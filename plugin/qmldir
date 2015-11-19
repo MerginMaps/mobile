@@ -1,0 +1,4 @@
+module qgis
+plugin qgismobile
+typeinfo plugins.qmltypes
+TestItem 1.0 TestItem.qml
