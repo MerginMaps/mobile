@@ -5,23 +5,24 @@ import qgis 1.0
 Window {
     visible: true
 
-    TestItem {
-        anchors.fill: parent
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            Qt.quit();
-        }
-    }
-
-    Text {
-        text: qsTr("Hello World")
-        anchors.centerIn: parent
-    }
+    width: 800
+    height: 600
 
     MapCanvas {
+        id: canvas
         anchors.fill: parent
+
+        engine.destinationCRS: "EPSG:4326" //"EPSG:3857"  // pseudo Mercator projection
+
+        engine.layers: [ml.layerId]
+
+        engine.extent: engine.layerExtent(ml.layerId)
+    }
+
+    MapLayer {
+        id: ml
+
+        source: "/home/martin/ne_50m.tif"
+        provider: "gdal"
     }
 }
