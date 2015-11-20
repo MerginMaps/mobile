@@ -25,4 +25,15 @@ Window {
         source: "/home/martin/ne_50m.tif"
         provider: "gdal"
     }
+
+    ScaleBar {
+        id: scaleBar
+
+        engine: canvas.engine
+
+        anchors.bottom: canvas.bottom
+        anchors.right: canvas.right
+        anchors.bottomMargin: 8
+        anchors.rightMargin: 8
+    }
 }
