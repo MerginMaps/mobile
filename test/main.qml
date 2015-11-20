@@ -17,6 +17,33 @@ Window {
         engine.layers: [ml.layerId]
 
         engine.extent: engine.layerExtent(ml.layerId)
+
+        VertexMarker {
+            position: PositionEngine.position
+            visible: PositionEngine.hasPosition && PositionEngine.accuracy != -1
+
+            opacity: 0.2
+            color: "#43ade9"
+            width: 2*PositionEngine.accuracy / canvas.engine.metersPerPixel
+        }
+
+        VertexMarker {
+            id: positionMarker
+
+            position: PositionEngine.position
+            visible: PositionEngine.hasPosition
+            color: "#25252a"
+
+            // one more inner circle... just for fun!
+            Rectangle {
+                anchors.centerIn: positionMarker
+                width: positionMarker.width - 2
+                height: width
+                radius: width/2
+                color: "#43ade9"
+            }
+        }
+
     }
 
     MapLayer {

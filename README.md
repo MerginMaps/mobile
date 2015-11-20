@@ -4,10 +4,16 @@ Reusable components that can be used in Qt Quick applications.
 
 The repository contains a module that compiles into Qt Quick plugin and a demo app that uses the plugin.
 
-Available components:
+Available visual items:
 
 - MapCanvas
 - ScaleBar
+- VertexMarker
+
+Other components:
+
+- MapLayer
+- PositionEngine
 
 Requirements:
 

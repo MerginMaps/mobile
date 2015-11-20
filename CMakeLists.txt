@@ -8,6 +8,7 @@ FIND_PACKAGE(Qt5Core QUIET)
 FIND_PACKAGE(Qt5Gui REQUIRED)
 FIND_PACKAGE(Qt5Qml REQUIRED)
 FIND_PACKAGE(Qt5Quick REQUIRED)
+FIND_PACKAGE(Qt5Positioning REQUIRED)
 FIND_PACKAGE(Qt5Xml REQUIRED)     # QGIS dep
 FIND_PACKAGE(Qt5Widgets REQUIRED) # QGIS dep
 FIND_PACKAGE(Qt5Concurrent REQUIRED) # QGIS dep
@@ -33,6 +34,8 @@ set(plugin_srcs
   plugin/mapengine.h
   plugin/maplayer.cpp
   plugin/maplayer.h
+  plugin/positionengine.cpp
+  plugin/positionengine.h
 )
 
 set(test_srcs
@@ -44,8 +47,9 @@ set(test_srcs
 configure_file(plugin/qmldir output/qgis/qmldir COPYONLY)
 configure_file(plugin/MapCanvas.qml output/qgis/MapCanvas.qml COPYONLY)
 configure_file(plugin/ScaleBar.qml output/qgis/ScaleBar.qml COPYONLY)
+configure_file(plugin/VertexMarker.qml output/qgis/VertexMarker.qml COPYONLY)
 add_library(qgismobile MODULE ${plugin_srcs})
-target_link_libraries(qgismobile Qt5::Quick Qt5::Qml ${qgis_library} Qt5::Xml Qt5::Widgets Qt5::Concurrent)
+target_link_libraries(qgismobile Qt5::Quick Qt5::Qml ${qgis_library} Qt5::Xml Qt5::Widgets Qt5::Concurrent Qt5::Positioning)
 set_target_properties(qgismobile PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/qgis)
 include_directories(${qgis_include_dir})
 add_definitions(-DCORE_EXPORT=)

@@ -3,3 +3,4 @@ plugin qgismobile
 typeinfo plugins.qmltypes
 MapCanvas 1.0 MapCanvas.qml
 ScaleBar 1.0 ScaleBar.qml
+VertexMarker 1.0 VertexMarker.qml
