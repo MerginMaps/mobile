@@ -13,6 +13,9 @@
 #include <qgsmapsettings.h>
 #include <qgsmaprendererparalleljob.h>
 #include <qgsdistancearea.h>
+#include <qgsfeatureiterator.h>
+#include <qgsvectordataprovider.h>
+#include <qgsvectorlayer.h>
 
 //#include "gisutils.h"
 
@@ -183,6 +186,70 @@ QRectF MapEngine::layerExtent(const QString& layerId) const
 {
   QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId);
   return ml ? qgsrect2qrect(mMapSettings.layerExtentToOutputExtent(ml, ml->extent())) : QRectF();
+}
+
+QRectF MapEngine::fullExtent() const
+{
+  return qgsrect2qrect(mMapSettings.fullExtent());
+}
+
+
+static QList<QgsAttributes> _identifyVector(QgsVectorLayer* vlayer, const QPointF& point, MapEngine* engine)
+{
+  double rad = engine->mapSettings().mapUnitsPerPixel() * 10;
+  QgsRectangle rect(point.x() - rad, point.y() - rad, point.x() + rad, point.y() + rad);
+
+  if (engine->mapSettings().destinationCrs() != vlayer->dataProvider()->crs())
+    rect = engine->mapSettings().layerTransform(vlayer)->transform(rect, QgsCoordinateTransform::ReverseTransform);
+
+  QList<QgsAttributes> lst;
+
+  QgsFeatureRequest request;
+  request.setFilterRect(rect);
+  request.setFlags(request.flags() | QgsFeatureRequest::ExactIntersect);
+  QgsFeature f;
+  QgsFeatureIterator fi = vlayer->getFeatures(request);
+  while (fi.nextFeature(f))
+  {
+    lst << f.attributes();
+  }
+  return lst;
+}
+
+
+void MapEngine::identifyPoint(const QPointF& point)
+{
+  //QList<QVariant> results;
+  QPointF mapPoint = convertImageToMapCoords(point);
+
+  QVariantMap vm;
+  foreach (const QString& layerId, layers())
+  {
+    QgsMapLayer* layer = QgsMapLayerRegistry::instance()->mapLayer(layerId);
+
+    if (QgsVectorLayer* vlayer = qobject_cast<QgsVectorLayer*>(layer))
+    {
+      QList<QgsAttributes> lst = _identifyVector(vlayer, mapPoint, this);
+      if (lst.count() == 0)
+        continue;
+
+      QgsFields fields = vlayer->pendingFields();
+      //for (int i = 0; i < lst.count(); ++i)
+      int i = 0; // take only first feature
+      {
+        // save all fields
+        for (int j = 0; j < fields.count(); ++j)
+          vm[fields[j].name()] = lst[i][j];
+      }
+
+      vm["__layer__"] = layer->name();
+      break;
+    }
+    vm["__layer__"] = "__none__";
+  }
+
+  mIdentifyResult = vm;
+  emit identifyResultChanged();
 }
 
 double MapEngine::screenUnitsToMeters(int baseLength) const

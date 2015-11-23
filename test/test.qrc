@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>icons/location.png</file>
+        <file>IdentifyContentItem.qml</file>
+        <file>IdentifyBar.qml</file>
     </qresource>
 </RCC>

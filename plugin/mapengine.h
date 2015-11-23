@@ -24,6 +24,7 @@ class MapEngine : public QObject
   Q_PROPERTY(double metersPerPixel READ metersPerPixel NOTIFY mapSettingsChanged)
   Q_PROPERTY(QStringList layers READ layers WRITE setLayers NOTIFY mapSettingsChanged)
   Q_PROPERTY(QRectF extent READ extent WRITE setExtent NOTIFY mapSettingsChanged)
+  Q_PROPERTY(QVariant identifyResult READ identifyResult NOTIFY identifyResultChanged)
 public:
   explicit MapEngine(QObject *parent = 0);
   ~MapEngine();
@@ -62,13 +63,19 @@ public:
 
   Q_INVOKABLE QRectF layerExtent(const QString& layerId) const;
 
+  Q_INVOKABLE QRectF fullExtent() const;
+
   QImage mapImage() const { return mMapImage; }
+
+  Q_INVOKABLE void identifyPoint(const QPointF& point);
+  QVariant identifyResult() const { return mIdentifyResult; }
 
 signals:
   void mapImageChanged();
   void imageSizeChanged();
   void mapSettingsChanged();
   void scaleBarChanged();
+  void identifyResultChanged();
 
 public slots:
   void jobFinished();
@@ -95,6 +102,8 @@ private:
   QString mScaleBarText;
 
   QgsMapRendererCache* mCache;
+
+  QVariant mIdentifyResult;
 };
 
 

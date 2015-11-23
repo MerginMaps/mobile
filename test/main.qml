@@ -2,21 +2,29 @@ import QtQuick 2.4
 import QtQuick.Window 2.2
 import qgis 1.0
 
+import QtQuick.Controls 1.3
+
 Window {
     visible: true
 
     width: 800
     height: 600
 
+    Component.onCompleted: {
+        Project.projectFile = "/home/martin/qgis/qgis-mobile/data/test_project.qgs"
+        canvas.engine.layers = Project.layers
+        canvas.engine.extent = canvas.engine.fullExtent()
+
+        // add raster background
+        ml.source = "/home/martin/ne_50m.tif"
+        canvas.engine.layers.push(ml.layerId)
+    }
+
     MapCanvas {
         id: canvas
         anchors.fill: parent
 
         engine.destinationCRS: "EPSG:4326" //"EPSG:3857"  // pseudo Mercator projection
-
-        engine.layers: [ml.layerId]
-
-        engine.extent: engine.layerExtent(ml.layerId)
 
         VertexMarker {
             position: PositionEngine.position
@@ -32,7 +40,7 @@ Window {
 
             position: PositionEngine.position
             visible: PositionEngine.hasPosition
-            color: "#25252a"
+            color: "white"
 
             // one more inner circle... just for fun!
             Rectangle {
@@ -44,12 +52,30 @@ Window {
             }
         }
 
+        onClicked: {
+            engine.identifyPoint(Qt.point(x,y))
+        }
+
+        Connections {
+            target: canvas.engine
+            onIdentifyResultChanged: {
+                var res = canvas.engine.identifyResult;
+                var hasData = res["__layer__"] !== "__none__"
+                identifyBar.state = hasData ? "on" : "off"
+
+                if (res["__layer__"] !== "points") {
+                    identifyBar.content.textLine1 = res["Name"]
+                    identifyBar.content.textLine2 = (res["__layer__"] === "polys" ? "Polygon" : "Linestring");
+                } else {
+                    identifyBar.content.textLine1 = res["Class"]
+                    identifyBar.content.textLine2 = "Airplane";
+                }
+            }
+        }
     }
 
     MapLayer {
         id: ml
-
-        source: "/home/martin/ne_50m.tif"
         provider: "gdal"
     }
 
@@ -66,7 +92,7 @@ Window {
 
     Rectangle {
 
-        anchors.bottom: canvas.bottom
+        anchors.top: canvas.top
         anchors.left: canvas.left
         anchors.margins: 8
 
@@ -87,4 +113,11 @@ Window {
             }
         }
     }
+
+    IdentifyBar {
+        id: identifyBar
+        width: parent.width
+
+    }
+
 }

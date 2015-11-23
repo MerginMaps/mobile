@@ -34,6 +34,8 @@ set(plugin_srcs
   plugin/mapengine.h
   plugin/maplayer.cpp
   plugin/maplayer.h
+  plugin/project.cpp
+  plugin/project.h
   plugin/positionengine.cpp
   plugin/positionengine.h
 )
@@ -41,6 +43,8 @@ set(plugin_srcs
 set(test_srcs
   test/main.cpp
   test/main.qml
+  test/IdentifyBar.qml
+  test/IdentifyContentItem.qml
 )
 
 # QML plugin
