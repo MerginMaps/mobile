@@ -169,6 +169,16 @@ void MapEngine::setExtent(const QRectF& extent)
   refreshMap();
 }
 
+void MapEngine::zoomToPoint(double x, double y, double scale)
+{
+  QgsRectangle r = mMapSettings.extent();
+  double scaleFactor = scale / mMapSettings.scale();
+  r.scale(scaleFactor, x, y);
+  mMapSettings.setExtent(r);
+  emit mapSettingsChanged();
+  refreshMap();
+}
+
 QRectF MapEngine::layerExtent(const QString& layerId) const
 {
   QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId);

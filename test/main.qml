@@ -63,4 +63,28 @@ Window {
         anchors.bottomMargin: 8
         anchors.rightMargin: 8
     }
+
+    Rectangle {
+
+        anchors.bottom: canvas.bottom
+        anchors.left: canvas.left
+        anchors.margins: 8
+
+        radius: width/2
+
+        color:  mousearea.pressed ? "#44000000" : "#88000000"
+        width: btnLocation.width * 1.2
+        height: width
+
+        Image {
+            id: btnLocation
+            anchors.centerIn: parent
+            source: "qrc:/icons/location.png"
+            MouseArea {
+                id: mousearea
+                anchors.fill: btnLocation
+                onClicked: canvas.engine.zoomToPoint(PositionEngine.position.x, PositionEngine.position.y, 500000)
+            }
+        }
+    }
 }

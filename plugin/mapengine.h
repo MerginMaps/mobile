@@ -58,6 +58,8 @@ public:
   QRectF extent() const;
   void setExtent(const QRectF& extent);
 
+  Q_INVOKABLE void zoomToPoint(double x, double y, double scale);
+
   Q_INVOKABLE QRectF layerExtent(const QString& layerId) const;
 
   QImage mapImage() const { return mMapImage; }
