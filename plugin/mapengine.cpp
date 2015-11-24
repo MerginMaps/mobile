@@ -116,6 +116,7 @@ void MapEngine::setTransparency(double value, QStringList layerIds)
 double MapEngine::transparency(QStringList layerIds)
 {
   // TODO return GISUtils::transparency(layerIds);
+  return 0;
 }
 
 double MapEngine::metersPerPixel() const

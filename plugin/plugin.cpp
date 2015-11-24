@@ -32,8 +32,10 @@ void Qgis_Mobile_ComponentsPlugin::registerTypes(const char *uri)
   qmlRegisterSingletonType<PositionEngine>(uri, 1, 0, "PositionEngine", _positionEngineProvider);
   qmlRegisterSingletonType<Project>(uri, 1, 0, "Project", _projectProvider);
 
-  // init QGIS core library
+#ifdef QGIS_PREFIX_PATH
   ::setenv("QGIS_PREFIX_PATH", QGIS_PREFIX_PATH, true);
+#endif
+  // init QGIS core library
   QgsApplication::init();
   QgsApplication::initQgis();
   //qDebug("%s", QgsApplication::showSettings().toLocal8Bit().data());
