@@ -76,6 +76,7 @@ void MapEngine::setDestinationCRS(const QString& crs)
   }
 
   mMapSettings.setDestinationCrs(c);
+  mMapSettings.setMapUnits(c.mapUnits()); // for correct scale calculation
 
   emit mapSettingsChanged();
   refreshMap();

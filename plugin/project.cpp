@@ -26,6 +26,7 @@ void Project::setProjectFile(const QString& filename)
   QgsProject::instance()->setFileName(filename);
   bool res = QgsProject::instance()->read();
   qDebug("load project: %d", res);
+
   emit projectFileChanged();
 }
 
@@ -33,5 +34,12 @@ QStringList Project::layers() const
 {
   QgsLayerTreeGroup* root = QgsProject::instance()->layerTreeRoot();
   //qDebug("root: %s", root->dump().toLocal8Bit().data());
-  return root->findLayerIds();
+  QStringList list;
+  foreach (QgsLayerTreeLayer* nodeLayer, root->findLayers())
+  {
+    if (nodeLayer->isVisible() == Qt::Checked)
+      list << nodeLayer->layerId();
+  }
+
+  return list;
 }

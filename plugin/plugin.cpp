@@ -5,6 +5,7 @@
 #include "project.h"
 
 #include <qgsapplication.h>
+#include <qgsproviderregistry.h>
 
 #include <qqml.h>
 
@@ -35,7 +36,8 @@ void Qgis_Mobile_ComponentsPlugin::registerTypes(const char *uri)
   ::setenv("QGIS_PREFIX_PATH", QGIS_PREFIX_PATH, true);
   QgsApplication::init();
   QgsApplication::initQgis();
-
+  //qDebug("%s", QgsApplication::showSettings().toLocal8Bit().data());
+  //qDebug("providers %s", QgsProviderRegistry::instance()->pluginList().toLocal8Bit().data());
 }
 
 
