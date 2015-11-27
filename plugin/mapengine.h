@@ -67,6 +67,9 @@ public:
 
   QImage mapImage() const { return mMapImage; }
 
+  Q_INVOKABLE QPointF mapCenter() const;
+  Q_INVOKABLE double mapScale() const;
+
   Q_INVOKABLE void identifyPoint(const QPointF& point);
   QVariant identifyResult() const { return mIdentifyResult; }
 
@@ -78,6 +81,7 @@ signals:
   void identifyResultChanged();
 
 public slots:
+  void refreshMapDelayed();
   void jobFinished();
   void updateScaleBar();
   void onRepaintRequested();
@@ -92,6 +96,9 @@ protected:
   double screenUnitsToMeters(int baseLength) const;
 
 private:
+
+  bool mRefreshRequested;
+  bool mJobCancelled;
 
   QgsMapSettings mMapSettings;
 

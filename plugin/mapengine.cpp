@@ -20,12 +20,15 @@
 //#include "gisutils.h"
 
 
-MapEngine::MapEngine(QObject *parent) : QObject(parent)
-, mJob(0)
-, mCache(new QgsMapRendererCache())
+MapEngine::MapEngine(QObject *parent)
+  : QObject(parent)
+  , mRefreshRequested(false)
+  , mJobCancelled(false)
+  , mJob(0)
+  , mCache(new QgsMapRendererCache())
 {
 
-  mMapSettings.setOutputSize(QSize(100,100));
+  //mMapSettings.setOutputSize(QSize(100,100));
   mMapSettings.setCrsTransformEnabled(true);
 
   refreshMap(); // make initial image
@@ -195,6 +198,16 @@ QRectF MapEngine::fullExtent() const
   return qgsrect2qrect(mMapSettings.fullExtent());
 }
 
+QPointF MapEngine::mapCenter() const
+{
+  return mMapSettings.visibleExtent().center().toQPointF();
+}
+
+double MapEngine::mapScale() const
+{
+  return mMapSettings.scale();
+}
+
 
 static QList<QgsAttributes> _identifyVector(QgsVectorLayer* vlayer, const QPointF& point, MapEngine* engine)
 {
@@ -305,8 +318,13 @@ void MapEngine::onRepaintRequested()
 void MapEngine::jobFinished()
 {
   Q_ASSERT(mJob);
-  mMapImage = mJob->renderedImage();
-  emit mapImageChanged();
+  qDebug("job finished: %d", !mJobCancelled);
+
+  if (!mJobCancelled)
+  {
+    mMapImage = mJob->renderedImage();
+    emit mapImageChanged();
+  }
 
   mJob->deleteLater();
   mJob = 0;
@@ -354,12 +372,36 @@ void MapEngine::scale(double s)
   refreshMap();
 }
 
+
 void MapEngine::refreshMap()
 {
+  if (!mMapSettings.hasValidSettings())
+  {
+    qDebug("invalid map settings - nothing to render");
+    return;
+  }
+
+  if (!mRefreshRequested)
+  {
+    mRefreshRequested = true;
+    QTimer::singleShot(0, this, SLOT(refreshMapDelayed()));
+  }
+}
+
+void MapEngine::refreshMapDelayed()
+{
+  mRefreshRequested = false;
+
   if (mJob)
   {
+    qDebug("cancelling!");
+    mJobCancelled = true;
     mJob->cancel();
   }
+
+  mJobCancelled = false;
+
+  qDebug("starting job...");
 
   mJob = new QgsMapRendererParallelJob(mMapSettings);
   connect(mJob, SIGNAL(finished()), this, SLOT(jobFinished()));
