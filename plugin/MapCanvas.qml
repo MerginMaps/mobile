@@ -3,17 +3,27 @@ import qgis 1.0
 
 Rectangle {
     id: canvas
-    implicitWidth: 256
-    implicitHeight: 256
 
-    property alias engine: mapEngine
-    property real imgDx: mapImage.dx
-    property real imgDy: mapImage.dy
-    property real imgScale: mapImage.scale
+    property MapView view: MapView {
+        size: Qt.size(canvas.width, canvas.height)
 
-    // emitted on change of map image, not directly after change of engine settings
-    // so that items using it change their values at the same time (to avoid flicker)
-    signal engineSettingsChanged
+        onChanged: {
+            if (size.width > 0 && size.height > 0 && mupp == 0) {
+                console.debug("setting extent - INITIAL")
+                this.fromExtent(engine.fullExtent())
+            }
+            if (!_imgViewInitialized && valid) {
+                console.debug("setting image's view - INITIAL")
+                _imgViewInitialized = true
+                mapImage.refreshMapImage()
+            }
+        }
+    }
+
+    property rect initialExtent
+    property bool _imgViewInitialized: false
+
+    property alias engine: mapImage.mapEngine
 
     // emitted when a single point is clicked
     signal clicked(real x, real y)
@@ -23,84 +33,37 @@ Rectangle {
 
     color: "white"
 
-    MapEngine {
-        id: mapEngine
-
-        imageSize: Qt.size( canvas.width, canvas.height )
-
-        onMapImageChanged: {
-            if (!mapImage.prev) {
-                // initial
-                mapImage.dx = 0
-                mapImage.dy = 0
-                mapImage.scale = 1
-            } else {
-                //console.debug("cur " + mapImage.dx + " " + mapImage.dy + " " + mapImage.scale)
-                //console.debug("prev " + mapImage.prevDx + " " + mapImage.prevDy + " " + mapImage.prevScale)
-                mapImage.dx -= mapImage.prevDx
-                mapImage.dy -= mapImage.prevDy
-                mapImage.scale /= mapImage.prevScale
-                //console.debug("res " + mapImage.dx + " " + mapImage.dy + " " + mapImage.scale)
-                if (mouseArea.panning) {
-                    mouseArea.dxStart -= mapImage.prevDx
-                    mouseArea.dyStart -= mapImage.prevDy
-                }
-                if (mouseArea.zooming)
-                    mouseArea.wheelScaleStart /= mapImage.prevScale
-                if (pinchArea.pinching) {
-                    // TODO: not yet working correctly
-                    pinchArea.startDx -= mapImage.prevDx
-                    pinchArea.startDy -= mapImage.prevDy
-                    pinchArea.startScale /= mapImage.prevScale
-                }
-            }
-            //mapImage.setPrevious()
-            canvas.engineSettingsChanged()
-        }
-    }
 
     MapImage {
         id: mapImage
-        mapEngine: mapEngine
 
-        property real dx: 0
-        property real dy: 0
-        property real scale: 1
+        mapEngine: MapEngine {}
 
-        property bool prev: false
-        property real prevDx
-        property real prevDy
-        property real prevScale
+        property MapView view: MapView { parentView: canvas.view }
 
-        // set the state of the image at the time another refresh request was made
-        function setPrevious() {
-            mapImage.prev = true
-            mapImage.prevDx = mapImage.dx
-            mapImage.prevDy = mapImage.dy
-            mapImage.prevScale = mapImage.scale
+        property MapView viewRequest: MapView { }
+
+        Connections {
+            target: mapImage.mapEngine
+            onMapImageChanged: {
+                console.log("map image changed: resetting center + mupp")
+                mapImage.view.copyFrom(mapImage.viewRequest)
+            }
         }
 
-        transform: [
-            Scale {
-                xScale: mapImage.scale
-                yScale: mapImage.scale
-                origin.x: canvas.width/2
-                origin.y: canvas.height/2
-            },
-            Translate {
-                x: mapImage.dx
-                y: mapImage.dy
-            }
-        ]
+        function refreshMapImage() {
+            viewRequest.copyFrom(canvas.view)
+            var extent = viewRequest.toExtent()
+            console.log("refreshMapImage " + viewRequest.center + " + " + viewRequest.mupp + " + " + viewRequest.size + " = " + extent)
+            engine.imageSize = viewRequest.size
+            engine.extent = extent
+            engine.refreshMap()
+        }
 
-        width: canvas.width
-        height: canvas.height
-
-        /*Rectangle {
-            color: "red"
-            opacity: 0.5
-            anchors.fill: mapImage
-        }*/
+        x: mapImage.view.dxToParent
+        y: mapImage.view.dyToParent
+        width: mapImage.view.scaleToParent * mapImage.view.size.width
+        height: mapImage.view.scaleToParent * mapImage.view.size.height
     }
 
 
@@ -109,28 +72,22 @@ Rectangle {
         anchors.fill: canvas
 
         // initial values
-        property bool pinching
-        property real startDx
-        property real startDy
-        property real startScale
+        property point startCenter
+        property real startMupp
 
         onPinchStarted: {
-            pinching = true
-            startDx = mapImage.dx
-            startDy = mapImage.dy
-            startScale = mapImage.scale
+            startCenter = canvas.view.center
+            startMupp = canvas.view.mupp
         }
         onPinchUpdated: {
-            var ds = pinch.scale/pinch.previousScale
-            mapImage.scale = startScale * pinch.scale
-            mapImage.dx = startDx + ( pinch.center.x - pinch.startCenter.x ) * pinch.scale
-            mapImage.dy = startDy + ( pinch.center.y - pinch.startCenter.y ) * pinch.scale
+            canvas.view.mupp = startMupp / pinch.scale
+
+            var dx = (pinch.center.x - pinch.startCenter.x) * canvas.view.mupp
+            var dy = -(pinch.center.y - pinch.startCenter.y) * canvas.view.mupp
+            canvas.view.center = Qt.point(startCenter.x - dx, startCenter.y - dy)
         }
         onPinchFinished: {
-            mapEngine.move(pinch.startCenter.x, pinch.startCenter.y, pinch.center.x, pinch.center.y)
-            mapEngine.scale(pinch.scale)
-            mapImage.setPrevious()
-            pinching = false
+            mapImage.refreshMapImage()
         }
 
     // mouse area needs to be inside pinch area in order to have
@@ -141,18 +98,14 @@ Rectangle {
 
         property bool panning: false
         property point panStart
-        property real dxStart
-        property real dyStart
+        property point centerStart
 
         property bool zooming: false
-        property real wheelScaleStart
 
         onPressed: {
             if (mouse.button == Qt.LeftButton) {
-                panning = true
                 panStart = Qt.point( mouse.x, mouse.y )
-                dxStart = mapImage.dx
-                dyStart = mapImage.dy
+                centerStart = view.center
             }
         }
 
@@ -163,31 +116,31 @@ Rectangle {
                     canvas.clicked(mouse.x, mouse.y)
                 else
                 {
-                    mapEngine.move(panStart.x, panStart.y, mouse.x, mouse.y)
-                    mapImage.setPrevious()
+                    mapImage.refreshMapImage()
                 }
 
             }
         }
 
         onPositionChanged: {
+            if (!panning && (mouse.buttons & Qt.LeftButton))
+                panning = true
+
             if (panning) {
-                mapImage.dx = mouse.x - panStart.x + dxStart
-                mapImage.dy = mouse.y - panStart.y + dyStart
+                var dx = (mouse.x - panStart.x) * canvas.view.mupp
+                var dy = -(mouse.y - panStart.y) * canvas.view.mupp
+                canvas.view.center = Qt.point(centerStart.x - dx, centerStart.y - dy)
             }
         }
 
-        onPressAndHold: canvas.pressAndHold(mouse.x, mouse.y)
+        onPressAndHold: if (!panning) canvas.pressAndHold(mouse.x, mouse.y)
 
         function temporaryZoom(d) {
             if (!zooming)
             {
                 zooming = true
-                wheelScaleStart = mapImage.scale
             }
-            mapImage.scale *= d
-            mapImage.dx *= d
-            mapImage.dy *= d
+            view.mupp /= d
 
             zoomRefreshTimer.restart()
         }
@@ -196,8 +149,7 @@ Rectangle {
              id: zoomRefreshTimer
              interval: 100
              onTriggered: {
-                 mapEngine.scale(mapImage.scale / mouseArea.wheelScaleStart)
-                 mapImage.setPrevious()
+                 mapImage.refreshMapImage()
                  mouseArea.zooming = false
              }
          }

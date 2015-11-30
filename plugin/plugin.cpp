@@ -111,6 +111,7 @@ void Qgis_Mobile_ComponentsPlugin::registerTypes(const char *uri)
 
   // @uri qgis
   qmlRegisterType<MapEngine>(uri, 1, 0, "MapEngine");
+  qmlRegisterType<MapView>(uri, 1, 0, "MapView");
   qmlRegisterType<MapImage>(uri, 1, 0, "MapImage");
   qmlRegisterType<MapLayer>(uri, 1, 0, "MapLayer");
   qmlRegisterSingletonType<PositionEngine>(uri, 1, 0, "PositionEngine", _positionEngineProvider);

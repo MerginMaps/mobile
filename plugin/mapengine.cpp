@@ -31,7 +31,7 @@ MapEngine::MapEngine(QObject *parent)
   //mMapSettings.setOutputSize(QSize(100,100));
   mMapSettings.setCrsTransformEnabled(true);
 
-  refreshMap(); // make initial image
+  //refreshMap(); // make initial image
 
   connect(this, SIGNAL(mapSettingsChanged()), this, SLOT(updateScaleBar()));
   connect(this, SIGNAL(imageSizeChanged()), this, SLOT(updateScaleBar()));
@@ -46,7 +46,7 @@ void MapEngine::setImageSize(const QSize& s)
   if (s.width() <= 0 || s.height() <= 0 || mMapSettings.outputSize() == s)
     return;
   mMapSettings.setOutputSize(s);
-  refreshMap(); // provide a image with new size
+  //refreshMap(); // provide a image with new size
   emit imageSizeChanged();
 }
 
@@ -82,7 +82,7 @@ void MapEngine::setDestinationCRS(const QString& crs)
   mMapSettings.setMapUnits(c.mapUnits()); // for correct scale calculation
 
   emit mapSettingsChanged();
-  refreshMap();
+  //refreshMap();
 }
 
 QString MapEngine::destinationCRS() const
@@ -113,7 +113,7 @@ QPointF MapEngine::convertWgs84ToImageCoords(const QPointF& wgs84Point)
 void MapEngine::setTransparency(double value, QStringList layerIds)
 {
   // TODO GISUtils::setTransparency(value, layerIds);
-  refreshMap();
+  //refreshMap();
 }
 
 double MapEngine::transparency(QStringList layerIds)
@@ -149,7 +149,7 @@ void MapEngine::setLayers(const QStringList& layers)
       connect(ml, SIGNAL(repaintRequested()), this, SLOT(onRepaintRequested()));
   }
   emit mapSettingsChanged();
-  refreshMap();
+  //refreshMap();
 }
 
 
@@ -171,10 +171,10 @@ QRectF MapEngine::extent() const
 void MapEngine::setExtent(const QRectF& extent)
 {
   QgsRectangle rect = qrect2qgsrect(extent);
-  rect.scale(1.1);  // a bit of extra margins
+  //rect.scale(1.1);  // a bit of extra margins
   mMapSettings.setExtent(rect);
   emit mapSettingsChanged();
-  refreshMap();
+  //refreshMap();
 }
 
 void MapEngine::zoomToPoint(double x, double y, double scale)
@@ -184,7 +184,7 @@ void MapEngine::zoomToPoint(double x, double y, double scale)
   r.scale(scaleFactor, x, y);
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
-  refreshMap();
+  //refreshMap();
 }
 
 QRectF MapEngine::layerExtent(const QString& layerId) const
@@ -311,7 +311,7 @@ void MapEngine::updateScaleBar()
 
 void MapEngine::onRepaintRequested()
 {
-  refreshMap();
+  //refreshMap();
 }
 
 
