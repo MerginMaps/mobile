@@ -80,10 +80,21 @@ Rectangle {
             mapImage.prevScale = mapImage.scale
         }
 
-        x: dx + canvas.width/2 * (1-scale)
-        y: dy + canvas.height/2 * (1-scale)
-        width: canvas.width * scale
-        height: canvas.height * scale
+        transform: [
+            Scale {
+                xScale: mapImage.scale
+                yScale: mapImage.scale
+                origin.x: canvas.width/2
+                origin.y: canvas.height/2
+            },
+            Translate {
+                x: mapImage.dx
+                y: mapImage.dy
+            }
+        ]
+
+        width: canvas.width
+        height: canvas.height
 
         /*Rectangle {
             color: "red"
