@@ -7,8 +7,9 @@ Rectangle {
     implicitHeight: 256
 
     property alias engine: mapEngine
-    property point panOffset: Qt.point(mapImage.dx, mapImage.dy)
-    property real pinchScale: mapImage.scale
+    property real imgDx: mapImage.dx
+    property real imgDy: mapImage.dy
+    property real imgScale: mapImage.scale
 
     // emitted on change of map image, not directly after change of engine settings
     // so that items using it change their values at the same time (to avoid flicker)
@@ -16,6 +17,9 @@ Rectangle {
 
     // emitted when a single point is clicked
     signal clicked(real x, real y)
+
+    // emitted when a single point is clicked for a longer time
+    signal pressAndHold(real x, real y)
 
     color: "white"
 
@@ -161,6 +165,8 @@ Rectangle {
                 mapImage.dy = mouse.y - panStart.y + dyStart
             }
         }
+
+        onPressAndHold: canvas.pressAndHold(mouse.x, mouse.y)
 
         function temporaryZoom(d) {
             if (!zooming)
