@@ -26,31 +26,8 @@ Window {
 
         engine.destinationCRS: "EPSG:4326" //"EPSG:3857"  // pseudo Mercator projection
 
-        VertexMarker {
-            position: canvas.engine.wgs84ToMap(PositionEngine.position)
-            visible: PositionEngine.hasPosition && PositionEngine.accuracy != -1
-
-            opacity: 0.2
-            color: "#43ade9"
-            width: 2*PositionEngine.accuracy / canvas.engine.metersPerPixel
-        }
-
-        VertexMarker {
-            id: positionMarker
-
-            position: canvas.engine.wgs84ToMap(PositionEngine.position)
-            visible: PositionEngine.hasPosition
-            color: "white"
-
-            // one more inner circle... just for fun!
-            Rectangle {
-                anchors.centerIn: positionMarker
-                width: positionMarker.width - 2
-                height: width
-                radius: width/2
-                color: "#43ade9"
-            }
-        }
+        PositionAccuracy { }
+        PositionMarker { }
 
         onClicked: {
             engine.identifyPoint(Qt.point(x,y))
