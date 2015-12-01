@@ -6,6 +6,8 @@ int main(int argc, char *argv[])
 {
   QGuiApplication app(argc, argv);
 
+  ::setenv("QGIS_PREFIX_PATH", QGIS_PREFIX_PATH, true);
+
   QQmlApplicationEngine engine;
 
   // if the QML module is in different path

@@ -43,14 +43,15 @@ public:
   MapView* view() const { return mView; }
   void setView(MapView* v);
 
-
   void setDestinationCRS(const QString& crs);
   QString destinationCRS() const;
 
   const QgsMapSettings& mapSettings() const { return mMapSettings; }
 
-  //! convert from lat/lon coordinates (wgs84) to coords of the rendered map image
-  Q_INVOKABLE QPointF convertWgs84ToImageCoords(const QPointF& wgs84Point);
+  //! convert from lat/lon coordinates (wgs84) to map coords
+  Q_INVOKABLE QPointF wgs84ToMap(const QPointF& wgs84Point);
+  //! find out right mupp for given scale denominator and current settings
+  Q_INVOKABLE double scale2mupp(double scale);
 
   QString scaleBarText() const { return mScaleBarText; }
   int scaleBarLength() const { return mScaleBarLength; }
@@ -95,6 +96,8 @@ private:
 
   MapView* mView;
   QgsMapSettings mMapSettings;
+  QgsCoordinateTransform* mWgs2map;
+  QgsDistanceArea* mDa;
 
   int mScaleBarLength; // in pixels
   QString mScaleBarText;

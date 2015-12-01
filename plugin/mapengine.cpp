@@ -4,6 +4,7 @@
 #include <QPainter>
 
 #include <qgsapplication.h>
+#include <qgscoordinatetransform.h>
 #include <qgsrasterlayer.h>
 #include <qgsmaplayerregistry.h>
 #include <qgsmapsettings.h>
@@ -21,7 +22,12 @@
 MapEngine::MapEngine(QObject *parent)
   : QObject(parent)
   , mView(0)
+  , mWgs2map(0)
+  , mDa(new QgsDistanceArea)
 {
+
+  mDa->setEllipsoid("WGS84");
+  mDa->setEllipsoidalMode(true);
 
   mMapSettings.setCrsTransformEnabled(true);
 
@@ -30,6 +36,8 @@ MapEngine::MapEngine(QObject *parent)
 
 MapEngine::~MapEngine()
 {
+  delete mWgs2map;
+  delete mDa;
 }
 
 void MapEngine::setView(MapView* v)
@@ -83,6 +91,12 @@ void MapEngine::setDestinationCRS(const QString& crs)
   mMapSettings.setDestinationCrs(c);
   mMapSettings.setMapUnits(c.mapUnits()); // for correct scale calculation
 
+  // for conversions from WGS 84
+  delete mWgs2map;
+  mWgs2map = new QgsCoordinateTransform(QgsCoordinateReferenceSystem("EPSG:4326"), mMapSettings.destinationCrs());
+
+  mDa->setSourceCrs(mMapSettings.destinationCrs());
+
   emit mapSettingsChanged();
 }
 
@@ -92,12 +106,19 @@ QString MapEngine::destinationCRS() const
 }
 
 
-QPointF MapEngine::convertWgs84ToImageCoords(const QPointF& wgs84Point)
+QPointF MapEngine::wgs84ToMap(const QPointF& wgs84Point)
 {
-  QgsCoordinateReferenceSystem wgs84("EPSG:4326");
-  QgsCoordinateTransform ct(wgs84, mMapSettings.destinationCrs());
-  QgsPoint mapPoint = ct.transform(wgs84Point.x(), wgs84Point.y());
-  return mView->mapToDisplay(QPointF(mapPoint.x(), mapPoint.y()));
+  if (!mWgs2map)
+    return QPointF();
+  QgsPoint mapPoint = mWgs2map->transform(wgs84Point.x(), wgs84Point.y());
+  return mapPoint.toQPointF();
+}
+
+double MapEngine::scale2mupp(double scale)
+{
+  double scaleFactor = scale / mMapSettings.scale();
+  double mupp = mMapSettings.mapUnitsPerPixel() * scaleFactor;
+  return mupp;
 }
 
 
@@ -205,15 +226,11 @@ double MapEngine::screenUnitsToMeters(int baseLength) const
 {
   // calculate the geographic distance from the central point of extent
   // to the specified number of points on the right side
-  QgsDistanceArea da;
-  da.setSourceCrs(mMapSettings.destinationCrs());
-  da.setEllipsoid("WGS84");
-  da.setEllipsoidalMode(true);
   QSize s = mMapSettings.outputSize();
   QPoint pointCenter(s.width()/2, s.height()/2);
   QgsPoint p1 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter);
   QgsPoint p2 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter+QPoint(baseLength,0));
-  return da.measureLine(p1, p2);
+  return mDa->measureLine(p1, p2);
 }
 
 

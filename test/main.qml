@@ -27,7 +27,7 @@ Window {
         engine.destinationCRS: "EPSG:4326" //"EPSG:3857"  // pseudo Mercator projection
 
         VertexMarker {
-            position: PositionEngine.position
+            position: canvas.engine.wgs84ToMap(PositionEngine.position)
             visible: PositionEngine.hasPosition && PositionEngine.accuracy != -1
 
             opacity: 0.2
@@ -38,7 +38,7 @@ Window {
         VertexMarker {
             id: positionMarker
 
-            position: PositionEngine.position
+            position: canvas.engine.wgs84ToMap(PositionEngine.position)
             visible: PositionEngine.hasPosition
             color: "white"
 
@@ -109,7 +109,10 @@ Window {
             MouseArea {
                 id: mousearea
                 anchors.fill: btnLocation
-                onClicked: canvas.engine.zoomToPoint(PositionEngine.position.x, PositionEngine.position.y, 500000)
+                onClicked: {
+                    canvas.view.center = PositionEngine.position
+                    canvas.view.mupp = canvas.engine.scale2mupp(500000)
+                }
             }
         }
     }
