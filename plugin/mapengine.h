@@ -64,6 +64,12 @@ public:
     return xform.transform(point.x(), point.y()).toQPointF();
   }
 
+  Q_INVOKABLE QPointF displayToMap(const QPointF& point)
+  {
+    QgsPoint p = xform.toMapCoordinatesF(point.x(), point.y());
+    return QPointF(p.x(), p.y());
+  }
+
   MapView* parentView() const { return mParentView; }
   void setParentView(MapView* mv) {
     mParentView = mv;
@@ -122,36 +128,29 @@ protected:
 class MapEngine : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QSize imageSize READ imageSize WRITE setImageSize NOTIFY imageSizeChanged)
+  Q_PROPERTY(MapView* view READ view WRITE setView NOTIFY mapSettingsChanged)
   Q_PROPERTY(QString destinationCRS READ destinationCRS WRITE setDestinationCRS NOTIFY mapSettingsChanged)
   Q_PROPERTY(QString scaleBarText READ scaleBarText NOTIFY scaleBarChanged)
   Q_PROPERTY(int scaleBarLength READ scaleBarLength NOTIFY scaleBarChanged)
   Q_PROPERTY(double metersPerPixel READ metersPerPixel NOTIFY mapSettingsChanged)
   Q_PROPERTY(QStringList layers READ layers WRITE setLayers NOTIFY mapSettingsChanged)
-  Q_PROPERTY(QRectF extent READ extent WRITE setExtent NOTIFY mapSettingsChanged)
+  Q_PROPERTY(QRectF extent READ extent NOTIFY mapSettingsChanged)
   Q_PROPERTY(QVariant identifyResult READ identifyResult NOTIFY identifyResultChanged)
 public:
   explicit MapEngine(QObject *parent = 0);
   ~MapEngine();
 
-  QSize imageSize() { return mMapSettings.outputSize(); }
+  MapView* view() const { return mView; }
+  void setView(MapView* v);
 
-  void setImageSize(const QSize& s);
 
   void setDestinationCRS(const QString& crs);
   QString destinationCRS() const;
 
   const QgsMapSettings& mapSettings() const { return mMapSettings; }
 
-  //! convert from map coordinates (projected) to coords of the rendered map image
-  Q_INVOKABLE QPointF convertMapToImageCoords(const QPointF& mapPoint);
-  //! convert from coords of the rendered map image to map coordinates (projected)
-  Q_INVOKABLE QPointF convertImageToMapCoords(const QPointF& imagePoint);
   //! convert from lat/lon coordinates (wgs84) to coords of the rendered map image
   Q_INVOKABLE QPointF convertWgs84ToImageCoords(const QPointF& wgs84Point);
-
-  Q_INVOKABLE void setTransparency(double value, QStringList layerIds);
-  Q_INVOKABLE double transparency(QStringList layerIds);
 
   QString scaleBarText() const { return mScaleBarText; }
   int scaleBarLength() const { return mScaleBarLength; }
@@ -162,40 +161,39 @@ public:
   void setLayers(const QStringList& layers);
 
   QRectF extent() const;
-  void setExtent(const QRectF& extent);
-
-  Q_INVOKABLE void zoomToPoint(double x, double y, double scale);
 
   Q_INVOKABLE QRectF layerExtent(const QString& layerId) const;
 
   Q_INVOKABLE QRectF fullExtent() const;
 
-  Q_INVOKABLE QPointF mapCenter() const;
-  Q_INVOKABLE double mapScale() const;
-
   Q_INVOKABLE void identifyPoint(const QPointF& point);
   QVariant identifyResult() const { return mIdentifyResult; }
 
 signals:
-  void imageSizeChanged();
   void mapSettingsChanged();
   void scaleBarChanged();
   void identifyResultChanged();
 
 public slots:
+  void mapViewChanged();
   void updateScaleBar();
   void onRepaintRequested();
 
+#if 0  // extent config now done with MapView
+  void setExtent(const QRectF& extent);
+  Q_INVOKABLE void zoomToPoint(double x, double y, double scale);
   Q_INVOKABLE void zoomIn();
   Q_INVOKABLE void zoomOut();
   Q_INVOKABLE void move(double x0, double y0, double x1, double y1);
   Q_INVOKABLE void scale(double s);
+#endif
 
 protected:
   double screenUnitsToMeters(int baseLength) const;
 
 private:
 
+  MapView* mView;
   QgsMapSettings mMapSettings;
 
   int mScaleBarLength; // in pixels

@@ -19,29 +19,51 @@
 
 //#include "gisutils.h"
 
+inline QgsRectangle qrect2qgsrect(const QRectF& rect)
+{
+  return QgsRectangle(rect.left(), rect.top(), rect.right(), rect.bottom());
+}
+
+inline QRectF qgsrect2qrect(const QgsRectangle& rect)
+{
+  return QRectF(QPointF(rect.xMinimum(), rect.yMinimum()), QPointF(rect.xMaximum(), rect.yMaximum()));
+}
+
+
 
 MapEngine::MapEngine(QObject *parent)
   : QObject(parent)
+  , mView(0)
   , mCache(new QgsMapRendererCache())
 {
 
-  //mMapSettings.setOutputSize(QSize(100,100));
   mMapSettings.setCrsTransformEnabled(true);
 
   connect(this, SIGNAL(mapSettingsChanged()), this, SLOT(updateScaleBar()));
-  connect(this, SIGNAL(imageSizeChanged()), this, SLOT(updateScaleBar()));
 }
 
 MapEngine::~MapEngine()
 {
 }
 
-void MapEngine::setImageSize(const QSize& s)
+void MapEngine::setView(MapView* v)
 {
-  if (s.width() <= 0 || s.height() <= 0 || mMapSettings.outputSize() == s)
-    return;
-  mMapSettings.setOutputSize(s);
-  emit imageSizeChanged();
+  if (mView)
+    disconnect(mView, SIGNAL(changed()), this, SLOT(mapViewChanged()));
+
+  mView = v;
+
+  if (mView)
+    connect(mView, SIGNAL(changed()), this, SLOT(mapViewChanged()));
+
+  emit mapSettingsChanged();
+}
+
+void MapEngine::mapViewChanged()
+{
+  mMapSettings.setOutputSize(mView->size());
+  mMapSettings.setExtent(qrect2qgsrect(mView->toExtent()));
+  emit mapSettingsChanged();
 }
 
 void MapEngine::setDestinationCRS(const QString& crs)
@@ -83,36 +105,15 @@ QString MapEngine::destinationCRS() const
   return mMapSettings.destinationCrs().authid();
 }
 
-QPointF MapEngine::convertMapToImageCoords(const QPointF& mapPoint)
-{
-  QgsPoint p = mMapSettings.mapToPixel().transform(QgsPoint(mapPoint.x(), mapPoint.y()));
-  return QPointF(p.x(), p.y());
-}
-
-QPointF MapEngine::convertImageToMapCoords(const QPointF& imagePoint)
-{
-  QgsPoint p = mMapSettings.mapToPixel().toMapCoordinatesF(imagePoint.x(), imagePoint.y());
-  return QPointF(p.x(), p.y());
-}
 
 QPointF MapEngine::convertWgs84ToImageCoords(const QPointF& wgs84Point)
 {
   QgsCoordinateReferenceSystem wgs84("EPSG:4326");
   QgsCoordinateTransform ct(wgs84, mMapSettings.destinationCrs());
   QgsPoint mapPoint = ct.transform(wgs84Point.x(), wgs84Point.y());
-  return convertMapToImageCoords(QPointF(mapPoint.x(), mapPoint.y()));
+  return mView->mapToDisplay(QPointF(mapPoint.x(), mapPoint.y()));
 }
 
-void MapEngine::setTransparency(double value, QStringList layerIds)
-{
-  // TODO GISUtils::setTransparency(value, layerIds);
-}
-
-double MapEngine::transparency(QStringList layerIds)
-{
-  // TODO return GISUtils::transparency(layerIds);
-  return 0;
-}
 
 double MapEngine::metersPerPixel() const
 {
@@ -144,38 +145,6 @@ void MapEngine::setLayers(const QStringList& layers)
 }
 
 
-inline QgsRectangle qrect2qgsrect(const QRectF& rect)
-{
-  return QgsRectangle(rect.left(), rect.top(), rect.right(), rect.bottom());
-}
-
-inline QRectF qgsrect2qrect(const QgsRectangle& rect)
-{
-  return QRectF(QPointF(rect.xMinimum(), rect.yMinimum()), QPointF(rect.xMaximum(), rect.yMaximum()));
-}
-
-QRectF MapEngine::extent() const
-{
-  return qgsrect2qrect(mMapSettings.visibleExtent());
-}
-
-void MapEngine::setExtent(const QRectF& extent)
-{
-  QgsRectangle rect = qrect2qgsrect(extent);
-  //rect.scale(1.1);  // a bit of extra margins
-  mMapSettings.setExtent(rect);
-  emit mapSettingsChanged();
-}
-
-void MapEngine::zoomToPoint(double x, double y, double scale)
-{
-  QgsRectangle r = mMapSettings.extent();
-  double scaleFactor = scale / mMapSettings.scale();
-  r.scale(scaleFactor, x, y);
-  mMapSettings.setExtent(r);
-  emit mapSettingsChanged();
-}
-
 QRectF MapEngine::layerExtent(const QString& layerId) const
 {
   QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId);
@@ -185,16 +154,6 @@ QRectF MapEngine::layerExtent(const QString& layerId) const
 QRectF MapEngine::fullExtent() const
 {
   return qgsrect2qrect(mMapSettings.fullExtent());
-}
-
-QPointF MapEngine::mapCenter() const
-{
-  return mMapSettings.visibleExtent().center().toQPointF();
-}
-
-double MapEngine::mapScale() const
-{
-  return mMapSettings.scale();
 }
 
 
@@ -224,7 +183,7 @@ static QList<QgsAttributes> _identifyVector(QgsVectorLayer* vlayer, const QPoint
 void MapEngine::identifyPoint(const QPointF& point)
 {
   //QList<QVariant> results;
-  QPointF mapPoint = convertImageToMapCoords(point);
+  QPointF mapPoint = mView->displayToMap(point);
 
   QVariantMap vm;
   foreach (const QString& layerId, layers())
@@ -304,6 +263,29 @@ void MapEngine::onRepaintRequested()
 }
 
 
+QRectF MapEngine::extent() const
+{
+  return qgsrect2qrect(mMapSettings.visibleExtent());
+}
+
+#if 0  // extent config now done with MapView
+void MapEngine::setExtent(const QRectF& extent)
+{
+  QgsRectangle rect = qrect2qgsrect(extent);
+  //rect.scale(1.1);  // a bit of extra margins
+  mMapSettings.setExtent(rect);
+  emit mapSettingsChanged();
+}
+
+void MapEngine::zoomToPoint(double x, double y, double scale)
+{
+  QgsRectangle r = mMapSettings.extent();
+  double scaleFactor = scale / mMapSettings.scale();
+  r.scale(scaleFactor, x, y);
+  mMapSettings.setExtent(r);
+  emit mapSettingsChanged();
+}
+
 void MapEngine::zoomIn()
 {
   QgsRectangle r = mMapSettings.extent();
@@ -341,7 +323,7 @@ void MapEngine::scale(double s)
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
 }
-
+#endif
 
 
 // ----------

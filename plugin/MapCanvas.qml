@@ -23,7 +23,7 @@ Rectangle {
     property rect initialExtent
     property bool _imgViewInitialized: false
 
-    property alias engine: mapImage.mapEngine
+    property MapEngine engine: MapEngine { view: canvas.view }
 
     // emitted when a single point is clicked
     signal clicked(real x, real y)
@@ -37,7 +37,7 @@ Rectangle {
     MapImage {
         id: mapImage
 
-        mapEngine: MapEngine {}
+        mapEngine: canvas.engine
 
         property MapView view: MapView { parentView: canvas.view }
 
