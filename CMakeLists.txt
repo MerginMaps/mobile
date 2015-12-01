@@ -45,6 +45,16 @@ set(plugin_srcs
   plugin/positionengine.h
 )
 
+set(plugin_qmls
+  plugin/qmldir
+  plugin/MapCanvas.qml
+  plugin/ScaleBar.qml
+  plugin/VertexMarker.qml
+  plugin/VertexMarkerBase.qml
+  plugin/PositionMarker.qml
+  plugin/PositionAccuracy.qml
+)
+
 set(test_srcs
   test/main.cpp
   test/main.qml
@@ -53,13 +63,10 @@ set(test_srcs
 )
 
 # QML plugin
-configure_file(plugin/qmldir output/qgis/qmldir COPYONLY)
-configure_file(plugin/MapCanvas.qml output/qgis/MapCanvas.qml COPYONLY)
-configure_file(plugin/ScaleBar.qml output/qgis/ScaleBar.qml COPYONLY)
-configure_file(plugin/VertexMarker.qml output/qgis/VertexMarker.qml COPYONLY)
-configure_file(plugin/VertexMarkerBase.qml output/qgis/VertexMarkerBase.qml COPYONLY)
-configure_file(plugin/PositionMarker.qml output/qgis/PositionMarker.qml COPYONLY)
-configure_file(plugin/PositionAccuracy.qml output/qgis/PositionAccuracy.qml COPYONLY)
+foreach (qml_file ${plugin_qmls})
+  get_filename_component(qml_filename ${qml_file} NAME)
+  configure_file(${qml_file} output/qgis/${qml_filename} COPYONLY)
+endforeach(qml_file)
 add_library(qgismobile MODULE ${plugin_srcs})
 target_link_libraries(qgismobile Qt5::Quick Qt5::Qml ${QGIS_LIBRARY} Qt5::Xml Qt5::Widgets Qt5::Concurrent Qt5::Positioning)
 set_target_properties(qgismobile PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/qgis)
@@ -76,7 +83,7 @@ INSTALL(TARGETS qgismobile
   RUNTIME DESTINATION ${QM_INSTALL_DIR}
   LIBRARY DESTINATION ${QM_INSTALL_DIR}
 )
-INSTALL(FILES plugin/qmldir plugin/MapCanvas.qml plugin/ScaleBar.qml plugin/VertexMarker.qml
+INSTALL(FILES ${plugin_qmls}
         DESTINATION ${QM_INSTALL_DIR})
 
 
