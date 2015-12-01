@@ -33,8 +33,12 @@ set(plugin_srcs
   plugin/plugin.h
   plugin/mapengine.cpp
   plugin/mapengine.h
+  plugin/mapimage.cpp
+  plugin/mapimage.h
   plugin/maplayer.cpp
   plugin/maplayer.h
+  plugin/mapview.cpp
+  plugin/mapview.h
   plugin/project.cpp
   plugin/project.h
   plugin/positionengine.cpp

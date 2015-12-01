@@ -1,6 +1,8 @@
 #include "plugin.h"
 #include "mapengine.h"
+#include "mapimage.h"
 #include "maplayer.h"
+#include "mapview.h"
 #include "positionengine.h"
 #include "project.h"
 
