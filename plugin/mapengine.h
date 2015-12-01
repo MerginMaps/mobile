@@ -170,8 +170,6 @@ public:
 
   Q_INVOKABLE QRectF fullExtent() const;
 
-  QImage mapImage() const { return mMapImage; }
-
   Q_INVOKABLE QPointF mapCenter() const;
   Q_INVOKABLE double mapScale() const;
 
@@ -179,15 +177,12 @@ public:
   QVariant identifyResult() const { return mIdentifyResult; }
 
 signals:
-  void mapImageChanged();
   void imageSizeChanged();
   void mapSettingsChanged();
   void scaleBarChanged();
   void identifyResultChanged();
 
 public slots:
-  void refreshMapDelayed();
-  void jobFinished();
   void updateScaleBar();
   void onRepaintRequested();
 
@@ -196,20 +191,12 @@ public slots:
   Q_INVOKABLE void move(double x0, double y0, double x1, double y1);
   Q_INVOKABLE void scale(double s);
 
-  Q_INVOKABLE void refreshMap();
-
 protected:
   double screenUnitsToMeters(int baseLength) const;
 
 private:
 
-  bool mRefreshRequested;
-  bool mJobCancelled;
-
   QgsMapSettings mMapSettings;
-
-  QgsMapRendererParallelJob* mJob;
-  QImage mMapImage;
 
   int mScaleBarLength; // in pixels
   QString mScaleBarText;
@@ -232,17 +219,30 @@ public:
   MapEngine* mapEngine() { return mEngine; }
   void setMapEngine(MapEngine* e);
 
+  Q_INVOKABLE void refreshMap(MapView* mv);
+
   QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData);
 
 signals:
   void mapEngineChanged();
+  void mapImageChanged();
 
 protected slots:
-  void mapImageChanged();
+  void refreshMapDelayed();
+  void jobFinished();
 
 protected:
   MapEngine* mEngine;
   bool mNewImg;
+
+  QgsMapSettings mMapSettings;
+
+  bool mRefreshRequested;
+  bool mJobCancelled;
+  QgsMapRendererParallelJob* mJob;
+  QImage mMapImage;
+
+  QgsMapRendererCache* mCache;
 };
 
 

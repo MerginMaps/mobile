@@ -43,21 +43,15 @@ Rectangle {
 
         property MapView viewRequest: MapView { }
 
-        Connections {
-            target: mapImage.mapEngine
-            onMapImageChanged: {
-                console.log("map image changed: resetting center + mupp")
-                mapImage.view.copyFrom(mapImage.viewRequest)
-            }
+        onMapImageChanged: {
+            console.log("map image changed: resetting center + mupp")
+            mapImage.view.copyFrom(mapImage.viewRequest)
         }
 
         function refreshMapImage() {
             viewRequest.copyFrom(canvas.view)
-            var extent = viewRequest.toExtent()
-            console.log("refreshMapImage " + viewRequest.center + " + " + viewRequest.mupp + " + " + viewRequest.size + " = " + extent)
-            engine.imageSize = viewRequest.size
-            engine.extent = extent
-            engine.refreshMap()
+            console.log("refreshMapImage " + viewRequest.center + " + " + viewRequest.mupp + " + " + viewRequest.size + " = " + viewRequest.toExtent())
+            mapImage.refreshMap(viewRequest)
         }
 
         x: mapImage.view.dxToParent

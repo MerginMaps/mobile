@@ -22,16 +22,11 @@
 
 MapEngine::MapEngine(QObject *parent)
   : QObject(parent)
-  , mRefreshRequested(false)
-  , mJobCancelled(false)
-  , mJob(0)
   , mCache(new QgsMapRendererCache())
 {
 
   //mMapSettings.setOutputSize(QSize(100,100));
   mMapSettings.setCrsTransformEnabled(true);
-
-  //refreshMap(); // make initial image
 
   connect(this, SIGNAL(mapSettingsChanged()), this, SLOT(updateScaleBar()));
   connect(this, SIGNAL(imageSizeChanged()), this, SLOT(updateScaleBar()));
@@ -46,7 +41,6 @@ void MapEngine::setImageSize(const QSize& s)
   if (s.width() <= 0 || s.height() <= 0 || mMapSettings.outputSize() == s)
     return;
   mMapSettings.setOutputSize(s);
-  //refreshMap(); // provide a image with new size
   emit imageSizeChanged();
 }
 
@@ -82,7 +76,6 @@ void MapEngine::setDestinationCRS(const QString& crs)
   mMapSettings.setMapUnits(c.mapUnits()); // for correct scale calculation
 
   emit mapSettingsChanged();
-  //refreshMap();
 }
 
 QString MapEngine::destinationCRS() const
@@ -113,7 +106,6 @@ QPointF MapEngine::convertWgs84ToImageCoords(const QPointF& wgs84Point)
 void MapEngine::setTransparency(double value, QStringList layerIds)
 {
   // TODO GISUtils::setTransparency(value, layerIds);
-  //refreshMap();
 }
 
 double MapEngine::transparency(QStringList layerIds)
@@ -149,7 +141,6 @@ void MapEngine::setLayers(const QStringList& layers)
       connect(ml, SIGNAL(repaintRequested()), this, SLOT(onRepaintRequested()));
   }
   emit mapSettingsChanged();
-  //refreshMap();
 }
 
 
@@ -174,7 +165,6 @@ void MapEngine::setExtent(const QRectF& extent)
   //rect.scale(1.1);  // a bit of extra margins
   mMapSettings.setExtent(rect);
   emit mapSettingsChanged();
-  //refreshMap();
 }
 
 void MapEngine::zoomToPoint(double x, double y, double scale)
@@ -184,7 +174,6 @@ void MapEngine::zoomToPoint(double x, double y, double scale)
   r.scale(scaleFactor, x, y);
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
-  //refreshMap();
 }
 
 QRectF MapEngine::layerExtent(const QString& layerId) const
@@ -315,28 +304,12 @@ void MapEngine::onRepaintRequested()
 }
 
 
-void MapEngine::jobFinished()
-{
-  Q_ASSERT(mJob);
-  qDebug("job finished: %d", !mJobCancelled);
-
-  if (!mJobCancelled)
-  {
-    mMapImage = mJob->renderedImage();
-    emit mapImageChanged();
-  }
-
-  mJob->deleteLater();
-  mJob = 0;
-}
-
 void MapEngine::zoomIn()
 {
   QgsRectangle r = mMapSettings.extent();
   r.scale(0.8);
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
-  refreshMap();
 }
 
 void MapEngine::zoomOut()
@@ -345,7 +318,6 @@ void MapEngine::zoomOut()
   r.scale(1.2);
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
-  refreshMap();
 }
 
 void MapEngine::move(double x0, double y0, double x1, double y1)
@@ -360,7 +332,6 @@ void MapEngine::move(double x0, double y0, double x1, double y1)
   mMapSettings.setExtent(QgsRectangle(c.x() - w/2, c.y() - h/2,
                                       c.x() + w/2, c.y() + h/2));
   emit mapSettingsChanged();
-  refreshMap();
 }
 
 void MapEngine::scale(double s)
@@ -369,45 +340,8 @@ void MapEngine::scale(double s)
   r.scale(1/s);
   mMapSettings.setExtent(r);
   emit mapSettingsChanged();
-  refreshMap();
 }
 
-
-void MapEngine::refreshMap()
-{
-  if (!mMapSettings.hasValidSettings())
-  {
-    qDebug("invalid map settings - nothing to render");
-    return;
-  }
-
-  if (!mRefreshRequested)
-  {
-    mRefreshRequested = true;
-    QTimer::singleShot(0, this, SLOT(refreshMapDelayed()));
-  }
-}
-
-void MapEngine::refreshMapDelayed()
-{
-  mRefreshRequested = false;
-
-  if (mJob)
-  {
-    qDebug("cancelling!");
-    mJobCancelled = true;
-    mJob->cancel();
-  }
-
-  mJobCancelled = false;
-
-  qDebug("starting job...");
-
-  mJob = new QgsMapRendererParallelJob(mMapSettings);
-  connect(mJob, SIGNAL(finished()), this, SLOT(jobFinished()));
-  mJob->setCache(mCache);
-  mJob->start();
-}
 
 
 // ----------
@@ -417,19 +351,17 @@ MapImage::MapImage(QQuickItem* parent)
   : QQuickItem(parent)
   , mEngine(0)
   , mNewImg(false)
+  , mRefreshRequested(false)
+  , mJobCancelled(false)
+  , mJob(0)
+  , mCache(new QgsMapRendererCache())
 {
   setFlag(ItemHasContents);
 }
 
 void MapImage::setMapEngine(MapEngine* e)
 {
-  if (mEngine)
-    disconnect(mEngine, SIGNAL(mapImageChanged()), this, SLOT(mapImageChanged()));
-
   mEngine = e;
-
-  if (mEngine)
-    connect(mEngine, SIGNAL(mapImageChanged()), this, SLOT(mapImageChanged()));
 
   emit mapEngineChanged();
 }
@@ -446,7 +378,7 @@ QSGNode* MapImage::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeDat
 
   if (mNewImg)
   {
-    QSGTexture *texture = window()->createTextureFromImage(mEngine->mapImage());
+    QSGTexture *texture = window()->createTextureFromImage(mMapImage);
     n->setTexture(texture);
     n->setOwnsTexture(true);
     mNewImg = false;
@@ -456,8 +388,67 @@ QSGNode* MapImage::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeDat
   return n;
 }
 
-void MapImage::mapImageChanged()
+
+
+void MapImage::refreshMap(MapView* mv)
 {
-  mNewImg = true;
-  update();
+  if (!mEngine)
+  {
+    qDebug("no engine for refresh!");
+    return;
+  }
+
+  mMapSettings = mEngine->mapSettings();
+  mMapSettings.setOutputSize(mv->size());
+  mMapSettings.setExtent(qrect2qgsrect(mv->toExtent()));
+
+  if (!mMapSettings.hasValidSettings())
+  {
+    qDebug("invalid map settings - nothing to render");
+    return;
+  }
+
+  if (!mRefreshRequested)
+  {
+    mRefreshRequested = true;
+    QTimer::singleShot(0, this, SLOT(refreshMapDelayed()));
+  }
+}
+
+void MapImage::refreshMapDelayed()
+{
+  mRefreshRequested = false;
+
+  if (mJob)
+  {
+    qDebug("cancelling!");
+    mJobCancelled = true;
+    mJob->cancel();
+  }
+
+  mJobCancelled = false;
+
+  qDebug("Starting job...");
+
+  mJob = new QgsMapRendererParallelJob(mMapSettings);
+  connect(mJob, SIGNAL(finished()), this, SLOT(jobFinished()));
+  mJob->setCache(mCache);
+  mJob->start();
+}
+
+void MapImage::jobFinished()
+{
+  Q_ASSERT(mJob);
+  qDebug("job finished! %d", !mJobCancelled);
+
+  if (!mJobCancelled)
+  {
+    mMapImage = mJob->renderedImage();
+    mNewImg = true;
+    update();
+    emit mapImageChanged();
+  }
+
+  mJob->deleteLater();
+  mJob = 0;
 }
