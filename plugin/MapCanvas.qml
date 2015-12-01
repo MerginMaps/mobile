@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Window 2.2
 import qgis 1.0
 
 Rectangle {
@@ -96,6 +97,11 @@ Rectangle {
 
         property bool zooming: false
 
+        function isDragging(x,y) {
+            // leave some tolerance before we consider that user is dragging the map
+            return Math.abs(panStart.x - x) > Screen.pixelDensity*1 || Math.abs(panStart.y - y) > Screen.pixelDensity*1
+        }
+
         onPressed: {
             if (mouse.button == Qt.LeftButton) {
                 panStart = Qt.point( mouse.x, mouse.y )
@@ -105,11 +111,11 @@ Rectangle {
 
         onReleased: {
             if (mouse.button == Qt.LeftButton) {
-                panning = false
-                if (Math.abs(panStart.x - mouse.x) == 0 && Math.abs(panStart.y - mouse.y) == 0)
+                if (!panning)
                     canvas.clicked(mouse.x, mouse.y)
                 else
                 {
+                    panning = false
                     mapImage.refreshMapImage()
                 }
 
@@ -117,7 +123,7 @@ Rectangle {
         }
 
         onPositionChanged: {
-            if (!panning && (mouse.buttons & Qt.LeftButton))
+            if (!panning && (mouse.buttons & Qt.LeftButton) && isDragging(mouse.x, mouse.y))
                 panning = true
 
             if (panning) {
