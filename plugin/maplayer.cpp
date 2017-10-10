@@ -1,7 +1,7 @@
 #include "maplayer.h"
 
 #include <qgsrasterlayer.h>
-#include <qgsmaplayerregistry.h>
+#include <qgsproject.h>
 
 MapLayer::MapLayer()
   : mRL(0)
@@ -36,7 +36,7 @@ void MapLayer::load()
 
   mRL = new QgsRasterLayer(mSource);
   Q_ASSERT(mRL->isValid());
-  QgsMapLayerRegistry::instance()->addMapLayer(mRL);
+  QgsProject::instance()->addMapLayer(mRL);
   qDebug("LOADED!");
   emit layerLoaded();
 }

@@ -1,5 +1,5 @@
 #include "mapview.h"
-
+#include <qgspointxy.h>
 #include <QtDebug>
 
 MapView::MapView(QObject* parent)
@@ -53,7 +53,7 @@ QPointF MapView::mapToDisplay(const QPointF& point)
 
 QPointF MapView::displayToMap(const QPointF& point)
 {
-  QgsPoint p = xform.toMapCoordinatesF(point.x(), point.y());
+  QgsPointXY p = xform.toMapCoordinatesF(point.x(), point.y());
   return QPointF(p.x(), p.y());
 }
 

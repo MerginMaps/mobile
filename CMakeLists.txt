@@ -1,4 +1,4 @@
-PROJEct(qgismobile)
+PROJECT(qgis_quick_components)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
@@ -67,9 +67,9 @@ foreach (qml_file ${plugin_qmls})
   get_filename_component(qml_filename ${qml_file} NAME)
   configure_file(${qml_file} output/qgis/${qml_filename} COPYONLY)
 endforeach(qml_file)
-add_library(qgismobile MODULE ${plugin_srcs})
-target_link_libraries(qgismobile Qt5::Quick Qt5::Qml ${QGIS_LIBRARY} Qt5::Xml Qt5::Widgets Qt5::Concurrent Qt5::Positioning)
-set_target_properties(qgismobile PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/qgis)
+add_library(qgis-quick-components MODULE ${plugin_srcs})
+target_link_libraries(qgis-quick-components Qt5::Quick Qt5::Qml ${QGIS_LIBRARY} Qt5::Xml Qt5::Widgets Qt5::Concurrent Qt5::Positioning)
+set_target_properties(qgis-quick-components PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/qgis)
 include_directories(${QGIS_INCLUDE_DIR})
 include_directories(${EXTRA_INCLUDE_DIR})
 add_definitions(-DCORE_EXPORT=)
@@ -79,7 +79,7 @@ endif ()
 
 # QML plugin installation
 SET(QM_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/qml/qgis)
-INSTALL(TARGETS qgismobile
+INSTALL(TARGETS qgis-quick-components
   RUNTIME DESTINATION ${QM_INSTALL_DIR}
   LIBRARY DESTINATION ${QM_INSTALL_DIR}
 )
@@ -90,6 +90,10 @@ INSTALL(FILES ${plugin_qmls}
 qt5_add_resources(RESOURCE_ADDED test/test.qrc)
 
 # test executable
-add_executable(qgismobiletest ${RESOURCE_ADDED} ${test_srcs})
-target_link_libraries(qgismobiletest Qt5::Gui Qt5::Qml Qt5::Quick ${qgis_library} Qt5::Xml Qt5::Widgets)
-set_target_properties(qgismobiletest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+add_executable(qgis-quick-components-test ${RESOURCE_ADDED} ${test_srcs})
+target_link_libraries(qgis-quick-components-test Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Xml Qt5::Widgets)
+target_link_libraries(qgis-quick-components-test ${QGIS_LIBRARY})
+set_target_properties(qgis-quick-components-test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
+
+INSTALL(TARGETS qgis-quick-components-test DESTINATION "bin")
+INSTALL(TARGETS qgis-quick-components DESTINATION "lib")

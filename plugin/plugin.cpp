@@ -99,7 +99,7 @@ static void init_qgis()
 #endif
 
   // make sure the DB exists - otherwise custom projections will be failing
-  if (!QgsApplication::createDB())
+  if (!QgsApplication::createDatabase())
     qDebug("Can't create qgis user DB!!!");
 
   qDebug("qgis_init %f [s]", t.elapsed()/1000.0);
