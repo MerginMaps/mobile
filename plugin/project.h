@@ -3,18 +3,20 @@
 
 #include <QObject>
 
+class QgsMapLayer;
+
 class Project : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QString projectFile READ projectFile WRITE setProjectFile NOTIFY projectFileChanged)
-  Q_PROPERTY(QStringList layers READ layers NOTIFY projectFileChanged)
+  Q_PROPERTY(QList< QgsMapLayer* > layers READ layers NOTIFY projectFileChanged)
 public:
   static Project* instance();
 
   void setProjectFile(const QString& filename);
   QString projectFile() const { return mFilename; }
 
-  QStringList layers() const;
+  QList< QgsMapLayer* > layers() const;
 
 signals:
   void projectFileChanged();

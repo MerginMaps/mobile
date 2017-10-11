@@ -13,11 +13,7 @@ Window {
     Component.onCompleted: {
         Project.projectFile = "/home/peter/qmobile/repo/qgis-quick-components/data/test_project.qgs"
         canvas.engine.layers = Project.layers
-        canvas.engine.extent = canvas.engine.fullExtent()
-
-        // add raster background
-        ml.source = "/home/peter/qmobile/repo/qgis-quick-components/data/bg.tif"
-        canvas.engine.layers.push(ml.layerId)
+        canvas.engine.view.center = canvas.engine.fullExtent()
     }
 
     MapCanvas {
@@ -49,11 +45,6 @@ Window {
                 }
             }
         }
-    }
-
-    MapLayer {
-        id: ml
-        provider: "gdal"
     }
 
     ScaleBar {

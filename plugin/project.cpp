@@ -30,15 +30,15 @@ void Project::setProjectFile(const QString& filename)
   emit projectFileChanged();
 }
 
-QStringList Project::layers() const
+QList< QgsMapLayer* > Project::layers() const
 {
   QgsLayerTreeGroup* root = QgsProject::instance()->layerTreeRoot();
   //qDebug("root: %s", root->dump().toLocal8Bit().data());
-  QStringList list;
+  QList< QgsMapLayer* > list;
   foreach (QgsLayerTreeLayer* nodeLayer, root->findLayers())
   {
-    if (nodeLayer->isVisible() == Qt::Checked)
-      list << nodeLayer->layerId();
+    if (nodeLayer->isVisible())
+      list << nodeLayer->layer();
   }
 
   return list;
