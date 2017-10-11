@@ -6,12 +6,14 @@
 #include <qgsapplication.h>
 #include <qgscoordinatetransform.h>
 #include <qgsrasterlayer.h>
-#include <qgsmaplayerregistry.h>
+#include <qgsproject.h>
 #include <qgsmapsettings.h>
 #include <qgsdistancearea.h>
 #include <qgsfeatureiterator.h>
 #include <qgsvectordataprovider.h>
 #include <qgsvectorlayer.h>
+#include <qgspointxy.h>
+#include <qgsunittypes.h>
 
 #include "mapview.h"
 
@@ -27,9 +29,6 @@ MapEngine::MapEngine(QObject *parent)
 {
 
   mDa->setEllipsoid("WGS84");
-  mDa->setEllipsoidalMode(true);
-
-  mMapSettings.setCrsTransformEnabled(true);
 
   connect(this, SIGNAL(mapSettingsChanged()), this, SLOT(updateScaleBar()));
 }
@@ -89,7 +88,6 @@ void MapEngine::setDestinationCRS(const QString& crs)
   }
 
   mMapSettings.setDestinationCrs(c);
-  mMapSettings.setMapUnits(c.mapUnits()); // for correct scale calculation
 
   // for conversions from WGS 84
   delete mWgs2map;
@@ -110,7 +108,7 @@ QPointF MapEngine::wgs84ToMap(const QPointF& wgs84Point)
 {
   if (!mWgs2map)
     return QPointF();
-  QgsPoint mapPoint = mWgs2map->transform(wgs84Point.x(), wgs84Point.y());
+  QgsPointXY mapPoint = mWgs2map->transform(wgs84Point.x(), wgs84Point.y());
   return mapPoint.toQPointF();
 }
 
@@ -125,7 +123,7 @@ double MapEngine::scale2mupp(double scale)
 double MapEngine::metersPerPixel() const
 {
   // assuming map unit = 1px (projected CRS with meters as map units)
-  if (mMapSettings.destinationCrs().mapUnits() == QGis::Meters)
+  if (mMapSettings.destinationCrs().mapUnits() == QgsUnitTypes::DistanceMeters)
     return mMapSettings.mapUnitsPerPixel();
   else
   {
@@ -133,28 +131,24 @@ double MapEngine::metersPerPixel() const
   }
 }
 
-void MapEngine::setLayers(const QStringList& layers)
+void MapEngine::setLayers(const QList<QgsMapLayer *> layers)
 {
-  foreach (const QString& layerId, mMapSettings.layers())
+  foreach (QgsMapLayer* ml, mMapSettings.layers())
   {
-    if (QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId))
       disconnect(ml, SIGNAL(repaintRequested()), this, SLOT(onRepaintRequested()));
   }
 
   mMapSettings.setLayers(layers);
-
-  foreach (const QString& layerId, layers)
+  foreach (QgsMapLayer* ml, layers)
   {
-    if (QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId))
       connect(ml, SIGNAL(repaintRequested()), this, SLOT(onRepaintRequested()));
   }
   emit mapSettingsChanged();
 }
 
 
-QRectF MapEngine::layerExtent(const QString& layerId) const
+QRectF MapEngine::layerExtent(const QgsMapLayer* ml) const
 {
-  QgsMapLayer* ml = QgsMapLayerRegistry::instance()->mapLayer(layerId);
   return ml ? qgsrect2qrect(mMapSettings.layerExtentToOutputExtent(ml, ml->extent())) : QRectF();
 }
 
@@ -170,7 +164,7 @@ static QList<QgsAttributes> _identifyVector(QgsVectorLayer* vlayer, const QPoint
   QgsRectangle rect(point.x() - rad, point.y() - rad, point.x() + rad, point.y() + rad);
 
   if (engine->mapSettings().destinationCrs() != vlayer->dataProvider()->crs())
-    rect = engine->mapSettings().layerTransform(vlayer)->transform(rect, QgsCoordinateTransform::ReverseTransform);
+    rect = engine->mapSettings().layerTransform(vlayer).transform(rect, QgsCoordinateTransform::ReverseTransform);
 
   QList<QgsAttributes> lst;
 
@@ -193,10 +187,8 @@ void MapEngine::identifyPoint(const QPointF& point)
   QPointF mapPoint = mView->displayToMap(point);
 
   QVariantMap vm;
-  foreach (const QString& layerId, layers())
+  foreach (QgsMapLayer* layer, layers())
   {
-    QgsMapLayer* layer = QgsMapLayerRegistry::instance()->mapLayer(layerId);
-
     if (QgsVectorLayer* vlayer = qobject_cast<QgsVectorLayer*>(layer))
     {
       QList<QgsAttributes> lst = _identifyVector(vlayer, mapPoint, this);
@@ -228,8 +220,8 @@ double MapEngine::screenUnitsToMeters(int baseLength) const
   // to the specified number of points on the right side
   QSize s = mMapSettings.outputSize();
   QPoint pointCenter(s.width()/2, s.height()/2);
-  QgsPoint p1 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter);
-  QgsPoint p2 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter+QPoint(baseLength,0));
+  QgsPointXY p1 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter);
+  QgsPointXY p2 = mMapSettings.mapToPixel().toMapCoordinates(pointCenter+QPoint(baseLength,0));
   return mDa->measureLine(p1, p2);
 }
 

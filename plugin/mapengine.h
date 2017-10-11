@@ -33,7 +33,7 @@ class MapEngine : public QObject
   Q_PROPERTY(QString scaleBarText READ scaleBarText NOTIFY scaleBarChanged)
   Q_PROPERTY(int scaleBarLength READ scaleBarLength NOTIFY scaleBarChanged)
   Q_PROPERTY(double metersPerPixel READ metersPerPixel NOTIFY mapSettingsChanged)
-  Q_PROPERTY(QStringList layers READ layers WRITE setLayers NOTIFY mapSettingsChanged)
+  Q_PROPERTY(QList<QgsMapLayer*> layers READ layers WRITE setLayers NOTIFY mapSettingsChanged)
   Q_PROPERTY(QRectF extent READ extent NOTIFY mapSettingsChanged)
   Q_PROPERTY(QVariant identifyResult READ identifyResult NOTIFY identifyResultChanged)
 public:
@@ -58,12 +58,12 @@ public:
 
   double metersPerPixel() const;
 
-  QStringList layers() const { return mMapSettings.layers(); }
-  void setLayers(const QStringList& layers);
+  QList<QgsMapLayer*> layers() const { return mMapSettings.layers(); }
+  void setLayers(const QList<QgsMapLayer*> layers);
 
   QRectF extent() const;
 
-  Q_INVOKABLE QRectF layerExtent(const QString& layerId) const;
+  Q_INVOKABLE QRectF layerExtent(const QgsMapLayer *ml) const;
 
   Q_INVOKABLE QRectF fullExtent() const;
 
