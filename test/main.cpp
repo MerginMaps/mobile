@@ -1,10 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
+#include "qgsapplication.h"
 
 int main(int argc, char *argv[])
 {
-  QGuiApplication app(argc, argv);
+  QgsApplication app(argc, argv, true);
 
 #ifdef QGIS_PREFIX_PATH
   ::setenv("QGIS_PREFIX_PATH", QGIS_PREFIX_PATH, true);

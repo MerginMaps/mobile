@@ -5,6 +5,7 @@
 #include "mapview.h"
 #include "positionengine.h"
 #include "project.h"
+#include "qgsnetworkaccessmanager.h"
 
 #include <qgsapplication.h>
 #include <qgsproviderregistry.h>
@@ -52,9 +53,9 @@ static void init_qgis()
 #endif
 
   // if not on Android, QGIS_PREFIX_PATH env variable should have been set already
-
   QgsApplication::init();
   QgsApplication::initQgis();
+  QgsNetworkAccessManager::instance();
 
 #ifdef ANDROID
   // QGIS plugins on Android are in the same path as other libraries

@@ -15,11 +15,11 @@ FIND_PACKAGE(Qt5Concurrent REQUIRED) # QGIS dep
 MESSAGE(STATUS "Found Qt version: ${Qt5Core_VERSION_STRING}")
 
 # QGIS
-set(QGIS_PATH /home/martin/inst/qgis-core-qt5 CACHE PATH "Path to QGIS installation")
+set(QGIS_PATH /home/peter/qmobile/apps CACHE PATH "Path to QGIS installation")
 set(QGIS_INCLUDE_DIR ${QGIS_PATH}/include/qgis)
 set(QGIS_LIBRARY ${QGIS_PATH}/lib/libqgis_core.so)
 SET(EXTRA_INCLUDE_DIR ${QGIS_PATH}/include) # some other dependent libs (e.g. geos, gdal)
-
+MESSAGE("qgis core: ${QGIS_LIBRARY}")
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

@@ -11,12 +11,12 @@ Window {
     height: 600
 
     Component.onCompleted: {
-        Project.projectFile = "/home/martin/qgis/qgis-mobile/data/test_project.qgs"
+        Project.projectFile = "/home/peter/qmobile/repo/qgis-quick-components/data/test_project.qgs"
         canvas.engine.layers = Project.layers
         canvas.engine.extent = canvas.engine.fullExtent()
 
         // add raster background
-        ml.source = "/home/martin/ne_50m.tif"
+        ml.source = "/home/peter/qmobile/repo/qgis-quick-components/data/bg.tif"
         canvas.engine.layers.push(ml.layerId)
     }
 

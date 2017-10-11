@@ -1,5 +1,5 @@
 module qgis
-plugin qgismobile
+plugin qgis-quick-components
 typeinfo plugins.qmltypes
 MapCanvas 1.0 MapCanvas.qml
 ScaleBar 1.0 ScaleBar.qml
