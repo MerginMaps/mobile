@@ -1,0 +1,73 @@
+/***************************************************************************
+  qgsquicklayertreemodel.h
+  --------------------------------------
+  Date                 : Nov 2017
+  Copyright            : (C) 2017 by Peter Petrik
+  Email                : zilolv at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
+#ifndef PROJECTSMODEL_H
+#define PROJECTSMODEL_H
+
+#include <QAbstractListModel>
+#include <QString>
+#include <QModelIndex>
+
+/*
+ * Given data directory, find all QGIS projects (*.qgs) in the directory and subdirectories
+ * and create list model from them. Available are full path to the file, name of the project
+ * and short name of the project (clipped to N chars)
+ */
+class ProjectModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY( QString dataDir READ dataDir) // never changes
+
+  public:
+    enum Roles
+    {
+      Name = Qt::UserRole + 1,
+      Path,
+      ShortName // name shortened to maxShortNameChars
+    };
+    Q_ENUMS( Roles )
+
+    explicit ProjectModel(const QString& dataDir, QObject* parent = nullptr);
+    ~ProjectModel();
+
+    Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
+    Q_INVOKABLE QModelIndex index( int row ) const;
+
+    QHash<int, QByteArray> roleNames() const override;
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    QString dataDir() const;
+
+  private:
+    void findProjectFiles();
+
+    struct ProjectFile {
+        QString name;
+        QString path;
+
+        bool operator < (const ProjectFile& str) const
+        {
+            return (name < str.name);
+        }
+    };
+    QList<ProjectFile> mProjectFiles;
+    QString mDataDir;
+    const int mMaxShortNameChars = 10;
+
+};
+
+#endif // PROJECTSMODEL_H

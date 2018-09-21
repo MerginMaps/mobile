@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ActiveLayerPanel.qml</file>
+        <file>FeaturePanel.qml</file>
+        <file>LayerTreeBtn.qml</file>
+        <file>main.qml</file>
+        <file>MainPanel.qml</file>
+        <file>MyLocationBtn.qml</file>
+        <file>OpenProjectBtn.qml</file>
+        <file>OpenProjectPanel.qml</file>
+        <file>RecordBtn.qml</file>
+        <file>ScaleBar.qml</file>
+        <file>error.qml</file>
+        <file>YdnpaStyle.qml</file>
+        <file>qmldir</file>
+        <file>SettingsPanel.qml</file>
+    </qresource>
+</RCC>
