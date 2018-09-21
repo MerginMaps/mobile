@@ -1,9 +1,0 @@
-module qgis
-plugin qgis-quick-components
-typeinfo plugins.qmltypes
-MapCanvas 1.0 MapCanvas.qml
-ScaleBar 1.0 ScaleBar.qml
-VertexMarker 1.0 VertexMarker.qml
-VertexMarkerBase 1.0 VertexMarkerBase.qml
-PositionAccuracy 1.0 PositionAccuracy.qml
-PositionMarker 1.0 PositionMarker.qml
