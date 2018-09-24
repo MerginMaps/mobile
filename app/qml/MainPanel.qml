@@ -17,7 +17,7 @@ Item {
     property string gpsStatus: "GPS \n (none)"
 
     property int itemSize: mainPanel.height * 0.8
-    property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*YdnpaStyle.panelSpacing - logoYD.width - gpsLabel.width)/2
+    property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logoYD.width - gpsLabel.width)/2
 
     id: mainPanel
 
@@ -28,13 +28,13 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
     }
 
     Image {
         id: logoYD
-        x: YdnpaStyle.panelSpacing
+        x: InputStyle.panelSpacing
         source: "logo_yd.png"
         height: mainPanel.itemSize
         fillMode: Image.PreserveAspectFit
@@ -49,8 +49,8 @@ Item {
     }
 
     Row {
-        x: 2*YdnpaStyle.panelSpacing  + logoYD.width
-        spacing: YdnpaStyle.panelSpacing
+        x: 2*InputStyle.panelSpacing  + logoYD.width
+        spacing: InputStyle.panelSpacing
         anchors.centerIn: parent
         height: parent.height
 
@@ -67,7 +67,7 @@ Item {
             height: parent.height
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            color: YdnpaStyle.clrPanelMain
+            color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
 
             MouseArea {
@@ -89,7 +89,7 @@ Item {
             height: parent.height
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            color: YdnpaStyle.clrPanelMain
+            color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
 
             MouseArea {
@@ -112,14 +112,14 @@ Item {
             width: fontMetrics.boundingRect("XXXXXXXXXXXXXXXX").width
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            color: YdnpaStyle.clrPanelMain
+            color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
         }
     }
 
     RecordBtn {
         id: recBtn
-        x: mainPanel.width - YdnpaStyle.panelSpacing - recBtn.width
+        x: mainPanel.width - InputStyle.panelSpacing - recBtn.width
         width: myLocationBtn.width
         anchors.verticalCenter: parent.verticalCenter
         onActivated: mainPanel.addFeatureClicked()

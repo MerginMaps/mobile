@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 
   // Set Device Pixels
 #ifdef ANDROID
-  float dp = calculateDevicePixels();
+  //float dp = calculateDevicePixels();
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
   engine.rootContext()->setContextProperty( "__appwindowwidth", 0);
   engine.rootContext()->setContextProperty( "__appwindowheight", 0);
@@ -295,9 +295,9 @@ int main(int argc, char *argv[])
 
   // Set simulated position for desktop builds
 #ifndef ANDROID
-  bool use_simulated_position = true;
+  bool use_simulated_position = false;
 #else
-  bool use_simulated_position = true;
+  bool use_simulated_position = false;
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 

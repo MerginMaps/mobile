@@ -12,8 +12,8 @@ ApplicationWindow {
 
     Rectangle {
         id: headerRect
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
         x: 0
         height: 140
         width: parent.width
@@ -24,7 +24,7 @@ ApplicationWindow {
         y: 10
         x: 20
         height: 120
-        spacing: YdnpaStyle.panelSpacing
+        spacing: InputStyle.panelSpacing
 
         Image {
             id: image
@@ -41,7 +41,7 @@ ApplicationWindow {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight
-            color: YdnpaStyle.clrPanelMain
+            color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("YDNPA Surveys")
             font.bold: true
@@ -72,8 +72,8 @@ ApplicationWindow {
 
     Rectangle {
         y: headerRect.height + 20 + msgText.height
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
         height: 140
         width: parent.width
     }

@@ -103,14 +103,15 @@ ApplicationWindow {
         id: mainPanel
         width: window.width
         height: 115 * QgsQuick.Utils.dp
+        z: 2
 
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
-        gpsStatus: positionMarker.gpsPositionLabel + "\n" + positionMarker.gpsAccuracyLabel
+        gpsStatus: ""
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
-        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionMarker.mapPosition);
+        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
         onOpenLogClicked: settingsPanel.visible = true
 
         recordButton.recording: digitizing.recording

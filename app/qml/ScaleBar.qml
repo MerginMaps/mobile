@@ -37,8 +37,8 @@ Item {
 
     Rectangle {
         id: background
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
         width: parent.width
         height: parent.height
     }
