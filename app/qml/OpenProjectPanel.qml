@@ -17,21 +17,21 @@ Drawer {
     dragMargin: 0 // prevents opening the drawer by dragging.
 
     background: Rectangle {
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
     }
 
     Column {
-        spacing: YdnpaStyle.panelSpacing
+        spacing: InputStyle.panelSpacing
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: YdnpaStyle.panelSpacing * 2
+        anchors.leftMargin: InputStyle.panelSpacing * 2
 
         Text {
             text: "Project"
-            color: YdnpaStyle.clrPanelMain
-            font.pixelSize: YdnpaStyle.fontPixelSizeBig
+            color: InputStyle.clrPanelMain
+            font.pixelSize: InputStyle.fontPixelSizeBig
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -46,10 +46,10 @@ Drawer {
                 text: name
 
                 contentItem: Text {
-                    color: index === activeProjectIndex ? YdnpaStyle.clrPanelHighlight : YdnpaStyle.clrPanelMain
+                    color: index === activeProjectIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
                     rightPadding: control.spacing
                     text: control.text
-                    font.pixelSize: YdnpaStyle.fontPixelSizeNormal
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
                     elide: Text.ElideRight
                     visible: control.text
                     horizontalAlignment: Text.AlignLeft

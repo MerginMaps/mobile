@@ -19,8 +19,8 @@ Drawer {
     dragMargin: 0 // prevents opening the drawer by dragging.
 
     background: Rectangle {
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
     }
 
     function show_panel(feature, state) {

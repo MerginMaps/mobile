@@ -14,8 +14,8 @@ Drawer {
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
 
     background: Rectangle {
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
     }
 
     ColumnLayout {
@@ -29,8 +29,8 @@ Drawer {
             id: settingsText
             text: "Settings"
             Layout.fillWidth: true
-            color: YdnpaStyle.clrPanelMain
-            font.pixelSize: YdnpaStyle.fontPixelSizeBig
+            color: InputStyle.clrPanelMain
+            font.pixelSize: InputStyle.fontPixelSizeBig
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -46,8 +46,8 @@ Drawer {
             id: logTitle
             text: "Message Log"
             Layout.fillWidth: true
-            color: YdnpaStyle.clrPanelMain
-            font.pixelSize: YdnpaStyle.fontPixelSizeBig
+            color: InputStyle.clrPanelMain
+            font.pixelSize: InputStyle.fontPixelSizeBig
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter

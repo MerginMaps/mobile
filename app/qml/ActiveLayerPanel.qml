@@ -18,20 +18,20 @@ Drawer {
     dragMargin: 0 // prevents opening the drawer by dragging.
 
     background: Rectangle {
-        color: YdnpaStyle.clrPanelBackground
-        opacity: YdnpaStyle.panelOpacity
+        color: InputStyle.clrPanelBackground
+        opacity: InputStyle.panelOpacity
     }
 
     Column {
-        spacing: YdnpaStyle.panelSpacing
+        spacing: InputStyle.panelSpacing
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: YdnpaStyle.panelSpacing * 2
+        anchors.leftMargin: InputStyle.panelSpacing * 2
 
         Text {
             text: "Active Layer"
-            color: YdnpaStyle.clrPanelMain
-            font.pixelSize: YdnpaStyle.fontPixelSizeBig
+            color: InputStyle.clrPanelMain
+            font.pixelSize: InputStyle.fontPixelSizeBig
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -47,10 +47,10 @@ Drawer {
                 visible: isVector && !isReadOnly // show only vector and editable layers
 
                 contentItem: Text {
-                    color: index === activeLayerIndex ? YdnpaStyle.clrPanelHighlight : YdnpaStyle.clrPanelMain
+                    color: index === activeLayerIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
                     rightPadding: control.spacing
                     text: control.text
-                    font.pixelSize: YdnpaStyle.fontPixelSizeNormal
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
                     elide: Text.ElideRight
                     visible: control.text
                     horizontalAlignment: Text.AlignLeft
