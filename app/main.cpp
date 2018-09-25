@@ -104,57 +104,7 @@ static void expand_assets_data(const QString& qgisDataPath) {
     qgisDataFiles << "resources/qgis.db" << "resources/srs.db";
 
 #ifdef QGIS_QUICK_EXPAND_TEST_DATA
-    qgisDataFiles << "flood damage/point damage.prj";
-    qgisDataFiles << "flood damage/tree damage.shx";
-    qgisDataFiles << "flood damage/tree damage.prj";
-    qgisDataFiles << "flood damage/fence damage.shx";
-    qgisDataFiles << "flood damage/point damage.qpj";
-    qgisDataFiles << "flood damage/tree damage.shp";
-    qgisDataFiles << "flood damage/tree damage.qpj";
-    qgisDataFiles << "flood damage/flood damage.qgs";
-    qgisDataFiles << "flood damage/fence damage.qpj";
-    qgisDataFiles << "flood damage/point damage.shx";
-    qgisDataFiles << "flood damage/fence damage.shp";
-    qgisDataFiles << "flood damage/fence damage.dbf";
-    qgisDataFiles << "flood damage/tree damage.dbf";
-    qgisDataFiles << "flood damage/fence damage.prj";
-    qgisDataFiles << "flood damage/point damage.shp";
-    qgisDataFiles << "flood damage/point damage.dbf";
-    qgisDataFiles << "wildlife/wildlife.qgs";
-    qgisDataFiles << "wildlife/pastures.dbf";
-    qgisDataFiles << "wildlife/pastures.qpj";
-    qgisDataFiles << "wildlife/pastures.shp";
-    qgisDataFiles << "wildlife/animal count.prj";
-    qgisDataFiles << "wildlife/fences.prj";
-    qgisDataFiles << "wildlife/pastures.shx";
-    qgisDataFiles << "wildlife/fences.shx";
-    qgisDataFiles << "wildlife/animal count.shp";
-    qgisDataFiles << "wildlife/fences.shp";
-    qgisDataFiles << "wildlife/pastures.prj";
-    qgisDataFiles << "wildlife/animal count.shx";
-    qgisDataFiles << "wildlife/animal count.qpj";
-    qgisDataFiles << "wildlife/animal count.dbf";
-    qgisDataFiles << "wildlife/fences.qpj";
-    qgisDataFiles << "wildlife/fences.dbf";
     qgisDataFiles << "background.gpkg";
-    qgisDataFiles << "tracks conditions/RoW_infra.dbf";
-    qgisDataFiles << "tracks conditions/RoW_infra.prj";
-    qgisDataFiles << "tracks conditions/track conditions.qgs";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.prj";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.qpj";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.shp";
-    qgisDataFiles << "tracks conditions/RoW_infra.qpj";
-    qgisDataFiles << "tracks conditions/RoW_infra.shx";
-    qgisDataFiles << "tracks conditions/RoW_infra.cpg";
-    qgisDataFiles << "tracks conditions/Route_accessibility.dbf";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.dbf";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.shx";
-    qgisDataFiles << "tracks conditions/Route_accessibility.shp";
-    qgisDataFiles << "tracks conditions/Route_accessibility.prj";
-    qgisDataFiles << "tracks conditions/RoW_infra.shp";
-    qgisDataFiles << "tracks conditions/Green_lane_condition_surveys.cpg";
-    qgisDataFiles << "tracks conditions/Route_accessibility.shx";
-    qgisDataFiles << "tracks conditions/Route_accessibility.qpj";
 #endif
 
     foreach (const QString& dataFile, qgisDataFiles)
@@ -336,9 +286,6 @@ int main(int argc, char *argv[])
   #endif
 
   // Add some data for debugging if needed (visible in the final customer app)
-  QRect rec = QApplication::desktop()->screenGeometry();
-  int height = rec.height();
-  int width = rec.width();
   QgsApplication::messageLog()->logMessage(QgsQuickUtils().dumpScreenInfo());
   QgsApplication::messageLog()->logMessage("data directory: " + dataDir);
   QgsApplication::messageLog()->logMessage("All up and running");
