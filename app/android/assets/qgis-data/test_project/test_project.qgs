@@ -515,7 +515,7 @@
               <prop k="angle_dd_useexpr" v="0"/>
               <prop k="color" v="189,189,189,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="gpsicons/plane.svg"/>
+              <prop k="name" v="icons/plane.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -539,7 +539,7 @@
               <prop k="angle_dd_useexpr" v="0"/>
               <prop k="color" v="124,124,124,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="transport/transport_airport.svg"/>
+              <prop k="name" v="icons/transport_airport.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -563,7 +563,7 @@
               <prop k="angle_dd_useexpr" v="0"/>
               <prop k="color" v="178,223,138,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="transport/transport_airport2.svg"/>
+              <prop k="name" v="icons/transport_airport2.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
