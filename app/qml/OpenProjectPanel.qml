@@ -1,8 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
-import yd 1.0
-import "."  // import YdnpaStyle singleton
+import lc 1.0
+import "."  // import InputStyle singleton
 
 Drawer {
 
