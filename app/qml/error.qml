@@ -1,14 +1,14 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
-import "."  // import YdnpaStyle singleton
+import "."  // import InputStyle singleton
 
 ApplicationWindow {
     id: window
     color: "white"
     visible: true
     visibility: "Maximized"
-    title: qsTr("YDNPA Surveys")
+    title: qsTr("Input")
 
     Rectangle {
         id: headerRect
@@ -31,7 +31,7 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             height: 100
             anchors.verticalCenter: parent.verticalCenter
-            source: "logo_yd.png"
+            source: "logo.png"
         }
 
         Text {
@@ -43,7 +43,7 @@ ApplicationWindow {
             elide: Text.ElideRight
             color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("YDNPA Surveys")
+            text: qsTr("Input")
             font.bold: true
             font.pixelSize: 30 * QgsQuick.Utils.dp
         }

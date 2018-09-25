@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
-import yd 1.0
+import lc 1.0
 
 ApplicationWindow {
     id: window
@@ -9,7 +9,7 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
-    title: qsTr("YDNPA Surveys")
+    title: qsTr("Input")
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;

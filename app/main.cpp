@@ -50,7 +50,7 @@ static QString getDataDir() {
   } else {
       qDebug() << "extDir: " << extDir.path() << " not writable";
 
-      QStringList split = QDir::homePath().split("/"); // something like /data/user/0/org.uk.yd/files
+      QStringList split = QDir::homePath().split("/"); // something like /data/user/0/uk.co.lutraconsulting/files
       // TODO support active user from QDir::homePath()
       QFileInfo usrDir("/storage/emulated/" + split[2] + "/");
       dataPathRaw = usrDir.path() + "/" + dataPathRaw;
@@ -206,10 +206,10 @@ static void init_qgis(const QString& qgisDataPath)
 }
 
 void initDeclarative() {
-    qmlRegisterUncreatableType<ProjectModel>( "yd", 1, 0, "ProjectModel", "" );
-    qmlRegisterUncreatableType<LayersModel>( "yd", 1, 0, "LayersModel", "" );
-    qmlRegisterUncreatableType<Loader>("yd", 1, 0, "Loader", "");
-    qmlRegisterType<DigitizingController>("yd", 1, 0, "DigitizingController");
+    qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
+    qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
+    qmlRegisterUncreatableType<Loader>("lc", 1, 0, "Loader", "");
+    qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
 }
 
 int show_error(const QgsApplication& app,
@@ -222,7 +222,7 @@ int show_error(const QgsApplication& app,
     Q_ASSERT(object);
     if ( QQuickWindow* quickWindow = qobject_cast<QQuickWindow*>( object ) )
     {
-      quickWindow->setIcon(QIcon(":/ydnpa-icon.png"));
+      quickWindow->setIcon(QIcon(":/logo.png"));
     }
     return app.exec();
 }
@@ -247,9 +247,9 @@ int main(int argc, char *argv[])
       QString msg;
       msg += "Unable to find any QGIS project. \n\n";
       msg += "Please copy QGIS project (.qgs) with all layers to the mobile device and restart the application:\n";
-      msg += "  if you have SD card, location is YDNPA under SD card base folder\n";
-      msg += "  if you do NOT have SD card, location is YDNPA under your user home folder\n\n";
-      msg += "Folder YDNPA should already be created and should contain QGIS resources directory.";
+      msg += "  if you have SD card, location is INPUT under SD card base folder\n";
+      msg += "  if you do NOT have SD card, location is INPUT under your user home folder\n\n";
+      msg += "Folder INPUT should already be created and should contain QGIS resources directory.";
       show_error(app, engine, msg);
 #else
   #ifndef NDEBUG
@@ -288,11 +288,6 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appwindowheight", 800);
 #endif
 
-  //Based on the tablet that is used by YDNPA
-  // float dp = 1.22951;
-  //QgsQuickUtils::instance()->setProperty("dp", dp);
-
-
   // Set simulated position for desktop builds
 #ifndef ANDROID
   bool use_simulated_position = false;
@@ -325,7 +320,7 @@ int main(int argc, char *argv[])
 
   if ( QQuickWindow* quickWindow = qobject_cast<QQuickWindow*>( object ) )
   {
-    quickWindow->setIcon(QIcon(":/ydnpa-icon.png"));
+    quickWindow->setIcon(QIcon(":/logo.png"));
   }
 
   // Set up the QSettings environment must be done after qapp is created
