@@ -87,6 +87,8 @@ static void setEnvironmentQgisPrefixPath() {
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
   ::setenv("QGIS_PREFIX_PATH", prefixPath.toUtf8().constData(), true);
 #endif
+
+  qDebug() << "QGIS_PREFIX_PATH: " << ::getenv("QGIS_PREFIX_PATH");
 }
 
 
