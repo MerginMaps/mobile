@@ -17,7 +17,7 @@ Item {
     property string gpsStatus: "GPS \n (none)"
 
     property int itemSize: mainPanel.height * 0.8
-    property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logoYD.width - gpsLabel.width)/2
+    property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
 
     id: mainPanel
 
@@ -33,9 +33,9 @@ Item {
     }
 
     Image {
-        id: logoYD
+        id: logo
         x: InputStyle.panelSpacing
-        source: "logo_yd.png"
+        source: "logo.png"
         height: mainPanel.itemSize
         fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter
@@ -49,7 +49,7 @@ Item {
     }
 
     Row {
-        x: 2*InputStyle.panelSpacing  + logoYD.width
+        x: 2*InputStyle.panelSpacing  + logo.width
         spacing: InputStyle.panelSpacing
         anchors.centerIn: parent
         height: parent.height
