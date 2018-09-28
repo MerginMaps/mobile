@@ -7,6 +7,12 @@ Mobile application based on QGIS's library QgsQuick.
 Tested: Linux, MacOs (Desktop only)
 In general you need `qgis_core` and `qgis_quick` libraries build for target platform.
 
+You need to copy and edit config.in with your paths!
+```
+cd app
+cp config.pri.default config.pri
+# nano config.pri
+```
 
 ## Development Linux - Desktop
 
