@@ -1,5 +1,7 @@
 # Input
 
+TODO: add travis
+
 Mobile application based on QGIS's library QgsQuick.
 
 # Development
