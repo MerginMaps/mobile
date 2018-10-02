@@ -1,6 +1,6 @@
 # Input
 
-TODO: add travis
+[![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
 
 Mobile application based on QGIS's library QgsQuick.
 
