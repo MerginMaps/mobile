@@ -16,7 +16,7 @@ script:
   - echo "travis_fold:start:docker-pull"
   - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
   - echo "travis_fold:end:docker-pull"
-  - docker run -v $(pwd)/app:/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+  - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
 
 jobs:
   include:

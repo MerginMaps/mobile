@@ -27,12 +27,12 @@ set -e
 if [[ -n ${VERSION} ]];
 then
   echo "Building release version ${VERSION}"
-  sed -i "s/VERSION_MAJOR\s*= .*/VERSION_MAJOR = $(echo "${VERSION}" | cut -f 2 -d '-' | cut -f 1 -d '.')/g" ${SOURCE_DIR}/version.pri
-  sed -i "s/VERSION_MINOR\s*= .*/VERSION_MINOR = $(echo "${VERSION}" | cut -f 2 -d '.')/g" ${SOURCE_DIR}/version.pri
-  sed -i "s/VERSION_FIX\s*= .*/VERSION_FIX = $(echo "${VERSION}" | cut -f 3 -d '.')/g" ${SOURCE_DIR}/version.pri
-  grep 'VERSION_MAJOR' ${SOURCE_DIR}/version.pri
-  grep 'VERSION_MINOR' ${SOURCE_DIR}/version.pri
-  grep 'VERSION_FIX' ${SOURCE_DIR}/version.pri
+  sed -i "s/VERSION_MAJOR\s*= .*/VERSION_MAJOR = $(echo "${VERSION}" | cut -f 2 -d '-' | cut -f 1 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+  sed -i "s/VERSION_MINOR\s*= .*/VERSION_MINOR = $(echo "${VERSION}" | cut -f 2 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+  sed -i "s/VERSION_FIX\s*= .*/VERSION_FIX = $(echo "${VERSION}" | cut -f 3 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+  grep 'VERSION_MAJOR' ${SOURCE_DIR}/app/version.pri
+  grep 'VERSION_MINOR' ${SOURCE_DIR}/app/version.pri
+  grep 'VERSION_FIX' ${SOURCE_DIR}/app/version.pri
 fi
 
 mkdir -p ${BUILD_DIR}/.gradle
@@ -40,8 +40,8 @@ mkdir -p ${BUILD_DIR}/.gradle
 ln -s ${BUILD_DIR}/.gradle /root/.gradle
 
 pushd ${BUILD_DIR}
-cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/config.pri
-${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/input.pro
+cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
+${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 if [ -n "${KEYNAME}" ]; then
