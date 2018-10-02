@@ -1,0 +1,25 @@
+language: python
+python:
+  - 3.5
+rvm:
+  - 2.0.0
+
+services:
+  - docker
+
+before_install:
+  - gem update --system
+  - gem --version
+
+script:
+  - export QFIELD_SDK_VERSION=20180926
+  - echo "travis_fold:start:docker-pull"
+  - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
+  - echo "travis_fold:end:docker-pull"
+  - docker run -v $(pwd)/app:/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+
+jobs:
+  include:
+    - stage: build
+      env:
+        - ARCH=armv7

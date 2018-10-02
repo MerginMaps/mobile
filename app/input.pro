@@ -2,6 +2,7 @@ TEMPLATE = app
 TARGET = Input
 
 include(config.pri)
+include(version.pri)
 
 # Mac specific includes/libraries paths
 mac {
