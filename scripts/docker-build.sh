@@ -45,8 +45,7 @@ ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
-${QT_ANDROID}/bin/androiddeployqt \
-	--input ${BUILD_DIR}/src/android-libinput.so-deployment-settings.json \
+${QT_ANDROID}/bin/androiddeployqt \ 
 	--output ${INSTALL_DIR} \
 	--deployment bundled \
 	--android-platform ${ANDROID_NDK_PLATFORM} \
