@@ -20,6 +20,7 @@ if [[ -z ${ARCH+x} ]]; then
 fi
 INSTALL_DIR=${BUILD_DIR}/out
 QT_ANDROID=${QT_ANDROID_BASE}/android_${ARCH}
+mkdir -p ${INSTALL_DIR}
 
 set -e
 
@@ -35,6 +36,10 @@ then
   grep 'VERSION_FIX' ${SOURCE_DIR}/app/version.pri
 fi
 
+echo "INSTALL_DIR: ${INSTALL_DIR}"
+echo "BUILD_DIR: ${BUILD_DIR}"
+echo "ARCH: ${ARCH}"
+
 mkdir -p ${BUILD_DIR}/.gradle
 # androiddeployqt needs gradle and downloads it to /root/.gradle. By linking it to the build folder, this will be cached between builds.
 ln -s ${BUILD_DIR}/.gradle /root/.gradle
@@ -45,7 +50,7 @@ ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
-${QT_ANDROID}/bin/androiddeployqt \ 
+${QT_ANDROID}/bin/androiddeployqt \
 	--output ${INSTALL_DIR} \
 	--deployment bundled \
 	--android-platform ${ANDROID_NDK_PLATFORM} \
