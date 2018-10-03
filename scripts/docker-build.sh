@@ -44,7 +44,6 @@ cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
 ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
-if [ -n "${KEYNAME}" ]; then
 
 ${QT_ANDROID}/bin/androiddeployqt \
 	--input ${BUILD_DIR}/src/android-libinput.so-deployment-settings.json \
