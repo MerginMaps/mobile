@@ -56,7 +56,7 @@ QGIS_PREFIX_PATH=$APP \
 $APP/bin/input
 ```
 
-## Developement Linux cross compile for Android
+## Development Linux Cross-Compilation for Android
 
 Same requirements as for Linux Desktop
 
@@ -88,10 +88,23 @@ QGIS_PREFIX_PATH=$APP/QGIS.app/Contents/MacOS \
 $APP/bin/qgis-quick-components-test
 ```
 
-1.append QGIS Frameworks paths to `DYLD_FRAMEWORK_PATH`
-
-```
-export
-```
-
+1. append QGIS Frameworks paths to `DYLD_FRAMEWORK_PATH`
 2. append QML path for `qgis_quick` qml dir
+
+## Development MacOS Cross-Compilation for Android
+
+Same requirements as for Cross-Compilation for Android
+
+Quick guide:
+- `brew tap caskroom/versions` 
+- `brew cask install java8`
+- `brew install ant`
+- `brew install bison`
+- `sudo mkdir -p /opt; sudo chown <your name>:admin /opt`
+- download SDK command line tools and unzip to `/opt/android-sdk`
+- sdk: install lldb, build tools, platform android X, cmake, platform-tools
+- download QT armv7 to `/opt/Qt`
+- download crystax and install to `/opt/crystax-10.3.2`
+- compile OSGeo4a
+- open QtCreator -> Manage Kits -> add SDK and NDK. compilers should be autodetected
+- enable connection on the device from MacOS when requested
