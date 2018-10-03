@@ -50,7 +50,7 @@ make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
 ${QT_ANDROID}/bin/androiddeployqt \
-    --input ${BUILD_DIR}/ android-libInput.so-deployment-settings.json \
+    --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
 	--output ${INSTALL_DIR} \
 	--deployment bundled \
 	--android-platform ${ANDROID_NDK_PLATFORM} \
