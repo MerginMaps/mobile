@@ -20,7 +20,6 @@ if [[ -z ${ARCH+x} ]]; then
 fi
 INSTALL_DIR=${BUILD_DIR}/out
 QT_ANDROID=${QT_ANDROID_BASE}/android_${ARCH}
-mkdir -p ${INSTALL_DIR}
 
 set -e
 
@@ -50,11 +49,8 @@ ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
-ls -la ${BUILD_DIR}/
-ls -la ${BUILD_DIR}/src/
-
 ${QT_ANDROID}/bin/androiddeployqt \
-    --input ${BUILD_DIR}/src/android-libinput.so-deployment-settings.json \
+    --input ${BUILD_DIR}/ android-libInput.so-deployment-settings.json \
 	--output ${INSTALL_DIR} \
 	--deployment bundled \
 	--android-platform ${ANDROID_NDK_PLATFORM} \
