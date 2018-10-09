@@ -1,5 +1,6 @@
 # Input
 
+<img align="right" src="https://raw.githubusercontent.com/lutraconsulting/input/master/app/img/input.png">
 [![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
 
 Mobile application based on QGIS's library QgsQuick.
@@ -96,7 +97,7 @@ $APP/bin/qgis-quick-components-test
 Same requirements as for Cross-Compilation for Android
 
 Quick guide:
-- `brew tap caskroom/versions` 
+- `brew tap caskroom/versions`
 - `brew cask install java8`
 - `brew install ant`
 - `brew install bison`
