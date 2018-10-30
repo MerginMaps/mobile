@@ -104,6 +104,7 @@ ApplicationWindow {
         width: window.width
         height: 115 * QgsQuick.Utils.dp
         z: 2
+        mapSettings: mapCanvas.mapSettings
 
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
