@@ -103,7 +103,8 @@ QMAKE_CXXFLAGS += -std=c++11
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 # this makes the manifest visible from Qt Creator
-DISTFILES += android/AndroidManifest.xml
+DISTFILES += android/AndroidManifest.xml \
+    qml/Notification.qml
 
 # packaging
 ANDROID_EXTRA_LIBS += \

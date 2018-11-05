@@ -7,14 +7,19 @@ Item {
     id: myLocationBtn
     height: width
     property int size: width / 2
+    property bool isLocationOutOfExtent: false
 
     signal activated()
+    signal activatedOnHold()
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
             myLocationBtn.activated()
             animation.restart()
+        }
+        onPressAndHold: {
+            myLocationBtn.activatedOnHold()
         }
     }
 
@@ -40,6 +45,6 @@ Item {
         width: size
         height: size
         anchors.centerIn: parent
-        source: "ic_my_location_white_48px.svg"
+        source: isLocationOutOfExtent ? "ic_my_location_out_extent_48px.svg" : "ic_my_location_white_48px.svg"
     }
 }

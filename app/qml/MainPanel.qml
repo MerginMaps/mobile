@@ -8,6 +8,7 @@ Item {
     signal openProjectClicked()
     signal openLayersClicked()
     signal myLocationClicked()
+    signal myLocationHold()
     signal addFeatureClicked()
     signal openLogClicked()
     property alias recordButton: recBtn
@@ -15,6 +16,7 @@ Item {
     property string activeProjectName: "(none)"
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
+    property bool isLocationOutOfExtent: false
 
     property int itemSize: mainPanel.height * 0.8
     property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
@@ -103,6 +105,8 @@ Item {
             width: mainPanel.itemSize
             anchors.verticalCenter: parent.verticalCenter
             onActivated: mainPanel.myLocationClicked()
+            onActivatedOnHold: mainPanel.myLocationHold()
+            isLocationOutOfExtent: mainPanel.isLocationOutOfExtent
         }
         
         Label {

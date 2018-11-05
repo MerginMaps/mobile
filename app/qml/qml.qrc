@@ -14,5 +14,6 @@
         <file>InputStyle.qml</file>
         <file>qmldir</file>
         <file>SettingsPanel.qml</file>
+        <file>Notification.qml</file>
     </qresource>
 </RCC>

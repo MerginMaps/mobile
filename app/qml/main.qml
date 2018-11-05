@@ -11,6 +11,15 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: qsTr("Input")
 
+    function isPositionOutOfExtent() {
+        var border = mainPanel.height
+        return (positionKit.screenPosition.x < border) ||
+                (positionKit.screenPosition.y < border) ||
+                (positionKit.screenPosition.x > mapCanvas.width -  border) ||
+                (positionKit.screenPosition.y > mapCanvas.height -  border)
+
+    }
+
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
         console.log("Completed Running!")
@@ -75,12 +84,7 @@ ApplicationWindow {
 
       onScreenPositionChanged: {
         if (settingsPanel.autoCenterMapChecked) {
-          var border = mainPanel.height
-          if ((positionKit.screenPosition.x < border) ||
-              (positionKit.screenPosition.y < border) ||
-              (positionKit.screenPosition.x > mapCanvas.width -  border) ||
-              (positionKit.screenPosition.y > mapCanvas.height -  border)
-              ) {
+          if (isPositionOutOfExtent()) {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
           }
         }
@@ -108,10 +112,17 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
+        isLocationOutOfExtent: isPositionOutOfExtent()
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
+
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+        onMyLocationHold: {
+            settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
+            popup.text = "AutoCenterMapChecked " + settingsPanel.autoCenterMapChecked
+            popup.open()
+        }
         onOpenLogClicked: settingsPanel.visible = true
 
         recordButton.recording: digitizing.recording
@@ -168,6 +179,11 @@ ApplicationWindow {
         height: window.height
         width: QgsQuick.Utils.dp * 600
         edge: Qt.LeftEdge
+    }
+
+    Notification {
+        id: popup
+        text: ""
     }
 
     FeaturePanel {
