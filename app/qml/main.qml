@@ -16,7 +16,6 @@ ApplicationWindow {
                 (positionKit.screenPosition.y < mainPanel.height) ||
                 (positionKit.screenPosition.x > mapCanvas.width) ||
                 (positionKit.screenPosition.y > mapCanvas.height)
-
     }
 
     Component.onCompleted: {
@@ -118,6 +117,7 @@ ApplicationWindow {
 
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
         onMyLocationHold: {
+            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
             settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
             popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
             popup.open()
