@@ -16,6 +16,7 @@
 
 #include "projectsmodel.h"
 #include "layersmodel.h"
+#include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 
 #include "qgsquickutils.h"
@@ -223,8 +224,14 @@ int main(int argc, char *argv[])
   LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
 
+  // Create layer model
+  MapThemesModel mtm(loader.project());
+  engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
+
   // Connections
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
+  QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
+  QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
 
   // Set Device Pixels
 #ifdef ANDROID
