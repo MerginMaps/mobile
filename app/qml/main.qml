@@ -12,11 +12,10 @@ ApplicationWindow {
     title: qsTr("Input")
 
     function isPositionOutOfExtent() {
-        var border = mainPanel.height
-        return (positionKit.screenPosition.x < border) ||
-                (positionKit.screenPosition.y < border) ||
-                (positionKit.screenPosition.x > mapCanvas.width -  border) ||
-                (positionKit.screenPosition.y > mapCanvas.height -  border)
+        return (positionKit.screenPosition.x < 0) ||
+                (positionKit.screenPosition.y < mainPanel.height) ||
+                (positionKit.screenPosition.x > mapCanvas.width) ||
+                (positionKit.screenPosition.y > mapCanvas.height)
 
     }
 
@@ -120,7 +119,7 @@ ApplicationWindow {
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
         onMyLocationHold: {
             settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
-            popup.text = "AutoCenterMapChecked " + settingsPanel.autoCenterMapChecked
+            popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true
@@ -184,6 +183,9 @@ ApplicationWindow {
     Notification {
         id: popup
         text: ""
+        anchors.centerIn: parent
+        width: 400 * QgsQuick.Utils.dp
+        height: 160 * QgsQuick.Utils.dp
     }
 
     FeaturePanel {

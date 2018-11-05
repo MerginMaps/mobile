@@ -45,6 +45,6 @@ Item {
         width: size
         height: size
         anchors.centerIn: parent
-        source: isLocationOutOfExtent ? "ic_my_location_out_extent_48px.svg" : "ic_my_location_white_48px.svg"
+        source: isLocationOutOfExtent ? "baseline-gps_off-24px.svg" : "ic_my_location_white_48px.svg"
     }
 }

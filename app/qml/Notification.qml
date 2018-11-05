@@ -12,16 +12,31 @@ Item {
 
     Popup {
         id: popup
-        x: 100
-        y: 100
-        width: 200
-        height: 300
         modal: false
         focus: true
-        closePolicy: Popup.CloseOnPressOutside
+        opacity: 1
+        width: notification.width
+        height: notification.height
+        background: Rectangle {
+            anchors.fill: parent
+            color: "white"
+            opacity: 0.8
+        }
+        onOpened: timer.start()
 
         Text {
+            anchors.fill: parent
             text: notification.text
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
         }
+    }
+
+    Timer {
+        id: timer
+        interval: 2000
+        onTriggered: popup.close()
+        running: false
+        repeat: false
     }
 }
