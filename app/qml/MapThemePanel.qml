@@ -7,11 +7,9 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property int activeLayerIndex: 0
-    //property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
-    //property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property int activeThemeIndex: 0
 
-    id: activeLayerPanel
+    id: mapThemePanel
     visible: false
     modal: true
     interactive: true
@@ -29,7 +27,7 @@ Drawer {
         anchors.leftMargin: InputStyle.panelSpacing * 2
 
         Text {
-            text: "Active Layer"
+            text: "Map Theme"
             color: InputStyle.clrPanelMain
             font.pixelSize: InputStyle.fontPixelSizeBig
             font.bold: true
@@ -44,10 +42,9 @@ Drawer {
             delegate: ItemDelegate {
                 id: control
                 text: name
-                //visible: isVector && !isReadOnly // show only vector and editable layers
 
                 contentItem: Text {
-                    color: index === activeLayerIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
+                    color: index === activeThemeIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
                     rightPadding: control.spacing
                     text: control.text
                     font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -58,9 +55,8 @@ Drawer {
                 }
 
                 onClicked: {
-                    console.log("active theme:", name)
                     __mapThemesModel.applyTheme(name)
-                    activeLayerIndex = index
+                    activeThemeIndex = index
                 }
             }
         }

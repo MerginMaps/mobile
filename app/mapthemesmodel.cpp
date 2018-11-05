@@ -30,8 +30,6 @@ MapThemesModel::MapThemesModel(QgsProject* project, QObject* parent )
   , mProject(project)
 {
    reloadMapThemes();
-   //connect( project->mapThemeCollection(), &QgsMapThemeCollection::mapThemeChanged, this, &QgsLayoutItemMap::mapThemeChanged );
-   // QGSCanvas::setTheme()
 }
 
 MapThemesModel::~MapThemesModel() {
@@ -41,7 +39,6 @@ void MapThemesModel::reloadMapThemes() {
     if (!mProject) return;
 
     QList<QString>allThemes;
-    allThemes << "";
     QgsMapThemeCollection* collection = mProject->mapThemeCollection();
     for(QString name: collection->mapThemes()) {
         allThemes << name;
@@ -83,7 +80,7 @@ QModelIndex MapThemesModel::index( int row ) const {
 
 int MapThemesModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
-    return mMapThemes.count() + 1;
+    return mMapThemes.count();
 }
 
 QList<QString> MapThemesModel::mapThemes() const
@@ -100,11 +97,9 @@ void MapThemesModel::setMapThemes( const QList<QString>& mapThemes )
   emit mapThemesChanged();
 }
 
-// applyTheme( const QString &name, QgsLayerTreeGroup *root, QgsLayerTreeModel *model )
 void MapThemesModel::applyTheme( const QString &name )
 {
     QgsLayerTree* root = mProject->layerTreeRoot();
-    qDebug() << "!!!!!Changing map theme for" << mProject->absoluteFilePath();
     QgsLayerTreeModel* model = new QgsLayerTreeModel(root);
     mProject->mapThemeCollection()->applyTheme(name, root, model);
     emit reloadLayers();
