@@ -115,13 +115,14 @@ ApplicationWindow {
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
 		onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: __loader.zoomToProject(mapCanvas.mapSettings)
+        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
             settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
             popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true
+        onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
         recordButton.recording: digitizing.recording
         recordButton.enabled: activeLayerPanel.activeVectorLayer != null
