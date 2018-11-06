@@ -10,6 +10,7 @@ Item {
     signal myLocationClicked()
     signal myLocationHold()
     signal addFeatureClicked()
+    signal openMapThemesClicked()
     signal openLogClicked()
     property alias recordButton: recBtn
 
@@ -61,6 +62,13 @@ Item {
             width: mainPanel.itemSize
             anchors.verticalCenter: parent.verticalCenter
             onActivated: mainPanel.openProjectClicked()
+        }
+
+        OpenProjectBtn {
+            id: mapThemeBtn
+            width: mainPanel.itemSize
+            anchors.verticalCenter: parent.verticalCenter
+            onActivated: mainPanel.openMapThemesClicked()
         }
 
         Label {
