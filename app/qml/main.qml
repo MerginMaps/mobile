@@ -111,6 +111,7 @@ ApplicationWindow {
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
+        onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
         onOpenLogClicked: settingsPanel.visible = true
         onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
@@ -166,6 +167,13 @@ ApplicationWindow {
 
     ActiveLayerPanel {
         id: activeLayerPanel
+        height: window.height
+        width: QgsQuick.Utils.dp * 600
+        edge: Qt.LeftEdge
+    }
+
+    MapThemePanel {
+        id: mapThemesPanel
         height: window.height
         width: QgsQuick.Utils.dp * 600
         edge: Qt.LeftEdge

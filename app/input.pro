@@ -55,7 +55,6 @@ mac {
   LIBS += -lqgis_core -lqgis_quick
 }
 
-################
 DEFINES += "CORE_EXPORT="
 DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
@@ -75,13 +74,15 @@ main.cpp \
 projectsmodel.cpp \
 layersmodel.cpp \
 loader.cpp \
-digitizingcontroller.cpp
+digitizingcontroller.cpp \
+    mapthemesmodel.cpp
 
 HEADERS += \
 projectsmodel.h \
 layersmodel.h \
 loader.h \
-digitizingcontroller.h
+digitizingcontroller.h \
+    mapthemesmodel.h
 
 RESOURCES += \
     img/pics.qrc \
@@ -103,7 +104,8 @@ QMAKE_CXXFLAGS += -std=c++11
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 # this makes the manifest visible from Qt Creator
-DISTFILES += android/AndroidManifest.xml
+DISTFILES += android/AndroidManifest.xml \
+    qml/MapThemePanel.qml
 
 # packaging
 ANDROID_EXTRA_LIBS += \
@@ -145,6 +147,6 @@ ANDROID_EXTRA_LIBS += \
     $$QT_LIBS_DIR/libQt5Sensors.so \
     $$QT_LIBS_DIR/libQt5Sql.so \
     $$QT_LIBS_DIR/libQt5Svg.so \
-    $$QT_LIBS_DIR/libQt5AndroidExtras.so
+    $$QT_LIBS_DIR/libQt5AndroidExtras.so \
 
 ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
