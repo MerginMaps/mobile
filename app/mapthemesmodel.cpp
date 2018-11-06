@@ -13,7 +13,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "MapThemesModel.h"
+#include "mapthemesmodel.h"
 
 #include <qgslayertreemodel.h>
 #include <qgslayertreenode.h>
