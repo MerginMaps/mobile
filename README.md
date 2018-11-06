@@ -1,6 +1,7 @@
 # Input
 
-<img align="right" src="https://raw.githubusercontent.com/lutraconsulting/input/master/app/img/input.png">
+<img align="right" src="https://raw.githubusercontent.com/lutraconsulting/input/d781624aa2927d3c92432905de441d4fa83980f1/app/img/input.png">
+
 [![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
 
 Mobile application based on QGIS's library QgsQuick.
