@@ -57,7 +57,7 @@ QVariant MapThemesModel::data( const QModelIndex& index, int role ) const
 {
     int row = index.row();
     if (row < 0 || row >= mMapThemes.count())
-        return QVariant("");
+        return QVariant();
 
     switch ( role )
     {
@@ -100,7 +100,7 @@ void MapThemesModel::setMapThemes( const QList<QString>& mapThemes )
 void MapThemesModel::applyTheme( const QString &name )
 {
     QgsLayerTree* root = mProject->layerTreeRoot();
-    QgsLayerTreeModel* model = new QgsLayerTreeModel(root);
-    mProject->mapThemeCollection()->applyTheme(name, root, model);
+    QgsLayerTreeModel model(root);
+    mProject->mapThemeCollection()->applyTheme(name, root, &model);
     emit reloadLayers();
 }
