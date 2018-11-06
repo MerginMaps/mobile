@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/">
+        <file>home.svg</file>
         <file>ic_map_white_48px.svg</file>
         <file>ic_my_location_white_48px.svg</file>
         <file>logo_lutra.png</file>
         <file>ic_navigation_black_48px.svg</file>
         <file>logo.png</file>
-        <file>home.svg</file>
+        <file>baseline-gps_off-24px.svg</file>
     </qresource>
 </RCC>

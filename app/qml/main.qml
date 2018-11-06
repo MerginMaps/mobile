@@ -11,6 +11,14 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: qsTr("Input")
 
+    function isPositionOutOfExtent(border) {
+        return ((positionKit.screenPosition.x < border) ||
+                (positionKit.screenPosition.y < border) ||
+                (positionKit.screenPosition.x > mapCanvas.width -  border) ||
+                (positionKit.screenPosition.y > mapCanvas.height -  border)
+                )
+    }
+
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
         console.log("Completed Running!")
@@ -76,11 +84,7 @@ ApplicationWindow {
       onScreenPositionChanged: {
         if (settingsPanel.autoCenterMapChecked) {
           var border = mainPanel.height
-          if ((positionKit.screenPosition.x < border) ||
-              (positionKit.screenPosition.y < border) ||
-              (positionKit.screenPosition.x > mapCanvas.width -  border) ||
-              (positionKit.screenPosition.y > mapCanvas.height -  border)
-              ) {
+          if (isPositionOutOfExtent(border)) {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
           }
         }
@@ -108,11 +112,17 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
+        lockOnPosition: settingsPanel.autoCenterMapChecked
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
         onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+        onMyLocationHold: {
+            settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
+            popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
+            popup.open()
+        }
         onOpenLogClicked: settingsPanel.visible = true
         onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
@@ -195,6 +205,14 @@ ApplicationWindow {
         height: window.height
         width: QgsQuick.Utils.dp * 600
         edge: Qt.LeftEdge
+    }
+
+    Notification {
+        id: popup
+        text: ""
+        anchors.centerIn: parent
+        width: 400 * QgsQuick.Utils.dp
+        height: 160 * QgsQuick.Utils.dp
     }
 
     FeaturePanel {

@@ -105,7 +105,8 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 # this makes the manifest visible from Qt Creator
 DISTFILES += android/AndroidManifest.xml \
-    qml/MapThemePanel.qml
+    qml/MapThemePanel.qml \
+    qml/Notification.qml
 
 # packaging
 ANDROID_EXTRA_LIBS += \
@@ -147,6 +148,6 @@ ANDROID_EXTRA_LIBS += \
     $$QT_LIBS_DIR/libQt5Sensors.so \
     $$QT_LIBS_DIR/libQt5Sql.so \
     $$QT_LIBS_DIR/libQt5Svg.so \
-    $$QT_LIBS_DIR/libQt5AndroidExtras.so \
+    $$QT_LIBS_DIR/libQt5AndroidExtras.so
 
 ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
