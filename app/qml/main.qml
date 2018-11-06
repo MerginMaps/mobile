@@ -11,11 +11,12 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: qsTr("Input")
 
-    function isPositionOutOfExtent() {
-        return (positionKit.screenPosition.x < 0) ||
-                (positionKit.screenPosition.y < mainPanel.height) ||
-                (positionKit.screenPosition.x > mapCanvas.width) ||
-                (positionKit.screenPosition.y > mapCanvas.height)
+    function isPositionOutOfExtent(border) {
+        return ((positionKit.screenPosition.x < border) ||
+                (positionKit.screenPosition.y < border) ||
+                (positionKit.screenPosition.x > mapCanvas.width -  border) ||
+                (positionKit.screenPosition.y > mapCanvas.height -  border)
+                )
     }
 
     Component.onCompleted: {
@@ -82,7 +83,8 @@ ApplicationWindow {
 
       onScreenPositionChanged: {
         if (settingsPanel.autoCenterMapChecked) {
-          if (isPositionOutOfExtent()) {
+          var border = mainPanel.height
+          if (isPositionOutOfExtent(border)) {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
           }
         }
@@ -114,7 +116,7 @@ ApplicationWindow {
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
-		onOpenMapThemesClicked: mapThemesPanel.visible = true
+        onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
             settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
