@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include "qgsproject.h"
+#include "qgsquickutils.h"
 
 class Loader: public QObject {
     Q_OBJECT
@@ -30,6 +31,7 @@ public:
     QgsProject *project();
 
     Q_INVOKABLE void load(const QString& filePath);
+    Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
 
 signals:
     void projectChanged();

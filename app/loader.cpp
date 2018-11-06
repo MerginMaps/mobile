@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "loader.h"
+#include "qgsvectorlayer.h"
 #include <QDebug>
 
 Loader::Loader(QObject* parent):QObject(parent)
@@ -34,4 +35,21 @@ void Loader::load(const QString& filePath) {
     } else {
         qDebug() << " ******** SKIPPED ";
     }
+}
+
+void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
+{
+    if (!mapSettings) {
+        qDebug() << "Cannot zoom to layers extent, mapSettings is not defined";
+        return;
+    }
+
+    const QVector<QgsMapLayer*> layers = mProject.layers<QgsMapLayer*>();
+    QgsRectangle extent;
+    for (const QgsMapLayer* layer: layers) {
+        QgsRectangle layerExtent = layer->extent();
+        extent.combineExtentWith(layerExtent);
+    }
+    extent.scale(1.05);
+    mapSettings->setExtent(extent);
 }
