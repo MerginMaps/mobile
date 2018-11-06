@@ -11,6 +11,7 @@ Item {
     signal myLocationHold()
     signal addFeatureClicked()
     signal openLogClicked()
+    signal zoomToProject()
     property alias recordButton: recBtn
 
     property string activeProjectName: "(none)"
@@ -55,6 +56,21 @@ Item {
         spacing: InputStyle.panelSpacing
         anchors.centerIn: parent
         height: parent.height
+
+        Image {
+            id: home
+            source: "home.svg"
+            fillMode: Image.PreserveAspectFit
+            clip:true
+            anchors.verticalCenter: parent.verticalCenter
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    zoomToProject()
+                }
+            }
+        }
 
         OpenProjectBtn {
             id: openProjectBtn

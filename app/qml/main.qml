@@ -123,6 +123,7 @@ ApplicationWindow {
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true
+        onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
         recordButton.recording: digitizing.recording
         recordButton.enabled: activeLayerPanel.activeVectorLayer != null
@@ -196,4 +197,5 @@ ApplicationWindow {
         mapSettings: mapCanvas.mapSettings
         project: __loader.project
     }
+
 }
