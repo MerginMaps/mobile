@@ -37,18 +37,19 @@ void Loader::load(const QString& filePath) {
     }
 }
 
-void Loader::zoomToDesign(QgsQuickMapSettings *mapSettings)
+void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
 {
     if (!mapSettings) {
         qDebug() << "Cannot zoom to layers extent, mapSettings is not defined";
         return;
     }
 
-    const QVector<QgsVectorLayer*> layers = mProject.layers<QgsVectorLayer*>();
+    const QVector<QgsMapLayer*> layers = mProject.layers<QgsMapLayer*>();
     QgsRectangle extent;
-    for (const QgsVectorLayer* layer: layers) {
+    for (const QgsMapLayer* layer: layers) {
         QgsRectangle layerExtent = layer->extent();
         extent.combineExtentWith(layerExtent);
     }
+    extent.scale(1.05);
     mapSettings->setExtent(extent);
 }

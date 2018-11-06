@@ -10,12 +10,12 @@ Item {
     signal myLocationClicked()
     signal addFeatureClicked()
     signal openLogClicked()
+    signal zoomToProject()
     property alias recordButton: recBtn
 
     property string activeProjectName: "(none)"
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
-    property var mapSettings
 
     property int itemSize: mainPanel.height * 0.8
     property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
@@ -65,7 +65,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    __loader.zoomToDesign(mainPanel.mapSettings)
+                    zoomToProject()
                 }
             }
         }
