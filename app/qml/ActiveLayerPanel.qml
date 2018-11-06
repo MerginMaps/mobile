@@ -45,7 +45,7 @@ Drawer {
                 id: control
                 text: name
                 visible: isVector && !isReadOnly // show only vector and editable layers
-                height: isVector && !isReadOnly ? undefined : 0
+                height: visible ? undefined : 0
                 contentItem: Text {
                     color: index === activeLayerIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
                     rightPadding: control.spacing
