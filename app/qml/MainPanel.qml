@@ -11,13 +11,12 @@ Item {
     signal myLocationHold()
     signal addFeatureClicked()
     signal openLogClicked()
-    signal zoomToProject()
     property alias recordButton: recBtn
 
     property string activeProjectName: "(none)"
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
-    property bool isLocationOutOfExtent: false
+    property bool lockOnPosition: false
 
     property int itemSize: mainPanel.height * 0.8
     property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
@@ -56,21 +55,6 @@ Item {
         spacing: InputStyle.panelSpacing
         anchors.centerIn: parent
         height: parent.height
-
-        Image {
-            id: home
-            source: "home.svg"
-            fillMode: Image.PreserveAspectFit
-            clip:true
-            anchors.verticalCenter: parent.verticalCenter
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    zoomToProject()
-                }
-            }
-        }
 
         OpenProjectBtn {
             id: openProjectBtn
@@ -122,7 +106,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             onActivated: mainPanel.myLocationClicked()
             onActivatedOnHold: mainPanel.myLocationHold()
-            isLocationOutOfExtent: mainPanel.isLocationOutOfExtent
+            lockOnPosition: mainPanel.lockOnPosition
         }
         
         Label {
