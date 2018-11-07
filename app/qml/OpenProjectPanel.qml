@@ -1,68 +1,118 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
 
-Drawer {
+Page {
 
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
+    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
+
     id: projectsPanel
     visible: false
-    modal: true
-    interactive: true
-    dragMargin: 0 // prevents opening the drawer by dragging.
+    contentWidth: parent.width
+    contentHeight: parent.height - header.height
 
     background: Rectangle {
-        color: InputStyle.clrPanelBackground
+        color: InputStyle.clrPanelMain
         opacity: InputStyle.panelOpacity
     }
 
-    Column {
-        spacing: InputStyle.panelSpacing
+//    header: Rectangle {
+//        height: 48 // TODO bug???
+//        width: parent.width
+//        color: InputStyle.clrPanelMain
+//        Text {
+//            anchors.fill: parent
+//            text: "Projects"
+//            color: InputStyle.fontColor
+//            font.pixelSize: InputStyle.fontPixelSizeNormal
+//            verticalAlignment: Text.AlignVCenter
+//            horizontalAlignment: Text.AlignHCenter
+//        }
+//    }
+    footer: Item {}
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: InputStyle.panelSpacing * 2
+    contentChildren: [
 
-        Text {
-            text: "Project"
-            color: InputStyle.clrPanelMain
-            font.pixelSize: InputStyle.fontPixelSizeBig
-            font.bold: true
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
+        ColumnLayout {
+            id: contentLayout
+            anchors.fill: parent
+            Layout.fillWidth: true
 
-        ListView {
-            implicitWidth: parent.width
-            implicitHeight: contentHeight
-            model: __projectsModel
-            delegate: ItemDelegate {
-                id: control
-                text: name
+            Rectangle {
+                id: projectMenu
+                color: InputStyle.panelBackground2
+                Layout.fillWidth: true
+                height: projectsPanel.rowHeight
 
-                contentItem: Text {
-                    color: index === activeProjectIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
-                    rightPadding: control.spacing
-                    text: control.text
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
-                    elide: Text.ElideRight
-                    visible: control.text
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
+                RowLayout {
+                    anchors.fill: parent
+                    Text {
+                        text: "My projects"
+                    }
+
+                    Text {
+                        text: "My projects"
+                    }
                 }
+            }
 
-                onClicked: {
-                    console.log("active project:", name)
-                    projectsPanel.activeProjectIndex = index
-                    projectsPanel.visible = false
+            ListView {
+                id: listView
+                model: __projectsModel
+                height: projectsPanel.height - projectsPanel.rowHeight
+                width: projectsPanel.width
+                delegate: ItemDelegate {
+                    id: itemDelegate
+                    //text: name
+                    width: listView.width
+                    height: projectsPanel.rowHeight
+
+                    RowLayout {
+                        id: row
+                        anchors.fill: parent
+                        //height: projectsPanel.rowHeight
+
+
+                        Image {
+                            id: icon
+                            height: row.height
+                            width: height
+                            source: 'file.svg'
+                            fillMode: Image.PreserveAspectCrop
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: icon
+                            source: icon
+                            color: InputStyle.fontColor
+                        }
+
+                        Text {
+                            anchors.left: icon.right
+                            height: row.height
+                            text: name
+                        }
+                    }
+
+
+
+                    onClicked: {
+                        console.log("active project:", name, projectMenu.height, projectsPanel.rowHeight)
+                        //projectsPanel.activeProjectIndex = index
+                       // projectsPanel.visible = false
+                    }
                 }
             }
         }
-    }
+
+    ]
 
 }

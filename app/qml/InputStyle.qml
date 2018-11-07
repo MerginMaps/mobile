@@ -11,7 +11,17 @@ QtObject {
 
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
+    property color fontColor: "#0b5036"
+    property color panelBackground2: "#EEF0F0"
+
+    property real buttonSize: 48
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real panelOpacity: 0.7
+
+    property real pixelDensity: 1
+
+    property var scale: function scaleParam(size) {
+        return size * (pixelDensity / QgsQuick.Utils.dp);
+    }
 }
