@@ -7,5 +7,6 @@
         <file>ic_navigation_black_48px.svg</file>
         <file>logo.png</file>
         <file>baseline-gps_off-24px.svg</file>
+        <file>file.svg</file>
     </qresource>
 </RCC>
