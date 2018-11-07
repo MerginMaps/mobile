@@ -46,6 +46,8 @@ ApplicationWindow {
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
+        openProjectPanel.visible = true
+        InputStyle.pixelDensity = window.screen.pixelDensity
         console.log("Completed Running!")
     }
 
@@ -190,9 +192,10 @@ ApplicationWindow {
 
     OpenProjectPanel {
         id: openProjectPanel
-        height: window.height
-        width: QgsQuick.Utils.dp * 600
-        edge: Qt.LeftEdge
+        height: window.height - mainPanel.height
+        width: window.width
+        y: mainPanel.height
+        //edge: Qt.LeftEdge
 
         onActiveProjectPathChanged: {
             __loader.load(activeProjectPath);
