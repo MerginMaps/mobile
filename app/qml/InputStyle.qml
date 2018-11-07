@@ -22,6 +22,7 @@ QtObject {
     property real pixelDensity: 1
 
     property var scale: function scaleParam(size) {
-        return size * (pixelDensity / QgsQuick.Utils.dp);
+        console.log("!!!!!!!pixelDensity", pixelDensity)
+        return size * ( QgsQuick.Utils.dp/ pixelDensity);
     }
 }
