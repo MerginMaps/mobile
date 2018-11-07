@@ -12,31 +12,31 @@ Page {
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
-    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
+    property real rowHeight: InputStyle.scale(InputStyle.buttonSize * 3)
 
     id: projectsPanel
     visible: false
     contentWidth: parent.width
-    contentHeight: parent.height - header.height
+    contentHeight: parent.height - rowHeight
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
         opacity: InputStyle.panelOpacity
     }
 
-//    header: Rectangle {
-//        height: 48 // TODO bug???
-//        width: parent.width
-//        color: InputStyle.clrPanelMain
-//        Text {
-//            anchors.fill: parent
-//            text: "Projects"
-//            color: InputStyle.fontColor
-//            font.pixelSize: InputStyle.fontPixelSizeNormal
-//            verticalAlignment: Text.AlignVCenter
-//            horizontalAlignment: Text.AlignHCenter
-//        }
-//    }
+    //    header: Rectangle {
+    //        height: 48 // TODO bug???
+    //        width: parent.width
+    //        color: InputStyle.clrPanelMain
+    //        Text {
+    //            anchors.fill: parent
+    //            text: "Projects"
+    //            color: InputStyle.fontColor
+    //            font.pixelSize: InputStyle.fontPixelSizeNormal
+    //            verticalAlignment: Text.AlignVCenter
+    //            horizontalAlignment: Text.AlignHCenter
+    //        }
+    //    }
     footer: Item {}
 
     contentChildren: [
@@ -45,7 +45,9 @@ Page {
             id: contentLayout
             anchors.fill: parent
             Layout.fillWidth: true
+            spacing: 0
 
+            // TODO redundat for NOW
             Rectangle {
                 id: projectMenu
                 color: InputStyle.panelBackground2
@@ -56,10 +58,17 @@ Page {
                     anchors.fill: parent
                     Text {
                         text: "My projects"
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                     }
-
                     Text {
-                        text: "My projects"
+                        text: "All projects"
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                     }
                 }
             }
@@ -73,41 +82,82 @@ Page {
                     id: itemDelegate
                     //text: name
                     width: listView.width
-                    height: projectsPanel.rowHeight
+                    height: projectMenu.height
 
                     RowLayout {
                         id: row
                         anchors.fill: parent
-                        //height: projectsPanel.rowHeight
+                        spacing: 0
 
-
-                        Image {
-                            id: icon
+                        Rectangle {
+                            id: iconContainer
                             height: row.height
                             width: height
-                            source: 'file.svg'
-                            fillMode: Image.PreserveAspectCrop
+
+                            Image {
+                                anchors.margins: 20 // TODO @vsklencar
+                                id: icon
+                                anchors.fill: parent
+                                source: 'file.svg'
+                                fillMode: Image.PreserveAspectFit
+                            }
+
+                            ColorOverlay {
+                                anchors.fill: icon
+                                source: icon
+                                color: InputStyle.fontColor
+                            }
+
                         }
 
-                        ColorOverlay {
-                            anchors.fill: icon
-                            source: icon
-                            color: InputStyle.fontColor
-                        }
-
-                        Text {
-                            anchors.left: icon.right
+                        Rectangle {
+                            id: textContainer
                             height: row.height
-                            text: name
+                            width: row.width - (iconContainer.width * 2)
+                            Text {
+                                anchors.fill: parent
+                                text: name
+                                leftPadding: 20
+                                font.pointSize: 24
+                                font.weight: Font.Bold
+                                color: InputStyle.fontColor
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Text {
+                                height: row.height/3
+                                text: "Some info smaller font"
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                                anchors.left: parent.left
+                                leftPadding: 20
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+
+                                font.pointSize: 12
+                            }
+                        }
+
+                        Rectangle {
+                            height: row.height
+                            width: iconContainer.width
+
+                            Button {
+                                id: icon2
+                                anchors.fill: parent
+                                anchors.margins: 20
+                                anchors.left: textContainer.right
+                                text: "..."
+                            }
                         }
                     }
-
 
 
                     onClicked: {
                         console.log("active project:", name, projectMenu.height, projectsPanel.rowHeight)
                         //projectsPanel.activeProjectIndex = index
-                       // projectsPanel.visible = false
+                        // projectsPanel.visible = false
                     }
                 }
             }
