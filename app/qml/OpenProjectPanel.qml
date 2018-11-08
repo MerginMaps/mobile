@@ -14,10 +14,14 @@ Page {
 
     property real rowHeight: InputStyle.scale(InputStyle.buttonSize * 3)
 
+    Component.onCompleted: {
+        // load model just after all components are prepared
+        // otherwise GridView's delegate item is initialized invalidately
+        grid.model = __projectsModel
+    }
+
     id: projectsPanel
     visible: false
-    contentWidth: parent.width
-    contentHeight: parent.height - rowHeight
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
@@ -73,96 +77,103 @@ Page {
                 }
             }
 
-            ListView {
-                id: listView
-                model: __projectsModel
+            GridView {
+                id: grid
+                //model: __projectsModel
                 height: projectsPanel.height - projectsPanel.rowHeight
                 width: projectsPanel.width
-                delegate: ItemDelegate {
-                    id: itemDelegate
-                    //text: name
-                    width: listView.width
-                    height: projectMenu.height
+                cellWidth: grid.width
+                cellHeight: 100 //projectsPanel.rowHeight * 5
+                contentWidth: grid.width
 
-                    RowLayout {
-                        id: row
-                        anchors.fill: parent
-                        spacing: 0
-
-                        Rectangle {
-                            id: iconContainer
-                            height: row.height
-                            width: height
-
-                            Image {
-                                anchors.margins: 20 // TODO @vsklencar
-                                id: icon
-                                anchors.fill: parent
-                                source: 'file.svg'
-                                fillMode: Image.PreserveAspectFit
-                            }
-
-                            ColorOverlay {
-                                anchors.fill: icon
-                                source: icon
-                                color: InputStyle.fontColor
-                            }
-
-                        }
-
-                        Rectangle {
-                            id: textContainer
-                            height: row.height
-                            width: row.width - (iconContainer.width * 2)
-                            Text {
-                                anchors.fill: parent
-                                text: name
-                                leftPadding: 20
-                                font.pointSize: 24
-                                font.weight: Font.Bold
-                                color: InputStyle.fontColor
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                            }
-
-                            Text {
-                                height: row.height/3
-                                text: "Some info smaller font"
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
-                                anchors.left: parent.left
-                                leftPadding: 20
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-
-                                font.pointSize: 12
-                            }
-                        }
-
-                        Rectangle {
-                            height: row.height
-                            width: iconContainer.width
-
-                            Button {
-                                id: icon2
-                                anchors.fill: parent
-                                anchors.margins: 20
-                                anchors.left: textContainer.right
-                                text: "..."
-                            }
-                        }
-                    }
-
-
-                    onClicked: {
-                        console.log("active project:", name, projectMenu.height, projectsPanel.rowHeight)
-                        //projectsPanel.activeProjectIndex = index
-                        // projectsPanel.visible = false
-                    }
-                }
+                delegate: delegateItem
             }
         }
 
     ]
+
+    Component {
+        id: delegateItem
+        Item {
+            width: grid.cellWidth
+            height: grid.cellHeight
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    projectsPanel.activeProjectIndex = index
+                    projectsPanel.visible = false
+                }
+            }
+
+            RowLayout {
+                id: row
+                anchors.fill: parent
+                spacing: 0
+
+                Rectangle {
+                    id: iconContainer
+                    height: grid.cellHeight
+                    width: grid.cellHeight
+
+                    Image {
+                        anchors.margins: 20 // TODO @vsklencar
+                        id: icon
+                        anchors.fill: parent
+                        source: 'file.svg'
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    ColorOverlay {
+                        anchors.fill: icon
+                        source: icon
+                        color: InputStyle.fontColor
+                    }
+
+                }
+
+                Rectangle {
+                    id: textContainer
+                    height: grid.cellHeight
+                    width: grid.cellWidth - (grid.cellHeight * 2)
+                    Text {
+                        anchors.fill: parent
+                        text: name
+                        leftPadding: 20
+                        font.pointSize: 24
+                        font.weight: Font.Bold
+                        color: InputStyle.fontColor
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    Text {
+                        height: grid.cellHeight/3
+                        text: "Some info smaller font"
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        leftPadding: 20
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+
+                        font.pointSize: 12
+                    }
+                }
+
+                Rectangle {
+                    height: grid.cellHeight
+                    width: grid.cellHeight
+
+                    Button {
+                        id: icon2
+                        anchors.fill: parent
+                        anchors.margins: 20
+                        text: "..."
+                    }
+                }
+            }
+        }
+    }
 
 }
