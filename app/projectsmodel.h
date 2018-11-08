@@ -36,7 +36,9 @@ class ProjectModel : public QAbstractListModel
     {
       Name = Qt::UserRole + 1,
       Path,
-      ShortName // name shortened to maxShortNameChars
+      ShortName, // name shortened to maxShortNameChars
+      ProjectInfo,
+      Size
     };
     Q_ENUMS( Roles )
 
@@ -58,6 +60,7 @@ class ProjectModel : public QAbstractListModel
     struct ProjectFile {
         QString name;
         QString path;
+        QString info;
 
         bool operator < (const ProjectFile& str) const
         {

@@ -18,6 +18,7 @@
 #include <QString>
 #include <QDirIterator>
 #include <QDebug>
+#include <QDateTime>
 
 ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
   : QAbstractListModel( parent )
@@ -36,6 +37,9 @@ void ProjectModel::findProjectFiles() {
         ProjectFile projectFile;
         projectFile.name = it.fileName().remove(".qgs");
         projectFile.path = it.filePath();
+        QFileInfo fileInfo(it.filePath());
+        QDateTime created = fileInfo.created();
+        projectFile.info = QString(created.toString());
         mProjectFiles.append(projectFile);
 
         qDebug() << "Found QGIS project: " << it.filePath();
@@ -58,6 +62,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
     case Name: return QVariant(projectFile.name);
     case ShortName: return QVariant(projectFile.name.left(mMaxShortNameChars - 3) + "...");
     case Path: return QVariant(projectFile.path);
+    case ProjectInfo: return QVariant(projectFile.info);
   }
 
   return QVariant();
@@ -67,8 +72,9 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
-  roleNames[ShortName] = "short_name";
+  roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
+  roleNames[ProjectInfo] = "projectInfo";
   return roleNames;
 }
 

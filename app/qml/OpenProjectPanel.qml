@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
@@ -12,43 +13,43 @@ Page {
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
-    property real rowHeight: InputStyle.scale(InputStyle.buttonSize * 3)
+    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
 
     Component.onCompleted: {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
         grid.model = __projectsModel
+        header.height = projectsPanel.rowHeight
     }
 
     id: projectsPanel
     visible: false
+    contentWidth: projectsPanel.width
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
-        opacity: InputStyle.panelOpacity
     }
 
-    //    header: Rectangle {
-    //        height: 48 // TODO bug???
-    //        width: parent.width
-    //        color: InputStyle.clrPanelMain
-    //        Text {
-    //            anchors.fill: parent
-    //            text: "Projects"
-    //            color: InputStyle.fontColor
-    //            font.pixelSize: InputStyle.fontPixelSizeNormal
-    //            verticalAlignment: Text.AlignVCenter
-    //            horizontalAlignment: Text.AlignHCenter
-    //        }
-    //    }
+    header: Rectangle {
+        height: projectsPanel.rowHeight
+        width: parent.width
+        color: InputStyle.clrPanelMain
+        Text {
+            anchors.fill: parent
+            text: "Projects"
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
     footer: Item {}
 
-    contentChildren: [
+    //contentChildren: [
 
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            Layout.fillWidth: true
             spacing: 0
 
             // TODO redundat for NOW
@@ -56,23 +57,48 @@ Page {
                 id: projectMenu
                 color: InputStyle.panelBackground2
                 Layout.fillWidth: true
-                height: projectsPanel.rowHeight
+                height: 100 //projectsPanel.rowHeight
+                width: projectsPanel.width
+
+                Component.onCompleted: {
+                    console.log("tralala!!!", projectsPanel.rowHeight, projectMenu.height)
+                    projectMenu.height = projectsPanel.rowHeight
+                }
+
+                ButtonGroup {
+                    buttons: projectMenuButtons.children
+                }
 
                 RowLayout {
+                    id: projectMenuButtons
                     anchors.fill: parent
-                    Text {
-                        text: "My projects"
+
+                    Button {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.fill: parent
+                            text: "My projects"
+                            color: InputStyle.fontColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.underline: true
+                            font.bold: true
+                        }
                     }
-                    Text {
-                        text: "All projects"
+
+                    Button {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+
+                        Text {
+                            anchors.fill: parent
+                            text: "All projects"
+                            color: InputStyle.fontColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.bold: true
+                        }
                     }
                 }
             }
@@ -80,17 +106,23 @@ Page {
             GridView {
                 id: grid
                 //model: __projectsModel
-                height: projectsPanel.height - projectsPanel.rowHeight
-                width: projectsPanel.width
+                //height: projectsPanel.height - projectsPanel.rowHeight
+                //width: projectsPanel.width
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 cellWidth: grid.width
-                cellHeight: 100 //projectsPanel.rowHeight * 5
+                cellHeight: projectsPanel.rowHeight
                 contentWidth: grid.width
 
                 delegate: delegateItem
+
+                Component.onCompleted: {
+                    console.log("tralala222!!!", projectsPanel.rowHeight, projectMenu.height)
+                }
             }
         }
 
-    ]
+   // ]
 
     Component {
         id: delegateItem
@@ -137,27 +169,28 @@ Page {
                     height: grid.cellHeight
                     width: grid.cellWidth - (grid.cellHeight * 2)
                     Text {
-                        anchors.fill: parent
+                        id: mainText
                         text: name
+                        height: textContainer.height/2
                         leftPadding: 20
                         font.pointSize: 24
                         font.weight: Font.Bold
                         color: InputStyle.fontColor
                         horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
+                        verticalAlignment: Text.AlignBottom
                     }
 
                     Text {
-                        height: grid.cellHeight/3
-                        text: "Some info smaller font"
+                        height: textContainer.height/2
+                        text: projectInfo
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
+                        anchors.top: mainText.bottom
                         leftPadding: 20
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-
                         font.pointSize: 12
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignTop
                     }
                 }
 
@@ -170,6 +203,11 @@ Page {
                         anchors.fill: parent
                         anchors.margins: 20
                         text: "..."
+
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: InputStyle.clrPanelMain
+                        }
                     }
                 }
             }
