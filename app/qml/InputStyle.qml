@@ -14,7 +14,7 @@ QtObject {
     property color fontColor: "#0b5036"
     property color panelBackground2: "#EEF0F0"
 
-    property real buttonSize: 48
+    property real buttonSize: 48 * 15
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real panelOpacity: 0.7
