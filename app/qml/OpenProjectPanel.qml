@@ -19,7 +19,6 @@ Page {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
         grid.model = __projectsModel
-        header.height = projectsPanel.rowHeight
     }
 
     id: projectsPanel
@@ -45,89 +44,90 @@ Page {
     }
     footer: Item {}
 
-    //contentChildren: [
-
-        ColumnLayout {
-            id: contentLayout
-            anchors.fill: parent
-            spacing: 0
+    ColumnLayout {
+        id: contentLayout
+        anchors.fill: parent
+        spacing: 0
 
 
-            Rectangle {
-                id: projectMenu
-                color: InputStyle.panelBackground2
-                Layout.fillWidth: true
-                height: 100 //projectsPanel.rowHeight
-                width: projectsPanel.width
+        Rectangle {
+            id: projectMenu
+            color: InputStyle.panelBackground2
+            Layout.fillWidth: true
+            height: InputStyle.scale(120) //projectsPanel.rowHeight
+            width: projectsPanel.width
 
-                Component.onCompleted: {
-                    console.log("tralala!!!", projectsPanel.rowHeight, projectMenu.height)
-                    projectMenu.height = projectsPanel.rowHeight
-                }
-
-                ButtonGroup {
-                    buttons: projectMenuButtons.children
-                }
-
-                RowLayout {
-                    id: projectMenuButtons
-                    anchors.fill: parent
-                    spacing: 0
-
-                    Button {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        id: myProjectsButton
-                        Text {
-                            anchors.fill: parent
-                            text: "My projects"
-                            color: InputStyle.fontColor
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.underline: true
-                            font.bold: true
-                        }
-                    }
-
-                    Button {
-                        id: allProjectsButton
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-
-                        Text {
-                            anchors.fill: parent
-                            text: "All projects"
-                            color: InputStyle.fontColor
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.bold: true
-                        }
-                    }
-                }
+            Component.onCompleted: {
+                //console.log("tralala!!!", projectsPanel.rowHeight, projectMenu.height)
+                projectMenu.height = projectsPanel.rowHeight
             }
 
-            ListView {
-                id: grid
-                //model: __projectsModel
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                contentWidth: grid.width
+            ButtonGroup {
+                buttons: projectMenuButtons.children
+            }
 
-                property int cellWidth: width
-                property int cellHeight: projectsPanel.rowHeight
-                property int borderWidth: 1
+            RowLayout {
+                id: projectMenuButtons
+                anchors.fill: parent
+                spacing: 0
 
-                delegate: delegateItem
+                Button {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    id: myProjectsButton
+                    Text {
+                        anchors.fill: parent
+                        text: "My projects"
+                        color: InputStyle.fontColor
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.underline: true
+                        font.bold: true
+                    }
+                }
+
+                Button {
+                    id: allProjectsButton
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    Text {
+                        anchors.fill: parent
+                        text: "All projects"
+                        color: InputStyle.fontColor
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.bold: true
+                    }
+                }
             }
         }
 
-   // ]
+        ListView {
+            id: grid
+            //model: __projectsModel
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            contentWidth: grid.width
+
+            property int cellWidth: width
+            property int cellHeight: projectsPanel.rowHeight
+            property int borderWidth: 1
+
+            delegate: delegateItem
+        }
+    }
 
     Component {
         id: delegateItem
+
         Rectangle {
+            id: itemContainer
+            property color primaryColor: InputStyle.clrPanelMain
+            property color secondaryColor: InputStyle.fontColor
             width: grid.cellWidth
             height: grid.cellHeight
+            color:index === activeProjectIndex ? itemContainer.secondaryColor : itemContainer.primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -137,10 +137,10 @@ Page {
                 }
             }
 
-            Column {
-                anchors.fill: parent
-
-
+            Rectangle {
+                width: parent.width
+                height: parent.height
+                color: 'transparent'
 
                 RowLayout {
                     id: row
@@ -151,9 +151,10 @@ Page {
                         id: iconContainer
                         height: grid.cellHeight
                         width: grid.cellHeight
+                        color: 'transparent'
 
                         Image {
-                            anchors.margins: 20 // TODO @vsklencar
+                            anchors.margins: (grid.cellHeight/4)*1.25 // TODO @vsklencar
                             id: icon
                             anchors.fill: parent
                             source: 'file.svg'
@@ -163,7 +164,7 @@ Page {
                         ColorOverlay {
                             anchors.fill: icon
                             source: icon
-                            color: InputStyle.fontColor
+                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                         }
 
                     }
@@ -173,14 +174,14 @@ Page {
                         y: 0
                         height: grid.cellHeight - row.bottomMargin
                         width: grid.cellWidth - (grid.cellHeight * 2)
+                        color: 'transparent'
                         Text {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            leftPadding: 20
                             font.pointSize: 24
                             font.weight: Font.Bold
-                            color: InputStyle.fontColor
+                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignBottom
                         }
@@ -192,8 +193,8 @@ Page {
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
-                            leftPadding: 20
                             font.pointSize: 12
+                            color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }
@@ -202,18 +203,26 @@ Page {
                     Rectangle {
                         height: grid.cellHeight
                         width: grid.cellHeight
+                        color: 'transparent'
                         y: 0
 
-                        Button {
-                            id: icon2
+                        MouseArea {
                             anchors.fill: parent
-                            anchors.margins: 20
-                            text: "..."
-
-                            background: Rectangle {
-                                anchors.fill: parent
-                                color: InputStyle.clrPanelMain
+                            onClicked: {
+                                projectsPanel.activeProjectIndex = index
+                                projectsPanel.visible = false
                             }
+                        }
+
+                        Text {
+                            anchors.fill: parent
+                            text: "..."
+                            height: textContainer.height/2
+                            font.pointSize: 24
+                            font.weight: Font.Bold
+                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                 }
