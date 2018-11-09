@@ -27,7 +27,7 @@ Page {
     contentWidth: projectsPanel.width
 
     background: Rectangle {
-        color: InputStyle.clrPanelMain
+        color: "grey" //InputStyle.clrPanelMain
     }
 
     header: Rectangle {
@@ -72,10 +72,12 @@ Page {
                 RowLayout {
                     id: projectMenuButtons
                     anchors.fill: parent
+                    spacing: 0
 
                     Button {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        id: myProjectsButton
                         Text {
                             anchors.fill: parent
                             text: "My projects"
@@ -88,6 +90,7 @@ Page {
                     }
 
                     Button {
+                        id: allProjectsButton
                         Layout.fillHeight: true
                         Layout.fillWidth: true
 
@@ -103,16 +106,21 @@ Page {
                 }
             }
 
-            GridView {
+            ListView {
                 id: grid
                 //model: __projectsModel
                 //height: projectsPanel.height - projectsPanel.rowHeight
                 //width: projectsPanel.width
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                cellWidth: grid.width
-                cellHeight: projectsPanel.rowHeight
+                //cellWidth: grid.width
+                //cellHeight: projectsPanel.rowHeight
                 contentWidth: grid.width
+
+                property int cellWidth: width
+                property int cellHeight: projectsPanel.rowHeight
+                property int borderWidth: 1
+                //spacing: 1
 
                 delegate: delegateItem
 
@@ -126,7 +134,7 @@ Page {
 
     Component {
         id: delegateItem
-        Item {
+        Rectangle {
             width: grid.cellWidth
             height: grid.cellHeight
 
@@ -138,80 +146,102 @@ Page {
                 }
             }
 
-            RowLayout {
-                id: row
+            Column {
                 anchors.fill: parent
-                spacing: 0
 
-                Rectangle {
-                    id: iconContainer
-                    height: grid.cellHeight
-                    width: grid.cellHeight
 
-                    Image {
-                        anchors.margins: 20 // TODO @vsklencar
-                        id: icon
-                        anchors.fill: parent
-                        source: 'file.svg'
-                        fillMode: Image.PreserveAspectFit
-                    }
 
-                    ColorOverlay {
-                        anchors.fill: icon
-                        source: icon
-                        color: InputStyle.fontColor
-                    }
+                RowLayout {
+                    id: row
+                    anchors.fill: parent
 
-                }
+                    //Layout.Margin: 1
+                    spacing: 0
 
-                Rectangle {
-                    id: textContainer
-                    height: grid.cellHeight
-                    width: grid.cellWidth - (grid.cellHeight * 2)
-                    Text {
-                        id: mainText
-                        text: name
-                        height: textContainer.height/2
-                        leftPadding: 20
-                        font.pointSize: 24
-                        font.weight: Font.Bold
-                        color: InputStyle.fontColor
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignBottom
-                    }
+                    Rectangle {
+                        id: iconContainer
+                        height: grid.cellHeight
+                        width: grid.cellHeight
+                        color: "red"
+                        y: 0
 
-                    Text {
-                        height: textContainer.height/2
-                        text: projectInfo
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.top: mainText.bottom
-                        leftPadding: 20
-                        font.pointSize: 12
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignTop
-                    }
-                }
-
-                Rectangle {
-                    height: grid.cellHeight
-                    width: grid.cellHeight
-
-                    Button {
-                        id: icon2
-                        anchors.fill: parent
-                        anchors.margins: 20
-                        text: "..."
-
-                        background: Rectangle {
+                        Image {
+                            anchors.margins: 20 // TODO @vsklencar
+                            id: icon
                             anchors.fill: parent
-                            color: InputStyle.clrPanelMain
+                            source: 'file.svg'
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: icon
+                            source: icon
+                            color: InputStyle.fontColor
+                        }
+
+                    }
+
+                    Rectangle {
+                        id: textContainer
+                        y: 0
+                        height: grid.cellHeight - row.bottomMargin
+                        width: grid.cellWidth - (grid.cellHeight * 2)
+                        Text {
+                            id: mainText
+                            text: name
+                            height: textContainer.height/2
+                            leftPadding: 20
+                            font.pointSize: 24
+                            font.weight: Font.Bold
+                            color: InputStyle.fontColor
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignBottom
+                        }
+
+                        Text {
+                            height: textContainer.height/2
+                            text: projectInfo
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.left: parent.left
+                            anchors.top: mainText.bottom
+                            leftPadding: 20
+                            font.pointSize: 12
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignTop
+                        }
+                    }
+
+                    Rectangle {
+                        height: grid.cellHeight
+                        width: grid.cellHeight
+                        y: 0
+
+                        Button {
+                            id: icon2
+                            anchors.fill: parent
+                            anchors.margins: 20
+                            text: "..."
+
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: InputStyle.clrPanelMain
+                            }
                         }
                     }
                 }
+
+                Rectangle {
+                    id: textBorer
+                    color: "blue"
+                    width: row.width
+                }
+
             }
+
+
         }
+
     }
 
 }
