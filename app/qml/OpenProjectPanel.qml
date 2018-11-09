@@ -27,7 +27,7 @@ Page {
     contentWidth: projectsPanel.width
 
     background: Rectangle {
-        color: "grey" //InputStyle.clrPanelMain
+        color: InputStyle.clrPanelMain
     }
 
     header: Rectangle {
@@ -52,7 +52,7 @@ Page {
             anchors.fill: parent
             spacing: 0
 
-            // TODO redundat for NOW
+
             Rectangle {
                 id: projectMenu
                 color: InputStyle.panelBackground2
@@ -109,24 +109,15 @@ Page {
             ListView {
                 id: grid
                 //model: __projectsModel
-                //height: projectsPanel.height - projectsPanel.rowHeight
-                //width: projectsPanel.width
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                //cellWidth: grid.width
-                //cellHeight: projectsPanel.rowHeight
                 contentWidth: grid.width
 
                 property int cellWidth: width
                 property int cellHeight: projectsPanel.rowHeight
                 property int borderWidth: 1
-                //spacing: 1
 
                 delegate: delegateItem
-
-                Component.onCompleted: {
-                    console.log("tralala222!!!", projectsPanel.rowHeight, projectMenu.height)
-                }
             }
         }
 
@@ -154,16 +145,12 @@ Page {
                 RowLayout {
                     id: row
                     anchors.fill: parent
-
-                    //Layout.Margin: 1
                     spacing: 0
 
                     Rectangle {
                         id: iconContainer
                         height: grid.cellHeight
                         width: grid.cellHeight
-                        color: "red"
-                        y: 0
 
                         Image {
                             anchors.margins: 20 // TODO @vsklencar
@@ -232,9 +219,11 @@ Page {
                 }
 
                 Rectangle {
-                    id: textBorer
-                    color: "blue"
+                    id: borderLine
+                    color: "grey"
                     width: row.width
+                    height: grid.borderWidth
+                    anchors.bottom: parent.bottom
                 }
 
             }
