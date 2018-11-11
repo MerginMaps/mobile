@@ -49,56 +49,62 @@ Page {
         anchors.fill: parent
         spacing: 0
 
-
-        Rectangle {
-            id: projectMenu
-            color: InputStyle.panelBackground2
+        TabBar {
+            id: projectMenuButtonsy
             Layout.fillWidth: true
-            height: InputStyle.scale(120) //projectsPanel.rowHeight
-            width: projectsPanel.width
+            spacing: 0
+            implicitHeight: 100
+            height: 100
 
-            Component.onCompleted: {
-                //console.log("tralala!!!", projectsPanel.rowHeight, projectMenu.height)
-                projectMenu.height = projectsPanel.rowHeight
+            background: Rectangle {
+                color: InputStyle.panelBackground2
             }
 
-            ButtonGroup {
-                buttons: projectMenuButtons.children
-            }
-
-            RowLayout {
-                id: projectMenuButtons
-                anchors.fill: parent
-                spacing: 0
-
-                Button {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    id: myProjectsButton
-                    Text {
-                        anchors.fill: parent
-                        text: "My projects"
-                        color: InputStyle.fontColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.underline: true
-                        font.bold: true
-                    }
+            TabButton {
+                height: projectMenuButtons.height
+                id: button1
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.top: parent.top
+                anchors.topMargin: 0
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
                 }
 
-                Button {
-                    id: allProjectsButton
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
+                contentItem: Text {
+                    anchors.fill: parent
+                    text: qsTr("My projects")
+                    color: InputStyle.fontColor
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.underline: button1.checked
+                    font.bold: true
+                }
 
-                    Text {
-                        anchors.fill: parent
-                        text: "All projects"
-                        color: InputStyle.fontColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.bold: true
-                    }
+            }
+            TabButton {
+                height: parent.height
+                id: button2
+                y:0
+                background: Rectangle {
+                    anchors.fill: parent
+                    height: parent.height
+                    color: "transparent"
+                }
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.top: parent.top
+                anchors.topMargin: 0
+                Text {
+                    anchors.fill: parent
+                    height: parent.height
+                    text: qsTr("All projects")
+                    color: InputStyle.fontColor
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.underline: button2.checked
+                    font.bold: true
                 }
             }
         }
@@ -179,7 +185,7 @@ Page {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            font.pointSize: 24
+                            font.pointSize: 28
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
@@ -229,7 +235,7 @@ Page {
 
                 Rectangle {
                     id: borderLine
-                    color: "grey"
+                    color: InputStyle.panelBackground2
                     width: row.width
                     height: grid.borderWidth
                     anchors.bottom: parent.bottom
