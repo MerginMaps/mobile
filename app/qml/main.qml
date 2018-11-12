@@ -19,6 +19,31 @@ ApplicationWindow {
                 )
     }
 
+    function recordFeature() {
+        var layer = activeLayerPanel.activeVectorLayer
+        if (!layer)
+        {
+            // nothing to do with no active layer
+        }
+        else if (digitizing.hasLineGeometry(layer)) {
+            if (digitizing.recording) {
+                digitizing.stopRecording()
+                var pair = digitizing.lineFeature()
+                highlight.featureLayerPair = pair
+                featurePanel.show_panel(pair, "Add")
+            }
+            else {
+                digitizing.startRecording()
+            }
+        }
+        else {
+            // assuming layer with point geometry
+            var pair = digitizing.pointFeature()
+            highlight.featureLayerPair = pair
+            featurePanel.show_panel(pair, "Add")
+        }
+    }
+
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
         console.log("Completed Running!")
@@ -94,7 +119,7 @@ ApplicationWindow {
     QgsQuick.PositionMarker {
       id: positionMarker
       positionKit: positionKit
-      z: 1
+      z: 0
     }
 
     DigitizingController {
@@ -107,7 +132,7 @@ ApplicationWindow {
         id: mainPanel
         width: window.width
         height: 115 * QgsQuick.Utils.dp
-        z: 2
+        z: 100
 
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
@@ -127,30 +152,13 @@ ApplicationWindow {
         onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
         recordButton.recording: digitizing.recording
-        recordButton.enabled: activeLayerPanel.activeVectorLayer != null
         onAddFeatureClicked: {
-            var layer = activeLayerPanel.activeVectorLayer
-            if (!layer)
-            {
-                // nothing to do with no active layer
+            if (digitizing.recording) {
+                recordFeature()
+            } else {
+                openLayersClicked()
             }
-            else if (digitizing.hasLineGeometry(layer)) {
-                if (digitizing.recording) {
-                    digitizing.stopRecording()
-                  var pair = pointFeature()
-                  highlight.featureLayerPair = pair
-                    featurePanel.show_panel(pair, "Add")
-                }
-                else {
-                    digitizing.startRecording()
-                }
-            }
-            else {
-                // assuming layer with point geometry
-                var pair = digitizing.pointFeature()
-                highlight.featureLayerPair = pair
-                featurePanel.show_panel(pair, "Add")
-            }
+
         }
     }
 
@@ -198,6 +206,11 @@ ApplicationWindow {
         height: window.height
         width: QgsQuick.Utils.dp * 600
         edge: Qt.LeftEdge
+
+        onLayerSettingChanged: {
+            console.log("onLayerSettingChanged")
+            recordFeature()
+        }
     }
 
     MapThemePanel {
