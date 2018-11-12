@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
@@ -42,7 +41,6 @@ Page {
             horizontalAlignment: Text.AlignHCenter
         }
     }
-    footer: Item {}
 
     ColumnLayout {
         id: contentLayout
@@ -54,6 +52,7 @@ Page {
             Layout.fillWidth: true
             spacing: 0
             implicitHeight: rowHeight
+            z: grid.z + 1
 
             background: Rectangle {
                 color: InputStyle.panelBackground2
@@ -66,9 +65,9 @@ Page {
                 anchors.bottomMargin: 0
                 anchors.top: parent.top
                 anchors.topMargin: 0
-                background: Rectangle {
+                // overwritting TabButton default background
+                background: Item {
                     anchors.fill: parent
-                    color: "transparent"
                 }
 
                 contentItem: Text {
@@ -79,6 +78,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     font.underline: button1.checked
                     font.bold: true
+                    font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
                 }
 
             }
@@ -86,10 +86,9 @@ Page {
                 height: parent.height
                 id: button2
                 y:0
-                background: Rectangle {
+                // overwritting TabButton default background
+                background: Item {
                     anchors.fill: parent
-                    height: parent.height
-                    color: "transparent"
                 }
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
@@ -104,13 +103,13 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     font.underline: button2.checked
                     font.bold: true
+                    font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
                 }
             }
         }
 
         ListView {
             id: grid
-            //model: __projectsModel
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentWidth: grid.width
@@ -142,24 +141,22 @@ Page {
                 }
             }
 
-            Rectangle {
+            Item {
                 width: parent.width
                 height: parent.height
-                color: 'transparent'
 
                 RowLayout {
                     id: row
                     anchors.fill: parent
                     spacing: 0
 
-                    Rectangle {
+                    Item {
                         id: iconContainer
                         height: grid.cellHeight
                         width: grid.cellHeight
-                        color: 'transparent'
 
                         Image {
-                            anchors.margins: (grid.cellHeight/4)*1.25 // TODO @vsklencar
+                            anchors.margins: (grid.cellHeight/4)
                             id: icon
                             anchors.fill: parent
                             source: 'file.svg'
@@ -174,17 +171,16 @@ Page {
 
                     }
 
-                    Rectangle {
+                    Item {
                         id: textContainer
                         y: 0
                         height: grid.cellHeight - row.bottomMargin
                         width: grid.cellWidth - (grid.cellHeight * 2)
-                        color: 'transparent'
                         Text {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            font.pointSize: 24
+                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
@@ -198,17 +194,16 @@ Page {
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
-                            font.pointSize: 12
+                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeSmall)
                             color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }
                     }
 
-                    Rectangle {
+                    Item {
                         height: grid.cellHeight
                         width: grid.cellHeight
-                        color: 'transparent'
                         y: 0
 
                         MouseArea {
@@ -223,7 +218,7 @@ Page {
                             anchors.fill: parent
                             text: "..."
                             height: textContainer.height/2
-                            font.pointSize: 24
+                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignHCenter

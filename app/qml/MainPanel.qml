@@ -74,14 +74,14 @@ Item {
             }
         }
 
-        OpenProjectBtn {
+        ProjectBtn {
             id: openProjectBtn
             width: mainPanel.itemSize
             anchors.verticalCenter: parent.verticalCenter
             onActivated: mainPanel.openProjectClicked()
         }
 
-        OpenProjectBtn {
+        ProjectBtn {
             id: mapThemeBtn
             width: mainPanel.itemSize
             anchors.verticalCenter: parent.verticalCenter
