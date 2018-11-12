@@ -11,6 +11,8 @@ Drawer {
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
 
+    signal layerSettingChanged()
+
     id: activeLayerPanel
     visible: false
     modal: true
@@ -61,6 +63,7 @@ Drawer {
                     console.log("active layer:", name)
                     activeLayerIndex = index
                     activeLayerPanel.visible = false
+                    layerSettingChanged()
                 }
             }
         }

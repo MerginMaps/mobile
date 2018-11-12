@@ -19,6 +19,7 @@ Item {
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
     property bool lockOnPosition: false
+    property bool labelsVisible: false
 
     property int itemSize: mainPanel.height * 0.8
     property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
@@ -95,18 +96,12 @@ Item {
             elide: Text.ElideRight
             color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
+            visible: mainPanel.labelsVisible
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: mainPanel.openProjectClicked()
             }
-        }
-
-        LayerTreeBtn {
-            id: layerTreeBtn
-            width: mainPanel.itemSize
-            anchors.verticalCenter: parent.verticalCenter
-            onActivated: mainPanel.openLayersClicked()
         }
 
         Label {
@@ -117,6 +112,7 @@ Item {
             elide: Text.ElideRight
             color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
+            visible: mainPanel.labelsVisible
 
             MouseArea {
                 anchors.fill: parent
@@ -142,14 +138,16 @@ Item {
             elide: Text.ElideRight
             color: InputStyle.clrPanelMain
             anchors.verticalCenter: parent.verticalCenter
+            visible: mainPanel.labelsVisible
+        }
+
+        RecordBtn {
+            id: recBtn
+            width: mainPanel.itemSize
+            anchors.verticalCenter: parent.verticalCenter
+            onActivated: mainPanel.addFeatureClicked()
         }
     }
 
-    RecordBtn {
-        id: recBtn
-        x: mainPanel.width - InputStyle.panelSpacing - recBtn.width
-        width: myLocationBtn.width
-        anchors.verticalCenter: parent.verticalCenter
-        onActivated: mainPanel.addFeatureClicked()
-    }
+
 }
