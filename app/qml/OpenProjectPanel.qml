@@ -50,11 +50,10 @@ Page {
         spacing: 0
 
         TabBar {
-            id: projectMenuButtonsy
+            id: projectMenuButtons
             Layout.fillWidth: true
             spacing: 0
-            implicitHeight: 100
-            height: 100
+            implicitHeight: rowHeight
 
             background: Rectangle {
                 color: InputStyle.panelBackground2
@@ -185,7 +184,7 @@ Page {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            font.pointSize: 28
+                            font.pointSize: 24
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
