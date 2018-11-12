@@ -119,7 +119,7 @@ ApplicationWindow {
     QgsQuick.PositionMarker {
       id: positionMarker
       positionKit: positionKit
-      z: 0
+      z: 1
     }
 
     DigitizingController {
@@ -132,7 +132,7 @@ ApplicationWindow {
         id: mainPanel
         width: window.width
         height: 115 * QgsQuick.Utils.dp
-        z: 100
+        z: 2
 
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
@@ -158,7 +158,6 @@ ApplicationWindow {
             } else {
                 openLayersClicked()
             }
-
         }
     }
 
