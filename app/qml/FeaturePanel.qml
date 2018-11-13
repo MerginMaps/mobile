@@ -22,10 +22,6 @@ Drawer {
     dragMargin: 0 // prevents opening the drawer by dragging.
     edge: Qt.BottomEdge
 
-    Component.onCompleted: {
-        previewPanel.height = featurePanel.panelHeight/3
-    }
-
     background: Rectangle {
         id: stateManager
         color: InputStyle.clrPanelBackground

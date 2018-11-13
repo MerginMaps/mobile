@@ -2,12 +2,10 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-//import QgsQuick 0.1 as QgsQuick
-
 
 Item {
     id: previewPanel
-    property real rowHeight: InputStyle.buttonSize
+    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
 
     property alias titleBorder: titleBorder
     property string title: ""
@@ -21,96 +19,61 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        //spacing: 0
-
-        // TODO empty photo container
-        Rectangle {
-            id: photoContainer
-            Layout.fillWidth: true
-            color: "transparent"
-            height: 0
-        }
+        color: InputStyle.clrPanelMain
 
         Rectangle {
-            height: parent.height - photoContainer.height
-            width: parent.width
-            //Layout.fillWidth: true
-            color: "red"
+            anchors.fill: parent
+            anchors.margins: InputStyle.scale(InputStyle.panelMargin)
 
-            Rectangle {
-                //anchors.fill: parent
-                anchors.margins: 20
-
-                height: previewPanel.height/2
+            Item {
                 width: parent.width
-                //Layout.fillWidth: true
-                color: "blue"
-
+                height: previewPanel.rowHeight
 
                 Item {
-                    Layout.fillWidth: true
+                    id: title
                     width: parent.width
-                    height: previewPanel.rowHeight
+                    height: parent.height - titleBorder.height
+                    Text {
+                        height: parent.height
+                        text: previewPanel.title
+                        font.pointSize: InputStyle.fontPointSizeTitle
+                        color: InputStyle.fontColor
+                        font.bold: true
+                        anchors.left: parent.left
+                        anchors.right: titleImage.left
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                    }
 
-                    Item {
-                        Layout.fillWidth: true
-                        width: parent.width
-                        height: previewPanel.rowHeight
-                        //anchors.fill: parent
-                        id: titleContainer
-
-                        Item {
-                            id: title
-                            width: parent.width
-                            height: parent.height - titleBorder.height
-                            y:0
-                            Text {
-                                height: parent.height
-                                text: previewPanel.title
-                                font.pointSize: InputStyle.fontPointSizeTitle
-                                color: InputStyle.fontColor
-                                font.bold: true
-                                anchors.left: parent.left
-                                anchors.right: titleImage.left
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                            }
-
-                            Image {
-                                id: titleImage
-                                height: parent.height
-                                width: height
-                                source: "ic_edit_48px.svg"
-                                anchors.right: parent.right
-                                anchors.margins: height/4
-
-                            }
-
-                            ColorOverlay {
-                                anchors.fill: titleImage
-                                source: titleImage
-                                color: InputStyle.highlightColor
-                            }
-
-                        }
-
-                        Rectangle {
-                            id: titleBorder
-                            width: parent.width
-                            height: 1
-                            color: InputStyle.fontColor
-                            anchors.bottom: titleContainer.bottom
-                        }
+                    Image {
+                        id: titleImage
+                        height: parent.height
+                        width: height
+                        source: "ic_edit_48px.svg"
+                        anchors.right: parent.right
+                        anchors.margins: height/4
 
                     }
 
+                    ColorOverlay {
+                        anchors.fill: titleImage
+                        source: titleImage
+                        color: InputStyle.highlightColor
+                    }
 
-                } //end title container
+                }
+
+                Rectangle {
+                    id: titleBorder
+                    width: parent.width
+                    height: 1
+                    color: InputStyle.fontColor
+                    anchors.bottom: title.bottom
+                }
 
             }
 
         }
-
 
     }
 
