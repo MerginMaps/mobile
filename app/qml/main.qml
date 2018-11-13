@@ -46,6 +46,8 @@ ApplicationWindow {
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
+        openProjectPanel.visible = true
+        InputStyle.deviceRatio = window.screen.devicePixelRatio
         console.log("Completed Running!")
     }
 
@@ -131,7 +133,7 @@ ApplicationWindow {
     MainPanel {
         id: mainPanel
         width: window.width
-        height: 115 * QgsQuick.Utils.dp
+        height: InputStyle.scale(115)//115 * QgsQuick.Utils.dp
         z: 2
 
         activeProjectName: openProjectPanel.activeProjectName
@@ -188,11 +190,11 @@ ApplicationWindow {
         }
     }
 
-    OpenProjectPanel {
+    ProjectPanel {
         id: openProjectPanel
         height: window.height
-        width: QgsQuick.Utils.dp * 600
-        edge: Qt.LeftEdge
+        width: window.width
+        y: mainPanel.height
 
         onActiveProjectPathChanged: {
             __loader.load(activeProjectPath);
