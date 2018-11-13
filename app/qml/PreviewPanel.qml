@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
+import QtGraphicalEffects 1.0
+//import QgsQuick 0.1 as QgsQuick
 
 
 Item {
@@ -17,9 +19,9 @@ Item {
         onClicked: contentClicked()
     }
 
-    ColumnLayout {
+    Rectangle {
         anchors.fill: parent
-        spacing: 0
+        //spacing: 0
 
         // TODO empty photo container
         Rectangle {
@@ -31,14 +33,18 @@ Item {
 
         Rectangle {
             height: parent.height - photoContainer.height
-            Layout.fillWidth: true
+            width: parent.width
+            //Layout.fillWidth: true
+            color: "red"
 
             Rectangle {
-                anchors.fill: parent
+                //anchors.fill: parent
                 anchors.margins: 20
 
-                height: parent.height/2
-                Layout.fillWidth: true
+                height: previewPanel.height/2
+                width: parent.width
+                //Layout.fillWidth: true
+                color: "blue"
 
 
                 Item {
@@ -46,10 +52,11 @@ Item {
                     width: parent.width
                     height: previewPanel.rowHeight
 
-                    Column {
+                    Item {
                         Layout.fillWidth: true
                         width: parent.width
-                        anchors.fill: parent
+                        height: previewPanel.rowHeight
+                        //anchors.fill: parent
                         id: titleContainer
 
                         Item {
@@ -60,7 +67,7 @@ Item {
                             Text {
                                 height: parent.height
                                 text: previewPanel.title
-                                font.pointSize: InputStyle.fontPointSizeBig
+                                font.pointSize: InputStyle.fontPointSizeTitle
                                 color: InputStyle.fontColor
                                 font.bold: true
                                 anchors.left: parent.left
@@ -73,10 +80,16 @@ Item {
                                 id: titleImage
                                 height: parent.height
                                 width: height
-                                source: "home.svg"
+                                source: "ic_edit_48px.svg"
                                 anchors.right: parent.right
                                 anchors.margins: height/4
 
+                            }
+
+                            ColorOverlay {
+                                anchors.fill: titleImage
+                                source: titleImage
+                                color: InputStyle.highlightColor
                             }
 
                         }
