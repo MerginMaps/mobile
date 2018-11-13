@@ -75,14 +75,16 @@ projectsmodel.cpp \
 layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
-    mapthemesmodel.cpp
+    mapthemesmodel.cpp \
+    featurepreviewmodel.cpp
 
 HEADERS += \
 projectsmodel.h \
 layersmodel.h \
 loader.h \
 digitizingcontroller.h \
-    mapthemesmodel.h
+    mapthemesmodel.h \
+    featurepreviewmodel.h
 
 RESOURCES += \
     img/pics.qrc \

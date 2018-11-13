@@ -15,5 +15,6 @@
         <file>SettingsPanel.qml</file>
         <file>MapThemePanel.qml</file>
         <file>Notification.qml</file>
+        <file>PreviewPanel.qml</file>
     </qresource>
 </RCC>
