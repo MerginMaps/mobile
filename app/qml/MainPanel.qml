@@ -31,61 +31,79 @@ Item {
     }
 
     Row {
-        //spacing: InputStyle.panelSpacing * 2
-        //anchors.centerIn: parent
         height: parent.height
         width: parent.width
         anchors.fill: parent
 
-        MainPanelButton {
-            id: openProjectBtn
-            width: mainPanel.itemSize
-            text: qsTr("Projects")
-            imageSource: "ic_map_white_48px.svg"
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
 
-            onActivated: mainPanel.openProjectClicked()
-            onActivatedOnHold: mainPanel.openMapThemesClicked()
-        }
+            MainPanelButton {
 
-        MainPanelButton {
-            id: myLocationBtn
-            width: mainPanel.itemSize
-
-            text: qsTr("GPS")
-            imageSource: "ic_my_location_white_48px.svg"
-            imageSource2: "baseline-gps_off-24px.svg"
-            imageSourceCondition: mainPanel.lockOnPosition
-
-            onActivated: mainPanel.myLocationClicked()
-            onActivatedOnHold: mainPanel.myLocationHold()
-        }
-
-        MainPanelButton {
-            id: recBtn
-            width: mainPanel.itemSize
-            text: qsTr("Record")
-
-            RecordBtn {
-                id: recBtnIcon
+                id: openProjectBtn
                 width: mainPanel.itemSize
-                anchors.top: parent.top
-                anchors.margins: width/4
-                anchors.topMargin: -anchors.margins/2
-                enabled: true
-            }
+                text: qsTr("Projects")
+                imageSource: "ic_map_white_48px.svg"
 
-            onActivated: mainPanel.addFeatureClicked()
+                onActivated: mainPanel.openProjectClicked()
+                onActivatedOnHold: mainPanel.openMapThemesClicked()
+            }
         }
 
-        MainPanelButton {
-            id: menuBtn
-            width: mainPanel.itemSize
 
 
-            text: qsTr("More")
-            imageSource: "ic_menu_48px.svg"
-            onActivated: {
-                rootMenu.open()
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+            MainPanelButton {
+                id: myLocationBtn
+                width: mainPanel.itemSize
+
+                text: qsTr("GPS")
+                imageSource: "ic_my_location_white_48px.svg"
+                imageSource2: "baseline-gps_off-24px.svg"
+                imageSourceCondition: mainPanel.lockOnPosition
+
+                onActivated: mainPanel.myLocationClicked()
+                onActivatedOnHold: mainPanel.myLocationHold()
+            }
+        }
+
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+            MainPanelButton {
+                id: recBtn
+                width: mainPanel.itemSize
+                text: qsTr("Record")
+
+                RecordBtn {
+                    id: recBtnIcon
+                    width: mainPanel.itemSize
+                    anchors.top: parent.top
+                    anchors.margins: width/4
+                    anchors.topMargin: -anchors.margins/2
+                    enabled: true
+                }
+
+                onActivated: mainPanel.addFeatureClicked()
+            }
+        }
+
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+            MainPanelButton {
+                id: menuBtn
+                width: mainPanel.itemSize
+
+
+                text: qsTr("More")
+                imageSource: "ic_menu_48px.svg"
+                onActivated: {
+                    rootMenu.open()
+                }
             }
         }
 
