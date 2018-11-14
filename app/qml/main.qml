@@ -133,7 +133,7 @@ ApplicationWindow {
     MainPanel {
         id: mainPanel
         width: window.width
-        height: InputStyle.scale(115)//115 * QgsQuick.Utils.dp
+        height: InputStyle.scale(115)
         z: 2
 
         activeProjectName: openProjectPanel.activeProjectName
@@ -232,8 +232,9 @@ ApplicationWindow {
     FeaturePanel {
         id: featurePanel
         height: window.height
-        width: QgsQuick.Utils.dp * 1000
-        edge: Qt.RightEdge
+        panelHeight: window.height
+        previewHeight: window.height/3
+        width: window.width
         mapSettings: mapCanvas.mapSettings
         project: __loader.project
     }

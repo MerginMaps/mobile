@@ -8,11 +8,15 @@ QtObject {
     property color clrPanelMain: "white"
     property color clrPanelHighlight: "yellow"
     property color clrPanelBackground: "#7b909d"
+    property color highlightColor: "#FB831F"
 
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
+    property real fontPointSizeTitle: 48
     property real fontPointSizeBig: 24
     property real fontPointSizeSmall: 12
+
+    property int panelMargin: 32
 
     property color fontColor: "#0b5036"
     property color panelBackground2: "#EEF0F0"

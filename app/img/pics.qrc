@@ -8,5 +8,6 @@
         <file>logo.png</file>
         <file>baseline-gps_off-24px.svg</file>
         <file>file.svg</file>
+        <file>ic_edit_48px.svg</file>
     </qresource>
 </RCC>
