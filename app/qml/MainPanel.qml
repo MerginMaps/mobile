@@ -47,11 +47,8 @@ Item {
                 imageSource: "ic_map_white_48px.svg"
 
                 onActivated: mainPanel.openProjectClicked()
-                onActivatedOnHold: mainPanel.openMapThemesClicked()
             }
         }
-
-
 
         Item {
             width: parent.width/parent.children.length
@@ -97,27 +94,34 @@ Item {
             MainPanelButton {
                 id: menuBtn
                 width: mainPanel.itemSize
-
-
                 text: qsTr("More")
                 imageSource: "ic_menu_48px.svg"
                 onActivated: {
-                    rootMenu.open()
+                    if (rootMenu.isOpen) {
+                        rootMenu.close()
+                    } else {
+                        rootMenu.open()
+                    }
                 }
             }
         }
-
     }
 
     Menu {
         id: rootMenu
-        title: "rootMenu"
+        title: "Menu"
         x:parent.width - rootMenu.width
         y: -rootMenu.height
+        property bool isOpen: false
+
+        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+
+        onClosed: isOpen = false
+        onOpened: isOpen = true
 
         Button {
             height: InputStyle.rowHeight/2
-            text: "Extent"
+            text: "Zoom to project"
             onClicked: {
                 mainPanel.zoomToProject()
                 rootMenu.close()
@@ -126,8 +130,9 @@ Item {
 
         Button {
             height: InputStyle.rowHeight/2
-            text: "menuItem2"
+            text: "Map themes"
             onClicked: {
+                mainPanel.openMapThemesClicked()
                 rootMenu.close()
             }
         }
@@ -135,8 +140,3 @@ Item {
 
 
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

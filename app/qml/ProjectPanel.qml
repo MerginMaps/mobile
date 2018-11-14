@@ -6,7 +6,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
 
-Page {
+Popup {
 
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
@@ -23,12 +23,15 @@ Page {
     id: projectsPanel
     visible: false
     contentWidth: projectsPanel.width
+    margins: 0
+    padding: 0
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
 
-    header: Rectangle {
+    Rectangle {
+        id: header
         height: projectsPanel.rowHeight
         width: parent.width
         color: InputStyle.clrPanelMain
@@ -44,7 +47,9 @@ Page {
 
     ColumnLayout {
         id: contentLayout
-        anchors.fill: parent
+        height: projectsPanel.height-projectsPanel.rowHeight
+        width: parent.width
+        y: projectsPanel.rowHeight
         spacing: 0
 
         TabBar {
@@ -234,12 +239,7 @@ Page {
                     height: grid.borderWidth
                     anchors.bottom: parent.bottom
                 }
-
             }
-
-
         }
-
     }
-
 }
