@@ -243,10 +243,8 @@ int main(int argc, char *argv[])
 
 
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed");
-//  engine.rootContext()->setContextProperty( "__appwindowwidth", 1217);
-//  engine.rootContext()->setContextProperty( "__appwindowheight", 800);
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 800);
-  engine.rootContext()->setContextProperty( "__appwindowheight", 1217);
+  engine.rootContext()->setContextProperty( "__appwindowwidth", 1217);
+  engine.rootContext()->setContextProperty( "__appwindowheight", 800);
 #endif
 
   // Set simulated position for desktop builds

@@ -133,7 +133,7 @@ ApplicationWindow {
     MainPanel {
         id: mainPanel
         width: window.width
-        height: InputStyle.scale(115)//115 * QgsQuick.Utils.dp
+        height: InputStyle.scale(115)
         z: 2
 
         activeProjectName: openProjectPanel.activeProjectName
