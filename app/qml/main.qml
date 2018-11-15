@@ -58,7 +58,7 @@ ApplicationWindow {
     QgsQuick.MapCanvas {
       id: mapCanvas
 
-      height: parent.height
+      height: parent.height - mainPanel.height
       width: parent.width
       z: zMapCanvas
 
@@ -138,7 +138,7 @@ ApplicationWindow {
     MainPanel {
         id: mainPanel
         width: window.width
-        height: InputStyle.rowHeight
+        height: InputStyle.rowHeightHeader
         z: zToolkits + 1
         y: window.height - height
 
@@ -171,12 +171,19 @@ ApplicationWindow {
 
     ScaleBar {
         id: scaleBar
-        height: 35 * QgsQuick.Utils.dp
-        textWidth: 115 * QgsQuick.Utils.dp
-        y: window.height - height
+        height: window.height * 0.05 // scalable just according device pixel height
+        y: window.height - height - mainPanel.height - InputStyle.panelMargin
         mapSettings: mapCanvas.mapSettings
-        preferredWidth: textWidth * 3
+        preferredWidth: Math.min(window.width, 180 * QgsQuick.Utils.dp)
         z: zToolkits
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    Connections {
+        target: mapCanvas.mapSettings
+        onExtentChanged: {
+            scaleBar.visible = true
+        }
     }
 
     Rectangle {
@@ -188,6 +195,7 @@ ApplicationWindow {
         z: zToolkits
         color: InputStyle.clrPanelBackground
         opacity: InputStyle.panelOpacity
+        visible: false
         Text  {
             anchors.fill: parent
             verticalAlignment: Text.AlignVCenter
@@ -212,9 +220,9 @@ ApplicationWindow {
 
     ActiveLayerPanel {
         id: activeLayerPanel
-        height: window.height
-        width: QgsQuick.Utils.dp * 600
-        edge: Qt.LeftEdge
+        height: window.height/2
+        width: window.width
+        edge: Qt.BottomEdge
         z: zPanel
 
         onLayerSettingChanged: {
@@ -226,7 +234,7 @@ ApplicationWindow {
     MapThemePanel {
         id: mapThemesPanel
         height: window.height
-        width: QgsQuick.Utils.dp * 600
+        width: window.width
         edge: Qt.LeftEdge
         z: zPanel
     }
@@ -243,10 +251,10 @@ ApplicationWindow {
     FeaturePanel {
         id: featurePanel
         height: window.height
-        panelHeight: window.height
-        previewHeight: window.height/3
         width: window.width
         mapSettings: mapCanvas.mapSettings
+        panelHeight: window.height
+        previewHeight: window.height/3
         project: __loader.project
         z: zPanel
     }

@@ -48,7 +48,7 @@ Item {
         color: fontColor
         text: root.text
         font.bold: true
-        font.pointSize: 24
+        font.pixelSize: InputStyle.fontPixelSizeSmaller
         verticalAlignment: Text.AlignBottom
         horizontalAlignment: Text.AlignHCenter
         z: image.z + 1

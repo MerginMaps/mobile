@@ -12,6 +12,8 @@ QtObject {
 
     property color highlightColor: "#FB831F"
 
+    property real fontPixelSizeSmaller: QgsQuick.Utils.dp * 15
+    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
     property real fontPointSizeTitle: 48
@@ -28,7 +30,7 @@ QtObject {
     property real rowHeightHeader: scale(64)
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
-    property real panelOpacity: 0.7
+    property real panelOpacity: 1
 
     // used in scaling functions for high DPI screens
     property real deviceRatio: 1
