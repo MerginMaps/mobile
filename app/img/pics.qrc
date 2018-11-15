@@ -10,5 +10,9 @@
         <file>file.svg</file>
         <file>ic_edit_48px.svg</file>
         <file>ic_menu_48px.svg</file>
+        <file>mIconLineLayer.svg</file>
+        <file>mIconPointLayer.svg</file>
+        <file>mIconPolygonLayer.svg</file>
+        <file>mIconRaster.svg</file>
     </qresource>
 </RCC>

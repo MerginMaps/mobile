@@ -8,6 +8,8 @@ QtObject {
     property color clrPanelMain: "white"
     property color clrPanelHighlight: "yellow"
     property color clrPanelBackground: fontColor
+    property color clrPanelBackground2: "#EAEAEA"
+
     property color highlightColor: "#FB831F"
 
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
@@ -22,7 +24,8 @@ QtObject {
     property color panelBackground2: "#EEF0F0"
 
     property real buttonSize: 96
-    property real rowHeight: scale(96)
+    property real rowHeight: scale(48)
+    property real rowHeightHeader: scale(64)
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real panelOpacity: 0.7
