@@ -64,6 +64,24 @@ Item {
 
                 onActivated: mainPanel.myLocationClicked()
                 onActivatedOnHold: mainPanel.myLocationHold()
+
+                Item {
+                    id: gpsSignal
+                    width: parent.height/4
+                    height: width
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    property int size: width
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: gpsSignal.size
+                        height: gpsSignal.size
+                        color: "orange"
+                        radius: width*0.5
+                        antialiasing: true
+                    }
+                }
             }
         }
 
@@ -113,6 +131,7 @@ Item {
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         property bool isOpen: false
+        width: 240 * QgsQuick.Utils.dp
 
         closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
@@ -120,7 +139,7 @@ Item {
         onOpened: isOpen = true
 
         Button {
-            height: InputStyle.rowHeight/2
+            height: InputStyle.rowHeight
             text: "Zoom to project"
             onClicked: {
                 mainPanel.zoomToProject()
@@ -129,7 +148,7 @@ Item {
         }
 
         Button {
-            height: InputStyle.rowHeight/2
+            height: InputStyle.rowHeight
             text: "Map themes"
             onClicked: {
                 mainPanel.openMapThemesClicked()
