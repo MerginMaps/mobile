@@ -30,14 +30,13 @@ Drawer {
         width: parent.width
         color: InputStyle.clrPanelBackground2
 
-
         Text {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
             text: "Survey layer"
             color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeBig
+            font.pixelSize: InputStyle.fontPixelSizeSmall
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -85,10 +84,9 @@ Drawer {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
 
-                RowLayout {
+                Item {
                     id: row
                     anchors.fill: parent
-                    spacing: 20
 
                     Rectangle {
                         id: iconContainer
@@ -98,12 +96,12 @@ Drawer {
                         Image {
                             id: icon
                             anchors.fill: parent
+                            anchors.margins: InputStyle.rowHeight/4
                             source: iconSource ? iconSource : ""
-                            sourceSize.width: 48
-                            sourceSize.height: 48
+                            sourceSize.width: width
+                            sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
                         }
-
                     }
 
                     Item {
@@ -119,7 +117,7 @@ Drawer {
                             height: parent.height
                             width: parent.width
 
-                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
+                            font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
                             color: index === activeLayerIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
