@@ -35,8 +35,8 @@ class LayersModel : public QAbstractListModel
       Name = Qt::UserRole + 1,
       isVector,
       isReadOnly,
-      VectorLayer,
-      IconSource
+      IconSource,
+      VectorLayer
     };
     Q_ENUMS( Roles )
 

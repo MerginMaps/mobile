@@ -59,7 +59,7 @@ Item {
 
                 text: qsTr("GPS")
                 imageSource: "ic_my_location_white_48px.svg"
-                imageSource2: "baseline-gps_off-24px.svg"
+                imageSource2: "ic_gps_off.svg"
                 imageSourceCondition: mainPanel.lockOnPosition
 
                 onActivated: mainPanel.myLocationClicked()

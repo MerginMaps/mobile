@@ -12,7 +12,7 @@ Popup {
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
-    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
+    property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
     Component.onCompleted: {
         // load model just after all components are prepared
@@ -32,7 +32,7 @@ Popup {
 
     Rectangle {
         id: header
-        height: projectsPanel.rowHeight
+        height: InputStyle.rowHeightHeader
         width: parent.width
         color: InputStyle.clrPanelMain
         Text {
@@ -40,6 +40,7 @@ Popup {
             text: "Projects"
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -47,16 +48,16 @@ Popup {
 
     ColumnLayout {
         id: contentLayout
-        height: projectsPanel.height-projectsPanel.rowHeight
+        height: projectsPanel.height-header.height
         width: parent.width
-        y: projectsPanel.rowHeight
+        y: header.height
         spacing: 0
 
         TabBar {
             id: projectMenuButtons
             Layout.fillWidth: true
             spacing: 0
-            implicitHeight: rowHeight
+            implicitHeight: InputStyle.rowHeightHeader
             z: grid.z + 1
 
             background: Rectangle {
@@ -83,7 +84,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                     font.underline: button1.checked
                     font.bold: true
-                    font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
+                    font.pixelSize: InputStyle.fontPixelSizeSmall
                 }
 
             }
@@ -108,7 +109,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                     font.underline: button2.checked
                     font.bold: true
-                    font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
+                    font.pixelSize: InputStyle.fontPixelSizeSmall
                 }
             }
         }
@@ -185,7 +186,7 @@ Popup {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
+                            font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
@@ -199,7 +200,7 @@ Popup {
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
-                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeSmall)
+                            font.pixelSize: InputStyle.fontPixelSizeSmaller
                             color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
@@ -223,7 +224,7 @@ Popup {
                             anchors.fill: parent
                             text: "..."
                             height: textContainer.height/2
-                            font.pointSize: InputStyle.scaleFontPointSize(InputStyle.fontPointSizeBig)
+                            font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignHCenter

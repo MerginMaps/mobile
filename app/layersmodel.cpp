@@ -79,9 +79,7 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
       case isReadOnly:
         return false;
       case IconSource:
-      {
         return QVariant();
-      }
       case VectorLayer:
         return QVariant::fromValue<QgsVectorLayer*>( nullptr );
     }

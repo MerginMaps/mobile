@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
@@ -10,7 +9,6 @@ Drawer {
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
-
 
     signal layerSettingChanged()
 
@@ -66,7 +64,8 @@ Drawer {
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
             width: listView.cellWidth
-            height: name === "(none)" ? 0 : listView.cellHeight
+            // first item in the model is "none" layer
+            height: index === 0 || !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin

@@ -16,16 +16,12 @@ QtObject {
     property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
-    property real fontPointSizeTitle: 48
-    property real fontPointSizeBig: 24
-    property real fontPointSizeSmall: 12
 
-    property int panelMargin: 32
+    property int panelMargin: scale(16)
 
     property color fontColor: "#0b5036"
     property color panelBackground2: "#EEF0F0"
 
-    property real buttonSize: 96
     property real rowHeight: scale(48)
     property real rowHeightHeader: scale(64)
 

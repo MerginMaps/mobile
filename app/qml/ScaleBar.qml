@@ -22,7 +22,7 @@ Item {
     Rectangle {
         id: background
         color: InputStyle.clrPanelMain
-        opacity: InputStyle.panelOpacity
+        opacity: 0.25
         width: parent.width
         height: parent.height
         radius: 5
