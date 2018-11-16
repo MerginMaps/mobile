@@ -75,6 +75,7 @@ Drawer {
                 onClicked: {
                     layerPanel.activeLayerIndex = index
                     layerPanel.visible = false
+                    layerPanel.layerSettingChanged()
                 }
             }
 
@@ -118,7 +119,7 @@ Drawer {
 
                             font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
-                            color: index === activeLayerIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
                         }

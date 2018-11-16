@@ -34,7 +34,7 @@ ApplicationWindow {
                 digitizing.stopRecording()
                 var pair = digitizing.lineFeature()
                 highlight.featureLayerPair = pair
-                featurePanel.show_panel(pair, "Add")
+                featurePanel.show_panel(pair, "Add", "form")
             }
             else {
                 digitizing.startRecording()
@@ -44,7 +44,7 @@ ApplicationWindow {
             // assuming layer with point geometry
             var pair = digitizing.pointFeature()
             highlight.featureLayerPair = pair
-            featurePanel.show_panel(pair, "Add")
+            featurePanel.show_panel(pair, "Add", "form")
         }
     }
 
