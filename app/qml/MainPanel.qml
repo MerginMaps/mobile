@@ -140,7 +140,7 @@ Item {
 
         Button {
             height: InputStyle.rowHeight
-            text: "Zoom to project"
+            text: qsTr("Zoom to project")
             onClicked: {
                 mainPanel.zoomToProject()
                 rootMenu.close()
@@ -149,7 +149,7 @@ Item {
 
         Button {
             height: InputStyle.rowHeight
-            text: "Map themes"
+            text: qsTr("Map themes")
             onClicked: {
                 mainPanel.openMapThemesClicked()
                 rootMenu.close()
