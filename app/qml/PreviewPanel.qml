@@ -36,7 +36,7 @@ Item {
                     Text {
                         height: parent.height
                         text: previewPanel.title
-                        font.pointSize: InputStyle.fontPointSizeTitle
+                        font.pixelSize: InputStyle.fontPixelSizeNormal
                         color: InputStyle.fontColor
                         font.bold: true
                         anchors.left: parent.left

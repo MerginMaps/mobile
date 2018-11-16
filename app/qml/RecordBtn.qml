@@ -10,14 +10,8 @@ Item {
 
     property bool recording: false
 
-    signal activated()
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onClicked: {
-            recordBtn.activated()
-        }
+    function activated() {
+        animation.start()
     }
 
     Rectangle {

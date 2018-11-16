@@ -13,23 +13,16 @@ Item {
     signal openMapThemesClicked()
     signal openLogClicked()
     signal zoomToProject()
-    property alias recordButton: recBtn
+    property alias recordButton: recBtnIcon
 
     property string activeProjectName: "(none)"
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
     property bool lockOnPosition: false
-    property bool labelsVisible: false
 
     property int itemSize: mainPanel.height * 0.8
-    property int labelWidth: (mainPanel.width - 4*mainPanel.itemSize - 8*InputStyle.panelSpacing - logo.width - gpsLabel.width)/2
 
     id: mainPanel
-
-    FontMetrics {
-        id: fontMetrics
-        font: gpsLabel.font
-    }
 
     Rectangle {
         anchors.fill: parent
@@ -37,115 +30,130 @@ Item {
         opacity: InputStyle.panelOpacity
     }
 
-    Image {
-        id: logo
-        x: InputStyle.panelSpacing
-        source: "logo.png"
-        height: mainPanel.itemSize
-        fillMode: Image.PreserveAspectFit
-        anchors.verticalCenter: parent.verticalCenter
+    Row {
+        height: parent.height
+        width: parent.width
+        anchors.fill: parent
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                mainPanel.openLogClicked()
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+
+            MainPanelButton {
+
+                id: openProjectBtn
+                width: mainPanel.itemSize
+                text: qsTr("Projects")
+                imageSource: "ic_map_white_48px.svg"
+
+                onActivated: mainPanel.openProjectClicked()
             }
         }
-    }
 
-    Row {
-        x: 2*InputStyle.panelSpacing  + logo.width
-        spacing: InputStyle.panelSpacing
-        anchors.centerIn: parent
-        height: parent.height
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+            MainPanelButton {
+                id: myLocationBtn
+                width: mainPanel.itemSize
 
-        Image {
-            id: home
-            source: "home.svg"
-            fillMode: Image.PreserveAspectFit
-            clip:true
-            anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("GPS")
+                imageSource: "ic_my_location_white_48px.svg"
+                imageSource2: "ic_gps_off.svg"
+                imageSourceCondition: mainPanel.lockOnPosition
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    zoomToProject()
+                onActivated: mainPanel.myLocationClicked()
+                onActivatedOnHold: mainPanel.myLocationHold()
+
+                Item {
+                    id: gpsSignal
+                    width: parent.height/4
+                    height: width
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    property int size: width
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: gpsSignal.size
+                        height: gpsSignal.size
+                        color: "orange"
+                        radius: width*0.5
+                        antialiasing: true
+                    }
                 }
             }
         }
 
-        ProjectBtn {
-            id: openProjectBtn
-            width: mainPanel.itemSize
-            anchors.verticalCenter: parent.verticalCenter
-            onActivated: mainPanel.openProjectClicked()
-        }
-
-        ProjectBtn {
-            id: mapThemeBtn
-            width: mainPanel.itemSize
-            anchors.verticalCenter: parent.verticalCenter
-            onActivated: mainPanel.openMapThemesClicked()
-        }
-
-        Label {
-            text: mainPanel.activeProjectName
-            width: mainPanel.labelWidth
+        Item {
+            width: parent.width/parent.children.length
             height: parent.height
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-            color: InputStyle.clrPanelMain
-            anchors.verticalCenter: parent.verticalCenter
-            visible: mainPanel.labelsVisible
+            MainPanelButton {
+                id: recBtn
+                width: mainPanel.itemSize
+                text: qsTr("Record")
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: mainPanel.openProjectClicked()
+                RecordBtn {
+                    id: recBtnIcon
+                    width: mainPanel.itemSize
+                    anchors.top: parent.top
+                    anchors.margins: width/4
+                    anchors.topMargin: -anchors.margins/2
+                    enabled: true
+                }
+
+                onActivated: mainPanel.addFeatureClicked()
             }
         }
 
-        Label {
-            text: mainPanel.activeLayerName
-            width: mainPanel.labelWidth
+        Item {
+            width: parent.width/parent.children.length
             height: parent.height
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-            color: InputStyle.clrPanelMain
-            anchors.verticalCenter: parent.verticalCenter
-            visible: mainPanel.labelsVisible
+            MainPanelButton {
+                id: menuBtn
+                width: mainPanel.itemSize
+                text: qsTr("More")
+                imageSource: "ic_menu_48px.svg"
+                onActivated: {
+                    if (rootMenu.isOpen) {
+                        rootMenu.close()
+                    } else {
+                        rootMenu.open()
+                    }
+                }
+            }
+        }
+    }
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: mainPanel.openLayersClicked()
+    Menu {
+        id: rootMenu
+        title: "Menu"
+        x:parent.width - rootMenu.width
+        y: -rootMenu.height
+        property bool isOpen: false
+        width: 240 * QgsQuick.Utils.dp
+
+        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+
+        onClosed: isOpen = false
+        onOpened: isOpen = true
+
+        Button {
+            height: InputStyle.rowHeight
+            text: qsTr("Zoom to project")
+            onClicked: {
+                mainPanel.zoomToProject()
+                rootMenu.close()
             }
         }
 
-        MyLocationBtn {
-            id: myLocationBtn
-            width: mainPanel.itemSize
-            anchors.verticalCenter: parent.verticalCenter
-            onActivated: mainPanel.myLocationClicked()
-            onActivatedOnHold: mainPanel.myLocationHold()
-            lockOnPosition: mainPanel.lockOnPosition
-        }
-        
-        Label {
-            id: gpsLabel
-            text: mainPanel.gpsStatus
-            height: parent.height
-            width: fontMetrics.boundingRect("XXXXXXXXXXXXXXXX").width
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-            color: InputStyle.clrPanelMain
-            anchors.verticalCenter: parent.verticalCenter
-            visible: mainPanel.labelsVisible
-        }
-
-        RecordBtn {
-            id: recBtn
-            width: mainPanel.itemSize
-            anchors.verticalCenter: parent.verticalCenter
-            onActivated: mainPanel.addFeatureClicked()
+        Button {
+            height: InputStyle.rowHeight
+            text: qsTr("Map themes")
+            onClicked: {
+                mainPanel.openMapThemesClicked()
+                rootMenu.close()
+            }
         }
     }
 

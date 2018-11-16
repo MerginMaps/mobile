@@ -12,63 +12,52 @@ Item {
         id: scaleBarKit
     }
 
-    property int textWidth: 50 * QgsQuick.Utils.dp
-    property color barColor: "white"
+    property color barColor: InputStyle.fontColor
     property string barText: scaleBarKit.distance + " " + scaleBarKit.units
     property int barWidth: scaleBarKit.width
-    property int lineWidth: 5 * QgsQuick.Utils.dp
+    property int lineWidth: 2 * QgsQuick.Utils.dp
 
-    width: textWidth + barWidth
-
-    MouseArea {
-        anchors.fill: background
-        onClicked: {
-            animation.restart()
-        }
-    }
-
-    NumberAnimation {
-        id: animation
-        target: scaleBar
-        property: "barWidth"
-        to: 200
-        duration: 1000
-    }
+    width: barWidth
 
     Rectangle {
         id: background
-        color: InputStyle.clrPanelBackground
-        opacity: InputStyle.panelOpacity
+        color: InputStyle.clrPanelMain
+        opacity: 0.25
         width: parent.width
         height: parent.height
+        radius: 5
     }
 
-    Row {
-        opacity: 1
-        spacing: 0
+    Item {
+        anchors.fill: parent
+        anchors.leftMargin: 5 * QgsQuick.Utils.dp
+        anchors.rightMargin: anchors.leftMargin
 
         Text {
             id: text
-            width: textWidth
-            height: scaleBar.height
             text: barText
             color: barColor
-            font.pixelSize: scaleBar.height - 2 * scaleBar.lineWidth
+            font.pixelSize: QgsQuick.Utils.dp * scaleBar.height/4
+            anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+            verticalAlignment: Text.AlignTop
         }
 
         Rectangle {
             id: leftBar
             width: scaleBar.lineWidth
-            height: scaleBar.height - 20 * QgsQuick.Utils.dp
+            height: scaleBar.height/3
             y: (scaleBar.height - leftBar.height) / 2
             color: barColor
             opacity: 1
+            anchors.right: parent.right
+            anchors.rightMargin: 0
         }
 
         Rectangle {
-            width: scaleBar.width - text.width - 15 * QgsQuick.Utils.dp
+            id: bar
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: scaleBar.lineWidth
             y: (scaleBar.height - scaleBar.lineWidth) / 2
             color: barColor
@@ -77,9 +66,35 @@ Item {
         Rectangle {
             id: rightBar
             width: scaleBar.lineWidth
-            height: scaleBar.height - 20 * QgsQuick.Utils.dp
+            height: scaleBar.height/3
             y: (scaleBar.height - leftBar.height) / 2
             color: barColor
+        }
+    }
+
+    NumberAnimation on opacity {
+        id: fadeOut
+        to: 0.0
+        duration: 1000
+
+        onStopped: {
+            scaleBar.visible = false
+            scaleBar.opacity = 1.0
+        }
+    }
+
+    Timer {
+        id: scaleBarTimer
+        interval: 3000; running: false; repeat: false
+        onTriggered: {
+            fadeOut.start()
+        }
+    }
+
+    onVisibleChanged: {
+        if (scaleBar.visible) {
+            fadeOut.stop()
+            scaleBarTimer.restart()
         }
     }
 }

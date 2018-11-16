@@ -48,13 +48,17 @@ Drawer {
         stateManager.state = "preview"
     }
 
-    function show_panel(feature, formState) {
+    function show_panel(feature, formState, panelState) {
         featurePanel.feature = feature
         featurePanel.formState = formState
         featurePanel.visible = true
-        previewPanel.visible = true
-        var index = currentAttributeModel.index(0, 0)
-        previewPanel.title = currentAttributeModel.data(index, QgsQuick.AttributeFormModel.Name)
+
+        if (panelState === "preview") {
+            var index = currentAttributeModel.index(0, 0)
+            previewPanel.title = currentAttributeModel.data(index, QgsQuick.AttributeFormModel.Name)
+
+        }
+        stateManager.state = panelState
     }
 
 

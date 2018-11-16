@@ -23,6 +23,7 @@
 #include <qgsproject.h>
 #include "qgsvectorlayer.h"
 #include <qgsmaplayer.h>
+#include <qgswkbtypes.h>
 
 #include <QString>
 
@@ -77,6 +78,8 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
         return true;
       case isReadOnly:
         return false;
+      case IconSource:
+        return QVariant();
       case VectorLayer:
         return QVariant::fromValue<QgsVectorLayer*>( nullptr );
     }
@@ -98,7 +101,22 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
     }
     case isReadOnly:
     {
-       return layer->readOnly();
+      return layer->readOnly();
+    }
+    case IconSource:
+    {
+      QgsVectorLayer* vectorLayer = qobject_cast<QgsVectorLayer*>( layer );
+      if (vectorLayer) {
+          QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
+          switch (type) {
+          case QgsWkbTypes::GeometryType::PointGeometry: return "mIconPointLayer.svg";
+          case QgsWkbTypes::GeometryType::LineGeometry: return "mIconLineLayer.svg";
+          case QgsWkbTypes::GeometryType::PolygonGeometry: return "mIconPolygonLayer.svg";
+          case QgsWkbTypes::GeometryType::UnknownGeometry: return "";
+          case QgsWkbTypes::GeometryType::NullGeometry: return "";
+          }
+        return QVariant();
+      } else return "mIconRaster.svg";
     }
     case VectorLayer:
     {
@@ -118,6 +136,7 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   roleNames[Name] = "name";
   roleNames[isVector] = "isVector";
   roleNames[isReadOnly] = "isReadOnly";
+  roleNames[IconSource] = "iconSource";
   roleNames[VectorLayer] = "vectorLayer";
   return roleNames;
 }

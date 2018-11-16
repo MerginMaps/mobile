@@ -11,6 +11,10 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: qsTr("Input")
 
+    property int zMapCanvas: 0
+    property int zPanel: 20
+    property int zToolkits: 10
+
     function isPositionOutOfExtent(border) {
         return ((positionKit.screenPosition.x < border) ||
                 (positionKit.screenPosition.y < border) ||
@@ -30,7 +34,7 @@ ApplicationWindow {
                 digitizing.stopRecording()
                 var pair = digitizing.lineFeature()
                 highlight.featureLayerPair = pair
-                featurePanel.show_panel(pair, "Add")
+                featurePanel.show_panel(pair, "Add", "form")
             }
             else {
                 digitizing.startRecording()
@@ -40,7 +44,7 @@ ApplicationWindow {
             // assuming layer with point geometry
             var pair = digitizing.pointFeature()
             highlight.featureLayerPair = pair
-            featurePanel.show_panel(pair, "Add")
+            featurePanel.show_panel(pair, "Add", "form")
         }
     }
 
@@ -54,8 +58,9 @@ ApplicationWindow {
     QgsQuick.MapCanvas {
       id: mapCanvas
 
-      height: parent.height
+      height: parent.height - mainPanel.height
       width: parent.width
+      z: zMapCanvas
 
       mapSettings.layers: __layersModel.layers
       mapSettings.project: __loader.project
@@ -91,7 +96,7 @@ ApplicationWindow {
         transform: QgsQuick.MapTransform {
             mapSettings: mapCanvas.mapSettings
         }
-        z: 1   // make sure items from here are on top of the Z-order
+        z: zMapCanvas + 1  // make sure items from here are on top of the Z-order
     }
 
     SettingsPanel {
@@ -99,7 +104,7 @@ ApplicationWindow {
       height: window.height
       //width: QgsQuick.Style.dp * 1000
       edge: Qt.RightEdge
-      z: 2   // make sure items from here are on top of the Z-order
+      z: zPanel   // make sure items from here are on top of the Z-order
     }
 
     /** Position Kit and Marker */
@@ -121,7 +126,7 @@ ApplicationWindow {
     QgsQuick.PositionMarker {
       id: positionMarker
       positionKit: positionKit
-      z: 1
+      z: zMapCanvas + 2
     }
 
     DigitizingController {
@@ -133,8 +138,9 @@ ApplicationWindow {
     MainPanel {
         id: mainPanel
         width: window.width
-        height: InputStyle.scale(115)
-        z: 2
+        height: InputStyle.rowHeightHeader
+        z: zToolkits + 1
+        y: window.height - height
 
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
@@ -165,11 +171,19 @@ ApplicationWindow {
 
     ScaleBar {
         id: scaleBar
-        height: 35 * QgsQuick.Utils.dp
-        textWidth: 115 * QgsQuick.Utils.dp
-        y: window.height - height
+        height: window.height * 0.05 // scalable just according device pixel height
+        y: window.height - height - mainPanel.height - InputStyle.panelMargin
         mapSettings: mapCanvas.mapSettings
-        preferredWidth: textWidth * 3
+        preferredWidth: Math.min(window.width, 180 * QgsQuick.Utils.dp)
+        z: zToolkits
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    Connections {
+        target: mapCanvas.mapSettings
+        onExtentChanged: {
+            scaleBar.visible = true
+        }
     }
 
     Rectangle {
@@ -178,8 +192,10 @@ ApplicationWindow {
         height: 35 * QgsQuick.Utils.dp
         x: 0
         y: window.height - 2 * (35 * QgsQuick.Utils.dp)
+        z: zToolkits
         color: InputStyle.clrPanelBackground
         opacity: InputStyle.panelOpacity
+        visible: false
         Text  {
             anchors.fill: parent
             verticalAlignment: Text.AlignVCenter
@@ -194,7 +210,7 @@ ApplicationWindow {
         id: openProjectPanel
         height: window.height
         width: window.width
-        y: mainPanel.height
+        z: zPanel
 
         onActiveProjectPathChanged: {
             __loader.load(activeProjectPath);
@@ -204,9 +220,10 @@ ApplicationWindow {
 
     ActiveLayerPanel {
         id: activeLayerPanel
-        height: window.height
-        width: QgsQuick.Utils.dp * 600
-        edge: Qt.LeftEdge
+        height: window.height/2
+        width: window.width
+        edge: Qt.BottomEdge
+        z: zPanel
 
         onLayerSettingChanged: {
             console.log("onLayerSettingChanged")
@@ -217,8 +234,9 @@ ApplicationWindow {
     MapThemePanel {
         id: mapThemesPanel
         height: window.height
-        width: QgsQuick.Utils.dp * 600
+        width: window.width
         edge: Qt.LeftEdge
+        z: zPanel
     }
 
     Notification {
@@ -227,16 +245,18 @@ ApplicationWindow {
         anchors.centerIn: parent
         width: 400 * QgsQuick.Utils.dp
         height: 160 * QgsQuick.Utils.dp
+        z: zPanel + 1
     }
 
     FeaturePanel {
         id: featurePanel
         height: window.height
-        panelHeight: window.height
-        previewHeight: window.height/3
         width: window.width
         mapSettings: mapCanvas.mapSettings
+        panelHeight: window.height
+        previewHeight: window.height/3
         project: __loader.project
+        z: zPanel
     }
 
 }

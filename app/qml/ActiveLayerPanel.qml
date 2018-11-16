@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
@@ -13,60 +12,130 @@ Drawer {
 
     signal layerSettingChanged()
 
-    id: activeLayerPanel
+    id: layerPanel
     visible: false
-    modal: true
+    modal: false
     interactive: true
     dragMargin: 0 // prevents opening the drawer by dragging.
 
     background: Rectangle {
-        color: InputStyle.clrPanelBackground
-        opacity: InputStyle.panelOpacity
+        color: InputStyle.clrPanelMain
     }
 
-    Column {
-        spacing: InputStyle.panelSpacing
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: InputStyle.panelSpacing * 2
+    Rectangle {
+        id: header
+        height: InputStyle.rowHeightHeader
+        width: parent.width
+        color: InputStyle.clrPanelBackground2
 
         Text {
-            text: "Active Layer"
-            color: InputStyle.clrPanelMain
-            font.pixelSize: InputStyle.fontPixelSizeBig
+            anchors.fill: parent
+            anchors.leftMargin: InputStyle.panelMargin
+            anchors.rightMargin: InputStyle.panelMargin
+            text: "Survey layer"
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeSmall
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
         }
+    }
 
-        ListView {
-            implicitWidth: parent.width
-            implicitHeight: contentHeight
-            model: __layersModel
-            delegate: ItemDelegate {
-                id: control
-                text: name
-                visible: isVector && !isReadOnly // show only vector and editable layers
-                height: visible ? undefined : 0
-                contentItem: Text {
-                    color: index === activeLayerIndex ? InputStyle.clrPanelHighlight : InputStyle.clrPanelMain
-                    rightPadding: control.spacing
-                    text: control.text
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
-                    elide: Text.ElideRight
-                    visible: control.text
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
+    ListView {
+        id: listView
+        height: layerPanel.height - header.height
+        width: parent.width
+        y: header.height
+        implicitWidth: parent.width
+        implicitHeight: contentHeight
+        model: __layersModel
+        delegate: delegateItem
+
+        property int cellWidth: width
+        property int cellHeight: InputStyle.rowHeight
+        property int borderWidth: 1
+
+    }
+
+    Component {
+        id: delegateItem
+        Rectangle {
+            id: itemContainer
+            property color primaryColor: InputStyle.clrPanelMain
+            property color secondaryColor: InputStyle.fontColor
+            width: listView.cellWidth
+            // first item in the model is "none" layer
+            height: index === 0 || !isVector ? 0 : listView.cellHeight
+            visible: height ? true : false
+            anchors.leftMargin: InputStyle.panelMargin
+            anchors.rightMargin: InputStyle.panelMargin
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    layerPanel.activeLayerIndex = index
+                    layerPanel.visible = false
+                    layerPanel.layerSettingChanged()
+                }
+            }
+
+            Item {
+                anchors.fill: parent
+                anchors.rightMargin: InputStyle.panelMargin
+                anchors.leftMargin: InputStyle.panelMargin
+
+                Item {
+                    id: row
+                    anchors.fill: parent
+
+                    Rectangle {
+                        id: iconContainer
+                        height: InputStyle.rowHeight
+                        width: InputStyle.rowHeight
+
+                        Image {
+                            id: icon
+                            anchors.fill: parent
+                            anchors.margins: InputStyle.rowHeight/4
+                            source: iconSource ? iconSource : ""
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
+
+                    Item {
+                        id: textContainer
+                        y: 0
+                        x: iconContainer.width + InputStyle.panelMargin
+                        height: listView.cellHeight
+                        width: listView.cellWidth - listView.cellHeight // minus icon
+
+                        Text {
+                            id: mainText
+                            text: name
+                            height: parent.height
+                            width: parent.width
+
+                            font.pixelSize: InputStyle.fontPixelSizeSmall
+                            font.weight: Font.Bold
+                            color: itemContainer.secondaryColor
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
                 }
 
-                onClicked: {
-                    console.log("active layer:", name)
-                    activeLayerIndex = index
-                    activeLayerPanel.visible = false
-                    layerSettingChanged()
+                Rectangle {
+                    id: borderLine
+                    color: InputStyle.fontColor
+                    width: row.width
+                    height: listView.borderWidth
+                    anchors.bottom: parent.bottom
                 }
             }
         }
+
     }
 
 }

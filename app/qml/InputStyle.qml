@@ -7,24 +7,26 @@ QtObject {
 
     property color clrPanelMain: "white"
     property color clrPanelHighlight: "yellow"
-    property color clrPanelBackground: "#7b909d"
+    property color clrPanelBackground: fontColor
+    property color clrPanelBackground2: "#EAEAEA"
+
     property color highlightColor: "#FB831F"
 
+    property real fontPixelSizeSmaller: QgsQuick.Utils.dp * 15
+    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 30
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
-    property real fontPointSizeTitle: 48
-    property real fontPointSizeBig: 24
-    property real fontPointSizeSmall: 12
 
-    property int panelMargin: 32
+    property int panelMargin: scale(16)
 
     property color fontColor: "#0b5036"
     property color panelBackground2: "#EEF0F0"
 
-    property real buttonSize: 96
+    property real rowHeight: scale(48)
+    property real rowHeightHeader: scale(64)
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
-    property real panelOpacity: 0.7
+    property real panelOpacity: 1
 
     // used in scaling functions for high DPI screens
     property real deviceRatio: 1
