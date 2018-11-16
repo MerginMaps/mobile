@@ -50,7 +50,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
-        openProjectPanel.visible = false // !!!!!!!
+        openProjectPanel.visible = true
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         console.log("Completed Running!")
     }
