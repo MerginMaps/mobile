@@ -71,7 +71,7 @@ Popup {
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
-                text: "Follow gps with map"
+                text: "Follow GPS with map"
 
                 Switch {
                     anchors.margins: 0
@@ -139,7 +139,7 @@ Popup {
                 id: panelItem
                 height: settingsPanel.rowHeight
                 width: parent.width
-                text: "Acceptable gps acuuracy"
+                text: "Acceptable GPS accuracy"
 
                 SpinBox {
                     id: gpsAccuracySpin
