@@ -30,21 +30,32 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
-    Rectangle {
+    PanelHeader {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
         color: InputStyle.clrPanelMain
-        Text {
-            anchors.fill: parent
-            text: "Projects"
-            color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            font.bold: true
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
+        rowHeight: InputStyle.rowHeightHeader
+        titleText: "Projects"
+
+        onBack: projectsPanel.close()
     }
+
+//    Rectangle {
+//        id: header
+//        height: InputStyle.rowHeightHeader
+//        width: parent.width
+//        color: InputStyle.clrPanelMain
+//        Text {
+//            anchors.fill: parent
+//            text: "Projects"
+//            color: InputStyle.fontColor
+//            font.pixelSize: InputStyle.fontPixelSizeTitle
+//            font.bold: true
+//            verticalAlignment: Text.AlignVCenter
+//            horizontalAlignment: Text.AlignHCenter
+//        }
+//    }
 
     ColumnLayout {
         id: contentLayout

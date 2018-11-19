@@ -50,8 +50,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
-        openProjectPanel.visible = true
+        //openProjectPanel.visible = true
         InputStyle.deviceRatio = window.screen.devicePixelRatio
+        InputStyle.realWidth = window.width
+        InputStyle.realHeight = window.height
         console.log("Completed Running!")
     }
 
@@ -78,7 +80,7 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
         highlight.featureLayerPair = res
         if (res.valid) {
-          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly" )
+          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
         }
       }
     }
@@ -102,8 +104,10 @@ ApplicationWindow {
     SettingsPanel {
       id: settingsPanel
       height: window.height
-      //width: QgsQuick.Style.dp * 1000
-      edge: Qt.RightEdge
+      width: window.width
+      rowHeight: InputStyle.rowHeight
+
+      defaultProject: openProjectPanel.activeProjectName
       z: zPanel   // make sure items from here are on top of the Z-order
     }
 

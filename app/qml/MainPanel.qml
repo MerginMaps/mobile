@@ -65,22 +65,11 @@ Item {
                 onActivated: mainPanel.myLocationClicked()
                 onActivatedOnHold: mainPanel.myLocationHold()
 
-                Item {
-                    id: gpsSignal
+                RoundIndicator {
                     width: parent.height/4
                     height: width
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    property int size: width
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: gpsSignal.size
-                        height: gpsSignal.size
-                        color: "orange"
-                        radius: width*0.5
-                        antialiasing: true
-                    }
                 }
             }
         }
@@ -152,6 +141,15 @@ Item {
             text: qsTr("Map themes")
             onClicked: {
                 mainPanel.openMapThemesClicked()
+                rootMenu.close()
+            }
+        }
+
+        Button {
+            height: InputStyle.rowHeight
+            text: qsTr("Settings")
+            onClicked: {
+                mainPanel.openLogClicked()
                 rootMenu.close()
             }
         }
