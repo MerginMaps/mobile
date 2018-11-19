@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
   Loader loader;
   engine.rootContext()->setContextProperty( "__loader", &loader );
 
-  // Create layer model 
+  // Create layer model
   LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
 
@@ -243,10 +243,8 @@ int main(int argc, char *argv[])
 
 
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed");
-//  engine.rootContext()->setContextProperty( "__appwindowwidth", 1217 );
-//  engine.rootContext()->setContextProperty( "__appwindowheight", 800 );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
-  engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", 1217 );
+  engine.rootContext()->setContextProperty( "__appwindowheight", 800 );
 #endif
 
   // Set simulated position for desktop builds

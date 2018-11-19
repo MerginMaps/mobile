@@ -42,8 +42,7 @@ QtObject {
 
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
-        var ratio = Math.min(realHeight/refHeight, realWidth/refWidth);
-        return size * QgsQuick.Utils.dp// * deviceRatio;
+        return size * QgsQuick.Utils.dp
     }
 
     // Scaling function for fonts using deviceRatio
