@@ -41,22 +41,6 @@ Popup {
         onBack: projectsPanel.close()
     }
 
-//    Rectangle {
-//        id: header
-//        height: InputStyle.rowHeightHeader
-//        width: parent.width
-//        color: InputStyle.clrPanelMain
-//        Text {
-//            anchors.fill: parent
-//            text: "Projects"
-//            color: InputStyle.fontColor
-//            font.pixelSize: InputStyle.fontPixelSizeTitle
-//            font.bold: true
-//            verticalAlignment: Text.AlignVCenter
-//            horizontalAlignment: Text.AlignHCenter
-//        }
-//    }
-
     ColumnLayout {
         id: contentLayout
         height: projectsPanel.height-header.height
@@ -130,6 +114,7 @@ Popup {
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentWidth: grid.width
+            clip: true
 
             property int cellWidth: width
             property int cellHeight: projectsPanel.rowHeight

@@ -21,15 +21,15 @@ Rectangle {
             height: header.rowHeight
             width: height
             source: "Ic_chevron_left_48px.svg"
-            anchors.topMargin: 0
             fillMode: Image.PreserveAspectFit
         }
 
         ColorOverlay {
-               anchors.fill: image
-               source: image
-               color: InputStyle.fontColor
-           }
+            anchors.fill: image
+            source: image
+            color: InputStyle.fontColor
+        }
+
         Text {
             id: backButtonText
             text: "Back"

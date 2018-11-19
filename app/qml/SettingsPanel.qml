@@ -96,10 +96,10 @@ Popup {
                     id: widget
                     property real indicatorSize: height/3
                     width: indicatorSize * 4
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
                     anchors.top: parent.top
                     anchors.topMargin: 0
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
 
@@ -108,24 +108,28 @@ Popup {
                         height: width
                         anchors.margins: height/3
                         color: InputStyle.clrPanelBackground2
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     RoundIndicator {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softRed
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     RoundIndicator {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softOrange
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     RoundIndicator {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softGreen
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                 }

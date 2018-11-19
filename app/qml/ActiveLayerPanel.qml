@@ -55,6 +55,17 @@ Drawer {
         property int cellHeight: InputStyle.rowHeight
         property int borderWidth: 1
 
+        Label {
+            anchors.fill: parent
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            visible: parent.count == 0
+            text: qsTr("No editable layers in the project!")
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.bold: true
+        }
+
     }
 
     Component {

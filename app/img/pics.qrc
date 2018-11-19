@@ -15,5 +15,6 @@
         <file>mIconRaster.svg</file>
         <file>ic_gps_off.svg</file>
         <file>Ic_chevron_left_48px.svg</file>
+        <file>ic_map_48px.svg</file>
     </qresource>
 </RCC>

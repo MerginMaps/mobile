@@ -243,9 +243,9 @@ ApplicationWindow {
 
     MapThemePanel {
         id: mapThemesPanel
-        height: window.height
+        height: window.height/2
         width: window.width
-        edge: Qt.LeftEdge
+        edge: Qt.BottomEdge
         z: zPanel
     }
 
