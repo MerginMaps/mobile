@@ -1,5 +1,5 @@
 import QtQuick 2.7
-
+import QtGraphicalEffects 1.0
 Rectangle {
     id: header
     color: InputStyle.clrPanelMain
@@ -25,6 +25,11 @@ Rectangle {
             fillMode: Image.PreserveAspectFit
         }
 
+        ColorOverlay {
+               anchors.fill: image
+               source: image
+               color: InputStyle.fontColor
+           }
         Text {
             id: backButtonText
             text: "Back"

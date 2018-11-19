@@ -109,6 +109,10 @@ ApplicationWindow {
 
       defaultProject: openProjectPanel.activeProjectName
       z: zPanel   // make sure items from here are on top of the Z-order
+
+      onGpsAccuracyToleranceChanged: {
+        mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
+      }
     }
 
     /** Position Kit and Marker */
@@ -150,6 +154,8 @@ ApplicationWindow {
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
         lockOnPosition: settingsPanel.autoCenterMapChecked
+        gpsAccuracyTolerance: settingsPanel.gpsAccuracy
+        gpsAccuracy: positionKit.accuracy
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true

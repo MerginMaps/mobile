@@ -17,7 +17,7 @@ QtObject {
 
     property real fontPixelSizeSmaller: QgsQuick.Utils.dp * 15
     property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 / 2    //* 2
+    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 / 2
     property real fontPixelSizeTitle: QgsQuick.Utils.dp * 32 / 2
     property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
 
@@ -43,7 +43,7 @@ QtObject {
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
         var ratio = Math.min(realHeight/refHeight, realWidth/refWidth);
-        return size * QgsQuick.Utils.dp * deviceRatio;
+        return size * QgsQuick.Utils.dp// * deviceRatio;
     }
 
     // Scaling function for fonts using deviceRatio

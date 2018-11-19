@@ -19,7 +19,8 @@ Item {
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
     property bool lockOnPosition: false
-
+    property int gpsAccuracyTolerance
+    property real gpsAccuracy
     property int itemSize: mainPanel.height * 0.8
 
     id: mainPanel
@@ -70,6 +71,10 @@ Item {
                     height: width
                     anchors.right: parent.right
                     anchors.top: parent.top
+                    color: {
+                        if (gpsAccuracy <= 0) return InputStyle.softRed
+                        return gpsAccuracy < gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
+                    }
                 }
             }
         }

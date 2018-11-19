@@ -11,13 +11,12 @@ Popup {
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: 90 //InputStyle.rowHeight
     property string defaultProject: "<none>"
+    property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
 
     id: settingsPanel
     visible: false
     padding: 0
-    height: 1136
-    width: 640
 
     background: Rectangle {
         anchors.fill: parent
@@ -48,7 +47,6 @@ Popup {
 
         Column {
             id: settingListContent
-            //width: parent.width
             anchors.fill: parent
             spacing: 1
 
@@ -76,9 +74,11 @@ Popup {
                 text: "Follow gps with map"
 
                 Switch {
+                    anchors.margins: 0
+                    padding: 0
                     id: autoCenterMapCheckBox
-                    //height: settingsPanel.rowHeight //InputStyle.fontPixelSizeNormal
-                    //width: height * 2
+                    height: InputStyle.fontPixelSizeNormal
+                    width: height * 3
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
@@ -86,16 +86,20 @@ Popup {
             }
 
             PanelItem {
+                id: panelItem1
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
                 text: "GPS accuracy"
 
-                Item {
+                Row {
                     id: widget
                     property real indicatorSize: height/3
-                    height: settingsPanel.rowHeight
-                    anchors.verticalCenter: parent.verticalCenter
+                    width: indicatorSize * 4
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.top: parent.top
+                    anchors.topMargin: 0
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
 
@@ -103,7 +107,6 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         anchors.margins: height/3
-                        //anchors.left: parent.left
                         color: InputStyle.clrPanelBackground2
                     }
 
@@ -135,7 +138,8 @@ Popup {
                 text: "Acceptable gps acuuracy"
 
                 SpinBox {
-                    height: settingsPanel.rowHeight //InputStyle.fontPixelSizeNormal
+                    id: gpsAccuracySpin
+                    height: settingsPanel.rowHeight/3
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
@@ -143,15 +147,6 @@ Popup {
             }
 
         }
-
-//        PanelItem {
-//            y: panelItem.height + settingsPanel.rowHeight
-//            x: 0
-
-//            width: parent.width
-//            height: parent.height - y
-//            color: InputStyle.clrPanelMain
-//        }
 
     }
 }
