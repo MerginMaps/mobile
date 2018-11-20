@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "."  // import InputStyle singleton
 
 Rectangle {
     id: root
