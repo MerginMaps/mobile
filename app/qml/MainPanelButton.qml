@@ -15,6 +15,7 @@ Rectangle {
     property color fontColor: "white"
     property color backgroundColor: InputStyle.fontColor
     property bool isHighlighted: false
+    property bool disabled: false
 
     signal activated()
     signal activatedOnHold()
@@ -45,12 +46,18 @@ Rectangle {
     ColorOverlay {
         anchors.fill: image
         source: image
-        color: root.isHighlighted ? backgroundColor : fontColor
+        color: {
+            if (disabled) return InputStyle.fontColorBright
+            return root.isHighlighted ? backgroundColor : fontColor
+        }
     }
 
     Text {
         anchors.fill: parent
-        color: root.isHighlighted ? backgroundColor : fontColor
+        color: {
+            if (disabled) return InputStyle.fontColorBright
+            return root.isHighlighted ? backgroundColor : fontColor
+        }
         text: root.text
         font.bold: true
         font.pixelSize: InputStyle.fontPixelSizeSmall

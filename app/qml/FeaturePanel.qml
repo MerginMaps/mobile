@@ -71,7 +71,6 @@ Drawer {
       y: 0
       onContentClicked: {
           stateManager.state = "form"
-          console.log("onContentClicked",stateManager.state)
       }
     }
 
@@ -133,7 +132,6 @@ Drawer {
             onCanceled: featurePanel.visible = false
 
             onStateChanged: {
-                console.log("trlala fomrt state chagnes")
                 toolbar.state = featureForm.state
             }
         }

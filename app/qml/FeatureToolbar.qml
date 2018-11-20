@@ -8,7 +8,7 @@ Item {
     signal editClicked()
     signal saveClicked()
     signal addPhotoClicked()
-    signal deleteClick()
+    signal deleteClicked()
 
     id: toolbar
 
@@ -70,10 +70,10 @@ Item {
             height: parent.height
 
             MainPanelButton {
-                id: deleteBtn
                 width: toolbar.itemSize
                 text: qsTr("Delete")
                 imageSource: "trash.svg"
+                disabled: true
 
                 onActivated: {
                     toolbar.deleteClicked()
@@ -82,10 +82,8 @@ Item {
         }
 
         Item {
-            id: saveBtn
             width: parent.width/parent.children.length
             height: parent.height
-
 
             MainPanelButton {
 
@@ -102,7 +100,6 @@ Item {
         }
 
         Item {
-            id: editBtn
             width: parent.width/parent.children.length
             height: parent.height
 
@@ -111,6 +108,7 @@ Item {
                 width: toolbar.itemSize
                 text: qsTr("Add photo")
                 imageSource: "add_photo.svg"
+                disabled: true
 
                 onActivated: {
                     toolbar.addPhotoClicked()
