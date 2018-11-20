@@ -23,5 +23,7 @@
         <file>back.svg</file>
         <file>more_menu.svg</file>
         <file>map_styles.svg</file>
+        <file>ic_gps_not_fixed_48px.svg</file>
+        <file>ic_gps_fixed_48px.svg</file>
     </qresource>
 </RCC>
