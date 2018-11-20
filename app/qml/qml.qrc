@@ -20,5 +20,6 @@
         <file>RoundIndicator.qml</file>
         <file>PanelHeader.qml</file>
         <file>PanelItem.qml</file>
+        <file>ExtendedMenuItem.qml</file>
     </qresource>
 </RCC>

@@ -161,7 +161,7 @@ Popup {
                             anchors.margins: (grid.cellHeight/4)
                             id: icon
                             anchors.fill: parent
-                            source: 'file.svg'
+                            source: 'project.svg'
                             fillMode: Image.PreserveAspectFit
                         }
 

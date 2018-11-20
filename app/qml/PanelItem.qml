@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    height: settingsPanel.rowHeight
+    height: InputStyle.rowHeight
     width: parent.width
     color: InputStyle.clrPanelMain
 

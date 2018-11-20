@@ -20,8 +20,14 @@ Rectangle {
             id: image
             height: header.rowHeight
             width: height
-            source: "Ic_chevron_left_48px.svg"
+            source: "back.svg"
             fillMode: Image.PreserveAspectFit
+            anchors.bottomMargin: header.rowHeight/4
+            anchors.topMargin: header.rowHeight/4
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.top: parent.top
+
         }
 
         ColorOverlay {

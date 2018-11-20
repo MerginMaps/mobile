@@ -45,7 +45,7 @@ Item {
                 id: openProjectBtn
                 width: mainPanel.itemSize
                 text: qsTr("Projects")
-                imageSource: "ic_map_white_48px.svg"
+                imageSource: "project.svg"
 
                 onActivated: mainPanel.openProjectClicked()
             }
@@ -107,7 +107,7 @@ Item {
                 id: menuBtn
                 width: mainPanel.itemSize
                 text: qsTr("More")
-                imageSource: "ic_menu_48px.svg"
+                imageSource: "more_menu.svg"
                 onActivated: {
                     if (rootMenu.isOpen) {
                         rootMenu.close()
@@ -125,34 +125,49 @@ Item {
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         property bool isOpen: false
-        width: 240 * QgsQuick.Utils.dp
-
+        width: 320 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
         onClosed: isOpen = false
         onOpened: isOpen = true
 
-        Button {
-            height: InputStyle.rowHeight
-            text: qsTr("Zoom to project")
+        MenuItem {
+            ExtendedMenuItem {
+                height: InputStyle.rowHeight
+                width: parent.width
+                text: qsTr("Zoom to project")
+                imageSource: "zoom_to_project.svg"
+            }
+
             onClicked: {
                 mainPanel.zoomToProject()
                 rootMenu.close()
             }
         }
 
-        Button {
-            height: InputStyle.rowHeight
-            text: qsTr("Map themes")
+
+        MenuItem {
+            ExtendedMenuItem {
+                height: InputStyle.rowHeight
+                width: parent.width
+                text: qsTr("Map themes")
+                imageSource: "map_styles.svg"
+            }
+
             onClicked: {
                 mainPanel.openMapThemesClicked()
                 rootMenu.close()
             }
         }
 
-        Button {
-            height: InputStyle.rowHeight
-            text: qsTr("Settings")
+        MenuItem {
+            ExtendedMenuItem {
+                height: InputStyle.rowHeight
+                width: parent.width
+                text: qsTr("Settings")
+                imageSource: "settings.svg"
+            }
+
             onClicked: {
                 mainPanel.openLogClicked()
                 rootMenu.close()

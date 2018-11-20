@@ -103,7 +103,7 @@ Drawer {
                             id: icon
                             anchors.fill: parent
                             anchors.margins: InputStyle.rowHeight/4
-                            source: "ic_map_48px.svg"
+                            source: "map_styles.svg"
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
