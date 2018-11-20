@@ -21,5 +21,6 @@
         <file>PanelHeader.qml</file>
         <file>PanelItem.qml</file>
         <file>ExtendedMenuItem.qml</file>
+        <file>PanelTabButton.qml</file>
     </qresource>
 </RCC>

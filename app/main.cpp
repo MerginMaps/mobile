@@ -184,6 +184,9 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  QFont font("Lato", 28, QFont::Normal);
+  app.setFont(font);
+
   // Set/Get enviroment
   QString dataDir = getDataDir();
   setEnvironmentQgisPrefixPath();
