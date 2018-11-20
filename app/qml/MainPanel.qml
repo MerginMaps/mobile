@@ -59,8 +59,8 @@ Item {
                 width: mainPanel.itemSize
 
                 text: qsTr("GPS")
-                imageSource: "ic_my_location_white_48px.svg"
-                imageSource2: "ic_gps_off.svg"
+                imageSource: "ic_gps_fixed_48px.svg"
+                imageSource2: "ic_gps_not_fixed_48px.svg"
                 imageSourceCondition: mainPanel.lockOnPosition
 
                 onActivated: mainPanel.myLocationClicked()
@@ -108,6 +108,7 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("More")
                 imageSource: "more_menu.svg"
+                isHighlighted: rootMenu.isOpen
                 onActivated: {
                     if (rootMenu.isOpen) {
                         rootMenu.close()
@@ -125,17 +126,21 @@ Item {
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         property bool isOpen: false
-        width: 320 * QgsQuick.Utils.dp
+        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
         onClosed: isOpen = false
         onOpened: isOpen = true
 
         MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
             ExtendedMenuItem {
-                height: InputStyle.rowHeight
+                height: mainPanel.itemSize
+                rowHeight: height
                 width: parent.width
-                text: qsTr("Zoom to project")
+                contentText: qsTr("Zoom to project")
                 imageSource: "zoom_to_project.svg"
             }
 
@@ -147,10 +152,14 @@ Item {
 
 
         MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
             ExtendedMenuItem {
-                height: InputStyle.rowHeight
+                height: mainPanel.itemSize
+                rowHeight: height
                 width: parent.width
-                text: qsTr("Map themes")
+                contentText: qsTr("Map themes")
                 imageSource: "map_styles.svg"
             }
 
@@ -161,10 +170,14 @@ Item {
         }
 
         MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
             ExtendedMenuItem {
-                height: InputStyle.rowHeight
+                anchors.fill: parent
+                rowHeight: parent.height
                 width: parent.width
-                text: qsTr("Settings")
+                contentText: qsTr("Settings")
                 imageSource: "settings.svg"
             }
 

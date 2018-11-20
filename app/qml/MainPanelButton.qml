@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-Item {
+Rectangle {
     id: root
     height: width
     anchors.centerIn: parent
@@ -12,9 +12,13 @@ Item {
     property bool imageSourceCondition: true
     property string text
     property color fontColor: "white"
+    property color backgroundColor: InputStyle.fontColor
+    property bool isHighlighted: false
 
     signal activated()
     signal activatedOnHold()
+
+    color: root.isHighlighted ? fontColor : backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -40,15 +44,15 @@ Item {
     ColorOverlay {
         anchors.fill: image
         source: image
-        color: fontColor
+        color: root.isHighlighted ? backgroundColor : fontColor
     }
 
     Text {
         anchors.fill: parent
-        color: fontColor
+        color: root.isHighlighted ? backgroundColor : fontColor
         text: root.text
         font.bold: true
-        font.pixelSize: InputStyle.fontPixelSizeSmaller
+        font.pixelSize: InputStyle.fontPixelSizeSmall
         verticalAlignment: Text.AlignBottom
         horizontalAlignment: Text.AlignHCenter
         z: image.z + 1

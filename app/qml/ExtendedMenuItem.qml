@@ -1,12 +1,16 @@
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.2
+
 Item {
     id: root
-    property string text: ""
+    property string contentText: ""
     property string imageSource: ""
     property real rowHeight: InputStyle.rowHeight
-    property real panelMargin: 0
+    property real panelMargin: InputStyle.panelMargin
     property bool overlayImage: true
+    property color fontColor: InputStyle.fontColor
+
     anchors.fill: parent
 
     Item {
@@ -14,8 +18,6 @@ Item {
         anchors.fill: parent
         width: parent.width
         height: parent.height
-        anchors.rightMargin: panelMargin
-        anchors.leftMargin: panelMargin
 
         Item {
             id: iconContainer
@@ -35,7 +37,7 @@ Item {
             ColorOverlay {
                 anchors.fill: icon
                 source: icon
-                color: InputStyle.fontColor
+                color: root.fontColor
                 visible: overlayImage
             }
         }
@@ -49,13 +51,13 @@ Item {
 
             Text {
                 id: mainText
-                text: root.text
+                text: root.contentText
                 height: parent.height
                 width: parent.width
 
-                font.pixelSize: InputStyle.fontPixelSizeSmall
+                font.pixelSize: InputStyle.fontPixelSizeNormal
                 font.weight: Font.Bold
-                color: InputStyle.fontColor
+                color: root.fontColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
             }
@@ -64,7 +66,7 @@ Item {
 
     Rectangle {
         id: borderLine
-        color: InputStyle.fontColor
+        color: root.fontColor
         width: row.width
         height: 1
         anchors.bottom: parent.bottom

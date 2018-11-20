@@ -26,7 +26,7 @@ Drawer {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
-        color: InputStyle.clrPanelBackground2
+        color: InputStyle.panelBackgroundLight
 
         Text {
             anchors.fill: parent
@@ -34,7 +34,7 @@ Drawer {
             anchors.rightMargin: InputStyle.panelMargin
             text: "Survey layer"
             color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeSmall
+            font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -93,8 +93,8 @@ Drawer {
             ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-                text: name
-                imageSource: iconSource
+                contentText: name
+                imageSource: iconSource ? iconSource : ""
                 overlayImage: false
             }
         }

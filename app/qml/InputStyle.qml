@@ -5,27 +5,29 @@ import QgsQuick 0.1 as QgsQuick
 
 QtObject {
 
-    property color clrPanelMain: "white"
-    property color clrPanelHighlight: "yellow"
-    property color clrPanelBackground: fontColor
-    property color clrPanelBackground2: "#EAEAEA"
+    // Primary colors
+    property color fontColor: "#006146"
+    property color fontColorBright: "#679D70"
+    property color panelBackground2: "#C6CCC7"
 
-    property color highlightColor: "#FB831F"
+    // Secondary colors
+    property color clrPanelMain: "white"
+    property color clrPanelBackground: fontColor
+    property color panelBackgroundDark: "#B3B3B3"
+    property color panelBackgroundLight: "#E6E6E6"
+
+    property color highlightColor: "#FD9626"
     property color softRed: "#FC9FB1"
     property color softOrange: "#FDD7B1"
     property color softGreen: "#32AA3A"
 
-    property real fontPixelSizeSmaller: QgsQuick.Utils.dp * 15
-    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 / 2
-    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 32 / 2
-    property real fontPixelSizeBig: QgsQuick.Utils.dp * 50
+    property real rado2Lutra: 0.75 // TODO delete this, but later!
 
-    property int panelMargin: scale(16)
+    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20 * rado2Lutra
+    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 * rado2Lutra
+    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 32 * rado2Lutra
 
-    property color fontColor: "#0b5036"
-    property color panelBackground2: "#EEF0F0"
-
+    property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
 

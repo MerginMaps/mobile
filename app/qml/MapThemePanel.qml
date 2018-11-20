@@ -23,7 +23,7 @@ Drawer {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
-        color: InputStyle.clrPanelBackground2
+        color: InputStyle.panelBackgroundLight
 
         Text {
             anchors.fill: parent
@@ -31,7 +31,7 @@ Drawer {
             anchors.rightMargin: InputStyle.panelMargin
             text: "Map themes"
             color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeSmall
+            font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -87,7 +87,7 @@ Drawer {
 
             ExtendedMenuItem {
                 panelMargin: InputStyle.panelMargin
-                text: name
+                contentText: name
                 imageSource: "map_styles.svg"
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
