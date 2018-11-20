@@ -26,7 +26,7 @@ Drawer {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
-        color: InputStyle.clrPanelBackground2
+        color: InputStyle.panelBackgroundLight
 
         Text {
             anchors.fill: parent
@@ -34,7 +34,7 @@ Drawer {
             anchors.rightMargin: InputStyle.panelMargin
             text: "Survey layer"
             color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeSmall
+            font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -54,6 +54,17 @@ Drawer {
         property int cellWidth: width
         property int cellHeight: InputStyle.rowHeight
         property int borderWidth: 1
+
+        Label {
+            anchors.fill: parent
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            visible: parent.count == 0
+            text: qsTr("No editable layers in the project!")
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.bold: true
+        }
 
     }
 
@@ -79,60 +90,12 @@ Drawer {
                 }
             }
 
-            Item {
-                anchors.fill: parent
+            ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-
-                Item {
-                    id: row
-                    anchors.fill: parent
-
-                    Rectangle {
-                        id: iconContainer
-                        height: InputStyle.rowHeight
-                        width: InputStyle.rowHeight
-
-                        Image {
-                            id: icon
-                            anchors.fill: parent
-                            anchors.margins: InputStyle.rowHeight/4
-                            source: iconSource ? iconSource : ""
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
-
-                    Item {
-                        id: textContainer
-                        y: 0
-                        x: iconContainer.width + InputStyle.panelMargin
-                        height: listView.cellHeight
-                        width: listView.cellWidth - listView.cellHeight // minus icon
-
-                        Text {
-                            id: mainText
-                            text: name
-                            height: parent.height
-                            width: parent.width
-
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            font.weight: Font.Bold
-                            color: itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: borderLine
-                    color: InputStyle.fontColor
-                    width: row.width
-                    height: listView.borderWidth
-                    anchors.bottom: parent.bottom
-                }
+                contentText: name
+                imageSource: iconSource ? iconSource : ""
+                overlayImage: false
             }
         }
 

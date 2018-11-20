@@ -19,7 +19,8 @@ Item {
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
     property bool lockOnPosition: false
-
+    property int gpsAccuracyTolerance
+    property real gpsAccuracy
     property int itemSize: mainPanel.height * 0.8
 
     id: mainPanel
@@ -44,7 +45,7 @@ Item {
                 id: openProjectBtn
                 width: mainPanel.itemSize
                 text: qsTr("Projects")
-                imageSource: "ic_map_white_48px.svg"
+                imageSource: "project.svg"
 
                 onActivated: mainPanel.openProjectClicked()
             }
@@ -58,28 +59,21 @@ Item {
                 width: mainPanel.itemSize
 
                 text: qsTr("GPS")
-                imageSource: "ic_my_location_white_48px.svg"
-                imageSource2: "ic_gps_off.svg"
+                imageSource: "ic_gps_fixed_48px.svg"
+                imageSource2: "ic_gps_not_fixed_48px.svg"
                 imageSourceCondition: mainPanel.lockOnPosition
 
                 onActivated: mainPanel.myLocationClicked()
                 onActivatedOnHold: mainPanel.myLocationHold()
 
-                Item {
-                    id: gpsSignal
+                RoundIndicator {
                     width: parent.height/4
                     height: width
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    property int size: width
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: gpsSignal.size
-                        height: gpsSignal.size
-                        color: "orange"
-                        radius: width*0.5
-                        antialiasing: true
+                    color: {
+                        if (gpsAccuracy <= 0) return InputStyle.softRed
+                        return gpsAccuracy < gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
                     }
                 }
             }
@@ -113,7 +107,8 @@ Item {
                 id: menuBtn
                 width: mainPanel.itemSize
                 text: qsTr("More")
-                imageSource: "ic_menu_48px.svg"
+                imageSource: "more_menu.svg"
+                isHighlighted: rootMenu.isOpen
                 onActivated: {
                     if (rootMenu.isOpen) {
                         rootMenu.close()
@@ -131,27 +126,63 @@ Item {
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         property bool isOpen: false
-        width: 240 * QgsQuick.Utils.dp
-
+        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
         onClosed: isOpen = false
         onOpened: isOpen = true
 
-        Button {
-            height: InputStyle.rowHeight
-            text: qsTr("Zoom to project")
+        MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Zoom to project")
+                imageSource: "zoom_to_project.svg"
+            }
+
             onClicked: {
                 mainPanel.zoomToProject()
                 rootMenu.close()
             }
         }
 
-        Button {
-            height: InputStyle.rowHeight
-            text: qsTr("Map themes")
+
+        MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Map themes")
+                imageSource: "map_styles.svg"
+            }
+
             onClicked: {
                 mainPanel.openMapThemesClicked()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            height: mainPanel.itemSize
+            width: parent.width
+
+            ExtendedMenuItem {
+                anchors.fill: parent
+                rowHeight: parent.height
+                width: parent.width
+                contentText: qsTr("Settings")
+                imageSource: "settings.svg"
+            }
+
+            onClicked: {
+                mainPanel.openLogClicked()
                 rootMenu.close()
             }
         }

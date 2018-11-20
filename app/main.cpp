@@ -184,6 +184,9 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  QFont font("Lato", 28, QFont::Normal);
+  app.setFont(font);
+
   // Set/Get enviroment
   QString dataDir = getDataDir();
   setEnvironmentQgisPrefixPath();
@@ -220,7 +223,7 @@ int main(int argc, char *argv[])
   Loader loader;
   engine.rootContext()->setContextProperty( "__loader", &loader );
 
-  // Create layer model 
+  // Create layer model
   LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
 

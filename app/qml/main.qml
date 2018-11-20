@@ -50,8 +50,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
-        openProjectPanel.visible = true
+        //openProjectPanel.visible = true
         InputStyle.deviceRatio = window.screen.devicePixelRatio
+        InputStyle.realWidth = window.width
+        InputStyle.realHeight = window.height
         console.log("Completed Running!")
     }
 
@@ -78,7 +80,7 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
         highlight.featureLayerPair = res
         if (res.valid) {
-          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly" )
+          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
         }
       }
     }
@@ -102,9 +104,15 @@ ApplicationWindow {
     SettingsPanel {
       id: settingsPanel
       height: window.height
-      //width: QgsQuick.Style.dp * 1000
-      edge: Qt.RightEdge
+      width: window.width
+      rowHeight: InputStyle.rowHeight
+
+      defaultProject: openProjectPanel.activeProjectName
       z: zPanel   // make sure items from here are on top of the Z-order
+
+      onGpsAccuracyToleranceChanged: {
+        mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
+      }
     }
 
     /** Position Kit and Marker */
@@ -146,6 +154,8 @@ ApplicationWindow {
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
         lockOnPosition: settingsPanel.autoCenterMapChecked
+        gpsAccuracyTolerance: settingsPanel.gpsAccuracy
+        gpsAccuracy: positionKit.accuracy
 
         onOpenProjectClicked: openProjectPanel.visible = true
         onOpenLayersClicked: activeLayerPanel.visible = true
@@ -233,9 +243,9 @@ ApplicationWindow {
 
     MapThemePanel {
         id: mapThemesPanel
-        height: window.height
+        height: window.height/2
         width: window.width
-        edge: Qt.LeftEdge
+        edge: Qt.BottomEdge
         z: zPanel
     }
 

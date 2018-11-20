@@ -14,5 +14,16 @@
         <file>mIconPolygonLayer.svg</file>
         <file>mIconRaster.svg</file>
         <file>ic_gps_off.svg</file>
+        <file>Ic_chevron_left_48px.svg</file>
+        <file>ic_map_48px.svg</file>
+        <file>project.svg</file>
+        <file>settings.svg</file>
+        <file>zoom_to_project.svg</file>
+        <file>edit.svg</file>
+        <file>back.svg</file>
+        <file>more_menu.svg</file>
+        <file>map_styles.svg</file>
+        <file>ic_gps_not_fixed_48px.svg</file>
+        <file>ic_gps_fixed_48px.svg</file>
     </qresource>
 </RCC>
