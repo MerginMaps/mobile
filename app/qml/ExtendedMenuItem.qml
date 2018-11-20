@@ -6,6 +6,7 @@ Item {
     property string imageSource: ""
     property real rowHeight: InputStyle.rowHeight
     property real panelMargin: 0
+    property bool overlayImage: true
     anchors.fill: parent
 
     Item {
@@ -35,6 +36,7 @@ Item {
                 anchors.fill: icon
                 source: icon
                 color: InputStyle.fontColor
+                visible: overlayImage
             }
         }
 
@@ -68,8 +70,3 @@ Item {
         anchors.bottom: parent.bottom
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

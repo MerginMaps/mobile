@@ -90,60 +90,12 @@ Drawer {
                 }
             }
 
-            Item {
-                anchors.fill: parent
+            ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-
-                Item {
-                    id: row
-                    anchors.fill: parent
-
-                    Rectangle {
-                        id: iconContainer
-                        height: InputStyle.rowHeight
-                        width: InputStyle.rowHeight
-
-                        Image {
-                            id: icon
-                            anchors.fill: parent
-                            anchors.margins: InputStyle.rowHeight/4
-                            source: iconSource ? iconSource : ""
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
-
-                    Item {
-                        id: textContainer
-                        y: 0
-                        x: iconContainer.width + InputStyle.panelMargin
-                        height: listView.cellHeight
-                        width: listView.cellWidth - listView.cellHeight // minus icon
-
-                        Text {
-                            id: mainText
-                            text: name
-                            height: parent.height
-                            width: parent.width
-
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            font.weight: Font.Bold
-                            color: itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: borderLine
-                    color: InputStyle.fontColor
-                    width: row.width
-                    height: listView.borderWidth
-                    anchors.bottom: parent.bottom
-                }
+                text: name
+                imageSource: iconSource
+                overlayImage: false
             }
         }
 
