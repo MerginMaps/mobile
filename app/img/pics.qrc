@@ -25,5 +25,8 @@
         <file>map_styles.svg</file>
         <file>ic_gps_not_fixed_48px.svg</file>
         <file>ic_gps_fixed_48px.svg</file>
+        <file>trash.svg</file>
+        <file>yes.svg</file>
+        <file>add_photo.svg</file>
     </qresource>
 </RCC>

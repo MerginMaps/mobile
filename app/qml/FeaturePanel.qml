@@ -24,20 +24,20 @@ Drawer {
 
     background: Rectangle {
         id: stateManager
-        color: InputStyle.clrPanelBackground
+        color: InputStyle.clrPanelMain
 
         state: "preview"
         states: [
             State {
                 name: "preview"
                 PropertyChanges { target: featurePanel; height: featurePanel.previewHeight }
-                PropertyChanges { target: featureForm; visible: false }
+                PropertyChanges { target: formContainer; visible: false }
                 PropertyChanges { target: previewPanel; visible: true }
             }
             ,State {
                 name: "form"
                 PropertyChanges { target: featurePanel; height: featurePanel.panelHeight }
-                PropertyChanges { target: featureForm; visible: true }
+                PropertyChanges { target: formContainer; visible: true }
                 PropertyChanges { target: previewPanel; visible: false }
             }
         ]
@@ -75,27 +75,78 @@ Drawer {
       }
     }
 
-    QgsQuick.FeatureForm {
-      id: featureForm
 
-      // using anchors here is not working well as
-      width: featurePanel.width
-      height: featurePanel.height
+    Item {
+        id: formContainer
+        width: featurePanel.width
+        height: featurePanel.height
+        visible: false
 
-      model: QgsQuick.AttributeFormModel {
-        attributeModel: QgsQuick.AttributeModel {
-            id: attributeModel
+        PanelHeader {
+            id: header
+            height: InputStyle.rowHeightHeader
+            width: parent.width
+            color: InputStyle.clrPanelMain
+            rowHeight: InputStyle.rowHeightHeader
+            titleText: "Edit Object"
+
+            onBack: featurePanel.visible = false
         }
-      }
 
-      project: featurePanel.project
+        Rectangle {
+            id: photoContainer
+            height: InputStyle.rowHeight * 2
+            width: parent.width
+            anchors.top: header.bottom
+            color: InputStyle.panelBackground2
 
-      toolbarVisible: true
+            Text {
+                id: backButtonText
+                anchors.fill: parent
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                text: "No photos added."
+                color: InputStyle.clrPanelMain
+                font.pixelSize: InputStyle.fontPixelSizeNormal
+            }
+        }
 
-      onSaved: {
-        featurePanel.visible = false
-      }
-      onCanceled: featurePanel.visible = false
+        QgsQuick.FeatureForm {
+            id: featureForm
+            visible: true
+
+            width: parent.width
+            height: parent.height - header.height - photoContainer.height - toolbar.height
+            anchors.top: photoContainer.bottom
+            anchors.bottom: toolbar.top
+
+            model: QgsQuick.AttributeFormModel {
+                attributeModel: QgsQuick.AttributeModel {
+                    id: attributeModel
+                }
+            }
+
+            project: featurePanel.project
+            onSaved: {
+                featurePanel.visible = false
+            }
+            onCanceled: featurePanel.visible = false
+
+            onStateChanged: {
+                console.log("trlala fomrt state chagnes")
+                toolbar.state = featureForm.state
+            }
+        }
+
+        FeatureToolbar {
+            id: toolbar
+            width: parent.width
+            height: InputStyle.rowHeightHeader
+            y: parent.height - height
+            state: featurePanel.formState
+
+            onEditClicked: featureForm.state = "Edit"
+            onSaveClicked: featureForm.save()
+        }
     }
-
 }
