@@ -56,56 +56,19 @@ Popup {
             z: grid.z + 1
 
             background: Rectangle {
-                color: InputStyle.panelBackground2
+                color: InputStyle.panelBackgroundLight
             }
 
-            TabButton {
+            PanelTabButton {
                 height: projectMenuButtons.height
-                id: button1
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                // overwritting TabButton default background
-                background: Item {
-                    anchors.fill: parent
-                }
-
-                contentItem: Text {
-                    anchors.fill: parent
-                    text: qsTr("My projects")
-                    color: InputStyle.fontColor
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font.underline: button1.checked
-                    font.bold: true
-                    font.pixelSize: InputStyle.fontPixelSizeSmall
-                }
-
+                text: qsTr("MY PROJECTS")
+                horizontalAlignment: Text.AlignLeft
             }
-            TabButton {
-                height: parent.height
-                id: button2
-                y:0
-                // overwritting TabButton default background
-                background: Item {
-                    anchors.fill: parent
-                }
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                Text {
-                    anchors.fill: parent
-                    height: parent.height
-                    text: qsTr("All projects")
-                    color: InputStyle.fontColor
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font.underline: button2.checked
-                    font.bold: true
-                    font.pixelSize: InputStyle.fontPixelSizeSmall
-                }
+
+            PanelTabButton {
+                height: projectMenuButtons.height
+                text: qsTr("ALL PROJECTS")
+                horizontalAlignment: Text.AlignRight
             }
         }
 
@@ -182,7 +145,7 @@ Popup {
                             id: mainText
                             text: name
                             height: textContainer.height/2
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
+                            font.pixelSize: InputStyle.fontPixelSizeNormal
                             font.weight: Font.Bold
                             color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
@@ -196,7 +159,7 @@ Popup {
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
-                            font.pixelSize: InputStyle.fontPixelSizeSmaller
+                            font.pixelSize: InputStyle.fontPixelSizeSmall
                             color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop

@@ -14,16 +14,17 @@ Rectangle {
         height: header.rowHeight
         width: height * 2
         anchors.left: header.left
+        anchors.leftMargin: InputStyle.panelMargin
         z: title.z + 1
 
         Image {
             id: image
-            height: header.rowHeight
+            height: InputStyle.fontPixelSizeTitle
             width: height
             source: "back.svg"
             fillMode: Image.PreserveAspectFit
-            anchors.bottomMargin: header.rowHeight/4
-            anchors.topMargin: header.rowHeight/4
+            anchors.bottomMargin: (header.rowHeight - height)/2
+            anchors.topMargin: (header.rowHeight - height)/2
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.top: parent.top
@@ -33,15 +34,14 @@ Rectangle {
         ColorOverlay {
             anchors.fill: image
             source: image
-            color: InputStyle.fontColor
+            color: InputStyle.fontColorBright
         }
 
         Text {
             id: backButtonText
             text: "Back"
-            color: InputStyle.fontColor
+            color: InputStyle.fontColorBright
             font.pixelSize: InputStyle.fontPixelSizeTitle
-            font.bold: true
             height: header.rowHeight
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft

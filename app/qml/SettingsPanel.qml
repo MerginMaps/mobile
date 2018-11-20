@@ -2,14 +2,13 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
-//import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
 
 Popup {
 
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
-    property real rowHeight: 90 //InputStyle.rowHeight
+    property real rowHeight: InputStyle.rowHeight
     property string defaultProject: "<none>"
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
@@ -41,7 +40,7 @@ Popup {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.margins: 0
-        color: "grey"
+        color: InputStyle.panelBackgroundDark
         width: parent.width
         height: parent.height
 
@@ -51,7 +50,7 @@ Popup {
             spacing: 1
 
             PanelItem {
-                color: InputStyle.clrPanelBackground2
+                color: InputStyle.panelBackgroundLight
                 text: "Start app with"
                 bold: true
             }
@@ -62,7 +61,7 @@ Popup {
             }
 
             PanelItem {
-                color: InputStyle.clrPanelBackground2
+                color: InputStyle.panelBackgroundLight
                 text: "GPS SETTINGS"
                 bold: true
             }
@@ -107,7 +106,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         anchors.margins: height/3
-                        color: InputStyle.clrPanelBackground2
+                        color: InputStyle.panelBackgroundLight
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
