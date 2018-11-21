@@ -92,9 +92,11 @@ Drawer {
             onBack: featurePanel.visible = false
         }
 
+        // TODO currently disabled since supporting photos is not yet implemented
         Rectangle {
             id: photoContainer
-            height: InputStyle.rowHeight * 2
+            height: 0
+            visible: false
             width: parent.width
             anchors.top: header.bottom
             color: InputStyle.panelBackground2
