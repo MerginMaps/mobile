@@ -34,11 +34,6 @@ QtObject {
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real panelOpacity: 1
 
-    property real refWidth: 640
-    property real refHeight: 1136
-    property real realWidth
-    property real realHeight
-
     // used in scaling functions for high DPI screens
     property real deviceRatio: 1
 

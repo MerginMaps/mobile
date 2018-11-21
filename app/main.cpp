@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
-  QQmlComponent component(&engine, QUrl("qrc:/main.qml"));
+  QQmlComponent component(&engine, QUrl("qrc:/init.qml"));
   QObject *object = component.create();
 
   if (!component.errors().isEmpty()) {

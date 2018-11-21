@@ -2,14 +2,13 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import "."
 
-ApplicationWindow {
+Item {
     id: window
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
-    visibility: __appwindowvisibility
-    title: qsTr("Input")
 
     property int zMapCanvas: 0
     property int zPanel: 20
@@ -51,9 +50,6 @@ ApplicationWindow {
     Component.onCompleted: {
         openProjectPanel.activeProjectIndex = 0;
         //openProjectPanel.visible = true
-        InputStyle.deviceRatio = window.screen.devicePixelRatio
-        InputStyle.realWidth = window.width
-        InputStyle.realHeight = window.height
         console.log("Completed Running!")
     }
 

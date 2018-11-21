@@ -22,5 +22,7 @@
         <file>PanelItem.qml</file>
         <file>ExtendedMenuItem.qml</file>
         <file>PanelTabButton.qml</file>
+        <file>SplashScreen.qml</file>
+        <file>init.qml</file>
     </qresource>
 </RCC>
