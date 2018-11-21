@@ -3,6 +3,7 @@
 #define STR1(x)  #x
 #define STR(x)  STR1(x)
 
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
@@ -184,8 +185,19 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
-  QFont font("Lato", 28, QFont::Normal);
-  app.setFont(font);
+  // we ship our fonts because they do not need to be installed on the target platform
+  QStringList fonts;
+  fonts << ":/Lato-Regular.ttf"
+        << ":/Lato-Bold.ttf";
+  for (QString font : fonts)
+  {
+    if (QFontDatabase::addApplicationFont(font) == -1)
+      qDebug() << "!! Failed to load font" << font;
+    else
+      qDebug() << "Loaded font" << font;
+  }
+
+  app.setFont(QFont("Lato"));
 
   // Set/Get enviroment
   QString dataDir = getDataDir();

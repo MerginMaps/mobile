@@ -86,7 +86,8 @@ mapthemesmodel.h
 
 RESOURCES += \
     img/pics.qrc \
-    qml/qml.qrc
+    qml/qml.qrc \
+    fonts/fonts.qrc
 
 TRANSLATIONS +=
 
