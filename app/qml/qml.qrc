@@ -23,5 +23,6 @@
         <file>ExtendedMenuItem.qml</file>
         <file>PanelTabButton.qml</file>
         <file>FeatureToolbar.qml</file>
+        <file>PositionMarker.qml</file>
     </qresource>
 </RCC>

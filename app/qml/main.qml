@@ -131,7 +131,7 @@ ApplicationWindow {
       }
     }
 
-    QgsQuick.PositionMarker {
+    PositionMarker {
       id: positionMarker
       positionKit: positionKit
       z: zMapCanvas + 2
