@@ -67,6 +67,7 @@ CONFIG(debug, debug|release) {
 QT += qml quick xml concurrent positioning quickcontrols2
 QT += network svg printsupport sql
 QT += opengl
+QT += androidextras
 
 
 SOURCES += \
@@ -108,6 +109,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 DISTFILES += android/AndroidManifest.xml \
     qml/MapThemePanel.qml \
     qml/Notification.qml
+    #android/splashscreen.xml
 
 # packaging
 ANDROID_EXTRA_LIBS += \
