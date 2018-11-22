@@ -6,7 +6,7 @@ import "."  // import InputStyle singleton
 
 Item {
     id: previewPanel
-    property real rowHeight: InputStyle.scale(InputStyle.buttonSize)
+    property real rowHeight: InputStyle.rowHeight
 
     property alias titleBorder: titleBorder
     property string title: ""
@@ -24,7 +24,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            anchors.margins: InputStyle.scale(InputStyle.panelMargin)
+            anchors.margins: InputStyle.panelMargin
 
             Item {
                 width: parent.width
@@ -35,33 +35,40 @@ Item {
                     width: parent.width
                     height: parent.height - titleBorder.height
                     Text {
+                        id: titleText
                         height: parent.height
+                        width: parent.width - rowHeight
                         text: previewPanel.title
-                        font.pixelSize: InputStyle.fontPixelSizeNormal
+                        font.pixelSize: InputStyle.fontPixelSizeTitle
                         color: InputStyle.fontColor
                         font.bold: true
-                        anchors.left: parent.left
-                        anchors.right: titleImage.left
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                     }
 
-                    Image {
-                        id: titleImage
-                        height: parent.height
+                    Item {
+                        id: iconContainer
+                        height: rowHeight
                         width: height
-                        source: "ic_edit_48px.svg"
+                        anchors.left: titleText.right
                         anchors.right: parent.right
-                        anchors.margins: height/4
 
+                        Image {
+                            id: icon
+                            anchors.fill: parent
+                            anchors.margins: rowHeight/4
+                            source: "ic_edit_48px.svg"
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: icon
+                            source: icon
+                            color: InputStyle.fontColor
+                        }
                     }
-
-                    ColorOverlay {
-                        anchors.fill: titleImage
-                        source: titleImage
-                        color: InputStyle.highlightColor
-                    }
-
                 }
 
                 Rectangle {
