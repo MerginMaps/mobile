@@ -30,7 +30,7 @@ Item {
 
     Image {
         id: direction
-        source: "gps_direction"
+        source: "gps_direction.svg"
         fillMode: Image.PreserveAspectFit
         rotation: positionKit.direction
         transformOrigin: Item.Bottom
