@@ -12,6 +12,7 @@
 #include <QDesktopWidget>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QtAndroidExtras>
 #include <qqml.h>
 #include <qgsmessagelog.h>
 
@@ -313,6 +314,10 @@ int main(int argc, char *argv[])
   QgsApplication::messageLog()->logMessage(QgsQuickUtils().dumpScreenInfo());
   QgsApplication::messageLog()->logMessage("data directory: " + dataDir);
   QgsApplication::messageLog()->logMessage("All up and running");
+
+#ifdef ANDROID
+  QtAndroid::hideSplashScreen();
+#endif
 
   return app.exec();
 }
