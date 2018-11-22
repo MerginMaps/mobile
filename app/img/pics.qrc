@@ -28,5 +28,8 @@
         <file>trash.svg</file>
         <file>yes.svg</file>
         <file>add_photo.svg</file>
+        <file>gps_direction.svg</file>
+        <file>gps_marker_no_position.svg</file>
+        <file>gps_marker_position.svg</file>
     </qresource>
 </RCC>

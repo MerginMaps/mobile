@@ -7,10 +7,9 @@ import "."
 
 Item {
     id: positionMarker
-    property int size: 300 * QgsQuick.Utils.dp
+    property int size: InputStyle.rowHeightHeader/2
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
-    property color unavailableColor: "gray"
     property bool withAccuracy: true
 
 
@@ -29,33 +28,29 @@ Item {
         opacity: 0.2
     }
 
-    Rectangle {
-      id: lastPosition
-      visible: !(positionKit.hasPosition)
-      property int borderWidth: 10 * QgsQuick.Utils.dp
-      width: borderWidth + 20 * QgsQuick.Utils.dp
-      height: width
-      color: "transparent"
-      border.color: InputStyle.panelBackgroundDark
-      border.width: borderWidth
-      radius: width*0.5
-      antialiasing: true
-      x: positionKit.screenPosition.x - width/2
-      y: positionKit.screenPosition.y - height/2
-      z: navigation.z + 1
+    Image {
+        id: direction
+        source: "gps_direction"
+        fillMode: Image.PreserveAspectFit
+        rotation: positionKit.direction
+        transformOrigin: Item.Bottom
+        width: positionMarker.size * 2
+        height: width
+        smooth: true
+        visible: positionKit.hasPosition && positionKit.direction >= 0
+        x: positionKit.screenPosition.x - width/2
+        y: positionKit.screenPosition.y - (height * 1)
     }
 
     Image {
         id: navigation
-        source: "gps.svg"
+        source: positionKit.hasPosition ? "gps_marker_position.svg" : "gps_marker_no_position.svg"
         fillMode: Image.PreserveAspectFit
-        rotation: positionKit.direction
         width: positionMarker.size
         height: width
         smooth: true
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - height/2
-        visible: positionKit.hasPosition
     }
 }
 
