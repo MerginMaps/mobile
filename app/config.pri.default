@@ -8,6 +8,13 @@ android {
   # we try to use it as /sdcard/path and if not writable, use /storage/emulated/0/path (user home path)
 }
 !android {
-  QGIS_INSTALL_PATH =  $${BASE_DIR}/Applications
+
+  # option 1: using QGIS from installed path
+  QGIS_INSTALL_PATH = $${BASE_DIR}/Applications
+
+  # option 2: using QGIS from build directory (not installed)
+  #QGIS_SRC_DIR = </home/folder>/Projects/qgis
+  #QGIS_BUILD_DIR = $${QGIS_SRC_DIR}/build
+
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
 }

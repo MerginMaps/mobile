@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
 
   init_qgis(dataDir);
   QQmlEngine engine;
+  engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
 
   // Create project model
