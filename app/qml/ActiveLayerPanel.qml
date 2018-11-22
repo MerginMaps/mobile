@@ -6,6 +6,7 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
+    property alias state: stateManager.state
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
@@ -21,6 +22,22 @@ Drawer {
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
+
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "setup"
+                //PropertyChanges { target: myRect; color: "red" }
+            }
+
+           ,State {
+                name: "record"
+                //PropertyChanges { target: myRect; color: "red" }
+            }
+        ]
+    }
+
 
     Rectangle {
         id: header
@@ -76,7 +93,7 @@ Drawer {
             property color secondaryColor: InputStyle.fontColor
             width: listView.cellWidth
             // first item in the model is "none" layer
-            height: index === 0 || !isVector ? 0 : listView.cellHeight
+            height: (stateManager.state !== "setup" && index === 0) || !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
@@ -84,9 +101,13 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    if (stateManager.state === "record") {
+                        layerPanel.layerSettingChanged()
+                    } else if (stateManager.state === "setup") {
+
+                    }
                     layerPanel.activeLayerIndex = index
                     layerPanel.visible = false
-                    layerPanel.layerSettingChanged()
                 }
             }
 
@@ -96,6 +117,9 @@ Drawer {
                 contentText: name
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
+                highlight: layerPanel.activeLayerIndex === index
+                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
+                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
             }
         }
 

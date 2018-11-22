@@ -3,16 +3,19 @@ import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.2
 import "."  // import InputStyle singleton
 
-Item {
+Rectangle {
     id: root
     property string contentText: ""
     property string imageSource: ""
     property real rowHeight: InputStyle.rowHeight
     property real panelMargin: InputStyle.panelMargin
     property bool overlayImage: true
+    property bool highlight: false
     property color fontColor: InputStyle.fontColor
+    property color panelColor: InputStyle.clrPanelMain
 
     anchors.fill: parent
+    color: panelColor
 
     Item {
         id: row

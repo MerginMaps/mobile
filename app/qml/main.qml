@@ -158,7 +158,14 @@ ApplicationWindow {
         gpsAccuracy: positionKit.accuracy
 
         onOpenProjectClicked: openProjectPanel.visible = true
-        onOpenLayersClicked: activeLayerPanel.visible = true
+        onOpenLayersClicked: {
+            activeLayerPanel.state = "record"
+            activeLayerPanel.visible = true
+        }
+        onSetDefaultLayerClicked: {
+            activeLayerPanel.state = "setup"
+            activeLayerPanel.visible = true
+        }
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {

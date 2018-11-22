@@ -10,6 +10,7 @@ Item {
     signal myLocationClicked()
     signal myLocationHold()
     signal addFeatureClicked()
+    signal setDefaultLayerClicked()
     signal openMapThemesClicked()
     signal openLogClicked()
     signal zoomToProject()
@@ -97,6 +98,7 @@ Item {
                 }
 
                 onActivated: mainPanel.addFeatureClicked()
+                onActivatedOnHold: mainPanel.setDefaultLayerClicked()
             }
         }
 
