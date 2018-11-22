@@ -12,7 +12,6 @@
 #include <QDesktopWidget>
 #include <QQmlContext>
 #include <QQuickWindow>
-#include <QtAndroidExtras>
 #include <qqml.h>
 #include <qgsmessagelog.h>
 
@@ -31,6 +30,7 @@
 #ifdef ANDROID
 #include <QFile>
 #include <QDir>
+#include <QtAndroidExtras>
 #endif
 
 #ifndef ANDROID
