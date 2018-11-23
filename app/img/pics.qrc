@@ -1,21 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>home.svg</file>
-        <file>ic_map_white_48px.svg</file>
-        <file>ic_my_location_white_48px.svg</file>
         <file>logo_lutra.png</file>
-        <file>ic_navigation_black_48px.svg</file>
         <file>logo.png</file>
         <file>file.svg</file>
-        <file>ic_edit_48px.svg</file>
-        <file>ic_menu_48px.svg</file>
         <file>mIconLineLayer.svg</file>
         <file>mIconPointLayer.svg</file>
         <file>mIconPolygonLayer.svg</file>
         <file>mIconRaster.svg</file>
-        <file>ic_gps_off.svg</file>
-        <file>Ic_chevron_left_48px.svg</file>
-        <file>ic_map_48px.svg</file>
         <file>project.svg</file>
         <file>settings.svg</file>
         <file>zoom_to_project.svg</file>
