@@ -133,7 +133,7 @@ Drawer {
             ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-                contentText: name
+                contentText: index === 0 ? "Clear default survey layer setting" : name
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
                 highlight: __layersModel.defaultLayerIndex === index

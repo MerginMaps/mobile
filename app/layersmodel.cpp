@@ -73,7 +73,7 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
     switch ( role )
     {
       case Name:
-        return "Clear default layer setting";
+        return "(none)";
       case isVector:
         return true;
       case isReadOnly:
