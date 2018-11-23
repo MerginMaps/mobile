@@ -10,8 +10,27 @@ Drawer {
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property string defaultLayerName: __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.Name)
+    property string title: "Survey Layer"
 
     signal layerSettingChanged()
+
+    function openPanel(state) {
+        activeLayerPanel.state = state
+        if (state === "setup") {
+
+        } else if (state === "record") {
+            // overwrite -> resets activeIndex according default
+            activeLayerIndex = __layersModel.defaultLayerIndex
+
+            if (activeLayerIndex !== 0) {
+                layerPanel.layerSettingChanged()
+                // record without opening panel
+                return;
+            }
+        }
+        activeLayerPanel.visible = true
+    }
 
     id: layerPanel
     visible: false
@@ -28,12 +47,12 @@ Drawer {
         states: [
             State {
                 name: "setup"
-                //PropertyChanges { target: myRect; color: "red" }
+                PropertyChanges { target: layerPanel; title: "Default survey layer"}
             }
 
            ,State {
                 name: "record"
-                //PropertyChanges { target: myRect; color: "red" }
+                PropertyChanges { target: layerPanel; title: "Survey layer" }
             }
         ]
     }
@@ -49,7 +68,7 @@ Drawer {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            text: "Survey layer"
+            text: layerPanel.title
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
@@ -93,7 +112,7 @@ Drawer {
             property color secondaryColor: InputStyle.fontColor
             width: listView.cellWidth
             // first item in the model is "none" layer
-            height: (stateManager.state !== "setup" && index === 0) || !isVector ? 0 : listView.cellHeight
+            height: (stateManager.state !== "setup" && index === 0) || (__layersModel.defaultLayerIndex === 0 && index === 0) || !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
@@ -101,13 +120,13 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    layerPanel.activeLayerIndex = index
+                    layerPanel.visible = false
                     if (stateManager.state === "record") {
                         layerPanel.layerSettingChanged()
                     } else if (stateManager.state === "setup") {
-
+                        __layersModel.defaultLayerIndex = index
                     }
-                    layerPanel.activeLayerIndex = index
-                    layerPanel.visible = false
                 }
             }
 
@@ -117,7 +136,7 @@ Drawer {
                 contentText: name
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: layerPanel.activeLayerIndex === index
+                highlight: __layersModel.defaultLayerIndex === index
                 fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
                 panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
             }

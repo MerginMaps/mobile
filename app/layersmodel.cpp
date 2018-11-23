@@ -153,3 +153,14 @@ int LayersModel::rowCount(const QModelIndex &parent) const {
 QList<QgsMapLayer*> LayersModel::layers() const {
     return mLayers;
 }
+
+int LayersModel::defaultLayerIndex() const {
+    return mDefaultLayerIndex;
+}
+
+void LayersModel::setDefaultLayerIndex(int index) {
+    if (index != mDefaultLayerIndex) {
+        mDefaultLayerIndex = index;
+        emit defaultLayerIndexChanged();
+    }
+}

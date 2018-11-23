@@ -28,6 +28,7 @@ class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QList<QgsMapLayer*> layers READ layers NOTIFY layersChanged )
+    Q_PROPERTY( int defaultLayerIndex READ defaultLayerIndex WRITE setDefaultLayerIndex NOTIFY defaultLayerIndexChanged )
 
   public:
     enum Roles
@@ -52,9 +53,12 @@ class LayersModel : public QAbstractListModel
 
     QList<QgsMapLayer*> layers() const;
 
+    int defaultLayerIndex() const;
+    void setDefaultLayerIndex(int index);
 
   signals:
     void layersChanged();
+    void defaultLayerIndexChanged();
 
   public slots:
     void reloadLayers(); //when project file changes, reload all layers, etc.
@@ -62,6 +66,7 @@ class LayersModel : public QAbstractListModel
   private:
     QgsProject* mProject;
     QList<QgsMapLayer*> mLayers; // all layers
+    int mDefaultLayerIndex;
 };
 
 #endif // LAYERSMODEL_H

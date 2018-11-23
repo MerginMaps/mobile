@@ -101,6 +101,11 @@ Popup {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    // TODO reset default survey layer after changing projects
+                    // Rather use connections and QSettings to save state
+                    if (projectsPanel.activeProjectIndex != index) {
+                        __layersModel.defaultLayerIndex = 0
+                    }
                     projectsPanel.activeProjectIndex = index
                     projectsPanel.visible = false
                 }
