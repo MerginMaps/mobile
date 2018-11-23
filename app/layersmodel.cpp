@@ -73,13 +73,13 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
     switch ( role )
     {
       case Name:
-        return "(none)";
+        return "Clear default layer setting";
       case isVector:
         return true;
       case isReadOnly:
         return false;
       case IconSource:
-        return QVariant();
+        return QVariant("no.svg");
       case VectorLayer:
         return QVariant::fromValue<QgsVectorLayer*>( nullptr );
     }
