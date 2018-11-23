@@ -70,7 +70,7 @@ ApplicationWindow {
       QgsQuick.IdentifyKit {
         id: identifyKit
         mapSettings: mapCanvas.mapSettings
-        identifyMode: QgsQuick.IdentifyKit.TopDownStopAtFirst
+        identifyMode: QgsQuick.IdentifyKit.TopDownAll
       }
 
       onClicked: {
