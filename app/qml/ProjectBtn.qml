@@ -39,6 +39,6 @@ Item {
         width: size
         height: size
         anchors.centerIn: parent
-        source: "ic_map_white_48px.svg"
+        source: "project.svg"
     }
 }

@@ -57,7 +57,7 @@ Item {
                             id: icon
                             anchors.fill: parent
                             anchors.margins: rowHeight/4
-                            source: "ic_edit_48px.svg"
+                            source: "edit.svg"
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
