@@ -108,7 +108,7 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("More")
                 imageSource: "more_menu.svg"
-                isHighlighted: rootMenu.isOpen
+                //isHighlighted: rootMenu.isOpen
                 onActivated: {
                     if (rootMenu.isOpen) {
                         rootMenu.close()

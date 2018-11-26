@@ -125,6 +125,8 @@ Popup {
                             id: icon
                             anchors.fill: parent
                             source: 'project.svg'
+                            sourceSize.width: width
+                            sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
                         }
 

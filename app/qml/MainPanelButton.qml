@@ -37,6 +37,8 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.fill: parent
         source: root.imageSourceCondition ? root.imageSource : root.imageSource2
+        sourceSize.width: width
+        sourceSize.height: height
         visible: source
         anchors.margins: root.width/4
         anchors.topMargin: 0
