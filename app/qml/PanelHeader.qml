@@ -24,6 +24,8 @@ Rectangle {
             height: InputStyle.fontPixelSizeTitle
             width: height
             source: "back.svg"
+            sourceSize.width: width
+            sourceSize.height: height
             fillMode: Image.PreserveAspectFit
             anchors.bottomMargin: (header.rowHeight - height)/2
             anchors.topMargin: (header.rowHeight - height)/2
@@ -51,6 +53,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.top: parent.top
+            anchors.leftMargin: header.rowHeight/4
         }
 
         MouseArea {
