@@ -4,11 +4,18 @@ import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 
 Item {
-    id: recordBtn
+    id: recordBtnContainer
     height: width
-    property int size: width / 2
 
+    property int size: width / 2
+    property int border: 10 * QgsQuick.Utils.dp
     property bool recording: false
+
+    onRecordingChanged: {
+        if (recording === false) {
+            recBtn.borderWidth = recordBtnContainer.border
+        }
+    }
 
     function activated() {
         animation.start()
@@ -17,23 +24,14 @@ Item {
     Rectangle {
         id: recBtn
         anchors.centerIn: parent
-        property int borderWidth: 10 * QgsQuick.Utils.dp
+        property int borderWidth: recordBtnContainer.border
         width: size
         height: size
-        color: recordBtn.enabled ? "#fd5757" : "#aaaaaa"
+        color: recording ? "#fd5757" : "transparent"
         border.color: "white"
         border.width: borderWidth
         radius: width*0.5
         antialiasing: true
-
-        Label {
-            id: label
-            font.pixelSize: parent.width / 5
-            anchors.centerIn: parent
-            text: "REC"
-            color: "white"
-            visible: recording
-        }
 
         SequentialAnimation {
             id: animation
@@ -42,16 +40,16 @@ Item {
             NumberAnimation {
                 target: recBtn
                 property: "borderWidth"
-                from: 10
-                to: 7
-                duration: 200
+                from: recordBtnContainer.border
+                to: recordBtnContainer.border * 0.7
+                duration: 300
             }
             NumberAnimation {
                 target: recBtn
                 property: "borderWidth"
-                from: 7
-                to: 10
-                duration: 200
+                from: recordBtnContainer.border * 0.7
+                to: recordBtnContainer.border
+                duration: 300
             }
         }
     }
