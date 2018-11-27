@@ -187,6 +187,12 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
+            if (!positionKit.hasPosition) {
+                popup.text = qsTr("The GPS is currently not available")
+                popup.open()
+                return // leaving when no gps is available
+            }
+
             if (digitizing.recording) {
                 recordFeature()
             } else {
