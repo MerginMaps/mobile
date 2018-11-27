@@ -158,6 +158,17 @@ ApplicationWindow {
         layer: activeLayerPanel.activeVectorLayer
     }
 
+    // Highlighting a new feature while digitizing
+    Connections {
+        target: digitizing.recordingFeatureModel
+        onFeatureLayerPairChanged: {
+            if (!highlight.visible) {
+                highlight.visible = true
+            }
+            highlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+        }
+    }
+
     MainPanel {
         id: mainPanel
         width: window.width
