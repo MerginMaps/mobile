@@ -17,9 +17,7 @@ Drawer {
 
     function openPanel(state) {
         activeLayerPanel.state = state
-        if (state === "setup") {
-
-        } else if (state === "record") {
+        if (state === "record") {
             // overwrite -> resets activeIndex according default
             activeLayerIndex = __layersModel.defaultLayerIndex
 
@@ -47,16 +45,12 @@ Drawer {
         states: [
             State {
                 name: "setup"
-                PropertyChanges { target: layerPanel; title: "Default survey layer"}
-            }
-
-           ,State {
+            },
+            State {
                 name: "record"
-                PropertyChanges { target: layerPanel; title: "Survey layer" }
             }
         ]
     }
-
 
     Rectangle {
         id: header
@@ -68,7 +62,7 @@ Drawer {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            text: layerPanel.title
+            text: stateManager.state === "setup"? qsTr("Default survey layer") : qsTr("Survey layer")
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true

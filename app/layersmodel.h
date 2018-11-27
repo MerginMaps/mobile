@@ -66,7 +66,7 @@ class LayersModel : public QAbstractListModel
   private:
     QgsProject* mProject;
     QList<QgsMapLayer*> mLayers; // all layers
-    int mDefaultLayerIndex;
+    int mDefaultLayerIndex = 0; // set to "none" layer
 };
 
 #endif // LAYERSMODEL_H
