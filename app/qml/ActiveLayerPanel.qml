@@ -6,11 +6,29 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
+    property alias state: stateManager.state
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property string defaultLayerName: __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.Name)
+    property string title: "Survey Layer"
 
     signal layerSettingChanged()
+
+    function openPanel(state) {
+        activeLayerPanel.state = state
+        if (state === "record") {
+            // overwrite -> resets activeIndex according default
+            activeLayerIndex = __layersModel.defaultLayerIndex
+
+            if (activeLayerIndex !== 0) {
+                layerPanel.layerSettingChanged()
+                // record without opening panel
+                return;
+            }
+        }
+        activeLayerPanel.visible = true
+    }
 
     id: layerPanel
     visible: false
@@ -20,6 +38,18 @@ Drawer {
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
+    }
+
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "setup"
+            },
+            State {
+                name: "record"
+            }
+        ]
     }
 
     Rectangle {
@@ -32,7 +62,7 @@ Drawer {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            text: "Survey layer"
+            text: stateManager.state === "setup"? qsTr("Default survey layer") : qsTr("Survey layer")
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
@@ -76,7 +106,7 @@ Drawer {
             property color secondaryColor: InputStyle.fontColor
             width: listView.cellWidth
             // first item in the model is "none" layer
-            height: index === 0 || !isVector ? 0 : listView.cellHeight
+            height: (stateManager.state !== "setup" && index === 0) || (__layersModel.defaultLayerIndex === 0 && index === 0) || !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
@@ -86,16 +116,23 @@ Drawer {
                 onClicked: {
                     layerPanel.activeLayerIndex = index
                     layerPanel.visible = false
-                    layerPanel.layerSettingChanged()
+                    if (stateManager.state === "record") {
+                        layerPanel.layerSettingChanged()
+                    } else if (stateManager.state === "setup") {
+                        __layersModel.defaultLayerIndex = index
+                    }
                 }
             }
 
             ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-                contentText: name
+                contentText: index === 0 ? "Clear default survey layer setting" : name
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
+                highlight: __layersModel.defaultLayerIndex === index
+                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
+                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
             }
         }
 
