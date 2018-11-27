@@ -79,7 +79,7 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
       case isReadOnly:
         return false;
       case IconSource:
-        return QVariant();
+        return QVariant("no.svg");
       case VectorLayer:
         return QVariant::fromValue<QgsVectorLayer*>( nullptr );
     }
@@ -152,4 +152,15 @@ int LayersModel::rowCount(const QModelIndex &parent) const {
 
 QList<QgsMapLayer*> LayersModel::layers() const {
     return mLayers;
+}
+
+int LayersModel::defaultLayerIndex() const {
+    return mDefaultLayerIndex;
+}
+
+void LayersModel::setDefaultLayerIndex(int index) {
+    if (index != mDefaultLayerIndex) {
+        mDefaultLayerIndex = index;
+        emit defaultLayerIndexChanged();
+    }
 }

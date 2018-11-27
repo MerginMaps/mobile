@@ -10,7 +10,10 @@ Popup {
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: InputStyle.rowHeight
     property string defaultProject: "<none>"
+    property string defaultLayer: "<none>"
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
+
+    signal defaultLayerClicked()
 
 
     id: settingsPanel
@@ -28,7 +31,7 @@ Popup {
         width: parent.width
         color: InputStyle.clrPanelMain
         rowHeight: InputStyle.rowHeightHeader
-        titleText: "Settings"
+        titleText: qsTr("Settings")
 
         onBack: settingsPanel.close()
     }
@@ -49,20 +52,32 @@ Popup {
             anchors.fill: parent
             spacing: 1
 
+            // Header "Start app with"
             PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: "Start app with"
+                text: qsTr("Start app with")
                 bold: true
             }
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: settingsPanel.defaultProject
+                text: qsTr("Default project") + ": " + settingsPanel.defaultProject
             }
 
             PanelItem {
+                color: InputStyle.clrPanelMain
+                text: qsTr("Default survey layer") + ": " + settingsPanel.defaultLayer
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: settingsPanel.defaultLayerClicked()
+                }
+            }
+
+             // Header "GPS SETTINGS"
+            PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: "GPS SETTINGS"
+                text: qsTr("GPS SETTINGS")
                 bold: true
             }
 
@@ -70,7 +85,7 @@ Popup {
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
-                text: "Follow GPS with map"
+                text: qsTr("Follow GPS with map")
 
                 Switch {
                     anchors.margins: 0
@@ -89,7 +104,7 @@ Popup {
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
-                text: "GPS accuracy"
+                text: qsTr("GPS accuracy")
 
                 Row {
                     id: widget
@@ -138,7 +153,7 @@ Popup {
                 id: panelItem
                 height: settingsPanel.rowHeight
                 width: parent.width
-                text: "Acceptable GPS accuracy"
+                text: qsTr("Acceptable GPS accuracy")
 
                 SpinBox {
                     id: gpsAccuracySpin

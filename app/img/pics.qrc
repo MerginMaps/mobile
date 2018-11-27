@@ -23,5 +23,6 @@
         <file>gps_direction.svg</file>
         <file>gps_marker_no_position.svg</file>
         <file>gps_marker_position.svg</file>
+        <file>no.svg</file>
     </qresource>
 </RCC>

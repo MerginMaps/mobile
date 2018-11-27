@@ -23,8 +23,23 @@ ApplicationWindow {
                 )
     }
 
+    function saveRecordedFeature(pair) {
+        if (pair.valid) {
+            highlight.featureLayerPair = pair
+            featurePanel.show_panel(pair, "Add", "form")
+        } else {
+            popup.text = "Recording feature is not valid"
+            popup.open()
+        }
+    }
+
     function recordFeature() {
-        var layer = activeLayerPanel.activeVectorLayer
+        var layer = undefined
+        if (__layersModel.defaultLayerIndex) {
+            layer = __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.VectorLayer)
+        } else {
+            layer = activeLayerPanel.activeVectorLayer
+        }
         if (!layer)
         {
             // nothing to do with no active layer
@@ -33,8 +48,7 @@ ApplicationWindow {
             if (digitizing.recording) {
                 digitizing.stopRecording()
                 var pair = digitizing.lineFeature()
-                highlight.featureLayerPair = pair
-                featurePanel.show_panel(pair, "Add", "form")
+                saveRecordedFeature(pair)
             }
             else {
                 digitizing.startRecording()
@@ -43,8 +57,7 @@ ApplicationWindow {
         else {
             // assuming layer with point geometry
             var pair = digitizing.pointFeature()
-            highlight.featureLayerPair = pair
-            featurePanel.show_panel(pair, "Add", "form")
+            saveRecordedFeature(pair)
         }
     }
 
@@ -106,10 +119,12 @@ ApplicationWindow {
       height: window.height
       width: window.width
       rowHeight: InputStyle.rowHeight
-
-      defaultProject: openProjectPanel.activeProjectName
       z: zPanel   // make sure items from here are on top of the Z-order
 
+      defaultProject: openProjectPanel.activeProjectName
+      defaultLayer: activeLayerPanel.activeLayerName
+
+      onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       onGpsAccuracyToleranceChanged: {
         mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
       }
@@ -158,7 +173,8 @@ ApplicationWindow {
         gpsAccuracy: positionKit.accuracy
 
         onOpenProjectClicked: openProjectPanel.visible = true
-        onOpenLayersClicked: activeLayerPanel.visible = true
+        onOpenLayersClicked: activeLayerPanel.openPanel("record")
+        onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
@@ -236,7 +252,6 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
-            console.log("onLayerSettingChanged")
             recordFeature()
         }
     }
