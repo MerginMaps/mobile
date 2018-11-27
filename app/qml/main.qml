@@ -162,9 +162,7 @@ ApplicationWindow {
     Connections {
         target: digitizing.recordingFeatureModel
         onFeatureLayerPairChanged: {
-            if (!highlight.visible) {
-                highlight.visible = true
-            }
+            highlight.visible = true
             highlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
         }
     }
