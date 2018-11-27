@@ -114,7 +114,7 @@ Popup {
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
             property bool highlight: if (stateManager.state === "setup") {
-                                         path === __projectsModel.defaultPath ? true : false
+                                         path === __projectsModel.defaultProjectPath ? true : false
                                      } else {
                                          index === activeProjectIndex ? true : false
                                      }
@@ -127,11 +127,11 @@ Popup {
                 onClicked: {
                     // TODO reset default survey layer after changing projects
                     // Rather use connections and QSettings to save state
-                    if (projectsPanel.activeProjectIndex != index) {
+                    if (projectsPanel.defaultProjectIndex != index) {
                         __layersModel.defaultLayerIndex = 0
                     }
                     if (stateManager.state === "setup") {
-                        __projectsModel.defaultPath = path ? path : ""
+                        __projectsModel.defaultProjectPath = path ? path : ""
                     } else {
                         projectsPanel.activeProjectIndex = index
                     }

@@ -66,7 +66,7 @@ ApplicationWindow {
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
-        console.log("Completed Running!", __projectsModel.defaultIndex)
+        console.log("Completed Running!")
     }
 
     QgsQuick.MapCanvas {

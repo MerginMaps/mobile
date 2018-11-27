@@ -31,7 +31,7 @@ class ProjectModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY( QString dataDir READ dataDir) // never changes
     Q_PROPERTY( int defaultIndex READ defaultIndex WRITE setDefaultIndex NOTIFY defaultIndexChanged )
-    Q_PROPERTY( QString defaultPath READ defaultProjectPath WRITE setDefaultProjectPath NOTIFY defaultProjectPathChanged )
+    Q_PROPERTY( QString defaultProjectPath READ defaultProjectPath WRITE setDefaultProjectPath NOTIFY defaultProjectPathChanged )
 
 
   public:
