@@ -51,11 +51,20 @@ void ProjectModel::findProjectFiles() {
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
   int row = index.row();
-  if (row < 0 || row > mProjectFiles.count())
+  if (row < 0 || row > mProjectFiles.count() + 1)
       return QVariant("");
 
+  if (row == 0) {
+      switch ( role )
+      {
+      case Name:
+          return "(none)";
+      }
+      return QVariant();
+  }
+
   // TODO should be moved to index() ?
-  const ProjectFile& projectFile = mProjectFiles.at(row);
+  const ProjectFile& projectFile = mProjectFiles.at(row - 1);
 
   switch ( role )
   {
@@ -90,3 +99,16 @@ int ProjectModel::rowCount(const QModelIndex &parent) const {
 QString ProjectModel::dataDir() const {
     return mDataDir;
 }
+
+
+int ProjectModel::defaultIndex() const {
+    return mDefaultIndex;
+}
+
+void ProjectModel::setDefaultIndex(int index) {
+    if (index != mDefaultIndex) {
+        mDefaultIndex = index;
+        emit defaultIndexChanged();
+    }
+}
+

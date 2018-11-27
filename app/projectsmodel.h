@@ -30,6 +30,8 @@ class ProjectModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QString dataDir READ dataDir) // never changes
+    Q_PROPERTY( int defaultIndex READ defaultIndex WRITE setDefaultIndex NOTIFY defaultIndexChanged )
+
 
   public:
     enum Roles
@@ -54,6 +56,12 @@ class ProjectModel : public QAbstractListModel
 
     QString dataDir() const;
 
+    int defaultIndex() const;
+    void setDefaultIndex(int index);
+
+  signals:
+    void defaultIndexChanged();
+
   private:
     void findProjectFiles();
 
@@ -70,6 +78,7 @@ class ProjectModel : public QAbstractListModel
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;
     const int mMaxShortNameChars = 10;
+    int mDefaultIndex = 2; // set to "none" project
 
 };
 

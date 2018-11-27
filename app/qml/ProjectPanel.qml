@@ -8,11 +8,22 @@ import "."  // import InputStyle singleton
 
 Popup {
 
+    property alias state: stateManager.state
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
+    property string defaultProjectName: __projectsModel.data(__projectsModel.index(__projectsModel.defaultIndex), ProjectModel.Name)
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
+
+    function openPanel(state) {
+        projectsPanel.state = state
+        if (state === "view") {
+            // overwrite -> resets activeIndex according default
+            activeProjectIndex = projectsPanel.defaultIndex
+        }
+        projectsPanel.visible = true
+    }
 
     Component.onCompleted: {
         // load model just after all components are prepared
@@ -30,13 +41,30 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
+    Connections {
+      target: __projectsModel
+      onDefaultIndexChanged: activeProjectIndex = __projectsModel.defaultIndex
+    }
+
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "setup"
+            },
+            State {
+                name: "view"
+            }
+        ]
+    }
+
     PanelHeader {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
         color: InputStyle.clrPanelMain
         rowHeight: InputStyle.rowHeightHeader
-        titleText: "Projects"
+        titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
 
         onBack: projectsPanel.close()
     }
@@ -95,7 +123,7 @@ Popup {
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
             width: grid.cellWidth
-            height: grid.cellHeight
+            height: (stateManager.state !== "setup" && index === 0) || (__projectsModel.defaultProjectIndex === 0 && index === 0) ? 0 : grid.cellHeight //grid.cellHeight
             color:index === activeProjectIndex ? itemContainer.secondaryColor : itemContainer.primaryColor
 
             MouseArea {

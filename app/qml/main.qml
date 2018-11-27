@@ -124,6 +124,7 @@ ApplicationWindow {
       defaultProject: openProjectPanel.activeProjectName
       defaultLayer: activeLayerPanel.activeLayerName
 
+	  onDefaultProjectClicked: openProjectPanel.openPanel("setup")	
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       onGpsAccuracyToleranceChanged: {
         mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
@@ -172,7 +173,7 @@ ApplicationWindow {
         gpsAccuracyTolerance: settingsPanel.gpsAccuracy
         gpsAccuracy: positionKit.accuracy
 
-        onOpenProjectClicked: openProjectPanel.visible = true
+        onOpenProjectClicked: openProjectPanel.openPanel("view")
         onOpenLayersClicked: activeLayerPanel.openPanel("record")
         onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true

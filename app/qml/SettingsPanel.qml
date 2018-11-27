@@ -13,9 +13,9 @@ Popup {
     property string defaultLayer: "<none>"
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
-    signal defaultLayerClicked()
-
-
+    signal defaultProjectClicked()
+	signal defaultLayerClicked()
+    
     id: settingsPanel
     visible: false
     padding: 0
@@ -62,6 +62,10 @@ Popup {
             PanelItem {
                 color: InputStyle.clrPanelMain
                 text: qsTr("Default project") + ": " + settingsPanel.defaultProject
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: settingsPanel.defaultProjectClicked()
+                }
             }
 
             PanelItem {
