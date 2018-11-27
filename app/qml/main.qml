@@ -282,6 +282,8 @@ ApplicationWindow {
         previewHeight: window.height/3
         project: __loader.project
         z: zPanel
+
+        onVisibleChanged: highlight.visible = visible
     }
 
 }
