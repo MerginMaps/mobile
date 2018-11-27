@@ -212,7 +212,7 @@ ApplicationWindow {
 
     ScaleBar {
         id: scaleBar
-        height: window.height * 0.05 // scalable just according device pixel height
+        height: InputStyle.scaleBarHeight
         y: window.height - height - mainPanel.height - InputStyle.panelMargin
         mapSettings: mapCanvas.mapSettings
         preferredWidth: Math.min(window.width, 180 * QgsQuick.Utils.dp)

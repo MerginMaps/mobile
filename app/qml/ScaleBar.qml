@@ -37,7 +37,7 @@ Item {
             id: text
             text: barText
             color: barColor
-            font.pixelSize: scaleBar.height * 0.4
+            font.pixelSize: InputStyle.fontPixelSizeSmall
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop
