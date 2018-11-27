@@ -250,23 +250,19 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
 
-  // Set Device Pixels
 #ifdef ANDROID
-  //float dp = calculateDevicePixels();
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
   engine.rootContext()->setContextProperty( "__appwindowwidth", 0);
   engine.rootContext()->setContextProperty( "__appwindowheight", 0);
 #else
-
-
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed");
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 1217 );
-  engine.rootContext()->setContextProperty( "__appwindowheight", 800 );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
+  engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
 
   // Set simulated position for desktop builds
 #ifndef ANDROID
-  bool use_simulated_position = false;
+  bool use_simulated_position = true;
 #else
   bool use_simulated_position = false;
 #endif
