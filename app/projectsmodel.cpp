@@ -109,14 +109,36 @@ int ProjectModel::defaultIndex() const {
 void ProjectModel::setDefaultIndex(int index) {
     if (index != mDefaultIndex) {
         mDefaultIndex = index;
+        emit defaultIndexChanged();
+    }
+}
 
+int ProjectModel::defaultIndexAccordingPath(QString path) const
+{
+    int i = 1; // starting from 1 since 0 is none
+    for (ProjectFile prj: mProjectFiles) {
+        if (prj.path == path) {
+             return i;
+        }
+        i++;
+    }
+    return 0;
+}
+
+QString ProjectModel::defaultProjectPath() const {
+    return mDefaultProjectPath;
+}
+
+void ProjectModel::setDefaultProjectPath( QString path ) {
+    if (path != mDefaultProjectPath) {
         QSettings settings;
         settings.beginGroup("inputApp");
-        settings.setValue("defaultProjectIndex", mDefaultIndex);
-        // TODO default project name
+        settings.setValue("defaultProjectPath", path);
         settings.endGroup();
 
-        emit defaultIndexChanged();
+        mDefaultProjectPath = path;
+        setDefaultIndex(defaultIndexAccordingPath(mDefaultProjectPath));
+        emit defaultProjectPathChanged();
     }
 }
 

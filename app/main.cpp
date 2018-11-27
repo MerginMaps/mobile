@@ -272,6 +272,18 @@ int main(int argc, char *argv[])
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
+  // Set up the QSettings environment must be done after qapp is created
+  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
+  QCoreApplication::setApplicationName( "Input" );
+  QCoreApplication::setApplicationVersion("0.1");
+
+  QSettings settings;
+  settings.beginGroup("inputApp");
+  QString path = settings.value("defaultProjectPath","").toString();
+  pm.setDefaultProjectPath(path);
+  settings.endGroup();
+
   QQmlComponent component(&engine, QUrl("qrc:/main.qml"));
   QObject *object = component.create();
 
@@ -299,18 +311,6 @@ int main(int argc, char *argv[])
     quickWindow->setIcon(QIcon(":/logo.png"));
   }
 
-  // Set up the QSettings environment must be done after qapp is created
-  QCoreApplication::setOrganizationName( "Lutra Consulting" );
-  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
-  QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion("0.1");
-
-  QSettings settings;
-  settings.beginGroup("inputApp");
-  QVariant defaultIndex = settings.value("defaultProjectIndex", 0);
-  pm.setDefaultIndex(defaultIndex.toInt());
-  // TODO default project name
-  settings.endGroup();
 
   #ifndef ANDROID
   QCommandLineParser parser;

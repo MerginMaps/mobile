@@ -18,10 +18,6 @@ Popup {
 
     function openPanel(state) {
         projectsPanel.state = state
-        if (state === "view") {
-            // overwrite -> resets activeIndex according default
-            activeProjectIndex = projectsPanel.defaultIndex
-        }
         projectsPanel.visible = true
     }
 
@@ -39,11 +35,6 @@ Popup {
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
-    }
-
-    Connections {
-      target: __projectsModel
-      onDefaultIndexChanged: projectsPanel.activeProjectIndex = __projectsModel.defaultIndex
     }
 
     Item {
@@ -122,9 +113,14 @@ Popup {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
+            property bool highlight: if (stateManager.state === "setup") {
+                                         path === __projectsModel.defaultPath ? true : false
+                                     } else {
+                                         index === activeProjectIndex ? true : false
+                                     }
             width: grid.cellWidth
-            height: (stateManager.state !== "setup" && index === 0) || (__projectsModel.defaultProjectIndex === 0 && index === 0) ? 0 : grid.cellHeight //grid.cellHeight
-            color:index === activeProjectIndex ? itemContainer.secondaryColor : itemContainer.primaryColor
+            height: (stateManager.state !== "setup" && index === 0) || (__projectsModel.defaultProjectIndex === 0 && index === 0) ? 0 : grid.cellHeight
+            color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -135,7 +131,7 @@ Popup {
                         __layersModel.defaultLayerIndex = 0
                     }
                     if (stateManager.state === "setup") {
-                        __projectsModel.defaultIndex = index
+                        __projectsModel.defaultPath = path ? path : ""
                     } else {
                         projectsPanel.activeProjectIndex = index
                     }
@@ -143,9 +139,18 @@ Popup {
                 }
             }
 
+            ExtendedMenuItem {
+                contentText: "Unselect default project"
+                imageSource: "no.svg"
+                rowHeight: grid.cellHeight
+                panelMargin: 0
+                visible: index === 0
+            }
+
             Item {
                 width: parent.width
                 height: parent.height
+                visible: index !== 0
 
                 RowLayout {
                     id: row
@@ -170,7 +175,7 @@ Popup {
                         ColorOverlay {
                             anchors.fill: icon
                             source: icon
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                         }
 
                     }
@@ -182,11 +187,11 @@ Popup {
                         width: grid.cellWidth - (grid.cellHeight * 2)
                         Text {
                             id: mainText
-                            text: name
+                            text: index === 0 ? qsTr("Deselect default projects") : name
                             height: textContainer.height/2
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             font.weight: Font.Bold
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignBottom
                         }
@@ -199,7 +204,7 @@ Popup {
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
                             font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
+                            color: itemContainer.highlight ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }

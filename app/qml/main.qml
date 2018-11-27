@@ -62,11 +62,11 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        (__projectsModel.defaultIndex === 0) ? openProjectPanel.open("show") : openProjectPanel.activeProjectIndex = __projectsModel.defaultIndex
+        (__projectsModel.defaultIndex === 0) ? openProjectPanel.openPanel("show") : openProjectPanel.activeProjectIndex = __projectsModel.defaultIndex
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
-        console.log("Completed Running!")
+        console.log("Completed Running!", __projectsModel.defaultIndex)
     }
 
     QgsQuick.MapCanvas {
@@ -120,7 +120,7 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      defaultProject: openProjectPanel.activeProjectName
+      defaultProject: openProjectPanel.defaultProjectName
       defaultLayer: activeLayerPanel.activeLayerName
 
 	  onDefaultProjectClicked: openProjectPanel.openPanel("setup")	

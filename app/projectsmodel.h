@@ -31,6 +31,7 @@ class ProjectModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY( QString dataDir READ dataDir) // never changes
     Q_PROPERTY( int defaultIndex READ defaultIndex WRITE setDefaultIndex NOTIFY defaultIndexChanged )
+    Q_PROPERTY( QString defaultPath READ defaultProjectPath WRITE setDefaultProjectPath NOTIFY defaultProjectPathChanged )
 
 
   public:
@@ -59,8 +60,14 @@ class ProjectModel : public QAbstractListModel
     int defaultIndex() const;
     void setDefaultIndex(int index);
 
+    Q_INVOKABLE int defaultIndexAccordingPath( QString path ) const;
+
+    QString defaultProjectPath() const;
+    void setDefaultProjectPath(QString path);
+
   signals:
     void defaultIndexChanged();
+    void defaultProjectPathChanged();
 
   private:
     void findProjectFiles();
@@ -78,7 +85,8 @@ class ProjectModel : public QAbstractListModel
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;
     const int mMaxShortNameChars = 10;
-    int mDefaultIndex = 2; // set to "none" project
+    QString mDefaultProjectPath = QString("");
+    int mDefaultIndex = 0; // set to "none" project
 
 };
 
