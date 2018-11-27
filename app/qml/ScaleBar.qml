@@ -37,7 +37,7 @@ Item {
             id: text
             text: barText
             color: barColor
-            font.pixelSize: QgsQuick.Utils.dp * scaleBar.height/4
+            font.pixelSize: scaleBar.height * 0.4
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop
