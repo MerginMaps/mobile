@@ -62,8 +62,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        openProjectPanel.activeProjectIndex = 0;
-        //openProjectPanel.visible = true
+        (__projectsModel.defaultIndex === 0) ? openProjectPanel.open("show") : openProjectPanel.activeProjectIndex = __projectsModel.defaultIndex
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height

@@ -19,6 +19,7 @@
 #include <QDirIterator>
 #include <QDebug>
 #include <QDateTime>
+#include <QSettings>
 
 ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
   : QAbstractListModel( parent )
@@ -108,6 +109,13 @@ int ProjectModel::defaultIndex() const {
 void ProjectModel::setDefaultIndex(int index) {
     if (index != mDefaultIndex) {
         mDefaultIndex = index;
+
+        QSettings settings;
+        settings.beginGroup("inputApp");
+        settings.setValue("defaultProjectIndex", mDefaultIndex);
+        // TODO default project name
+        settings.endGroup();
+
         emit defaultIndexChanged();
     }
 }

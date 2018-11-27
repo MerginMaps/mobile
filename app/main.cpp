@@ -305,6 +305,13 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion("0.1");
 
+  QSettings settings;
+  settings.beginGroup("inputApp");
+  QVariant defaultIndex = settings.value("defaultProjectIndex", 0);
+  pm.setDefaultIndex(defaultIndex.toInt());
+  // TODO default project name
+  settings.endGroup();
+
   #ifndef ANDROID
   QCommandLineParser parser;
   parser.addVersionOption();

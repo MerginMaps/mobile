@@ -43,7 +43,7 @@ Popup {
 
     Connections {
       target: __projectsModel
-      onDefaultIndexChanged: activeProjectIndex = __projectsModel.defaultIndex
+      onDefaultIndexChanged: projectsPanel.activeProjectIndex = __projectsModel.defaultIndex
     }
 
     Item {
@@ -134,7 +134,11 @@ Popup {
                     if (projectsPanel.activeProjectIndex != index) {
                         __layersModel.defaultLayerIndex = 0
                     }
-                    projectsPanel.activeProjectIndex = index
+                    if (stateManager.state === "setup") {
+                        __projectsModel.defaultIndex = index
+                    } else {
+                        projectsPanel.activeProjectIndex = index
+                    }
                     projectsPanel.visible = false
                 }
             }
