@@ -158,6 +158,15 @@ ApplicationWindow {
         layer: activeLayerPanel.activeVectorLayer
     }
 
+    // Highlighting a new feature while digitizing
+    Connections {
+        target: digitizing.recordingFeatureModel
+        onFeatureLayerPairChanged: {
+            highlight.visible = true
+            highlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+        }
+    }
+
     MainPanel {
         id: mainPanel
         width: window.width
@@ -187,6 +196,12 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
+            if (!positionKit.hasPosition) {
+                popup.text = qsTr("The GPS is currently not available")
+                popup.open()
+                return // leaving when no gps is available
+            }
+
             if (digitizing.recording) {
                 recordFeature()
             } else {
@@ -282,6 +297,8 @@ ApplicationWindow {
         previewHeight: window.height/3
         project: __loader.project
         z: zPanel
+
+        onVisibleChanged: highlight.visible = visible
     }
 
 }
