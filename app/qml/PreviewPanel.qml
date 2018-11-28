@@ -109,11 +109,11 @@ Item {
                            Text {
                                id: fieldName
                                text: Name + ":"
-                               width: parent.width/4
+                               width: root.width/2
                                height: root.height
                                font.pixelSize: InputStyle.fontPixelSizeNormal
                                color: InputStyle.fontColorBright
-                               clip: true
+                               elide: Text.ElideLeft
                            }
 
                            Text {
@@ -127,6 +127,7 @@ Item {
                                height: root.height
                                font.pixelSize: InputStyle.fontPixelSizeNormal
                                color: InputStyle.fontColor
+                               elide: Text.ElideLeft
                            }
                        }
                    }

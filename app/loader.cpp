@@ -59,13 +59,13 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
     QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
     QString mapTip = pair.layer()->mapTipTemplate();
 
+    int LIMIT = 2;
     if (mapTip.isEmpty()) {
-        int LIMIT = 2;
         QStringList fields;
         for (QgsField field: pair.layer()->fields()) {
             fields << field.name();
-            if (fields.length() >= LIMIT) return fields;
+            if (fields.length() == LIMIT) return fields;
         }
     }
-    return mapTip.split("\n");
+    return mapTip.split("\n").mid(0, LIMIT);
 }
