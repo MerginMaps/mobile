@@ -22,5 +22,6 @@ Rectangle {
         color: InputStyle.fontColor
         font.bold: bold
         font.pixelSize: InputStyle.fontPixelSizeNormal
+        elide: Text.ElideLeft
     }
 }
