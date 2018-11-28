@@ -14,6 +14,11 @@ Popup {
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
+    function openPanel(state) {
+        stateManager.state = state
+        projectsPanel.visible = true
+    }
+
     Component.onCompleted: {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
@@ -30,13 +35,25 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "setup"
+            },
+            State {
+                name: "view"
+            }
+        ]
+    }
+
     PanelHeader {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
         color: InputStyle.clrPanelMain
         rowHeight: InputStyle.rowHeightHeader
-        titleText: "Projects"
+        titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
 
         onBack: projectsPanel.close()
     }
@@ -72,6 +89,28 @@ Popup {
             }
         }
 
+        // TODO: must be wrapped in item due to ColumnLayout
+        Item {
+            height: InputStyle.rowHeight
+            width: parent.width
+
+            ExtendedMenuItem {
+                contentText: "Unselect default project"
+                imageSource: "no.svg"
+                panelMargin: 0
+                visible: __appSettings.defaultProject
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        __appSettings.defaultProject = ""
+                        projectsPanel.close()
+                    }
+                }
+            }
+        }
+
+
         ListView {
             id: grid
             Layout.fillWidth: true
@@ -101,12 +140,21 @@ Popup {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    // TODO reset default survey layer after changing projects
-                    // Rather use connections and QSettings to save state
-                    if (projectsPanel.activeProjectIndex != index) {
-                        __layersModel.defaultLayerIndex = 0
+                    if (stateManager.state === "setup") {
+                        //__appSettings.defaultProject
+                        console.log("Setting project to ", path)
+                        __appSettings.defaultProject = path ? path : ""
                     }
-                    projectsPanel.activeProjectIndex = index
+
+                    else if (stateManager.state === "view") {
+                        // TODO reset default survey layer after changing projects
+                        // Rather use connections and QSettings to save state
+                        if (projectsPanel.activeProjectIndex != index) {
+                            __layersModel.defaultLayerIndex = 0
+                        }
+                        projectsPanel.activeProjectIndex = index
+                    }
+
                     projectsPanel.visible = false
                 }
             }
