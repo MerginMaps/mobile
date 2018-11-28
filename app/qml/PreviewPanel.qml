@@ -113,6 +113,7 @@ Item {
                                height: root.height
                                font.pixelSize: InputStyle.fontPixelSizeNormal
                                color: InputStyle.fontColorBright
+                               clip: true
                            }
 
                            Text {
@@ -122,6 +123,7 @@ Item {
                                anchors.right: parent.right
                                anchors.bottom: parent.bottom
                                anchors.top: parent.top
+                               anchors.leftMargin: InputStyle.panelMargin
                                height: root.height
                                font.pixelSize: InputStyle.fontPixelSizeNormal
                                color: InputStyle.fontColor
