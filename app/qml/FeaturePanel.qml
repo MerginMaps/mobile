@@ -56,7 +56,7 @@ Drawer {
         if (panelState === "preview") {
             var index = currentAttributeModel.index(0, 0)
             previewPanel.title = currentAttributeModel.data(index, QgsQuick.AttributeFormModel.Name)
-
+            previewPanel.contentText = __loader.mapTip(feature)
         }
         stateManager.state = panelState
     }

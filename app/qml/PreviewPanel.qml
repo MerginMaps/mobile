@@ -10,6 +10,7 @@ Item {
 
     property alias titleBorder: titleBorder
     property string title: ""
+    property string contentText: ""
 
     signal contentClicked()
 
@@ -27,6 +28,7 @@ Item {
             anchors.margins: InputStyle.panelMargin
 
             Item {
+                id: header
                 width: parent.width
                 height: previewPanel.rowHeight
 
@@ -77,6 +79,19 @@ Item {
                     height: 1
                     color: InputStyle.fontColor
                     anchors.bottom: title.bottom
+                }
+
+            }
+
+            Item {
+                id: content
+                width: parent.width
+                anchors.top: header.bottom
+                anchors.bottom: parent.bottom
+
+                Text {
+                    textFormat: Text.RichText
+                    text: contentText
                 }
 
             }
