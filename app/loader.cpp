@@ -54,23 +54,18 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
     mapSettings->setExtent(extent);
 }
 
-QString Loader::mapTip(QgsQuickFeatureLayerPair pair)
+QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 {
     QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
     QString mapTip = pair.layer()->mapTipTemplate();
-    QString tipString;
-    QgsExpression exp( pair.layer()->displayExpression() );
-    QgsFeature feature = pair.featureRef();
 
-    context.setFeature( feature );
-    if ( !mapTip.isEmpty() )
-    {
-        tipString = QgsExpression::replaceExpressionText( mapTip, &context );
+    if (mapTip.isEmpty()) {
+        int LIMIT = 2;
+        QStringList fields;
+        for (QgsField field: pair.layer()->fields()) {
+            fields << field.name();
+            if (fields.length() >= LIMIT) return fields;
+        }
     }
-    else
-    {
-        tipString = exp.evaluate( &context ).toString();
-    }
-
-    return tipString;
+    return mapTip.split("\n");
 }

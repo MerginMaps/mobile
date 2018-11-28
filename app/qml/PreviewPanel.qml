@@ -2,15 +2,18 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
+import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Item {
     id: previewPanel
     property real rowHeight: InputStyle.rowHeight
+    property QgsQuick.AttributeFormModel model
 
     property alias titleBorder: titleBorder
     property string title: ""
     property string contentText: ""
+    property variant previewFields: [];
 
     signal contentClicked()
 
@@ -88,6 +91,43 @@ Item {
                 width: parent.width
                 anchors.top: header.bottom
                 anchors.bottom: parent.bottom
+
+                ListView {
+                       model: previewPanel.model
+                       anchors.fill: parent
+                       spacing: 5
+
+                       delegate: Item {
+                           id: root
+                           width: parent.width
+                           height: {
+                               console.log(Name, previewFields.indexOf(Name) >= 0)
+                               previewFields.indexOf(Name) >= 0 ? previewPanel.rowHeight/2 : 0
+                           }
+                           visible: height
+
+                           Text {
+                               id: fieldName
+                               text: Name + ":"
+                               width: parent.width/4
+                               height: root.height
+                               font.pixelSize: InputStyle.fontPixelSizeNormal
+                               color: InputStyle.fontColorBright
+                           }
+
+                           Text {
+                               id: text2
+                               text: AttributeValue
+                               anchors.left: fieldName.right
+                               anchors.right: parent.right
+                               anchors.bottom: parent.bottom
+                               anchors.top: parent.top
+                               height: root.height
+                               font.pixelSize: InputStyle.fontPixelSizeNormal
+                               color: InputStyle.fontColor
+                           }
+                       }
+                   }
 
                 Text {
                     textFormat: Text.RichText
