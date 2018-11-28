@@ -133,9 +133,17 @@ Popup {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
+            property bool highlight: {
+                if (stateManager.state === "setup") {
+                    return path === __appSettings.defaultProject ? true : false
+                } else {
+                    return index === activeProjectIndex ? true : false
+                }
+            }
+
             width: grid.cellWidth
             height: grid.cellHeight
-            color:index === activeProjectIndex ? itemContainer.secondaryColor : itemContainer.primaryColor
+            color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -186,7 +194,7 @@ Popup {
                         ColorOverlay {
                             anchors.fill: icon
                             source: icon
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                         }
 
                     }
@@ -202,7 +210,7 @@ Popup {
                             height: textContainer.height/2
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             font.weight: Font.Bold
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignBottom
                         }
@@ -215,7 +223,7 @@ Popup {
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
                             font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
+                            color: itemContainer.highlight ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }
@@ -240,7 +248,7 @@ Popup {
                             height: textContainer.height/2
                             font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
