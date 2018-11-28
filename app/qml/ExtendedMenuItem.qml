@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.2
 import "."  // import InputStyle singleton
 
-Rectangle {
+Item {
     id: root
     property string contentText: ""
     property string imageSource: ""
@@ -11,11 +11,13 @@ Rectangle {
     property real panelMargin: InputStyle.panelMargin
     property bool overlayImage: true
     property bool highlight: false
+    property bool showBorder: true
+
     property color fontColor: InputStyle.fontColor
     property color panelColor: InputStyle.clrPanelMain
+    property color highlightColor: InputStyle.fontColorBright
 
     anchors.fill: parent
-    color: panelColor
 
     Item {
         id: row
@@ -41,7 +43,7 @@ Rectangle {
             ColorOverlay {
                 anchors.fill: icon
                 source: icon
-                color: root.fontColor
+                color: root.highlight ? root.panelColor : root.fontColor
                 visible: overlayImage
             }
         }
@@ -61,7 +63,7 @@ Rectangle {
 
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 font.weight: Font.Bold
-                color: root.fontColor
+                color: root.highlight ? root.panelColor : root.fontColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
             }
@@ -70,9 +72,10 @@ Rectangle {
 
     Rectangle {
         id: borderLine
-        color: root.fontColor
+        color: root.highlightColor
         width: row.width
         height: 1
+        visible: root.showBorder
         anchors.bottom: parent.bottom
     }
 }

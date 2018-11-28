@@ -103,13 +103,14 @@ Drawer {
         Rectangle {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColor
+            property color secondaryColor: InputStyle.fontColorBright
             width: listView.cellWidth
             // first item in the model is "none" layer
             height: (stateManager.state !== "setup" && index === 0) || (__layersModel.defaultLayerIndex === 0 && index === 0) || !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
+            color: item.highlight ? secondaryColor : primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -125,14 +126,14 @@ Drawer {
             }
 
             ExtendedMenuItem {
+                id: item
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-                contentText: index === 0 ? "Clear default survey layer setting" : name
+                contentText: index === 0 ? "Clear default survey layer setting" : (name ? name : "")
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
                 highlight: __layersModel.defaultLayerIndex === index
-                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
-                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
+                showBorder: __layersModel.defaultLayerIndex - 1 !== index
             }
         }
 
