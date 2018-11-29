@@ -58,17 +58,30 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 {
     QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
     QString mapTip = pair.layer()->mapTipTemplate();
-
     int LIMIT = 2;
-    if (mapTip.isEmpty()) {
-        QStringList fields;
+    QStringList previewFields;
+
+    QStringList fields;
+    for (QgsField field: pair.layer()->fields()) {
+        if (pair.layer()->displayField() != field.name()) {
+            fields << field.name();
+        }
+    }
+
+    for  (QString line: mapTip.split("\n")) {
+        if (fields.indexOf(line) != -1) {
+            previewFields << line;
+        }
+        if (previewFields.length() == LIMIT) return previewFields;
+    }
+
+    if (previewFields.empty()) {
         for (QgsField field: pair.layer()->fields()) {
             if (pair.layer()->displayField() != field.name()) {
-                fields << field.name();
+                previewFields << field.name();
             }
-            if (fields.length() == LIMIT) return fields;
+            if (previewFields.length() == LIMIT) return previewFields;
         }
-        return fields;
     }
-    return mapTip.split("\n").mid(0, LIMIT);
+    return previewFields;
 }
