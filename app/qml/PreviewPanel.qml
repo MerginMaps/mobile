@@ -12,8 +12,7 @@ Item {
 
     property alias titleBorder: titleBorder
     property string title: ""
-    property string contentText: ""
-    property variant previewFields: [];
+    property variant previewFields: []
 
     signal contentClicked()
 
@@ -29,6 +28,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             anchors.margins: InputStyle.panelMargin
+            anchors.topMargin: 0
 
             Item {
                 id: header
@@ -62,6 +62,7 @@ Item {
                             id: icon
                             anchors.fill: parent
                             anchors.margins: rowHeight/4
+                            anchors.rightMargin: 0
                             source: "edit.svg"
                             sourceSize.width: width
                             sourceSize.height: height
@@ -83,7 +84,6 @@ Item {
                     color: InputStyle.fontColor
                     anchors.bottom: title.bottom
                 }
-
             }
 
             Item {
@@ -93,54 +93,43 @@ Item {
                 anchors.bottom: parent.bottom
 
                 ListView {
-                       model: previewPanel.model
-                       anchors.fill: parent
-                       spacing: 5
+                    model: previewPanel.model
+                    anchors.fill: parent
+                    anchors.topMargin: InputStyle.panelMargin
+                    spacing: 2 * QgsQuick.Utils.dp
 
-                       delegate: Item {
-                           id: root
-                           width: parent.width
-                           height: {
-                               console.log(Name, previewFields.indexOf(Name) >= 0)
-                               previewFields.indexOf(Name) >= 0 ? previewPanel.rowHeight/2 : 0
-                           }
-                           visible: height
+                    delegate: Item {
+                        id: root
+                        width: parent.width
+                        height:previewFields.indexOf(Name) >= 0 ? previewPanel.rowHeight/2 : 0
+                        visible: height
 
-                           Text {
-                               id: fieldName
-                               text: Name + ":"
-                               width: root.width/2
-                               height: root.height
-                               font.pixelSize: InputStyle.fontPixelSizeNormal
-                               color: InputStyle.fontColorBright
-                               elide: Text.ElideLeft
-                           }
+                        Text {
+                            id: fieldName
+                            text: Name
+                            width: root.width/2
+                            height: root.height
+                            font.pixelSize: InputStyle.fontPixelSizeNormal
+                            color: InputStyle.fontColorBright
+                            elide: Text.ElideRight
+                        }
 
-                           Text {
-                               id: text2
-                               text: AttributeValue
-                               anchors.left: fieldName.right
-                               anchors.right: parent.right
-                               anchors.bottom: parent.bottom
-                               anchors.top: parent.top
-                               anchors.leftMargin: InputStyle.panelMargin
-                               height: root.height
-                               font.pixelSize: InputStyle.fontPixelSizeNormal
-                               color: InputStyle.fontColor
-                               elide: Text.ElideLeft
-                           }
-                       }
-                   }
-
-                Text {
-                    textFormat: Text.RichText
-                    text: contentText
+                        Text {
+                            id: text2
+                            text: AttributeValue
+                            anchors.left: fieldName.right
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.top: parent.top
+                            anchors.leftMargin: InputStyle.panelMargin
+                            height: root.height
+                            font.pixelSize: InputStyle.fontPixelSizeNormal
+                            color: InputStyle.fontColor
+                            elide: Text.ElideRight
+                        }
+                    }
                 }
-
             }
-
         }
-
     }
-
 }

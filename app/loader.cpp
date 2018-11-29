@@ -63,9 +63,12 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
     if (mapTip.isEmpty()) {
         QStringList fields;
         for (QgsField field: pair.layer()->fields()) {
-            fields << field.name();
+            if (pair.layer()->displayField() != field.name()) {
+                fields << field.name();
+            }
             if (fields.length() == LIMIT) return fields;
         }
+        return fields;
     }
     return mapTip.split("\n").mid(0, LIMIT);
 }
