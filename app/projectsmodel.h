@@ -47,6 +47,7 @@ class ProjectModel : public QAbstractListModel
 
     Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE int rowAccordingPath(QString path) const;
 
     QHash<int, QByteArray> roleNames() const override;
 

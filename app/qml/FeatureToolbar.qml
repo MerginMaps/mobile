@@ -92,7 +92,6 @@ Item {
                 imageSource: "yes.svg"
 
                 onActivated: {
-                    console.log("trlala!!! edit button")
                     toolbar.saveClicked()
                 }
             }

@@ -8,9 +8,10 @@ import "."  // import InputStyle singleton
 
 Popup {
 
-    property int activeProjectIndex: -1
+    property int activeProjectIndex: 0
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
+    property string defaultProjectPath: __appSettings.defaultProject
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
@@ -91,14 +92,13 @@ Popup {
 
         // TODO: must be wrapped in item due to ColumnLayout
         Item {
-            height: InputStyle.rowHeight
             width: parent.width
+            implicitHeight:projectsPanel.defaultProjectPath && stateManager.state === "setup" ? InputStyle.rowHeight : 0
 
             ExtendedMenuItem {
                 contentText: "Unselect default project"
                 imageSource: "no.svg"
                 panelMargin: 0
-                visible: __appSettings.defaultProject
 
                 MouseArea {
                     anchors.fill: parent
@@ -137,7 +137,7 @@ Popup {
                 if (stateManager.state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
                 } else {
-                    return index === activeProjectIndex ? true : false
+                    return index === projectsPanel.activeProjectIndex ? true : false
                 }
             }
 
@@ -149,17 +149,10 @@ Popup {
                 anchors.fill: parent
                 onClicked: {
                     if (stateManager.state === "setup") {
-                        //__appSettings.defaultProject
-                        console.log("Setting project to ", path)
                         __appSettings.defaultProject = path ? path : ""
                     }
 
                     else if (stateManager.state === "view") {
-                        // TODO reset default survey layer after changing projects
-                        // Rather use connections and QSettings to save state
-                        if (projectsPanel.activeProjectIndex != index) {
-                            __layersModel.defaultLayerIndex = 0
-                        }
                         projectsPanel.activeProjectIndex = index
                     }
 

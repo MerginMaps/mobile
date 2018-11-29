@@ -10,7 +10,7 @@ Drawer {
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
-    property string defaultLayerName: __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.Name)
+
     property string title: "Survey Layer"
 
     signal layerSettingChanged()
@@ -19,7 +19,7 @@ Drawer {
         activeLayerPanel.state = state
         if (state === "record") {
             // overwrite -> resets activeIndex according default
-            activeLayerIndex = __layersModel.defaultLayerIndex
+            //activeLayerIndex = __layersModel.defaultLayerIndex
 
             if (activeLayerIndex !== 0) {
                 layerPanel.layerSettingChanged()
@@ -105,8 +105,7 @@ Drawer {
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
             width: listView.cellWidth
-            // first item in the model is "none" layer
-            height: (stateManager.state !== "setup" && index === 0) || (__layersModel.defaultLayerIndex === 0 && index === 0) || !isVector ? 0 : listView.cellHeight
+            height: !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
@@ -119,7 +118,7 @@ Drawer {
                     if (stateManager.state === "record") {
                         layerPanel.layerSettingChanged()
                     } else if (stateManager.state === "setup") {
-                        __layersModel.defaultLayerIndex = index
+                        __appSettings.defaultLayer = name
                     }
                 }
             }
@@ -127,12 +126,18 @@ Drawer {
             ExtendedMenuItem {
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
-                contentText: index === 0 ? "Clear default survey layer setting" : name
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: __layersModel.defaultLayerIndex === index
-                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
-                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
+                contentText: name
+                highlight: {
+                    if (stateManager.state === "setup") {
+                        __appSettings.defaultLayer === name
+                    } else {
+                        activeLayerIndex === index
+                    }
+                }
+//                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
+//                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
             }
         }
 

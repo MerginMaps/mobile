@@ -51,10 +51,9 @@ void ProjectModel::findProjectFiles() {
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
   int row = index.row();
-  if (row < 0 || row > mProjectFiles.count())
+  if (row < 0 || row >= mProjectFiles.count())
       return QVariant("");
 
-  // TODO should be moved to index() ?
   const ProjectFile& projectFile = mProjectFiles.at(row);
 
   switch ( role )
@@ -80,6 +79,17 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 
 QModelIndex ProjectModel::index( int row ) const {
     return createIndex(row, 0, nullptr);
+}
+
+int ProjectModel::rowAccordingPath(QString path) const{
+    int i = 0;
+    for (ProjectFile prj: mProjectFiles) {
+        if (prj.path == path) {
+             return i;
+        }
+        i++;
+    }
+    return -1;
 }
 
 int ProjectModel::rowCount(const QModelIndex &parent) const {

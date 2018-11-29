@@ -62,8 +62,13 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        openProjectPanel.activeProjectIndex = 0;
+        // TODO
         //openProjectPanel.visible = true
+        var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
+        var defaultIndex = __projectsModel.rowAccordingPath(path);
+        openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
+        __loader.load(path);
+
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
@@ -120,8 +125,6 @@ ApplicationWindow {
       width: window.width
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
-
-      defaultLayer: activeLayerPanel.activeLayerName
 
       onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
@@ -253,10 +256,7 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
-        onActiveProjectPathChanged: {
-            __loader.load(activeProjectPath);
-            activeLayerPanel.activeLayerIndex = 0
-        }
+        onActiveProjectPathChanged:__loader.load(openProjectPanel.activeProjectPath)
     }
 
     ActiveLayerPanel {

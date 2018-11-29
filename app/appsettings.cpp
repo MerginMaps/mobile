@@ -21,6 +21,7 @@ QString AppSettings::defaultLayer() const
     return mDefaultLayers.value(mDefaultProject);
 }
 
+// TODO why settip up twice to QSettings
 void AppSettings::setDefaultLayer(const QString &value)
 {
     if (defaultLayer() != value) {
