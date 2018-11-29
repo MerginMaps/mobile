@@ -21,7 +21,7 @@ Drawer {
     interactive: true
     dragMargin: 0 // prevents opening the drawer by dragging.
     edge: Qt.BottomEdge
-    closePolicy: Popup.CloseOnEscape
+    closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
     background: Rectangle {
         id: stateManager
