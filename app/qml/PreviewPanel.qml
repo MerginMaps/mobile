@@ -112,6 +112,7 @@ Item {
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             color: InputStyle.fontColorBright
                             elide: Text.ElideRight
+                            anchors.rightMargin: InputStyle.panelMargin
                         }
 
                         Text {
@@ -121,7 +122,6 @@ Item {
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom
                             anchors.top: parent.top
-                            anchors.leftMargin: InputStyle.panelMargin
                             height: root.height
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             color: InputStyle.fontColor
