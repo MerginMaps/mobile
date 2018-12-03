@@ -110,6 +110,7 @@ Drawer {
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
+            color: item.highlight ? secondaryColor : primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -125,6 +126,7 @@ Drawer {
             }
 
             ExtendedMenuItem {
+                id: item
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
                 imageSource: iconSource ? iconSource : ""
@@ -137,8 +139,6 @@ Drawer {
                         activeLayerIndex === index
                     }
                 }
-//                fontColor: highlight ? InputStyle.clrPanelMain : InputStyle.fontColor
-//                panelColor: highlight ? InputStyle.fontColor : InputStyle.clrPanelMain
             }
         }
 

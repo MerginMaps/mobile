@@ -69,6 +69,7 @@ ApplicationWindow {
         var defaultIndex = __projectsModel.rowAccordingPath(path);
         openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
         __loader.load(path);
+        __appSettings.activeProject = path
 
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
@@ -123,7 +124,7 @@ ApplicationWindow {
     Connections {
         target: __appSettings
         onDefaultLayerChanged: {
-            settingsPanel.defaultLayer = __appSettings.defaultLayer(openProjectPanel.activeProjectPath)
+            settingsPanel.defaultLayer = __appSettings.defaultLayer
         }
     }
 
@@ -133,12 +134,6 @@ ApplicationWindow {
       width: window.width
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
-
-      defaultLayer: {
-          console.log("load default layer", openProjectPanel.activeProjectPath, __appSettings.defaultLayer(openProjectPanel.activeProjectPath))
-          __appSettings.defaultLayer(openProjectPanel.activeProjectPath)
-      }
-
 
       onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
@@ -271,7 +266,6 @@ ApplicationWindow {
         z: zPanel
 
         // TODO put inside ProjectPanel
-        onActiveProjectPathChanged:__loader.load(openProjectPanel.activeProjectPath)
     }
 
     ActiveLayerPanel {
