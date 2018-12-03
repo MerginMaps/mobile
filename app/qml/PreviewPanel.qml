@@ -19,7 +19,15 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: contentClicked()
+        onClicked: {
+            if (editArea.containsMouse) {
+                editClicked()
+            }
+            else {
+                contentClicked()
+            }
+        }
+        z: previewPanel.z + 1 // otherwise content list would take mouseEvent
     }
 
     Rectangle {
@@ -59,13 +67,12 @@ Item {
                         anchors.left: titleText.right
                         anchors.right: parent.right
 
+                        // overlapped by previewPanel MouseArea, handled there
                         MouseArea {
-                            anchors.fill: parent
-                            propagateComposedEvents: true
-                            onClicked: {
-                                previewPanel.editClicked()
-                                mouse.accepted = false
-                            }
+                            id: editArea
+                            anchors.fill: iconContainer
+                             z: previewPanel.z + 1
+                             hoverEnabled: true
                         }
 
                         Image {
@@ -101,12 +108,6 @@ Item {
                 width: parent.width
                 anchors.top: header.bottom
                 anchors.bottom: parent.bottom
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: contentClicked()
-                    z: content.z + 1
-                }
 
                 ListView {
                     model: previewPanel.model
