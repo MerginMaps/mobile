@@ -129,14 +129,14 @@ Drawer {
                 contentText: index === 0 ? "Clear default survey layer setting" : (name ? name : "")
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                                highlight: {
+                highlight: {
                     if (stateManager.state === "setup") {
                         __appSettings.defaultLayer === name
                     } else {
                         activeLayerIndex === index
                     }
                 }
-                showBorder: __layersModel.activeLayerIndex - 1 !== index
+                showBorder: activeLayerPanel.activeLayerIndex - 1 !== index
             }
         }
 
