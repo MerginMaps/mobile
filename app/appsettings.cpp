@@ -14,7 +14,6 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     settings.endGroup();
 
     setDefaultProject(path);
-    // TODO check if activeProject is initialize
     setActiveProject(path);
     setDefaultLayer(layer);
 }
@@ -24,7 +23,6 @@ QString AppSettings::defaultLayer() const
     return mDefaultLayers.value(mActiveProject);
 }
 
-// TODO why settip up twice to QSettings
 void AppSettings::setDefaultLayer(const QString &value)
 {
     if (defaultLayer() != value) {

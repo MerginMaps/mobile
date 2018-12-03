@@ -19,9 +19,6 @@ public:
     QString activeProject() const;
     void setActiveProject(const QString &value);
 
-//    Q_INVOKABLE QString defaultLayer(const QString &projectPath) const;
-//    Q_INVOKABLE void setDefaultLayer(const QString &value, const QString &projectPath);
-
     QString defaultLayer() const;
     void setDefaultLayer(const QString &value);
 
@@ -34,9 +31,10 @@ signals:
 private:
     // Projects path
     QString mDefaultProject;
+    // Path to active project
     QString mActiveProject;
 
-    // Projects path -> defaultLayer
+    // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;
 
     const QString mGroupName = QString("inputApp");

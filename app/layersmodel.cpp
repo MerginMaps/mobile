@@ -126,6 +126,18 @@ QModelIndex LayersModel::index( int row ) const {
     return createIndex(row, 0, nullptr);
 }
 
+int LayersModel::rowAccordingName(QString name) const
+{
+    int i = 0;
+    for (QgsMapLayer* layer: mLayers) {
+        if (layer->name() == name) {
+             return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
 int LayersModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return mLayers.count();

@@ -34,13 +34,7 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var layer = undefined
-        if (__layersModel.defaultLayerIndex) {
-            // TODO
-            layer = __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.VectorLayer)
-        } else {
-            layer = activeLayerPanel.activeVectorLayer
-        }
+        var layer = activeLayerPanel.activeVectorLayer
         if (!layer)
         {
             // nothing to do with no active layer
@@ -63,13 +57,15 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        // TODO
-        //openProjectPanel.visible = true
-        var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
-        var defaultIndex = __projectsModel.rowAccordingPath(path);
-        openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
-        __loader.load(path);
-        __appSettings.activeProject = path
+        if (__appSettings.defaultProject) {
+            var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
+            var defaultIndex = __projectsModel.rowAccordingPath(path);
+            openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
+            __loader.load(path);
+            __appSettings.activeProject = path
+        } else {
+            openProjectPanel.visible = true
+        }
 
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
@@ -268,7 +264,12 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
-        // TODO put inside ProjectPanel
+        onActiveProjectPathChanged: {
+            __appSettings.activeProject = openProjectPanel.activeProjectPath
+            __loader.load(openProjectPanel.activeProjectPath)
+            // TODO set ativeIndex lyarPanel
+            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+        }
     }
 
     ActiveLayerPanel {
@@ -277,7 +278,6 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
-        activeProjectPath: openProjectPanel.activeProjectPath
 
         onLayerSettingChanged: {
             recordFeature()

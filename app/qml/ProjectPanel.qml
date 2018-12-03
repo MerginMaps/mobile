@@ -19,11 +19,6 @@ Popup {
         projectsPanel.visible = true
     }
 
-    onActiveProjectPathChanged: {
-        __appSettings.activeProject = openProjectPanel.activeProjectPath //__projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
-        __loader.load(openProjectPanel.activeProjectPath)
-    }
-
     Component.onCompleted: {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately

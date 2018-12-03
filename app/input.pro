@@ -110,7 +110,7 @@ layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
-    appsettings.cpp
+appsettings.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -118,7 +118,7 @@ layersmodel.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
-    appsettings.h
+appsettings.h
 
 RESOURCES += \
     img/pics.qrc \
