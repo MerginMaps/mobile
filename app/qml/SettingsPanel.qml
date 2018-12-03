@@ -10,17 +10,11 @@ Popup {
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: InputStyle.rowHeight
     property string defaultProject: __appSettings.defaultProject
-    //property string activeProjectPath: "" //__appSettings.defaultProject
-    property string defaultLayer: "default" //__appSettings.defaultLayer(activeProjectPath)
+    property string defaultLayer: __appSettings.defaultLayer
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
     signal defaultProjectClicked()
     signal defaultLayerClicked()
-
-//    onAct: {
-//        __appSettings.defaultLayer(__projectsModel.activeProjectPath)
-//    }
-
 
     id: settingsPanel
     visible: false

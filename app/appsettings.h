@@ -40,6 +40,8 @@ private:
     QHash<QString, QString> mDefaultLayers;
 
     const QString mGroupName = QString("inputApp");
+
+    void reloadDefaultLayers();
 };
 
 #endif // APPSETTINGS_H

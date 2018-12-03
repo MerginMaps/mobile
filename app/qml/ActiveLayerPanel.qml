@@ -119,8 +119,7 @@ Drawer {
                     if (stateManager.state === "record") {
                         layerPanel.layerSettingChanged()
                     } else if (stateManager.state === "setup") {
-                        //console.log("Saving default project", name, layerPanel.activeProjectPath, __appSettings.layerPanel.activeProject)
-                        __appSettings.setDefaultLayer(name)
+                        __appSettings.defaultLayer = name
                     }
                 }
             }
@@ -133,7 +132,7 @@ Drawer {
                 contentText: name
                 highlight: {
                     if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer(__projectsModel.activeProjectPath) === name
+                        __appSettings.defaultLayer === name
                     } else {
                         activeLayerIndex === index
                     }

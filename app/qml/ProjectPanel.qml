@@ -19,8 +19,9 @@ Popup {
         projectsPanel.visible = true
     }
 
-    onActiveProjectIndexChanged: {
-        __appSettings.activeProject = __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
+    onActiveProjectPathChanged: {
+        __appSettings.activeProject = openProjectPanel.activeProjectPath //__projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
+        __loader.load(openProjectPanel.activeProjectPath)
     }
 
     Component.onCompleted: {

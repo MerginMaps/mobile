@@ -5,6 +5,7 @@
 AppSettings::AppSettings(QObject* parent):QObject(parent)
 {
     mDefaultLayers = QHash<QString, QString>();
+    reloadDefaultLayers();
 
     QSettings settings;
     settings.beginGroup(mGroupName);
@@ -36,6 +37,20 @@ void AppSettings::setDefaultLayer(const QString &value)
     }
 }
 
+void AppSettings::reloadDefaultLayers()
+{
+    QSettings settings;
+    settings.beginGroup(mGroupName);
+    for (QString key: settings.allKeys()) {
+        if (key.startsWith("defaultLayer/")) {
+            QVariant value = settings.value(key);
+            mDefaultLayers.insert(key.replace("defaultLayer", ""), value.toString());
+        }
+    }
+
+    settings.endGroup();
+}
+
 
 QString AppSettings::defaultProject() const
 {
@@ -52,5 +67,20 @@ void AppSettings::setDefaultProject(const QString &value)
         settings.endGroup();
 
         emit defaultProjectChanged();
+    }
+}
+
+QString AppSettings::activeProject() const
+{
+    return mActiveProject;
+}
+
+void AppSettings::setActiveProject(const QString &value)
+{
+    if (mActiveProject != value) {
+        mActiveProject = value;
+
+        emit activeProjectChanged();
+        emit defaultLayerChanged();
     }
 }
