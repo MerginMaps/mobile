@@ -267,7 +267,6 @@ ApplicationWindow {
         onActiveProjectPathChanged: {
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            // TODO set ativeIndex lyarPanel
             activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
         }
     }

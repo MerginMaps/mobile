@@ -8,7 +8,7 @@ import "."  // import InputStyle singleton
 
 Popup {
 
-    property int activeProjectIndex: 0
+    property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
