@@ -19,9 +19,6 @@ Drawer {
     function openPanel(state) {
         activeLayerPanel.state = state
         if (state === "record") {
-            // overwrite -> resets activeIndex according default
-            //activeLayerIndex = __layersModel.defaultLayerIndex
-
             if (activeLayerIndex !== 0) {
                 layerPanel.layerSettingChanged()
                 // record without opening panel
@@ -104,7 +101,7 @@ Drawer {
         Rectangle {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColor
+            property color secondaryColor: InputStyle.fontColorBright
             width: listView.cellWidth
             height: !isVector ? 0 : listView.cellHeight
             visible: height ? true : false
@@ -129,16 +126,17 @@ Drawer {
                 id: item
                 anchors.rightMargin: InputStyle.panelMargin
                 anchors.leftMargin: InputStyle.panelMargin
+                contentText: index === 0 ? "Clear default survey layer setting" : (name ? name : "")
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                contentText: name
-                highlight: {
+                                highlight: {
                     if (stateManager.state === "setup") {
                         __appSettings.defaultLayer === name
                     } else {
                         activeLayerIndex === index
                     }
                 }
+                showBorder: __layersModel.activeLayerIndex - 1 !== index
             }
         }
 

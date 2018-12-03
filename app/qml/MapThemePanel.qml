@@ -71,11 +71,12 @@ Drawer {
         Rectangle {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColor
+            property color secondaryColor: InputStyle.fontColorBright
             width: listView.cellWidth
             height: listView.cellHeight
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
+            color: item.highlight ? secondaryColor : primaryColor
 
             MouseArea {
                 anchors.fill: parent
@@ -86,11 +87,14 @@ Drawer {
             }
 
             ExtendedMenuItem {
+                id: item
                 panelMargin: InputStyle.panelMargin
                 contentText: name
                 imageSource: "map_styles.svg"
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
+                highlight: activeThemeIndex === index
+                showBorder: activeThemeIndex - 1 !== index
             }
         }
 

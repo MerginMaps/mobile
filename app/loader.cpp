@@ -54,23 +54,34 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
     mapSettings->setExtent(extent);
 }
 
-QString Loader::mapTip(QgsQuickFeatureLayerPair pair)
+QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 {
     QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
     QString mapTip = pair.layer()->mapTipTemplate();
-    QString tipString;
-    QgsExpression exp( pair.layer()->displayExpression() );
-    QgsFeature feature = pair.featureRef();
+    int LIMIT = 2;
+    QStringList previewFields;
 
-    context.setFeature( feature );
-    if ( !mapTip.isEmpty() )
-    {
-        tipString = QgsExpression::replaceExpressionText( mapTip, &context );
-    }
-    else
-    {
-        tipString = exp.evaluate( &context ).toString();
+    QStringList fields;
+    for (QgsField field: pair.layer()->fields()) {
+        if (pair.layer()->displayField() != field.name()) {
+            fields << field.name();
+        }
     }
 
-    return tipString;
+    for  (QString line: mapTip.split("\n")) {
+        if (fields.indexOf(line) != -1) {
+            previewFields << line;
+        }
+        if (previewFields.length() == LIMIT) return previewFields;
+    }
+
+    if (previewFields.empty()) {
+        for (QgsField field: pair.layer()->fields()) {
+            if (pair.layer()->displayField() != field.name()) {
+                previewFields << field.name();
+            }
+            if (previewFields.length() == LIMIT) return previewFields;
+        }
+    }
+    return previewFields;
 }

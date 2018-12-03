@@ -91,9 +91,7 @@ Item {
                 text: qsTr("Save")
                 imageSource: "yes.svg"
 
-                onActivated: {
-                    toolbar.saveClicked()
-                }
+                onActivated: toolbar.saveClicked()
             }
 
         }
