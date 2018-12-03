@@ -15,6 +15,7 @@ Item {
     property variant previewFields: []
 
     signal contentClicked()
+    signal editClicked()
 
     MouseArea {
         anchors.fill: parent
@@ -58,6 +59,15 @@ Item {
                         anchors.left: titleText.right
                         anchors.right: parent.right
 
+                        MouseArea {
+                            anchors.fill: parent
+                            propagateComposedEvents: true
+                            onClicked: {
+                                previewPanel.editClicked()
+                                mouse.accepted = false
+                            }
+                        }
+
                         Image {
                             id: icon
                             anchors.fill: parent
@@ -91,6 +101,12 @@ Item {
                 width: parent.width
                 anchors.top: header.bottom
                 anchors.bottom: parent.bottom
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: contentClicked()
+                    z: content.z + 1
+                }
 
                 ListView {
                     model: previewPanel.model
