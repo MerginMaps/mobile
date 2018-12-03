@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
@@ -149,6 +150,25 @@ Drawer {
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()
+            onDeleteClicked: deleteDialog.visible = true
+        }
+
+
+        MessageDialog {
+          id: deleteDialog
+          visible: false
+          title: qsTr( "Delete feature" )
+          text: qsTr( "Really delete this feature?" )
+          icon: StandardIcon.Warning
+          standardButtons: StandardButton.Ok | StandardButton.Cancel
+          onAccepted: {
+            featureForm.model.attributeModel.deleteFeature()
+            visible = false
+            featureForm.canceled()
+          }
+          onRejected: {
+            visible = false
+          }
         }
     }
 }
