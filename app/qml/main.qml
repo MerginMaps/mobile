@@ -36,6 +36,7 @@ ApplicationWindow {
     function recordFeature() {
         var layer = undefined
         if (__layersModel.defaultLayerIndex) {
+            // TODO
             layer = __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.VectorLayer)
         } else {
             layer = activeLayerPanel.activeVectorLayer
@@ -119,12 +120,25 @@ ApplicationWindow {
         z: zMapCanvas + 1  // make sure items from here are on top of the Z-order
     }
 
+    Connections {
+        target: __appSettings
+        onDefaultLayerChanged: {
+            settingsPanel.defaultLayer = __appSettings.defaultLayer(openProjectPanel.activeProjectPath)
+        }
+    }
+
     SettingsPanel {
       id: settingsPanel
       height: window.height
       width: window.width
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
+
+      defaultLayer: {
+          console.log("load default layer", openProjectPanel.activeProjectPath, __appSettings.defaultLayer(openProjectPanel.activeProjectPath))
+          __appSettings.defaultLayer(openProjectPanel.activeProjectPath)
+      }
+
 
       onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
@@ -256,6 +270,7 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
+        // TODO put inside ProjectPanel
         onActiveProjectPathChanged:__loader.load(openProjectPanel.activeProjectPath)
     }
 
@@ -265,6 +280,7 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
+        activeProjectPath: openProjectPanel.activeProjectPath
 
         onLayerSettingChanged: {
             recordFeature()

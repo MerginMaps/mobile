@@ -11,13 +11,16 @@ Popup {
     property int activeProjectIndex: 0
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
-    property string defaultProjectPath: __appSettings.defaultProject
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
     function openPanel(state) {
         stateManager.state = state
         projectsPanel.visible = true
+    }
+
+    onActiveProjectIndexChanged: {
+        __appSettings.activeProject = __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     }
 
     Component.onCompleted: {
@@ -93,7 +96,7 @@ Popup {
         // TODO: must be wrapped in item due to ColumnLayout
         Item {
             width: parent.width
-            implicitHeight:projectsPanel.defaultProjectPath && stateManager.state === "setup" ? InputStyle.rowHeight : 0
+            implicitHeight: __appSettings.defaultProject && stateManager.state === "setup" ? InputStyle.rowHeight : 0
 
             ExtendedMenuItem {
                 contentText: "Unselect default project"

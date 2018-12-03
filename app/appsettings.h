@@ -7,6 +7,7 @@
 class AppSettings: public QObject {
     Q_OBJECT
     Q_PROPERTY(QString defaultProject READ defaultProject WRITE setDefaultProject NOTIFY defaultProjectChanged)
+    Q_PROPERTY(QString activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged)
     Q_PROPERTY(QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged)
 
 public:
@@ -15,15 +16,27 @@ public:
     QString defaultProject() const;
     void setDefaultProject(const QString &value);
 
+    QString activeProject() const;
+    void setActiveProject(const QString &value);
+
+//    Q_INVOKABLE QString defaultLayer(const QString &projectPath) const;
+//    Q_INVOKABLE void setDefaultLayer(const QString &value, const QString &projectPath);
+
     QString defaultLayer() const;
     void setDefaultLayer(const QString &value);
 
+
 signals:
     void defaultProjectChanged();
+    void activeProjectChanged();
     void defaultLayerChanged();
 
 private:
+    // Projects path
     QString mDefaultProject;
+    QString mActiveProject;
+
+    // Projects path -> defaultLayer
     QHash<QString, QString> mDefaultLayers;
 
     const QString mGroupName = QString("inputApp");

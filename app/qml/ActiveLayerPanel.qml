@@ -10,6 +10,7 @@ Drawer {
     property int activeLayerIndex: 0
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property string activeProjectPath: ""
 
     property string title: "Survey Layer"
 
@@ -118,7 +119,8 @@ Drawer {
                     if (stateManager.state === "record") {
                         layerPanel.layerSettingChanged()
                     } else if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer = name
+                        //console.log("Saving default project", name, layerPanel.activeProjectPath, __appSettings.layerPanel.activeProject)
+                        __appSettings.setDefaultLayer(name)
                     }
                 }
             }
@@ -131,7 +133,7 @@ Drawer {
                 contentText: name
                 highlight: {
                     if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer === name
+                        __appSettings.defaultLayer(__projectsModel.activeProjectPath) === name
                     } else {
                         activeLayerIndex === index
                     }
