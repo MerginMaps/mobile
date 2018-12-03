@@ -76,7 +76,6 @@ Drawer {
       }
 
       onEditClicked: {
-        //stateManager.state = "form"
         featurePanel.formState = "Edit"
       }
     }
