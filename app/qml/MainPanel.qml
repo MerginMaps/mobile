@@ -190,5 +190,17 @@ Item {
         }
     }
 
+    // Menu shadow
+    Rectangle {
+        x: rootMenu.x
+        y: rootMenu.y
+        width: rootMenu.width
+        height: rootMenu.height
+        layer.enabled: true
+        layer.effect: Shadow {}
+        visible: rootMenu.isOpen
+        z: rootMenu.z - 1
+    }
+
 
 }

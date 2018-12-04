@@ -24,6 +24,9 @@ Item {
         }
     }
 
+    layer.enabled: true
+    layer.effect: Shadow {}
+
     Rectangle {
         anchors.fill: parent
         color: InputStyle.clrPanelMain
