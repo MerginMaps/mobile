@@ -89,9 +89,9 @@ ApplicationWindow {
       onClicked: {
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
-
         var res = identifyKit.identifyOne(screenPoint);
         highlight.featureLayerPair = res
+        highlight.visible = true
         if (res.valid) {
           featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
@@ -312,9 +312,9 @@ ApplicationWindow {
         z: 0 // to featureform editors be visible
 
         onVisibleChanged: {
-            highlight.visible = visible
             if (!visible) {
                 digitizingHighlight.visible = false
+                highlight.visible = false
             }
         }
     }
