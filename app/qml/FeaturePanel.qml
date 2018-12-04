@@ -75,6 +75,11 @@ Drawer {
       onContentClicked: {
           stateManager.state = "form"
       }
+
+      onEditClicked: {
+          stateManager.state = "form"
+          featurePanel.formState = "Edit"
+      }
     }
 
 

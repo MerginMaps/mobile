@@ -93,7 +93,7 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
         highlight.featureLayerPair = res
         if (res.valid) {
-          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
+          featurePanel.show_panel(res, "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
             // closes feature/preview panel when there is nothing to show
             featurePanel.visible = false
