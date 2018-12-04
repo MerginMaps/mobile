@@ -92,9 +92,9 @@ ApplicationWindow {
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
         var res = identifyKit.identifyOne(screenPoint);
-        highlight.featureLayerPair = res
-        highlight.visible = true
         if (res.valid) {
+          highlight.featureLayerPair = res
+          highlight.visible = true
           featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
             // closes feature/preview panel when there is nothing to show
