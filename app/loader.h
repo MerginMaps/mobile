@@ -26,7 +26,7 @@ class Loader: public QObject {
     Q_OBJECT
     Q_PROPERTY(QgsProject* project READ project NOTIFY projectChanged) // never changes
     Q_PROPERTY(QgsQuickPositionKit* positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged)
-    Q_PROPERTY(bool isRecordingOn READ isRecordingOn WRITE setRecordingOn NOTIFY isRecordingOnChanged)
+    Q_PROPERTY(bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged)
 
 public:
     explicit Loader(QObject* parent = nullptr );
@@ -36,8 +36,8 @@ public:
     QgsQuickPositionKit *positionKit() const { return mPositionKit; }
     void setPositionKit( QgsQuickPositionKit *kit );
 
-    bool isRecordingOn() const { return mIsRecordingOn; }
-    void setRecordingOn( bool isRecordingOn );
+    bool isRecording() const { return mRecording; }
+    void setRecording( bool isRecording );
 
     Q_INVOKABLE void load(const QString& filePath);
     Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
@@ -48,8 +48,7 @@ signals:
     void projectReloaded();
 
     void positionKitChanged();
-    void isRecordingOnChanged();
-    void appStateChangedSignal(Qt::ApplicationState state);
+    void recordingChanged();
 
 public slots:
      void appStateChanged(Qt::ApplicationState state);
@@ -57,7 +56,7 @@ public slots:
 private:
     QgsProject mProject;
     QgsQuickPositionKit *mPositionKit = nullptr;
-    bool mIsRecordingOn = false;
+    bool mRecording = false;
 };
 
 #endif // LOADER_H

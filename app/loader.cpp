@@ -30,11 +30,11 @@ void Loader::setPositionKit(QgsQuickPositionKit *kit)
   emit positionKitChanged();
 }
 
-void Loader::setRecordingOn(bool isRecordingOn)
+void Loader::setRecording(bool isRecordingOn)
 {
-    if (mIsRecordingOn != isRecordingOn) {
-        mIsRecordingOn = isRecordingOn;
-        emit isRecordingOnChanged();
+    if (mRecording != isRecordingOn) {
+        mRecording = isRecordingOn;
+        emit recordingChanged();
     }
 }
 
@@ -102,7 +102,8 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 
 void Loader::appStateChanged(Qt::ApplicationState state)
 {
-    if (!mIsRecordingOn) {
+    // Turns on/off gps position updates according app state to save battery.
+    if (!mRecording) {
         mPositionKit->requestUpdates(state == Qt::ApplicationActive);
     }
 }
