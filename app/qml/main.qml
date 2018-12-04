@@ -25,7 +25,8 @@ ApplicationWindow {
 
     function saveRecordedFeature(pair) {
         if (pair.valid) {
-            highlight.featureLayerPair = pair
+            digitizingHighlight.featureLayerPair = pair
+            digitizingHighlight.visible = true
             featurePanel.show_panel(pair, "Add", "form")
         } else {
             popup.text = "Recording feature is not valid"
@@ -40,6 +41,7 @@ ApplicationWindow {
         } else {
             layer = activeLayerPanel.activeVectorLayer
         }
+
         if (!layer)
         {
             // nothing to do with no active layer
@@ -167,17 +169,6 @@ ApplicationWindow {
         id: digitizing
         positionKit: positionMarker.positionKit
         layer: activeLayerPanel.activeVectorLayer
-    }
-
-    // Highlighting a new feature while digitizing
-    Connections {
-        target: digitizing.recordingFeatureModel
-        onFeatureLayerPairChanged: {
-            if (digitizing.recording) {
-                digitizingHighlight.visible = true
-                digitizingHighlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
-            }
-        }
     }
 
     MainPanel {
