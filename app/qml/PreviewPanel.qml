@@ -15,10 +15,13 @@ Item {
     property variant previewFields: []
 
     signal contentClicked()
+    signal editClicked()
 
     MouseArea {
         anchors.fill: parent
-        onClicked: contentClicked()
+        onClicked: {
+            contentClicked()
+        }
     }
 
     Rectangle {
@@ -57,6 +60,12 @@ Item {
                         width: height
                         anchors.left: titleText.right
                         anchors.right: parent.right
+
+                        MouseArea {
+                            id: editArea
+                            anchors.fill: iconContainer
+                            onClicked: editClicked()
+                        }
 
                         Image {
                             id: icon
@@ -97,6 +106,7 @@ Item {
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp
+                    interactive: false
 
                     delegate: Item {
                         id: root

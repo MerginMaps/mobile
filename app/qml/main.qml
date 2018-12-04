@@ -41,7 +41,6 @@ ApplicationWindow {
         } else {
             layer = activeLayerPanel.activeVectorLayer
         }
-
         if (!layer)
         {
             // nothing to do with no active layer
@@ -95,7 +94,7 @@ ApplicationWindow {
         if (res.valid) {
           highlight.featureLayerPair = res
           highlight.visible = true
-          featurePanel.show_panel(res, res.layer === activeLayerPanel.activeVectorLayer ? "Edit" : "ReadOnly", "preview" )
+          featurePanel.show_panel(res, "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
             // closes feature/preview panel when there is nothing to show
             featurePanel.visible = false

@@ -73,7 +73,6 @@ Item {
                 width: toolbar.itemSize
                 text: qsTr("Delete")
                 imageSource: "trash.svg"
-                disabled: true
 
                 onActivated: {
                     toolbar.deleteClicked()
