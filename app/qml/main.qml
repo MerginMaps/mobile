@@ -25,7 +25,8 @@ ApplicationWindow {
 
     function saveRecordedFeature(pair) {
         if (pair.valid) {
-            highlight.featureLayerPair = pair
+            digitizingHighlight.featureLayerPair = pair
+            digitizingHighlight.visible = true
             featurePanel.show_panel(pair, "Add", "form")
         } else {
             popup.text = "Recording feature is not valid"
@@ -89,10 +90,10 @@ ApplicationWindow {
       onClicked: {
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
-
         var res = identifyKit.identifyOne(screenPoint);
-        highlight.featureLayerPair = res
         if (res.valid) {
+          highlight.featureLayerPair = res
+          highlight.visible = true
           featurePanel.show_panel(res, "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
             // closes feature/preview panel when there is nothing to show
@@ -105,6 +106,14 @@ ApplicationWindow {
       anchors.fill: mapCanvas
       id: highlight
       color: "red"
+      mapSettings: mapCanvas.mapSettings
+      z: 1
+    }
+
+    QgsQuick.FeatureHighlight {
+      anchors.fill: mapCanvas
+      id: digitizingHighlight
+      color: "yellow"
       mapSettings: mapCanvas.mapSettings
       z: 1
     }
@@ -165,8 +174,10 @@ ApplicationWindow {
     Connections {
         target: digitizing.recordingFeatureModel
         onFeatureLayerPairChanged: {
-            highlight.visible = true
-            highlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+            if (digitizing.recording) {
+                digitizingHighlight.visible = true
+                digitizingHighlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+            }
         }
     }
 
@@ -301,7 +312,12 @@ ApplicationWindow {
         project: __loader.project
         z: 0 // to featureform editors be visible
 
-        onVisibleChanged: highlight.visible = visible
+        onVisibleChanged: {
+            if (!visible) {
+                digitizingHighlight.visible = false
+                highlight.visible = false
+            }
+        }
     }
 
 }
