@@ -199,7 +199,6 @@ Item {
         layer.enabled: true
         layer.effect: Shadow {}
         visible: rootMenu.isOpen
-        z: rootMenu.z - 1
     }
 
 
