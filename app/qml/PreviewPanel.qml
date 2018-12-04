@@ -20,14 +20,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            if (editArea.containsMouse) {
-                editClicked()
-            }
-            else {
-                contentClicked()
-            }
+            contentClicked()
         }
-        z: previewPanel.z + 1 // otherwise content list would take mouseEvent
     }
 
     Rectangle {
@@ -67,12 +61,10 @@ Item {
                         anchors.left: titleText.right
                         anchors.right: parent.right
 
-                        // overlapped by previewPanel MouseArea, handled there
                         MouseArea {
                             id: editArea
                             anchors.fill: iconContainer
-                             z: previewPanel.z + 1
-                             hoverEnabled: true
+                            onClicked: editClicked()
                         }
 
                         Image {
@@ -114,6 +106,7 @@ Item {
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp
+                    interactive: false
 
                     delegate: Item {
                         id: root
