@@ -24,6 +24,20 @@ QgsProject* Loader::project() {
     return &mProject;
 }
 
+void Loader::setPositionKit(QgsQuickPositionKit *kit)
+{
+  mPositionKit = kit;
+  emit positionKitChanged();
+}
+
+void Loader::setRecordingOn(bool isRecordingOn)
+{
+    if (mIsRecordingOn != isRecordingOn) {
+        mIsRecordingOn = isRecordingOn;
+        emit isRecordingOnChanged();
+    }
+}
+
 void Loader::load(const QString& filePath) {
     qDebug() << "Loading " << filePath;
     if (mProject.fileName() != filePath) {
@@ -84,4 +98,11 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
         }
     }
     return previewFields;
+}
+
+void Loader::appStateChanged(Qt::ApplicationState state)
+{
+    if (!mIsRecordingOn) {
+        mPositionKit->requestUpdates(state == Qt::ApplicationActive);
+    }
 }

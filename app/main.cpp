@@ -246,6 +246,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
 
   // Connections
+  QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
