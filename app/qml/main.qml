@@ -109,6 +109,14 @@ ApplicationWindow {
       z: 1
     }
 
+    QgsQuick.FeatureHighlight {
+      anchors.fill: mapCanvas
+      id: digitizingHighlight
+      color: "yellow"
+      mapSettings: mapCanvas.mapSettings
+      z: 1
+    }
+
     Item {
         anchors.fill: mapCanvas
         transform: QgsQuick.MapTransform {
@@ -165,8 +173,10 @@ ApplicationWindow {
     Connections {
         target: digitizing.recordingFeatureModel
         onFeatureLayerPairChanged: {
-            highlight.visible = true
-            highlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+            if (digitizing.recording) {
+                digitizingHighlight.visible = true
+                digitizingHighlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+            }
         }
     }
 
@@ -301,7 +311,12 @@ ApplicationWindow {
         project: __loader.project
         z: 0 // to featureform editors be visible
 
-        onVisibleChanged: highlight.visible = visible
+        onVisibleChanged: {
+            highlight.visible = visible
+            if (!visible) {
+                digitizingHighlight.visible = false
+            }
+        }
     }
 
 }
