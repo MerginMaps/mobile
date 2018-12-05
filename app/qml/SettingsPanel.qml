@@ -9,7 +9,6 @@ Popup {
 
     property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: InputStyle.rowHeight
-    property string defaultProject: __appSettings.defaultProject
     property string defaultLayer: __appSettings.defaultLayer
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
@@ -61,49 +60,21 @@ Popup {
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default project") + ": "
+                text: qsTr("Default project") + ": " + (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: settingsPanel.defaultProjectClicked()
                 }
-
-                Text {
-                    text: settingsPanel.defaultProject
-                    anchors.right: parent.right
-                    anchors.rightMargin: InputStyle.panelMargin
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: parent.width * 0.7
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    color: InputStyle.fontColor
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
-                    elide: Text.ElideLeft
-                }
             }
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default survey layer") + ": "
+                text: qsTr("Default survey layer") + ": " + (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: settingsPanel.defaultLayerClicked()
-                }
-
-                Text {
-                    text: settingsPanel.defaultLayer
-                    anchors.right: parent.right
-                    anchors.rightMargin: InputStyle.panelMargin
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: parent.width * 0.7
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    color: InputStyle.fontColor
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
-                    elide: Text.ElideLeft
                 }
             }
 

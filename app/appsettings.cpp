@@ -1,6 +1,7 @@
 #include "appsettings.h"
 
 #include <QSettings>
+#include <QFileInfo>
 
 AppSettings::AppSettings(QObject* parent):QObject(parent)
 {
@@ -81,4 +82,13 @@ void AppSettings::setActiveProject(const QString &value)
         emit activeProjectChanged();
         emit defaultLayerChanged();
     }
+}
+
+QString AppSettings::defaultProjectName() const
+{
+    if (!mDefaultProject.isEmpty()) {
+        QFileInfo info(mDefaultProject);
+        return info.baseName();
+    }
+    return QString("");
 }

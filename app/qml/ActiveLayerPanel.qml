@@ -160,7 +160,7 @@ Drawer {
                         activeLayerIndex === index
                     }
                 }
-                showBorder: layerPanel.activeLayerIndex - 1 !== index
+                showBorder: !__appSettings.defaultLayer || layerPanel.activeLayerIndex - 1 !== index
             }
         }
 
