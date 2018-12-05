@@ -186,7 +186,7 @@ Popup {
             PanelItem {
                 height: settingsPanel.rowHeight
                 width: parent.width
-                text: qsTr("Acceptable GPS accuracy")
+                text: qsTr("Treshold")
 
                 NumberSpin {
                     id: gpsAccuracySpin
@@ -197,7 +197,6 @@ Popup {
                     width: height * 6
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
-
                 }
             }
         }
