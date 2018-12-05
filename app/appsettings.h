@@ -11,6 +11,7 @@ class AppSettings: public QObject {
     Q_PROPERTY(QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged)
     Q_PROPERTY(QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged)
     Q_PROPERTY(bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged)
+    Q_PROPERTY(int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged)
 
 public:
     explicit AppSettings(QObject* parent = nullptr);
@@ -29,11 +30,15 @@ public:
 
     QString defaultProjectName() const;
 
+    int gpsAccuracyTolerance() const;
+    void setGpsAccuracyTolerance(int gpsAccuracyTolerance);
+
 signals:
     void defaultProjectChanged();
     void activeProjectChanged();
     void defaultLayerChanged();
     void autoCenterMapCheckedChanged();
+    void gpsAccuracyToleranceChanged();
 
 private:
     // Projects path
@@ -42,6 +47,8 @@ private:
     QString mActiveProject;
     // flag for following GPS position
     bool mAutoCenterMapChecked = false;
+    // used in GPS signal indicator
+    int mGpsAccuracyTolerance = 0;
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;

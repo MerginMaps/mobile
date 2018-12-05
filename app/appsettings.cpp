@@ -13,12 +13,14 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     QString path = settings.value("defaultProject","").toString();
     QString layer = settings.value("defaultLayer/"  + path,"").toString();
     bool autoCenter = settings.value("autoCenter", false).toBool();
+    int gpsTolerance = settings.value("gpsTolerance", 0).toInt();
     settings.endGroup();
 
     setDefaultProject(path);
     setActiveProject(path);
     setDefaultLayer(layer);
     setAutoCenterMapChecked(autoCenter);
+    setGpsAccuracyTolerance(gpsTolerance);
 }
 
 QString AppSettings::defaultLayer() const
@@ -113,4 +115,23 @@ QString AppSettings::defaultProjectName() const
         return info.baseName();
     }
     return QString("");
+}
+
+int AppSettings::gpsAccuracyTolerance() const
+{
+    return mGpsAccuracyTolerance;
+}
+
+void AppSettings::setGpsAccuracyTolerance(int value)
+{
+    if (mGpsAccuracyTolerance != value) {
+        mGpsAccuracyTolerance = value;
+        QSettings settings;
+        settings.beginGroup(mGroupName);
+        settings.setValue("gpsTolerance", value);
+        settings.endGroup();
+
+        emit gpsAccuracyToleranceChanged();
+    }
+
 }

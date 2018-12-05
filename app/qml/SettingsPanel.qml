@@ -9,16 +9,10 @@ Popup {
 
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
-    property alias gpsAccuracyTolerance: gpsAccuracySpin.value
-    property real gpsAccuracy
+    property color gpsIndicatorColor: InputStyle.softRed
 
     signal defaultProjectClicked()
     signal defaultLayerClicked()
-
-    function activeIndicator() {
-        if (gpsAccuracy <= 0) return InputStyle.softRed
-        return gpsAccuracy < gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
-    }
 
     id: settingsPanel
     visible: false
@@ -105,8 +99,9 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
-					 checked: __appSettings.autoCenterMapChecked
+                    checked: __appSettings.autoCenterMapChecked
                     onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+
                     property color highlighColor: InputStyle.softGreen
                     property color disabledColor: InputStyle.panelBackgroundDark
 
@@ -139,7 +134,10 @@ Popup {
 
                 Row {
                     id: widget
-                    property real indicatorSize: height/3
+                    property real indicatorSize: {
+                        var size = height/3
+                        size % 2 === 0 ? size : size + 1
+                    }
                     width: indicatorSize * 4
                     anchors.top: parent.top
                     anchors.topMargin: 0
@@ -163,7 +161,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softRed
-                        isActive: color === activeIndicator()
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -171,7 +169,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softOrange
-                        isActive: color === activeIndicator()
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -179,7 +177,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softGreen
-                        isActive: color === activeIndicator()
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
@@ -192,6 +190,8 @@ Popup {
 
                 NumberSpin {
                     id: gpsAccuracySpin
+                    value: __appSettings.gpsAccuracyTolerance
+                    onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
@@ -200,7 +200,6 @@ Popup {
 
                 }
             }
-
         }
 
     }

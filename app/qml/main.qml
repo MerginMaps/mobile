@@ -57,6 +57,11 @@ ApplicationWindow {
         }
     }
 
+    function getGpsIndicatorColor() {
+        if (positionKit.accuracy <= 0) return InputStyle.softRed
+        return positionKit.accuracy < __appSettings.gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -138,9 +143,7 @@ ApplicationWindow {
 
       onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
-      onGpsAccuracyToleranceChanged: {
-        mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
-      }
+      gpsIndicatorColor: getGpsIndicatorColor()
     }
 
     /** Position Kit and Marker */
@@ -192,8 +195,7 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
-        gpsAccuracyTolerance: settingsPanel.gpsAccuracy
-        gpsAccuracy: positionKit.accuracy
+        gpsIndicatorColor: getGpsIndicatorColor()
 
         onOpenProjectClicked: openProjectPanel.openPanel("view")
         onSetDefaultProjectClicked: openProjectPanel.openPanel("setup")
