@@ -7,7 +7,6 @@ import "."  // import InputStyle singleton
 
 Popup {
 
-    property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
@@ -100,6 +99,13 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+
+                    onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+                }
+
+                Connections {
+                    target: __appSettings
+                    onAutoCenterMapCheckedChanged: autoCenterMapCheckBox.checked = __appSettings.autoCenterMapChecked
                 }
             }
 

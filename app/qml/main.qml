@@ -141,7 +141,7 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
-        if (settingsPanel.autoCenterMapChecked) {
+        if (__appSettings.autoCenterMapChecked) {
           var border = mainPanel.height
           if (isPositionOutOfExtent(border)) {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
@@ -181,7 +181,7 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
-        lockOnPosition: settingsPanel.autoCenterMapChecked
+        lockOnPosition: __appSettings.autoCenterMapChecked
         gpsAccuracyTolerance: settingsPanel.gpsAccuracy
         gpsAccuracy: positionKit.accuracy
 
@@ -191,8 +191,8 @@ ApplicationWindow {
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
-            settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
-            popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
+            __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
+            popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true

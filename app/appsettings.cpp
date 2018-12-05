@@ -12,11 +12,13 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     settings.beginGroup(mGroupName);
     QString path = settings.value("defaultProject","").toString();
     QString layer = settings.value("defaultLayer/"  + path,"").toString();
+    bool autoCenter = settings.value("autoCenter", false).toBool();
     settings.endGroup();
 
     setDefaultProject(path);
     setActiveProject(path);
     setDefaultLayer(layer);
+    setAutoCenterMapChecked(autoCenter);
 }
 
 QString AppSettings::defaultLayer() const
@@ -82,6 +84,26 @@ void AppSettings::setActiveProject(const QString &value)
         emit activeProjectChanged();
         emit defaultLayerChanged();
     }
+}
+
+bool AppSettings::autoCenterMapChecked() {
+    return mAutoCenterMapChecked;
+}
+
+
+void AppSettings::setAutoCenterMapChecked(bool value)
+{
+
+    if (mAutoCenterMapChecked != value) {
+        mAutoCenterMapChecked = value;
+        QSettings settings;
+        settings.beginGroup(mGroupName);
+        settings.setValue("autoCenter", value);
+        settings.endGroup();
+
+        emit autoCenterMapCheckedChanged();
+    }
+
 }
 
 QString AppSettings::defaultProjectName() const
