@@ -99,13 +99,8 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
-
+                    checked: __appSettings.autoCenterMapChecked
                     onCheckedChanged: __appSettings.autoCenterMapChecked = checked
-                }
-
-                Connections {
-                    target: __appSettings
-                    onAutoCenterMapCheckedChanged: autoCenterMapCheckBox.checked = __appSettings.autoCenterMapChecked
                 }
             }
 

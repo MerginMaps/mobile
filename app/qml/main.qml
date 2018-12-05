@@ -181,7 +181,6 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
-        lockOnPosition: __appSettings.autoCenterMapChecked
         gpsAccuracyTolerance: settingsPanel.gpsAccuracy
         gpsAccuracy: positionKit.accuracy
 
