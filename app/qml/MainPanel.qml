@@ -6,11 +6,11 @@ import "."  // import InputStyle singleton
 
 Item {
     signal openProjectClicked()
-    signal openLayersClicked()
     signal myLocationClicked()
     signal myLocationHold()
     signal addFeatureClicked()
     signal setDefaultLayerClicked()
+    signal setDefaultProjectClicked()
     signal openMapThemesClicked()
     signal openLogClicked()
     signal zoomToProject()
@@ -49,6 +49,7 @@ Item {
                 imageSource: "project.svg"
 
                 onActivated: mainPanel.openProjectClicked()
+                onActivatedOnHold: mainPanel.setDefaultProjectClicked()
             }
         }
 

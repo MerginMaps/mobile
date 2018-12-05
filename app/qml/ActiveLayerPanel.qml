@@ -86,6 +86,7 @@ Drawer {
                 anchors.fill: parent
                 onClicked: {
                     __appSettings.defaultLayer = ""
+                    activeLayerIndex = -1
                     layerPanel.close()
                 }
             }

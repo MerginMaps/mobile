@@ -30,6 +30,7 @@ Popup {
     contentWidth: projectsPanel.width
     margins: 0
     padding: 0
+    closePolicy: activeProjectName ? Popup.CloseOnEscape : Popup.NoAutoClose
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
@@ -56,6 +57,7 @@ Popup {
         titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
 
         onBack: projectsPanel.close()
+        withBackButton: projectsPanel.activeProjectPath
     }
 
     ColumnLayout {

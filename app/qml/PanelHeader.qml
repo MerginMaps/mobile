@@ -8,6 +8,7 @@ Rectangle {
 
     property real rowHeight
     property string titleText: ""
+    property bool withBackButton: true
 
     signal back()
 
@@ -18,6 +19,7 @@ Rectangle {
         anchors.left: header.left
         anchors.leftMargin: InputStyle.panelMargin
         z: title.z + 1
+        visible: withBackButton
 
         Image {
             id: image

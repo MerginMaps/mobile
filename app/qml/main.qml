@@ -64,7 +64,7 @@ ApplicationWindow {
             __loader.load(path);
             __appSettings.activeProject = path
         } else {
-            openProjectPanel.visible = true
+            openProjectPanel.openPanel("view")
         }
 
         InputStyle.deviceRatio = window.screen.devicePixelRatio
@@ -118,13 +118,6 @@ ApplicationWindow {
             mapSettings: mapCanvas.mapSettings
         }
         z: zMapCanvas + 1  // make sure items from here are on top of the Z-order
-    }
-
-    Connections {
-        target: __appSettings
-        onDefaultLayerChanged: {
-            settingsPanel.defaultLayer = __appSettings.defaultLayer
-        }
     }
 
     SettingsPanel {
@@ -193,7 +186,7 @@ ApplicationWindow {
         gpsAccuracy: positionKit.accuracy
 
         onOpenProjectClicked: openProjectPanel.openPanel("view")
-        onOpenLayersClicked: activeLayerPanel.openPanel("record")
+        onSetDefaultProjectClicked: openProjectPanel.openPanel("setup")
         onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
@@ -216,7 +209,7 @@ ApplicationWindow {
             if (digitizing.recording) {
                 recordFeature()
             } else {
-                openLayersClicked()
+                activeLayerPanel.openPanel("record")
             }
         }
     }
@@ -264,7 +257,8 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
-        onActiveProjectPathChanged: {
+        onActiveProjectIndexChanged: {
+            openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
             activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
