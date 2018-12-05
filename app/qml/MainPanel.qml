@@ -6,11 +6,11 @@ import "."  // import InputStyle singleton
 
 Item {
     signal openProjectClicked()
-    signal openLayersClicked()
     signal myLocationClicked()
     signal myLocationHold()
     signal addFeatureClicked()
     signal setDefaultLayerClicked()
+    signal setDefaultProjectClicked()
     signal openMapThemesClicked()
     signal openLogClicked()
     signal zoomToProject()
@@ -19,7 +19,6 @@ Item {
     property string activeProjectName: "(none)"
     property string activeLayerName: "(none)"
     property string gpsStatus: "GPS \n (none)"
-    property bool lockOnPosition: false
     property int gpsAccuracyTolerance
     property real gpsAccuracy
     property int itemSize: mainPanel.height * 0.8
@@ -49,6 +48,7 @@ Item {
                 imageSource: "project.svg"
 
                 onActivated: mainPanel.openProjectClicked()
+                onActivatedOnHold: mainPanel.setDefaultProjectClicked()
             }
         }
 
@@ -62,7 +62,7 @@ Item {
                 text: qsTr("GPS")
                 imageSource: "ic_gps_fixed_48px.svg"
                 imageSource2: "ic_gps_not_fixed_48px.svg"
-                imageSourceCondition: mainPanel.lockOnPosition
+                imageSourceCondition: __appSettings.autoCenterMapChecked
 
                 onActivated: mainPanel.myLocationClicked()
                 onActivatedOnHold: mainPanel.myLocationHold()

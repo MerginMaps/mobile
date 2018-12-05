@@ -40,6 +40,7 @@
 
 #include "qgsapplication.h"
 #include "loader.h"
+#include "appsettings.h"
 
 static QString getDataDir() {
 #ifdef QGIS_QUICK_DATA_PATH
@@ -164,6 +165,7 @@ void initDeclarative() {
     qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
     qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
     qmlRegisterUncreatableType<Loader>("lc", 1, 0, "Loader", "");
+    qmlRegisterUncreatableType<AppSettings>("lc", 1, 0, "AppSettings", "");
     qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
 }
 
@@ -210,6 +212,12 @@ int main(int argc, char *argv[])
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
 
+  // Set up the QSettings environment must be done after qapp is created
+  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
+  QCoreApplication::setApplicationName( "Input" );
+  QCoreApplication::setApplicationVersion("0.1");
+
   // Create project model
   ProjectModel pm(dataDir);
   if (pm.rowCount() == 0) {
@@ -244,6 +252,10 @@ int main(int argc, char *argv[])
   // Create layer model
   MapThemesModel mtm(loader.project());
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
+
+  // Create layer model
+  AppSettings as;
+  engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Connections
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
@@ -294,12 +306,6 @@ int main(int argc, char *argv[])
   {
     quickWindow->setIcon(QIcon(":/logo.png"));
   }
-
-  // Set up the QSettings environment must be done after qapp is created
-  QCoreApplication::setOrganizationName( "Lutra Consulting" );
-  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
-  QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion("0.1");
 
   #ifndef ANDROID
   QCommandLineParser parser;

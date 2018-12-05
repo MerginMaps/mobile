@@ -4,7 +4,6 @@
         <file>FeaturePanel.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>
-        <file>MyLocationBtn.qml</file>
         <file>ProjectBtn.qml</file>
         <file>ProjectPanel.qml</file>
         <file>RecordBtn.qml</file>

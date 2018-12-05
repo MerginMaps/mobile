@@ -28,7 +28,6 @@ class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QList<QgsMapLayer*> layers READ layers NOTIFY layersChanged )
-    Q_PROPERTY( int defaultLayerIndex READ defaultLayerIndex WRITE setDefaultLayerIndex NOTIFY defaultLayerIndexChanged )
 
   public:
     enum Roles
@@ -46,6 +45,7 @@ class LayersModel : public QAbstractListModel
 
     Q_INVOKABLE QVariant data ( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;   
+    Q_INVOKABLE int rowAccordingName(QString name) const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
@@ -66,7 +66,6 @@ class LayersModel : public QAbstractListModel
   private:
     QgsProject* mProject;
     QList<QgsMapLayer*> mLayers; // all layers
-    int mDefaultLayerIndex = 0; // set to "none" layer
 };
 
 #endif // LAYERSMODEL_H

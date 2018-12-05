@@ -14,6 +14,11 @@ Popup {
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
+    function openPanel(state) {
+        stateManager.state = state
+        projectsPanel.visible = true
+    }
+
     Component.onCompleted: {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
@@ -25,9 +30,22 @@ Popup {
     contentWidth: projectsPanel.width
     margins: 0
     padding: 0
+    closePolicy: activeProjectName ? Popup.CloseOnEscape : Popup.NoAutoClose
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
+    }
+
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "setup"
+            },
+            State {
+                name: "view"
+            }
+        ]
     }
 
     PanelHeader {
@@ -36,9 +54,10 @@ Popup {
         width: parent.width
         color: InputStyle.clrPanelMain
         rowHeight: InputStyle.rowHeightHeader
-        titleText: "Projects"
+        titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
 
         onBack: projectsPanel.close()
+        withBackButton: projectsPanel.activeProjectPath
     }
 
     ColumnLayout {
@@ -72,6 +91,27 @@ Popup {
             }
         }
 
+        // TODO: must be wrapped in item due to ColumnLayout
+        Item {
+            width: parent.width
+            implicitHeight: __appSettings.defaultProject && stateManager.state === "setup" ? InputStyle.rowHeight : 0
+
+            ExtendedMenuItem {
+                contentText: "Unselect default project"
+                imageSource: "no.svg"
+                panelMargin: 0
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        __appSettings.defaultProject = ""
+                        projectsPanel.close()
+                    }
+                }
+            }
+        }
+
+
         ListView {
             id: grid
             Layout.fillWidth: true
@@ -94,19 +134,29 @@ Popup {
             id: itemContainer
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColor
+            property bool highlight: {
+                if (stateManager.state === "setup") {
+                    return path === __appSettings.defaultProject ? true : false
+                } else {
+                    return index === projectsPanel.activeProjectIndex ? true : false
+                }
+            }
+
             width: grid.cellWidth
             height: grid.cellHeight
-            color:index === activeProjectIndex ? itemContainer.secondaryColor : itemContainer.primaryColor
+            color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    // TODO reset default survey layer after changing projects
-                    // Rather use connections and QSettings to save state
-                    if (projectsPanel.activeProjectIndex != index) {
-                        __layersModel.defaultLayerIndex = 0
+                    if (stateManager.state === "setup") {
+                        __appSettings.defaultProject = path ? path : ""
                     }
-                    projectsPanel.activeProjectIndex = index
+
+                    else if (stateManager.state === "view") {
+                        projectsPanel.activeProjectIndex = index
+                    }
+
                     projectsPanel.visible = false
                 }
             }
@@ -138,7 +188,7 @@ Popup {
                         ColorOverlay {
                             anchors.fill: icon
                             source: icon
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                         }
 
                     }
@@ -154,7 +204,7 @@ Popup {
                             height: textContainer.height/2
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             font.weight: Font.Bold
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignBottom
                         }
@@ -167,7 +217,7 @@ Popup {
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
                             font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : "grey"
+                            color: itemContainer.highlight ? itemContainer.primaryColor : "grey"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }
@@ -192,7 +242,7 @@ Popup {
                             height: textContainer.height/2
                             font.pixelSize: InputStyle.fontPixelSizeSmall
                             font.weight: Font.Bold
-                            color: index === activeProjectIndex ? itemContainer.primaryColor : itemContainer.secondaryColor
+                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }

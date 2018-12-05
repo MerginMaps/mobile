@@ -109,14 +109,16 @@ projectsmodel.cpp \
 layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
-mapthemesmodel.cpp
+mapthemesmodel.cpp \
+appsettings.cpp
 
 HEADERS += \
 projectsmodel.h \
 layersmodel.h \
 loader.h \
 digitizingcontroller.h \
-mapthemesmodel.h
+mapthemesmodel.h \
+appsettings.h
 
 RESOURCES += \
     img/pics.qrc \

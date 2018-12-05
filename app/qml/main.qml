@@ -35,12 +35,7 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var layer = undefined
-        if (__layersModel.defaultLayerIndex) {
-            layer = __layersModel.data(__layersModel.index(__layersModel.defaultLayerIndex), LayersModel.VectorLayer)
-        } else {
-            layer = activeLayerPanel.activeVectorLayer
-        }
+        var layer = activeLayerPanel.activeVectorLayer
         if (!layer)
         {
             // nothing to do with no active layer
@@ -63,8 +58,16 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        openProjectPanel.activeProjectIndex = 0;
-        //openProjectPanel.visible = true
+        if (__appSettings.defaultProject) {
+            var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
+            var defaultIndex = __projectsModel.rowAccordingPath(path);
+            openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
+            __loader.load(path);
+            __appSettings.activeProject = path
+        } else {
+            openProjectPanel.openPanel("view")
+        }
+
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
@@ -133,9 +136,7 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      defaultProject: openProjectPanel.activeProjectName
-      defaultLayer: activeLayerPanel.activeLayerName
-
+      onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       onGpsAccuracyToleranceChanged: {
         mainPanel.gpsAccuracyTolerance = settingsPanel.gpsAccuracyTolerance
@@ -149,7 +150,7 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
-        if (settingsPanel.autoCenterMapChecked) {
+        if (__appSettings.autoCenterMapChecked) {
           var border = mainPanel.height
           if (isPositionOutOfExtent(border)) {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
@@ -191,18 +192,17 @@ ApplicationWindow {
         activeProjectName: openProjectPanel.activeProjectName
         activeLayerName: activeLayerPanel.activeLayerName
         gpsStatus: ""
-        lockOnPosition: settingsPanel.autoCenterMapChecked
         gpsAccuracyTolerance: settingsPanel.gpsAccuracy
         gpsAccuracy: positionKit.accuracy
 
-        onOpenProjectClicked: openProjectPanel.visible = true
-        onOpenLayersClicked: activeLayerPanel.openPanel("record")
+        onOpenProjectClicked: openProjectPanel.openPanel("view")
+        onSetDefaultProjectClicked: openProjectPanel.openPanel("setup")
         onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
-            settingsPanel.autoCenterMapChecked =!settingsPanel.autoCenterMapChecked
-            popup.text = "Autocenter mode " + (settingsPanel.autoCenterMapChecked ? "on" : "off")
+            __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
+            popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true
@@ -219,7 +219,7 @@ ApplicationWindow {
             if (digitizing.recording) {
                 recordFeature()
             } else {
-                openLayersClicked()
+                activeLayerPanel.openPanel("record")
             }
         }
     }
@@ -267,9 +267,11 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
-        onActiveProjectPathChanged: {
-            __loader.load(activeProjectPath);
-            activeLayerPanel.activeLayerIndex = 0
+        onActiveProjectIndexChanged: {
+            openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
+            __appSettings.activeProject = openProjectPanel.activeProjectPath
+            __loader.load(openProjectPanel.activeProjectPath)
+            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
         }
     }
 

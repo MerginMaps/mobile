@@ -7,14 +7,12 @@ import "."  // import InputStyle singleton
 
 Popup {
 
-    property alias autoCenterMapChecked: autoCenterMapCheckBox.checked
     property real rowHeight: InputStyle.rowHeight
-    property string defaultProject: "<none>"
-    property string defaultLayer: "<none>"
+    property string defaultLayer: __appSettings.defaultLayer
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
 
+    signal defaultProjectClicked()
     signal defaultLayerClicked()
-
 
     id: settingsPanel
     visible: false
@@ -61,12 +59,17 @@ Popup {
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default project") + ": " + settingsPanel.defaultProject
+                text: qsTr("Default project") + ": " + (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: settingsPanel.defaultProjectClicked()
+                }
             }
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default survey layer") + ": " + settingsPanel.defaultLayer
+                text: qsTr("Default survey layer") + ": " + (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
@@ -96,6 +99,8 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+                    checked: __appSettings.autoCenterMapChecked
+                    onCheckedChanged: __appSettings.autoCenterMapChecked = checked
                 }
             }
 

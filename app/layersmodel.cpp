@@ -65,29 +65,10 @@ void LayersModel::reloadLayers() {
 QVariant LayersModel::data( const QModelIndex& index, int role ) const
 {
   int row = index.row();
-  if (row < 0 || row > mLayers.count())
+  if (row < 0 || row >= mLayers.count())
     return QVariant("");
 
-  if (row == 0)
-  {
-    switch ( role )
-    {
-      case Name:
-        return "(none)";
-      case isVector:
-        return true;
-      case isReadOnly:
-        return false;
-      case IconSource:
-        return QVariant("no.svg");
-      case VectorLayer:
-        return QVariant::fromValue<QgsVectorLayer*>( nullptr );
-    }
-    return QVariant();
-  }
-
-  // TODO should be moved to index() ?
-  QgsMapLayer* layer = mLayers.at(row-1);
+  QgsMapLayer* layer = mLayers.at(row);
 
   switch ( role )
   {
@@ -145,22 +126,23 @@ QModelIndex LayersModel::index( int row ) const {
     return createIndex(row, 0, nullptr);
 }
 
+int LayersModel::rowAccordingName(QString name) const
+{
+    int i = 0;
+    for (QgsMapLayer* layer: mLayers) {
+        if (layer->name() == name) {
+             return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
 int LayersModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
-    return mLayers.count() + 1;
+    return mLayers.count();
 }
 
 QList<QgsMapLayer*> LayersModel::layers() const {
     return mLayers;
-}
-
-int LayersModel::defaultLayerIndex() const {
-    return mDefaultLayerIndex;
-}
-
-void LayersModel::setDefaultLayerIndex(int index) {
-    if (index != mDefaultLayerIndex) {
-        mDefaultLayerIndex = index;
-        emit defaultLayerIndexChanged();
-    }
 }
