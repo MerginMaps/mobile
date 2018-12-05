@@ -10,9 +10,15 @@ Popup {
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
     property alias gpsAccuracyTolerance: gpsAccuracySpin.value
+    property real gpsAccuracy
 
     signal defaultProjectClicked()
     signal defaultLayerClicked()
+
+    function activeIndicator() {
+        if (gpsAccuracy <= 0) return InputStyle.softRed
+        return gpsAccuracy < gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
+    }
 
     id: settingsPanel
     visible: false
@@ -126,7 +132,6 @@ Popup {
             }
 
             PanelItem {
-                id: panelItem1
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
@@ -142,6 +147,7 @@ Popup {
                     anchors.bottomMargin: 0
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+                    spacing: InputStyle.panelSpacing
 
                     RoundIndicator {
                         width: widget.indicatorSize
@@ -149,12 +155,15 @@ Popup {
                         anchors.margins: height/3
                         color: InputStyle.panelBackgroundLight
                         anchors.verticalCenter: parent.verticalCenter
+                        visible: false // disabled due no manual GPS on/off support
                     }
 
                     RoundIndicator {
+                        id: redIndicator
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softRed
+                        isActive: color === activeIndicator()
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -162,6 +171,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softOrange
+                        isActive: color === activeIndicator()
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -169,24 +179,25 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softGreen
+                        isActive: color === activeIndicator()
                         anchors.verticalCenter: parent.verticalCenter
                     }
-
                 }
             }
 
             PanelItem {
-                id: panelItem
                 height: settingsPanel.rowHeight
                 width: parent.width
                 text: qsTr("Acceptable GPS accuracy")
 
-                SpinBox {
+                NumberSpin {
                     id: gpsAccuracySpin
-                    height: settingsPanel.rowHeight/3
+                    height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter
+                    width: height * 6
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+
                 }
             }
 
