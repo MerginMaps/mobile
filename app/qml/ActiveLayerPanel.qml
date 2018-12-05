@@ -69,6 +69,9 @@ Drawer {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
         }
+
+        layer.enabled: true
+        layer.effect: Shadow {}
     }
 
     ListView {
