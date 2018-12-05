@@ -33,9 +33,9 @@ QtObject {
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
-    property real shadowVerticalOffset: -5
-    property real shadowRadius: 15
-    property real shadowSamples: 1 + shadowRadius * 2 // DropShadow docs: samples = 1 + radius * 2,
+    property real shadowVerticalOffset: -2 * QgsQuick.Utils.dp
+    property real shadowRadius: 8 * QgsQuick.Utils.dp
+    property real shadowSamples: 12
     property real panelOpacity: 1
 
     property real refWidth: 640
