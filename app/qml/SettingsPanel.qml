@@ -95,12 +95,33 @@ Popup {
                     padding: 0
                     id: autoCenterMapCheckBox
                     height: InputStyle.fontPixelSizeNormal
-                    width: height * 3
+                    width: height * 2
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
-                    checked: __appSettings.autoCenterMapChecked
+					 checked: __appSettings.autoCenterMapChecked
                     onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+                    property color highlighColor: InputStyle.softGreen
+                    property color disabledColor: InputStyle.panelBackgroundDark
+
+                    indicator: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: parent.height
+                        x: autoCenterMapCheckBox.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: parent.height/2
+                        color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : "#ffffff"
+                        border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+
+                        Rectangle {
+                            x: autoCenterMapCheckBox.checked ? parent.width - width : 0
+                            width: parent.height
+                            height: parent.height
+                            radius: parent.height/2
+                            color: "#ffffff"
+                            border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+                        }
+                    }
                 }
             }
 
