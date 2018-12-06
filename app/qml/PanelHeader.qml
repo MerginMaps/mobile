@@ -23,7 +23,7 @@ Rectangle {
 
         Image {
             id: image
-            height: InputStyle.fontPixelSizeTitle
+            height: InputStyle.fontPixelSizeNormal
             width: height
             source: "back.svg"
             sourceSize.width: width
@@ -47,7 +47,7 @@ Rectangle {
             id: backButtonText
             text: "Back"
             color: InputStyle.fontColorBright
-            font.pixelSize: InputStyle.fontPixelSizeTitle
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             height: header.rowHeight
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
