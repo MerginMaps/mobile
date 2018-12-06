@@ -8,6 +8,7 @@ Rectangle {
     color: InputStyle.clrPanelMain
 
     property string text: ""
+    property string text2: ""
     property bool bold: false
 
     Text {
@@ -23,5 +24,22 @@ Rectangle {
         font.bold: bold
         font.pixelSize: InputStyle.fontPixelSizeNormal
         elide: Text.ElideRight
+    }
+
+    Text {
+        text: text2
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: InputStyle.panelMargin
+        anchors.rightMargin: InputStyle.panelMargin
+        horizontalAlignment: Text.AlignRight
+        verticalAlignment: Text.AlignVCenter
+        color: InputStyle.fontColor
+        font.bold: bold
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        elide: Text.ElideRight
+        visible: text2
     }
 }

@@ -24,5 +24,6 @@
         <file>FeatureToolbar.qml</file>
         <file>PositionMarker.qml</file>
         <file>Shadow.qml</file>
+        <file>NumberSpin.qml</file>
     </qresource>
 </RCC>

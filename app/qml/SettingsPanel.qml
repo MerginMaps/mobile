@@ -9,7 +9,7 @@ Popup {
 
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
-    property alias gpsAccuracyTolerance: gpsAccuracySpin.value
+    property color gpsIndicatorColor: InputStyle.softRed
 
     signal defaultProjectClicked()
     signal defaultLayerClicked()
@@ -50,16 +50,17 @@ Popup {
             anchors.fill: parent
             spacing: 1
 
-            // Header "Start app with"
+            // Header "Defaults"
             PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: qsTr("Start app with")
+                text: qsTr("Defaults")
                 bold: true
             }
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default project") + ": " + (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
+                text: qsTr("Project")
+                text2: (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
@@ -69,7 +70,8 @@ Popup {
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default survey layer") + ": " + (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
+                text: qsTr("Survey layer")
+                text2: (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
@@ -77,10 +79,10 @@ Popup {
                 }
             }
 
-             // Header "GPS SETTINGS"
+             // Header "GPS"
             PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: qsTr("GPS SETTINGS")
+                text: qsTr("GPS")
                 bold: true
             }
 
@@ -95,17 +97,38 @@ Popup {
                     padding: 0
                     id: autoCenterMapCheckBox
                     height: InputStyle.fontPixelSizeNormal
-                    width: height * 3
+                    width: height * 2
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
                     checked: __appSettings.autoCenterMapChecked
                     onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+
+                    property color highlighColor: InputStyle.softGreen
+                    property color disabledColor: InputStyle.panelBackgroundDark
+
+                    indicator: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: parent.height
+                        x: autoCenterMapCheckBox.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: parent.height/2
+                        color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : "#ffffff"
+                        border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+
+                        Rectangle {
+                            x: autoCenterMapCheckBox.checked ? parent.width - width : 0
+                            width: parent.height
+                            height: parent.height
+                            radius: parent.height/2
+                            color: "#ffffff"
+                            border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+                        }
+                    }
                 }
             }
 
             PanelItem {
-                id: panelItem1
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
@@ -113,7 +136,10 @@ Popup {
 
                 Row {
                     id: widget
-                    property real indicatorSize: height/3
+                    property real indicatorSize: {
+                        var size = height/3
+                        size % 2 === 0 ? size : size + 1
+                    }
                     width: indicatorSize * 4
                     anchors.top: parent.top
                     anchors.topMargin: 0
@@ -121,6 +147,7 @@ Popup {
                     anchors.bottomMargin: 0
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+                    spacing: InputStyle.panelSpacing
 
                     RoundIndicator {
                         width: widget.indicatorSize
@@ -128,12 +155,14 @@ Popup {
                         anchors.margins: height/3
                         color: InputStyle.panelBackgroundLight
                         anchors.verticalCenter: parent.verticalCenter
+                        visible: false // disabled due no manual GPS on/off support
                     }
 
                     RoundIndicator {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softRed
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -141,6 +170,7 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softOrange
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -148,27 +178,27 @@ Popup {
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softGreen
+                        isActive: color === gpsIndicatorColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
-
                 }
             }
 
             PanelItem {
-                id: panelItem
                 height: settingsPanel.rowHeight
                 width: parent.width
-                text: qsTr("Acceptable GPS accuracy")
+                text: qsTr("Accuracy threshold")
 
-                SpinBox {
-                    id: gpsAccuracySpin
-                    height: settingsPanel.rowHeight/3
+                NumberSpin {
+                    value: __appSettings.gpsAccuracyTolerance
+                    onValueChanged: __appSettings.gpsAccuracyTolerance = value
+                    height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter
+                    width: height * 6
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
                 }
             }
-
         }
 
     }

@@ -5,7 +5,8 @@ Item {
     width: parent.height
     height: width
     property int size: width
-    property color color: "orange"
+    property color color: InputStyle.softGreen
+    property bool isActive: false
 
     Rectangle {
         anchors.centerIn: parent
@@ -14,5 +15,16 @@ Item {
         color: gpsSignal.color
         radius: width*0.5
         antialiasing: true
+    }
+
+    Rectangle {
+        id: activeIndicator
+        anchors.centerIn: parent
+        width: gpsSignal.size/2.0
+        height: gpsSignal.size/2.0
+        color: "white"
+        radius: width*0.5
+        antialiasing: true
+        visible: isActive
     }
 }
