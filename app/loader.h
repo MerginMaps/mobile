@@ -51,8 +51,9 @@ signals:
     void recordingChanged();
 
 public slots:
+#ifdef ANDROID
      void appStateChanged(Qt::ApplicationState state);
-
+#endif
 private:
     QgsProject mProject;
     QgsQuickPositionKit *mPositionKit = nullptr;

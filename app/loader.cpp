@@ -100,10 +100,15 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
     return previewFields;
 }
 
+#ifdef ANDROID
 void Loader::appStateChanged(Qt::ApplicationState state)
 {
-    // Turns on/off gps position updates according app state to save battery.
     if (!mRecording) {
-        mPositionKit->requestUpdates(state == Qt::ApplicationActive);
+        if (state == Qt::ApplicationActive) {
+            mPositionKit->source().startUpdates();
+        } else {
+            mPositionKit->source().stopUpdates();
+        }
     }
 }
+#endif
