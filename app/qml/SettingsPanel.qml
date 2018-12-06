@@ -50,16 +50,17 @@ Popup {
             anchors.fill: parent
             spacing: 1
 
-            // Header "Start app with"
+            // Header "Defaults"
             PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: qsTr("Start app with")
+                text: qsTr("Defaults")
                 bold: true
             }
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default project") + ": " + (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
+                text: qsTr("Project")
+                text2: (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
@@ -69,7 +70,8 @@ Popup {
 
             PanelItem {
                 color: InputStyle.clrPanelMain
-                text: qsTr("Default survey layer") + ": " + (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
+                text: qsTr("Survey layer")
+                text2: (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
 
                 MouseArea {
                     anchors.fill: parent
@@ -77,10 +79,10 @@ Popup {
                 }
             }
 
-             // Header "GPS SETTINGS"
+             // Header "GPS"
             PanelItem {
                 color: InputStyle.panelBackgroundLight
-                text: qsTr("GPS SETTINGS")
+                text: qsTr("GPS")
                 bold: true
             }
 
@@ -157,7 +159,6 @@ Popup {
                     }
 
                     RoundIndicator {
-                        id: redIndicator
                         width: widget.indicatorSize
                         height: width
                         color: InputStyle.softRed
@@ -186,10 +187,9 @@ Popup {
             PanelItem {
                 height: settingsPanel.rowHeight
                 width: parent.width
-                text: qsTr("Treshold")
+                text: qsTr("Accuracy threshold")
 
                 NumberSpin {
-                    id: gpsAccuracySpin
                     value: __appSettings.gpsAccuracyTolerance
                     onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal

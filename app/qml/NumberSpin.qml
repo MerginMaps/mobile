@@ -28,7 +28,7 @@ Item {
 
     Text {
         id: valueText
-        text: value + "m"
+        text: value + " m"
         color: InputStyle.fontColorBright
         font.pixelSize: InputStyle.fontPixelSizeNormal
         height: root.rowHeight
