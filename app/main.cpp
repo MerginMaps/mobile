@@ -14,6 +14,7 @@
 #include <QQuickWindow>
 #include <qqml.h>
 #include <qgsmessagelog.h>
+#include "qgsconfig.h"
 
 #include "projectsmodel.h"
 #include "layersmodel.h"
@@ -188,6 +189,7 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  qDebug() << "Built with QGIS version " << VERSION_INT;
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
   fonts << ":/Lato-Regular.ttf"
@@ -258,6 +260,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Connections
+  QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);

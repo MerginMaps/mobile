@@ -24,6 +24,20 @@ QgsProject* Loader::project() {
     return &mProject;
 }
 
+void Loader::setPositionKit(QgsQuickPositionKit *kit)
+{
+  mPositionKit = kit;
+  emit positionKitChanged();
+}
+
+void Loader::setRecording(bool isRecordingOn)
+{
+    if (mRecording != isRecordingOn) {
+        mRecording = isRecordingOn;
+        emit recordingChanged();
+    }
+}
+
 void Loader::load(const QString& filePath) {
     qDebug() << "Loading " << filePath;
     if (mProject.fileName() != filePath) {
@@ -84,4 +98,19 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
         }
     }
     return previewFields;
+}
+
+void Loader::appStateChanged(Qt::ApplicationState state)
+{
+#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
+    if (!mRecording) {
+        if (state == Qt::ApplicationActive) {
+            mPositionKit->source()->startUpdates();
+        } else {
+            mPositionKit->source()->stopUpdates();
+        }
+    }
+#else
+    Q_UNUSED(state);
+#endif
 }

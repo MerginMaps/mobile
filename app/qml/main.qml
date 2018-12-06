@@ -77,6 +77,8 @@ ApplicationWindow {
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
         console.log("Completed Running!")
+        __loader.positionKit = positionKit
+        __loader.recording = digitizing.recording
     }
 
     QgsQuick.MapCanvas {
@@ -172,6 +174,10 @@ ApplicationWindow {
         id: digitizing
         positionKit: positionMarker.positionKit
         layer: activeLayerPanel.activeVectorLayer
+
+        onRecordingChanged: {
+            __loader.recording = digitizing.recording
+        }
     }
 
     // Highlighting a new feature while digitizing
@@ -323,5 +329,4 @@ ApplicationWindow {
             }
         }
     }
-
 }

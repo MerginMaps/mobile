@@ -20,15 +20,24 @@
 #include <QObject>
 #include "qgsproject.h"
 #include "qgsquickutils.h"
+#include "qgsquickpositionkit.h"
 
 class Loader: public QObject {
     Q_OBJECT
     Q_PROPERTY(QgsProject* project READ project NOTIFY projectChanged) // never changes
+    Q_PROPERTY(QgsQuickPositionKit* positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged)
+    Q_PROPERTY(bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged)
 
 public:
     explicit Loader(QObject* parent = nullptr );
 
     QgsProject *project();
+
+    QgsQuickPositionKit *positionKit() const { return mPositionKit; }
+    void setPositionKit( QgsQuickPositionKit *kit );
+
+    bool isRecording() const { return mRecording; }
+    void setRecording( bool isRecording );
 
     Q_INVOKABLE void load(const QString& filePath);
     Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
@@ -38,8 +47,15 @@ signals:
     void projectChanged();
     void projectReloaded();
 
+    void positionKitChanged();
+    void recordingChanged();
+
+public slots:
+     void appStateChanged(Qt::ApplicationState state);
 private:
     QgsProject mProject;
+    QgsQuickPositionKit *mPositionKit = nullptr;
+    bool mRecording = false;
 };
 
 #endif // LOADER_H
