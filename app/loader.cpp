@@ -100,9 +100,9 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
     return previewFields;
 }
 
-#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
 void Loader::appStateChanged(Qt::ApplicationState state)
 {
+#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
     if (!mRecording) {
         if (state == Qt::ApplicationActive) {
             mPositionKit->source().startUpdates();
@@ -110,5 +110,7 @@ void Loader::appStateChanged(Qt::ApplicationState state)
             mPositionKit->source().stopUpdates();
         }
     }
-}
+#else
+    Q_UNUSED(state);
 #endif
+}

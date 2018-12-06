@@ -248,9 +248,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
 
   // Connections
-#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
   QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
-#endif
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);

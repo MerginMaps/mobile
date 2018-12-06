@@ -51,9 +51,7 @@ signals:
     void recordingChanged();
 
 public slots:
-#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
      void appStateChanged(Qt::ApplicationState state);
-#endif
 private:
     QgsProject mProject;
     QgsQuickPositionKit *mPositionKit = nullptr;
