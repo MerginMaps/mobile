@@ -150,7 +150,7 @@ DISTFILES += android/AndroidManifest.xml \
 android {
     ANDROID_EXTRA_LIBS += \
         $${QGIS_LIB_DIR}/libcrystax.so \
-        #$${QGIS_LIB_DIR}/libcrypto.so \
+        $${QGIS_LIB_DIR}/libcrypto.so \
         $${QGIS_LIB_DIR}/libexpat.so \
         $${QGIS_LIB_DIR}/libgeos.so \
         $${QGIS_LIB_DIR}/libgeos_c.so \
@@ -180,7 +180,7 @@ android {
         $${QGIS_LIB_DIR}/libowsprovider.so \
         $${QGIS_LIB_DIR}/libpostgresprovider.so \
         $${QGIS_LIB_DIR}/libspatialiteprovider.so \
-        #$${QGIS_LIB_DIR}/libssl.so \
+        $${QGIS_LIB_DIR}/libssl.so \
         $${QGIS_LIB_DIR}/libwcsprovider.so \
         $${QGIS_LIB_DIR}/libwfsprovider.so \
         $${QGIS_LIB_DIR}/libwmsprovider.so \
