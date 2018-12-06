@@ -48,7 +48,7 @@ private:
     // flag for following GPS position
     bool mAutoCenterMapChecked = false;
     // used in GPS signal indicator
-    int mGpsAccuracyTolerance = 10;
+    int mGpsAccuracyTolerance = -1;
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;

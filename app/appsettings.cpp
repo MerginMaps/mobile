@@ -13,7 +13,7 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     QString path = settings.value("defaultProject","").toString();
     QString layer = settings.value("defaultLayer/"  + path,"").toString();
     bool autoCenter = settings.value("autoCenter", false).toBool();
-    int gpsTolerance = settings.value("gpsTolerance", 0).toInt();
+    int gpsTolerance = settings.value("gpsTolerance", 10).toInt();
     settings.endGroup();
 
     setDefaultProject(path);
