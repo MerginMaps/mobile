@@ -36,6 +36,7 @@ public:
 
 
   Q_INVOKABLE bool hasLineGeometry( QgsVectorLayer *layer ) const;
+  Q_INVOKABLE bool hasPolygonGeometry( QgsVectorLayer *layer ) const;
 
   //! Creates a new QgsFeature with point geometry from the current GPS point
   Q_INVOKABLE QgsQuickFeatureLayerPair pointFeature();
