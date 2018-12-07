@@ -85,6 +85,7 @@ Drawer {
                 onClicked: {
                     __mapThemesModel.applyTheme(name)
                     activeThemeIndex = index
+                    mapThemePanel.close()
                 }
             }
 
