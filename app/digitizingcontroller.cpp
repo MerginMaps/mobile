@@ -60,6 +60,11 @@ bool DigitizingController::hasLineGeometry(QgsVectorLayer *layer) const
   return layer && layer->geometryType() == QgsWkbTypes::LineGeometry;
 }
 
+bool DigitizingController::hasPolygonGeometry(QgsVectorLayer *layer) const
+{
+  return layer && layer->geometryType() == QgsWkbTypes::PolygonGeometry;
+}
+
 void DigitizingController::fixZ(QgsPoint* point) const {
     Q_ASSERT(point);
 

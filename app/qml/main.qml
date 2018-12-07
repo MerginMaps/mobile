@@ -118,6 +118,7 @@ ApplicationWindow {
       color: "red"
       mapSettings: mapCanvas.mapSettings
       z: 1
+      opacity: digitizing.hasPolygonGeometry(highlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
     }
 
     QgsQuick.FeatureHighlight {
@@ -126,6 +127,7 @@ ApplicationWindow {
       color: "yellow"
       mapSettings: mapCanvas.mapSettings
       z: 1
+      opacity: digitizing.hasPolygonGeometry(digitizingHighlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
     }
 
     Item {
