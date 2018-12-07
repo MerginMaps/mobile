@@ -61,7 +61,7 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
     const QVector<QgsMapLayer*> layers = mProject.layers<QgsMapLayer*>();
     QgsRectangle extent;
     for (const QgsMapLayer* layer: layers) {
-        QgsRectangle layerExtent = layer->extent();
+        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent(layer, layer->extent());
         extent.combineExtentWith(layerExtent);
     }
     extent.scale(1.05);
