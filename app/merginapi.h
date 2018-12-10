@@ -1,23 +1,16 @@
 #ifndef MERGINAPI_H
 #define MERGINAPI_H
 
-#include <projectsmodel.h>
+#include "merginprojectmodel.h"
 
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QEventLoop>
 
-struct MerginProject {
-    QString name;
-    QStringList tags;
-    QDate craeted;
-};
-typedef QList<std::shared_ptr<MerginProject>> ProjectList;
-
 class MerginApi: public QObject {
      Q_OBJECT
 public:
-    explicit MerginApi(const QString& root, ProjectModel *model, QObject* parent = nullptr );
+    explicit MerginApi(const QString& root, MerginProjectModel *model, QObject* parent = nullptr );
     ~MerginApi() = default;
     Q_INVOKABLE void reloadModel();
     ProjectList listProjects();
@@ -35,7 +28,7 @@ private:
     QNetworkAccessManager mManager;
     QString mApiRoot; //e.g. localhost:5000
     ProjectList mMerginProjects;
-    ProjectModel *mModel;
+    MerginProjectModel *mModel;
     QByteArray mToken = QByteArray("TODO");
 
 };

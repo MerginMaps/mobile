@@ -111,7 +111,8 @@ loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
-merginapi.cpp
+merginapi.cpp \
+merginprojectmodel.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -120,7 +121,8 @@ loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
-merginapi.h
+merginapi.h \
+merginprojectmodel.h
 
 RESOURCES += \
     img/pics.qrc \

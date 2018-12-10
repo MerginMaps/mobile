@@ -13,6 +13,7 @@ Popup {
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
+    property bool showMergin: false
 
     function openPanel(state) {
         stateManager.state = state
@@ -23,6 +24,7 @@ Popup {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
         grid.model = __projectsModel
+        merginProjectsList.model = __merginProjectsModel
     }
 
     id: projectsPanel
@@ -82,6 +84,8 @@ Popup {
                 height: projectMenuButtons.height
                 text: qsTr("MY PROJECTS")
                 horizontalAlignment: Text.AlignLeft
+
+                onClicked: showMergin = false
             }
 
             PanelTabButton {
@@ -90,6 +94,7 @@ Popup {
                 horizontalAlignment: Text.AlignRight
 
                 onClicked: {
+                    showMergin = true
                     __merginApi.reloadModel()
                 }
             }
@@ -118,6 +123,22 @@ Popup {
 
         ListView {
             id: grid
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            contentWidth: grid.width
+            clip: true
+            visible: !showMergin
+
+            property int cellWidth: width
+            property int cellHeight: projectsPanel.rowHeight
+            property int borderWidth: 1
+
+            delegate: delegateItem
+        }
+
+        ListView {
+            id: merginProjectsList
+            visible: showMergin
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentWidth: grid.width
@@ -215,7 +236,7 @@ Popup {
 
                         Text {
                             height: textContainer.height/2
-                            text: projectInfo
+                            text: projectInfo ? projectInfo : ""
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left

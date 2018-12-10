@@ -6,7 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-MerginApi::MerginApi(const QString &root, ProjectModel *model, QObject *parent)
+MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QObject *parent)
   : QObject (parent)
   , mApiRoot(root)
   , mModel(model)
@@ -15,12 +15,8 @@ MerginApi::MerginApi(const QString &root, ProjectModel *model, QObject *parent)
 
 void MerginApi::reloadModel()
 {
-
     ProjectList projects = listProjects();
-
-    mModel;
-    //mModel;
-
+    mModel->resetProjects(projects);
 }
 
 ProjectList MerginApi::listProjects()
@@ -31,7 +27,6 @@ ProjectList MerginApi::listProjects()
     QUrl url(mApiRoot + "/v1/project");
 
     request.setUrl(url);
-    //  headers={'Authorization': 'Basic ' + b64encode(b'mergin:ilovemergin').decode('utf-8')
     request.setRawHeader("Authorization", QByteArray("Basic ") + mToken);
 
     QNetworkReply *reply = mManager.get(request);

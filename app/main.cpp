@@ -244,6 +244,10 @@ int main(int argc, char *argv[])
   }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
 
+  // Create mergin projects model
+  MerginProjectModel mpm;
+  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
+
   // Create QGIS project
   Loader loader;
   engine.rootContext()->setContextProperty( "__loader", &loader );
@@ -252,16 +256,16 @@ int main(int argc, char *argv[])
   LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
 
-  // Create layer model
+  // Create map theme model
   MapThemesModel mtm(loader.project());
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
 
-  // Create layer model
+  // Create app settings
   AppSettings as;
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
-  // Create layer model
-  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &pm);
+  // Create mergin api
+  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &mpm );
   engine.rootContext()->setContextProperty( "__merginApi", &ma );
 
   // Connections
