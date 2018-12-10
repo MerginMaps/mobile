@@ -11,28 +11,31 @@ Item {
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
-    // real position
-    property real positionKitX: positionKit.screenPosition.x
-    property real positionKitY: positionKit.screenPosition.y
     // animated position
-    property real posX
-    property real posY
+    property real animatedPosX
+    property real animatedPosY
 
-    onPositionKitXChanged: {
-        animateX.from = posX
-        animateX.to = positionKit.screenPosition.x
-        animateX.start()
+    function changePos() {
+        var posNext = positionKit.mapSettings.coordinateToScreen(positionKit.projectedPosition)
+
+        animateX.from = animatedPosX
+        animateX.to = posNext.x
+        animateX.restart()
+
+        animateY.from = animatedPosY
+        animateY.to = posNext.y
+        animateY.restart()
     }
-    onPositionKitYChanged: {
-        animateY.from = posY
-        animateY.to = positionKit.screenPosition.y
-        animateY.start()
+
+    Component.onCompleted: {
+        animatedPosX =  positionKit.projectedPosition.x
+        animatedPosY = positionKit.projectedPosition.y
     }
 
     NumberAnimation {
         id: animateX
         target: positionMarker
-        properties: "posX"
+        properties: "animatedPosX"
         duration: 1000
         easing {type: Easing.Linear}
     }
@@ -40,7 +43,7 @@ Item {
     NumberAnimation {
         id: animateY
         target: positionMarker
-        properties: "posY"
+        properties: "animatedPosY"
         duration: 1000
         easing {type: Easing.Linear}
     }
@@ -52,8 +55,8 @@ Item {
                  positionKit.hasPosition &&
                  (positionKit.accuracy > 0) &&
                  (accuracyIndicator.width > positionMarker.size / 2.0)
-        x: posX - width/2
-        y: posY - height/2
+        x: animatedPosX - width/2
+        y: animatedPosY - height/2
         width:positionKit.screenAccuracy
         height: accuracyIndicator.width
         color: InputStyle.highlightColor
@@ -71,8 +74,8 @@ Item {
         height: width
         smooth: true
         visible: positionKit.hasPosition && positionKit.direction >= 0
-        x: posX - width/2
-        y: posY - (height * 1)
+        x: animatedPosX - width/2
+        y: animatedPosY - (height * 1)
     }
 
     Image {
@@ -82,8 +85,8 @@ Item {
         width: positionMarker.size
         height: width
         smooth: true
-        x: posX - width/2
-        y: posY - height/2
+        x: animatedPosX - width/2
+        y: animatedPosY - height/2
     }
 }
 

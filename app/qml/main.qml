@@ -150,6 +150,7 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
+        positionMarker.changePos()
         if (__appSettings.autoCenterMapChecked) {
           var border = mainPanel.height
           if (isPositionOutOfExtent(border)) {
@@ -238,6 +239,9 @@ ApplicationWindow {
         target: mapCanvas.mapSettings
         onExtentChanged: {
             scaleBar.visible = true
+            var pos = mapCanvas.mapSettings.coordinateToScreen( positionKit.projectedPosition)
+            positionMarker.animatedPosX = pos.x
+            positionMarker.animatedPosY = pos.y
         }
     }
 
