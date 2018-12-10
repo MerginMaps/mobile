@@ -20,6 +20,7 @@
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
+#include "merginapi.h"
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
@@ -258,6 +259,10 @@ int main(int argc, char *argv[])
   // Create layer model
   AppSettings as;
   engine.rootContext()->setContextProperty( "__appSettings", &as );
+
+  // Create layer model
+  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &pm);
+  engine.rootContext()->setContextProperty( "__merginApi", &ma );
 
   // Connections
   QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);

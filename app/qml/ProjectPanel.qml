@@ -88,6 +88,10 @@ Popup {
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight
+
+                onClicked: {
+                    __merginApi.reloadModel()
+                }
             }
         }
 
