@@ -48,12 +48,12 @@ Popup {
 
     // TODO make one global indicator if somewhere else will be needed
     BusyIndicator {
-      id: busyIndicator
-      width: parent.width/8
-      height: width
-      running: false
-      visible: running
-      anchors.centerIn: parent
+        id: busyIndicator
+        width: parent.width/8
+        height: width
+        running: false
+        visible: running
+        anchors.centerIn: parent
     }
 
     Item {
@@ -174,136 +174,39 @@ Popup {
 
     Component {
         id: delegateItem
+        ProjectDelegateItem {
+            cellWidth: projectsPanel.width
+            cellHeight: projectsPanel.rowHeight
+            borderWidth: 1
+            activeProjectIndex: projectsPanel.activeProjectIndex
+            state: stateManager.state
+            width: cellWidth
+            height: cellHeight
+            highlight: {
+                if (showMergin) return false
 
-        Rectangle {
-            id: itemContainer
-            property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColor
-            property bool highlight: {
-                if (stateManager.state === "setup") {
+                if (state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
                 } else {
                     return index === projectsPanel.activeProjectIndex ? true : false
                 }
             }
 
-            width: grid.cellWidth
-            height: grid.cellHeight
-            color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if (showMergin) return
+            onItemClicked: {
+                if (showMergin) return
 
-                    if (stateManager.state === "setup") {
-                        __appSettings.defaultProject = path ? path : ""
-                    }
-
-                    else if (stateManager.state === "view") {
-                        projectsPanel.activeProjectIndex = index
-                    }
-
-                    projectsPanel.visible = false
+                if (stateManager.state === "setup") {
+                    __appSettings.defaultProject = path ? path : ""
                 }
+
+                else if (stateManager.state === "view") {
+                    projectsPanel.activeProjectIndex = index
+                }
+
+                projectsPanel.visible = false
             }
 
-            Item {
-                width: parent.width
-                height: parent.height
-
-                RowLayout {
-                    id: row
-                    anchors.fill: parent
-                    spacing: 0
-
-                    Item {
-                        id: iconContainer
-                        height: grid.cellHeight
-                        width: grid.cellHeight
-
-                        Image {
-                            anchors.margins: (grid.cellHeight/4)
-                            id: icon
-                            anchors.fill: parent
-                            source: 'project.svg'
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            fillMode: Image.PreserveAspectFit
-                        }
-
-                        ColorOverlay {
-                            anchors.fill: icon
-                            source: icon
-                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                        }
-
-                    }
-
-                    Item {
-                        id: textContainer
-                        y: 0
-                        height: grid.cellHeight - row.bottomMargin
-                        width: grid.cellWidth - (grid.cellHeight * 2)
-                        Text {
-                            id: mainText
-                            text: name
-                            height: textContainer.height/2
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            font.weight: Font.Bold
-                            color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignBottom
-                        }
-
-                        Text {
-                            height: textContainer.height/2
-                            text: projectInfo ? projectInfo : ""
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            anchors.left: parent.left
-                            anchors.top: mainText.bottom
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: itemContainer.highlight ? itemContainer.primaryColor : InputStyle.panelBackgroundDark
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignTop
-                        }
-                    }
-
-                    Item {
-                        height: grid.cellHeight
-                        width: grid.cellHeight
-                        y: 0
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                projectsPanel.activeProjectIndex = index
-                                projectsPanel.visible = false
-                            }
-                        }
-
-                        Text {
-                            anchors.fill: parent
-                            text: "..."
-                            height: textContainer.height/2
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            font.weight: Font.Bold
-                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: borderLine
-                    color: InputStyle.panelBackground2
-                    width: row.width
-                    height: grid.borderWidth
-                    anchors.bottom: parent.bottom
-                }
-            }
         }
     }
 }
