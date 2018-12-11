@@ -47,7 +47,6 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
-    // TODO make one global indicator if somewhere else will be needed
     BusyIndicator {
         id: busyIndicator
         width: parent.width/8
@@ -209,6 +208,8 @@ Popup {
 
                 projectsPanel.visible = false
             }
+
+            onMenuClicked: itemClicked() // nothing to do with menu atm
 
         }
     }
