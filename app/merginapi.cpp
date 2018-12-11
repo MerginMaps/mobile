@@ -38,10 +38,10 @@ void MerginApi::listProjectsReplyFinished()
     if (r->error() == QNetworkReply::NoError)
     {
       QByteArray data = r->readAll();
-      qDebug("R: %s", data.constData());
       mMerginProjects = parseProjectsData(data);
     }
     else {
+        // TODO propagate error
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
     }
@@ -64,11 +64,9 @@ ProjectList MerginApi::parseProjectsData(QByteArray data)
         {
             QJsonObject designMap = it->toObject();
             MerginProject p;
-            // get info from server
             p.name = designMap.value("name").toString();
             QString created = designMap.value("created").toString();
-            QDateTime dateTime = QDateTime::fromString(created, Qt::ISODateWithMs);
-            p.info = dateTime.toString();
+            p.info = QDateTime::fromString(created, Qt::ISODateWithMs).toString();
             result << std::make_shared<MerginProject>(p);
         }
     }

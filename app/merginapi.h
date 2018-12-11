@@ -25,7 +25,7 @@ private:
 
     QEventLoop mEventLoop;
     QNetworkAccessManager mManager;
-    QString mApiRoot; //e.g. localhost:5000
+    QString mApiRoot;
     ProjectList mMerginProjects;
     MerginProjectModel *mModel;
     QByteArray mToken;

@@ -55,7 +55,6 @@ Rectangle {
                     source: icon
                     color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                 }
-
             }
 
             Item {
@@ -96,8 +95,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        //menuClicked()
-                        itemClicked()
+                        menuClicked()
                     }
                 }
 
