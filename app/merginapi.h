@@ -12,8 +12,7 @@ class MerginApi: public QObject {
 public:
     explicit MerginApi(const QString& root, MerginProjectModel *model, QObject* parent = nullptr );
     ~MerginApi() = default;
-    Q_INVOKABLE void reloadModel();
-    ProjectList listProjects();
+    Q_INVOKABLE void listProjects();
 
 signals:
     void listProjectsFinished();

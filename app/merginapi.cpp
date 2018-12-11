@@ -14,28 +14,18 @@ MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QObject *pa
 {
 }
 
-void MerginApi::reloadModel()
+void MerginApi::listProjects()
 {
-    ProjectList projects = listProjects();
-    mModel->resetProjects(projects);
-}
-
-ProjectList MerginApi::listProjects()
-{
-
     mMerginProjects.clear();
     QNetworkRequest request;
-    QUrl url(mApiRoot + "/v1/project");
+    // projects filtered by tag "input_use"
+    QUrl url(mApiRoot + "/v1/project?tags=input_use");
 
     request.setUrl(url);
     request.setRawHeader("Authorization", QByteArray("Basic ") + mToken);
 
     QNetworkReply *reply = mManager.get(request);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished);
-
-    mEventLoop.exec();  // waits until the request is sent and the reply is processed
-
-    return mMerginProjects;
 }
 
 void MerginApi::listProjectsReplyFinished()
@@ -56,9 +46,9 @@ void MerginApi::listProjectsReplyFinished()
     }
 
 
+    mModel->resetProjects(mMerginProjects);
     r->deleteLater();
-
-    mEventLoop.quit();
+    emit listProjectsFinished();
 }
 
 ProjectList MerginApi::parseProjectsData(QByteArray data)

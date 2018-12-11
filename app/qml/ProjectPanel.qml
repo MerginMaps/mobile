@@ -28,6 +28,14 @@ Popup {
         merginProjectsList.model = __merginProjectsModel
     }
 
+    Connections {
+        target: __merginApi
+        onListProjectsFinished: {
+            busyIndicator.running = false
+            console.log("listProjectsReplyFinishedlistProjectsReplyFinished")
+        }
+    }
+
     id: projectsPanel
     visible: false
     contentWidth: projectsPanel.width
@@ -107,8 +115,7 @@ Popup {
                 onClicked: {
                     busyIndicator.running = true
                     showMergin = true
-                    __merginApi.reloadModel()
-                    busyIndicator.running = false
+                    __merginApi.listProjects()
                 }
             }
         }
@@ -188,6 +195,8 @@ Popup {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    if (showMergin) return
+
                     if (stateManager.state === "setup") {
                         __appSettings.defaultProject = path ? path : ""
                     }
