@@ -19,6 +19,7 @@ QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
     switch ( role )
     {
     case Name: return QVariant(project->name);
+    case ProjectInfo: return QVariant(project->info);
     }
 
     return QVariant();
@@ -28,6 +29,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
 {
     QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
     roleNames[Name] = "name";
+    roleNames[ProjectInfo] = "projectInfo";
     return roleNames;
 }
 

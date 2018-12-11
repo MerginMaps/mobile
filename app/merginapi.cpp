@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDate>
 
 MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QObject *parent)
   : QObject (parent)
@@ -52,8 +53,6 @@ void MerginApi::listProjectsReplyFinished()
     else {
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
-//       if (r->errorString() == QStringLiteral("Host requires authentication"))
-//           emit authRequested(r->errorString() + QStringLiteral(" - please log in and repeat action again."));
     }
 
 
@@ -76,9 +75,11 @@ ProjectList MerginApi::parseProjectsData(QByteArray data)
             MerginProject p;
             // get info from server
             p.name = designMap.value("name").toString();
+            QString created = designMap.value("created").toString();
+            QDateTime dateTime = QDateTime::fromString(created, Qt::ISODateWithMs);
+            p.info = dateTime.toString();
             result << std::make_shared<MerginProject>(p);
         }
-
     }
     return result;
 }

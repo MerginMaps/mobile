@@ -11,6 +11,7 @@ Popup {
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
+    property var busyIndicator
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
     property bool showMergin: false
@@ -36,6 +37,16 @@ Popup {
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
+    }
+
+    // TODO make one global indicator if somewhere else will be needed
+    BusyIndicator {
+      id: busyIndicator
+      width: parent.width/8
+      height: width
+      running: false
+      visible: running
+      anchors.centerIn: parent
     }
 
     Item {
@@ -94,8 +105,10 @@ Popup {
                 horizontalAlignment: Text.AlignRight
 
                 onClicked: {
+                    busyIndicator.running = true
                     showMergin = true
                     __merginApi.reloadModel()
+                    busyIndicator.running = false
                 }
             }
         }
@@ -104,6 +117,7 @@ Popup {
         Item {
             width: parent.width
             implicitHeight: __appSettings.defaultProject && stateManager.state === "setup" ? InputStyle.rowHeight : 0
+            visible: implicitHeight
 
             ExtendedMenuItem {
                 contentText: "Unselect default project"
@@ -242,7 +256,7 @@ Popup {
                             anchors.left: parent.left
                             anchors.top: mainText.bottom
                             font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: itemContainer.highlight ? itemContainer.primaryColor : "grey"
+                            color: itemContainer.highlight ? itemContainer.primaryColor : InputStyle.panelBackgroundDark
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignTop
                         }

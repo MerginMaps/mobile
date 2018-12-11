@@ -8,7 +8,7 @@
 struct MerginProject {
     QString name;
     QStringList tags;
-    //QDate created;
+    QString info;
 };
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
@@ -20,7 +20,8 @@ class MerginProjectModel: public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1,
-      Size
+      Size,
+      ProjectInfo
     };
     Q_ENUMS( Roles )
 
