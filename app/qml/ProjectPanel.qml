@@ -18,6 +18,7 @@ Popup {
 
     function openPanel(state) {
         stateManager.state = state
+        myProjectsBtn.clicked()
         projectsPanel.visible = true
     }
 
@@ -99,17 +100,19 @@ Popup {
             }
 
             PanelTabButton {
+                id: myProjectsBtn
                 height: projectMenuButtons.height
                 text: qsTr("MY PROJECTS")
                 horizontalAlignment: Text.AlignLeft
 
-                onClicked: showMergin = false
+                onClicked: {showMergin = false; checked = true}
             }
 
             PanelTabButton {
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight
+                visible: stateManager.state !== "setup"
 
                 onClicked: {
                     busyIndicator.running = true
