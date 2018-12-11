@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QEventLoop>
+#include <memory>
 
 class MerginApi: public QObject {
      Q_OBJECT

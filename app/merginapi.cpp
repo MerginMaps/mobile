@@ -1,7 +1,6 @@
 #include "merginapi.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QtNetwork>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
