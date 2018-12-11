@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QEventLoop>
+#include <memory>
 
 struct MerginProject {
     QString name;

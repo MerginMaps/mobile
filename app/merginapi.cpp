@@ -5,7 +5,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDate>
-#include <memory>
 
 #ifdef ANDROID
 #include <QtAndroid>
