@@ -4,13 +4,8 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include <QString>
-
-struct MerginProject {
-    QString name;
-    QStringList tags;
-    QString info;
-};
-typedef QList<std::shared_ptr<MerginProject>> ProjectList;
+#include <memory>
+#include "merginapi.h"
 
 class MerginProjectModel: public QAbstractListModel
 {
@@ -25,21 +20,23 @@ class MerginProjectModel: public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MerginProjectModel(QObject* parent = nullptr);
+    explicit MerginProjectModel(MerginApi *merginApi, QObject* parent = nullptr);
 
     Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
+    ProjectList projects();
 
     QHash<int, QByteArray> roleNames() const override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    void resetProjects(ProjectList projects);
+    void resetProjects();
 
 signals:
     void merginProjectsChanged();
 
   private:
+    MerginApi* mApi;
     ProjectList mMerginProjects;
 
 };

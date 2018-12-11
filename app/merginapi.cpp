@@ -5,11 +5,16 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDate>
+#include <memory>
 
-MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QByteArray token, QObject *parent)
+#ifdef ANDROID
+#include <QtAndroid>
+#include <QAndroidJniObject>
+#endif
+
+MerginApi::MerginApi(const QString &root, QByteArray token, QObject *parent)
   : QObject (parent)
   , mApiRoot(root)
-  , mModel(model)
   , mToken(token)
 {
 }
@@ -22,10 +27,15 @@ void MerginApi::listProjects()
     QUrl url(mApiRoot + "/v1/project?tags=input_use");
 
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic ") + mToken);
+    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
 
     QNetworkReply *reply = mManager.get(request);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished);
+}
+
+ProjectList MerginApi::projects()
+{
+    return mMerginProjects;
 }
 
 void MerginApi::listProjectsReplyFinished()
@@ -43,15 +53,26 @@ void MerginApi::listProjectsReplyFinished()
         // TODO propagate error
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
+        emit networkErrorOccurred( r->errorString() );
+        QString errMsg = r->errorString() ;
+#ifdef ANDROID
+        QtAndroid::runOnAndroidThread([errMsg] {
+            QAndroidJniObject javaString = QAndroidJniObject::fromString(errMsg);
+            QAndroidJniObject toast = QAndroidJniObject::callStaticObjectMethod("android/widget/Toast", "makeText",
+                                                                                "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
+                                                                                QtAndroid::androidActivity().object(),
+                                                                                javaString.object(),
+                                                                                jint(1));
+            toast.callMethod<void>("show");
+        });
+#endif
     }
 
-
-    mModel->resetProjects(mMerginProjects);
     r->deleteLater();
     emit listProjectsFinished();
 }
 
-ProjectList MerginApi::parseProjectsData(QByteArray data)
+ProjectList MerginApi::parseProjectsData(const QByteArray data)
 {
     ProjectList result;
 

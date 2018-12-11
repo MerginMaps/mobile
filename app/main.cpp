@@ -21,6 +21,7 @@
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
+#include "merginprojectmodel.h"
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
@@ -244,10 +245,6 @@ int main(int argc, char *argv[])
   }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
 
-  // Create mergin projects model
-  MerginProjectModel mpm;
-  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
-
   // Create QGIS project
   Loader loader;
   engine.rootContext()->setContextProperty( "__loader", &loader );
@@ -269,8 +266,12 @@ int main(int argc, char *argv[])
 #ifdef MERGIN_TOKEN
   merginToken.append(STR(MERGIN_TOKEN));
 #endif
-  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &mpm, merginToken );
-  engine.rootContext()->setContextProperty( "__merginApi", &ma );
+  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), merginToken );
+  engine.rootContext()->setContextProperty( "__merginApi", ma );
+
+  // Create mergin projects model
+  MerginProjectModel mpm( ma );
+  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
   // Connections
   QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
