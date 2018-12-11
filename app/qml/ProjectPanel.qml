@@ -32,7 +32,6 @@ Popup {
         target: __merginApi
         onListProjectsFinished: {
             busyIndicator.running = false
-            console.log("listProjectsReplyFinishedlistProjectsReplyFinished")
         }
     }
 

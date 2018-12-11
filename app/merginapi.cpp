@@ -7,10 +7,11 @@
 #include <QJsonArray>
 #include <QDate>
 
-MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QObject *parent)
+MerginApi::MerginApi(const QString &root, MerginProjectModel *model, QByteArray token, QObject *parent)
   : QObject (parent)
   , mApiRoot(root)
   , mModel(model)
+  , mToken(token)
 {
 }
 

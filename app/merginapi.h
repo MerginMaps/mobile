@@ -10,7 +10,7 @@
 class MerginApi: public QObject {
      Q_OBJECT
 public:
-    explicit MerginApi(const QString& root, MerginProjectModel *model, QObject* parent = nullptr );
+    explicit MerginApi(const QString& root, MerginProjectModel *model, QByteArray token, QObject* parent = nullptr );
     ~MerginApi() = default;
     Q_INVOKABLE void listProjects();
 
@@ -28,7 +28,7 @@ private:
     QString mApiRoot; //e.g. localhost:5000
     ProjectList mMerginProjects;
     MerginProjectModel *mModel;
-    QByteArray mToken = QByteArray("TODO");
+    QByteArray mToken;
 
 };
 

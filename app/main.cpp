@@ -265,7 +265,11 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &mpm );
+  QByteArray merginToken;
+#ifdef MERGIN_TOKEN
+  merginToken.append(STR(MERGIN_TOKEN));
+#endif
+  MerginApi ma(QString("https://mergin.dev.cloudmappin.com"), &mpm, merginToken );
   engine.rootContext()->setContextProperty( "__merginApi", &ma );
 
   // Connections
