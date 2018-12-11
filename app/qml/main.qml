@@ -239,9 +239,6 @@ ApplicationWindow {
         target: mapCanvas.mapSettings
         onExtentChanged: {
             scaleBar.visible = true
-            var pos = mapCanvas.mapSettings.coordinateToScreen( positionKit.projectedPosition)
-            positionMarker.animatedPosX = pos.x
-            positionMarker.animatedPosY = pos.y
         }
     }
 

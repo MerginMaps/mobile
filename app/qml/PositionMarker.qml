@@ -11,7 +11,7 @@ Item {
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
-    // animated position
+    // animated position in screen coords
     property real animatedPosX
     property real animatedPosY
 
@@ -28,26 +28,35 @@ Item {
     }
 
     Component.onCompleted: {
-        animatedPosX =  positionKit.projectedPosition.x
-        animatedPosY = positionKit.projectedPosition.y
+        var pos = positionKit.mapSettings.coordinateToScreen(positionKit.projectedPosition)
+        animatedPosX =  pos.x
+        animatedPosY = pos.y
     }
 
     NumberAnimation {
         id: animateX
         target: positionMarker
         properties: "animatedPosX"
-        duration: 1000
-        easing {type: Easing.Linear}
+        duration: 500
+        easing {type: Easing.InOutQuad}
     }
 
     NumberAnimation {
         id: animateY
         target: positionMarker
         properties: "animatedPosY"
-        duration: 1000
-        easing {type: Easing.Linear}
+        duration: 500
+        easing {type: Easing.InOutQuad}
     }
 
+    Connections {
+        target: positionKit.mapSettings
+        onExtentChanged: {
+            var pos = mapCanvas.mapSettings.coordinateToScreen( positionKit.projectedPosition)
+            positionMarker.animatedPosX = pos.x
+            positionMarker.animatedPosY = pos.y
+        }
+    }
 
     Rectangle {
         id: accuracyIndicator
