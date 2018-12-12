@@ -16,6 +16,7 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 
+#include "androidutils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
@@ -222,6 +223,16 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion("0.1");
 
+  bool isAndroid;
+#ifdef ANDROID
+ isAndroid = true;
+#else
+  isAndroid = false;
+#endif
+  // Create project model
+  AndroidUtils au(isAndroid);
+  engine.rootContext()->setContextProperty( "__androidUtils", &au );
+
   // Create project model
   ProjectModel pm(dataDir);
   if (pm.rowCount() == 0) {
@@ -278,6 +289,7 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
+  QObject::connect(ma, &MerginApi::networkErrorOccurred, &au, &AndroidUtils::showToast);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");

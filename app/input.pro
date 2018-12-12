@@ -113,7 +113,8 @@ digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
-merginprojectmodel.cpp
+merginprojectmodel.cpp \
+androidutils.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -123,7 +124,8 @@ digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
-merginprojectmodel.h
+merginprojectmodel.h \
+androidutils.h
 
 RESOURCES += \
     img/pics.qrc \

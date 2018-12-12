@@ -29,7 +29,7 @@ private slots:
     void listProjectsReplyFinished();
 
 private:
-    ProjectList parseProjectsData( const QByteArray data );
+    ProjectList parseProjectsData( const QByteArray &data );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
