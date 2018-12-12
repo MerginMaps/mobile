@@ -6,7 +6,7 @@
 #include <QDebug>
 #endif
 
-AndroidUtils::AndroidUtils(const bool &isAndroid, QObject* parent):QObject(parent)
+AndroidUtils::AndroidUtils(bool isAndroid, QObject* parent):QObject(parent)
   ,mIsAndroid(isAndroid)
 {
 }

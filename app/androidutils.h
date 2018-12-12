@@ -7,7 +7,7 @@ class AndroidUtils: public QObject {
     Q_OBJECT
     Q_PROPERTY(bool isAndroid READ isAndroid ) // never change
 public:
-    explicit AndroidUtils( const bool &isAndroid, QObject* parent = nullptr );
+    explicit AndroidUtils( bool isAndroid, QObject* parent = nullptr );
 
     bool isAndroid() const;
 
