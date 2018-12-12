@@ -209,7 +209,12 @@ Popup {
                 projectsPanel.visible = false
             }
 
-            onMenuClicked: itemClicked() // nothing to do with menu atm
+            onMenuClicked: {
+                if (showMergin) {
+                    console.log("Going to download project " + name)
+                    __merginApi.downloadProject(name)
+                }
+            }
 
         }
     }

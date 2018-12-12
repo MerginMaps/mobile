@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
 #ifdef MERGIN_TOKEN
   merginToken.append(STR(MERGIN_TOKEN));
 #endif
-  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), merginToken );
+  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir, merginToken );
   engine.rootContext()->setContextProperty( "__merginApi", ma );
 
   // Create mergin projects model
