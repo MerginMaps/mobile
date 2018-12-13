@@ -89,6 +89,7 @@ mac {
 DEFINES += "CORE_EXPORT="
 DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
+DEFINES += "MERGIN_TOKEN=$${MERGIN_TOKEN}"
 
 CONFIG(debug, debug|release) {
   DEFINES += "QGIS_PREFIX_PATH=$${QGIS_PREFIX_PATH}"
@@ -110,7 +111,10 @@ layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
-appsettings.cpp
+appsettings.cpp \
+merginapi.cpp \
+merginprojectmodel.cpp \
+androidutils.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -118,7 +122,10 @@ layersmodel.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
-appsettings.h
+appsettings.h \
+merginapi.h \
+merginprojectmodel.h \
+androidutils.h
 
 RESOURCES += \
     img/pics.qrc \

@@ -11,11 +11,14 @@ Popup {
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
     property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
+    property var busyIndicator
 
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
+    property bool showMergin: false
 
     function openPanel(state) {
         stateManager.state = state
+        myProjectsBtn.clicked()
         projectsPanel.visible = true
     }
 
@@ -23,6 +26,14 @@ Popup {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
         grid.model = __projectsModel
+        merginProjectsList.model = __merginProjectsModel
+    }
+
+    Connections {
+        target: __merginApi
+        onListProjectsFinished: {
+            busyIndicator.running = false
+        }
     }
 
     id: projectsPanel
@@ -34,6 +45,15 @@ Popup {
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
+    }
+
+    BusyIndicator {
+        id: busyIndicator
+        width: parent.width/8
+        height: width
+        running: false
+        visible: running
+        anchors.centerIn: parent
     }
 
     Item {
@@ -79,15 +99,25 @@ Popup {
             }
 
             PanelTabButton {
+                id: myProjectsBtn
                 height: projectMenuButtons.height
                 text: qsTr("MY PROJECTS")
                 horizontalAlignment: Text.AlignLeft
+
+                onClicked: {showMergin = false; checked = true}
             }
 
             PanelTabButton {
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight
+                visible: stateManager.state !== "setup"
+
+                onClicked: {
+                    busyIndicator.running = true
+                    showMergin = true
+                    __merginApi.listProjects()
+                }
             }
         }
 
@@ -95,6 +125,7 @@ Popup {
         Item {
             width: parent.width
             implicitHeight: __appSettings.defaultProject && stateManager.state === "setup" ? InputStyle.rowHeight : 0
+            visible: implicitHeight
 
             ExtendedMenuItem {
                 contentText: "Unselect default project"
@@ -118,6 +149,22 @@ Popup {
             Layout.fillHeight: true
             contentWidth: grid.width
             clip: true
+            visible: !showMergin
+
+            property int cellWidth: width
+            property int cellHeight: projectsPanel.rowHeight
+            property int borderWidth: 1
+
+            delegate: delegateItem
+        }
+
+        ListView {
+            id: merginProjectsList
+            visible: showMergin
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            contentWidth: grid.width
+            clip: true
 
             property int cellWidth: width
             property int cellHeight: projectsPanel.rowHeight
@@ -129,134 +176,41 @@ Popup {
 
     Component {
         id: delegateItem
+        ProjectDelegateItem {
+            cellWidth: projectsPanel.width
+            cellHeight: projectsPanel.rowHeight
+            borderWidth: 1
+            activeProjectIndex: projectsPanel.activeProjectIndex
+            state: stateManager.state
+            width: cellWidth
+            height: cellHeight
+            highlight: {
+                if (showMergin) return false
 
-        Rectangle {
-            id: itemContainer
-            property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColor
-            property bool highlight: {
-                if (stateManager.state === "setup") {
+                if (state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
                 } else {
                     return index === projectsPanel.activeProjectIndex ? true : false
                 }
             }
 
-            width: grid.cellWidth
-            height: grid.cellHeight
-            color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if (stateManager.state === "setup") {
-                        __appSettings.defaultProject = path ? path : ""
-                    }
+            onItemClicked: {
+                if (showMergin) return
 
-                    else if (stateManager.state === "view") {
-                        projectsPanel.activeProjectIndex = index
-                    }
-
-                    projectsPanel.visible = false
+                if (stateManager.state === "setup") {
+                    __appSettings.defaultProject = path ? path : ""
                 }
+
+                else if (stateManager.state === "view") {
+                    projectsPanel.activeProjectIndex = index
+                }
+
+                projectsPanel.visible = false
             }
 
-            Item {
-                width: parent.width
-                height: parent.height
+            onMenuClicked: itemClicked() // nothing to do with menu atm
 
-                RowLayout {
-                    id: row
-                    anchors.fill: parent
-                    spacing: 0
-
-                    Item {
-                        id: iconContainer
-                        height: grid.cellHeight
-                        width: grid.cellHeight
-
-                        Image {
-                            anchors.margins: (grid.cellHeight/4)
-                            id: icon
-                            anchors.fill: parent
-                            source: 'project.svg'
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            fillMode: Image.PreserveAspectFit
-                        }
-
-                        ColorOverlay {
-                            anchors.fill: icon
-                            source: icon
-                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                        }
-
-                    }
-
-                    Item {
-                        id: textContainer
-                        y: 0
-                        height: grid.cellHeight - row.bottomMargin
-                        width: grid.cellWidth - (grid.cellHeight * 2)
-                        Text {
-                            id: mainText
-                            text: name
-                            height: textContainer.height/2
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            font.weight: Font.Bold
-                            color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignBottom
-                        }
-
-                        Text {
-                            height: textContainer.height/2
-                            text: projectInfo
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            anchors.left: parent.left
-                            anchors.top: mainText.bottom
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            color: itemContainer.highlight ? itemContainer.primaryColor : "grey"
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignTop
-                        }
-                    }
-
-                    Item {
-                        height: grid.cellHeight
-                        width: grid.cellHeight
-                        y: 0
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                projectsPanel.activeProjectIndex = index
-                                projectsPanel.visible = false
-                            }
-                        }
-
-                        Text {
-                            anchors.fill: parent
-                            text: "..."
-                            height: textContainer.height/2
-                            font.pixelSize: InputStyle.fontPixelSizeSmall
-                            font.weight: Font.Bold
-                            color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: borderLine
-                    color: InputStyle.panelBackground2
-                    width: row.width
-                    height: grid.borderWidth
-                    anchors.bottom: parent.bottom
-                }
-            }
         }
     }
 }

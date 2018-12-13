@@ -1,35 +1,25 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 
-Item {
-
-    id: notification
+Popup {
+    id: popup
+    modal: false
+    focus: true
+    opacity: 1
     property string text: ""
-
-    function open() {
-        popup.open()
+    margins: -7
+    background: Rectangle {
+        anchors.fill: parent
+        color: InputStyle.fontColorBright
+        opacity: 0.5
     }
+    onOpened: timer.start()
 
-    Popup {
-        id: popup
-        modal: false
-        focus: true
-        opacity: 1
-        width: notification.width
-        height: notification.height
-        background: Rectangle {
-            anchors.fill: parent
-            color: "white"
-            opacity: 0.8
-        }
-        onOpened: timer.start()
-
-        Text {
-            anchors.fill: parent
-            text: notification.text
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
+    Text {
+        anchors.fill: parent
+        text: popup.text
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
     }
 
     Timer {

@@ -25,5 +25,6 @@
         <file>PositionMarker.qml</file>
         <file>Shadow.qml</file>
         <file>NumberSpin.qml</file>
+        <file>ProjectDelegateItem.qml</file>
     </qresource>
 </RCC>

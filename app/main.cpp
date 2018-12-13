@@ -16,10 +16,13 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 
+#include "androidutils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
+#include "merginapi.h"
+#include "merginprojectmodel.h"
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
@@ -221,6 +224,10 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationVersion("0.1");
 
   // Create project model
+  AndroidUtils au;
+  engine.rootContext()->setContextProperty( "__androidUtils", &au );
+
+  // Create project model
   ProjectModel pm(dataDir);
   if (pm.rowCount() == 0) {
 #ifdef ANDROID
@@ -251,13 +258,25 @@ int main(int argc, char *argv[])
   LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
 
-  // Create layer model
+  // Create map theme model
   MapThemesModel mtm(loader.project());
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
 
-  // Create layer model
+  // Create app settings
   AppSettings as;
   engine.rootContext()->setContextProperty( "__appSettings", &as );
+
+  // Create mergin api
+  QByteArray merginToken;
+#ifdef MERGIN_TOKEN
+  merginToken.append(STR(MERGIN_TOKEN));
+#endif
+  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), merginToken );
+  engine.rootContext()->setContextProperty( "__merginApi", ma );
+
+  // Create mergin projects model
+  MerginProjectModel mpm( ma );
+  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
   // Connections
   QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);

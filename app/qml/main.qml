@@ -308,10 +308,24 @@ ApplicationWindow {
     Notification {
         id: popup
         text: ""
-        anchors.centerIn: parent
         width: 400 * QgsQuick.Utils.dp
         height: 160 * QgsQuick.Utils.dp
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
         z: zPanel + 1
+    }
+
+    Connections {
+        target: __merginApi
+        onNetworkErrorOccurred: {
+            console.log("__androidUtils.isAndroid", __androidUtils.isAndroid)
+            if (!__androidUtils.isAndroid) {
+                popup.text = errorMessage
+                popup.open()
+            } else {
+                __androidUtils.showToast(errorMessage)
+            }
+        }
     }
 
     FeaturePanel {
