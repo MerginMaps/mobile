@@ -322,6 +322,8 @@ ApplicationWindow {
             if (!__androidUtils.isAndroid) {
                 popup.text = errorMessage
                 popup.open()
+            } else {
+                __androidUtils.showToast(errorMessage)
             }
         }
     }

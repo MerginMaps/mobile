@@ -6,8 +6,7 @@
 #include <QDebug>
 #endif
 
-AndroidUtils::AndroidUtils(bool isAndroid, QObject* parent):QObject(parent)
-  ,mIsAndroid(isAndroid)
+AndroidUtils::AndroidUtils(QObject* parent):QObject(parent)
 {
 }
 
@@ -30,5 +29,9 @@ Q_UNUSED(message)
 
 bool AndroidUtils::isAndroid() const
 {
-    return mIsAndroid;
+#ifdef ANDROID
+    return true;
+#else
+    return false;
+#endif
 }

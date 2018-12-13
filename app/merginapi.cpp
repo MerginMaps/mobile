@@ -45,7 +45,6 @@ void MerginApi::listProjectsReplyFinished()
       mMerginProjects = parseProjectsData(data);
     }
     else {
-        // TODO propagate error
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
         emit networkErrorOccurred( r->errorString() );
