@@ -11,6 +11,7 @@ struct MerginProject {
     QString name;
     QStringList tags;
     QString info;
+    bool pending = false;
 };
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
@@ -25,8 +26,9 @@ public:
 
 signals:
     void listProjectsFinished();
-    void downloadProjectFinished(QString projectPath);
-    void networkErrorOccurred(QString errorMessage, QString additionalInfo);
+    void downloadProjectFinished(QString projectFolder, QString projectName);
+    void networkErrorOccurred(QString message, QString additionalInfo);
+    void notify(QString message);
 
 private slots:
     void listProjectsReplyFinished();
@@ -37,6 +39,7 @@ private:
     void makeToast(const QString &errorMessage, const QString &additionalInfo);
     QString saveFileName(const QUrl &url);
     void unzipProject(QString path, QString dir);
+    bool cacheProjectsData(const QByteArray &data);
 
     QNetworkAccessManager mManager;
     QString mApiRoot;

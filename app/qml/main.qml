@@ -62,6 +62,15 @@ ApplicationWindow {
         return positionKit.accuracy < __appSettings.gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
     }
 
+    function showMessage(message) {
+        if (!__androidUtils.isAndroid) {
+            popup.text = message
+            popup.open()
+        } else {
+            __androidUtils.showToast(message)
+        }
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -318,15 +327,24 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
-            console.log("__androidUtils.isAndroid", __androidUtils.isAndroid)
-            if (!__androidUtils.isAndroid) {
-                popup.text = errorMessage
-                popup.open()
-            } else {
-                __androidUtils.showToast(errorMessage)
-            }
+            showMessage(message)
+        }
+        onNotify: {
+            showMessage(message)
         }
     }
+
+//    Connections {
+//        target: __merginApi
+//        onNotify: {
+//            if (!__androidUtils.isAndroid) {
+//                popup.text = message
+//                popup.open()
+//            } else {
+//                __androidUtils.showToast(message)
+//            }
+//        }
+//    }
 
     FeaturePanel {
         id: featurePanel

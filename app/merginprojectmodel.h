@@ -16,7 +16,8 @@ class MerginProjectModel: public QAbstractListModel
     {
       Name = Qt::UserRole + 1,
       Size,
-      ProjectInfo
+      ProjectInfo,
+      Status // just "pending" for now
     };
     Q_ENUMS( Roles )
 
@@ -35,6 +36,9 @@ class MerginProjectModel: public QAbstractListModel
 signals:
     void merginProjectsChanged();
 
+
+public slots:
+    void downloadProjectFinished(QString projectFolder, QString projectName);
   private:
     MerginApi* mApi;
     ProjectList mMerginProjects;

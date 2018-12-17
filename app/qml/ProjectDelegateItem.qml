@@ -17,6 +17,7 @@ Rectangle {
     property int activeProjectIndex
     property string state
     property bool highlight: false
+    property bool pending: false
 
     signal itemClicked();
     signal menuClicked()
@@ -95,7 +96,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        menuClicked()
+                        if (!pending) menuClicked()
                     }
                 }
 
@@ -108,8 +109,19 @@ Rectangle {
                     color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    visible: !pending
+                }
+
+                BusyIndicator {
+                    id: busyIndicator
+                    implicitHeight: itemContainer.cellHeight/2
+                    implicitWidth: implicitHeight
+                    running: pending
+                    anchors.centerIn: parent
                 }
             }
+
+
         }
 
         Rectangle {

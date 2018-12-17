@@ -193,6 +193,7 @@ Popup {
                     return index === projectsPanel.activeProjectIndex ? true : false
                 }
             }
+            pending: showMergin ? pending : false
 
 
             onItemClicked: {
@@ -211,7 +212,7 @@ Popup {
 
             onMenuClicked: {
                 if (showMergin) {
-                    console.log("Going to download project " + name)
+                    pending = true
                     __merginApi.downloadProject(name)
                 }
             }

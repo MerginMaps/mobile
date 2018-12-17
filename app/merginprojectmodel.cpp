@@ -7,7 +7,6 @@ MerginProjectModel::MerginProjectModel(MerginApi *merginApi, QObject* parent)
     : QAbstractListModel( parent )
     ,mApi(merginApi)
 {
-    QObject::connect(mApi, &MerginApi::listProjectsFinished, this, &MerginProjectModel::resetProjects);
 }
 
 QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
@@ -22,6 +21,7 @@ QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
     {
     case Name: return QVariant(project->name);
     case ProjectInfo: return QVariant(project->info);
+    case Status: return QVariant(project->pending);
     }
 
     return QVariant();
@@ -32,6 +32,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
     QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
     roleNames[Name] = "name";
     roleNames[ProjectInfo] = "projectInfo";
+    roleNames[Status] = "pending";
     return roleNames;
 }
 
@@ -57,4 +58,17 @@ void MerginProjectModel::resetProjects()
     endResetModel();
 
     emit merginProjectsChanged();
+}
+
+// TODO emit signal merginProjectChanged
+void MerginProjectModel::downloadProjectFinished(QString projectFolder, QString projectName)
+{
+    Q_UNUSED(projectFolder);
+    for (std::shared_ptr<MerginProject> project: mMerginProjects) {
+        if (project->name == projectName) {
+            beginResetModel();
+            project->pending = false;
+            endResetModel();
+        }
+    }
 }

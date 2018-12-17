@@ -18,11 +18,15 @@ MerginApi::MerginApi(const QString &root, const QString& dataDir, QByteArray tok
   , mDataDir(dataDir + "/downloads/")
   , mToken(token)
 {
-    connect( this, &MerginApi::networkErrorOccurred, this, &MerginApi::makeToast );
 }
 
 void MerginApi::listProjects()
 {
+    if (mToken.isEmpty()) {
+        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: listProjects" );
+        return;
+    }
+
     mMerginProjects.clear();
     QNetworkRequest request;
     // projects filtered by tag "input_use"
@@ -36,16 +40,19 @@ void MerginApi::listProjects()
 
 void MerginApi::downloadProject(QString projectName)
 {
+    if (mToken.isEmpty()) {
+        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: downloadProject" );
+    }
+
     mMerginProjects.clear();
     QNetworkRequest request;
-    // TODO check spaces in names
     QUrl url(mApiRoot + "/v1/project/download/" + projectName + "?format=zip");
     qDebug() << "Requested " << url.toString();
 
     if (mPendingRequests.contains(url)) {
-        // TODO propagate error
         QString errorMsg = QStringLiteral("Download request for %1 is already pending.").arg(projectName);
         qDebug() << errorMsg;
+        emit networkErrorOccurred( errorMsg, "Mergin API error: downloadProject" );
         return;
     }
 
@@ -71,12 +78,13 @@ void MerginApi::listProjectsReplyFinished()
     if (r->error() == QNetworkReply::NoError)
     {
       QByteArray data = r->readAll();
+      cacheProjectsData(data);
       mMerginProjects = parseProjectsData(data);
     }
     else {
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
-        emit networkErrorOccurred( r->errorString() );
+        emit networkErrorOccurred( r->errorString(), "Mergin API error: listProjects" );
     }
 
     r->deleteLater();
@@ -85,20 +93,14 @@ void MerginApi::listProjectsReplyFinished()
 
 QString MerginApi::createProjectFile(const QByteArray data, QString projectName)
 {
-    // TODO test mDataDir
     QDir dir;
     if (!dir.exists(mDataDir))
         dir.mkpath(mDataDir);
     QFile file(mDataDir + projectName);
-    if (!file.exists()) {
-        qDebug("File doesn't exists yet");
-    } else {
-        // TODO overwrite projects??
+    if (file.exists()) {
+        qDebug("Zip file already exists!");
+        // TODO overwrite projects / handle data-sync
     }
-
-    int size = data.size();
-    qDebug("size: %s", QString::number(size).toStdString().c_str());
-    qDebug("RES: %s", data.toStdString().c_str());
 
     bool isOpen = file.open(QIODevice::WriteOnly);
     QString path;
@@ -130,7 +132,8 @@ void MerginApi::downloadProjectReplyFinished()
         QString filePath = createProjectFile(r->readAll(), projectName + extention);
         QString projectDir = mDataDir + projectName;
         unzipProject(filePath, projectDir + "/");
-        emit downloadProjectFinished(projectDir);
+        emit downloadProjectFinished(projectDir, projectName);
+        emit notify("Download successful");
     }
     else {
         emit networkErrorOccurred( r->errorString(), "Mergin API error: downloadProject" );
@@ -189,23 +192,22 @@ void MerginApi::unzipProject(QString path, QString dir)
 
     QStringList files;
     QgsZipUtils::unzip(path, dir, files);
-    qDebug() << "Unzipped " << files.count();
 }
 
-void MerginApi::makeToast(const QString &errorMessage, const QString &additionalInfo)
+bool MerginApi::cacheProjectsData(const QByteArray &data)
 {
-    QString message = QStringLiteral("%1(): %2").arg(additionalInfo, errorMessage);
-    qDebug("%s", message.toStdString().c_str());
-#ifdef ANDROID
-        QtAndroid::runOnAndroidThread([errorMessage] {
-            QAndroidJniObject javaString = QAndroidJniObject::fromString(errorMessage);
-            QAndroidJniObject toast = QAndroidJniObject::callStaticObjectMethod("android/widget/Toast", "makeText",
-                                                                                "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-                                                                                QtAndroid::androidActivity().object(),
-                                                                                javaString.object(),
-                                                                                jint(1));
-            toast.callMethod<void>("show");
-        });
-#endif
-}
+    QDir dir;
+    if (!dir.exists(mDataDir))
+        dir.mkpath(mDataDir);
 
+    QFile file(mDataDir + "projectsCache.txt");
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    QDataStream stream(&file);
+    stream << data;
+    file.close();
+
+    return true;
+}
