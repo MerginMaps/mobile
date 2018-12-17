@@ -25,7 +25,7 @@ public:
 
 signals:
     void listProjectsFinished();
-    void downloadProjectFinished();
+    void downloadProjectFinished(QString projectPath);
     void networkErrorOccurred(QString errorMessage, QString additionalInfo);
 
 private slots:
@@ -35,14 +35,15 @@ private slots:
 private:
     ProjectList parseProjectsData( const QByteArray data );
     void makeToast(const QString &errorMessage, const QString &additionalInfo);
-    QString getDataDir();
     QString saveFileName(const QUrl &url);
+    void unzipProject(QString path, QString dir);
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
     ProjectList mMerginProjects;
     QString mDataDir;
     QByteArray mToken;
+    QHash<QUrl, QString>mPendingRequests;
 
     QString createProjectFile( const QByteArray data, QString projectName );
 };

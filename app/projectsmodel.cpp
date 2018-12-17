@@ -30,7 +30,12 @@ ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
 ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles() {
-    QDirIterator it(mDataDir, QStringList() << "*.qgs", QDir::Files, QDirIterator::Subdirectories);
+    addProjectsFromPath(mDataDir);
+}
+
+void ProjectModel::addProjectsFromPath(QString path)
+{
+    QDirIterator it(path, QStringList() << "*.qgs", QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext())
     {
         it.next();
@@ -99,4 +104,11 @@ int ProjectModel::rowCount(const QModelIndex &parent) const {
 
 QString ProjectModel::dataDir() const {
     return mDataDir;
+}
+
+void ProjectModel::addProject(QString projectPath)
+{
+    beginResetModel();
+    addProjectsFromPath(projectPath);
+    endResetModel();
 }

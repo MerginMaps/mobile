@@ -278,6 +278,7 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
+  QObject::connect(ma, &MerginApi::downloadProjectFinished, &pm, &ProjectModel::addProject);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
