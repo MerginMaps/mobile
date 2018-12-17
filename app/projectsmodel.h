@@ -55,8 +55,12 @@ class ProjectModel : public QAbstractListModel
 
     QString dataDir() const;
 
+    public slots:
+        void addProject(QString projectPath);
+
   private:
     void findProjectFiles();
+    void addProjectsFromPath(QString path);
 
     struct ProjectFile {
         QString name;

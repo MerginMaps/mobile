@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 #ifdef MERGIN_TOKEN
   merginToken.append(STR(MERGIN_TOKEN));
 #endif
-  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), merginToken );
+  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir, merginToken );
   engine.rootContext()->setContextProperty( "__merginApi", ma );
 
   // Create mergin projects model
@@ -283,6 +283,7 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
+  QObject::connect(ma, &MerginApi::downloadProjectFinished, &pm, &ProjectModel::addProject);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
