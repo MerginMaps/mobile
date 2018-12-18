@@ -60,7 +60,6 @@ void MerginProjectModel::resetProjects()
     emit merginProjectsChanged();
 }
 
-// TODO emit signal merginProjectChanged
 void MerginProjectModel::downloadProjectFinished(QString projectFolder, QString projectName)
 {
     Q_UNUSED(projectFolder);
@@ -69,6 +68,9 @@ void MerginProjectModel::downloadProjectFinished(QString projectFolder, QString 
             beginResetModel();
             project->pending = false;
             endResetModel();
+            emit merginProjectsChanged();
+
+            return;
         }
     }
 }

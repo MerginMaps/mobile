@@ -54,6 +54,8 @@ class ProjectModel : public QAbstractListModel
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     QString dataDir() const;
+signals:
+    void projectsChanged();
 
     public slots:
         void addProject(QString projectFolder, QString projectName);

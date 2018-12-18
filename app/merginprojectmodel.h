@@ -36,7 +36,6 @@ class MerginProjectModel: public QAbstractListModel
 signals:
     void merginProjectsChanged();
 
-
 public slots:
     void downloadProjectFinished(QString projectFolder, QString projectName);
   private:

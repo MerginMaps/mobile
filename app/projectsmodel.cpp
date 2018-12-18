@@ -108,7 +108,9 @@ QString ProjectModel::dataDir() const {
 
 void ProjectModel::addProject(QString projectFolder, QString projectName)
 {
+    Q_UNUSED(projectName);
     beginResetModel();
-    addProjectsFromPath(projectFolder + projectName);
+    addProjectsFromPath(projectFolder);
     endResetModel();
+    emit projectsChanged();
 }
