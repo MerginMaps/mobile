@@ -334,18 +334,6 @@ ApplicationWindow {
         }
     }
 
-//    Connections {
-//        target: __merginApi
-//        onNotify: {
-//            if (!__androidUtils.isAndroid) {
-//                popup.text = message
-//                popup.open()
-//            } else {
-//                __androidUtils.showToast(message)
-//            }
-//        }
-//    }
-
     FeaturePanel {
         id: featurePanel
         height: window.height
