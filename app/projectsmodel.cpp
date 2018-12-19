@@ -35,7 +35,7 @@ void ProjectModel::findProjectFiles() {
 
 void ProjectModel::addProjectsFromPath(QString path)
 {
-    QDirIterator it(path, QStringList() << "*.qgs", QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it(path, QStringList() << QStringLiteral("*.qgs"), QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext())
     {
         it.next();

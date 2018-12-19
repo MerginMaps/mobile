@@ -44,7 +44,6 @@ void MerginApi::downloadProject(QString projectName)
         emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: downloadProject" );
     }
 
-    mMerginProjects.clear();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/download/" + projectName + "?format=zip");
     qDebug() << "Requested " << url.toString();
@@ -91,7 +90,7 @@ void MerginApi::listProjectsReplyFinished()
     emit listProjectsFinished();
 }
 
-QString MerginApi::createProjectFile(const QByteArray data, QString projectName)
+QString MerginApi::createProjectFile(const QByteArray &data, QString projectName)
 {
     QDir dir;
     if (!dir.exists(mDataDir))
@@ -109,7 +108,7 @@ QString MerginApi::createProjectFile(const QByteArray data, QString projectName)
         file.close();
         path = QFileInfo(file).absoluteFilePath();
     } else {
-        qDebug() << "File cannot be open";
+        notify(QString("Project %1 cannot be open").arg(projectName));
     }
 
     return path;
@@ -119,7 +118,10 @@ void MerginApi::downloadProjectReplyFinished()
 {
 
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
-    Q_ASSERT(r);
+    if (!r) {
+        emit networkErrorOccurred( "No reply received.", "Mergin API error: downloadProject" );
+        return;
+    }
 
     QString projectName("temp");
     if (mPendingRequests.contains(r->url())) {
@@ -188,7 +190,7 @@ void MerginApi::unzipProject(QString path, QString dir)
 {
     QDir d;
     if (!d.exists(dir))
-        d.mkdir(dir);
+        d.mkpath(dir);
 
     QStringList files;
     QgsZipUtils::unzip(path, dir, files);

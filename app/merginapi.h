@@ -48,7 +48,7 @@ private:
     QByteArray mToken;
     QHash<QUrl, QString>mPendingRequests;
 
-    QString createProjectFile( const QByteArray data, QString projectName );
+    QString createProjectFile( const QByteArray &data, QString projectName );
 };
 
 #endif // MERGINAPI_H

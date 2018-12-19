@@ -3,7 +3,7 @@
 #include <QAbstractListModel>
 #include <QString>
 
-MerginProjectModel::MerginProjectModel(MerginApi *merginApi, QObject* parent)
+MerginProjectModel::MerginProjectModel(std::shared_ptr<MerginApi> merginApi, QObject* parent)
     : QAbstractListModel( parent )
     ,mApi(merginApi)
 {
@@ -54,7 +54,7 @@ void MerginProjectModel::resetProjects()
 {
     mMerginProjects.clear();
     beginResetModel();
-    mMerginProjects = mApi->projects();
+    mMerginProjects = mApi.get()->projects();
     endResetModel();
 
     emit merginProjectsChanged();

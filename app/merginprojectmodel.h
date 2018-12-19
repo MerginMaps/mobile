@@ -21,7 +21,7 @@ class MerginProjectModel: public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MerginProjectModel(MerginApi *merginApi, QObject* parent = nullptr);
+    explicit MerginProjectModel(std::shared_ptr<MerginApi> merginApi, QObject* parent = nullptr);
 
     Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
@@ -39,7 +39,7 @@ signals:
 public slots:
     void downloadProjectFinished(QString projectFolder, QString projectName);
   private:
-    MerginApi* mApi;
+    std::shared_ptr<MerginApi> mApi;
     ProjectList mMerginProjects;
 
 };

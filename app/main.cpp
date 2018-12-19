@@ -271,8 +271,9 @@ int main(int argc, char *argv[])
 #ifdef MERGIN_TOKEN
   merginToken.append(STR(MERGIN_TOKEN));
 #endif
-  MerginApi* ma=  new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir, merginToken );
-  engine.rootContext()->setContextProperty( "__merginApi", ma );
+
+  std::shared_ptr<MerginApi> ma =  std::make_shared<MerginApi>(QString("https://mergin.dev.cloudmappin.com"), dataDir, merginToken );
+  engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 
   // Create mergin projects model
   MerginProjectModel mpm( ma );
@@ -283,9 +284,9 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
-  QObject::connect(ma, &MerginApi::downloadProjectFinished, &mpm, &MerginProjectModel::downloadProjectFinished);
-  QObject::connect(ma, &MerginApi::downloadProjectFinished, &pm, &ProjectModel::addProject);
-  QObject::connect(ma, &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
+  QObject::connect(ma.get(), &MerginApi::downloadProjectFinished, &mpm, &MerginProjectModel::downloadProjectFinished);
+  QObject::connect(ma.get(), &MerginApi::downloadProjectFinished, &pm, &ProjectModel::addProject);
+  QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
