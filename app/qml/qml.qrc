@@ -8,7 +8,6 @@
         <file>ProjectPanel.qml</file>
         <file>RecordBtn.qml</file>
         <file>ScaleBar.qml</file>
-        <file>error.qml</file>
         <file>InputStyle.qml</file>
         <file>qmldir</file>
         <file>SettingsPanel.qml</file>

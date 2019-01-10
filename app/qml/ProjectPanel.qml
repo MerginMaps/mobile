@@ -156,6 +156,17 @@ Popup {
             property int borderWidth: 1
 
             delegate: delegateItem
+
+            Label {
+                anchors.fill: parent
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                visible: parent.count == 0
+                text: qsTr("No projects found!")
+                color: InputStyle.fontColor
+                font.pixelSize: InputStyle.fontPixelSizeNormal
+                font.bold: true
+            }
         }
 
         ListView {

@@ -173,21 +173,6 @@ void initDeclarative() {
     qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
 }
 
-int show_error(const QgsApplication& app,
-                QQmlEngine& engine,
-                const QString& msg)
-{
-    engine.rootContext()->setContextProperty( "__msg", msg );
-    QQmlComponent component(&engine, QUrl("qrc:/error.qml"));
-    QObject *object = component.create();
-    Q_ASSERT(object);
-    if ( QQuickWindow* quickWindow = qobject_cast<QQuickWindow*>( object ) )
-    {
-      quickWindow->setIcon(QIcon(":/logo.png"));
-    }
-    return app.exec();
-}
-
 int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
@@ -230,23 +215,7 @@ int main(int argc, char *argv[])
   // Create project model
   ProjectModel pm(dataDir);
   if (pm.rowCount() == 0) {
-#ifdef ANDROID
-      QString msg;
-      msg += "Unable to find any QGIS project. \n\n";
-      msg += "Please copy QGIS project (.qgs) with all layers to the mobile device and restart the application:\n";
-      msg += "  if you have SD card, location is INPUT under SD card base folder\n";
-      msg += "  if you do NOT have SD card, location is INPUT under your user home folder\n\n";
-      msg += "Folder INPUT should already be created and should contain QGIS resources directory.";
-      show_error(app, engine, msg);
-#else
-  #ifndef NDEBUG
-      QString msg("Unable to find any QGIS project \n in folder " + dataDir);
-      show_error(app, engine, msg);
-  #else
-      qDebug() << "Unable to find any QGIS project in the folder " << dataDir
-  #endif
-#endif
-      return EXIT_FAILURE;
+      qDebug() << "Unable to find any QGIS project in the folder " << dataDir;
   }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
 
