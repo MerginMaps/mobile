@@ -22,6 +22,15 @@ Popup {
         projectsPanel.visible = true
     }
 
+    function getStatusIcon(status) {
+        if (status === "noVersion") return "download.svg"
+        else if (status === "outOfDate") return "update.svg"
+        else if (status === "upToDate") return "check.svg"
+
+        return "more_menu.svg"
+    }
+
+
     Component.onCompleted: {
         // load model just after all components are prepared
         // otherwise GridView's delegate item is initialized invalidately
@@ -181,7 +190,7 @@ Popup {
             property int cellHeight: projectsPanel.rowHeight
             property int borderWidth: 1
 
-            delegate: delegateItem
+            delegate: delegateItemMergin
         }
     }
 
@@ -190,21 +199,16 @@ Popup {
         ProjectDelegateItem {
             cellWidth: projectsPanel.width
             cellHeight: projectsPanel.rowHeight
-            borderWidth: 1
-            activeProjectIndex: projectsPanel.activeProjectIndex
             state: stateManager.state
             width: cellWidth
             height: cellHeight
             highlight: {
-                if (showMergin) return false
-
                 if (state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
                 } else {
-                    return index === projectsPanel.activeProjectIndex ? true : false
+                    return path === projectsPanel.activeProjectPath ? true : false
                 }
             }
-
 
             onItemClicked: {
                 if (showMergin) return
@@ -219,8 +223,30 @@ Popup {
 
                 projectsPanel.visible = false
             }
+        }
+    }
 
-            onMenuClicked: itemClicked() // nothing to do with menu atm
+    Component {
+        id: delegateItemMergin
+        ProjectDelegateItem {
+            cellWidth: projectsPanel.width
+            cellHeight: projectsPanel.rowHeight
+            state: stateManager.state
+            width: cellWidth
+            height: cellHeight
+            pending: pendingProject
+            statusIconSource: getStatusIcon(status)
+
+            onMenuClicked: {
+                if (status === "upToDate") return
+
+                __merginProjectsModel.setPending(row, true)
+                if (status === "noVersion") {
+                    __merginApi.downloadProject(name)
+                } else if (status === "outOfDate") {
+                    __merginApi.updateProject(name)
+                }
+            }
 
         }
     }

@@ -24,5 +24,8 @@
         <file>gps_marker_no_position.svg</file>
         <file>gps_marker_position.svg</file>
         <file>no.svg</file>
+        <file>update.svg</file>
+        <file>check.svg</file>
+        <file>download.svg</file>
     </qresource>
 </RCC>
