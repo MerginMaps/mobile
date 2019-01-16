@@ -3,11 +3,9 @@
 #include <QAbstractListModel>
 #include <QString>
 
-MerginProjectModel::MerginProjectModel(MerginApi *merginApi, QObject* parent)
+MerginProjectModel::MerginProjectModel(QObject* parent)
     : QAbstractListModel( parent )
-    ,mApi(merginApi)
 {
-    QObject::connect(mApi, &MerginApi::listProjectsFinished, this, &MerginProjectModel::resetProjects);
 }
 
 QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
@@ -21,10 +19,31 @@ QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
     switch ( role )
     {
     case Name: return QVariant(project->name);
-    case ProjectInfo: return QVariant(project->info);
+    case ProjectInfo: {
+        if (!project->updated.isValid()) {
+            return QVariant(project->serverUpdated).toString();
+        } else {
+            return QVariant(project->updated).toString();
+        }
+    }
+    case Status: {
+        if (project->status == ProjectStatus::OutOfDate) return QVariant("outOfDate");
+        if (project->status == ProjectStatus::UpToDate) return QVariant("upToDate");
+        if (project->status == ProjectStatus::NoVersion) return QVariant("noVersion");
+        return QVariant("noVersion");
+    }
+    case Pending: return QVariant(project->pending);
     }
 
     return QVariant();
+}
+
+void MerginProjectModel::setPending(int row, bool pending)
+{
+    if (row < 0 || row > mMerginProjects.length() - 1) return;
+    QModelIndex ix = index(row);
+    mMerginProjects.at(row)->pending = pending;
+    emit dataChanged(ix, ix);
 }
 
 QHash<int, QByteArray> MerginProjectModel::roleNames() const
@@ -32,11 +51,9 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
     QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
     roleNames[Name] = "name";
     roleNames[ProjectInfo] = "projectInfo";
+    roleNames[Status] = "status";
+    roleNames[Pending] = "pendingProject";
     return roleNames;
-}
-
-QModelIndex MerginProjectModel::index( int row ) const {
-    return createIndex(row, 0, nullptr);
 }
 
 ProjectList MerginProjectModel::projects()
@@ -49,12 +66,24 @@ int MerginProjectModel::rowCount(const QModelIndex &parent) const {
     return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects()
+void MerginProjectModel::resetProjects(const ProjectList &merginProjects)
 {
     mMerginProjects.clear();
     beginResetModel();
-    mMerginProjects = mApi->projects();
+    mMerginProjects = merginProjects;
     endResetModel();
+}
 
-    emit merginProjectsChanged();
+void MerginProjectModel::downloadProjectFinished(QString projectFolder, QString projectName)
+{
+    Q_UNUSED(projectFolder);
+    int row = 0;
+    for (std::shared_ptr<MerginProject> project: mMerginProjects) {
+        if (project->name == projectName) {
+            project->status = ProjectStatus::UpToDate;
+            setPending(row, false); // emits dataChanged
+            return;
+        }
+        row++;
+    }
 }

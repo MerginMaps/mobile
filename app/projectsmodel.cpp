@@ -30,7 +30,18 @@ ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
 ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles() {
-    QDirIterator it(mDataDir, QStringList() << "*.qgs", QDir::Files, QDirIterator::Subdirectories);
+    addProjectsFromPath(mDataDir);
+}
+
+void ProjectModel::addProjectsFromPath(QString path)
+{
+    QDirIterator it(path, QStringList() << QStringLiteral("*.qgs"), QDir::Files, QDirIterator::Subdirectories);
+    QSet<QString> projectFilePaths;
+
+    for (ProjectFile projectFile: mProjectFiles) {
+        projectFilePaths << projectFile.path;
+    }
+
     while (it.hasNext())
     {
         it.next();
@@ -40,7 +51,9 @@ void ProjectModel::findProjectFiles() {
         QFileInfo fileInfo(it.filePath());
         QDateTime created = fileInfo.created();
         projectFile.info = QString(created.toString());
-        mProjectFiles.append(projectFile);
+
+        if (!projectFilePaths.contains(projectFile.path))
+            mProjectFiles.append(projectFile);
 
         qDebug() << "Found QGIS project: " << it.filePath();
     }
@@ -99,4 +112,13 @@ int ProjectModel::rowCount(const QModelIndex &parent) const {
 
 QString ProjectModel::dataDir() const {
     return mDataDir;
+}
+
+void ProjectModel::addProject(QString projectFolder, QString projectName)
+{
+    Q_UNUSED(projectName);
+    beginResetModel();
+    addProjectsFromPath(projectFolder);
+    endResetModel();
+    emit projectsChanged();
 }

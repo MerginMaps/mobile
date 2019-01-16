@@ -16,27 +16,27 @@ class MerginProjectModel: public QAbstractListModel
     {
       Name = Qt::UserRole + 1,
       Size,
-      ProjectInfo
+      ProjectInfo,
+      Status,
+      Pending
     };
     Q_ENUMS( Roles )
 
-    explicit MerginProjectModel(MerginApi *merginApi, QObject* parent = nullptr);
+    explicit MerginProjectModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE void setPending(int row, bool pending);
     ProjectList projects();
 
     QHash<int, QByteArray> roleNames() const override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    void resetProjects();
+    void resetProjects(const ProjectList &merginProjects);
 
-signals:
-    void merginProjectsChanged();
-
+public slots:
+    void downloadProjectFinished(QString projectFolder, QString projectName);
   private:
-    MerginApi* mApi;
     ProjectList mMerginProjects;
 
 };
