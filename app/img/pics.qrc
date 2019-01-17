@@ -27,5 +27,6 @@
         <file>update.svg</file>
         <file>check.svg</file>
         <file>download.svg</file>
+        <file>upload.svg</file>
     </qresource>
 </RCC>

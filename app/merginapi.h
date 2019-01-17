@@ -11,7 +11,8 @@ enum ProjectStatus
 {
   NoVersion,
   UpToDate,
-  OutOfDate
+  OutOfDate,
+  Modified
 };
 Q_ENUMS( ProjectStatus )
 

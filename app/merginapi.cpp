@@ -160,7 +160,12 @@ ProjectList MerginApi::updateMerginProjectList(ProjectList serverProjects)
     for (std::shared_ptr<MerginProject> project: serverProjects) {
         if (projectUpdates.contains(project->name)) {
             QDateTime localUpdate = projectUpdates.value(project->name);
-            project->updated = localUpdate;
+            QDateTime lastModified = QFileInfo(mDataDir + project->name).lastModified();
+            if (localUpdate >= lastModified) {
+                project->updated = localUpdate;
+            } else {
+               project->updated = lastModified;
+            }
             project->status = getProjectStatus(project->updated, project->serverUpdated);
         }
     }
@@ -628,6 +633,11 @@ ProjectStatus MerginApi::getProjectStatus(QDateTime localUpdated, QDateTime upda
     if (localUpdated < updated) {
         return ProjectStatus::OutOfDate;
     }
+
+    if (localUpdated > updated) {
+        return ProjectStatus::Modified;
+    }
+
     return ProjectStatus::UpToDate;
 }
 

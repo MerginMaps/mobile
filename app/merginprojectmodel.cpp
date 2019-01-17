@@ -30,6 +30,7 @@ QVariant MerginProjectModel::data( const QModelIndex& index, int role ) const
         if (project->status == ProjectStatus::OutOfDate) return QVariant("outOfDate");
         if (project->status == ProjectStatus::UpToDate) return QVariant("upToDate");
         if (project->status == ProjectStatus::NoVersion) return QVariant("noVersion");
+        if (project->status == ProjectStatus::Modified) return QVariant("modified");
         return QVariant("noVersion");
     }
     case Pending: return QVariant(project->pending);
