@@ -99,6 +99,7 @@ private:
     QSet<QString> listFiles(QString projectPath);
     void downloadProjectFiles(QString projectName, QByteArray json);
     void uploadProjectFiles(QString projectName, QByteArray json, QList<MerginFile> files);
+    QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles(QNetworkReply *r);
     ProjectList updateMerginProjectList(ProjectList serverProjects);
     void setUpdateToProject(QString projectName);
     void deleteObsoleteFiles(QString projectName);

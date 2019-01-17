@@ -278,86 +278,87 @@ void MerginApi::updateInfoReplyFinished()
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
-    QList<MerginFile> files;
+    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r);
+
     QUrl url = r->url();
     QStringList res = url.path().split("/");
     QString projectName;
     projectName = res.last();
     QString projectPath = QString(mDataDir + projectName + "/");
 
-    if (r->error() == QNetworkReply::NoError)
-    {
-      QByteArray data = r->readAll();
-      QJsonDocument doc = QJsonDocument::fromJson(data);
-      if (doc.isObject()) {
-          QJsonObject docObj = doc.object();
-          QString updated = docObj.value("updated").toString();
-          auto it = docObj.constFind("files");
-          QJsonValue v = *it;
-          Q_ASSERT( v.isArray() );
-          QJsonArray vArray = v.toArray();
-
-          QSet<QString> localFiles = listFiles(projectPath);
-          for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it)
-          {
-            QJsonObject projectInfoMap = it->toObject();
-            QString serverChecksum = projectInfoMap.value("checksum").toString();
-            QString path = projectInfoMap.value("path").toString();
-            QByteArray localChecksumBytes = getChecksum(projectPath + path);
-            QString localChecksum = QString::fromLatin1(localChecksumBytes.data(), localChecksumBytes.size());
-            if (serverChecksum != localChecksum) {
-                MerginFile file;
-                file.checksum = serverChecksum;
-                file.path = path;
-                files.append(file);
-            } else {
-                localFiles.remove(path);
-            }
-          }
-
-          // will be removed after successful download
-          mObsoleteFiles.insert(projectPath, localFiles);
-      }
-      QJsonDocument jsonDoc;
-      QJsonArray fileArray;
-
-      for(MerginFile file: files) {
-        QJsonObject fileObject;
-        fileObject.insert("path", file.path);
-        fileObject.insert("checksum", file.checksum);
-        fileArray.append(fileObject);
-      }
-
-      jsonDoc.setArray(fileArray);
-      qDebug() << jsonDoc.toJson(QJsonDocument::Compact);
-      downloadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact));
-    }
-    else {
-        QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
-        qDebug("%s", message.toStdString().c_str());
-        emit networkErrorOccurred( r->errorString(), "Mergin API error: projectInfo" );
-    }
-
     r->deleteLater();
+
+    QJsonDocument jsonDoc;
+    QJsonArray fileArray;
+    for (QString key: files.keys()) {
+        if (key == QStringLiteral("added")) {
+            QSet<QString> obsolateFiles;
+            for(MerginFile file: files.value(key)) {
+                obsolateFiles.insert(file.path);
+            }
+            // TODO refactor mObsoleteFiles
+            mObsoleteFiles.insert(projectPath, obsolateFiles);
+        } else {
+            for(MerginFile file: files.value(key)) {
+                QJsonObject fileObject;
+                fileObject.insert("path", file.path);
+                fileObject.insert("checksum", file.checksum);
+                fileArray.append(fileObject);
+            }
+        }
+
+
+    }
+
+    jsonDoc.setArray(fileArray);
+    qDebug() << jsonDoc.toJson(QJsonDocument::Compact);
+    downloadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact));
 }
 
-// TODO refactor
 void MerginApi::uploadInfoReplyFinished()
 {
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
-    QList<MerginFile> files;
+    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r);
+    QUrl url = r->url();
+    QStringList res = url.path().split("/");
+    QString projectName;
+    projectName = res.last();
 
+    r->deleteLater();
 
+    QJsonDocument jsonDoc;
+    QJsonObject changes;
+
+    QList<MerginFile> filesToUpload;
+    for (QString key: files.keys()) {
+        QJsonArray jsonArray;
+        for (MerginFile file: files.value(key)) {
+            QJsonObject fileObject;
+            fileObject.insert("path", file.path);
+            fileObject.insert("checksum", file.checksum);
+            jsonArray.append(fileObject);
+
+            if (key != "removed") {
+                 filesToUpload.append(file);
+            }
+        }
+        changes.insert(key, jsonArray);
+    }
+
+    jsonDoc.setObject(changes);
+    uploadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact), filesToUpload);
+}
+
+QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetworkReply *r)
+{
     QList<MerginFile> added;
     QList<MerginFile> updatedFiles;
     QList<MerginFile> renamed;
     QList<MerginFile> removed;
 
-    // Use instead of QLists
-    QJsonArray removedJson;
-    QJsonArray addedJson;
+    QHash<QString, QList<MerginFile>> files;
 
     QUrl url = r->url();
     QStringList res = url.path().split("/");
@@ -392,11 +393,6 @@ void MerginApi::uploadInfoReplyFinished()
                 file.checksum = serverChecksum;
                 file.path = path;
                 removed.append(file);
-
-                QJsonObject fileObject;
-                fileObject.insert("path", file.path);
-                fileObject.insert("checksum", file.checksum);
-                removedJson.append(fileObject);
             }
             // updated
             else if (serverChecksum != localChecksum) {
@@ -417,38 +413,20 @@ void MerginApi::uploadInfoReplyFinished()
               file.checksum = localChecksum;
               file.path = p;
               added.append(file);
-
-              QJsonObject fileObject;
-              fileObject.insert("path", file.path);
-              fileObject.insert("checksum", file.checksum);
-              addedJson.append(fileObject);
           }
-
       }
-      QJsonDocument jsonDoc;
-      QJsonObject changes;
 
-      // TODO add rest file arrays
-
-
-      QJsonArray updatedJson;
-      QJsonArray renamedJson;
-      changes.insert("added", addedJson);
-      changes.insert("removed", removedJson);
-      changes.insert("updated", updatedJson);
-      changes.insert("renamed", renamedJson);
-
-      jsonDoc.setObject(changes);
-      uploadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact), added);
-
+      files.insert("added", added);
+      files.insert("updated", updatedFiles);
+      files.insert("removed", removed);
+      files.insert("renamed", renamed);
     }
     else {
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
         emit networkErrorOccurred( r->errorString(), "Mergin API error: projectInfo" );
     }
-
-    r->deleteLater();
+    return files;
 }
 
 ProjectList MerginApi::parseProjectsData(const QByteArray &data, bool dataFromServer)
