@@ -68,6 +68,8 @@ public:
      */
     Q_INVOKABLE void updateProject(QString projectName);
 
+    Q_INVOKABLE void uploadProject(QString projectName);
+
     ProjectList projects();
 
 signals:
@@ -81,7 +83,9 @@ signals:
 private slots:
     void listProjectsReplyFinished();
     void downloadProjectReplyFinished(); // download + update
+    void uploadProjectReplyFinished();
     void updateInfoReplyFinished();
+    void uploadInfoReplyFinished();
     void cacheProjects();
 
 private:
@@ -94,6 +98,7 @@ private:
     QByteArray getChecksum(QString filePath);
     QSet<QString> listFiles(QString projectPath);
     void downloadProjectFiles(QString projectName, QByteArray json);
+    void uploadProjectFiles(QString projectName, QByteArray json, QList<MerginFile> files);
     ProjectList updateMerginProjectList(ProjectList serverProjects);
     void setUpdateToProject(QString projectName);
     void deleteObsoleteFiles(QString projectName);
