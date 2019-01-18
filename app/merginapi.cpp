@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QByteArray>
 #include <QSet>
+#include <QMessageBox>
 
 MerginApi::MerginApi(const QString &root, const QString& dataDir, QByteArray token, QObject *parent)
   : QObject (parent)
@@ -79,18 +80,22 @@ void MerginApi::updateProject(QString projectName)
 
 void MerginApi::uploadProject(QString projectName)
 {
-    if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
+
+    QMessageBox msgBox;
+    msgBox.setText("The project has been updated on the server in the meantime. Your files will be updated before upload.");
+    msgBox.setInformativeText("Do you want to continue?");
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+
+    if (msgBox.exec() == QMessageBox::Cancel) {
+        emit syncProjectFinished(mDataDir + projectName, projectName, false);
+        return;
     }
 
-    QNetworkRequest request;
-    QUrl url(mApiRoot + "/v1/project/" + projectName);
 
-    request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
-
-    QNetworkReply *reply = mManager.get(request);
-    connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished);
+    mWaitingForUpload.insert(projectName);
+    updateProject(projectName);
+    connect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
 }
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
@@ -145,6 +150,7 @@ void MerginApi::uploadProjectFiles(QString projectName, QByteArray json, QList<M
     QUrl url(mApiRoot + "/v1/project/data_sync/" + projectName);
     request.setUrl(url);
     request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    mPendingRequests.insert(url, projectName);
 
     QNetworkReply *reply = mManager.post(request, multiPart);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadProjectReplyFinished);
@@ -249,7 +255,7 @@ void MerginApi::downloadProjectReplyFinished()
         handleDataStream(r, projectDir);
         setUpdateToProject(projectName);
 
-        emit downloadProjectFinished(projectDir, projectName);
+        emit syncProjectFinished(projectDir, projectName);
         emit notify("Download successful");
     }
     else {
@@ -267,14 +273,17 @@ void MerginApi::uploadProjectReplyFinished()
 
     if (r->error() == QNetworkReply::NoError)
     {
-        //emit uploadProjectFinished(projectDir, projectName);
+        QString projectName = mPendingRequests.value(r->url());
+        QString projectDir = mDataDir + projectName;
+
+        emit syncProjectFinished(projectDir, projectName);
         emit notify("Upload successful");
     }
     else {
         qDebug() << r->errorString();
         emit networkErrorOccurred( r->errorString(), "Mergin API error: uploadProject" );
     }
-    //mPendingRequests.remove(r->url());
+    mPendingRequests.remove(r->url());
     r->deleteLater();
 }
 
@@ -297,11 +306,13 @@ void MerginApi::updateInfoReplyFinished()
     QJsonArray fileArray;
     for (QString key: files.keys()) {
         if (key == QStringLiteral("added")) {
+            // no removal before upload
+            if (mWaitingForUpload.contains(projectName)) continue;
+
             QSet<QString> obsolateFiles;
             for(MerginFile file: files.value(key)) {
                 obsolateFiles.insert(file.path);
             }
-            // TODO refactor mObsoleteFiles
             mObsoleteFiles.insert(projectPath, obsolateFiles);
         } else {
             for(MerginFile file: files.value(key)) {
@@ -311,10 +322,9 @@ void MerginApi::updateInfoReplyFinished()
                 fileArray.append(fileObject);
             }
         }
-
-
     }
 
+    // TODO no request if its empty && mWaitingForUpload
     jsonDoc.setArray(fileArray);
     qDebug() << jsonDoc.toJson(QJsonDocument::Compact);
     downloadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact));
@@ -502,6 +512,29 @@ void MerginApi::cacheProjects()
     cacheProjectsData(doc.toJson());
 }
 
+void MerginApi::continueWithUpload(QString projectDir, QString projectName, bool successfully)
+{
+    Q_UNUSED(projectDir)
+
+     mWaitingForUpload.remove(projectName);
+    if (mToken.isEmpty()) {
+        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
+    }
+
+    if (!successfully) {
+
+    }
+
+    QNetworkRequest request;
+    QUrl url(mApiRoot + "/v1/project/" + projectName);
+
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+
+    QNetworkReply *reply = mManager.get(request);
+    connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished);
+}
+
 void MerginApi::handleDataStream(QNetworkReply* r, QString projectDir)
 {
     // Read content type from reply's header
@@ -664,7 +697,9 @@ QSet<QString> MerginApi::listFiles(QString path)
     while (it.hasNext())
     {
         it.next();
-        files << it.filePath().replace(path, "");
+        if (!mIgnoreFiles.contains(it.fileInfo().suffix())) {
+            files << it.filePath().replace(path, "");
+        }
     }
     return files;
 }

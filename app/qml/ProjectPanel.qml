@@ -248,7 +248,6 @@ Popup {
                 } else if (status === "outOfDate") {
                     __merginApi.updateProject(name)
                 } else if (status === "modified") {
-                    __merginApi.updateProject(name) // TODO update before upload
                     __merginApi.uploadProject(name)
                 }
             }
