@@ -92,7 +92,6 @@ void MerginApi::uploadProject(QString projectName)
         return;
     }
 
-
     mWaitingForUpload.insert(projectName);
     updateProject(projectName);
     connect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
@@ -256,7 +255,9 @@ void MerginApi::downloadProjectReplyFinished()
         setUpdateToProject(projectName);
 
         emit syncProjectFinished(projectDir, projectName);
-        emit notify("Download successful");
+        if (!mWaitingForUpload.contains(projectName)) {
+            emit notify("Download successful");
+        }
     }
     else {
         qDebug() << r->errorString();
@@ -516,13 +517,14 @@ void MerginApi::continueWithUpload(QString projectDir, QString projectName, bool
 {
     Q_UNUSED(projectDir)
 
-     mWaitingForUpload.remove(projectName);
+    disconnect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
+    mWaitingForUpload.remove(projectName);
     if (mToken.isEmpty()) {
         emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
     }
 
     if (!successfully) {
-
+        return;
     }
 
     QNetworkRequest request;
