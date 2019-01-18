@@ -249,13 +249,14 @@ void MerginApi::downloadProjectReplyFinished()
     {
         QString projectName = mPendingRequests.value(r->url());
         QString projectDir = mDataDir + projectName;
+        bool waitingForUpload = mWaitingForUpload.contains(projectName);
 
         deleteObsoleteFiles(projectDir + "/");
-        handleDataStream(r, projectDir);
+        handleDataStream(r, projectDir, !waitingForUpload);
         setUpdateToProject(projectName);
 
         emit syncProjectFinished(projectDir, projectName);
-        if (!mWaitingForUpload.contains(projectName)) {
+        if (!waitingForUpload) {
             emit notify("Download successful");
         }
     }
@@ -537,7 +538,7 @@ void MerginApi::continueWithUpload(QString projectDir, QString projectName, bool
     connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished);
 }
 
-void MerginApi::handleDataStream(QNetworkReply* r, QString projectDir)
+void MerginApi::handleDataStream(QNetworkReply* r, QString projectDir, bool overwrite)
 {
     // Read content type from reply's header
     QByteArray contentType;
@@ -613,8 +614,17 @@ void MerginApi::handleDataStream(QNetworkReply* r, QString projectDir)
             activeFilePath = projectDir + "/" + filename;
             activeFile.setFileName(activeFilePath);
             if (activeFile.exists()) {
-                // Remove file if want to override
-                activeFile.remove();
+                if (overwrite) {
+                    // Remove file if want to override
+                    activeFile.remove();
+                }
+                else {
+                    int i = 0;
+                    QString newPath =  activeFilePath + "_conflict_copy";
+                    while (QFile::exists(newPath + QString::number(i)))
+                        ++i;
+                    activeFile.setFileName(newPath + QString::number(i));
+                }
             } else {
                 createPathIfNotExists(activeFilePath);
             }

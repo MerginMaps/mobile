@@ -99,7 +99,7 @@ private slots:
 private:
     ProjectList parseProjectsData(const QByteArray &data, bool dataFromServer = false);
     bool cacheProjectsData(const QByteArray &data);
-    void handleDataStream(QNetworkReply* r, QString projectDir);
+    void handleDataStream(QNetworkReply* r, QString projectDir, bool overwrite);
     bool saveFile(const QByteArray &data, QFile &file, bool closeFile);
     void createPathIfNotExists(QString filePath);
     ProjectStatus getProjectStatus(QDateTime localUpdated, QDateTime updated);
