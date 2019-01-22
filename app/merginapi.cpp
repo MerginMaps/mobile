@@ -126,8 +126,6 @@ void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
     request.setRawHeader("Accept", "application/json");
     mPendingRequests.insert(url, projectName);
 
-    qDebug() << json;
-
     QNetworkReply *reply = mManager.post(request, json);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished);
 }
@@ -260,10 +258,10 @@ void MerginApi::downloadProjectReplyFinished()
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
+    QString projectName = mPendingRequests.value(r->url());
+    QString projectDir = mDataDir + projectName;
     if (r->error() == QNetworkReply::NoError)
     {
-        QString projectName = mPendingRequests.value(r->url());
-        QString projectDir = mDataDir + projectName;
         bool waitingForUpload = mWaitingForUpload.contains(projectName);
 
         deleteObsoleteFiles(projectDir + "/");
@@ -275,6 +273,7 @@ void MerginApi::downloadProjectReplyFinished()
     }
     else {
         qDebug() << r->errorString();
+        emit syncProjectFinished(projectDir, projectName, false);
         emit networkErrorOccurred( r->errorString(), "Mergin API error: downloadProject" );
     }
     mPendingRequests.remove(r->url());
@@ -286,16 +285,16 @@ void MerginApi::uploadProjectReplyFinished()
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
+    QString projectName = mPendingRequests.value(r->url());
+    QString projectDir = mDataDir + projectName;
     if (r->error() == QNetworkReply::NoError)
     {
-        QString projectName = mPendingRequests.value(r->url());
-        QString projectDir = mDataDir + projectName;
-
         emit syncProjectFinished(projectDir, projectName);
         emit notify("Upload successful");
     }
     else {
         qDebug() << r->errorString();
+        emit syncProjectFinished(projectDir, projectName, false);
         emit networkErrorOccurred( r->errorString(), "Mergin API error: uploadProject" );
     }
     mPendingRequests.remove(r->url());
@@ -339,9 +338,7 @@ void MerginApi::updateInfoReplyFinished()
         }
     }
 
-    // TODO no request if its empty && mWaitingForUpload
     jsonDoc.setArray(fileArray);
-    qDebug() << jsonDoc.toJson(QJsonDocument::Compact);
     downloadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact));
 }
 
@@ -721,7 +718,6 @@ QByteArray MerginApi::getChecksum(QString filePath) {
            chunk = f.read(CHUNK_SIZE);
         }
         f.close();
-        qDebug() << filePath << ":" << hash.result().toHex();
         return hash.result().toHex();
     }
 
