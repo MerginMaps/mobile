@@ -82,20 +82,33 @@ void MerginApi::updateProject(QString projectName)
 void MerginApi::uploadProject(QString projectName)
 {
 
-    QMessageBox msgBox;
-    msgBox.setText("The project has been updated on the server in the meantime. Your files will be updated before upload.");
-    msgBox.setInformativeText("Do you want to continue?");
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-
-    if (msgBox.exec() == QMessageBox::Cancel) {
-        emit syncProjectFinished(mDataDir + projectName, projectName, false);
-        return;
+    bool onlyUpload = true;
+    for (std::shared_ptr<MerginProject> project: mMerginProjects) {
+        if(project->name == projectName) {
+            if (project->updated < project->serverUpdated && project->serverUpdated > project->lastSync.toUTC()) {
+                onlyUpload = false;
+            }
+        }
     }
 
-    mWaitingForUpload.insert(projectName);
-    updateProject(projectName);
-    connect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
+    if (onlyUpload) {
+       continueWithUpload(mDataDir + projectName, projectName, true);
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("The project has been updated on the server in the meantime. Your files will be updated before upload.");
+        msgBox.setInformativeText("Do you want to continue?");
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+
+        if (msgBox.exec() == QMessageBox::Cancel) {
+            emit syncProjectFinished(mDataDir + projectName, projectName, false);
+            return;
+        }
+
+        mWaitingForUpload.insert(projectName);
+        updateProject(projectName);
+        connect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
+    }
 }
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
@@ -294,7 +307,7 @@ void MerginApi::updateInfoReplyFinished()
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
-    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r);
+    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r, true);
 
     QUrl url = r->url();
     QStringList res = url.path().split("/");
@@ -337,7 +350,7 @@ void MerginApi::uploadInfoReplyFinished()
     QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
     Q_ASSERT(r);
 
-    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r);
+    QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles(r, false);
     QUrl url = r->url();
     QStringList res = url.path().split("/");
     QString projectName;
@@ -368,7 +381,7 @@ void MerginApi::uploadInfoReplyFinished()
     uploadProjectFiles(projectName, jsonDoc.toJson(QJsonDocument::Compact), filesToUpload);
 }
 
-QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetworkReply *r)
+QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetworkReply *r, bool isForUpdate)
 {
     QList<MerginFile> added;
     QList<MerginFile> updatedFiles;
@@ -414,7 +427,14 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetwor
             // updated
             else if (serverChecksum != localChecksum) {
                 MerginFile file;
-                file.checksum = serverChecksum;
+                // if updated file is required from server, it has to have server checksum
+                // if updated file is going to be upload, it has to have local checksum
+                if (isForUpdate) {
+                    file.checksum = serverChecksum;
+                } else {
+                    file.checksum = localChecksum;
+                }
+
                 file.path = path;
                 updatedFiles.append(file);
             }
@@ -475,7 +495,7 @@ ProjectList MerginApi::parseProjectsData(const QByteArray &data, bool dataFromSe
                 }
                 p.serverUpdated = updated;
             } else {
-                p.lastSync = QDateTime::fromString(projectMap.value("lastSync").toString(), Qt::ISODateWithMs); // TODO utc??
+                p.lastSync = QDateTime::fromString(projectMap.value("lastSync").toString(), Qt::ISODateWithMs);
                 p.updated = updated;
             }
             result << std::make_shared<MerginProject>(p);
@@ -680,12 +700,12 @@ ProjectStatus MerginApi::getProjectStatus(QDateTime localUpdated, QDateTime upda
         return ProjectStatus::NoVersion;
     }
 
-    if (localUpdated < updated && updated > lastSync.toUTC()) {
-        return ProjectStatus::OutOfDate;
-    }
-
     if (lastSync < lastModified) {
         return ProjectStatus::Modified;
+    }
+
+    if (localUpdated < updated && updated > lastSync.toUTC()) {
+        return ProjectStatus::OutOfDate;
     }
 
     return ProjectStatus::UpToDate;
