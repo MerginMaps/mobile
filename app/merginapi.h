@@ -20,10 +20,13 @@ struct MerginProject {
     QString name;
     QStringList tags;
     QDateTime created;
-    QDateTime updated; // last local update
-    QDateTime serverUpdated; // last update on server
+    QDateTime updated; // local version of project files
+    QDateTime serverUpdated; // available version of project files on server
+    QDateTime lastSync; // local datetime of download/upload/update project
     bool pending = false; // if there is a pending request for downlaod/update a project
     ProjectStatus status = NoVersion;
+    int size;
+    int filesCount;
 };
 
 struct MerginFile {
@@ -95,6 +98,7 @@ private slots:
     void uploadInfoReplyFinished();
     void cacheProjects();
     void continueWithUpload(QString projectDir, QString projectName, bool successfully = true);
+    void setUpdateToProject(QString projectDir, QString projectName, bool successfully);
 
 private:
     ProjectList parseProjectsData(const QByteArray &data, bool dataFromServer = false);
@@ -102,14 +106,13 @@ private:
     void handleDataStream(QNetworkReply* r, QString projectDir, bool overwrite);
     bool saveFile(const QByteArray &data, QFile &file, bool closeFile);
     void createPathIfNotExists(QString filePath);
-    ProjectStatus getProjectStatus(QDateTime localUpdated, QDateTime updated);
+    ProjectStatus getProjectStatus(QDateTime localUpdated, QDateTime updated, QDateTime lastSync, QDateTime lastMod);
     QByteArray getChecksum(QString filePath);
     QSet<QString> listFiles(QString projectPath);
     void downloadProjectFiles(QString projectName, QByteArray json);
     void uploadProjectFiles(QString projectName, QByteArray json, QList<MerginFile> files);
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles(QNetworkReply *r);
     ProjectList updateMerginProjectList(ProjectList serverProjects);
-    void setUpdateToProject(QString projectName);
     void deleteObsoleteFiles(QString projectName);
 
     QNetworkAccessManager mManager;
@@ -121,7 +124,7 @@ private:
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;
-    QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal";
+    QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
 
     const int CHUNK_SIZE = 65536;
 };

@@ -208,6 +208,9 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion("0.1");
 
+  // No temp files while working with geopackages
+  QSettings().setValue("/qgis/walForSqlite3", false);
+
   // Create project model
   AndroidUtils au;
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
