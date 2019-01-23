@@ -26,6 +26,7 @@ Popup {
         if (status === "noVersion") return "download.svg"
         else if (status === "outOfDate") return "update.svg"
         else if (status === "upToDate") return "check.svg"
+        else if (status === "modified") return "upload.svg"
 
         return "more_menu.svg"
     }
@@ -240,11 +241,14 @@ Popup {
             onMenuClicked: {
                 if (status === "upToDate") return
 
-                __merginProjectsModel.setPending(row, true)
+                __merginProjectsModel.setPending(index, true)
+
                 if (status === "noVersion") {
                     __merginApi.downloadProject(name)
                 } else if (status === "outOfDate") {
                     __merginApi.updateProject(name)
+                } else if (status === "modified") {
+                    __merginApi.uploadProject(name)
                 }
             }
 

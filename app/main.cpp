@@ -208,6 +208,9 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion("0.1");
 
+  // No temp files while working with geopackages
+  QSettings().setValue("/qgis/walForSqlite3", false);
+
   // Create project model
   AndroidUtils au;
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
@@ -253,8 +256,8 @@ int main(int argc, char *argv[])
   QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
   QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
   QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
-  QObject::connect(ma.get(), &MerginApi::downloadProjectFinished, &mpm, &MerginProjectModel::downloadProjectFinished);
-  QObject::connect(ma.get(), &MerginApi::downloadProjectFinished, &pm, &ProjectModel::addProject);
+  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished);
+  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject);
   QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
 
 #ifdef ANDROID

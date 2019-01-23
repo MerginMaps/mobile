@@ -11,7 +11,8 @@ enum ProjectStatus
 {
   NoVersion,
   UpToDate,
-  OutOfDate
+  OutOfDate,
+  Modified
 };
 Q_ENUMS( ProjectStatus )
 
@@ -19,10 +20,13 @@ struct MerginProject {
     QString name;
     QStringList tags;
     QDateTime created;
-    QDateTime updated; // last local update
-    QDateTime serverUpdated; // last update on server
+    QDateTime updated; // local version of project files
+    QDateTime serverUpdated; // available version of project files on server
+    QDateTime lastSync; // local datetime of download/upload/update project
     bool pending = false; // if there is a pending request for downlaod/update a project
     ProjectStatus status = NoVersion;
+    int size;
+    int filesCount;
 };
 
 struct MerginFile {
@@ -50,8 +54,8 @@ public:
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
-     * when a response is received, parses data-stream and creates files. Eventually emits downloadProjectFinished on which
-     * MerginProjectModel updates status of the project item. On downloadProjectFinished, ProjectModel adds the project item to the project list.
+     * when a response is received, parses data-stream and creates files. Eventually emits syncProjectFinished on which
+     * MerginProjectModel updates status of the project item. On syncProjectFinished, ProjectModel adds the project item to the project list.
      * If download has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
      * @param projectName Name of project to download.
@@ -59,21 +63,29 @@ public:
     Q_INVOKABLE void downloadProject(QString projectName);
 
     /**
-     * Sends non-blocking GET request to the server to update a project with a given name. On downloadProjectReplyFinished,
+     * Sends non-blocking POST request to the server to update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Eventually emits downloadProjectFinished on which MerginProjectModel updates status of the project item.
+     * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * If update has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
      * @param projectName Name of project to update.
      */
     Q_INVOKABLE void updateProject(QString projectName);
 
+    /**
+     * Sends non-blocking POST request to the server to upload changes in a project with a given name.
+     * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
+     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
+     * Emits also notify signal with a message for the GUI.
+     * @param projectName Name of project to upload.
+     */
+    Q_INVOKABLE void uploadProject(QString projectName);
+
     ProjectList projects();
 
 signals:
     void listProjectsFinished(ProjectList merginProjects);
-    void downloadProjectFinished(QString projectDir, QString projectName);
-    void updateProjectFinished(QString projectDir, QString projectName);
+    void syncProjectFinished(QString projectDir, QString projectName, bool successfully = true);
     void networkErrorOccurred(QString message, QString additionalInfo);
     void notify(QString message);
     void merginProjectsChanged();
@@ -81,21 +93,26 @@ signals:
 private slots:
     void listProjectsReplyFinished();
     void downloadProjectReplyFinished(); // download + update
+    void uploadProjectReplyFinished();
     void updateInfoReplyFinished();
+    void uploadInfoReplyFinished();
     void cacheProjects();
+    void continueWithUpload(QString projectDir, QString projectName, bool successfully = true);
+    void setUpdateToProject(QString projectDir, QString projectName, bool successfully);
 
 private:
     ProjectList parseProjectsData(const QByteArray &data, bool dataFromServer = false);
     bool cacheProjectsData(const QByteArray &data);
-    void handleDataStream(QNetworkReply* r, QString projectDir);
+    void handleDataStream(QNetworkReply* r, QString projectDir, bool overwrite);
     bool saveFile(const QByteArray &data, QFile &file, bool closeFile);
     void createPathIfNotExists(QString filePath);
-    ProjectStatus getProjectStatus(QDateTime localUpdated, QDateTime updated);
+    ProjectStatus getProjectStatus(QDateTime localUpdated, QDateTime updated, QDateTime lastSync, QDateTime lastMod);
     QByteArray getChecksum(QString filePath);
     QSet<QString> listFiles(QString projectPath);
     void downloadProjectFiles(QString projectName, QByteArray json);
+    void uploadProjectFiles(QString projectName, QByteArray json, QList<MerginFile> files);
+    QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles(QNetworkReply *r, bool isForUpdate);
     ProjectList updateMerginProjectList(ProjectList serverProjects);
-    void setUpdateToProject(QString projectName);
     void deleteObsoleteFiles(QString projectName);
 
     QNetworkAccessManager mManager;
@@ -105,7 +122,9 @@ private:
     QString mCacheFile;
     QByteArray mToken;
     QHash<QUrl, QString>mPendingRequests;
+    QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;
+    QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
 
     const int CHUNK_SIZE = 65536;
 };

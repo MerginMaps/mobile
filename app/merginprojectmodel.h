@@ -35,7 +35,7 @@ class MerginProjectModel: public QAbstractListModel
     void resetProjects(const ProjectList &merginProjects);
 
 public slots:
-    void downloadProjectFinished(QString projectFolder, QString projectName);
+    void syncProjectFinished(QString projectFolder, QString projectName, bool successfully);
   private:
     ProjectList mMerginProjects;
 
