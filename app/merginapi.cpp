@@ -23,7 +23,8 @@ MerginApi::MerginApi(const QString &root, const QString& dataDir, QByteArray tok
 void MerginApi::listProjects()
 {
     if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: listProjects" );
+        emit authRequested();
+        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: listProjects" );
         return;
     }
 
@@ -40,7 +41,8 @@ void MerginApi::listProjects()
 void MerginApi::downloadProject(QString projectName)
 {
     if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: downloadProject" );
+        emit authRequested();
+        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: downloadProject" );
     }
 
     QNetworkRequest request;
@@ -65,7 +67,8 @@ void MerginApi::updateProject(QString projectName)
 {
 
     if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
+        emit authRequested();
+        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
     }
 
     QNetworkRequest request;
@@ -111,10 +114,20 @@ void MerginApi::uploadProject(QString projectName)
     }
 }
 
+void MerginApi::authorize(QString username, QString password)
+{
+    QString concatenated = username + ":" + password;
+    mToken = concatenated.toLocal8Bit().toBase64();
+
+    emit authChanged();
+}
+
+
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
 {
     if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: fetchProject" );
+        emit authRequested();
+        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: fetchProject" );
         return;
     }
 
@@ -246,6 +259,11 @@ void MerginApi::listProjectsReplyFinished()
         QString message = QStringLiteral("Network API error: %1(): %2").arg("listProjects", r->errorString());
         qDebug("%s", message.toStdString().c_str());
         emit networkErrorOccurred( r->errorString(), "Mergin API error: listProjects" );
+
+        if (r->errorString() == "Host requires authentication") {
+            emit authRequested();
+            return;
+        }
     }
 
     r->deleteLater();

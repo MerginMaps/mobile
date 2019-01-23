@@ -46,6 +46,24 @@ Popup {
         }
     }
 
+    Connections {
+      target: __merginApi
+      onAuthRequested: {
+        busyIndicator.running = false
+        authPanel.visible = true
+        authPanel.loginIndicator.running = false
+      }
+    }
+
+    Connections {
+      target: __merginApi
+      onAuthChanged: {
+        authPanel.loginIndicator.running = false
+        authPanel.visible = false
+        merginProjectBtn.clicked()
+      }
+    }
+
     id: projectsPanel
     visible: false
     contentWidth: projectsPanel.width
@@ -55,6 +73,14 @@ Popup {
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
+    }
+
+    AuthPanel {
+        id: authPanel
+        visible: false
+        height: parent.height
+        width: parent.width
+        z: 2
     }
 
     BusyIndicator {
@@ -118,6 +144,7 @@ Popup {
             }
 
             PanelTabButton {
+                id: merginProjectBtn
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight

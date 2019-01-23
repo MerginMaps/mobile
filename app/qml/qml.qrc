@@ -25,5 +25,6 @@
         <file>Shadow.qml</file>
         <file>NumberSpin.qml</file>
         <file>ProjectDelegateItem.qml</file>
+        <file>AuthPanel.qml</file>
     </qresource>
 </RCC>

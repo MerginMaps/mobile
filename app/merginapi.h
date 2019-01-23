@@ -81,6 +81,8 @@ public:
      */
     Q_INVOKABLE void uploadProject(QString projectName);
 
+    Q_INVOKABLE void authorize(QString username, QString password);
+
     ProjectList projects();
 
 signals:
@@ -89,6 +91,8 @@ signals:
     void networkErrorOccurred(QString message, QString additionalInfo);
     void notify(QString message);
     void merginProjectsChanged();
+    void authRequested();
+    void authChanged();
 
 private slots:
     void listProjectsReplyFinished();
