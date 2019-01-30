@@ -66,7 +66,6 @@ void MerginApi::updateProject(QString projectName)
 
     if (mToken.isEmpty()) {
         emit authRequested();
-        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
     }
 
     QNetworkRequest request;
