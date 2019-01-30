@@ -50,7 +50,7 @@ Popup {
       target: __merginApi
       onAuthRequested: {
         busyIndicator.running = false
-        authPanel.visible = true
+        authPanel.open()
         authPanel.loginIndicator.running = false
       }
     }
@@ -59,7 +59,7 @@ Popup {
       target: __merginApi
       onAuthChanged: {
         authPanel.loginIndicator.running = false
-        authPanel.visible = false
+        authPanel.close()
         merginProjectBtn.clicked()
       }
     }
@@ -78,9 +78,11 @@ Popup {
     AuthPanel {
         id: authPanel
         visible: false
-        height: parent.height
+        height: window.height
         width: parent.width
-        z: 2
+        z: projectsPanel.z + 1
+
+        onAuthFailed: myProjectsBtn.clicked()
     }
 
     BusyIndicator {

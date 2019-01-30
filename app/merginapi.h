@@ -39,6 +39,7 @@ typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
 class MerginApi: public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
 public:
     explicit MerginApi(const QString& root, const QString& dataDir, QByteArray token, QObject* parent = nullptr );
     ~MerginApi() = default;
@@ -81,9 +82,19 @@ public:
      */
     Q_INVOKABLE void uploadProject(QString projectName);
 
+     /**
+     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
+     * @param username
+     * @param password
+     */
     Q_INVOKABLE void authorize(QString username, QString password);
+    Q_INVOKABLE void logoutRequested();
+    Q_INVOKABLE bool hasValidToken();
 
     ProjectList projects();
+
+    QString username() const;
+    void setUsername(const QString &value);
 
 signals:
     void listProjectsFinished(ProjectList merginProjects);
@@ -93,6 +104,7 @@ signals:
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
+    void usernameChanged();
 
 private slots:
     void listProjectsReplyFinished();
@@ -125,6 +137,7 @@ private:
     QString mDataDir;
     QString mCacheFile;
     QByteArray mToken;
+    QString mUsername;
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;

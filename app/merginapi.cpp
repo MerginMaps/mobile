@@ -24,7 +24,6 @@ void MerginApi::listProjects()
 {
     if (mToken.isEmpty()) {
         emit authRequested();
-        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: listProjects" );
         return;
     }
 
@@ -42,7 +41,6 @@ void MerginApi::downloadProject(QString projectName)
 {
     if (mToken.isEmpty()) {
         emit authRequested();
-        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: downloadProject" );
     }
 
     QNetworkRequest request;
@@ -118,16 +116,26 @@ void MerginApi::authorize(QString username, QString password)
 {
     QString concatenated = username + ":" + password;
     mToken = concatenated.toLocal8Bit().toBase64();
-
+    mUsername = username;
+    emit usernameChanged();
     emit authChanged();
 }
 
+void MerginApi::logoutRequested()
+{
+    setUsername("");
+    mToken = "";
+}
+
+bool MerginApi::hasValidToken()
+{
+    return !mToken.isEmpty();
+}
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
 {
     if (mToken.isEmpty()) {
         emit authRequested();
-        //emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: fetchProject" );
         return;
     }
 
@@ -225,6 +233,19 @@ void MerginApi::deleteObsoleteFiles(QString projectPath)
     }
 }
 
+QString MerginApi::username() const
+{
+    return mUsername;
+}
+
+void MerginApi::setUsername(const QString &value)
+{
+    mUsername = value;
+    if (mUsername.isEmpty()) {
+        mToken.clear();
+    }
+}
+
 ProjectList MerginApi::projects()
 {
     return mMerginProjects;
@@ -261,6 +282,7 @@ void MerginApi::listProjectsReplyFinished()
         emit networkErrorOccurred( r->errorString(), "Mergin API error: listProjects" );
 
         if (r->errorString() == "Host requires authentication") {
+            mToken = "";
             emit authRequested();
             return;
         }

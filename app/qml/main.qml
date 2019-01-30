@@ -321,7 +321,7 @@ ApplicationWindow {
         height: 160 * QgsQuick.Utils.dp
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        z: zPanel + 1
+        z: zPanel + 1000 // the most top
     }
 
     Connections {

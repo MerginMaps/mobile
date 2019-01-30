@@ -58,6 +58,23 @@ Popup {
             }
 
             PanelItem {
+                id: usernameField
+                color: InputStyle.clrPanelMain
+                text: qsTr("Login")
+                text2: __merginApi.username ? __merginApi.username : "(none)"
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (__merginApi.username) {
+                            __merginApi.username = ""
+                            usernameField.text2 = __merginApi.username ? __merginApi.username : "(none)"
+                        }
+                    }
+                }
+            }
+
+            PanelItem {
                 color: InputStyle.clrPanelMain
                 text: qsTr("Project")
                 text2: (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
