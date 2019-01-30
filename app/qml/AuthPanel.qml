@@ -5,8 +5,11 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 
 Drawer {
+
+  signal authFailed()
+
   property alias loginName: loginName
-  property string password: password
+  property alias password: password
   property alias loginIndicator: loginIndicator
   property string errorText: errorText
 
@@ -14,15 +17,18 @@ Drawer {
   property real panelMargin: fieldHeight/4
   property color fontColor: "white"
 
-  signal authFailed()
+  modal: true
+  interactive: true
+  closePolicy: Popup.CloseOnEscape
+  dragMargin: 0 // prevents opening the drawer by dragging.
 
-    onClosed: {
-        password.text = ""
-        loginName.text = ""
-        if (!__merginApi.hasValidToken()) {
-            authFailed()
-        }
-    }
+  onClosed: {
+      password.text = ""
+      loginName.text = ""
+      if (!__merginApi.hasValidToken()) {
+          authFailed()
+      }
+  }
 
   id: root
   Pane {
@@ -112,7 +118,7 @@ Drawer {
           Rectangle {
               id: loginNameBorder
               color: root.fontColor
-              y: loginName.height
+              y: loginName.height - height
               height: 2 * QgsQuick.Utils.dp
               opacity: loginName.focus ? 1 : 0.6
               width: parent.width - fieldHeight/2
@@ -182,8 +188,8 @@ Drawer {
           Rectangle {
               id: passBorder
               color: InputStyle.panelBackgroundLight
-              y: password.height
               height: 2 * QgsQuick.Utils.dp
+              y: password.height - height
               opacity: password.focus ? 1 : 0.6
               width: parent.width - fieldHeight/2
               z: password.z + 1
