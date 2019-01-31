@@ -35,6 +35,7 @@ class ProjectModel : public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1,
+      FolderName,
       Path,
       ShortName, // name shortened to maxShortNameChars
       ProjectInfo,
@@ -62,10 +63,11 @@ public slots:
 
   private:
     void findProjectFiles();
-    void addProjectsFromPath(QString path);
+    void addProjectFromPath(QString path);
 
     struct ProjectFile {
         QString name;
+        QString folderName;
         QString path;
         QString info;
 

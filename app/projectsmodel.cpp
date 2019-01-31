@@ -22,7 +22,7 @@
 
 ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
   : QAbstractListModel( parent )
-  , mDataDir(dataDir)
+  , mDataDir(dataDir + "/")
 {
     findProjectFiles();
 }
@@ -30,11 +30,18 @@ ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
 ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles() {
-    addProjectsFromPath(mDataDir);
+    QDirIterator it(mDataDir, QDir::Dirs);
+    while (it.hasNext()) {
+       it.next();
+       addProjectFromPath(it.fileInfo().absolutePath());
+    }
+    std::sort(mProjectFiles.begin(), mProjectFiles.end());
 }
 
-void ProjectModel::addProjectsFromPath(QString path)
+void ProjectModel::addProjectFromPath(QString path)
 {
+    if (path.isEmpty()) return;
+
     QDirIterator it(path, QStringList() << QStringLiteral("*.qgs"), QDir::Files, QDirIterator::Subdirectories);
     QSet<QString> projectFilePaths;
 
@@ -42,22 +49,41 @@ void ProjectModel::addProjectsFromPath(QString path)
         projectFilePaths << projectFile.path;
     }
 
+
+    QList<ProjectFile> foundProjects;
     while (it.hasNext())
     {
         it.next();
         ProjectFile projectFile;
         projectFile.name = it.fileName().remove(".qgs");
+        QDir projectDir(it.fileInfo().absoluteDir());
+        projectFile.folderName = projectDir.dirName();
         projectFile.path = it.filePath();
         QFileInfo fileInfo(it.filePath());
         QDateTime created = fileInfo.created();
         projectFile.info = QString(created.toString());
 
         if (!projectFilePaths.contains(projectFile.path))
-            mProjectFiles.append(projectFile);
+            foundProjects.append(projectFile);
 
         qDebug() << "Found QGIS project: " << it.filePath();
     }
-    std::sort(mProjectFiles.begin(), mProjectFiles.end());
+
+    if(!foundProjects.isEmpty()) {
+        ProjectFile project = foundProjects.at(0);
+        project.name = ""; // invalid project
+        project.path = "";
+        project.info = "invalid project";
+        mProjectFiles.append(project);
+    } else {
+        ProjectFile projectFile;
+        projectFile.name = "";
+        QDir projectDir(it.fileInfo().absoluteDir());
+        projectFile.folderName = path;
+        projectFile.path = "";
+        projectFile.info = "invalid project";
+    }
+    // std::sort(mProjectFiles.begin(), mProjectFiles.end());
 }
 
 
@@ -71,7 +97,8 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 
   switch ( role )
   {
-    case Name: return QVariant(projectFile.name);
+    case Name: return QVariant(projectFile.folderName);
+    case FolderName: return QVariant(projectFile.folderName);
     case ShortName: return QVariant(projectFile.name.left(mMaxShortNameChars - 3) + "...");
     case Path: return QVariant(projectFile.path);
     case ProjectInfo: return QVariant(projectFile.info);
@@ -84,6 +111,7 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
+  roleNames[FolderName] = "folderName";
   roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
   roleNames[ProjectInfo] = "projectInfo";
@@ -118,7 +146,7 @@ void ProjectModel::addProject(QString projectFolder, QString projectName)
 {
     Q_UNUSED(projectName);
     beginResetModel();
-    addProjectsFromPath(projectFolder);
+    addProjectFromPath(projectFolder);
     endResetModel();
     emit projectsChanged();
 }
