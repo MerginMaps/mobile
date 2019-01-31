@@ -6,7 +6,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
 
-Popup {
+Item {
 
     property int activeProjectIndex: -1
     property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
@@ -46,14 +46,41 @@ Popup {
         }
     }
 
+    Connections {
+      target: __merginApi
+      onAuthRequested: {
+        busyIndicator.running = false
+        authPanel.visible = true
+      }
+    }
+
+    Connections {
+      target: __merginApi
+      onAuthChanged: {
+        if (__merginApi.hasAuthData()) {
+            authPanel.close()
+            merginProjectBtn.clicked()
+        }
+      }
+    }
+
     id: projectsPanel
     visible: false
-    contentWidth: projectsPanel.width
-    margins: 0
-    padding: 0
-    closePolicy: activeProjectName ? Popup.CloseOnEscape : Popup.NoAutoClose
+    focus: true
 
-    background: Rectangle {
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            event.accepted = true;
+            projectsPanel.visible = false
+        }
+    }
+
+    Keys.forwardTo: authPanel.visible ? authPanel : []
+
+    // background
+    Rectangle {
+        width: parent.width
+        height: parent.height
         color: InputStyle.clrPanelMain
     }
 
@@ -86,7 +113,7 @@ Popup {
         rowHeight: InputStyle.rowHeightHeader
         titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
 
-        onBack: projectsPanel.close()
+        onBack: projectsPanel.visible = false
         withBackButton: projectsPanel.activeProjectPath
     }
 
@@ -118,6 +145,7 @@ Popup {
             }
 
             PanelTabButton {
+                id: merginProjectBtn
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight
@@ -146,7 +174,7 @@ Popup {
                     anchors.fill: parent
                     onClicked: {
                         __appSettings.defaultProject = ""
-                        projectsPanel.close()
+                        projectsPanel.visible = false
                     }
                 }
             }
@@ -253,5 +281,12 @@ Popup {
             }
 
         }
+    }
+    AuthPanel {
+        id: authPanel
+        visible: false
+        height: window.height
+        width: parent.width
+        onAuthFailed: myProjectsBtn.clicked()
     }
 }

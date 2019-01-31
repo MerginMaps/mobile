@@ -79,6 +79,29 @@ Popup {
                 }
             }
 
+            // Header "Mergin"
+            PanelItem {
+                color: InputStyle.panelBackgroundLight
+                text: qsTr("Mergin")
+                bold: true
+            }
+
+            PanelItem {
+                id: usernameField
+                color: InputStyle.clrPanelMain
+                text: qsTr("Login")
+                text2: __merginApi.username
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (__merginApi.hasAuthData()) {
+                            __merginApi.clearAuth()
+                        }
+                    }
+                }
+            }
+
              // Header "GPS"
             PanelItem {
                 color: InputStyle.panelBackgroundLight

@@ -28,5 +28,8 @@
         <file>check.svg</file>
         <file>download.svg</file>
         <file>upload.svg</file>
+        <file>lock.svg</file>
+        <file>account.svg</file>
+        <file>mergin.svg</file>
     </qresource>
 </RCC>

@@ -39,8 +39,9 @@ typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
 class MerginApi: public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString username READ username NOTIFY authChanged)
 public:
-    explicit MerginApi(const QString& root, const QString& dataDir, QByteArray token, QObject* parent = nullptr );
+    explicit MerginApi(const QString& root, const QString& dataDir, QObject* parent = nullptr );
     ~MerginApi() = default;
 
     /**
@@ -81,7 +82,18 @@ public:
      */
     Q_INVOKABLE void uploadProject(QString projectName);
 
+     /**
+     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
+     * @param username
+     * @param password
+     */
+    Q_INVOKABLE void authorize(QString username, QString password);
+    Q_INVOKABLE void clearAuth();
+    Q_INVOKABLE bool hasAuthData();
+
     ProjectList projects();
+
+    QString username() const;
 
 signals:
     void listProjectsFinished(ProjectList merginProjects);
@@ -89,6 +101,8 @@ signals:
     void networkErrorOccurred(QString message, QString additionalInfo);
     void notify(QString message);
     void merginProjectsChanged();
+    void authRequested();
+    void authChanged();
 
 private slots:
     void listProjectsReplyFinished();
@@ -99,6 +113,7 @@ private slots:
     void cacheProjects();
     void continueWithUpload(QString projectDir, QString projectName, bool successfully = true);
     void setUpdateToProject(QString projectDir, QString projectName, bool successfully);
+    void saveAuthData();
 
 private:
     ProjectList parseProjectsData(const QByteArray &data, bool dataFromServer = false);
@@ -114,13 +129,16 @@ private:
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles(QNetworkReply *r, bool isForUpdate);
     ProjectList updateMerginProjectList(ProjectList serverProjects);
     void deleteObsoleteFiles(QString projectName);
+    QByteArray generateToken();
+    void loadAuthData();
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
     ProjectList mMerginProjects;
     QString mDataDir;
     QString mCacheFile;
-    QByteArray mToken;
+    QString mUsername;
+    QString mPassword;
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;

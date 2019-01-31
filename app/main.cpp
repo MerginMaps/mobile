@@ -239,12 +239,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  QByteArray merginToken;
-#ifdef MERGIN_TOKEN
-  merginToken.append(STR(MERGIN_TOKEN));
-#endif
-
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir, merginToken ));
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir ));
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 
   // Create mergin projects model
