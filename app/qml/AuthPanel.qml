@@ -5,7 +5,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
-Drawer {
+Item {
 
   signal authFailed()
 
@@ -18,12 +18,8 @@ Drawer {
   property real panelMargin: fieldHeight/4
   property color fontColor: "white"
 
-  modal: true
-  interactive: true
-  closePolicy: Popup.CloseOnEscape
-  dragMargin: 0 // prevents opening the drawer by dragging.
-
-  onClosed: {
+  function close() {
+      visible = false
       password.text = ""
       loginName.text = ""
       if (!__merginApi.hasAuthData()) {
@@ -31,7 +27,13 @@ Drawer {
       }
   }
 
+  Keys.onEscapePressed: {
+      event.accepted = true;
+      root.close()
+  }
+
   id: root
+  focus: true
   Pane {
     id: pane
 
