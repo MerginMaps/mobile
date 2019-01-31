@@ -26,7 +26,7 @@ Drawer {
   onClosed: {
       password.text = ""
       loginName.text = ""
-      if (!__merginApi.hasValidToken()) {
+      if (!__merginApi.hasAuthData()) {
           authFailed()
       }
   }
@@ -112,7 +112,6 @@ Drawer {
                 background: Rectangle {
                     color: InputStyle.fontColor
                 }
-
               }
           }
 

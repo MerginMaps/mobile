@@ -50,7 +50,7 @@ Popup {
       target: __merginApi
       onAuthRequested: {
         busyIndicator.running = false
-        authPanel.open()
+        authPanel.visible = true
         authPanel.loginIndicator.running = false
       }
     }
@@ -58,9 +58,11 @@ Popup {
     Connections {
       target: __merginApi
       onAuthChanged: {
-        authPanel.loginIndicator.running = false
-        authPanel.close()
-        merginProjectBtn.clicked()
+        if (__merginApi.hasAuthData()) {
+            authPanel.loginIndicator.running = false
+            authPanel.visible = false
+            merginProjectBtn.clicked()
+        }
       }
     }
 

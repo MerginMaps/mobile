@@ -9,29 +9,32 @@
 #include <QSet>
 #include <QMessageBox>
 
-MerginApi::MerginApi(const QString &root, const QString& dataDir, QByteArray token, QObject *parent)
+MerginApi::MerginApi(const QString &root, const QString& dataDir, QObject *parent)
   : QObject (parent)
   , mApiRoot(root)
   , mDataDir(dataDir + "/downloads/")
   , mCacheFile(".projectsCache.txt")
-  , mToken(token)
 {
     QObject::connect(this, &MerginApi::syncProjectFinished,this, &MerginApi::setUpdateToProject);
     QObject::connect(this, &MerginApi::merginProjectsChanged,this, &MerginApi::cacheProjects);
+    QObject::connect(this, &MerginApi::authChanged,this, &MerginApi::saveAuthData);
+
+    loadAuthData();
 }
 
 void MerginApi::listProjects()
 {
-    if (mToken.isEmpty()) {
+    if (!hasAuthData()) {
         emit authRequested();
         return;
     }
 
+    QByteArray token = generateToken();
     QNetworkRequest request;
     // projects filtered by tag "input_use"
     QUrl url(mApiRoot + "/v1/project?tags=input_use");
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
 
     QNetworkReply *reply = mManager.get(request);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished);
@@ -39,10 +42,12 @@ void MerginApi::listProjects()
 
 void MerginApi::downloadProject(QString projectName)
 {
-    if (mToken.isEmpty()) {
+    if (!hasAuthData()) {
         emit authRequested();
+        return;
     }
 
+    QByteArray token = generateToken();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/download/" + projectName);
 
@@ -54,7 +59,7 @@ void MerginApi::downloadProject(QString projectName)
     }
 
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
 
     QNetworkReply *reply = mManager.get(request);
     mPendingRequests.insert(url, projectName);
@@ -64,15 +69,17 @@ void MerginApi::downloadProject(QString projectName)
 void MerginApi::updateProject(QString projectName)
 {
 
-    if (mToken.isEmpty()) {
+    if (!hasAuthData()) {
         emit authRequested();
+        return;
     }
 
+    QByteArray token = generateToken();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/" + projectName);
 
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
 
     QNetworkReply *reply = mManager.get(request);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished);
@@ -113,35 +120,35 @@ void MerginApi::uploadProject(QString projectName)
 
 void MerginApi::authorize(QString username, QString password)
 {
-    QString concatenated = username + ":" + password;
-    mToken = concatenated.toLocal8Bit().toBase64();
     mUsername = username;
-    emit usernameChanged();
+    mPassword = password;
     emit authChanged();
 }
 
-void MerginApi::logoutRequested()
+void MerginApi::clearAuth()
 {
     setUsername("");
-    mToken = "";
+    setPassword("");
+    emit authChanged();
 }
 
-bool MerginApi::hasValidToken()
+bool MerginApi::hasAuthData()
 {
-    return !mToken.isEmpty();
+    return !mUsername.isEmpty() && !mPassword.isEmpty();
 }
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
 {
-    if (mToken.isEmpty()) {
+    if (!hasAuthData()) {
         emit authRequested();
         return;
     }
 
+    QByteArray token = generateToken();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/fetch/" + projectName);
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Accept", "application/json");
     mPendingRequests.insert(url, projectName);
@@ -152,7 +159,7 @@ void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
 
 void MerginApi::uploadProjectFiles(QString projectName, QByteArray json, QList<MerginFile> files)
 {
-    if (mToken.isEmpty()) {
+    if (!hasAuthData()) {
         emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: fetchProject" );
         return;
     }
@@ -176,11 +183,11 @@ void MerginApi::uploadProjectFiles(QString projectName, QByteArray json, QList<M
         multiPart->append(filePart);
     }
 
-
+    QByteArray token = generateToken();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/data_sync/" + projectName);
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
     mPendingRequests.insert(url, projectName);
 
     QNetworkReply *reply = mManager.post(request, multiPart);
@@ -232,6 +239,40 @@ void MerginApi::deleteObsoleteFiles(QString projectPath)
     }
 }
 
+void MerginApi::saveAuthData()
+{
+    QSettings settings;
+    settings.beginGroup("Input/");
+    settings.setValue("username", mUsername);
+    settings.setValue("password", mPassword);
+    settings.endGroup();
+}
+
+
+void MerginApi::loadAuthData()
+{
+    QSettings settings;
+    settings.beginGroup("Input/");
+    setUsername(settings.value("username").toString());
+    setPassword(settings.value("password").toString());
+}
+
+QString MerginApi::getPassword() const
+{
+    return mPassword;
+}
+
+void MerginApi::setPassword(const QString &password)
+{
+    mPassword = password;
+}
+
+QByteArray MerginApi::generateToken()
+{
+    QString concatenated = mUsername + ":" + mPassword;
+    return concatenated.toLocal8Bit().toBase64();
+}
+
 QString MerginApi::username() const
 {
     return mUsername;
@@ -240,9 +281,7 @@ QString MerginApi::username() const
 void MerginApi::setUsername(const QString &value)
 {
     mUsername = value;
-    if (mUsername.isEmpty()) {
-        mToken.clear();
-    }
+    emit usernameChanged();
 }
 
 ProjectList MerginApi::projects()
@@ -281,7 +320,6 @@ void MerginApi::listProjectsReplyFinished()
         emit networkErrorOccurred( r->errorString(), "Mergin API error: listProjects" );
 
         if (r->errorString() == "Host requires authentication") {
-            mToken = "";
             emit authRequested();
             return;
         }
@@ -578,19 +616,20 @@ void MerginApi::continueWithUpload(QString projectDir, QString projectName, bool
 
     disconnect(this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload);
     mWaitingForUpload.remove(projectName);
-    if (mToken.isEmpty()) {
-        emit networkErrorOccurred( "Auth token is invalid", "Mergin API error: projectInfo" );
+    if (!hasAuthData()) {
+        emit networkErrorOccurred( "Auth data is invalid", "Mergin API error: projectInfo" );
     }
 
     if (!successfully) {
         return;
     }
 
+    QByteArray token = generateToken();
     QNetworkRequest request;
     QUrl url(mApiRoot + "/v1/project/" + projectName);
 
     request.setUrl(url);
-    request.setRawHeader("Authorization", QByteArray("Basic " + mToken));
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
 
     QNetworkReply *reply = mManager.get(request);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished);
