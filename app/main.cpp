@@ -208,8 +208,10 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion("0.1");
 
-  // No temp files while working with geopackages
-  QSettings().setValue("/qgis/walForSqlite3", false);
+  // QGIS environment variables to set
+  // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
+  // and properly close connection after writting changes to gpkg.
+  ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
   // Create project model
   AndroidUtils au;
