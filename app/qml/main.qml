@@ -282,7 +282,7 @@ ApplicationWindow {
 
     ProjectPanel {
         id: openProjectPanel
-        height: window.height - mainPanel.height
+        height: window.height
         width: window.width
         z: zPanel
 
