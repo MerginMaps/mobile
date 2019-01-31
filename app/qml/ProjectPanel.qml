@@ -51,7 +51,6 @@ Item {
       onAuthRequested: {
         busyIndicator.running = false
         authPanel.visible = true
-        authPanel.loginIndicator.running = false
       }
     }
 
@@ -59,7 +58,6 @@ Item {
       target: __merginApi
       onAuthChanged: {
         if (__merginApi.hasAuthData()) {
-            authPanel.loginIndicator.running = false
             authPanel.close()
             merginProjectBtn.clicked()
         }
@@ -70,9 +68,11 @@ Item {
     visible: false
     focus: true
 
-    Keys.onEscapePressed: {
-        event.accepted = true;
-        projectsPanel.visible = false
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            event.accepted = true;
+            projectsPanel.visible = false
+        }
     }
 
     Keys.forwardTo: authPanel.visible ? authPanel : []
@@ -82,16 +82,6 @@ Item {
         width: parent.width
         height: parent.height
         color: InputStyle.clrPanelMain
-    }
-
-    AuthPanel {
-        id: authPanel
-        visible: false
-        height: window.height
-        width: parent.width
-        z: projectsPanel.z + 1
-
-        onAuthFailed: myProjectsBtn.clicked()
     }
 
     BusyIndicator {
@@ -291,5 +281,12 @@ Item {
             }
 
         }
+    }
+    AuthPanel {
+        id: authPanel
+        visible: false
+        height: window.height
+        width: parent.width
+        onAuthFailed: myProjectsBtn.clicked()
     }
 }

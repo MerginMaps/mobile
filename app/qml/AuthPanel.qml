@@ -11,7 +11,6 @@ Item {
 
   property alias loginName: loginName
   property alias password: password
-  property alias loginIndicator: loginIndicator
   property string errorText: errorText
 
   property real fieldHeight: InputStyle.rowHeight
@@ -27,9 +26,11 @@ Item {
       }
   }
 
-  Keys.onEscapePressed: {
-      event.accepted = true;
-      root.close()
+  Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          event.accepted = true;
+          root.close()
+      }
   }
 
   id: root
@@ -109,7 +110,6 @@ Item {
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 color: root.fontColor
                 placeholderText: qsTr("Username")
-                enabled: !loginIndicator.running
                 font.capitalization: Font.MixedCase
                 background: Rectangle {
                     color: InputStyle.fontColor
@@ -124,7 +124,6 @@ Item {
               height: 2 * QgsQuick.Utils.dp
               opacity: loginName.focus ? 1 : 0.6
               width: parent.width - fieldHeight/2
-              z: loginName.z + 1
               anchors.horizontalCenter: parent.horizontalCenter
           }
 
@@ -177,7 +176,6 @@ Item {
                 color: root.fontColor
                 placeholderText: qsTr("Password")
                 echoMode: TextInput.Password
-                enabled: !loginIndicator.running
                 inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                 font.capitalization: Font.MixedCase
 
@@ -194,7 +192,6 @@ Item {
               y: password.height - height
               opacity: password.focus ? 1 : 0.6
               width: parent.width - fieldHeight/2
-              z: password.z + 1
               anchors.horizontalCenter: parent.horizontalCenter
           }
 
@@ -207,7 +204,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
               __merginApi.authorize(loginName.text, password.text)
-              loginIndicator.running = true
             }
             background: Rectangle {
                 color: InputStyle.panelBackgroundLight
@@ -222,30 +218,8 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
-
-            enabled: !loginIndicator.running
           }
         }
       }
     }
-
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    color: "black"
-    opacity: 0.3
-    visible: loginIndicator.running
-    z: 100
-  }
-
-  BusyIndicator {
-    id: loginIndicator
-    width: root.height/4
-    height: root.height/4
-    running: false
-    visible: running
-    anchors.centerIn: parent
-    z: 101
-  }
-
 }

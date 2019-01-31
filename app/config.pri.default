@@ -18,6 +18,3 @@ android {
 
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
 }
-
-# base64 hash code of "username:password" for the mergin authentication.
-MERGIN_TOKEN = username:password

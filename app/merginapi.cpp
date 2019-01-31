@@ -127,8 +127,8 @@ void MerginApi::authorize(QString username, QString password)
 
 void MerginApi::clearAuth()
 {
-    setUsername("");
-    setPassword("");
+    mUsername = "";
+    mPassword = "";
     emit authChanged();
 }
 
@@ -253,18 +253,8 @@ void MerginApi::loadAuthData()
 {
     QSettings settings;
     settings.beginGroup("Input/");
-    setUsername(settings.value("username").toString());
-    setPassword(settings.value("password").toString());
-}
-
-QString MerginApi::getPassword() const
-{
-    return mPassword;
-}
-
-void MerginApi::setPassword(const QString &password)
-{
-    mPassword = password;
+    mUsername = (settings.value("username").toString());
+    mPassword = (settings.value("password").toString());
 }
 
 QByteArray MerginApi::generateToken()
@@ -276,12 +266,6 @@ QByteArray MerginApi::generateToken()
 QString MerginApi::username() const
 {
     return mUsername;
-}
-
-void MerginApi::setUsername(const QString &value)
-{
-    mUsername = value;
-    emit usernameChanged();
 }
 
 ProjectList MerginApi::projects()

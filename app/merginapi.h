@@ -94,10 +94,6 @@ public:
     ProjectList projects();
 
     QString username() const;
-    void setUsername(const QString &value);
-
-    QString getPassword() const;
-    void setPassword(const QString &password);
 
 signals:
     void listProjectsFinished(ProjectList merginProjects);
@@ -107,7 +103,6 @@ signals:
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
-    void usernameChanged();
 
 private slots:
     void listProjectsReplyFinished();
