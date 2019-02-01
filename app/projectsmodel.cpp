@@ -30,10 +30,9 @@ ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
 ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles() {
-    QDirIterator it(mDataDir, QDir::Dirs);
-    while (it.hasNext()) {
-       it.next();
-       addProjectFromPath(it.fileInfo().absolutePath());
+    QStringList entryList = QDir(mDataDir).entryList(QDir::NoDotAndDotDot | QDir::Dirs);
+    for (QString folderName: entryList) {
+        addProjectFromPath(mDataDir + "/" + folderName);
     }
     std::sort(mProjectFiles.begin(), mProjectFiles.end());
 }
@@ -56,10 +55,9 @@ void ProjectModel::addProjectFromPath(QString path)
         it.next();
         ProjectFile projectFile;
         projectFile.name = it.fileName().remove(".qgs");
-        QDir projectDir(it.fileInfo().absoluteDir());
-        projectFile.folderName = projectDir.dirName();
         projectFile.path = it.filePath();
         QFileInfo fileInfo(it.filePath());
+        projectFile.folderName = it.fileInfo().baseName();
         QDateTime created = fileInfo.created();
         projectFile.info = QString(created.toString());
 
@@ -71,9 +69,12 @@ void ProjectModel::addProjectFromPath(QString path)
 
     if(!foundProjects.isEmpty()) {
         ProjectFile project = foundProjects.at(0);
-        project.name = ""; // invalid project
-        project.path = "";
-        project.info = "invalid project";
+        if (foundProjects.length() > 1) {
+            project.name = ""; // invalid project
+            project.path = "";
+            project.info = "invalid project";
+        }
+
         mProjectFiles.append(project);
     } else {
         ProjectFile projectFile;
