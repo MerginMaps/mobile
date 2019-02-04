@@ -68,23 +68,22 @@ void ProjectModel::addProjectFromPath(QString path)
         qDebug() << "Found QGIS project: " << it.filePath();
     }
 
+    ProjectFile project;
     if (!foundProjects.isEmpty()) {
-        ProjectFile project = foundProjects.at(0);
+        project = foundProjects.at(0);
         if (foundProjects.length() > 1) {
             project.name = "";
             project.path = "";
             project.info = "invalid project";
         }
-
-        mProjectFiles.append(project);
     } else {
-        ProjectFile project;
         project.name = "";
         QDir projectDir(path);
         project.folderName = projectDir.dirName();
         project.path = "";
         project.info = "invalid project";
     }
+     mProjectFiles.append(project);
 }
 
 

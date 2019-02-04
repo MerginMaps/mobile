@@ -38,17 +38,15 @@ void Loader::setRecording(bool isRecordingOn)
     }
 }
 
-void Loader::load(const QString& filePath) {
+bool Loader::load(const QString& filePath) {
     qDebug() << "Loading " << filePath;
+    bool res = true;
     if (mProject.fileName() != filePath) {
-        bool res = mProject.read(filePath);
-        Q_ASSERT(res);
-        qDebug() << " ******** OK ";
-
+        res = mProject.read(filePath);
         emit projectReloaded();
-    } else {
-        qDebug() << " ******** SKIPPED ";
     }
+
+    return res;
 }
 
 void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)

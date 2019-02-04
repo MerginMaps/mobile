@@ -73,7 +73,7 @@ public slots:
 
         bool operator < (const ProjectFile& str) const
         {
-            return (name < str.name);
+            return (folderName < str.folderName);
         }
     };
     QList<ProjectFile> mProjectFiles;

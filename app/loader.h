@@ -39,7 +39,7 @@ public:
     bool isRecording() const { return mRecording; }
     void setRecording( bool isRecording );
 
-    Q_INVOKABLE void load(const QString& filePath);
+    Q_INVOKABLE bool load(const QString& filePath);
     Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
     Q_INVOKABLE QStringList mapTip(QgsQuickFeatureLayerPair pair);
 
