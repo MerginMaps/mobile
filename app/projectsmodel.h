@@ -39,7 +39,8 @@ class ProjectModel : public QAbstractListModel
       Path,
       ShortName, // name shortened to maxShortNameChars
       ProjectInfo,
-      Size
+      Size,
+      IsValid
     };
     Q_ENUMS( Roles )
 
@@ -70,6 +71,7 @@ public slots:
         QString folderName;
         QString path;
         QString info;
+        bool isValid;
 
         bool operator < (const ProjectFile& str) const
         {

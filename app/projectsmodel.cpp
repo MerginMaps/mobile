@@ -22,7 +22,7 @@
 
 ProjectModel::ProjectModel(const QString &dataDir, QObject* parent)
   : QAbstractListModel( parent )
-  , mDataDir(dataDir + "/")
+  , mDataDir(dataDir)
 {
     findProjectFiles();
 }
@@ -61,6 +61,7 @@ void ProjectModel::addProjectFromPath(QString path)
         QFileInfo fileInfo(it.filePath());
         QDateTime created = fileInfo.created();
         projectFile.info = QString(created.toString());
+        projectFile.isValid = true;
 
         if (!projectFilePaths.contains(projectFile.path))
             foundProjects.append(projectFile);
@@ -72,16 +73,16 @@ void ProjectModel::addProjectFromPath(QString path)
     if (!foundProjects.isEmpty()) {
         project = foundProjects.at(0);
         if (foundProjects.length() > 1) {
-            project.name = "";
-            project.path = "";
             project.info = "invalid project";
+            project.isValid = false;
         }
     } else {
         project.name = "";
         QDir projectDir(path);
         project.folderName = projectDir.dirName();
-        project.path = "";
+        project.path = path;
         project.info = "invalid project";
+        project.isValid = false;
     }
      mProjectFiles.append(project);
 }
@@ -102,6 +103,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
     case ShortName: return QVariant(projectFile.name.left(mMaxShortNameChars - 3) + "...");
     case Path: return QVariant(projectFile.path);
     case ProjectInfo: return QVariant(projectFile.info);
+    case IsValid: return QVariant(projectFile.isValid);
   }
 
   return QVariant();
@@ -115,6 +117,7 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
   roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
   roleNames[ProjectInfo] = "projectInfo";
+  roleNames[IsValid] = "isValid";
   return roleNames;
 }
 

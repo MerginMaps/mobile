@@ -234,7 +234,7 @@ Item {
             width: cellWidth
             height: cellHeight
             projectName: folderName
-            disabled: (name === "") // invalid project
+            disabled: !isValid // invalid project
             highlight: {
                 if (disabled) return true
 
