@@ -56,8 +56,9 @@ void ProjectModel::addProjectFromPath(QString path)
         ProjectFile projectFile;
         projectFile.name = it.fileName().remove(".qgs");
         projectFile.path = it.filePath();
+        QDir projectDir(path);
+        projectFile.folderName = projectDir.dirName();
         QFileInfo fileInfo(it.filePath());
-        projectFile.folderName = it.fileInfo().baseName();
         QDateTime created = fileInfo.created();
         projectFile.info = QString(created.toString());
 
@@ -67,24 +68,23 @@ void ProjectModel::addProjectFromPath(QString path)
         qDebug() << "Found QGIS project: " << it.filePath();
     }
 
-    if(!foundProjects.isEmpty()) {
+    if (!foundProjects.isEmpty()) {
         ProjectFile project = foundProjects.at(0);
         if (foundProjects.length() > 1) {
-            project.name = ""; // invalid project
+            project.name = "";
             project.path = "";
             project.info = "invalid project";
         }
 
         mProjectFiles.append(project);
     } else {
-        ProjectFile projectFile;
-        projectFile.name = "";
-        QDir projectDir(it.fileInfo().absoluteDir());
-        projectFile.folderName = path;
-        projectFile.path = "";
-        projectFile.info = "invalid project";
+        ProjectFile project;
+        project.name = "";
+        QDir projectDir(path);
+        project.folderName = projectDir.dirName();
+        project.path = "";
+        project.info = "invalid project";
     }
-    // std::sort(mProjectFiles.begin(), mProjectFiles.end());
 }
 
 
@@ -98,7 +98,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 
   switch ( role )
   {
-    case Name: return QVariant(projectFile.folderName);
+    case Name: return QVariant(projectFile.name);
     case FolderName: return QVariant(projectFile.folderName);
     case ShortName: return QVariant(projectFile.name.left(mMaxShortNameChars - 3) + "...");
     case Path: return QVariant(projectFile.path);

@@ -231,6 +231,7 @@ Item {
             state: stateManager.state
             width: cellWidth
             height: cellHeight
+            projectName: folderName
             highlight: {
                 if (state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
@@ -238,6 +239,7 @@ Item {
                     return path === projectsPanel.activeProjectPath ? true : false
                 }
             }
+            disabled: (name === "") // invalid project
 
             onItemClicked: {
                 if (showMergin) return

@@ -119,7 +119,8 @@ static void expand_assets_data(const QString& qgisDataPath) {
 
     foreach (const QString& dataFile, qgisDataFiles)
     {
-      QFile f(assetsBasePath + "/qgis-data/" + dataFile);
+
+      QFile f(assetsBasePath + "/" + dataFile);
       QString destFilePath = qgisDataPath + "/" + dataFile;
       QDir destFileDir = QFileInfo(destFilePath).absoluteDir();
       if (!destFileDir.exists())
@@ -153,7 +154,7 @@ static void init_qgis(const QString& qgisDataPath)
 #ifdef ANDROID
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
-  QgsApplication::setPkgDataPath(qgisDataPath);
+  QgsApplication::setPkgDataPath(QgsApplication::qgisSettingsDirPath());
 #else
   Q_UNUSED(qgisDataPath);
 #endif
@@ -195,9 +196,9 @@ int main(int argc, char *argv[])
   // Set/Get enviroment
   QString dataDir = getDataDir();
   setEnvironmentQgisPrefixPath();
-  expand_assets_data(dataDir);
 
-  init_qgis(dataDir);
+  init_qgis(QgsApplication::qgisSettingsDirPath());
+  expand_assets_data(QgsApplication::qgisSettingsDirPath());
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
