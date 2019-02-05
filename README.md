@@ -13,7 +13,6 @@ Tested: Linux (Ubuntu, Manjaro), MacOs (Desktop only), Android.
 ## Development Linux Cross-Compilation for Android
 Requirements Android:
 - Qt5.11.2
-- QGIS 3.x prerequsities
 - Docker
 - OSGeo4A
 - Minimum 20GB free space (For NDK, SDK, Qt, OsGeo4A and others)
