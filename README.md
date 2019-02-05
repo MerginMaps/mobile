@@ -77,7 +77,19 @@ docker cp 71eef3e8038a:/opt/android-ndk /home/apps/android
 docker cp 71eef3e8038a:/opt/android-sdk /home/apps/android
 ```
 - The folder copied from docker has root permission, so we cannot compile any app in Qt Creator with root files. Change these folder's permissions to your user name.
-- Then you are ready to build it with Qt Creator! Set up SDK and NDK path of Qt Creator, install ant and and Java JDK 8. Open Input's pro file and build it :)
+- Configure config.pri according to new osgeo path:
+Example:
+```
+android {
+  OSGEO4A_DIR = /home/apps/osgeo4a
+  OSGEO4A_STAGE_DIR = $${OSGEO4A_DIR}
+  QGIS_INSTALL_PATH = $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH
+  QGIS_QUICK_DATA_PATH = INPUT # should be relative path
+}
+!android {
+}
+```
+- Then you are ready to build it with Qt Creator! Set up SDK and NDK path in Qt Creator's Android settings, install ant and and Java JDK 8. Open Input's pro file and build it :)
 
 Note: Before you develop the app for Android with Qt Creator, you should create a new folder in Android's SD Card named "INPUT" and copy your projects and data manually to INPUT folder under your SD Card. Unless you don't do it, Input may not see any project.
 
