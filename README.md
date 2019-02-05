@@ -81,8 +81,8 @@ docker cp 71eef3e8038a:/opt/android-sdk /home/apps/android
 Example:
 ```
 android {
-  OSGEO4A_DIR = /home/apps/osgeo4a
-  OSGEO4A_STAGE_DIR = $${OSGEO4A_DIR}
+  OSGEO4A_DIR = /home/apps
+  OSGEO4A_STAGE_DIR = /home/apps/osgeo4a
   QGIS_INSTALL_PATH = $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
 }
