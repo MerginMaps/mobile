@@ -143,7 +143,7 @@ static void expand_pkg_data(const QString& pkgPath) {
     }
   }
 #else
-    Q_UNUSED(qgisDataPath);
+    Q_UNUSED(pkgPath);
 #endif
 }
 
@@ -164,7 +164,7 @@ static void copy_demo_projects(const QString& dataPath) {
       cpDir(assetsBasePath + "/demo-projects/" + projectName, dataPath + "/" + projectName);
   }
 #else
-    Q_UNUSED(qgisDataPath);
+    Q_UNUSED(dataPath);
 #endif
 }
 
