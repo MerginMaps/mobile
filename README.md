@@ -8,105 +8,47 @@ Mobile application based on QGIS's library QgsQuick.
 
 # Development
 
-Tested: Linux, MacOs (Desktop only)
-In general you need `qgis_core` and `qgis_quick` libraries build for target platform.
-
-You need to copy and edit config.in with your paths!
-```
-cd app
-cp config.pri.default config.pri
-# nano config.pri
-```
-
-## Development Linux - Desktop
-
-Requirements:
-
-- Qt5.x
-- QGIS 3.x prerequsities
-
-You can either build qgis_quick library or use ony from QGIS 3.4+ installation
-For building QGIS use these flags WITH_QUICK=TRUE, WITH_GUI=FALSE, WITH_DESKTOP=FALSE, WITH_BINDINGS=FALSE
-
-```
-cd repo/QGIS/build-cmd
-cmake \
-   -GNinja \
-   -DCMAKE_BUILD_TYPE=Release \
-   -DCMAKE_INSTALL_PREFIX=~/qmobile/apps \
-   -DWITH_GUI=FALSE \
-   -DWITH_QUICK=TRUE \
-   -DWITH_QTWEBKIT=FALSE \
-   -DENABLE_TESTS=FALSE \
-   -DWITH_BINDINGS=FALSE \
-   ..
-ninja
-ninja install
-```
-
-Now you need to edit input/config.pri with paths to your QGIS installation and build with qmake
-
-And run
-
-```
-#!/bin/bash
-APP=~/qmobile/apps
-
-LD_LIBRARY_PATH=$APP/lib/ \
-QML2_IMPORT_PATH=$APP/qml \
-QGIS_PREFIX_PATH=$APP \
-$APP/bin/input
-```
+Tested: Linux (Ubuntu, Manjaro), MacOs (Desktop only), Android
+You need to copy config.pri.default file in /app folder, rename it to config.pri and paste in the current folder.
 
 ## Development Linux Cross-Compilation for Android
-
-Same requirements as for Linux Desktop
-
 Requirements Android:
+- Qt5.11.2
+- QGIS 3.x prerequsities
+- Docker
 - OSGeo4A
+- Minimum 20GB free space (For NDK, SDK, Qt, OsGeo4A and others)
 
-Build `qgis_core` and `qgis_quick` libraries with OSGeo4A.
-Now you need to edit input/config.pri with paths to your OSGeo4A installation and build with qmake
+Now you need to edit input/config.pri with paths to your OSGeo4A installation. 
 
-## Development MacOS Desktop
+# OSGeo4A Installation from Docker
+- First install Docker, you can install it from software manager or command line (Ubuntu: sudo apt-get install docker.io)
+- Build OsGeo4A:
+cd OSGeo4A
+sudo docker build -t osgeo4a .
 
-So far only working if you want to build desktop version of the application
+Clone Input:
+git clone https://github.com/lutraconsulting/input.git
+cd Input
 
-Requirements:
- - All QGIS dependencies for qgis-3 receipt from https://github.com/OSGeo/homebrew-osgeo4mac
+To compite input from docker directly, use this :
+docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-armv7" -e "ARCH=armv7" -it osgeo4a
+After you built it, open Android-Build folder in Input. Find APK file in output folder.
 
-You can either build qgis_quick library or use ony from QGIS 3.4+ installation. Use same flags as for Linux
-Now you need to edit input/config.pri with paths to your QGIS installation and build with qmake
+Another way is to copy all OsGeo4A dependencies to host machine.
+To do so, use these commands:
+first get the image id number and copy 
+sudo docker ps
+example:
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                                            NAMES
+1b4ad9311e93        bamos/openface      "/bin/bash"         33 minutes ago 
+Then copy the image folder to the host folder:
+docker cp <containerId>:/file/path/within/container /host/path/target
 
-To run the application from build tree, you need to:
 
-```
-#!/bin/bash
-APP=~/qmobile/Applications
+The folder copied from docker has root permission, so we cannot compile an app with QtCreator with root files. To change permission folder copied from docker image, it should be user’s permission, not root:
+sudo chown -R edip:edip ./osgeo4a/
 
-DYLD_FRAMEWORK_PATH=$DYLD_FRAMEWORK_PATH:$APP/QGIS.app/Contents/MacOS/lib:$APP/QGIS.app/Contents/Frameworks \
-QML2_IMPORT_PATH=$APP/QGIS.app/Contents/MacOS/qml \
-QGIS_PREFIX_PATH=$APP/QGIS.app/Contents/MacOS \
-$APP/bin/qgis-quick-components-test
-```
 
-1. append QGIS Frameworks paths to `DYLD_FRAMEWORK_PATH`
-2. append QML path for `qgis_quick` qml dir
+Before you develop the app for Android with Qt Creator, you should create a new folder named "INPUT" and copy your projects and data manually to INPUT folder under your SD Card. Then you can compile the app with Qt Creator.
 
-## Development MacOS Cross-Compilation for Android
-
-Same requirements as for Cross-Compilation for Android
-
-Quick guide:
-- `brew tap caskroom/versions`
-- `brew cask install java8`
-- `brew install ant`
-- `brew install bison`
-- `sudo mkdir -p /opt; sudo chown <your name>:admin /opt`
-- download SDK command line tools and unzip to `/opt/android-sdk`
-- sdk: install lldb, build tools, platform android X, cmake, platform-tools
-- download QT armv7 to `/opt/Qt`
-- download crystax and install to `/opt/crystax-10.3.2`
-- compile OSGeo4a
-- open QtCreator -> Manage Kits -> add SDK and NDK. compilers should be autodetected
-- enable connection on the device from MacOS when requested
