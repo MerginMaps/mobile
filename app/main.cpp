@@ -134,16 +134,12 @@ static void expand_pkg_data(const QString& pkgPath) {
   // make sure all necessary QGIS data are available - unpacked from assets
   //if (!homeDir.exists(qgisDataSubdir)) // do it always on startup - for now
   {
-    QStringList qgisDataFiles;
-    qgisDataFiles << "resources";
+    QStringList qgisDataFolders;
+    qgisDataFolders << "resources";
 
-    foreach (const QString& dataFile, qgisDataFiles)
+    foreach (const QString& dataFolder, qgisDataFolders)
     {
-
-      QFile f(assetsBasePath + "/" + dataFile);
-      QString destFilePath = pkgPath + "/" + dataFile;
-      QDir destFileDir = QFileInfo(destFilePath).absoluteDir();
-      cpDir(assetsBasePath + "/" + dataFile, destFilePath);
+      cpDir(assetsBasePath + "/qgis-data/" + dataFolder, pkgPath + "/" + dataFolder);
     }
   }
 #else
@@ -165,7 +161,7 @@ static void copy_demo_projects(const QString& dataPath) {
       // if projectFolder exists, do not copy
       if (projectDir.exists()) continue;
 
-      cpDir(assetsBasePath + "/qgis-data/" + projectName, dataPath + "/" + projectName);
+      cpDir(assetsBasePath + "/demo-projects/" + projectName, dataPath + "/" + projectName);
   }
 #else
     Q_UNUSED(qgisDataPath);
