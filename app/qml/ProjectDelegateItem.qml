@@ -18,13 +18,23 @@ Rectangle {
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"
+    property string projectName: name
+    property bool disabled: false
 
     signal itemClicked();
     signal menuClicked()
 
     MouseArea {
         anchors.fill: parent
-        onClicked: itemClicked()
+        onClicked: if (!disabled) itemClicked()
+    }
+
+    Rectangle {
+        id: backgroundRect
+        visible: disabled
+        width: parent.width
+        height: parent.height
+        color: InputStyle.panelBackgroundDark
     }
 
     Item {
@@ -65,7 +75,7 @@ Rectangle {
                 width: itemContainer.cellWidth - (itemContainer.cellHeight * 2)
                 Text {
                     id: mainText
-                    text: name
+                    text: itemContainer.projectName
                     height: textContainer.height/2
                     font.pixelSize: InputStyle.fontPixelSizeNormal
                     font.weight: Font.Bold

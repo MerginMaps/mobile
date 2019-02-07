@@ -12,7 +12,7 @@
 MerginApi::MerginApi(const QString &root, const QString& dataDir, QObject *parent)
   : QObject (parent)
   , mApiRoot(root)
-  , mDataDir(dataDir + "/downloads/")
+  , mDataDir(dataDir + "/")
   , mCacheFile(".projectsCache.txt")
 {
     QObject::connect(this, &MerginApi::syncProjectFinished,this, &MerginApi::setUpdateToProject);

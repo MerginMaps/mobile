@@ -69,6 +69,8 @@ Item {
     focus: true
 
     Keys.onReleased: {
+        if (!activeProjectPath) return
+
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
             event.accepted = true;
             projectsPanel.visible = false
@@ -231,13 +233,18 @@ Item {
             state: stateManager.state
             width: cellWidth
             height: cellHeight
+            projectName: folderName
+            disabled: !isValid // invalid project
             highlight: {
+                if (disabled) return true
+
                 if (state === "setup") {
                     return path === __appSettings.defaultProject ? true : false
                 } else {
                     return path === projectsPanel.activeProjectPath ? true : false
                 }
             }
+
 
             onItemClicked: {
                 if (showMergin) return

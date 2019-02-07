@@ -99,50 +99,53 @@ static void setEnvironmentQgisPrefixPath() {
   qDebug() << "QGIS_PREFIX_PATH: " << ::getenv("QGIS_PREFIX_PATH");
 }
 
+static bool cpDir(const QString &srcPath, const QString &dstPath)
+{
+    QDir parentDstDir(QFileInfo(dstPath).path());
+    if (!parentDstDir.mkpath(dstPath))
+        return false;
 
-static void expand_assets_data(const QString& qgisDataPath) {
+    QDir srcDir(srcPath);
+    foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
+        QString srcItemPath = srcPath + "/" + info.fileName();
+        QString dstItemPath = dstPath + "/" + info.fileName();
+        if (info.isDir()) {
+            if (!cpDir(srcItemPath, dstItemPath)) {
+                return false;
+            }
+        } else if (info.isFile()) {
+            if (!QFile::copy(srcItemPath, dstItemPath)) {
+                return false;
+            }
+            QFile::setPermissions(dstItemPath, QFile::ReadUser|QFile::WriteUser|QFile::ReadOwner|QFile::WriteOwner);
+        } else {
+            qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
+        }
+    }
+    return true;
+}
+
+// Copies resources folder to package folder
+static void expand_pkg_data(const QString& pkgPath) {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
-
-  QDir qgisDataDir(qgisDataPath);
-
-  // make sure all necessary QGIS data are available - unpacked from assets
-  //if (!homeDir.exists(qgisDataSubdir)) // do it always on startup - for now
-  {
-    QStringList qgisDataFiles;
-    qgisDataFiles << "resources/qgis.db" << "resources/srs.db";
-
-#ifdef QGIS_QUICK_EXPAND_TEST_DATA
-    qgisDataFiles << "background.gpkg";
-#endif
-
-    foreach (const QString& dataFile, qgisDataFiles)
-    {
-      QFile f(assetsBasePath + "/qgis-data/" + dataFile);
-      QString destFilePath = qgisDataPath + "/" + dataFile;
-      QDir destFileDir = QFileInfo(destFilePath).absoluteDir();
-      if (!destFileDir.exists())
-      {
-        bool mkres = qgisDataDir.mkpath(QFileInfo(dataFile).dir().path());
-        qDebug("mkpath [%d] %s", mkres, destFileDir.absolutePath().toLatin1().data());
-      }
-      if (!QFile(destFilePath).exists())
-      {
-        bool res = f.copy(destFilePath);
-        qDebug("copying [%d] %s", res, destFilePath.toLatin1().data());
-        // by default the permissions are set as readable for everyone - and not writable!
-        res = QFile::setPermissions(destFilePath, QFile::ReadUser|QFile::WriteUser|QFile::ReadOwner|QFile::WriteOwner);
-        qDebug("chmod [%d]", res);
-      }
-    }
-  }
+  cpDir(assetsBasePath + "/qgis-data", pkgPath);
 #else
-    Q_UNUSED(qgisDataPath);
+    Q_UNUSED(pkgPath);
 #endif
 }
 
-static void init_qgis(const QString& qgisDataPath)
+static void copy_demo_projects(const QString& projectDir) {
+#ifdef ANDROID
+  QString assetsBasePath( "assets:" );
+  qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
+  cpDir(assetsBasePath + "/demo-projects", projectDir);
+#else
+    Q_UNUSED(projectDir);
+#endif
+}
+
+static void init_qgis(const QString & pkgPath)
 {
   QTime t;
   t.start();
@@ -153,9 +156,9 @@ static void init_qgis(const QString& qgisDataPath)
 #ifdef ANDROID
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
-  QgsApplication::setPkgDataPath(qgisDataPath);
+  QgsApplication::setPkgDataPath( pkgPath );
 #else
-  Q_UNUSED(qgisDataPath);
+  Q_UNUSED(pkgPath)
 #endif
 
   // make sure the DB exists - otherwise custom projections will be failing
@@ -194,10 +197,12 @@ int main(int argc, char *argv[])
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
+  QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
-  expand_assets_data(dataDir);
 
-  init_qgis(dataDir);
+  init_qgis(dataDir + "/qgis-data");
+  expand_pkg_data( QgsApplication::pkgDataPath() );
+  copy_demo_projects( projectDir );
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
@@ -218,9 +223,9 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
 
   // Create project model
-  ProjectModel pm(dataDir);
+  ProjectModel pm(projectDir);
   if (pm.rowCount() == 0) {
-      qDebug() << "Unable to find any QGIS project in the folder " << dataDir;
+      qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
   }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
 
@@ -241,7 +246,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir ));
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), projectDir ));
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 
   // Create mergin projects model

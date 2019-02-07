@@ -35,10 +35,12 @@ class ProjectModel : public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1,
+      FolderName,
       Path,
       ShortName, // name shortened to maxShortNameChars
       ProjectInfo,
-      Size
+      Size,
+      IsValid
     };
     Q_ENUMS( Roles )
 
@@ -62,16 +64,18 @@ public slots:
 
   private:
     void findProjectFiles();
-    void addProjectsFromPath(QString path);
+    void addProjectFromPath(QString path);
 
     struct ProjectFile {
         QString name;
+        QString folderName;
         QString path;
         QString info;
+        bool isValid;
 
         bool operator < (const ProjectFile& str) const
         {
-            return (name < str.name);
+            return (folderName < str.folderName);
         }
     };
     QList<ProjectFile> mProjectFiles;

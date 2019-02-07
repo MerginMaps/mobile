@@ -74,10 +74,16 @@ ApplicationWindow {
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
-            var defaultIndex = __projectsModel.rowAccordingPath(path);
-            openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
-            __loader.load(path);
-            __appSettings.activeProject = path
+            var defaultIndex = __projectsModel.rowAccordingPath(path)
+            var isValid = __projectsModel.data(__projectsModel.index(defaultIndex), ProjectModel.IsValid)
+            if (isValid && __loader.load(path)) {
+                openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
+                __appSettings.activeProject = path
+            } else {
+                // if default project load failed, delete default setting
+                __appSettings.defaultProject = ""
+                openProjectPanel.openPanel("view")
+            }
         } else {
             openProjectPanel.openPanel("view")
         }
