@@ -135,13 +135,13 @@ static void expand_pkg_data(const QString& pkgPath) {
 #endif
 }
 
-static void copy_demo_projects(const QString& dataPath) {
+static void copy_demo_projects(const QString& projectDir) {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
   qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
-  cpDir(assetsBasePath + "/demo-projects", dataPath);
+  cpDir(assetsBasePath + "/demo-projects", projectDir);
 #else
-    Q_UNUSED(dataPath);
+    Q_UNUSED(projectDir);
 #endif
 }
 
@@ -157,6 +157,8 @@ static void init_qgis(const QString & pkgPath)
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
   QgsApplication::setPkgDataPath( pkgPath );
+#else
+  Q_UNUSED(pkgPath)
 #endif
 
   // make sure the DB exists - otherwise custom projections will be failing
@@ -195,11 +197,12 @@ int main(int argc, char *argv[])
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
+  QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
 
   init_qgis(dataDir + "/qgis-data");
-  expand_pkg_data( app.pkgDataPath() );
-  copy_demo_projects( dataDir );
+  expand_pkg_data( QgsApplication::pkgDataPath() );
+  copy_demo_projects( projectDir );
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
@@ -220,9 +223,9 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
 
   // Create project model
-  ProjectModel pm(dataDir);
+  ProjectModel pm(projectDir);
   if (pm.rowCount() == 0) {
-      qDebug() << "Unable to find any QGIS project in the folder " << dataDir;
+      qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
   }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
 
@@ -243,7 +246,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), dataDir ));
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), projectDir ));
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 
   // Create mergin projects model

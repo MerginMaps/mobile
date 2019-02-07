@@ -135,7 +135,7 @@ private:
     QNetworkAccessManager mManager;
     QString mApiRoot;
     ProjectList mMerginProjects;
-    QString mDataDir;
+    QString mDataDir; // dir with all projects
     QString mCacheFile;
     QString mUsername;
     QString mPassword;
