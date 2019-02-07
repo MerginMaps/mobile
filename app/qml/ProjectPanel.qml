@@ -305,7 +305,6 @@ Item {
 
     MessageDialog {
       id: deleteDialog
-
       visible: false
       property int relatedProjectIndex
 
@@ -315,11 +314,16 @@ Item {
       standardButtons: StandardButton.Ok | StandardButton.Cancel
       onAccepted: {
          __projectsModel.deleteProject(relatedProjectIndex)
-        relatedProjectIndex = -1
+        if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
+            __loader.load("")
+            __loader.projectReloaded();
+            projectsPanel.activeProjectIndex = -1
+        }
+        deleteDialog.relatedProjectIndex = -1
         visible = false
       }
       onRejected: {
-        relatedProjectIndex = -1
+        deleteDialog.relatedProjectIndex = -1
         visible = false
       }
     }

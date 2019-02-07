@@ -40,6 +40,14 @@ void Loader::setRecording(bool isRecordingOn)
 
 bool Loader::load(const QString& filePath) {
     qDebug() << "Loading " << filePath;
+
+    // Just clear project if empty
+    if (filePath.isEmpty()) {
+        mProject.clear();
+        emit projectReloaded();
+        return true;
+    }
+
     bool res = true;
     if (mProject.fileName() != filePath) {
         res = mProject.read(filePath);
