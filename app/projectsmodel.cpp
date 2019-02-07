@@ -139,12 +139,12 @@ int ProjectModel::rowAccordingPath(QString path) const{
 void ProjectModel::deleteProject(int row)
 {
     ProjectFile project = mProjectFiles.at(row);
-    QDir dir(project.path);
+    QDir dir(mDataDir + "/" + project.folderName);
     dir.removeRecursively();
     beginResetModel();
     mProjectFiles.removeAt(row);
     endResetModel();
-    emit projectDeleted(project.name); // TODO change to folderName after #145
+    emit projectDeleted(project.folderName);
 }
 
 int ProjectModel::rowCount(const QModelIndex &parent) const {

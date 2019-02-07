@@ -58,7 +58,7 @@ class ProjectModel : public QAbstractListModel
 
     QString dataDir() const;
 signals:
-    void projectDeleted(QString path);
+    void projectDeleted(QString folderName);
 
 public slots:
     void addProject(QString projectFolder, QString projectName);
