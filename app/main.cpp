@@ -102,7 +102,6 @@ static void setEnvironmentQgisPrefixPath() {
 static bool cpDir(const QString &srcPath, const QString &dstPath)
 {
     QDir parentDstDir(QFileInfo(dstPath).path());
-    QFile::setPermissions(dstPath, QFile::ReadUser|QFile::WriteUser|QFile::ReadOwner|QFile::WriteOwner);
     if (!parentDstDir.mkpath(dstPath))
         return false;
 
@@ -118,6 +117,7 @@ static bool cpDir(const QString &srcPath, const QString &dstPath)
             if (!QFile::copy(srcItemPath, dstItemPath)) {
                 return false;
             }
+            QFile::setPermissions(dstItemPath, QFile::ReadUser|QFile::WriteUser|QFile::ReadOwner|QFile::WriteOwner);
         } else {
             qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
         }
@@ -129,19 +129,7 @@ static bool cpDir(const QString &srcPath, const QString &dstPath)
 static void expand_pkg_data(const QString& pkgPath) {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
-
-  // make sure all necessary QGIS data are available - unpacked from assets
-  //if (!homeDir.exists(qgisDataSubdir)) // do it always on startup - for now
-  {
-    QStringList qgisDataFolders;
-    qgisDataFolders << "resources";
-
-    foreach (const QString& dataFolder, qgisDataFolders)
-    {
-      cpDir(assetsBasePath + "/qgis-data/" + dataFolder, pkgPath + "/" + dataFolder);
-    }
-  }
+  cpDir(assetsBasePath + "/qgis-data", pkgPath);
 #else
     Q_UNUSED(pkgPath);
 #endif
@@ -151,24 +139,13 @@ static void copy_demo_projects(const QString& dataPath) {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
   qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
-
-  QStringList demoProjectNames;
-  demoProjectNames << "survey" << "test_project";
-
-  foreach (const QString& projectName, demoProjectNames)
-  {
-      QDir projectDir(dataPath + "/" + projectName);
-      // if projectFolder exists, do not copy
-      if (projectDir.exists()) continue;
-
-      cpDir(assetsBasePath + "/demo-projects/" + projectName, dataPath + "/" + projectName);
-  }
+  cpDir(assetsBasePath + "/demo-projects", dataPath);
 #else
     Q_UNUSED(dataPath);
 #endif
 }
 
-static void init_qgis()
+static void init_qgis(const QString & pkgPath)
 {
   QTime t;
   t.start();
@@ -179,6 +156,7 @@ static void init_qgis()
 #ifdef ANDROID
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
+  QgsApplication::setPkgDataPath( pkgPath );
 #endif
 
   // make sure the DB exists - otherwise custom projections will be failing
@@ -219,8 +197,8 @@ int main(int argc, char *argv[])
   QString dataDir = getDataDir();
   setEnvironmentQgisPrefixPath();
 
-  init_qgis();
-  expand_pkg_data( QgsApplication::pkgDataPath() );
+  init_qgis(dataDir + "/qgis-data");
+  expand_pkg_data( app.pkgDataPath() );
   copy_demo_projects( dataDir );
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
