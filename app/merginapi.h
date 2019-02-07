@@ -104,6 +104,9 @@ signals:
     void authRequested();
     void authChanged();
 
+public slots:
+    void projectDeleted(QString projectName);
+
 private slots:
     void listProjectsReplyFinished();
     void downloadProjectReplyFinished(); // download + update
@@ -114,6 +117,7 @@ private slots:
     void continueWithUpload(QString projectDir, QString projectName, bool successfully = true);
     void setUpdateToProject(QString projectDir, QString projectName, bool successfully);
     void saveAuthData();
+
 
 private:
     ProjectList parseProjectsData(const QByteArray &data, bool dataFromServer = false);

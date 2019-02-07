@@ -261,6 +261,7 @@ int main(int argc, char *argv[])
   QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished);
   QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject);
   QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
+  QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");

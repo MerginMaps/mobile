@@ -50,6 +50,7 @@ class ProjectModel : public QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
     Q_INVOKABLE int rowAccordingPath(QString path) const;
+    Q_INVOKABLE void deleteProject( int row );
 
     QHash<int, QByteArray> roleNames() const override;
 
@@ -57,7 +58,7 @@ class ProjectModel : public QAbstractListModel
 
     QString dataDir() const;
 signals:
-    void projectsChanged();
+    void projectDeleted(QString path);
 
 public slots:
     void addProject(QString projectFolder, QString projectName);
