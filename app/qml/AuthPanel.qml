@@ -52,30 +52,22 @@ Item {
             id: loginForm
             anchors.fill: parent
             anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height: 0
-            anchors.verticalCenter: parent
-
-            Image {
-                source: "mergin.svg"
-                width: parent.width/2
-                anchors.top: parent.top
-                anchors.topMargin: Qt.inputMethod.keyboardRectangle.height ? 0: root.fieldHeight
-                sourceSize.width: width
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
 
             Column {
                 id: columnLayout
-                width: parent.width
-                height: parent.height
-                anchors.top: parent.top
-                anchors.topMargin: parent.height/3
-                anchors.right: parent.right
-                anchors.left: parent.left
                 spacing: root.panelMargin
+                anchors.verticalCenter: parent.verticalCenter
+
+                Image {
+                    source: "mergin.svg"
+                    width: loginForm.width/2
+                    sourceSize.width: width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
                 Row {
                     id: row
-                    width: parent.width
+                    width: loginForm.width
                     height: fieldHeight
                     spacing: 0
 
@@ -130,7 +122,7 @@ Item {
                 }
 
                 Row {
-                    width: parent.width
+                    width: loginForm.width
                     height: fieldHeight
                     spacing: 0
 
@@ -193,13 +185,13 @@ Item {
                     height: 2 * QgsQuick.Utils.dp
                     y: password.height - height
                     opacity: password.focus ? 1 : 0.6
-                    width: parent.width - fieldHeight/2
+                    width: loginForm.width - fieldHeight/2
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 Button {
                     id: loginButton
-                    width: parent.width - 2* root.panelMargin
+                    width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight
                     text: qsTr("Login")
                     font.pixelSize: loginButton.height/2
