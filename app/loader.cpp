@@ -74,16 +74,25 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
     mapSettings->setExtent(extent);
 }
 
+QString Loader::featureTitle(QgsQuickFeatureLayerPair pair)
+{
+  QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
+  context.setFeature( pair.feature() );
+  QgsExpression expr( pair.layer()->displayExpression() );
+  return expr.evaluate( &context ).toString();
+}
+
 QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 {
     QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
     QString mapTip = pair.layer()->mapTipTemplate();
+    QString featureTitleExpression = pair.layer()->displayExpression();
     int LIMIT = 2;
     QStringList previewFields;
 
     QStringList fields;
     for (QgsField field: pair.layer()->fields()) {
-        if (pair.layer()->displayField() != field.name()) {
+        if (featureTitleExpression != field.name()) {
             fields << field.name();
         }
     }
@@ -97,7 +106,7 @@ QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
 
     if (previewFields.empty()) {
         for (QgsField field: pair.layer()->fields()) {
-            if (pair.layer()->displayField() != field.name()) {
+            if (featureTitleExpression != field.name()) {
                 previewFields << field.name();
             }
             if (previewFields.length() == LIMIT) return previewFields;

@@ -56,6 +56,7 @@ Item {
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
+                        elide: Qt.ElideRight
                     }
 
                     Item {

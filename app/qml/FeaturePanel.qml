@@ -58,8 +58,7 @@ Drawer {
         featurePanel.isReadOnly = feature.layer.readOnly
 
         if (panelState === "preview") {
-            var index = currentAttributeModel.index(0, 0)
-            previewPanel.title = currentAttributeModel.data(index, QgsQuick.AttributeFormModel.Name)
+            previewPanel.title = __loader.featureTitle(feature)
             previewPanel.previewFields = __loader.mapTip(feature)
         }
         stateManager.state = panelState
