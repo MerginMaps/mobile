@@ -248,6 +248,18 @@ void MerginApi::saveAuthData()
     settings.endGroup();
 }
 
+void MerginApi::projectDeleted(QString projectName)
+{
+    for (std::shared_ptr<MerginProject> project: mMerginProjects) {
+        if (project->name == projectName) {
+            project->status = ProjectStatus::NoVersion;
+            project->lastSync = QDateTime();
+            project->updated = QDateTime();
+            emit merginProjectsChanged();
+        }
+    }
+}
+
 
 void MerginApi::loadAuthData()
 {

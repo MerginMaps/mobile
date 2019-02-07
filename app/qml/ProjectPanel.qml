@@ -259,6 +259,10 @@ Item {
 
                 projectsPanel.visible = false
             }
+
+            onMenuClicked: {
+                __projectsModel.deleteProject(index)
+            }
         }
     }
 
