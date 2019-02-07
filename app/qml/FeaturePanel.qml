@@ -10,6 +10,7 @@ Drawer {
     property var project
     property real panelHeight
     property real previewHeight
+    property bool isReadOnly
 
     property alias formState: featureForm.state
     property alias feature: attributeModel.featureLayerPair
@@ -54,6 +55,7 @@ Drawer {
         featurePanel.feature = feature
         featurePanel.formState = formState
         featurePanel.visible = true
+        featurePanel.isReadOnly = feature.layer.readOnly
 
         if (panelState === "preview") {
             var index = currentAttributeModel.index(0, 0)
@@ -70,6 +72,7 @@ Drawer {
       height: featurePanel.previewHeight
       width: parent.width
       visible: false
+      isReadOnly: featurePanel.isReadOnly
       x: 0
       y: 0
       onContentClicked: {
@@ -152,6 +155,7 @@ Drawer {
             height: InputStyle.rowHeightHeader
             y: parent.height - height
             state: featurePanel.formState
+            visible: !featurePanel.isReadOnly
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()
