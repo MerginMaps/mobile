@@ -7,108 +7,104 @@ import "."  // import InputStyle singleton
 
 Item {
 
-  signal authFailed()
+    signal authFailed()
 
-  property alias loginName: loginName
-  property alias password: password
-  property string errorText: errorText
+    property alias loginName: loginName
+    property alias password: password
+    property string errorText: errorText
 
-  property real fieldHeight: InputStyle.rowHeight
-  property real panelMargin: fieldHeight/4
-  property color fontColor: "white"
+    property real fieldHeight: InputStyle.rowHeight
+    property real panelMargin: fieldHeight/4
+    property color fontColor: "white"
 
-  function close() {
-      visible = false
-      password.text = ""
-      loginName.text = ""
-      if (!__merginApi.hasAuthData()) {
-          authFailed()
-      }
-  }
-
-  Keys.onReleased: {
-        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          event.accepted = true;
-          root.close()
-      }
-  }
-
-  id: root
-  focus: true
-  Pane {
-    id: pane
-
-    width: parent.width
-    height: parent.height
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    background: Rectangle {
-      color: InputStyle.fontColor
+    function close() {
+        visible = false
+        password.text = ""
+        loginName.text = ""
+        if (!__merginApi.hasAuthData()) {
+            authFailed()
+        }
     }
 
-    Flickable{
-            flickableDirection: Flickable.VerticalFlick
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            event.accepted = true;
+            root.close()
+        }
+    }
+
+    id: root
+    focus: true
+    Pane {
+        id: pane
+
+        width: parent.width
+        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+
+
+        background: Rectangle {
+            color: InputStyle.fontColor
+        }
+
+        Item {
+            id: loginForm
             anchors.fill: parent
-            contentHeight: parent.height
-            bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height: 0
+            anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height: 0
+            anchors.verticalCenter: parent
 
-            Item {
-                id: loginForm
-                anchors.fill: parent
-                anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height: 0
+            Image {
+                source: "mergin.svg"
+                width: parent.width/2
+                anchors.top: parent.top
+                anchors.topMargin: Qt.inputMethod.keyboardRectangle.height ? 0: root.fieldHeight
+                sourceSize.width: width
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
 
-                Image {
-                    source: "mergin.svg"
-                    width: parent.width/2
-                    anchors.top: parent.top
-                    anchors.topMargin: Qt.inputMethod.keyboardRectangle.height ? 0: root.fieldHeight
-                    sourceSize.width: width
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+            Column {
+                id: columnLayout
+                width: parent.width
+                height: parent.height
+                anchors.top: parent.top
+                anchors.topMargin: parent.height/3
+                anchors.right: parent.right
+                anchors.left: parent.left
+                spacing: root.panelMargin
 
-                Column {
-                  id: columnLayout
-                  width: parent.width
-                  height: parent.height
-                  anchors.top: parent.top
-                  anchors.topMargin: parent.height/3
-                  anchors.right: parent.right
-                  anchors.left: parent.left
-                  spacing: root.panelMargin
+                Row {
+                    id: row
+                    width: parent.width
+                    height: fieldHeight
+                    spacing: 0
 
-                  Row {
-                      id: row
-                      width: parent.width
-                      height: fieldHeight
-                      spacing: 0
+                    Rectangle {
+                        id: iconContainer
+                        height: fieldHeight
+                        width: fieldHeight
+                        color: InputStyle.fontColor
 
-                      Rectangle {
-                          id: iconContainer
-                          height: fieldHeight
-                          width: fieldHeight
-                          color: InputStyle.fontColor
+                        Image {
+                            anchors.margins: root.panelMargin
+                            id: icon
+                            height: fieldHeight
+                            width: fieldHeight
+                            anchors.fill: parent
+                            source: 'account.svg'
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
 
-                          Image {
-                              anchors.margins: root.panelMargin
-                              id: icon
-                              height: fieldHeight
-                              width: fieldHeight
-                              anchors.fill: parent
-                              source: 'account.svg'
-                              sourceSize.width: width
-                              sourceSize.height: height
-                              fillMode: Image.PreserveAspectFit
-                          }
+                        ColorOverlay {
+                            anchors.fill: icon
+                            source: icon
+                            color: root.fontColor
+                        }
+                    }
 
-                          ColorOverlay {
-                              anchors.fill: icon
-                              source: icon
-                              color: root.fontColor
-                          }
-                      }
-
-                      TextField {
+                    TextField {
                         id: loginName
                         x: iconContainer.width
                         width: parent.width - iconContainer.width
@@ -120,61 +116,61 @@ Item {
                         background: Rectangle {
                             color: InputStyle.fontColor
                         }
-                      }
-                  }
+                    }
+                }
 
-                  Rectangle {
-                      id: loginNameBorder
-                      color: root.fontColor
-                      y: loginName.height - height
-                      height: 2 * QgsQuick.Utils.dp
-                      opacity: loginName.focus ? 1 : 0.6
-                      width: parent.width - fieldHeight/2
-                      anchors.horizontalCenter: parent.horizontalCenter
-                  }
+                Rectangle {
+                    id: loginNameBorder
+                    color: root.fontColor
+                    y: loginName.height - height
+                    height: 2 * QgsQuick.Utils.dp
+                    opacity: loginName.focus ? 1 : 0.6
+                    width: parent.width - fieldHeight/2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
-                  Row {
-                      width: parent.width
-                      height: fieldHeight
-                      spacing: 0
+                Row {
+                    width: parent.width
+                    height: fieldHeight
+                    spacing: 0
 
-                      Rectangle {
-                          id: iconContainer2
-                          height: fieldHeight
-                          width: fieldHeight
-                          color: InputStyle.fontColor
+                    Rectangle {
+                        id: iconContainer2
+                        height: fieldHeight
+                        width: fieldHeight
+                        color: InputStyle.fontColor
 
-                          Image {
-                              anchors.margins: (fieldHeight/4)
-                              id: icon2
-                              height: fieldHeight
-                              width: fieldHeight
-                              anchors.fill: parent
-                              source: 'lock.svg'
-                              sourceSize.width: width
-                              sourceSize.height: height
-                              fillMode: Image.PreserveAspectFit
+                        Image {
+                            anchors.margins: (fieldHeight/4)
+                            id: icon2
+                            height: fieldHeight
+                            width: fieldHeight
+                            anchors.fill: parent
+                            source: 'lock.svg'
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
 
-                              MouseArea {
+                            MouseArea {
                                 anchors.fill: parent
                                 onClicked: {
-                                  if (password.echoMode === TextInput.Normal) {
-                                    password.echoMode = TextInput.Password
-                                  } else {
-                                    password.echoMode = TextInput.Normal
-                                  }
+                                    if (password.echoMode === TextInput.Normal) {
+                                        password.echoMode = TextInput.Password
+                                    } else {
+                                        password.echoMode = TextInput.Normal
+                                    }
                                 }
-                              }
-                          }
+                            }
+                        }
 
-                          ColorOverlay {
-                              anchors.fill: icon2
-                              source: icon2
-                              color: root.fontColor
-                          }
-                      }
+                        ColorOverlay {
+                            anchors.fill: icon2
+                            source: icon2
+                            color: root.fontColor
+                        }
+                    }
 
-                      TextField {
+                    TextField {
                         id: password
                         width: parent.width - iconContainer.width
                         height: fieldHeight
@@ -188,20 +184,20 @@ Item {
                         background: Rectangle {
                             color: InputStyle.fontColor
                         }
-                      }
-                  }
+                    }
+                }
 
-                  Rectangle {
-                      id: passBorder
-                      color: InputStyle.panelBackgroundLight
-                      height: 2 * QgsQuick.Utils.dp
-                      y: password.height - height
-                      opacity: password.focus ? 1 : 0.6
-                      width: parent.width - fieldHeight/2
-                      anchors.horizontalCenter: parent.horizontalCenter
-                  }
+                Rectangle {
+                    id: passBorder
+                    color: InputStyle.panelBackgroundLight
+                    height: 2 * QgsQuick.Utils.dp
+                    y: password.height - height
+                    opacity: password.focus ? 1 : 0.6
+                    width: parent.width - fieldHeight/2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
-                  Button {
+                Button {
                     id: loginButton
                     width: parent.width - 2* root.panelMargin
                     height: fieldHeight
@@ -209,7 +205,7 @@ Item {
                     font.pixelSize: loginButton.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
-                      __merginApi.authorize(loginName.text, password.text)
+                        __merginApi.authorize(loginName.text, password.text)
                     }
                     background: Rectangle {
                         color: InputStyle.panelBackgroundLight
@@ -224,12 +220,9 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
-                  }
                 }
-              }
-
-    }
-
+            }
+        }
 
     }
 }
