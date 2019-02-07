@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
@@ -233,6 +234,7 @@ Item {
             state: stateManager.state
             width: cellWidth
             height: cellHeight
+            statusIconSource: "trash.svg"
             projectName: folderName
             disabled: !isValid // invalid project
             highlight: {
@@ -244,7 +246,6 @@ Item {
                     return path === projectsPanel.activeProjectPath ? true : false
                 }
             }
-
 
             onItemClicked: {
                 if (showMergin) return
@@ -261,7 +262,8 @@ Item {
             }
 
             onMenuClicked: {
-                __projectsModel.deleteProject(index)
+                deleteDialog.relatedProjectIndex = index
+                deleteDialog.open()
             }
         }
     }
@@ -299,5 +301,26 @@ Item {
         height: window.height
         width: parent.width
         onAuthFailed: myProjectsBtn.clicked()
+    }
+
+    MessageDialog {
+      id: deleteDialog
+
+      visible: false
+      property int relatedProjectIndex
+
+      title: qsTr( "Delete project" )
+      text: qsTr( "Do you really want to delete project?" )
+      icon: StandardIcon.Warning
+      standardButtons: StandardButton.Ok | StandardButton.Cancel
+      onAccepted: {
+         __projectsModel.deleteProject(relatedProjectIndex)
+        relatedProjectIndex = -1
+        visible = false
+      }
+      onRejected: {
+        relatedProjectIndex = -1
+        visible = false
+      }
     }
 }
