@@ -13,6 +13,7 @@ Item {
     property alias titleBorder: titleBorder
     property string title: ""
     property variant previewFields: []
+    property bool isReadOnly
 
     signal contentClicked()
     signal editClicked()
@@ -63,6 +64,7 @@ Item {
                         width: height
                         anchors.left: titleText.right
                         anchors.right: parent.right
+                        visible: !previewPanel.isReadOnly
 
                         MouseArea {
                             id: editArea
