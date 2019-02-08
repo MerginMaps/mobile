@@ -41,6 +41,7 @@ public:
 
     Q_INVOKABLE bool load(const QString& filePath);
     Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
+    Q_INVOKABLE QString featureTitle(QgsQuickFeatureLayerPair pair);
     Q_INVOKABLE QStringList mapTip(QgsQuickFeatureLayerPair pair);
 
 signals:
