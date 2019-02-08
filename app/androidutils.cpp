@@ -35,3 +35,24 @@ bool AndroidUtils::isAndroid() const
     return false;
 #endif
 }
+
+void AndroidUtils::requirePermissions()
+{
+    checkAndAcquirePermissions("android.permission.WRITE_EXTERNAL_STORAGE");
+    checkAndAcquirePermissions("android.permission.CAMERA");
+}
+
+bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
+{
+  QtAndroid::PermissionResult r = QtAndroid::checkPermission( permissionString );
+  if ( r == QtAndroid::PermissionResult::Denied )
+  {
+    QtAndroid::requestPermissionsSync( QStringList() << permissionString );
+    r = QtAndroid::checkPermission( permissionString );
+    if ( r == QtAndroid::PermissionResult::Denied )
+    {
+      return false;
+    }
+  }
+  return true;
+}
