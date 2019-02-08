@@ -10,6 +10,9 @@ public:
     explicit AndroidUtils( QObject* parent = nullptr );
 
     bool isAndroid() const;
+    static void requirePermissions();
+    static bool checkAndAcquirePermissions( const QString &permissionString );
+
 
 public slots:
     void showToast( QString message );

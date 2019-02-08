@@ -200,6 +200,9 @@ int main(int argc, char *argv[])
   QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
 
+  // Require permissions before copying data
+  AndroidUtils::requirePermissions();
+
   init_qgis(dataDir + "/qgis-data");
   expand_pkg_data( QgsApplication::pkgDataPath() );
   copy_demo_projects( projectDir );
