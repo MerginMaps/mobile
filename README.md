@@ -110,3 +110,6 @@ Quick guide:
 - compile OSGeo4a
 - open QtCreator -> Manage Kits -> add SDK and NDK. compilers should be autodetected
 - enable connection on the device from MacOS when requested
+
+## Privacy policy
+Read more about privacy policy [here](privacy_policy.md).
