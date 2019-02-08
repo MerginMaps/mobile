@@ -12,6 +12,9 @@ Item {
 
     property alias titleBorder: titleBorder
     property string title: ""
+    property string mapTipType: ""
+    property string mapTipImage: ""
+    property string mapTipHtml: ""
     property variant previewFields: []
     property bool isReadOnly
 
@@ -107,7 +110,26 @@ Item {
                 anchors.top: header.bottom
                 anchors.bottom: parent.bottom
 
+                // we have three options what will be in the preview content: html content, image or field values
+
+                Text {
+                    visible: mapTipType == 'html'
+                    text: mapTipHtml
+                    anchors.fill: parent
+                    anchors.topMargin: InputStyle.panelMargin
+                }
+
+                Image {
+                    visible: mapTipType == 'image'
+                    source: mapTipImage
+                    sourceSize: Qt.size(width, height)
+                    fillMode: Image.PreserveAspectFit
+                    anchors.fill: parent
+                    anchors.topMargin: InputStyle.panelMargin
+                }
+
                 ListView {
+                    visible: mapTipType == 'fields'
                     model: previewPanel.model
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin

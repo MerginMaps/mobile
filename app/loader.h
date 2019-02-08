@@ -42,7 +42,10 @@ public:
     Q_INVOKABLE bool load(const QString& filePath);
     Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
     Q_INVOKABLE QString featureTitle(QgsQuickFeatureLayerPair pair);
-    Q_INVOKABLE QStringList mapTip(QgsQuickFeatureLayerPair pair);
+    Q_INVOKABLE QString mapTipHtml(QgsQuickFeatureLayerPair pair);
+    Q_INVOKABLE QString mapTipType(QgsQuickFeatureLayerPair pair);
+    Q_INVOKABLE QString mapTipImage(QgsQuickFeatureLayerPair pair);
+    Q_INVOKABLE QStringList mapTipFields(QgsQuickFeatureLayerPair pair);
 
 signals:
     void projectChanged();
@@ -53,6 +56,8 @@ signals:
 
 public slots:
      void appStateChanged(Qt::ApplicationState state);
+private:
+     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
 private:
     QgsProject mProject;
     QgsQuickPositionKit *mPositionKit = nullptr;

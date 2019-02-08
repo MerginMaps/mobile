@@ -59,7 +59,10 @@ Drawer {
 
         if (panelState === "preview") {
             previewPanel.title = __loader.featureTitle(feature)
-            previewPanel.previewFields = __loader.mapTip(feature)
+            previewPanel.mapTipType = __loader.mapTipType(feature)
+            previewPanel.mapTipHtml = __loader.mapTipHtml(feature)
+            previewPanel.mapTipImage = __loader.mapTipImage(feature)
+            previewPanel.previewFields = __loader.mapTipFields(feature)
         }
         stateManager.state = panelState
     }

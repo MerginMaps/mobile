@@ -76,43 +76,76 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
 
 QString Loader::featureTitle(QgsQuickFeatureLayerPair pair)
 {
-  QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
+  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
   context.setFeature( pair.feature() );
   QgsExpression expr( pair.layer()->displayExpression() );
   return expr.evaluate( &context ).toString();
 }
 
-QStringList Loader::mapTip(QgsQuickFeatureLayerPair pair)
+QString Loader::mapTipHtml(QgsQuickFeatureLayerPair pair)
 {
-    QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( pair.layer() ) );
+  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
+  context.setFeature( pair.feature() );
+  return QgsExpression::replaceExpressionText( pair.layer()->mapTipTemplate(), &context );
+}
+
+QString Loader::mapTipType(QgsQuickFeatureLayerPair pair)
+{
+  QString mapTip = pair.layer()->mapTipTemplate();
+  if (mapTip.startsWith("# image\n"))
+    return "image";
+  else if (mapTip.startsWith("# fields\n") || mapTip.isEmpty())
+    return "fields";
+  else
+    return "html";
+}
+
+QString Loader::mapTipImage(QgsQuickFeatureLayerPair pair)
+{
+  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
+  context.setFeature( pair.feature() );
+  QString mapTip = pair.layer()->mapTipTemplate();
+  QStringList lst = mapTip.split('\n');  // first line is "# image"
+  if (lst.count() >= 2)
+    return QgsExpression::replaceExpressionText( lst[1], &context );
+  else
+    return QString();
+}
+
+QStringList Loader::mapTipFields(QgsQuickFeatureLayerPair pair)
+{
     QString mapTip = pair.layer()->mapTipTemplate();
-    QString featureTitleExpression = pair.layer()->displayExpression();
-    int LIMIT = 2;
-    QStringList previewFields;
+    QStringList lst;
+    const QgsFields fields = pair.layer()->fields();
+    const int LIMIT = 3;  // max. 3 fields can fit in the preview
 
-    QStringList fields;
-    for (QgsField field: pair.layer()->fields()) {
-        if (featureTitleExpression != field.name()) {
-            fields << field.name();
-        }
+    if (mapTip.isEmpty())
+    {
+      // user has not provided any map tip - let's use first two fields to show
+      // at least something.
+      QString featureTitleExpression = pair.layer()->displayExpression();
+      for (QgsField field: fields)
+      {
+        if (featureTitleExpression != field.name())
+          lst << field.displayName();  // yes, using alias, not the original field name
+        if (lst.count() == LIMIT)
+          break;
+      }
     }
-
-    for  (QString line: mapTip.split("\n")) {
-        if (fields.indexOf(line) != -1) {
-            previewFields << line;
-        }
-        if (previewFields.length() == LIMIT) return previewFields;
+    else
+    {
+      // user has specified "# fields" on the first line and then each next line is a field name
+      QStringList lines = mapTip.split('\n');
+      for (int i = 1; i < lines.count(); ++i)  // starting from index to avoid first line with "# fields"
+      {
+        int index = fields.indexFromName( lines[i] );
+        if ( index >= 0 )
+          lst << fields[index].displayName();  // yes, using alias, not the original field name
+        if (lst.count() == LIMIT)
+          break;
+      }
     }
-
-    if (previewFields.empty()) {
-        for (QgsField field: pair.layer()->fields()) {
-            if (featureTitleExpression != field.name()) {
-                previewFields << field.name();
-            }
-            if (previewFields.length() == LIMIT) return previewFields;
-        }
-    }
-    return previewFields;
+    return lst;
 }
 
 void Loader::appStateChanged(Qt::ApplicationState state)
@@ -128,4 +161,14 @@ void Loader::appStateChanged(Qt::ApplicationState state)
 #else
     Q_UNUSED(state);
 #endif
+}
+
+QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes(QgsMapLayer *layer)
+{
+  // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
+  QList<QgsExpressionContextScope *> scopes;
+  scopes << QgsExpressionContextUtils::globalScope();
+  scopes << QgsExpressionContextUtils::projectScope( &mProject );
+  scopes << QgsExpressionContextUtils::layerScope( layer );
+  return scopes;
 }
