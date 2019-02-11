@@ -39,7 +39,6 @@ bool AndroidUtils::isAndroid() const
 void AndroidUtils::requirePermissions()
 {
     checkAndAcquirePermissions("android.permission.WRITE_EXTERNAL_STORAGE");
-    checkAndAcquirePermissions("android.permission.CAMERA");
 }
 
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
