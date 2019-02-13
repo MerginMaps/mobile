@@ -43,6 +43,8 @@ void AndroidUtils::requirePermissions()
 
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 {
+#ifdef ANDROID
+
   QtAndroid::PermissionResult r = QtAndroid::checkPermission( permissionString );
   if ( r == QtAndroid::PermissionResult::Denied )
   {
@@ -53,5 +55,8 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
       return false;
     }
   }
+#else
+  Q_UNUSED(permissionString)
+#endif
   return true;
 }

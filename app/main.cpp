@@ -195,13 +195,13 @@ int main(int argc, char *argv[])
 
   app.setFont(QFont("Lato"));
 
+  // Require permissions before accessing data folder
+  AndroidUtils::requirePermissions();
+
   // Set/Get enviroment
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
-
-  // Require permissions before copying data
-  AndroidUtils::requirePermissions();
 
   init_qgis(dataDir + "/qgis-data");
   expand_pkg_data( QgsApplication::pkgDataPath() );
@@ -249,7 +249,9 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), projectDir ));
+  //std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), projectDir ));
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://dev.dev.cloudmergin.com/"), projectDir ));
+
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 
   // Create mergin projects model
