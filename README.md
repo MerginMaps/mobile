@@ -6,7 +6,7 @@
 
 Input makes surveying geospatial data easy. You can design your survey project in QGIS with custom forms:
 
-<img align="right" src="https://raw.githubusercontent.com/lutraconsulting/input/images/screens.png">
+<img align="right" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screens.png">
 
 
 ## Privacy policy
