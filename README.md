@@ -22,5 +22,9 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
     <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen4.jpg" width="20%">
 </p>
 
+## Developers
+
+For more information on building Input please have a look in [developer documentation](docs/developers/for_devs.md).
+
 ## Privacy policy
 Read more about privacy policy [here](privacy_policy.md).
