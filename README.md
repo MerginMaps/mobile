@@ -15,7 +15,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 * Display and editing of feature forms
 * Built-in service for syncronising data (Mergin)
 
-<img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screens.png">
+<img src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen1.png"> <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen2.png"> <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen3.png"> <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen4.png">
 
 
 ## Privacy policy
