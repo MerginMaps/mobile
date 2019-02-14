@@ -16,10 +16,10 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 * Built-in service for syncronising data (Mergin)
 
 <p float="left">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen12.png width="25%"">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen2.png width="25%"">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen3.png width="25%"">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/frontpage/images/screen4.png width="25%"">
+    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen1.jpg" width="20%">
+    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen2.jpg" width="20%">
+    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen3.jpg" width="20%">
+    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen4.jpg" width="20%">
 </p>
 
 ## Privacy policy
