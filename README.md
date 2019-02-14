@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
 
-<img align="left" src="https://raw.githubusercontent.com/lutraconsulting/input/d781624aa2927d3c92432905de441d4fa83980f1/app/img/input.png">  
+<img src="https://raw.githubusercontent.com/lutraconsulting/input/d781624aa2927d3c92432905de441d4fa83980f1/app/img/input.png">  
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
