@@ -15,6 +15,7 @@
 
 #include "loader.h"
 #include "qgsvectorlayer.h"
+#include "qgsexpressioncontextutils.h"
 #include <QDebug>
 
 Loader::Loader(QObject* parent):QObject(parent)
