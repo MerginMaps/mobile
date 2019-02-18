@@ -58,11 +58,10 @@ Dialog {
                     Layout.fillWidth: true
                     height: fieldHeight
 
-                    Rectangle {
+                    Item {
                         id: iconContainer
                         height: fieldHeight/2
                         width: fieldHeight/2
-                        color: merginLinkDialog.bgColor
 
                         Image {
                             anchors.margins: (fieldHeight/4)
@@ -96,7 +95,7 @@ Dialog {
                             color: merginLinkDialog.bgColor
                         }
 
-                        onAccepted: merginLinkDialog.accept()
+                        onAccepted: merginLinkDialog.apply()
                     }
                 }
 
