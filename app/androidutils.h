@@ -5,7 +5,7 @@
 
 class AndroidUtils: public QObject {
     Q_OBJECT
-    Q_PROPERTY(bool isAndroid READ isAndroid )
+    Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT )
 public:
     explicit AndroidUtils( QObject* parent = nullptr );
 
