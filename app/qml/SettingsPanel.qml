@@ -11,7 +11,6 @@ Popup {
     property string defaultLayer: __appSettings.defaultLayer
     property color gpsIndicatorColor: InputStyle.softRed
 
-    signal defaultProjectClicked()
     signal defaultLayerClicked()
 
     id: settingsPanel
@@ -55,17 +54,6 @@ Popup {
                 color: InputStyle.panelBackgroundLight
                 text: qsTr("Defaults")
                 bold: true
-            }
-
-            PanelItem {
-                color: InputStyle.clrPanelMain
-                text: qsTr("Project")
-                text2: (__appSettings.defaultProject ? __appSettings.defaultProjectName : "(none)")
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: settingsPanel.defaultProjectClicked()
-                }
             }
 
             PanelItem {
