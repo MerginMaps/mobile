@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
+import "."  // import InputStyle singleton
 
 Dialog {
     property string linkFieldText: __merginApi.apiRoot
