@@ -9,6 +9,7 @@ Dialog {
     property string linkFieldText: __merginApi.apiRoot
     property real fieldHeight: InputStyle.rowHeight
     property color fontColor: InputStyle.fontColor
+    property color bgColor: "white"
     property real panelMargin: InputStyle.panelMargin
 
     signal closing()
@@ -36,13 +37,12 @@ Dialog {
 
     contentItem: Rectangle {
         id: dialogContent
-        width: window.width - 2 * merginLinkDialog.panelMargin
         height: fieldHeight * 4
+        width: window.width - 2 * merginLinkDialog.panelMargin
 
-        Keys.onEnterPressed: merginLinkDialog.accept()
         Keys.onEscapePressed: merginLinkDialog.reject()
         Keys.onBackPressed: merginLinkDialog.reject()
-        color: "white"
+        color: merginLinkDialog.bgColor
 
         Item {
             anchors.fill: parent
@@ -62,7 +62,7 @@ Dialog {
                         id: iconContainer
                         height: fieldHeight/2
                         width: fieldHeight/2
-                        color: "white"
+                        color: merginLinkDialog.bgColor
 
                         Image {
                             anchors.margins: (fieldHeight/4)
@@ -93,8 +93,10 @@ Dialog {
                         font.capitalization: Font.MixedCase
                         Layout.fillWidth: true
                         background: Rectangle {
-                            color: "white"
+                            color: merginLinkDialog.bgColor
                         }
+
+                        onAccepted: merginLinkDialog.accept()
                     }
                 }
 
@@ -120,7 +122,7 @@ Dialog {
                         font.bold: true
                         flat: true
                         background: Rectangle {
-                            color: "white"
+                            color: merginLinkDialog.bgColor
                         }
                         onClicked:merginLinkDialog.click(StandardButton.Reset)
                     }
@@ -131,7 +133,7 @@ Dialog {
                         flat: true
                         font.bold: true
                         background: Rectangle {
-                            color: "white"
+                            color: merginLinkDialog.bgColor
                         }
                         onClicked: merginLinkDialog.click(StandardButton.Cancel)
                     }
@@ -142,7 +144,7 @@ Dialog {
                         flat: true
                         font.bold: true
                         background: Rectangle {
-                            color: "white"
+                            color: merginLinkDialog.bgColor
                         }
                         onClicked: merginLinkDialog.click(StandardButton.Apply)
                     }

@@ -108,6 +108,7 @@ Item {
                         color: root.fontColor
                         placeholderText: qsTr("Username")
                         font.capitalization: Font.MixedCase
+                        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                         background: Rectangle {
                             color: InputStyle.fontColor
                         }
@@ -218,11 +219,11 @@ Item {
                 }
 
                 Button {
-                    id: singInButton
+                    id: signUpButton
                     width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight * 0.7
                     text: qsTr("Sign up")
-                    font.pixelSize: singInButton.height/2
+                    font.pixelSize: signUpButton.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked:Qt.openUrlExternally(__merginApi.apiRoot + "/auth/signup");
                     background: Rectangle {
@@ -230,8 +231,8 @@ Item {
                     }
 
                     contentItem: Text {
-                        text: singInButton.text
-                        font: singInButton.font
+                        text: signUpButton.text
+                        font: signUpButton.font
                         color: InputStyle.highlightColor
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignRight
@@ -289,5 +290,7 @@ Item {
     MerginSettingDialog {
         id: merginDialog
         onClosing: root.forceActiveFocus()
+        height: __androidUtils.isAndroid ? 0 : fieldHeight * 4
+        width: __androidUtils.isAndroid ? 0 : window.width - 2 * merginDialog.panelMargin
     }
 }

@@ -42,7 +42,7 @@ class MerginApi: public QObject {
     Q_PROPERTY(QString username READ username NOTIFY authChanged)
      Q_PROPERTY(QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged)
 public:
-    explicit MerginApi(const QString& root, const QString& dataDir, QObject* parent = nullptr );
+    explicit MerginApi(const QString& dataDir, QObject* parent = nullptr );
     ~MerginApi() = default;
 
     /**
@@ -141,6 +141,7 @@ private:
     void deleteObsoleteFiles(QString projectName);
     QByteArray generateToken();
     void loadAuthData();
+    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
 
     QNetworkAccessManager mManager;
     QString mApiRoot;

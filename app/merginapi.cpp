@@ -9,7 +9,7 @@
 #include <QSet>
 #include <QMessageBox>
 
-MerginApi::MerginApi(const QString &root, const QString& dataDir, QObject *parent)
+MerginApi::MerginApi(const QString& dataDir, QObject *parent)
   : QObject (parent)
   , mDataDir(dataDir + "/")
   , mCacheFile(".projectsCache.txt")
@@ -17,11 +17,6 @@ MerginApi::MerginApi(const QString &root, const QString& dataDir, QObject *paren
     QObject::connect(this, &MerginApi::syncProjectFinished,this, &MerginApi::setUpdateToProject);
     QObject::connect(this, &MerginApi::merginProjectsChanged,this, &MerginApi::cacheProjects);
     QObject::connect(this, &MerginApi::authChanged,this, &MerginApi::saveAuthData);
-
-    QSettings settings;
-    settings.beginGroup("Input/");
-    settings.setValue("apiRootDefault", root);
-    settings.endGroup();
 
     loadAuthData();
 }
@@ -140,7 +135,7 @@ void MerginApi::resetApiRoot()
 {
     QSettings settings;
     settings.beginGroup("Input/");
-    setApiRoot(settings.value("apiRootDefault").toString());
+    setApiRoot(defaultApiRoot());
     settings.endGroup();
 }
 
@@ -278,7 +273,7 @@ void MerginApi::loadAuthData()
 {
     QSettings settings;
     settings.beginGroup("Input/");
-    setApiRoot(settings.value("apiRoot", settings.value("apiRootDefault")).toString());
+    setApiRoot(settings.value("apiRoot").toString());
     mUsername = settings.value("username").toString();
     mPassword = settings.value("password").toString();
 }
@@ -290,10 +285,14 @@ QString MerginApi::apiRoot() const
 
 void MerginApi::setApiRoot(const QString &apiRoot)
 {
-    mApiRoot = apiRoot;
     QSettings settings;
     settings.beginGroup("Input/");
-    settings.setValue("apiRoot", apiRoot);
+    if (apiRoot.isEmpty()) {
+        mApiRoot = defaultApiRoot();
+    } else {
+        mApiRoot = apiRoot;
+    }
+    settings.setValue("apiRoot", mApiRoot);
     settings.endGroup();
     emit apiRootChanged();
 }

@@ -1,8 +1,5 @@
 BASE_DIR=</home/folder>/Projects/quick
 
-# Default Mergin URL - used with /auth/signup
-DEFAULT_MERGIN_URL=<MERGIN URL>
-
 android {
   OSGEO4A_DIR = $${BASE_DIR}/OSGeo4A
   OSGEO4A_STAGE_DIR = $${OSGEO4A_DIR}/stage
