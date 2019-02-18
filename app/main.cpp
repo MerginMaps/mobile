@@ -249,8 +249,11 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appSettings", &as );
 
   // Create mergin api
-  //std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://mergin.dev.cloudmappin.com"), projectDir ));
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(QString("https://dev.dev.cloudmergin.com/"), projectDir ));
+  QString defaultMerginUrl;
+#ifdef DEFAULT_MERGIN_URL
+  defaultMerginUrl=STR(QGIS_QUICK_DATA_PATH)
+#endif
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi(defaultMerginUrl, projectDir ));
 
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
 

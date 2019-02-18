@@ -217,6 +217,28 @@ Item {
                     }
                 }
 
+                Button {
+                    id: singInButton
+                    width: loginForm.width - 2* root.panelMargin
+                    height: fieldHeight * 0.7
+                    text: qsTr("Sign up")
+                    font.pixelSize: singInButton.height/2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onClicked:Qt.openUrlExternally(__merginApi.apiRoot + "/auth/signup");
+                    background: Rectangle {
+                        color: InputStyle.fontColor
+                    }
+
+                    contentItem: Text {
+                        text: singInButton.text
+                        font: singInButton.font
+                        color: InputStyle.highlightColor
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignRight
+                        elide: Text.ElideRight
+                    }
+                }
+
                 Row {
                     height: fieldHeight
                     anchors.horizontalCenter: parent.horizontalCenter
