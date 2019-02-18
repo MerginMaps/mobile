@@ -17,8 +17,7 @@ Item {
     property real rowHeight: InputStyle.rowHeightHeader * 1.2
     property bool showMergin: false
 
-    function openPanel(state) {
-        stateManager.state = state
+    function openPanel() {
         myProjectsBtn.clicked()
         projectsPanel.visible = true
     }
@@ -96,25 +95,13 @@ Item {
         anchors.centerIn: parent
     }
 
-    Item {
-        id: stateManager
-        states: [
-            State {
-                name: "setup"
-            },
-            State {
-                name: "view"
-            }
-        ]
-    }
-
     PanelHeader {
         id: header
         height: InputStyle.rowHeightHeader
         width: parent.width
         color: InputStyle.clrPanelMain
         rowHeight: InputStyle.rowHeightHeader
-        titleText: stateManager.state === "setup"? qsTr("Default project") : qsTr("Projects")
+        titleText: qsTr("Projects")
 
         onBack: projectsPanel.visible = false
         withBackButton: projectsPanel.activeProjectPath
@@ -152,7 +139,6 @@ Item {
                 height: projectMenuButtons.height
                 text: qsTr("ALL PROJECTS")
                 horizontalAlignment: Text.AlignRight
-                visible: stateManager.state !== "setup"
 
                 onClicked: {
                     busyIndicator.running = true
@@ -161,28 +147,6 @@ Item {
                 }
             }
         }
-
-        // TODO: must be wrapped in item due to ColumnLayout
-        Item {
-            width: parent.width
-            implicitHeight: __appSettings.defaultProject && stateManager.state === "setup" ? InputStyle.rowHeight : 0
-            visible: implicitHeight
-
-            ExtendedMenuItem {
-                contentText: "Unselect default project"
-                imageSource: "no.svg"
-                panelMargin: 0
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        __appSettings.defaultProject = ""
-                        projectsPanel.visible = false
-                    }
-                }
-            }
-        }
-
 
         ListView {
             id: grid
@@ -231,7 +195,6 @@ Item {
         ProjectDelegateItem {
             cellWidth: projectsPanel.width
             cellHeight: projectsPanel.rowHeight
-            state: stateManager.state
             width: cellWidth
             height: cellHeight
             statusIconSource: "trash.svg"
@@ -239,25 +202,13 @@ Item {
             disabled: !isValid // invalid project
             highlight: {
                 if (disabled) return true
-
-                if (state === "setup") {
-                    return path === __appSettings.defaultProject ? true : false
-                } else {
-                    return path === projectsPanel.activeProjectPath ? true : false
-                }
+                return path === projectsPanel.activeProjectPath ? true : false
             }
 
             onItemClicked: {
                 if (showMergin) return
-
-                if (stateManager.state === "setup") {
-                    __appSettings.defaultProject = path ? path : ""
-                }
-
-                else if (stateManager.state === "view") {
-                    projectsPanel.activeProjectIndex = index
-                }
-
+                projectsPanel.activeProjectIndex = index
+                __appSettings.defaultProject = path
                 projectsPanel.visible = false
             }
 
@@ -273,7 +224,6 @@ Item {
         ProjectDelegateItem {
             cellWidth: projectsPanel.width
             cellHeight: projectsPanel.rowHeight
-            state: stateManager.state
             width: cellWidth
             height: cellHeight
             pending: pendingProject

@@ -14,7 +14,6 @@ Rectangle {
     property int cellWidth: width
     property int cellHeight: height
     property int borderWidth: 1
-    property string state
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"

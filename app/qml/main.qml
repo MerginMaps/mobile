@@ -82,10 +82,10 @@ ApplicationWindow {
             } else {
                 // if default project load failed, delete default setting
                 __appSettings.defaultProject = ""
-                openProjectPanel.openPanel("view")
+                openProjectPanel.openPanel()
             }
         } else {
-            openProjectPanel.openPanel("view")
+            openProjectPanel.openPanel()
         }
 
         InputStyle.deviceRatio = window.screen.devicePixelRatio
@@ -160,7 +160,6 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      onDefaultProjectClicked: openProjectPanel.openPanel("setup")
       onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       gpsIndicatorColor: getGpsIndicatorColor()
     }
@@ -220,8 +219,7 @@ ApplicationWindow {
         gpsStatus: ""
         gpsIndicatorColor: getGpsIndicatorColor()
 
-        onOpenProjectClicked: openProjectPanel.openPanel("view")
-        onSetDefaultProjectClicked: openProjectPanel.openPanel("setup")
+        onOpenProjectClicked: openProjectPanel.openPanel()
         onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
