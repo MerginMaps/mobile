@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
@@ -9,6 +10,7 @@ Item {
 
     signal authFailed()
 
+    property alias merginLink: merginLink
     property alias loginName: loginName
     property alias password: password
     property string errorText: errorText
@@ -35,6 +37,7 @@ Item {
 
     id: root
     focus: true
+
     Pane {
         id: pane
 
@@ -213,8 +216,56 @@ Item {
                         elide: Text.ElideRight
                     }
                 }
+
+                Row {
+                    height: fieldHeight
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    Item {
+                        id: iconContainerMergin
+                        height: fieldHeight/2
+                        width: fieldHeight/2
+
+                        MouseArea {
+                            width: iconContainerMergin.width
+                            height: iconContainerMergin.height
+                            onClicked: {
+                                merginDialog.open()
+                            }
+                        }
+
+                        Image {
+                            id: iconLink
+                            anchors.fill: parent
+                            anchors.margins: parent.height * 0.25
+                            source: 'edit.svg'
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: iconLink
+                            source: iconLink
+                            color: InputStyle.panelBackgroundLight
+                        }
+                    }
+
+                    Label {
+                        id: merginLink
+                        text: __merginApi.apiRoot
+                        height: fieldHeight/2
+                        color: InputStyle.panelBackgroundLight
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
             }
         }
+    }
 
+    MerginSettingDialog {
+        id: merginDialog
+        onClosing: root.forceActiveFocus()
     }
 }

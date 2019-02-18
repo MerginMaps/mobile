@@ -40,6 +40,7 @@ typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 class MerginApi: public QObject {
     Q_OBJECT
     Q_PROPERTY(QString username READ username NOTIFY authChanged)
+     Q_PROPERTY(QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged)
 public:
     explicit MerginApi(const QString& root, const QString& dataDir, QObject* parent = nullptr );
     ~MerginApi() = default;
@@ -89,11 +90,15 @@ public:
      */
     Q_INVOKABLE void authorize(QString username, QString password);
     Q_INVOKABLE void clearAuth();
+    Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
 
     ProjectList projects();
 
     QString username() const;
+
+    QString apiRoot() const;
+    void setApiRoot(const QString &apiRoot);
 
 signals:
     void listProjectsFinished(ProjectList merginProjects);
@@ -103,6 +108,7 @@ signals:
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
+    void apiRootChanged();
 
 public slots:
     void projectDeleted(QString projectName);
