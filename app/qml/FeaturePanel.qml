@@ -133,45 +133,6 @@ Drawer {
             height: parent.height - header.height - photoContainer.height - toolbar.height
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
-            style: QgsQuick.FeatureFormStyling {
-                property color backgroundColor: "white  "
-                property real backgroundOpacity: 1
-
-                property QtObject group: QtObject {
-                  property color backgroundColor: "lightGray"
-                  property real height: 30 * QgsQuick.Utils.dp
-                }
-
-                property QtObject tabs: QtObject {
-                  property color normalColor: "#4CAF50"
-                  property color activeColor: "#1B5E20"
-                  property color disabledColor: "#999999"
-                  property real height: 48 * QgsQuick.Utils.dp
-                }
-
-                property QtObject constraint: QtObject {
-                  property color validColor: "black"
-                  property color invalidColor: "#c0392b"
-                  property color descriptionColor: "#e67e22"
-                }
-
-                property QtObject toolbutton: QtObject {
-                  property color backgroundColor: "transparent"
-                  property color backgroundColorInvalid: "#bdc3c7"
-                  property real size: 80 * QgsQuick.Utils.dp
-                }
-
-                  property QtObject fields: QtObject {
-                    property color backgroundColor: InputStyle.panelBackgroundLight
-                    property color backgroundColorInactive: "grey"
-                    property color fontColor: InputStyle.fontColor
-                    property color activeColor: InputStyle.fontColor
-                    property color normalColor: InputStyle.panelBackgroundLight
-                    property real cornerRadius: 1
-                    property real height: 54 * QgsQuick.Utils.dp
-                    property int fontPixelSize: 22 * QgsQuick.Utils.dp
-                  }
-              }
 
             model: QgsQuick.AttributeFormModel {
                 attributeModel: QgsQuick.AttributeModel {
