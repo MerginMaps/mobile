@@ -281,6 +281,14 @@ Item {
                         height: fieldHeight/2
                         color: InputStyle.panelBackgroundLight
                         verticalAlignment: Text.AlignVCenter
+
+                        MouseArea {
+                            width: parent.width
+                            height: parent.height
+                            onClicked: {
+                                merginDialog.open()
+                            }
+                        }
                     }
                 }
             }
