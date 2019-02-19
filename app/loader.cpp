@@ -15,7 +15,10 @@
 
 #include "loader.h"
 #include "qgsvectorlayer.h"
+#if VERSION_INT >= 30500
+// this header only exists in QGIS >= 3.6
 #include "qgsexpressioncontextutils.h"
+#endif
 #include <QDebug>
 
 Loader::Loader(QObject* parent):QObject(parent)
