@@ -188,6 +188,35 @@ Drawer {
             onStateChanged: {
                 toolbar.state = featureForm.state
             }
+
+            onWidgetInteraction: {
+                if (widget === "ExternalResource") {
+                    var homePath  = featureForm.project ? featureForm.project.homePath : ""
+                    imagePreview.source = "file:///" +  homePath + "/"+ value
+                    imagePreview.width = featureForm.width - 2 * InputStyle.panelMargin
+                    previewImageWrapper.open()
+                }
+            }
+
+            onGalleryRequested: {
+                // TODO need info about widget
+                if (__androidUtils.isAndroid) {
+                    __androidUtils.callImagePicker()
+                    console.log("!!!!!!!!!!!", itemWidget)
+                    itemWidget.valueChanged("file:///storage/emulated/0/INPUT/projects/Demo/IMG_00000002.jpg", false)
+                } else {
+                    fileDialog.open()
+                    console.log("TODO FileDialog for desktop")
+                }
+            }
+
+            Connections {
+                target: __androidUtils
+                onImageSelected: {
+                    console.log("Image Path", imagePath)
+                    //featureForm.changeImage(imagePath)
+                }
+            }
         }
 
         FeatureToolbar {
@@ -221,4 +250,36 @@ Drawer {
           }
         }
     }
+
+    Popup {
+        id: previewImageWrapper
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        background: Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+        }
+
+        Image {
+            id: imagePreview
+            anchors.centerIn: parent
+            anchors.margins: InputStyle.panelMargin
+            visible: true
+            autoTransform: true
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+
+    FileDialog {
+        id: fileDialog
+        title: qsTr( "Open Image" )
+        visible: false
+        nameFilters: [ qsTr( "Images (*.jpg)" ), qsTr( "All files (*)" ) ]
+
+        width: window.width
+        height: window.height
+    }
+
 }

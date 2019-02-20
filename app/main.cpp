@@ -196,8 +196,9 @@ int main(int argc, char *argv[])
   app.setFont(QFont("Lato"));
 
   // Require permissions before accessing data folder
+#ifdef ANDROID
   AndroidUtils::requirePermissions();
-
+#endif
   // Set/Get enviroment
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
