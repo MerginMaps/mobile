@@ -12,6 +12,7 @@ public:
 
     Q_INVOKABLE bool removeFile( const QString &filePath );
     Q_INVOKABLE bool cpFile( const QString &srcPath, const QString &dstPath );
+    Q_INVOKABLE QString getFileName( const QString &filePath);
 };
 
 #endif // INPUTUTILS_H

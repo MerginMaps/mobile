@@ -72,6 +72,9 @@ Drawer {
     function imageSelected(imagePath) {
         var homePath  = featureForm.project ? featureForm.project.homePath : ""
         var fileName = QgsQuick.Utils.getRelativePath(imagePath, homePath)
+        if (!fileName) {
+            fileName = __inputUtils.getFileName(imagePath)
+        }
         if (!QgsQuick.Utils.fileExists(homePath, fileName)) {
             __inputUtils.cpFile(imagePath, homePath + "/" + fileName)
         }
@@ -266,7 +269,7 @@ Drawer {
         id: previewImageWrapper
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
         background: Rectangle {
             anchors.fill: parent
             color: "transparent"
@@ -287,7 +290,7 @@ Drawer {
         id: fileDialog
         title: qsTr( "Open Image" )
         visible: false
-        nameFilters: [ qsTr( "Image files (*.jpg)" ) ]
+        nameFilters: [ qsTr( "Image files (*.png *.jpg)" ) ]
         width: window.width
         height: window.height
 

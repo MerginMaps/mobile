@@ -21,3 +21,9 @@ bool InputUtils::cpFile(const QString &srcPath, const QString &dstPath)
 
     return QFile::copy(modSrcPath, dstPath);
 }
+
+QString InputUtils::getFileName(const QString &filePath)
+{
+    QFileInfo fileInfo(filePath);
+    return fileInfo.fileName();
+}
