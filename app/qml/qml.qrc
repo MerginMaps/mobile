@@ -27,5 +27,6 @@
         <file>ProjectDelegateItem.qml</file>
         <file>AuthPanel.qml</file>
         <file>MerginSettingDialog.qml</file>
+        <file>ExternalResourceBundle.qml</file>
     </qresource>
 </RCC>
