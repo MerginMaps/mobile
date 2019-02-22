@@ -74,12 +74,7 @@ void AndroidUtils::callImagePicker()
     if (ACTION_PICK.isValid() && intent.isValid())
     {
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QAndroidJniObject::fromString("image/*").object<jstring>());
-        QtAndroid::startActivity(intent.object<jobject>(), 101, this); // this as receiver
-        qDebug() << "OK";
-    }
-    else
-    {
-        qDebug() << "ERROR";
+        QtAndroid::startActivity(intent.object<jobject>(), MEDIA_CODE, this); // this as receiver
     }
 #endif
 }
@@ -89,7 +84,7 @@ void AndroidUtils::handleActivityResult(int receiverRequestCode, int resultCode,
 {
 
     jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
-    if (receiverRequestCode == 101 && resultCode == RESULT_OK)
+    if (receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK)
     {
         QAndroidJniObject uri = data.callObjectMethod("getData", "()Landroid/net/Uri;");
         QAndroidJniObject mediaStore = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;");

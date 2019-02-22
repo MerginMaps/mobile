@@ -12,7 +12,7 @@ bool InputUtils::removeFile(const QString &filePath)
     return file.remove( filePath );
 }
 
-bool InputUtils::cpFile(const QString &srcPath, const QString &dstPath)
+bool InputUtils::copyFile(const QString &srcPath, const QString &dstPath)
 {
     QString modSrcPath = srcPath;
     if (srcPath.startsWith("file://")) {

@@ -23,10 +23,15 @@ public:
     static void requirePermissions();
     static bool checkAndAcquirePermissions( const QString &permissionString );
 
+    /**
+      * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
+      * handler of the activity emits imageSelected signal.
+      * */
     Q_INVOKABLE void callImagePicker();
 #ifdef ANDROID
-    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
+    const static int MEDIA_CODE = 101;
 
+    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data) override;
 #endif
 
 signals:

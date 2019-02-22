@@ -8,7 +8,6 @@ Drawer {
 
     property var mapSettings
     property var project
-    property var itemWidget // field editor widget related to current action
     property real panelHeight
     property real previewHeight
     property bool isReadOnly
@@ -68,20 +67,6 @@ Drawer {
         }
         stateManager.state = panelState
     }
-
-    function imageSelected(imagePath) {
-        var homePath  = featureForm.project ? featureForm.project.homePath : ""
-        var fileName = QgsQuick.Utils.getRelativePath(imagePath, homePath)
-        if (!fileName) {
-            fileName = __inputUtils.getFileName(imagePath)
-        }
-        if (!QgsQuick.Utils.fileExists(homePath, fileName)) {
-            __inputUtils.cpFile(imagePath, homePath + "/" + fileName)
-        }
-        featurePanel.itemWidget.valueChanged(fileName, false)
-        featurePanel.itemWidget = undefined
-    }
-
 
     PreviewPanel {
       id: previewPanel
@@ -149,26 +134,43 @@ Drawer {
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: QtObject {
+                id: externalResourceHandler
+
+                // field editor widget related to current action
+                property var itemWidget
+
                 property var chooseImage: function chooseImage(itemWidget) {
+                    externalResourceHandler.itemWidget = itemWidget
                     if (__androidUtils.isAndroid) {
                         __androidUtils.callImagePicker()
-                        featurePanel.itemWidget = itemWidget
                     } else {
-                        featurePanel.itemWidget = itemWidget
                         fileDialog.open()
                     }
                 }
 
                 property var previewImage: function previewImage(imagePath) {
-                    imagePreview.source = "file:///" +  imagePath
-                    imagePreview.width = featureForm.width - 2 * InputStyle.panelMargin
+                    imagePreview.source = "file://" +  imagePath
+                    imagePreview.width = window.width - 2 * InputStyle.panelMargin
                     previewImageWrapper.open()
                 }
 
                 property var removeImage: function removeImage(itemWidget, imagePath) {
                     imageDeleteDialog.imagePath = imagePath
-                    featurePanel.itemWidget = itemWidget
+                    externalResourceHandler.itemWidget = itemWidget
                     imageDeleteDialog.open()
+                }
+
+                property var imageSelected: function imageSelected(imagePath) {
+                    var homePath  = featureForm.project ? featureForm.project.homePath : ""
+                    var fileName = QgsQuick.Utils.getRelativePath(imagePath, homePath)
+                    if (!fileName) {
+                        fileName = __inputUtils.getFileName(imagePath)
+                    }
+                    if (!QgsQuick.Utils.fileExists(homePath, fileName)) {
+                        __inputUtils.copyFile(imagePath, homePath + "/" + fileName)
+                    }
+                    externalResourceHandler.itemWidget.valueChanged(fileName, false)
+                    externalResourceHandler.itemWidget = undefined
                 }
             }
             style: QgsQuick.FeatureFormStyling {
@@ -229,7 +231,7 @@ Drawer {
 
             Connections {
                 target: __androidUtils
-                onImageSelected: featurePanel.imageSelected(imagePath)
+                onImageSelected: externalResourceHandler.imageSelected(imagePath)
             }
         }
 
@@ -270,15 +272,15 @@ Drawer {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-        background: Rectangle {
+        background: Item {
             anchors.fill: parent
-            color: "transparent"
         }
 
-        Image {
+        contentHeight: window.height
+        contentWidth: window.width
+        contentItem: Image {
             id: imagePreview
             anchors.centerIn: parent
-            anchors.margins: InputStyle.panelMargin
             visible: true
             autoTransform: true
             fillMode: Image.PreserveAspectFit
@@ -290,33 +292,31 @@ Drawer {
         id: fileDialog
         title: qsTr( "Open Image" )
         visible: false
-        nameFilters: [ qsTr( "Image files (*.png *.jpg)" ) ]
+        nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
         width: window.width
         height: window.height
 
-        onAccepted:featurePanel.imageSelected(fileDialog.fileUrl)
+        onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
 
     MessageDialog {
         property string imagePath
-        //property var itemWidget
 
         id: imageDeleteDialog
         visible: false
         title: qsTr( "Delete photo" )
         text: qsTr( "Would you like to permanently delete the image file?" )
         icon: StandardIcon.Warning
-        standardButtons: StandardButton.Ok | StandardButton.No | StandardButton.Cancel
-        onAccepted: {
+        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        onYes: {
             __inputUtils.removeFile(imagePath)
-            featurePanel.itemWidget.valueChanged("", false)
+            externalResourceHandler.itemWidget.valueChanged("", false)
             visible = false
         }
         onNo: {
-            featurePanel.itemWidget.valueChanged("", false)
+            externalResourceHandler.itemWidget.valueChanged("", false)
             // visible = false called afterwards when onReject
         }
-
         onRejected: {
            visible = false
         }
