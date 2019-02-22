@@ -17,6 +17,7 @@
 #include "qgsconfig.h"
 
 #include "androidutils.h"
+#include "inpututils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
@@ -222,9 +223,13 @@ int main(int argc, char *argv[])
   // and properly close connection after writting changes to gpkg.
   ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
-  // Create project model
+  // Create android utils
   AndroidUtils au;
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
+
+  // Create input utils
+  InputUtils iu;
+  engine.rootContext()->setContextProperty( "__inputUtils", &iu );
 
   // Create project model
   ProjectModel pm(projectDir);
