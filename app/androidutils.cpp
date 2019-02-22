@@ -92,14 +92,14 @@ void AndroidUtils::handleActivityResult(int receiverRequestCode, int resultCode,
     if (receiverRequestCode == 101 && resultCode == RESULT_OK)
     {
         QAndroidJniObject uri = data.callObjectMethod("getData", "()Landroid/net/Uri;");
-        QAndroidJniObject dadosAndroid = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;");
+        QAndroidJniObject mediaStore = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;");
         QAndroidJniEnvironment env;
-        jobjectArray projecao = (jobjectArray)env->NewObjectArray(1, env->FindClass("java/lang/String"), NULL);
-        jobject projacaoDadosAndroid = env->NewStringUTF(dadosAndroid.toString().toStdString().c_str());
-        env->SetObjectArrayElement(projecao, 0, projacaoDadosAndroid);
+        jobjectArray projection = (jobjectArray)env->NewObjectArray(1, env->FindClass("java/lang/String"), NULL);
+        jobject projectionDataAndroid = env->NewStringUTF(mediaStore.toString().toStdString().c_str());
+        env->SetObjectArrayElement(projection, 0, projectionDataAndroid);
         QAndroidJniObject contentResolver = QtAndroid::androidActivity().callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
-        QAndroidJniObject cursor = contentResolver.callObjectMethod("query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projecao, NULL, NULL, NULL);
-        jint columnIndex = cursor.callMethod<jint>("getColumnIndex", "(Ljava/lang/String;)I", dadosAndroid.object<jstring>());
+        QAndroidJniObject cursor = contentResolver.callObjectMethod("query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL);
+        jint columnIndex = cursor.callMethod<jint>("getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>());
         cursor.callMethod<jboolean>("moveToFirst", "()Z");
         QAndroidJniObject result = cursor.callObjectMethod("getString", "(I)Ljava/lang/String;", columnIndex);
         QString selectedImagePath = "file://" + result.toString();
@@ -107,7 +107,7 @@ void AndroidUtils::handleActivityResult(int receiverRequestCode, int resultCode,
     }
     else
     {
-        qDebug() << "Caminho errado";
+        qDebug() << "Something went wrong with media store activity";
     }
 
 }
