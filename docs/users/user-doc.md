@@ -47,9 +47,10 @@ documentation. The following points will be additionally used in Input:
 -   Input preview panel (similar to Google map) is used when you tap on
     a feature from the survey layer. You can set up a map tooltip to be displayed within the preview panel. Example of the preview panel in Input and QGIS tooltip set up can be seen below:
 
-![Display setting in QGIS](images/qgis_properties_display.png)
+<img src="images/qgis_properties_display.png" alt="Display setting in QGIS" style="width: 50%; height: 50%"/>​
 
-![Preview panel in Input based on Display settings in QGIS](images/input_preview_panel.png)
+<img src="images/input_preview_panel.png" alt="Preview panel in Input based on Display settings in QGIS" style="width: 25%; height: 25%"/>​
+
 
 -   To be able to attach photos to a survey feature, you will need to have an attribute column in your survey layer. Within the form setting, ensure to set Widget type to Attachment.
 
@@ -82,25 +83,26 @@ application for the first time, it will take you to MY PROJECT screen.
 This screen displays all the projects stored locally (under
 /sdcard/INPUT folder).
 
-![MY PROJECTS screen in Input](images/input_my_projects.png){ width=50% }
+
+<img src="images/input_my_projects.png" alt="MY PROJECTS screen in Input" style="width: 25%; height: 25%"/>​
 
 To access your projects or those shared with you through Mergin, select
 ALL PROJECTS tab. You will require your log in details to sign in to
 Mergin:
 
-![Mergin sign in screen in Input](images/input_mergin_signin.png){ width=50% }
+<img src="images/input_mergin_signin.png" alt="Mergin sign in screen in Input" style="width: 25%; height: 25%"/>​
 
 Once logged in, you can download your project to work on it locally by
 pressing download button to the right of the project:
 
-![MY PROJECTS screen in Input](images/input_all_projects.png){ width=50% }
-==============================================================================
+<img src="images/input_all_projects.png" alt="ALL PROJECTS screen in Input" style="width: 25%; height: 25%"/>​
 
 The project will be available for survey after you download it locally.
 Select MY PROJECTS and you should be able to see your downloaded
 project:
 
-![MY PROJECTS screen in Input](images/input_my_projects_updated.png){ width=50% }
+<img src="images/input_my_projects_updated.png" alt="MY PROJECTS screen in Input" style="width: 25%; height: 25%"/>​
+
 
 Selecting a project under MY PROJECTS will open it in INPUT.
 
@@ -130,21 +132,22 @@ connectivity. Select Project from the lower panel and then tap on ALL
 PROJECTS. Input should automatically flag changed projects with an
 upload icon.
 
-![MY PROJECTS screen in Input](images/input_all_projects_updated.png){ width=50% }
+
+<img src="images/input_all_projects_updated.png" alt="ALL PROJECTS screen with updated local project" style="width: 25%; height: 25%"/>​
 
 Pressing upload button to the right of the project will send the updated
 data and project to Mergin. If a project and its data has been updated
 through Mergin, you will be notified to synchronise the changes to your
 local copy.
 
-![MY PROJECTS screen in Input](images/input_all_projects_mergin_updated.png){ width=50% }
+<img src="images/input_all_projects_mergin_updated.png" alt="ALL PROJECTS screen with updated project in Mergin" style="width: 25%; height: 25%"/>​
 
 User interface
 ==============
 
 Below is a description of various items within the user interface:
 
-![MY PROJECTS screen in Input](images/input_gui.png){ width=50% }
+<img src="images/input_gui.png" alt="Input user interface" style="width: 25%; height: 25%"/>​
 
 Projects
 --------
