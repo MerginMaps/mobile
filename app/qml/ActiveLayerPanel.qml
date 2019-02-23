@@ -78,7 +78,7 @@ Drawer {
         visible: implicitHeight
 
         ExtendedMenuItem {
-            contentText: "Unselect default survey layer"
+            contentText: "Deselect default survey layer"
             imageSource: "no.svg"
             panelMargin: 0
             anchors.leftMargin: InputStyle.panelMargin
