@@ -15,9 +15,6 @@ Item {
     signal zoomToProject()
     property alias recordButton: recBtnIcon
 
-    property string activeProjectName: "(none)"
-    property string activeLayerName: "(none)"
-    property string gpsStatus: "GPS \n (none)"
     property int itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
 
