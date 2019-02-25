@@ -214,9 +214,6 @@ ApplicationWindow {
         z: zToolkits + 1
         y: window.height - height
 
-        activeProjectName: openProjectPanel.activeProjectName
-        activeLayerName: activeLayerPanel.activeLayerName
-        gpsStatus: ""
         gpsIndicatorColor: getGpsIndicatorColor()
 
         onOpenProjectClicked: openProjectPanel.openPanel()
