@@ -11,6 +11,7 @@ class AppSettings: public QObject {
     Q_PROPERTY(QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged)
     Q_PROPERTY(QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged)
     Q_PROPERTY(bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged)
+    Q_PROPERTY(int digitizingPeriod READ digitizingPeriod WRITE setDigitizingPeriod NOTIFY digitizingPeriodChanged)
     Q_PROPERTY(int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged)
 
 public:
@@ -33,12 +34,16 @@ public:
     int gpsAccuracyTolerance() const;
     void setGpsAccuracyTolerance(int gpsAccuracyTolerance);
 
+    int digitizingPeriod() const;
+    void setDigitizingPeriod(int digitizingPeriod);
+
 signals:
     void defaultProjectChanged();
     void activeProjectChanged();
     void defaultLayerChanged();
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
+    void digitizingPeriodChanged();
 
 private:
     // Projects path
@@ -49,6 +54,8 @@ private:
     bool mAutoCenterMapChecked = false;
     // used in GPS signal indicator
     int mGpsAccuracyTolerance = -1;
+    // Digitizing period in seconds
+    int mDigitizingPeriod = 3;
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;

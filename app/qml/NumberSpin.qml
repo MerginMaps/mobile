@@ -6,6 +6,9 @@ Item {
     id: root
     property real rowHeight: height
     property real value: 0
+    property string label
+    property int maxValue: 99
+    property int minValue: 0
 
     Image {
         id: imageDecrease
@@ -18,7 +21,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: root.value -=1
+            onClicked: if (minValue <= root.value - 1) root.value -=1
         }
     }
 
@@ -30,7 +33,7 @@ Item {
 
     Text {
         id: valueText
-        text: value + " m"
+        text: value + label
         color: InputStyle.fontColorBright
         font.pixelSize: InputStyle.fontPixelSizeNormal
         height: root.rowHeight
@@ -53,7 +56,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: root.value +=1
+            onClicked: if (maxValue >= root.value + 1) root.value +=1
         }
     }
 

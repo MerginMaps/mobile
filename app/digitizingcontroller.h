@@ -19,6 +19,7 @@ class DigitizingController : public QObject
   Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY layerChanged)
   Q_PROPERTY(QgsVectorLayer* layer READ layer WRITE setLayer NOTIFY layerChanged)
   Q_PROPERTY(bool recording READ isRecording NOTIFY recordingChanged)
+  Q_PROPERTY(int digitizingPeriod READ digitizingPeriod WRITE setDigitizingPeriod NOTIFY digitizingPeriodChanged)
   Q_PROPERTY(QgsQuickPositionKit* positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged)
   Q_PROPERTY(QgsQuickAttributeModel* recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged)
   Q_PROPERTY(QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
@@ -49,12 +50,16 @@ public:
 
   QgsQuickAttributeModel *recordingFeatureModel() const { return mRecordingModel; }
 
+  int digitizingPeriod() const;
+  void setDigitizingPeriod(int digitizingPeriod);
+
 signals:
   void layerChanged();
   void recordingChanged();
   void positionKitChanged();
   void recordingFeatureModelChanged();
   void mapSettingsChanged();
+  void digitizingPeriodChanged();
 
 private slots:
   void onPositionChanged();
@@ -68,6 +73,8 @@ private:
   QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings
   QgsQuickAttributeModel *mRecordingModel = nullptr;  //!< to be used for highlight of feature being recorded
   QgsQuickMapSettings *mMapSettings = nullptr;
+  int mDigitizingPeriod = 3; // in seconds
+  QTimer mDigitizingPeriodTimer;
 };
 
 #endif // DIGITIZINGCONTROLLER_H

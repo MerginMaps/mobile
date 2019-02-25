@@ -142,6 +142,26 @@ Popup {
             PanelItem {
                 height: settingsPanel.rowHeight
                 width: parent.width
+                text: qsTr("Digitizing period")
+
+                NumberSpin {
+                    id: spinDigitizingPeriod
+                    value: __appSettings.digitizingPeriod
+                    minValue: 1
+                    maxValue: 10
+                    label: " s"
+                    onValueChanged: __appSettings.digitizingPeriod = spinDigitizingPeriod.value
+                    height: InputStyle.fontPixelSizeNormal
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: height * 6
+                    anchors.right: parent.right
+                    anchors.rightMargin: InputStyle.panelMargin
+                }
+            }
+
+            PanelItem {
+                height: settingsPanel.rowHeight
+                width: parent.width
                 color: InputStyle.clrPanelMain
                 text: qsTr("GPS accuracy")
 
@@ -202,6 +222,7 @@ Popup {
 
                 NumberSpin {
                     value: __appSettings.gpsAccuracyTolerance
+                    label: " m"
                     onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter

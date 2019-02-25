@@ -190,6 +190,7 @@ ApplicationWindow {
         id: digitizing
         positionKit: positionMarker.positionKit
         layer: activeLayerPanel.activeVectorLayer
+        digitizingPeriod: __appSettings.digitizingPeriod
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording

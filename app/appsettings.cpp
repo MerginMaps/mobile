@@ -14,6 +14,7 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     QString layer = settings.value("defaultLayer/"  + path,"").toString();
     bool autoCenter = settings.value("autoCenter", false).toBool();
     int gpsTolerance = settings.value("gpsTolerance", 10).toInt();
+    int digitizingPeriod = settings.value("digitizingPeriod", 3).toInt();
     settings.endGroup();
 
     setDefaultProject(path);
@@ -21,6 +22,7 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     setDefaultLayer(layer);
     setAutoCenterMapChecked(autoCenter);
     setGpsAccuracyTolerance(gpsTolerance);
+    setDigitizingPeriod(digitizingPeriod);
 }
 
 QString AppSettings::defaultLayer() const
@@ -133,5 +135,22 @@ void AppSettings::setGpsAccuracyTolerance(int value)
 
         emit gpsAccuracyToleranceChanged();
     }
+}
 
+int AppSettings::digitizingPeriod() const
+{
+    return mDigitizingPeriod;
+}
+
+void AppSettings::setDigitizingPeriod(int digitizingPeriod)
+{
+    if (mDigitizingPeriod != digitizingPeriod) {
+        mDigitizingPeriod = digitizingPeriod;
+        QSettings settings;
+        settings.beginGroup(mGroupName);
+        settings.setValue("digitizingPeriod", digitizingPeriod);
+        settings.endGroup();
+
+        emit digitizingPeriodChanged();
+    }
 }
