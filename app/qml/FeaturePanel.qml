@@ -17,6 +17,7 @@ Drawer {
     property alias currentAttributeModel: attributeModel
 
 
+
     id: featurePanel
     visible: false
     modal: false
@@ -66,7 +67,6 @@ Drawer {
         }
         stateManager.state = panelState
     }
-
 
     PreviewPanel {
       id: previewPanel
@@ -133,6 +133,7 @@ Drawer {
             height: parent.height - header.height - photoContainer.height - toolbar.height
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
+            externalResourceHandler: externalResourceBundle.handler
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white  "
                 property real backgroundOpacity: 1
@@ -221,4 +222,7 @@ Drawer {
           }
         }
     }
+
+    ExternalResourceBundle {id: externalResourceBundle}
+
 }

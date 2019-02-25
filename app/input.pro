@@ -113,7 +113,8 @@ mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
 merginprojectmodel.cpp \
-androidutils.cpp
+androidutils.cpp \
+inpututils.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -124,7 +125,8 @@ mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
 merginprojectmodel.h \
-androidutils.h
+androidutils.h \
+inpututils.h
 
 RESOURCES += \
     img/pics.qrc \
