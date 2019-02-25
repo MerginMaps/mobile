@@ -32,18 +32,16 @@ Selecting a project under MY PROJECTS will open it in INPUT.
 ## Adding/editing features
 
 To add a feature, select the record button from the lower panel. When
-you tap on the record button for the first time, it will list all the
-layers, you can edit. The layer you select for the first time to survey,
-will become automatically, your default survey layer and subsequent
-tapping on the record button, will add feature to this layer. To reset
-the default survey layer, press and hold the record button. This will
-reset the defaults and shows all the layers for survey.
+you tap on the record button, it will list all the
+layers, you can edit.
 
 If your survey layer is a point layer, it will record the location of
 your device as the survey point. If your survey layer is a line, it will
 start the path and tracks your GPS as an input to the line vertices. To
 finish the line capturing, you will need to press the record button
 again.
+
+You can set the default survey layer, so when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on ** Settings ** and set the survey layer under ** Defaults **.
 
 
 ## Viewing/deleting existing data
