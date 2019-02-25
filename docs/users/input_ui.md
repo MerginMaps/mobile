@@ -2,7 +2,7 @@
 
 Below is a description of various items within the user interface:
 
-<img src="images/input_gui.png" alt="Input user interface" style="width: 25%; height: 25%"/>​
+<img src="images/input_gui.png" alt="Input user interface" width=50% />​
 
 ## Projects
 Projects will list the projects available locally (MY PROJECTS) and
@@ -44,7 +44,7 @@ This is a shortcut to zoom the extent of all visible layers within the project.
 Themes generated from QGIS project will be listed here. User can switch
 between different map themes using this option.
 
-##Settings
+## Settings
 Input specific configuration can be accessed through settings.
 
 ### Defaults
@@ -65,4 +65,5 @@ map.
 
 GPS accuracy colours show the current strength of the signal based on the
 Accuracy threshold. If the signal falls within the the threshold, the
-colour will be green. If it is outside, it will be orange or red.
+colour will be green. If it is outside, it will be orange. The indicator
+will be red in case there is no GPS position fix available.

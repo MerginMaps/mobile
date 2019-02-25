@@ -17,7 +17,10 @@ Drawer {
     function openPanel(state) {
         layerPanel.state = state
         if (state === "record") {
-            if (activeLayerIndex >= 0 ) {
+            activeLayerIndex = -1
+            var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+            if (defaultLayerIndex >= 0 ) {
+                activeLayerIndex = defaultLayerIndex
                 layerPanel.layerSettingChanged()
                 // record without opening panel
                 return;
