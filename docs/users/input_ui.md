@@ -35,7 +35,7 @@ If a line layer is selected, a path will be generated from the GPS track
 until the record button is pressed again. The form for the recorded line
 will appear accordingly.
 
-See **Settings** section to set a layer as the default survey layer, so the record button will edit the layer without listing all the editable layers.
+Pressing and holding ** Record ** button will allow you to set the default survey layer. This option is also available under the **Settings** section.
 
 ## Zoom to project
 This is a shortcut to zoom the extent of all visible layers within the project.
