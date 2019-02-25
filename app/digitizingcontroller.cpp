@@ -11,6 +11,7 @@ DigitizingController::DigitizingController(QObject *parent)
   , mMapSettings(nullptr)
 {
   mRecordingModel = new QgsQuickAttributeModel( this );
+  mDigitizingPeriodTimer.setSingleShot(true);
 }
 
 void DigitizingController::setPositionKit(QgsQuickPositionKit *kit)
@@ -97,6 +98,17 @@ QgsCoordinateTransform DigitizingController::tranformer() const
   return transform;
 }
 
+int DigitizingController::digitizingPeriod() const
+{
+    return mDigitizingPeriod;
+}
+
+void DigitizingController::setDigitizingPeriod(int digitizingPeriod)
+{
+    mDigitizingPeriod = digitizingPeriod;
+    emit digitizingPeriodChanged();
+}
+
 QgsQuickFeatureLayerPair DigitizingController::pointFeature()
 {
     if ( !featureLayerPair().layer() )
@@ -141,10 +153,17 @@ void DigitizingController::onPositionChanged()
   if ( !mPositionKit->hasPosition() )
     return;
 
+
   QgsPoint point = mPositionKit->position();
   fixZ(&point);
 
-  mRecordedPoints.append( point );
+  if (mDigitizingPeriodTimer.isActive()) {
+      mRecordedPoints.last().setX(point.x());
+      mRecordedPoints.last().setY(point.y());
+  } else {
+      mRecordedPoints.append( point );
+      mDigitizingPeriodTimer.start( mDigitizingPeriod * 1000 );
+  }
 
   // update geometry so we can use the model for highlight in map
   mRecordingModel->setFeatureLayerPair(lineFeature());
