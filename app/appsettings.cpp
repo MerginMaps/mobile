@@ -14,7 +14,7 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     QString layer = settings.value("defaultLayer/"  + path,"").toString();
     bool autoCenter = settings.value("autoCenter", false).toBool();
     int gpsTolerance = settings.value("gpsTolerance", 10).toInt();
-    int digitizingPeriod = settings.value("digitizingPeriod", 3).toInt();
+    int lineRecordingInterval = settings.value("lineRecordingInterval", 3).toInt();
     settings.endGroup();
 
     setDefaultProject(path);
@@ -22,7 +22,7 @@ AppSettings::AppSettings(QObject* parent):QObject(parent)
     setDefaultLayer(layer);
     setAutoCenterMapChecked(autoCenter);
     setGpsAccuracyTolerance(gpsTolerance);
-    setDigitizingPeriod(digitizingPeriod);
+    setLineRecordingInterval(lineRecordingInterval);
 }
 
 QString AppSettings::defaultLayer() const
@@ -137,20 +137,20 @@ void AppSettings::setGpsAccuracyTolerance(int value)
     }
 }
 
-int AppSettings::digitizingPeriod() const
+int AppSettings::lineRecordingInterval() const
 {
-    return mDigitizingPeriod;
+    return mLineRecordingInterval;
 }
 
-void AppSettings::setDigitizingPeriod(int digitizingPeriod)
+void AppSettings::setLineRecordingInterval(int value)
 {
-    if (mDigitizingPeriod != digitizingPeriod) {
-        mDigitizingPeriod = digitizingPeriod;
+    if (mLineRecordingInterval != value) {
+        mLineRecordingInterval = value;
         QSettings settings;
         settings.beginGroup(mGroupName);
-        settings.setValue("digitizingPeriod", digitizingPeriod);
+        settings.setValue("lineRecordingInterval", value);
         settings.endGroup();
 
-        emit digitizingPeriodChanged();
+        emit lineRecordingIntervalChanged();
     }
 }

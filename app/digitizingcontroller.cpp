@@ -11,7 +11,6 @@ DigitizingController::DigitizingController(QObject *parent)
   , mMapSettings(nullptr)
 {
   mRecordingModel = new QgsQuickAttributeModel( this );
-  mDigitizingPeriodTimer.setSingleShot(true);
 }
 
 void DigitizingController::setPositionKit(QgsQuickPositionKit *kit)
@@ -98,15 +97,15 @@ QgsCoordinateTransform DigitizingController::tranformer() const
   return transform;
 }
 
-int DigitizingController::digitizingPeriod() const
+int DigitizingController::lineRecordingInterval() const
 {
-    return mDigitizingPeriod;
+    return mLineRecordingInterval;
 }
 
-void DigitizingController::setDigitizingPeriod(int digitizingPeriod)
+void DigitizingController::setLineRecordingInterval(int lineRecordingInterval)
 {
-    mDigitizingPeriod = digitizingPeriod;
-    emit digitizingPeriodChanged();
+    mLineRecordingInterval = lineRecordingInterval;
+    emit lineRecordingIntervalChanged();
 }
 
 QgsQuickFeatureLayerPair DigitizingController::pointFeature()
@@ -157,14 +156,13 @@ void DigitizingController::onPositionChanged()
   QgsPoint point = mPositionKit->position();
   fixZ(&point);
 
-  if (mDigitizingPeriodTimer.isActive()) {
+  if (mLastTimeRecorded.addSecs(mLineRecordingInterval) <= QDateTime().currentDateTime()) {
+      mLastTimeRecorded = QDateTime().currentDateTime();
+      mRecordedPoints.append( point );
+  } else {
       mRecordedPoints.last().setX(point.x());
       mRecordedPoints.last().setY(point.y());
-  } else {
-      mRecordedPoints.append( point );
-      mDigitizingPeriodTimer.start( mDigitizingPeriod * 1000 );
   }
-
   // update geometry so we can use the model for highlight in map
   mRecordingModel->setFeatureLayerPair(lineFeature());
 }

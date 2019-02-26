@@ -6,7 +6,7 @@ Item {
     id: root
     property real rowHeight: height
     property real value: 0
-    property string label
+    property string suffix
     property int maxValue: 99
     property int minValue: 0
 
@@ -33,7 +33,7 @@ Item {
 
     Text {
         id: valueText
-        text: value + label
+        text: value + suffix
         color: InputStyle.fontColorBright
         font.pixelSize: InputStyle.fontPixelSizeNormal
         height: root.rowHeight
