@@ -156,12 +156,14 @@ void DigitizingController::onPositionChanged()
   QgsPoint point = mPositionKit->position();
   fixZ(&point);
 
-  if (mLastTimeRecorded.addSecs(mLineRecordingInterval) <= QDateTime().currentDateTime()) {
-      mLastTimeRecorded = QDateTime().currentDateTime();
+  if (mLastTimeRecorded.addSecs(mLineRecordingInterval) <= QDateTime::currentDateTime()) {
+      mLastTimeRecorded = QDateTime::currentDateTime();
       mRecordedPoints.append( point );
   } else {
-      mRecordedPoints.last().setX(point.x());
-      mRecordedPoints.last().setY(point.y());
+      if (!mRecordedPoints.isEmpty()) {
+          mRecordedPoints.last().setX(point.x());
+          mRecordedPoints.last().setY(point.y());
+      }
   }
   // update geometry so we can use the model for highlight in map
   mRecordingModel->setFeatureLayerPair(lineFeature());
