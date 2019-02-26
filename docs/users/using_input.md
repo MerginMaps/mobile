@@ -41,7 +41,7 @@ start the path and tracks your GPS as an input to the line vertices. To
 finish the line capturing, you will need to press the record button
 again.
 
-You can set the default survey layer, so when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on ** Settings ** and set the survey layer under ** Defaults**. Alternatively, you can press and hold ** Record button ** to set the default survey layer.
+You can set the default survey layer, so when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on **Settings** and set the survey layer under **Defaults**. Alternatively, you can press and hold **Record button** to set the default survey layer.
 
 
 ## Viewing/deleting existing data

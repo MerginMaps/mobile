@@ -21,8 +21,8 @@ GPS signal colour on the map denotes the accuracy threshold set by user
 within the Input settings (See Settings section).
 
 ## Record
-This option will allow user to capture the poison of the GPS and save it
-as point or line vertices. Pressing the ** Record**  button will
+This option will allow user to capture the position of the GPS and save it
+as point or line vertices. Pressing the **Record**  button will
 list all the survey layers (point and line layers within the project not
 marked as read-only in the QGIS project properties). User can then
 select a layer.
@@ -35,7 +35,7 @@ If a line layer is selected, a path will be generated from the GPS track
 until the record button is pressed again. The form for the recorded line
 will appear accordingly.
 
-Pressing and holding ** Record ** button will allow you to set the default survey layer. This option is also available under the **Settings** section.
+Pressing and holding **Record** button will allow you to set the default survey layer. This option is also available under the **Settings** section.
 
 ## Zoom to project
 This is a shortcut to zoom the extent of all visible layers within the project.
