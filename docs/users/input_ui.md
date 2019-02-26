@@ -14,16 +14,15 @@ includes projects shared with the user by other Mergin users. Projects
 can be downloaded or updated (to or from) Mergin from this screen.
 
 ## GPS
-By default, the map is always centred around the GPS signal. This will
-limit to users to pan the map to the other parts of projects. Pressing
-and holding GPS icon, will turn off the auto-centre mode.
+By default, the map centred around the project extent. Pressing
+and holding GPS icon, will turn on the GPS auto-centre mode.
 
-GPS signal color on the map denotes the accuracy threshold set by user
+GPS signal colour on the map denotes the accuracy threshold set by user
 within the Input settings (See Settings section).
 
 ## Record
 This option will allow user to capture the position of the GPS and save it
-as point or line. Pressing the Record button for the first time will
+as point or line vertices. Pressing the **Record**  button will
 list all the survey layers (point and line layers within the project not
 marked as read-only in the QGIS project properties). User can then
 select a layer.
@@ -36,10 +35,7 @@ If a line layer is selected, a path will be generated from the GPS track
 until the record button is pressed again. The form for the recorded line
 will appear accordingly.
 
-Input sets the last surveyed layer as the default layer for editing.
-Subsequent pressing of the record will make changes to the default
-layer. To reset the default layer and see the full list of the survey
-layers, you need to press and hold the record button.
+Pressing and holding **Record** button will allow you to set the default survey layer. This option is also available under the **Settings** section.
 
 ## Zoom to project
 This is a shortcut to zoom the extent of all visible layers within the project.
