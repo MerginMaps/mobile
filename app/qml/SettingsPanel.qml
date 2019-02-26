@@ -202,7 +202,7 @@ Popup {
 
                 NumberSpin {
                     value: __appSettings.gpsAccuracyTolerance
-                    label: " m"
+                    suffix: " m"
                     onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter
@@ -218,12 +218,12 @@ Popup {
                 text: qsTr("Line rec. interval")
 
                 NumberSpin {
-                    id: spinDigitizingPeriod
-                    value: __appSettings.digitizingPeriod
+                    id: spinRecordingInterval
+                    value: __appSettings.lineRecordingInterval
                     minValue: 1
-                    maxValue: 10
-                    label: " s"
-                    onValueChanged: __appSettings.digitizingPeriod = spinDigitizingPeriod.value
+                    maxValue: 30
+                    suffix: " s"
+                    onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
                     height: InputStyle.fontPixelSizeNormal
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
