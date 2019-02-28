@@ -32,8 +32,8 @@ Item {
 
             MainPanelButton {
                 id: gpsSwitchBtn
-                width: mainPanel.itemSize
-                text: qsTr("Gps")
+                width: root.itemSize
+                text: qsTr("GPS")
                 imageSource: "ic_gps_fixed_48px.svg"
                 onActivated: root.gpsSwitchClicked()
 
@@ -53,7 +53,7 @@ Item {
 
             MainPanelButton {
                 id: addButton
-                width: mainPanel.itemSize
+                width: root.itemSize
                 text: qsTr("Add")
                 imageSource: "check.svg"
 
@@ -67,7 +67,7 @@ Item {
 
             MainPanelButton {
                 id: cancelButton
-                width: mainPanel.itemSize
+                width: root.itemSize
                 text: qsTr("Cancel")
                 imageSource: "no.svg"
 

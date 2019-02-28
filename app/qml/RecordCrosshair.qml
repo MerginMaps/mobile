@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtGraphicalEffects 1.12
+import QtQuick 2.7
+import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 

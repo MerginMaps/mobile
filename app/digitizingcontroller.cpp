@@ -113,7 +113,12 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint(const QgsPo
     if ( !featureLayerPair().layer() )
         return QgsQuickFeatureLayerPair();
 
-    QgsPoint* mapPoint = new QgsPoint( point );
+    if (!mMapSettings) {
+        return QgsQuickFeatureLayerPair();
+    }
+
+    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(featureLayerPair().layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* mapPoint = new QgsPoint( layerPoint );
     fixZ(mapPoint);
     QgsGeometry geom( mapPoint );
 

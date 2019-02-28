@@ -32,6 +32,7 @@ ApplicationWindow {
             }
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
+                recordToolbar.gpsSwitchClicked()
             }
         }
     }
@@ -217,6 +218,7 @@ ApplicationWindow {
         positionKit: positionMarker.positionKit
         layer: activeLayerPanel.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
+        mapSettings: mapCanvas.mapSettings
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
@@ -285,7 +287,7 @@ ApplicationWindow {
     RecordCrosshair {
         id: crosshair
         width: window.width
-        height: window.height
+        height: window.height - mainPanel.height
         visible: recordToolbar.visible
     }
 
