@@ -15,6 +15,27 @@ ApplicationWindow {
     property int zPanel: 20
     property int zToolkits: 10
 
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "view"
+            },
+            State {
+                name: "record"
+            }
+        ]
+
+        onStateChanged: {
+            if (stateManager.state === "view") {
+                recordToolbar.visible = false
+            }
+            else if (stateManager.state === "record") {
+                recordToolbar.visible = true
+            }
+        }
+    }
+
     function isPositionOutOfExtent(border) {
         return ((positionKit.screenPosition.x < border) ||
                 (positionKit.screenPosition.y < border) ||
@@ -32,6 +53,7 @@ ApplicationWindow {
             popup.text = "Recording feature is not valid"
             popup.open()
         }
+        stateManager.state = "view"
     }
 
     function recordFeature() {
@@ -39,8 +61,10 @@ ApplicationWindow {
         if (!layer)
         {
             // nothing to do with no active layer
+            return
         }
-        else if (digitizing.hasLineGeometry(layer)) {
+
+        if (digitizing.hasLineGeometry(layer)) {
             if (digitizing.recording) {
                 digitizing.stopRecording()
                 var pair = digitizing.lineFeature()
@@ -52,8 +76,15 @@ ApplicationWindow {
         }
         else {
             // assuming layer with point geometry
-            var pair = digitizing.pointFeature()
-            saveRecordedFeature(pair)
+            if (recordToolbar.manualRecording) {
+                var screenPoint = Qt.point( window.width/2, window.height/2 )
+                var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+                var pair = digitizing.pointFeatureFromPoint(centerPoint)
+                saveRecordedFeature(pair)
+            } else {
+                var pairGps = digitizing.pointFeature()
+                saveRecordedFeature(pairGps)
+            }
         }
     }
 
@@ -230,19 +261,36 @@ ApplicationWindow {
         onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
         recordButton.recording: digitizing.recording
-        onAddFeatureClicked: {
+        onAddFeatureClicked: activeLayerPanel.openPanel("record")
+    }
+
+    RecordToolbar {
+        id: recordToolbar
+        width: window.width
+        height: InputStyle.rowHeightHeader
+        z: zToolkits + 1
+        y: window.height - height
+        visible: false
+
+        onAddClicked: recordFeature()
+
+        onGpsSwitchClicked: {
             if (!positionKit.hasPosition) {
                 popup.text = qsTr("The GPS is currently not available")
                 popup.open()
                 return // leaving when no gps is available
             }
-
-            if (digitizing.recording) {
-                recordFeature()
-            } else {
-                activeLayerPanel.openPanel("record")
-            }
+            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         }
+
+        onRemoveClicked: stateManager.state = "view"
+    }
+
+    RecordCrosshair {
+        id: crosshair
+        width: window.width
+        height: window.height
+        visible: recordToolbar.visible
     }
 
     ScaleBar {
@@ -303,9 +351,7 @@ ApplicationWindow {
         edge: Qt.BottomEdge
         z: zPanel
 
-        onLayerSettingChanged: {
-            recordFeature()
-        }
+        onLayerSettingChanged: stateManager.state = "record"
     }
 
     MapThemePanel {
