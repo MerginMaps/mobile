@@ -76,15 +76,10 @@ ApplicationWindow {
         }
         else {
             // assuming layer with point geometry
-            if (recordToolbar.manualRecording) {
-                var screenPoint = Qt.point( window.width/2, window.height/2 )
-                var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-                var pair = digitizing.pointFeatureFromPoint(centerPoint)
-                saveRecordedFeature(pair)
-            } else {
-                var pairGps = digitizing.pointFeature()
-                saveRecordedFeature(pairGps)
-            }
+            var screenPoint = Qt.point( window.width/2, window.height/2 )
+            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+            var pair = digitizing.pointFeatureFromPoint(centerPoint)
+            saveRecordedFeature(pair)
         }
     }
 
@@ -271,6 +266,7 @@ ApplicationWindow {
         z: zToolkits + 1
         y: window.height - height
         visible: false
+        gpsIndicatorColor: getGpsIndicatorColor()
 
         onAddClicked: recordFeature()
 

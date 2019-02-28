@@ -10,10 +10,9 @@ Item {
     signal gpsSwitchClicked
     signal close
     property int itemSize: mainPanel.height * 0.8
-    property bool manualRecording: true
+    property color gpsIndicatorColor: InputStyle.softRed
 
     id: root
-
     onClose: visible = false
 
     Rectangle {
@@ -35,8 +34,16 @@ Item {
                 id: gpsSwitchBtn
                 width: mainPanel.itemSize
                 text: qsTr("Gps")
-                imageSource: root.manualRecording ? "ic_gps_not_fixed_48px.svg" : "ic_gps_fixed_48px.svg"
+                imageSource: "ic_gps_fixed_48px.svg"
                 onActivated: root.gpsSwitchClicked()
+
+                RoundIndicator {
+                    width: parent.height/4
+                    height: width
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    color: gpsIndicatorColor
+                }
             }
         }
 
@@ -50,10 +57,7 @@ Item {
                 text: qsTr("Add")
                 imageSource: "check.svg"
 
-                onActivated: {
-                    console.log("TOOLBAR ADD")
-                    root.addClicked()
-                }
+                onActivated: root.addClicked()
             }
         }
 

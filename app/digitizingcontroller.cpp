@@ -97,16 +97,6 @@ QgsCoordinateTransform DigitizingController::tranformer() const
   return transform;
 }
 
-QgsQuickFeatureLayerPair DigitizingController::createPair(const QgsGeometry &geom) const
-{
-    QgsFeature f;
-    f.setGeometry( geom );
-    f.setFields( featureLayerPair().layer()->fields() );
-    QgsAttributes attrs( f.fields().count() );
-    f.setAttributes( attrs );
-    return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
-}
-
 int DigitizingController::lineRecordingInterval() const
 {
     return mLineRecordingInterval;
@@ -118,28 +108,18 @@ void DigitizingController::setLineRecordingInterval(int lineRecordingInterval)
     emit lineRecordingIntervalChanged();
 }
 
-QgsQuickFeatureLayerPair DigitizingController::pointFeature()
-{
-    if ( !featureLayerPair().layer() )
-        return QgsQuickFeatureLayerPair();
-
-    if ( !mPositionKit->hasPosition() )
-        return QgsQuickFeatureLayerPair();
-
-    QgsPoint* point = mPositionKit->position().clone();
-    fixZ(point);
-    QgsGeometry geom( point );
-
-    geom.transform(tranformer());
-    return createPair(geom);
-}
-
 QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint(const QgsPoint &point)
 {
     QgsPoint* mapPoint = new QgsPoint( point );
     fixZ(mapPoint);
     QgsGeometry geom( mapPoint );
-    return createPair(geom);
+
+    QgsFeature f;
+    f.setGeometry( geom );
+    f.setFields( featureLayerPair().layer()->fields() );
+    QgsAttributes attrs( f.fields().count() );
+    f.setAttributes( attrs );
+    return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
 }
 
 void DigitizingController::startRecording()
