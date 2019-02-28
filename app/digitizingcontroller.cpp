@@ -110,6 +110,9 @@ void DigitizingController::setLineRecordingInterval(int lineRecordingInterval)
 
 QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint(const QgsPoint &point)
 {
+    if ( !featureLayerPair().layer() )
+            return QgsQuickFeatureLayerPair();
+
     QgsPoint* mapPoint = new QgsPoint( point );
     fixZ(mapPoint);
     QgsGeometry geom( mapPoint );
