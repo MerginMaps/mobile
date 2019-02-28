@@ -108,19 +108,19 @@ void DigitizingController::setLineRecordingInterval(int lineRecordingInterval)
     emit lineRecordingIntervalChanged();
 }
 
-QgsQuickFeatureLayerPair DigitizingController::pointFeature()
+QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint(const QgsPoint &point)
 {
     if ( !featureLayerPair().layer() )
         return QgsQuickFeatureLayerPair();
 
-    if ( !mPositionKit->hasPosition() )
+    if (!mMapSettings) {
         return QgsQuickFeatureLayerPair();
+    }
 
-    QgsPoint* point = mPositionKit->position().clone();
-    fixZ(point);
-    QgsGeometry geom( point );
-
-    geom.transform(tranformer());
+    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(featureLayerPair().layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* mapPoint = new QgsPoint( layerPoint );
+    fixZ(mapPoint);
+    QgsGeometry geom( mapPoint );
 
     QgsFeature f;
     f.setGeometry( geom );

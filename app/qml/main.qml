@@ -15,6 +15,28 @@ ApplicationWindow {
     property int zPanel: 20
     property int zToolkits: 10
 
+    Item {
+        id: stateManager
+        states: [
+            State {
+                name: "view"
+            },
+            State {
+                name: "record"
+            }
+        ]
+
+        onStateChanged: {
+            if (stateManager.state === "view") {
+                recordToolbar.visible = false
+            }
+            else if (stateManager.state === "record") {
+                recordToolbar.visible = true
+                recordToolbar.gpsSwitchClicked()
+            }
+        }
+    }
+
     function isPositionOutOfExtent(border) {
         return ((positionKit.screenPosition.x < border) ||
                 (positionKit.screenPosition.y < border) ||
@@ -32,6 +54,7 @@ ApplicationWindow {
             popup.text = "Recording feature is not valid"
             popup.open()
         }
+        stateManager.state = "view"
     }
 
     function recordFeature() {
@@ -39,8 +62,10 @@ ApplicationWindow {
         if (!layer)
         {
             // nothing to do with no active layer
+            return
         }
-        else if (digitizing.hasLineGeometry(layer)) {
+
+        if (digitizing.hasLineGeometry(layer)) {
             if (digitizing.recording) {
                 digitizing.stopRecording()
                 var pair = digitizing.lineFeature()
@@ -52,7 +77,9 @@ ApplicationWindow {
         }
         else {
             // assuming layer with point geometry
-            var pair = digitizing.pointFeature()
+            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+            var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
         }
     }
@@ -191,6 +218,7 @@ ApplicationWindow {
         positionKit: positionMarker.positionKit
         layer: activeLayerPanel.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
+        mapSettings: mapCanvas.mapSettings
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
@@ -231,18 +259,42 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            if (!positionKit.hasPosition) {
-                popup.text = qsTr("The GPS is currently not available")
-                popup.open()
-                return // leaving when no gps is available
-            }
-
             if (digitizing.recording) {
                 recordFeature()
             } else {
                 activeLayerPanel.openPanel("record")
             }
         }
+    }
+
+    RecordToolbar {
+        id: recordToolbar
+        width: window.width
+        height: InputStyle.rowHeightHeader
+        z: zToolkits + 1
+        y: window.height - height
+        visible: false
+        gpsIndicatorColor: getGpsIndicatorColor()
+
+        onAddClicked: recordFeature()
+
+        onGpsSwitchClicked: {
+            if (!positionKit.hasPosition) {
+                popup.text = qsTr("The GPS is currently not available")
+                popup.open()
+                return // leaving when no gps is available
+            }
+            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+        }
+
+        onRemoveClicked: stateManager.state = "view"
+    }
+
+    RecordCrosshair {
+        id: crosshair
+        width: mapCanvas.width
+        height: mapCanvas.height
+        visible: recordToolbar.visible
     }
 
     ScaleBar {
@@ -304,7 +356,19 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
-            recordFeature()
+            var layer = activeLayerPanel.activeVectorLayer
+            if (!layer)
+            {
+                // nothing to do with no active layer
+                return
+            }
+            if (digitizing.hasLineGeometry(layer)) {
+                // skipping manual editing/adding vertices
+                recordFeature()
+            } else {
+                stateManager.state = "record"
+            }
+
         }
     }
 
