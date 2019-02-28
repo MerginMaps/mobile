@@ -77,7 +77,7 @@ ApplicationWindow {
         }
         else {
             // assuming layer with point geometry
-            var screenPoint = Qt.point( window.width/2, (window.height - mainPanel.height)/2 )
+            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
             var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
             var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
@@ -292,8 +292,8 @@ ApplicationWindow {
 
     RecordCrosshair {
         id: crosshair
-        width: window.width
-        height: window.height - mainPanel.height
+        width: mapCanvas.width
+        height: mapCanvas.height
         visible: recordToolbar.visible
     }
 
