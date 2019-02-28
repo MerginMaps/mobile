@@ -77,7 +77,7 @@ ApplicationWindow {
         }
         else {
             // assuming layer with point geometry
-            var screenPoint = Qt.point( window.width/2, window.height/2 )
+            var screenPoint = Qt.point( window.width/2, (window.height - mainPanel.height)/2 )
             var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
             var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
@@ -258,7 +258,13 @@ ApplicationWindow {
         onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
 
         recordButton.recording: digitizing.recording
-        onAddFeatureClicked: activeLayerPanel.openPanel("record")
+        onAddFeatureClicked: {
+            if (digitizing.recording) {
+                recordFeature()
+            } else {
+                activeLayerPanel.openPanel("record")
+            }
+        }
     }
 
     RecordToolbar {
@@ -349,7 +355,21 @@ ApplicationWindow {
         edge: Qt.BottomEdge
         z: zPanel
 
-        onLayerSettingChanged: stateManager.state = "record"
+        onLayerSettingChanged: {
+            var layer = activeLayerPanel.activeVectorLayer
+            if (!layer)
+            {
+                // nothing to do with no active layer
+                return
+            }
+            if (digitizing.hasLineGeometry(layer)) {
+                // skipping manual editing/adding vertices
+                recordFeature()
+            } else {
+                stateManager.state = "record"
+            }
+
+        }
     }
 
     MapThemePanel {
