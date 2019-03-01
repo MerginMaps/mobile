@@ -30,6 +30,10 @@ Drawer {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
+    Behavior on height {
+        PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+    }
+
     background: Rectangle {
         id: stateManager
         color: InputStyle.clrPanelMain
