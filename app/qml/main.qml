@@ -86,6 +86,7 @@ ApplicationWindow {
             featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, centerPoint)
             featurePanel.saveFeatureGeom()
             stateManager.state = "view"
+            featurePanel.show_panel(featurePanel.feature, "Edit", "form")
         }
     }
 
