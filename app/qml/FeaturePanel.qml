@@ -202,7 +202,7 @@ Drawer {
             y: parent.height - height
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
-            isFeatureLine: (!!featurePanel.feature.layer) && digitizing.hasLineGeometry(featurePanel.feature.layer)
+            isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()

@@ -15,7 +15,7 @@ Rectangle {
     property color fontColor: "white"
     property color backgroundColor: InputStyle.fontColor
     property bool isHighlighted: false
-    property bool disabled: false
+    property bool enabled: true
 
     signal activated()
     signal activatedOnHold()
@@ -24,11 +24,12 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
+        enabled: root.enabled
         onClicked: {
-            if (!disabled) root.activated()
+            root.activated()
         }
         onPressAndHold: {
-            if (!disabled) root.activatedOnHold()
+            root.activatedOnHold()
         }
     }
 
@@ -49,7 +50,7 @@ Rectangle {
         anchors.fill: image
         source: image
         color: {
-            if (disabled) return InputStyle.fontColorBright
+            if (!root.enabled) return InputStyle.fontColorBright
             return root.isHighlighted ? backgroundColor : fontColor
         }
     }
@@ -57,7 +58,7 @@ Rectangle {
     Text {
         anchors.fill: parent
         color: {
-            if (disabled) return InputStyle.fontColorBright
+            if (!root.enabled) return InputStyle.fontColorBright
             return root.isHighlighted ? backgroundColor : fontColor
         }
         text: root.text

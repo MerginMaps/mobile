@@ -38,13 +38,14 @@ public:
 
   Q_INVOKABLE bool hasLineGeometry( QgsVectorLayer *layer ) const;
   Q_INVOKABLE bool hasPolygonGeometry( QgsVectorLayer *layer ) const;
+  Q_INVOKABLE bool hasPointGeometry( QgsVectorLayer *layer ) const;
 
   //! Creates a new QgsFeature with point geometry from the given point with map coordinates.
   Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint(const QgsPoint &point);
   //! Creates a new QgsFeature with line geometry from the points stored since the start of recording
   Q_INVOKABLE QgsQuickFeatureLayerPair lineFeature();
   //! Returns (point geom) featurePair coords in map coordinates.
-  Q_INVOKABLE QgsPoint mapCoords(QgsQuickFeatureLayerPair pair);
+  Q_INVOKABLE QgsPoint pointFeatureMapCoordinates(QgsQuickFeatureLayerPair pair);
   //! Changes point geometry of given pair according given point.
   Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point);
 

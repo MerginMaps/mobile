@@ -12,6 +12,6 @@ Item {
         width: height
         source: "crosshair.svg"
         sourceSize.width: width
-        sourceSize.height: heightß
+        sourceSize.height: height
     }
 }

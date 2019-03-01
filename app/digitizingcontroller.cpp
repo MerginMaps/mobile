@@ -65,6 +65,11 @@ bool DigitizingController::hasPolygonGeometry(QgsVectorLayer *layer) const
   return layer && layer->geometryType() == QgsWkbTypes::PolygonGeometry;
 }
 
+bool DigitizingController::hasPointGeometry(QgsVectorLayer *layer) const
+{
+  return layer && layer->geometryType() == QgsWkbTypes::PointGeometry;
+}
+
 void DigitizingController::fixZ(QgsPoint* point) const {
     Q_ASSERT(point);
 
@@ -194,7 +199,7 @@ QgsQuickFeatureLayerPair DigitizingController::lineFeature()
   return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
 }
 
-QgsPoint DigitizingController::mapCoords(QgsQuickFeatureLayerPair pair)
+QgsPoint DigitizingController::pointFeatureMapCoordinates(QgsQuickFeatureLayerPair pair)
 {
     if ( !pair.layer() )
       return QgsPoint();
@@ -205,10 +210,10 @@ QgsPoint DigitizingController::mapCoords(QgsQuickFeatureLayerPair pair)
 
 QgsQuickFeatureLayerPair DigitizingController::changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point)
 {
-    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(pair.layer(), QgsPointXY(point.x(), point.y()));
-    QgsPoint* mapPoint = new QgsPoint( layerPoint );
-    fixZ(mapPoint);
-    QgsGeometry geom( mapPoint );
+    QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates(pair.layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* layerPoint = new QgsPoint( layerPointXY );
+    fixZ(layerPoint);
+    QgsGeometry geom( layerPoint );
 
     pair.featureRef().setGeometry(geom);
     return pair;

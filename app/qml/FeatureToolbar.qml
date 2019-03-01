@@ -4,7 +4,7 @@ import "."  // import InputStyle singleton
 
 Item {
     property int itemSize: toolbar.height * 0.8
-    property bool isFeatureLine: false
+    property bool isFeaturePoint: false
 
     signal editClicked()
     signal saveClicked()
@@ -106,7 +106,7 @@ Item {
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
                 imageSource: "edit.svg"
-                disabled: isFeatureLine
+                enabled: isFeaturePoint
 
                 onActivated: {
                     toolbar.editGeometryClicked()

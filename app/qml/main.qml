@@ -18,12 +18,15 @@ ApplicationWindow {
     Item {
         id: stateManager
         states: [
+            // Default state - when none of state below
             State {
                 name: "view"
             },
+            // When a user is in recording session - creating a new feature.
             State {
                 name: "record"
             },
+            // When a user is modifying geometry of an existing feature
             State {
                 name: "edit"
             }
@@ -40,7 +43,7 @@ ApplicationWindow {
             else if (stateManager.state === "edit") {
                 featurePanel.visible = false
                 recordToolbar.visible = true
-                var screenPos = digitizing.mapCoords(featurePanel.feature)
+                var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
                 mapCanvas.mapSettings.setCenter(screenPos);
             }
         }
@@ -340,6 +343,7 @@ ApplicationWindow {
         width: mapCanvas.width
         height: mapCanvas.height
         visible: recordToolbar.visible
+        z: positionMarker.z + 1
     }
 
     ScaleBar {
