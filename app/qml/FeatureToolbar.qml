@@ -4,11 +4,13 @@ import "."  // import InputStyle singleton
 
 Item {
     property int itemSize: toolbar.height * 0.8
+    property bool isFeaturePoint: false
 
     signal editClicked()
     signal saveClicked()
     signal addPhotoClicked()
     signal deleteClicked()
+    signal editGeometryClicked()
 
     id: toolbar
 
@@ -102,12 +104,12 @@ Item {
             MainPanelButton {
 
                 width: toolbar.itemSize
-                text: qsTr("Add photo")
-                imageSource: "add_photo.svg"
-                disabled: true
+                text: qsTr("Edit geometry")
+                imageSource: "edit.svg"
+                enabled: isFeaturePoint
 
                 onActivated: {
-                    toolbar.addPhotoClicked()
+                    toolbar.editGeometryClicked()
                 }
             }
         }

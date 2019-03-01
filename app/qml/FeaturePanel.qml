@@ -12,11 +12,15 @@ Drawer {
     property real previewHeight
     property bool isReadOnly
 
+    signal editGeometryClicked()
+
     property alias formState: featureForm.state
     property alias feature: attributeModel.featureLayerPair
     property alias currentAttributeModel: attributeModel
 
-
+    function saveFeatureGeom() {
+        featureForm.save()
+    }
 
     id: featurePanel
     visible: false
@@ -198,10 +202,14 @@ Drawer {
             y: parent.height - height
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
+            isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()
             onDeleteClicked: deleteDialog.visible = true
+            onEditGeometryClicked: {
+                featurePanel.editGeometryClicked()
+            }
         }
 
 

@@ -32,5 +32,6 @@
         <file>account.svg</file>
         <file>mergin.svg</file>
         <file>link.svg</file>
+        <file>crosshair.svg</file>
     </qresource>
 </RCC>

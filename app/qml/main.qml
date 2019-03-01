@@ -18,11 +18,17 @@ ApplicationWindow {
     Item {
         id: stateManager
         states: [
+            // Default state - when none of state below
             State {
                 name: "view"
             },
+            // When a user is in recording session - creating a new feature.
             State {
                 name: "record"
+            },
+            // When a user is modifying geometry of an existing feature
+            State {
+                name: "edit"
             }
         ]
 
@@ -33,6 +39,12 @@ ApplicationWindow {
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
                 recordToolbar.gpsSwitchClicked()
+            }
+            else if (stateManager.state === "edit") {
+                featurePanel.visible = false
+                recordToolbar.visible = true
+                var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
+                mapCanvas.mapSettings.setCenter(screenPos);
             }
         }
     }
@@ -55,6 +67,30 @@ ApplicationWindow {
             popup.open()
         }
         stateManager.state = "view"
+    }
+
+
+    function editFeature() {
+        var layer = featurePanel.feature.layer
+        if (!layer)
+        {
+            // nothing to do with no active layer
+            return
+        }
+
+        if (digitizing.hasLineGeometry(layer)) {
+            // TODO
+        }
+        else {
+            // assuming layer with point geometry
+            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+
+            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, centerPoint)
+            featurePanel.saveFeatureGeom()
+            stateManager.state = "view"
+            featurePanel.show_panel(featurePanel.feature, "Edit", "form")
+        }
     }
 
     function recordFeature() {
@@ -276,7 +312,14 @@ ApplicationWindow {
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
 
-        onAddClicked: recordFeature()
+        onAddClicked: {
+            if (stateManager.state === "record") {
+                recordFeature()
+
+            } else if (stateManager.state === "edit") {
+                editFeature()
+            }
+        }
 
         onGpsSwitchClicked: {
             if (!positionKit.hasPosition) {
@@ -287,7 +330,12 @@ ApplicationWindow {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         }
 
-        onRemoveClicked: stateManager.state = "view"
+        onRemoveClicked: {
+            if (stateManager.state === "edit") {
+                featurePanel.show_panel(featurePanel.feature, "Edit", "form")
+            }
+            stateManager.state = "view"
+        }
     }
 
     RecordCrosshair {
@@ -295,6 +343,7 @@ ApplicationWindow {
         width: mapCanvas.width
         height: mapCanvas.height
         visible: recordToolbar.visible
+        z: positionMarker.z + 1
     }
 
     ScaleBar {
@@ -415,6 +464,10 @@ ApplicationWindow {
                 digitizingHighlight.visible = false
                 highlight.visible = false
             }
+        }
+
+        onEditGeometryClicked: {
+            stateManager.state = "edit"
         }
     }
 }
