@@ -9,6 +9,7 @@ Item {
     signal saveClicked()
     signal addPhotoClicked()
     signal deleteClicked()
+    signal editGeometryClicked()
 
     id: toolbar
 
@@ -102,12 +103,11 @@ Item {
             MainPanelButton {
 
                 width: toolbar.itemSize
-                text: qsTr("Add photo")
-                imageSource: "add_photo.svg"
-                disabled: true
+                text: qsTr("Edit geometry")
+                imageSource: "edit.svg"
 
                 onActivated: {
-                    toolbar.addPhotoClicked()
+                    toolbar.editGeometryClicked()
                 }
             }
         }

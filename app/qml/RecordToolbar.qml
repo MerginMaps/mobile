@@ -54,7 +54,7 @@ Item {
             MainPanelButton {
                 id: addButton
                 width: root.itemSize
-                text: qsTr("Add")
+                text: qsTr("Confirm")
                 imageSource: "check.svg"
 
                 onActivated: root.addClicked()

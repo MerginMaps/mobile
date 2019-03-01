@@ -193,3 +193,23 @@ QgsQuickFeatureLayerPair DigitizingController::lineFeature()
 
   return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
 }
+
+QgsPoint DigitizingController::mapCoords(QgsQuickFeatureLayerPair pair)
+{
+    if ( !pair.layer() )
+      return QgsPoint();
+
+    QgsPointXY res = mMapSettings->mapSettings().layerToMapCoordinates(pair.layer(), QgsPoint(pair.feature().geometry().asPoint()));
+    return QgsPoint(res);
+}
+
+QgsQuickFeatureLayerPair DigitizingController::changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point)
+{
+    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(pair.layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* mapPoint = new QgsPoint( layerPoint );
+    fixZ(mapPoint);
+    QgsGeometry geom( mapPoint );
+
+    pair.featureRef().setGeometry(geom);
+    return pair;
+}

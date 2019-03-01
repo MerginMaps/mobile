@@ -43,6 +43,10 @@ public:
   Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint(const QgsPoint &point);
   //! Creates a new QgsFeature with line geometry from the points stored since the start of recording
   Q_INVOKABLE QgsQuickFeatureLayerPair lineFeature();
+  //! Returns (point geom) featurePair coords in map coordinates.
+  Q_INVOKABLE QgsPoint mapCoords(QgsQuickFeatureLayerPair pair);
+  //! Changes point geometry of given pair according given point.
+  Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point);
 
   Q_INVOKABLE void startRecording();
   Q_INVOKABLE void stopRecording();
