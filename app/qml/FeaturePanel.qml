@@ -175,9 +175,9 @@ Drawer {
                     property color backgroundColorInactive: "grey"
                     property color fontColor: InputStyle.fontColor
                     property color activeColor: InputStyle.fontColor
-                    property color attentionColor: "red"
+                    property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
-                    property real cornerRadius: 15
+                    property real cornerRadius: 15 * QgsQuick.Utils.dp
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
                   }
