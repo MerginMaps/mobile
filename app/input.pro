@@ -154,10 +154,8 @@ DISTFILES += android/AndroidManifest.xml \
     qml/Notification.qml
 
 # packaging
-# Note: libcrypto and libssl currently not included due falling build
 android {
     ANDROID_EXTRA_LIBS += \
-        $${QGIS_LIB_DIR}/libcrystax.so \
         $${QGIS_LIB_DIR}/libcrypto.so \
         $${QGIS_LIB_DIR}/libexpat.so \
         $${QGIS_LIB_DIR}/libgeos.so \
