@@ -155,7 +155,7 @@ Item {
 
                         Text {
                             id: text2
-                            text: AttributeValue
+                            text: AttributeValue ? AttributeValue : ""
                             anchors.left: fieldName.right
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom
