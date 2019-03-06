@@ -1,4 +1,5 @@
 #include "inpututils.h"
+#include "qgsvectorlayer.h"
 #include <QFile>
 #include <QFileInfo>
 
@@ -26,4 +27,35 @@ QString InputUtils::getFileName(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     return fileInfo.fileName();
+}
+
+void InputUtils::setExtentToFeature(const QgsQuickFeatureLayerPair& pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio)
+{
+
+  if (!mapSettings)
+      return;
+
+  if (!pair.layer())
+    return;
+
+  if (!pair.feature().isValid())
+    return;
+
+  QgsGeometry geom = pair.feature().geometry();
+  if ( geom.isNull() || !geom.constGet() )
+    return;
+
+  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent(pair.layer(), geom.boundingBox() );
+  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
+  QgsPointXY currentExtentCenter = currentExtent.center();
+  QgsPointXY featureCenter = bbox.center();
+
+  double panelOffset = (currentExtent.yMaximum() - currentExtent.yMinimum()) * panelOffsetRatio / 2;
+  double offsetX = currentExtentCenter.x() - featureCenter.x();
+  double offsetY = currentExtentCenter.y() - featureCenter.y();
+  currentExtent.setXMinimum(currentExtent.xMinimum() - offsetX);
+  currentExtent.setXMaximum(currentExtent.xMaximum() - offsetX);
+  currentExtent.setYMinimum(currentExtent.yMinimum() - offsetY - panelOffset);
+  currentExtent.setYMaximum(currentExtent.yMaximum() - offsetY - panelOffset);
+  mapSettings->setExtent( currentExtent );
 }

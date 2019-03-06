@@ -181,6 +181,13 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
         if (res.valid) {
           highlight.featureLayerPair = res
+
+          // update extent to fit feature above preview panel
+          if (mouse.y > window.height - featurePanel.previewHeight) {
+              var panelOffsetRatio = featurePanel.previewHeight/window.height
+              __inputUtils.setExtentToFeature(res, mapCanvas.mapSettings, panelOffsetRatio)
+          }
+
           highlight.visible = true
           featurePanel.show_panel(res, "ReadOnly", "preview" )
         } else if (featurePanel.visible) {
