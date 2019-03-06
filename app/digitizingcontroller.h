@@ -19,6 +19,7 @@ class DigitizingController : public QObject
   Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY layerChanged)
   Q_PROPERTY(QgsVectorLayer* layer READ layer WRITE setLayer NOTIFY layerChanged)
   Q_PROPERTY(bool recording READ isRecording NOTIFY recordingChanged)
+  Q_PROPERTY(bool manualRecording READ manualRecording WRITE setManualRecording NOTIFY manualRecordingChanged)
   Q_PROPERTY(int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged)
   Q_PROPERTY(QgsQuickPositionKit* positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged)
   Q_PROPERTY(QgsQuickAttributeModel* recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged)
@@ -49,6 +50,9 @@ public:
   //! Changes point geometry of given pair according given point.
   Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point);
 
+  Q_INVOKABLE void addPoint(const QgsPoint &point);
+  Q_INVOKABLE void removeLastPoint();
+
   Q_INVOKABLE void startRecording();
   Q_INVOKABLE void stopRecording();
   bool isRecording() const { return mRecording; }
@@ -58,9 +62,13 @@ public:
   int lineRecordingInterval() const;
   void setLineRecordingInterval(int lineRecordingInterval);
 
+  bool manualRecording() const;
+  void setManualRecording(bool manualRecording);
+
 signals:
   void layerChanged();
   void recordingChanged();
+  void manualRecordingChanged();
   void positionKitChanged();
   void recordingFeatureModelChanged();
   void mapSettingsChanged();
@@ -74,6 +82,7 @@ private:
   QgsCoordinateTransform tranformer() const;
 
   bool mRecording = false;
+  bool mManualRecording = false;
   QgsQuickPositionKit *mPositionKit = nullptr;
   QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings
   QgsQuickAttributeModel *mRecordingModel = nullptr;  //!< to be used for highlight of feature being recorded

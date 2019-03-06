@@ -102,6 +102,17 @@ QgsCoordinateTransform DigitizingController::tranformer() const
   return transform;
 }
 
+bool DigitizingController::manualRecording() const
+{
+    return mManualRecording;
+}
+
+void DigitizingController::setManualRecording(bool manualRecording)
+{
+    mManualRecording = manualRecording;
+    emit manualRecordingChanged();
+}
+
 int DigitizingController::lineRecordingInterval() const
 {
     return mLineRecordingInterval;
@@ -151,6 +162,9 @@ void DigitizingController::stopRecording()
 
 void DigitizingController::onPositionChanged()
 {
+  if (mManualRecording)
+    return;
+
   if ( !mRecording )
     return;
 
@@ -217,4 +231,35 @@ QgsQuickFeatureLayerPair DigitizingController::changePointGeometry(QgsQuickFeatu
 
     pair.featureRef().setGeometry(geom);
     return pair;
+}
+
+void DigitizingController::addPoint(const QgsPoint &point)
+{
+    if ( !mRecording )
+      return;
+
+    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(featureLayerPair().layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* mapPoint = new QgsPoint( layerPoint );
+    fixZ(mapPoint);
+    mRecordedPoints.append( *mapPoint );
+
+    // update geometry so we can use the model for highlight in map
+    mRecordingModel->setFeatureLayerPair(lineFeature());
+}
+
+void DigitizingController::removeLastPoint()
+{
+    if (mRecordedPoints.isEmpty())
+        return;
+
+    if (mRecordedPoints.size() == 1) {
+        // cancel recording
+        mRecording = false;
+        emit recordingChanged();
+
+        return;
+    }
+
+    mRecordedPoints.removeLast();
+    mRecordingModel->setFeatureLayerPair(lineFeature());
 }
