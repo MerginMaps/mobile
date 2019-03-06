@@ -110,7 +110,7 @@ Rectangle {
                 }
 
                 Image {
-                    anchors.margins: (itemContainer.cellHeight/4)
+                    anchors.margins: (itemContainer.cellHeight * 0.35)
                     id: statusIcon
                     anchors.fill: parent
                     source: statusIconSource

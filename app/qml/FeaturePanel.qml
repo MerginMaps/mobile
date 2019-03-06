@@ -108,7 +108,7 @@ Drawer {
             width: parent.width
             color: InputStyle.clrPanelMain
             rowHeight: InputStyle.rowHeightHeader
-            titleText: "Edit Object"
+            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Object") : qsTr("Object")
 
             onBack: featurePanel.visible = false
         }
@@ -175,8 +175,9 @@ Drawer {
                     property color backgroundColorInactive: "grey"
                     property color fontColor: InputStyle.fontColor
                     property color activeColor: InputStyle.fontColor
+                    property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
-                    property real cornerRadius: 1
+                    property real cornerRadius: 8 * QgsQuick.Utils.dp
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
                   }
