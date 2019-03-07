@@ -35,21 +35,27 @@ To add a feature, select the record button from the lower panel. When you tap on
 layers, you can edit.
 
 
-If your survey layer is a point layer, it will record the location of
-your device as the survey point. If your survey layer is a line, it will
+If your survey layer is a point layer, it will show a cross-hair at your GPS location. You can confirm the location by pressing **Confirm**. Alternatively, you can move the map to another location. The point below the cross-hair will be used as the recorded location. You can move back to your location, by pressing **GPS**.
+
+<img src="images/input_capture_point.png" alt="Capturing point" width=50% />​
+
+If your survey layer is a line, it will
 start the path and tracks your GPS as an input to the line vertices. To
 finish the line capturing, you will need to press the record button
 again.
 
-You can set the default survey layer, so when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on **Settings** and set the survey layer under **Defaults**. Alternatively, you can press and hold **Record button** to set the default survey layer.
+You can set the default survey layer, so that when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on **Settings** and set the survey layer under **Defaults**. Alternatively, you can press and hold **Record button** to set the default survey layer.
 
 
 ## Viewing/deleting existing data
 You can view the existing data by tapping on them on the map. It will
 open a preview panel (according to Display settings in QGIS - see
 project preparation section). To edit the form related to an existing
-feature, you can press the pencil within the preview panel. If you want
-to delete the item, you can press the recycle bin from the lower panel
+feature, you can press the pencil within the preview panel.
+
+For point layers, you can also change the location (geometry) of your layer, by pressing **Edit geometry**. Similar to capturing a new point, a map will appear with a cross-hair at your GPS location. You can adjust the location of the cross-hair by panning the map and press **Confirm**.
+
+If you want to delete the item, you can press the recycle bin from the lower panel
 in the form edit.
 
 ## Synchronisation of data/ projects
