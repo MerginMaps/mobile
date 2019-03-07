@@ -17,6 +17,7 @@ Item {
     property int itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
+    property bool manualRecordig: false
 
     id: root
     onClose: visible = false
@@ -83,6 +84,7 @@ Item {
                 width: root.itemSize
                 text: qsTr("Add")
                 imageSource: "plus.svg"
+                enabled: manualRecordig
 
                 onActivated: root.addClicked()
             }

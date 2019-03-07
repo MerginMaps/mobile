@@ -313,6 +313,7 @@ ApplicationWindow {
         y: window.height - height
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
+        manualRecordig: digitizing.manualRecording
 
         onAddClicked: {
             if (stateManager.state === "record") {
