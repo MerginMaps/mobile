@@ -47,10 +47,12 @@ between different map themes using this option.
 ## Settings
 Input specific configuration can be accessed through settings.
 
+<img src="images/input_settings.png" alt="Input user interface" width=50% />​
+
 ### Defaults
 
-The default Survey layer can be viewed, cleared or reset here. By
-tapping the Survey layer, you can set a layer or deselect the default
+The default **Survey layer** can be viewed, cleared or reset here. By
+tapping the **Survey layer**, you can set a layer or deselect the default
 layer.
 
 ### Mergin
@@ -60,10 +62,12 @@ users can tap on their name.
 
 ### GPS
 
-Follow GPS with map will pan the map so the GPS point can be seen on the
+**Follow GPS with map** will pan the map so the GPS point can be seen on the
 map.
 
-GPS accuracy colours show the current strength of the signal based on the
+**GPS accuracy** colours show the current strength of the signal based on the
 Accuracy threshold. If the signal falls within the the threshold, the
 colour will be green. If it is outside, it will be orange. The indicator
 will be red in case there is no GPS position fix available.
+
+**Line rec. interval** when streaming GPS position for capturing lines, you can set the intervals at which the GPS location will be used as vertices of the line.
