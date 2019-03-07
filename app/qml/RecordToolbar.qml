@@ -14,8 +14,6 @@ Item {
     signal removePointClicked
     signal close
 
-    // TODO current point index
-
     property int itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
@@ -84,7 +82,7 @@ Item {
                 id: addButton
                 width: root.itemSize
                 text: qsTr("Add")
-                imageSource: "check.svg"
+                imageSource: "plus.svg"
 
                 onActivated: root.addClicked()
             }

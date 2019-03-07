@@ -171,20 +171,23 @@ void DigitizingController::onPositionChanged()
   if ( !mPositionKit->hasPosition() )
     return;
 
-
   QgsPoint point = mPositionKit->position();
-  fixZ(&point);
+  QgsGeometry geom = QgsGeometry::fromPointXY(QgsPointXY(point.x(), point.y()));
+  geom.transform(tranformer());
+
+  QgsPointXY layerPointXY = geom.asPoint();
+  QgsPoint *layerPoint = new QgsPoint(layerPointXY);
+  fixZ(layerPoint);
 
   if (mLastTimeRecorded.addSecs(mLineRecordingInterval) <= QDateTime::currentDateTime()) {
       mLastTimeRecorded = QDateTime::currentDateTime();
-      mRecordedPoints.append( point );
+      mRecordedPoints.append( *layerPoint );
   } else {
       if (!mRecordedPoints.isEmpty()) {
-          mRecordedPoints.last().setX(point.x());
-          mRecordedPoints.last().setY(point.y());
+          mRecordedPoints.last().setX(layerPoint->x());
+          mRecordedPoints.last().setY(layerPoint->y());
       }
   }
-  // update geometry so we can use the model for highlight in map
   mRecordingModel->setFeatureLayerPair(lineFeature());
 }
 
@@ -199,10 +202,7 @@ QgsQuickFeatureLayerPair DigitizingController::lineFeature()
   QgsLineString *linestring = new QgsLineString;
   Q_FOREACH ( const QgsPoint &pt, mRecordedPoints )
     linestring->addVertex( pt );
-
   QgsGeometry geom( linestring );
-
-  geom.transform(tranformer());
 
   QgsFeature f;
   f.setGeometry( geom );
@@ -233,15 +233,15 @@ QgsQuickFeatureLayerPair DigitizingController::changePointGeometry(QgsQuickFeatu
     return pair;
 }
 
-void DigitizingController::addPoint(const QgsPoint &point)
+void DigitizingController::addRecordPoint(const QgsPoint &point)
 {
     if ( !mRecording )
       return;
 
-    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates(featureLayerPair().layer(), QgsPointXY(point.x(), point.y()));
-    QgsPoint* mapPoint = new QgsPoint( layerPoint );
-    fixZ(mapPoint);
-    mRecordedPoints.append( *mapPoint );
+    QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates(featureLayerPair().layer(), QgsPointXY(point.x(), point.y()));
+    QgsPoint* layerPoint = new QgsPoint( layerPointXY );
+    fixZ(layerPoint);
+    mRecordedPoints.append( *layerPoint );
 
     // update geometry so we can use the model for highlight in map
     mRecordingModel->setFeatureLayerPair(lineFeature());

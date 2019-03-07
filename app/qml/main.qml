@@ -107,7 +107,7 @@ ApplicationWindow {
             }
             var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
             var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-            digitizing.addPoint(centerPoint)
+            digitizing.addRecordPoint(centerPoint)
         }
         else {
             // assuming layer with point geometry
@@ -421,7 +421,6 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
-            // TODO relocate setting of recorddToolbar
             var layer = activeLayerPanel.activeVectorLayer
             if (!layer)
             {

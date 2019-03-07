@@ -50,7 +50,7 @@ public:
   //! Changes point geometry of given pair according given point.
   Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry(QgsQuickFeatureLayerPair pair, QgsPoint point);
 
-  Q_INVOKABLE void addPoint(const QgsPoint &point);
+  Q_INVOKABLE void addRecordPoint( const QgsPoint &point );
   Q_INVOKABLE void removeLastPoint();
 
   Q_INVOKABLE void startRecording();
@@ -82,9 +82,9 @@ private:
   QgsCoordinateTransform tranformer() const;
 
   bool mRecording = false;
-  bool mManualRecording = false;
+  bool mManualRecording = true;
   QgsQuickPositionKit *mPositionKit = nullptr;
-  QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings
+  QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings, point's coord in layer CRS
   QgsQuickAttributeModel *mRecordingModel = nullptr;  //!< to be used for highlight of feature being recorded
   QgsQuickMapSettings *mMapSettings = nullptr;
   int mLineRecordingInterval = 3; // in seconds

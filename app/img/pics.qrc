@@ -33,5 +33,6 @@
         <file>mergin.svg</file>
         <file>link.svg</file>
         <file>crosshair.svg</file>
+        <file>plus.svg</file>
     </qresource>
 </RCC>
