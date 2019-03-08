@@ -142,6 +142,7 @@ Drawer {
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
+            toolbarVisible: false
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white  "
                 property real backgroundOpacity: 1
