@@ -58,7 +58,7 @@ ApplicationWindow {
     }
 
     function saveRecordedFeature(pair) {
-        if (pair.valid) {
+        if (digitizing.isPairValid(pair)) {
             digitizingHighlight.featureLayerPair = pair
             digitizingHighlight.visible = true
             featurePanel.show_panel(pair, "Add", "form")
@@ -81,7 +81,7 @@ ApplicationWindow {
         if (digitizing.hasLineGeometry(layer)) {
             // TODO
         }
-        else {
+        else if (digitizing.hasPointGeometry(layer)) {
             // assuming layer with point geometry
             var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
             var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
@@ -94,28 +94,17 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var layer = activeLayerPanel.activeVectorLayer
-        if (!layer)
-        {
-            // nothing to do with no active layer
-            return
-        }
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
 
-        if (digitizing.hasLineGeometry(layer)) {
+        if (digitizing.hasPointGeometry(activeLayerPanel.activeVectorLayer)) {
+            var pair = digitizing.pointFeatureFromPoint(centerPoint)
+            saveRecordedFeature(pair)
+        } else {
             if (!digitizing.recording) {
                 digitizing.startRecording()
             }
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
             digitizing.addRecordPoint(centerPoint)
-        }
-        else {
-            // assuming layer with point geometry
-
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-            var pair = digitizing.pointFeatureFromPoint(centerPoint)
-            saveRecordedFeature(pair)
         }
     }
 
@@ -349,7 +338,7 @@ ApplicationWindow {
 
          onStopRecordingClicked: {
              digitizing.stopRecording()
-             var pair = digitizing.lineFeature()
+             var pair = digitizing.getRecordedFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
          }
@@ -434,9 +423,7 @@ ApplicationWindow {
             } else {
                 recordToolbar.pointLayerSelected = false
             }
-            // TODO restrict polygons
             stateManager.state = "record"
-
         }
     }
 

@@ -40,11 +40,12 @@ public:
   Q_INVOKABLE bool hasLineGeometry( QgsVectorLayer *layer ) const;
   Q_INVOKABLE bool hasPolygonGeometry( QgsVectorLayer *layer ) const;
   Q_INVOKABLE bool hasPointGeometry( QgsVectorLayer *layer ) const;
+  Q_INVOKABLE bool isPairValid(QgsQuickFeatureLayerPair pair) const;
 
   //! Creates a new QgsFeature with point geometry from the given point with map coordinates.
   Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint(const QgsPoint &point);
-  //! Creates a new QgsFeature with line geometry from the points stored since the start of recording
-  Q_INVOKABLE QgsQuickFeatureLayerPair lineFeature();
+  //! Creates a new QgsFeature with line/polygon geometry from the points stored since the start of recording
+  Q_INVOKABLE QgsQuickFeatureLayerPair getRecordedFeature();
   //! Returns (point geom) featurePair coords in map coordinates.
   Q_INVOKABLE QgsPoint pointFeatureMapCoordinates(QgsQuickFeatureLayerPair pair);
   //! Changes point geometry of given pair according given point.
@@ -80,6 +81,8 @@ private slots:
 private:
   void fixZ(QgsPoint* point) const; // add/remove Z coordinate based on layer wkb type
   QgsCoordinateTransform tranformer() const;
+  QgsQuickFeatureLayerPair lineFeature();
+  QgsQuickFeatureLayerPair polygonFeature();
 
   bool mRecording = false;
   bool mManualRecording = true;

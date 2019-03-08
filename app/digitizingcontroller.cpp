@@ -70,6 +70,12 @@ bool DigitizingController::hasPointGeometry(QgsVectorLayer *layer) const
   return layer && layer->geometryType() == QgsWkbTypes::PointGeometry;
 }
 
+// TODO move second condition to QgsQuickFeatureLayerPair class
+bool DigitizingController::isPairValid(QgsQuickFeatureLayerPair pair) const
+{
+    return pair.isValid() && pair.feature().geometry().isGeosValid();
+}
+
 void DigitizingController::fixZ(QgsPoint* point) const {
     Q_ASSERT(point);
 
@@ -188,7 +194,35 @@ void DigitizingController::onPositionChanged()
           mRecordedPoints.last().setY(layerPoint->y());
       }
   }
-  mRecordingModel->setFeatureLayerPair(lineFeature());
+  mRecordingModel->setFeatureLayerPair(getRecordedFeature());
+}
+
+QgsQuickFeatureLayerPair DigitizingController::polygonFeature()
+{
+  if ( !featureLayerPair().layer() )
+    return QgsQuickFeatureLayerPair();
+
+  if ( mRecordedPoints.isEmpty() )
+    return QgsQuickFeatureLayerPair();
+
+//  QgsPolygonString *linestring = new QgsPolygonString;
+//  Q_FOREACH ( const QgsPoint &pt, mRecordedPoints )
+//    linestring->addVertex( pt );
+//  QgsGeometry geom( linestring );
+
+  QVector<QgsPointXY> polygonPoints;
+  Q_FOREACH ( const QgsPoint &pt, mRecordedPoints ) {
+      polygonPoints.append(QgsPointXY(pt.x(), pt.y()));
+  }
+  QgsGeometry geom = QgsGeometry::fromPolygonXY( QVector<QVector<QgsPointXY>>() << polygonPoints );
+
+  QgsFeature f;
+  f.setGeometry( geom );
+  f.setFields( featureLayerPair().layer()->fields() );
+  QgsAttributes attrs( f.fields().count() );
+  f.setAttributes( attrs );
+
+  return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
 }
 
 QgsQuickFeatureLayerPair DigitizingController::lineFeature()
@@ -211,6 +245,17 @@ QgsQuickFeatureLayerPair DigitizingController::lineFeature()
   f.setAttributes( attrs );
 
   return QgsQuickFeatureLayerPair(f, featureLayerPair().layer());
+}
+
+QgsQuickFeatureLayerPair DigitizingController::getRecordedFeature()
+{
+  if (hasLineGeometry(featureLayerPair().layer())) {
+    return lineFeature();
+  } else if (hasPolygonGeometry(featureLayerPair().layer())) {
+    return polygonFeature();
+  }
+
+  return QgsQuickFeatureLayerPair();
 }
 
 QgsPoint DigitizingController::pointFeatureMapCoordinates(QgsQuickFeatureLayerPair pair)
@@ -244,7 +289,7 @@ void DigitizingController::addRecordPoint(const QgsPoint &point)
     mRecordedPoints.append( *layerPoint );
 
     // update geometry so we can use the model for highlight in map
-    mRecordingModel->setFeatureLayerPair(lineFeature());
+    mRecordingModel->setFeatureLayerPair(getRecordedFeature());
 }
 
 void DigitizingController::removeLastPoint()
@@ -261,5 +306,5 @@ void DigitizingController::removeLastPoint()
     }
 
     mRecordedPoints.removeLast();
-    mRecordingModel->setFeatureLayerPair(lineFeature());
+    mRecordingModel->setFeatureLayerPair(getRecordedFeature());
 }
