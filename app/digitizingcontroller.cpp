@@ -205,11 +205,6 @@ QgsQuickFeatureLayerPair DigitizingController::polygonFeature()
   if ( mRecordedPoints.isEmpty() )
     return QgsQuickFeatureLayerPair();
 
-//  QgsPolygonString *linestring = new QgsPolygonString;
-//  Q_FOREACH ( const QgsPoint &pt, mRecordedPoints )
-//    linestring->addVertex( pt );
-//  QgsGeometry geom( linestring );
-
   QVector<QgsPointXY> polygonPoints;
   Q_FOREACH ( const QgsPoint &pt, mRecordedPoints ) {
       polygonPoints.append(QgsPointXY(pt.x(), pt.y()));

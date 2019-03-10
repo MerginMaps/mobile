@@ -8,7 +8,7 @@ import "."  // import InputStyle singleton
 Item {
     signal addClicked
     signal removeClicked
-    signal gpsSwitchClicked // TODO rename
+    signal gpsSwitchClicked
     signal manualRecordingClicked
     signal stopRecordingClicked
     signal removePointClicked
@@ -21,12 +21,6 @@ Item {
 
     id: root
     onClose: visible = false
-
-    onPointLayerSelectedChanged: {
-        console.log("pointLayerSelectedpointLayerSelected", pointLayerSelected)
-        visible = false
-        visible = true
-    }
 
     Rectangle {
         anchors.fill: parent
