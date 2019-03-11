@@ -7,7 +7,7 @@ import "."  // import InputStyle singleton
 
 Item {
     signal addClicked
-    signal removeClicked
+    signal cancelClicked
     signal gpsSwitchClicked
     signal manualRecordingClicked
     signal stopRecordingClicked
@@ -109,7 +109,7 @@ Item {
                 text: qsTr("Cancel")
                 imageSource: "no.svg"
 
-                onActivated: root.removeClicked()
+                onActivated: root.cancelClicked()
             }
         }
     }

@@ -325,11 +325,13 @@ ApplicationWindow {
             digitizing.manualRecording = !digitizing.manualRecording
         }
 
-        onRemoveClicked: {
+        onCancelClicked: {
             if (stateManager.state === "edit") {
                 featurePanel.show_panel(featurePanel.feature, "Edit", "form")
             }
             stateManager.state = "view"
+            digitizing.stopRecording();
+            digitizingHighlight.visible = false
         }
 
         onRemovePointClicked: {
