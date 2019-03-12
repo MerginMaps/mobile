@@ -58,7 +58,7 @@ ApplicationWindow {
     }
 
     function saveRecordedFeature(pair) {
-        if (pair.valid) {
+        if (digitizing.isPairValid(pair)) {
             digitizingHighlight.featureLayerPair = pair
             digitizingHighlight.visible = true
             featurePanel.show_panel(pair, "Add", "form")
@@ -81,7 +81,7 @@ ApplicationWindow {
         if (digitizing.hasLineGeometry(layer)) {
             // TODO
         }
-        else {
+        else if (digitizing.hasPointGeometry(layer)) {
             // assuming layer with point geometry
             var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
             var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
@@ -94,29 +94,17 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var layer = activeLayerPanel.activeVectorLayer
-        if (!layer)
-        {
-            // nothing to do with no active layer
-            return
-        }
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
 
-        if (digitizing.hasLineGeometry(layer)) {
-            if (digitizing.recording) {
-                digitizing.stopRecording()
-                var pair = digitizing.lineFeature()
-                saveRecordedFeature(pair)
-            }
-            else {
-                digitizing.startRecording()
-            }
-        }
-        else {
-            // assuming layer with point geometry
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+        if (digitizing.hasPointGeometry(activeLayerPanel.activeVectorLayer)) {
             var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
+        } else {
+            if (!digitizing.recording) {
+                digitizing.startRecording()
+            }
+            digitizing.addRecordPoint(centerPoint)
         }
     }
 
@@ -302,11 +290,7 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            if (digitizing.recording) {
-                recordFeature()
-            } else {
-                activeLayerPanel.openPanel("record")
-            }
+            activeLayerPanel.openPanel("record")
         }
     }
 
@@ -318,11 +302,15 @@ ApplicationWindow {
         y: window.height - height
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
+        manualRecordig: digitizing.manualRecording
+
+        onVisibleChanged: {
+            if (!manualRecordig && visible) digitizing.startRecording()
+        }
 
         onAddClicked: {
             if (stateManager.state === "record") {
                 recordFeature()
-
             } else if (stateManager.state === "edit") {
                 editFeature()
             }
@@ -337,19 +325,39 @@ ApplicationWindow {
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         }
 
-        onRemoveClicked: {
+        onManualRecordingClicked: {
+            digitizing.manualRecording = !digitizing.manualRecording
+            if (!digitizing.manualRecording && stateManager.state === "record") {
+                digitizing.startRecording()
+            }
+        }
+
+        onCancelClicked: {
             if (stateManager.state === "edit") {
                 featurePanel.show_panel(featurePanel.feature, "Edit", "form")
             }
             stateManager.state = "view"
+            digitizing.stopRecording();
+            digitizingHighlight.visible = false
         }
+
+        onRemovePointClicked: {
+            digitizing.removeLastPoint()
+        }
+
+         onStopRecordingClicked: {
+             digitizing.stopRecording()
+             var pair = digitizing.lineOrPolygonFeature();
+             saveRecordedFeature(pair)
+             stateManager.state = "view"
+         }
     }
 
     RecordCrosshair {
         id: crosshair
         width: mapCanvas.width
         height: mapCanvas.height
-        visible: recordToolbar.visible
+        visible: recordToolbar.visible && digitizing.manualRecording
         z: positionMarker.z + 1
     }
 
@@ -418,13 +426,13 @@ ApplicationWindow {
                 // nothing to do with no active layer
                 return
             }
-            if (digitizing.hasLineGeometry(layer)) {
-                // skipping manual editing/adding vertices
-                recordFeature()
-            } else {
-                stateManager.state = "record"
-            }
 
+            if (digitizing.hasPointGeometry(layer)) {
+                recordToolbar.pointLayerSelected = true
+            } else {
+                recordToolbar.pointLayerSelected = false
+            }
+            stateManager.state = "record"
         }
     }
 
