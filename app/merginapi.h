@@ -32,6 +32,7 @@ struct MerginProject {
 struct MerginFile {
     QString path;
     QString checksum;
+    qint64 size;
 };
 
 
