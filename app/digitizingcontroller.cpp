@@ -165,8 +165,9 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint(const QgsPo
 
 void DigitizingController::startRecording()
 {
-  mRecordedPoints.clear();
+  if (mRecording) return;
 
+  mRecordedPoints.clear();
   mRecording = true;
   emit recordingChanged();
 }

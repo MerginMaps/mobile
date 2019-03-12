@@ -304,6 +304,10 @@ ApplicationWindow {
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
 
+        onVisibleChanged: {
+            if (!manualRecordig && visible) digitizing.startRecording()
+        }
+
         onAddClicked: {
             if (stateManager.state === "record") {
                 recordFeature()
@@ -323,10 +327,8 @@ ApplicationWindow {
 
         onManualRecordingClicked: {
             digitizing.manualRecording = !digitizing.manualRecording
-            if (!digitizing.manualRecording) {
-                if (stateManager.state === "record") {
-                    recordFeature()
-                }
+            if (!digitizing.manualRecording && stateManager.state === "record") {
+                digitizing.startRecording()
             }
         }
 
@@ -355,7 +357,7 @@ ApplicationWindow {
         id: crosshair
         width: mapCanvas.width
         height: mapCanvas.height
-        visible: recordToolbar.visible
+        visible: recordToolbar.visible && digitizing.manualRecording
         z: positionMarker.z + 1
     }
 
