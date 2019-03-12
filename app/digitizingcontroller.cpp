@@ -71,10 +71,9 @@ bool DigitizingController::hasPointGeometry(QgsVectorLayer *layer) const
   return layer && layer->geometryType() == QgsWkbTypes::PointGeometry;
 }
 
-// TODO move second condition to QgsQuickFeatureLayerPair class
 bool DigitizingController::isPairValid(QgsQuickFeatureLayerPair pair) const
 {
-  return pair.isValid() && pair.feature().geometry().isGeosValid();
+  return pair.isValid() && hasEnoughPoints();
 }
 
 void DigitizingController::fixZ(QgsPoint* point) const {
@@ -107,6 +106,17 @@ QgsCoordinateTransform DigitizingController::transformer() const
                                     featureLayerPair().layer()->crs(),
                                     context);
   return transform;
+}
+
+bool DigitizingController::hasEnoughPoints() const
+{
+   if (hasLineGeometry(featureLayerPair().layer())) {
+      return mRecordedPoints.length() >= 2;
+   } else if (hasPolygonGeometry(featureLayerPair().layer())) {
+      return mRecordedPoints.length() >= 3;
+   }
+
+   return !mRecordedPoints.isEmpty();
 }
 
 bool DigitizingController::manualRecording() const

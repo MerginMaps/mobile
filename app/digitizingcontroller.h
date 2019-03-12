@@ -83,6 +83,7 @@ private:
   QgsCoordinateTransform transformer() const;
   QgsQuickFeatureLayerPair lineFeature();
   QgsQuickFeatureLayerPair polygonFeature();
+  bool hasEnoughPoints() const;
 
   bool mRecording = false;
   //! Flag if a point is added to mRecordedPoints by user interaction (true) or onPositionChanged (false)
