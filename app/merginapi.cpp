@@ -181,8 +181,8 @@ void MerginApi::uploadProjectFiles(QString projectName, QByteArray json, QList<M
 
     for (MerginFile file: files) {
         QHttpPart filePart;
-        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("multipart/form-data"));
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"%1\"; filename=\"%2\"").arg(file.path).arg(file.path));
+        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("multipart/form-data"));
         QFile *f = new QFile(projectPath + file.path);
         f->open(QIODevice::ReadOnly);
         filePart.setBodyDevice(f);
@@ -196,6 +196,8 @@ void MerginApi::uploadProjectFiles(QString projectName, QByteArray json, QList<M
     request.setUrl(url);
     request.setRawHeader("Authorization", QByteArray("Basic " + token));
     mPendingRequests.insert(url, projectName);
+
+    qDebug() << request.rawHeaderList();
 
     QNetworkReply *reply = mManager.post(request, multiPart);
     connect(reply, &QNetworkReply::finished, this, &MerginApi::uploadProjectReplyFinished);
@@ -466,6 +468,7 @@ void MerginApi::uploadInfoReplyFinished()
             QJsonObject fileObject;
             fileObject.insert("path", file.path);
             fileObject.insert("checksum", file.checksum);
+            fileObject.insert("size", file.size);
             jsonArray.append(fileObject);
 
             if (key != "removed") {
@@ -514,12 +517,14 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetwor
             QString path = projectInfoMap.value("path").toString();
             QByteArray localChecksumBytes = getChecksum(projectPath + path);
             QString localChecksum = QString::fromLatin1(localChecksumBytes.data(), localChecksumBytes.size());
+            QFileInfo info(projectPath + path);
 
             // removed
             if (localChecksum.isEmpty()) {
                 MerginFile file;
                 file.checksum = serverChecksum;
                 file.path = path;
+                file.size = info.size();
                 removed.append(file);
             }
             // updated
@@ -532,7 +537,7 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetwor
                 } else {
                     file.checksum = localChecksum;
                 }
-
+                file.size = info.size();
                 file.path = path;
                 updatedFiles.append(file);
             }
@@ -547,6 +552,8 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles(QNetwor
               QString localChecksum = QString::fromLatin1(localChecksumBytes.data(), localChecksumBytes.size());
               file.checksum = localChecksum;
               file.path = p;
+              QFileInfo info(projectPath + p);
+              file.size = info.size();
               added.append(file);
           }
       }
