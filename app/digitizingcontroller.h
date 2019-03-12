@@ -45,7 +45,7 @@ public:
   //! Creates a new QgsFeature with point geometry from the given point with map coordinates.
   Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint(const QgsPoint &point);
   //! Creates a new QgsFeature with line/polygon geometry from the points stored since the start of recording
-  Q_INVOKABLE QgsQuickFeatureLayerPair getRecordedFeature();
+  Q_INVOKABLE QgsQuickFeatureLayerPair lineOrPolygonFeature();
   //! Returns (point geom) featurePair coords in map coordinates.
   Q_INVOKABLE QgsPoint pointFeatureMapCoordinates(QgsQuickFeatureLayerPair pair);
   //! Changes point geometry of given pair according given point.
@@ -80,11 +80,13 @@ private slots:
 
 private:
   void fixZ(QgsPoint* point) const; // add/remove Z coordinate based on layer wkb type
-  QgsCoordinateTransform tranformer() const;
+  QgsCoordinateTransform transformer() const;
   QgsQuickFeatureLayerPair lineFeature();
   QgsQuickFeatureLayerPair polygonFeature();
 
   bool mRecording = false;
+  //! Flag if a point is added to mRecordedPoints by user interaction (true) or onPositionChanged (false)
+  //! Used only for polyline and polygon features.
   bool mManualRecording = true;
   QgsQuickPositionKit *mPositionKit = nullptr;
   QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings, point's coord in layer CRS

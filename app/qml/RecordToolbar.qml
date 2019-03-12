@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
-import QtQuick.Layouts 1.7
+import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
@@ -62,8 +62,9 @@ Item {
             MainPanelButton {
                 id: removePointButton
                 width: root.itemSize
-                text: qsTr("Delete")
-                imageSource: "trash.svg"
+                text: qsTr("Undo")
+                imageSource: "undo.svg"
+                enabled: manualRecordig
 
                 onActivated: root.removePointClicked()
             }
@@ -76,7 +77,7 @@ Item {
             MainPanelButton {
                 id: addButton
                 width: root.itemSize
-                text: qsTr("Add")
+                text: qsTr("Add Point")
                 imageSource: "plus.svg"
                 enabled: manualRecordig
 

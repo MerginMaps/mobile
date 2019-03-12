@@ -323,6 +323,11 @@ ApplicationWindow {
 
         onManualRecordingClicked: {
             digitizing.manualRecording = !digitizing.manualRecording
+            if (!digitizing.manualRecording) {
+                if (stateManager.state === "record") {
+                    recordFeature()
+                }
+            }
         }
 
         onCancelClicked: {
@@ -340,7 +345,7 @@ ApplicationWindow {
 
          onStopRecordingClicked: {
              digitizing.stopRecording()
-             var pair = digitizing.getRecordedFeature();
+             var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
          }
