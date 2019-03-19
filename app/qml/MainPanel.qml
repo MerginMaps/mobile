@@ -119,7 +119,7 @@ Item {
         y: -rootMenu.height
         property bool isOpen: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
-        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.CloseOnPressOutside
 
         onClosed: isOpen = false
         onOpened: isOpen = true
