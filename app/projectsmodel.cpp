@@ -44,10 +44,15 @@ void ProjectModel::addProjectFromPath(QString path)
     QDirIterator it(path, QStringList() << QStringLiteral("*.qgs"), QDir::Files, QDirIterator::Subdirectories);
     QSet<QString> projectFilePaths;
 
+    int i = 0;
+    int projectExistsAt = -1;
     for (ProjectFile projectFile: mProjectFiles) {
         projectFilePaths << projectFile.path;
+        if (mDataDir + "/" + projectFile.folderName == path) {
+            projectExistsAt = i;
+        }
+        i++;
     }
-
 
     QList<ProjectFile> foundProjects;
     while (it.hasNext())
@@ -63,9 +68,7 @@ void ProjectModel::addProjectFromPath(QString path)
         projectFile.info = QString(created.toString());
         projectFile.isValid = true;
 
-        if (!projectFilePaths.contains(projectFile.path))
-            foundProjects.append(projectFile);
-
+        foundProjects.append(projectFile);
         qDebug() << "Found QGIS project: " << it.filePath();
     }
 
@@ -84,7 +87,11 @@ void ProjectModel::addProjectFromPath(QString path)
         project.info = "invalid project";
         project.isValid = false;
     }
-     mProjectFiles.append(project);
+
+    if (projectExistsAt >= 0)
+        mProjectFiles.removeAt(projectExistsAt);
+
+    mProjectFiles.append(project);
 }
 
 
@@ -156,8 +163,10 @@ QString ProjectModel::dataDir() const {
     return mDataDir;
 }
 
-void ProjectModel::addProject(QString projectFolder, QString projectName)
+void ProjectModel::addProject(QString projectFolder, QString projectName, bool successful)
 {
+    if (!successful) return;
+
     Q_UNUSED(projectName);
     beginResetModel();
     addProjectFromPath(projectFolder);
