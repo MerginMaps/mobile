@@ -61,7 +61,7 @@ signals:
     void projectDeleted(QString folderName);
 
 public slots:
-    void addProject(QString projectFolder, QString projectName);
+    void addProject(QString projectFolder, QString projectName, bool successful);
 
   private:
     void findProjectFiles();
