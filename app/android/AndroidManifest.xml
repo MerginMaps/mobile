@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="uk.co.lutraconsulting" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.2.2" android:versionCode="6" android:installLocation="auto">
-    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon">
+<manifest package="uk.co.lutraconsulting" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.2.4" android:versionCode="8" android:installLocation="auto">
+    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@mipmap/ic_input">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="uk.co.lutraconsulting.InputActivity" android:label="Input" android:launchMode="singleTop" android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
