@@ -38,12 +38,15 @@ layers, you can edit. In Input, you have two modes to capture feature:
 
   - Free hand: by adding points or nodes to lines or areas
 
+### Capturing points
 
 If your survey layer is a point layer, it will show a cross-hair at your GPS location. You can confirm the location by pressing **Confirm**. Alternatively, you can move the map to another location. The point below the cross-hair will be used as the recorded location. You can move back to your location, by pressing **GPS**.
 
 <img src="images/input_capture_point.png" alt="Capturing point" width=50% />​
 
-If your survey layer is a line or area, it the panel at the bottom changes to a figure similar to the one below:
+### Capturing lines or areas
+
+If your survey layer is a line or area, the panel at the bottom changes to a figure similar to the one below:
 
 <img src="images/input_capture_line.png" alt="Capturing point" width=50% />​
 
@@ -51,7 +54,7 @@ You can:
 
 - Use **Add point** to define the shape of your line or area manually by navigating through the map
 
-- If you want to **stream** the GPS to shape your line or area, press and hole **GPS** button on the bottom left corner.
+- If you want to **stream** the GPS to shape your line or area, press and hold **GPS** button on the bottom left corner.
 
 Once finished, press **Done**. If your feature is an area, it will join the last point to the first point to close the shape.
 
