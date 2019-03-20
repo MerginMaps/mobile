@@ -48,7 +48,7 @@ If your survey layer is a point layer, it will show a cross-hair at your GPS loc
 
 If your survey layer is a line or area, the panel at the bottom changes to a figure similar to the one below:
 
-<img src="images/input_capture_line.png" alt="Capturing point" width=50% />​
+<img src="images/input_capture_line.png" alt="Capturing lines" width=50% />​
 
 You can:
 
