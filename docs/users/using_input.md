@@ -32,17 +32,29 @@ Selecting a project under MY PROJECTS will open it in INPUT.
 ## Adding/editing features
 
 To add a feature, select the record button from the lower panel. When you tap on the record button, it will list all the
-layers, you can edit.
+layers, you can edit. In Input, you have two modes to capture feature:
+
+  - GPS location or streaming (if you are capturing lines/areas)
+
+  - Free hand: by adding points or nodes to lines or areas
 
 
 If your survey layer is a point layer, it will show a cross-hair at your GPS location. You can confirm the location by pressing **Confirm**. Alternatively, you can move the map to another location. The point below the cross-hair will be used as the recorded location. You can move back to your location, by pressing **GPS**.
 
 <img src="images/input_capture_point.png" alt="Capturing point" width=50% />​
 
-If your survey layer is a line, it will
-start the path and tracks your GPS as an input to the line vertices. To
-finish the line capturing, you will need to press the record button
-again.
+If your survey layer is a line or area, it the panel at the bottom changes to a figure similar to the one below:
+
+<img src="images/input_capture_line.png" alt="Capturing point" width=50% />​
+
+You can:
+
+- Use **Add point** to define the shape of your line or area manually by navigating through the map
+
+- If you want to **stream** the GPS to shape your line or area, press and hole **GPS** button on the bottom left corner.
+
+Once finished, press **Done**. If your feature is an area, it will join the last point to the first point to close the shape.
+
 
 You can set the default survey layer, so that when you press record, it will automatically adds the feature to the default layer. To set the default survey layer, click on **Settings** and set the survey layer under **Defaults**. Alternatively, you can press and hold **Record button** to set the default survey layer.
 
