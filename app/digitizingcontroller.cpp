@@ -116,7 +116,8 @@ bool DigitizingController::hasEnoughPoints() const
       return mRecordedPoints.length() >= 3;
    }
 
-   return !mRecordedPoints.isEmpty();
+   // Point capturing doesn't use mRecordedPoints
+   return true;
 }
 
 bool DigitizingController::manualRecording() const
