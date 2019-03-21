@@ -17,6 +17,7 @@
 #ifndef LAYERSMODEL_H
 #define LAYERSMODEL_H
 
+#include <QtCore/qsortfilterproxymodel.h>
 #include <QAbstractListModel>
 #include <QList>
 #include <QSet>

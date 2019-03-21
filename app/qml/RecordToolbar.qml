@@ -21,6 +21,7 @@ Item {
     property bool pointLayerSelected: true
     property bool manualRecordig: false
     property bool recording: false
+    property int activeLayerIndex: comboBox.currentIndex
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(comboBox.currentIndex), LayersModel.VectorLayer)
 
     id: root
@@ -46,12 +47,17 @@ Item {
                 id: label
                 height: extraPanel.height * 0.8
                 text: qsTr("Survey Layer")
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
 
             ComboBox {
                 id: comboBox
                 currentIndex: 1
-                height: extraPanel.height * 0.8
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 model: __layersModel
                 textRole: "name"
                 enabled: !root.recording

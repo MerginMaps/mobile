@@ -218,7 +218,6 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 
@@ -277,7 +276,6 @@ ApplicationWindow {
         gpsIndicatorColor: getGpsIndicatorColor()
 
         onOpenProjectClicked: openProjectPanel.openPanel()
-        onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
@@ -383,6 +381,8 @@ ApplicationWindow {
              } else {
                  recordToolbar.pointLayerSelected = false
              }
+
+             __appSettings.defaultLayer = layer.name
          }
     }
 
@@ -441,36 +441,36 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+            console.log("recordToolbar.activeLayerIndex", recordToolbar.activeLayerIndex)
+
+            recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+            console.log("recordToolbar.activeLayerIndex", recordToolbar.activeLayerIndex)
         }
     }
 
-    ActiveLayerPanel {
-        id: activeLayerPanel
-        height: window.height/2
-        width: window.width
-        edge: Qt.BottomEdge
-        z: zPanel
+//    ActiveLayerPanel {
+//        id: activeLayerPanel
+//        height: window.height/2
+//        width: window.width
+//        edge: Qt.BottomEdge
+//        z: zPanel
 
-        onLayerSettingChanged: {
-            var layer = activeLayerPanel.activeVectorLayer
-            console.log("@@!@##!onLayerSettingChanged@$!@$", layer)
-            console.log("@@!@##!onLayerSettingChanged@$!@$", layer.name)
+//        onLayerSettingChanged: {
+//            var layer = activeLayerPanel.activeVectorLayer
+//            if (!layer)
+//            {
+//                // nothing to do with no active layer
+//                return
+//            }
 
-            if (!layer)
-            {
-                // nothing to do with no active layer
-                return
-            }
-
-            if (digitizing.hasPointGeometry(layer)) {
-                recordToolbar.pointLayerSelected = true
-            } else {
-                recordToolbar.pointLayerSelected = false
-            }
-            stateManager.state = "record"
-        }
-    }
+//            if (digitizing.hasPointGeometry(layer)) {
+//                recordToolbar.pointLayerSelected = true
+//            } else {
+//                recordToolbar.pointLayerSelected = false
+//            }
+//            stateManager.state = "record"
+//        }
+//    }
 
     MapThemePanel {
         id: mapThemesPanel
