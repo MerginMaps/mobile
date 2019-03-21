@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>ActiveLayerPanel.qml</file>
         <file>FeaturePanel.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>

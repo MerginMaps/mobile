@@ -62,12 +62,6 @@ void LayersModel::reloadLayers() {
     }
 }
 
-//bool LayersModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
-//{
-//    return true;
-//    //return data(source_parent, Roles::isVector).toBool() && !data(source_parent, Roles::isReadOnly).toBool();
-//}
-
 QVariant LayersModel::data( const QModelIndex& index, int role ) const
 {
   int row = index.row();

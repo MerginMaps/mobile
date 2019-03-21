@@ -441,36 +441,9 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            console.log("recordToolbar.activeLayerIndex", recordToolbar.activeLayerIndex)
-
             recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
-            console.log("recordToolbar.activeLayerIndex", recordToolbar.activeLayerIndex)
         }
     }
-
-//    ActiveLayerPanel {
-//        id: activeLayerPanel
-//        height: window.height/2
-//        width: window.width
-//        edge: Qt.BottomEdge
-//        z: zPanel
-
-//        onLayerSettingChanged: {
-//            var layer = activeLayerPanel.activeVectorLayer
-//            if (!layer)
-//            {
-//                // nothing to do with no active layer
-//                return
-//            }
-
-//            if (digitizing.hasPointGeometry(layer)) {
-//                recordToolbar.pointLayerSelected = true
-//            } else {
-//                recordToolbar.pointLayerSelected = false
-//            }
-//            stateManager.state = "record"
-//        }
-//    }
 
     MapThemePanel {
         id: mapThemesPanel
