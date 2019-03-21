@@ -97,7 +97,7 @@ ApplicationWindow {
         var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
         var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
 
-        if (digitizing.hasPointGeometry(activeLayerPanel.activeVectorLayer)) {
+        if (digitizing.hasPointGeometry(recordToolbar.activeVectorLayer)) {
             var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
         } else {
@@ -247,7 +247,7 @@ ApplicationWindow {
     DigitizingController {
         id: digitizing
         positionKit: positionMarker.positionKit
-        layer: activeLayerPanel.activeVectorLayer
+        layer: recordToolbar.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
 
@@ -290,21 +290,39 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            activeLayerPanel.openPanel("record")
+            stateManager.state = "record"
         }
     }
 
     RecordToolbar {
         id: recordToolbar
         width: window.width
-        height: InputStyle.rowHeightHeader
+        height: InputStyle.rowHeightHeader * 2
+        rowHeight: InputStyle.rowHeightHeader
         z: zToolkits + 1
         y: window.height - height
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
+        recording: digitizing.recording
 
         onVisibleChanged: {
+            if (visible) {
+                var layer = recordToolbar.activeVectorLayer
+
+                if (!layer)
+                {
+                    // nothing to do with no active layer
+                    return
+                }
+
+                if (digitizing.hasPointGeometry(layer)) {
+                    recordToolbar.pointLayerSelected = true
+                } else {
+                    recordToolbar.pointLayerSelected = false
+                }
+            }
+
             if (!manualRecordig && visible) digitizing.startRecording()
         }
 
@@ -350,6 +368,21 @@ ApplicationWindow {
              var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
+         }
+
+         onActiveVectorLayerChanged: {
+             var layer = recordToolbar.activeVectorLayer
+             if (!layer)
+             {
+                 // nothing to do with no active layer
+                 return
+             }
+
+             if (digitizing.hasPointGeometry(layer)) {
+                 recordToolbar.pointLayerSelected = true
+             } else {
+                 recordToolbar.pointLayerSelected = false
+             }
          }
     }
 
@@ -421,6 +454,9 @@ ApplicationWindow {
 
         onLayerSettingChanged: {
             var layer = activeLayerPanel.activeVectorLayer
+            console.log("@@!@##!onLayerSettingChanged@$!@$", layer)
+            console.log("@@!@##!onLayerSettingChanged@$!@$", layer.name)
+
             if (!layer)
             {
                 // nothing to do with no active layer

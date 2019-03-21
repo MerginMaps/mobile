@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
     signal addClicked
@@ -14,10 +15,13 @@ Item {
     signal removePointClicked
     signal close
 
-    property int itemSize: mainPanel.height * 0.8
+    property int rowHeight: mainPanel.height
+    property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecordig: false
+    property bool recording: false
+    property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(comboBox.currentIndex), LayersModel.VectorLayer)
 
     id: root
     onClose: visible = false
@@ -28,9 +32,38 @@ Item {
         opacity: InputStyle.panelOpacity
     }
 
-    RowLayout {
-        height: parent.height
+    Rectangle {
+        id: extraPanel
+        height: root.rowHeight * 0.8
         width: parent.width
+        color: InputStyle.panelBackgroundLight
+
+        RowLayout {
+            height: extraPanel.height
+            width: parent.width
+
+            Label {
+                id: label
+                height: extraPanel.height * 0.8
+                text: qsTr("Survey Layer")
+            }
+
+            ComboBox {
+                id: comboBox
+                currentIndex: 1
+                height: extraPanel.height * 0.8
+                model: __layersModel
+                textRole: "name"
+                enabled: !root.recording
+            }
+
+        }
+    }
+
+    RowLayout {
+        height: root.rowHeight
+        width: parent.width
+        anchors.bottom: parent.bottom
 
         Item {
             height: parent.height
