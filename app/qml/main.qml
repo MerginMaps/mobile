@@ -306,22 +306,8 @@ ApplicationWindow {
 
         onVisibleChanged: {
             if (visible) {
-                var layer = recordToolbar.activeVectorLayer
-
-                if (!layer)
-                {
-                    // nothing to do with no active layer
-                    return
-                }
-
-                if (digitizing.hasPointGeometry(layer)) {
-                    recordToolbar.pointLayerSelected = true
-                } else {
-                    recordToolbar.pointLayerSelected = false
-                }
+                digitizing.manualRecording = true
             }
-
-            if (!manualRecordig && visible) digitizing.startRecording()
         }
 
         onAddClicked: {
