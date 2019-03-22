@@ -15,7 +15,8 @@ Item {
     signal removePointClicked
     signal close
 
-    property int rowHeight: mainPanel.height
+    property int rowHeight: InputStyle.rowHeightHeader
+    property int extraPanelHeight: InputStyle.rowHeightHeader * 0.6
     property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
@@ -35,7 +36,7 @@ Item {
 
     Rectangle {
         id: extraPanel
-        height: root.rowHeight * 0.8
+        height: extraPanelHeight
         width: parent.width
         color: InputStyle.panelBackgroundLight
 
@@ -47,10 +48,11 @@ Item {
                 id: label
                 height: extraPanel.height * 0.8
                 text: qsTr("Survey Layer")
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
+                leftPadding: InputStyle.panelMargin
+                rightPadding: InputStyle.panelMargin
             }
 
             ComboBox {
@@ -61,8 +63,43 @@ Item {
                 model: __layersModel
                 textRole: "name"
                 enabled: !root.recording
-            }
 
+                contentItem: Text {
+                    id: contentItem
+                    anchors.fill: parent
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+                    text: comboBox.currentText
+                    leftPadding: QgsQuick.Utils.dp * 8
+                    font.bold: true
+                }
+
+                delegate: Rectangle {
+                    id: itemContainer
+                    width: comboBox.width
+                    height: isVector &&  !isReadOnly ? extraPanel.height : 0
+                    visible: height ? true : false
+                    anchors.leftMargin: InputStyle.panelMargin
+                    anchors.rightMargin: InputStyle.panelMargin
+                    color: comboBox.currentIndex === index ? InputStyle.panelBackgroundLight : InputStyle.clrPanelMain
+
+                    Label {
+                        anchors.fill: parent
+                        horizontalAlignment: Qt.AlignLeft
+                        verticalAlignment: Qt.AlignVCenter
+                        text: name
+                        leftPadding: contentItem.leftPadding
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            comboBox.currentIndex = index
+                            comboBox.popup.close()
+                        }
+                    }
+                }
+            }
         }
     }
 

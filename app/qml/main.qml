@@ -295,8 +295,7 @@ ApplicationWindow {
     RecordToolbar {
         id: recordToolbar
         width: window.width
-        height: InputStyle.rowHeightHeader * 2
-        rowHeight: InputStyle.rowHeightHeader
+        height: InputStyle.rowHeightHeader + extraPanelHeight
         z: zToolkits + 1
         y: window.height - height
         visible: false
