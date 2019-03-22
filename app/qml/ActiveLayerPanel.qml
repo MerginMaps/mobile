@@ -6,7 +6,6 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property alias state: stateManager.state
     property int activeLayerIndex: -1
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
@@ -14,15 +13,12 @@ Drawer {
 
     signal layerSettingChanged()
 
-    function openPanel(state) {
-        layerPanel.state = state
-        if (state === "record") {
-            activeLayerIndex = -1
-            var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
-            if (defaultLayerIndex >= 0 ) {
-                activeLayerIndex = defaultLayerIndex
-                layerPanel.layerSettingChanged()
-            }
+    function openPanel() {
+        activeLayerIndex = -1
+        var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+        if (defaultLayerIndex >= 0 ) {
+            activeLayerIndex = defaultLayerIndex
+            layerPanel.layerSettingChanged()
         }
         layerPanel.visible = true
     }
@@ -37,18 +33,6 @@ Drawer {
         color: InputStyle.clrPanelMain
     }
 
-    Item {
-        id: stateManager
-        states: [
-            State {
-                name: "setup"
-            },
-            State {
-                name: "record"
-            }
-        ]
-    }
-
     Rectangle {
         id: header
         height: InputStyle.rowHeightHeader
@@ -59,7 +43,7 @@ Drawer {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            text: stateManager.state === "setup"? qsTr("Default survey layer") : qsTr("Survey layer")
+            text: qsTr("Survey layer")
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
@@ -69,32 +53,6 @@ Drawer {
 
         layer.enabled: true
         layer.effect: Shadow {}
-    }
-
-    Item {
-        id: cancelDefaultItem
-        width: parent.width
-        anchors.top: header.bottom
-        implicitHeight: __appSettings.defaultLayer && stateManager.state === "setup" ? InputStyle.rowHeight : 0
-        visible: implicitHeight
-
-        ExtendedMenuItem {
-            contentText: "Deselect default survey layer"
-            imageSource: "no.svg"
-            panelMargin: 0
-            anchors.leftMargin: InputStyle.panelMargin
-            anchors.rightMargin: InputStyle.panelMargin
-            showBorder: layerPanel.activeLayerIndex !== 0
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    __appSettings.defaultLayer = ""
-                    activeLayerIndex = -1
-                    layerPanel.close()
-                }
-            }
-        }
     }
 
     ListView {
@@ -154,13 +112,7 @@ Drawer {
                 contentText: name ? name : ""
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: {
-                    if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer === name
-                    } else {
-                        activeLayerIndex === index
-                    }
-                }
+                highlight: activeLayerIndex === index
                 showBorder: !__appSettings.defaultLayer || layerPanel.activeLayerIndex - 1 !== index
             }
         }

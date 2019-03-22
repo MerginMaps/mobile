@@ -351,7 +351,7 @@ ApplicationWindow {
 
          onLayerLabelClicked: {
              if (!digitizing.recording) {
-                 activeLayerPanel.openPanel("record")
+                 activeLayerPanel.openPanel()
              }
          }
     }
