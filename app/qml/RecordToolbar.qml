@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
     signal addClicked
@@ -13,11 +14,19 @@ Item {
     signal stopRecordingClicked
     signal removePointClicked
     signal close
+    signal layerLabelClicked
 
-    property int itemSize: mainPanel.height * 0.8
+    property int rowHeight: InputStyle.rowHeightHeader
+    property int extraPanelHeight: InputStyle.rowHeightHeader * 0.6
+    property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecordig: false
+    property string layerName
+
+    property int activeLayerIndex: -1
+    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property string activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
 
     id: root
     onClose: visible = false
@@ -28,9 +37,49 @@ Item {
         opacity: InputStyle.panelOpacity
     }
 
-    RowLayout {
-        height: parent.height
+    Rectangle {
+        id: extraPanel
+        height: extraPanelHeight
         width: parent.width
+        color: InputStyle.panelBackgroundLight
+
+        RowLayout {
+            height: extraPanel.height
+            width: parent.width
+
+            Rectangle {
+                id: itemContainer
+                anchors.fill: parent
+                height: extraPanel.height
+                color: InputStyle.fontColorBright
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        layerLabelClicked()
+                    }
+                }
+
+                ExtendedMenuItem {
+                    id: item
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 0
+                    rowHeight: extraPanel.height
+                    fontColor: "white"
+
+                    contentText: root.activeLayerName
+                    imageSource: root.activeLayerIcon
+                    showBorder: false
+                    Layout.alignment: Qt.AlignHCenter
+                }
+            }
+        }
+    }
+
+    RowLayout {
+        height: root.rowHeight
+        width: parent.width
+        anchors.bottom: parent.bottom
 
         Item {
             height: parent.height

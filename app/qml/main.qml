@@ -218,7 +218,6 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 
@@ -277,7 +276,6 @@ ApplicationWindow {
         gpsIndicatorColor: getGpsIndicatorColor()
 
         onOpenProjectClicked: openProjectPanel.openPanel()
-        onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
@@ -290,23 +288,22 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            activeLayerPanel.openPanel("record")
+            stateManager.state = "record"
         }
     }
 
     RecordToolbar {
         id: recordToolbar
         width: window.width
-        height: InputStyle.rowHeightHeader
+        height: InputStyle.rowHeightHeader + extraPanelHeight
         z: zToolkits + 1
         y: window.height - height
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
-
-        onVisibleChanged: {
-            if (!manualRecordig && visible) digitizing.startRecording()
-        }
+        activeLayerIndex: activeLayerPanel.activeLayerIndex
+        // reset manualRecording after opening
+        onVisibleChanged: if (visible) digitizing.manualRecording = true
 
         onAddClicked: {
             if (stateManager.state === "record") {
@@ -350,6 +347,12 @@ ApplicationWindow {
              var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
+         }
+
+         onLayerLabelClicked: {
+             if (!digitizing.recording) {
+                 activeLayerPanel.openPanel("record")
+             }
          }
     }
 

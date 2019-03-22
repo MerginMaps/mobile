@@ -11,8 +11,6 @@ Popup {
     property string defaultLayer: __appSettings.defaultLayer
     property color gpsIndicatorColor: InputStyle.softRed
 
-    signal defaultLayerClicked()
-
     id: settingsPanel
     visible: false
     padding: 0
@@ -48,24 +46,6 @@ Popup {
             id: settingListContent
             anchors.fill: parent
             spacing: 1
-
-            // Header "Defaults"
-            PanelItem {
-                color: InputStyle.panelBackgroundLight
-                text: qsTr("Defaults")
-                bold: true
-            }
-
-            PanelItem {
-                color: InputStyle.clrPanelMain
-                text: qsTr("Survey layer")
-                text2: (settingsPanel.defaultLayer ? settingsPanel.defaultLayer : "(none)")
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: settingsPanel.defaultLayerClicked()
-                }
-            }
 
             // Header "Mergin"
             PanelItem {

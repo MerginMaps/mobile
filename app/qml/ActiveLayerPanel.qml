@@ -22,8 +22,6 @@ Drawer {
             if (defaultLayerIndex >= 0 ) {
                 activeLayerIndex = defaultLayerIndex
                 layerPanel.layerSettingChanged()
-                // record without opening panel
-                return;
             }
         }
         layerPanel.visible = true
@@ -144,11 +142,8 @@ Drawer {
                 onClicked: {
                     layerPanel.activeLayerIndex = index
                     layerPanel.visible = false
-                    if (stateManager.state === "record") {
-                        layerPanel.layerSettingChanged()
-                    } else if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer = name
-                    }
+                    __appSettings.defaultLayer = name
+                    layerPanel.layerSettingChanged()
                 }
             }
 
