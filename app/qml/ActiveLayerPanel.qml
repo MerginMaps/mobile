@@ -57,9 +57,9 @@ Drawer {
 
     ListView {
         id: listView
-        height: layerPanel.height - header.height - cancelDefaultItem.implicitHeight
+        height: layerPanel.height - header.height
         width: parent.width
-        y: header.height + cancelDefaultItem.implicitHeight
+        y: header.height
         implicitWidth: parent.width
         implicitHeight: contentHeight
         model: __layersModel
