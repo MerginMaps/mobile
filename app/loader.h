@@ -59,7 +59,7 @@ public slots:
 private:
      QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
 private:
-    QgsProject mProject;
+    QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;
 };

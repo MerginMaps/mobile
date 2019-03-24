@@ -21,11 +21,18 @@
 #endif
 #include <QDebug>
 
-Loader::Loader(QObject* parent):QObject(parent)
-{}
+Loader::Loader(QObject* parent)
+  :QObject(parent)
+{
+  // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
+  // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
+  // iterator uses it for virtual fields, causing minor bugs with expressions)
+  // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
+  mProject = QgsProject::instance();
+}
 
 QgsProject* Loader::project() {
-    return &mProject;
+    return mProject;
 }
 
 void Loader::setPositionKit(QgsQuickPositionKit *kit)
@@ -47,14 +54,14 @@ bool Loader::load(const QString& filePath) {
 
     // Just clear project if empty
     if (filePath.isEmpty()) {
-        mProject.clear();
+        mProject->clear();
         emit projectReloaded();
         return true;
     }
 
     bool res = true;
-    if (mProject.fileName() != filePath) {
-        res = mProject.read(filePath);
+    if (mProject->fileName() != filePath) {
+        res = mProject->read(filePath);
         emit projectReloaded();
     }
 
@@ -68,7 +75,7 @@ void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
         return;
     }
 
-    const QVector<QgsMapLayer*> layers = mProject.layers<QgsMapLayer*>();
+    const QVector<QgsMapLayer*> layers = mProject->layers<QgsMapLayer*>();
     QgsRectangle extent;
     for (const QgsMapLayer* layer: layers) {
         QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent(layer, layer->extent());
@@ -172,7 +179,7 @@ QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes(QgsMapLayer 
   // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
   QList<QgsExpressionContextScope *> scopes;
   scopes << QgsExpressionContextUtils::globalScope();
-  scopes << QgsExpressionContextUtils::projectScope( &mProject );
+  scopes << QgsExpressionContextUtils::projectScope( mProject );
   scopes << QgsExpressionContextUtils::layerScope( layer );
   return scopes;
 }
