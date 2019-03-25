@@ -288,7 +288,13 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            stateManager.state = "record"
+            if (__layersModel.noOfEditableLayers() > 0) {
+                stateManager.state = "record"
+            } else {
+                popup.text = qsTr("No editable layers!")
+                popup.open()
+            }
+
         }
     }
 
@@ -411,7 +417,7 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer, 0)
         }
     }
 
