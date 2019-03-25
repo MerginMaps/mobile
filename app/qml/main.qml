@@ -417,7 +417,8 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer, 0)
+            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
+                                                                               __layersModel.firstNonOnlyReadableLayerIndex())
         }
     }
 

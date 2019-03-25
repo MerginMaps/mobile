@@ -150,6 +150,19 @@ int LayersModel::noOfEditableLayers() const
     return count;
 }
 
+int LayersModel::firstNonOnlyReadableLayerIndex() const
+{
+    int i = 0;
+    for (QgsMapLayer* layer: mLayers) {
+        if (!layer->readOnly()) {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+
 int LayersModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return mLayers.count();

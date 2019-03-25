@@ -15,7 +15,7 @@ Drawer {
 
     function openPanel() {
         activeLayerIndex = -1
-        var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer, 0)
+        var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer, __layersModel.firstNonOnlyReadableLayerIndex())
         if (defaultLayerIndex >= 0 ) {
             activeLayerIndex = defaultLayerIndex
             layerPanel.layerSettingChanged()
