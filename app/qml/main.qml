@@ -122,6 +122,24 @@ ApplicationWindow {
         }
     }
 
+    function updateRecordToolbar() {
+        var layer = activeLayerPanel.activeVectorLayer
+        if (!layer)
+        {
+            // nothing to do with no active layer
+            return
+        }
+
+        if (digitizing.hasPointGeometry(layer)) {
+            recordToolbar.pointLayerSelected = true
+        } else {
+            recordToolbar.pointLayerSelected = false
+        }
+        recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+        recordToolbar.activeLayerName= __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.Name)
+        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -311,6 +329,23 @@ ApplicationWindow {
         // reset manualRecording after opening
         onVisibleChanged: if (visible) digitizing.manualRecording = true
 
+        onActiveLayerIndexChanged: {
+            var layer = activeLayerPanel.activeVectorLayer
+            if (!layer)
+            {
+                // nothing to do with no active layer
+                return
+            }
+
+            if (digitizing.hasPointGeometry(layer)) {
+                recordToolbar.pointLayerSelected = true
+            } else {
+                recordToolbar.pointLayerSelected = false
+            }
+            activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+            activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
+        }
+
         onAddClicked: {
             if (stateManager.state === "record") {
                 recordFeature()
@@ -417,8 +452,11 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
+
             activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
                                                                                __layersModel.firstNonOnlyReadableLayerIndex())
+            activeLayerPanel.activeLayerIndexChanged()
+            updateRecordToolbar()
         }
     }
 
@@ -430,19 +468,7 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
-            var layer = activeLayerPanel.activeVectorLayer
-            if (!layer)
-            {
-                // nothing to do with no active layer
-                return
-            }
-
-            if (digitizing.hasPointGeometry(layer)) {
-                recordToolbar.pointLayerSelected = true
-            } else {
-                recordToolbar.pointLayerSelected = false
-            }
-            stateManager.state = "record"
+            updateRecordToolbar()
         }
     }
 

@@ -14,13 +14,11 @@ Drawer {
     signal layerSettingChanged()
 
     function openPanel() {
-        activeLayerIndex = -1
-        var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer, __layersModel.firstNonOnlyReadableLayerIndex())
-        if (defaultLayerIndex >= 0 ) {
-            activeLayerIndex = defaultLayerIndex
-            layerPanel.layerSettingChanged()
-        }
         layerPanel.visible = true
+    }
+
+    onActiveLayerNameChanged: {
+        __appSettings.defaultLayer = activeLayerName
     }
 
     id: layerPanel
