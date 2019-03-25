@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 import lc 1.0
@@ -41,37 +42,47 @@ Item {
         id: extraPanel
         height: extraPanelHeight
         width: parent.width
-        color: InputStyle.panelBackgroundLight
+        color: InputStyle.fontColorBright
 
-        RowLayout {
-            height: extraPanel.height
-            width: parent.width
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                layerLabelClicked()
+            }
+        }
 
-            Rectangle {
-                id: itemContainer
-                anchors.fill: parent
+        Item {
+            anchors.centerIn: parent
+            height: extraPanelHeight
+
+            Image {
+                id: icon
+                width: extraPanel.height
+                height: width
+                sourceSize.width: width
+                sourceSize.height: height
+                source: root.activeLayerIcon
+                fillMode: Image.PreserveAspectFit
+                anchors.right: label.left
+                anchors.margins: extraPanel.height/4
+
+            }
+
+            ColorOverlay {
+                anchors.fill: icon
+                source: icon
+                color: "white"
+            }
+
+
+            Text {
+                id: label
                 height: extraPanel.height
-                color: InputStyle.fontColorBright
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        layerLabelClicked()
-                    }
-                }
-
-                ExtendedMenuItem {
-                    id: item
-                    anchors.rightMargin: 0
-                    anchors.leftMargin: 0
-                    rowHeight: extraPanel.height
-                    fontColor: "white"
-
-                    contentText: root.activeLayerName
-                    imageSource: root.activeLayerIcon
-                    showBorder: false
-                    Layout.alignment: Qt.AlignHCenter
-                }
+                text: root.activeLayerName
+                color: "white"
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }
