@@ -2,8 +2,10 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
     signal addClicked
@@ -13,11 +15,18 @@ Item {
     signal stopRecordingClicked
     signal removePointClicked
     signal close
+    signal layerLabelClicked
 
-    property int itemSize: mainPanel.height * 0.8
+    property int rowHeight: InputStyle.rowHeightHeader
+    property int extraPanelHeight: InputStyle.rowHeightHeader * 0.6
+    property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecordig: false
+
+    property int activeLayerIndex: -1
+    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
+    property string activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
 
     id: root
     onClose: visible = false
@@ -28,9 +37,63 @@ Item {
         opacity: InputStyle.panelOpacity
     }
 
-    RowLayout {
-        height: parent.height
+    Rectangle {
+        id: extraPanel
+        height: extraPanelHeight
         width: parent.width
+        color: InputStyle.fontColorBright
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                layerLabelClicked()
+            }
+        }
+
+        Item {
+            anchors.centerIn: parent
+            height: extraPanelHeight
+
+            Item {
+                id: iconContainer
+                height: extraPanelHeight
+                width: extraPanelHeight
+                anchors.right: label.left
+
+                Image {
+                    id: icon
+                    anchors.fill: parent
+                    anchors.margins: extraPanelHeight/4
+                    sourceSize.width: width
+                    sourceSize.height: height
+                    source: root.activeLayerIcon
+                    fillMode: Image.PreserveAspectFit
+                    anchors.right: label.left
+                }
+
+                ColorOverlay {
+                    anchors.fill: icon
+                    source: icon
+                    color: "white"
+                }
+            }
+
+            Text {
+                id: label
+                height: extraPanel.height
+                text: root.activeLayerName
+                color: "white"
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+    }
+
+    RowLayout {
+        height: root.rowHeight
+        width: parent.width
+        anchors.bottom: parent.bottom
 
         Item {
             height: parent.height

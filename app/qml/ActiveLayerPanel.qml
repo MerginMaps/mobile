@@ -6,7 +6,6 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property alias state: stateManager.state
     property int activeLayerIndex: -1
     property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
@@ -14,19 +13,12 @@ Drawer {
 
     signal layerSettingChanged()
 
-    function openPanel(state) {
-        layerPanel.state = state
-        if (state === "record") {
-            activeLayerIndex = -1
-            var defaultLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
-            if (defaultLayerIndex >= 0 ) {
-                activeLayerIndex = defaultLayerIndex
-                layerPanel.layerSettingChanged()
-                // record without opening panel
-                return;
-            }
-        }
+    function openPanel() {
         layerPanel.visible = true
+    }
+
+    onActiveLayerNameChanged: {
+        __appSettings.defaultLayer = activeLayerName
     }
 
     id: layerPanel
@@ -39,18 +31,6 @@ Drawer {
         color: InputStyle.clrPanelMain
     }
 
-    Item {
-        id: stateManager
-        states: [
-            State {
-                name: "setup"
-            },
-            State {
-                name: "record"
-            }
-        ]
-    }
-
     Rectangle {
         id: header
         height: InputStyle.rowHeightHeader
@@ -61,7 +41,7 @@ Drawer {
             anchors.fill: parent
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            text: stateManager.state === "setup"? qsTr("Default survey layer") : qsTr("Survey layer")
+            text: qsTr("Survey layer")
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeTitle
             font.bold: true
@@ -73,37 +53,11 @@ Drawer {
         layer.effect: Shadow {}
     }
 
-    Item {
-        id: cancelDefaultItem
-        width: parent.width
-        anchors.top: header.bottom
-        implicitHeight: __appSettings.defaultLayer && stateManager.state === "setup" ? InputStyle.rowHeight : 0
-        visible: implicitHeight
-
-        ExtendedMenuItem {
-            contentText: "Deselect default survey layer"
-            imageSource: "no.svg"
-            panelMargin: 0
-            anchors.leftMargin: InputStyle.panelMargin
-            anchors.rightMargin: InputStyle.panelMargin
-            showBorder: layerPanel.activeLayerIndex !== 0
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    __appSettings.defaultLayer = ""
-                    activeLayerIndex = -1
-                    layerPanel.close()
-                }
-            }
-        }
-    }
-
     ListView {
         id: listView
-        height: layerPanel.height - header.height - cancelDefaultItem.implicitHeight
+        height: layerPanel.height - header.height
         width: parent.width
-        y: header.height + cancelDefaultItem.implicitHeight
+        y: header.height
         implicitWidth: parent.width
         implicitHeight: contentHeight
         model: __layersModel
@@ -144,11 +98,8 @@ Drawer {
                 onClicked: {
                     layerPanel.activeLayerIndex = index
                     layerPanel.visible = false
-                    if (stateManager.state === "record") {
-                        layerPanel.layerSettingChanged()
-                    } else if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer = name
-                    }
+                    __appSettings.defaultLayer = name
+                    layerPanel.layerSettingChanged()
                 }
             }
 
@@ -159,13 +110,7 @@ Drawer {
                 contentText: name ? name : ""
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: {
-                    if (stateManager.state === "setup") {
-                        __appSettings.defaultLayer === name
-                    } else {
-                        activeLayerIndex === index
-                    }
-                }
+                highlight: activeLayerIndex === index
                 showBorder: !__appSettings.defaultLayer || layerPanel.activeLayerIndex - 1 !== index
             }
         }

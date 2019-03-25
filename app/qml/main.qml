@@ -122,6 +122,23 @@ ApplicationWindow {
         }
     }
 
+    function updateRecordToolbar() {
+        var layer = activeLayerPanel.activeVectorLayer
+        if (!layer)
+        {
+            // nothing to do with no active layer
+            return
+        }
+
+        if (digitizing.hasPointGeometry(layer)) {
+            recordToolbar.pointLayerSelected = true
+        } else {
+            recordToolbar.pointLayerSelected = false
+        }
+        recordToolbar.activeLayerName= __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.Name)
+        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -218,7 +235,6 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
-      onDefaultLayerClicked: activeLayerPanel.openPanel("setup")
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 
@@ -277,7 +293,6 @@ ApplicationWindow {
         gpsIndicatorColor: getGpsIndicatorColor()
 
         onOpenProjectClicked: openProjectPanel.openPanel()
-        onSetDefaultLayerClicked: activeLayerPanel.openPanel("setup")
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
         onMyLocationHold: {
@@ -290,22 +305,31 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            activeLayerPanel.openPanel("record")
+            if (__layersModel.noOfEditableLayers() > 0) {
+                stateManager.state = "record"
+            } else {
+                popup.text = qsTr("No editable layers!")
+                popup.open()
+            }
+
         }
     }
 
     RecordToolbar {
         id: recordToolbar
         width: window.width
-        height: InputStyle.rowHeightHeader
+        height: InputStyle.rowHeightHeader + extraPanelHeight
         z: zToolkits + 1
         y: window.height - height
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
+        activeLayerIndex: activeLayerPanel.activeLayerIndex
+        // reset manualRecording after opening
+        onVisibleChanged: if (visible) digitizing.manualRecording = true
 
-        onVisibleChanged: {
-            if (!manualRecordig && visible) digitizing.startRecording()
+        onActiveLayerIndexChanged: {
+            updateRecordToolbar()
         }
 
         onAddClicked: {
@@ -350,6 +374,12 @@ ApplicationWindow {
              var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
+         }
+
+         onLayerLabelClicked: {
+             if (!digitizing.recording) {
+                 activeLayerPanel.openPanel()
+             }
          }
     }
 
@@ -408,7 +438,12 @@ ApplicationWindow {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer)
+
+            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
+                                                                               __layersModel.firstNonOnlyReadableLayerIndex())
+            activeLayerPanel.activeLayerIndexChanged()
+            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+            updateRecordToolbar()
         }
     }
 
@@ -420,19 +455,8 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
-            var layer = activeLayerPanel.activeVectorLayer
-            if (!layer)
-            {
-                // nothing to do with no active layer
-                return
-            }
-
-            if (digitizing.hasPointGeometry(layer)) {
-                recordToolbar.pointLayerSelected = true
-            } else {
-                recordToolbar.pointLayerSelected = false
-            }
-            stateManager.state = "record"
+            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+            updateRecordToolbar()
         }
     }
 

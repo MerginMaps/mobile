@@ -45,7 +45,9 @@ class LayersModel : public QAbstractListModel
 
     Q_INVOKABLE QVariant data ( const QModelIndex& index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;   
-    Q_INVOKABLE int rowAccordingName(QString name) const;
+    Q_INVOKABLE int rowAccordingName(QString name, int defaultIndex = -1) const;
+    Q_INVOKABLE int noOfEditableLayers() const;
+    Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 

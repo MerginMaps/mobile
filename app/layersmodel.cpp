@@ -126,7 +126,7 @@ QModelIndex LayersModel::index( int row ) const {
     return createIndex(row, 0, nullptr);
 }
 
-int LayersModel::rowAccordingName(QString name) const
+int LayersModel::rowAccordingName(QString name, int defaultIndex) const
 {
     int i = 0;
     for (QgsMapLayer* layer: mLayers) {
@@ -135,6 +135,31 @@ int LayersModel::rowAccordingName(QString name) const
         }
         i++;
     }
+    return defaultIndex;
+}
+
+int LayersModel::noOfEditableLayers() const
+{
+    int count = 0;
+    for (QgsMapLayer* layer: mLayers) {
+        if (!layer->readOnly()) {
+             count++;
+        }
+    }
+
+    return count;
+}
+
+int LayersModel::firstNonOnlyReadableLayerIndex() const
+{
+    int i = 0;
+    for (QgsMapLayer* layer: mLayers) {
+        if (!layer->readOnly()) {
+            return i;
+        }
+        i++;
+    }
+
     return -1;
 }
 

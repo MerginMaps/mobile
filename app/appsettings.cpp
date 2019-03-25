@@ -86,7 +86,6 @@ void AppSettings::setActiveProject(const QString &value)
         mActiveProject = value;
 
         emit activeProjectChanged();
-        emit defaultLayerChanged();
     }
 }
 
