@@ -55,25 +55,29 @@ Item {
             anchors.centerIn: parent
             height: extraPanelHeight
 
-            Image {
-                id: icon
-                width: extraPanel.height
-                height: width
-                sourceSize.width: width
-                sourceSize.height: height
-                source: root.activeLayerIcon
-                fillMode: Image.PreserveAspectFit
+            Item {
+                id: iconContainer
+                height: extraPanelHeight
+                width: extraPanelHeight
                 anchors.right: label.left
-                anchors.margins: extraPanel.height/4
 
+                Image {
+                    id: icon
+                    anchors.fill: parent
+                    anchors.margins: extraPanelHeight/4
+                    sourceSize.width: width
+                    sourceSize.height: height
+                    source: root.activeLayerIcon
+                    fillMode: Image.PreserveAspectFit
+                    anchors.right: label.left
+                }
+
+                ColorOverlay {
+                    anchors.fill: icon
+                    source: icon
+                    color: "white"
+                }
             }
-
-            ColorOverlay {
-                anchors.fill: icon
-                source: icon
-                color: "white"
-            }
-
 
             Text {
                 id: label
