@@ -135,7 +135,6 @@ ApplicationWindow {
         } else {
             recordToolbar.pointLayerSelected = false
         }
-        recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
         recordToolbar.activeLayerName= __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.Name)
         recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
     }
@@ -330,20 +329,7 @@ ApplicationWindow {
         onVisibleChanged: if (visible) digitizing.manualRecording = true
 
         onActiveLayerIndexChanged: {
-            var layer = activeLayerPanel.activeVectorLayer
-            if (!layer)
-            {
-                // nothing to do with no active layer
-                return
-            }
-
-            if (digitizing.hasPointGeometry(layer)) {
-                recordToolbar.pointLayerSelected = true
-            } else {
-                recordToolbar.pointLayerSelected = false
-            }
-            activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
-            activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
+            updateRecordToolbar()
         }
 
         onAddClicked: {
@@ -456,6 +442,7 @@ ApplicationWindow {
             activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
                                                                                __layersModel.firstNonOnlyReadableLayerIndex())
             activeLayerPanel.activeLayerIndexChanged()
+            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
             updateRecordToolbar()
         }
     }
@@ -468,6 +455,7 @@ ApplicationWindow {
         z: zPanel
 
         onLayerSettingChanged: {
+            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
             updateRecordToolbar()
         }
     }

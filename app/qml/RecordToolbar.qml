@@ -23,7 +23,6 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecordig: false
-    property string layerName
 
     property int activeLayerIndex: -1
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
