@@ -104,6 +104,7 @@ public:
 signals:
     void listProjectsFinished(ProjectList merginProjects);
     void syncProjectFinished(QString projectDir, QString projectName, bool successfully = true);
+    void reloadProject(QString projectDir);
     void networkErrorOccurred(QString message, QString additionalInfo);
     void notify(QString message);
     void merginProjectsChanged();

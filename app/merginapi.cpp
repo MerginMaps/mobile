@@ -371,6 +371,7 @@ void MerginApi::downloadProjectReplyFinished()
         handleDataStream(r, projectDir, !waitingForUpload);
         emit syncProjectFinished(projectDir, projectName);
         if (!waitingForUpload) {
+            emit reloadProject(projectDir);
             emit notify("Download successful");
         }
     }
