@@ -211,7 +211,28 @@ Popup {
                     anchors.rightMargin: InputStyle.panelMargin
                 }
             }
+
+            // App info
+           PanelItem {
+               color: InputStyle.panelBackgroundLight
+               text: qsTr("About")
+               bold: true
+
+               MouseArea {
+                   anchors.fill: parent
+                   onClicked: {
+                      // TODO open about
+                       aboutPanel.visible = true
+                   }
+               }
+           }
         }
 
+    }
+
+    AboutPanel {
+        id: aboutPanel
+        anchors.fill: parent
+        visible: false
     }
 }

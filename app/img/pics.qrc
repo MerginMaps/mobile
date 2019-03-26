@@ -35,5 +35,6 @@
         <file>crosshair.svg</file>
         <file>plus.svg</file>
         <file>undo.svg</file>
+        <file>input.svg</file>
     </qresource>
 </RCC>
