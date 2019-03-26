@@ -68,7 +68,7 @@ bool Loader::load(const QString& filePath) {
     return res;
 }
 
-bool Loader::reload(QString projectDir) {
+bool Loader::reloadProject(QString projectDir) {
     if (mProject->homePath() == projectDir) {
         return load(mProject->fileName());
     }
