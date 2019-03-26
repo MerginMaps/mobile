@@ -225,7 +225,7 @@ Item {
                     text: qsTr("Sign up")
                     font.pixelSize: signUpButton.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked:Qt.openUrlExternally(__merginApi.apiRoot + "/auth/signup");
+                    onClicked:Qt.openUrlExternally(__merginApi.apiRoot);
                     background: Rectangle {
                         color: InputStyle.fontColor
                     }
