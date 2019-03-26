@@ -56,6 +56,8 @@ signals:
 
 public slots:
      void appStateChanged(Qt::ApplicationState state);
+     // Reloads project if current project path matches given path (its the same project)
+     bool reloadProject(QString projectDir);
 private:
      QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
 private:

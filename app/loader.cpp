@@ -68,6 +68,13 @@ bool Loader::load(const QString& filePath) {
     return res;
 }
 
+bool Loader::reload(QString projectDir) {
+    if (mProject->homePath() == projectDir) {
+        return load(mProject->fileName());
+    }
+    return false;
+}
+
 void Loader::zoomToProject(QgsQuickMapSettings *mapSettings)
 {
     if (!mapSettings) {
