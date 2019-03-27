@@ -18,7 +18,6 @@ Item {
     }
 
     id: root
-    focus: true
 
     Pane {
         id: pane

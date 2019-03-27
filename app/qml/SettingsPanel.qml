@@ -20,6 +20,12 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
+    onAboutToHide: {
+        if (aboutPanel.visible) {
+            aboutPanel.visible = false
+        }
+    }
+
     PanelHeader {
         id: header
         height: settingsPanel.rowHeight
@@ -226,10 +232,7 @@ Popup {
 
                MouseArea {
                    anchors.fill: parent
-                   onClicked: {
-                      // TODO open about
-                       aboutPanel.visible = true
-                   }
+                   onClicked: aboutPanel.visible = true
                }
            }
         }
