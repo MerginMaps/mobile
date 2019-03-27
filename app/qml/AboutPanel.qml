@@ -8,7 +8,6 @@ import "."  // import InputStyle singleton
 
 Item {
     property string inputLink: "https://inputapp.io/"
-    property string version: "x.y.z"
 
     property real fieldHeight: InputStyle.rowHeight
     property real panelMargin: fieldHeight/4
@@ -16,13 +15,6 @@ Item {
 
     function close() {
         visible = false
-    }
-
-    Keys.onReleased: {
-        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-            event.accepted = true;
-            root.close()
-        }
     }
 
     id: root
@@ -49,14 +41,21 @@ Item {
 
             Column {
                 id: columnLayout
-                spacing: root.panelMargin
                 anchors.verticalCenter: parent.verticalCenter
+                width: parent.width
 
                 Image {
                     source: "input.svg"
                     width: content.width/2
                     sourceSize.width: width
                     anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Text {
+                    text: "v" + __version
+                    font.pixelSize: inputLinkBtn.height/2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: fontColor
                 }
 
                 Button {
@@ -80,6 +79,30 @@ Item {
                         elide: Text.ElideRight
                     }
                 }
+            }
+
+            Text {
+                id: developedText
+                text: "Developed by"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: lutraLogo.top
+                color: fontColor
+            }
+
+            Image {
+                id: lutraLogo
+                source: "lutra_logo.svg"
+                width: developedText.width
+                sourceSize.width: width
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: InputStyle.panelMargin * 2
+            }
+
+            ColorOverlay {
+                anchors.fill: lutraLogo
+                source: lutraLogo
+                color: fontColor
             }
         }
     }

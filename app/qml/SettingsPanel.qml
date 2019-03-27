@@ -212,9 +212,15 @@ Popup {
                 }
             }
 
+            // Delimeter
+            PanelItem {
+                color: InputStyle.panelBackgroundLight
+                text: ""
+                height: settingsPanel.rowHeight/3
+            }
+
             // App info
            PanelItem {
-               color: InputStyle.panelBackgroundLight
                text: qsTr("About")
                bold: true
 

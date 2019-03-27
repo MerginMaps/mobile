@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>home.svg</file>
-        <file>logo_lutra.png</file>
         <file>logo.png</file>
         <file>file.svg</file>
         <file>mIconLineLayer.svg</file>
@@ -36,5 +35,6 @@
         <file>plus.svg</file>
         <file>undo.svg</file>
         <file>input.svg</file>
+        <file>lutra_logo.svg</file>
     </qresource>
 </RCC>

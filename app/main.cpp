@@ -212,11 +212,17 @@ int main(int argc, char *argv[])
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
 
+
+  QString version;
+#ifdef INPUT_VERSION
+  version = STR(INPUT_VERSION);
+#endif
+
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion("0.1");
+  QCoreApplication::setApplicationVersion(version);
 
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
@@ -282,6 +288,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
   engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
+  engine.rootContext()->setContextProperty( "__version", version);
 
   // Set simulated position for desktop builds
 #ifndef ANDROID
