@@ -228,8 +228,6 @@ Popup {
             // App info
            PanelItem {
                text: qsTr("About")
-               bold: true
-
                MouseArea {
                    anchors.fill: parent
                    onClicked: aboutPanel.visible = true

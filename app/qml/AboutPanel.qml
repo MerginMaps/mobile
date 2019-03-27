@@ -44,6 +44,7 @@ Item {
                 width: parent.width
 
                 Image {
+                    id: inputLogo
                     source: "input.svg"
                     width: content.width/2
                     sourceSize.width: width
@@ -83,6 +84,7 @@ Item {
             Text {
                 id: developedText
                 text: "Developed by"
+                font.pixelSize: inputLinkBtn.height/2
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: lutraLogo.top
                 color: fontColor
@@ -91,7 +93,7 @@ Item {
             Image {
                 id: lutraLogo
                 source: "lutra_logo.svg"
-                width: developedText.width
+                width: inputLogo.width/2
                 sourceSize.width: width
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
