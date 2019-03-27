@@ -207,7 +207,10 @@ ProjectList MerginApi::updateMerginProjectList(ProjectList serverProjects)
 {
     QHash<QString, std::shared_ptr<MerginProject>> projectUpdates;
     for (std::shared_ptr<MerginProject> project: mMerginProjects) {
-        projectUpdates.insert(project->name, project);
+        QDir projectFolder(mDataDir + "/" + project->name);
+        if (projectFolder.exists()) {
+             projectUpdates.insert(project->name, project);
+        }
     }
 
     for (std::shared_ptr<MerginProject> project: serverProjects) {
@@ -636,7 +639,11 @@ void MerginApi::cacheProjects()
         projectMap.insert("name", p->name);
         QJsonArray tags;
         projectMap.insert("tags", tags.fromStringList(p->tags));
-        array.append(projectMap);
+
+        QDir projectFolder(mDataDir + "/" + p->name);
+        if (projectFolder.exists()) {
+            array.append(projectMap);
+        }
     }
     doc.setArray(array);
     cacheProjectsData(doc.toJson());
