@@ -181,6 +181,9 @@ ApplicationWindow {
       }
 
       onClicked: {
+       // no identify action in record state
+       if (stateManager.state === "record") return
+
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
         var res = identifyKit.identifyOne(screenPoint);
