@@ -20,6 +20,12 @@ Popup {
         color: InputStyle.clrPanelMain
     }
 
+    onAboutToHide: {
+        if (aboutPanel.visible) {
+            aboutPanel.visible = false
+        }
+    }
+
     PanelHeader {
         id: header
         height: settingsPanel.rowHeight
@@ -211,7 +217,29 @@ Popup {
                     anchors.rightMargin: InputStyle.panelMargin
                 }
             }
+
+            // Delimeter
+            PanelItem {
+                color: InputStyle.panelBackgroundLight
+                text: ""
+                height: settingsPanel.rowHeight/3
+            }
+
+            // App info
+           PanelItem {
+               text: qsTr("About")
+               MouseArea {
+                   anchors.fill: parent
+                   onClicked: aboutPanel.visible = true
+               }
+           }
         }
 
+    }
+
+    AboutPanel {
+        id: aboutPanel
+        anchors.fill: parent
+        visible: false
     }
 }

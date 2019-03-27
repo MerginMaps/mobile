@@ -30,5 +30,6 @@
         <file>ExternalResourceBundle.qml</file>
         <file>RecordToolbar.qml</file>
         <file>RecordCrosshair.qml</file>
+        <file>AboutPanel.qml</file>
     </qresource>
 </RCC>
