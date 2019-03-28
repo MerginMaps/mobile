@@ -25,6 +25,8 @@
 #include "merginapi.h"
 #include "merginprojectmodel.h"
 
+#include "test/testmerginapi.h"
+
 #include "qgsquickutils.h"
 #include "qgsproject.h"
 
@@ -181,6 +183,8 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  bool IS_TEST = true;
+
   qDebug() << "Built with QGIS version " << VERSION_INT;
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
@@ -229,45 +233,19 @@ int main(int argc, char *argv[])
   // and properly close connection after writting changes to gpkg.
   ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
-  // Create android utils
+  // Create Input classes
   AndroidUtils au;
-  engine.rootContext()->setContextProperty( "__androidUtils", &au );
-
-  // Create input utils
   InputUtils iu;
-  engine.rootContext()->setContextProperty( "__inputUtils", &iu );
-
-  // Create project model
   ProjectModel pm(projectDir);
   if (pm.rowCount() == 0) {
       qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
   }
-  engine.rootContext()->setContextProperty( "__projectsModel", &pm );
-
-  // Create QGIS project
   Loader loader;
-  engine.rootContext()->setContextProperty( "__loader", &loader );
-
-  // Create layer model
   LayersModel lm(loader.project());
-  engine.rootContext()->setContextProperty( "__layersModel", &lm );
-
-  // Create map theme model
   MapThemesModel mtm(loader.project());
-  engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
-
-  // Create app settings
   AppSettings as;
-  engine.rootContext()->setContextProperty( "__appSettings", &as );
-
-  // Create mergin api
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi( projectDir ));
-
-  engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
-
-  // Create mergin projects model
   MerginProjectModel mpm;
-  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
   // Connections
   QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
@@ -279,6 +257,24 @@ int main(int argc, char *argv[])
   QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
   QObject::connect(ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject);
   QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
+
+  if (IS_TEST) {
+
+        TestMerginApi test(ma.get(), &mpm);
+        return 0;
+        // TODO exit after last test;
+  }
+
+  // Register to QQmlEngine
+  engine.rootContext()->setContextProperty( "__androidUtils", &au );
+  engine.rootContext()->setContextProperty( "__inputUtils", &iu );
+  engine.rootContext()->setContextProperty( "__projectsModel", &pm );
+  engine.rootContext()->setContextProperty( "__loader", &loader );
+  engine.rootContext()->setContextProperty( "__layersModel", &lm );
+  engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
+  engine.rootContext()->setContextProperty( "__appSettings", &as );
+  engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
+  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");

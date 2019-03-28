@@ -89,6 +89,9 @@ mac {
 DEFINES += "CORE_EXPORT="
 DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
+DEFINES += "TEST_API_USERNAME=$${TEST_API_USERNAME}"
+DEFINES += "TEST_API_PASSWORD=$${TEST_API_PASSWORD}"
+DEFINES += "TEST_API=$${TEST_API}"
 
 CONFIG(debug, debug|release) {
   DEFINES += "QGIS_PREFIX_PATH=$${QGIS_PREFIX_PATH}"
@@ -114,7 +117,8 @@ appsettings.cpp \
 merginapi.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-inpututils.cpp
+inpututils.cpp \
+ test/testmerginapi.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -126,7 +130,8 @@ appsettings.h \
 merginapi.h \
 merginprojectmodel.h \
 androidutils.h \
-inpututils.h
+inpututils.h \
+    test/testmerginapi.h
 
 RESOURCES += \
     img/pics.qrc \
