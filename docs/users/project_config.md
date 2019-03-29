@@ -21,7 +21,7 @@ If you are using a vector layer for background layer:
 ## Survey layer
 
 Vector layers can be used as survey layer
-in Input. If you plan to synchronise your data using [Mergin](https://public.cloudmergin.com), currently only **Geopackage** vector format is supported. You can apply style and set up the forms according to the QGIS
+in Input. You can apply style and set up the forms according to the QGIS
 documentation.
 
 ## Layer properties
