@@ -70,12 +70,9 @@ static QString getDataDir(bool isTest = false) {
       }
   }
 #endif
-
-#ifdef TEST_PATH_SUFFIX
-  if (isTest)
-    dataPathRaw += STR(TEST_PATH_SUFFIX);
-#endif
-
+  if (isTest && ::getenv("TEST_PATH_SUFFIX")) {
+      dataPathRaw += ::getenv("TEST_PATH_SUFFIX");
+  }
   ::setenv("QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true);
 #else
   qDebug("== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==");
@@ -188,9 +185,10 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
-  // TODO !!! @vsklencar
-  bool IS_TEST = true;
-
+  bool IS_TEST = false;
+  for( int i = 0; i < argc; ++i ) {
+      if (std::string(argv[i]) == "--test") IS_TEST = true;
+  }
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
   // Require permissions before accessing data folder

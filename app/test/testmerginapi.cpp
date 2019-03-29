@@ -21,16 +21,15 @@ TestMerginApi::TestMerginApi(MerginApi* api, MerginProjectModel* mpm, ProjectMod
 void TestMerginApi::initTestCase()
 {
     if (mApi) {
-#ifdef TEST_API
-        mApiRoot = STR(TEST_API);
-        mApiRoot = "https://" + mApiRoot;
-#endif
-#ifdef TEST_API_USERNAME
-        mUsername = STR(TEST_API_USERNAME);
-#endif
-#ifdef TEST_API_PASSWORD
-        mPassword = STR(TEST_API_PASSWORD);
-#endif
+        if (::getenv("TEST_MERGIN_URL")) {
+           mApiRoot = ::getenv("TEST_MERGIN_URL");
+        }
+        if (::getenv("TEST_API_USERNAME")) {
+           mUsername = ::getenv("TEST_API_USERNAME");
+        }
+        if (::getenv("TEST_API_PASSWORD")) {
+           mPassword = ::getenv("TEST_API_PASSWORD");
+        }
         mApi->setApiRoot(mApiRoot);
         mApi->authorize(mUsername, mPassword);
     }

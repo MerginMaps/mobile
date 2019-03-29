@@ -29,7 +29,6 @@ class TestMerginApi: public QObject
     void testListProjectFinished();
     void testDownloadProjectFinished();
 
-
 private:
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
@@ -37,7 +36,6 @@ private:
     QString mApiRoot;
     QString mUsername;
     QString mPassword;
-
     QEventLoop mEventLoop;
 };
 
