@@ -45,7 +45,7 @@ void TestMerginApi::testListProject()
 void TestMerginApi::testDownloadProject()
 {
     QObject::connect(mApi, &MerginApi::syncProjectFinished, this, &TestMerginApi::testDownloadProjectFinished);
-    mApi->downloadProject(PROJECT_NAME);
+    mApi->downloadProject(mProjectName);
     mEventLoop.exec();
 }
 
@@ -59,15 +59,8 @@ void TestMerginApi::testListProjectFinished()
 {
     mEventLoop.quit();
     ProjectList projects = mMerginProjectModel->projects();
-    bool hasTestProject = false;
-    for(std::shared_ptr<MerginProject> p: projects) {
-        if (hasTestProject)
-            continue;
-        if (p->name == PROJECT_NAME)
-            hasTestProject = true;
-    }
-
-    Q_ASSERT(hasTestProject);
+    Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
+    mProjectName = mMerginProjectModel->projects().at(0)->name;
     QObject::disconnect(mApi, &MerginApi::listProjectsFinished, this, &TestMerginApi::testListProjectFinished);
     qDebug() << "TestMerginApi::stestListProjectFinished PASSED";
 }

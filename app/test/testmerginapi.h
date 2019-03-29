@@ -18,8 +18,6 @@ class TestMerginApi: public QObject
     explicit TestMerginApi(MerginApi* api, MerginProjectModel* mpm, ProjectModel* pm, QObject* parent = nullptr);
     ~TestMerginApi() = default;
 
-  const QString PROJECT_NAME = "mobile_demo_mod";
-
   public slots:
     void initTestCase();
     void testListProject();
@@ -37,6 +35,8 @@ private:
     QString mUsername;
     QString mPassword;
     QEventLoop mEventLoop;
+
+    QString mProjectName;
 };
 
 # endif // TESTMERGINAPI_H
