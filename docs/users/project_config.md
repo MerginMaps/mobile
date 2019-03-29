@@ -20,7 +20,7 @@ If you are using a vector layer for background layer:
 
 ## Survey layer
 
-Vector layers (currently points and lines) can be used as survey layer
+Vector layers can be used as survey layer
 in Input. You can apply style and set up the forms according to the QGIS
 documentation.
 
