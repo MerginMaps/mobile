@@ -49,7 +49,7 @@
 #include "loader.h"
 #include "appsettings.h"
 
-static QString getDataDir() {
+static QString getDataDir(bool isTest = false) {
 #ifdef QGIS_QUICK_DATA_PATH
   QString dataPathRaw(STR(QGIS_QUICK_DATA_PATH));
 
@@ -69,6 +69,11 @@ static QString getDataDir() {
           qDebug() << "usrDir: " << usrDir.path() << " not writable";
       }
   }
+#endif
+
+#ifdef TEST_PATH_SUFFIX
+  if (isTest)
+    dataPathRaw += STR(TEST_PATH_SUFFIX);
 #endif
 
   ::setenv("QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true);
@@ -183,55 +188,22 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  // TODO !!! @vsklencar
   bool IS_TEST = true;
 
   qDebug() << "Built with QGIS version " << VERSION_INT;
-  // we ship our fonts because they do not need to be installed on the target platform
-  QStringList fonts;
-  fonts << ":/Lato-Regular.ttf"
-        << ":/Lato-Bold.ttf";
-  for (QString font : fonts)
-  {
-    if (QFontDatabase::addApplicationFont(font) == -1)
-      qDebug() << "!! Failed to load font" << font;
-    else
-      qDebug() << "Loaded font" << font;
-  }
-
-  app.setFont(QFont("Lato"));
 
   // Require permissions before accessing data folder
 #ifdef ANDROID
   AndroidUtils::requirePermissions();
 #endif
   // Set/Get enviroment
-  QString dataDir = getDataDir();
+  QString dataDir = getDataDir(IS_TEST);
   QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
 
   init_qgis(dataDir + "/qgis-data");
   expand_pkg_data( QgsApplication::pkgDataPath() );
-  copy_demo_projects( projectDir );
-  QQmlEngine engine;
-  engine.addImportPath( QgsApplication::qmlImportPath() );
-  initDeclarative();
-
-
-  QString version;
-#ifdef INPUT_VERSION
-  version = STR(INPUT_VERSION);
-#endif
-
-  // Set up the QSettings environment must be done after qapp is created
-  QCoreApplication::setOrganizationName( "Lutra Consulting" );
-  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
-  QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion(version);
-
-  // QGIS environment variables to set
-  // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
-  // and properly close connection after writting changes to gpkg.
-  ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
   // Create Input classes
   AndroidUtils au;
@@ -259,11 +231,43 @@ int main(int argc, char *argv[])
   QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
 
   if (IS_TEST) {
-
-        TestMerginApi test(ma.get(), &mpm);
+        TestMerginApi test(ma.get(), &mpm, &pm);
         return 0;
-        // TODO exit after last test;
   }
+
+  // we ship our fonts because they do not need to be installed on the target platform
+  QStringList fonts;
+  fonts << ":/Lato-Regular.ttf"
+        << ":/Lato-Bold.ttf";
+  for (QString font : fonts)
+  {
+    if (QFontDatabase::addApplicationFont(font) == -1)
+      qDebug() << "!! Failed to load font" << font;
+    else
+      qDebug() << "Loaded font" << font;
+  }
+  app.setFont(QFont("Lato"));
+
+  copy_demo_projects( projectDir );
+  QQmlEngine engine;
+  engine.addImportPath( QgsApplication::qmlImportPath() );
+  initDeclarative();
+
+  QString version;
+#ifdef INPUT_VERSION
+  version = STR(INPUT_VERSION);
+#endif
+
+  // Set up the QSettings environment must be done after qapp is created
+  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
+  QCoreApplication::setApplicationName( "Input" );
+  QCoreApplication::setApplicationVersion(version);
+
+  // QGIS environment variables to set
+  // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
+  // and properly close connection after writting changes to gpkg.
+  ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
