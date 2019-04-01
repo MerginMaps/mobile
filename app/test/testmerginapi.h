@@ -33,8 +33,9 @@ private:
     QString mApiRoot;
     QString mUsername;
     QString mPassword;
-
     QString mProjectName;
+
+    ProjectList getProjectList();
 };
 
 # endif // TESTMERGINAPI_H
