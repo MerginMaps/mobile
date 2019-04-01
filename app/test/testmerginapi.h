@@ -2,6 +2,7 @@
 #define TESTMERGINAPI_H
 
 #include <QObject>
+#include <QEventLoop>
 
 #include <qgsvectorlayer.h>
 #include <merginapi.h>
@@ -21,8 +22,9 @@ class TestMerginApi: public QObject
     void initTestCase();
     void testListProject();
     void testDownloadProject();
-    void testCreateProject();
-    void testDeleteProject();
+    void testCreateProjectTwice();
+    void testDeleteNonExistingProject();
+    void testCreateDeleteProject();
 
     void cleanupTestCase();
 
@@ -34,6 +36,7 @@ private:
     QString mUsername;
     QString mPassword;
     QString mProjectName;
+    QEventLoop mEventLoop;
 
     ProjectList getProjectList();
 };

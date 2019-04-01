@@ -22,7 +22,7 @@ MerginApi::MerginApi(const QString& dataDir, QObject *parent)
     loadAuthData();
 }
 
-void MerginApi::listProjects(bool withFilter)
+void MerginApi::listProjects(QString filterTag)
 {
     if (!hasAuthData()) {
         emit authRequested();
@@ -33,8 +33,8 @@ void MerginApi::listProjects(bool withFilter)
     QNetworkRequest request;
     // projects filtered by tag "input_use"
     QString urlString = mApiRoot + "/v1/project";
-    if (withFilter) {
-        urlString +="?tags=input_use";
+    if (!filterTag.isEmpty()) {
+        urlString +="?tags=" + filterTag;
     }
     QUrl url(urlString);
     request.setUrl(url);

@@ -53,7 +53,7 @@ public:
      * If listing has been successful, updates cached merginProjects list.
      * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects(bool withFilter = false);
+    Q_INVOKABLE void listProjects(QString filterTag = QStringLiteral("input_use"));
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
