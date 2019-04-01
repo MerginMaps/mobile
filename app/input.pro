@@ -98,6 +98,7 @@ CONFIG(debug, debug|release) {
 QT += qml quick xml concurrent positioning quickcontrols2
 QT += network svg printsupport sql
 QT += opengl
+QT += testlib
 android {
     QT += androidextras
 }

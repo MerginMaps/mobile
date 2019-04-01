@@ -181,6 +181,10 @@ void initDeclarative() {
     qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
 }
 
+void initTestDeclarative() {
+    qRegisterMetaType<ProjectList>("ProjectList");
+}
+
 int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
@@ -229,8 +233,9 @@ int main(int argc, char *argv[])
   QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
 
   if (IS_TEST) {
-        TestMerginApi test(ma.get(), &mpm, &pm);
-        return 0;
+      initTestDeclarative();
+      TestMerginApi test(ma.get(), &mpm, &pm);
+      return 0;
   }
 
   // we ship our fonts because they do not need to be installed on the target platform

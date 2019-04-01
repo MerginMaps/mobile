@@ -1,5 +1,6 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
+#include <QSignalSpy>
 
 #define STR1(x)  #x
 #define STR(x)  STR1(x)
@@ -37,39 +38,34 @@ void TestMerginApi::initTestCase()
 
 void TestMerginApi::testListProject()
 {
-    QObject::connect(mApi, &MerginApi::listProjectsFinished, this, &TestMerginApi::testListProjectFinished);
     mApi->listProjects();
-    mEventLoop.exec();
+    QSignalSpy spy(mApi, SIGNAL(listProjectsFinished(ProjectList)));
+
+    QVERIFY(spy.wait(1000));
+    QCOMPARE(spy.count(), 1);
+
+    ProjectList projects = mMerginProjectModel->projects();
+    Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
+    mProjectName = mMerginProjectModel->projects().at(0)->name;
+    qDebug() << "TestMerginApi::testListProjectFinished PASSED";
 }
 
 void TestMerginApi::testDownloadProject()
 {
-    QObject::connect(mApi, &MerginApi::syncProjectFinished, this, &TestMerginApi::testDownloadProjectFinished);
+    QSignalSpy spy(mApi, SIGNAL(syncProjectFinished(QString, QString, bool)));
     mApi->downloadProject(mProjectName);
-    mEventLoop.exec();
+
+    QVERIFY(spy.wait(5000));
+    QCOMPARE(spy.count(), 1);
+
+    ProjectList projects = mMerginProjectModel->projects();
+    Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
+    mProjectName = mMerginProjectModel->projects().at(0)->name;
+    qDebug() << "TestMerginApi::testListProjectFinished PASSED";
 }
 
 void TestMerginApi::cleanupTestCase()
 {
     QDir testDir(mProjectModel->dataDir());
     testDir.removeRecursively();
-}
-
-void TestMerginApi::testListProjectFinished()
-{
-    mEventLoop.quit();
-    ProjectList projects = mMerginProjectModel->projects();
-    Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
-    mProjectName = mMerginProjectModel->projects().at(0)->name;
-    QObject::disconnect(mApi, &MerginApi::listProjectsFinished, this, &TestMerginApi::testListProjectFinished);
-    qDebug() << "TestMerginApi::stestListProjectFinished PASSED";
-}
-
-void TestMerginApi::testDownloadProjectFinished()
-{
-    int projectCountAfter = mProjectModel->rowCount();
-    Q_ASSERT(1 == projectCountAfter);
-    mEventLoop.quit();
-    QObject::disconnect(mApi, &MerginApi::syncProjectFinished, this, &TestMerginApi::testDownloadProjectFinished);
-    qDebug() << "TestMerginApi::testDownloadProjectFinished PASSED";
 }
