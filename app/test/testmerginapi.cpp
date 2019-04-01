@@ -89,7 +89,7 @@ void TestMerginApi::testDeleteProject()
 {
     testCreateProject();
 
-    QSignalSpy spy(mApi, SIGNAL(serverProjectDeleted()));
+    QSignalSpy spy(mApi, SIGNAL(serverProjectDeleted(QString)));
     mProjectName = "TEMPORARY_TEST_PROJECT";
     mApi->deleteProject(mProjectName);
     spy.wait(1000);

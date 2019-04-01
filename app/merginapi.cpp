@@ -17,6 +17,7 @@ MerginApi::MerginApi(const QString& dataDir, QObject *parent)
     QObject::connect(this, &MerginApi::syncProjectFinished,this, &MerginApi::setUpdateToProject);
     QObject::connect(this, &MerginApi::merginProjectsChanged,this, &MerginApi::cacheProjects);
     QObject::connect(this, &MerginApi::authChanged,this, &MerginApi::saveAuthData);
+    QObject::connect(this, &MerginApi::serverProjectDeleted,this, &MerginApi::projectDeleted);
 
     loadAuthData();
 }
@@ -186,8 +187,9 @@ void MerginApi::deleteProject(QString projectName)
     QUrl url(mApiRoot + "/v1/project/" + projectName);
     request.setUrl(url);
     request.setRawHeader("Authorization", QByteArray("Basic " + token));
+    mPendingRequests.insert(url, projectName);
     QNetworkReply *reply = mManager.deleteResource(request);
-    connect(reply, &QNetworkReply::finished, this, &MerginApi::serverProjectDeleted);
+    connect(reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished);
 }
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
@@ -331,8 +333,9 @@ void MerginApi::deleteProjectFinished()
 
     if (r->error() == QNetworkReply::NoError)
     {
+        QString projectName = mPendingRequests.value(r->url());
         emit notify("Project deleted");
-        emit serverProjectDeleted();
+        emit serverProjectDeleted(projectName);
     }
     else {
         qDebug() << r->errorString();
