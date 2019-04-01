@@ -25,6 +25,8 @@
 #include "merginapi.h"
 #include "merginprojectmodel.h"
 
+#include "test/testmerginapi.h"
+
 #include "qgsquickutils.h"
 #include "qgsproject.h"
 
@@ -47,7 +49,7 @@
 #include "loader.h"
 #include "appsettings.h"
 
-static QString getDataDir() {
+static QString getDataDir(bool isTest = false) {
 #ifdef QGIS_QUICK_DATA_PATH
   QString dataPathRaw(STR(QGIS_QUICK_DATA_PATH));
 
@@ -68,7 +70,9 @@ static QString getDataDir() {
       }
   }
 #endif
-
+  if (isTest && ::getenv("TEST_PATH_SUFFIX")) {
+      dataPathRaw += ::getenv("TEST_PATH_SUFFIX");
+  }
   ::setenv("QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true);
 #else
   qDebug("== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==");
@@ -177,11 +181,63 @@ void initDeclarative() {
     qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
 }
 
+void initTestDeclarative() {
+    qRegisterMetaType<ProjectList>("ProjectList");
+}
+
 int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  bool IS_TEST = false;
+  for( int i = 0; i < argc; ++i ) {
+      if (std::string(argv[i]) == "--test") IS_TEST = true;
+  }
   qDebug() << "Built with QGIS version " << VERSION_INT;
+
+  // Require permissions before accessing data folder
+#ifdef ANDROID
+  AndroidUtils::requirePermissions();
+#endif
+  // Set/Get enviroment
+  QString dataDir = getDataDir(IS_TEST);
+  QString projectDir = dataDir + "/projects";
+  setEnvironmentQgisPrefixPath();
+
+  init_qgis(dataDir + "/qgis-data");
+  expand_pkg_data( QgsApplication::pkgDataPath() );
+
+  // Create Input classes
+  AndroidUtils au;
+  InputUtils iu;
+  ProjectModel pm(projectDir);
+  if (pm.rowCount() == 0) {
+      qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
+  }
+  Loader loader;
+  LayersModel lm(loader.project());
+  MapThemesModel mtm(loader.project());
+  AppSettings as;
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi( projectDir ));
+  MerginProjectModel mpm;
+
+  // Connections
+  QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
+  QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
+  QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
+  QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
+  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished);
+  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject);
+  QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
+  QObject::connect(ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject);
+  QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
+
+  if (IS_TEST) {
+      initTestDeclarative();
+      TestMerginApi test(ma.get(), &mpm, &pm);
+      return 0;
+  }
+
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
   fonts << ":/Lato-Regular.ttf"
@@ -193,25 +249,12 @@ int main(int argc, char *argv[])
     else
       qDebug() << "Loaded font" << font;
   }
-
   app.setFont(QFont("Lato"));
 
-  // Require permissions before accessing data folder
-#ifdef ANDROID
-  AndroidUtils::requirePermissions();
-#endif
-  // Set/Get enviroment
-  QString dataDir = getDataDir();
-  QString projectDir = dataDir + "/projects";
-  setEnvironmentQgisPrefixPath();
-
-  init_qgis(dataDir + "/qgis-data");
-  expand_pkg_data( QgsApplication::pkgDataPath() );
   copy_demo_projects( projectDir );
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
-
 
   QString version;
 #ifdef INPUT_VERSION
@@ -229,56 +272,16 @@ int main(int argc, char *argv[])
   // and properly close connection after writting changes to gpkg.
   ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
 
-  // Create android utils
-  AndroidUtils au;
+  // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
-
-  // Create input utils
-  InputUtils iu;
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
-
-  // Create project model
-  ProjectModel pm(projectDir);
-  if (pm.rowCount() == 0) {
-      qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
-  }
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
-
-  // Create QGIS project
-  Loader loader;
   engine.rootContext()->setContextProperty( "__loader", &loader );
-
-  // Create layer model
-  LayersModel lm(loader.project());
   engine.rootContext()->setContextProperty( "__layersModel", &lm );
-
-  // Create map theme model
-  MapThemesModel mtm(loader.project());
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
-
-  // Create app settings
-  AppSettings as;
   engine.rootContext()->setContextProperty( "__appSettings", &as );
-
-  // Create mergin api
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi( projectDir ));
-
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
-
-  // Create mergin projects model
-  MerginProjectModel mpm;
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
-
-  // Connections
-  QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
-  QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
-  QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
-  QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
-  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished);
-  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject);
-  QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
-  QObject::connect(ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject);
-  QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
 
 #ifdef ANDROID
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");

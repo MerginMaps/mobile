@@ -98,6 +98,7 @@ CONFIG(debug, debug|release) {
 QT += qml quick xml concurrent positioning quickcontrols2
 QT += network svg printsupport sql
 QT += opengl
+QT += testlib
 android {
     QT += androidextras
 }
@@ -114,7 +115,8 @@ appsettings.cpp \
 merginapi.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-inpututils.cpp
+inpututils.cpp \
+test/testmerginapi.cpp
 
 HEADERS += \
 projectsmodel.h \
@@ -126,7 +128,8 @@ appsettings.h \
 merginapi.h \
 merginprojectmodel.h \
 androidutils.h \
-inpututils.h
+inpututils.h \
+test/testmerginapi.h
 
 RESOURCES += \
     img/pics.qrc \

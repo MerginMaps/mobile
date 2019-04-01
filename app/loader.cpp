@@ -169,7 +169,7 @@ QStringList Loader::mapTipFields(QgsQuickFeatureLayerPair pair)
 void Loader::appStateChanged(Qt::ApplicationState state)
 {
 #if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
-    if (!mRecording) {
+    if (!mRecording && mPositionKit) {
         if (state == Qt::ApplicationActive) {
             mPositionKit->source()->startUpdates();
         } else {
