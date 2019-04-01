@@ -21,6 +21,9 @@ class TestMerginApi: public QObject
     void initTestCase();
     void testListProject();
     void testDownloadProject();
+    void testCreateProject();
+    void testDeleteProject();
+
     void cleanupTestCase();
 
 private:

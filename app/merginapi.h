@@ -94,6 +94,10 @@ public:
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
 
+    // Test functions
+    void createProject(QString projectName);
+    void deleteProject(QString projectName);
+
     ProjectList projects();
 
     QString username() const;

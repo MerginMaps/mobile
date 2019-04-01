@@ -144,6 +144,47 @@ bool MerginApi::hasAuthData()
     return !mUsername.isEmpty() && !mPassword.isEmpty();
 }
 
+void MerginApi::createProject(QString projectName)
+{
+    if (!hasAuthData()) {
+        emit authRequested();
+        return;
+    }
+
+    QByteArray token = generateToken();
+    QNetworkRequest request;
+    QUrl url(mApiRoot + "/v1/project");
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
+    request.setRawHeader("Content-Type", "application/json");
+    request.setRawHeader("Accept", "application/json");
+
+    QJsonDocument jsonDoc;
+    QJsonObject jsonObject;
+    jsonObject.insert("name", projectName);
+    jsonObject.insert("public", false);
+    jsonDoc.setObject(jsonObject);
+    QByteArray json = jsonDoc.toJson(QJsonDocument::Compact);
+
+    QNetworkReply *reply = mManager.post(request, json);
+    //connect(reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished);
+}
+
+void MerginApi::deleteProject(QString projectName)
+{
+    if (!hasAuthData()) {
+        emit authRequested();
+        return;
+    }
+
+    QByteArray token = generateToken();
+    QNetworkRequest request;
+    QUrl url(mApiRoot + "/v1/project/" + projectName);
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
+    QNetworkReply *reply = mManager.deleteResource(request);
+}
+
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
 {
     if (!hasAuthData()) {

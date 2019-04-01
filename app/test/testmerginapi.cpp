@@ -14,8 +14,15 @@ TestMerginApi::TestMerginApi(MerginApi* api, MerginProjectModel* mpm, ProjectMod
 
     initTestCase();
 
-    testListProject();
-    testDownloadProject();
+    // temporarely disabled tests
+    if (false) {
+        testListProject();
+        testDownloadProject();
+    }
+
+
+    //testCreateProject();
+    testDeleteProject();
 
     cleanupTestCase();
 }
@@ -62,6 +69,26 @@ void TestMerginApi::testDownloadProject()
     Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
     mProjectName = mMerginProjectModel->projects().at(0)->name;
     qDebug() << "TestMerginApi::testListProjectFinished PASSED";
+}
+
+void TestMerginApi::testCreateProject()
+{
+    //QSignalSpy spy(mApi, SIGNAL(createProjectFinished()));
+    mProjectName = "test2";
+    mApi->createProject(mProjectName);
+
+    // TODO check if such projedt exists
+    qDebug() << "TestMerginApi::testCreateProject PASSED";
+}
+
+void TestMerginApi::testDeleteProject()
+{
+    //QSignalSpy spy(mApi, SIGNAL(createProjectFinished()));
+    mProjectName = "test2";
+    mApi->createProject(mProjectName);
+
+    // TODO check if such projedt DOESNT exists
+    qDebug() << "TestMerginApi::testDeleteProject PASSED";
 }
 
 void TestMerginApi::cleanupTestCase()
