@@ -97,7 +97,7 @@ void TestMerginApi::testCreateProjectTwice()
     QVERIFY(arguments.at(0).type() == QVariant::String);
     QVERIFY(arguments.at(1).type() == QVariant::String);
 
-    QCOMPARE(arguments.at(1), QStringLiteral("Mergin API error: createProject"));
+    QCOMPARE(arguments.at(1).toString(), QStringLiteral("Mergin API error: createProject"));
 
     //Clean created project
     QSignalSpy spy3(mApi, SIGNAL(serverProjectDeleted(QString)));
@@ -127,7 +127,7 @@ void TestMerginApi::testDeleteNonExistingProject()
     QList<QVariant> arguments = spy.takeFirst();
     QVERIFY(arguments.at(0).type() == QVariant::String);
     QVERIFY(arguments.at(1).type() == QVariant::String);
-    QCOMPARE(arguments.at(1), QStringLiteral("Mergin API error: deleteProject"));
+    QCOMPARE(arguments.at(1).toString(), QStringLiteral("Mergin API error: deleteProject"));
 
     qDebug() << "TestMerginApi::testDeleteNonExistingProject PASSED";
 }
