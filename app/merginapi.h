@@ -51,9 +51,9 @@ public:
      * when a response is received, parses project json, writes it to a cache text file and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * If listing has been successful, updates cached merginProjects list.
-     * @param
+     * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects();
+    Q_INVOKABLE void listProjects(QString filterTag = QStringLiteral("input_use"));
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
@@ -94,6 +94,10 @@ public:
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
 
+    // Test functions
+    void createProject(QString projectName);
+    void deleteProject(QString projectName);
+
     ProjectList projects();
 
     QString username() const;
@@ -111,6 +115,8 @@ signals:
     void authRequested();
     void authChanged();
     void apiRootChanged();
+    void projectCreated(QString projectName);
+    void serverProjectDeleted(QString projectName);
 
 public slots:
     void projectDeleted(QString projectName);
@@ -125,6 +131,8 @@ private slots:
     void continueWithUpload(QString projectDir, QString projectName, bool successfully = true);
     void setUpdateToProject(QString projectDir, QString projectName, bool successfully);
     void saveAuthData();
+    void createProjectFinished();
+    void deleteProjectFinished();
 
 
 private:

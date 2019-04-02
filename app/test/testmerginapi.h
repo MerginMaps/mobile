@@ -21,9 +21,15 @@ class TestMerginApi: public QObject
     void initTestCase();
     void testListProject();
     void testDownloadProject();
+    void testCreateProjectTwice();
+    void testDeleteNonExistingProject();
+    void testCreateDeleteProject();
+
     void cleanupTestCase();
 
 private:
+    int SHORT_REPLY = 1000;
+
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
     ProjectModel* mProjectModel;
@@ -31,7 +37,8 @@ private:
     QString mUsername;
     QString mPassword;
 
-    QString mProjectName;
+    ProjectList getProjectList();
+    bool hasProject(QString projectName, ProjectList projects);
 };
 
 # endif // TESTMERGINAPI_H

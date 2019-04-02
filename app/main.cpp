@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
   AndroidUtils au;
   InputUtils iu;
   ProjectModel pm(projectDir);
-  if (pm.rowCount() == 0) {
+  if (pm.rowCount() == 0 && !IS_TEST) {
       qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
   }
   Loader loader;

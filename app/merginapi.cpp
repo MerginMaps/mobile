@@ -17,11 +17,12 @@ MerginApi::MerginApi(const QString& dataDir, QObject *parent)
     QObject::connect(this, &MerginApi::syncProjectFinished,this, &MerginApi::setUpdateToProject);
     QObject::connect(this, &MerginApi::merginProjectsChanged,this, &MerginApi::cacheProjects);
     QObject::connect(this, &MerginApi::authChanged,this, &MerginApi::saveAuthData);
+    QObject::connect(this, &MerginApi::serverProjectDeleted,this, &MerginApi::projectDeleted);
 
     loadAuthData();
 }
 
-void MerginApi::listProjects()
+void MerginApi::listProjects(QString filterTag)
 {
     if (!hasAuthData()) {
         emit authRequested();
@@ -31,7 +32,11 @@ void MerginApi::listProjects()
     QByteArray token = generateToken();
     QNetworkRequest request;
     // projects filtered by tag "input_use"
-    QUrl url(mApiRoot + "/v1/project?tags=input_use");
+    QString urlString = mApiRoot + "/v1/project";
+    if (!filterTag.isEmpty()) {
+        urlString +="?tags=" + filterTag;
+    }
+    QUrl url(urlString);
     request.setUrl(url);
     request.setRawHeader("Authorization", QByteArray("Basic " + token));
 
@@ -142,6 +147,50 @@ void MerginApi::resetApiRoot()
 bool MerginApi::hasAuthData()
 {
     return !mUsername.isEmpty() && !mPassword.isEmpty();
+}
+
+void MerginApi::createProject(QString projectName)
+{
+    if (!hasAuthData()) {
+        emit authRequested();
+        return;
+    }
+
+    QByteArray token = generateToken();
+    QNetworkRequest request;
+    QUrl url(mApiRoot + "/v1/project");
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
+    request.setRawHeader("Content-Type", "application/json");
+    request.setRawHeader("Accept", "application/json");
+    mPendingRequests.insert(url, projectName);
+
+    QJsonDocument jsonDoc;
+    QJsonObject jsonObject;
+    jsonObject.insert("name", projectName);
+    jsonObject.insert("public", false);
+    jsonDoc.setObject(jsonObject);
+    QByteArray json = jsonDoc.toJson(QJsonDocument::Compact);
+
+    QNetworkReply *reply = mManager.post(request, json);
+    connect(reply, &QNetworkReply::finished, this, &MerginApi::createProjectFinished);
+}
+
+void MerginApi::deleteProject(QString projectName)
+{
+    if (!hasAuthData()) {
+        emit authRequested();
+        return;
+    }
+
+    QByteArray token = generateToken();
+    QNetworkRequest request;
+    QUrl url(mApiRoot + "/v1/project/" + projectName);
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
+    mPendingRequests.insert(url, projectName);
+    QNetworkReply *reply = mManager.deleteResource(request);
+    connect(reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished);
 }
 
 void MerginApi::downloadProjectFiles(QString projectName, QByteArray json)
@@ -259,6 +308,44 @@ void MerginApi::saveAuthData()
     settings.setValue("password", mPassword);
     settings.setValue("apiRoot", mApiRoot);
     settings.endGroup();
+}
+
+void MerginApi::createProjectFinished()
+{
+    QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
+    Q_ASSERT(r);
+
+    if (r->error() == QNetworkReply::NoError)
+    {
+        QString projectName = mPendingRequests.value(r->url());
+        emit notify("Project created");
+        emit projectCreated(projectName);
+    }
+    else {
+        qDebug() << r->errorString();
+        emit networkErrorOccurred( r->errorString(), "Mergin API error: createProject" );
+    }
+    mPendingRequests.remove(r->url());
+    r->deleteLater();
+}
+
+void MerginApi::deleteProjectFinished()
+{
+    QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
+    Q_ASSERT(r);
+
+    if (r->error() == QNetworkReply::NoError)
+    {
+        QString projectName = mPendingRequests.value(r->url());
+        emit notify("Project deleted");
+        emit serverProjectDeleted(projectName);
+    }
+    else {
+        qDebug() << r->errorString();
+        emit networkErrorOccurred( r->errorString(), "Mergin API error: deleteProject" );
+    }
+    mPendingRequests.remove(r->url());
+    r->deleteLater();
 }
 
 void MerginApi::projectDeleted(QString projectName)
