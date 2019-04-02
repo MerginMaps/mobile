@@ -15,9 +15,9 @@ then
     export DROPBOX_FOLDER="master"
   fi
 
-  sudo cp build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk /tmp/${APK_FILE}
+  sudo cp /usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk /tmp/${APK_FILE}
   python3 uploader.py --source /tmp/${APK_FILE} --destination "$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN
-  
+
 else
   echo -e "Not uploading artifacts ..."
   if [ "${TRAVIS_SECURE_ENV_VARS}" != "true" ];
