@@ -139,6 +139,13 @@ ApplicationWindow {
         recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
     }
 
+    function updateActiveLayerByName(layerName) {
+        activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(layerName,
+                                                                           __layersModel.firstNonOnlyReadableLayerIndex())
+        activeLayerPanel.activeLayerIndexChanged()
+        recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -442,10 +449,7 @@ ApplicationWindow {
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
 
-            activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
-                                                                               __layersModel.firstNonOnlyReadableLayerIndex())
-            activeLayerPanel.activeLayerIndexChanged()
-            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+            updateActiveLayerByName(__appSettings.defaultLayer)
             updateRecordToolbar()
         }
     }
@@ -509,6 +513,8 @@ ApplicationWindow {
         }
 
         onEditGeometryClicked: {
+            updateActiveLayerByName(featurePanel.feature.layer.name)
+            updateRecordToolbar()
             stateManager.state = "edit"
         }
     }
