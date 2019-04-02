@@ -3,6 +3,7 @@ set -e
 
 export UPLOAD_ARTIFACT_ID=$( [[ ${TRAVIS_PULL_REQUEST} =~ false ]] && echo ${TRAVIS_TAG} || echo ${TRAVIS_PULL_REQUEST} )
 export APK_FILE=input-${UPLOAD_ARTIFACT_ID}-${TRAVIS_COMMIT}-${ARCH}.apk
+export BUILD_FILE=/usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
 
 # If we have secure env vars and are in either a pull request or a tag, we need to upload artifacts
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
@@ -15,7 +16,7 @@ then
     export DROPBOX_FOLDER="master"
   fi
 
-  sudo cp /usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk /tmp/${APK_FILE}
+  sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
   python3 uploader.py --source /tmp/${APK_FILE} --destination "$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN
 
 else
