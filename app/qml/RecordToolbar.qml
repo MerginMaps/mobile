@@ -23,6 +23,7 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecordig: false
+    property bool extraPanelVisible: true
 
     property int activeLayerIndex: -1
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
@@ -42,6 +43,7 @@ Item {
         height: extraPanelHeight
         width: parent.width
         color: InputStyle.fontColorBright
+        visible: extraPanelVisible
 
         MouseArea {
             anchors.fill: parent
