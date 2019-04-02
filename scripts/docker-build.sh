@@ -46,8 +46,8 @@ ln -s ${BUILD_DIR}/.gradle /root/.gradle
 pushd ${BUILD_DIR}
 cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
 ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
-make release
-make release install INSTALL_ROOT=${INSTALL_DIR}
+make
+make install INSTALL_ROOT=${INSTALL_DIR}
 
 ${QT_ANDROID}/bin/androiddeployqt \
     --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \

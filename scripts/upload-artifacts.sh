@@ -3,7 +3,7 @@ set -e
 
 export UPLOAD_ARTIFACT_ID=$( [[ ${TRAVIS_PULL_REQUEST} =~ false ]] && echo ${TRAVIS_TAG} || echo ${TRAVIS_PULL_REQUEST} )
 export APK_FILE=input-${UPLOAD_ARTIFACT_ID}-${TRAVIS_COMMIT}-${ARCH}.apk
-export BUILD_FILE=/usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
+export BUILD_FILE=/usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-debug.apk
 
 # If we have secure env vars and are in either a pull request or a tag, we need to upload artifacts
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
