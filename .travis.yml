@@ -1,25 +1,28 @@
 language: python
 python:
-  - 3.5
+- 3.5
 rvm:
-  - 2.0.0
-
+- 2.0.0
 services:
-  - docker
-
+- docker
 before_install:
-  - gem update --system
-  - gem --version
+- gem update --system
+- gem --version
+- pip3 install dropbox
 
 script:
-  - export QFIELD_SDK_VERSION=20190221
-  - echo "travis_fold:start:docker-pull"
-  - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
-  - echo "travis_fold:end:docker-pull"
-  - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+- export QFIELD_SDK_VERSION=20190221
+- echo "travis_fold:start:docker-pull"
+- docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
+- echo "travis_fold:end:docker-pull"
+- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+- ./scripts/upload-artifacts.sh
 
 jobs:
   include:
-    - stage: build
-      env:
-        - ARCH=armv7
+  - stage: build
+    env:
+    - ARCH=armv7
+env:
+  global:
+    secure: xd5XySatBed9IghvB1DHojEmR6M+U6+Rq7tf8wPeaI8cltKJGRZp6263as7MC3P4UE/60BJzfSZooZGEuCsBrkNR0P2/FdIMwKFtn3Vd8OGZLXDSgwXOuhDdpqnTg5dyiSvFFbdW65XCwa42rJoIWP85aOf9L/+3lylddVhgFL51ThPOoN9vW7bSMK7J0xSN7VQtgVyMvmIP90Gx7GXwSPeKoFmVf6BRe+qZ3DOSChIvZBAOwwb+pzsmM403Z4rosb9Bkk81e05NJEZwkNq9iyMAAKEOMDCKrYkBi6UvvAf6lzxlI+PlA8E0/6BVL/q660vTa9UVv31DGbf+Q0I2jPi8Gs/dkTN9jojMfcP83Aq1Xj2Ej65Ym42PSOdU/UfeK9/znYZIUCYEDXY9rb9YOPOK3DvVA5tp5fztXKtg5oSgbjZs8XptxlGZ5oZu4Ha9DvDq+67O166QfP7QEGD4OmhYRoeX47Wg6Uth8Xglm79vy6P8Dljm6rph20YNiHN6KkAS0t8ZTe/Wk+xjIUAbFpMu973tI4gAuvuwRv8WbveQNNvOj1ywBVL8GH8SPyq8bD5HLnPBGRRuhrxIxJAjgiwtz4dfyRba/mk2JJTA0KJsMU1JGi225YSgZpw107KIXCFZLAcxqu39qiPfBeh7meeW6IMfiroHR18dX3yk8yk=
