@@ -78,7 +78,7 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
     }
     case isVector:
     {
-      return layer->type() == QgsMapLayer::VectorLayer;
+      return layer->type() == QgsMapLayerType::VectorLayer;
     }
     case isReadOnly:
     {
