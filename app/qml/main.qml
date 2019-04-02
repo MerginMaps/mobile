@@ -38,11 +38,19 @@ ApplicationWindow {
             }
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
+                recordToolbar.extraPanelVisible = true
+                recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+                updateRecordToolbar()
                 recordToolbar.gpsSwitchClicked()
             }
             else if (stateManager.state === "edit") {
                 featurePanel.visible = false
                 recordToolbar.visible = true
+                recordToolbar.extraPanelVisible = false
+                recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
+                                                                                   __layersModel.firstNonOnlyReadableLayerIndex())
+                updateRecordToolbar()
+
                 var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
                 mapCanvas.mapSettings.setCenter(screenPos);
             }
@@ -123,7 +131,7 @@ ApplicationWindow {
     }
 
     function updateRecordToolbar() {
-        var layer = activeLayerPanel.activeVectorLayer
+        var layer = recordToolbar.activeVectorLayer
         if (!layer)
         {
             // nothing to do with no active layer
@@ -450,8 +458,6 @@ ApplicationWindow {
             __loader.load(openProjectPanel.activeProjectPath)
 
             updateActiveLayerByName(__appSettings.defaultLayer)
-            updateRecordToolbar()
-            recordToolbar.extraPanelVisible = true
         }
     }
 
@@ -514,9 +520,6 @@ ApplicationWindow {
         }
 
         onEditGeometryClicked: {
-            updateActiveLayerByName(featurePanel.feature.layer.name)
-            updateRecordToolbar()
-            recordToolbar.extraPanelVisible = false
             stateManager.state = "edit"
         }
     }
