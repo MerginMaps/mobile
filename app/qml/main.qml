@@ -328,7 +328,7 @@ ApplicationWindow {
     RecordToolbar {
         id: recordToolbar
         width: window.width
-        height: InputStyle.rowHeightHeader + extraPanelHeight
+        height: InputStyle.rowHeightHeader + ((extraPanelVisible) ? extraPanelHeight : 0)
         z: zToolkits + 1
         y: window.height - height
         visible: false
@@ -451,6 +451,7 @@ ApplicationWindow {
 
             updateActiveLayerByName(__appSettings.defaultLayer)
             updateRecordToolbar()
+            recordToolbar.extraPanelVisible = true
         }
     }
 
@@ -515,6 +516,7 @@ ApplicationWindow {
         onEditGeometryClicked: {
             updateActiveLayerByName(featurePanel.feature.layer.name)
             updateRecordToolbar()
+            recordToolbar.extraPanelVisible = false
             stateManager.state = "edit"
         }
     }
