@@ -163,6 +163,7 @@ void MerginApi::createProject(QString projectName)
     request.setRawHeader("Authorization", QByteArray("Basic " + token));
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Accept", "application/json");
+    mPendingRequests.insert(url, projectName);
 
     QJsonDocument jsonDoc;
     QJsonObject jsonObject;
@@ -316,8 +317,9 @@ void MerginApi::createProjectFinished()
 
     if (r->error() == QNetworkReply::NoError)
     {
+        QString projectName = mPendingRequests.value(r->url());
         emit notify("Project created");
-        emit projectCreated();
+        emit projectCreated(projectName);
     }
     else {
         qDebug() << r->errorString();

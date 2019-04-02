@@ -115,7 +115,7 @@ signals:
     void authRequested();
     void authChanged();
     void apiRootChanged();
-    void projectCreated();
+    void projectCreated(QString projectName);
     void serverProjectDeleted(QString projectName);
 
 public slots:

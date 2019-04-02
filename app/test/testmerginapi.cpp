@@ -21,7 +21,7 @@ TestMerginApi::TestMerginApi(MerginApi* api, MerginProjectModel* mpm, ProjectMod
     testCreateDeleteProject();
 
     cleanupTestCase();
-    qDebug() << "TestMerginApi - ALL TEST PASSED";
+    qDebug() << "TestMerginApi - ALL TESTS PASSED";
 }
 void TestMerginApi::initTestCase()
 {
@@ -46,7 +46,7 @@ void TestMerginApi::testListProject()
     QSignalSpy spy(mApi, SIGNAL(listProjectsFinished(ProjectList)));
     mApi->listProjects(QString());
 
-    QVERIFY(spy.wait(1000));
+    QVERIFY(spy.wait(SHORT_REPLY));
     QCOMPARE(spy.count(), 1);
 
     ProjectList projects = mMerginProjectModel->projects();
@@ -58,46 +58,39 @@ void TestMerginApi::testDownloadProject()
 {
     qDebug() << "TestMerginApi::testDownloadProject START";
     QSignalSpy spy(mApi, SIGNAL(syncProjectFinished(QString, QString, bool)));
-    mProjectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
-    mApi->downloadProject(mProjectName);
+    QString projectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
+    mApi->downloadProject(projectName);
 
     QVERIFY(spy.wait(5000));
     QCOMPARE(spy.count(), 1);
 
     ProjectList projects = mMerginProjectModel->projects();
     Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
-    mProjectName = mMerginProjectModel->projects().at(0)->name;
+    projectName = mMerginProjectModel->projects().at(0)->name;
     qDebug() << "TestMerginApi::testDownloadProject PASSED";
 }
 
 void TestMerginApi::testCreateProjectTwice()
 {
     qDebug() << "TestMerginApi::testCreateProjectTwice START";
-    mProjectName = "TEMPORARY_TEST_PROJECT";
+    QString projectName = "TEMPORARY_TEST_PROJECT";
     bool containsTestProject = false;
     ProjectList projects = getProjectList();
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(!containsTestProject);
+    Q_ASSERT(!hasProject(projectName, projects));
 
-    QSignalSpy spy(mApi, SIGNAL(projectCreated()));
-    mApi->createProject(mProjectName);
-    QVERIFY(spy.wait(1000));
+    QSignalSpy spy(mApi, SIGNAL(projectCreated(QString)));
+    mApi->createProject(projectName);
+    QVERIFY(spy.wait(SHORT_REPLY));
     QCOMPARE(spy.count(), 1);
 
     projects = getProjectList();
     Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
-
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(containsTestProject);
+    Q_ASSERT(hasProject(projectName, projects));
 
     // Create again, expecting error
     QSignalSpy spy2(mApi, SIGNAL(networkErrorOccurred(QString, QString)));
-    mApi->createProject(mProjectName);
-    QVERIFY(spy2.wait(1000));
+    mApi->createProject(projectName);
+    QVERIFY(spy2.wait(SHORT_REPLY));
     QCOMPARE(spy2.count(), 1);
 
     QList<QVariant> arguments = spy2.takeFirst();
@@ -107,16 +100,13 @@ void TestMerginApi::testCreateProjectTwice()
     QCOMPARE(arguments.at(1), QStringLiteral("Mergin API error: createProject"));
 
     //Clean created project
-    QSignalSpy spy3(mApi, SIGNAL(networkErrorOccurred(QString, QString)));
-    mApi->deleteProject(mProjectName);
-    spy3.wait(1000);
+    QSignalSpy spy3(mApi, SIGNAL(serverProjectDeleted(QString)));
+    mApi->deleteProject(projectName);
+    spy3.wait(SHORT_REPLY);
 
     containsTestProject = false;
     projects = getProjectList();
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(!containsTestProject);
+    Q_ASSERT(!hasProject(projectName, projects));
 
     qDebug() << "TestMerginApi::testCreateProjectTwice PASSED";
 }
@@ -124,19 +114,15 @@ void TestMerginApi::testCreateProjectTwice()
 void TestMerginApi::testDeleteNonExistingProject()
 {
     qDebug() << "TestMerginApi::testDeleteNonExistingProject START";
-    // Checks if projects doestn exist
-    mProjectName = "TEMPORARY_TEST_PROJECT";
-    bool containsTestProject = false;
+    // Checks if projects doesn't exist
+    QString projectName = "TEMPORARY_TEST_PROJECT";
     ProjectList projects = getProjectList();
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(!containsTestProject);
+    Q_ASSERT(!hasProject(projectName, projects));
 
     // Try to delete non-existing project
     QSignalSpy spy(mApi, SIGNAL(networkErrorOccurred(QString, QString)));
-    mApi->deleteProject(mProjectName);
-    spy.wait(1000);
+    mApi->deleteProject(projectName);
+    spy.wait(SHORT_REPLY);
 
     QList<QVariant> arguments = spy.takeFirst();
     QVERIFY(arguments.at(0).type() == QVariant::String);
@@ -150,39 +136,27 @@ void TestMerginApi::testCreateDeleteProject()
 {
     qDebug() << "TestMerginApi::testCreateDeleteProject START";
     // Create a project
-    mProjectName = "TEMPORARY_TEST_PROJECT";
-    bool containsTestProject = false;
-
+    QString projectName = "TEMPORARY_TEST_PROJECT";
     ProjectList projects = getProjectList();
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(!containsTestProject);
+    Q_ASSERT(!hasProject(projectName, projects));
 
-    QSignalSpy spy(mApi, SIGNAL(projectCreated()));
-    mApi->createProject(mProjectName);
-    QVERIFY(spy.wait(1000));
+    QSignalSpy spy(mApi, SIGNAL(projectCreated(QString)));
+    mApi->createProject(projectName);
+    QVERIFY(spy.wait(SHORT_REPLY));
     QCOMPARE(spy.count(), 1);
 
     projects = getProjectList();
     Q_ASSERT(!mMerginProjectModel->projects().isEmpty());
-
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(containsTestProject);
+    Q_ASSERT(hasProject(projectName, projects));
 
     // Delete created project
     QSignalSpy spy2(mApi, SIGNAL(serverProjectDeleted(QString)));
-    mApi->deleteProject(mProjectName);
-    spy.wait(1000);
+    mApi->deleteProject(projectName);
+    spy.wait(SHORT_REPLY);
 
     projects = getProjectList();
-    containsTestProject = false;
-    for (std::shared_ptr<MerginProject> project: projects) {
-        if (project->name == mProjectName) containsTestProject = true;
-    }
-    Q_ASSERT(!containsTestProject);
+
+    Q_ASSERT(!hasProject(projectName, projects));
     qDebug() << "TestMerginApi::testCreateDeleteProject PASSED";
 }
 
@@ -196,7 +170,15 @@ ProjectList TestMerginApi::getProjectList()
 {
     QSignalSpy spy(mApi, SIGNAL(listProjectsFinished(ProjectList)));
     mApi->listProjects(QString());
-    spy.wait(1000);
+    spy.wait(SHORT_REPLY);
 
     return mApi->projects();
+}
+
+bool TestMerginApi::hasProject(QString projectName, ProjectList projects)
+{
+    for (std::shared_ptr<MerginProject> project: projects) {
+        if (project->name == projectName) return true;
+    }
+    return false;
 }
