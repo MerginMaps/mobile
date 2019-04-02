@@ -325,6 +325,7 @@ void MerginApi::createProjectFinished()
         qDebug() << r->errorString();
         emit networkErrorOccurred( r->errorString(), "Mergin API error: createProject" );
     }
+    mPendingRequests.remove(r->url());
     r->deleteLater();
 }
 
@@ -343,6 +344,7 @@ void MerginApi::deleteProjectFinished()
         qDebug() << r->errorString();
         emit networkErrorOccurred( r->errorString(), "Mergin API error: deleteProject" );
     }
+    mPendingRequests.remove(r->url());
     r->deleteLater();
 }
 
