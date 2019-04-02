@@ -26,7 +26,9 @@ Item {
     property bool extraPanelVisible: true
 
     property int activeLayerIndex: -1
-    property QgsQuick.VectorLayer activeVectorLayer: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer)
+    property QgsQuick.VectorLayer activeVectorLayer: (activeLayerIndex >= 0) ?
+                                                         __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer) :
+                                                         null
     property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
     property string activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
 
