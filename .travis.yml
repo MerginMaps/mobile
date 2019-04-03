@@ -10,32 +10,21 @@ before_install:
 - gem update --system
 - gem --version
 - pip3 install dropbox
-- pip3 install pyopenssl
-- pip3 install google-api-python-client
+
+script:
+- export QFIELD_SDK_VERSION=20190221
+- docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
+- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}"
+  -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+- ./scripts/upload-artifacts.sh
 
 jobs:
-  allow_failures:
-  #  - name: testing
   include:
     - stage: build
       name: "build ARMv7"
       env:
         - ARCH=armv7
       if: type = pull_request OR tag IS present OR branch = master
-      script:
-      - export QFIELD_SDK_VERSION=20190221
-      - echo "travis_fold:start:docker-pull"
-      - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
-      - echo "travis_fold:end:docker-pull"
-      - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
-    - stage: deploy
-      name: "Deploy"
-      if: type = pull_request OR tag IS present OR branch = master
-      script:
-        - ./scripts/upload-artifacts.sh
-
-matrix:
-  fast_finish: true
 
 env:
   global:
