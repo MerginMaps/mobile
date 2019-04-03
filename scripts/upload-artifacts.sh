@@ -18,7 +18,7 @@ then
   fi
 
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
-  python3 uploader.py --source /tmp/${APK_FILE} --destination "$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN
+  python3 ./scripts/uploader.py --source /tmp/${APK_FILE} --destination "$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN
 
 else
   echo -e "Not uploading artifacts ..."
