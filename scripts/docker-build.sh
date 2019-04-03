@@ -44,7 +44,7 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -n "${KEYNAME}" ]; then
     ${QT_ANDROID}/bin/androiddeployqt \
-	    --sign ${SOURCE_DIR}/Input_keystore.p12 "input" \
+	    --sign ${SOURCE_DIR}/Input_keystore.keystore "input" \
 	    --storepass "${STOREPASS}" \
 	    --keypass "${STOREPASS}" \
         --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
