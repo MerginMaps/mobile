@@ -31,7 +31,8 @@ then
   fi
 
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
-  APK_URL=`python3 ./scripts/uploader.py --source /tmp/${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN | tail -n 1`
+  python3 ./scripts/uploader.py --source /tmp/${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
+  APK_URL=`tail -n 1 uploader.log`
   curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "Apk: [armv7](${APK_URL}) (SDK: ${OSGEO4A_SDK})"}' https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
 
 else
