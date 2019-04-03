@@ -126,7 +126,16 @@ void MerginApi::authorize(QString username, QString password)
 {
     mUsername = username;
     mPassword = password;
-    emit authChanged();
+
+    QByteArray token = generateToken();
+    QNetworkRequest request;
+    QString urlString = mApiRoot + "/auth/user/" + mUsername;
+    QUrl url(urlString);
+    request.setUrl(url);
+    request.setRawHeader("Authorization", QByteArray("Basic " + token));
+
+    QNetworkReply *reply = mManager.get(request);
+    connect(reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished);
 }
 
 void MerginApi::clearAuth()
@@ -345,6 +354,26 @@ void MerginApi::deleteProjectFinished()
         emit networkErrorOccurred( r->errorString(), "Mergin API error: deleteProject" );
     }
     mPendingRequests.remove(r->url());
+    r->deleteLater();
+}
+
+void MerginApi::authorizeFinished()
+{
+    QNetworkReply* r = qobject_cast<QNetworkReply*>(sender());
+    Q_ASSERT(r);
+
+    if (r->error() == QNetworkReply::NoError)
+    {
+        emit authChanged();
+    }
+    else {
+        qDebug() << r->errorString();
+        mUsername = "";
+        mPassword = "";
+
+        emit authFailed();
+        emit notify("Authentication failed");
+    }
     r->deleteLater();
 }
 

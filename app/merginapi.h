@@ -114,6 +114,7 @@ signals:
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
+    void authFailed();
     void apiRootChanged();
     void projectCreated(QString projectName);
     void serverProjectDeleted(QString projectName);
@@ -133,6 +134,7 @@ private slots:
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished();
+    void authorizeFinished();
 
 
 private:
