@@ -9,15 +9,14 @@ before_install:
 - gem update --system
 - gem --version
 - pip3 install dropbox
-
 script:
 - export QFIELD_SDK_VERSION=20190221
 - echo "travis_fold:start:docker-pull"
 - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
 - echo "travis_fold:end:docker-pull"
-- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
-- ./scripts/upload-artifacts.sh
-
+- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}"
+  -e "VERSION=${TRAVIS_TAG}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+- "./scripts/upload-artifacts.sh"
 jobs:
   include:
   - stage: build
@@ -25,4 +24,7 @@ jobs:
     - ARCH=armv7
 env:
   global:
-    secure: xd5XySatBed9IghvB1DHojEmR6M+U6+Rq7tf8wPeaI8cltKJGRZp6263as7MC3P4UE/60BJzfSZooZGEuCsBrkNR0P2/FdIMwKFtn3Vd8OGZLXDSgwXOuhDdpqnTg5dyiSvFFbdW65XCwa42rJoIWP85aOf9L/+3lylddVhgFL51ThPOoN9vW7bSMK7J0xSN7VQtgVyMvmIP90Gx7GXwSPeKoFmVf6BRe+qZ3DOSChIvZBAOwwb+pzsmM403Z4rosb9Bkk81e05NJEZwkNq9iyMAAKEOMDCKrYkBi6UvvAf6lzxlI+PlA8E0/6BVL/q660vTa9UVv31DGbf+Q0I2jPi8Gs/dkTN9jojMfcP83Aq1Xj2Ej65Ym42PSOdU/UfeK9/znYZIUCYEDXY9rb9YOPOK3DvVA5tp5fztXKtg5oSgbjZs8XptxlGZ5oZu4Ha9DvDq+67O166QfP7QEGD4OmhYRoeX47Wg6Uth8Xglm79vy6P8Dljm6rph20YNiHN6KkAS0t8ZTe/Wk+xjIUAbFpMu973tI4gAuvuwRv8WbveQNNvOj1ywBVL8GH8SPyq8bD5HLnPBGRRuhrxIxJAjgiwtz4dfyRba/mk2JJTA0KJsMU1JGi225YSgZpw107KIXCFZLAcxqu39qiPfBeh7meeW6IMfiroHR18dX3yk8yk=
+  # DROPBOX_TOKEN for LutraConsultingInput Dropbox application folder
+  - secure: xd5XySatBed9IghvB1DHojEmR6M+U6+Rq7tf8wPeaI8cltKJGRZp6263as7MC3P4UE/60BJzfSZooZGEuCsBrkNR0P2/FdIMwKFtn3Vd8OGZLXDSgwXOuhDdpqnTg5dyiSvFFbdW65XCwa42rJoIWP85aOf9L/+3lylddVhgFL51ThPOoN9vW7bSMK7J0xSN7VQtgVyMvmIP90Gx7GXwSPeKoFmVf6BRe+qZ3DOSChIvZBAOwwb+pzsmM403Z4rosb9Bkk81e05NJEZwkNq9iyMAAKEOMDCKrYkBi6UvvAf6lzxlI+PlA8E0/6BVL/q660vTa9UVv31DGbf+Q0I2jPi8Gs/dkTN9jojMfcP83Aq1Xj2Ej65Ym42PSOdU/UfeK9/znYZIUCYEDXY9rb9YOPOK3DvVA5tp5fztXKtg5oSgbjZs8XptxlGZ5oZu4Ha9DvDq+67O166QfP7QEGD4OmhYRoeX47Wg6Uth8Xglm79vy6P8Dljm6rph20YNiHN6KkAS0t8ZTe/Wk+xjIUAbFpMu973tI4gAuvuwRv8WbveQNNvOj1ywBVL8GH8SPyq8bD5HLnPBGRRuhrxIxJAjgiwtz4dfyRba/mk2JJTA0KJsMU1JGi225YSgZpw107KIXCFZLAcxqu39qiPfBeh7meeW6IMfiroHR18dX3yk8yk=
+  # GITHUB_TOKEN of inputapp-bot GitHub user account
+  - secure: nPsd+gsAATtGys+NyZpbgo8F7tEPVEIRxTCqHtYNfrrAjacYOShU5RwsFWQgk/e+hmNRcPO9zOrAT+TwnJvB5Fzicgavg0eH5ekASrXl4TfdCeuYaH9afpbevG8Jc1TfcqDEAK9X9akIj2q/Yubws7dYQpUCQ71eRPkmNH+WtN2nfmLcERY+bbYVhRxowXCsxSGbLJ39oSRtb48h84es5SmbMdIaGqcBh1xp6OCDjSfSU0FcITz9/JyxmKSNMYrJgV79LBQ//5WjwirEWvEWV0Wp/9KgqWZ9ozCHgBWodiDrMo3kRMzfrS+/MRPAZ7Jz9JHZbBfpPiqyYdXFWcJkgOvWH7Vp++WJ3CrF1HKd2eXsTRaF0c5aSXs6/pIhw9UUvw9h4+I1xDRhoedQs70N6gx2ZFEE+Y/uEm02wb3TEhN/T/njyJvj/eMdvGfpLAEMMcIZV/jI+ZWHTyHaUFvrEkX7T6paZNACoiRfd/e6XsPLLM8Ocyj8Td62cXczHFJk9ylByOTL8CoKnnZVqpuDE8GD78bq+EC0m+d76DCXfwli73vyeeHDBXRe8xx4MZcJXU21UeCJzWRcXWMd3xejIGG0+KKs73tUuyUexLFuNJLYSowv/kCCyaqv6qD8QcCnRtAenICZ+LEAbggOoQZV+RSQbrHsheOC1DBjxW/dFLI=

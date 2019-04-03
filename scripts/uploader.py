@@ -72,8 +72,7 @@ if __name__ == '__main__':
         raise UploadError(args.source + " does not exists")
 
     # parse token
-    token = args.token
-    token = os.environ.get[token] # DO NOT print this value, it is SECRET on travis!
+    token = os.environ.get(args.token) # DO NOT print this value, it is SECRET on travis!
     if len(token) != 64:
         raise UploadError("ERROR: Looks like your Dropbox access token is not valid, should be 64 char long")
 
@@ -91,4 +90,6 @@ if __name__ == '__main__':
 
     # Share for public
     r = dbx.sharing_create_shared_link_with_settings(args.destination)
-    print("Upload " + args.source + " to " + str(r.url) + "(" + args.destination + ")")
+    print("Upload " + args.source + " to " + args.destination + ":")
+    # make sure last like is alone since we use the link in the
+    print(r.url)
