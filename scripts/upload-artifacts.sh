@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-export UPLOAD_ARTIFACT_ID=$( [[ ${TRAVIS_PULL_REQUEST} =~ false ]] && echo ${TRAVIS_TAG} || echo ${TRAVIS_PULL_REQUEST} )
-export APK_FILE=input-${UPLOAD_ARTIFACT_ID}-${TRAVIS_COMMIT}-${ARCH}.apk
 # export BUILD_FILE=/usr/src/input/build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
 export BUILD_FILE=build-${ARCH}/out//build/outputs/apk/debug/out-debug.apk
 export GITHUB_REPO=lutraconsulting/input
@@ -12,10 +10,16 @@ if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
 then
   if [ ${TRAVIS_PULL_REQUEST} != false ]; then
     export DROPBOX_FOLDER="pulls"
+    export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}.apk
+    export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
   elif [[ -n ${TRAVIS_TAG} ]]; then
     export DROPBOX_FOLDER="tags"
+    export APK_FILE=input-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${ARCH}.apk
+    export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   elif [[ ${TRAVIS_BRANCH} = master ]]; then
     export DROPBOX_FOLDER="master"
+    export APK_FILE=input-${TRAVIS_BRANCH}-${TRAVIS_COMMIT}-${ARCH}.apk
+    export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   fi
 
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
