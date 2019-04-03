@@ -10,7 +10,7 @@ env:
   - OSGEO4A_SDK=opengisch/qfield-sdk:20190221
   # GITHUB_TOKEN defined in travis web
   # DROPBOX_TOKEN defined in travis web
-  
+
 before_install:
 - gem update --system
 - gem --version
