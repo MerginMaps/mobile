@@ -13,7 +13,7 @@ before_install:
 script:
 - export OSGEO4A_SDK=opengisch/qfield-sdk:20190403
 - docker pull ${OSGEO4A_SDK}
-- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "KEYPASS=${KEYPASS}" -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh
+- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh
 - "./scripts/upload-artifacts.sh"
 jobs:
   include:
