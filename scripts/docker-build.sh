@@ -44,9 +44,9 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -n ${STOREPASS} ]; then
     ${QT_ANDROID}/bin/androiddeployqt \
-	    --sign ${SOURCE_DIR}/Input_keystore.keystore "input" \
-	    --storepass "${STOREPASS}" \
-	    --keypass "${STOREPASS}" \
+	    --sign ${SOURCE_DIR}/Input_keystore.keystore input \
+	    --storepass ${STOREPASS} \
+	    --keypass ${STOREPASS} \
         --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
