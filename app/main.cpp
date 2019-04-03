@@ -189,6 +189,17 @@ int main(int argc, char *argv[])
 {
   QgsApplication app(argc, argv, true);
 
+  QString version;
+#ifdef INPUT_VERSION
+  version = STR(INPUT_VERSION);
+#endif
+
+  // Set up the QSettings environment must be done after qapp is created
+  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
+  QCoreApplication::setApplicationName( "Input" );
+  QCoreApplication::setApplicationVersion(version);
+
   bool IS_TEST = false;
   for( int i = 0; i < argc; ++i ) {
       if (std::string(argv[i]) == "--test") IS_TEST = true;
@@ -255,17 +266,6 @@ int main(int argc, char *argv[])
   QQmlEngine engine;
   engine.addImportPath( QgsApplication::qmlImportPath() );
   initDeclarative();
-
-  QString version;
-#ifdef INPUT_VERSION
-  version = STR(INPUT_VERSION);
-#endif
-
-  // Set up the QSettings environment must be done after qapp is created
-  QCoreApplication::setOrganizationName( "Lutra Consulting" );
-  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
-  QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion(version);
 
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
