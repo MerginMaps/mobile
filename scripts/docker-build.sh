@@ -1,13 +1,6 @@
 #!/bin/bash
 
 # This is intended to be run within a opengisch/qfield-sdk docker container.
-#
-#     docker run -v $(pwd):/usr/src/qfield opengisch/qfield-sdk /usr/src/input/scripts/docker-build.sh
-#
-# The result will be put into `build-docker/out/build/outputs/apk/out-debug.apk`
-#
-#
-# ANDROID_NDK_PLATFORM and QT_VERSION are defined in docker-qt-crystax
 
 SOURCE_DIR=/usr/src/input
 if [[ -z ${BUILD_FOLDER+x} ]]; then
@@ -49,12 +42,24 @@ ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
-${QT_ANDROID}/bin/androiddeployqt \
-    --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
-	--output ${INSTALL_DIR} \
-	--deployment bundled \
-	--android-platform ${ANDROID_NDK_PLATFORM} \
-	--gradle
+if [ -n "${KEYNAME}" ]; then
+    ${QT_ANDROID}/bin/androiddeployqt \
+	    --sign ${SOURCE_DIR}/Input_keystore.p12 "input" \
+	    --storepass "${STOREPASS}" \
+	    --keypass "${STOREPASS}" \
+        --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
+	    --output ${INSTALL_DIR} \
+	    --deployment bundled \
+	    --android-platform ${ANDROID_NDK_PLATFORM} \
+	    --gradle
+else
+    ${QT_ANDROID}/bin/androiddeployqt \
+        --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
+	    --output ${INSTALL_DIR} \
+	    --deployment bundled \
+	    --android-platform ${ANDROID_NDK_PLATFORM} \
+	    --gradle
+fi
 
 chown -R $(stat -c "%u" .):$(stat -c "%u" .) .
 popd
