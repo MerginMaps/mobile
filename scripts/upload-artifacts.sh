@@ -9,17 +9,23 @@ export GITHUB_REPO=lutraconsulting/input
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
 then
   if [ ${TRAVIS_PULL_REQUEST} != false ]; then
+    echo -e "\e[31mDeploying pull request\e[0m"
     export DROPBOX_FOLDER="pulls"
     export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
   elif [[ -n ${TRAVIS_TAG} ]]; then
+    echo -e "\e[31mDeploying tagged release\e[0m"
     export DROPBOX_FOLDER="tags"
     export APK_FILE=input-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${ARCH}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   elif [[ ${TRAVIS_BRANCH} = master ]]; then
+    echo -e "\e[31mDeploying master branch\e[0m"
     export DROPBOX_FOLDER="master"
     export APK_FILE=input-${TRAVIS_BRANCH}-${TRAVIS_COMMIT}-${ARCH}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
+  else
+    echo "Nothing to do, not PR, master or tagged release"
+    exit 0
   fi
 
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
