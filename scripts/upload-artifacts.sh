@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -n "${KEYNAME}" ]; then
+if [ -n "${STOREPASS}" ]; then
     export BUILD_FILE=build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
     export SIGNED="signed"
 else
