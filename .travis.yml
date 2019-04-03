@@ -5,30 +5,23 @@ rvm:
 - 2.0.0
 services:
 - docker
-
 env:
   global:
-  # DROPBOX_TOKEN for LutraConsultingInput Dropbox application folder
-  - secure: xd5XySatBed9IghvB1DHojEmR6M+U6+Rq7tf8wPeaI8cltKJGRZp6263as7MC3P4UE/60BJzfSZooZGEuCsBrkNR0P2/FdIMwKFtn3Vd8OGZLXDSgwXOuhDdpqnTg5dyiSvFFbdW65XCwa42rJoIWP85aOf9L/+3lylddVhgFL51ThPOoN9vW7bSMK7J0xSN7VQtgVyMvmIP90Gx7GXwSPeKoFmVf6BRe+qZ3DOSChIvZBAOwwb+pzsmM403Z4rosb9Bkk81e05NJEZwkNq9iyMAAKEOMDCKrYkBi6UvvAf6lzxlI+PlA8E0/6BVL/q660vTa9UVv31DGbf+Q0I2jPi8Gs/dkTN9jojMfcP83Aq1Xj2Ej65Ym42PSOdU/UfeK9/znYZIUCYEDXY9rb9YOPOK3DvVA5tp5fztXKtg5oSgbjZs8XptxlGZ5oZu4Ha9DvDq+67O166QfP7QEGD4OmhYRoeX47Wg6Uth8Xglm79vy6P8Dljm6rph20YNiHN6KkAS0t8ZTe/Wk+xjIUAbFpMu973tI4gAuvuwRv8WbveQNNvOj1ywBVL8GH8SPyq8bD5HLnPBGRRuhrxIxJAjgiwtz4dfyRba/mk2JJTA0KJsMU1JGi225YSgZpw107KIXCFZLAcxqu39qiPfBeh7meeW6IMfiroHR18dX3yk8yk=
-  # GITHUB_TOKEN of inputapp-bot GitHub user account
-  - secure: nPsd+gsAATtGys+NyZpbgo8F7tEPVEIRxTCqHtYNfrrAjacYOShU5RwsFWQgk/e+hmNRcPO9zOrAT+TwnJvB5Fzicgavg0eH5ekASrXl4TfdCeuYaH9afpbevG8Jc1TfcqDEAK9X9akIj2q/Yubws7dYQpUCQ71eRPkmNH+WtN2nfmLcERY+bbYVhRxowXCsxSGbLJ39oSRtb48h84es5SmbMdIaGqcBh1xp6OCDjSfSU0FcITz9/JyxmKSNMYrJgV79LBQ//5WjwirEWvEWV0Wp/9KgqWZ9ozCHgBWodiDrMo3kRMzfrS+/MRPAZ7Jz9JHZbBfpPiqyYdXFWcJkgOvWH7Vp++WJ3CrF1HKd2eXsTRaF0c5aSXs6/pIhw9UUvw9h4+I1xDRhoedQs70N6gx2ZFEE+Y/uEm02wb3TEhN/T/njyJvj/eMdvGfpLAEMMcIZV/jI+ZWHTyHaUFvrEkX7T6paZNACoiRfd/e6XsPLLM8Ocyj8Td62cXczHFJk9ylByOTL8CoKnnZVqpuDE8GD78bq+EC0m+d76DCXfwli73vyeeHDBXRe8xx4MZcJXU21UeCJzWRcXWMd3xejIGG0+KKs73tUuyUexLFuNJLYSowv/kCCyaqv6qD8QcCnRtAenICZ+LEAbggOoQZV+RSQbrHsheOC1DBjxW/dFLI=
   - OSGEO4A_SDK=opengisch/qfield-sdk:20190221
-
+  - secure: RQAG7vSU9eWjpMLbFVse3WwHAwMGVoEHAkjby1rOYL0STiE1iyK2VGhX6LhXO5Ft4ieyklqwiyAEsJy/mMlEbRWs3TsI/yHGMKFME7JgC87GFwrIm0AwZRTKKzwvk1Q9QZ3A7jKMupO7D2SMIlP1k2OkjvASwpFW40Shzd+DAi6mhS14ECsycRLgjZamSCZoQJrhaUaaFpoLggrLHQlNiM5LY5mJmOUh1nbA3yL+2WuCcS4J3vNPhuJ4N+FnX7vTYNTbd/dyLb+m+KngOl/uEDCdV7oDyVVY5bs9H260C14HFAV9c5K8Dsce4yuB+NkyeF0PeYivPWuhZ10S0tcaDbH9KriwiEyyug2Iy0tjbIEur35okHMf21y//qCRXMXCZrOLIJqpw9qWjIp6OE9E2z37Oxhtv416UxsBzn/ywFjeoP538cQJ0N879bY4A4Fgh3cTFL44qBO5jfniyJk1LmybcMZnTn9ZxgA3aAtmc1CSnBFr1cB6CSMv0GDU5hmeCS0TFkTIq2t99uZB59tXkSP8TT0hdLFtBlYPvyS9otRQAS36tNQhbSermvgDFtWZa4b7eIDenkR8z0LI2/dGUTcLTU7F7mspXVvGVAG+Tfzyi7qqvIYJT7733IppoYHzgxPEgzxm4qos0C5Z+1V1WjKcSM6KS9C3PhtEQx4blQo=
+  - secure: ky9vY68yaeaOErkNEmMOhADYd2J8L6WhrSYK3Nn9sALuoT1rbQfJ71su1eN4Ul+wG5EYQvP1kx51qaTmyRMQd5d4uCx6/QwODnrB5LJLt4dtxLNAT0POIVMG/LFOTpGUbKh7Sk94XPsFo4zYsssd4yEMYnyZNi8QJrhaOBdcUBvU/UbctDZPvX6Bz1POrpzjnmnBFKtVVDmtoXlOMZDC8kSqPztILGAE8adHdoYCfLjytpjBDDU2CPMxkUiIncqDyduh3q8S+8NzjT14dwbY6QunRv8bFgyz6VhoFH8VFHp9b1PVlr2kQeAS5lTmYhVkZenBjRnGKNBMsQ9C0OHKYZf/ZIRasNJDhFfkq1CcDhs/IfSWKTPt2PkACXp6NtDbUIf9hS8nvUkZQONJaZAtQv5ExrnfEnJlKzei7vlrxTNZVi3Ha/df+H6jubyJgf8mulNYBOEK9n52lOpT1uhPisJBPwa8A64foVOW7DDeTITwhPg/tApbVS+xLTFyuqekWzhPh4w4ccxnZvsj+ndFyyrIPMhrW6poeDPjci32DmGDXZum8pCzvKh4oADIIvjc8GigBTvW52iFsXgtMco4ZD1Yc/efes2p0p5Ats1fyAo9kIcNMD0N1Ni7XHzcaDbL4Xmnohxsg1sfvVKH/WAl8IJRM2RBgv0AbXUEd/RSbqI=
 before_install:
 - gem update --system
 - gem --version
 - pip3 install dropbox
-
 script:
 - docker pull ${OSGEO4A_SDK}
 - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}"
   -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh
-- ./scripts/upload-artifacts.sh
-
+- "./scripts/upload-artifacts.sh"
 jobs:
   include:
-    - stage: build
-      name: "build ARMv7"
-      env:
-        - ARCH=armv7
-
+  - stage: build
+    name: build ARMv7
+    env:
+    - ARCH=armv7
