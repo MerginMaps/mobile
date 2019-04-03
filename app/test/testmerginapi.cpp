@@ -36,7 +36,10 @@ void TestMerginApi::initTestCase()
            mPassword = ::getenv("TEST_API_PASSWORD");
         }
         mApi->setApiRoot(mApiRoot);
+        QSignalSpy spy(mApi, SIGNAL(authChanged()));
         mApi->authorize(mUsername, mPassword);
+        QVERIFY(spy.wait(SHORT_REPLY));
+        QCOMPARE(spy.count(), 1);
     }
 }
 
