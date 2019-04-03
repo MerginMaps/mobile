@@ -8,7 +8,7 @@ export GITHUB_REPO=lutraconsulting/input
 # If we have secure env vars and are in either a pull request or a tag, we need to upload artifacts
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
 then
-  if [ ${TRAVIS_PULL_REQUEST} != false ]; then
+  if [ ${TRAVIS_PULL_REQUEST} != "false" ]; then
     echo -e "\e[31mDeploying pull request\e[0m"
     export DROPBOX_FOLDER="pulls"
     export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}.apk
