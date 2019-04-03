@@ -38,7 +38,7 @@ then
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
   python3 ./scripts/uploader.py --source /tmp/${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
   APK_URL=`tail -n 1 uploader.log`
-  curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "'${SIGNED}' apk: [armv7]('${APK_URL}') (SDK: '${OSGEO4A_SDK}')"}' ${GITHUB_API}
+  curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "'${SIGNED}' apk: [armv7]('${APK_URL}') (SDK: '${SDK_VERSION}')"}' ${GITHUB_API}
 
 else
   echo -e "Not uploading artifacts ..."
