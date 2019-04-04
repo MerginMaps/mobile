@@ -368,11 +368,18 @@ void MerginApi::authorizeFinished()
     }
     else {
         qDebug() << r->errorString();
-        mUsername = "";
-        mPassword = "";
+        QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+        int status = statusCode.toInt();
+        if (r->errorString() == QStringLiteral("Host requires authentication")) {
+            mUsername = "";
+            mPassword = "";
 
-        emit authFailed();
-        emit notify("Authentication failed");
+            emit authFailed();
+            emit notify("Authentication failed");
+        } else if (status == 403) {
+            // Assuming auth was successful, endpoint is just FORBIDDEN for admin users.
+            emit authChanged();
+        }
     }
     r->deleteLater();
 }
