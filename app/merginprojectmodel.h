@@ -22,20 +22,20 @@ class MerginProjectModel: public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MerginProjectModel(QObject* parent = nullptr);
+    explicit MerginProjectModel( QObject *parent = nullptr );
 
-    Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
-    Q_INVOKABLE void setPending(int row, bool pending);
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
+    Q_INVOKABLE void setPending( int row, bool pending );
     ProjectList projects();
 
     QHash<int, QByteArray> roleNames() const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    void resetProjects(const ProjectList &merginProjects);
+    void resetProjects( const ProjectList &merginProjects );
 
-public slots:
-    void syncProjectFinished(QString projectFolder, QString projectName, bool successfully);
+  public slots:
+    void syncProjectFinished( QString projectFolder, QString projectName, bool successfully );
   private:
     ProjectList mMerginProjects;
 
