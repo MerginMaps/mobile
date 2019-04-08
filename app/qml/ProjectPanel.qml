@@ -210,6 +210,7 @@ Item {
                 projectsPanel.activeProjectIndex = index
                 __appSettings.defaultProject = path
                 projectsPanel.visible = false
+                projectsPanel.activeProjectIndexChanged()
             }
 
             onMenuClicked: {
