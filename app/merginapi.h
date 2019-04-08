@@ -56,7 +56,7 @@ class MerginApi: public QObject
      * If listing has been successful, updates cached merginProjects list.
      * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects( QString filterTag = QStringLiteral( "input_use" ) );
+    Q_INVOKABLE void listProjects( const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
@@ -66,7 +66,7 @@ class MerginApi: public QObject
      * Emits also notify signal with a message for the GUI.
      * @param projectName Name of project to download.
      */
-    Q_INVOKABLE void downloadProject( QString projectName );
+    Q_INVOKABLE void downloadProject( const QString &projectName );
 
     /**
      * Sends non-blocking POST request to the server to update a project with a given name. On downloadProjectReplyFinished,
@@ -76,7 +76,7 @@ class MerginApi: public QObject
      * Emits also notify signal with a message for the GUI.
      * @param projectName Name of project to update.
      */
-    Q_INVOKABLE void updateProject( QString projectName );
+    Q_INVOKABLE void updateProject( const QString &projectName );
 
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
@@ -85,21 +85,21 @@ class MerginApi: public QObject
      * Emits also notify signal with a message for the GUI.
      * @param projectName Name of project to upload.
      */
-    Q_INVOKABLE void uploadProject( QString projectName );
+    Q_INVOKABLE void uploadProject( const QString &projectName );
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
     * @param username
     * @param password
     */
-    Q_INVOKABLE void authorize( QString username, QString password );
+    Q_INVOKABLE void authorize( const QString &username, const QString &password );
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
 
     // Test functions
-    void createProject( QString projectName );
-    void deleteProject( QString projectName );
+    void createProject( const QString &projectName );
+    void deleteProject( const QString &projectName );
 
     ProjectList projects();
 
@@ -109,21 +109,21 @@ class MerginApi: public QObject
     void setApiRoot( const QString &apiRoot );
 
   signals:
-    void listProjectsFinished( ProjectList merginProjects );
-    void syncProjectFinished( QString projectDir, QString projectName, bool successfully = true );
-    void reloadProject( QString projectDir );
-    void networkErrorOccurred( QString message, QString additionalInfo );
-    void notify( QString message );
+    void listProjectsFinished( const ProjectList &merginProjects );
+    void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
+    void reloadProject( const QString &projectDir );
+    void networkErrorOccurred( const QString &message, const QString &additionalInfo );
+    void notify( const QString &message );
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
     void authFailed();
     void apiRootChanged();
-    void projectCreated( QString projectName );
-    void serverProjectDeleted( QString projectName );
+    void projectCreated( const QString &projectName );
+    void serverProjectDeleted( const QString &projectName );
 
   public slots:
-    void projectDeleted( QString projectName );
+    void projectDeleted( const QString &projectName );
 
   private slots:
     void listProjectsReplyFinished();
@@ -132,8 +132,8 @@ class MerginApi: public QObject
     void updateInfoReplyFinished();
     void uploadInfoReplyFinished();
     void cacheProjects();
-    void continueWithUpload( QString projectDir, QString projectName, bool successfully = true );
-    void setUpdateToProject( QString projectDir, QString projectName, bool successfully );
+    void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
+    void setUpdateToProject( const QString &projectDir, const QString &projectName, bool successfully );
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished();
@@ -143,17 +143,17 @@ class MerginApi: public QObject
   private:
     ProjectList parseProjectsData( const QByteArray &data, bool dataFromServer = false );
     bool cacheProjectsData( const QByteArray &data );
-    void handleDataStream( QNetworkReply *r, QString projectDir, bool overwrite );
+    void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
-    void createPathIfNotExists( QString filePath );
-    ProjectStatus getProjectStatus( QDateTime localUpdated, QDateTime updated, QDateTime lastSync, QDateTime lastMod );
-    QByteArray getChecksum( QString filePath );
-    QSet<QString> listFiles( QString projectPath );
-    void downloadProjectFiles( QString projectName, QByteArray json );
-    void uploadProjectFiles( QString projectName, QByteArray json, QList<MerginFile> files );
+    void createPathIfNotExists( const QString &filePath );
+    ProjectStatus getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastMod );
+    QByteArray getChecksum( const QString &filePath );
+    QSet<QString> listFiles( const QString &projectPath );
+    void downloadProjectFiles( const QString &projectName, const QByteArray &json );
+    void uploadProjectFiles( const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
-    ProjectList updateMerginProjectList( ProjectList serverProjects );
-    void deleteObsoleteFiles( QString projectName );
+    ProjectList updateMerginProjectList( const ProjectList &serverProjects );
+    void deleteObsoleteFiles( const QString &projectName );
     QByteArray generateToken();
     void loadAuthData();
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }

@@ -12,7 +12,7 @@
 MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir + '/' )
-  , mCacheFile( QStringLiteral(".projectsCache.txt") )
+  , mCacheFile( QStringLiteral( ".projectsCache.txt" ) )
 {
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::setUpdateToProject );
   QObject::connect( this, &MerginApi::merginProjectsChanged, this, &MerginApi::cacheProjects );
@@ -22,7 +22,7 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( QString filterTag )
+void MerginApi::listProjects( const QString &filterTag )
 {
   if ( !hasAuthData() )
   {
@@ -33,10 +33,10 @@ void MerginApi::listProjects( QString filterTag )
   QByteArray token = generateToken();
   QNetworkRequest request;
   // projects filtered by tag "input_use"
-  QString urlString = mApiRoot + QStringLiteral("/v1/project");
+  QString urlString = mApiRoot + QStringLiteral( "/v1/project" );
   if ( !filterTag.isEmpty() )
   {
-    urlString += QStringLiteral("?tags=") + filterTag;
+    urlString += QStringLiteral( "?tags=" ) + filterTag;
   }
   QUrl url( urlString );
   request.setUrl( url );
@@ -46,7 +46,7 @@ void MerginApi::listProjects( QString filterTag )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
 
-void MerginApi::downloadProject( QString projectName )
+void MerginApi::downloadProject( const QString &projectName )
 {
   if ( !hasAuthData() )
   {
@@ -56,13 +56,13 @@ void MerginApi::downloadProject( QString projectName )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral("/v1/project/download/") + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/" ) + projectName );
 
   if ( mPendingRequests.contains( url ) )
   {
     QString errorMsg = QStringLiteral( "Download request for %1 is already pending." ).arg( projectName );
     qDebug() << errorMsg;
-    emit networkErrorOccurred( errorMsg, QStringLiteral("Mergin API error: downloadProject") );
+    emit networkErrorOccurred( errorMsg, QStringLiteral( "Mergin API error: downloadProject" ) );
     return;
   }
 
@@ -74,7 +74,7 @@ void MerginApi::downloadProject( QString projectName )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished );
 }
 
-void MerginApi::updateProject( QString projectName )
+void MerginApi::updateProject( const QString &projectName )
 {
 
   if ( !hasAuthData() )
@@ -85,7 +85,7 @@ void MerginApi::updateProject( QString projectName )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral("/v1/project/") + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
@@ -95,7 +95,7 @@ void MerginApi::updateProject( QString projectName )
 
 }
 
-void MerginApi::uploadProject( QString projectName )
+void MerginApi::uploadProject( const QString &projectName )
 {
 
   bool onlyUpload = true;
@@ -117,7 +117,7 @@ void MerginApi::uploadProject( QString projectName )
   else
   {
     QMessageBox msgBox;
-    msgBox.setText( QStringLiteral("The project has been updated on the server in the meantime. Your files will be updated before upload.") );
+    msgBox.setText( QStringLiteral( "The project has been updated on the server in the meantime. Your files will be updated before upload." ) );
     msgBox.setInformativeText( "Do you want to continue?" );
     msgBox.setStandardButtons( QMessageBox::Ok | QMessageBox::Cancel );
     msgBox.setDefaultButton( QMessageBox::Cancel );
@@ -134,14 +134,14 @@ void MerginApi::uploadProject( QString projectName )
   }
 }
 
-void MerginApi::authorize( QString username, QString password )
+void MerginApi::authorize( const QString &username, const QString &password )
 {
   mUsername = username;
   mPassword = password;
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QString urlString = mApiRoot + QStringLiteral("/auth/user/") + mUsername;
+  QString urlString = mApiRoot + QStringLiteral( "/auth/user/" ) + mUsername;
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
@@ -160,7 +160,7 @@ void MerginApi::clearAuth()
 void MerginApi::resetApiRoot()
 {
   QSettings settings;
-  settings.beginGroup( QStringLiteral("Input/") );
+  settings.beginGroup( QStringLiteral( "Input/" ) );
   setApiRoot( defaultApiRoot() );
   settings.endGroup();
 }
@@ -170,7 +170,7 @@ bool MerginApi::hasAuthData()
   return !mUsername.isEmpty() && !mPassword.isEmpty();
 }
 
-void MerginApi::createProject( QString projectName )
+void MerginApi::createProject( const QString &projectName )
 {
   if ( !hasAuthData() )
   {
@@ -189,8 +189,8 @@ void MerginApi::createProject( QString projectName )
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral("name"), projectName );
-  jsonObject.insert( QStringLiteral("public"), false );
+  jsonObject.insert( QStringLiteral( "name" ), projectName );
+  jsonObject.insert( QStringLiteral( "public" ), false );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
@@ -198,7 +198,7 @@ void MerginApi::createProject( QString projectName )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::createProjectFinished );
 }
 
-void MerginApi::deleteProject( QString projectName )
+void MerginApi::deleteProject( const QString &projectName )
 {
   if ( !hasAuthData() )
   {
@@ -208,7 +208,7 @@ void MerginApi::deleteProject( QString projectName )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral("/v1/project/") + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
   mPendingRequests.insert( url, projectName );
@@ -216,7 +216,7 @@ void MerginApi::deleteProject( QString projectName )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
 }
 
-void MerginApi::downloadProjectFiles( QString projectName, QByteArray json )
+void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArray &json )
 {
   if ( !hasAuthData() )
   {
@@ -226,7 +226,7 @@ void MerginApi::downloadProjectFiles( QString projectName, QByteArray json )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral("/v1/project/fetch/") + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/fetch/" ) + projectName );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -237,11 +237,11 @@ void MerginApi::downloadProjectFiles( QString projectName, QByteArray json )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished );
 }
 
-void MerginApi::uploadProjectFiles( QString projectName, QByteArray json, QList<MerginFile> files )
+void MerginApi::uploadProjectFiles( const QString &projectName, const QByteArray &json, const QList<MerginFile> &files )
 {
   if ( !hasAuthData() )
   {
-    emit networkErrorOccurred( QStringLiteral("Auth token is invalid"), QStringLiteral("Mergin API error: fetchProject") );
+    emit networkErrorOccurred( QStringLiteral( "Auth token is invalid" ), QStringLiteral( "Mergin API error: fetchProject" ) );
     return;
   }
 
@@ -249,7 +249,7 @@ void MerginApi::uploadProjectFiles( QString projectName, QByteArray json, QList<
   QHttpMultiPart *multiPart = new QHttpMultiPart( QHttpMultiPart::FormDataType );
 
   QHttpPart textPart;
-  textPart.setHeader( QNetworkRequest::ContentDispositionHeader, QVariant( QStringLiteral("form-data; name=\"changes\"") ) );
+  textPart.setHeader( QNetworkRequest::ContentDispositionHeader, QVariant( QStringLiteral( "form-data; name=\"changes\"" ) ) );
   textPart.setBody( json );
   multiPart->append( textPart );
 
@@ -257,7 +257,7 @@ void MerginApi::uploadProjectFiles( QString projectName, QByteArray json, QList<
   {
     QHttpPart filePart;
     filePart.setHeader( QNetworkRequest::ContentDispositionHeader, QStringLiteral( "form-data; name=\"%1\"; filename=\"%2\"" ).arg( file.path, file.path ) );
-    filePart.setHeader( QNetworkRequest::ContentTypeHeader, QVariant( QStringLiteral("multipart/form-data") ) );
+    filePart.setHeader( QNetworkRequest::ContentTypeHeader, QVariant( QStringLiteral( "multipart/form-data" ) ) );
     QFile *f = new QFile( projectPath + file.path );
     f->open( QIODevice::ReadOnly );
     filePart.setBodyDevice( f );
@@ -278,7 +278,7 @@ void MerginApi::uploadProjectFiles( QString projectName, QByteArray json, QList<
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadProjectReplyFinished );
 }
 
-ProjectList MerginApi::updateMerginProjectList( ProjectList serverProjects )
+ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProjects )
 {
   QHash<QString, std::shared_ptr<MerginProject>> projectUpdates;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
@@ -304,7 +304,7 @@ ProjectList MerginApi::updateMerginProjectList( ProjectList serverProjects )
   return serverProjects;
 }
 
-void MerginApi::setUpdateToProject( QString projectDir, QString projectName, bool successfully )
+void MerginApi::setUpdateToProject( const QString &projectDir, const QString &projectName, bool successfully )
 {
   Q_UNUSED( projectDir );
   if ( !successfully ) return;
@@ -321,7 +321,7 @@ void MerginApi::setUpdateToProject( QString projectDir, QString projectName, boo
   }
 }
 
-void MerginApi::deleteObsoleteFiles( QString projectPath )
+void MerginApi::deleteObsoleteFiles( const QString &projectPath )
 {
   if ( !mObsoleteFiles.value( projectPath ).isEmpty() )
   {
@@ -352,13 +352,13 @@ void MerginApi::createProjectFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     QString projectName = mPendingRequests.value( r->url() );
-    emit notify( QStringLiteral("Project created") );
+    emit notify( QStringLiteral( "Project created" ) );
     emit projectCreated( projectName );
   }
   else
   {
     qDebug() << r->errorString();
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: createProject") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: createProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -372,13 +372,13 @@ void MerginApi::deleteProjectFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     QString projectName = mPendingRequests.value( r->url() );
-    emit notify( QStringLiteral("Project deleted") );
+    emit notify( QStringLiteral( "Project deleted" ) );
     emit serverProjectDeleted( projectName );
   }
   else
   {
     qDebug() << r->errorString();
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: deleteProject") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: deleteProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -400,11 +400,11 @@ void MerginApi::authorizeFinished()
     int status = statusCode.toInt();
     if ( status == 401 )
     {
-      mUsername = "";
-      mPassword = "";
+      mUsername = QString();
+      mPassword = QString();
 
       emit authFailed();
-      emit notify( QStringLiteral("Authentication failed") );
+      emit notify( QStringLiteral( "Authentication failed" ) );
     }
     else if ( status == 403 )
     {
@@ -413,13 +413,13 @@ void MerginApi::authorizeFinished()
     }
     else
     {
-      emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: authorize") );
+      emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: authorize" ) );
     }
   }
   r->deleteLater();
 }
 
-void MerginApi::projectDeleted( QString projectName )
+void MerginApi::projectDeleted( const QString &projectName )
 {
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
@@ -437,10 +437,10 @@ void MerginApi::projectDeleted( QString projectName )
 void MerginApi::loadAuthData()
 {
   QSettings settings;
-  settings.beginGroup( QStringLiteral("Input/") );
-  setApiRoot( settings.value( QStringLiteral("apiRoot") ).toString() );
-  mUsername = settings.value( QStringLiteral("username") ).toString();
-  mPassword = settings.value( QStringLiteral("password") ).toString();
+  settings.beginGroup( QStringLiteral( "Input/" ) );
+  setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
+  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
+  mPassword = settings.value( QStringLiteral( "password" ) ).toString();
 }
 
 QString MerginApi::apiRoot() const
@@ -451,7 +451,7 @@ QString MerginApi::apiRoot() const
 void MerginApi::setApiRoot( const QString &apiRoot )
 {
   QSettings settings;
-  settings.beginGroup( QStringLiteral("Input/") );
+  settings.beginGroup( QStringLiteral( "Input/" ) );
   if ( apiRoot.isEmpty() )
   {
     mApiRoot = defaultApiRoot();
@@ -460,7 +460,7 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   {
     mApiRoot = apiRoot;
   }
-  settings.setValue( QStringLiteral("apiRoot"), mApiRoot );
+  settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
   settings.endGroup();
   emit apiRootChanged();
 }
@@ -510,11 +510,11 @@ void MerginApi::listProjectsReplyFinished()
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral("listProjects"), r->errorString() );
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: listProjects") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: listProjects" ) );
 
-    if ( r->errorString() == QLatin1String("Host requires authentication") )
+    if ( r->errorString() == QLatin1String( "Host requires authentication" ) )
     {
       emit authRequested();
       return;
@@ -543,14 +543,14 @@ void MerginApi::downloadProjectReplyFinished()
     if ( !waitingForUpload )
     {
       emit reloadProject( projectDir );
-      emit notify( QStringLiteral("Download successful") );
+      emit notify( QStringLiteral( "Download successful" ) );
     }
   }
   else
   {
     qDebug() << r->errorString();
     emit syncProjectFinished( projectDir, projectName, false );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: downloadProject") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -566,13 +566,13 @@ void MerginApi::uploadProjectReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     emit syncProjectFinished( projectDir, projectName );
-    emit notify( QStringLiteral("Upload successful") );
+    emit notify( QStringLiteral( "Upload successful" ) );
   }
   else
   {
     qDebug() << r->errorString();
     emit syncProjectFinished( projectDir, projectName, false );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: uploadProject") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: uploadProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -653,7 +653,7 @@ void MerginApi::uploadInfoReplyFinished()
       fileObject.insert( "size", file.size );
       jsonArray.append( fileObject );
 
-      if ( key != QStringLiteral("removed") )
+      if ( key != QStringLiteral( "removed" ) )
       {
         filesToUpload.append( file );
       }
@@ -687,8 +687,8 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      QString updated = docObj.value( QStringLiteral("updated") ).toString();
-      auto it = docObj.constFind( QStringLiteral("files") );
+      QString updated = docObj.value( QStringLiteral( "updated" ) ).toString();
+      auto it = docObj.constFind( QStringLiteral( "files" ) );
       QJsonValue v = *it;
       Q_ASSERT( v.isArray() );
       QJsonArray vArray = v.toArray();
@@ -697,8 +697,8 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
       for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
       {
         QJsonObject projectInfoMap = it->toObject();
-        QString serverChecksum = projectInfoMap.value( QStringLiteral("checksum") ).toString();
-        QString path = projectInfoMap.value( QStringLiteral("path") ).toString();
+        QString serverChecksum = projectInfoMap.value( QStringLiteral( "checksum" ) ).toString();
+        QString path = projectInfoMap.value( QStringLiteral( "path" ) ).toString();
         QByteArray localChecksumBytes = getChecksum( projectPath + path );
         QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
         QFileInfo info( projectPath + path );
@@ -748,16 +748,16 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
       }
     }
 
-    files.insert( QStringLiteral("added"), added );
-    files.insert( QStringLiteral("updated"), updatedFiles );
-    files.insert( QStringLiteral("removed"), removed );
-    files.insert( QStringLiteral("renamed"), renamed );
+    files.insert( QStringLiteral( "added" ), added );
+    files.insert( QStringLiteral( "updated" ), updatedFiles );
+    files.insert( QStringLiteral( "removed" ), removed );
+    files.insert( QStringLiteral( "renamed" ), renamed );
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral("listProjects"), r->errorString() );
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral("Mergin API error: projectInfo") );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: projectInfo" ) );
   }
   return files;
 }
@@ -775,8 +775,8 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
     {
       QJsonObject projectMap = it->toObject();
       MerginProject p;
-      p.name = projectMap.value( QStringLiteral("name") ).toString();
-      QJsonValue tags = projectMap.value( QStringLiteral("tags") );
+      p.name = projectMap.value( QStringLiteral( "name" ) ).toString();
+      QJsonValue tags = projectMap.value( QStringLiteral( "tags" ) );
       if ( tags.isArray() )
       {
         for ( QJsonValueRef tag : tags.toArray() )
@@ -785,8 +785,8 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
         }
         tags.toArray().toVariantList();
       }
-      p.created = QDateTime::fromString( projectMap.value( QStringLiteral("created") ).toString(), Qt::ISODateWithMs ).toUTC();
-      QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral("updated") ).toString(), Qt::ISODateWithMs ).toUTC();
+      p.created = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+      QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
 
       if ( dataFromServer )
       {
@@ -798,7 +798,7 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
       }
       else
       {
-        p.lastSync = QDateTime::fromString( projectMap.value( QStringLiteral("lastSync") ).toString(), Qt::ISODateWithMs );
+        p.lastSync = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs );
         p.updated = updated;
       }
       result << std::make_shared<MerginProject>( p );
@@ -829,12 +829,12 @@ void MerginApi::cacheProjects()
   for ( std::shared_ptr<MerginProject> p : mMerginProjects )
   {
     QJsonObject projectMap;
-    projectMap.insert( QStringLiteral("created"), p->created.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral("updated"), p->updated.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral("lastSync"), p->lastSync.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral("name"), p->name );
+    projectMap.insert( QStringLiteral( "created" ), p->created.toString( Qt::ISODateWithMs ) );
+    projectMap.insert( QStringLiteral( "updated" ), p->updated.toString( Qt::ISODateWithMs ) );
+    projectMap.insert( QStringLiteral( "lastSync" ), p->lastSync.toString( Qt::ISODateWithMs ) );
+    projectMap.insert( QStringLiteral( "name" ), p->name );
     QJsonArray tags;
-    projectMap.insert( QStringLiteral("tags"), tags.fromStringList( p->tags ) );
+    projectMap.insert( QStringLiteral( "tags" ), tags.fromStringList( p->tags ) );
 
     QDir projectFolder( mDataDir + '/' + p->name );
     if ( projectFolder.exists() )
@@ -846,7 +846,7 @@ void MerginApi::cacheProjects()
   cacheProjectsData( doc.toJson() );
 }
 
-void MerginApi::continueWithUpload( QString projectDir, QString projectName, bool successfully )
+void MerginApi::continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully )
 {
   Q_UNUSED( projectDir )
 
@@ -854,7 +854,7 @@ void MerginApi::continueWithUpload( QString projectDir, QString projectName, boo
   mWaitingForUpload.remove( projectName );
   if ( !hasAuthData() )
   {
-    emit networkErrorOccurred( QStringLiteral("Auth data is invalid"), QStringLiteral("Mergin API error: projectInfo") );
+    emit networkErrorOccurred( QStringLiteral( "Auth data is invalid" ), QStringLiteral( "Mergin API error: projectInfo" ) );
   }
 
   if ( !successfully )
@@ -864,7 +864,7 @@ void MerginApi::continueWithUpload( QString projectDir, QString projectName, boo
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral("/v1/project/") + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
@@ -873,7 +873,7 @@ void MerginApi::continueWithUpload( QString projectDir, QString projectName, boo
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
 }
 
-void MerginApi::handleDataStream( QNetworkReply *r, QString projectDir, bool overwrite )
+void MerginApi::handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite )
 {
   // Read content type from reply's header
   QByteArray contentType;
@@ -893,7 +893,7 @@ void MerginApi::handleDataStream( QNetworkReply *r, QString projectDir, bool ove
   // Read boundary hash from content types
   QString boundary;
   QRegularExpression re;
-  re.setPattern( QStringLiteral("[^;]+; boundary=(?<boundary>.+)") );
+  re.setPattern( QStringLiteral( "[^;]+; boundary=(?<boundary>.+)" ) );
   QRegularExpressionMatch match = re.match( contentTypeString );
   if ( match.hasMatch() )
   {
@@ -902,9 +902,9 @@ void MerginApi::handleDataStream( QNetworkReply *r, QString projectDir, bool ove
 
   // Depends on boundary size itself + special chars which number may vary
   int boundarySize = boundary.length() + 8;
-  QRegularExpression boundaryPattern( QStringLiteral("(\r\n)?--") + boundary + QStringLiteral("\r\n") );
-  QRegularExpression headerPattern( QStringLiteral("Content-Disposition: form-data; name=\"(?P<name>[^'\"]+)\"(; filename=\"(?P<filename>[^\"]+)\")?\r\n(Content-Type: (?P<content_type>.+))?\r\n") );
-  QRegularExpression endPattern( QStringLiteral("(\r\n)?--") + boundary +  QStringLiteral("--\r\n") );
+  QRegularExpression boundaryPattern( QStringLiteral( "(\r\n)?--" ) + boundary + QStringLiteral( "\r\n" ) );
+  QRegularExpression headerPattern( QStringLiteral( "Content-Disposition: form-data; name=\"(?P<name>[^'\"]+)\"(; filename=\"(?P<filename>[^\"]+)\")?\r\n(Content-Type: (?P<content_type>.+))?\r\n" ) );
+  QRegularExpression endPattern( QStringLiteral( "(\r\n)?--" ) + boundary +  QStringLiteral( "--\r\n" ) );
 
   QByteArray data;
   QString dataString;
@@ -953,7 +953,7 @@ void MerginApi::handleDataStream( QNetworkReply *r, QString projectDir, bool ove
       headerMatch = headerPattern.match( dataString );
       data = data.remove( 0, headerMatch.captured( 0 ).length() );
       dataString = QString::fromLatin1( data.data(), data.size() );
-      QString filename = headerMatch.captured( QStringLiteral("filename") );
+      QString filename = headerMatch.captured( QStringLiteral( "filename" ) );
 
       activeFilePath = projectDir + '/' + filename;
       activeFile.setFileName( activeFilePath );
@@ -967,7 +967,7 @@ void MerginApi::handleDataStream( QNetworkReply *r, QString projectDir, bool ove
         else
         {
           int i = 0;
-          QString newPath =  activeFilePath + QStringLiteral("_conflict_copy");
+          QString newPath =  activeFilePath + QStringLiteral( "_conflict_copy" );
           while ( QFile::exists( newPath + QString::number( i ) ) )
             ++i;
           if ( !QFile::copy( activeFilePath, newPath + QString::number( i ) ) )
@@ -1011,7 +1011,7 @@ bool MerginApi::saveFile( const QByteArray &data, QFile &file, bool closeFile )
   return true;
 }
 
-void MerginApi::createPathIfNotExists( QString filePath )
+void MerginApi::createPathIfNotExists( const QString &filePath )
 {
   QDir dir;
   if ( !dir.exists( mDataDir ) )
@@ -1025,7 +1025,7 @@ void MerginApi::createPathIfNotExists( QString filePath )
   }
 }
 
-ProjectStatus MerginApi::getProjectStatus( QDateTime localUpdated, QDateTime updated, QDateTime lastSync, QDateTime lastModified )
+ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastModified )
 {
   if ( !localUpdated.isValid() )
   {
@@ -1045,7 +1045,7 @@ ProjectStatus MerginApi::getProjectStatus( QDateTime localUpdated, QDateTime upd
   return ProjectStatus::UpToDate;
 }
 
-QByteArray MerginApi::getChecksum( QString filePath )
+QByteArray MerginApi::getChecksum( const QString &filePath )
 {
   QFile f( filePath );
   if ( f.open( QFile::ReadOnly ) )
@@ -1064,7 +1064,7 @@ QByteArray MerginApi::getChecksum( QString filePath )
   return QByteArray();
 }
 
-QSet<QString> MerginApi::listFiles( QString path )
+QSet<QString> MerginApi::listFiles( const QString &path )
 {
   QSet<QString> files;
   QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
