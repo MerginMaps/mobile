@@ -38,13 +38,13 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       switch ( project->status )
       {
         case ProjectStatus::OutOfDate:
-          return QVariant( QStringLiteral("outOfDate") );
+          return QVariant( QStringLiteral( "outOfDate" ) );
         case ProjectStatus::UpToDate:
-          return QVariant( QStringLiteral("upToDate") );
+          return QVariant( QStringLiteral( "upToDate" ) );
         case ProjectStatus::NoVersion:
-          return QVariant( QStringLiteral("noVersion") );
+          return QVariant( QStringLiteral( "noVersion" ) );
         case ProjectStatus::Modified:
-          return QVariant( QStringLiteral("modified") );
+          return QVariant( QStringLiteral( "modified" ) );
       }
     }
     case Pending: return QVariant( project->pending );
@@ -90,7 +90,7 @@ void MerginProjectModel::resetProjects( const ProjectList &merginProjects )
   endResetModel();
 }
 
-void MerginProjectModel::syncProjectFinished( QString projectFolder, QString projectName, bool successfully )
+void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectName, bool successfully )
 {
   Q_UNUSED( projectFolder );
   int row = 0;
