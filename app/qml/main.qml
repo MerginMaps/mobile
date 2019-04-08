@@ -152,6 +152,7 @@ ApplicationWindow {
                                                                            __layersModel.firstNonOnlyReadableLayerIndex())
         activeLayerPanel.activeLayerIndexChanged()
         recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
+        recordToolbar.activeLayerIndexChanged()
     }
 
     Component.onCompleted: {
