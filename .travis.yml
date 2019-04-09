@@ -15,7 +15,6 @@ before_install:
 - pip3 install dropbox
 
 script:
-- ./scripts/check_all.bash
 - export SDK_VERSION=20190403
 - export OSGEO4A_SDK=opengisch/qfield-sdk:${SDK_VERSION}
 - docker pull ${OSGEO4A_SDK}
@@ -25,6 +24,10 @@ script:
 jobs:
   include:
   - stage: build
-    name: build ARMv7
+    name: "Build ARMv7"
     env:
     - ARCH=armv7
+  - stage: test
+    name: "Code Style"
+    script:
+      - ./scripts/check_all.bash
