@@ -148,8 +148,16 @@ Drawer {
                 property real backgroundOpacity: 1
 
                 property QtObject group: QtObject {
-                  property color backgroundColor: "lightGray"
-                  property real height: 30 * QgsQuick.Utils.dp
+                  property color backgroundColor: InputStyle.panelBackgroundLight
+                  property color marginColor: InputStyle.panelBackgroundDark
+                  property real leftMargin: 0 * QgsQuick.Utils.dp
+                  property real rightMargin: 0 * QgsQuick.Utils.dp
+                  property real topMargin: 2 * QgsQuick.Utils.dp
+                  property real bottomMargin: 2 * QgsQuick.Utils.dp
+                  property real height: 64 * QgsQuick.Utils.dp
+                  property color fontColor: InputStyle.fontColor
+                  property int spacing: 10 * QgsQuick.Utils.dp
+                  property int fontPixelSize: 24 * QgsQuick.Utils.dp
                 }
 
                 property QtObject tabs: QtObject {
