@@ -27,48 +27,53 @@
 
 #include <QString>
 
-LayersModel::LayersModel(QgsProject* project, QObject* parent )
+LayersModel::LayersModel( QgsProject *project, QObject *parent )
   : QAbstractListModel( parent )
-  , mProject(project)
+  , mProject( project )
 {
-    reloadLayers();
+  reloadLayers();
 }
 
-LayersModel::~LayersModel() {
+LayersModel::~LayersModel()
+{
 }
 
 
-void LayersModel::reloadLayers() {
-    QgsLayerTreeGroup* root = mProject->layerTreeRoot();
+void LayersModel::reloadLayers()
+{
+  QgsLayerTreeGroup *root = mProject->layerTreeRoot();
 
-    // Get list of all visible and valid layers in the project
-    QList< QgsMapLayer* > allLayers;
-    foreach (QgsLayerTreeLayer* nodeLayer, root->findLayers())
+  // Get list of all visible and valid layers in the project
+  QList< QgsMapLayer * > allLayers;
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  {
+    if ( nodeLayer->isVisible() )
     {
-      if (nodeLayer->isVisible()) {
-       QgsMapLayer* layer = nodeLayer->layer();
-       if (layer->isValid()) {
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer->isValid() )
+      {
         allLayers << layer;
         qDebug() << "Found layer: " << layer->name();
-       }
       }
     }
-    if (mLayers != allLayers) {
-        beginResetModel();
-        mLayers = allLayers;
-        endResetModel();
+  }
+  if ( mLayers != allLayers )
+  {
+    beginResetModel();
+    mLayers = allLayers;
+    endResetModel();
 
-        emit layersChanged();
-    }
+    emit layersChanged();
+  }
 }
 
-QVariant LayersModel::data( const QModelIndex& index, int role ) const
+QVariant LayersModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
-  if (row < 0 || row >= mLayers.count())
-    return QVariant("");
+  if ( row < 0 || row >= mLayers.count() )
+    return QVariant( "" );
 
-  QgsMapLayer* layer = mLayers.at(row);
+  QgsMapLayer *layer = mLayers.at( row );
 
   switch ( role )
   {
@@ -86,24 +91,28 @@ QVariant LayersModel::data( const QModelIndex& index, int role ) const
     }
     case IconSource:
     {
-      QgsVectorLayer* vectorLayer = qobject_cast<QgsVectorLayer*>( layer );
-      if (vectorLayer) {
-          QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
-          switch (type) {
+      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+      if ( vectorLayer )
+      {
+        QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
+        switch ( type )
+        {
           case QgsWkbTypes::GeometryType::PointGeometry: return "mIconPointLayer.svg";
           case QgsWkbTypes::GeometryType::LineGeometry: return "mIconLineLayer.svg";
           case QgsWkbTypes::GeometryType::PolygonGeometry: return "mIconPolygonLayer.svg";
           case QgsWkbTypes::GeometryType::UnknownGeometry: return "";
           case QgsWkbTypes::GeometryType::NullGeometry: return "";
-          }
+        }
         return QVariant();
-      } else return "mIconRaster.svg";
+      }
+      else return "mIconRaster.svg";
     }
     case VectorLayer:
     {
-      QgsVectorLayer* vectorLayer = qobject_cast<QgsVectorLayer*>( layer );
-      if (vectorLayer) {
-        return QVariant::fromValue<QgsVectorLayer*>( vectorLayer );
+      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+      if ( vectorLayer )
+      {
+        return QVariant::fromValue<QgsVectorLayer *>( vectorLayer );
       }
     }
   }
@@ -122,52 +131,61 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   return roleNames;
 }
 
-QModelIndex LayersModel::index( int row ) const {
-    return createIndex(row, 0, nullptr);
+QModelIndex LayersModel::index( int row ) const
+{
+  return createIndex( row, 0, nullptr );
 }
 
-int LayersModel::rowAccordingName(QString name, int defaultIndex) const
+int LayersModel::rowAccordingName( QString name, int defaultIndex ) const
 {
-    int i = 0;
-    for (QgsMapLayer* layer: mLayers) {
-        if (layer->name() == name) {
-             return i;
-        }
-        i++;
+  int i = 0;
+  for ( QgsMapLayer *layer : mLayers )
+  {
+    if ( layer->name() == name )
+    {
+      return i;
     }
-    return defaultIndex;
+    i++;
+  }
+  return defaultIndex;
 }
 
 int LayersModel::noOfEditableLayers() const
 {
-    int count = 0;
-    for (QgsMapLayer* layer: mLayers) {
-        if (!layer->readOnly()) {
-             count++;
-        }
+  int count = 0;
+  for ( QgsMapLayer *layer : mLayers )
+  {
+    if ( !layer->readOnly() )
+    {
+      count++;
     }
+  }
 
-    return count;
+  return count;
 }
 
 int LayersModel::firstNonOnlyReadableLayerIndex() const
 {
-    int i = 0;
-    for (QgsMapLayer* layer: mLayers) {
-        if (!layer->readOnly()) {
-            return i;
-        }
-        i++;
+  int i = 0;
+  for ( QgsMapLayer *layer : mLayers )
+  {
+    if ( !layer->readOnly() )
+    {
+      return i;
     }
+    i++;
+  }
 
-    return -1;
+  return -1;
 }
 
-int LayersModel::rowCount(const QModelIndex &parent) const {
-    Q_UNUSED(parent);
-    return mLayers.count();
+int LayersModel::rowCount( const QModelIndex &parent ) const
+{
+  Q_UNUSED( parent );
+  return mLayers.count();
 }
 
-QList<QgsMapLayer*> LayersModel::layers() const {
-    return mLayers;
+QList<QgsMapLayer *> LayersModel::layers() const
+{
+  return mLayers;
 }

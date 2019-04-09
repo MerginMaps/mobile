@@ -49,48 +49,55 @@
 #include "loader.h"
 #include "appsettings.h"
 
-static QString getDataDir(bool isTest = false) {
+static QString getDataDir( bool isTest = false )
+{
 #ifdef QGIS_QUICK_DATA_PATH
-  QString dataPathRaw(STR(QGIS_QUICK_DATA_PATH));
+  QString dataPathRaw( STR( QGIS_QUICK_DATA_PATH ) );
 
 #ifdef ANDROID
-  QFileInfo extDir("/sdcard/");
-  if(extDir.isDir() && extDir.isWritable()){
-      // seems that this directory transposes to the latter one in case there is no sdcard attached
-      dataPathRaw = extDir.path() + "/" + dataPathRaw;
-  } else {
-      qDebug() << "extDir: " << extDir.path() << " not writable";
+  QFileInfo extDir( "/sdcard/" );
+  if ( extDir.isDir() && extDir.isWritable() )
+  {
+    // seems that this directory transposes to the latter one in case there is no sdcard attached
+    dataPathRaw = extDir.path() + "/" + dataPathRaw;
+  }
+  else
+  {
+    qDebug() << "extDir: " << extDir.path() << " not writable";
 
-      QStringList split = QDir::homePath().split("/"); // something like /data/user/0/uk.co.lutraconsulting/files
-      // TODO support active user from QDir::homePath()
-      QFileInfo usrDir("/storage/emulated/" + split[2] + "/");
-      dataPathRaw = usrDir.path() + "/" + dataPathRaw;
-      if(!(usrDir.isDir() && usrDir.isWritable())){
-          qDebug() << "usrDir: " << usrDir.path() << " not writable";
-      }
+    QStringList split = QDir::homePath().split( "/" ); // something like /data/user/0/uk.co.lutraconsulting/files
+    // TODO support active user from QDir::homePath()
+    QFileInfo usrDir( "/storage/emulated/" + split[2] + "/" );
+    dataPathRaw = usrDir.path() + "/" + dataPathRaw;
+    if ( !( usrDir.isDir() && usrDir.isWritable() ) )
+    {
+      qDebug() << "usrDir: " << usrDir.path() << " not writable";
+    }
   }
 #endif
-  if (isTest && ::getenv("TEST_PATH_SUFFIX")) {
-      dataPathRaw += ::getenv("TEST_PATH_SUFFIX");
+  if ( isTest && ::getenv( "TEST_PATH_SUFFIX" ) )
+  {
+    dataPathRaw += ::getenv( "TEST_PATH_SUFFIX" );
   }
-  ::setenv("QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true);
+  ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
 #else
-  qDebug("== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==");
+  qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
 #endif
-  QString dataDir(::getenv("QGIS_QUICK_DATA_PATH"));
+  QString dataDir( ::getenv( "QGIS_QUICK_DATA_PATH" ) );
   qDebug() << "QGIS_QUICK_DATA_PATH: " << dataDir;
   return dataDir;
 }
 
-static void setEnvironmentQgisPrefixPath() {
+static void setEnvironmentQgisPrefixPath()
+{
 #ifndef ANDROID
 #ifdef QGIS_PREFIX_PATH
-  ::setenv("QGIS_PREFIX_PATH", STR(QGIS_PREFIX_PATH), true);
+  ::setenv( "QGIS_PREFIX_PATH", STR( QGIS_PREFIX_PATH ), true );
 #endif
-  if (::getenv("QGIS_PREFIX_PATH") == 0)
+  if ( ::getenv( "QGIS_PREFIX_PATH" ) == 0 )
   {
     // if not on Android, QGIS_PREFIX_PATH env variable should have been set already or defined as C++ define
-    qDebug("== Must set QGIS_PREFIX_PATH in order to get QGIS Quick module running! ==");
+    qDebug( "== Must set QGIS_PREFIX_PATH in order to get QGIS Quick module running! ==" );
   }
 #endif
 
@@ -98,59 +105,69 @@ static void setEnvironmentQgisPrefixPath() {
   QDir myDir( QDir::homePath() );
   myDir.cdUp();
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
-  ::setenv("QGIS_PREFIX_PATH", prefixPath.toUtf8().constData(), true);
+  ::setenv( "QGIS_PREFIX_PATH", prefixPath.toUtf8().constData(), true );
 #endif
 
-  qDebug() << "QGIS_PREFIX_PATH: " << ::getenv("QGIS_PREFIX_PATH");
+  qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
 }
 
-static bool cpDir(const QString &srcPath, const QString &dstPath)
+static bool cpDir( const QString &srcPath, const QString &dstPath )
 {
-    QDir parentDstDir(QFileInfo(dstPath).path());
-    if (!parentDstDir.mkpath(dstPath))
-        return false;
+  QDir parentDstDir( QFileInfo( dstPath ).path() );
+  if ( !parentDstDir.mkpath( dstPath ) )
+    return false;
 
-    QDir srcDir(srcPath);
-    foreach(const QFileInfo &info, srcDir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot)) {
-        QString srcItemPath = srcPath + "/" + info.fileName();
-        QString dstItemPath = dstPath + "/" + info.fileName();
-        if (info.isDir()) {
-            if (!cpDir(srcItemPath, dstItemPath)) {
-                return false;
-            }
-        } else if (info.isFile()) {
-            if (!QFile::copy(srcItemPath, dstItemPath)) {
-                return false;
-            }
-            QFile::setPermissions(dstItemPath, QFile::ReadUser|QFile::WriteUser|QFile::ReadOwner|QFile::WriteOwner);
-        } else {
-            qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
-        }
+  QDir srcDir( srcPath );
+  foreach ( const QFileInfo &info, srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) )
+  {
+    QString srcItemPath = srcPath + "/" + info.fileName();
+    QString dstItemPath = dstPath + "/" + info.fileName();
+    if ( info.isDir() )
+    {
+      if ( !cpDir( srcItemPath, dstItemPath ) )
+      {
+        return false;
+      }
     }
-    return true;
+    else if ( info.isFile() )
+    {
+      if ( !QFile::copy( srcItemPath, dstItemPath ) )
+      {
+        return false;
+      }
+      QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
+    }
+    else
+    {
+      qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
+    }
+  }
+  return true;
 }
 
 // Copies resources folder to package folder
-static void expand_pkg_data(const QString& pkgPath) {
+static void expand_pkg_data( const QString &pkgPath )
+{
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  cpDir(assetsBasePath + "/qgis-data", pkgPath);
+  cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
-    Q_UNUSED(pkgPath);
+  Q_UNUSED( pkgPath );
 #endif
 }
 
-static void copy_demo_projects(const QString& projectDir) {
+static void copy_demo_projects( const QString &projectDir )
+{
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  qDebug("assets base path:  %s", assetsBasePath.toLatin1().data());
-  cpDir(assetsBasePath + "/demo-projects", projectDir);
+  qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
+  cpDir( assetsBasePath + "/demo-projects", projectDir );
 #else
-    Q_UNUSED(projectDir);
+  Q_UNUSED( projectDir );
 #endif
 }
 
-static void init_qgis(const QString & pkgPath)
+static void init_qgis( const QString &pkgPath )
 {
   QTime t;
   t.start();
@@ -163,46 +180,49 @@ static void init_qgis(const QString & pkgPath)
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
   QgsApplication::setPkgDataPath( pkgPath );
 #else
-  Q_UNUSED(pkgPath)
+  Q_UNUSED( pkgPath )
 #endif
 
   // make sure the DB exists - otherwise custom projections will be failing
-  if (!QgsApplication::createDatabase())
-    qDebug("Can't create qgis user DB!!!");
+  if ( !QgsApplication::createDatabase() )
+    qDebug( "Can't create qgis user DB!!!" );
 
-  qDebug("qgis_init %f [s]", t.elapsed()/1000.0);
+  qDebug( "qgis_init %f [s]", t.elapsed() / 1000.0 );
 }
 
-void initDeclarative() {
-    qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
-    qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
-    qmlRegisterUncreatableType<Loader>("lc", 1, 0, "Loader", "");
-    qmlRegisterUncreatableType<AppSettings>("lc", 1, 0, "AppSettings", "");
-    qmlRegisterType<DigitizingController>("lc", 1, 0, "DigitizingController");
-}
-
-void initTestDeclarative() {
-    qRegisterMetaType<ProjectList>("ProjectList");
-}
-
-int main(int argc, char *argv[])
+void initDeclarative()
 {
-  QgsApplication app(argc, argv, true);
+  qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
+  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
+  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
+  qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
+  qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
+}
+
+void initTestDeclarative()
+{
+  qRegisterMetaType<ProjectList>( "ProjectList" );
+}
+
+int main( int argc, char *argv[] )
+{
+  QgsApplication app( argc, argv, true );
 
   QString version;
 #ifdef INPUT_VERSION
-  version = STR(INPUT_VERSION);
+  version = STR( INPUT_VERSION );
 #endif
 
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" );
-  QCoreApplication::setApplicationVersion(version);
+  QCoreApplication::setApplicationVersion( version );
 
   bool IS_TEST = false;
-  for( int i = 0; i < argc; ++i ) {
-      if (std::string(argv[i]) == "--test") IS_TEST = true;
+  for ( int i = 0; i < argc; ++i )
+  {
+    if ( std::string( argv[i] ) == "--test" ) IS_TEST = true;
   }
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -211,56 +231,58 @@ int main(int argc, char *argv[])
   AndroidUtils::requirePermissions();
 #endif
   // Set/Get enviroment
-  QString dataDir = getDataDir(IS_TEST);
+  QString dataDir = getDataDir( IS_TEST );
   QString projectDir = dataDir + "/projects";
   setEnvironmentQgisPrefixPath();
 
-  init_qgis(dataDir + "/qgis-data");
+  init_qgis( dataDir + "/qgis-data" );
   expand_pkg_data( QgsApplication::pkgDataPath() );
 
   // Create Input classes
   AndroidUtils au;
   InputUtils iu;
-  ProjectModel pm(projectDir);
-  if (pm.rowCount() == 0 && !IS_TEST) {
-      qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
+  ProjectModel pm( projectDir );
+  if ( pm.rowCount() == 0 && !IS_TEST )
+  {
+    qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
   }
   Loader loader;
-  LayersModel lm(loader.project());
-  MapThemesModel mtm(loader.project());
+  LayersModel lm( loader.project() );
+  MapThemesModel mtm( loader.project() );
   AppSettings as;
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>(new MerginApi( projectDir ));
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( projectDir ) );
   MerginProjectModel mpm;
 
   // Connections
-  QObject::connect(&app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged);
-  QObject::connect(&loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers);
-  QObject::connect(&loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes);
-  QObject::connect(&mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers);
-  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished);
-  QObject::connect(ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject);
-  QObject::connect(ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects);
-  QObject::connect(ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject);
-  QObject::connect(&pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted);
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
+  QObject::connect( &loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers );
+  QObject::connect( &loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes );
+  QObject::connect( &mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers );
+  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished );
+  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
+  QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
+  QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( &pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted );
 
-  if (IS_TEST) {
-      initTestDeclarative();
-      TestMerginApi test(ma.get(), &mpm, &pm);
-      return 0;
+  if ( IS_TEST )
+  {
+    initTestDeclarative();
+    TestMerginApi test( ma.get(), &mpm, &pm );
+    return 0;
   }
 
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
   fonts << ":/Lato-Regular.ttf"
         << ":/Lato-Bold.ttf";
-  for (QString font : fonts)
+  for ( QString font : fonts )
   {
-    if (QFontDatabase::addApplicationFont(font) == -1)
+    if ( QFontDatabase::addApplicationFont( font ) == -1 )
       qDebug() << "!! Failed to load font" << font;
     else
       qDebug() << "Loaded font" << font;
   }
-  app.setFont(QFont("Lato"));
+  app.setFont( QFont( "Lato" ) );
 
   copy_demo_projects( projectDir );
   QQmlEngine engine;
@@ -284,15 +306,15 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
 #ifdef ANDROID
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized");
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 0);
-  engine.rootContext()->setContextProperty( "__appwindowheight", 0);
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", 0 );
+  engine.rootContext()->setContextProperty( "__appwindowheight", 0 );
 #else
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed");
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed" );
   engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
   engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
-  engine.rootContext()->setContextProperty( "__version", version);
+  engine.rootContext()->setContextProperty( "__version", version );
 
   // Set simulated position for desktop builds
 #ifndef ANDROID
@@ -302,43 +324,45 @@ int main(int argc, char *argv[])
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
-  QQmlComponent component(&engine, QUrl("qrc:/main.qml"));
+  QQmlComponent component( &engine, QUrl( "qrc:/main.qml" ) );
   QObject *object = component.create();
 
-  if (!component.errors().isEmpty()) {
-      qDebug("%s", QgsApplication::showSettings().toLocal8Bit().data());
-
-      qDebug() << "****************************************";
-      qDebug() << "*****        QML errors:           *****";
-      qDebug() << "****************************************";
-      for(const QQmlError& error: component.errors()) {
-        qDebug() << "  " << error;
-      }
-      qDebug() << "****************************************";
-      qDebug() << "****************************************";
-  }
-
-  if( object == 0 )
+  if ( !component.errors().isEmpty() )
   {
-      qDebug() << "FATAL ERROR: unable to create main.qml";
-      return EXIT_FAILURE;
+    qDebug( "%s", QgsApplication::showSettings().toLocal8Bit().data() );
+
+    qDebug() << "****************************************";
+    qDebug() << "*****        QML errors:           *****";
+    qDebug() << "****************************************";
+    for ( const QQmlError &error : component.errors() )
+    {
+      qDebug() << "  " << error;
+    }
+    qDebug() << "****************************************";
+    qDebug() << "****************************************";
   }
 
-  if ( QQuickWindow* quickWindow = qobject_cast<QQuickWindow*>( object ) )
+  if ( object == 0 )
   {
-    quickWindow->setIcon(QIcon(":/logo.png"));
+    qDebug() << "FATAL ERROR: unable to create main.qml";
+    return EXIT_FAILURE;
   }
 
-  #ifndef ANDROID
+  if ( QQuickWindow *quickWindow = qobject_cast<QQuickWindow *>( object ) )
+  {
+    quickWindow->setIcon( QIcon( ":/logo.png" ) );
+  }
+
+#ifndef ANDROID
   QCommandLineParser parser;
   parser.addVersionOption();
-  parser.process(app);
-  #endif
+  parser.process( app );
+#endif
 
   // Add some data for debugging if needed (visible in the final customer app)
-  QgsApplication::messageLog()->logMessage(QgsQuickUtils().dumpScreenInfo());
-  QgsApplication::messageLog()->logMessage("data directory: " + dataDir);
-  QgsApplication::messageLog()->logMessage("All up and running");
+  QgsApplication::messageLog()->logMessage( QgsQuickUtils().dumpScreenInfo() );
+  QgsApplication::messageLog()->logMessage( "data directory: " + dataDir );
+  QgsApplication::messageLog()->logMessage( "All up and running" );
 
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();

@@ -25,46 +25,50 @@
 
 #include <QString>
 
-MapThemesModel::MapThemesModel(QgsProject* project, QObject* parent )
+MapThemesModel::MapThemesModel( QgsProject *project, QObject *parent )
   : QAbstractListModel( parent )
-  , mProject(project)
+  , mProject( project )
 {
-   reloadMapThemes();
+  reloadMapThemes();
 }
 
-MapThemesModel::~MapThemesModel() {
-}
-
-void MapThemesModel::reloadMapThemes() {
-    if (!mProject) return;
-
-    QList<QString>allThemes;
-    QgsMapThemeCollection* collection = mProject->mapThemeCollection();
-    for(QString name: collection->mapThemes()) {
-        allThemes << name;
-        qDebug() << "Found map theme: " << name;
-    }
-
-    if (mMapThemes != allThemes) {
-        beginResetModel();
-        mMapThemes = allThemes;
-        endResetModel();
-        emit mapThemesChanged();
-    }
-}
-
-QVariant MapThemesModel::data( const QModelIndex& index, int role ) const
+MapThemesModel::~MapThemesModel()
 {
-    int row = index.row();
-    if (row < 0 || row >= mMapThemes.count())
-        return QVariant();
+}
 
-    switch ( role )
-    {
-    case Name:
-        return mMapThemes.at(index.row());
-    }
+void MapThemesModel::reloadMapThemes()
+{
+  if ( !mProject ) return;
+
+  QList<QString>allThemes;
+  QgsMapThemeCollection *collection = mProject->mapThemeCollection();
+  for ( QString name : collection->mapThemes() )
+  {
+    allThemes << name;
+    qDebug() << "Found map theme: " << name;
+  }
+
+  if ( mMapThemes != allThemes )
+  {
+    beginResetModel();
+    mMapThemes = allThemes;
+    endResetModel();
+    emit mapThemesChanged();
+  }
+}
+
+QVariant MapThemesModel::data( const QModelIndex &index, int role ) const
+{
+  int row = index.row();
+  if ( row < 0 || row >= mMapThemes.count() )
     return QVariant();
+
+  switch ( role )
+  {
+    case Name:
+      return mMapThemes.at( index.row() );
+  }
+  return QVariant();
 }
 
 QHash<int, QByteArray> MapThemesModel::roleNames() const
@@ -74,13 +78,15 @@ QHash<int, QByteArray> MapThemesModel::roleNames() const
   return roleNames;
 }
 
-QModelIndex MapThemesModel::index( int row ) const {
-    return createIndex(row, 0, nullptr);
+QModelIndex MapThemesModel::index( int row ) const
+{
+  return createIndex( row, 0, nullptr );
 }
 
-int MapThemesModel::rowCount(const QModelIndex &parent) const {
-    Q_UNUSED(parent);
-    return mMapThemes.count();
+int MapThemesModel::rowCount( const QModelIndex &parent ) const
+{
+  Q_UNUSED( parent );
+  return mMapThemes.count();
 }
 
 QList<QString> MapThemesModel::mapThemes() const
@@ -88,7 +94,7 @@ QList<QString> MapThemesModel::mapThemes() const
   return mMapThemes;
 }
 
-void MapThemesModel::setMapThemes( const QList<QString>& mapThemes )
+void MapThemesModel::setMapThemes( const QList<QString> &mapThemes )
 {
   if ( mMapThemes == mapThemes )
     return;
@@ -99,8 +105,8 @@ void MapThemesModel::setMapThemes( const QList<QString>& mapThemes )
 
 void MapThemesModel::applyTheme( const QString &name )
 {
-    QgsLayerTree* root = mProject->layerTreeRoot();
-    QgsLayerTreeModel model(root);
-    mProject->mapThemeCollection()->applyTheme(name, root, &model);
-    emit reloadLayers();
+  QgsLayerTree *root = mProject->layerTreeRoot();
+  QgsLayerTreeModel model( root );
+  mProject->mapThemeCollection()->applyTheme( name, root, &model );
+  emit reloadLayers();
 }
