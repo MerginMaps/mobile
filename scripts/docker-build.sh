@@ -42,7 +42,7 @@ ${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
-if [ -n ${STOREPASS} ]; then
+if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     ${QT_ANDROID}/bin/androiddeployqt \
 	    --sign ${SOURCE_DIR}/Input_keystore.keystore input \
 	    --storepass ${STOREPASS} \
