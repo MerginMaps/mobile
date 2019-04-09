@@ -3,153 +3,163 @@
 #include <QSettings>
 #include <QFileInfo>
 
-AppSettings::AppSettings(QObject* parent):QObject(parent)
+AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
-    mDefaultLayers = QHash<QString, QString>();
-    reloadDefaultLayers();
+  mDefaultLayers = QHash<QString, QString>();
+  reloadDefaultLayers();
 
-    QSettings settings;
-    settings.beginGroup(mGroupName);
-    QString path = settings.value("defaultProject","").toString();
-    QString layer = settings.value("defaultLayer/"  + path,"").toString();
-    bool autoCenter = settings.value("autoCenter", false).toBool();
-    int gpsTolerance = settings.value("gpsTolerance", 10).toInt();
-    int lineRecordingInterval = settings.value("lineRecordingInterval", 3).toInt();
-    settings.endGroup();
+  QSettings settings;
+  settings.beginGroup( mGroupName );
+  QString path = settings.value( "defaultProject", "" ).toString();
+  QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
+  bool autoCenter = settings.value( "autoCenter", false ).toBool();
+  int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
+  int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
+  settings.endGroup();
 
-    setDefaultProject(path);
-    setActiveProject(path);
-    setDefaultLayer(layer);
-    setAutoCenterMapChecked(autoCenter);
-    setGpsAccuracyTolerance(gpsTolerance);
-    setLineRecordingInterval(lineRecordingInterval);
+  setDefaultProject( path );
+  setActiveProject( path );
+  setDefaultLayer( layer );
+  setAutoCenterMapChecked( autoCenter );
+  setGpsAccuracyTolerance( gpsTolerance );
+  setLineRecordingInterval( lineRecordingInterval );
 }
 
 QString AppSettings::defaultLayer() const
 {
-    return mDefaultLayers.value(mActiveProject);
+  return mDefaultLayers.value( mActiveProject );
 }
 
-void AppSettings::setDefaultLayer(const QString &value)
+void AppSettings::setDefaultLayer( const QString &value )
 {
-    if (defaultLayer() != value) {
-        QSettings settings;
-        settings.beginGroup(mGroupName);
-        settings.setValue("defaultLayer/" + mActiveProject, value);
-        settings.endGroup();
-        mDefaultLayers.insert(mActiveProject, value);
-        emit defaultLayerChanged();
-    }
+  if ( defaultLayer() != value )
+  {
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "defaultLayer/" + mActiveProject, value );
+    settings.endGroup();
+    mDefaultLayers.insert( mActiveProject, value );
+    emit defaultLayerChanged();
+  }
 }
 
 void AppSettings::reloadDefaultLayers()
 {
-    QSettings settings;
-    settings.beginGroup(mGroupName);
-    for (QString key: settings.allKeys()) {
-        if (key.startsWith("defaultLayer/")) {
-            QVariant value = settings.value(key);
-            mDefaultLayers.insert(key.replace("defaultLayer", ""), value.toString());
-        }
+  QSettings settings;
+  settings.beginGroup( mGroupName );
+  for ( QString key : settings.allKeys() )
+  {
+    if ( key.startsWith( "defaultLayer/" ) )
+    {
+      QVariant value = settings.value( key );
+      mDefaultLayers.insert( key.replace( "defaultLayer", "" ), value.toString() );
     }
+  }
 
-    settings.endGroup();
+  settings.endGroup();
 }
 
 
 QString AppSettings::defaultProject() const
 {
-    return mDefaultProject;
+  return mDefaultProject;
 }
 
-void AppSettings::setDefaultProject(const QString &value)
+void AppSettings::setDefaultProject( const QString &value )
 {
-    if (mDefaultProject != value) {
-        mDefaultProject = value;
-        QSettings settings;
-        settings.beginGroup(mGroupName);
-        settings.setValue("defaultProject", value);
-        settings.endGroup();
+  if ( mDefaultProject != value )
+  {
+    mDefaultProject = value;
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "defaultProject", value );
+    settings.endGroup();
 
-        emit defaultProjectChanged();
-    }
+    emit defaultProjectChanged();
+  }
 }
 
 QString AppSettings::activeProject() const
 {
-    return mActiveProject;
+  return mActiveProject;
 }
 
-void AppSettings::setActiveProject(const QString &value)
+void AppSettings::setActiveProject( const QString &value )
 {
-    if (mActiveProject != value) {
-        mActiveProject = value;
+  if ( mActiveProject != value )
+  {
+    mActiveProject = value;
 
-        emit activeProjectChanged();
-    }
+    emit activeProjectChanged();
+  }
 }
 
-bool AppSettings::autoCenterMapChecked() {
-    return mAutoCenterMapChecked;
+bool AppSettings::autoCenterMapChecked()
+{
+  return mAutoCenterMapChecked;
 }
 
 
-void AppSettings::setAutoCenterMapChecked(bool value)
+void AppSettings::setAutoCenterMapChecked( bool value )
 {
 
-    if (mAutoCenterMapChecked != value) {
-        mAutoCenterMapChecked = value;
-        QSettings settings;
-        settings.beginGroup(mGroupName);
-        settings.setValue("autoCenter", value);
-        settings.endGroup();
+  if ( mAutoCenterMapChecked != value )
+  {
+    mAutoCenterMapChecked = value;
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "autoCenter", value );
+    settings.endGroup();
 
-        emit autoCenterMapCheckedChanged();
-    }
+    emit autoCenterMapCheckedChanged();
+  }
 
 }
 
 QString AppSettings::defaultProjectName() const
 {
-    if (!mDefaultProject.isEmpty()) {
-        QFileInfo info(mDefaultProject);
-        return info.baseName();
-    }
-    return QString("");
+  if ( !mDefaultProject.isEmpty() )
+  {
+    QFileInfo info( mDefaultProject );
+    return info.baseName();
+  }
+  return QString( "" );
 }
 
 int AppSettings::gpsAccuracyTolerance() const
 {
-    return mGpsAccuracyTolerance;
+  return mGpsAccuracyTolerance;
 }
 
-void AppSettings::setGpsAccuracyTolerance(int value)
+void AppSettings::setGpsAccuracyTolerance( int value )
 {
-    if (mGpsAccuracyTolerance != value) {
-        mGpsAccuracyTolerance = value;
-        QSettings settings;
-        settings.beginGroup(mGroupName);
-        settings.setValue("gpsTolerance", value);
-        settings.endGroup();
+  if ( mGpsAccuracyTolerance != value )
+  {
+    mGpsAccuracyTolerance = value;
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "gpsTolerance", value );
+    settings.endGroup();
 
-        emit gpsAccuracyToleranceChanged();
-    }
+    emit gpsAccuracyToleranceChanged();
+  }
 }
 
 int AppSettings::lineRecordingInterval() const
 {
-    return mLineRecordingInterval;
+  return mLineRecordingInterval;
 }
 
-void AppSettings::setLineRecordingInterval(int value)
+void AppSettings::setLineRecordingInterval( int value )
 {
-    if (mLineRecordingInterval != value) {
-        mLineRecordingInterval = value;
-        QSettings settings;
-        settings.beginGroup(mGroupName);
-        settings.setValue("lineRecordingInterval", value);
-        settings.endGroup();
+  if ( mLineRecordingInterval != value )
+  {
+    mLineRecordingInterval = value;
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "lineRecordingInterval", value );
+    settings.endGroup();
 
-        emit lineRecordingIntervalChanged();
-    }
+    emit lineRecordingIntervalChanged();
+  }
 }

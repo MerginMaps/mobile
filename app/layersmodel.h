@@ -27,7 +27,7 @@ class QgsProject;
 class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QgsMapLayer*> layers READ layers NOTIFY layersChanged )
+    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersChanged )
 
   public:
     enum Roles
@@ -40,23 +40,23 @@ class LayersModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit LayersModel(QgsProject* project, QObject* parent = nullptr );
+    explicit LayersModel( QgsProject *project, QObject *parent = nullptr );
     ~LayersModel();
 
-    Q_INVOKABLE QVariant data ( const QModelIndex& index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;   
-    Q_INVOKABLE int rowAccordingName(QString name, int defaultIndex = -1) const;
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
+    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
     Q_INVOKABLE int noOfEditableLayers() const;
     Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 
     QHash<int, QByteArray> roleNames() const override;
 
-    QList<QgsMapLayer*> layers() const;
+    QList<QgsMapLayer *> layers() const;
 
     int defaultLayerIndex() const;
-    void setDefaultLayerIndex(int index);
+    void setDefaultLayerIndex( int index );
 
   signals:
     void layersChanged();
@@ -66,8 +66,8 @@ class LayersModel : public QAbstractListModel
     void reloadLayers(); //when project file changes, reload all layers, etc.
 
   private:
-    QgsProject* mProject;
-    QList<QgsMapLayer*> mLayers; // all layers
+    QgsProject *mProject;
+    QList<QgsMapLayer *> mLayers; // all layers
 };
 
 #endif // LAYERSMODEL_H

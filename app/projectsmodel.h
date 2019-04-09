@@ -29,7 +29,7 @@
 class ProjectModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QString dataDir READ dataDir) // never changes
+    Q_PROPERTY( QString dataDir READ dataDir ) // never changes
 
   public:
     enum Roles
@@ -44,40 +44,41 @@ class ProjectModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit ProjectModel(const QString& dataDir, QObject* parent = nullptr);
+    explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
     ~ProjectModel();
 
-    Q_INVOKABLE QVariant data( const QModelIndex& index, int role ) const override;
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
-    Q_INVOKABLE int rowAccordingPath(QString path) const;
+    Q_INVOKABLE int rowAccordingPath( QString path ) const;
     Q_INVOKABLE void deleteProject( int row );
 
     QHash<int, QByteArray> roleNames() const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 
     QString dataDir() const;
-signals:
-    void projectDeleted(QString folderName);
+  signals:
+    void projectDeleted( QString folderName );
 
-public slots:
-    void addProject(QString projectFolder, QString projectName, bool successful);
+  public slots:
+    void addProject( QString projectFolder, QString projectName, bool successful );
 
   private:
     void findProjectFiles();
-    void addProjectFromPath(QString path);
+    void addProjectFromPath( QString path );
 
-    struct ProjectFile {
-        QString name;
-        QString folderName;
-        QString path;
-        QString info;
-        bool isValid;
+    struct ProjectFile
+    {
+      QString name;
+      QString folderName;
+      QString path;
+      QString info;
+      bool isValid;
 
-        bool operator < (const ProjectFile& str) const
-        {
-            return (folderName < str.folderName);
-        }
+      bool operator < ( const ProjectFile &str ) const
+      {
+        return ( folderName < str.folderName );
+      }
     };
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;

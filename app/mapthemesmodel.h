@@ -36,19 +36,19 @@ class MapThemesModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MapThemesModel(QgsProject* project, QObject* parent = nullptr );
+    explicit MapThemesModel( QgsProject *project, QObject *parent = nullptr );
     ~MapThemesModel();
 
-    Q_INVOKABLE QVariant data ( const QModelIndex& index, int role ) const override;
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
     Q_INVOKABLE void applyTheme( const QString &name );
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 
     QHash<int, QByteArray> roleNames() const override;
 
     QList<QString> mapThemes() const;
-    void setMapThemes( const QList<QString>& mapThemes );
+    void setMapThemes( const QList<QString> &mapThemes );
 
   signals:
     void mapThemesChanged();
@@ -58,7 +58,7 @@ class MapThemesModel : public QAbstractListModel
     void reloadMapThemes();
 
   private:
-    QgsProject* mProject;
+    QgsProject *mProject;
     QList<QString> mMapThemes;
 };
 

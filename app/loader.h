@@ -22,14 +22,15 @@
 #include "qgsquickutils.h"
 #include "qgsquickpositionkit.h"
 
-class Loader: public QObject {
+class Loader: public QObject
+{
     Q_OBJECT
-    Q_PROPERTY(QgsProject* project READ project NOTIFY projectChanged) // never changes
-    Q_PROPERTY(QgsQuickPositionKit* positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged)
-    Q_PROPERTY(bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged)
+    Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
+    Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
 
-public:
-    explicit Loader(QObject* parent = nullptr );
+  public:
+    explicit Loader( QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -39,28 +40,28 @@ public:
     bool isRecording() const { return mRecording; }
     void setRecording( bool isRecording );
 
-    Q_INVOKABLE bool load(const QString& filePath);
-    Q_INVOKABLE void zoomToProject(QgsQuickMapSettings *mapSettings);
-    Q_INVOKABLE QString featureTitle(QgsQuickFeatureLayerPair pair);
-    Q_INVOKABLE QString mapTipHtml(QgsQuickFeatureLayerPair pair);
-    Q_INVOKABLE QString mapTipType(QgsQuickFeatureLayerPair pair);
-    Q_INVOKABLE QString mapTipImage(QgsQuickFeatureLayerPair pair);
-    Q_INVOKABLE QStringList mapTipFields(QgsQuickFeatureLayerPair pair);
+    Q_INVOKABLE bool load( const QString &filePath );
+    Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE QString featureTitle( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QString mapTipHtml( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
 
-signals:
+  signals:
     void projectChanged();
     void projectReloaded();
 
     void positionKitChanged();
     void recordingChanged();
 
-public slots:
-     void appStateChanged(Qt::ApplicationState state);
-     // Reloads project if current project path matches given path (its the same project)
-     bool reloadProject(QString projectDir);
-private:
-     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
-private:
+  public slots:
+    void appStateChanged( Qt::ApplicationState state );
+    // Reloads project if current project path matches given path (its the same project)
+    bool reloadProject( QString projectDir );
+  private:
+    QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
+  private:
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;

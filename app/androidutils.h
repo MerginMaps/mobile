@@ -9,15 +9,15 @@
 #include <QObject>
 
 class AndroidUtils: public QObject
-        #ifdef ANDROID
-        , QAndroidActivityResultReceiver
-        #endif
+#ifdef ANDROID
+  , QAndroidActivityResultReceiver
+#endif
 {
     Q_OBJECT
-    Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT )
+    Q_PROPERTY( bool isAndroid READ isAndroid CONSTANT )
 
-public:
-    explicit AndroidUtils( QObject* parent = nullptr );
+  public:
+    explicit AndroidUtils( QObject *parent = nullptr );
 
     bool isAndroid() const;
     static void requirePermissions();
@@ -31,16 +31,16 @@ public:
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;
 
-    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data) override;
+    void handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data ) override;
 #endif
 
-signals:
-    void imageSelected(QString imagePath);
+  signals:
+    void imageSelected( QString imagePath );
 
-public slots:
+  public slots:
     void showToast( QString message );
 
-private:
+  private:
     bool mIsAndroid;
 
 };

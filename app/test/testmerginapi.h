@@ -13,8 +13,8 @@
 class TestMerginApi: public QObject
 {
     Q_OBJECT
- public:
-    explicit TestMerginApi(MerginApi* api, MerginProjectModel* mpm, ProjectModel* pm, QObject* parent = nullptr);
+  public:
+    explicit TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm, QObject *parent = nullptr );
     ~TestMerginApi() = default;
 
   public slots:
@@ -27,18 +27,18 @@ class TestMerginApi: public QObject
 
     void cleanupTestCase();
 
-private:
+  private:
     int SHORT_REPLY = 1000;
 
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
-    ProjectModel* mProjectModel;
+    ProjectModel *mProjectModel;
     QString mApiRoot;
     QString mUsername;
     QString mPassword;
 
     ProjectList getProjectList();
-    bool hasProject(QString projectName, ProjectList projects);
+    bool hasProject( QString projectName, ProjectList projects );
 };
 
 # endif // TESTMERGINAPI_H
