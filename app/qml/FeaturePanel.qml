@@ -152,8 +152,8 @@ Drawer {
                   property color marginColor: InputStyle.panelBackgroundDark
                   property real leftMargin: 0 * QgsQuick.Utils.dp
                   property real rightMargin: 0 * QgsQuick.Utils.dp
-                  property real topMargin: 2 * QgsQuick.Utils.dp
-                  property real bottomMargin: 2 * QgsQuick.Utils.dp
+                  property real topMargin: 1 * QgsQuick.Utils.dp
+                  property real bottomMargin: 1 * QgsQuick.Utils.dp
                   property real height: 64 * QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
                   property int spacing: 10 * QgsQuick.Utils.dp
