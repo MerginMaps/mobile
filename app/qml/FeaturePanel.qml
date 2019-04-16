@@ -164,6 +164,9 @@ Drawer {
                   property color normalColor: "#4CAF50"
                   property color activeColor: "#1B5E20"
                   property color disabledColor: "#999999"
+                  property color normalBackgroundColor: InputStyle.panelBackgroundLight
+                  property color activeBackgroundColor: "#FFFFFF"
+                  property color disabledBackgroundColor: InputStyle.panelBackgroundDark
                   property real height: 48 * QgsQuick.Utils.dp
                 }
 
@@ -190,6 +193,15 @@ Drawer {
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
                   }
+
+                property QtObject icons: QtObject {
+                  property var camera: InputStyle.cameraIcon
+                  property var remove: InputStyle.removeIcon
+                  property var gallery: QgsQuick.Utils.getThemeIcon("ic_gallery")
+                  property var brokenImage: QgsQuick.Utils.getThemeIcon("ic_broken_image_black")
+                  property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
+                  property var today: QgsQuick.Utils.getThemeIcon("ic_today")
+                }
               }
 
             model: QgsQuick.AttributeFormModel {

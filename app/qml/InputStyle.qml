@@ -48,6 +48,10 @@ QtObject {
     // used in scaling functions for high DPI screens
     property real deviceRatio: 1
 
+    // icons
+    property var cameraIcon: "qrc:/add_photo.svg"
+    property var removeIcon: "qrc:/trash.svg"
+
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
         return size * QgsQuick.Utils.dp
