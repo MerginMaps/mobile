@@ -296,7 +296,7 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
     {
       QDateTime localUpdate = projectUpdates.value( project->name ).get()->updated;
       project->lastSync = projectUpdates.value( project->name ).get()->lastSync;
-      QDateTime lastModified = QFileInfo( mDataDir + project->name ).lastModified();
+      QDateTime lastModified = getLastModifiedFileDateTime( mDataDir + project->name );
       project->updated = localUpdate;
       project->status = getProjectStatus( project->updated, project->serverUpdated, project->lastSync, lastModified );
     }
@@ -1043,6 +1043,24 @@ ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const 
   }
 
   return ProjectStatus::UpToDate;
+}
+
+QDateTime MerginApi::getLastModifiedFileDateTime( const QString &path )
+{
+  QDateTime lastModified = QFileInfo( path ).lastModified();
+  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
+  while ( it.hasNext() )
+  {
+    it.next();
+    if ( !mIgnoreFiles.contains( it.fileInfo().suffix() ) )
+    {
+      if ( it.fileInfo().lastModified() > lastModified )
+      {
+        lastModified = it.fileInfo().lastModified();
+      }
+    }
+  }
+  return lastModified;
 }
 
 QByteArray MerginApi::getChecksum( const QString &filePath )

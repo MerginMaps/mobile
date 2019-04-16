@@ -147,6 +147,7 @@ class MerginApi: public QObject
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
     void createPathIfNotExists( const QString &filePath );
     ProjectStatus getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastMod );
+    QDateTime getLastModifiedFileDateTime( const QString &path );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
     void downloadProjectFiles( const QString &projectName, const QByteArray &json );
