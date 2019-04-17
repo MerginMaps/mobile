@@ -320,7 +320,12 @@ ApplicationWindow {
             popup.open()
         }
         onOpenLogClicked: settingsPanel.visible = true
-        onZoomToProject: __loader.zoomToProject(mapCanvas.mapSettings)
+        onZoomToProject: {
+          if (__appSettings.autoCenterMapChecked) {
+            mainPanel.myLocationHold()
+          }
+          __loader.zoomToProject(mapCanvas.mapSettings)
+        }
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
