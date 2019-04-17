@@ -36,5 +36,6 @@
         <file>undo.svg</file>
         <file>input.svg</file>
         <file>lutra_logo.svg</file>
+        <file>gallery.svg</file>
     </qresource>
 </RCC>
