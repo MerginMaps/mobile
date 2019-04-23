@@ -47,6 +47,15 @@ Item {
             externalResourceHandler.itemWidget.valueChanged(fileName, false)
             externalResourceHandler.itemWidget = undefined
         }
+
+        property var onFormSave: function onFormSave(itemWidget) {
+          __inputUtils.removeFile(itemWidget.sourceToDelete)
+          itemWidget.sourceToDelete = ""
+        }
+
+        property var onFormCancel: function onFormCanceled(itemWidget) {
+          itemWidget.sourceToDelete = ""
+        }
     }
 
     Connections {
@@ -95,7 +104,7 @@ Item {
         icon: StandardIcon.Warning
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
-            __inputUtils.removeFile(imagePath)
+            externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
             externalResourceHandler.itemWidget.valueChanged("", false)
             visible = false
         }
