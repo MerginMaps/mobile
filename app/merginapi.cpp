@@ -22,7 +22,8 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( const QString &filterTag )
+void MerginApi::listProjects( const QString &searchExpression, const QString &user,
+                              const QString &flag, const QString &filterTag )
 {
   if ( !hasAuthData() )
   {
@@ -37,6 +38,14 @@ void MerginApi::listProjects( const QString &filterTag )
   if ( !filterTag.isEmpty() )
   {
     urlString += QStringLiteral( "?tags=" ) + filterTag;
+  }
+  if ( !searchExpression.isEmpty() )
+  {
+    urlString += QStringLiteral( "&q=" ) + searchExpression;
+  }
+  if ( !flag.isEmpty() )
+  {
+    urlString += QStringLiteral( "&flag=%1&user=%2" ).arg( flag ).arg( user );
   }
   QUrl url( urlString );
   request.setUrl( url );
@@ -150,10 +159,25 @@ void MerginApi::authorize( const QString &username, const QString &password )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
 }
 
+void MerginApi::getUserInfo( const QString &username )
+{
+  QByteArray token = generateToken();
+  QNetworkRequest request;
+  QString urlString = mApiRoot + QStringLiteral( "v1/user/" ) + username;
+  QUrl url( urlString );
+  request.setUrl( url );
+  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+
+  QNetworkReply *reply = mManager.get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getUserInfoFinished );
+}
+
 void MerginApi::clearAuth()
 {
   mUsername = "";
   mPassword = "";
+  mDiskUsage = 0;
+  mStorageLimit = 0;
   emit authChanged();
 }
 
@@ -443,6 +467,26 @@ void MerginApi::loadAuthData()
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
 }
 
+int MerginApi::storageLimit() const
+{
+  return mStorageLimit;
+}
+
+int MerginApi::diskUsage() const
+{
+  return mDiskUsage;
+}
+
+QString MerginApi::searchExpression() const
+{
+  return mSearchExpression;
+}
+
+void MerginApi::setSearchExpression( const QString &searchExpression )
+{
+  mSearchExpression = searchExpression;
+}
+
 QString MerginApi::apiRoot() const
 {
   return mApiRoot;
@@ -501,7 +545,6 @@ void MerginApi::listProjectsReplyFinished()
         mMerginProjects = parseProjectsData( cachedData );
       }
     }
-
 
     QByteArray data = r->readAll();
     ProjectList serverProjects = parseProjectsData( data, true );
@@ -663,6 +706,32 @@ void MerginApi::uploadInfoReplyFinished()
 
   jsonDoc.setObject( changes );
   uploadProjectFiles( projectName, jsonDoc.toJson( QJsonDocument::Compact ), filesToUpload );
+}
+
+void MerginApi::getUserInfoFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      QJsonObject docObj = doc.object();
+      mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
+      mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
+    }
+  }
+  else
+  {
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "getUserInfo" ), r->errorString() );
+    qDebug( "%s", message.toStdString().c_str() );
+    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: getUserInfo" ) );
+  }
+
+  r->deleteLater();
+  emit userInfoChanged();
 }
 
 QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate )

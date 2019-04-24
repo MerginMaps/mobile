@@ -29,6 +29,7 @@
         <file>upload.svg</file>
         <file>lock.svg</file>
         <file>account.svg</file>
+        <file>account-multi.svg</file>
         <file>mergin.svg</file>
         <file>link.svg</file>
         <file>crosshair.svg</file>
@@ -37,5 +38,9 @@
         <file>input.svg</file>
         <file>lutra_logo.svg</file>
         <file>gallery.svg</file>
+        <file>search.svg</file>
+        <file>mergin_color.svg</file>
+        <file>explore.svg</file>
+        <file>home.svg</file>
     </qresource>
 </RCC>

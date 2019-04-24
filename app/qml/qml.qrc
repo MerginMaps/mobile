@@ -31,5 +31,7 @@
         <file>RecordToolbar.qml</file>
         <file>RecordCrosshair.qml</file>
         <file>AboutPanel.qml</file>
+        <file>MerginProjectPanel.qml</file>
+        <file>AccountPage.qml</file>
     </qresource>
 </RCC>
