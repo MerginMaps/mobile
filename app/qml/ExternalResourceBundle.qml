@@ -30,9 +30,13 @@ Item {
         }
 
         property var removeImage: function removeImage(itemWidget, imagePath) {
-            imageDeleteDialog.imagePath = imagePath
             externalResourceHandler.itemWidget = itemWidget
-            imageDeleteDialog.open()
+            if (QgsQuick.Utils.fileExists(imagePath)) {
+              imageDeleteDialog.imagePath = imagePath
+              imageDeleteDialog.open()
+            } else {
+              externalResourceHandler.itemWidget.valueChanged("", false)
+            }
         }
 
         property var imageSelected: function imageSelected(imagePath) {
