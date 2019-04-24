@@ -37,5 +37,8 @@
         <file>input.svg</file>
         <file>lutra_logo.svg</file>
         <file>gallery.svg</file>
+        <file>search.svg</file>
+        <file>cloud-search.svg</file>
+        <file>account-multiple.svg</file>
     </qresource>
 </RCC>
