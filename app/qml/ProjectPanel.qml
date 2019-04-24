@@ -251,7 +251,7 @@ Item {
         visible: false
         height: window.height
         width: parent.width
-        onAuthFailed: myProjectsBtn.clicked()
+        onAuthFailed: myProjectsBtn.activated()
     }
 
     MessageDialog {

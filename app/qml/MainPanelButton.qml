@@ -16,11 +16,13 @@ Rectangle {
     property color backgroundColor: InputStyle.fontColor
     property bool isHighlighted: false
     property bool enabled: true
+    property bool faded: false
 
     signal activated()
     signal activatedOnHold()
 
     color: root.isHighlighted ? fontColor : backgroundColor
+    opacity: root.faded ? 0.6 : 1
 
     MouseArea {
         anchors.fill: parent

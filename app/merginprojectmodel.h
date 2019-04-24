@@ -2,12 +2,12 @@
 #define MERGINPROJECTMODEL_H
 
 #include <QObject>
-#include <QAbstractListModel>
 #include <QString>
 #include <memory>
 #include "merginapi.h"
+#include "inputsearchmodel.h"
 
-class MerginProjectModel: public QAbstractListModel
+class MerginProjectModel: public InputSearchModel
 {
     Q_OBJECT
 
@@ -18,7 +18,8 @@ class MerginProjectModel: public QAbstractListModel
       Size,
       ProjectInfo,
       Status,
-      Pending
+      Pending,
+      PassesFilter
     };
     Q_ENUMS( Roles )
 

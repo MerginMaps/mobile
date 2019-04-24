@@ -14,6 +14,7 @@ QtObject {
     property color clrPanelMain: "white"
     property color clrPanelBackground: fontColor
     property color panelBackgroundDark: "#B3B3B3"
+    property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
 
     property color highlightColor: "#FD9626"

@@ -452,7 +452,7 @@ ApplicationWindow {
         }
     }
 
-    ProjectPanel {
+    MerginProjectPanel {
         id: openProjectPanel
         height: window.height
         width: window.width
