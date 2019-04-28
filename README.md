@@ -3,9 +3,13 @@
 [![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
 [![CircleCI](https://circleci.com/gh/lutraconsulting/input.svg?style=svg)](https://circleci.com/gh/lutraconsulting/input)
 
-<img src="https://raw.githubusercontent.com/lutraconsulting/input/d781624aa2927d3c92432905de441d4fa83980f1/app/img/input.png">  
-
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
+
+## Download the app from Google Play Store
+Click here to download the app on your Android device:
+<a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
+For more information on how to use the app, see [Documentation](#documentation)
 
 ## Features
 
