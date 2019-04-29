@@ -21,7 +21,7 @@
 #include <QDateTime>
 
 ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
-  : QAbstractListModel( parent )
+  : InputSearchModel( parent )
   , mDataDir( dataDir )
 {
   findProjectFiles();
@@ -102,7 +102,6 @@ void ProjectModel::addProjectFromPath( QString path )
   mProjectFiles.append( project );
 }
 
-
 QVariant ProjectModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
@@ -119,6 +118,7 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
     case Path: return QVariant( projectFile.path );
     case ProjectInfo: return QVariant( projectFile.info );
     case IsValid: return QVariant( projectFile.isValid );
+    case PassesFilter:return mSearchExpression.isEmpty() || projectFile.name.contains(mSearchExpression, Qt::CaseInsensitive);
   }
 
   return QVariant();
@@ -133,6 +133,7 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
   roleNames[Path] = "path";
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[IsValid] = "isValid";
+  roleNames[PassesFilter] = "passesFilter";
   return roleNames;
 }
 

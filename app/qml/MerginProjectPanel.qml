@@ -190,6 +190,14 @@ Item {
         background: Rectangle {
           color: searchBar.bgColor
         }
+
+        onTextChanged: {
+          if (toolbar.highlighted === homeBtn.text) {
+            __projectsModel.searchExpression = searchField.text
+          } else {
+            __merginProjectsModel.searchExpression = searchField.text
+          }
+        }
       }
 
       Item {
@@ -295,7 +303,8 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: cellHeight
+      height: passesFilter ? cellHeight : 0
+      visible: height ? true : false
       statusIconSource: "trash.svg"
       itemMargin: projectsPanel.panelMargin
       projectName: folderName
@@ -326,7 +335,8 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: cellHeight
+      height: passesFilter ? cellHeight : 0
+      visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
 
