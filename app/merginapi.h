@@ -45,6 +45,7 @@ class MerginApi: public QObject
     Q_OBJECT
     Q_PROPERTY( QString username READ username NOTIFY authChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
+    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
   public:
     explicit MerginApi( const QString &dataDir, QObject *parent = nullptr );
     ~MerginApi() = default;
@@ -54,9 +55,10 @@ class MerginApi: public QObject
      * when a response is received, parses project json, writes it to a cache text file and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * If listing has been successful, updates cached merginProjects list.
+     * @param searchExpression Sesrch filter on projects name.
      * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects( const QString &filterTag = QStringLiteral( "input_use" ) );
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
@@ -108,7 +110,10 @@ class MerginApi: public QObject
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-  signals:
+    QString searchExpression() const;
+    void setSearchExpression(const QString &searchExpression);
+
+signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
     void reloadProject( const QString &projectDir );
@@ -166,6 +171,7 @@ class MerginApi: public QObject
     QString mCacheFile;
     QString mUsername;
     QString mPassword;
+    QString mSearchExpression; // stores last listProjects search expression
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;

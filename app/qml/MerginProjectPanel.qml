@@ -194,6 +194,11 @@ Item {
         onTextChanged: {
           if (toolbar.highlighted === homeBtn.text) {
             __projectsModel.searchExpression = searchField.text
+          } else if (toolbar.highlighted === exploreBtn.text) {
+            __merginApi.searchExpression = searchField.text
+            busyIndicator.running = true
+            showMergin = true
+            __merginApi.listProjects(searchField.text)
           } else {
             __merginProjectsModel.searchExpression = searchField.text
           }
@@ -369,6 +374,18 @@ Item {
     anchors.bottom: parent.bottom
     color: InputStyle.clrPanelBackground
 
+    onHighlightedChanged: {
+      //searchField.text = "" // TO remove search after tab changed
+
+      if (toolbar.highlighted === homeBtn.text) {
+        searchField.text = __projectsModel.searchExpression
+      } else if (toolbar.highlighted === exploreBtn.text) {
+        searchField.text = __merginApi.searchExpression
+      } else {
+        searchField.text = __merginProjectsModel.searchExpression
+      }
+    }
+
     Row {
       height: toolbar.height
       width: parent.width
@@ -437,6 +454,9 @@ Item {
 
           onActivated: {
             toolbar.highlighted = exploreBtn.text
+            busyIndicator.running = true
+            showMergin = true
+            __merginApi.listProjects(searchField.text)
           }
         }
       }

@@ -116,7 +116,7 @@ merginapi.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
-inputsearchmodel.cpp
+inputsearchmodel.cpp \
 test/testmerginapi.cpp
 
 HEADERS += \

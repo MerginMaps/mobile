@@ -22,7 +22,7 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( const QString &filterTag )
+void MerginApi::listProjects( const QString &searchExpression , const QString &filterTag )
 {
   if ( !hasAuthData() )
   {
@@ -37,6 +37,10 @@ void MerginApi::listProjects( const QString &filterTag )
   if ( !filterTag.isEmpty() )
   {
     urlString += QStringLiteral( "?tags=" ) + filterTag;
+  }
+  if ( !searchExpression.isEmpty() )
+  {
+    urlString += QStringLiteral( "&q=" ) + searchExpression;
   }
   QUrl url( urlString );
   request.setUrl( url );
@@ -443,15 +447,25 @@ void MerginApi::loadAuthData()
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
 }
 
+QString MerginApi::searchExpression() const
+{
+    return mSearchExpression;
+}
+
+void MerginApi::setSearchExpression(const QString &searchExpression)
+{
+    mSearchExpression = searchExpression;
+}
+
 QString MerginApi::apiRoot() const
 {
-  return mApiRoot;
+    return mApiRoot;
 }
 
 void MerginApi::setApiRoot( const QString &apiRoot )
 {
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
+    QSettings settings;
+    settings.beginGroup( QStringLiteral( "Input/" ) );
   if ( apiRoot.isEmpty() )
   {
     mApiRoot = defaultApiRoot();
