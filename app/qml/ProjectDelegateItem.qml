@@ -19,6 +19,7 @@ Rectangle {
     property string statusIconSource: "more_menu.svg"
     property string projectName: name
     property bool disabled: false
+    property real itemMargin: itemContainer.cellHeight/4
 
     signal itemClicked();
     signal menuClicked()
@@ -51,7 +52,7 @@ Rectangle {
                 width: itemContainer.cellHeight
 
                 Image {
-                    anchors.margins: (itemContainer.cellHeight/4)
+                    anchors.margins: itemContainer.itemMargin
                     id: icon
                     anchors.fill: parent
                     source: 'project.svg'

@@ -40,5 +40,6 @@
         <file>search.svg</file>
         <file>cloud-search.svg</file>
         <file>account-multiple.svg</file>
+        <file>mergin_color.svg</file>
     </qresource>
 </RCC>

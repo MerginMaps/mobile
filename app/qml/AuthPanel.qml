@@ -17,7 +17,8 @@ Item {
 
     property real fieldHeight: InputStyle.rowHeight
     property real panelMargin: fieldHeight/4
-    property color fontColor: "white"
+    property color fontColor: InputStyle.panelBackgroundDark
+    property color bgColor: "white"
 
     function close() {
         visible = false
@@ -46,9 +47,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
-
         background: Rectangle {
-            color: InputStyle.fontColor
+            color: root.bgColor
         }
 
         Item {
@@ -62,7 +62,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Image {
-                    source: "mergin.svg"
+                    source: "mergin_color.svg"
                     width: loginForm.width/2
                     sourceSize.width: width
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -78,7 +78,7 @@ Item {
                         id: iconContainer
                         height: fieldHeight
                         width: fieldHeight
-                        color: InputStyle.fontColor
+                        color: root.bgColor
 
                         Image {
                             anchors.margins: root.panelMargin
@@ -110,7 +110,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                         background: Rectangle {
-                            color: InputStyle.fontColor
+                            color: root.bgColor
                         }
                     }
                 }
@@ -134,7 +134,7 @@ Item {
                         id: iconContainer2
                         height: fieldHeight
                         width: fieldHeight
-                        color: InputStyle.fontColor
+                        color: root.bgColor
 
                         Image {
                             anchors.margins: (fieldHeight/4)
@@ -178,14 +178,14 @@ Item {
                         font.capitalization: Font.MixedCase
 
                         background: Rectangle {
-                            color: InputStyle.fontColor
+                            color: root.bgColor
                         }
                     }
                 }
 
                 Rectangle {
                     id: passBorder
-                    color: InputStyle.panelBackgroundLight
+                    color: InputStyle.panelBackgroundDark
                     height: 2 * QgsQuick.Utils.dp
                     y: password.height - height
                     opacity: password.focus ? 1 : 0.6
@@ -197,21 +197,21 @@ Item {
                     id: loginButton
                     width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight
-                    text: qsTr("Login")
+                    text: qsTr("Sign in")
                     font.pixelSize: loginButton.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
                         __merginApi.authorize(loginName.text, password.text)
                     }
                     background: Rectangle {
-                        color: InputStyle.panelBackgroundLight
+                        color: InputStyle.highlightColor
                     }
 
                     contentItem: Text {
                         text: loginButton.text
                         font: loginButton.font
                         opacity: enabled ? 1.0 : 0.3
-                        color: InputStyle.fontColor
+                        color: root.bgColor
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
@@ -227,15 +227,15 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked:Qt.openUrlExternally(__merginApi.apiRoot);
                     background: Rectangle {
-                        color: InputStyle.fontColor
+                        color: root.bgColor
                     }
 
                     contentItem: Text {
                         text: signUpButton.text
                         font: signUpButton.font
                         color: InputStyle.highlightColor
-                        horizontalAlignment: Text.AlignRight
-                        verticalAlignment: Text.AlignRight
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
                 }
@@ -271,7 +271,7 @@ Item {
                         ColorOverlay {
                             anchors.fill: iconLink
                             source: iconLink
-                            color: InputStyle.panelBackgroundLight
+                            color: InputStyle.panelBackgroundDark
                         }
                     }
 
@@ -279,7 +279,7 @@ Item {
                         id: merginLink
                         text: __merginApi.apiRoot
                         height: fieldHeight/2
-                        color: InputStyle.panelBackgroundLight
+                        color: InputStyle.panelBackgroundDark
                         verticalAlignment: Text.AlignVCenter
 
                         MouseArea {

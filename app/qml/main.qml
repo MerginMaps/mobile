@@ -452,14 +452,6 @@ ApplicationWindow {
         }
     }
 
-//    MerginProjectPanel {
-//      id: projectPanel
-//      height: window.height
-//      width: window.width
-//      z: zPanel
-//      visible: true
-//    }
-
     MerginProjectPanel {
         id: openProjectPanel
         height: window.height

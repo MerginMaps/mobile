@@ -16,6 +16,7 @@ Item {
 
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
   property bool showMergin: false
+  property real panelMargin: InputStyle.panelMargin/2
 
   function openPanel() {
     homeBtn.activated()
@@ -59,7 +60,7 @@ Item {
     onAuthChanged: {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
-        merginProjectBtn.clicked()
+        homeBtn.clicked()
       }
     }
   }
@@ -111,6 +112,7 @@ Item {
       width: InputStyle.rowHeightHeader
       height: width
       anchors.right: parent.right
+      anchors.rightMargin: projectsPanel.panelMargin
 
       Rectangle {
         id: avatarImage
@@ -124,12 +126,14 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            // TODO show detials
+            if (__merginApi.hasAuthData())
+              accountPanel.visible = true
+            else
+              myProjectsBtn.activated() // open auth form
           }
         }
 
         Image {
-          //anchors.margins: (avatarImage.width/4)
           id: userIcon
           anchors.fill: parent
           source: 'account.svg'
@@ -169,34 +173,39 @@ Item {
       //listView.visible = false
     }
 
-    Row {
-        id: row
-        width: searchBar.width
-        height: searchBar.height
-        spacing: 0
+    Item {
+      id: row
+      width: searchBar.width
+      height: searchBar.height
 
-        TextField {
-            id: searchField
-            width: parent.width
-            height: searchBar.fieldHeight * 0.8
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: searchBar.fontColor
-            placeholderText: qsTr("SEARCH")
-            font.capitalization: Font.MixedCase
-            inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-            background: Rectangle {
-                color: searchBar.bgColor
-            }
+      TextField {
+        id: searchField
+        width: parent.width
+        height: searchBar.fieldHeight * 0.8
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: searchBar.fontColor
+        placeholderText: qsTr("SEARCH")
+        font.capitalization: Font.MixedCase
+        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+        background: Rectangle {
+          color: searchBar.bgColor
         }
+      }
+
+      Item {
+        id: iconContainer
+        height: searchField.height
+        width: searchField.height
+        anchors.right: parent.right
+        anchors.rightMargin: projectsPanel.panelMargin
 
         Image {
           id: cancelSearchBtn
           source: searchField.text ? "no.svg" : "search.svg"
-          sourceSize: Qt.size(width, height)
+          sourceSize.width: width
+          sourceSize.height: height
           width: searchField.height
           height: width
-          anchors.right: parent.right
-          s
           fillMode: Image.PreserveAspectFit
 
           MouseArea {
@@ -216,23 +225,24 @@ Item {
           source: cancelSearchBtn
           color: searchBar.fontColor
         }
+      }
     }
 
     Rectangle {
-        id: searchFieldBorder
-        color: searchBar.fontColor
-        y: searchField.height - height
-        height: 2 * QgsQuick.Utils.dp
-        opacity: searchField.focus ? 1 : 0.6
-        width: parent.width - searchBar.fieldHeight/2
-        anchors.horizontalCenter: parent.horizontalCenter
+      id: searchFieldBorder
+      color: searchBar.fontColor
+      y: searchField.height - height
+      height: 2 * QgsQuick.Utils.dp
+      opacity: searchField.focus ? 1 : 0.6
+      width: parent.width - projectsPanel.panelMargin*2
+      anchors.horizontalCenter: parent.horizontalCenter
     }
   }
 
   // Content
   ColumnLayout {
     id: contentLayout
-    height: projectsPanel.height-header.height-searchBar.height
+    height: projectsPanel.height-header.height-searchBar.height-toolbar.height
     width: parent.width
     y: header.height + searchBar.height
     spacing: 0
@@ -287,6 +297,7 @@ Item {
       width: cellWidth
       height: cellHeight
       statusIconSource: "trash.svg"
+      itemMargin: projectsPanel.panelMargin
       projectName: folderName
       disabled: !isValid // invalid project
       highlight: {
@@ -340,15 +351,16 @@ Item {
   // Toolbar
   Rectangle {
     property int itemSize: toolbar.height * 0.8
+    property string highlighted: homeBtn.text
 
     id: toolbar
-    height: projectsPanel.rowHeight
+    height: InputStyle.rowHeightHeader
     width: parent.width
     anchors.bottom: parent.bottom
     color: InputStyle.clrPanelBackground
 
     Row {
-      height: projectsPanel.rowHeight
+      height: toolbar.height
       width: parent.width
       anchors.bottom: parent.bottom
 
@@ -362,8 +374,9 @@ Item {
           width: toolbar.itemSize
           text: qsTr("Home")
           imageSource: "home.svg"
+          faded: toolbar.highlighted !== homeBtn.text
 
-          onActivated: {showMergin = false}
+          onActivated: {toolbar.highlighted = homeBtn.text; showMergin = false}
         }
       }
 
@@ -371,17 +384,18 @@ Item {
         width: parent.width/parent.children.length
         height: parent.height
         MainPanelButton {
-          id: myLocationBtn
+          id: myProjectsBtn
           width: toolbar.itemSize
           text: qsTr("My projects")
           imageSource: "account.svg"
+          faded: toolbar.highlighted !== myProjectsBtn.text
 
           onActivated: {
+            toolbar.highlighted = myProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
             __merginApi.listProjects()
           }
-
         }
       }
 
@@ -389,11 +403,15 @@ Item {
         width: parent.width/parent.children.length
         height: parent.height
         MainPanelButton {
-          id: recBtn
+          id: sharedProjectsBtn
           width: toolbar.itemSize
           text: qsTr("Shared with me")
           imageSource: "account-multiple.svg"
+          faded: toolbar.highlighted !== sharedProjectsBtn.text
 
+          onActivated: {
+            toolbar.highlighted = sharedProjectsBtn.text
+          }
         }
       }
 
@@ -401,16 +419,18 @@ Item {
         width: parent.width/parent.children.length
         height: parent.height
         MainPanelButton {
-          id: menuBtn
+          id: exploreBtn
           width: toolbar.itemSize
           text: qsTr("Explore")
           imageSource: "cloud-search.svg"
+          faded: toolbar.highlighted !== exploreBtn.text
+
           onActivated: {
+            toolbar.highlighted = exploreBtn.text
           }
         }
       }
     }
-
   }
 
 
@@ -418,9 +438,18 @@ Item {
   AuthPanel {
     id: authPanel
     visible: false
-    height: window.height
+    y: searchBar.y
+    height: contentLayout.height + searchBar.height
     width: parent.width
     onAuthFailed: myProjectsBtn.clicked()
+  }
+
+  AccountPage {
+    id: accountPanel
+    height: window.height
+    width: parent.width
+    visible: false
+    //onAuthFailed: myProjectsBtn.clicked()
   }
 
   MessageDialog {
