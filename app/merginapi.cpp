@@ -22,7 +22,7 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( const QString &searchExpression , const QString &filterTag )
+void MerginApi::listProjects( const QString &searchExpression, const QString &filterTag )
 {
   if ( !hasAuthData() )
   {
@@ -449,23 +449,23 @@ void MerginApi::loadAuthData()
 
 QString MerginApi::searchExpression() const
 {
-    return mSearchExpression;
+  return mSearchExpression;
 }
 
-void MerginApi::setSearchExpression(const QString &searchExpression)
+void MerginApi::setSearchExpression( const QString &searchExpression )
 {
-    mSearchExpression = searchExpression;
+  mSearchExpression = searchExpression;
 }
 
 QString MerginApi::apiRoot() const
 {
-    return mApiRoot;
+  return mApiRoot;
 }
 
 void MerginApi::setApiRoot( const QString &apiRoot )
 {
-    QSettings settings;
-    settings.beginGroup( QStringLiteral( "Input/" ) );
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "Input/" ) );
   if ( apiRoot.isEmpty() )
   {
     mApiRoot = defaultApiRoot();

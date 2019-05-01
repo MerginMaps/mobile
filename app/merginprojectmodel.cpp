@@ -47,7 +47,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       }
     }
     case Pending: return QVariant( project->pending );
-    case PassesFilter:return mSearchExpression.isEmpty() || project->name.contains(mSearchExpression, Qt::CaseInsensitive);
+    case PassesFilter: return mSearchExpression.isEmpty() || project->name.contains( mSearchExpression, Qt::CaseInsensitive );
   }
 
   return QVariant();

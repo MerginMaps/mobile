@@ -170,7 +170,6 @@ Item {
     function deactivate() {
       searchField.text = ""
       searchField.focus = false
-      //listView.visible = false
     }
 
     Item {
@@ -229,8 +228,6 @@ Item {
             onClicked: {
               if (searchField.text) {
                 searchBar.deactivate()
-              } else {
-                // perform search
               }
             }
           }
@@ -510,7 +507,6 @@ Item {
     height: window.height
     width: parent.width
     visible: false
-    //onAuthFailed: myProjectsBtn.clicked()
   }
 
   MessageDialog {

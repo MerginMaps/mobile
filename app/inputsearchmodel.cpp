@@ -1,20 +1,20 @@
 #include "inputsearchmodel.h"
 
-InputSearchModel::InputSearchModel(QObject *parent)
+InputSearchModel::InputSearchModel( QObject *parent )
 {
-
 }
 
 QString InputSearchModel::searchExpression() const
 {
-    return mSearchExpression;
+  return mSearchExpression;
 }
 
-void InputSearchModel::setSearchExpression(const QString &searchExpression)
+void InputSearchModel::setSearchExpression( const QString &searchExpression )
 {
-    if (searchExpression != mSearchExpression) {
-        mSearchExpression = searchExpression;
-        // Hack to model changed signal
-        endResetModel();
-    }
+  if ( searchExpression != mSearchExpression )
+  {
+    mSearchExpression = searchExpression;
+    // Hack to model changed signal
+    endResetModel();
+  }
 }

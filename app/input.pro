@@ -115,8 +115,8 @@ appsettings.cpp \
 merginapi.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-inpututils.cpp \
 inputsearchmodel.cpp \
+inpututils.cpp \
 test/testmerginapi.cpp
 
 HEADERS += \
@@ -129,9 +129,9 @@ appsettings.h \
 merginapi.h \
 merginprojectmodel.h \
 androidutils.h \
+inputsearchmodel.h \
 inpututils.h \
-test/testmerginapi.h \
-    inputsearchmodel.h
+test/testmerginapi.h
 
 RESOURCES += \
     img/pics.qrc \

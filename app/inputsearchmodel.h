@@ -9,12 +9,12 @@ class InputSearchModel: public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
 
-public:
+  public:
     explicit InputSearchModel( QObject *parent = nullptr );
     QString searchExpression() const;
-    void setSearchExpression(const QString &searchExpression);
+    void setSearchExpression( const QString &searchExpression );
 
-protected:
+  protected:
     QString mSearchExpression;
 };
 

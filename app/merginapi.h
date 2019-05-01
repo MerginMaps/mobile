@@ -55,7 +55,7 @@ class MerginApi: public QObject
      * when a response is received, parses project json, writes it to a cache text file and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * If listing has been successful, updates cached merginProjects list.
-     * @param searchExpression Sesrch filter on projects name.
+     * @param searchExpression Search filter on projects name.
      * @param withFilter If true, applies "input" tag in request.
      */
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
@@ -111,9 +111,9 @@ class MerginApi: public QObject
     void setApiRoot( const QString &apiRoot );
 
     QString searchExpression() const;
-    void setSearchExpression(const QString &searchExpression);
+    void setSearchExpression( const QString &searchExpression );
 
-signals:
+  signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
     void reloadProject( const QString &projectDir );
