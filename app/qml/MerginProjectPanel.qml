@@ -15,8 +15,9 @@ Item {
   property var busyIndicator
 
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
+  property real iconSize: rowHeight/2
   property bool showMergin: false
-  property real panelMargin: InputStyle.panelMargin/2
+  property real panelMargin: InputStyle.panelMargin
 
   function openPanel() {
     homeBtn.activated()
@@ -109,16 +110,16 @@ Item {
 
     Item {
       id: avatar
-      width: InputStyle.rowHeightHeader
-      height: width
+      width: InputStyle.rowHeightHeader * 0.8
+      height: InputStyle.rowHeightHeader
       anchors.right: parent.right
       anchors.rightMargin: projectsPanel.panelMargin
 
       Rectangle {
         id: avatarImage
         anchors.centerIn: parent
-        width: InputStyle.rowHeightHeader * 0.7
-        height: width
+        width: avatar.width
+        height: avatar.width
         color: InputStyle.fontColor
         radius: width*0.5
         antialiasing: true
@@ -135,7 +136,7 @@ Item {
 
         Image {
           id: userIcon
-          anchors.fill: parent
+          anchors.fill: avatarImage
           source: 'account.svg'
           sourceSize.width: width
           sourceSize.height: height
@@ -159,7 +160,6 @@ Item {
     y: header.height
     color: InputStyle.panelBackgroundLight
 
-    property real fieldHeight: InputStyle.rowHeightHeader
     property color bgColor: InputStyle.panelBackgroundLight
     property color fontColor: InputStyle.panelBackgroundDark
 
@@ -181,7 +181,7 @@ Item {
       TextField {
         id: searchField
         width: parent.width
-        height: searchBar.fieldHeight * 0.8
+        height: InputStyle.rowHeight
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: searchBar.fontColor
         placeholderText: qsTr("SEARCH")
@@ -190,6 +190,8 @@ Item {
         background: Rectangle {
           color: searchBar.bgColor
         }
+        leftPadding: projectsPanel.panelMargin
+        rightPadding: projectsPanel.panelMargin
 
         onTextChanged: {
           if (toolbar.highlighted === homeBtn.text) {
@@ -207,18 +209,19 @@ Item {
 
       Item {
         id: iconContainer
-        height: searchField.height
-        width: searchField.height
+        height: projectsPanel.rowHeight
+        width: projectsPanel.iconSize
         anchors.right: parent.right
         anchors.rightMargin: projectsPanel.panelMargin
 
         Image {
           id: cancelSearchBtn
           source: searchField.text ? "no.svg" : "search.svg"
+          width: projectsPanel.iconSize
+          height: width
           sourceSize.width: width
           sourceSize.height: height
-          width: searchField.height
-          height: width
+          anchors.centerIn: parent
           fillMode: Image.PreserveAspectFit
 
           MouseArea {
@@ -244,7 +247,7 @@ Item {
     Rectangle {
       id: searchFieldBorder
       color: searchBar.fontColor
-      y: searchField.height - height
+      y: searchField.height - height * 4
       height: 2 * QgsQuick.Utils.dp
       opacity: searchField.focus ? 1 : 0.6
       width: parent.width - projectsPanel.panelMargin*2
@@ -259,6 +262,33 @@ Item {
     width: parent.width
     y: header.height + searchBar.height
     spacing: 0
+
+    // Info label
+    Item {
+      width: parent.width
+      height: toolbar.highlighted === exploreBtn.text ? projectsPanel.rowHeight * 3 : 0
+      visible: height
+
+      Text {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WordWrap
+        color: InputStyle.panelBackgroundDark
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        text: qsTr("Explore public Mergin projects!")
+        visible: parent.height
+      }
+
+      Rectangle {
+          id: borderLine
+          color: InputStyle.panelBackground2
+          width: parent.width
+          height: 1 * QgsQuick.Utils.dp
+          anchors.bottom: parent.bottom
+      }
+    }
 
     ListView {
       id: grid
@@ -307,6 +337,7 @@ Item {
     ProjectDelegateItem {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
+      iconSize: projectsPanel.iconSize
       width: cellWidth
       height: passesFilter ? cellHeight : 0
       visible: height ? true : false

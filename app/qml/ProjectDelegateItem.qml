@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import lc 1.0
+import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Rectangle {
@@ -13,13 +14,14 @@ Rectangle {
     property color secondaryColor: InputStyle.fontColor
     property int cellWidth: width
     property int cellHeight: height
-    property int borderWidth: 1
+    property real iconSize: height/2
+    property int borderWidth: 1 * QgsQuick.Utils.dp
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"
     property string projectName: name
     property bool disabled: false
-    property real itemMargin: itemContainer.cellHeight/4
+    property real itemMargin: InputStyle.panelMargin
 
     signal itemClicked();
     signal menuClicked()
@@ -44,18 +46,21 @@ Rectangle {
         RowLayout {
             id: row
             anchors.fill: parent
-            spacing: 0
+            anchors.rightMargin: itemContainer.itemMargin
+            anchors.leftMargin: itemContainer.itemMargin
+            spacing: InputStyle.panelMargin
 
             Item {
                 id: iconContainer
                 height: itemContainer.cellHeight
-                width: itemContainer.cellHeight
+                width: itemContainer.iconSize
 
                 Image {
-                    anchors.margins: itemContainer.itemMargin
                     id: icon
-                    anchors.fill: parent
+                    anchors.centerIn: parent
                     source: 'project.svg'
+                    width: itemContainer.iconSize
+                    height: width
                     sourceSize.width: width
                     sourceSize.height: height
                     fillMode: Image.PreserveAspectFit
@@ -70,18 +75,20 @@ Rectangle {
 
             Item {
                 id: textContainer
-                y: 0
-                height: itemContainer.cellHeight - row.bottomMargin
-                width: itemContainer.cellWidth - (itemContainer.cellHeight * 2)
+                height: itemContainer.cellHeight
+                width: row.width - iconContainer.width - statusContainer.width - (2* row.spacing)
+
                 Text {
                     id: mainText
                     text: itemContainer.projectName
                     height: textContainer.height/2
+                    width: textContainer.width
                     font.pixelSize: InputStyle.fontPixelSizeNormal
                     font.weight: Font.Bold
                     color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignBottom
+                    elide: Text.ElideRight
                 }
 
                 Text {
@@ -99,8 +106,9 @@ Rectangle {
             }
 
             Item {
+                id: statusContainer
                 height: itemContainer.cellHeight
-                width: itemContainer.cellHeight
+                width: itemContainer.iconSize
                 y: 0
 
                 MouseArea {
@@ -111,10 +119,11 @@ Rectangle {
                 }
 
                 Image {
-                    anchors.margins: (itemContainer.cellHeight * 0.35)
                     id: statusIcon
-                    anchors.fill: parent
+                    anchors.centerIn: parent
                     source: statusIconSource
+                    height: itemContainer.iconSize
+                    width: height
                     sourceSize.width: width
                     sourceSize.height: height
                     fillMode: Image.PreserveAspectFit
@@ -136,14 +145,12 @@ Rectangle {
                     anchors.centerIn: parent
                 }
             }
-
-
         }
 
         Rectangle {
             id: borderLine
             color: InputStyle.panelBackground2
-            width: row.width
+            width: itemContainer.width
             height: itemContainer.borderWidth
             anchors.bottom: parent.bottom
         }
