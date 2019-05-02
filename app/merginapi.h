@@ -44,6 +44,8 @@ class MerginApi: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString username READ username NOTIFY authChanged )
+    Q_PROPERTY( int storageLimit READ storageLimit NOTIFY userInfoChanged )
+    Q_PROPERTY( int diskUsage READ diskUsage NOTIFY userInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
   public:
@@ -56,9 +58,12 @@ class MerginApi: public QObject
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * If listing has been successful, updates cached merginProjects list.
      * @param searchExpression Search filter on projects name.
+     * @param user Mergin username used with flag
+     * @param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
      * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),const QString &user = QStringLiteral(),
+                                   const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
@@ -95,6 +100,7 @@ class MerginApi: public QObject
     * @param password
     */
     Q_INVOKABLE void authorize( const QString &username, const QString &password );
+    Q_INVOKABLE void getUserInfo( const QString &username );
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
@@ -113,6 +119,10 @@ class MerginApi: public QObject
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
 
+    int diskUsage() const;
+
+    int storageLimit() const;
+
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
@@ -126,6 +136,7 @@ class MerginApi: public QObject
     void apiRootChanged();
     void projectCreated( const QString &projectName );
     void serverProjectDeleted( const QString &projectName );
+    void userInfoChanged();
 
   public slots:
     void projectDeleted( const QString &projectName );
@@ -136,6 +147,7 @@ class MerginApi: public QObject
     void uploadProjectReplyFinished();
     void updateInfoReplyFinished();
     void uploadInfoReplyFinished();
+    void getUserInfoFinished();
     void cacheProjects();
     void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
     void setUpdateToProject( const QString &projectDir, const QString &projectName, bool successfully );
@@ -171,6 +183,8 @@ class MerginApi: public QObject
     QString mCacheFile;
     QString mUsername;
     QString mPassword;
+    int mDiskUsage = 0; // in Bytes
+    int mStorageLimit = 0; // in Bytes
     QString mSearchExpression; // stores last listProjects search expression
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;

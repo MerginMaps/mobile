@@ -118,7 +118,7 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
     case Path: return QVariant( projectFile.path );
     case ProjectInfo: return QVariant( projectFile.info );
     case IsValid: return QVariant( projectFile.isValid );
-    case PassesFilter: return mSearchExpression.isEmpty() || projectFile.name.contains( mSearchExpression, Qt::CaseInsensitive );
+    case PassesFilter: return mSearchExpression.isEmpty() || projectFile.folderName.contains( mSearchExpression, Qt::CaseInsensitive );
   }
 
   return QVariant();

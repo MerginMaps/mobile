@@ -17,7 +17,7 @@ Item {
 
     property real fieldHeight: InputStyle.rowHeight
     property real panelMargin: fieldHeight/4
-    property color fontColor: InputStyle.panelBackgroundDark
+    property color fontColor: InputStyle.panelBackgroundDarker
     property color bgColor: "white"
 
     function close() {
@@ -271,7 +271,7 @@ Item {
                         ColorOverlay {
                             anchors.fill: iconLink
                             source: iconLink
-                            color: InputStyle.panelBackgroundDark
+                            color: root.fontColor
                         }
                     }
 
@@ -279,7 +279,7 @@ Item {
                         id: merginLink
                         text: __merginApi.apiRoot
                         height: fieldHeight/2
-                        color: InputStyle.panelBackgroundDark
+                        color: root.fontColor
                         verticalAlignment: Text.AlignVCenter
 
                         MouseArea {

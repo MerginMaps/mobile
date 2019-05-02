@@ -7,11 +7,16 @@ import "."  // import InputStyle singleton
 Rectangle {
   property color bgColor: "white"
   property string username: __merginApi.username
-  property real storage: 0.42
+  property int storageLimit: __merginApi.storageLimit
+  property int diskUsage: __merginApi.diskUsage
 
   id: root
   visible: true
   color:  bgColor
+
+  function formatNumber(number) {
+    return number / (1024 * 1024)
+  }
 
   // header
   PanelHeader {
@@ -43,7 +48,7 @@ Rectangle {
       Rectangle {
         id: avatarImage
         anchors.centerIn: parent
-        width: avatar.width * 0.7
+        width: avatar.width * 0.8
         height: width
         color: InputStyle.fontColor
         radius: width*0.5
@@ -51,8 +56,10 @@ Rectangle {
 
         Image {
           id: userIcon
-          anchors.fill: parent
+          anchors.centerIn: parent
           source: 'account.svg'
+          height: parent.height * 0.8
+          width: height
           sourceSize.width: width
           sourceSize.height: height
           fillMode: Image.PreserveAspectFit
@@ -70,7 +77,7 @@ Rectangle {
       text: root.username
       anchors.horizontalCenter: parent.horizontalCenter
       horizontalAlignment: Text.AlignHCenter
-      color: InputStyle.panelBackgroundDark
+      color: InputStyle.panelBackgroundDarker
       font.pixelSize: InputStyle.fontPixelSizeTitle * 2
       anchors.top: avatar.bottom
     }
@@ -93,7 +100,7 @@ Rectangle {
       Text  {
         text:  qsTr("Used Data")
         font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.panelBackgroundDark
+        color: InputStyle.panelBackgroundDarker
       }
 
       ProgressBar {
@@ -102,7 +109,7 @@ Rectangle {
         id: progressBar
         width: parent.width - parent.padding*2
         height: itemHeight
-        value: root.storage
+        value: root.diskUsage/root.storageLimit
 
         background: Rectangle {
           implicitWidth: parent.width
@@ -123,7 +130,7 @@ Rectangle {
       }
 
       Text  {
-        text:  (root.storage * 100) + "/100"
+        text:  formatNumber(root.diskUsage).toFixed(2) + "/" +  formatNumber(root.storageLimit) + "   MB"
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
       }

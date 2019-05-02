@@ -61,7 +61,9 @@ Item {
     onAuthChanged: {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
-        homeBtn.clicked()
+        myProjectsBtn.activated()
+      } else {
+        homeBtn.activated()
       }
     }
   }
@@ -127,8 +129,10 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData())
+            if (__merginApi.hasAuthData()) {
+              __merginApi.getUserInfo(__merginApi.username)
               accountPanel.visible = true
+            }
             else
               myProjectsBtn.activated() // open auth form
           }
@@ -136,8 +140,10 @@ Item {
 
         Image {
           id: userIcon
-          anchors.fill: avatarImage
+          anchors.centerIn: avatarImage
           source: 'account.svg'
+          height: avatarImage.height * 0.8
+          width: height
           sourceSize.width: width
           sourceSize.height: height
           fillMode: Image.PreserveAspectFit
@@ -161,7 +167,7 @@ Item {
     color: InputStyle.panelBackgroundLight
 
     property color bgColor: InputStyle.panelBackgroundLight
-    property color fontColor: InputStyle.panelBackgroundDark
+    property color fontColor: InputStyle.panelBackgroundDarker
 
     /**
      * Used for deactivating focus on SearchBar when another component should have focus.
@@ -208,7 +214,7 @@ Item {
 
       Item {
         id: iconContainer
-        height: projectsPanel.rowHeight
+        height: searchField.height
         width: projectsPanel.iconSize
         anchors.right: parent.right
         anchors.rightMargin: projectsPanel.panelMargin
@@ -272,7 +278,7 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
-        color: InputStyle.panelBackgroundDark
+        color: InputStyle.panelBackgroundDarker
         font.pixelSize: InputStyle.fontPixelSizeNormal
         text: qsTr("Explore public Mergin projects!")
         visible: parent.height
@@ -431,7 +437,12 @@ Item {
           imageSource: "home.svg"
           faded: toolbar.highlighted !== homeBtn.text
 
-          onActivated: {toolbar.highlighted = homeBtn.text; showMergin = false}
+          onActivated: {
+            toolbar.highlighted = homeBtn.text;
+            if (authPanel.visible)
+              authPanel.close()
+            showMergin = false
+          }
         }
       }
 
@@ -449,7 +460,7 @@ Item {
             toolbar.highlighted = myProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginApi.listProjects()
+            __merginApi.listProjects("", __merginApi.username, "created")
           }
         }
       }
@@ -461,11 +472,14 @@ Item {
           id: sharedProjectsBtn
           width: toolbar.itemSize
           text: qsTr("Shared with me")
-          imageSource: "account-multiple.svg"
+          imageSource: "account-multi.svg"
           faded: toolbar.highlighted !== sharedProjectsBtn.text
 
           onActivated: {
             toolbar.highlighted = sharedProjectsBtn.text
+            busyIndicator.running = true
+            showMergin = true
+            __merginApi.listProjects("", __merginApi.username, "shared")
           }
         }
       }
@@ -477,7 +491,7 @@ Item {
           id: exploreBtn
           width: toolbar.itemSize
           text: qsTr("Explore")
-          imageSource: "cloud-search.svg"
+          imageSource: "explore.svg"
           faded: toolbar.highlighted !== exploreBtn.text
 
           onActivated: {
@@ -499,7 +513,7 @@ Item {
     y: searchBar.y
     height: contentLayout.height + searchBar.height
     width: parent.width
-    onAuthFailed: myProjectsBtn.clicked()
+    onAuthFailed: myProjectsBtn.activated()
   }
 
   AccountPage {

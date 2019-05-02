@@ -24,11 +24,11 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
     {
       if ( !project->updated.isValid() )
       {
-        return QVariant( project->serverUpdated ).toString();
+        return project->serverUpdated.toString();
       }
       else
       {
-        return QVariant( project->updated ).toString();
+        return project->updated.toString();
       }
     }
 

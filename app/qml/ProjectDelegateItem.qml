@@ -15,7 +15,7 @@ Rectangle {
     property int cellWidth: width
     property int cellHeight: height
     property real iconSize: height/2
-    property int borderWidth: 1 * QgsQuick.Utils.dp
+    property real borderWidth: 1 * QgsQuick.Utils.dp
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"
