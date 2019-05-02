@@ -149,19 +149,12 @@ void MerginApi::authorize( const QString &username, const QString &password )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
+  QString urlString = mApiRoot + QStringLiteral( "/auth/user/" ) + mUsername;
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Content-Type", "application/json" );
+  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
 
-  QJsonDocument jsonDoc;
-  QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "login" ), mUsername );
-  jsonObject.insert( QStringLiteral( "password" ), mPassword );
-  jsonDoc.setObject( jsonObject );
-  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
 }
 
@@ -421,13 +414,6 @@ void MerginApi::authorizeFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
-    if ( doc.isObject() )
-    {
-      QJsonObject docObj = doc.object();
-      mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
-      mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
-    }
     emit authChanged();
   }
   else

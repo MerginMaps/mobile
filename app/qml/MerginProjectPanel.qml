@@ -15,7 +15,7 @@ Item {
   property var busyIndicator
 
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
-  property real iconSize: rowHeight/2
+  property real iconSize: rowHeight/3
   property bool showMergin: false
   property real panelMargin: InputStyle.panelMargin
 
@@ -107,8 +107,15 @@ Item {
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Projects")
 
-    onBack: projectsPanel.visible = false
-    withBackButton: projectsPanel.activeProjectPath
+    onBack: {
+      if (authPanel.visible) {
+        authPanel.visible = false
+        homeBtn.activated()
+      } else {
+        projectsPanel.visible = false
+      }
+    }
+    withBackButton: projectsPanel.activeProjectPath || authPanel.visible
 
     Item {
       id: avatar
@@ -268,8 +275,9 @@ Item {
 
     // Info label
     Item {
+      id: infoLabel
       width: parent.width
-      height: toolbar.highlighted === exploreBtn.text ? projectsPanel.rowHeight * 3 : 0
+      height: toolbar.highlighted === exploreBtn.text ? projectsPanel.rowHeight * 2 : 0
       visible: height
 
       Text {
@@ -282,6 +290,43 @@ Item {
         font.pixelSize: InputStyle.fontPixelSizeNormal
         text: qsTr("Explore public Mergin projects!")
         visible: parent.height
+      }
+
+      // To not propagate click on canvas on background
+      MouseArea {
+        anchors.fill: parent
+      }
+
+      Item {
+        id: infoLabelHideBtn
+        height: projectsPanel.iconSize
+        width: height
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: projectsPanel.panelMargin
+        anchors.topMargin: projectsPanel.panelMargin
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: infoLabel.visible = false
+        }
+
+        Image {
+          id: infoLabelHide
+          anchors.centerIn: infoLabelHideBtn
+          source: 'no.svg'
+          height: infoLabelHideBtn.height
+          width: height
+          sourceSize.width: width
+          sourceSize.height: height
+          fillMode: Image.PreserveAspectFit
+        }
+
+        ColorOverlay {
+          anchors.fill: infoLabelHide
+          source: infoLabelHide
+          color: InputStyle.panelBackgroundDark
+        }
       }
 
       Rectangle {
@@ -321,7 +366,7 @@ Item {
 
     ListView {
       id: merginProjectsList
-      visible: showMergin
+      visible: showMergin && !busyIndicator.running
       Layout.fillWidth: true
       Layout.fillHeight: true
       contentWidth: grid.width
@@ -378,6 +423,7 @@ Item {
       visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
+      iconSize: projectsPanel.iconSize
 
       onMenuClicked: {
         if (status === "upToDate") return

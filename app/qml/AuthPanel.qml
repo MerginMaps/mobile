@@ -24,9 +24,6 @@ Item {
         visible = false
         password.text = ""
         loginName.text = ""
-        if (!__merginApi.hasAuthData()) {
-            authFailed()
-        }
     }
 
     Keys.onReleased: {

@@ -62,7 +62,7 @@ class MerginApi: public QObject
      * @param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
      * @param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),const QString &user = QStringLiteral(),
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &user = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
