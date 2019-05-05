@@ -14,7 +14,7 @@ before_install:
 - pip3 install dropbox
 
 script:
-- export SDK_VERSION=20190425
+- export SDK_VERSION=20190505
 - export OSGEO4A_SDK=opengisch/qfield-sdk:${SDK_VERSION}
 - docker pull ${OSGEO4A_SDK}
 - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh
