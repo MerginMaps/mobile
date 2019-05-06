@@ -57,10 +57,10 @@ class MerginApi: public QObject
      * when a response is received, parses project json, writes it to a cache text file and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * If listing has been successful, updates cached merginProjects list.
-     * @param searchExpression Search filter on projects name.
-     * @param user Mergin username used with flag
-     * @param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
-     * @param withFilter If true, applies "input" tag in request.
+     * \param searchExpression Search filter on projects name.
+     * \param user Mergin username used with flag
+     * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
+     * \param withFilter If true, applies "input" tag in request.
      */
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &user = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
@@ -71,7 +71,7 @@ class MerginApi: public QObject
      * MerginProjectModel updates status of the project item. On syncProjectFinished, ProjectModel adds the project item to the project list.
      * If download has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
-     * @param projectName Name of project to download.
+     * \param projectName Name of project to download.
      */
     Q_INVOKABLE void downloadProject( const QString &projectName );
 
@@ -81,7 +81,7 @@ class MerginApi: public QObject
      * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * If update has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
-     * @param projectName Name of project to update.
+     * \param projectName Name of project to update.
      */
     Q_INVOKABLE void updateProject( const QString &projectName );
 
@@ -90,14 +90,14 @@ class MerginApi: public QObject
      * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
      * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * Emits also notify signal with a message for the GUI.
-     * @param projectName Name of project to upload.
+     * \param projectName Name of project to upload.
      */
     Q_INVOKABLE void uploadProject( const QString &projectName );
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
-    * @param username
-    * @param password
+    * \param username
+    * \param password
     */
     Q_INVOKABLE void authorize( const QString &username, const QString &password );
     Q_INVOKABLE void getUserInfo( const QString &username );
@@ -119,8 +119,10 @@ class MerginApi: public QObject
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
 
+    //! Disk usage of current logged in user in Mergin instance in Bytes
     int diskUsage() const;
 
+    //! Total storage limit of current logged in user in Mergin instance in Bytes
     int storageLimit() const;
 
   signals:

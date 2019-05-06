@@ -22,7 +22,8 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( const QString &searchExpression, const QString &user, const QString &flag, const QString &filterTag )
+void MerginApi::listProjects( const QString &searchExpression, const QString &user,
+                              const QString &flag, const QString &filterTag )
 {
   if ( !hasAuthData() )
   {
