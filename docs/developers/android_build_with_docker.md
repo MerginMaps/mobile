@@ -16,8 +16,9 @@ Now you need to edit input/config.pri with paths to your OSGeo4A installation.
 - First install Docker, you can install it from software manager or command line (Ubuntu: ```sudo apt-get install docker.io```)
 - Building OSGeo4A:
 ```
-git clone https://github.com/opengisch/OSGeo4A.git
+git clone https://github.com/lutraconsulting/OSGeo4A
 cd OSGeo4A
+git checkout docker
 sudo docker build -t osgeo4a .
 ```
 It will take for a long time to build everything.
@@ -59,8 +60,6 @@ example output:
 REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
 osgeo4a                latest              71eef3e8038a        7 days ago          10.5GB
 <none>                 <none>              8a34148c5af2        8 days ago          11.2GB
-<none>                 <none>              bd72457905ca        8 days ago          9.71GB
-opengisch/qt-crystax   5.11.3_v2           8db89632ab85        12 days ago         9.7GB
 ```
 - Then copy the necessary folders in OSGeo4A's docker image to the host folder:
 ```
