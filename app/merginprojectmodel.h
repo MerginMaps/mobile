@@ -3,11 +3,11 @@
 
 #include <QObject>
 #include <QString>
+#include <QAbstractListModel>
 #include <memory>
 #include "merginapi.h"
-#include "inputsearchmodel.h"
 
-class MerginProjectModel: public InputSearchModel
+class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
 
@@ -18,8 +18,7 @@ class MerginProjectModel: public InputSearchModel
       Size,
       ProjectInfo,
       Status,
-      Pending,
-      PassesFilter
+      Pending
     };
     Q_ENUMS( Roles )
 

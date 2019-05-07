@@ -7,7 +7,6 @@
 #include <merginapi.h>
 #include <projectsmodel.h>
 #include <merginprojectmodel.h>
-#include <inputsearchmodel.h>
 
 #include <qgsapplication.h>
 

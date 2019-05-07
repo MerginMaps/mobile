@@ -47,7 +47,6 @@ class MerginApi: public QObject
     Q_PROPERTY( int storageLimit READ storageLimit NOTIFY userInfoChanged )
     Q_PROPERTY( int diskUsage READ diskUsage NOTIFY userInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
-    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
   public:
     explicit MerginApi( const QString &dataDir, QObject *parent = nullptr );
     ~MerginApi() = default;
@@ -96,8 +95,8 @@ class MerginApi: public QObject
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
-    * \param username
-    * \param password
+    * \param username Login user name to Mergin
+    * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &username, const QString &password );
     Q_INVOKABLE void getUserInfo( const QString &username );
@@ -115,9 +114,6 @@ class MerginApi: public QObject
 
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
-
-    QString searchExpression() const;
-    void setSearchExpression( const QString &searchExpression );
 
     //! Disk usage of current logged in user in Mergin instance in Bytes
     int diskUsage() const;
@@ -187,7 +183,6 @@ class MerginApi: public QObject
     QString mPassword;
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
-    QString mSearchExpression; // stores last listProjects search expression
     QHash<QUrl, QString>mPendingRequests;
     QSet<QString> mWaitingForUpload;
     QHash<QString, QSet<QString>> mObsoleteFiles;

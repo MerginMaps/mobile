@@ -3,7 +3,7 @@
 #include <QString>
 
 MerginProjectModel::MerginProjectModel( QObject *parent )
-  : InputSearchModel( parent )
+  : QAbstractListModel( parent )
 {
 }
 
@@ -47,7 +47,6 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       }
     }
     case Pending: return QVariant( project->pending );
-    case PassesFilter: return mSearchExpression.isEmpty() || project->name.contains( mSearchExpression, Qt::CaseInsensitive );
   }
 
   return QVariant();
@@ -68,7 +67,6 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
-  roleNames[PassesFilter] = "passesFilter";
   return roleNames;
 }
 

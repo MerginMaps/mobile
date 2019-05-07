@@ -115,7 +115,6 @@ appsettings.cpp \
 merginapi.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-inputsearchmodel.cpp \
 inpututils.cpp \
 test/testmerginapi.cpp
 
@@ -129,7 +128,6 @@ appsettings.h \
 merginapi.h \
 merginprojectmodel.h \
 androidutils.h \
-inputsearchmodel.h \
 inpututils.h \
 test/testmerginapi.h
 
