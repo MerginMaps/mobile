@@ -11,7 +11,8 @@ Item {
 
   property int activeProjectIndex: -1
   property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
-  property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
+  property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex, ProjectModel.Name))
+  property string merginSearchExpression: ""
   property var busyIndicator
 
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
@@ -209,12 +210,13 @@ Item {
           if (toolbar.highlighted === homeBtn.text) {
             __projectsModel.searchExpression = searchField.text
           } else if (toolbar.highlighted === exploreBtn.text) {
-            __merginApi.searchExpression = searchField.text
-            busyIndicator.running = true
-            showMergin = true
-            __merginApi.listProjects(searchField.text)
-          } else {
-            __merginProjectsModel.searchExpression = searchField.text
+            exploreBtn.activated()
+          } else if (toolbar.highlighted === sharedProjectsBtn.text) {
+            sharedProjectsBtn.activated()
+          } else if (toolbar.highlighted === myProjectsBtn.text) {
+            myProjectsBtn.activated()
+          }else {
+            merginSearchExpression = searchField.text
           }
         }
       }
@@ -419,7 +421,7 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: passesFilter ? cellHeight : 0
+      height: cellHeight
       visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
@@ -455,14 +457,9 @@ Item {
     color: InputStyle.clrPanelBackground
 
     onHighlightedChanged: {
-      //searchField.text = "" // TO remove search after tab changed
-
+      searchField.text = ""
       if (toolbar.highlighted === homeBtn.text) {
-        searchField.text = __projectsModel.searchExpression
-      } else if (toolbar.highlighted === exploreBtn.text) {
-        searchField.text = __merginApi.searchExpression
-      } else {
-        searchField.text = __merginProjectsModel.searchExpression
+        __projectsModel.searchExpression = ""
       }
     }
 
@@ -506,7 +503,7 @@ Item {
             toolbar.highlighted = myProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginApi.listProjects("", __merginApi.username, "created")
+            __merginApi.listProjects(searchField.text, __merginApi.username, "created")
           }
         }
       }
@@ -525,7 +522,7 @@ Item {
             toolbar.highlighted = sharedProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginApi.listProjects("", __merginApi.username, "shared")
+            __merginApi.listProjects(searchField.text, __merginApi.username, "shared")
           }
         }
       }

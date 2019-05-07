@@ -21,7 +21,7 @@
 #include <QDateTime>
 
 ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
-  : InputSearchModel( parent )
+  : QAbstractListModel( parent )
   , mDataDir( dataDir )
 {
   findProjectFiles();
@@ -176,6 +176,21 @@ int ProjectModel::rowCount( const QModelIndex &parent ) const
 QString ProjectModel::dataDir() const
 {
   return mDataDir;
+}
+
+QString ProjectModel::searchExpression() const
+{
+  return mSearchExpression;
+}
+
+void ProjectModel::setSearchExpression( const QString &searchExpression )
+{
+  if ( searchExpression != mSearchExpression )
+  {
+    mSearchExpression = searchExpression;
+    // Hack to model changed signal
+    endResetModel();
+  }
 }
 
 void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )

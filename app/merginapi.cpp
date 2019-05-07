@@ -477,16 +477,6 @@ int MerginApi::diskUsage() const
   return mDiskUsage;
 }
 
-QString MerginApi::searchExpression() const
-{
-  return mSearchExpression;
-}
-
-void MerginApi::setSearchExpression( const QString &searchExpression )
-{
-  mSearchExpression = searchExpression;
-}
-
 QString MerginApi::apiRoot() const
 {
   return mApiRoot;

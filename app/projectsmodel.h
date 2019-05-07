@@ -18,7 +18,6 @@
 #define PROJECTSMODEL_H
 
 #include <QAbstractListModel>
-#include <inputsearchmodel.h>
 #include <QString>
 #include <QModelIndex>
 
@@ -27,10 +26,11 @@
  * and create list model from them. Available are full path to the file, name of the project
  * and short name of the project (clipped to N chars)
  */
-class ProjectModel : public InputSearchModel
+class ProjectModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QString dataDir READ dataDir ) // never changes
+    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
 
   public:
     enum Roles
@@ -59,6 +59,10 @@ class ProjectModel : public InputSearchModel
     int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 
     QString dataDir() const;
+
+    QString searchExpression() const;
+    void setSearchExpression( const QString &searchExpression );
+
   signals:
     void projectDeleted( QString folderName );
 
@@ -85,6 +89,7 @@ class ProjectModel : public InputSearchModel
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;
     const int mMaxShortNameChars = 10;
+    QString mSearchExpression;
 
 };
 
