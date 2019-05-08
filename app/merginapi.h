@@ -18,7 +18,7 @@ Q_ENUMS( ProjectStatus )
 
 struct MerginProject
 {
-  QString name;
+  QString name; //projectNamespace + projectName
   QStringList tags;
   QDateTime created;
   QDateTime updated; // local version of project files
@@ -183,8 +183,8 @@ class MerginApi: public QObject
     QString mPassword;
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
-    QHash<QUrl, QString>mPendingRequests;
-    QSet<QString> mWaitingForUpload;
+    QHash<QUrl, QString >mPendingRequests; // projectNamespace/projectName
+    QSet<QString> mWaitingForUpload; // projectNamespace/projectName
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
 

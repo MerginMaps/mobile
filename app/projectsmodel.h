@@ -36,6 +36,7 @@ class ProjectModel : public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1,
+      ProjectNamespace,
       FolderName,
       Path,
       ShortName, // name shortened to maxShortNameChars
@@ -76,6 +77,7 @@ class ProjectModel : public QAbstractListModel
     struct ProjectFile
     {
       QString name;
+      QString projectNamespace;
       QString folderName;
       QString path;
       QString info;

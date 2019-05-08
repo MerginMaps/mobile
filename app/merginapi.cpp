@@ -65,7 +65,7 @@ void MerginApi::downloadProject( const QString &projectName )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/" ) + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/%1" ).arg( projectName ) );
 
   if ( mPendingRequests.contains( url ) )
   {
@@ -150,12 +150,19 @@ void MerginApi::authorize( const QString &username, const QString &password )
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QString urlString = mApiRoot + QStringLiteral( "/auth/user/" ) + mUsername;
+  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Content-Type", "application/json" );
 
-  QNetworkReply *reply = mManager.get( request );
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "login" ), mUsername );
+  jsonObject.insert( QStringLiteral( "password" ), mPassword );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+
+  QNetworkReply *reply = mManager.post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
 }
 
@@ -415,6 +422,13 @@ void MerginApi::authorizeFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      QJsonObject docObj = doc.object();
+      mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
+      mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
+    }
     emit authChanged();
   }
   else
@@ -621,7 +635,7 @@ void MerginApi::updateInfoReplyFinished()
   QUrl url = r->url();
   QStringList res = url.path().split( "/" );
   QString projectName;
-  projectName = res.last();
+  projectName = res.takeAt( res.length() - 2 ) + "/" + res.last();
   QString projectPath = QString( mDataDir + projectName + "/" );
 
   r->deleteLater();
@@ -667,7 +681,7 @@ void MerginApi::uploadInfoReplyFinished()
   QUrl url = r->url();
   QStringList res = url.path().split( "/" );
   QString projectName;
-  projectName = res.last();
+  projectName = res.takeAt( res.length() - 2 ) + "/" + res.last();
 
   r->deleteLater();
 
@@ -736,7 +750,7 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
   QUrl url = r->url();
   QStringList res = url.path().split( '/' );
   QString projectName;
-  projectName = res.last();
+  projectName = res.takeAt( res.length() - 2 ) + "/" + res.last();
   QString projectPath = QString( mDataDir + projectName + '/' );
 
   if ( r->error() == QNetworkReply::NoError )
@@ -834,7 +848,8 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
     {
       QJsonObject projectMap = it->toObject();
       MerginProject p;
-      p.name = projectMap.value( QStringLiteral( "name" ) ).toString();
+      p.name = QString( "%1/%2" ).arg( projectMap.value( QStringLiteral( "namespace" ) ).toString() )
+               .arg( projectMap.value( QStringLiteral( "name" ) ).toString() );
       QJsonValue tags = projectMap.value( QStringLiteral( "tags" ) );
       if ( tags.isArray() )
       {
