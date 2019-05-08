@@ -67,7 +67,8 @@ void TestMerginApi::testDownloadProject()
   qDebug() << "TestMerginApi::testDownloadProject START";
   QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   QString projectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
-  mApi->downloadProject( projectName );
+  QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
+  mApi->downloadProject( mUsername + "/" + projectName );
 
   QVERIFY( spy.wait( 5000 ) );
   QCOMPARE( spy.count(), 1 );
@@ -81,7 +82,7 @@ void TestMerginApi::testDownloadProject()
 void TestMerginApi::testCreateProjectTwice()
 {
   qDebug() << "TestMerginApi::testCreateProjectTwice START";
-  QString projectName = "TEMPORARY_TEST_PROJECT";
+  QString projectName = mUsername + "/TEMPORARY_TEST_PROJECT";
   bool containsTestProject = false;
   ProjectList projects = getProjectList();
   Q_ASSERT( !hasProject( projectName, projects ) );
@@ -123,7 +124,7 @@ void TestMerginApi::testDeleteNonExistingProject()
 {
   qDebug() << "TestMerginApi::testDeleteNonExistingProject START";
   // Checks if projects doesn't exist
-  QString projectName = "TEMPORARY_TEST_PROJECT";
+  QString projectName = mUsername + "/TEMPORARY_TEST_PROJECT";
   ProjectList projects = getProjectList();
   Q_ASSERT( !hasProject( projectName, projects ) );
 
@@ -144,7 +145,7 @@ void TestMerginApi::testCreateDeleteProject()
 {
   qDebug() << "TestMerginApi::testCreateDeleteProject START";
   // Create a project
-  QString projectName = "TEMPORARY_TEST_PROJECT";
+  QString projectName = mUsername + "/TEMPORARY_TEST_PROJECT";
   ProjectList projects = getProjectList();
   Q_ASSERT( !hasProject( projectName, projects ) );
 

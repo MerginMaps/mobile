@@ -11,7 +11,7 @@ Item {
 
   property int activeProjectIndex: -1
   property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
-  property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex, ProjectModel.Name))
+  property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
   property string merginSearchExpression: ""
   property var busyIndicator
 

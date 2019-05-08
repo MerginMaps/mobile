@@ -32,9 +32,13 @@ ProjectModel::~ProjectModel() {}
 void ProjectModel::findProjectFiles()
 {
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-  for ( QString folderName : entryList )
+  for ( QString namespaceFolder : entryList )
   {
-    addProjectFromPath( mDataDir + "/" + folderName );
+    QStringList entryList2 = QDir( mDataDir + "/" + namespaceFolder ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
+    for ( QString folderName : entryList2 )
+    {
+      addProjectFromPath( mDataDir + "/" + namespaceFolder + "/" + folderName );
+    }
   }
   std::sort( mProjectFiles.begin(), mProjectFiles.end() );
 }
@@ -44,14 +48,12 @@ void ProjectModel::addProjectFromPath( QString path )
   if ( path.isEmpty() ) return;
 
   QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ), QDir::Files, QDirIterator::Subdirectories );
-  QSet<QString> projectFilePaths;
 
   int i = 0;
   int projectExistsAt = -1;
   for ( ProjectFile projectFile : mProjectFiles )
   {
-    projectFilePaths << projectFile.path;
-    if ( mDataDir + "/" + projectFile.folderName == path )
+    if ( mDataDir + "/" + projectFile.projectNamespace + "/" + projectFile.folderName == path )
     {
       projectExistsAt = i;
     }
@@ -64,6 +66,8 @@ void ProjectModel::addProjectFromPath( QString path )
     it.next();
     ProjectFile projectFile;
     projectFile.name = it.fileName().remove( ".qgs" );
+    QStringList res = path.split( "/" );
+    projectFile.projectNamespace = res.takeAt( res.length() - 2 );
     projectFile.path = it.filePath();
     QDir projectDir( path );
     projectFile.folderName = projectDir.dirName();
@@ -90,6 +94,8 @@ void ProjectModel::addProjectFromPath( QString path )
   {
     project.name = "";
     QDir projectDir( path );
+    QStringList res = path.split( "/" );
+    project.projectNamespace = res.takeAt( res.length() - 2 );
     project.folderName = projectDir.dirName();
     project.path = path;
     project.info = "invalid project";
@@ -113,6 +119,7 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
   switch ( role )
   {
     case Name: return QVariant( projectFile.name );
+    case ProjectNamespace: return QVariant( projectFile.projectNamespace );
     case FolderName: return QVariant( projectFile.folderName );
     case ShortName: return QVariant( projectFile.name.left( mMaxShortNameChars - 3 ) + "..." );
     case Path: return QVariant( projectFile.path );
@@ -128,6 +135,7 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
+  roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[FolderName] = "folderName";
   roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
@@ -159,12 +167,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 void ProjectModel::deleteProject( int row )
 {
   ProjectFile project = mProjectFiles.at( row );
-  QDir dir( mDataDir + "/" + project.folderName );
+  QDir dir( mDataDir + "/" + project.projectNamespace + "/" + project.folderName );
   dir.removeRecursively();
   beginResetModel();
   mProjectFiles.removeAt( row );
   endResetModel();
-  emit projectDeleted( project.folderName );
+  emit projectDeleted( project.projectNamespace + "/" + project.folderName );
 }
 
 int ProjectModel::rowCount( const QModelIndex &parent ) const
