@@ -30,6 +30,20 @@ QString InputUtils::getFileName( const QString &filePath )
   return fileInfo.fileName();
 }
 
+QString InputUtils::formatProjectName( const QString &fullProjectName )
+{
+  if ( fullProjectName.contains( "/" ) )
+  {
+    QStringList list = fullProjectName.split( "/" );
+    return QString( "%1/<b>%2</b>" ).arg( list.at( 0 ) ).arg( list.at( 1 ) );
+
+  }
+  else
+  {
+    return QString( "<b>%1</b>" ).arg( fullProjectName );
+  }
+}
+
 void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
 

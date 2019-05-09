@@ -19,7 +19,7 @@ Rectangle {
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"
-    property string projectName: name
+    property string projectName: name // <namespace>/<projectName>
     property bool disabled: false
     property real itemMargin: InputStyle.panelMargin
 
@@ -80,11 +80,10 @@ Rectangle {
 
                 Text {
                     id: mainText
-                    text: itemContainer.projectName
+                    text: __inputUtils.formatProjectName(itemContainer.projectName)
                     height: textContainer.height/2
                     width: textContainer.width
                     font.pixelSize: InputStyle.fontPixelSizeNormal
-                    font.weight: Font.Bold
                     color: itemContainer.highlight? itemContainer.primaryColor : itemContainer.secondaryColor
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignBottom

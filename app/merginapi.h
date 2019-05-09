@@ -107,6 +107,7 @@ class MerginApi: public QObject
     // Test functions
     void createProject( const QString &projectName );
     void deleteProject( const QString &projectName );
+    void clearTokenData();
 
     ProjectList projects();
 
@@ -154,7 +155,6 @@ class MerginApi: public QObject
     void deleteProjectFinished();
     void authorizeFinished();
 
-
   private:
     ProjectList parseProjectsData( const QByteArray &data, bool dataFromServer = false );
     bool cacheProjectsData( const QByteArray &data );
@@ -173,6 +173,7 @@ class MerginApi: public QObject
     QByteArray generateToken();
     void loadAuthData();
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
+    bool validateAuthAndContinute();
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
@@ -181,12 +182,15 @@ class MerginApi: public QObject
     QString mCacheFile;
     QString mUsername;
     QString mPassword;
+    QByteArray mAuthToken;
+    QDateTime mTokenExpiration;
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
     QHash<QUrl, QString >mPendingRequests; // projectNamespace/projectName
     QSet<QString> mWaitingForUpload; // projectNamespace/projectName
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
+    QEventLoop mAuthLoopEvent;
 
     const int CHUNK_SIZE = 65536;
 };
