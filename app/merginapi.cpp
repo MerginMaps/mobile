@@ -25,13 +25,11 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
 void MerginApi::listProjects( const QString &searchExpression, const QString &user,
                               const QString &flag, const QString &filterTag )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
-    emit authRequested();
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   // projects filtered by tag "input_use"
   QString urlString = mApiRoot + QStringLiteral( "/v1/project" );
@@ -49,7 +47,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
   }
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
@@ -57,9 +55,8 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
 
 void MerginApi::downloadProject( const QString &projectName )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
-    emit authRequested();
     return;
   }
 
@@ -76,7 +73,7 @@ void MerginApi::downloadProject( const QString &projectName )
   }
 
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   mPendingRequests.insert( url, projectName );
@@ -86,9 +83,8 @@ void MerginApi::downloadProject( const QString &projectName )
 void MerginApi::updateProject( const QString &projectName )
 {
 
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
-    emit authRequested();
     return;
   }
 
@@ -97,7 +93,7 @@ void MerginApi::updateProject( const QString &projectName )
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished );
@@ -145,7 +141,14 @@ void MerginApi::uploadProject( const QString &projectName )
 
 void MerginApi::authorize( const QString &username, const QString &password )
 {
-  mUsername = username;
+  if ( username.contains( "@" ) )
+  {
+    mUsername = username.split( "@" ).first();
+  }
+  else
+  {
+    mUsername = username;
+  }
   mPassword = password;
 
   QByteArray token = generateToken();
@@ -168,12 +171,17 @@ void MerginApi::authorize( const QString &username, const QString &password )
 
 void MerginApi::getUserInfo( const QString &username )
 {
+  if ( !validateAuthAndContinute() )
+  {
+    return;
+  }
+
   QByteArray token = generateToken();
   QNetworkRequest request;
   QString urlString = mApiRoot + QStringLiteral( "v1/user/" ) + username;
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getUserInfoFinished );
@@ -183,6 +191,8 @@ void MerginApi::clearAuth()
 {
   mUsername = "";
   mPassword = "";
+  mAuthToken.clear();
+  mTokenExpiration.setTime( QTime() );
   mDiskUsage = 0;
   mStorageLimit = 0;
   emit authChanged();
@@ -203,24 +213,25 @@ bool MerginApi::hasAuthData()
 
 void MerginApi::createProject( const QString &projectName )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
-    emit authRequested();
     return;
   }
 
   QByteArray token = generateToken();
   QNetworkRequest request;
-  QUrl url( mApiRoot + "/v1/project" );
+  QString projectNamespace = projectName.split( "/" ).at( 0 );
+  QString onlyProjectName = projectName.split( "/" ).at( 1 );
+  QUrl url( mApiRoot + "/v1/project/" + projectNamespace );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
   mPendingRequests.insert( url, projectName );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "name" ), projectName );
+  jsonObject.insert( QStringLiteral( "name" ), onlyProjectName );
   jsonObject.insert( QStringLiteral( "public" ), false );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
@@ -231,9 +242,8 @@ void MerginApi::createProject( const QString &projectName )
 
 void MerginApi::deleteProject( const QString &projectName )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
-    emit authRequested();
     return;
   }
 
@@ -241,15 +251,21 @@ void MerginApi::deleteProject( const QString &projectName )
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   mPendingRequests.insert( url, projectName );
   QNetworkReply *reply = mManager.deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
 }
 
+void MerginApi::clearTokenData()
+{
+  mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
+  mAuthToken.clear();
+}
+
 void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArray &json )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
     emit authRequested();
     return;
@@ -259,7 +275,7 @@ void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArr
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/fetch/" ) + projectName );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
   mPendingRequests.insert( url, projectName );
@@ -270,7 +286,7 @@ void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArr
 
 void MerginApi::uploadProjectFiles( const QString &projectName, const QByteArray &json, const QList<MerginFile> &files )
 {
-  if ( !hasAuthData() )
+  if ( !validateAuthAndContinute() )
   {
     emit networkErrorOccurred( QStringLiteral( "Auth token is invalid" ), QStringLiteral( "Mergin API error: fetchProject" ) );
     return;
@@ -300,7 +316,7 @@ void MerginApi::uploadProjectFiles( const QString &projectName, const QByteArray
   QNetworkRequest request;
   QUrl url( mApiRoot + "/v1/project/data_sync/" + projectName );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   mPendingRequests.insert( url, projectName );
 
   qDebug() << request.rawHeaderList();
@@ -371,6 +387,8 @@ void MerginApi::saveAuthData()
   settings.beginGroup( "Input/" );
   settings.setValue( "username", mUsername );
   settings.setValue( "password", mPassword );
+  settings.setValue( "token", mAuthToken );
+  settings.setValue( "expire", mTokenExpiration );
   settings.setValue( "apiRoot", mApiRoot );
   settings.endGroup();
 }
@@ -426,6 +444,9 @@ void MerginApi::authorizeFinished()
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
+      QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
+      mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
+      mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
       mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
     }
@@ -436,23 +457,22 @@ void MerginApi::authorizeFinished()
     qDebug() << r->errorString();
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
-    if ( status == 401 )
+    if ( status == 401 || status == 400 )
     {
-      mUsername = QString();
-      mPassword = QString();
-
       emit authFailed();
       emit notify( QStringLiteral( "Authentication failed" ) );
-    }
-    else if ( status == 403 )
-    {
-      // Assuming auth was successful, endpoint is just FORBIDDEN for admin users.
-      emit authChanged();
     }
     else
     {
       emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: authorize" ) );
     }
+    mUsername.clear();
+    mPassword.clear();
+    clearTokenData();
+  }
+  if ( mAuthLoopEvent.isRunning() )
+  {
+    mAuthLoopEvent.exit();
   }
   r->deleteLater();
 }
@@ -479,6 +499,25 @@ void MerginApi::loadAuthData()
   setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
   mUsername = settings.value( QStringLiteral( "username" ) ).toString();
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+  mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
+  mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+}
+
+bool MerginApi::validateAuthAndContinute()
+{
+  if ( !hasAuthData() )
+  {
+    emit authRequested();
+    return false;
+  }
+
+  if ( mAuthToken.isEmpty() || mTokenExpiration < QDateTime().currentDateTime().toUTC() )
+  {
+    authorize( mUsername, mPassword );
+
+    mAuthLoopEvent.exec();
+  }
+  return true;
 }
 
 int MerginApi::storageLimit() const
@@ -926,7 +965,8 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
 
   disconnect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
   mWaitingForUpload.remove( projectName );
-  if ( !hasAuthData() )
+
+  if ( !validateAuthAndContinute() )
   {
     emit networkErrorOccurred( QStringLiteral( "Auth data is invalid" ), QStringLiteral( "Mergin API error: projectInfo" ) );
   }
@@ -941,7 +981,7 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Basic " + token ) );
+  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
