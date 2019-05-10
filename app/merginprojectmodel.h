@@ -10,6 +10,8 @@
 class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY( int filterCreator READ filterCreator WRITE setFilterCreator )
+    Q_PROPERTY( int filterWriter READ filterWriter WRITE setFilterWriter )
 
   public:
     enum Roles
@@ -18,7 +20,8 @@ class MerginProjectModel: public QAbstractListModel
       Size,
       ProjectInfo,
       Status,
-      Pending
+      Pending,
+      PassesFilter
     };
     Q_ENUMS( Roles )
 
@@ -34,10 +37,18 @@ class MerginProjectModel: public QAbstractListModel
 
     void resetProjects( const ProjectList &merginProjects );
 
+    int filterCreator() const;
+    void setFilterCreator( int filterCreator );
+
+    int filterWriter() const;
+    void setFilterWriter( int filterWriter );
+
   public slots:
     void syncProjectFinished( const QString &projectFolder, const QString &projectName, bool successfully );
   private:
     ProjectList mMerginProjects;
+    int mFilterCreator;
+    int mFilterWriter;
 
 };
 #endif // MERGINPROJECTMODEL_H
