@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtGraphicalEffects 1.0
+import QtSensors 5.0
 import QgsQuick 0.1 as QgsQuick
 import "."
 
@@ -11,7 +12,23 @@ Item {
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
+    property int interval: 100 // Interval of direction marker updates in ms
+    property real trashold: 2 // trashold used to minimized direction marker updates (otherwise shaking)
+    property real azimuth: 0
 
+    Timer {
+      interval: positionMarker.interval; running: true; repeat: true
+      onTriggered: {
+        if (Math.abs(positionMarker.azimuth - compass.reading.azimuth) > positionMarker.trashold) {
+          positionMarker.azimuth = compass.reading.azimuth
+        }
+      }
+    }
+
+    Compass {
+      id: compass
+      active: true
+    }
 
     Rectangle {
         id: accuracyIndicator
@@ -32,12 +49,12 @@ Item {
         id: direction
         source: "gps_direction.svg"
         fillMode: Image.PreserveAspectFit
-        rotation: positionKit.direction
+        rotation: compass.reading ? positionMarker.azimuth : positionKit.direction
         transformOrigin: Item.Bottom
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && positionKit.direction >= 0
+        visible: positionKit.hasPosition && (positionKit.direction >= 0 || compass.reading)
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
     }
@@ -53,4 +70,3 @@ Item {
         y: positionKit.screenPosition.y - height/2
     }
 }
-
