@@ -47,6 +47,19 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       }
     }
     case Pending: return QVariant( project->pending );
+    case PassesFilter:
+    {
+      qDebug() << project->name << project->creator << mFilterCreator << project->writers << mFilterWriter;
+      if ( mFilterCreator >= 0 )
+      {
+        return project->creator == mFilterCreator;
+      }
+      else if ( mFilterWriter >= 0 )
+      {
+        return project->creator != mFilterWriter && project->writers.contains( mFilterWriter );
+      }
+      return true;
+    }
   }
 
   return QVariant();
@@ -67,6 +80,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
+  roleNames[PassesFilter] = "passesFilter";
   return roleNames;
 }
 
@@ -106,4 +120,24 @@ void MerginProjectModel::syncProjectFinished( const QString &projectFolder, cons
     }
     row++;
   }
+}
+
+int MerginProjectModel::filterWriter() const
+{
+  return mFilterWriter;
+}
+
+void MerginProjectModel::setFilterWriter( int filterWriter )
+{
+  mFilterWriter = filterWriter;
+}
+
+int MerginProjectModel::filterCreator() const
+{
+  return mFilterCreator;
+}
+
+void MerginProjectModel::setFilterCreator( int filterCreator )
+{
+  mFilterCreator = filterCreator;
 }

@@ -28,6 +28,9 @@ struct MerginProject
   ProjectStatus status = NoVersion;
   int size;
   int filesCount;
+  int creator; // ID of current user
+  //QList<int> owners;
+  QList<int> writers;
 };
 
 struct MerginFile
@@ -44,6 +47,7 @@ class MerginApi: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString username READ username NOTIFY authChanged )
+    Q_PROPERTY( int userId READ userId NOTIFY authChanged )
     Q_PROPERTY( int storageLimit READ storageLimit NOTIFY userInfoChanged )
     Q_PROPERTY( int diskUsage READ diskUsage NOTIFY userInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
@@ -122,6 +126,9 @@ class MerginApi: public QObject
     //! Total storage limit of current logged in user in Mergin instance in Bytes
     int storageLimit() const;
 
+    int userId() const;
+    void setUserId( int userId );
+
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
@@ -161,6 +168,13 @@ class MerginApi: public QObject
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
     void createPathIfNotExists( const QString &filePath );
+    /**
+    *
+    * \param localUpdated Timestamp version of local copy of the project
+    * \param updated Timestamp version of latest project on a server
+    * \param lastSync Timestamp of last successfull sync with a server
+    * \param lastMod Timestamp of last modification on local copy of the project
+    */
     ProjectStatus getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastMod );
     QDateTime getLastModifiedFileDateTime( const QString &path );
     QByteArray getChecksum( const QString &filePath );
@@ -182,6 +196,7 @@ class MerginApi: public QObject
     QString mCacheFile;
     QString mUsername;
     QString mPassword;
+    int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
     int mDiskUsage = 0; // in Bytes

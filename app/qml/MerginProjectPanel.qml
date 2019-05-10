@@ -421,7 +421,7 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: cellHeight
+      height: passesFilter ? cellHeight : 0
       visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
@@ -504,7 +504,9 @@ Item {
             toolbar.highlighted = myProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginApi.listProjects(searchField.text, __merginApi.username, "created")
+            __merginProjectsModel.filterCreator = __merginApi.userId
+            __merginProjectsModel.filterWriter = -1
+            __merginApi.listProjects(searchField.text)
           }
         }
       }
@@ -523,7 +525,9 @@ Item {
             toolbar.highlighted = sharedProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginApi.listProjects(searchField.text, __merginApi.username, "shared")
+            __merginProjectsModel.filterCreator = -1
+            __merginProjectsModel.filterWriter = __merginApi.userId
+            __merginApi.listProjects(searchField.text)
           }
         }
       }
@@ -542,6 +546,8 @@ Item {
             toolbar.highlighted = exploreBtn.text
             busyIndicator.running = true
             showMergin = true
+            __merginProjectsModel.filterCreator = -1
+            __merginProjectsModel.filterWriter = -1
             __merginApi.listProjects(searchField.text)
           }
         }

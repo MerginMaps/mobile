@@ -193,6 +193,7 @@ void MerginApi::clearAuth()
   mPassword = "";
   mAuthToken.clear();
   mTokenExpiration.setTime( QTime() );
+  mUserId = -1;
   mDiskUsage = 0;
   mStorageLimit = 0;
   emit authChanged();
@@ -341,8 +342,8 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
   {
     if ( projectUpdates.contains( project->name ) )
     {
-      QDateTime localUpdate = projectUpdates.value( project->name ).get()->updated;
-      project->lastSync = projectUpdates.value( project->name ).get()->lastSync;
+      QDateTime localUpdate = projectUpdates.value( project->name ).get()->updated.toUTC();
+      project->lastSync = projectUpdates.value( project->name ).get()->lastSync.toUTC();
       QDateTime lastModified = getLastModifiedFileDateTime( mDataDir + project->name );
       project->updated = localUpdate;
       project->status = getProjectStatus( project->updated, project->serverUpdated, project->lastSync, lastModified );
@@ -360,8 +361,14 @@ void MerginApi::setUpdateToProject( const QString &projectDir, const QString &pr
   {
     if ( projectName == project->name )
     {
-      project->updated = project->serverUpdated;
-      project->lastSync = QDateTime::currentDateTime();
+      if ( !project->serverUpdated.isValid() )
+      {
+        project->updated = project->created;
+      } else
+      {
+        project->updated = project->serverUpdated;
+      }
+      project->lastSync = QDateTime::currentDateTime().toUTC();
       emit merginProjectsChanged();
       return;
     }
@@ -387,6 +394,7 @@ void MerginApi::saveAuthData()
   settings.beginGroup( "Input/" );
   settings.setValue( "username", mUsername );
   settings.setValue( "password", mPassword );
+  settings.setValue( "userId", mUserId );
   settings.setValue( "token", mAuthToken );
   settings.setValue( "expire", mTokenExpiration );
   settings.setValue( "apiRoot", mApiRoot );
@@ -447,6 +455,7 @@ void MerginApi::authorizeFinished()
       QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
       mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
       mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+      mUserId = docObj.value( QStringLiteral( "id" ) ).toInt();
       mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
       mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
     }
@@ -499,6 +508,7 @@ void MerginApi::loadAuthData()
   setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
   mUsername = settings.value( QStringLiteral( "username" ) ).toString();
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+  mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
   mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
   mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
 }
@@ -518,6 +528,16 @@ bool MerginApi::validateAuthAndContinute()
     mAuthLoopEvent.exec();
   }
   return true;
+}
+
+int MerginApi::userId() const
+{
+  return mUserId;
+}
+
+void MerginApi::setUserId( int userId )
+{
+  mUserId = userId;
 }
 
 int MerginApi::storageLimit() const
@@ -889,6 +909,16 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
       MerginProject p;
       p.name = QString( "%1/%2" ).arg( projectMap.value( QStringLiteral( "namespace" ) ).toString() )
                .arg( projectMap.value( QStringLiteral( "name" ) ).toString() );
+      p.creator = projectMap.value( QStringLiteral( "creator" ) ).toInt();
+      QJsonValue access = projectMap.value( QStringLiteral( "access" ) );
+      if ( access.isObject() )
+      {
+        QJsonArray writers = access.toObject().value( "writers" ).toArray();
+        for ( QJsonValueRef tag : writers )
+        {
+          p.writers.append( tag.toInt() );
+        }
+      }
       QJsonValue tags = projectMap.value( QStringLiteral( "tags" ) );
       if ( tags.isArray() )
       {
@@ -896,7 +926,6 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
         {
           p.tags.append( tag.toString() );
         }
-        tags.toArray().toVariantList();
       }
       p.created = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
@@ -911,7 +940,11 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
       }
       else
       {
-        p.lastSync = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs );
+        p.lastSync = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+        if ( !updated.isValid() )
+        {
+          updated = p.created;
+        }
         p.updated = updated;
       }
       result << std::make_shared<MerginProject>( p );
@@ -941,19 +974,37 @@ void MerginApi::cacheProjects()
   QJsonArray array;
   for ( std::shared_ptr<MerginProject> p : mMerginProjects )
   {
+//      QDir projectFolder( mDataDir + '/' + p->name );
+//      if ( !projectFolder.exists() )
+//      {
+//          continue;
+//      }
+
     QJsonObject projectMap;
     projectMap.insert( QStringLiteral( "created" ), p->created.toString( Qt::ISODateWithMs ) );
     projectMap.insert( QStringLiteral( "updated" ), p->updated.toString( Qt::ISODateWithMs ) );
     projectMap.insert( QStringLiteral( "lastSync" ), p->lastSync.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral( "name" ), p->name );
+    projectMap.insert( QStringLiteral( "creator" ), p->creator );
+    QStringList parts = p->name.split( "/" );
+    if ( parts.length() == 1 )
+    {
+      projectMap.insert( QStringLiteral( "name" ), parts.at( 0 ) );
+    }
+    else
+    {
+      projectMap.insert( QStringLiteral( "namespace" ), parts.at( 0 ) );
+      projectMap.insert( QStringLiteral( "name" ), parts.at( 1 ) );
+    }
+
     QJsonArray tags;
     projectMap.insert( QStringLiteral( "tags" ), tags.fromStringList( p->tags ) );
-
-    QDir projectFolder( mDataDir + '/' + p->name );
-    if ( projectFolder.exists() )
+    QJsonArray writers;
+    for ( int userId : p->writers )
     {
-      array.append( projectMap );
+      writers.append( userId );
     }
+    projectMap.insert( QStringLiteral( "writers" ), writers );
+    array.append( projectMap );
   }
   doc.setArray( array );
   cacheProjectsData( doc.toJson() );
@@ -1141,16 +1192,19 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
 
 ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastModified )
 {
+  // There was no sync yet
   if ( !localUpdated.isValid() )
   {
     return ProjectStatus::NoVersion;
   }
 
+  // Something has locally changed after last sync with server
   if ( lastSync < lastModified )
   {
     return ProjectStatus::Modified;
   }
 
+  // Version is lower than latest one, last sync also before updated
   if ( localUpdated < updated && updated > lastSync.toUTC() )
   {
     return ProjectStatus::OutOfDate;
@@ -1174,7 +1228,7 @@ QDateTime MerginApi::getLastModifiedFileDateTime( const QString &path )
       }
     }
   }
-  return lastModified;
+  return lastModified.toUTC();
 }
 
 QByteArray MerginApi::getChecksum( const QString &filePath )

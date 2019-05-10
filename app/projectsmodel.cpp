@@ -72,7 +72,7 @@ void ProjectModel::addProjectFromPath( QString path )
     QDir projectDir( path );
     projectFile.folderName = projectDir.dirName();
     QFileInfo fileInfo( it.filePath() );
-    QDateTime created = fileInfo.created();
+    QDateTime created = fileInfo.created().toUTC();
     projectFile.info = QString( created.toString() );
     projectFile.isValid = true;
 
