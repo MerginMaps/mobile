@@ -364,7 +364,8 @@ void MerginApi::setUpdateToProject( const QString &projectDir, const QString &pr
       if ( !project->serverUpdated.isValid() )
       {
         project->updated = project->created;
-      } else
+      }
+      else
       {
         project->updated = project->serverUpdated;
       }
