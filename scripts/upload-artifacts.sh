@@ -31,7 +31,7 @@ then
   else
     echo -e "\e[31mDeploying other commit\e[0m"
     export DROPBOX_FOLDER="other"
-    export APK_FILE=input-${TRAVIS_BRANCH}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
+    export APK_FILE=input-${TRAVIS_BRANCH/\//_}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   fi
 
