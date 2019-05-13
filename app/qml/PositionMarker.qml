@@ -13,14 +13,15 @@ Item {
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
     property int interval: 100 // Interval of direction marker updates in ms
-    property real trashold: 2 // trashold used to minimized direction marker updates (otherwise shaking)
-    property real azimuth: 0
+    property real threshold: 3 // threshold used to minimized direction marker updates (otherwise shaking)
+    property real direction
 
     Timer {
       interval: positionMarker.interval; running: true; repeat: true
       onTriggered: {
-        if (Math.abs(positionMarker.azimuth - compass.reading.azimuth) > positionMarker.trashold) {
-          positionMarker.azimuth = compass.reading.azimuth
+        var newDirection = compass.reading ? compass.reading.azimuth : positionKit.direction
+        if (Math.abs(positionMarker.direction - newDirection) > positionMarker.threshold) {
+          positionMarker.direction = newDirection
         }
       }
     }
@@ -49,12 +50,12 @@ Item {
         id: direction
         source: "gps_direction.svg"
         fillMode: Image.PreserveAspectFit
-        rotation: compass.reading ? positionMarker.azimuth : positionKit.direction
+        rotation: positionMarker.direction
         transformOrigin: Item.Bottom
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && (positionKit.direction >= 0 || compass.reading)
+        visible: positionKit.hasPosition
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
     }
