@@ -35,19 +35,10 @@ then
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   fi
 
-  # add file to dropbox
   sudo cp ${BUILD_FILE} /tmp/${APK_FILE}
   python3 ./scripts/uploader.py --source /tmp/${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
   APK_URL=`tail -n 1 uploader.log`
-
-  # github api has no way to upload png to comment
-  APK_QRCODE=${APK_FILE}.png
-  qr "${APK_URL}" > "/tmp/${APK_QRCODE}"
-  python3 ./scripts/uploader.py --source /tmp/${APK_QRCODE} --destination "/$DROPBOX_FOLDER/${APK_QRCODE}" --token DROPBOX_TOKEN > uploader2.log 2>&1
-  APK_QRCODE_URL=`tail -n 1 uploader2.log`
-
-  # push new comment
-  curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "'${SIGNED}' apk: [armv7]('${APK_URL}') (SDK: ['${SDK_VERSION}'](https://github.com/lutraconsulting/OSGeo4A/releases/tag/'${SDK_VERSION}'))![qrcode]('${APK_QRCODE_URL}')"}' ${GITHUB_API}
+  curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "'${SIGNED}' apk: [armv7]('${APK_URL}') (SDK: ['${SDK_VERSION}'](https://github.com/lutraconsulting/OSGeo4A/releases/tag/'${SDK_VERSION}'))"}' ${GITHUB_API}
 
 else
   echo -e "Not uploading artifacts ..."
