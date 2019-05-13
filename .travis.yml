@@ -12,6 +12,7 @@ before_install:
 - gem update --system
 - gem --version
 - pip3 install dropbox
+- pip3 install qrcode[pil]
 
 script:
 - export SDK_VERSION=release-1
