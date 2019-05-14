@@ -36,7 +36,8 @@ class LayersModel : public QAbstractListModel
       isVector,
       isReadOnly,
       IconSource,
-      VectorLayer
+      VectorLayer,
+      HasGeometry
     };
     Q_ENUMS( Roles )
 
