@@ -899,6 +899,14 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
 {
   ProjectList result;
 
+  // TODO delete namespace hacking after another version upgrade
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "Input/" ) );
+  QString username = settings.value( QStringLiteral( "username" ), QStringLiteral( "input" ) ).toString();
+  if ( username.isEmpty() )
+    username = QStringLiteral( "input" );
+  settings.endGroup();
+
   QJsonDocument doc = QJsonDocument::fromJson( data );
   if ( doc.isArray() )
   {
@@ -908,7 +916,12 @@ ProjectList MerginApi::parseProjectsData( const QByteArray &data, bool dataFromS
     {
       QJsonObject projectMap = it->toObject();
       MerginProject p;
-      p.name = QString( "%1/%2" ).arg( projectMap.value( QStringLiteral( "namespace" ) ).toString() )
+      QString projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
+      if ( projectNamespace.isEmpty() )
+      {
+        projectNamespace = username;
+      }
+      p.name = QString( "%1/%2" ).arg( projectNamespace )
                .arg( projectMap.value( QStringLiteral( "name" ) ).toString() );
       p.creator = projectMap.value( QStringLiteral( "creator" ) ).toInt();
       QJsonValue access = projectMap.value( QStringLiteral( "access" ) );

@@ -111,7 +111,17 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
 }
 
-static bool cpDir( const QString &srcPath, const QString &dstPath )
+//static void doProjectMigration(const QString &projectDir)
+//{
+//    QSettings settings;
+//    settings.beginGroup("Input");
+//    QString username = settings.value("username", "input").toString();
+
+
+//    cpDir(projectDir, projectDir + "/" + username);
+//}
+
+static bool cpDir( const QString &srcPath, const QString &dstPath, QStringList ignoredFolders = QStringList() )
 {
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
@@ -124,6 +134,8 @@ static bool cpDir( const QString &srcPath, const QString &dstPath )
     QString dstItemPath = dstPath + "/" + info.fileName();
     if ( info.isDir() )
     {
+      if ( ignoredFolders.contains( srcItemPath ) ) continue;
+
       if ( !cpDir( srcItemPath, dstItemPath ) )
       {
         return false;
@@ -219,6 +231,7 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion( version );
 
+
   bool IS_TEST = false;
   for ( int i = 0; i < argc; ++i )
   {
@@ -237,6 +250,38 @@ int main( int argc, char *argv[] )
 
   init_qgis( dataDir + "/qgis-data" );
   expand_pkg_data( QgsApplication::pkgDataPath() );
+
+
+  // MIGRATION - TODO delete migration after another version upgrade
+  QDir dir;
+  if ( !dir.exists( dataDir ) )
+    dir.mkpath( dataDir );
+
+  QFileInfo newFile( dataDir + "/.projectMigration" );
+  if ( !newFile.exists() )
+  {
+    QFile migrationFile( newFile.absoluteFilePath() );
+    migrationFile.open( QIODevice::WriteOnly );
+    migrationFile.close();
+
+    QSettings settings;
+    settings.beginGroup( QStringLiteral( "Input/" ) );
+    QString username = settings.value( QStringLiteral( "username" ), QStringLiteral( "input" ) ).toString();
+    if ( username.isEmpty() )
+      username = QStringLiteral( "input" );
+    settings.endGroup();
+
+    QStringList entryList = QDir( projectDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
+    cpDir( projectDir, projectDir + "/" + username, QStringList() << projectDir + "/" + username );
+    for ( QString entry : entryList )
+    {
+      QDir testDir( projectDir + "/" + entry );
+      testDir.removeRecursively();
+    }
+    qDebug() << "Project migration DONE!" << username;
+  }
+
+  // END OF MIGRATION
 
   // Create Input classes
   AndroidUtils au;
