@@ -111,16 +111,6 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
 }
 
-//static void doProjectMigration(const QString &projectDir)
-//{
-//    QSettings settings;
-//    settings.beginGroup("Input");
-//    QString username = settings.value("username", "input").toString();
-
-
-//    cpDir(projectDir, projectDir + "/" + username);
-//}
-
 static bool cpDir( const QString &srcPath, const QString &dstPath, QStringList ignoredFolders = QStringList() )
 {
   QDir parentDstDir( QFileInfo( dstPath ).path() );
