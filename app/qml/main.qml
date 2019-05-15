@@ -544,6 +544,9 @@ ApplicationWindow {
         onNotify: {
             showMessage(message)
         }
+        onApiIncompatibilityOccured: {
+            showMessage(message)
+        }
     }
 
     FeaturePanel {
