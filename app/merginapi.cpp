@@ -516,9 +516,6 @@ void MerginApi::checkMerginVersionFinished()
     }
     else
     {
-//        QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-//        int status = statusCode.toInt();
-//        qDebug() << r->errorString() << status << statusCode << "!!!!!!!!!!!!!!!!!!";
         emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
     }
     r->deleteLater();
