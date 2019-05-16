@@ -29,7 +29,7 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
 void MerginApi::listProjects( const QString &searchExpression, const QString &user,
                               const QString &flag, const QString &filterTag )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -59,7 +59,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
 
 void MerginApi::downloadProject( const QString &projectName )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -87,7 +87,7 @@ void MerginApi::downloadProject( const QString &projectName )
 void MerginApi::updateProject( const QString &projectName )
 {
 
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -175,7 +175,7 @@ void MerginApi::authorize( const QString &username, const QString &password )
 
 void MerginApi::getUserInfo( const QString &username )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -218,7 +218,7 @@ bool MerginApi::hasAuthData()
 
 void MerginApi::createProject( const QString &projectName )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -247,7 +247,7 @@ void MerginApi::createProject( const QString &projectName )
 
 void MerginApi::deleteProject( const QString &projectName )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     return;
   }
@@ -270,9 +270,8 @@ void MerginApi::clearTokenData()
 
 void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArray &json )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
-    emit authRequested();
     return;
   }
 
@@ -291,7 +290,7 @@ void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArr
 
 void MerginApi::uploadProjectFiles( const QString &projectName, const QByteArray &json, const QList<MerginFile> &files )
 {
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     emit networkErrorOccurred( QStringLiteral( "Auth token is invalid" ), QStringLiteral( "Mergin API error: fetchProject" ) );
     return;
@@ -493,32 +492,49 @@ void MerginApi::authorizeFinished()
 
 void MerginApi::checkMerginVersionFinished()
 {
-    QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-    Q_ASSERT( r );
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
 
-    if ( r->error() == QNetworkReply::NoError )
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
     {
-        QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
-        if (doc.isObject()) {
-            QJsonObject obj = doc.object();
-            QString apiVersion = obj.value(QStringLiteral("version")).toString();
-            // Check version compatibility - HAS TO MATCH COMPLETELY
-#ifdef REQUIRED_MERGIN_API_VERSION
-            QString requiredApiVersion = STR(REQUIRED_MERGIN_API_VERSION);
-            if ( !requiredApiVersion.isEmpty() && (apiVersion != requiredApiVersion)) {
-                emit apiIncompatibilityOccured(QString("Required Mergin API version %1 not matching current %2")
-                                               .arg(requiredApiVersion).arg(apiVersion), QStringLiteral( "Mergin API error: checkMerginVersion" ));
-            } else {
-                mApiVersionSatisfied = true;
-            }
+      QJsonObject obj = doc.object();
+      QString apiVersion = obj.value( QStringLiteral( "version" ) ).toString();
+#ifdef REQUIRED_MERGIN_API_VERSION_MAJOR
+      int major = -1;
+      int minor = -1;
+      QRegularExpression re;
+      re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+      QRegularExpressionMatch match = re.match( apiVersion );
+      if ( match.hasMatch() )
+      {
+        major = match.captured( "major" ).toInt();
+        minor = match.captured( "minor" ).toInt();
+      }
+
+      QString requiredApiVersionMajor = STR( REQUIRED_MERGIN_API_VERSION_MAJOR );
+      QString requiredApiVersionMinor = STR( REQUIRED_MERGIN_API_VERSION_MINOR );
+      if ( requiredApiVersionMajor.toInt() > major || requiredApiVersionMinor.toInt() > minor )
+      {
+        setApiVersionStatus( VersionStatus::FAILED );
+        emit apiIncompatibilityOccured( QString( "Required Mergin API version %1.%2 not matching current %3" )
+                                        .arg( requiredApiVersionMajor ).arg( requiredApiVersionMinor ).arg( apiVersion ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
+      }
+      else
+      {
+        setApiVersionStatus( VersionStatus::PASSED );
+      }
 #endif
-        }
     }
-    else
-    {
-        emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
-    }
-    r->deleteLater();
+  }
+  else
+  {
+    setApiVersionStatus( VersionStatus::NOT_FOUND );
+    emit apiIncompatibilityOccured( QString( "Mergin server not available" ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
+  }
+  r->deleteLater();
 }
 
 void MerginApi::projectDeleted( const QString &projectName )
@@ -565,6 +581,17 @@ bool MerginApi::validateAuthAndContinute()
   return true;
 }
 
+VersionStatus MerginApi::apiVersionStatus() const
+{
+  return mApiVersionStatus;
+}
+
+void MerginApi::setApiVersionStatus( const VersionStatus &apiVersionStatus )
+{
+  mApiVersionStatus = apiVersionStatus;
+  emit apiVersionStatusChanged();
+}
+
 int MerginApi::userId() const
 {
   return mUserId;
@@ -587,15 +614,15 @@ int MerginApi::diskUsage() const
 
 void MerginApi::checkMerginVersion()
 {
-    if (mApiVersionSatisfied) return;
+  if ( mApiVersionStatus == VersionStatus::PASSED ) return;
 
-    QNetworkRequest request;
-    QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
+  QNetworkRequest request;
+  QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
 
-    request.setUrl( url );
+  request.setUrl( url );
 
-    QNetworkReply *reply = mManager.get( request );
-    connect( reply, &QNetworkReply::finished, this, &MerginApi::checkMerginVersionFinished );
+  QNetworkReply *reply = mManager.get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::checkMerginVersionFinished );
 }
 
 QString MerginApi::apiRoot() const
@@ -617,7 +644,7 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   }
   settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
   settings.endGroup();
-  mApiVersionSatisfied = false;
+  setApiVersionStatus( VersionStatus::UNKNOWN );
   emit apiRootChanged();
 }
 
@@ -1066,7 +1093,7 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
   disconnect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
   mWaitingForUpload.remove( projectName );
 
-  if ( !validateAuthAndContinute() )
+  if ( !validateAuthAndContinute() || mApiVersionStatus != VersionStatus::PASSED )
   {
     emit networkErrorOccurred( QStringLiteral( "Auth data is invalid" ), QStringLiteral( "Mergin API error: projectInfo" ) );
   }

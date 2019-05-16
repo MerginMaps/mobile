@@ -69,6 +69,7 @@ Item {
                     id: row
                     width: loginForm.width
                     height: fieldHeight
+                    visible: !warningMsgContainer.visible
                     spacing: 0
 
                     Rectangle {
@@ -114,6 +115,7 @@ Item {
 
                 Rectangle {
                     id: loginNameBorder
+                    visible: !warningMsgContainer.visible
                     color: root.fontColor
                     y: loginName.height - height
                     height: 2 * QgsQuick.Utils.dp
@@ -126,6 +128,7 @@ Item {
                     width: loginForm.width
                     height: fieldHeight
                     spacing: 0
+                    visible: !warningMsgContainer.visible
 
                     Rectangle {
                         id: iconContainer2
@@ -182,6 +185,7 @@ Item {
 
                 Rectangle {
                     id: passBorder
+                    visible: !warningMsgContainer.visible
                     color: InputStyle.panelBackgroundDark
                     height: 2 * QgsQuick.Utils.dp
                     y: password.height - height
@@ -192,6 +196,7 @@ Item {
 
                 Button {
                     id: loginButton
+                    visible: !warningMsgContainer.visible
                     width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight
                     text: qsTr("Sign in")
@@ -217,6 +222,7 @@ Item {
 
                 Button {
                     id: signUpButton
+                    visible: !warningMsgContainer.visible
                     width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight * 0.7
                     text: qsTr("Sign up")
@@ -235,6 +241,28 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
+                }
+
+                Row {
+                  id: warningMsgContainer
+                  visible: __merginApi.apiVersionStatus !== 2 // TODO proper ENUM (PASSED)
+                  width: loginForm.width
+
+                  Text {
+                    width: parent.width
+                    text: {
+                      if (__merginApi.apiVersionStatus === 3 ) {
+                        qsTr("Mergin server has been updated. Please, update Input app to enable Mergin functionality.")
+                      } else {
+                        qsTr("Mergin server unavailable.")
+                      }
+                    }
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
+                    color: InputStyle.fontColor
+                    wrapMode: Text.WordWrap
+                  }
                 }
 
                 Row {

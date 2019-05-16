@@ -16,6 +16,16 @@ enum ProjectStatus
 };
 Q_ENUMS( ProjectStatus )
 
+enum VersionStatus
+{
+  UNKNOWN, // unchecked
+  NOT_FOUND, // cannot be checked due to network/wrong url
+  PASSED,
+  FAILED
+};
+Q_ENUMS( VersionStatus )
+
+
 struct MerginProject
 {
   QString name; //projectNamespace + projectName
@@ -51,6 +61,7 @@ class MerginApi: public QObject
     Q_PROPERTY( int storageLimit READ storageLimit NOTIFY userInfoChanged )
     Q_PROPERTY( int diskUsage READ diskUsage NOTIFY userInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
+    Q_PROPERTY( int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
   public:
     explicit MerginApi( const QString &dataDir, QObject *parent = nullptr );
     ~MerginApi() = default;
@@ -109,7 +120,7 @@ class MerginApi: public QObject
     Q_INVOKABLE bool hasAuthData();
     /**
     * Pings Mergin server and checks its version with required version defined in version.pri
-    * Accordingly sets mApiVersionSatisfied variable (reset when mergin url is changed).
+    * Accordingly sets mApiVersionStatus variable (reset when mergin url is changed).
     * The function is skipped if version has been checked and passed.
     */
     Q_INVOKABLE void checkMerginVersion();
@@ -135,6 +146,9 @@ class MerginApi: public QObject
     int userId() const;
     void setUserId( int userId );
 
+    VersionStatus apiVersionStatus() const;
+    void setApiVersionStatus( const VersionStatus &apiVersionStatus );
+
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
@@ -147,6 +161,7 @@ class MerginApi: public QObject
     void authChanged();
     void authFailed();
     void apiRootChanged();
+    void apiVersionStatusChanged();
     void projectCreated( const QString &projectName );
     void serverProjectDeleted( const QString &projectName );
     void userInfoChanged();
@@ -197,7 +212,6 @@ class MerginApi: public QObject
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     bool validateAuthAndContinute();
 
-
     QNetworkAccessManager mManager;
     QString mApiRoot;
     ProjectList mMerginProjects;
@@ -215,7 +229,7 @@ class MerginApi: public QObject
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
     QEventLoop mAuthLoopEvent;
-    bool mApiVersionSatisfied = false;
+    VersionStatus mApiVersionStatus = VersionStatus::UNKNOWN;
 
     const int CHUNK_SIZE = 65536;
 };
