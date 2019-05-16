@@ -47,18 +47,22 @@ Item {
     onListProjectsFinished: {
       busyIndicator.running = false
     }
-  }
-
-  Connections {
-    target: __merginApi
+    onApiVersionStatusChanged: {
+      busyIndicator.running = false
+      if (__merginApi.apiVersionStatus === 2 && authPanel.visible) {
+        authPanel.visible = false
+      }
+    }
+    onApiIncompatibilityOccured: {
+      busyIndicator.running = false
+      if (projectsPanel.visible && toolbar.highlighted !== homeBtn.text) {
+        authPanel.visible = true
+      }
+    }
     onAuthRequested: {
       busyIndicator.running = false
       authPanel.visible = true
     }
-  }
-
-  Connections {
-    target: __merginApi
     onAuthChanged: {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
@@ -137,7 +141,7 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData()) {
+            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === 2) {
               __merginApi.getUserInfo(__merginApi.username)
               accountPanel.visible = true
             }
