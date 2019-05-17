@@ -123,7 +123,7 @@ class MerginApi: public QObject
     * Accordingly sets mApiVersionStatus variable (reset when mergin url is changed).
     * The function is skipped if version has been checked and passed.
     */
-    Q_INVOKABLE void checkMerginVersion();
+    Q_INVOKABLE void pingMergin();
 
     // Test functions
     void createProject( const QString &projectName );
@@ -165,6 +165,7 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectName );
     void serverProjectDeleted( const QString &projectName );
     void userInfoChanged();
+    void pingMerginFinished( const QString &apiVersion, const QString &msg );
 
   public slots:
     void projectDeleted( const QString &projectName );
@@ -183,7 +184,7 @@ class MerginApi: public QObject
     void createProjectFinished();
     void deleteProjectFinished();
     void authorizeFinished();
-    void checkMerginVersionFinished();
+    void pingMerginReplyFinished();
 
   private:
     ProjectList parseProjectsData( const QByteArray &data, bool dataFromServer = false );
@@ -211,6 +212,7 @@ class MerginApi: public QObject
     void loadAuthData();
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     bool validateAuthAndContinute();
+    void checkMerginVersion( QString apiVersion, QString msg = QStringLiteral() );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;

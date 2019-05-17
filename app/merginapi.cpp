@@ -21,7 +21,7 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   QObject::connect( this, &MerginApi::merginProjectsChanged, this, &MerginApi::cacheProjects );
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::serverProjectDeleted, this, &MerginApi::projectDeleted );
-  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::checkMerginVersion );
+  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
 
   loadAuthData();
 }
@@ -490,10 +490,12 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
-void MerginApi::checkMerginVersionFinished()
+void MerginApi::pingMerginReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
+  QString apiVersion;
+  QString msg;
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -501,40 +503,15 @@ void MerginApi::checkMerginVersionFinished()
     if ( doc.isObject() )
     {
       QJsonObject obj = doc.object();
-      QString apiVersion = obj.value( QStringLiteral( "version" ) ).toString();
-#ifdef REQUIRED_MERGIN_API_VERSION_MAJOR
-      int major = -1;
-      int minor = -1;
-      QRegularExpression re;
-      re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
-      QRegularExpressionMatch match = re.match( apiVersion );
-      if ( match.hasMatch() )
-      {
-        major = match.captured( "major" ).toInt();
-        minor = match.captured( "minor" ).toInt();
-      }
-
-      QString requiredApiVersionMajor = STR( REQUIRED_MERGIN_API_VERSION_MAJOR );
-      QString requiredApiVersionMinor = STR( REQUIRED_MERGIN_API_VERSION_MINOR );
-      if ( requiredApiVersionMajor.toInt() > major || requiredApiVersionMinor.toInt() > minor )
-      {
-        setApiVersionStatus( VersionStatus::FAILED );
-        emit apiIncompatibilityOccured( QString( "Required Mergin API version %1.%2 not matching current %3" )
-                                        .arg( requiredApiVersionMajor ).arg( requiredApiVersionMinor ).arg( apiVersion ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
-      }
-      else
-      {
-        setApiVersionStatus( VersionStatus::PASSED );
-      }
-#endif
+      apiVersion = obj.value( QStringLiteral( "version" ) ).toString();
     }
   }
   else
   {
-    setApiVersionStatus( VersionStatus::NOT_FOUND );
-    emit apiIncompatibilityOccured( QString( "Mergin server not available" ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
+    msg = r->errorString();
   }
   r->deleteLater();
+  emit pingMerginFinished( apiVersion, msg );
 }
 
 void MerginApi::projectDeleted( const QString &projectName )
@@ -581,6 +558,43 @@ bool MerginApi::validateAuthAndContinute()
   return true;
 }
 
+void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
+{
+  if ( msg.isEmpty() )
+  {
+#ifdef REQUIRED_MERGIN_API_VERSION_MAJOR
+    int major = -1;
+    int minor = -1;
+    QRegularExpression re;
+    re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+    QRegularExpressionMatch match = re.match( apiVersion );
+    if ( match.hasMatch() )
+    {
+      major = match.captured( "major" ).toInt();
+      minor = match.captured( "minor" ).toInt();
+    }
+
+    QString requiredApiVersionMajor = STR( REQUIRED_MERGIN_API_VERSION_MAJOR );
+    QString requiredApiVersionMinor = STR( REQUIRED_MERGIN_API_VERSION_MINOR );
+    if ( requiredApiVersionMajor.toInt() > major || requiredApiVersionMinor.toInt() > minor )
+    {
+      setApiVersionStatus( VersionStatus::FAILED );
+      emit apiIncompatibilityOccured( QString( "Required Mergin API version %1.%2 not matching current %3" )
+                                      .arg( requiredApiVersionMajor ).arg( requiredApiVersionMinor ).arg( apiVersion ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
+    }
+    else
+    {
+      setApiVersionStatus( VersionStatus::PASSED );
+    }
+#endif
+  }
+  else
+  {
+    setApiVersionStatus( VersionStatus::NOT_FOUND );
+    emit apiIncompatibilityOccured( msg, QStringLiteral( "Mergin API error: checkMerginVersion" ) );
+  }
+}
+
 VersionStatus MerginApi::apiVersionStatus() const
 {
   return mApiVersionStatus;
@@ -612,9 +626,12 @@ int MerginApi::diskUsage() const
   return mDiskUsage;
 }
 
-void MerginApi::checkMerginVersion()
+void MerginApi::pingMergin()
 {
   if ( mApiVersionStatus == VersionStatus::PASSED ) return;
+
+  setApiVersionStatus(VersionStatus::UNKNOWN);
+  emit apiIncompatibilityOccured( QStringLiteral("Reset Mergin version"), QStringLiteral("pingMergin request about to send") );
 
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
@@ -622,7 +639,7 @@ void MerginApi::checkMerginVersion()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::checkMerginVersionFinished );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
 
 QString MerginApi::apiRoot() const
