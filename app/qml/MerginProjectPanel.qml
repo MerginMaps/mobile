@@ -466,7 +466,7 @@ Item {
       if (toolbar.highlighted === homeBtn.text) {
         __projectsModel.searchExpression = ""
       } else {
-        __merginApi.checkMerginVersion()
+        __merginApi.pingMergin()
       }
     }
 
