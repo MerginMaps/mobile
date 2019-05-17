@@ -33,5 +33,6 @@
         <file>AboutPanel.qml</file>
         <file>MerginProjectPanel.qml</file>
         <file>AccountPage.qml</file>
+        <file>Highlight.qml</file>
     </qresource>
 </RCC>

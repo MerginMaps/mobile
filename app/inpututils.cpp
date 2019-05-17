@@ -1,7 +1,15 @@
 #include "inpututils.h"
+
+#include "qgsgeometrycollection.h"
+#include "qgslinestring.h"
+#include "qgspolygon.h"
 #include "qgsvectorlayer.h"
+
+#include "qgsquickmaptransform.h"
+
 #include <QFile>
 #include <QFileInfo>
+
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -73,4 +81,130 @@ void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQu
   currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY - panelOffset );
   currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY - panelOffset );
   mapSettings->setExtent( currentExtent );
+}
+
+
+double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
+{
+  if ( !ms ) return 1;
+  return 1 / ms->mapUnitsPerPixel();
+}
+
+double InputUtils::mapSettingsOffsetX( QgsQuickMapSettings *ms )
+{
+  if ( !ms ) return 0;
+  return -ms->visibleExtent().xMinimum();
+}
+
+double InputUtils::mapSettingsOffsetY( QgsQuickMapSettings *ms )
+{
+  if ( !ms ) return 0;
+  return -ms->visibleExtent().yMaximum();
+}
+
+
+static void addLineString( const QgsLineString *line, QVector<double> &data )
+{
+  data << line->numPoints();
+  const double *x = line->xData();
+  const double *y = line->yData();
+  for ( int i = 0; i < line->numPoints(); ++i )
+  {
+    data << x[i] << y[i];
+  }
+}
+
+static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type, QVector<double> &data )
+{
+  switch ( type )
+  {
+    case QgsWkbTypes::PointGeometry:
+    {
+      const QgsPoint *point = qgsgeometry_cast<const QgsPoint *>( geom );
+      if ( point )
+      {
+        data << 0 << point->x() << point->y();
+      }
+      break;
+    }
+
+    case QgsWkbTypes::LineGeometry:
+    {
+      const QgsLineString *line = qgsgeometry_cast<const QgsLineString *>( geom );
+      if ( line )
+      {
+        data << 1;
+        addLineString( line, data );
+      }
+      break;
+    }
+
+    case QgsWkbTypes::PolygonGeometry:
+    {
+      const QgsPolygon *poly = qgsgeometry_cast<const QgsPolygon *>( geom );
+      if ( poly )
+      {
+        if ( const QgsLineString *line = qgsgeometry_cast<const QgsLineString *>( poly->exteriorRing() ) )
+        {
+          data << 2;
+          addLineString( line, data );
+        }
+        for ( int i = 0; i < poly->numInteriorRings(); ++i )
+        {
+          if ( const QgsLineString *line = qgsgeometry_cast<const QgsLineString *>( poly->interiorRing( i ) ) )
+          {
+            data << 2;
+            addLineString( line, data );
+          }
+        }
+      }
+      break;
+    }
+
+    case QgsWkbTypes::UnknownGeometry:
+    case QgsWkbTypes::NullGeometry:
+      break;
+  }
+}
+
+
+QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !pair.isValid() )
+    return QVector<double>();
+
+  QgsGeometry g = pair.feature().geometry();
+
+  QgsCoordinateTransform ct( pair.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct.isShortCircuited() )
+  {
+    try
+    {
+      g.transform( ct );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e );
+      return QVector<double>();
+    }
+  }
+
+  QVector<double> data;
+
+  const QgsAbstractGeometry *geom = g.constGet();
+  QgsWkbTypes::GeometryType geomType = g.type();
+  const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
+  if ( collection && !collection->isEmpty() )
+  {
+    for ( int i = 0; i < collection->numGeometries(); ++i )
+    {
+      addSingleGeometry( collection->geometryN( i ), geomType, data );
+    }
+  }
+  else
+  {
+    addSingleGeometry( geom, geomType, data );
+  }
+
+  return data;
 }

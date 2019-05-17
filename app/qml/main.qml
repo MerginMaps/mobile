@@ -221,13 +221,16 @@ ApplicationWindow {
       }
     }
 
-    QgsQuick.FeatureHighlight {
-      anchors.fill: mapCanvas
-      id: highlight
-      color: "red"
-      mapSettings: mapCanvas.mapSettings
-      z: 1
-      opacity: digitizing.hasPolygonGeometry(highlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
+    Highlight {
+        id: highlight
+        anchors.fill: mapCanvas
+
+        mapSettings: mapCanvas.mapSettings
+        penWidth: 7 * QgsQuick.Utils.dp
+        markerSize: 20 * QgsQuick.Utils.dp
+        markerColor: "red"
+        outlineColor: "red"
+        fillColor: Qt.rgba(1,0,0,InputStyle.lowHighlightOpacity)
     }
 
     QgsQuick.FeatureHighlight {
