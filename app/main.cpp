@@ -23,6 +23,7 @@
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
+#include "merginapistatus.h"
 #include "merginprojectmodel.h"
 
 #include "test/testmerginapi.h"
@@ -196,6 +197,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
+  qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
 }
 
