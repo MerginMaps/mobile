@@ -113,6 +113,7 @@ digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
+merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
@@ -126,6 +127,7 @@ digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
+merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
 inpututils.h \

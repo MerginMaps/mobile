@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
+import lc 1.0
 import "."  // import InputStyle singleton
 
 Item {
@@ -245,13 +246,13 @@ Item {
 
                 Row {
                   id: warningMsgContainer
-                  visible: __merginApi.apiVersionStatus !== 2 // TODO proper ENUM (PASSED)
+                  visible: __merginApi.apiVersionStatus !== MerginApiStatus.PASSED
                   width: loginForm.width
 
                   Text {
                     width: parent.width
                     text: {
-                      if (__merginApi.apiVersionStatus === 3 ) {
+                      if (__merginApi.apiVersionStatus === MerginApiStatus.FAILED ) {
                         qsTr("Mergin server has been updated. Please, update Input app to enable Mergin functionality.")
                       } else {
                         qsTr("Mergin server unavailable.")

@@ -7,6 +7,8 @@
 #include <memory>
 #include <QFile>
 
+#include "merginapistatus.h"
+
 enum ProjectStatus
 {
   NoVersion,
@@ -15,16 +17,6 @@ enum ProjectStatus
   Modified
 };
 Q_ENUMS( ProjectStatus )
-
-enum VersionStatus
-{
-  UNKNOWN, // unchecked
-  NOT_FOUND, // cannot be checked due to network/wrong url
-  PASSED,
-  FAILED
-};
-Q_ENUMS( VersionStatus )
-
 
 struct MerginProject
 {
@@ -146,8 +138,8 @@ class MerginApi: public QObject
     int userId() const;
     void setUserId( int userId );
 
-    VersionStatus apiVersionStatus() const;
-    void setApiVersionStatus( const VersionStatus &apiVersionStatus );
+    MerginApiStatus::VersionStatus apiVersionStatus() const;
+    void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
@@ -231,7 +223,7 @@ class MerginApi: public QObject
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
     QEventLoop mAuthLoopEvent;
-    VersionStatus mApiVersionStatus = VersionStatus::UNKNOWN;
+    MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
 
     const int CHUNK_SIZE = 65536;
 };
