@@ -225,7 +225,7 @@ ApplicationWindow {
         id: highlight
         anchors.fill: mapCanvas
 
-        property bool hasPolygon: digitizing.hasPolygonGeometry(featureLayerPair.layer)
+        property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
 
         mapSettings: mapCanvas.mapSettings
 
@@ -253,7 +253,7 @@ ApplicationWindow {
       id: digitizingHighlight
       anchors.fill: mapCanvas
 
-      property bool hasPolygon: digitizing.hasPolygonGeometry(featureLayerPair.layer)
+      property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
 
       mapSettings: mapCanvas.mapSettings
 
