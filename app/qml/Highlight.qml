@@ -28,7 +28,7 @@ Item {
   property url markerImageSource   // e.g. "file:///home/martin/all_the_things.jpg"
 
   // feature+layer pair which determines what geometry is highlighted
-  property var featureLayerPair
+  property var featureLayerPair: null
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
