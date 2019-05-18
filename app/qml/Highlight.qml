@@ -9,20 +9,20 @@ Item {
   // color for line geometries
   property color lineColor: "black"
   // width for line geometries
-  property real lineWidth: 4
+  property real lineWidth: 2 * QgsQuick.Utils.dp
 
   // color for polygon geometries
   property color fillColor: "red"
 
   // width for outlines of lines and polygons
-  property real outlinePenWidth: 2
+  property real outlinePenWidth: 1 * QgsQuick.Utils.dp
   // color for outlines of lines and polygons
   property color outlineColor: "black"
 
   property string markerType: "circle"   // "circle" or "image"
   property color markerColor: "yellow"
-  property real markerWidth: 60
-  property real markerHeight: 60
+  property real markerWidth: 30 * QgsQuick.Utils.dp
+  property real markerHeight: 30 * QgsQuick.Utils.dp
   property real markerAnchorX: markerWidth/2
   property real markerAnchorY: markerHeight/2
   property url markerImageSource   // e.g. "file:///home/martin/all_the_things.jpg"
