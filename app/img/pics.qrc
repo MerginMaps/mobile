@@ -42,5 +42,6 @@
         <file>mergin_color.svg</file>
         <file>explore.svg</file>
         <file>home.svg</file>
+        <file>marker.svg</file>
     </qresource>
 </RCC>
