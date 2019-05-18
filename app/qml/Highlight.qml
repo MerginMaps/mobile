@@ -6,12 +6,25 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: highlight
 
-  property color outlineColor: "black"
+  // color for line geometries
+  property color lineColor: "black"
+  // width for line geometries
+  property real lineWidth: 4
+
+  // color for polygon geometries
   property color fillColor: "red"
-  property color markerColor: "yellow"
-  property real penWidth: 4
-  property real markerSize: 60
+
+  // width for outlines of lines and polygons
+  property real outlinePenWidth: 2
+  // color for outlines of lines and polygons
+  property color outlineColor: "black"
+
   property string markerType: "circle"   // "circle" or "image"
+  property color markerColor: "yellow"
+  property real markerWidth: 60
+  property real markerHeight: 60
+  property real markerAnchorX: markerWidth/2
+  property real markerAnchorY: markerHeight/2
   property url markerImageSource   // e.g. "file:///home/martin/all_the_things.jpg"
 
   // feature+layer pair which determines what geometry is highlighted
@@ -87,6 +100,7 @@ Item {
       if (newLineElements.length === 0)
           newLineElements.push(componentMoveTo.createObject(lineShapePath))
       lineShapePath.pathElements = newLineElements
+      lineOutlineShapePath.pathElements = newLineElements
 
       if (newPolygonElements.length === 0)
           newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
@@ -101,12 +115,10 @@ Item {
     Item {
       property real posX: 0
       property real posY: 0
-      property real anchorX: width/2
-      property real anchorY: height/2
-      x: posX* highlight.mapTransformScale + highlight.mapTransformOffsetX* highlight.mapTransformScale - anchorX
-      y: posY*-highlight.mapTransformScale + highlight.mapTransformOffsetY*-highlight.mapTransformScale - anchorY
-      width: highlight.markerSize
-      height: highlight.markerSize
+      x: posX* highlight.mapTransformScale + highlight.mapTransformOffsetX* highlight.mapTransformScale - highlight.markerAnchorX
+      y: posY*-highlight.mapTransformScale + highlight.mapTransformOffsetY*-highlight.mapTransformScale - highlight.markerAnchorY
+      width: highlight.markerWidth
+      height: highlight.markerHeight
       Rectangle {
           visible: highlight.markerType == "circle"
           anchors.fill: parent
@@ -134,18 +146,27 @@ Item {
     Component {  id: componentMoveTo; PathMove { } }
 
     ShapePath {
+        id: lineOutlineShapePath
+        strokeWidth: highlight.lineWidth / highlight.mapTransformScale
+        fillColor: "transparent"
+        strokeColor: highlight.outlineColor
+        capStyle: lineShapePath.capStyle
+        joinStyle: lineShapePath.joinStyle
+    }
+
+    ShapePath {
       id: lineShapePath
-      strokeColor: highlight.outlineColor
-      strokeWidth: highlight.penWidth / highlight.mapTransformScale  // negate scaling from the transform
+      strokeColor: highlight.lineColor
+      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / highlight.mapTransformScale  // negate scaling from the transform
       fillColor: "transparent"
-      capStyle: ShapePath.FlatCap
+      capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
     }
 
     ShapePath {
       id: polygonShapePath
       strokeColor: highlight.outlineColor
-      strokeWidth: highlight.penWidth / highlight.mapTransformScale  // negate scaling from the transform
+      strokeWidth: highlight.outlinePenWidth / highlight.mapTransformScale  // negate scaling from the transform
       fillColor: highlight.fillColor
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin

@@ -138,9 +138,9 @@ RESOURCES += \
 
 TRANSLATIONS +=
 
-lupdate_only {
-    SOURCES += qml/*.qml
-}
+#lupdate_only {
+#    SOURCES += qml/*.qml
+#}
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGIS_QML_DIR}
