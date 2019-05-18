@@ -249,13 +249,32 @@ ApplicationWindow {
         layer.samples: 4
     }
 
-    QgsQuick.FeatureHighlight {
-      anchors.fill: mapCanvas
+    Highlight {
       id: digitizingHighlight
-      color: "yellow"
+      anchors.fill: mapCanvas
+
+      property bool hasPolygon: digitizing.hasPolygonGeometry(featureLayerPair.layer)
+
       mapSettings: mapCanvas.mapSettings
-      z: 1
-      opacity: digitizing.hasPolygonGeometry(digitizingHighlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
+
+      lineColor: highlight.lineColor
+      lineWidth: highlight.lineWidth
+
+      fillColor: highlight.fillColor
+
+      outlinePenWidth: highlight.outlinePenWidth
+      outlineColor: highlight.outlineColor
+
+      markerType: highlight.markerType
+      markerImageSource: highlight.markerImageSource
+      markerWidth: highlight.markerWidth
+      markerHeight: highlight.markerHeight
+      markerAnchorY: highlight.markerAnchorY
+
+      // enable anti-aliasing to make the higlight look nicer
+      // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
+      layer.enabled: true
+      layer.samples: 4
     }
 
     Item {
