@@ -193,6 +193,18 @@ void ProjectModel::setSearchExpression( const QString &searchExpression )
   }
 }
 
+bool ProjectModel::containsProject( const QString &projectName )
+{
+  for ( ProjectFile prj : mProjectFiles )
+  {
+    if ( prj.folderName == projectName )
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )
 {
   if ( !successful ) return;

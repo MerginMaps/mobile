@@ -126,8 +126,8 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MINOR = 4;
 
     // Test functions
-    void createProject( const QString &projectName );
-    void deleteProject( const QString &projectName );
+    void createProject( const QString &projectNamespace, const QString &projectName );
+    void deleteProject( const QString &projectNamespace, const QString &projectName );
     void clearTokenData();
 
     ProjectList projects();

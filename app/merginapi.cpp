@@ -211,7 +211,7 @@ bool MerginApi::hasAuthData()
   return !mUsername.isEmpty() && !mPassword.isEmpty();
 }
 
-void MerginApi::createProject( const QString &projectName )
+void MerginApi::createProject( const QString &projectNamespace, const QString &projectName )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -219,18 +219,17 @@ void MerginApi::createProject( const QString &projectName )
   }
 
   QNetworkRequest request;
-  QString projectNamespace = projectName.split( "/" ).at( 0 );
-  QString onlyProjectName = projectName.split( "/" ).at( 1 );
-  QUrl url( mApiRoot + "/v1/project/" + projectNamespace );
+  QUrl url( mApiRoot + QString( "/v1/project/%1" ).arg( projectNamespace ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
-  mPendingRequests.insert( url, projectName );
+  mPendingRequests.insert( url, projectNamespace + "/" + projectName );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "name" ), onlyProjectName );
+  jsonObject.insert( QStringLiteral( "name" ), projectName );
+  jsonObject.insert( QStringLiteral( "namespace" ), projectNamespace );
   jsonObject.insert( QStringLiteral( "public" ), false );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
@@ -239,7 +238,7 @@ void MerginApi::createProject( const QString &projectName )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::createProjectFinished );
 }
 
-void MerginApi::deleteProject( const QString &projectName )
+void MerginApi::deleteProject( const QString &projectNamespace, const QString &projectName )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -247,10 +246,10 @@ void MerginApi::deleteProject( const QString &projectName )
   }
 
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1/%2" ).arg( projectNamespace ).arg( projectName ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  mPendingRequests.insert( url, projectName );
+  mPendingRequests.insert( url, projectNamespace + "/" + projectName );
   QNetworkReply *reply = mManager.deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
 }
@@ -404,9 +403,9 @@ void MerginApi::createProjectFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    QString projectName = mPendingRequests.value( r->url() );
+    QString projectFullName = mPendingRequests.value( r->url() );
     emit notify( QStringLiteral( "Project created" ) );
-    emit projectCreated( projectName );
+    emit projectCreated( projectFullName );
   }
   else
   {
@@ -424,9 +423,9 @@ void MerginApi::deleteProjectFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    QString projectName = mPendingRequests.value( r->url() );
+    QString projectFullName = mPendingRequests.value( r->url() );
     emit notify( QStringLiteral( "Project deleted" ) );
-    emit serverProjectDeleted( projectName );
+    emit serverProjectDeleted( projectFullName );
   }
   else
   {
