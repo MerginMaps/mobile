@@ -32,13 +32,9 @@ ProjectModel::~ProjectModel() {}
 void ProjectModel::findProjectFiles()
 {
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-  for ( QString namespaceFolder : entryList )
+  for ( QString folderName : entryList )
   {
-    QStringList entryList2 = QDir( mDataDir + "/" + namespaceFolder ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-    for ( QString folderName : entryList2 )
-    {
-      addProjectFromPath( mDataDir + "/" + namespaceFolder + "/" + folderName );
-    }
+    addProjectFromPath( mDataDir + "/" + folderName );
   }
   std::sort( mProjectFiles.begin(), mProjectFiles.end() );
 }
@@ -53,7 +49,7 @@ void ProjectModel::addProjectFromPath( QString path )
   int projectExistsAt = -1;
   for ( ProjectFile projectFile : mProjectFiles )
   {
-    if ( mDataDir + "/" + projectFile.projectNamespace + "/" + projectFile.folderName == path )
+    if ( mDataDir + projectFile.folderName == path )
     {
       projectExistsAt = i;
     }
@@ -66,8 +62,6 @@ void ProjectModel::addProjectFromPath( QString path )
     it.next();
     ProjectFile projectFile;
     projectFile.name = it.fileName().remove( ".qgs" );
-    QStringList res = path.split( "/" );
-    projectFile.projectNamespace = res.takeAt( res.length() - 2 );
     projectFile.path = it.filePath();
     QDir projectDir( path );
     projectFile.folderName = projectDir.dirName();
@@ -94,8 +88,6 @@ void ProjectModel::addProjectFromPath( QString path )
   {
     project.name = "";
     QDir projectDir( path );
-    QStringList res = path.split( "/" );
-    project.projectNamespace = res.takeAt( res.length() - 2 );
     project.folderName = projectDir.dirName();
     project.path = path;
     project.info = "invalid project";
@@ -167,12 +159,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 void ProjectModel::deleteProject( int row )
 {
   ProjectFile project = mProjectFiles.at( row );
-  QDir dir( mDataDir + "/" + project.projectNamespace + "/" + project.folderName );
+  QDir dir( mDataDir + project.folderName );
   dir.removeRecursively();
   beginResetModel();
   mProjectFiles.removeAt( row );
   endResetModel();
-  emit projectDeleted( project.projectNamespace + "/" + project.folderName );
+  emit projectDeleted( project.folderName );
 }
 
 int ProjectModel::rowCount( const QModelIndex &parent ) const

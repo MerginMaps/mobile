@@ -234,7 +234,7 @@ int main( int argc, char *argv[] )
 #endif
   // Set/Get enviroment
   QString dataDir = getDataDir( IS_TEST );
-  QString projectDir = dataDir + "/projects";
+  QString projectDir = dataDir + "/projects/";
   setEnvironmentQgisPrefixPath();
 
   init_qgis( dataDir + "/qgis-data" );

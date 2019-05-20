@@ -19,7 +19,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
   {
     case Name:
       return QVariant( project->name );
-
+    case ProjectNamespace: return QVariant( project->projectNamespace );
     case ProjectInfo:
     {
       if ( !project->updated.isValid() )
@@ -49,7 +49,6 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
     case Pending: return QVariant( project->pending );
     case PassesFilter:
     {
-      qDebug() << project->name << project->creator << mFilterCreator << project->writers << mFilterWriter;
       if ( mFilterCreator >= 0 )
       {
         return project->creator == mFilterCreator;
@@ -77,6 +76,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
+  roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
@@ -103,13 +103,13 @@ void MerginProjectModel::resetProjects( const ProjectList &merginProjects )
   endResetModel();
 }
 
-void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectName, bool successfully )
+void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully )
 {
   Q_UNUSED( projectFolder );
   int row = 0;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
-    if ( project->name == projectName )
+    if ( project->projectNamespace + "/" + project->name == projectFullName )
     {
       if ( successfully )
       {

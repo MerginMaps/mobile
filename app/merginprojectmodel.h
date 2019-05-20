@@ -17,6 +17,7 @@ class MerginProjectModel: public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1,
+      ProjectNamespace,
       Size,
       ProjectInfo,
       Status,
@@ -44,7 +45,7 @@ class MerginProjectModel: public QAbstractListModel
     void setFilterWriter( int filterWriter );
 
   public slots:
-    void syncProjectFinished( const QString &projectFolder, const QString &projectName, bool successfully );
+    void syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully );
   private:
     ProjectList mMerginProjects;
     int mFilterCreator;

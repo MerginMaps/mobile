@@ -430,7 +430,7 @@ Item {
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
       iconSize: projectsPanel.iconSize
-      projectName: name
+      projectName: projectNamespace + "/" + name
 
       onMenuClicked: {
         if (status === "upToDate") return
@@ -438,11 +438,11 @@ Item {
         __merginProjectsModel.setPending(index, true)
 
         if (status === "noVersion") {
-          __merginApi.downloadProject(name)
+          __merginApi.downloadProject(projectNamespace, name)
         } else if (status === "outOfDate") {
-          __merginApi.updateProject(name)
+          __merginApi.updateProject(projectNamespace, name)
         } else if (status === "modified") {
-          __merginApi.uploadProject(name)
+          __merginApi.uploadProject(projectNamespace, name)
         }
       }
 
