@@ -229,7 +229,6 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
   jsonObject.insert( QStringLiteral( "name" ), projectName );
-  jsonObject.insert( QStringLiteral( "namespace" ), projectNamespace );
   jsonObject.insert( QStringLiteral( "public" ), false );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );

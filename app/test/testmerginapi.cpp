@@ -17,11 +17,9 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
 
   testListProject();
   testDownloadProject();
-
-  // TODO Fix all related with create/delete project
-  //testCreateProjectTwice();
-  //testDeleteNonExistingProject();
-  //testCreateDeleteProject();
+  testCreateProjectTwice();
+  testDeleteNonExistingProject();
+  testCreateDeleteProject();
 
   cleanupTestCase();
   qDebug() << "TestMerginApi - ALL TESTS PASSED";
@@ -77,7 +75,6 @@ void TestMerginApi::testDownloadProject()
 
   ProjectList projects = mMerginProjectModel->projects();
   Q_ASSERT( !mMerginProjectModel->projects().isEmpty() );
-  //projectName = mMerginProjectModel->projects().at( 0 )->name;
 
   bool downloadSuccessful = mProjectModel->containsProject( projectName );
   Q_ASSERT( downloadSuccessful );
