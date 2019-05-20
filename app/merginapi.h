@@ -21,6 +21,8 @@ Q_ENUMS( ProjectStatus )
 struct MerginProject
 {
   QString name; //projectNamespace + projectName
+  QString projectNamespace;
+  QString projectDir;
   QStringList tags;
   QDateTime created;
   QDateTime updated; // local version of project files
@@ -77,9 +79,10 @@ class MerginApi: public QObject
      * MerginProjectModel updates status of the project item. On syncProjectFinished, ProjectModel adds the project item to the project list.
      * If download has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
-     * \param projectName Name of project to download.
+     * \param projectNamespace Project's namespace used in request.
+     * \param projectName  Project's name used in request.
      */
-    Q_INVOKABLE void downloadProject( const QString &projectName );
+    Q_INVOKABLE void downloadProject( const QString &projectNamespace, const QString &projectName );
 
     /**
      * Sends non-blocking POST request to the server to update a project with a given name. On downloadProjectReplyFinished,
@@ -87,18 +90,20 @@ class MerginApi: public QObject
      * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * If update has been successful, updates cached merginProjects list.
      * Emits also notify signal with a message for the GUI.
-     * \param projectName Name of project to update.
+     * \param projectNamespace Project's namespace used in request.
+     * \param projectName  Project's name used in request.
      */
-    Q_INVOKABLE void updateProject( const QString &projectName );
+    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName );
 
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
      * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
      * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * Emits also notify signal with a message for the GUI.
-     * \param projectName Name of project to upload.
+     * \param projectNamespace Project's namespace used in request.
+     * \param projectName  Project's name used in request.
      */
-    Q_INVOKABLE void uploadProject( const QString &projectName );
+    Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName );
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
@@ -146,7 +151,7 @@ class MerginApi: public QObject
 
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
-    void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
+    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo );
     void notify( const QString &message );
@@ -197,8 +202,8 @@ class MerginApi: public QObject
     QDateTime getLastModifiedFileDateTime( const QString &path );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
-    void downloadProjectFiles( const QString &projectName, const QByteArray &json );
-    void uploadProjectFiles( const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
+    void downloadProjectFiles( const QString &downloadProjectFiles, const QByteArray &json );
+    void uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
     void deleteObsoleteFiles( const QString &projectName );
