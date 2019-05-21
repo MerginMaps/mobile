@@ -117,6 +117,9 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
+    static const int MERGIN_API_VERSION_MAJOR = 2019;
+    static const int MERGIN_API_VERSION_MINOR = 4;
+
     // Test functions
     void createProject( const QString &projectName );
     void deleteProject( const QString &projectName );

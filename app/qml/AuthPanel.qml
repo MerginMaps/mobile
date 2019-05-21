@@ -246,14 +246,17 @@ Item {
 
                 Row {
                   id: warningMsgContainer
-                  visible: __merginApi.apiVersionStatus !== MerginApiStatus.PASSED
+                  visible: __merginApi.apiVersionStatus !== MerginApiStatus.OK
                   width: loginForm.width
 
                   Text {
+                    id: pendingText
                     width: parent.width
                     text: {
-                      if (__merginApi.apiVersionStatus === MerginApiStatus.FAILED ) {
+                      if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE ) {
                         qsTr("Mergin server has been updated. Please, update Input app to enable Mergin functionality.")
+                      } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
+                        ""
                       } else {
                         qsTr("Mergin server unavailable.")
                       }
@@ -316,6 +319,46 @@ Item {
                             }
                         }
                     }
+                }
+
+                Item {
+                  width: parent.width
+                  height: fieldHeight/2
+
+                  Button {
+                    width: parent.height
+                    height: parent.height
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: __merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE ||
+                             __merginApi.apiVersionStatus === MerginApiStatus.NOT_FOUND
+                    background: Rectangle {
+                      anchors.fill: parent
+                      color: InputStyle.fontColor
+                      radius: 2 * QgsQuick.Utils.dp
+                    }
+
+                    onClicked:__merginApi.pingMergin()
+
+                    Image {
+                      id: image
+                      anchors.horizontalCenter: parent.horizontalCenter
+                      anchors.fill: parent
+                      width: parent.width
+                      height: parent.height
+                      source: "update"
+                      sourceSize.width: width
+                      sourceSize.height: height
+                      visible: source
+                      anchors.topMargin: 0
+                      fillMode: Image.PreserveAspectFit
+                    }
+
+                    ColorOverlay {
+                      anchors.fill: image
+                      source: image
+                      color: "white"
+                    }
+                  }
                 }
             }
         }

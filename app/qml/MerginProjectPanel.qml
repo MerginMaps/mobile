@@ -49,7 +49,7 @@ Item {
     }
     onApiVersionStatusChanged: {
       busyIndicator.running = false
-      if (__merginApi.apiVersionStatus === MerginApiStatus.PASSED && authPanel.visible) {
+      if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
         authPanel.visible = false
       }
     }
@@ -141,7 +141,7 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.PASSED) {
+            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
               __merginApi.getUserInfo(__merginApi.username)
               accountPanel.visible = true
             }
