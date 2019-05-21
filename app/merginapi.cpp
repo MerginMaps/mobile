@@ -572,22 +572,18 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
       minor = match.captured( "minor" ).toInt();
     }
 
-    if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR >= minor ) || ( MERGIN_API_VERSION_MAJOR > major ) )
+    if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR <= minor ) || ( MERGIN_API_VERSION_MAJOR < major ) )
     {
       setApiVersionStatus( MerginApiStatus::OK );
     }
     else
     {
       setApiVersionStatus( MerginApiStatus::INCOMPATIBLE );
-      emit apiIncompatibilityOccured( QString( "Required Mergin API version %1.%2 not matching current %3" )
-                                      .arg( MERGIN_API_VERSION_MAJOR ).arg( MERGIN_API_VERSION_MINOR )
-                                      .arg( apiVersion ), QStringLiteral( "Mergin API error: checkMerginVersion" ) );
     }
   }
   else
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
-    emit apiIncompatibilityOccured( msg, QStringLiteral( "Mergin API error: checkMerginVersion" ) );
   }
 }
 
@@ -627,11 +623,9 @@ void MerginApi::pingMergin()
   if ( mApiVersionStatus == MerginApiStatus::OK ) return;
 
   setApiVersionStatus( MerginApiStatus::PENDING );
-  emit apiIncompatibilityOccured( QStringLiteral( "Reset Mergin version" ), QStringLiteral( "pingMergin request about to send" ) );
 
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
-
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );

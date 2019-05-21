@@ -50,12 +50,12 @@ Item {
     onApiVersionStatusChanged: {
       busyIndicator.running = false
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
-        authPanel.visible = false
-      }
-    }
-    onApiIncompatibilityOccured: {
-      busyIndicator.running = false
-      if (projectsPanel.visible && toolbar.highlighted !== homeBtn.text) {
+        if (__merginApi.hasAuthData()) {
+          authPanel.visible = false
+          // filters should be set already
+          __merginApi.listProjects(searchField.text)
+        }
+      } else if (toolbar.highlighted !== homeBtn.text) {
         authPanel.visible = true
       }
     }

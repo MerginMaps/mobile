@@ -149,7 +149,6 @@ class MerginApi: public QObject
     void syncProjectFinished( const QString &projectDir, const QString &projectName, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo );
-    void apiIncompatibilityOccured( const QString &message, const QString &additionalInfo );
     void notify( const QString &message );
     void merginProjectsChanged();
     void authRequested();
