@@ -60,7 +60,6 @@ void MerginApi::downloadProject( const QString &projectName )
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/%1" ).arg( projectName ) );
 
@@ -88,7 +87,6 @@ void MerginApi::updateProject( const QString &projectName )
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 
@@ -151,7 +149,6 @@ void MerginApi::authorize( const QString &username, const QString &password )
   }
   mPassword = password;
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
   QUrl url( urlString );
@@ -176,7 +173,6 @@ void MerginApi::getUserInfo( const QString &username )
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QString urlString = mApiRoot + QStringLiteral( "v1/user/" ) + username;
   QUrl url( urlString );
@@ -219,7 +215,6 @@ void MerginApi::createProject( const QString &projectName )
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QString projectNamespace = projectName.split( "/" ).at( 0 );
   QString onlyProjectName = projectName.split( "/" ).at( 1 );
@@ -248,7 +243,6 @@ void MerginApi::deleteProject( const QString &projectName )
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
   request.setUrl( url );
@@ -272,7 +266,6 @@ void MerginApi::downloadProjectFiles( const QString &projectName, const QByteArr
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/fetch/" ) + projectName );
   request.setUrl( url );
@@ -313,7 +306,6 @@ void MerginApi::uploadProjectFiles( const QString &projectName, const QByteArray
     multiPart->append( filePart );
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + "/v1/project/data_sync/" + projectName );
   request.setUrl( url );
@@ -571,12 +563,6 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
   settings.endGroup();
   emit apiRootChanged();
-}
-
-QByteArray MerginApi::generateToken()
-{
-  QString concatenated = mUsername + ':' + mPassword;
-  return concatenated.toLocal8Bit().toBase64();
 }
 
 QString MerginApi::username() const
@@ -1028,7 +1014,6 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
     return;
   }
 
-  QByteArray token = generateToken();
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/" ) + projectName );
 

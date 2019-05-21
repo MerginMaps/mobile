@@ -5,7 +5,6 @@
         <file>main.qml</file>
         <file>MainPanel.qml</file>
         <file>ProjectBtn.qml</file>
-        <file>ProjectPanel.qml</file>
         <file>RecordBtn.qml</file>
         <file>ScaleBar.qml</file>
         <file>InputStyle.qml</file>
