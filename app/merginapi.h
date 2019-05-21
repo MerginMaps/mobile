@@ -202,7 +202,6 @@ class MerginApi: public QObject
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
     void deleteObsoleteFiles( const QString &projectName );
-    QByteArray generateToken();
     void loadAuthData();
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     bool validateAuthAndContinute();
