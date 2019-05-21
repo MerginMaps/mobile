@@ -13,9 +13,10 @@ class MerginApiStatus
     enum VersionStatus
     {
       UNKNOWN, // unchecked
+      PENDING, // sent version check, but waiting for the response
       NOT_FOUND, // cannot be checked due to network/wrong url
-      PASSED,
-      FAILED
+      OK, // server version satisfied requirements
+      INCOMPATIBLE // server version below requirements
     };
     Q_ENUMS( VersionStatus )
 };
