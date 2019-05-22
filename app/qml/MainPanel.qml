@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
+import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
@@ -10,11 +11,11 @@ Item {
     signal myLocationHold()
     signal addFeatureClicked()
     signal openMapThemesClicked()
-    signal openLogClicked()
+    signal openSettingsClicked()
     signal zoomToProject()
     property alias recordButton: recBtnIcon
 
-    property int itemSize: mainPanel.height * 0.8
+    property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
 
     id: mainPanel
@@ -26,16 +27,20 @@ Item {
     }
 
     Row {
-        height: parent.height
-        width: parent.width
+        id: panelRow
         anchors.fill: parent
+        height: mainPanel.itemSize
+        property real itemWidth: mainPanel.height * 1.1
+        property int itemsToShow: Math.min((width / panelRow.itemWidth), children.length) - 1
+        property real calculatedItemWidth: itemsToShow ? parent.width/itemsToShow : parent.width
 
         Item {
-            width: parent.width/parent.children.length
+            id: openProjectsItem
             height: parent.height
+            visible: panelRow.itemsToShow > 1
+            width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
-
                 id: openProjectBtn
                 width: mainPanel.itemSize
                 text: qsTr("Projects")
@@ -46,8 +51,11 @@ Item {
         }
 
         Item {
-            width: parent.width/parent.children.length
+            id: myLocationItem
             height: parent.height
+            visible: panelRow.itemsToShow > 2
+            width: visible ? panelRow.calculatedItemWidth : 0
+
             MainPanelButton {
                 id: myLocationBtn
                 width: mainPanel.itemSize
@@ -71,8 +79,11 @@ Item {
         }
 
         Item {
-            width: parent.width/parent.children.length
+            id: recItem
             height: parent.height
+            visible: panelRow.itemsToShow > 3
+            width: visible ? panelRow.calculatedItemWidth : 0
+
             MainPanelButton {
                 id: recBtn
                 width: mainPanel.itemSize
@@ -92,8 +103,60 @@ Item {
         }
 
         Item {
-            width: parent.width/parent.children.length
+            id: zoomToProjectItem
             height: parent.height
+            visible: panelRow.itemsToShow > 4
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+
+                id: zoomToProjectBtn
+                width: mainPanel.itemSize
+                text: qsTr("Zoom to project")
+                imageSource: "zoom_to_project.svg"
+
+                onActivated:mainPanel.zoomToProject()
+            }
+        }
+
+        Item {
+            id: mapThemesItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 5
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+
+                id: mapThemesBtn
+                width: mainPanel.itemSize
+                text: qsTr("Map themes")
+                imageSource: "map_styles.svg"
+                onActivated: mainPanel.openMapThemesClicked()
+            }
+        }
+
+        // Last item
+        Item {
+            id: settingsItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 5
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+
+                id: settingsBtn
+                width: mainPanel.itemSize
+                text: qsTr("Settings")
+                imageSource: "settings.svg"
+                onActivated: mainPanel.openSettingsClicked()
+            }
+        }
+
+        Item {
+            width: panelRow.calculatedItemWidth
+            height: parent.height
+            visible: !settingsItem.visible
+
             MainPanelButton {
                 id: menuBtn
                 width: mainPanel.itemSize
@@ -123,8 +186,74 @@ Item {
         onOpened: isOpen = true
 
         MenuItem {
-            height: mainPanel.itemSize
             width: parent.width
+            visible: !openProjectsItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Projects")
+                imageSource: "project.svg"
+            }
+
+            onClicked: {
+                openProjectBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !myLocationItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("GPS")
+                imageSource: __appSettings.autoCenterMapChecked ? "ic_gps_fixed_48px.svg" : "ic_gps_not_fixed_48px.svg"
+            }
+
+            onClicked: {
+                myLocationBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !recItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Record")
+
+                RecordBtn {
+                    id: recBtnIcon2
+                    width: mainPanel.itemSize
+                    anchors.margins: width/4
+                    anchors.topMargin: -anchors.margins/2
+                    enabled: true
+                    color: InputStyle.fontColor
+                }
+            }
+
+            onClicked: {
+                recBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !zoomToProjectItem.visible
+            height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
                 height: mainPanel.itemSize
@@ -135,15 +264,15 @@ Item {
             }
 
             onClicked: {
-                mainPanel.zoomToProject()
+                zoomToProjectBtn.activcated()
                 rootMenu.close()
             }
         }
 
-
         MenuItem {
-            height: mainPanel.itemSize
             width: parent.width
+            visible: !mapThemesItem.visible
+            height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
                 height: mainPanel.itemSize
@@ -154,13 +283,14 @@ Item {
             }
 
             onClicked: {
-                mainPanel.openMapThemesClicked()
+                mapThemesBtn.activated()
                 rootMenu.close()
             }
         }
 
         MenuItem {
-            height: mainPanel.itemSize
+            visible: !settingsItem.visible
+            height: visible ? mainPanel.itemSize : 0
             width: parent.width
 
             ExtendedMenuItem {
@@ -172,7 +302,7 @@ Item {
             }
 
             onClicked: {
-                mainPanel.openLogClicked()
+                settingsBtn.activated()
                 rootMenu.close()
             }
         }

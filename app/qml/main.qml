@@ -391,7 +391,7 @@ ApplicationWindow {
             popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
             popup.open()
         }
-        onOpenLogClicked: settingsPanel.visible = true
+        onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
           if (__appSettings.autoCenterMapChecked) {
             mainPanel.myLocationHold()

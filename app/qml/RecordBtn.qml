@@ -10,6 +10,7 @@ Item {
     property int size: width / 2
     property int border: 10 * QgsQuick.Utils.dp
     property bool recording: false
+    property color color: InputStyle.clrPanelMain
 
     onRecordingChanged: {
         if (recording === false) {
@@ -28,7 +29,7 @@ Item {
         width: size
         height: size
         color: recording ? "#fd5757" : "transparent"
-        border.color: "white"
+        border.color: recordBtnContainer.color
         border.width: borderWidth
         radius: width*0.5
         antialiasing: true
