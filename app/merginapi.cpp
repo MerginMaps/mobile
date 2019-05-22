@@ -62,7 +62,7 @@ void MerginApi::downloadProject( const QString &projectNamespace, const QString 
   {
     return;
   }
-  QString projectFullName = QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
+  QString projectFullName = getFullProjectName( projectNamespace, projectName );
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/%1" ).arg( projectFullName ) );
 
@@ -104,10 +104,10 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
 void MerginApi::uploadProject( const QString &projectNamespace, const QString &projectName )
 {
   bool onlyUpload = true;
-  QString projectFullName = QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
+  QString projectFullName = getFullProjectName( projectNamespace, projectName );
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
-    if ( project->projectNamespace + "/" + project->name == projectFullName )
+    if ( getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
     {
       if ( project->updated < project->serverUpdated && project->serverUpdated > project->lastSync.toUTC() )
       {
@@ -224,7 +224,7 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
-  mPendingRequests.insert( url, projectNamespace + "/" + projectName );
+  mPendingRequests.insert( url, getFullProjectName( projectNamespace, projectName ) );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
@@ -248,7 +248,7 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1/%2" ).arg( projectNamespace ).arg( projectName ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  mPendingRequests.insert( url, projectNamespace + "/" + projectName );
+  mPendingRequests.insert( url, getFullProjectName( projectNamespace, projectName ) );
   QNetworkReply *reply = mManager.deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
 }
@@ -310,7 +310,7 @@ void MerginApi::uploadProjectFiles( const QString &projectNamespace, const QStri
   QUrl url( mApiRoot + QString( "/v1/project/data_sync/%1/%2" ).arg( projectNamespace ).arg( projectName ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  mPendingRequests.insert( url, projectNamespace + "/" + projectName );
+  mPendingRequests.insert( url, getFullProjectName( projectNamespace, projectName ) );
 
   qDebug() << request.rawHeaderList();
 
@@ -318,7 +318,6 @@ void MerginApi::uploadProjectFiles( const QString &projectNamespace, const QStri
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadProjectReplyFinished );
 }
 
-// TODO namespace + name
 ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProjects )
 {
   QHash<QString, std::shared_ptr<MerginProject>> projectUpdates;
@@ -327,16 +326,17 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
     QDir projectFolder( mDataDir + project->name );
     if ( projectFolder.exists() )
     {
-      projectUpdates.insert( project->name, project );
+      projectUpdates.insert( getFullProjectName( project->projectNamespace, project->name ), project );
     }
   }
 
   for ( std::shared_ptr<MerginProject> project : serverProjects )
   {
-    if ( projectUpdates.contains( project->name ) )
+    QString fullProjectName = getFullProjectName( project->projectNamespace, project->name );
+    if ( projectUpdates.contains( fullProjectName ) )
     {
-      QDateTime localUpdate = projectUpdates.value( project->name ).get()->updated.toUTC();
-      project->lastSync = projectUpdates.value( project->name ).get()->lastSync.toUTC();
+      QDateTime localUpdate = projectUpdates.value( fullProjectName ).get()->updated.toUTC();
+      project->lastSync = projectUpdates.value( fullProjectName ).get()->lastSync.toUTC();
       QDateTime lastModified = getLastModifiedFileDateTime( mDataDir + project->name );
       project->updated = localUpdate;
       project->status = getProjectStatus( project->updated, project->serverUpdated, project->lastSync, lastModified );
@@ -352,7 +352,7 @@ void MerginApi::setUpdateToProject( const QString &projectDir, const QString &pr
 
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
-    if ( projectFullName == project->projectNamespace + "/" + project->name )
+    if ( projectFullName == getFullProjectName( project->projectNamespace, project->name ) )
     {
       if ( !project->serverUpdated.isValid() )
       {
@@ -578,6 +578,27 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   }
 }
 
+bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )
+{
+  QStringList parts = sourceString.split( "/" );
+  if ( parts.length() > 1 )
+  {
+    projectNamespace = parts.at( parts.length() - 2 );
+    name = parts.last();
+    return true;
+  }
+  else
+  {
+    name = sourceString;
+    return false;
+  }
+}
+
+QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName )
+{
+  return QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
+}
+
 MerginApiStatus::VersionStatus MerginApi::apiVersionStatus() const
 {
   return mApiVersionStatus;
@@ -704,10 +725,11 @@ void MerginApi::downloadProjectReplyFinished()
   Q_ASSERT( r );
 
   QString projectFullName = mPendingRequests.value( r->url() );
-  QStringList parts = projectFullName.split( "/" );
-  QString projectNamespace = parts.at( 0 );
-  QString projectName = parts.at( 1 );
+  QString projectNamespace;
+  QString projectName;
+  extractProjectName( projectFullName, projectNamespace, projectName );
   QString projectDir = mDataDir + projectName;
+
   if ( r->error() == QNetworkReply::NoError )
   {
     bool waitingForUpload = mWaitingForUpload.contains( projectFullName );
@@ -737,10 +759,11 @@ void MerginApi::uploadProjectReplyFinished()
   Q_ASSERT( r );
 
   QString projectFullName = mPendingRequests.value( r->url() );
-  QStringList parts = projectFullName.split( "/" );
-  QString projectNamespace = parts.at( 0 );
-  QString projectName = parts.at( 1 );
+  QString projectNamespace;
+  QString projectName;
+  extractProjectName( projectFullName, projectNamespace, projectName );
   QString projectDir = mDataDir + projectName;
+
   if ( r->error() == QNetworkReply::NoError )
   {
     emit syncProjectFinished( projectDir, projectFullName );
@@ -764,9 +787,11 @@ void MerginApi::updateInfoReplyFinished()
 
   QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, true );
   QUrl url = r->url();
-  QStringList res = url.path().split( "/" );
-  QString projectFullName = res.takeAt( res.length() - 2 ) + "/" + res.last();
-  QString projectPath = QString( mDataDir + res.last() + "/" );
+  QString projectNamespace;
+  QString projectName;
+  extractProjectName( url.path(), projectNamespace, projectName );
+  QString projectFullName = getFullProjectName( projectNamespace, projectName );
+  QString projectPath = QString( mDataDir + projectName + "/" );
 
   r->deleteLater();
 
@@ -809,10 +834,10 @@ void MerginApi::uploadInfoReplyFinished()
 
   QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, false );
   QUrl url = r->url();
-  QStringList res = url.path().split( "/" );
-  QString projectNamespace = res.takeAt( res.length() - 2 );
-  QString projectName = res.last();
-  QString projectFullName = projectNamespace + "/" + projectName;
+  QString projectNamespace;
+  QString projectName;
+  extractProjectName( url.path(), projectNamespace, projectName );
+  QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
   r->deleteLater();
 

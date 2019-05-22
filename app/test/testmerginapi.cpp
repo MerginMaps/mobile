@@ -58,7 +58,7 @@ void TestMerginApi::testListProject()
   QCOMPARE( spy.count(), 1 );
 
   ProjectList projects = mMerginProjectModel->projects();
-  Q_ASSERT( !mMerginProjectModel->projects().isEmpty() );
+  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
   qDebug() << "TestMerginApi::testListProjectFinished PASSED";
 }
 
@@ -74,10 +74,10 @@ void TestMerginApi::testDownloadProject()
   QCOMPARE( spy.count(), 1 );
 
   ProjectList projects = mMerginProjectModel->projects();
-  Q_ASSERT( !mMerginProjectModel->projects().isEmpty() );
+  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
 
   bool downloadSuccessful = mProjectModel->containsProject( projectName );
-  Q_ASSERT( downloadSuccessful );
+  QVERIFY( downloadSuccessful );
   qDebug() << "TestMerginApi::testDownloadProject PASSED";
 }
 
@@ -88,7 +88,7 @@ void TestMerginApi::testCreateProjectTwice()
   QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
   bool containsTestProject = false;
   ProjectList projects = getProjectList();
-  Q_ASSERT( !hasProject( projectName, projects ) );
+  QVERIFY( !hasProject( projectName, projects ) );
 
   QSignalSpy spy( mApi, SIGNAL( projectCreated( QString ) ) );
   mApi->createProject( projectNamespace, projectName );
@@ -96,8 +96,8 @@ void TestMerginApi::testCreateProjectTwice()
   QCOMPARE( spy.count(), 1 );
 
   projects = getProjectList();
-  Q_ASSERT( !mMerginProjectModel->projects().isEmpty() );
-  Q_ASSERT( hasProject( projectName, projects ) );
+  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
+  QVERIFY( hasProject( projectName, projects ) );
 
   // Create again, expecting error
   QSignalSpy spy2( mApi, SIGNAL( networkErrorOccurred( QString, QString ) ) );
@@ -118,7 +118,7 @@ void TestMerginApi::testCreateProjectTwice()
 
   containsTestProject = false;
   projects = getProjectList();
-  Q_ASSERT( !hasProject( projectName, projects ) );
+  QVERIFY( !hasProject( projectName, projects ) );
 
   qDebug() << "TestMerginApi::testCreateProjectTwice PASSED";
 }
@@ -130,7 +130,7 @@ void TestMerginApi::testDeleteNonExistingProject()
   QString projectName = "TEMPORARY_TEST_PROJECT";
   QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
   ProjectList projects = getProjectList();
-  Q_ASSERT( !hasProject( projectName, projects ) );
+  QVERIFY( !hasProject( projectName, projects ) );
 
   // Try to delete non-existing project
   QSignalSpy spy( mApi, SIGNAL( networkErrorOccurred( QString, QString ) ) );
@@ -152,7 +152,7 @@ void TestMerginApi::testCreateDeleteProject()
   QString projectName = "TEMPORARY_TEST_PROJECT";
   QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
   ProjectList projects = getProjectList();
-  Q_ASSERT( !hasProject( projectName, projects ) );
+  QVERIFY( !hasProject( projectName, projects ) );
 
   QSignalSpy spy( mApi, SIGNAL( projectCreated( QString ) ) );
   mApi->createProject( projectNamespace, projectName );
@@ -160,8 +160,8 @@ void TestMerginApi::testCreateDeleteProject()
   QCOMPARE( spy.count(), 1 );
 
   projects = getProjectList();
-  Q_ASSERT( !mMerginProjectModel->projects().isEmpty() );
-  Q_ASSERT( hasProject( projectName, projects ) );
+  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
+  QVERIFY( hasProject( projectName, projects ) );
 
   // Delete created project
   QSignalSpy spy2( mApi, SIGNAL( serverProjectDeleted( QString ) ) );
@@ -170,7 +170,7 @@ void TestMerginApi::testCreateDeleteProject()
 
   projects = getProjectList();
 
-  Q_ASSERT( !hasProject( projectName, projects ) );
+  QVERIFY( !hasProject( projectName, projects ) );
   qDebug() << "TestMerginApi::testCreateDeleteProject PASSED";
 }
 
