@@ -30,7 +30,7 @@ Item {
         id: panelRow
         anchors.fill: parent
         height: mainPanel.itemSize
-        property real itemWidth: mainPanel.height * 1.1
+        property real itemWidth: mainPanel.height * 1.2
         property int itemsToShow: Math.min((width / panelRow.itemWidth), children.length) - 1
         property real calculatedItemWidth: itemsToShow ? parent.width/itemsToShow : parent.width
 
