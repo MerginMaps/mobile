@@ -20,9 +20,8 @@ Q_ENUMS( ProjectStatus )
 
 struct MerginProject
 {
-  QString name; //projectNamespace + projectName
+  QString name;
   QString projectNamespace;
-  QString projectDir;
   QStringList tags;
   QDateTime created;
   QDateTime updated; // local version of project files
@@ -33,7 +32,6 @@ struct MerginProject
   int size;
   int filesCount;
   int creator; // ID of current user
-  //QList<int> owners;
   QList<int> writers;
 };
 
@@ -186,6 +184,9 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
 
   private:
+    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
+    static QString getFullProjectName( QString projectNamespace, QString projectName );
+
     ProjectList parseProjectsData( const QByteArray &data, bool dataFromServer = false );
     bool cacheProjectsData( const QByteArray &data );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
@@ -208,9 +209,16 @@ class MerginApi: public QObject
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
     void deleteObsoleteFiles( const QString &projectName );
     void loadAuthData();
-    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     bool validateAuthAndContinute();
     void checkMerginVersion( QString apiVersion, QString msg = QStringLiteral() );
+    /**
+    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
+    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * \param sourceString - either url or fullname of a project
+    * \param projectNamespace QString to be set as namespace, might not change original value
+    * \param projectName QString to be set to name of a project
+    */
+    bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
