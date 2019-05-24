@@ -22,6 +22,7 @@ struct MerginProject
 {
   QString name;
   QString projectNamespace;
+  QString projectDir;
   QStringList tags;
   QDateTime created;
   QDateTime updated; // local version of project files
@@ -123,6 +124,9 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MAJOR = 2019;
     static const int MERGIN_API_VERSION_MINOR = 4;
 
+    static QString getFullProjectName( QString projectNamespace, QString projectName );
+    QString forceCreateDir( QString path );
+
     // Test functions
     void createProject( const QString &projectNamespace, const QString &projectName );
     void deleteProject( const QString &projectNamespace, const QString &projectName );
@@ -160,12 +164,13 @@ class MerginApi: public QObject
     void apiRootChanged();
     void apiVersionStatusChanged();
     void projectCreated( const QString &projectName );
-    void serverProjectDeleted( const QString &projectName );
+    void serverProjectDeleted( const QString &projecFullName );
     void userInfoChanged();
     void pingMerginFinished( const QString &apiVersion, const QString &msg );
 
   public slots:
-    void projectDeleted( const QString &projectName );
+    void projectDeleted( const QString &projecFullName );
+    void projectDeletedOnPath( const QString &projectDir);
 
   private slots:
     void listProjectsReplyFinished();
@@ -174,7 +179,6 @@ class MerginApi: public QObject
     void updateInfoReplyFinished();
     void uploadInfoReplyFinished();
     void getUserInfoFinished();
-    void cacheProjects();
     void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
     void setUpdateToProject( const QString &projectDir, const QString &projectName, bool successfully );
     void saveAuthData();
@@ -185,10 +189,11 @@ class MerginApi: public QObject
 
   private:
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
-    static QString getFullProjectName( QString projectNamespace, QString projectName );
-
-    ProjectList parseProjectsData( const QByteArray &data, bool dataFromServer = false );
-    bool cacheProjectsData( const QByteArray &data );
+    ProjectList parseAllProjectsData();
+    ProjectList parseListProjectsData( const QByteArray &data );
+    std::shared_ptr<MerginProject> parseProjectData( const QString &cachePath );
+    bool cacheProjectData( const QString &projectNamespace, const QString &projectName );
+    bool cacheData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
     void createPathIfNotExists( const QString &filePath );
@@ -207,7 +212,7 @@ class MerginApi: public QObject
     void uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
-    void deleteObsoleteFiles( const QString &projectName );
+    void deleteObsoleteFiles( const QString &projectPath );
     void loadAuthData();
     bool validateAuthAndContinute();
     void checkMerginVersion( QString apiVersion, QString msg = QStringLiteral() );
@@ -219,6 +224,8 @@ class MerginApi: public QObject
     * \param projectName QString to be set to name of a project
     */
     bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
+    std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
+    QString getProjectDir( const QString &projectNamespace, const  QString &projectName );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;

@@ -111,7 +111,6 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
   switch ( role )
   {
     case Name: return QVariant( projectFile.name );
-    case ProjectNamespace: return QVariant( projectFile.projectNamespace );
     case FolderName: return QVariant( projectFile.folderName );
     case ShortName: return QVariant( projectFile.name.left( mMaxShortNameChars - 3 ) + "..." );
     case Path: return QVariant( projectFile.path );
@@ -127,7 +126,6 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
-  roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[FolderName] = "folderName";
   roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
@@ -164,7 +162,7 @@ void ProjectModel::deleteProject( int row )
   beginResetModel();
   mProjectFiles.removeAt( row );
   endResetModel();
-  emit projectDeleted( project.folderName );
+  emit projectDeletedOnPath( project.folderName );
 }
 
 int ProjectModel::rowCount( const QModelIndex &parent ) const

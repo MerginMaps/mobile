@@ -397,7 +397,7 @@ Item {
       visible: height ? true : false
       statusIconSource: "trash.svg"
       itemMargin: projectsPanel.panelMargin
-      projectName: projectNamespace + "/" + folderName
+      projectName: folderName
       disabled: !isValid // invalid project
       highlight: {
         if (disabled) return true

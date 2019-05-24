@@ -264,7 +264,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-  QObject::connect( &pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted );
+  QObject::connect( &pm, &ProjectModel::projectDeletedOnPath, ma.get(), &MerginApi::projectDeletedOnPath );
 
   if ( IS_TEST )
   {

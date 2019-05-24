@@ -109,7 +109,7 @@ void MerginProjectModel::syncProjectFinished( const QString &projectFolder, cons
   int row = 0;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
-    if ( project->projectNamespace + "/" + project->name == projectFullName )
+    if ( MerginApi::getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
     {
       if ( successfully )
       {
