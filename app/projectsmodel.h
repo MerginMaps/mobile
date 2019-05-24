@@ -35,8 +35,7 @@ class ProjectModel : public QAbstractListModel
   public:
     enum Roles
     {
-      Name = Qt::UserRole + 1,
-      ProjectNamespace,
+      Name = Qt::UserRole + 1, // name of *.gsq project file
       FolderName,
       Path,
       ShortName, // name shortened to maxShortNameChars
@@ -68,7 +67,7 @@ class ProjectModel : public QAbstractListModel
     bool containsProject( const QString &projectName );
 
   signals:
-    void projectDeleted( QString folderName );
+    void projectDeletedOnPath( QString projectDir );
 
   public slots:
     void addProject( QString projectFolder, QString projectName, bool successful );
@@ -80,7 +79,6 @@ class ProjectModel : public QAbstractListModel
     struct ProjectFile
     {
       QString name;
-      QString projectNamespace;
       QString folderName;
       QString path;
       QString info;
