@@ -22,9 +22,10 @@
 
 #include "merginapi.h"
 
-ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
+ProjectModel::ProjectModel( const QString &dataDir, const QString &cacheName, QObject *parent )
   : QAbstractListModel( parent )
   , mDataDir( dataDir )
+  , mCachedName( cacheName )
 {
   findProjectFiles();
 }
@@ -100,7 +101,7 @@ void ProjectModel::addProjectFromPath( QString path )
     mProjectFiles.removeAt( projectExistsAt );
 
   std::shared_ptr<MerginProject> cachedProject = MerginApi::parseProjectData( path, mCachedName );
-  if (cachedProject)
+  if ( cachedProject )
     project.projectNamespace = cachedProject->projectNamespace;
 
   mProjectFiles.append( project );
