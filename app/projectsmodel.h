@@ -36,6 +36,7 @@ class ProjectModel : public QAbstractListModel
     enum Roles
     {
       Name = Qt::UserRole + 1, // name of *.gsq project file
+      ProjectNamespace,
       FolderName,
       Path,
       ShortName, // name shortened to maxShortNameChars
@@ -79,6 +80,7 @@ class ProjectModel : public QAbstractListModel
     struct ProjectFile
     {
       QString name;
+      QString projectNamespace;
       QString folderName;
       QString path;
       QString info;
@@ -93,6 +95,7 @@ class ProjectModel : public QAbstractListModel
     QString mDataDir;
     const int mMaxShortNameChars = 10;
     QString mSearchExpression;
+    QString mCachedName = QStringLiteral( ".projectsCache.json" );
 
 };
 

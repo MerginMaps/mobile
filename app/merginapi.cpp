@@ -12,7 +12,7 @@
 MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
-  , mCacheFile( QStringLiteral( ".projectsCache.txt" ) )
+  , mCacheFile( QStringLiteral( ".projectsCache.json" ) )
 {
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::setUpdateToProject );
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::cacheProjectData );
@@ -369,7 +369,7 @@ void MerginApi::setUpdateToProject( const QString &projectDir, const QString &pr
       {
         project->updated = project->serverUpdated;
       }
-      if ( projectDir.isEmpty() )
+      if ( project->projectDir.isEmpty() )
         project->projectDir = projectDir;
       project->lastSync = QDateTime::currentDateTime().toUTC();
       emit merginProjectsChanged();
@@ -523,8 +523,7 @@ ProjectList MerginApi::parseAllProjectsData()
     QFileInfo info( mDataDir + folderName + "/" + mCacheFile );
     if ( info.exists() )
     {
-      std::shared_ptr<MerginProject> project = parseProjectData( mDataDir + folderName );
-      // TODO test empty pointer/project
+      std::shared_ptr<MerginProject> project = parseProjectData( mDataDir + folderName, mCacheFile );
       if (project) {
          projects << project;
       }
@@ -1128,9 +1127,8 @@ ProjectList MerginApi::parseListProjectsData( const QByteArray &data )
   return result;
 }
 
-std::shared_ptr<MerginProject> MerginApi::parseProjectData( const QString &projectPath ) {
-  QFile file( projectPath + "/" + mCacheFile );
-  // TODO return empty pointer
+std::shared_ptr<MerginProject> MerginApi::parseProjectData( const QString &projectPath, const QString &cacheName ) {
+  QFile file( projectPath + "/" + cacheName );
   if ( !file.exists() ) return std::shared_ptr<MerginProject>();
 
   QByteArray data;
@@ -1159,11 +1157,10 @@ std::shared_ptr<MerginProject> MerginApi::parseProjectData( const QString &proje
   return  std::make_shared<MerginProject>( p );
 }
 
-// TODO files + other data
+// TODO checksums + other data in the next task
 bool MerginApi::cacheProjectData( const QString &projectDir, const QString &projectFullName )
 {
   std::shared_ptr<MerginProject> project = getProject( projectFullName );
-  // TODO test empty shared_pointer
   if ( project )
   {
     QJsonDocument doc;
