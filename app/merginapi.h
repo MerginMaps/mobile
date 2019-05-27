@@ -152,6 +152,8 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
+    QString cacheFile() const;
+
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
@@ -171,7 +173,7 @@ class MerginApi: public QObject
 
   public slots:
     void projectDeleted( const QString &projecFullName );
-    void projectDeletedOnPath( const QString &projectDir);
+    void projectDeletedOnPath( const QString &projectDir );
 
   private slots:
     void listProjectsReplyFinished();
@@ -225,6 +227,12 @@ class MerginApi: public QObject
     */
     bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
     std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
+    /**
+    * Returns mergin project directory according projectNamespace and projectName. Either it already exists
+    * or it creates a new folder (e.g after first sync).
+    * \param projectNamespace To find a project according namespace as a part of full project name
+    * \param projectName To find a project according name as a part of full project name
+    */
     QString getProjectDir( const QString &projectNamespace, const  QString &projectName );
 
     QNetworkAccessManager mManager;
