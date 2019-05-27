@@ -125,6 +125,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MINOR = 4;
 
     static QString getFullProjectName( QString projectNamespace, QString projectName );
+    static std::shared_ptr<MerginProject> parseProjectData( const QString &projectPath, const QString &cacheName );
     QString forceCreateDir( QString path );
 
     // Test functions
@@ -191,7 +192,6 @@ class MerginApi: public QObject
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     ProjectList parseAllProjectsData();
     ProjectList parseListProjectsData( const QByteArray &data );
-    std::shared_ptr<MerginProject> parseProjectData( const QString &cachePath );
     bool cacheProjectData( const QString &projectNamespace, const QString &projectName );
     bool cacheData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );

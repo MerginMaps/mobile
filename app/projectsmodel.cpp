@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "merginapi.h"
+
 ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
   : QAbstractListModel( parent )
   , mDataDir( dataDir )
@@ -97,6 +99,10 @@ void ProjectModel::addProjectFromPath( QString path )
   if ( projectExistsAt >= 0 )
     mProjectFiles.removeAt( projectExistsAt );
 
+  std::shared_ptr<MerginProject> cachedProject = MerginApi::parseProjectData( path, mCachedName );
+  if (cachedProject)
+    project.projectNamespace = cachedProject->projectNamespace;
+
   mProjectFiles.append( project );
 }
 
@@ -111,6 +117,7 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
   switch ( role )
   {
     case Name: return QVariant( projectFile.name );
+    case ProjectNamespace: return QVariant( projectFile.projectNamespace );
     case FolderName: return QVariant( projectFile.folderName );
     case ShortName: return QVariant( projectFile.name.left( mMaxShortNameChars - 3 ) + "..." );
     case Path: return QVariant( projectFile.path );
@@ -126,6 +133,7 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Name] = "name";
+  roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[FolderName] = "folderName";
   roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
