@@ -14,7 +14,7 @@ before_install:
 - pip3 install dropbox
 
 script:
-- export SDK_VERSION=release-1
+- export SDK_VERSION=release-2
 - export OSGEO4A_SDK=lutraconsulting/osgeo4a:${SDK_VERSION}
 - docker pull ${OSGEO4A_SDK}
 - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh

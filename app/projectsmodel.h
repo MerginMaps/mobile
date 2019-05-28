@@ -22,7 +22,7 @@
 #include <QModelIndex>
 
 /*
- * Given data directory, find all QGIS projects (*.qgs) in the directory and subdirectories
+ * Given data directory, find all QGIS projects (*.qgs or *.qgz) in the directory and subdirectories
  * and create list model from them. Available are full path to the file, name of the project
  * and short name of the project (clipped to N chars)
  */
