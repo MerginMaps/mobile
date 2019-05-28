@@ -43,7 +43,7 @@ void ProjectModel::addProjectFromPath( QString path )
 {
   if ( path.isEmpty() ) return;
 
-  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ), QDir::Files, QDirIterator::Subdirectories );
+  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
 
   int i = 0;
   int projectExistsAt = -1;
@@ -61,7 +61,7 @@ void ProjectModel::addProjectFromPath( QString path )
   {
     it.next();
     ProjectFile projectFile;
-    projectFile.name = it.fileName().remove( ".qgs" );
+    projectFile.name = it.fileName().remove( ".qgs" ).remove( ".qgz" );
     projectFile.path = it.filePath();
     QDir projectDir( path );
     projectFile.folderName = projectDir.dirName();
