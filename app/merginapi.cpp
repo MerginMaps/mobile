@@ -12,7 +12,7 @@
 MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
-  , mCacheFile( QStringLiteral( ".projectsCache.json" ) )
+  , mCacheFile( QStringLiteral( "/.mergin/mergin.json" ) )
 {
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::setUpdateToProject );
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::cacheProjectData );
