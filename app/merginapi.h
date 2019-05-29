@@ -18,16 +18,25 @@ enum ProjectStatus
 };
 Q_ENUMS( ProjectStatus )
 
+struct MerginFile
+{
+  QString path;
+  QString checksum;
+  qint64 size;
+  QDateTime mtime;
+};
+
 struct MerginProject
 {
   QString name;
   QString projectNamespace;
   QString projectDir;
   QStringList tags;
-  QDateTime created;
-  QDateTime updated; // local version of project files
-  QDateTime serverUpdated; // available version of project files on server
-  QDateTime lastSync; // local datetime of download/upload/update project
+  QList<MerginFile> files;
+  QString version;
+  QDateTime clientUpdated; // client's version of project files
+  QDateTime serverUpdated; // available latest version of project files on server
+  QDateTime lastSyncClient; // local datetime of download/upload/update project
   bool pending = false; // if there is a pending request for downlaod/update a project
   ProjectStatus status = NoVersion;
   int size;
@@ -35,14 +44,6 @@ struct MerginProject
   int creator; // ID of current user
   QList<int> writers;
 };
-
-struct MerginFile
-{
-  QString path;
-  QString checksum;
-  qint64 size;
-};
-
 
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
@@ -61,9 +62,8 @@ class MerginApi: public QObject
 
     /**
      * Sends non-blocking GET request to the server to listProjects. On listProjectsReplyFinished,
-     * when a response is received, parses project json, writes it to a cache text file and sets mMerginProjects.
+     * when a response is received, parses projects json and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
-     * If listing has been successful, updates cached merginProjects list.
      * \param searchExpression Search filter on projects name.
      * \param user Mergin username used with flag
      * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
@@ -76,7 +76,7 @@ class MerginApi: public QObject
      * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream and creates files. Eventually emits syncProjectFinished on which
      * MerginProjectModel updates status of the project item. On syncProjectFinished, ProjectModel adds the project item to the project list.
-     * If download has been successful, updates cached merginProjects list.
+     * If download has been successful, creates metadata file of the project.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
@@ -87,7 +87,7 @@ class MerginApi: public QObject
      * Sends non-blocking POST request to the server to update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
      * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
-     * If update has been successful, updates cached merginProjects list.
+     * If update has been successful, updates metadata file of the project.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
@@ -125,8 +125,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MINOR = 4;
 
     static QString getFullProjectName( QString projectNamespace, QString projectName );
-    static std::shared_ptr<MerginProject> parseProjectData( const QString &projectPath, const QString &cacheName );
-    QString forceCreateDir( QString path );
+    static std::shared_ptr<MerginProject> readProjectMetadata( const QString &projectPath );
 
     // Test functions
     void createProject( const QString &projectNamespace, const QString &projectName );
@@ -151,8 +150,6 @@ class MerginApi: public QObject
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
-
-    QString cacheFile() const;
 
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
@@ -194,8 +191,8 @@ class MerginApi: public QObject
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     ProjectList parseAllProjectsData();
     ProjectList parseListProjectsData( const QByteArray &data );
-    bool cacheProjectData( const QString &projectNamespace, const QString &projectName );
-    bool cacheData( const QByteArray &data, const QString &path );
+    bool writeProjectMetadata( const QString &projectNamespace, const QString &projectName );
+    bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
     void createPathIfNotExists( const QString &filePath );
@@ -213,6 +210,10 @@ class MerginApi: public QObject
     void downloadProjectFiles( const QString &downloadProjectFiles, const QByteArray &json );
     void uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
+    /**
+    * Updates merginProjects list with given list. Suppose to be called after listProject request.
+    * \param serverProjects List of mergin projects to be merged with current merginList project.
+    */
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
     void deleteObsoleteFiles( const QString &projectPath );
     void loadAuthData();
@@ -221,25 +222,39 @@ class MerginApi: public QObject
     /**
     * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
     * and the previous of last (namespace) substring after splitting sourceString with slash.
-    * \param sourceString - either url or fullname of a project
+    * \param sourceString QString either url or fullname of a project
     * \param projectNamespace QString to be set as namespace, might not change original value
     * \param projectName QString to be set to name of a project
     */
     bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
+    /**
+    * Finds project in merginProjects list according its full name.
+    * \param projecFulltName QString to be set to name of a project
+    */
     std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
     /**
     * Returns mergin project directory according projectNamespace and projectName. Either it already exists
-    * or it creates a new folder (e.g after first sync).
-    * \param projectNamespace To find a project according namespace as a part of full project name
-    * \param projectName To find a project according name as a part of full project name
+    * or it creates a new folder for the project and returns its path.
+    * \param projectNamespace QString to find a project according namespace as a part of full project name
+    * \param projectName QString to find a project according name as a part of full project name
     */
     QString getProjectDir( const QString &projectNamespace, const  QString &projectName );
+    /**
+    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
+    * \param QString path
+    */
+    QString findUniqueProjectDirectorName( QString path );
+    /**
+    * Clears projects metadata.
+    * \param project std::shared_ptr<MerginProject> to access certain project.
+    */
+    void clearProject( std::shared_ptr<MerginProject> project );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
     ProjectList mMerginProjects;
     QString mDataDir; // dir with all projects
-    QString mCacheFile;
+    static const QString sMetadataFile;
     QString mUsername;
     QString mPassword;
     int mUserId = -1;
