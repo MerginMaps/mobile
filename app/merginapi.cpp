@@ -9,19 +9,20 @@
 #include <QSet>
 #include <QMessageBox>
 
+const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
+
 MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
-  , mCacheFile( QStringLiteral( "/.mergin/mergin.json" ) )
 {
   QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::setUpdateToProject );
-  QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::cacheProjectData );
+  QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::writeProjectMetadata );
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::serverProjectDeleted, this, &MerginApi::projectDeleted );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
 
-
+  //sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
   loadAuthData();
   mMerginProjects = parseAllProjectsData();
 }
@@ -111,7 +112,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   {
     if ( getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
     {
-      if ( project->updated < project->serverUpdated && project->serverUpdated > project->lastSync.toUTC() )
+      if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->lastSyncClient.toUTC() )
       {
         onlyUpload = false;
       }
@@ -341,11 +342,11 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
     if ( downloadedProjects.contains( fullProjectName ) )
     {
       project->projectDir = downloadedProjects.value( fullProjectName ).get()->projectDir;
-      QDateTime localUpdate = downloadedProjects.value( fullProjectName ).get()->updated.toUTC();
-      project->lastSync = downloadedProjects.value( fullProjectName ).get()->lastSync.toUTC();
+      QDateTime localUpdate = downloadedProjects.value( fullProjectName ).get()->clientUpdated.toUTC();
+      project->lastSyncClient = downloadedProjects.value( fullProjectName ).get()->lastSyncClient.toUTC();
       QDateTime lastModified = getLastModifiedFileDateTime( project->projectDir );
-      project->updated = localUpdate;
-      project->status = getProjectStatus( project->updated, project->serverUpdated, project->lastSync, lastModified );
+      project->clientUpdated = localUpdate;
+      project->status = getProjectStatus( project->clientUpdated, project->serverUpdated, project->lastSyncClient, lastModified );
     }
   }
   return serverProjects;
@@ -360,17 +361,10 @@ void MerginApi::setUpdateToProject( const QString &projectDir, const QString &pr
   {
     if ( projectFullName == getFullProjectName( project->projectNamespace, project->name ) )
     {
-      if ( !project->serverUpdated.isValid() )
-      {
-        project->updated = project->created;
-      }
-      else
-      {
-        project->updated = project->serverUpdated;
-      }
+      project->clientUpdated = project->serverUpdated;
       if ( project->projectDir.isEmpty() )
         project->projectDir = projectDir;
-      project->lastSync = QDateTime::currentDateTime().toUTC();
+      project->lastSyncClient = QDateTime::currentDateTime().toUTC();
       emit merginProjectsChanged();
       return;
     }
@@ -519,10 +513,10 @@ ProjectList MerginApi::parseAllProjectsData()
 
   for ( QString folderName : entryList )
   {
-    QFileInfo info( mDataDir + folderName + "/" + mCacheFile );
+    QFileInfo info( mDataDir + folderName + "/" + sMetadataFile );
     if ( info.exists() )
     {
-      std::shared_ptr<MerginProject> project = parseProjectData( mDataDir + folderName, mCacheFile );
+      std::shared_ptr<MerginProject> project = readProjectMetadata( mDataDir + folderName );
       if ( project )
       {
         projects << project;
@@ -533,18 +527,23 @@ ProjectList MerginApi::parseAllProjectsData()
   return projects;
 }
 
+void MerginApi::clearProject( std::shared_ptr<MerginProject> project )
+{
+  project->status = ProjectStatus::NoVersion;
+  project->lastSyncClient = QDateTime();
+  project->clientUpdated = QDateTime();
+  project->serverUpdated = QDateTime();
+  project->projectDir.clear();
+  emit merginProjectsChanged();
+}
+
 void MerginApi::projectDeleted( const QString &projecFullName )
 {
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
     if ( getFullProjectName( project->projectNamespace, project->name ) == projecFullName )
     {
-      project->status = ProjectStatus::NoVersion;
-      project->lastSync = QDateTime();
-      project->updated = QDateTime();
-      project->serverUpdated = QDateTime();
-      project->projectDir.clear();
-      emit merginProjectsChanged();
+      clearProject( project );
     }
   }
 }
@@ -555,7 +554,7 @@ void MerginApi::projectDeletedOnPath( const QString &projectDir )
   {
     if ( project->projectDir == mDataDir + projectDir )
     {
-      projectDeleted( getFullProjectName( project->projectNamespace, project->name ) );
+      clearProject( project );
     }
   }
 }
@@ -648,7 +647,7 @@ std::shared_ptr<MerginProject> MerginApi::getProject( const QString &projectFull
   return std::shared_ptr<MerginProject>();
 }
 
-QString MerginApi::forceCreateDir( QString path )
+QString MerginApi::findUniqueProjectDirectorName( QString path )
 {
   QDir projectDir( path );
   if ( projectDir.exists() )
@@ -660,14 +659,11 @@ QString MerginApi::forceCreateDir( QString path )
       ++i;
       info.setFile( path + QString::number( i ) );
     }
-    projectDir.mkdir( path + QString::number( i ) );
     return path + QString::number( i );
   }
   else
   {
-    QDir dir( "" );
-    dir.mkdir( projectDir.path() );
-    return projectDir.path();
+    return path;
   };
 }
 
@@ -679,8 +675,15 @@ QString MerginApi::getProjectDir( const QString &projectNamespace, const QString
   {
     if ( project->projectDir.isEmpty() )
     {
+      QString projectDirPath = findUniqueProjectDirectorName( mDataDir + projectName );
+      QDir projectDir( projectDirPath );
+      if ( !projectDir.exists() )
+      {
+        QDir dir( "" );
+        dir.mkdir( projectDirPath );
+      }
 
-      return forceCreateDir( mDataDir + projectName );
+      return projectDir.path();
     }
     else
     {
@@ -688,11 +691,6 @@ QString MerginApi::getProjectDir( const QString &projectNamespace, const QString
     }
   }
   return QStringLiteral();
-}
-
-QString MerginApi::cacheFile() const
-{
-  return mCacheFile;
 }
 
 QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName )
@@ -832,6 +830,7 @@ void MerginApi::downloadProjectReplyFinished()
     emit syncProjectFinished( projectDir, projectFullName );
     if ( !waitingForUpload )
     {
+      // TODO if first download, get projects info
       emit reloadProject( projectDir );
       emit notify( QStringLiteral( "Download successful" ) );
     }
@@ -885,6 +884,7 @@ void MerginApi::updateInfoReplyFinished()
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   QString projectPath = getProjectDir( projectNamespace, projectName );
+  std::shared_ptr<MerginProject> project = getProject( projectFullName );
 
   r->deleteLater();
 
@@ -911,9 +911,11 @@ void MerginApi::updateInfoReplyFinished()
         QJsonObject fileObject;
         fileObject.insert( "path", file.path );
         fileObject.insert( "checksum", file.checksum );
+        // TODO add mtime and size ??? really needed
         fileArray.append( fileObject );
       }
     }
+    // TODO save set of files with url, save after successful sync
   }
 
   jsonDoc.setArray( fileArray );
@@ -931,6 +933,7 @@ void MerginApi::uploadInfoReplyFinished()
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
+  //std::shared_ptr<MerginProject> project = getProject(projectFullName);
 
   r->deleteLater();
 
@@ -1019,8 +1022,15 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
       for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
       {
         QJsonObject projectInfoMap = it->toObject();
+        // Server metadata
         QString serverChecksum = projectInfoMap.value( QStringLiteral( "checksum" ) ).toString();
         QString path = projectInfoMap.value( QStringLiteral( "path" ) ).toString();
+        QDateTime mtime = QDateTime::fromString( projectInfoMap.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+        int size = projectInfoMap.value( QStringLiteral( "size" ) ).toInt();
+
+        // TODO write to merginProjects list
+
+        // TODO check mtime first
         QByteArray localChecksumBytes = getChecksum( projectPath + path );
         QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
         QFileInfo info( projectPath + path );
@@ -1084,6 +1094,7 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
   return files;
 }
 
+// TODO parse other data
 ProjectList MerginApi::parseListProjectsData( const QByteArray &data )
 {
   ProjectList result;
@@ -1100,6 +1111,22 @@ ProjectList MerginApi::parseListProjectsData( const QByteArray &data )
       p.name = projectMap.value( QStringLiteral( "name" ) ).toString();
       p.projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
       p.creator = projectMap.value( QStringLiteral( "creator" ) ).toInt();
+      //p.files = ???;
+      //p.version = "TODO";
+//      QJsonValue files = projectMap.value( QStringLiteral( "files" ) );
+//      if ( files.isArray() )
+//      {
+//        //QJsonArray writers = files.value(projectMap.value( "files" ).toArray();
+//          for ( QJsonValueRef fileRef : files.toArray() )
+//          {
+//            MerginFile file;
+//            QJsonObject fileObj = fileRef.toObject();
+//            file.path = fileObj.value("path").toString();
+//              //p.writers.append( tag.toInt() );
+//          }
+
+//      }
+
       QJsonValue access = projectMap.value( QStringLiteral( "access" ) );
       if ( access.isObject() )
       {
@@ -1117,22 +1144,24 @@ ProjectList MerginApi::parseListProjectsData( const QByteArray &data )
           p.tags.append( tag.toString() );
         }
       }
-      p.created = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       if ( !updated.isValid() )
       {
-        updated = p.created;
+        p.serverUpdated = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       }
-      p.serverUpdated = updated;
+      else
+      {
+        p.serverUpdated = updated;
+      }
       result << std::make_shared<MerginProject>( p );
     }
   }
   return result;
 }
 
-std::shared_ptr<MerginProject> MerginApi::parseProjectData( const QString &projectPath, const QString &cacheName )
+std::shared_ptr<MerginProject> MerginApi::readProjectMetadata( const QString &projectPath )
 {
-  QFile file( QString( "%1/%2" ).arg( projectPath ).arg( cacheName ) );
+  QFile file( QString( "%1/%2" ).arg( projectPath ).arg( sMetadataFile ) );
   if ( !file.exists() ) return std::shared_ptr<MerginProject>();
 
   QByteArray data;
@@ -1148,39 +1177,34 @@ std::shared_ptr<MerginProject> MerginApi::parseProjectData( const QString &proje
   MerginProject p;
   p.name = projectMap.value( QStringLiteral( "name" ) ).toString();
   p.projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
-  p.created = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-  QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-  if ( !updated.isValid() )
-    updated = p.created;
-  p.updated = updated;
-  p.lastSync = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+  p.clientUpdated = QDateTime::fromString( projectMap.value( QStringLiteral( "clientUpdated" ) ).toString(), Qt::ISODateWithMs ).toUTC();;
+  p.lastSyncClient = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs ).toUTC();
   p.projectDir = projectPath;
 
   return  std::make_shared<MerginProject>( p );
 }
 
 // TODO checksums + other data in the next task
-bool MerginApi::cacheProjectData( const QString &projectDir, const QString &projectFullName )
+bool MerginApi::writeProjectMetadata( const QString &projectDir, const QString &projectFullName )
 {
   std::shared_ptr<MerginProject> project = getProject( projectFullName );
   if ( project )
   {
     QJsonDocument doc;
     QJsonObject projectMap;
-    projectMap.insert( QStringLiteral( "created" ), project->created.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral( "updated" ), project->updated.toString( Qt::ISODateWithMs ) );
-    projectMap.insert( QStringLiteral( "lastSync" ), project->lastSync.toString( Qt::ISODateWithMs ) );
+    projectMap.insert( QStringLiteral( "clientUpdated" ), project->clientUpdated.toString( Qt::ISODateWithMs ) );
+    projectMap.insert( QStringLiteral( "lastSync" ), project->lastSyncClient.toString( Qt::ISODateWithMs ) );
     projectMap.insert( QStringLiteral( "name" ), project->name );
     projectMap.insert( QStringLiteral( "namespace" ), project->projectNamespace );
 
     doc.setObject( projectMap );
-    cacheData( doc.toJson(), projectDir + "/" + mCacheFile );
+    writeData( doc.toJson(), projectDir + "/" + MerginApi::sMetadataFile );
     return true;
   }
   return false;
 }
 
-bool MerginApi::cacheData( const QByteArray &data, const QString &path )
+bool MerginApi::writeData( const QByteArray &data, const QString &path )
 {
   QFile file( path );
   createPathIfNotExists( path );
@@ -1374,6 +1398,7 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
   }
 }
 
+// TODO check what happend if send empty upload (new version on server??)
 ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastModified )
 {
   // There was no sync yet

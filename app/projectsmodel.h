@@ -35,7 +35,7 @@ class ProjectModel : public QAbstractListModel
   public:
     enum Roles
     {
-      Name = Qt::UserRole + 1, // name of *.gsq project file
+      Name = Qt::UserRole + 1, // name of a project file
       ProjectNamespace,
       FolderName,
       Path,
@@ -47,7 +47,7 @@ class ProjectModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit ProjectModel( const QString &dataDir, const QString &cacheName, QObject *parent = nullptr );
+    explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
     ~ProjectModel();
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
@@ -95,7 +95,6 @@ class ProjectModel : public QAbstractListModel
     QString mDataDir;
     const int mMaxShortNameChars = 10;
     QString mSearchExpression;
-    QString mCachedName;
 
 };
 

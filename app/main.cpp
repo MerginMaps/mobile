@@ -243,8 +243,8 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   InputUtils iu;
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( projectDir ) );
-  ProjectModel pm( projectDir, ma->cacheFile() );
+
+  ProjectModel pm( projectDir );
   if ( pm.rowCount() == 0 && !IS_TEST )
   {
     qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
@@ -254,6 +254,7 @@ int main( int argc, char *argv[] )
   MapThemesModel mtm( loader.project() );
   AppSettings as;
   MerginProjectModel mpm;
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( projectDir ) );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

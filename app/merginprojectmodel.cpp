@@ -22,13 +22,13 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
     case ProjectNamespace: return QVariant( project->projectNamespace );
     case ProjectInfo:
     {
-      if ( !project->updated.isValid() )
+      if ( !project->clientUpdated.isValid() )
       {
         return project->serverUpdated.toString();
       }
       else
       {
-        return project->updated.toString();
+        return project->clientUpdated.toString();
       }
     }
 
