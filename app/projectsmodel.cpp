@@ -99,7 +99,7 @@ void ProjectModel::addProjectFromPath( QString path )
   if ( projectExistsAt >= 0 )
     mProjectFiles.removeAt( projectExistsAt );
 
-  std::shared_ptr<MerginProject> merginProject = MerginApi::readProjectMetadata( path );
+  std::shared_ptr<MerginProject> merginProject = MerginApi::readProjectMetadataFromPath( path );
   if ( merginProject )
     project.projectNamespace = merginProject->projectNamespace;
 
