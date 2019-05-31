@@ -62,13 +62,16 @@ void TestMerginApi::testListProject()
   qDebug() << "TestMerginApi::testListProjectFinished PASSED";
 }
 
+/**
+ * Download project from a scratch using fetch endpoint.
+ */
 void TestMerginApi::testDownloadProject()
 {
   qDebug() << "TestMerginApi::testDownloadProject START";
   QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   QString projectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
   QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
-  mApi->downloadProject( projectNamespace, projectName );
+  mApi->updateProject( projectNamespace, projectName );
 
   QVERIFY( spy.wait( 5000 ) );
   QCOMPARE( spy.count(), 1 );

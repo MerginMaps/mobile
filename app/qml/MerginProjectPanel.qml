@@ -438,7 +438,7 @@ Item {
         __merginProjectsModel.setPending(index, true)
 
         if (status === "noVersion") {
-          __merginApi.downloadProject(projectNamespace, name)
+          __merginApi.updateProject(projectNamespace, name)
         } else if (status === "outOfDate") {
           __merginApi.updateProject(projectNamespace, name)
         } else if (status === "modified") {
