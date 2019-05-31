@@ -73,18 +73,7 @@ class MerginApi: public QObject
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
-     * Sends non-blocking GET request to the server to download a project with a given name. On downloadProjectReplyFinished,
-     * when a response is received, parses data-stream and creates files. Eventually emits syncProjectFinished on which
-     * MerginProjectModel updates status of the project item. On syncProjectFinished, ProjectModel adds the project item to the project list.
-     * If download has been successful, creates metadata file of the project.
-     * Emits also notify signal with a message for the GUI.
-     * \param projectNamespace Project's namespace used in request.
-     * \param projectName  Project's name used in request.
-     */
-    Q_INVOKABLE void downloadProject( const QString &projectNamespace, const QString &projectName );
-
-    /**
-     * Sends non-blocking POST request to the server to update a project with a given name. On downloadProjectReplyFinished,
+     * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
      * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
      * If update has been successful, updates metadata file of the project.

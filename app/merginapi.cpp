@@ -56,36 +56,6 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
 
-void MerginApi::downloadProject( const QString &projectNamespace, const QString &projectName )
-{
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
-  {
-    return;
-  }
-  QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/download/%1" ).arg( projectFullName ) );
-
-  if ( mPendingRequests.contains( url ) )
-  {
-    QString errorMsg = QStringLiteral( "Download request for %1 is already pending." ).arg( projectFullName );
-    qDebug() << errorMsg;
-    emit networkErrorOccurred( errorMsg, QStringLiteral( "Mergin API error: downloadProject" ) );
-    return;
-  }
-
-  // TODO send in request chain
-  QNetworkReply *infoReply = getProjectInfo( projectFullName );
-  connect( infoReply, &QNetworkReply::finished, this, &MerginApi::parseProjectInfoReply );
-
-  request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-
-  QNetworkReply *reply = mManager.get( request );
-  mPendingRequests.insert( url, projectFullName );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished );
-}
-
 void MerginApi::updateProject( const QString &projectNamespace, const QString &projectName )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
@@ -665,7 +635,7 @@ QString MerginApi::getProjectDir( const QString &projectNamespace, const QString
         QDir dir( "" );
         dir.mkdir( projectDirPath );
       }
-
+      project->projectDir = projectDirPath;
       return projectDir.path();
     }
     else
@@ -868,7 +838,6 @@ void MerginApi::updateInfoReplyFinished()
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  QString projectPath = getProjectDir( projectNamespace, projectName );
 
   QJsonDocument jsonDoc;
   QJsonArray fileArray;
@@ -877,14 +846,19 @@ void MerginApi::updateInfoReplyFinished()
     if ( key == QStringLiteral( "added" ) )
     {
       // no removal before upload
-      if ( mWaitingForUpload.contains( projectFullName ) ) continue;
-
-      QSet<QString> obsolateFiles;
-      for ( MerginFile file : files.value( key ) )
+      if ( !mWaitingForUpload.contains( projectFullName ) )
       {
-        obsolateFiles.insert( file.path );
+        QSet<QString> obsolateFiles;
+        for ( MerginFile file : files.value( key ) )
+        {
+          obsolateFiles.insert( file.path );
+        }
+        if ( !obsolateFiles.isEmpty() )
+        {
+          QString projectPath = getProjectDir( projectNamespace, projectName );
+          mObsoleteFiles.insert( projectPath, obsolateFiles );
+        }
       }
-      mObsoleteFiles.insert( projectPath, obsolateFiles );
     }
     else
     {
