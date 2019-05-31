@@ -600,7 +600,7 @@ std::shared_ptr<MerginProject> MerginApi::getProject( const QString &projectFull
   return std::shared_ptr<MerginProject>();
 }
 
-QString MerginApi::findUniqueProjectDirectorName( QString path )
+QString MerginApi::findUniqueProjectDirectoryName( QString path )
 {
   QDir projectDir( path );
   if ( projectDir.exists() )
@@ -628,7 +628,7 @@ QString MerginApi::getProjectDir( const QString &projectNamespace, const QString
   {
     if ( project->projectDir.isEmpty() )
     {
-      QString projectDirPath = findUniqueProjectDirectorName( mDataDir + projectName );
+      QString projectDirPath = findUniqueProjectDirectoryName( mDataDir + projectName );
       QDir projectDir( projectDirPath );
       if ( !projectDir.exists() )
       {
@@ -848,15 +848,15 @@ void MerginApi::updateInfoReplyFinished()
       // no removal before upload
       if ( !mWaitingForUpload.contains( projectFullName ) )
       {
-        QSet<QString> obsolateFiles;
+        QSet<QString> obsoleteFiles;
         for ( MerginFile file : files.value( key ) )
         {
-          obsolateFiles.insert( file.path );
+          obsoleteFiles.insert( file.path );
         }
-        if ( !obsolateFiles.isEmpty() )
+        if ( !obsoleteFiles.isEmpty() )
         {
           QString projectPath = getProjectDir( projectNamespace, projectName );
-          mObsoleteFiles.insert( projectPath, obsolateFiles );
+          mObsoleteFiles.insert( projectPath, obsoleteFiles );
         }
       }
     }
@@ -997,7 +997,6 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
           projectFiles << rawServerFile;
         }
 
-        // TODO check mtime first
         QByteArray localChecksumBytes = getChecksum( projectPath + path );
         QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
         QFileInfo info( projectPath + path );
