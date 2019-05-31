@@ -243,7 +243,6 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   InputUtils iu;
-
   ProjectModel pm( projectDir );
   if ( pm.rowCount() == 0 && !IS_TEST )
   {
@@ -253,8 +252,8 @@ int main( int argc, char *argv[] )
   LayersModel lm( loader.project() );
   MapThemesModel mtm( loader.project() );
   AppSettings as;
-  MerginProjectModel mpm;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( projectDir ) );
+  MerginProjectModel mpm;
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
