@@ -125,7 +125,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MINOR = 4;
 
     static QString getFullProjectName( QString projectNamespace, QString projectName );
-    static std::shared_ptr<MerginProject> readProjectMetadata( const QString &projectPath );
+    static std::shared_ptr<MerginProject> readProjectMetadataFromPath( const QString &projectPath );
 
     // Test functions
     void createProject( const QString &projectNamespace, const QString &projectName );
@@ -180,18 +180,21 @@ class MerginApi: public QObject
     void uploadInfoReplyFinished();
     void getUserInfoFinished();
     void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
-    void setUpdateToProject( const QString &projectDir, const QString &projectName, bool successfully );
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished();
     void authorizeFinished();
     void pingMerginReplyFinished();
+    void updateProjectMetadata( const QString &projectNamespace, const QString &projectName, bool syncSuccessful = true );
+    void parseProjectInfoReply();
 
   private:
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
-    ProjectList parseAllProjectsData();
-    ProjectList parseListProjectsData( const QByteArray &data );
-    bool writeProjectMetadata( const QString &projectNamespace, const QString &projectName );
+    static MerginProject readProjectMetadata( const QByteArray &data );
+    ProjectList parseAllProjectsMetadata();
+    ProjectList parseListProjectsMetadata( const QByteArray &data );
+    QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
+
     bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
@@ -249,6 +252,8 @@ class MerginApi: public QObject
     * \param project std::shared_ptr<MerginProject> to access certain project.
     */
     void clearProject( std::shared_ptr<MerginProject> project );
+    QNetworkReply *getProjectInfo( const QString &projectFullName );
+    QHash<QString, MerginProject> mTempMerginProjects;
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
@@ -262,7 +267,7 @@ class MerginApi: public QObject
     QDateTime mTokenExpiration;
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
-    QHash<QUrl, QString >mPendingRequests; // projectNamespace/projectName
+    QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
     QSet<QString> mWaitingForUpload; // projectNamespace/projectName
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
