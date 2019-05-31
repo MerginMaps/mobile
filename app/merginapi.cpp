@@ -647,7 +647,7 @@ QString MerginApi::findUniqueProjectDirectorName( QString path )
   else
   {
     return path;
-  };
+  }
 }
 
 QString MerginApi::getProjectDir( const QString &projectNamespace, const QString &projectName )
@@ -893,7 +893,7 @@ void MerginApi::updateInfoReplyFinished()
         QJsonObject fileObject;
         fileObject.insert( "path", file.path );
         fileObject.insert( "checksum", file.checksum );
-        // TODO add mtime and size ??? really needed
+        fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
         fileArray.append( fileObject );
       }
     }
@@ -1127,6 +1127,7 @@ ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
           p.writers.append( tag.toInt() );
         }
       }
+
       QJsonValue tags = projectMap.value( QStringLiteral( "tags" ) );
       if ( tags.isArray() )
       {
@@ -1135,6 +1136,7 @@ ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
           p.tags.append( tag.toString() );
         }
       }
+
       QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       if ( !updated.isValid() )
       {
@@ -1144,6 +1146,7 @@ ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
       {
         p.serverUpdated = updated;
       }
+
       result << std::make_shared<MerginProject>( p );
     }
   }
