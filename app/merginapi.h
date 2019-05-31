@@ -235,13 +235,17 @@ class MerginApi: public QObject
     * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
     * \param QString path
     */
-    QString findUniqueProjectDirectorName( QString path );
+    QString findUniqueProjectDirectoryName( QString path );
     /**
     * Clears projects metadata.
     * \param project std::shared_ptr<MerginProject> to access certain project.
     */
     void clearProject( std::shared_ptr<MerginProject> project );
     QNetworkReply *getProjectInfo( const QString &projectFullName );
+    /**
+    * Used to store metadata about projects inbetween info and sync_data request.
+    * MerginProjects list is updated with those data only if transfer has been successful.
+    */
     QHash<QString, MerginProject> mTempMerginProjects;
 
     QNetworkAccessManager mManager;
