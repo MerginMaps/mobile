@@ -65,7 +65,7 @@ class ProjectModel : public QAbstractListModel
     void setSearchExpression( const QString &searchExpression );
 
     // Test function
-    bool containsProject( const QString &projectName );
+    bool containsProject( const QString &projectNamespace, const QString &projectName );
 
   signals:
     void projectDeletedOnPath( QString projectDir );

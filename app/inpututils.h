@@ -43,6 +43,8 @@ class InputUtils: public QObject
      * If the layer's CRS is not the same as map CRS, the geometry will be first transformed to map CRS.
      */
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+
+    static bool cpDir( const QString &srcPath, const QString &dstPath );
 };
 
 #endif // INPUTUTILS_H

@@ -112,46 +112,12 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
 }
 
-static bool cpDir( const QString &srcPath, const QString &dstPath )
-{
-  QDir parentDstDir( QFileInfo( dstPath ).path() );
-  if ( !parentDstDir.mkpath( dstPath ) )
-    return false;
-
-  QDir srcDir( srcPath );
-  foreach ( const QFileInfo &info, srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) )
-  {
-    QString srcItemPath = srcPath + "/" + info.fileName();
-    QString dstItemPath = dstPath + "/" + info.fileName();
-    if ( info.isDir() )
-    {
-      if ( !cpDir( srcItemPath, dstItemPath ) )
-      {
-        return false;
-      }
-    }
-    else if ( info.isFile() )
-    {
-      if ( !QFile::copy( srcItemPath, dstItemPath ) )
-      {
-        return false;
-      }
-      QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
-    }
-    else
-    {
-      qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
-    }
-  }
-  return true;
-}
-
 // Copies resources folder to package folder
 static void expand_pkg_data( const QString &pkgPath )
 {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  cpDir( assetsBasePath + "/qgis-data", pkgPath );
+  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
   Q_UNUSED( pkgPath );
 #endif
@@ -162,7 +128,7 @@ static void copy_demo_projects( const QString &projectDir )
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
   qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
-  cpDir( assetsBasePath + "/demo-projects", projectDir );
+  InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
 #else
   Q_UNUSED( projectDir );
 #endif

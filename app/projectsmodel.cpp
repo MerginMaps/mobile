@@ -199,11 +199,12 @@ void ProjectModel::setSearchExpression( const QString &searchExpression )
   }
 }
 
-bool ProjectModel::containsProject( const QString &projectName )
+bool ProjectModel::containsProject( const QString &projectNamespace, const QString &projectName )
 {
+  QString projectFullName = MerginApi::getFullProjectName( projectNamespace, projectName );
   for ( ProjectFile prj : mProjectFiles )
   {
-    if ( prj.folderName == projectName )
+    if ( MerginApi::getFullProjectName( prj.projectNamespace, prj.name ) == projectFullName )
     {
       return true;
     }
