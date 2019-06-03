@@ -1009,6 +1009,7 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
           file.path = path;
           file.size = info.size();
           removed.append( file );
+          localFiles.remove( path );
         }
         // updated
         else if ( serverChecksum != localChecksum )
@@ -1029,9 +1030,8 @@ QHash<QString, QList<MerginFile>> MerginApi::parseAndCompareProjectFiles( QNetwo
           file.size = info.size();
           file.path = path;
           updatedFiles.append( file );
+          localFiles.remove( path );
         }
-
-        localFiles.remove( path );
       }
 
       // Rest of localFiles are newly added

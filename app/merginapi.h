@@ -110,6 +110,12 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
+    /**
+    * Finds project in merginProjects list according its full name.
+    * \param projecFulltName QString to be set to name of a project
+    */
+    std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
+
     static const int MERGIN_API_VERSION_MAJOR = 2019;
     static const int MERGIN_API_VERSION_MINOR = 4;
 
@@ -219,11 +225,6 @@ class MerginApi: public QObject
     * \param projectName QString to be set to name of a project
     */
     bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
-    /**
-    * Finds project in merginProjects list according its full name.
-    * \param projecFulltName QString to be set to name of a project
-    */
-    std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
     /**
     * Returns mergin project directory according projectNamespace and projectName. Either it already exists
     * or it creates a new folder for the project and returns its path.

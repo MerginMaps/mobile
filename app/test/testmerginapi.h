@@ -17,6 +17,8 @@ class TestMerginApi: public QObject
     explicit TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm, QObject *parent = nullptr );
     ~TestMerginApi() = default;
 
+    static const QString TEST_PROJECT_NAME;
+
   public slots:
     void initTestCase();
     void testListProject();
@@ -24,11 +26,13 @@ class TestMerginApi: public QObject
     void testCreateProjectTwice();
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
+    void testUploadProject();
 
     void cleanupTestCase();
 
   private:
     int SHORT_REPLY = 1000;
+    int LONG_REPLY = 5000;
 
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
@@ -36,9 +40,14 @@ class TestMerginApi: public QObject
     QString mApiRoot;
     QString mUsername;
     QString mPassword;
+    QString mDataDir;
 
     ProjectList getProjectList();
-    bool hasProject( QString projectName, ProjectList projects );
+    bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
+    void initTestProject();
+    void deleteTestProject();
+    void copyTestProject();
+    QString testDataPath();
 };
 
 # endif // TESTMERGINAPI_H
