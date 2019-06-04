@@ -204,7 +204,7 @@ bool ProjectModel::containsProject( const QString &projectNamespace, const QStri
   QString projectFullName = MerginApi::getFullProjectName( projectNamespace, projectName );
   for ( ProjectFile prj : mProjectFiles )
   {
-    if ( MerginApi::getFullProjectName( prj.projectNamespace, prj.name ) == projectFullName )
+    if ( MerginApi::getFullProjectName( prj.projectNamespace, prj.folderName ) == projectFullName )
     {
       return true;
     }

@@ -41,6 +41,8 @@ class TestMerginApi: public QObject
     QString mUsername;
     QString mPassword;
     QString mDataDir;
+    int passedTests = 0;
+    int runTests = 0;
 
     ProjectList getProjectList();
     bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
