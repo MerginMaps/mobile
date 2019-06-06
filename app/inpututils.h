@@ -52,7 +52,6 @@ class InputUtils: public QObject
 
   private:
     static void appendLog( const QByteArray &data, const QString &path );
-
 };
 
 #endif // INPUTUTILS_H
