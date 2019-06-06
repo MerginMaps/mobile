@@ -248,3 +248,25 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
   }
   return true;
 }
+
+void InputUtils::log( const QString &msg, const QString &info )
+{
+  QString logFilePath;
+  QByteArray data;
+  data.append( QString( "%1 - %2. %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( msg ).arg( info ) );
+
+  appendLog( data, LOG_FILE );
+}
+
+void InputUtils::appendLog( const QByteArray &data, const QString &path )
+{
+  QFile file( path );
+  if ( !file.open( QIODevice::Append ) )
+  {
+    return;
+  }
+
+  file.write( data );
+  file.close();
+}
+
