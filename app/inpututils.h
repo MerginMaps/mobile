@@ -5,6 +5,8 @@
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
 
+extern QString LOG_FILE;
+
 class InputUtils: public QObject
 {
     Q_OBJECT
@@ -45,6 +47,12 @@ class InputUtils: public QObject
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
     static bool cpDir( const QString &srcPath, const QString &dstPath );
+
+    static void log( const QString &msg, const QString &info = QStringLiteral() );
+
+  private:
+    static void appendLog( const QByteArray &data, const QString &path );
+
 };
 
 #endif // INPUTUTILS_H
