@@ -72,6 +72,9 @@ class MerginApi: public QObject
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &user = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
+    // TODO docs
+    Q_INVOKABLE void downloadFile( const QString &projectFullName, const QString &filename, const QString &version );
+
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
@@ -149,6 +152,7 @@ class MerginApi: public QObject
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    void downloadFileFinished( const QString &projectDir, const QString &projectFullName, const QString &version, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo );
     void notify( const QString &message );
@@ -170,6 +174,8 @@ class MerginApi: public QObject
   private slots:
     void listProjectsReplyFinished();
     void downloadProjectReplyFinished(); // download + update
+    void continueDownloadFiles( const QString &projectDir, const QString &projectName, const QString &version, bool successfully = true );
+    void downloadFileReplyFinished();
     void uploadProjectReplyFinished();
     void updateInfoReplyFinished();
     void uploadInfoReplyFinished();
@@ -192,7 +198,8 @@ class MerginApi: public QObject
 
     bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
-    bool saveFile( const QByteArray &data, QFile &file, bool closeFile );
+    void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool overwrite );
+    bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
     /**
     *
@@ -205,9 +212,16 @@ class MerginApi: public QObject
     QDateTime getLastModifiedFileDateTime( const QString &path );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
-    void downloadProjectFiles( const QString &downloadProjectFiles, const QByteArray &json );
+    // TODO consider delete function below if its not going to be used in the future
+    /**
+    * NOTE: It is currently not used!
+    * Sends request to fetch files contained in given json
+    * \param projectFullName
+    * \param json List of json objects (MerginFile structure) to be fetched
+    */
+    void downloadProjectFiles( const QString &projectFullName, const QByteArray &json );
     void uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files );
-    QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
+    QPair<QHash<QString, QList<MerginFile>>, QString> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     /**
     * Updates merginProjects list with given list. Suppose to be called after listProject request.
     * \param serverProjects List of mergin projects to be merged with current merginList project.
@@ -263,6 +277,7 @@ class MerginApi: public QObject
     int mStorageLimit = 0; // in Bytes
     QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
     QSet<QString> mWaitingForUpload; // projectNamespace/projectName
+    QHash<QString, QList<MerginFile>> mFilesToDownload; // projectFullName -> list of files
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
     QEventLoop mAuthLoopEvent;
