@@ -247,8 +247,7 @@ void MerginApi::downloadProjectFiles( const QString &projectFullName, const QByt
   connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished );
 }
 
-void MerginApi::uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files,
-                                    const QString &info )
+void MerginApi::uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -285,7 +284,7 @@ void MerginApi::uploadProjectFiles( const QString &projectNamespace, const QStri
   mPendingRequests.insert( url, projectFullName );
 
   QNetworkReply *reply = mManager.post( request, multiPart );
-  InputUtils::log( url.toString(), info );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadProjectReplyFinished );
 }
 
@@ -943,7 +942,7 @@ void MerginApi::uploadInfoReplyFinished()
                  .arg( InputUtils::filesToString( files.value( "removed" ) ) ).arg( InputUtils::filesToString( files.value( "renamed" ) ) );
 
   InputUtils::log( url.toString(), info );
-  uploadProjectFiles( projectNamespace, projectName, jsonDoc.toJson( QJsonDocument::Compact ), filesToUpload, info );
+  uploadProjectFiles( projectNamespace, projectName, jsonDoc.toJson( QJsonDocument::Compact ), filesToUpload );
 }
 
 void MerginApi::getUserInfoFinished()

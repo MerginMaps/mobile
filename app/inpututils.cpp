@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+QString InputUtils::sLogFile = QStringLiteral();
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -217,7 +218,7 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
 
 void InputUtils::setLogFilename( const QString &value )
 {
-  LOG_FILE() = value;
+  sLogFile = value;
 }
 
 QString InputUtils::filesToString( QList<MerginFile> files )
@@ -228,12 +229,6 @@ QString InputUtils::filesToString( QList<MerginFile> files )
     resultList << file.path;
   }
   return resultList.join( ", " );
-}
-
-QString &InputUtils::LOG_FILE()
-{
-  static QString LOG_FILE = QString();
-  return LOG_FILE;
 }
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
@@ -276,7 +271,7 @@ void InputUtils::log( const QString &msg, const QString &info )
   QByteArray data;
   data.append( QString( "%1 - %2. %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( msg ).arg( info ) );
 
-  //appendLog( data, LOG_FILE );
+  appendLog( data, sLogFile );
 }
 
 void InputUtils::appendLog( const QByteArray &data, const QString &path )
