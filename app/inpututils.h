@@ -6,8 +6,6 @@
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
 
-extern QString LOG_FILE;
-
 class InputUtils: public QObject
 {
     Q_OBJECT
@@ -55,11 +53,9 @@ class InputUtils: public QObject
 
     static QString filesToString( QList<MerginFile> files );
 
-    static QString sLOG_FILE;
-
-
   private:
-    static QString &LOG_FILE();
+
+    static QString sLogFile;
 
     static void appendLog( const QByteArray &data, const QString &path );
 };
