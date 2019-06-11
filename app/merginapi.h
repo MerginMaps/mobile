@@ -205,7 +205,7 @@ class MerginApi: public QObject
     QDateTime getLastModifiedFileDateTime( const QString &path );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
-    void downloadProjectFiles( const QString &downloadProjectFiles, const QByteArray &json, const QString &info );
+    void downloadProjectFiles( const QString &downloadProjectFiles, const QByteArray &json );
     void uploadProjectFiles( const QString &projectNamespace, const QString &projectName, const QByteArray &json, const QList<MerginFile> &files, const QString &info );
     QHash<QString, QList<MerginFile>> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     /**

@@ -50,8 +50,6 @@
 #include "loader.h"
 #include "appsettings.h"
 
-QString LOG_FILE;
-
 static QString getDataDir( bool isTest = false )
 {
 #ifdef QGIS_QUICK_DATA_PATH
@@ -203,7 +201,7 @@ int main( int argc, char *argv[] )
   // Set/Get enviroment
   QString dataDir = getDataDir( IS_TEST );
   QString projectDir = dataDir + "/projects/";
-  LOG_FILE = projectDir + ".logs";
+  InputUtils::setLogFilename( projectDir + ".logs" );
   setEnvironmentQgisPrefixPath();
 
   init_qgis( dataDir + "/qgis-data" );
