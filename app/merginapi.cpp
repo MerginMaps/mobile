@@ -55,6 +55,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
 
@@ -226,7 +227,7 @@ void MerginApi::clearTokenData()
   mAuthToken.clear();
 }
 
-void MerginApi::downloadProjectFiles( const QString &projectFullName, const QByteArray &json, const QString &info )
+void MerginApi::downloadProjectFiles( const QString &projectFullName, const QByteArray &json )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -242,7 +243,7 @@ void MerginApi::downloadProjectFiles( const QString &projectFullName, const QByt
   mPendingRequests.insert( url, projectFullName );
 
   QNetworkReply *reply = mManager.post( request, json );
-  InputUtils::log( url.toString(), info );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadProjectReplyFinished );
 }
 
@@ -497,6 +498,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   mPendingRequests.insert( url, projectFullName );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   return mManager.get( request );
 }
 
@@ -750,12 +752,14 @@ void MerginApi::listProjectsReplyFinished()
     ProjectList serverProjects = parseListProjectsMetadata( data );
     mMerginProjects = updateMerginProjectList( serverProjects );
     emit merginProjectsChanged();
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
   }
   else
   {
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: listProjects" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
 
     if ( r->errorString() == QLatin1String( "Host requires authentication" ) )
     {
@@ -798,7 +802,7 @@ void MerginApi::downloadProjectReplyFinished()
     qDebug() << r->errorString();
     emit syncProjectFinished( projectDir, projectFullName, false );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadProject" ) );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -830,7 +834,7 @@ void MerginApi::uploadProjectReplyFinished()
     qDebug() << r->errorString();
     emit syncProjectFinished( projectDir, projectFullName, false );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: uploadProject" ) );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -841,8 +845,9 @@ void MerginApi::updateInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, true );
   QUrl url = r->url();
+  InputUtils::log( url.toString(), QStringLiteral( "FINISHED" ) );
+  QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, true );
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
@@ -885,11 +890,13 @@ void MerginApi::updateInfoReplyFinished()
   r->deleteLater();
   mPendingRequests.remove( url );
   jsonDoc.setArray( fileArray );
-  QString info = QString( "STARTED - removed: %1, updated: %2, added: %3, renamed: %4" )
-                 .arg( files.value( "added" ).size() ).arg( files.value( "updated" ).size() )
-                 .arg( files.value( "removed" ).size() ).arg( files.value( "renamed" ).size() );
+  QString info = QString( "PUSH request - removed: %1, updated: %2, added: %3, renamed: %4" )
+                 .arg( InputUtils::filesToString( files.value( "added" ) ) ).arg( InputUtils::filesToString( files.value( "updated" ) ) )
+                 .arg( InputUtils::filesToString( files.value( "removed" ) ) ).arg( InputUtils::filesToString( files.value( "renamed" ) ) );
 
-  downloadProjectFiles( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ), info );
+  InputUtils::log( url.toString(), info );
+
+  downloadProjectFiles( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
 }
 
 void MerginApi::uploadInfoReplyFinished()
@@ -897,8 +904,9 @@ void MerginApi::uploadInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, false );
   QUrl url = r->url();
+  InputUtils::log( url.toString(), QStringLiteral( "FINISHED" ) );
+  QHash<QString, QList<MerginFile>> files = parseAndCompareProjectFiles( r, false );
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
@@ -930,9 +938,11 @@ void MerginApi::uploadInfoReplyFinished()
   r->deleteLater();
   mPendingRequests.remove( url );
   jsonDoc.setObject( changes );
-  QString info = QString( "STARTED - added: %1, updated: %2, removed: %3, renamed: %4" )
-                 .arg( files.value( "added" ).size() ).arg( files.value( "updated" ).size() )
-                 .arg( files.value( "removed" ).size() ).arg( files.value( "renamed" ).size() );
+  QString info = QString( "PULL request - added: %1, updated: %2, removed: %3, renamed: %4" )
+                 .arg( InputUtils::filesToString( files.value( "added" ) ) ).arg( InputUtils::filesToString( files.value( "updated" ) ) )
+                 .arg( InputUtils::filesToString( files.value( "removed" ) ) ).arg( InputUtils::filesToString( files.value( "renamed" ) ) );
+
+  InputUtils::log( url.toString(), info );
   uploadProjectFiles( projectNamespace, projectName, jsonDoc.toJson( QJsonDocument::Compact ), filesToUpload, info );
 }
 

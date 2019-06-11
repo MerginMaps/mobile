@@ -2,6 +2,7 @@
 #define INPUTUTILS_H
 
 #include <QObject>
+#include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
 
@@ -50,7 +51,16 @@ class InputUtils: public QObject
 
     static void log( const QString &msg, const QString &info = QStringLiteral() );
 
+    static void setLogFilename( const QString &value );
+
+    static QString filesToString( QList<MerginFile> files );
+
+    static QString sLOG_FILE;
+
+
   private:
+    static QString &LOG_FILE();
+
     static void appendLog( const QByteArray &data, const QString &path );
 };
 

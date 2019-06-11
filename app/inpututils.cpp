@@ -215,6 +215,27 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
   return data;
 }
 
+void InputUtils::setLogFilename( const QString &value )
+{
+  LOG_FILE() = value;
+}
+
+QString InputUtils::filesToString( QList<MerginFile> files )
+{
+  QStringList resultList;
+  for ( MerginFile file : files )
+  {
+    resultList << file.path;
+  }
+  return resultList.join( ", " );
+}
+
+QString &InputUtils::LOG_FILE()
+{
+  static QString LOG_FILE = QString();
+  return LOG_FILE;
+}
+
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
 {
   QDir parentDstDir( QFileInfo( dstPath ).path() );
@@ -255,7 +276,7 @@ void InputUtils::log( const QString &msg, const QString &info )
   QByteArray data;
   data.append( QString( "%1 - %2. %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( msg ).arg( info ) );
 
-  appendLog( data, LOG_FILE );
+  //appendLog( data, LOG_FILE );
 }
 
 void InputUtils::appendLog( const QByteArray &data, const QString &path )
