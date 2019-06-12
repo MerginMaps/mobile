@@ -74,7 +74,7 @@ class MerginApi: public QObject
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     // TODO docs
-    void downloadFile( const QString &projectFullName, const QString &filename, const QString &version );
+    void downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo = 0 );
     void uploadFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
 
 
@@ -158,7 +158,7 @@ class MerginApi: public QObject
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
-    void downloadFileFinished( const QString &projectDir, const QString &projectFullName, const QString &version, bool successfully = true );
+    void downloadFileFinished( const QString &projectFullName, const QString &version, int chunkNo = 0, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo );
     void notify( const QString &message );
@@ -182,7 +182,7 @@ class MerginApi: public QObject
 
     // Pull slots
     void updateInfoReplyFinished();
-    void continueDownloadFiles( const QString &projectDir, const QString &projectName, const QString &version, bool successfully = true );
+    void continueDownloadFiles( const QString &projectName, const QString &version, int chunkNo = 0, bool successfully = true );
     void downloadFileReplyFinished();
 
     // Push slots
@@ -209,7 +209,7 @@ class MerginApi: public QObject
 
     bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
-    void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool overwrite );
+    void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
     /**

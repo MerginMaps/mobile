@@ -62,7 +62,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
 
-void MerginApi::downloadFile( const QString &projectFullName, const QString &filename, const QString &version )
+void MerginApi::downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -70,9 +70,27 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
   }
 
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3" ).arg( projectFullName ).arg( filename ).arg( version ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3&chunkNo=%4" ).arg( projectFullName ).arg( filename ).arg( version ).arg( chunkNo ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+
+  // TODO if -1 send a whole file
+//  if (chunkNo) {
+
+//  }
+  QString range;
+  if ( chunkNo == 0 )
+  {
+    range = QStringLiteral( "bytes=%1-%2" ).arg( UPLOAD_CHUNK_SIZE * chunkNo ).arg( UPLOAD_CHUNK_SIZE * ( chunkNo + 1 ) );
+  }
+  else
+  {
+    range = QStringLiteral( "bytes=%1-%2" ).arg( ( UPLOAD_CHUNK_SIZE * chunkNo ) + 1 ).arg( UPLOAD_CHUNK_SIZE * ( chunkNo + 1 ) );
+  }
+
+  qDebug() << "!!!!RANGE!!!" << range << filename << version;
+  request.setRawHeader( "Range", range.toUtf8() );
+
   mPendingRequests.insert( url, projectFullName );
 
   QNetworkReply *reply = mManager.get( request );
@@ -85,7 +103,6 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
   {
     return;
   }
-
 
   QString projectNamespace;
   QString projectName;
@@ -160,7 +177,6 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
   if ( reply )
     connect( reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished );
 }
-
 void MerginApi::uploadProject( const QString &projectNamespace, const QString &projectName )
 {
   bool onlyUpload = true;
@@ -808,23 +824,40 @@ void MerginApi::listProjectsReplyFinished()
   emit listProjectsFinished( mMerginProjects );
 }
 
-void MerginApi::continueDownloadFiles( const QString &projectDir, const QString &projectFullName, const QString &version, bool successfully )
+void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo, bool successfully )
 {
   // TODO if not successfull, try again
   // TODO work with mutable list instead of creating new instance
-  QList<MerginFile> files = mFilesToDownload.value( projectFullName );
-  files.removeFirst();
-  if ( files.isEmpty() )
-  {
-    mFilesToDownload.remove( projectFullName );
-    emit syncProjectFinished( projectDir, projectFullName, true );
-    return;
-  }
-  // Take next file
-  MerginFile file = files.first();
-  mFilesToDownload.insert( projectFullName, files );
 
-  downloadFile( projectFullName, file.path, version );
+  QList<MerginFile> files = mFilesToDownload.value( projectFullName );
+  MerginFile currentFile = files.first();
+  if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
+  {
+    downloadFile( projectFullName, currentFile.path, version, lastChunkNo + 1 );
+  }
+  else
+  {
+    files.removeFirst();
+    // TODO upload filesToUpload differently
+    mFilesToDownload.insert( projectFullName, files );
+
+    if ( !files.isEmpty() )
+    {
+      MerginFile nextFile = files.first();
+      downloadFile( projectFullName, nextFile.path, version, 0 );
+    }
+    else
+    {
+      mFilesToDownload.remove( projectFullName );
+
+      QString projectNamespace;
+      QString projectName;
+      extractProjectName( projectFullName, projectNamespace, projectName );
+      QString projectDir = getProjectDir( projectNamespace, projectName );
+      emit syncProjectFinished( projectDir, projectFullName, true );
+      return;
+    }
+  }
 }
 
 void MerginApi::downloadFileReplyFinished()
@@ -833,29 +866,46 @@ void MerginApi::downloadFileReplyFinished()
   Q_ASSERT( r );
 
   QString projectFullName = mPendingRequests.value( r->url() );
-  QString projectNamespace;
-  QString projectName;
-  extractProjectName( projectFullName, projectNamespace, projectName );
-  QString projectDir = getProjectDir( projectNamespace, projectName );
 
   QString url = r->url().toString();
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
   QString version = query.queryItemValue( "version" );
+  int chunkNo = query.queryItemValue( "chunkNo" ).toInt();
   mPendingRequests.remove( r->url() );
 
   if ( r->error() == QNetworkReply::NoError )
   {
+    // TODO log msg
+    QString projectNamespace;
+    QString projectName;
+    extractProjectName( projectFullName, projectNamespace, projectName );
+    QString projectDir = getProjectDir( projectNamespace, projectName );
     // TODO get successfull from method below
-    qDebug() << "!!!!Downloading file: " << projectDir << filename << version;
-    // TODO always overwrite ??
-    handleOctetStream( r, projectDir, filename, true );
-    emit downloadFileFinished( projectDir, projectFullName, version, true );
+    qDebug() << "!!!!Downloading file: " << projectDir << filename << version << chunkNo;
+    // TODO can be emtpy
+    MerginFile file = mFilesToDownload.value( projectFullName ).first();
+    bool overwrite = file.chunks.size() <= 1;
+    bool closeFile = false;
+
+    if ( chunkNo == 0 )
+    {
+      overwrite = true;
+    }
+
+    if ( chunkNo == file.chunks.size() - 1 )
+    {
+      closeFile = true;
+    }
+    handleOctetStream( r, projectDir, filename, closeFile, overwrite );
+
+    // Send another request afterwards
+    emit downloadFileFinished( projectFullName, version, chunkNo, true );
   }
   else
   {
     qDebug() << r->errorString();
-    emit downloadFileFinished( projectDir, projectFullName, version, false );
+    emit downloadFileFinished( projectFullName, version, chunkNo, false );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
   }
 
@@ -994,7 +1044,6 @@ void MerginApi::updateInfoReplyFinished()
     {
       for ( MerginFile file : files.value( key ) )
       {
-
         // TODO refactor
         float floatNumber = float( file.size ) / UPLOAD_CHUNK_SIZE;
         int noOfChunks = qCeil( floatNumber );
@@ -1012,7 +1061,8 @@ void MerginApi::updateInfoReplyFinished()
   if ( !filesToDownload.isEmpty() )
   {
     mFilesToDownload.insert( projectFullName, filesToDownload );
-    downloadFile( projectFullName, filesToDownload.first().path, version );
+    MerginFile nextFile = filesToDownload.first();
+    downloadFile( projectFullName, nextFile.path, version, 0 );
   }
 }
 
@@ -1220,9 +1270,16 @@ QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProj
           MerginFile file;
           file.checksum = serverChecksum;
           file.path = path;
-          file.size = info.size();
-          // PRobably not needed TODO
-          file.mtime = info.lastModified();
+          if ( isForUpdate )
+          {
+            file.size = size;
+            file.mtime = mtime;
+          }
+          else
+          {
+            file.size = info.size(); // always 0
+            file.mtime = info.lastModified(); // not relevant
+          }
           removed.append( file );
 
         }
@@ -1603,7 +1660,7 @@ void MerginApi::handleDataStream( QNetworkReply *r, const QString &projectDir, b
   }
 }
 
-void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool overwrite )
+void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
 {
   QByteArray data = r->readAll();
   QList<QByteArray> headerList = r->rawHeaderList();
@@ -1612,7 +1669,7 @@ void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, 
   QString activeFilePath = projectDir + '/' + filename;
   file.setFileName( activeFilePath );
   createPathIfNotExists( activeFilePath );
-  saveFile( data, file, true, overwrite );
+  saveFile( data, file, closeFile, overwrite );
 }
 
 bool MerginApi::saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite )
