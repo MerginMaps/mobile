@@ -216,6 +216,8 @@ void ProjectModel::addProject( QString projectFolder, QString projectName, bool 
 {
   if ( !successful ) return;
 
+  if ( projectFolder.isEmpty() ) return;
+
   Q_UNUSED( projectName );
   beginResetModel();
   addProjectFromPath( projectFolder );
