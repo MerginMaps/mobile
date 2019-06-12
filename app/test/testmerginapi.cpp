@@ -92,7 +92,7 @@ void TestMerginApi::testDownloadProject()
   QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
   mApi->updateProject( projectNamespace, projectName );
 
-  QVERIFY( spy.wait( LONG_REPLY ) );
+  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 
   ProjectList projects = mMerginProjectModel->projects();
@@ -226,7 +226,7 @@ void TestMerginApi::testUploadProject()
 
   QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   mApi->uploadProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( LONG_REPLY ) );
+  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 
   qDebug() << "TestMerginApi::testUploadProject PASSED";
