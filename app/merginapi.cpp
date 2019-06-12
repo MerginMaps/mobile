@@ -994,6 +994,17 @@ void MerginApi::updateInfoReplyFinished()
     {
       for ( MerginFile file : files.value( key ) )
       {
+
+        // TODO refactor
+        float floatNumber = float( file.size ) / UPLOAD_CHUNK_SIZE;
+        int noOfChunks = qCeil( floatNumber );
+        QStringList chunks;
+        for ( int i = 0; i < noOfChunks; i++ )
+        {
+          QString chunkID = QUuid::createUuid().toString( QUuid::WithoutBraces );
+          chunks.append( chunkID );
+        }
+        file.chunks = chunks;
         filesToDownload << file;
       }
     }
@@ -1036,7 +1047,6 @@ void MerginApi::uploadInfoReplyFinished()
       fileObject.insert( "checksum", file.checksum );
       fileObject.insert( "size", file.size );
       fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
-
 
       float floatNumber = float( file.size ) / UPLOAD_CHUNK_SIZE;
       int noOfChunks = qCeil( floatNumber );
@@ -1168,6 +1178,10 @@ QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProj
       QJsonObject docObj = doc.object();
       QString updated = docObj.value( QStringLiteral( "updated" ) ).toString();
       version = docObj.value( QStringLiteral( "version" ) ).toString();
+      if ( version.isEmpty() )
+      {
+        version = QStringLiteral( "v1" );
+      }
       auto it = docObj.constFind( QStringLiteral( "files" ) );
       QJsonValue v = *it;
       Q_ASSERT( v.isArray() );
@@ -1433,29 +1447,6 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
     writeData( doc.toJson(), projectDir + "/" + MerginApi::sMetadataFile );
 
     emit merginProjectsChanged();
-  }
-}
-
-// TODO delete - not used
-void MerginApi::parseProjectInfoReply()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
-  QString projectFullName = mPendingRequests.value( r->url() );
-  mPendingRequests.remove( r->url() );
-
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    QByteArray data = r->readAll();
-    MerginProject project = readProjectMetadata( data );
-    mTempMerginProjects.insert( projectFullName, project );
-  }
-  else
-  {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
-    qDebug( "%s", message.toStdString().c_str() );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: projectInfo" ) );
   }
 }
 
