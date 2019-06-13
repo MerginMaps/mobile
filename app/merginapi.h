@@ -182,6 +182,7 @@ class MerginApi: public QObject
     void uploadInfoReplyFinished();
     void uploadFileReplyFinished();
     void uploadFinishReplyFinished();
+    void uploadCancelReplyFinished();
     void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
 
     void getUserInfoFinished();
@@ -198,6 +199,7 @@ class MerginApi: public QObject
     ProjectList parseAllProjectsMetadata();
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
+    QStringList generateChunkIds( int noOfChunks );
 
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).
@@ -230,6 +232,7 @@ class MerginApi: public QObject
      * \param json project info containing metadata for upload
      */
     void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
+    void uploadCancel( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
@@ -311,7 +314,7 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
 
     const int CHUNK_SIZE = 65536;
-    const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024;
+    const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 };
 
 #endif // MERGINAPI_H
