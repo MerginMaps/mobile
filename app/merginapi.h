@@ -73,14 +73,6 @@ class MerginApi: public QObject
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &user = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
-    // TODO docs
-    void downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo = 0 );
-    void uploadFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
-
-
-    Q_INVOKABLE void uploadStart( const QString &projectFullName, const QByteArray &json );
-    void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
-
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
@@ -206,6 +198,38 @@ class MerginApi: public QObject
     ProjectList parseAllProjectsMetadata();
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
+
+    /**
+     * Sends non-blocking GET request to the server to download a file (chunk).
+     * \param projectFullName Namespace/name
+     * \param filename Name of file to be downloaded
+     * \param version version of file to be downloaded
+     * \param chunkNo Chunk number of given file to be downloaded
+     */
+    void downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo = 0 );
+
+    /**
+     * Sends non-blocking POST request to the server to upload a file (chunk).
+     * \param projectFullName Namespace/name
+     * \param json project info containing metadata for upload
+     */
+    void uploadStart( const QString &projectFullName, const QByteArray &json );
+
+    /**
+     * Sends non-blocking POST request to the server to upload a file (chunk).
+     * \param projectFullName Namespace/name
+     * \param transactionUUID Transaction ID which servers sends on uploadStart
+     * \param file Mergin file to upload
+     * \param chunkNo Chunk number of given file to be uploaded
+     */
+    void uploadFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
+
+    /**
+     * Closing request after successful upload.
+     * \param projectFullName Namespace/name
+     * \param json project info containing metadata for upload
+     */
+    void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
     void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
