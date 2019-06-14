@@ -192,6 +192,7 @@ class MerginApi: public QObject
     void authorizeFinished();
     void pingMerginReplyFinished();
     void updateProjectMetadata( const QString &projectNamespace, const QString &projectName, bool syncSuccessful = true );
+    void copyTempFilesToProject( const QString &projectDir, const QString &projectFullName );
 
   private:
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
@@ -315,6 +316,7 @@ class MerginApi: public QObject
 
     const int CHUNK_SIZE = 65536;
     const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+    const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
 };
 
 #endif // MERGINAPI_H

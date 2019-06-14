@@ -835,8 +835,11 @@ void MerginApi::listProjectsReplyFinished()
 
 void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo, bool successfully )
 {
-  // TODO resent request if false
-  Q_UNUSED( successfully );
+  if ( !successfully )
+  {
+    QDir( mDataDir + TEMP_FOLDER + projectFullName ).removeRecursively();
+    return;
+  }
 
   MerginFile currentFile = mFilesToDownload[projectFullName].first();
   if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
@@ -854,11 +857,12 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     else
     {
       mFilesToDownload.remove( projectFullName );
-
       QString projectNamespace;
       QString projectName;
       extractProjectName( projectFullName, projectNamespace, projectName );
       QString projectDir = getProjectDir( projectNamespace, projectName );
+      copyTempFilesToProject( projectDir, projectFullName );
+
       emit syncProjectFinished( projectDir, projectFullName, true );
     }
   }
@@ -900,7 +904,9 @@ void MerginApi::downloadFileReplyFinished()
       }
     }
 
-    handleOctetStream( r, projectDir, filename, closeFile, overwrite );
+    QString tempFoler = mDataDir + TEMP_FOLDER + projectFullName;
+    createPathIfNotExists( tempFoler );
+    handleOctetStream( r, tempFoler, filename, closeFile, overwrite );
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     // Send another request afterwards
     emit downloadFileFinished( projectFullName, version, chunkNo, true );
@@ -1014,6 +1020,7 @@ void MerginApi::updateInfoReplyFinished()
   QString version = pair.second;
 
   QUrl url = r->url();
+  mPendingRequests.remove( url );
   InputUtils::log( url.toString(), QStringLiteral( "FINISHED" ) );
   QString projectNamespace;
   QString projectName;
@@ -1059,7 +1066,6 @@ void MerginApi::updateInfoReplyFinished()
   }
 }
 
-// TODO handle error
 void MerginApi::uploadInfoReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -1070,6 +1076,7 @@ void MerginApi::uploadInfoReplyFinished()
   QString version = pair.second;
 
   QUrl url = r->url();
+  mPendingRequests.remove( url );
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
@@ -1218,6 +1225,7 @@ QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProj
   QString version;
   if ( r->error() == QNetworkReply::NoError )
   {
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QList<MerginFile> added;
     QList<MerginFile> updatedFiles;
     QList<MerginFile> renamed;
@@ -1351,6 +1359,7 @@ QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProj
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: projectInfo" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
   }
 
   return QPair<QHash<QString, QList<MerginFile>>, QString>( files, version );
@@ -1524,6 +1533,13 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
 
     emit merginProjectsChanged();
   }
+}
+
+void MerginApi::copyTempFilesToProject( const QString &projectDir, const QString &projectFullName )
+{
+  QString tempProjectDir = mDataDir + TEMP_FOLDER + projectFullName;
+  InputUtils::cpDir( tempProjectDir, projectDir );
+  QDir( tempProjectDir ).removeRecursively();
 }
 
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
