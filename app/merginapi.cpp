@@ -74,13 +74,11 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3&chunkNo=%4" ).arg( projectFullName ).arg( filename ).arg( version ).arg( chunkNo ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+  request.setAttribute( QNetworkRequest::User, QVariant( chunkNo ) );
 
   QString range;
   int from = UPLOAD_CHUNK_SIZE * chunkNo;
-  int to = UPLOAD_CHUNK_SIZE * ( chunkNo + 1 );
-  if ( chunkNo != 0 )
-    from++;
-
+  int to = UPLOAD_CHUNK_SIZE * ( chunkNo + 1 ) - 1;
   range = QStringLiteral( "bytes=%1-%2" ).arg( from ).arg( to );
   request.setRawHeader( "Range", range.toUtf8() );
 
@@ -151,7 +149,7 @@ void MerginApi::uploadCancel( const QString &projectFullName, const QString &tra
   }
 
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/finish/%1" ).arg( transactionUUID ) );
+  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -879,7 +877,7 @@ void MerginApi::downloadFileReplyFinished()
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
   QString version = query.queryItemValue( "version" );
-  int chunkNo = query.queryItemValue( "chunkNo" ).toInt();
+  int chunkNo = r->request().attribute( QNetworkRequest::User ).toInt();
   mPendingRequests.remove( r->url() );
 
   if ( r->error() == QNetworkReply::NoError )
@@ -892,7 +890,7 @@ void MerginApi::downloadFileReplyFinished()
     bool overwrite = true; // chunkNo == 0
     bool closeFile = false;
 
-    QList<MerginFile> files = mFilesToDownload.value( projectFullName + "tralal" );
+    QList<MerginFile> files = mFilesToDownload.value( projectFullName );
     if ( !files.isEmpty() )
     {
       MerginFile file = mFilesToDownload.value( projectFullName ).first();
@@ -913,7 +911,7 @@ void MerginApi::downloadFileReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     qDebug() << r->errorString();
     emit downloadFileFinished( projectFullName, version, chunkNo, false );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
@@ -954,7 +952,7 @@ void MerginApi::uploadStartReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     mPendingRequests.remove( r->url() );
     qDebug() << r->errorString();
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: uploadStartReply" ) );
@@ -1001,7 +999,7 @@ void MerginApi::uploadFileReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     qDebug() << r->errorString();
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
     uploadCancel( projectFullName, transactionUUID );
@@ -1021,7 +1019,6 @@ void MerginApi::updateInfoReplyFinished()
 
   QUrl url = r->url();
   mPendingRequests.remove( url );
-  InputUtils::log( url.toString(), QStringLiteral( "FINISHED" ) );
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
@@ -1161,9 +1158,8 @@ void MerginApi::uploadFinishReplyFinished()
   else
   {
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadFinish" ), r->errorString() );
-    qDebug( "%s", message.toStdString().c_str() );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
 
   r->deleteLater();
@@ -1186,7 +1182,7 @@ void MerginApi::uploadCancelReplyFinished()
   {
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadFinish" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
 
   emit syncProjectFinished( QStringLiteral(), projectFullName, false );
@@ -1359,7 +1355,7 @@ QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProj
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: projectInfo" ) );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
 
   return QPair<QHash<QString, QList<MerginFile>>, QString>( files, version );
@@ -1698,7 +1694,6 @@ void MerginApi::handleDataStream( QNetworkReply *r, const QString &projectDir, b
 void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
 {
   QByteArray data = r->readAll();
-  QList<QByteArray> headerList = r->rawHeaderList();
   QFile file;
 
   QString activeFilePath = projectDir + '/' + filename;
