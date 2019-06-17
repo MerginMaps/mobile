@@ -271,6 +271,7 @@ void InputUtils::log( const QString &msg, const QString &info )
   QByteArray data;
   data.append( QString( "%1 - %2. %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( msg ).arg( info ) );
 
+  qDebug() << data;
   appendLog( data, sLogFile );
 }
 

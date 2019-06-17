@@ -317,6 +317,7 @@ class MerginApi: public QObject
     QHash<QString, QList<MerginFile>> mFilesToUpload; // projectFullName -> list of files
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QHash<QString, QString> mTransactions; // projectFullname -> transactionUUID
+    QHash<QString, QNetworkReply *> mOpenConnections; // related to upload
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
