@@ -435,7 +435,7 @@ Item {
       onMenuClicked: {
         if (status === "upToDate") return
 
-        if (pendingProject && (status === "noVersion" || status === "modified")) {
+        if (pendingProject && status === "modified") {
           __merginApi.uploadCancel(projectNamespace + "/" + name)
           __merginProjectsModel.setPending(index, false)
         }
