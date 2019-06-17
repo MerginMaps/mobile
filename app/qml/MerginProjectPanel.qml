@@ -438,6 +438,7 @@ Item {
         if (pendingProject && status === "modified") {
           __merginApi.uploadCancel(projectNamespace + "/" + name)
           __merginProjectsModel.setPending(index, false)
+          return
         }
 
         __merginProjectsModel.setPending(index, true)
