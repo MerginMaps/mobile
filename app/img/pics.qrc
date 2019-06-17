@@ -23,10 +23,7 @@
         <file>gps_marker_no_position.svg</file>
         <file>gps_marker_position.svg</file>
         <file>no.svg</file>
-        <file>update.svg</file>
         <file>check.svg</file>
-        <file>download.svg</file>
-        <file>upload.svg</file>
         <file>lock.svg</file>
         <file>account.svg</file>
         <file>account-multi.svg</file>
@@ -43,5 +40,7 @@
         <file>explore.svg</file>
         <file>home.svg</file>
         <file>marker.svg</file>
+        <file>sync.svg</file>
+        <file>download.svg</file>
     </qresource>
 </RCC>

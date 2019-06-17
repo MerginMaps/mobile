@@ -27,9 +27,9 @@ Item {
 
   function getStatusIcon(status) {
     if (status === "noVersion") return "download.svg"
-    else if (status === "outOfDate") return "update.svg"
+    else if (status === "outOfDate") return "sync.svg"
     else if (status === "upToDate") return "check.svg"
-    else if (status === "modified") return "upload.svg"
+    else if (status === "modified") return "sync.svg"
 
     return "more_menu.svg"
   }
@@ -381,6 +381,17 @@ Item {
       property int cellWidth: width
       property int cellHeight: projectsPanel.rowHeight
       property int borderWidth: 1
+
+      Label {
+        anchors.fill: parent
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+        visible: !merginProjectsList.contentHeight
+        text: qsTr("No projects found!")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.bold: true
+      }
 
       delegate: delegateItemMergin
     }
