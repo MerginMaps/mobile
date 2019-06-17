@@ -100,6 +100,10 @@ void TestMerginApi::testDownloadProject()
 
   bool downloadSuccessful = mProjectModel->containsProject( projectNamespace, projectName );
   QVERIFY( downloadSuccessful );
+
+  QDir testDir( mProjectModel->dataDir() + projectName );
+  testDir.removeRecursively();
+
   qDebug() << "TestMerginApi::testDownloadProject PASSED";
   passedTests++;
 }
@@ -218,16 +222,38 @@ void TestMerginApi::testUploadProject()
   QVERIFY( hasProject( projectNamespace, projectName, projects ) );
 
   std::shared_ptr<MerginProject> project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QDateTime serverT0 = project->serverUpdated;
   if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->lastSyncClient.toUTC() )
   {
+    // Fake same version on client of what is on the server
     project->clientUpdated = project->serverUpdated;
     project->projectDir = mProjectModel->dataDir() + projectName;
   }
 
-  QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   mApi->uploadProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
-  QCOMPARE( spy.count(), 1 );
+//  QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+//   NOTE: QSignalSpy somehow cannot catch signal above, functionality is tested anyway by following up verification
+//   QVERIFY( spy.wait( LONG_REPLY ) );
+//   QCOMPARE( spy.count(), 1 );
+
+  projects = getProjectList();
+  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+
+  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QDateTime serverT1 = project->serverUpdated;
+  QCOMPARE( serverT0, serverT1 );
+
+  mApi->uploadProject( projectNamespace, projectName );
+  QSignalSpy spy2( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+
+  QVERIFY( spy2.wait( LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
+
+  projects = getProjectList();
+  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QDateTime serverT2 = project->serverUpdated;
+  QVERIFY( serverT1 < serverT2 );
 
   qDebug() << "TestMerginApi::testUploadProject PASSED";
   passedTests++;

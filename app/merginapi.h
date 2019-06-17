@@ -95,6 +95,14 @@ class MerginApi: public QObject
     Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName );
 
     /**
+     * Sends non-blocking POST request to the server to cancel uploading of a project with a given name.
+     * If uploaded hasnt started yet, so a client is waiting for transaction UUID, it cancel the procedure withing itself
+     * withoyt sending cancel request.
+     * \param projectFullName Project's full name to cancel its upload
+     */
+    Q_INVOKABLE void uploadCancel( const QString &projectFullName );
+
+    /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
     * \param username Login user name to Mergin
     * \param password Password to given username to log in to Mergin
@@ -233,10 +241,8 @@ class MerginApi: public QObject
      * \param json project info containing metadata for upload
      */
     void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
-    void uploadCancel( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
-    void handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite );
     void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
@@ -310,6 +316,7 @@ class MerginApi: public QObject
     QHash<QString, QList<MerginFile>> mFilesToDownload; // projectFullName -> list of files
     QHash<QString, QList<MerginFile>> mFilesToUpload; // projectFullName -> list of files
     QHash<QString, QSet<QString>> mObsoleteFiles;
+    QHash<QString, QString> mTransactions; // projectFullname -> transactionUUID
     QSet<QString> mIgnoreFiles = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~";
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;

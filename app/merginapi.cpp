@@ -70,8 +70,7 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
   }
 
   QNetworkRequest request;
-  // chunkNo is redundant in request, but used in handling reply
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3&chunkNo=%4" ).arg( projectFullName ).arg( filename ).arg( version ).arg( chunkNo ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3" ).arg( projectFullName ).arg( filename ).arg( version ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setAttribute( QNetworkRequest::User, QVariant( chunkNo ) );
@@ -129,6 +128,12 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
     return;
   }
 
+  // Has been canceled
+  if ( !mTransactions.contains( projectFullName ) )
+  {
+    return;
+  }
+
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "v1/project/push/%1" ).arg( projectFullName ) );
   request.setUrl( url );
@@ -141,22 +146,32 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadStartReplyFinished );
 }
 
-void MerginApi::uploadCancel( const QString &projectFullName, const QString &transactionUUID )
+void MerginApi::uploadCancel( const QString &projectFullName )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
 
-  QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
-  request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  request.setRawHeader( "Content-Type", "application/json" );
-  mPendingRequests.insert( url, projectFullName );
+  QString transactionUUID = mTransactions.value( projectFullName );
+  // Transaction has not started yet
+  if ( transactionUUID == projectFullName )
+  {
+    mTransactions.remove( projectFullName );
+    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+  }
+  else
+  {
+    QNetworkRequest request;
+    QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
+    request.setUrl( url );
+    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+    request.setRawHeader( "Content-Type", "application/json" );
+    mPendingRequests.insert( url, projectFullName );
 
-  QNetworkReply *reply = mManager.post( request, QByteArray() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadCancelReplyFinished );
+    QNetworkReply *reply = mManager.post( request, QByteArray() );
+    connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadCancelReplyFinished );
+  }
 }
 
 void MerginApi::uploadFinish( const QString &projectFullName, const QString &transactionUUID )
@@ -189,6 +204,9 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   bool onlyUpload = true;
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   QString projectDir = getProjectDir( projectNamespace, projectName );
+
+  // Waiting for transaction UUID, just added projectFullName as a tag its pending
+  mTransactions.insert( projectFullName, projectFullName );
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
     if ( getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
@@ -493,6 +511,7 @@ void MerginApi::pingMerginReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
@@ -503,6 +522,7 @@ void MerginApi::pingMerginReplyFinished()
   else
   {
     msg = r->errorString();
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( msg ) );
   }
   r->deleteLater();
   emit pingMerginFinished( apiVersion, msg );
@@ -759,6 +779,7 @@ void MerginApi::pingMergin()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
 
@@ -872,13 +893,12 @@ void MerginApi::downloadFileReplyFinished()
   Q_ASSERT( r );
 
   QString projectFullName = mPendingRequests.value( r->url() );
+  mPendingRequests.remove( r->url() );
 
-  QString url = r->url().toString();
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
   QString version = query.queryItemValue( "version" );
   int chunkNo = r->request().attribute( QNetworkRequest::User ).toInt();
-  mPendingRequests.remove( r->url() );
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -936,6 +956,7 @@ void MerginApi::uploadStartReplyFinished()
     {
       QJsonObject docObj = doc.object();
       transactionUUID = docObj.value( QStringLiteral( "transaction" ) ).toString();
+      mTransactions.insert( projectFullName, transactionUUID );
     }
 
     QList<MerginFile> files = mFilesToUpload.value( projectFullName );
@@ -947,7 +968,7 @@ void MerginApi::uploadStartReplyFinished()
     // Suppose to not happend if upload has been invoked
     else
     {
-      uploadCancel( projectFullName, transactionUUID );
+      uploadCancel( projectFullName );
     }
   }
   else
@@ -955,6 +976,7 @@ void MerginApi::uploadStartReplyFinished()
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     mPendingRequests.remove( r->url() );
     qDebug() << r->errorString();
+    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: uploadStartReply" ) );
   }
 
@@ -1002,7 +1024,7 @@ void MerginApi::uploadFileReplyFinished()
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     qDebug() << r->errorString();
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
-    uploadCancel( projectFullName, transactionUUID );
+    uploadCancel( projectFullName );
   }
 
   r->deleteLater();
@@ -1013,17 +1035,23 @@ void MerginApi::updateInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QPair<QHash<QString, QList<MerginFile>>, QString> pair = parseAndCompareProjectFiles( r, true );
-  QHash<QString, QList<MerginFile>> files = pair.first;
-  QString version = pair.second;
-
   QUrl url = r->url();
   mPendingRequests.remove( url );
+
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   QList<MerginFile> filesToDownload;
+
+  QPair<QHash<QString, QList<MerginFile>>, QString> pair = parseAndCompareProjectFiles( r, true );
+  QHash<QString, QList<MerginFile>> files = pair.first;
+  QString version = pair.second;
+
+  if ( r->error() != QNetworkReply::NoError )
+  {
+    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+  }
 
   for ( QString key : files.keys() )
   {
@@ -1078,6 +1106,12 @@ void MerginApi::uploadInfoReplyFinished()
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
+
+  if ( r->error() != QNetworkReply::NoError )
+  {
+    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+  }
+
   std::shared_ptr<MerginProject> project = getProject( projectFullName );
   QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
 
@@ -1141,6 +1175,7 @@ void MerginApi::uploadFinishReplyFinished()
   QUrl url = r->url();
   QString projectFullName = mPendingRequests.value( url );
   mPendingRequests.remove( url );
+  mTransactions.remove( projectFullName );
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -1176,11 +1211,12 @@ void MerginApi::uploadCancelReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
+    mTransactions.remove( projectFullName );
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadFinish" ), r->errorString() );
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadCancel" ), r->errorString() );
     qDebug( "%s", message.toStdString().c_str() );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
@@ -1565,130 +1601,15 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
     return;
   }
 
+  // Has been canceled
+  if ( !mTransactions.contains( projectFullName ) )
+  {
+    return;
+  }
+
   QNetworkReply *reply = getProjectInfo( projectFullName );
   if ( reply )
     connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
-}
-
-void MerginApi::handleDataStream( QNetworkReply *r, const QString &projectDir, bool overwrite )
-{
-  // Read content type from reply's header
-  QByteArray contentType;
-  QString contentTypeString;
-  QList<QByteArray> headerList = r->rawHeaderList();
-  QString headString;
-  foreach ( QByteArray head, headerList )
-  {
-    headString = QString::fromLatin1( head.data(), head.size() );
-    if ( headString == QStringLiteral( "Content-Type" ) )
-    {
-      contentType = r->rawHeader( head );
-      contentTypeString = QString::fromLatin1( contentType.data(), contentType.size() );
-    }
-  }
-
-  // Read boundary hash from content types
-  QString boundary;
-  QRegularExpression re;
-  re.setPattern( QStringLiteral( "[^;]+; boundary=(?<boundary>.+)" ) );
-  QRegularExpressionMatch match = re.match( contentTypeString );
-  if ( match.hasMatch() )
-  {
-    boundary = match.captured( "boundary" );
-  }
-
-  // Depends on boundary size itself + special chars which number may vary
-  int boundarySize = boundary.length() + 8;
-  QRegularExpression boundaryPattern( QStringLiteral( "(\r\n)?--" ) + boundary + QStringLiteral( "\r\n" ) );
-  QRegularExpression headerPattern( QStringLiteral( "Content-Disposition: form-data; name=\"(?P<name>[^'\"]+)\"(; filename=\"(?P<filename>[^\"]+)\")?\r\n(Content-Type: (?P<content_type>.+))?\r\n" ) );
-  QRegularExpression endPattern( QStringLiteral( "(\r\n)?--" ) + boundary +  QStringLiteral( "--\r\n" ) );
-
-  QByteArray data;
-  QString dataString;
-  QString activeFilePath;
-  QFile activeFile;
-
-  while ( true )
-  {
-    QByteArray chunk = r->read( CHUNK_SIZE );
-    if ( chunk.isEmpty() )
-    {
-      // End of stream - write rest of data to active file
-      if ( !activeFile.fileName().isEmpty() )
-      {
-        QRegularExpressionMatch endMatch = endPattern.match( data );
-        int tillIndex = data.indexOf( endMatch.captured( 0 ) );
-        saveFile( data.left( tillIndex ), activeFile, true );
-      }
-      return;
-    }
-
-    data = data.append( chunk );
-    dataString = QString::fromLatin1( data.data(), data.size() );
-    QRegularExpressionMatch boundaryMatch = boundaryPattern.match( dataString );
-
-    while ( boundaryMatch.hasMatch() )
-    {
-      if ( !activeFile.fileName().isEmpty() )
-      {
-        int tillIndex = data.indexOf( boundaryMatch.captured( 0 ) );
-        saveFile( data.left( tillIndex ), activeFile, true );
-      }
-
-      // delete previously written data with next boundary part
-      int tillIndex = data.indexOf( boundaryMatch.captured( 0 ) ) + boundaryMatch.captured( 0 ).length();
-      data = data.remove( 0, tillIndex );
-      dataString = QString::fromLatin1( data.data(), data.size() );
-
-      QRegularExpressionMatch headerMatch = headerPattern.match( dataString );
-      if ( !headerMatch.hasMatch() )
-      {
-        qDebug() << "Received corrupted header";
-        data = data + r->read( CHUNK_SIZE );
-        dataString = QString::fromLatin1( data.data(), data.size() );
-      }
-      headerMatch = headerPattern.match( dataString );
-      data = data.remove( 0, headerMatch.captured( 0 ).length() );
-      dataString = QString::fromLatin1( data.data(), data.size() );
-      QString filename = headerMatch.captured( QStringLiteral( "filename" ) );
-
-      activeFilePath = projectDir + '/' + filename;
-      activeFile.setFileName( activeFilePath );
-      if ( activeFile.exists() )
-      {
-        if ( overwrite )
-        {
-          // Remove file if want to override
-          activeFile.remove();
-        }
-        else
-        {
-          int i = 0;
-          QString newPath =  activeFilePath + QStringLiteral( "_conflict_copy" );
-          while ( QFile::exists( newPath + QString::number( i ) ) )
-            ++i;
-          if ( !QFile::copy( activeFilePath, newPath + QString::number( i ) ) )
-          {
-            qDebug() << activeFilePath << " will be overwritten";
-          }
-          activeFile.remove();
-        }
-      }
-      else
-      {
-        createPathIfNotExists( activeFilePath );
-      }
-
-      boundaryMatch = boundaryPattern.match( dataString );
-    }
-
-    // Write rest of chunk to file
-    if ( !activeFile.fileName().isEmpty() )
-    {
-      saveFile( data.left( data.size() - boundarySize ), activeFile, false );
-    }
-    data = data.remove( 0, data.size() - boundarySize );
-  }
 }
 
 void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
