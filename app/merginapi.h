@@ -96,8 +96,8 @@ class MerginApi: public QObject
 
     /**
      * Sends non-blocking POST request to the server to cancel uploading of a project with a given name.
-     * If uploaded hasnt started yet, so a client is waiting for transaction UUID, it cancel the procedure withing itself
-     * withoyt sending cancel request.
+     * If upload has not started yet and a client is waiting for transaction UUID, it cancels the procedure just on client side
+     * without sending cancel request to the server.
      * \param projectFullName Project's full name to cancel its upload
      */
     Q_INVOKABLE void uploadCancel( const QString &projectFullName );
@@ -238,7 +238,7 @@ class MerginApi: public QObject
     /**
      * Closing request after successful upload.
      * \param projectFullName Namespace/name
-     * \param json project info containing metadata for upload
+     * \param transactionUUID transaction UUID to match upload process on the server
      */
     void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
 

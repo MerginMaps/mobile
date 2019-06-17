@@ -233,9 +233,9 @@ void TestMerginApi::testUploadProject()
   mApi->uploadProject( projectNamespace, projectName );
 //  QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-//   NOTE: QSignalSpy somehow cannot catch signal above, functionality is tested anyway by following up verification
-//   QVERIFY( spy.wait( LONG_REPLY ) );
-//   QCOMPARE( spy.count(), 1 );
+//  NOTE: QSignalSpy somehow cannot catch signal above, functionality is tested anyway by following up verification
+//  QVERIFY( spy.wait( LONG_REPLY ) );
+//  QCOMPARE( spy.count(), 1 );
 
   projects = getProjectList();
   QVERIFY( hasProject( projectNamespace, projectName, projects ) );

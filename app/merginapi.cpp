@@ -181,6 +181,11 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
     return;
   }
 
+  if ( !mTransactions.contains( projectFullName ) )
+  {
+    return;
+  }
+
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "v1/project/push/finish/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
@@ -238,7 +243,6 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
     mWaitingForUpload.insert( projectFullName );
     updateProject( projectNamespace, projectName );
-
     connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
   }
 }
@@ -1660,7 +1664,11 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
   if ( !newFile.absoluteDir().exists() )
   {
     if ( !QDir( dir ).mkpath( newFile.absolutePath() ) )
-      qDebug() << "Creating folder failed" << filePath;
+    {
+      QString msg = QString( "Creating a folder failed for path: %1" ).arg( filePath );
+      qDebug() << msg;
+      InputUtils::log( msg );
+    }
   }
 }
 
