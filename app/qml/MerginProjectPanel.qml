@@ -435,11 +435,13 @@ Item {
       onMenuClicked: {
         if (status === "upToDate") return
 
-        __merginProjectsModel.setPending(index, true)
+        if (pendingProject && (status === "noVersion" || status === "modified")) {
+          __merginApi.uploadCancel(projectNamespace + "/" + name)
+          __merginProjectsModel.setPending(index, false)
+        }
 
-        if (status === "noVersion") {
-          __merginApi.updateProject(projectNamespace, name)
-        } else if (status === "outOfDate") {
+        __merginProjectsModel.setPending(index, true)
+        if (status === "noVersion" || status === "outOfDate") {
           __merginApi.updateProject(projectNamespace, name)
         } else if (status === "modified") {
           __merginApi.uploadProject(projectNamespace, name)
