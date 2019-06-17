@@ -676,9 +676,6 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
   }
-
-  // TODO Current mergin version is "latest"
-  setApiVersionStatus( MerginApiStatus::OK );
 }
 
 bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )
