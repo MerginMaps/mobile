@@ -253,8 +253,9 @@ class MerginApi: public QObject
     * \param lastSync Timestamp of last successfull sync with a server
     * \param lastMod Timestamp of last modification on local copy of the project
     */
-    ProjectStatus getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastMod );
+    ProjectStatus getProjectStatus( std::shared_ptr<MerginProject> project, const QDateTime &lastMod );
     QDateTime getLastModifiedFileDateTime( const QString &path );
+    int getProjectFilesCount( const QString &path );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
     QPair<QHash<QString, QList<MerginFile>>, QString> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );

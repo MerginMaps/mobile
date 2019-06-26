@@ -407,7 +407,7 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
       project->lastSyncClient = downloadedProjects.value( fullProjectName ).get()->lastSyncClient.toUTC();
       QDateTime lastModified = getLastModifiedFileDateTime( project->projectDir );
       project->clientUpdated = localUpdate;
-      project->status = getProjectStatus( project->clientUpdated, project->serverUpdated, project->lastSyncClient, lastModified );
+      project->status = getProjectStatus( project, lastModified );
     }
   }
   return serverProjects;
@@ -1432,6 +1432,12 @@ ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
       p.projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
       p.creator = projectMap.value( QStringLiteral( "creator" ) ).toInt();
 
+      QJsonValue meta = projectMap.value( QStringLiteral( "meta" ) );
+      if ( meta.isObject() )
+      {
+        p.filesCount = meta.toObject().value( "files_count" ).toInt();
+      }
+
       QJsonValue access = projectMap.value( QStringLiteral( "access" ) );
       if ( access.isObject() )
       {
@@ -1685,22 +1691,23 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
   }
 }
 
-ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const QDateTime &updated, const QDateTime &lastSync, const QDateTime &lastModified )
+ProjectStatus MerginApi::getProjectStatus( std::shared_ptr<MerginProject> project, const QDateTime &lastModified )
 {
   // There was no sync yet
-  if ( !localUpdated.isValid() )
+  if ( !project->clientUpdated.isValid() )
   {
     return ProjectStatus::NoVersion;
   }
 
   // Something has locally changed after last sync with server
-  if ( lastSync < lastModified )
+  int filesCount = getProjectFilesCount( project->projectDir );
+  if ( project->lastSyncClient < lastModified || project->filesCount != filesCount )
   {
     return ProjectStatus::Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
-  if ( localUpdated < updated && updated > lastSync.toUTC() )
+  if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->clientUpdated.toUTC() )
   {
     return ProjectStatus::OutOfDate;
   }
@@ -1724,6 +1731,21 @@ QDateTime MerginApi::getLastModifiedFileDateTime( const QString &path )
     }
   }
   return lastModified.toUTC();
+}
+
+int MerginApi::getProjectFilesCount( const QString &path )
+{
+  int count = 0;
+  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
+  while ( it.hasNext() )
+  {
+    it.next();
+    if ( !mIgnoreFiles.contains( it.fileInfo().suffix() ) && it.fileInfo().fileName() != QStringLiteral( "mergin.json" ) )
+    {
+      count++;
+    }
+  }
+  return count;
 }
 
 QByteArray MerginApi::getChecksum( const QString &filePath )
