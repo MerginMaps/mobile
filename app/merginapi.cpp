@@ -1710,7 +1710,7 @@ ProjectStatus MerginApi::getProjectStatus( const QDateTime &localUpdated, const 
 
 QDateTime MerginApi::getLastModifiedFileDateTime( const QString &path )
 {
-  QDateTime lastModified = QFileInfo( path ).lastModified();
+  QDateTime lastModified;
   QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
   while ( it.hasNext() )
   {
