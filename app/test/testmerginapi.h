@@ -27,6 +27,7 @@ class TestMerginApi: public QObject
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
     void testUploadProject();
+    void testPushChangesOfProject();
 
     void cleanupTestCase();
 
@@ -47,6 +48,7 @@ class TestMerginApi: public QObject
     ProjectList getProjectList();
     bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
     void initTestProject();
+    std::shared_ptr<MerginProject> prepareTestProject();
     void deleteTestProject();
     void copyTestProject();
     QString testDataPath();
