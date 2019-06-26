@@ -1707,7 +1707,7 @@ ProjectStatus MerginApi::getProjectStatus( std::shared_ptr<MerginProject> projec
   }
 
   // Version is lower than latest one, last sync also before updated
-  if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->clientUpdated.toUTC() )
+  if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->lastSyncClient )
   {
     return ProjectStatus::OutOfDate;
   }
