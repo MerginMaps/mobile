@@ -1722,7 +1722,7 @@ QDateTime MerginApi::getLastModifiedFileDateTime( const QString &path )
   while ( it.hasNext() )
   {
     it.next();
-    if ( !mIgnoreFiles.contains( it.fileInfo().suffix() ) )
+    if ( !isInIgnore( it.fileInfo() ) )
     {
       if ( it.fileInfo().lastModified() > lastModified )
       {
@@ -1740,12 +1740,17 @@ int MerginApi::getProjectFilesCount( const QString &path )
   while ( it.hasNext() )
   {
     it.next();
-    if ( !mIgnoreFiles.contains( it.fileInfo().suffix() ) && it.fileInfo().fileName() != QStringLiteral( "mergin.json" ) )
+    if ( !isInIgnore( it.fileInfo() ) )
     {
       count++;
     }
   }
   return count;
+}
+
+bool MerginApi::isInIgnore( QFileInfo info )
+{
+  return mIgnoreExtensions.contains( info.suffix() ) || mIgnoreFiles.contains( info.fileName() );
 }
 
 QByteArray MerginApi::getChecksum( const QString &filePath )
@@ -1774,7 +1779,7 @@ QSet<QString> MerginApi::listFiles( const QString &path )
   while ( it.hasNext() )
   {
     it.next();
-    if ( !mIgnoreFiles.contains( it.fileInfo().suffix() ) )
+    if ( !isInIgnore( it.fileInfo() ) )
     {
       files << it.filePath().replace( path, "" );
     }
