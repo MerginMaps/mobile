@@ -19,7 +19,7 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
   initTestCase();
 
   testListProject();
-  //testDownloadProject();
+  testDownloadProject();
   testCreateProjectTwice();
   testDeleteNonExistingProject();
   testCreateDeleteProject();
