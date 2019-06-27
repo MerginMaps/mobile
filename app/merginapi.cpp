@@ -891,7 +891,16 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     if ( !mFilesToDownload[projectFullName].isEmpty() )
     {
       MerginFile nextFile = mFilesToDownload[projectFullName].first();
-      downloadFile( projectFullName, nextFile.path, version, 0 );
+
+      if ( !nextFile.size )
+      {
+        createEmptyFile( mDataDir + TEMP_FOLDER + projectFullName + "/" + nextFile.path );
+        emit continueDownloadFiles( projectFullName, version, 0, true );
+      }
+      else
+      {
+        downloadFile( projectFullName, nextFile.path, version, 0 );
+      }
     }
     else
     {
@@ -1106,7 +1115,15 @@ void MerginApi::updateInfoReplyFinished()
   {
     mFilesToDownload.insert( projectFullName, filesToDownload );
     MerginFile nextFile = filesToDownload.first();
-    downloadFile( projectFullName, nextFile.path, version, 0 );
+    if ( !nextFile.size )
+    {
+      createEmptyFile( mDataDir + TEMP_FOLDER + projectFullName + "/" + nextFile.path );
+      emit continueDownloadFiles( projectFullName, version, 0, true );
+    }
+    else
+    {
+      downloadFile( projectFullName, nextFile.path, version, 0 );
+    }
   }
 }
 
@@ -1689,6 +1706,19 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
       InputUtils::log( QString( "Creating a folder failed for path: %1" ).arg( filePath ) );
     }
   }
+}
+
+void MerginApi::createEmptyFile( const QString &path )
+{
+  QDir dir;
+  QFileInfo info( path );
+  QString parentDir( info.dir().path() );
+  if ( !dir.exists( parentDir ) )
+    dir.mkpath( parentDir );
+
+  QFile file( path );
+  file.open( QIODevice::ReadWrite );
+  file.close();
 }
 
 ProjectStatus MerginApi::getProjectStatus( std::shared_ptr<MerginProject> project, const QDateTime &lastModified )

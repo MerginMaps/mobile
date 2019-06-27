@@ -246,6 +246,7 @@ class MerginApi: public QObject
     void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
+    void createEmptyFile( const QString &path );
     /**
     *
     * \param localUpdated Timestamp version of local copy of the project
