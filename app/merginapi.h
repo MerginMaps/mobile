@@ -158,6 +158,7 @@ class MerginApi: public QObject
 
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
+    void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void downloadFileFinished( const QString &projectFullName, const QString &version, int chunkNo = 0, bool successfully = true );
     void reloadProject( const QString &projectDir );

@@ -547,6 +547,7 @@ void MerginApi::pingMerginReplyFinished()
   else
   {
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    msg = r->errorString();
   }
   r->deleteLater();
   emit pingMerginFinished( apiVersion, msg );
@@ -860,11 +861,13 @@ void MerginApi::listProjectsReplyFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
     emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: listProjects" ) );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    mMerginProjects.clear();
 
     if ( r->errorString() == QLatin1String( "Host requires authentication" ) )
     {
       emit authRequested();
-      return;
+    } else {
+      emit listProjectsFailed();
     }
   }
 
