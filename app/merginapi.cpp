@@ -866,7 +866,9 @@ void MerginApi::listProjectsReplyFinished()
     if ( r->errorString() == QLatin1String( "Host requires authentication" ) )
     {
       emit authRequested();
-    } else {
+    }
+    else
+    {
       emit listProjectsFailed();
     }
   }
