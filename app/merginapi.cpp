@@ -1748,7 +1748,7 @@ int MerginApi::getProjectFilesCount( const QString &path )
   return count;
 }
 
-bool MerginApi::isInIgnore( QFileInfo info )
+bool MerginApi::isInIgnore( const QFileInfo &info )
 {
   return mIgnoreExtensions.contains( info.suffix() ) || mIgnoreFiles.contains( info.fileName() );
 }

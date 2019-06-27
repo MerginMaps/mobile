@@ -257,7 +257,7 @@ class MerginApi: public QObject
     ProjectStatus getProjectStatus( std::shared_ptr<MerginProject> project, const QDateTime &lastMod );
     QDateTime getLastModifiedFileDateTime( const QString &path );
     int getProjectFilesCount( const QString &path );
-    bool isInIgnore( QFileInfo info );
+    bool isInIgnore( const QFileInfo &info );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
     QPair<QHash<QString, QList<MerginFile>>, QString> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
@@ -321,7 +321,7 @@ class MerginApi: public QObject
     QHash<QString, QSet<QString>> mObsoleteFiles;
     QHash<QString, QString> mTransactions; // projectFullname -> transactionUUID
     QHash<QString, QNetworkReply *> mOpenConnections; // related to upload
-    QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << ".swap";
+    QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
