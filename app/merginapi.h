@@ -247,6 +247,7 @@ class MerginApi: public QObject
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
     void createEmptyFile( const QString &path );
+    void takeFirstAndDownload( const QString &projectFullName, const QString &version );
     /**
     *
     * \param localUpdated Timestamp version of local copy of the project

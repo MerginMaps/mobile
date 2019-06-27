@@ -872,6 +872,20 @@ void MerginApi::listProjectsReplyFinished()
   emit listProjectsFinished( mMerginProjects );
 }
 
+void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QString &version )
+{
+  MerginFile nextFile = mFilesToDownload[projectFullName].first();
+  if ( !nextFile.size )
+  {
+    createEmptyFile( mDataDir + TEMP_FOLDER + projectFullName + "/" + nextFile.path );
+    emit continueDownloadFiles( projectFullName, version, 0, true );
+  }
+  else
+  {
+    downloadFile( projectFullName, nextFile.path, version, 0 );
+  }
+}
+
 void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo, bool successfully )
 {
   if ( !successfully )
@@ -890,17 +904,7 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     mFilesToDownload[projectFullName].removeFirst();
     if ( !mFilesToDownload[projectFullName].isEmpty() )
     {
-      MerginFile nextFile = mFilesToDownload[projectFullName].first();
-
-      if ( !nextFile.size )
-      {
-        createEmptyFile( mDataDir + TEMP_FOLDER + projectFullName + "/" + nextFile.path );
-        emit continueDownloadFiles( projectFullName, version, 0, true );
-      }
-      else
-      {
-        downloadFile( projectFullName, nextFile.path, version, 0 );
-      }
+      takeFirstAndDownload( projectFullName, version );
     }
     else
     {
@@ -1114,16 +1118,7 @@ void MerginApi::updateInfoReplyFinished()
   if ( !filesToDownload.isEmpty() )
   {
     mFilesToDownload.insert( projectFullName, filesToDownload );
-    MerginFile nextFile = filesToDownload.first();
-    if ( !nextFile.size )
-    {
-      createEmptyFile( mDataDir + TEMP_FOLDER + projectFullName + "/" + nextFile.path );
-      emit continueDownloadFiles( projectFullName, version, 0, true );
-    }
-    else
-    {
-      downloadFile( projectFullName, nextFile.path, version, 0 );
-    }
+    takeFirstAndDownload( projectFullName, version );
   }
 }
 
