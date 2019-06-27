@@ -342,10 +342,10 @@ Item {
                     Image {
                       id: image
                       anchors.horizontalCenter: parent.horizontalCenter
-                      anchors.fill: parent
-                      width: parent.width
-                      height: parent.height
-                      source: "update"
+                      anchors.centerIn: parent
+                      width: parent.width * 0.75
+                      height: width
+                      source: "sync.svg"
                       sourceSize.width: width
                       sourceSize.height: height
                       visible: source
