@@ -47,6 +47,9 @@ Item {
     onListProjectsFinished: {
       busyIndicator.running = false
     }
+    onListProjectsFailed: {
+      reloadList.visible = true
+    }
     onApiVersionStatusChanged: {
       busyIndicator.running = false
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
@@ -387,7 +390,7 @@ Item {
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
         visible: !merginProjectsList.contentHeight
-        text: qsTr("No projects found!")
+        text: reloadList.visible ? qsTr("Failed to download the list of projects!") : qsTr("No projects found!")
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
         font.bold: true
@@ -615,6 +618,53 @@ Item {
     onRejected: {
       deleteDialog.relatedProjectIndex = -1
       visible = false
+    }
+  }
+
+  Item {
+    id: reloadList
+    width: grid.cellWidth
+    height: grid.cellHeight/2
+    visible: false
+    Layout.alignment: Qt.AlignVCenter
+    y: projectsPanel.height/3 * 2
+
+    Button {
+      width: parent.height
+      height: parent.height
+      anchors.horizontalCenter: parent.horizontalCenter
+      background: Rectangle {
+        anchors.fill: parent
+        color: InputStyle.fontColor
+        radius: 2 * QgsQuick.Utils.dp
+      }
+
+      onClicked: {
+        busyIndicator.running = true
+        // filters suppose to not change
+        __merginApi.listProjects(searchField.text)
+        reloadList.visible = false
+      }
+
+      Image {
+        id: image
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
+        width: parent.width * 0.75
+        height: width
+        source: "sync.svg"
+        sourceSize.width: width
+        sourceSize.height: height
+        visible: source
+        anchors.topMargin: 0
+        fillMode: Image.PreserveAspectFit
+      }
+
+      ColorOverlay {
+        anchors.fill: image
+        source: image
+        color: "white"
+      }
     }
   }
 }
