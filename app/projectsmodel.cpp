@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "merginapi.h"
+
 ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
   : QAbstractListModel( parent )
   , mDataDir( dataDir )
@@ -32,13 +34,9 @@ ProjectModel::~ProjectModel() {}
 void ProjectModel::findProjectFiles()
 {
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-  for ( QString namespaceFolder : entryList )
+  for ( QString folderName : entryList )
   {
-    QStringList entryList2 = QDir( mDataDir + "/" + namespaceFolder ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-    for ( QString folderName : entryList2 )
-    {
-      addProjectFromPath( mDataDir + "/" + namespaceFolder + "/" + folderName );
-    }
+    addProjectFromPath( mDataDir + "/" + folderName );
   }
   std::sort( mProjectFiles.begin(), mProjectFiles.end() );
 }
@@ -47,13 +45,13 @@ void ProjectModel::addProjectFromPath( QString path )
 {
   if ( path.isEmpty() ) return;
 
-  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ), QDir::Files, QDirIterator::Subdirectories );
+  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
 
   int i = 0;
   int projectExistsAt = -1;
   for ( ProjectFile projectFile : mProjectFiles )
   {
-    if ( mDataDir + "/" + projectFile.projectNamespace + "/" + projectFile.folderName == path )
+    if ( mDataDir + projectFile.folderName + "/" == path )
     {
       projectExistsAt = i;
     }
@@ -65,9 +63,7 @@ void ProjectModel::addProjectFromPath( QString path )
   {
     it.next();
     ProjectFile projectFile;
-    projectFile.name = it.fileName().remove( ".qgs" );
-    QStringList res = path.split( "/" );
-    projectFile.projectNamespace = res.takeAt( res.length() - 2 );
+    projectFile.name = it.fileName().remove( ".qgs" ).remove( ".qgz" );
     projectFile.path = it.filePath();
     QDir projectDir( path );
     projectFile.folderName = projectDir.dirName();
@@ -94,8 +90,6 @@ void ProjectModel::addProjectFromPath( QString path )
   {
     project.name = "";
     QDir projectDir( path );
-    QStringList res = path.split( "/" );
-    project.projectNamespace = res.takeAt( res.length() - 2 );
     project.folderName = projectDir.dirName();
     project.path = path;
     project.info = "invalid project";
@@ -104,6 +98,10 @@ void ProjectModel::addProjectFromPath( QString path )
 
   if ( projectExistsAt >= 0 )
     mProjectFiles.removeAt( projectExistsAt );
+
+  std::shared_ptr<MerginProject> merginProject = MerginApi::readProjectMetadataFromPath( path );
+  if ( merginProject )
+    project.projectNamespace = merginProject->projectNamespace;
 
   mProjectFiles.append( project );
 }
@@ -167,12 +165,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 void ProjectModel::deleteProject( int row )
 {
   ProjectFile project = mProjectFiles.at( row );
-  QDir dir( mDataDir + "/" + project.projectNamespace + "/" + project.folderName );
+  QDir dir( mDataDir + project.folderName );
   dir.removeRecursively();
   beginResetModel();
   mProjectFiles.removeAt( row );
   endResetModel();
-  emit projectDeleted( project.projectNamespace + "/" + project.folderName );
+  emit projectDeletedOnPath( project.folderName );
 }
 
 int ProjectModel::rowCount( const QModelIndex &parent ) const
@@ -201,9 +199,24 @@ void ProjectModel::setSearchExpression( const QString &searchExpression )
   }
 }
 
+bool ProjectModel::containsProject( const QString &projectNamespace, const QString &projectName )
+{
+  QString projectFullName = MerginApi::getFullProjectName( projectNamespace, projectName );
+  for ( ProjectFile prj : mProjectFiles )
+  {
+    if ( MerginApi::getFullProjectName( prj.projectNamespace, prj.folderName ) == projectFullName )
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )
 {
   if ( !successful ) return;
+
+  if ( projectFolder.isEmpty() ) return;
 
   Q_UNUSED( projectName );
   beginResetModel();

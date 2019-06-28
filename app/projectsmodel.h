@@ -22,7 +22,7 @@
 #include <QModelIndex>
 
 /*
- * Given data directory, find all QGIS projects (*.qgs) in the directory and subdirectories
+ * Given data directory, find all QGIS projects (*.qgs or *.qgz) in the directory and subdirectories
  * and create list model from them. Available are full path to the file, name of the project
  * and short name of the project (clipped to N chars)
  */
@@ -35,7 +35,7 @@ class ProjectModel : public QAbstractListModel
   public:
     enum Roles
     {
-      Name = Qt::UserRole + 1,
+      Name = Qt::UserRole + 1, // name of a project file
       ProjectNamespace,
       FolderName,
       Path,
@@ -64,8 +64,11 @@ class ProjectModel : public QAbstractListModel
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
 
+    // Test function
+    bool containsProject( const QString &projectNamespace, const QString &projectName );
+
   signals:
-    void projectDeleted( QString folderName );
+    void projectDeletedOnPath( QString projectDir );
 
   public slots:
     void addProject( QString projectFolder, QString projectName, bool successful );

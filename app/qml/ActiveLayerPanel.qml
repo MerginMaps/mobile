@@ -89,7 +89,7 @@ Drawer {
             property color primaryColor: InputStyle.clrPanelMain
             property color secondaryColor: InputStyle.fontColorBright
             width: listView.cellWidth
-            height: isVector &&  !isReadOnly ? listView.cellHeight : 0
+            height: isVector && !isReadOnly && hasGeometry ? listView.cellHeight : 0
             visible: height ? true : false
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin

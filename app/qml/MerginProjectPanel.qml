@@ -27,9 +27,9 @@ Item {
 
   function getStatusIcon(status) {
     if (status === "noVersion") return "download.svg"
-    else if (status === "outOfDate") return "update.svg"
+    else if (status === "outOfDate") return "sync.svg"
     else if (status === "upToDate") return "check.svg"
-    else if (status === "modified") return "upload.svg"
+    else if (status === "modified") return "sync.svg"
 
     return "more_menu.svg"
   }
@@ -47,18 +47,22 @@ Item {
     onListProjectsFinished: {
       busyIndicator.running = false
     }
-  }
-
-  Connections {
-    target: __merginApi
+    onApiVersionStatusChanged: {
+      busyIndicator.running = false
+      if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
+        if (__merginApi.hasAuthData()) {
+          authPanel.visible = false
+          // filters should be set already
+          __merginApi.listProjects(searchField.text)
+        }
+      } else if (toolbar.highlighted !== homeBtn.text) {
+        authPanel.visible = true
+      }
+    }
     onAuthRequested: {
       busyIndicator.running = false
       authPanel.visible = true
     }
-  }
-
-  Connections {
-    target: __merginApi
     onAuthChanged: {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
@@ -137,7 +141,7 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData()) {
+            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
               __merginApi.getUserInfo(__merginApi.username)
               accountPanel.visible = true
             }
@@ -378,6 +382,17 @@ Item {
       property int cellHeight: projectsPanel.rowHeight
       property int borderWidth: 1
 
+      Label {
+        anchors.fill: parent
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+        visible: !merginProjectsList.contentHeight
+        text: qsTr("No projects found!")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.bold: true
+      }
+
       delegate: delegateItemMergin
     }
   }
@@ -426,19 +441,22 @@ Item {
       pending: pendingProject
       statusIconSource: getStatusIcon(status)
       iconSize: projectsPanel.iconSize
-      projectName: name
+      projectName: projectNamespace + "/" + name
 
       onMenuClicked: {
         if (status === "upToDate") return
 
-        __merginProjectsModel.setPending(index, true)
+        if (pendingProject && status === "modified") {
+          __merginApi.uploadCancel(projectNamespace + "/" + name)
+          __merginProjectsModel.setPending(index, false)
+          return
+        }
 
-        if (status === "noVersion") {
-          __merginApi.downloadProject(name)
-        } else if (status === "outOfDate") {
-          __merginApi.updateProject(name)
+        __merginProjectsModel.setPending(index, true)
+        if (status === "noVersion" || status === "outOfDate") {
+          __merginApi.updateProject(projectNamespace, name)
         } else if (status === "modified") {
-          __merginApi.uploadProject(name)
+          __merginApi.uploadProject(projectNamespace, name)
         }
       }
 
@@ -461,6 +479,8 @@ Item {
       searchField.text = ""
       if (toolbar.highlighted === homeBtn.text) {
         __projectsModel.searchExpression = ""
+      } else {
+        __merginApi.pingMergin()
       }
     }
 

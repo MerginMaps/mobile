@@ -114,6 +114,16 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
       {
         return QVariant::fromValue<QgsVectorLayer *>( vectorLayer );
       }
+      return QVariant();
+    }
+    case HasGeometry:
+    {
+      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+      if ( vectorLayer )
+      {
+        return vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::NullGeometry;
+      }
+      return false;
     }
   }
 
@@ -128,6 +138,7 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   roleNames[isReadOnly] = "isReadOnly";
   roleNames[IconSource] = "iconSource";
   roleNames[VectorLayer] = "vectorLayer";
+  roleNames[HasGeometry] = "hasGeometry";
   return roleNames;
 }
 

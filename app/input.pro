@@ -113,6 +113,7 @@ digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
+merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
@@ -126,6 +127,7 @@ digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
+merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
 inpututils.h \
@@ -138,9 +140,9 @@ RESOURCES += \
 
 TRANSLATIONS +=
 
-lupdate_only {
-    SOURCES += qml/*.qml
-}
+#lupdate_only {
+#    SOURCES += qml/*.qml
+#}
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGIS_QML_DIR}

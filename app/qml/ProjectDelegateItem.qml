@@ -142,6 +142,11 @@ Rectangle {
                     implicitWidth: implicitHeight
                     running: pending
                     anchors.centerIn: parent
+
+                    MouseArea {
+                      anchors.fill: parent
+                      onClicked: menuClicked()
+                    }
                 }
             }
         }

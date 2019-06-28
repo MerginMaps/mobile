@@ -221,22 +221,60 @@ ApplicationWindow {
       }
     }
 
-    QgsQuick.FeatureHighlight {
-      anchors.fill: mapCanvas
-      id: highlight
-      color: "red"
-      mapSettings: mapCanvas.mapSettings
-      z: 1
-      opacity: digitizing.hasPolygonGeometry(highlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
+    Highlight {
+        id: highlight
+        anchors.fill: mapCanvas
+
+        property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
+
+        mapSettings: mapCanvas.mapSettings
+
+        lineColor: Qt.rgba(1,0.2,0.2,1)
+        lineWidth: 6 * QgsQuick.Utils.dp
+
+        fillColor: Qt.rgba(1,0.2,0.2,InputStyle.lowHighlightOpacity)
+
+        outlinePenWidth: 1 * QgsQuick.Utils.dp
+        outlineColor: "white"
+
+        markerType: "image"
+        markerImageSource: "qrc:/marker.svg"
+        markerWidth: 60 * QgsQuick.Utils.dp
+        markerHeight: 70 * QgsQuick.Utils.dp
+        markerAnchorY: 48 * QgsQuick.Utils.dp
+
+        // enable anti-aliasing to make the higlight look nicer
+        // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
+        layer.enabled: true
+        layer.samples: 4
     }
 
-    QgsQuick.FeatureHighlight {
-      anchors.fill: mapCanvas
+    Highlight {
       id: digitizingHighlight
-      color: "yellow"
+      anchors.fill: mapCanvas
+
+      property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
+
       mapSettings: mapCanvas.mapSettings
-      z: 1
-      opacity: digitizing.hasPolygonGeometry(digitizingHighlight.featureLayerPair.layer) ? InputStyle.lowHighlightOpacity : InputStyle.highHighlightOpacity
+
+      lineColor: highlight.lineColor
+      lineWidth: highlight.lineWidth
+
+      fillColor: highlight.fillColor
+
+      outlinePenWidth: highlight.outlinePenWidth
+      outlineColor: highlight.outlineColor
+
+      markerType: highlight.markerType
+      markerImageSource: highlight.markerImageSource
+      markerWidth: highlight.markerWidth
+      markerHeight: highlight.markerHeight
+      markerAnchorY: highlight.markerAnchorY
+
+      // enable anti-aliasing to make the higlight look nicer
+      // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
+      layer.enabled: true
+      layer.samples: 4
     }
 
     Item {

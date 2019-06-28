@@ -23,6 +23,7 @@
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
+#include "merginapistatus.h"
 #include "merginprojectmodel.h"
 
 #include "test/testmerginapi.h"
@@ -111,46 +112,12 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
 }
 
-static bool cpDir( const QString &srcPath, const QString &dstPath )
-{
-  QDir parentDstDir( QFileInfo( dstPath ).path() );
-  if ( !parentDstDir.mkpath( dstPath ) )
-    return false;
-
-  QDir srcDir( srcPath );
-  foreach ( const QFileInfo &info, srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) )
-  {
-    QString srcItemPath = srcPath + "/" + info.fileName();
-    QString dstItemPath = dstPath + "/" + info.fileName();
-    if ( info.isDir() )
-    {
-      if ( !cpDir( srcItemPath, dstItemPath ) )
-      {
-        return false;
-      }
-    }
-    else if ( info.isFile() )
-    {
-      if ( !QFile::copy( srcItemPath, dstItemPath ) )
-      {
-        return false;
-      }
-      QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
-    }
-    else
-    {
-      qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
-    }
-  }
-  return true;
-}
-
 // Copies resources folder to package folder
 static void expand_pkg_data( const QString &pkgPath )
 {
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
-  cpDir( assetsBasePath + "/qgis-data", pkgPath );
+  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
   Q_UNUSED( pkgPath );
 #endif
@@ -161,7 +128,7 @@ static void copy_demo_projects( const QString &projectDir )
 #ifdef ANDROID
   QString assetsBasePath( "assets:" );
   qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
-  cpDir( assetsBasePath + "/demo-projects", projectDir );
+  InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
 #else
   Q_UNUSED( projectDir );
 #endif
@@ -196,6 +163,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
+  qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
 }
 
@@ -232,7 +200,8 @@ int main( int argc, char *argv[] )
 #endif
   // Set/Get enviroment
   QString dataDir = getDataDir( IS_TEST );
-  QString projectDir = dataDir + "/projects";
+  QString projectDir = dataDir + "/projects/";
+  InputUtils::setLogFilename( projectDir + ".logs" );
   setEnvironmentQgisPrefixPath();
 
   init_qgis( dataDir + "/qgis-data" );
@@ -262,7 +231,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-  QObject::connect( &pm, &ProjectModel::projectDeleted, ma.get(), &MerginApi::projectDeleted );
+  QObject::connect( &pm, &ProjectModel::projectDeletedOnPath, ma.get(), &MerginApi::projectDeletedOnPath );
 
   if ( IS_TEST )
   {
