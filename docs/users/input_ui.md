@@ -5,13 +5,16 @@ Below is a description of various items within the user interface:
 <img src="images/input_gui.png" alt="Input user interface" width=50% />​
 
 ## Projects
-Projects will list the projects available locally (MY PROJECTS) and
-those shared via Mergin (ALL PROJECTS). Within MY PROJECT, user can
-delete an existing project.
 
-ALL PROJECTS lists the projects within user's Mergin account. It also
-includes projects shared with the user by other Mergin users. Projects
-can be downloaded or updated (to or from) Mergin from this screen.
+Within this screen you can see the following options:
+- **Home**: list of all downloaded projects on your device. You can only open downloaded projects within this screen. You can also delete local projects by selecting the bin icon to the right of each project.
+- **My projects**: are the projects created by user and hosted on the Mergin service. You can download and upload changes using the icons to the right of each project.
+- **Shared with me**: are projects on the Mergin service shared with you by other users.
+- **Explore**: a full list of public projects by others on the Mergin service
+
+You can **Search** for projects using the search bar on the top. To access your Mergin profile information, select the icon on the top right of this screen.
+
+<img src="../../images/screen4.jpg" alt="Projects screen" width=50% />​
 
 ## GPS
 By default, the map centred around the project extent. Pressing
@@ -48,12 +51,6 @@ between different map themes using this option.
 Input specific configuration can be accessed through settings.
 
 <img src="images/input_settings.png" alt="Input user interface" width=50% />​
-
-### Defaults
-
-The default **Survey layer** can be viewed, cleared or reset here. By
-tapping the **Survey layer**, you can set a layer or deselect the default
-layer.
 
 ### Mergin
 

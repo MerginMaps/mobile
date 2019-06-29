@@ -14,4 +14,4 @@ A typical workflow for using Input consists of the following steps:
 
 -   Working with Input: map navigation, data editing, including filling the forms, viewing existing data and uploading the changes back to Mergin. See [Using Input](using_input.md)
 
--   Input user interface: describs various buttons, options and configurations. See [Input user interface](input_ui.md)
+-   Input user interface: describes various buttons, options and configurations. See [Input user interface](input_ui.md)

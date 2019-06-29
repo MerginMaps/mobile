@@ -88,8 +88,6 @@ Ensure the paths are set to Relative under Project Properties. All paths to the 
 
 Input does not include all the SVGs within QGIS. Therefore, if you are using SVGs for your layer styling, ensure those are copied across to the project folder.
 
-Input currently cannot read QGZ project at the moment. Ensure to save your project as QGS file.
-
 An example of Project Properties in QGIS for survey layers and identifiable layers can be seen below:
 
 <img src="images/qgis_project_properties.png" alt="Preview panel in Input based on Display settings in QGIS" style="width: 50%; height: 50%"/>​
