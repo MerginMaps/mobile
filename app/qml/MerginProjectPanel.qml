@@ -147,6 +147,7 @@ Item {
             if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
               __merginApi.getUserInfo(__merginApi.username)
               accountPanel.visible = true
+              reloadList.visible = false
             }
             else
               myProjectsBtn.activated() // open auth form
@@ -390,7 +391,7 @@ Item {
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
         visible: !merginProjectsList.contentHeight
-        text: reloadList.visible ? qsTr("Failed to download the list of projects!") : qsTr("No projects found!")
+        text: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
         font.bold: true
@@ -623,48 +624,37 @@ Item {
 
   Item {
     id: reloadList
-    width: grid.cellWidth
-    height: grid.cellHeight/2
+    width: parent.width
+    height: grid.cellHeight
     visible: false
     Layout.alignment: Qt.AlignVCenter
     y: projectsPanel.height/3 * 2
 
     Button {
-      width: parent.height
-      height: parent.height
-      anchors.horizontalCenter: parent.horizontalCenter
-      background: Rectangle {
-        anchors.fill: parent
-        color: InputStyle.fontColor
-        radius: 2 * QgsQuick.Utils.dp
-      }
-
-      onClicked: {
-        busyIndicator.running = true
-        // filters suppose to not change
-        __merginApi.listProjects(searchField.text)
-        reloadList.visible = false
-      }
-
-      Image {
-        id: image
+        id: reloadBtn
+        width: reloadList.width - 2* InputStyle.panelMargin
+        height: reloadList.height
+        text: qsTr("Try again")
+        font.pixelSize: reloadBtn.height/2
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.centerIn: parent
-        width: parent.width * 0.75
-        height: width
-        source: "sync.svg"
-        sourceSize.width: width
-        sourceSize.height: height
-        visible: source
-        anchors.topMargin: 0
-        fillMode: Image.PreserveAspectFit
-      }
+        onClicked: {
+          busyIndicator.running = true
+          // filters suppose to not change
+          __merginApi.listProjects(searchField.text)
+          reloadList.visible = false
+        }
+        background: Rectangle {
+            color: InputStyle.highlightColor
+        }
 
-      ColorOverlay {
-        anchors.fill: image
-        source: image
-        color: "white"
-      }
+        contentItem: Text {
+            text: reloadBtn.text
+            font: reloadBtn.font
+            color: InputStyle.clrPanelMain
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
     }
   }
 }
