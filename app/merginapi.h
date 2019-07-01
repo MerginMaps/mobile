@@ -47,6 +47,11 @@ struct MerginProject
   QList<int> writers;
 };
 
+struct ProjectDiff
+{
+  QHash<QString, QList<MerginFile>> changes;
+};
+
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
 class MerginApi: public QObject
@@ -128,16 +133,26 @@ class MerginApi: public QObject
 
     static const int MERGIN_API_VERSION_MAJOR = 2019;
     static const int MERGIN_API_VERSION_MINOR = 4;
+    static const QString sMetadataFile;
 
+    /**
+    * Finds project in merginProjects list according its full name.
+    * \param projectPath Full path to project's folder
+    * \param metadataFile Relative path of metafile to project's folder
+    */
     static QString getFullProjectName( QString projectNamespace, QString projectName );
-    static std::shared_ptr<MerginProject> readProjectMetadataFromPath( const QString &projectPath );
+    static std::shared_ptr<MerginProject> readProjectMetadataFromPath( const QString &projectPath,
+        const QString &metadataFile = MerginApi::sMetadataFile );
 
     // Test functions
     void createProject( const QString &projectNamespace, const QString &projectName );
     void deleteProject( const QString &projectNamespace, const QString &projectName );
     void clearTokenData();
 
+    // Production and Test functions (therefore not private)
+    ProjectDiff compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current );
     ProjectList projects();
+    QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
     QString username() const;
 
@@ -262,7 +277,6 @@ class MerginApi: public QObject
     bool isInIgnore( const QFileInfo &info );
     QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
-    QPair<QHash<QString, QList<MerginFile>>, QString> parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate );
     /**
     * Updates merginProjects list with given list. Suppose to be called after listProject request.
     * \param serverProjects List of mergin projects to be merged with current merginList project.
@@ -308,7 +322,6 @@ class MerginApi: public QObject
     QString mApiRoot;
     ProjectList mMerginProjects;
     QString mDataDir; // dir with all projects
-    static const QString sMetadataFile;
     QString mUsername;
     QString mPassword;
     int mUserId = -1;

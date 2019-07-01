@@ -29,6 +29,10 @@ class TestMerginApi: public QObject
     void testUploadProject();
     void testPushChangesOfProject();
 
+    void testParseAndCompareNoChanges();
+    void testParseAndCompareRemovedAdded();
+    void testParseAndCompareUpdated();
+
     void cleanupTestCase();
 
   private:
@@ -51,6 +55,7 @@ class TestMerginApi: public QObject
     std::shared_ptr<MerginProject> prepareTestProject();
     void deleteTestProject();
     void copyTestProject();
+    void verifyDiff( const ProjectDiff &diff, const QString &key );
     QString testDataPath();
 };
 
