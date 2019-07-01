@@ -838,6 +838,26 @@ ProjectList MerginApi::projects()
   return mMerginProjects;
 }
 
+QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
+{
+  QList<MerginFile> merginFiles;
+  QSet<QString> localFiles = listFiles( projectPath );
+  for ( QString p : localFiles )
+  {
+
+    MerginFile file;
+    QByteArray localChecksumBytes = getChecksum( projectPath + p );
+    QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
+    file.checksum = localChecksum;
+    file.path = p;
+    QFileInfo info( projectPath + p );
+    file.size = info.size();
+    file.mtime = info.lastModified();
+    merginFiles.append( file );
+  }
+  return merginFiles;
+}
+
 void MerginApi::listProjectsReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -1081,49 +1101,62 @@ void MerginApi::updateInfoReplyFinished()
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   QList<MerginFile> filesToDownload;
 
-  QPair<QHash<QString, QList<MerginFile>>, QString> pair = parseAndCompareProjectFiles( r, true );
-  QHash<QString, QList<MerginFile>> files = pair.first;
-  QString version = pair.second;
-
-  if ( r->error() != QNetworkReply::NoError )
+  if ( r->error() == QNetworkReply::NoError )
   {
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-  }
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    QByteArray data = r->readAll();
 
-  for ( QString key : files.keys() )
-  {
-    if ( key == QStringLiteral( "added" ) )
+    QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
+    QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
+
+    MerginProject serverProject = readProjectMetadata( data );
+    mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
+
+    ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
+    QHash<QString, QList<MerginFile>> files = diff.changes;
+
+    for ( QString key : files.keys() )
     {
-      // no removal before upload
-      if ( !mWaitingForUpload.contains( projectFullName ) )
+      if ( key == QStringLiteral( "removed" ) )
       {
-        QSet<QString> obsoleteFiles;
+        // no removal before upload
+        if ( !mWaitingForUpload.contains( projectFullName ) )
+        {
+          QSet<QString> obsoleteFiles;
+          for ( MerginFile file : files.value( key ) )
+          {
+            obsoleteFiles.insert( file.path );
+          }
+          if ( !obsoleteFiles.isEmpty() )
+          {
+            QString projectPath = getProjectDir( projectNamespace, projectName );
+            mObsoleteFiles.insert( projectPath, obsoleteFiles );
+          }
+        }
+      }
+      else
+      {
         for ( MerginFile file : files.value( key ) )
         {
-          obsoleteFiles.insert( file.path );
-        }
-        if ( !obsoleteFiles.isEmpty() )
-        {
-          QString projectPath = getProjectDir( projectNamespace, projectName );
-          mObsoleteFiles.insert( projectPath, obsoleteFiles );
+          qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+          int noOfChunks = qCeil( rawNoOfChunks );
+          file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+          filesToDownload << file;
         }
       }
     }
-    else
+    if ( !filesToDownload.isEmpty() )
     {
-      for ( MerginFile file : files.value( key ) )
-      {
-        qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-        int noOfChunks = qCeil( rawNoOfChunks );
-        file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
-        filesToDownload << file;
-      }
+      mFilesToDownload.insert( projectFullName, filesToDownload );
+      takeFirstAndDownload( projectFullName, serverProject.version );
     }
+
   }
-  if ( !filesToDownload.isEmpty() )
+  else
   {
-    mFilesToDownload.insert( projectFullName, filesToDownload );
-    takeFirstAndDownload( projectFullName, version );
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
 }
 
@@ -1132,10 +1165,6 @@ void MerginApi::uploadInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QPair<QHash<QString, QList<MerginFile>>, QString> pair = parseAndCompareProjectFiles( r, false );
-  QHash<QString, QList<MerginFile>> files = pair.first;
-  QString version = pair.second;
-
   QUrl url = r->url();
   mPendingRequests.remove( url );
   QString projectNamespace;
@@ -1143,64 +1172,75 @@ void MerginApi::uploadInfoReplyFinished()
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
-  if ( r->error() != QNetworkReply::NoError )
+  if ( r->error() == QNetworkReply::NoError )
   {
+    QJsonObject changes;
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    QByteArray data = r->readAll();
+
+    QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
+    QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
+
+    MerginProject serverProject = readProjectMetadata( data );
+    mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
+
+    ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
+
+    QList<MerginFile> filesToUpload;
+    for ( QString key : diff.changes.keys() )
+    {
+      QJsonArray jsonArray;
+      for ( MerginFile file : diff.changes.value( key ) )
+      {
+        QJsonObject fileObject;
+        fileObject.insert( "path", file.path );
+        fileObject.insert( "checksum", file.checksum );
+        fileObject.insert( "size", file.size );
+        fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+
+        qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+        int noOfChunks = qCeil( rawNoOfChunks );
+        QStringList chunks = generateChunkIds( noOfChunks );
+        QJsonArray chunksJson;
+        for ( QString id : chunks )
+        {
+          chunksJson.append( id );
+        }
+        file.chunks = chunks;
+        fileObject.insert( "chunks", chunksJson );
+        jsonArray.append( fileObject );
+
+        if ( key != QStringLiteral( "removed" ) )
+        {
+          filesToUpload.append( file );
+        }
+      }
+      changes.insert( key, jsonArray );
+    }
+
+    r->deleteLater();
+    mPendingRequests.remove( url );
+    mFilesToUpload.insert( projectFullName, filesToUpload );
+
+    QJsonObject json;
+    json.insert( QStringLiteral( "changes" ), changes );
+    json.insert( QStringLiteral( "version" ), serverProject.version );
+    QJsonDocument jsonDoc;
+    jsonDoc.setObject( json );
+
+    QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3, renamed: %4" )
+                   .arg( InputUtils::filesToString( diff.changes.value( "added" ) ) ).arg( InputUtils::filesToString( diff.changes.value( "updated" ) ) )
+                   .arg( InputUtils::filesToString( diff.changes.value( "removed" ) ) ).arg( InputUtils::filesToString( diff.changes.value( "renamed" ) ) );
+    InputUtils::log( url.toString(), info );
+
+    uploadStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
+  }
+  else
+  {
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
-
-  std::shared_ptr<MerginProject> project = getProject( projectFullName );
-  QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
-
-  QJsonDocument jsonDoc;
-  QJsonObject changes;
-
-  QList<MerginFile> filesToUpload;
-  for ( QString key : files.keys() )
-  {
-    QJsonArray jsonArray;
-    for ( MerginFile file : files.value( key ) )
-    {
-      QJsonObject fileObject;
-      fileObject.insert( "path", file.path );
-      fileObject.insert( "checksum", file.checksum );
-      fileObject.insert( "size", file.size );
-      fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
-
-      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-      int noOfChunks = qCeil( rawNoOfChunks );
-      QStringList chunks = generateChunkIds( noOfChunks );
-      QJsonArray chunksJson;
-      for ( QString id : chunks )
-      {
-        chunksJson.append( id );
-      }
-      file.chunks = chunks;
-      fileObject.insert( "chunks", chunksJson );
-      jsonArray.append( fileObject );
-
-      if ( key != QStringLiteral( "removed" ) )
-      {
-        filesToUpload.append( file );
-      }
-    }
-    changes.insert( key, jsonArray );
-  }
-
-  r->deleteLater();
-  mPendingRequests.remove( url );
-  mFilesToUpload.insert( projectFullName, filesToUpload );
-
-  QJsonObject json;
-  json.insert( QStringLiteral( "changes" ), changes );
-  json.insert( QStringLiteral( "version" ), version );
-  jsonDoc.setObject( json );
-
-  QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3, renamed: %4" )
-                 .arg( InputUtils::filesToString( files.value( "added" ) ) ).arg( InputUtils::filesToString( files.value( "updated" ) ) )
-                 .arg( InputUtils::filesToString( files.value( "removed" ) ) ).arg( InputUtils::filesToString( files.value( "renamed" ) ) );
-  InputUtils::log( url.toString(), info );
-
-  uploadStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
 }
 
 void MerginApi::uploadFinishReplyFinished()
@@ -1287,149 +1327,53 @@ void MerginApi::getUserInfoFinished()
   emit userInfoChanged();
 }
 
-QPair<QHash<QString, QList<MerginFile>>, QString> MerginApi::parseAndCompareProjectFiles( QNetworkReply *r, bool isForUpdate )
+ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current )
 {
-  QHash<QString, QList<MerginFile>> files;
-  QString version;
-  if ( r->error() == QNetworkReply::NoError )
+  QHash<QString, QList<MerginFile>> changes;
+  ProjectDiff diff;
+
+  QList<MerginFile> added;
+  QList<MerginFile> updatedFiles;
+  QList<MerginFile> renamed;
+  QList<MerginFile> removed;
+  QList<MerginFile> projectFiles;
+
+  QHash<QString, MerginFile> currentFilesMap;
+  for ( MerginFile currentFile : current )
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
-    QList<MerginFile> added;
-    QList<MerginFile> updatedFiles;
-    QList<MerginFile> renamed;
-    QList<MerginFile> removed;
+    currentFilesMap.insert( currentFile.path, currentFile );
+  }
 
-    QUrl url = r->url();
-    QString projectName;
-    QString projectNamespace;
-    extractProjectName( r->url().path(), projectNamespace, projectName );
-    QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
-    // List of files metadata of all files
-    QList<MerginFile> projectFiles;
+  for ( MerginFile originFile : origin )
+  {
+    MerginFile currentFile = currentFilesMap.value( originFile.path );
 
-    QByteArray data = r->readAll();
-    QJsonDocument doc = QJsonDocument::fromJson( data );
-    if ( doc.isObject() )
+    if ( currentFile.checksum.isEmpty() )
     {
-      QJsonObject docObj = doc.object();
-      QString updated = docObj.value( QStringLiteral( "updated" ) ).toString();
-      version = docObj.value( QStringLiteral( "version" ) ).toString();
-      if ( version.isEmpty() )
-      {
-        version = QStringLiteral( "v1" );
-      }
-      auto it = docObj.constFind( QStringLiteral( "files" ) );
-      QJsonValue v = *it;
-      Q_ASSERT( v.isArray() );
-      QJsonArray vArray = v.toArray();
-
-      QSet<QString> localFiles = listFiles( projectPath );
-      for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
-      {
-        QJsonObject projectInfoMap = it->toObject();
-        // Server metadata
-        QString serverChecksum = projectInfoMap.value( QStringLiteral( "checksum" ) ).toString();
-        QString path = projectInfoMap.value( QStringLiteral( "path" ) ).toString();
-        QDateTime mtime = QDateTime::fromString( projectInfoMap.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-        int size = projectInfoMap.value( QStringLiteral( "size" ) ).toInt();
-
-        if ( isForUpdate )
-        {
-          // Include metadata of file from server in temp project's file
-          MerginFile rawServerFile;
-          rawServerFile.checksum = serverChecksum;
-          rawServerFile.path = path;
-          rawServerFile.size = size;
-          rawServerFile.mtime = mtime;
-          projectFiles << rawServerFile;
-        }
-
-        QByteArray localChecksumBytes = getChecksum( projectPath + path );
-        QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
-        QFileInfo info( projectPath + path );
-
-        // removed
-        if ( localChecksum.isEmpty() )
-        {
-          MerginFile file;
-          file.checksum = serverChecksum;
-          file.path = path;
-          if ( isForUpdate )
-          {
-            file.size = size;
-            file.mtime = mtime;
-          }
-          else
-          {
-            file.size = info.size(); // always 0
-            file.mtime = info.lastModified(); // not relevant
-          }
-          removed.append( file );
-
-        }
-        // updated
-        else if ( serverChecksum != localChecksum )
-        {
-          MerginFile file;
-          // if updated file is required from server, it has to have server checksum
-          // if updated file is going to be upload, it has to have local checksum
-          if ( isForUpdate )
-          {
-            file.checksum = serverChecksum;
-            file.mtime = mtime;
-          }
-          else
-          {
-            file.checksum = localChecksum;
-            file.mtime = info.lastModified();
-          }
-          file.size = info.size();
-          file.path = path;
-          updatedFiles.append( file );
-
-        }
-        localFiles.remove( path );
-      }
-
-      // Rest of localFiles are newly added
-      for ( QString p : localFiles )
-      {
-        MerginFile file;
-        QByteArray localChecksumBytes = getChecksum( projectPath + p );
-        QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
-        file.checksum = localChecksum;
-        file.path = p;
-        QFileInfo info( projectPath + p );
-        file.size = info.size();
-        file.mtime = info.lastModified();
-        added.append( file );
-      }
-
-      // Only if is for update, upload parses reply's data afterwards.
-      if ( isForUpdate )
-      {
-        // Save data from server to update metadata after successful request
-        MerginProject project;
-        project.name = docObj.value( QStringLiteral( "name" ) ).toString();
-        project.version = docObj.value( QStringLiteral( "version" ) ).toString();
-        project.files = projectFiles;
-        mTempMerginProjects.insert( projectNamespace + "/" + projectName, project );
-      }
+      added.append( originFile );
     }
 
-    files.insert( QStringLiteral( "added" ), added );
-    files.insert( QStringLiteral( "updated" ), updatedFiles );
-    files.insert( QStringLiteral( "removed" ), removed );
-    files.insert( QStringLiteral( "renamed" ), renamed );
-  }
-  else
-  {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: projectInfo" ) );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
+    else if ( currentFile.checksum != originFile.checksum )
+    {
+      updatedFiles.append( originFile );
+    }
+
+    currentFilesMap.remove( originFile.path );
   }
 
-  return QPair<QHash<QString, QList<MerginFile>>, QString>( files, version );
+  // Rest files are extra, therefore put to remove
+  for ( MerginFile file : currentFilesMap )
+  {
+    removed.append( file );
+  }
+
+  changes.insert( QStringLiteral( "added" ), added );
+  changes.insert( QStringLiteral( "updated" ), updatedFiles );
+  changes.insert( QStringLiteral( "removed" ), removed );
+  changes.insert( QStringLiteral( "renamed" ), renamed );
+  diff.changes = changes;
+
+  return diff;
 }
 
 ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
@@ -1490,9 +1434,9 @@ ProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
   return result;
 }
 
-std::shared_ptr<MerginProject> MerginApi::readProjectMetadataFromPath( const QString &projectPath )
+std::shared_ptr<MerginProject> MerginApi::readProjectMetadataFromPath( const QString &projectPath, const QString &metadataFile )
 {
-  QFile file( QString( "%1/%2" ).arg( projectPath ).arg( sMetadataFile ) );
+  QFile file( QString( "%1/%2" ).arg( projectPath ).arg( metadataFile ) );
   if ( !file.exists() ) return std::shared_ptr<MerginProject>();
 
   QByteArray data;
@@ -1509,40 +1453,46 @@ std::shared_ptr<MerginProject> MerginApi::readProjectMetadataFromPath( const QSt
 
 MerginProject MerginApi::readProjectMetadata( const QByteArray &data )
 {
-  QJsonDocument doc = QJsonDocument::fromJson( data );
-  QJsonObject projectMap = doc.object();
-
-  MerginProject p;
-  p.name = projectMap.value( QStringLiteral( "name" ) ).toString();
-  p.projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
-  p.clientUpdated = QDateTime::fromString( projectMap.value( QStringLiteral( "clientUpdated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-  p.lastSyncClient = QDateTime::fromString( projectMap.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-  p.version = projectMap.value( QStringLiteral( "version" ) ).toString();
-
+  MerginProject project;
   QList<MerginFile> projectFiles;
-  auto it = projectMap.constFind( QStringLiteral( "files" ) );
-  QJsonValue v = *it;
-  Q_ASSERT( v.isArray() );
-  QJsonArray vArray = v.toArray();
-  for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
+
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( doc.isObject() )
   {
-    QJsonObject projectInfoMap = it->toObject();
-    QString serverChecksum = projectInfoMap.value( QStringLiteral( "checksum" ) ).toString();
-    QString path = projectInfoMap.value( QStringLiteral( "path" ) ).toString();
-    QDateTime mtime = QDateTime::fromString( projectInfoMap.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-    int size = projectInfoMap.value( QStringLiteral( "size" ) ).toInt();
+    QJsonObject docObj = doc.object();
+    auto it = docObj.constFind( QStringLiteral( "files" ) );
+    QJsonValue v = *it;
+    Q_ASSERT( v.isArray() );
+    QJsonArray vArray = v.toArray();
 
-    // Include metadata of file from server in temp project's file
-    MerginFile rawServerFile;
-    rawServerFile.checksum = serverChecksum;
-    rawServerFile.path = path;
-    rawServerFile.size = size;
-    rawServerFile.mtime = mtime;
-    projectFiles << rawServerFile;
+    for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
+    {
+      QJsonObject merginFileInfo = it->toObject();
+      // Include metadata of file from server in temp project's file
+      MerginFile merginFile;
+      merginFile.checksum = merginFileInfo.value( QStringLiteral( "checksum" ) ).toString();;
+      merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();;
+      merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInt();;
+      merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();;
+      projectFiles << merginFile;
+    }
+
+    // Save data from server to update metadata after successful request
+    project.name = docObj.value( QStringLiteral( "name" ) ).toString();
+    project.projectNamespace = docObj.value( QStringLiteral( "namespace" ) ).toString();
+    project.version = docObj.value( QStringLiteral( "version" ) ).toString();
+    project.serverUpdated = QDateTime::fromString( docObj.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+    if ( project.version.isEmpty() )
+    {
+      project.version = QStringLiteral( "v1" );
+    }
+    // extra data to server
+    project.clientUpdated = QDateTime::fromString( docObj.value( QStringLiteral( "clientUpdated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+    project.lastSyncClient = QDateTime::fromString( docObj.value( QStringLiteral( "lastSync" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+
+    project.files = projectFiles;
   }
-  p.files = projectFiles;
-
-  return p;
+  return project;
 }
 
 QJsonDocument MerginApi::createProjectMetadataJson( std::shared_ptr<MerginProject> project )
