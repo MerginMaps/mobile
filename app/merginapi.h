@@ -305,6 +305,11 @@ class MerginApi: public QObject
     */
     bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
     /**
+    * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
+    * \param data Data received from mergin server on a request failed.
+    */
+    QString extractServerErrorMsg( const QByteArray &data );
+    /**
     * Returns mergin project directory according projectNamespace and projectName. Either it already exists
     * or it creates a new folder for the project and returns its path.
     * \param projectNamespace QString to find a project according namespace as a part of full project name
@@ -354,6 +359,7 @@ class MerginApi: public QObject
     const int CHUNK_SIZE = 65536;
     const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
+
 };
 
 #endif // MERGINAPI_H
