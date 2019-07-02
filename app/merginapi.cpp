@@ -1321,50 +1321,38 @@ void MerginApi::getUserInfoFinished()
   emit userInfoChanged();
 }
 
-ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current )
+ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles )
 {
   ProjectDiff diff;
-
-  QList<MerginFile> added;
-  QList<MerginFile> updatedFiles;
-  QList<MerginFile> renamed;
-  QList<MerginFile> removed;
-
-  QList<MerginFile> projectFiles;
-
   QHash<QString, MerginFile> currentFilesMap;
-  for ( MerginFile currentFile : current )
+
+  for ( MerginFile currentFile : currentFiles )
   {
     currentFilesMap.insert( currentFile.path, currentFile );
   }
 
-  for ( MerginFile originFile : origin )
+  for ( MerginFile newFile : newFiles )
   {
-    MerginFile currentFile = currentFilesMap.value( originFile.path );
+    MerginFile currentFile = currentFilesMap.value( newFile.path );
 
     if ( currentFile.checksum.isEmpty() )
     {
-      added.append( originFile );
+      diff.added.append( newFile );
     }
 
-    else if ( currentFile.checksum != originFile.checksum )
+    else if ( currentFile.checksum != newFile.checksum )
     {
-      updatedFiles.append( originFile );
+      diff.modified.append( newFile );
     }
 
-    currentFilesMap.remove( originFile.path );
+    currentFilesMap.remove( currentFile.path );
   }
 
   // Rest files are extra, therefore put to remove
   for ( MerginFile file : currentFilesMap )
   {
-    removed.append( file );
+    diff.removed.append( file );
   }
-  // TODO refactor
-  diff.added = added;
-  diff.modified = updatedFiles;
-  diff.removed = removed;
-  diff.renamed = renamed;
 
   return diff;
 }
