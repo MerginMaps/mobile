@@ -1113,38 +1113,46 @@ void MerginApi::updateInfoReplyFinished()
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
     ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
-    QHash<QString, QList<MerginFile>> files = diff.changes;
 
-    for ( QString key : files.keys() )
+    if ( !mWaitingForUpload.contains( projectFullName ) )
     {
-      if ( key == QStringLiteral( "removed" ) )
+      QSet<QString> obsoleteFiles;
+      for ( MerginFile file : diff.removed )
       {
-        // no removal before upload
-        if ( !mWaitingForUpload.contains( projectFullName ) )
-        {
-          QSet<QString> obsoleteFiles;
-          for ( MerginFile file : files.value( key ) )
-          {
-            obsoleteFiles.insert( file.path );
-          }
-          if ( !obsoleteFiles.isEmpty() )
-          {
-            QString projectPath = getProjectDir( projectNamespace, projectName );
-            mObsoleteFiles.insert( projectPath, obsoleteFiles );
-          }
-        }
+        obsoleteFiles.insert( file.path );
       }
-      else
+      if ( !obsoleteFiles.isEmpty() )
       {
-        for ( MerginFile file : files.value( key ) )
-        {
-          qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-          int noOfChunks = qCeil( rawNoOfChunks );
-          file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
-          filesToDownload << file;
-        }
+        QString projectPath = getProjectDir( projectNamespace, projectName );
+        mObsoleteFiles.insert( projectPath, obsoleteFiles );
       }
     }
+
+    for ( MerginFile file : diff.added )
+    {
+      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+      int noOfChunks = qCeil( rawNoOfChunks );
+      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+      filesToDownload << file;
+    }
+
+    for ( MerginFile file : diff.modified )
+    {
+      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+      int noOfChunks = qCeil( rawNoOfChunks );
+      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+      filesToDownload << file;
+    }
+
+    // renamed is handled as new file
+    for ( MerginFile file : diff.renamed )
+    {
+      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+      int noOfChunks = qCeil( rawNoOfChunks );
+      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+      filesToDownload << file;
+    }
+
     if ( !filesToDownload.isEmpty() )
     {
       mFilesToDownload.insert( projectFullName, filesToDownload );
@@ -1185,38 +1193,24 @@ void MerginApi::uploadInfoReplyFinished()
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
     ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
-
     QList<MerginFile> filesToUpload;
-    for ( QString key : diff.changes.keys() )
-    {
-      QJsonArray jsonArray;
-      for ( MerginFile file : diff.changes.value( key ) )
-      {
-        QJsonObject fileObject;
-        fileObject.insert( "path", file.path );
-        fileObject.insert( "checksum", file.checksum );
-        fileObject.insert( "size", file.size );
-        fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+    QJsonArray jsonArray;
 
-        qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-        int noOfChunks = qCeil( rawNoOfChunks );
-        QStringList chunks = generateChunkIds( noOfChunks );
-        QJsonArray chunksJson;
-        for ( QString id : chunks )
-        {
-          chunksJson.append( id );
-        }
-        file.chunks = chunks;
-        fileObject.insert( "chunks", chunksJson );
-        jsonArray.append( fileObject );
+    QJsonObject added = prepareUploadChangesJSON( diff.added );
+    jsonArray.append( added );
+    filesToUpload.append( diff.added );
 
-        if ( key != QStringLiteral( "removed" ) )
-        {
-          filesToUpload.append( file );
-        }
-      }
-      changes.insert( key, jsonArray );
-    }
+    QJsonObject modified = prepareUploadChangesJSON( diff.modified );
+    jsonArray.append( modified );
+    filesToUpload.append( diff.modified );
+
+    QJsonObject removed = prepareUploadChangesJSON( diff.removed );
+    jsonArray.append( removed );
+    // removed not in filesToUpload
+
+    QJsonObject renamed = prepareUploadChangesJSON( diff.renamed );
+    jsonArray.append( renamed );
+    filesToUpload.append( diff.renamed );
 
     r->deleteLater();
     mPendingRequests.remove( url );
@@ -1229,8 +1223,8 @@ void MerginApi::uploadInfoReplyFinished()
     jsonDoc.setObject( json );
 
     QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3, renamed: %4" )
-                   .arg( InputUtils::filesToString( diff.changes.value( "added" ) ) ).arg( InputUtils::filesToString( diff.changes.value( "updated" ) ) )
-                   .arg( InputUtils::filesToString( diff.changes.value( "removed" ) ) ).arg( InputUtils::filesToString( diff.changes.value( "renamed" ) ) );
+                   .arg( InputUtils::filesToString( diff.added ) ).arg( InputUtils::filesToString( diff.modified ) )
+                   .arg( InputUtils::filesToString( diff.removed ) ).arg( InputUtils::filesToString( diff.renamed ) );
     InputUtils::log( url.toString(), info );
 
     uploadStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
@@ -1329,13 +1323,13 @@ void MerginApi::getUserInfoFinished()
 
 ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current )
 {
-  QHash<QString, QList<MerginFile>> changes;
   ProjectDiff diff;
 
   QList<MerginFile> added;
   QList<MerginFile> updatedFiles;
   QList<MerginFile> renamed;
   QList<MerginFile> removed;
+
   QList<MerginFile> projectFiles;
 
   QHash<QString, MerginFile> currentFilesMap;
@@ -1366,12 +1360,11 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &origin, con
   {
     removed.append( file );
   }
-
-  changes.insert( QStringLiteral( "added" ), added );
-  changes.insert( QStringLiteral( "updated" ), updatedFiles );
-  changes.insert( QStringLiteral( "removed" ), removed );
-  changes.insert( QStringLiteral( "renamed" ), renamed );
-  diff.changes = changes;
+  // TODO refactor
+  diff.added = added;
+  diff.modified = updatedFiles;
+  diff.removed = removed;
+  diff.renamed = renamed;
 
   return diff;
 }
@@ -1530,6 +1523,31 @@ QStringList MerginApi::generateChunkIds( int noOfChunks )
     chunks.append( chunkID );
   }
   return chunks;
+}
+
+QJsonObject MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
+{
+  QJsonObject fileObject;
+  for ( MerginFile file : files )
+  {
+
+    fileObject.insert( "path", file.path );
+    fileObject.insert( "checksum", file.checksum );
+    fileObject.insert( "size", file.size );
+    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+
+    qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
+    int noOfChunks = qCeil( rawNoOfChunks );
+    QStringList chunks = generateChunkIds( noOfChunks );
+    QJsonArray chunksJson;
+    for ( QString id : chunks )
+    {
+      chunksJson.append( id );
+    }
+    file.chunks = chunks;
+    fileObject.insert( "chunks", chunksJson );
+  }
+  return fileObject;
 }
 
 void MerginApi::updateProjectMetadata( const QString &projectDir, const QString &projectFullName, bool syncSuccessful )

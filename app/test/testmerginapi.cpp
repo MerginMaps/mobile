@@ -309,7 +309,10 @@ void TestMerginApi::testParseAndCompareNoChanges()
   std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
   QVERIFY( project );
   ProjectDiff diff = mApi->compareProjectFiles( project->files, project->files );
-  verifyDiff( diff, QStringLiteral() );
+  QVERIFY( diff.added.isEmpty() );
+  QVERIFY( diff.modified.isEmpty() );
+  QVERIFY( diff.removed.isEmpty() );
+  QVERIFY( diff.renamed.isEmpty() );
 
   qDebug() << "TestMerginApi::parseAndCompareTestNoChanges PASSED";
   passedTests++;
@@ -317,7 +320,7 @@ void TestMerginApi::testParseAndCompareNoChanges()
 
 void TestMerginApi::testParseAndCompareRemovedAdded()
 {
-  qDebug() << "TestMerginApi::testParseAndCompareWithChanges START";
+  qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded START";
   runTests++;
 
   QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
@@ -329,10 +332,10 @@ void TestMerginApi::testParseAndCompareRemovedAdded()
   ProjectDiff diff = mApi->compareProjectFiles( project_added->files, project->files );
   ProjectDiff diff_removed = mApi->compareProjectFiles( project->files, project_added->files );
 
-  verifyDiff( diff, QStringLiteral( "added" ) );
-  verifyDiff( diff_removed, QStringLiteral( "removed" ) );
+  QCOMPARE( diff.added.size(), 1 );
+  QCOMPARE( diff_removed.removed.size(), 1 );
 
-  qDebug() << "TestMerginApi::testParseAndCompareWithChanges PASSED";
+  qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded PASSED";
   passedTests++;
 }
 
@@ -348,7 +351,7 @@ void TestMerginApi::testParseAndCompareUpdated()
   QVERIFY( project_updated );
 
   ProjectDiff diff = mApi->compareProjectFiles( project_updated->files, project->files );
-  verifyDiff( diff, QStringLiteral( "updated" ) );
+  QCOMPARE( diff.modified.size(), 1 );
 
   qDebug() << "TestMerginApi::testParseAndCompareUpdated PASSED";
   passedTests++;
@@ -436,22 +439,6 @@ void TestMerginApi::copyTestProject()
   QString destination = mProjectModel->dataDir().remove( mProjectModel->dataDir().length() - 1, 1 );
   InputUtils::cpDir( source, destination );
   qDebug() << "TestMerginApi::copyTestProject DONE";
-}
-
-void TestMerginApi::verifyDiff( const ProjectDiff &diff, const QString &key )
-{
-  for ( QString k : diff.changes.keys() )
-  {
-    QList<MerginFile> files = diff.changes.value( k );
-    if ( key == key )
-    {
-      QCOMPARE( files.size(), 1 );
-    }
-    else
-    {
-      QVERIFY( files.isEmpty() );
-    }
-  }
 }
 
 QString TestMerginApi::testDataPath()
