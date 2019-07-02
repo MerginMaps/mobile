@@ -453,8 +453,10 @@ void MerginApi::createProjectFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: createProject" ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    InputUtils::log( r->url().toString(), message );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -474,8 +476,9 @@ void MerginApi::deleteProjectFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: deleteProject" ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: deleteProject" ) );
   }
   mPendingRequests.remove( r->url() );
   r->deleteLater();
@@ -504,17 +507,18 @@ void MerginApi::authorizeFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
     if ( status == 401 || status == 400 )
     {
       emit authFailed();
-      emit notify( QStringLiteral( "Authentication failed" ) );
+      emit notify( serverMsg );
     }
     else
     {
-      emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: authorize" ) );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
     mUsername.clear();
     mPassword.clear();
@@ -532,7 +536,7 @@ void MerginApi::pingMerginReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
   QString apiVersion;
-  QString msg;
+  QString serverMsg;
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -546,11 +550,11 @@ void MerginApi::pingMerginReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    msg = r->errorString();
+    serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
   }
   r->deleteLater();
-  emit pingMerginFinished( apiVersion, msg );
+  emit pingMerginFinished( apiVersion, serverMsg );
 }
 
 ProjectList MerginApi::parseAllProjectsMetadata()
@@ -693,6 +697,23 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
     name = sourceString;
     return false;
   }
+}
+
+QString MerginApi::extractServerErrorMsg( const QByteArray &data )
+{
+  QString serverMsg;
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( doc.isObject() )
+  {
+    QJsonObject obj = doc.object();
+    serverMsg = obj.value( "detail" ).toString();
+  }
+  else
+  {
+    serverMsg = data;
+  }
+
+  return serverMsg;
 }
 
 std::shared_ptr<MerginProject> MerginApi::getProject( const QString &projectFullName )
@@ -878,14 +899,17 @@ void MerginApi::listProjectsReplyFinished()
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "listProjects" ), r->errorString() );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: listProjects" ) );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjects" ), r->errorString(), serverMsg );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     mMerginProjects.clear();
 
-    if ( r->errorString() == QLatin1String( "Host requires authentication" ) )
+    int status = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( status == 401 || status == 400 )
     {
-      emit authRequested();
+      emit authFailed();
+      emit notify( serverMsg );
     }
     else
     {
@@ -989,9 +1013,10 @@ void MerginApi::downloadFileReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     emit downloadFileFinished( projectFullName, version, chunkNo, false );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
   }
 
   r->deleteLater();
@@ -1032,9 +1057,10 @@ void MerginApi::uploadStartReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: uploadStartReply" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
   }
 
   r->deleteLater();
@@ -1079,8 +1105,9 @@ void MerginApi::uploadFileReplyFinished()
   }
   else
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: downloadFile" ) );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
     uploadCancel( projectFullName );
   }
 
@@ -1245,7 +1272,8 @@ void MerginApi::uploadFinishReplyFinished()
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadFinish" ), r->errorString() );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "uploadFinish" ), r->errorString(), serverMsg );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
@@ -1269,7 +1297,8 @@ void MerginApi::uploadCancelReplyFinished()
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "uploadCancel" ), r->errorString() );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "uploadCancel" ), r->errorString(), serverMsg );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
 
@@ -1295,9 +1324,10 @@ void MerginApi::getUserInfoFinished()
   }
   else
   {
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "getUserInfo" ), r->errorString() );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( r->errorString(), QStringLiteral( "Mergin API error: getUserInfo" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
   r->deleteLater();
