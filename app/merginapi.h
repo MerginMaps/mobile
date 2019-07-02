@@ -154,12 +154,12 @@ class MerginApi: public QObject
 
     // Production and Test functions (therefore not private)
     /**
-    * Compares files from origin with files from current. For instance, of there is an extra file in origin,
-    * it suppose to appear in 'added'. If there is a missing file in origin, it suppose to appear in removed.
-    * \param origin List of MerginFiles which are compared with current.
-    * \param current List of MerginFiles which are taken as base in a comparison.
+    * Compares files from newFiles with files from current. For instance, of there is an extra file in new,
+    * it suppose to appear in 'added'. If there is a missing file in new, it suppose to appear in removed.
+    * \param newFiles List of MerginFiles which are compared with current files.
+    * \param currentFiles List of MerginFiles which are taken as base in a comparison.
     */
-    ProjectDiff compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current );
+    ProjectDiff compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles );
     ProjectList projects();
     QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
