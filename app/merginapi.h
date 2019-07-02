@@ -49,7 +49,10 @@ struct MerginProject
 
 struct ProjectDiff
 {
-  QHash<QString, QList<MerginFile>> changes;
+  QList<MerginFile> added;
+  QList<MerginFile> modified;
+  QList<MerginFile> renamed;
+  QList<MerginFile> removed;
 };
 
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
@@ -150,6 +153,12 @@ class MerginApi: public QObject
     void clearTokenData();
 
     // Production and Test functions (therefore not private)
+    /**
+    * Compares files from origin with files from current. For instance, of there is an extra file in origin,
+    * it suppose to appear in 'added'. If there is a missing file in origin, it suppose to appear in removed.
+    * \param origin List of MerginFiles which are compared with current.
+    * \param current List of MerginFiles which are taken as base in a comparison.
+    */
     ProjectDiff compareProjectFiles( const QList<MerginFile> &origin, const QList<MerginFile> &current );
     ProjectList projects();
     QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -225,6 +234,7 @@ class MerginApi: public QObject
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
     QStringList generateChunkIds( int noOfChunks );
+    QJsonObject prepareUploadChangesJSON( const QList<MerginFile> &files );
 
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).
