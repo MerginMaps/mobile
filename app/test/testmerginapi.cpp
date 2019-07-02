@@ -29,6 +29,7 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
   testParseAndCompareNoChanges();
   testParseAndCompareRemovedAdded();
   testParseAndCompareUpdated();
+  testParseAndCompareRenamed();
 
   cleanupTestCase();
   qDebug() << QString( "TestMerginApi - PASSED: %1/%2" ).arg( passedTests ).arg( runTests );
@@ -310,9 +311,8 @@ void TestMerginApi::testParseAndCompareNoChanges()
   QVERIFY( project );
   ProjectDiff diff = mApi->compareProjectFiles( project->files, project->files );
   QVERIFY( diff.added.isEmpty() );
-  QVERIFY( diff.modified.isEmpty() );
   QVERIFY( diff.removed.isEmpty() );
-  QVERIFY( diff.renamed.isEmpty() );
+  QVERIFY( diff.modified.isEmpty() );
 
   qDebug() << "TestMerginApi::parseAndCompareTestNoChanges PASSED";
   passedTests++;
@@ -330,10 +330,14 @@ void TestMerginApi::testParseAndCompareRemovedAdded()
   QVERIFY( project_added );
 
   ProjectDiff diff = mApi->compareProjectFiles( project_added->files, project->files );
-  ProjectDiff diff_removed = mApi->compareProjectFiles( project->files, project_added->files );
-
   QCOMPARE( diff.added.size(), 1 );
+  QVERIFY( diff.removed.isEmpty() );
+  QVERIFY( diff.modified.isEmpty() );
+
+  ProjectDiff diff_removed = mApi->compareProjectFiles( project->files, project_added->files );
+  QVERIFY( diff_removed.added.isEmpty() );
   QCOMPARE( diff_removed.removed.size(), 1 );
+  QVERIFY( diff_removed.modified.isEmpty() );
 
   qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded PASSED";
   passedTests++;
@@ -351,9 +355,31 @@ void TestMerginApi::testParseAndCompareUpdated()
   QVERIFY( project_updated );
 
   ProjectDiff diff = mApi->compareProjectFiles( project_updated->files, project->files );
+  QVERIFY( diff.added.isEmpty() );
+  QVERIFY( diff.removed.isEmpty() );
   QCOMPARE( diff.modified.size(), 1 );
 
   qDebug() << "TestMerginApi::testParseAndCompareUpdated PASSED";
+  passedTests++;
+}
+
+void TestMerginApi::testParseAndCompareRenamed()
+{
+  qDebug() << "TestMerginApi::testParseAndCompareRenamed START";
+  runTests++;
+
+  QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
+  std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
+  std::shared_ptr<MerginProject> project_renamed = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin_renamed.json" ) );
+  QVERIFY( project );
+  QVERIFY( project_renamed );
+
+  ProjectDiff diff = mApi->compareProjectFiles( project_renamed->files, project->files );
+  QCOMPARE( diff.added.size(), 1 );
+  QCOMPARE( diff.removed.size(), 1 );
+  QVERIFY( diff.modified.isEmpty() );
+
+  qDebug() << "TestMerginApi::testParseAndCompareRenamed PASSED";
   passedTests++;
 }
 
