@@ -51,7 +51,6 @@ struct ProjectDiff
 {
   QList<MerginFile> added;
   QList<MerginFile> modified;
-  QList<MerginFile> renamed;
   QList<MerginFile> removed;
 };
 
@@ -233,8 +232,8 @@ class MerginApi: public QObject
     ProjectList parseAllProjectsMetadata();
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
-    QStringList generateChunkIds( int noOfChunks );
-    QJsonObject prepareUploadChangesJSON( const QList<MerginFile> &files );
+    QStringList generateChunkIdsForSize( qint64 fileSize );
+    QJsonObject prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath = false );
 
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).

@@ -32,6 +32,7 @@ class TestMerginApi: public QObject
     void testParseAndCompareNoChanges();
     void testParseAndCompareRemovedAdded();
     void testParseAndCompareUpdated();
+    void testParseAndCompareRenamed();
 
     void cleanupTestCase();
 
@@ -55,7 +56,6 @@ class TestMerginApi: public QObject
     std::shared_ptr<MerginProject> prepareTestProject();
     void deleteTestProject();
     void copyTestProject();
-    void verifyDiff( const ProjectDiff &diff, const QString &key );
     QString testDataPath();
 };
 

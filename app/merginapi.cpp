@@ -1125,26 +1125,13 @@ void MerginApi::updateInfoReplyFinished()
 
     for ( MerginFile file : diff.added )
     {
-      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-      int noOfChunks = qCeil( rawNoOfChunks );
-      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
     }
 
     for ( MerginFile file : diff.modified )
     {
-      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-      int noOfChunks = qCeil( rawNoOfChunks );
-      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
-      filesToDownload << file;
-    }
-
-    // renamed is handled as new file
-    for ( MerginFile file : diff.renamed )
-    {
-      qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-      int noOfChunks = qCeil( rawNoOfChunks );
-      file.chunks = generateChunkIds( noOfChunks ); // doesnt really matter whats there, only how many chunks are expected
+      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
     }
 
@@ -1199,13 +1186,9 @@ void MerginApi::uploadInfoReplyFinished()
     jsonArray.append( modified );
     filesToUpload.append( diff.modified );
 
-    QJsonObject removed = prepareUploadChangesJSON( diff.removed );
+    QJsonObject removed = prepareUploadChangesJSON( diff.removed, true );
     jsonArray.append( removed );
     // removed not in filesToUpload
-
-    QJsonObject renamed = prepareUploadChangesJSON( diff.renamed );
-    jsonArray.append( renamed );
-    filesToUpload.append( diff.renamed );
 
     r->deleteLater();
     mPendingRequests.remove( url );
@@ -1217,9 +1200,9 @@ void MerginApi::uploadInfoReplyFinished()
     QJsonDocument jsonDoc;
     jsonDoc.setObject( json );
 
-    QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3, renamed: %4" )
+    QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3" )
                    .arg( InputUtils::filesToString( diff.added ) ).arg( InputUtils::filesToString( diff.modified ) )
-                   .arg( InputUtils::filesToString( diff.removed ) ).arg( InputUtils::filesToString( diff.renamed ) );
+                   .arg( InputUtils::filesToString( diff.removed ) );
     InputUtils::log( url.toString(), info );
 
     uploadStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
@@ -1446,10 +1429,10 @@ MerginProject MerginApi::readProjectMetadata( const QByteArray &data )
       QJsonObject merginFileInfo = it->toObject();
       // Include metadata of file from server in temp project's file
       MerginFile merginFile;
-      merginFile.checksum = merginFileInfo.value( QStringLiteral( "checksum" ) ).toString();;
-      merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();;
-      merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInt();;
-      merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();;
+      merginFile.checksum = merginFileInfo.value( QStringLiteral( "checksum" ) ).toString();
+      merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();
+      merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInt();
+      merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
       projectFiles << merginFile;
     }
 
@@ -1497,8 +1480,10 @@ QJsonDocument MerginApi::createProjectMetadataJson( std::shared_ptr<MerginProjec
   return doc;
 }
 
-QStringList MerginApi::generateChunkIds( int noOfChunks )
+QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
 {
+  qreal rawNoOfChunks = qreal( fileSize ) / UPLOAD_CHUNK_SIZE;
+  int noOfChunks = qCeil( rawNoOfChunks );
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
@@ -1508,27 +1493,29 @@ QStringList MerginApi::generateChunkIds( int noOfChunks )
   return chunks;
 }
 
-QJsonObject MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
+QJsonObject MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath )
 {
   QJsonObject fileObject;
   for ( MerginFile file : files )
   {
 
     fileObject.insert( "path", file.path );
-    fileObject.insert( "checksum", file.checksum );
-    fileObject.insert( "size", file.size );
-    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
-
-    qreal rawNoOfChunks = qreal( file.size ) / UPLOAD_CHUNK_SIZE;
-    int noOfChunks = qCeil( rawNoOfChunks );
-    QStringList chunks = generateChunkIds( noOfChunks );
-    QJsonArray chunksJson;
-    for ( QString id : chunks )
+    if ( !onlyPath )
     {
-      chunksJson.append( id );
+      fileObject.insert( "checksum", file.checksum );
+      fileObject.insert( "size", file.size );
+      fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+
+      QStringList chunks = generateChunkIdsForSize( file.size );
+      QJsonArray chunksJson;
+      for ( QString id : chunks )
+      {
+        chunksJson.append( id );
+      }
+      file.chunks = chunks;
+      fileObject.insert( "chunks", chunksJson );
     }
-    file.chunks = chunks;
-    fileObject.insert( "chunks", chunksJson );
+
   }
   return fileObject;
 }
@@ -1540,7 +1527,6 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
     mTempMerginProjects.remove( projectFullName );
     return;
   }
-
   MerginProject tempProjectData = mTempMerginProjects.take( projectFullName );
   std::shared_ptr<MerginProject> project = getProject( projectFullName );
   if ( project )
