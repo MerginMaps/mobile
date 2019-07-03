@@ -306,6 +306,7 @@ void MerginApi::getUserInfo( const QString &username )
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
+  InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getUserInfoFinished );
 }
 
@@ -904,17 +905,6 @@ void MerginApi::listProjectsReplyFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     mMerginProjects.clear();
-
-    int status = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    if ( status == 401 || status == 400 )
-    {
-      emit authFailed();
-      emit notify( serverMsg );
-    }
-    else
-    {
-      emit listProjectsFailed();
-    }
   }
 
   r->deleteLater();
