@@ -905,6 +905,8 @@ void MerginApi::listProjectsReplyFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     mMerginProjects.clear();
+
+    emit listProjectsFailed();
   }
 
   r->deleteLater();
