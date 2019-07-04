@@ -350,6 +350,8 @@ void TestMerginApi::testPushChangesOfProject()
   QCOMPARE( spy.count(), 1 );
 
   ProjectList projects = getProjectList();
+  int projectSize0 = projects.size();
+  int localProjectSize0 = mProjectModel->rowCount();
   QVERIFY( hasProject( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT1 = project->serverUpdated;
@@ -371,10 +373,14 @@ void TestMerginApi::testPushChangesOfProject()
   QCOMPARE( spy2.count(), 1 );
 
   projects = getProjectList();
+  int projectSize1 = projects.size();
+  int localProjectSize1 = mProjectModel->rowCount();
   QVERIFY( hasProject( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT2 = project->serverUpdated;
   QVERIFY( serverT1 < serverT2 );
+  QCOMPARE( localProjectSize0, localProjectSize1 );
+  QCOMPARE( projectSize0, projectSize1 );
 
   qDebug() << "TestMerginApi::testPushChangesOfProject PASSED";
   passedTests++;
