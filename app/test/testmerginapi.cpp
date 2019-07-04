@@ -9,6 +9,7 @@
 #include "inpututils.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
+const QString TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD = TestMerginApi::TEST_PROJECT_NAME + "_DOWNLOAD";
 
 TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm, QObject *parent )
 {
@@ -20,6 +21,7 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
 
   testListProject();
   testDownloadProject();
+  testCancelDownlaodProject();
   testCreateProjectTwice();
   testDeleteNonExistingProject();
   testCreateDeleteProject();
@@ -60,7 +62,7 @@ void TestMerginApi::initTestCase()
     Q_ASSERT( spy.wait( LONG_REPLY ) );
     QCOMPARE( spy.count(), 1 );
 
-    mDataDir = testDataPath();
+    mTestData = testDataPath();
     initTestProject();
     copyTestProject();
 
@@ -111,6 +113,83 @@ void TestMerginApi::testDownloadProject()
   testDir.removeRecursively();
 
   qDebug() << "TestMerginApi::testDownloadProject PASSED";
+  passedTests++;
+}
+
+void TestMerginApi::testCancelDownlaodProject()
+{
+  qDebug() << "TestMerginApi::testCancelDownlaodProject START";
+  runTests++;
+  QString projectName = TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD;
+
+  // create a project
+  QSignalSpy spy( mApi, SIGNAL( projectCreated( QString ) ) );
+  mApi->createProject( mUsername, projectName );
+  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+
+  // Copy data
+  QString source = mTestData + "/" + TestMerginApi::TEST_PROJECT_NAME + "/";
+  QString projectDir = mProjectModel->dataDir() + projectName + "/";
+  qDebug() << source << projectDir;
+  InputUtils::cpDir( source, projectDir );
+
+  // Upload data
+  MerginProject project;
+  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>( project );
+  p->name = projectName;
+  p->projectNamespace = mUsername;
+  p->projectDir = projectDir;
+  mApi->addProject( p );
+
+  QSignalSpy spy3( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  mApi->uploadProject( mUsername, projectName );
+  QVERIFY( spy3.wait( LONG_REPLY ) );
+  QCOMPARE( spy3.count(), 1 );
+  QList<QVariant> arguments = spy3.takeFirst();
+  QVERIFY( arguments.at( 2 ).toBool() );
+
+  // Remove the whole project
+  QDir( projectDir ).removeRecursively();
+  QFileInfo info( projectDir );
+  QDir dir( projectDir );
+  QCOMPARE( info.size(), 0 );
+  QVERIFY( dir.isEmpty() );
+  mApi->clearProject( p );
+
+  // Test download and cancel before transaction actually starts
+  mApi->updateProject( mUsername, projectName );
+  QSignalSpy spy5( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
+//  TODO cannot catch signal of spy5s
+//  QVERIFY( spy5.wait( LONG_REPLY ) );
+//  QCOMPARE( spy5.count(), 1 );
+//  arguments = spy5.takeFirst();
+//  QVERIFY( !arguments.at(2).toBool() );
+
+  QCOMPARE( QFileInfo( projectDir ).size(), 0 );
+  QVERIFY( QDir( projectDir ).isEmpty() );
+
+  // Test download and cancel after transcation starts
+  QSignalSpy spy6( mApi, SIGNAL( pullFilesStarted() ) );
+  mApi->updateProject( mUsername, projectName );
+  QVERIFY( spy6.wait( LONG_REPLY ) );
+  QCOMPARE( spy6.count(), 1 );
+
+  QSignalSpy spy7( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
+//  TODO cannot catch signal of spy7
+//  QVERIFY( spy7.wait( LONG_REPLY ) );
+//  QCOMPARE( spy7.count(), 1 );
+//  arguments = spy7.takeFirst();
+//  QVERIFY( !arguments.at(2).toBool() );
+
+  info = QFileInfo( projectDir );
+  dir = QDir( projectDir );
+  QCOMPARE( info.size(), 0 );
+  QVERIFY( dir.isEmpty() );
+
+  qDebug() << "TestMerginApi::testCancelDownlaodProject PASSED";
   passedTests++;
 }
 
@@ -223,7 +302,7 @@ void TestMerginApi::testUploadProject()
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
   QString projectNamespace = mUsername;
-  std::shared_ptr<MerginProject> project = prepareTestProject();
+  std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
 
   QDateTime serverT0 = project->serverUpdated;
   mApi->uploadProject( projectNamespace, projectName );
@@ -262,7 +341,7 @@ void TestMerginApi::testPushChangesOfProject()
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
   QString projectNamespace = mUsername;
-  std::shared_ptr<MerginProject> project = prepareTestProject();
+  std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
 
   QDateTime serverT0 = project->serverUpdated;
   mApi->uploadProject( projectNamespace, projectName );
@@ -385,7 +464,7 @@ void TestMerginApi::testParseAndCompareRenamed()
 
 void TestMerginApi::cleanupTestCase()
 {
-  deleteTestProject();
+  deleteTestProjects();
 
   QDir testDir( mProjectModel->dataDir() );
   testDir.removeRecursively();
@@ -432,7 +511,7 @@ void TestMerginApi::initTestProject()
   qDebug() << "TestMerginApi::initTestProject DONE";
 }
 
-std::shared_ptr<MerginProject> TestMerginApi::prepareTestProject()
+std::shared_ptr<MerginProject> TestMerginApi::prepareTestProjectUpload()
 {
   // Create a project
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
@@ -449,19 +528,25 @@ std::shared_ptr<MerginProject> TestMerginApi::prepareTestProject()
   return project;
 }
 
-void TestMerginApi::deleteTestProject()
+void TestMerginApi::deleteSingleTestProject( QString &projectNamespace, const QString &projectName )
+{
+  QSignalSpy spy( mApi, SIGNAL( serverProjectDeleted( QString ) ) );
+  mApi->deleteProject( projectNamespace, projectName );
+  spy.wait( SHORT_REPLY );
+}
+
+void TestMerginApi::deleteTestProjects()
 {
   QString projectNamespace = mUsername;
+  deleteSingleTestProject( projectNamespace, TestMerginApi::TEST_PROJECT_NAME );
+  deleteSingleTestProject( projectNamespace, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
-  QSignalSpy spy( mApi, SIGNAL( serverProjectDeleted( QString ) ) );
-  mApi->deleteProject( projectNamespace, TestMerginApi::TEST_PROJECT_NAME );
-  spy.wait( SHORT_REPLY );
   qDebug() << "TestMerginApi::deleteTestProject DONE";
 }
 
 void TestMerginApi::copyTestProject()
 {
-  QString source = mDataDir;
+  QString source = mTestData;
   QString destination = mProjectModel->dataDir().remove( mProjectModel->dataDir().length() - 1, 1 );
   InputUtils::cpDir( source, destination );
   qDebug() << "TestMerginApi::copyTestProject DONE";

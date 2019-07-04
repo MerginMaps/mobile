@@ -18,11 +18,13 @@ class TestMerginApi: public QObject
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
+    static const QString TEST_PROJECT_NAME_DOWNLOAD;
 
   public slots:
     void initTestCase();
     void testListProject();
     void testDownloadProject();
+    void testCancelDownlaodProject();
     void testCreateProjectTwice();
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
@@ -46,17 +48,18 @@ class TestMerginApi: public QObject
     QString mApiRoot;
     QString mUsername;
     QString mPassword;
-    QString mDataDir;
+    QString mTestData;
     int passedTests = 0;
     int runTests = 0;
 
     ProjectList getProjectList();
     bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
     void initTestProject();
-    std::shared_ptr<MerginProject> prepareTestProject();
-    void deleteTestProject();
+    std::shared_ptr<MerginProject> prepareTestProjectUpload();
+    void deleteTestProjects();
     void copyTestProject();
     QString testDataPath();
+    void deleteSingleTestProject( QString &projectNamespace, const QString &projectName );
 };
 
 # endif // TESTMERGINAPI_H

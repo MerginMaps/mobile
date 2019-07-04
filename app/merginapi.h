@@ -111,6 +111,14 @@ class MerginApi: public QObject
     Q_INVOKABLE void uploadCancel( const QString &projectFullName );
 
     /**
+     * To cancel update (1) either before downloading data started - all data related to the download are cleaned;
+     * or (2) either when data transfer has begun - connections are aborted followed by calling function once again
+     * to clean related data as in the case 1.;
+     * \param projectFullName Project's full name to cancel its update
+     */
+    Q_INVOKABLE void updateCancel( const QString &projectFullName );
+
+    /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
     * \param username Login user name to Mergin
     * \param password Password to given username to log in to Mergin
@@ -147,8 +155,24 @@ class MerginApi: public QObject
         const QString &metadataFile = MerginApi::sMetadataFile );
 
     // Test functions
+    /**
+    * Creates an empty project on Mergin server.
+    * \param projectNamespace
+    * \param projectName
+    */
     void createProject( const QString &projectNamespace, const QString &projectName );
+    /**
+    * Deletes the project of given namespace and name on Mergin server.
+    * \param projectNamespace
+    * \param projectName
+    */
     void deleteProject( const QString &projectNamespace, const QString &projectName );
+    /**
+    * Adds a project to list of merginProjects
+    * \param projectNamespace
+    * \param projectName
+    */
+    void addProject( std::shared_ptr<MerginProject> project );
     void clearTokenData();
 
     // Production and Test functions (therefore not private)
@@ -161,6 +185,11 @@ class MerginApi: public QObject
     ProjectDiff compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles );
     ProjectList projects();
     QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
+    /**
+    * Clears projects metadata.
+    * \param project std::shared_ptr<MerginProject> to access certain project.
+    */
+    void clearProject( std::shared_ptr<MerginProject> project );
 
     QString username() const;
 
@@ -197,6 +226,7 @@ class MerginApi: public QObject
     void serverProjectDeleted( const QString &projecFullName );
     void userInfoChanged();
     void pingMerginFinished( const QString &apiVersion, const QString &msg );
+    void pullFilesStarted();
 
   public slots:
     void projectDeleted( const QString &projecFullName );
@@ -234,7 +264,7 @@ class MerginApi: public QObject
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
     QStringList generateChunkIdsForSize( qint64 fileSize );
-    QJsonObject prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath = false );
+    QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath = false );
 
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).
@@ -317,15 +347,15 @@ class MerginApi: public QObject
     */
     QString getProjectDir( const QString &projectNamespace, const  QString &projectName );
     /**
+    * Returns a temporary project path.
+    * \param projectFullName
+    */
+    QString getTempProjectDir( const QString &projectFullName );
+    /**
     * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
     * \param QString path
     */
     QString findUniqueProjectDirectoryName( QString path );
-    /**
-    * Clears projects metadata.
-    * \param project std::shared_ptr<MerginProject> to access certain project.
-    */
-    void clearProject( std::shared_ptr<MerginProject> project );
     QNetworkReply *getProjectInfo( const QString &projectFullName );
     /**
     * Used to store metadata about projects inbetween info and sync_data request.
