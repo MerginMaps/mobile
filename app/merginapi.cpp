@@ -1242,9 +1242,16 @@ void MerginApi::uploadInfoReplyFinished()
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
 
     MerginProject serverProject = readProjectMetadata( data );
-    mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
-
     ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
+    if ( diff.sizeOfChanges + mDiskUsage >= mStorageLimit )
+    {
+      QString message = QStringLiteral( "Storage limit exceeded" );
+      notify( message );
+      InputUtils::log( QStringLiteral( "SYNC Cancelled" ), QStringLiteral( "ABORT - %1" ).arg( message ) );
+      emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+      return;
+    }
+
     QList<MerginFile> filesToUpload;
 
     QJsonArray added = prepareUploadChangesJSON( diff.added );
@@ -1262,8 +1269,8 @@ void MerginApi::uploadInfoReplyFinished()
     changes.insert( "renamed", QJsonArray() );
 
     r->deleteLater();
-    mPendingRequests.remove( url );
     mFilesToUpload.insert( projectFullName, filesToUpload );
+    mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
@@ -1391,11 +1398,13 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
     if ( currentFile.checksum.isEmpty() )
     {
       diff.added.append( newFile );
+      diff.sizeOfChanges += newFile.size;
     }
 
     else if ( currentFile.checksum != newFile.checksum )
     {
       diff.modified.append( newFile );
+      diff.sizeOfChanges += newFile.size;
     }
 
     currentFilesMap.remove( currentFile.path );
@@ -1405,6 +1414,7 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
   for ( MerginFile file : currentFilesMap )
   {
     diff.removed.append( file );
+    diff.sizeOfChanges -= file.size;
   }
 
   return diff;
