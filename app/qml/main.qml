@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
@@ -128,6 +129,11 @@ ApplicationWindow {
         } else {
             __androidUtils.showToast(message)
         }
+    }
+
+    function showDialog(message) {
+      alertDialog.text  = message
+      alertDialog.open()
     }
 
     function updateRecordToolbar() {
@@ -536,6 +542,12 @@ ApplicationWindow {
         z: zPanel + 1000 // the most top
     }
 
+    MessageDialog {
+        id: alertDialog
+        title: qsTr("Sync error")
+        onAccepted: alertDialog.close()
+    }
+
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
@@ -543,6 +555,9 @@ ApplicationWindow {
         }
         onNotify: {
             showMessage(message)
+        }
+        onNotifyDialog: {
+          showDialog(message)
         }
     }
 

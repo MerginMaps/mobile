@@ -1094,9 +1094,19 @@ void MerginApi::uploadStartReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    int status = statusCode.toInt();
+    if ( status == 400 && r->errorString() == QStringLiteral( "You have reached a data limit" ) )
+    {
+      emit notifyDialog( r->errorString() );
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
+    }
+
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
   }
 
   r->deleteLater();
@@ -1243,14 +1253,6 @@ void MerginApi::uploadInfoReplyFinished()
 
     MerginProject serverProject = readProjectMetadata( data );
     ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
-    if ( diff.sizeOfChanges + mDiskUsage >= mStorageLimit )
-    {
-      QString message = QStringLiteral( "Storage limit exceeded" );
-      notify( message );
-      InputUtils::log( QStringLiteral( "SYNC Cancelled" ), QStringLiteral( "ABORT - %1" ).arg( message ) );
-      emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-      return;
-    }
 
     QList<MerginFile> filesToUpload;
 
