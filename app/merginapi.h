@@ -217,6 +217,7 @@ class MerginApi: public QObject
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo );
     void notify( const QString &message );
+    void notifyDialog( const QString &message );
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
