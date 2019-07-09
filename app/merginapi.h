@@ -214,9 +214,8 @@ class MerginApi: public QObject
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void downloadFileFinished( const QString &projectFullName, const QString &version, int chunkNo = 0, bool successfully = true );
     void reloadProject( const QString &projectDir );
-    void networkErrorOccurred( const QString &message, const QString &additionalInfo );
+    void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
     void notify( const QString &message );
-    void notifyDialog( const QString &message );
     void merginProjectsChanged();
     void authRequested();
     void authChanged();
