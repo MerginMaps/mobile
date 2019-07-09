@@ -52,7 +52,6 @@ struct ProjectDiff
   QList<MerginFile> added;
   QList<MerginFile> modified;
   QList<MerginFile> removed;
-  int sizeOfChanges = 0;
 };
 
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
