@@ -164,13 +164,14 @@ void MerginApi::uploadCancel( const QString &projectFullName )
     reply->abort();
   }
   mOpenConnections.remove( projectFullName );
-  mFilesToUpload.remove( projectFullName );
+  mTransactionalStatus[projectFullName].files.clear();
   QString transactionUUID = mTransactions.value( projectFullName );
 
   // Transaction has not started yet
   if ( transactionUUID == projectFullName )
   {
     mTransactions.remove( projectFullName );
+    mTransactionalStatus[projectFullName].files.clear();
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
   else
@@ -199,7 +200,6 @@ void MerginApi::updateCancel( const QString &projectFullName )
   }
   else
   {
-    mFilesToDownload.remove( projectFullName );
     MerginProject p = mTempMerginProjects.value( projectFullName );
     QDir projectDir( p.projectDir );
     if ( projectDir.exists() && projectDir.isEmpty() )
@@ -208,6 +208,7 @@ void MerginApi::updateCancel( const QString &projectFullName )
     }
     QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
     mTempMerginProjects.remove( projectFullName );
+    mTransactionalStatus.remove( projectFullName );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
 }
@@ -954,7 +955,7 @@ void MerginApi::listProjectsReplyFinished()
 
 void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QString &version )
 {
-  MerginFile nextFile = mFilesToDownload[projectFullName].first();
+  MerginFile nextFile = mTransactionalStatus[projectFullName].files.first();
   if ( !nextFile.size )
   {
     createEmptyFile( getTempProjectDir( projectFullName ) + "/" + nextFile.path );
@@ -974,21 +975,21 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     return;
   }
 
-  MerginFile currentFile = mFilesToDownload[projectFullName].first();
+  MerginFile currentFile = mTransactionalStatus[projectFullName].files.first();
   if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
   {
     downloadFile( projectFullName, currentFile.path, version, lastChunkNo + 1 );
   }
   else
   {
-    mFilesToDownload[projectFullName].removeFirst();
-    if ( !mFilesToDownload[projectFullName].isEmpty() )
+    mTransactionalStatus[projectFullName].files.removeFirst();
+    if ( !mTransactionalStatus[projectFullName].files.isEmpty() )
     {
       takeFirstAndDownload( projectFullName, version );
     }
     else
     {
-      mFilesToDownload.remove( projectFullName );
+      mTransactionalStatus[projectFullName].files.clear();
       QString projectNamespace;
       QString projectName;
       extractProjectName( projectFullName, projectNamespace, projectName );
@@ -1024,10 +1025,10 @@ void MerginApi::downloadFileReplyFinished()
     bool overwrite = true; // chunkNo == 0
     bool closeFile = false;
 
-    QList<MerginFile> files = mFilesToDownload.value( projectFullName );
+    QList<MerginFile> files = mTransactionalStatus[projectFullName].files;
     if ( !files.isEmpty() )
     {
-      MerginFile file = mFilesToDownload.value( projectFullName ).first();
+      MerginFile file = mTransactionalStatus[projectFullName].files.first();
       overwrite  = file.chunks.size() <= 1;
 
       if ( chunkNo == file.chunks.size() - 1 )
@@ -1083,7 +1084,7 @@ void MerginApi::uploadStartReplyFinished()
       mTransactions.insert( projectFullName, transactionUUID );
     }
 
-    QList<MerginFile> files = mFilesToUpload.value( projectFullName );
+    QList<MerginFile> files = mTransactionalStatus[projectFullName].files;
     if ( !files.isEmpty() )
     {
       MerginFile file = files.first();
@@ -1127,7 +1128,7 @@ void MerginApi::uploadFileReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
-    MerginFile currentFile = mFilesToUpload[projectFullName].first();
+    MerginFile currentFile = mTransactionalStatus[projectFullName].files.first();
     int chunkNo = currentFile.chunks.indexOf( chunkID );
     if ( chunkNo < currentFile.chunks.size() - 1 )
     {
@@ -1137,15 +1138,15 @@ void MerginApi::uploadFileReplyFinished()
     {
       mTransactionalStatus[projectFullName].transferedSize += currentFile.size;
       emit syncProgressUpdated( projectFullName, mTransactionalStatus[projectFullName].transferedSize / mTransactionalStatus[projectFullName].totalSize );
-      mFilesToUpload[projectFullName].removeFirst();
-      if ( !mFilesToUpload[projectFullName].isEmpty() )
+      mTransactionalStatus[projectFullName].files.removeFirst();
+      if ( !mTransactionalStatus[projectFullName].files.isEmpty() )
       {
-        MerginFile nextFile = mFilesToUpload[projectFullName].first();
+        MerginFile nextFile = mTransactionalStatus[projectFullName].files.first();
         uploadFile( projectFullName, transactionUUID, nextFile );
       }
       else
       {
-        mFilesToUpload.remove( projectFullName );
+        mTransactionalStatus[projectFullName].files.clear();
         uploadFinish( projectFullName, transactionUUID );
       }
     }
@@ -1221,8 +1222,8 @@ void MerginApi::updateInfoReplyFinished()
 
     if ( !filesToDownload.isEmpty() )
     {
+      syncStatus.files = filesToDownload;
       mTransactionalStatus.insert( projectFullName, syncStatus );
-      mFilesToDownload.insert( projectFullName, filesToDownload );
       takeFirstAndDownload( projectFullName, serverProject.version );
       emit pullFilesStarted();
     }
@@ -1283,9 +1284,9 @@ void MerginApi::uploadInfoReplyFinished()
       syncStatus.totalSize += file.size;
     }
 
+    syncStatus.files = filesToUpload;
     mTransactionalStatus.insert( projectFullName, syncStatus );
-    mFilesToUpload.insert( projectFullName, filesToUpload );
-    mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
+    mTempMerginProjects.insert( projectFullName, serverProject );
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
