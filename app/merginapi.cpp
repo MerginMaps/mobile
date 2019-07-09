@@ -1237,7 +1237,6 @@ void MerginApi::uploadInfoReplyFinished()
   Q_ASSERT( r );
 
   QUrl url = r->url();
-  mPendingRequests.remove( url );
   QString projectNamespace;
   QString projectName;
   extractProjectName( url.path(), projectNamespace, projectName );
@@ -1254,7 +1253,6 @@ void MerginApi::uploadInfoReplyFinished()
 
     MerginProject serverProject = readProjectMetadata( data );
     ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
-
     QList<MerginFile> filesToUpload;
 
     QJsonArray added = prepareUploadChangesJSON( diff.added );
@@ -1271,7 +1269,6 @@ void MerginApi::uploadInfoReplyFinished()
     changes.insert( "updated", modified );
     changes.insert( "renamed", QJsonArray() );
 
-    r->deleteLater();
     mFilesToUpload.insert( projectFullName, filesToUpload );
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
@@ -1294,6 +1291,9 @@ void MerginApi::uploadInfoReplyFinished()
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
+
+  mPendingRequests.remove( url );
+  r->deleteLater();
 }
 
 void MerginApi::uploadFinishReplyFinished()
@@ -1401,13 +1401,11 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
     if ( currentFile.checksum.isEmpty() )
     {
       diff.added.append( newFile );
-      diff.sizeOfChanges += newFile.size;
     }
 
     else if ( currentFile.checksum != newFile.checksum )
     {
       diff.modified.append( newFile );
-      diff.sizeOfChanges += newFile.size;
     }
 
     currentFilesMap.remove( currentFile.path );
@@ -1417,7 +1415,6 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
   for ( MerginFile file : currentFilesMap )
   {
     diff.removed.append( file );
-    diff.sizeOfChanges -= file.size;
   }
 
   return diff;
