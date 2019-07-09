@@ -132,7 +132,7 @@ ApplicationWindow {
     }
 
     function showDialog(message) {
-      alertDialog.text  = message
+      alertDialog.text  = qsTr(message)
       alertDialog.open()
     }
 
@@ -544,7 +544,7 @@ ApplicationWindow {
 
     MessageDialog {
         id: alertDialog
-        title: qsTr("Sync error")
+        title: qsTr("Synchronization error")
         onAccepted: alertDialog.close()
     }
 
