@@ -47,6 +47,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       }
     }
     case Pending: return QVariant( project->pending );
+    case SyncProgress: return QVariant( project->progress );
     case PassesFilter:
     {
       if ( mFilterCreator >= 0 )
@@ -81,6 +82,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
   roleNames[PassesFilter] = "passesFilter";
+  roleNames[SyncProgress] = "syncProgress";
   return roleNames;
 }
 
@@ -116,6 +118,24 @@ void MerginProjectModel::syncProjectFinished( const QString &projectFolder, cons
         project->status = ProjectStatus::UpToDate;
       }
       setPending( row, false ); // emits dataChanged
+      return;
+    }
+    row++;
+  }
+}
+
+void MerginProjectModel::syncProgressUpdated( const QString &projectFullName, qreal progress )
+{
+  int row = 0;
+  for ( std::shared_ptr<MerginProject> project : mMerginProjects )
+  {
+    if ( MerginApi::getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
+    {
+      if ( row < 0 || row > mMerginProjects.length() - 1 ) return;
+
+      QModelIndex ix = index( row );
+      project->progress = progress;
+      emit dataChanged( ix, ix );
       return;
     }
     row++;

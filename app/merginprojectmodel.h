@@ -22,7 +22,8 @@ class MerginProjectModel: public QAbstractListModel
       ProjectInfo,
       Status,
       Pending,
-      PassesFilter
+      PassesFilter,
+      SyncProgress
     };
     Q_ENUMS( Roles )
 
@@ -46,6 +47,7 @@ class MerginProjectModel: public QAbstractListModel
 
   public slots:
     void syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully );
+    void syncProgressUpdated( const QString &projectFullName, qreal progress );
   private:
     ProjectList mMerginProjects;
     int mFilterCreator;

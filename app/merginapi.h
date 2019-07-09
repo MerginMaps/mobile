@@ -28,6 +28,12 @@ struct MerginFile
   QStringList chunks; // used only for upload otherwise suppose to be empty
 };
 
+struct TransactionStatus
+{
+  qreal totalSize = 0;
+  int transferedSize = 0;
+};
+
 struct MerginProject
 {
   QString name;
@@ -43,6 +49,7 @@ struct MerginProject
   ProjectStatus status = NoVersion;
   int size;
   int filesCount;
+  qreal progress;
   int creator; // ID of current user
   QList<int> writers;
 };
@@ -212,6 +219,7 @@ class MerginApi: public QObject
     void listProjectsFinished( const ProjectList &merginProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    void syncProgressUpdated( const QString &projectFullName, qreal progress );
     void downloadFileFinished( const QString &projectFullName, const QString &version, int chunkNo = 0, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
@@ -299,7 +307,7 @@ class MerginApi: public QObject
     void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
-    void handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
+    void handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
     void createEmptyFile( const QString &path );
@@ -374,13 +382,18 @@ class MerginApi: public QObject
     QDateTime mTokenExpiration;
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
+
+    // TODO refactor
     QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
-    QSet<QString> mWaitingForUpload; // projectNamespace/projectName
-    QHash<QString, QList<MerginFile>> mFilesToDownload; // projectFullName -> list of files
-    QHash<QString, QList<MerginFile>> mFilesToUpload; // projectFullName -> list of files
-    QHash<QString, QSet<QString>> mObsoleteFiles;
-    QHash<QString, QString> mTransactions; // projectFullname -> transactionUUID
-    QHash<QString, QNetworkReply *> mOpenConnections; // related to upload
+
+    QSet<QString> mWaitingForUpload; // U + D projectNamespace/projectName
+    QHash<QString, QList<MerginFile>> mFilesToDownload; // U projectFullName -> list of files
+    QHash<QString, QList<MerginFile>> mFilesToUpload; // D projectFullName -> list of files
+    QHash<QString, QSet<QString>> mObsoleteFiles; // D
+    QHash<QString, QString> mTransactions; // U projectFullname -> transactionUUID
+    QHash<QString, TransactionStatus> mTransactionalStatus; //D + U projectFullname -> transactionUUID
+    QHash<QString, QNetworkReply *> mOpenConnections; // U related to upload
+
     QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
     QEventLoop mAuthLoopEvent;
