@@ -20,7 +20,7 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
   initTestCase();
 
   testListProject();
-  //testDownloadProject();
+  testDownloadProject();
   testCancelDownlaodProject();
   testCreateProjectTwice();
   testDeleteNonExistingProject();
@@ -380,8 +380,6 @@ void TestMerginApi::testPushChangesOfProject()
   QDateTime serverT2 = project->serverUpdated;
   QVERIFY( serverT1 < serverT2 );
 
-  qDebug() << "!!!!!" << localProjectNo0 << localProjectNo1;
-  qDebug() << "!!2143!!!" << projectNo0 << projectNo1;
   QCOMPARE( localProjectNo0, localProjectNo1 );
   QCOMPARE( projectNo0, projectNo1 );
 
