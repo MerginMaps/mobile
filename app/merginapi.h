@@ -32,6 +32,7 @@ struct TransactionStatus
 {
   qreal totalSize = 0;
   int transferedSize = 0;
+  QList<MerginFile> files; // either to upload or download
 };
 
 struct MerginProject
@@ -387,12 +388,10 @@ class MerginApi: public QObject
     QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
 
     QSet<QString> mWaitingForUpload; // U + D projectNamespace/projectName
-    QHash<QString, QList<MerginFile>> mFilesToDownload; // U projectFullName -> list of files
-    QHash<QString, QList<MerginFile>> mFilesToUpload; // D projectFullName -> list of files
-    QHash<QString, QSet<QString>> mObsoleteFiles; // D
+    QHash<QString, QSet<QString>> mObsoleteFiles; // D projectPath -> files
     QHash<QString, QString> mTransactions; // U projectFullname -> transactionUUID
-    QHash<QString, TransactionStatus> mTransactionalStatus; //D + U projectFullname -> transactionUUID
     QHash<QString, QNetworkReply *> mOpenConnections; // U related to upload
+    QHash<QString, TransactionStatus> mTransactionalStatus; //D + U projectFullname -> transactionUUID
 
     QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
