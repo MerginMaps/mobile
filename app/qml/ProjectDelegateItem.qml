@@ -22,6 +22,7 @@ Rectangle {
     property string projectName: name // <namespace>/<projectName>
     property bool disabled: false
     property real itemMargin: InputStyle.panelMargin
+    property real progressValue: 0
 
     signal itemClicked();
     signal menuClicked()
@@ -57,6 +58,7 @@ Rectangle {
 
                 Image {
                     id: icon
+                    visible: !pending
                     anchors.centerIn: parent
                     source: 'project.svg'
                     width: itemContainer.iconSize
@@ -69,7 +71,16 @@ Rectangle {
                 ColorOverlay {
                     anchors.fill: icon
                     source: icon
+                    visible: !pending
                     color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
+                }
+
+                BusyIndicator {
+                    id: busyIndicator
+                    implicitHeight: itemContainer.cellHeight/2
+                    implicitWidth: implicitHeight
+                    running: pending
+                    anchors.centerIn: parent
                 }
             }
 
@@ -91,6 +102,8 @@ Rectangle {
                 }
 
                 Text {
+                    id: secondaryText
+                    visible: !pending
                     height: textContainer.height/2
                     text: projectInfo ? projectInfo : ""
                     anchors.right: parent.right
@@ -102,6 +115,35 @@ Rectangle {
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignTop
                 }
+
+                ProgressBar {
+                  property real itemHeight: InputStyle.fontPixelSizeSmall
+
+                  id: progressBar
+                  anchors.top: mainText.bottom
+                  height: InputStyle.fontPixelSizeSmall
+                  width: secondaryText.width
+                  value: progressValue
+                  visible: pending
+
+                  background: Rectangle {
+                    implicitWidth: parent.width
+                    implicitHeight: progressBar.itemHeight
+                    color: InputStyle.panelBackgroundLight
+                  }
+
+                  contentItem: Item {
+                    implicitWidth: parent.width
+                    implicitHeight: progressBar.itemHeight
+
+                    Rectangle {
+                      width: progressBar.visualPosition * parent.width
+                      height: parent.height
+                      color: InputStyle.fontColor
+                    }
+                  }
+                }
+
             }
 
             Item {
@@ -112,9 +154,7 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        if (!pending) menuClicked()
-                    }
+                    onClicked:menuClicked()
                 }
 
                 Image {
@@ -126,27 +166,12 @@ Rectangle {
                     sourceSize.width: width
                     sourceSize.height: height
                     fillMode: Image.PreserveAspectFit
-                    visible: !pending
                 }
 
                 ColorOverlay {
                     anchors.fill: statusIcon
                     source: statusIcon
                     color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                    visible: !pending
-                }
-
-                BusyIndicator {
-                    id: busyIndicator
-                    implicitHeight: itemContainer.cellHeight/2
-                    implicitWidth: implicitHeight
-                    running: pending
-                    anchors.centerIn: parent
-
-                    MouseArea {
-                      anchors.fill: parent
-                      onClicked: menuClicked()
-                    }
                 }
             }
         }

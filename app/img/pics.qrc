@@ -42,5 +42,6 @@
         <file>marker.svg</file>
         <file>sync.svg</file>
         <file>download.svg</file>
+        <file>stop.svg</file>
     </qresource>
 </RCC>

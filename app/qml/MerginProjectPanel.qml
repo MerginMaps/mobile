@@ -25,7 +25,9 @@ Item {
     projectsPanel.visible = true
   }
 
-  function getStatusIcon(status) {
+  function getStatusIcon(status, pending) {
+    if (pending) return "stop.svg"
+
     if (status === "noVersion") return "download.svg"
     else if (status === "outOfDate") return "sync.svg"
     else if (status === "upToDate") return "check.svg"
@@ -33,7 +35,6 @@ Item {
 
     return "more_menu.svg"
   }
-
 
   Component.onCompleted: {
     // load model just after all components are prepared
@@ -443,9 +444,10 @@ Item {
       height: passesFilter ? cellHeight : 0
       visible: height ? true : false
       pending: pendingProject
-      statusIconSource: getStatusIcon(status)
+      statusIconSource: getStatusIcon(status, pendingProject)
       iconSize: projectsPanel.iconSize
       projectName: projectNamespace + "/" + name
+      progressValue: syncProgress
 
       onMenuClicked: {
         if (status === "upToDate") return
