@@ -1038,7 +1038,11 @@ void MerginApi::downloadFileReplyFinished()
 
     QString tempFoler = getTempProjectDir( projectFullName );
     createPathIfNotExists( tempFoler );
-    handleOctetStream( r, tempFoler, filename, closeFile, overwrite );
+    QByteArray data = r->readAll();
+    handleOctetStream( data, tempFoler, filename, closeFile, overwrite );
+    mTransactionalStatus[projectFullName].transferedSize += data.size();
+
+    emit syncProgressUpdated( projectFullName, mTransactionalStatus[projectFullName].transferedSize / mTransactionalStatus[projectFullName].totalSize );
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     // Send another request afterwards
     emit downloadFileFinished( projectFullName, version, chunkNo, true );
@@ -1131,6 +1135,8 @@ void MerginApi::uploadFileReplyFinished()
     }
     else
     {
+      mTransactionalStatus[projectFullName].transferedSize += currentFile.size;
+      emit syncProgressUpdated( projectFullName, mTransactionalStatus[projectFullName].transferedSize / mTransactionalStatus[projectFullName].totalSize );
       mFilesToUpload[projectFullName].removeFirst();
       if ( !mFilesToUpload[projectFullName].isEmpty() )
       {
@@ -1181,8 +1187,9 @@ void MerginApi::updateInfoReplyFinished()
     serverProject.projectDir = projectPath;
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
-    ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
 
+
+    ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
     if ( !mWaitingForUpload.contains( projectFullName ) )
     {
       QSet<QString> obsoleteFiles;
@@ -1197,20 +1204,24 @@ void MerginApi::updateInfoReplyFinished()
       }
     }
 
+    TransactionStatus syncStatus;
     for ( MerginFile file : diff.added )
     {
       file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
+      syncStatus.totalSize += file.size;
     }
 
     for ( MerginFile file : diff.modified )
     {
       file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
+      syncStatus.totalSize += file.size;
     }
 
     if ( !filesToDownload.isEmpty() )
     {
+      mTransactionalStatus.insert( projectFullName, syncStatus );
       mFilesToDownload.insert( projectFullName, filesToDownload );
       takeFirstAndDownload( projectFullName, serverProject.version );
       emit pullFilesStarted();
@@ -1263,6 +1274,16 @@ void MerginApi::uploadInfoReplyFinished()
     changes.insert( "updated", modified );
     changes.insert( "renamed", QJsonArray() );
 
+    r->deleteLater();
+    mPendingRequests.remove( url );
+    TransactionStatus syncStatus;
+
+    for ( MerginFile file : filesToUpload )
+    {
+      syncStatus.totalSize += file.size;
+    }
+
+    mTransactionalStatus.insert( projectFullName, syncStatus );
     mFilesToUpload.insert( projectFullName, filesToUpload );
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
@@ -1668,11 +1689,9 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
     connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
 }
 
-void MerginApi::handleOctetStream( QNetworkReply *r, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
+void MerginApi::handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
 {
-  QByteArray data = r->readAll();
   QFile file;
-
   QString activeFilePath = projectDir + '/' + filename;
   file.setFileName( activeFilePath );
   createPathIfNotExists( activeFilePath );
