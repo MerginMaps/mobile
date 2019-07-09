@@ -1093,12 +1093,13 @@ void MerginApi::uploadStartReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
-    if ( status == 400 && r->errorString() == QStringLiteral( "You have reached a data limit" ) )
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString errorMsg = r->errorString();
+    if ( status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" ) )
     {
-      emit notifyDialog( r->errorString() );
+      emit notifyDialog( serverMsg );
     }
     else
     {
