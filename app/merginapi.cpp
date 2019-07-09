@@ -1097,16 +1097,10 @@ void MerginApi::uploadStartReplyFinished()
     int status = statusCode.toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString errorMsg = r->errorString();
-    if ( status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" ) )
-    {
-      emit notifyDialog( serverMsg );
-    }
-    else
-    {
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
-    }
+    bool showAsDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), showAsDialog );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
 

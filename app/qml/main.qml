@@ -551,7 +551,7 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
-            showMessage(message)
+            showAsDialog ? showDialog(message) : showMessage(message)
         }
         onNotify: {
             showMessage(message)
