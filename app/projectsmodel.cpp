@@ -51,7 +51,7 @@ void ProjectModel::addProjectFromPath( QString path )
   int projectExistsAt = -1;
   for ( ProjectFile projectFile : mProjectFiles )
   {
-    if ( mDataDir + projectFile.folderName == path )
+    if ( QDir( mDataDir + projectFile.folderName ) == QDir( path ) )
     {
       projectExistsAt = i;
     }
