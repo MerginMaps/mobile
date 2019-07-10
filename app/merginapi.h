@@ -32,6 +32,7 @@ struct TransactionStatus
 {
   qreal totalSize = 0;
   int transferedSize = 0;
+  QString transactionUUID; // only for upload
   QList<MerginFile> files; // either to upload or download
 };
 
@@ -386,10 +387,9 @@ class MerginApi: public QObject
 
     // TODO refactor
     QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
+    QHash<QString, QSet<QString>> mObsoleteFiles; // D projectPath -> files
 
     QSet<QString> mWaitingForUpload; // U + D projectNamespace/projectName
-    QHash<QString, QSet<QString>> mObsoleteFiles; // D projectPath -> files
-    QHash<QString, QString> mTransactions; // U projectFullname -> transactionUUID
     QHash<QString, QNetworkReply *> mOpenConnections; // U related to upload
     QHash<QString, TransactionStatus> mTransactionalStatus; //D + U projectFullname -> transactionUUID
 

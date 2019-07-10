@@ -131,7 +131,7 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   }
 
   // Has been canceled
-  if ( !mTransactions.contains( projectFullName ) )
+  if ( mTransactionalStatus[projectFullName].transactionUUID.isEmpty() )
   {
     InputUtils::log( "uploadStarted", QStringLiteral( "ABORT" ) );
     return;
@@ -165,12 +165,12 @@ void MerginApi::uploadCancel( const QString &projectFullName )
   }
   mOpenConnections.remove( projectFullName );
   mTransactionalStatus[projectFullName].files.clear();
-  QString transactionUUID = mTransactions.value( projectFullName );
+  QString transactionUUID = mTransactionalStatus[projectFullName].transactionUUID;
 
   // Transaction has not started yet
   if ( transactionUUID == projectFullName )
   {
-    mTransactions.remove( projectFullName );
+    mTransactionalStatus[projectFullName].transactionUUID.clear();
     mTransactionalStatus[projectFullName].files.clear();
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
@@ -220,7 +220,7 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
     return;
   }
 
-  if ( !mTransactions.contains( projectFullName ) )
+  if ( mTransactionalStatus[projectFullName].transactionUUID.isEmpty() )
   {
     return;
   }
@@ -256,7 +256,10 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   QString projectDir = getProjectDir( projectNamespace, projectName );
 
   // Waiting for transaction UUID, just added projectFullName as a tag its pending
-  mTransactions.insert( projectFullName, projectFullName );
+  TransactionStatus syncStatus;
+  syncStatus.transactionUUID = projectFullName;
+  mTransactionalStatus.insert( projectFullName, syncStatus );
+
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
     if ( getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
@@ -1081,7 +1084,7 @@ void MerginApi::uploadStartReplyFinished()
     {
       QJsonObject docObj = doc.object();
       transactionUUID = docObj.value( QStringLiteral( "transaction" ) ).toString();
-      mTransactions.insert( projectFullName, transactionUUID );
+      mTransactionalStatus[projectFullName].transactionUUID = transactionUUID;
     }
 
     QList<MerginFile> files = mTransactionalStatus[projectFullName].files;
@@ -1277,16 +1280,14 @@ void MerginApi::uploadInfoReplyFinished()
 
     r->deleteLater();
     mPendingRequests.remove( url );
-    TransactionStatus syncStatus;
-
+    //TransactionStatus syncStatus;
     for ( MerginFile file : filesToUpload )
     {
-      syncStatus.totalSize += file.size;
+      mTransactionalStatus[projectFullName].totalSize += file.size;
     }
 
-    syncStatus.files = filesToUpload;
-    mTransactionalStatus.insert( projectFullName, syncStatus );
-    mTempMerginProjects.insert( projectFullName, serverProject );
+    mTransactionalStatus[projectFullName].files = filesToUpload;
+    //mTransactionalStatus.insert( projectFullName, syncStatus );
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
@@ -1320,7 +1321,7 @@ void MerginApi::uploadFinishReplyFinished()
   QUrl url = r->url();
   QString projectFullName = mPendingRequests.value( url );
   mPendingRequests.remove( url );
-  mTransactions.remove( projectFullName );
+  mTransactionalStatus[projectFullName].transactionUUID.clear();
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -1357,7 +1358,7 @@ void MerginApi::uploadCancelReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    mTransactions.remove( projectFullName );
+    mTransactionalStatus[projectFullName].transactionUUID.clear(); // TODO removed in syncFinished??
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
   }
   else
@@ -1679,7 +1680,7 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
   }
 
   // Has been canceled
-  if ( !mTransactions.contains( projectFullName ) )
+  if ( mTransactionalStatus[projectFullName].transactionUUID.isEmpty() )
   {
     InputUtils::log( "continueWithUpload", QStringLiteral( "ABORT" ) );
     return;
