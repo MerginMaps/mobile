@@ -726,6 +726,9 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
   }
+
+  // TODO remove, only for te4eting
+  setApiVersionStatus( MerginApiStatus::OK );
 }
 
 bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )
@@ -1059,6 +1062,7 @@ void MerginApi::downloadFileReplyFinished()
 
     emit syncProgressUpdated( projectFullName, mTransactionalStatus[projectFullName].transferedSize / mTransactionalStatus[projectFullName].totalSize );
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    deleteReply( r, projectFullName );
     // Send another request afterwards
     emit downloadFileFinished( projectFullName, version, chunkNo, true );
   }
@@ -1070,11 +1074,10 @@ void MerginApi::downloadFileReplyFinished()
       serverMsg = r->errorString();
     }
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    deleteReply( r, projectFullName );
     emit downloadFileFinished( projectFullName, version, chunkNo, false );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
   }
-
-  deleteReply( r, projectFullName );
 }
 
 void MerginApi::uploadStartReplyFinished()
