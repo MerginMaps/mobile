@@ -33,6 +33,7 @@ struct TransactionStatus
   qreal totalSize = 0;
   int transferedSize = 0;
   QString transactionUUID; // only for upload
+  QNetworkReply *openReply = nullptr; // all sync replies except cancel
   QList<MerginFile> files; // either to upload or download
 };
 
@@ -314,6 +315,7 @@ class MerginApi: public QObject
     void createPathIfNotExists( const QString &filePath );
     void createEmptyFile( const QString &path );
     void takeFirstAndDownload( const QString &projectFullName, const QString &version );
+    void deleteReply( QNetworkReply *r, const QString &projectFullName );
     /**
     *
     * \param localUpdated Timestamp version of local copy of the project
@@ -385,14 +387,10 @@ class MerginApi: public QObject
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
 
-    // TODO refactor
     QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
-    QHash<QString, QSet<QString>> mObsoleteFiles; // D projectPath -> files
-
-    QSet<QString> mWaitingForUpload; // U + D projectNamespace/projectName
-    QHash<QString, QNetworkReply *> mOpenConnections; // U related to upload
-    QHash<QString, TransactionStatus> mTransactionalStatus; //D + U projectFullname -> transactionUUID
-
+    QHash<QString, QSet<QString>> mObsoleteFiles; // projectPath -> files
+    QSet<QString> mWaitingForUpload; // projectNamespace/projectName
+    QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
     QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
     QEventLoop mAuthLoopEvent;
@@ -401,7 +399,6 @@ class MerginApi: public QObject
     const int CHUNK_SIZE = 65536;
     const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
-
 };
 
 #endif // MERGINAPI_H
