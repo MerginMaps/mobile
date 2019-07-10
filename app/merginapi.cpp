@@ -83,7 +83,7 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
 
   mPendingRequests.insert( url, projectFullName );
   QNetworkReply *reply = mManager.get( request );
-  mOpenConnections.insert( projectFullName, reply );
+  mTransactionalStatus[projectFullName].openReply = reply;
   InputUtils::log( url.toString() + " Range: " + range, QStringLiteral( "STARTED" ) );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadFileReplyFinished );
 }
@@ -118,8 +118,8 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
 
   QNetworkReply *reply = mManager.post( request, data );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadFileReplyFinished );
+  mTransactionalStatus[projectFullName].openReply = reply;
   mPendingRequests.insert( url, projectFullName );
-  mOpenConnections.insert( projectFullName, reply );
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
 }
 
@@ -146,7 +146,7 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   QNetworkReply *reply = mManager.post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadStartReplyFinished );
   mPendingRequests.insert( url, projectFullName );
-  mOpenConnections.insert( projectFullName, reply );
+  mTransactionalStatus[projectFullName].openReply = reply;
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
 }
 
@@ -157,44 +157,51 @@ void MerginApi::uploadCancel( const QString &projectFullName )
     return;
   }
 
-  QNetworkReply *reply = mOpenConnections.value( projectFullName );
+  if ( !mTransactionalStatus.contains( projectFullName ) )
+    return;
+
+  QNetworkReply *reply = mTransactionalStatus[projectFullName].openReply;
+  // There is an open transaction, abort it followed by calling cancelUpload again.
   if ( reply )
   {
     InputUtils::log( reply->url().toString(), QStringLiteral( "ABORT" ) );
     reply->abort();
   }
-  mOpenConnections.remove( projectFullName );
-  mTransactionalStatus[projectFullName].files.clear();
-  QString transactionUUID = mTransactionalStatus[projectFullName].transactionUUID;
-
-  // Transaction has not started yet
-  if ( transactionUUID == projectFullName )
-  {
-    mTransactionalStatus[projectFullName].transactionUUID.clear();
-    mTransactionalStatus[projectFullName].files.clear();
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
-  }
+  // There is no connections, can send cancel request or call syncProjectFinished straight away
   else
   {
-    QNetworkRequest request;
-    QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
-    request.setUrl( url );
-    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-    request.setRawHeader( "Content-Type", "application/json" );
-    mPendingRequests.insert( url, projectFullName );
+    mTransactionalStatus[projectFullName].files.clear();
+    QString transactionUUID = mTransactionalStatus[projectFullName].transactionUUID;
 
-    QNetworkReply *reply = mManager.post( request, QByteArray() );
-    connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadCancelReplyFinished );
-    InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
+    // Any transaction has not started yet
+    if ( transactionUUID == projectFullName || transactionUUID.isEmpty() )
+    {
+      emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    }
+    else
+    {
+      QNetworkRequest request;
+      QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
+      request.setUrl( url );
+      request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+      request.setRawHeader( "Content-Type", "application/json" );
+      mPendingRequests.insert( url, projectFullName );
+
+      // To not include cancel reply to transactionStatus
+      QNetworkReply *reply = mManager.post( request, QByteArray() );
+      connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadCancelReplyFinished );
+      InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
+    }
   }
 }
 
 void MerginApi::updateCancel( const QString &projectFullName )
 {
-  QNetworkReply *reply = mOpenConnections.value( projectFullName );
+  if ( !mTransactionalStatus.contains( projectFullName ) ) return;
+
+  QNetworkReply *reply = mTransactionalStatus[projectFullName].openReply;
   if ( reply )
   {
-    mOpenConnections.remove( projectFullName );
     InputUtils::log( reply->url().toString(), QStringLiteral( "ABORT" ) );
     reply->abort();
   }
@@ -208,7 +215,6 @@ void MerginApi::updateCancel( const QString &projectFullName )
     }
     QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
     mTempMerginProjects.remove( projectFullName );
-    mTransactionalStatus.remove( projectFullName );
     emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   }
 }
@@ -234,7 +240,7 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   QNetworkReply *reply = mManager.post( request, QByteArray() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadFinishReplyFinished );
   mPendingRequests.insert( url, projectFullName );
-  mOpenConnections.insert( projectFullName, reply );
+  mTransactionalStatus[projectFullName].openReply = reply;
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
 }
 
@@ -244,7 +250,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
   QNetworkReply *reply = getProjectInfo( projectFullName );
   if ( reply )
   {
-    mOpenConnections.insert( projectFullName, reply );
+    mTransactionalStatus[projectFullName].openReply = reply;
     connect( reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished );
   }
 }
@@ -285,7 +291,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
     if ( msgBox.exec() == QMessageBox::Cancel )
     {
-      emit syncProjectFinished( projectDir, projectFullName, false );
+      updateCancel( projectFullName ); // suppose to call syncProjectFinished
       return;
     }
 
@@ -992,7 +998,6 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     }
     else
     {
-      mTransactionalStatus[projectFullName].files.clear();
       QString projectNamespace;
       QString projectName;
       extractProjectName( projectFullName, projectNamespace, projectName );
@@ -1004,6 +1009,13 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
   }
 }
 
+void MerginApi::deleteReply( QNetworkReply *r, const QString &projectFullName )
+{
+  Q_ASSERT( r == mTransactionalStatus[projectFullName].openReply );
+  r->deleteLater();
+  mTransactionalStatus[projectFullName].openReply = nullptr;
+}
+
 void MerginApi::downloadFileReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -1011,7 +1023,6 @@ void MerginApi::downloadFileReplyFinished()
 
   QString projectFullName = mPendingRequests.value( r->url() );
   mPendingRequests.remove( r->url() );
-  mOpenConnections.remove( projectFullName );
 
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
@@ -1063,7 +1074,7 @@ void MerginApi::downloadFileReplyFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
   }
 
-  r->deleteLater();
+  deleteReply( r, projectFullName );
 }
 
 void MerginApi::uploadStartReplyFinished()
@@ -1073,12 +1084,12 @@ void MerginApi::uploadStartReplyFinished()
 
   QString projectFullName = mPendingRequests.value( r->url() );
   mPendingRequests.remove( r->url() );
-  mOpenConnections.remove( projectFullName );
 
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    deleteReply( r, projectFullName );
     QString transactionUUID;
     if ( doc.isObject() )
     {
@@ -1108,11 +1119,10 @@ void MerginApi::uploadStartReplyFinished()
     bool showAsDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), showAsDialog );
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    deleteReply( r, projectFullName );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
+    uploadCancel( projectFullName );
   }
-
-  r->deleteLater();
 }
 
 void MerginApi::uploadFileReplyFinished()
@@ -1122,7 +1132,6 @@ void MerginApi::uploadFileReplyFinished()
 
   QString projectFullName = mPendingRequests.value( r->url() );
   mPendingRequests.remove( r->url() );
-  mOpenConnections.remove( projectFullName );
 
   QStringList params = ( r->url().toString().split( "/" ) );
   QString transactionUUID = params.at( params.length() - 2 );
@@ -1131,6 +1140,8 @@ void MerginApi::uploadFileReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    deleteReply( r, projectFullName );
+
     MerginFile currentFile = mTransactionalStatus[projectFullName].files.first();
     int chunkNo = currentFile.chunks.indexOf( chunkID );
     if ( chunkNo < currentFile.chunks.size() - 1 )
@@ -1142,6 +1153,7 @@ void MerginApi::uploadFileReplyFinished()
       mTransactionalStatus[projectFullName].transferedSize += currentFile.size;
       emit syncProgressUpdated( projectFullName, mTransactionalStatus[projectFullName].transferedSize / mTransactionalStatus[projectFullName].totalSize );
       mTransactionalStatus[projectFullName].files.removeFirst();
+
       if ( !mTransactionalStatus[projectFullName].files.isEmpty() )
       {
         MerginFile nextFile = mTransactionalStatus[projectFullName].files.first();
@@ -1149,7 +1161,6 @@ void MerginApi::uploadFileReplyFinished()
       }
       else
       {
-        mTransactionalStatus[projectFullName].files.clear();
         uploadFinish( projectFullName, transactionUUID );
       }
     }
@@ -1159,10 +1170,10 @@ void MerginApi::uploadFileReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
+
+    deleteReply( r, projectFullName );
     uploadCancel( projectFullName );
   }
-
-  r->deleteLater();
 }
 
 void MerginApi::updateInfoReplyFinished()
@@ -1176,13 +1187,13 @@ void MerginApi::updateInfoReplyFinished()
   extractProjectName( url.path(), projectNamespace, projectName );
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   mPendingRequests.remove( url );
-  mOpenConnections.remove( projectFullName );
   QList<MerginFile> filesToDownload;
 
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QByteArray data = r->readAll();
+    deleteReply( r, projectFullName );
 
     QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
@@ -1190,8 +1201,6 @@ void MerginApi::updateInfoReplyFinished()
     MerginProject serverProject = readProjectMetadata( data );
     serverProject.projectDir = projectPath;
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
-
-
 
     ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
     if ( !mWaitingForUpload.contains( projectFullName ) )
@@ -1230,13 +1239,13 @@ void MerginApi::updateInfoReplyFinished()
       takeFirstAndDownload( projectFullName, serverProject.version );
       emit pullFilesStarted();
     }
-
   }
   else
   {
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    deleteReply( r, projectFullName );
+    updateCancel( projectFullName );
   }
 }
 
@@ -1256,6 +1265,7 @@ void MerginApi::uploadInfoReplyFinished()
     QJsonObject changes;
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QByteArray data = r->readAll();
+    deleteReply( r, projectFullName );
 
     QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
@@ -1278,16 +1288,12 @@ void MerginApi::uploadInfoReplyFinished()
     changes.insert( "updated", modified );
     changes.insert( "renamed", QJsonArray() );
 
-    r->deleteLater();
     mPendingRequests.remove( url );
-    //TransactionStatus syncStatus;
     for ( MerginFile file : filesToUpload )
     {
       mTransactionalStatus[projectFullName].totalSize += file.size;
     }
-
     mTransactionalStatus[projectFullName].files = filesToUpload;
-    //mTransactionalStatus.insert( projectFullName, syncStatus );
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
@@ -1306,7 +1312,8 @@ void MerginApi::uploadInfoReplyFinished()
   {
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    deleteReply( r, projectFullName );
+    uploadCancel( projectFullName );
   }
 
   mPendingRequests.remove( url );
@@ -1326,25 +1333,25 @@ void MerginApi::uploadFinishReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     QByteArray data = r->readAll();
-    MerginProject project = readProjectMetadata( data );
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    deleteReply( r, projectFullName );
 
+    MerginProject project = readProjectMetadata( data );
     QString projectNamespace;
     QString projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
     QString projectDir = getProjectDir( projectNamespace, projectName ) + "/";
     mTempMerginProjects.insert( projectFullName, project );
     syncProjectFinished( projectDir, projectFullName, true );
-    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
   }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "uploadFinish" ), r->errorString(), serverMsg );
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
+    deleteReply( r, projectFullName );
+    uploadCancel( projectFullName );
   }
-
-  r->deleteLater();
 }
 
 void MerginApi::uploadCancelReplyFinished()
@@ -1358,7 +1365,7 @@ void MerginApi::uploadCancelReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    mTransactionalStatus[projectFullName].transactionUUID.clear(); // TODO removed in syncFinished??
+    mTransactionalStatus[projectFullName].transactionUUID.clear();
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
   }
   else
@@ -1367,9 +1374,9 @@ void MerginApi::uploadCancelReplyFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "uploadCancel" ), r->errorString(), serverMsg );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
-
-  emit syncProjectFinished( QStringLiteral(), projectFullName, false );
   r->deleteLater();
+  // if reply has error, uploadCancel send another push cancel request since true == !mTransactionalStatus[projectFullName].transactionUUID.isEmpty()
+  uploadCancel( projectFullName );
 }
 
 void MerginApi::getUserInfoFinished()
@@ -1623,6 +1630,7 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files, 
 
 void MerginApi::updateProjectMetadata( const QString &projectDir, const QString &projectFullName, bool syncSuccessful )
 {
+  mTransactionalStatus.remove( projectFullName );
   if ( !syncSuccessful )
   {
     return;
@@ -1688,7 +1696,10 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
 
   QNetworkReply *reply = getProjectInfo( projectFullName );
   if ( reply )
+  {
+    mTransactionalStatus[projectFullName].openReply = reply;
     connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
+  }
 }
 
 void MerginApi::handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
