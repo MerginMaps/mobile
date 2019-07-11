@@ -1107,19 +1107,13 @@ void MerginApi::uploadStartReplyFinished()
       MerginFile file = files.first();
       uploadFile( projectFullName, transactionUUID, file );
     }
-    // Suppose to not happend if upload has been invoked
-    else
-    {
-      uploadCancel( projectFullName );
-    }
+    // else pushing only files to be removed
   }
   else
   {
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString errorMsg = r->errorString();
-    bool showAsDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     deleteReply( r, projectFullName );
@@ -1283,7 +1277,7 @@ void MerginApi::uploadInfoReplyFinished()
     QJsonArray modified = prepareUploadChangesJSON( diff.modified );
     filesToUpload.append( diff.modified );
 
-    QJsonArray removed = prepareUploadChangesJSON( diff.removed, true );
+    QJsonArray removed = prepareUploadChangesJSON( diff.removed );
     // removed not in filesToUpload
 
     changes.insert( "added", added );
@@ -1331,10 +1325,10 @@ void MerginApi::uploadFinishReplyFinished()
   QUrl url = r->url();
   QString projectFullName = mPendingRequests.value( url );
   mPendingRequests.remove( url );
-  mTransactionalStatus[projectFullName].transactionUUID.clear();
 
   if ( r->error() == QNetworkReply::NoError )
   {
+    mTransactionalStatus[projectFullName].transactionUUID.clear();
     QByteArray data = r->readAll();
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     deleteReply( r, projectFullName );
@@ -1605,7 +1599,7 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
   return chunks;
 }
 
-QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath )
+QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
 {
   QJsonArray jsonArray;
 
@@ -1613,19 +1607,17 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files, 
   {
     QJsonObject fileObject;
     fileObject.insert( "path", file.path );
-    if ( !onlyPath )
-    {
-      fileObject.insert( "checksum", file.checksum );
-      fileObject.insert( "size", file.size );
-      fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
 
-      QJsonArray chunksJson;
-      for ( QString id : file.chunks )
-      {
-        chunksJson.append( id );
-      }
-      fileObject.insert( "chunks", chunksJson );
+    fileObject.insert( "checksum", file.checksum );
+    fileObject.insert( "size", file.size );
+    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+
+    QJsonArray chunksJson;
+    for ( QString id : file.chunks )
+    {
+      chunksJson.append( id );
     }
+    fileObject.insert( "chunks", chunksJson );
     jsonArray.append( fileObject );
   }
   return jsonArray;
