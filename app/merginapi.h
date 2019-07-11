@@ -275,7 +275,7 @@ class MerginApi: public QObject
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
     QStringList generateChunkIdsForSize( qint64 fileSize );
-    QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files, bool onlyPath = false );
+    QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
 
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).
