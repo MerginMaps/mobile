@@ -1112,12 +1112,14 @@ void MerginApi::uploadStartReplyFinished()
   else
   {
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    int status = statusCode.toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString errorMsg = r->errorString();
+    bool showAsDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     deleteReply( r, projectFullName );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), showAsDialog );
     uploadCancel( projectFullName );
   }
 }
