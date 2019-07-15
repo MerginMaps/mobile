@@ -155,6 +155,8 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
 
+    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
+
     /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
@@ -269,7 +271,6 @@ class MerginApi: public QObject
     void copyTempFilesToProject( const QString &projectDir, const QString &projectFullName );
 
   private:
-    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
     static MerginProject readProjectMetadata( const QByteArray &data );
     ProjectList parseAllProjectsMetadata();
     ProjectList parseListProjectsMetadata( const QByteArray &data );

@@ -14,39 +14,48 @@ const QString TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD = TestMerginApi::TEST_PR
 TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm )
 {
   mApi = api;
+  Q_ASSERT( mApi );  // does not make sense to run without API
   mMerginProjectModel = mpm;
   mProjectModel = pm;
 }
 
 void TestMerginApi::initTestCase()
 {
-  if ( mApi )
-  {
-    if ( ::getenv( "TEST_MERGIN_URL" ) )
-    {
-      mApiRoot = ::getenv( "TEST_MERGIN_URL" );
-    }
-    if ( ::getenv( "TEST_API_USERNAME" ) )
-    {
-      mUsername = ::getenv( "TEST_API_USERNAME" );
-    }
-    if ( ::getenv( "TEST_API_PASSWORD" ) )
-    {
-      mPassword = ::getenv( "TEST_API_PASSWORD" );
-    }
-    mApi->setApiRoot( mApiRoot );
-    QSignalSpy spy( mApi, SIGNAL( authChanged() ) );
-    mApi->authorize( mUsername, mPassword );
-    Q_ASSERT( spy.wait( LONG_REPLY ) );
-    QCOMPARE( spy.count(), 1 );
+  // these env variables really need to be set!
+  QVERIFY( ::getenv( "TEST_MERGIN_URL" ) );
+  QVERIFY( ::getenv( "TEST_API_USERNAME" ) );
+  QVERIFY( ::getenv( "TEST_API_PASSWORD" ) );
 
-    mTestData = testDataPath();
-    initTestProject();
-    copyTestProject();
+  QString apiRoot = ::getenv( "TEST_MERGIN_URL" );
+  QString username = ::getenv( "TEST_API_USERNAME" );
+  QString password = ::getenv( "TEST_API_PASSWORD" );
 
-    qDebug() << "TestMerginApi::initTestCase DONE";
-  }
+  // let's make sure we do not mess with the public instance
+  QVERIFY( apiRoot != MerginApi::defaultApiRoot() );
+
+  mApi->setApiRoot( apiRoot );
+  QSignalSpy spy( mApi, &MerginApi::authChanged );
+  mApi->authorize( username, password );
+  Q_ASSERT( spy.wait( LONG_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+
+  mUsername = username;  // keep for later
+  mTestData = testDataPath();
+  initTestProject();
+  copyTestProject();
+
+  qDebug() << "TestMerginApi::initTestCase DONE";
 }
+
+void TestMerginApi::cleanupTestCase()
+{
+  deleteTestProjects();
+
+  QDir testDir( mProjectModel->dataDir() );
+  testDir.removeRecursively();
+  qDebug() << "TestMerginApi::cleanupTestCase DONE";
+}
+
 
 void TestMerginApi::testListProject()
 {
@@ -469,14 +478,6 @@ void TestMerginApi::testParseAndCompareRenamed()
   qDebug() << "TestMerginApi::testParseAndCompareRenamed PASSED";
 }
 
-void TestMerginApi::cleanupTestCase()
-{
-  deleteTestProjects();
-
-  QDir testDir( mProjectModel->dataDir() );
-  testDir.removeRecursively();
-  qDebug() << "TestMerginApi::cleanupTestCase DONE";
-}
 
 //////// HELPER FUNCTIONS ////////
 

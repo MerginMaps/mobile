@@ -21,7 +21,11 @@ class TestMerginApi: public QObject
     static const QString TEST_PROJECT_NAME_DOWNLOAD;
 
   private slots:
+
+    // global init + cleanup functions
     void initTestCase();
+    void cleanupTestCase();
+
     void testListProject();
     void testDownloadProject();
     void testCancelDownlaodProject();
@@ -37,8 +41,6 @@ class TestMerginApi: public QObject
     void testParseAndCompareUpdated();
     void testParseAndCompareRenamed();
 
-    void cleanupTestCase();
-
   private:
     int SHORT_REPLY = 1000;
     int LONG_REPLY = 5000;
@@ -46,9 +48,7 @@ class TestMerginApi: public QObject
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
     ProjectModel *mProjectModel;
-    QString mApiRoot;
     QString mUsername;
-    QString mPassword;
     QString mTestData;
 
     ProjectList getProjectList();
