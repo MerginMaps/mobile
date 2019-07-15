@@ -14,13 +14,13 @@ class TestMerginApi: public QObject
 {
     Q_OBJECT
   public:
-    explicit TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm, QObject *parent = nullptr );
+    explicit TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm );
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
     static const QString TEST_PROJECT_NAME_DOWNLOAD;
 
-  public slots:
+  private slots:
     void initTestCase();
     void testListProject();
     void testDownloadProject();
@@ -50,8 +50,6 @@ class TestMerginApi: public QObject
     QString mUsername;
     QString mPassword;
     QString mTestData;
-    int passedTests = 0;
-    int runTests = 0;
 
     ProjectList getProjectList();
     bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );

@@ -111,5 +111,20 @@ Quick guide:
 - open QtCreator -> Manage Kits -> add SDK and NDK. compilers should be autodetected
 - enable connection on the device from MacOS when requested
 
+## Running tests
+
+You need to set few env variables:
+- TEST_MERGIN_URL
+- TEST_API_USERNAME
+- TEST_API_PASSWORD
+- TEST_PATH_SUFFIX
+- TEST_DATA
+
+Run:
+```
+input --test
+```
+
+
 ## Privacy policy
 Read more about privacy policy [here](privacy_policy.md).

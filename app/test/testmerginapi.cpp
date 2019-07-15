@@ -11,36 +11,13 @@
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 const QString TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD = TestMerginApi::TEST_PROJECT_NAME + "_DOWNLOAD";
 
-TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm, QObject *parent )
+TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm )
 {
   mApi = api;
   mMerginProjectModel = mpm;
   mProjectModel = pm;
-
-  initTestCase();
-
-  testListProject();
-  testDownloadProject();
-  testCancelDownlaodProject();
-  testCreateProjectTwice();
-  testDeleteNonExistingProject();
-  testCreateDeleteProject();
-  testUploadProject();
-  testPushRemovedFile();
-  testPushChangesOfProject();
-
-  testParseAndCompareNoChanges();
-  testParseAndCompareRemovedAdded();
-  testParseAndCompareUpdated();
-  testParseAndCompareRenamed();
-
-  cleanupTestCase();
-  qDebug() << QString( "TestMerginApi - PASSED: %1/%2" ).arg( passedTests ).arg( runTests );
-  if ( runTests == passedTests )
-  {
-    qDebug() << "TestMerginApi - ALL TESTS PASSED";
-  }
 }
+
 void TestMerginApi::initTestCase()
 {
   if ( mApi )
@@ -74,7 +51,6 @@ void TestMerginApi::initTestCase()
 void TestMerginApi::testListProject()
 {
   qDebug() << "TestMerginApi::testListProjectFinished START";
-  runTests++;
 
   QSignalSpy spy( mApi, SIGNAL( listProjectsFinished( ProjectList ) ) );
   mApi->listProjects( QString() );
@@ -85,7 +61,6 @@ void TestMerginApi::testListProject()
   ProjectList projects = mMerginProjectModel->projects();
   QVERIFY( !mMerginProjectModel->projects().isEmpty() );
   qDebug() << "TestMerginApi::testListProjectFinished PASSED";
-  passedTests++;
 }
 
 /**
@@ -94,7 +69,6 @@ void TestMerginApi::testListProject()
 void TestMerginApi::testDownloadProject()
 {
   qDebug() << "TestMerginApi::testDownloadProject START";
-  runTests++;
 
   QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
   QString projectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
@@ -114,13 +88,11 @@ void TestMerginApi::testDownloadProject()
   testDir.removeRecursively();
 
   qDebug() << "TestMerginApi::testDownloadProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testCancelDownlaodProject()
 {
   qDebug() << "TestMerginApi::testCancelDownlaodProject START";
-  runTests++;
   QString projectName = TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD;
 
   // create a project
@@ -191,17 +163,14 @@ void TestMerginApi::testCancelDownlaodProject()
   QVERIFY( dir.isEmpty() );
 
   qDebug() << "TestMerginApi::testCancelDownlaodProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testCreateProjectTwice()
 {
   qDebug() << "TestMerginApi::testCreateProjectTwice START";
-  runTests++;
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "2";
   QString projectNamespace = mUsername;
-  bool containsTestProject = false;
   ProjectList projects = getProjectList();
   QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
 
@@ -231,18 +200,15 @@ void TestMerginApi::testCreateProjectTwice()
   mApi->deleteProject( projectNamespace, projectName );
   spy3.wait( SHORT_REPLY );
 
-  containsTestProject = false;
   projects = getProjectList();
   QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
 
   qDebug() << "TestMerginApi::testCreateProjectTwice PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testDeleteNonExistingProject()
 {
   qDebug() << "TestMerginApi::testDeleteNonExistingProject START";
-  runTests++;
 
   // Checks if projects doesn't exist
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "_DOESNT_EXISTS";
@@ -261,13 +227,11 @@ void TestMerginApi::testDeleteNonExistingProject()
   QCOMPARE( arguments.at( 1 ).toString(), QStringLiteral( "Mergin API error: deleteProject" ) );
 
   qDebug() << "TestMerginApi::testDeleteNonExistingProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testCreateDeleteProject()
 {
   qDebug() << "TestMerginApi::testCreateDeleteProject START";
-  runTests++;
 
   // Create a project
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "_CREATE_DELETE";
@@ -293,13 +257,11 @@ void TestMerginApi::testCreateDeleteProject()
   QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
 
   qDebug() << "TestMerginApi::testCreateDeleteProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testUploadProject()
 {
   qDebug() << "TestMerginApi::testUploadProject START";
-  runTests++;
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
   QString projectNamespace = mUsername;
@@ -332,13 +294,11 @@ void TestMerginApi::testUploadProject()
   QVERIFY( serverT1 < serverT2 );
 
   qDebug() << "TestMerginApi::testUploadProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testPushRemovedFile()
 {
   qDebug() << "TestMerginApi::testPushRemovedFile START";
-  runTests++;
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
   QString projectNamespace = mUsername;
@@ -382,13 +342,11 @@ void TestMerginApi::testPushRemovedFile()
   QCOMPARE( projectNo0, projectNo1 );
 
   qDebug() << "TestMerginApi::testPushRemovedFile PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testPushChangesOfProject()
 {
   qDebug() << "TestMerginApi::testPushChangesOfProject START";
-  runTests++;
 
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
   QString projectNamespace = mUsername;
@@ -435,13 +393,11 @@ void TestMerginApi::testPushChangesOfProject()
   QCOMPARE( projectNo0, projectNo1 );
 
   qDebug() << "TestMerginApi::testPushChangesOfProject PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testParseAndCompareNoChanges()
 {
   qDebug() << "TestMerginApi::parseAndCompareTestNoChanges START";
-  runTests++;
 
   QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
   std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
@@ -452,13 +408,11 @@ void TestMerginApi::testParseAndCompareNoChanges()
   QVERIFY( diff.modified.isEmpty() );
 
   qDebug() << "TestMerginApi::parseAndCompareTestNoChanges PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testParseAndCompareRemovedAdded()
 {
   qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded START";
-  runTests++;
 
   QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
   std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
@@ -477,13 +431,11 @@ void TestMerginApi::testParseAndCompareRemovedAdded()
   QVERIFY( diff_removed.modified.isEmpty() );
 
   qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testParseAndCompareUpdated()
 {
   qDebug() << "TestMerginApi::testParseAndCompareUpdated START";
-  runTests++;
 
   QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
   std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
@@ -497,13 +449,11 @@ void TestMerginApi::testParseAndCompareUpdated()
   QCOMPARE( diff.modified.size(), 1 );
 
   qDebug() << "TestMerginApi::testParseAndCompareUpdated PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::testParseAndCompareRenamed()
 {
   qDebug() << "TestMerginApi::testParseAndCompareRenamed START";
-  runTests++;
 
   QString projectMetadataPath = QString( "%1" ).arg( mProjectModel->dataDir() );
   std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( projectMetadataPath, QStringLiteral( "mergin.json" ) );
@@ -517,7 +467,6 @@ void TestMerginApi::testParseAndCompareRenamed()
   QVERIFY( diff.modified.isEmpty() );
 
   qDebug() << "TestMerginApi::testParseAndCompareRenamed PASSED";
-  passedTests++;
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -621,4 +570,3 @@ QString TestMerginApi::testDataPath()
   // TODO if missing variable, take root folder + /test/test_data/
   return QStringLiteral();
 }
-
