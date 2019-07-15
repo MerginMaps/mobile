@@ -28,7 +28,7 @@ class TestMerginApi: public QObject
 
     void testListProject();
     void testDownloadProject();
-    void testCancelDownlaodProject();
+    void testCancelDownloadProject();
     void testCreateProjectTwice();
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
@@ -55,7 +55,11 @@ class TestMerginApi: public QObject
     bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
     void initTestProject();
     std::shared_ptr<MerginProject> prepareTestProjectUpload();
-    void deleteSingleTestProject( QString &projectNamespace, const QString &projectName );
+
+    //! Creates a project on the server and pushes an initial version and removes the local copy.
+    void createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
+    //! Deletes a project on the server
+    void deleteRemoteProject( const QString &projectNamespace, const QString &projectName );
 };
 
 # endif // TESTMERGINAPI_H
