@@ -86,22 +86,22 @@ class ProjectModel : public QAbstractListModel
       QString info;
       bool isValid;
 
-      bool operator < ( const ProjectFile &str ) const
+      bool operator < ( const ProjectFile &other ) const
       {
-        if ( !projectNamespace.isEmpty() && str.projectNamespace.isEmpty() )
+        if ( !projectNamespace.isEmpty() && other.projectNamespace.isEmpty() )
         {
           return false;
         }
-        if ( projectNamespace.isEmpty() && !str.projectNamespace.isEmpty() )
+        if ( projectNamespace.isEmpty() && !other.projectNamespace.isEmpty() )
         {
           return true;
         }
 
-        if ( ( projectNamespace.isEmpty() && str.projectNamespace.isEmpty() ) || projectNamespace.toLower() == str.projectNamespace.toLower() )
+        if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) == 0 )
         {
-          return folderName.toLower() < str.folderName.toLower();
+          return folderName.compare( other.folderName, Qt::CaseInsensitive ) < 0;
         }
-        if ( projectNamespace.toLower() < str.projectNamespace.toLower() )
+        if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) < 0 )
         {
           return true;
         }
