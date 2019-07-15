@@ -60,6 +60,9 @@ class TestMerginApi: public QObject
     void createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
     //! Deletes a project on the server
     void deleteRemoteProject( const QString &projectNamespace, const QString &projectName );
+
+    //! Deletes a project from the local drive
+    void deleteLocalProject( const QString &projectNamespace, const QString &projectName );
 };
 
 # endif // TESTMERGINAPI_H

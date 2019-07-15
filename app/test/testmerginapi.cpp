@@ -11,6 +11,18 @@
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 const QString TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD = TestMerginApi::TEST_PROJECT_NAME + "_DOWNLOAD";
 
+
+static std::shared_ptr<MerginProject> _findProjectByName( const QString &projectNamespace, const QString &projectName, const ProjectList &projects )
+{
+  for ( std::shared_ptr<MerginProject> project : projects )
+  {
+    if ( project->name == projectName && project->projectNamespace == projectNamespace )
+      return project;
+  }
+  return nullptr;
+}
+
+
 TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm )
 {
   mApi = api;
@@ -63,20 +75,27 @@ void TestMerginApi::cleanupTestCase()
   qDebug() << "TestMerginApi::cleanupTestCase DONE";
 }
 
-
 void TestMerginApi::testListProject()
 {
-  qDebug() << "TestMerginApi::testListProjectFinished START";
+  // check that there's no hello world project
+  QSignalSpy spy0( mApi, &MerginApi::listProjectsFinished );
+  mApi->listProjects( QString() );
+  QVERIFY( spy0.wait( SHORT_REPLY ) );
+  QCOMPARE( spy0.count(), 1 );
+  QVERIFY( !_findProjectByName( mUsername, "hello world project", mMerginProjectModel->projects() ) );
 
+  // create the project on the server (the content is not important)
+  createRemoteProject( mUsername, "hello world project", mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // check the project exists on the server
   QSignalSpy spy( mApi, &MerginApi::listProjectsFinished );
   mApi->listProjects( QString() );
-
   QVERIFY( spy.wait( SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
+  QVERIFY( _findProjectByName( mUsername, "hello world project", mMerginProjectModel->projects() ) );
 
-  ProjectList projects = mMerginProjectModel->projects();
-  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
-  qDebug() << "TestMerginApi::testListProjectFinished PASSED";
+  // get rid of the project again
+  deleteRemoteProject( mUsername, "hello world project" );
 }
 
 /**
@@ -84,13 +103,14 @@ void TestMerginApi::testListProject()
  */
 void TestMerginApi::testDownloadProject()
 {
-  qDebug() << "TestMerginApi::testDownloadProject START";
+  // create the project on the server (the content is not important)
+  QString projectName = "mobile_demo_mod";
+  QString projectNamespace = mUsername;
+  createRemoteProject( projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
+  // try to download the project
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
-  QString projectName = "mobile_demo_mod"; // TODO depends on mergin test server, unless a project is created beforehand
-  QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
   mApi->updateProject( projectNamespace, projectName );
-
   QVERIFY( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 
@@ -100,10 +120,24 @@ void TestMerginApi::testDownloadProject()
   bool downloadSuccessful = mProjectModel->containsProject( projectNamespace, projectName );
   QVERIFY( downloadSuccessful );
 
-  QDir testDir( mApi->projectsPath() + projectName );
-  testDir.removeRecursively();
+  std::shared_ptr<MerginProject> project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project );
+  QCOMPARE( project->name, projectName );
+  QCOMPARE( project->projectNamespace, projectNamespace );
+  QCOMPARE( project->projectDir, mApi->projectsPath() + projectName );  // assuming no name clash that would require renaming of the dir
+  QCOMPARE( project->version, "v2" );  // for some unknown reason, first version in Mergin is v2 :-)
+  QCOMPARE( project->filesCount, 2 );  // .qgs + .txt file
+  QCOMPARE( project->status, UpToDate );
 
-  qDebug() << "TestMerginApi::testDownloadProject PASSED";
+  // TODO: bug - project info of the mergin project is not updated when starting download (e.g. serverUpdated is lost)
+  //QCOMPARE( mApi->getProjectStatus( project, mApi->getLastModifiedFileDateTime( project->projectDir ) ), UpToDate );
+
+  // there should be something in the directory
+  QStringList projectDirEntries = QDir( project->projectDir ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+  QCOMPARE( projectDirEntries.count(), 2 );
+
+  deleteLocalProject( projectNamespace, projectName );
+  deleteRemoteProject( projectNamespace, projectName );
 }
 
 void TestMerginApi::createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath )
@@ -559,4 +593,14 @@ void TestMerginApi::deleteRemoteProject( const QString &projectNamespace, const 
   QSignalSpy spy( mApi, &MerginApi::serverProjectDeleted );
   mApi->deleteProject( projectNamespace, projectName );
   spy.wait( SHORT_REPLY );
+}
+
+void TestMerginApi::deleteLocalProject( const QString &projectNamespace, const QString &projectName )
+{
+  std::shared_ptr<MerginProject> project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project );
+  QVERIFY( project->projectDir.startsWith( mApi->projectsPath() ) );  // just to make sure we don't delete something wrong (-:
+  QDir projectDir( project->projectDir );
+  projectDir.removeRecursively();
+  mApi->clearProject( project );
 }

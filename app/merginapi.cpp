@@ -1650,7 +1650,9 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
       project->projectDir = projectDir;
     project->lastSyncClient = QDateTime::currentDateTime().toUTC();
     project->files = tempProjectData.files;
+    project->filesCount = project->files.count();
     project->version = tempProjectData.version;
+    project->status = UpToDate;
 
     QJsonDocument doc = createProjectMetadataJson( project );
     writeData( doc.toJson(), projectDir + "/" + MerginApi::sMetadataFile );
