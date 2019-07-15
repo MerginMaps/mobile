@@ -12,10 +12,10 @@
 
 enum ProjectStatus
 {
-  NoVersion,
-  UpToDate,
-  OutOfDate,
-  Modified
+  NoVersion,  //!< the project is not available locally
+  UpToDate,   //!< both server and local copy are in sync with no extra modifications
+  OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
+  Modified    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
 };
 Q_ENUMS( ProjectStatus )
 
@@ -41,7 +41,7 @@ struct MerginProject
 {
   QString name;
   QString projectNamespace;
-  QString projectDir;
+  QString projectDir;  // full path to the project directory
   QStringList tags;
   QList<MerginFile> files;
   QString version;
@@ -50,11 +50,10 @@ struct MerginProject
   QDateTime lastSyncClient; // local datetime of download/upload/update project
   bool pending = false; // if there is a pending request for downlaod/update a project
   ProjectStatus status = NoVersion;
-  int size;
-  int filesCount;
+  int filesCount = -1;  // it's here in addition to "files" because project list only contains this information
   qreal progress;
-  int creator; // ID of current user
-  QList<int> writers;
+  int creator; // server-side user ID of the project owner (creator)
+  QList<int> writers; // server-side user IDs of users having write access to the project
 };
 
 struct ProjectDiff
@@ -407,6 +406,8 @@ class MerginApi: public QObject
     const int CHUNK_SIZE = 65536;
     const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
+
+    friend class TestMerginApi;
 };
 
 #endif // MERGINAPI_H
