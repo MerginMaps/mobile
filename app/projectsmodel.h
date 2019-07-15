@@ -47,6 +47,38 @@ class ProjectModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
+    struct ProjectFile
+    {
+      QString name;
+      QString projectNamespace;
+      QString folderName;
+      QString path;
+      QString info;
+      bool isValid;
+
+      bool operator < ( const ProjectFile &str ) const
+      {
+        if ( !projectNamespace.isEmpty() && str.projectNamespace.isEmpty() )
+        {
+          return false;
+        }
+        if ( projectNamespace.isEmpty() && !str.projectNamespace.isEmpty() )
+        {
+          return true;
+        }
+
+        if ( ( projectNamespace.isEmpty() && str.projectNamespace.isEmpty() ) || projectNamespace.toLower() == str.projectNamespace.toLower() )
+        {
+          return folderName.toLower() < str.folderName.toLower();
+        }
+        if ( projectNamespace.toLower() < str.projectNamespace.toLower() )
+        {
+          return true;
+        }
+        else return false;
+      }
+    };
+
     explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
     ~ProjectModel();
 
@@ -77,20 +109,6 @@ class ProjectModel : public QAbstractListModel
     void findProjectFiles();
     void addProjectFromPath( QString path );
 
-    struct ProjectFile
-    {
-      QString name;
-      QString projectNamespace;
-      QString folderName;
-      QString path;
-      QString info;
-      bool isValid;
-
-      bool operator < ( const ProjectFile &str ) const
-      {
-        return ( folderName < str.folderName );
-      }
-    };
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;
     const int mMaxShortNameChars = 10;
