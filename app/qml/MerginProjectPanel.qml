@@ -362,15 +362,21 @@ Item {
 
       delegate: delegateItem
 
-      Label {
+      Text {
         anchors.fill: parent
-        horizontalAlignment: Qt.AlignHCenter
-        verticalAlignment: Qt.AlignVCenter
-        visible: parent.count == 0
-        text: qsTr("No projects found!")
+        textFormat: Text.RichText
+        text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
+              "No projects found.<br> See <a href='https://github.com/lutraconsulting/input/blob/master/docs/users/project_config.md'>how to create a project</a>" +
+              " and <a href='https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md'>how to download it</a> to your device."
+        onLinkActivated: Qt.openUrlExternally(link)
+        visible: grid.count === 0
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
         font.bold: true
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
+        padding: InputStyle.panelMargin/2
       }
     }
 
