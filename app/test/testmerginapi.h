@@ -57,7 +57,6 @@ class TestMerginApi: public QObject
     std::shared_ptr<MerginProject> prepareTestProjectUpload();
     void deleteTestProjects();
     void copyTestProject();
-    QString testDataPath();
     void deleteSingleTestProject( QString &projectNamespace, const QString &projectName );
 };
 

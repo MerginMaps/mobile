@@ -40,7 +40,12 @@ void TestMerginApi::initTestCase()
   QCOMPARE( spy.count(), 1 );
 
   mUsername = username;  // keep for later
-  mTestData = testDataPath();
+
+  // figure out the directory with our test data (in this git repo)
+  QDir dir = QFileInfo(__FILE__).dir();
+  QVERIFY( dir.cd("../../test/test_data") );
+  mTestData = dir.absolutePath();
+
   initTestProject();
   copyTestProject();
 
@@ -558,16 +563,4 @@ void TestMerginApi::copyTestProject()
   QString destination = mProjectModel->dataDir().remove( mProjectModel->dataDir().length() - 1, 1 );
   InputUtils::cpDir( source, destination );
   qDebug() << "TestMerginApi::copyTestProject DONE";
-}
-
-QString TestMerginApi::testDataPath()
-{
-#ifdef TEST_DATA
-  return STR( TEST_DATA );
-#endif
-  QString testData = ::getenv( "TEST_DATA" );
-  if ( !testData.isEmpty() ) return testData;
-
-  // TODO if missing variable, take root folder + /test/test_data/
-  return QStringLiteral();
 }
