@@ -12,6 +12,7 @@
 #include <QDesktopWidget>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QTest>
 #include <qqml.h>
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
@@ -238,6 +239,7 @@ int main( int argc, char *argv[] )
   {
     initTestDeclarative();
     TestMerginApi test( ma.get(), &mpm, &pm );
+    QTest::qExec(&test);
     return 0;
   }
 
