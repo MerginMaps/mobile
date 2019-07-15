@@ -1093,6 +1093,7 @@ void MerginApi::uploadStartReplyFinished()
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     deleteReply( r, projectFullName );
+
     QString transactionUUID;
     if ( doc.isObject() )
     {
@@ -1108,6 +1109,14 @@ void MerginApi::uploadStartReplyFinished()
       uploadFile( projectFullName, transactionUUID, file );
     }
     // else pushing only files to be removed
+    else
+    {
+      QString projectNamespace;
+      QString projectName;
+      extractProjectName( projectFullName, projectNamespace, projectName );
+      QString projectPath = getProjectDir( projectNamespace, projectName );
+      emit syncProjectFinished( projectPath, projectFullName, true );
+    }
   }
   else
   {

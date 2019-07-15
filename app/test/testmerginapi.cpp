@@ -26,6 +26,7 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
   testDeleteNonExistingProject();
   testCreateDeleteProject();
   testUploadProject();
+  testPushRemovedFile();
   testPushChangesOfProject();
 
   testParseAndCompareNoChanges();
@@ -331,6 +332,56 @@ void TestMerginApi::testUploadProject()
   QVERIFY( serverT1 < serverT2 );
 
   qDebug() << "TestMerginApi::testUploadProject PASSED";
+  passedTests++;
+}
+
+void TestMerginApi::testPushRemovedFile()
+{
+  qDebug() << "TestMerginApi::testPushRemovedFile START";
+  runTests++;
+
+  QString projectName = TestMerginApi::TEST_PROJECT_NAME;
+  QString projectNamespace = mUsername;
+  std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
+
+  QDateTime serverT0 = project->serverUpdated;
+  mApi->uploadProject( projectNamespace, projectName );
+  QSignalSpy spy( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  QVERIFY( spy.wait( LONG_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+
+  ProjectList projects = getProjectList();
+  int projectNo0 = projects.size();
+  int localProjectNo0 = mProjectModel->rowCount();
+  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QDateTime serverT1 = project->serverUpdated;
+  // Remove file
+  QFile file( mProjectModel->dataDir() + projectName + "/test1.txt" );
+  QVERIFY( file.exists() );
+  file.remove();
+  QVERIFY( !file.exists() );
+
+  // upload changes
+  QSignalSpy spy2( mApi, SIGNAL( syncProjectFinished( QString, QString, bool ) ) );
+  mApi->uploadProject( projectNamespace, projectName );
+  QVERIFY( spy2.wait( LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
+  QList<QVariant> arguments = spy2.takeFirst();
+  QVERIFY( arguments.at( 2 ).toBool() );
+
+  projects = getProjectList();
+  int projectNo1 = projects.size();
+  int localProjectNo1 = mProjectModel->rowCount();
+  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QDateTime serverT2 = project->serverUpdated;
+  QVERIFY( serverT1 < serverT2 );
+
+  QCOMPARE( localProjectNo0, localProjectNo1 );
+  QCOMPARE( projectNo0, projectNo1 );
+
+  qDebug() << "TestMerginApi::testPushRemovedFile PASSED";
   passedTests++;
 }
 
