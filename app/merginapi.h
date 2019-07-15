@@ -80,6 +80,13 @@ class MerginApi: public QObject
     ~MerginApi() = default;
 
     /**
+     * Returns path of the local directory in which all projects are stored.
+     * Each project is one sub-directory.
+     * \note returns the directory with a trailing slash
+     */
+    QString projectsPath() const { return mDataDir; }
+
+    /**
      * Sends non-blocking GET request to the server to listProjects. On listProjectsReplyFinished,
      * when a response is received, parses projects json and sets mMerginProjects.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
