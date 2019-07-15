@@ -47,6 +47,36 @@ class ProjectModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
+    explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
+    ~ProjectModel();
+
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
+    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE int rowAccordingPath( QString path ) const;
+    Q_INVOKABLE void deleteProject( int row );
+
+    QHash<int, QByteArray> roleNames() const override;
+
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+
+    QString dataDir() const;
+
+    QString searchExpression() const;
+    void setSearchExpression( const QString &searchExpression );
+
+    // Test function
+    bool containsProject( const QString &projectNamespace, const QString &projectName );
+
+  signals:
+    void projectDeletedOnPath( QString projectDir );
+
+  public slots:
+    void addProject( QString projectFolder, QString projectName, bool successful );
+
+  private:
+    void findProjectFiles();
+    void addProjectFromPath( QString path );
+
     struct ProjectFile
     {
       QString name;
@@ -78,37 +108,6 @@ class ProjectModel : public QAbstractListModel
         else return false;
       }
     };
-
-    explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
-    ~ProjectModel();
-
-    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;
-    Q_INVOKABLE int rowAccordingPath( QString path ) const;
-    Q_INVOKABLE void deleteProject( int row );
-
-    QHash<int, QByteArray> roleNames() const override;
-
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-
-    QString dataDir() const;
-
-    QString searchExpression() const;
-    void setSearchExpression( const QString &searchExpression );
-
-    // Test function
-    bool containsProject( const QString &projectNamespace, const QString &projectName );
-
-  signals:
-    void projectDeletedOnPath( QString projectDir );
-
-  public slots:
-    void addProject( QString projectFolder, QString projectName, bool successful );
-
-  private:
-    void findProjectFiles();
-    void addProjectFromPath( QString path );
-
     QList<ProjectFile> mProjectFiles;
     QString mDataDir;
     const int mMaxShortNameChars = 10;
