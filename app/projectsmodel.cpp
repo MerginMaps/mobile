@@ -221,5 +221,6 @@ void ProjectModel::addProject( QString projectFolder, QString projectName, bool 
   Q_UNUSED( projectName );
   beginResetModel();
   addProjectFromPath( projectFolder );
+  std::sort( mProjectFiles.begin(), mProjectFiles.end() );
   endResetModel();
 }
