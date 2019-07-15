@@ -118,7 +118,6 @@ You need to set few env variables:
 - TEST_API_USERNAME
 - TEST_API_PASSWORD
 - TEST_PATH_SUFFIX
-- TEST_DATA
 
 Run:
 ```
