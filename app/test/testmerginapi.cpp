@@ -191,17 +191,18 @@ void TestMerginApi::testCancelDownloadProject()
   QString projectDir = mApi->projectsPath() + projectName + "/";
 
   // Test download and cancel before transaction actually starts
-  mApi->updateProject( mUsername, projectName );
   QSignalSpy spy5( mApi, &MerginApi::syncProjectFinished );
+  mApi->updateProject( mUsername, projectName );
   mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
-//  TODO cannot catch signal of spy5s
-//  QVERIFY( spy5.wait( LONG_REPLY ) );
-//  QCOMPARE( spy5.count(), 1 );
-//  arguments = spy5.takeFirst();
-//  QVERIFY( !arguments.at(2).toBool() );
+
+  // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
+  QCOMPARE( spy5.count(), 1 );
+  QList<QVariant> arguments = spy5.takeFirst();
+  QVERIFY( !arguments.at( 2 ).toBool() );
 
   QCOMPARE( QFileInfo( projectDir ).size(), 0 );
   QVERIFY( QDir( projectDir ).isEmpty() );
+
 
   // Test download and cancel after transcation starts
   QSignalSpy spy6( mApi, &MerginApi::pullFilesStarted );
@@ -211,11 +212,11 @@ void TestMerginApi::testCancelDownloadProject()
 
   QSignalSpy spy7( mApi, &MerginApi::syncProjectFinished );
   mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
-//  TODO cannot catch signal of spy7
-//  QVERIFY( spy7.wait( LONG_REPLY ) );
-//  QCOMPARE( spy7.count(), 1 );
-//  arguments = spy7.takeFirst();
-//  QVERIFY( !arguments.at(2).toBool() );
+
+  // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
+  QCOMPARE( spy7.count(), 1 );
+  arguments = spy7.takeFirst();
+  QVERIFY( !arguments.at( 2 ).toBool() );
 
   QFileInfo info( projectDir );
   QDir dir( projectDir );
@@ -272,7 +273,7 @@ void TestMerginApi::testDeleteNonExistingProject()
 
   // Checks if projects doesn't exist
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "_DOESNT_EXISTS";
-  QString projectNamespace = mUsername; // TODO depends on mergin test server, unless a project is created beforehand
+  QString projectNamespace = mUsername;
   ProjectList projects = getProjectList();
   QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
 
@@ -328,12 +329,14 @@ void TestMerginApi::testUploadProject()
   std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
 
   QDateTime serverT0 = project->serverUpdated;
+  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
   mApi->uploadProject( projectNamespace, projectName );
-//  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
   mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-//  NOTE: QSignalSpy somehow cannot catch signal above, functionality is tested anyway by following up verification
-//  QVERIFY( spy.wait( LONG_REPLY ) );
-//  QCOMPARE( spy.count(), 1 );
+
+  // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
+  QCOMPARE( spy.count(), 1 );
+  QList<QVariant> arguments = spy.takeFirst();
+  QVERIFY( !arguments.at( 2 ).toBool() );
 
   ProjectList projects = getProjectList();
   QVERIFY( hasProject( projectNamespace, projectName, projects ) );
