@@ -235,7 +235,10 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
 {
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
+  {
+    qDebug() << "Cannnot make path " << dstPath;
     return false;
+  }
 
   QDir srcDir( srcPath );
   foreach ( const QFileInfo &info, srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden ) )
@@ -246,6 +249,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
       {
+        qDebug() << "Cannot copy dir " << srcItemPath << " > " << dstItemPath;
         return false;
       }
     }
@@ -253,6 +257,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
     {
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
       {
+        qDebug() << "Cannot copy file " << srcItemPath << " > " << dstItemPath;
         return false;
       }
       QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );

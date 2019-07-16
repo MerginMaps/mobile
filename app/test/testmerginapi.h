@@ -52,7 +52,6 @@ class TestMerginApi: public QObject
     QString mTestDataPath;
 
     ProjectList getProjectList();
-    bool hasProject( QString projectNamespace, QString projectName, ProjectList projects );
     void initTestProject();
     std::shared_ptr<MerginProject> prepareTestProjectUpload();
 

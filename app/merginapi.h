@@ -226,6 +226,9 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
+    //! Returns details about currently active transactions (both download and upload). Useful for tests
+    QHash<QString, TransactionStatus> transactions() const { return mTransactionalStatus; }
+
   signals:
     void listProjectsFinished( const ProjectList &merginProjects );
     void listProjectsFailed();
