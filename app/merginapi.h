@@ -235,7 +235,6 @@ class MerginApi: public QObject
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void syncProgressUpdated( const QString &projectFullName, qreal progress );
-    void downloadFileFinished( const QString &projectFullName, const QString &version, int chunkNo = 0, bool successfully = true );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
     void notify( const QString &message );
@@ -260,7 +259,7 @@ class MerginApi: public QObject
 
     // Pull slots
     void updateInfoReplyFinished();
-    void continueDownloadFiles( const QString &projectName, const QString &version, int chunkNo = 0, bool successfully = true );
+    void continueDownloadFiles( const QString &projectName, const QString &version, int chunkNo = 0 );
     void downloadFileReplyFinished();
 
     // Push slots

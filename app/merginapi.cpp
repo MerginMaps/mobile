@@ -24,7 +24,6 @@ MerginApi::MerginApi( const QString &dataDir, QObject *parent )
   QObject::connect( this, &MerginApi::serverProjectDeleted, this, &MerginApi::projectDeleted );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
-  QObject::connect( this, &MerginApi::downloadFileFinished, this, &MerginApi::continueDownloadFiles );
 
   loadAuthData();
   mMerginProjects = parseAllProjectsMetadata();
@@ -997,7 +996,7 @@ void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QStr
   if ( !nextFile.size )
   {
     createEmptyFile( getTempProjectDir( projectFullName ) + "/" + nextFile.path );
-    emit continueDownloadFiles( projectFullName, version, 0, true );
+    continueDownloadFiles( projectFullName, version, 0 );
   }
   else
   {
@@ -1005,14 +1004,8 @@ void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QStr
   }
 }
 
-void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo, bool successfully )
+void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo )
 {
-  if ( !successfully )
-  {
-    updateCancel( projectFullName );
-    return;
-  }
-
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus& transaction = mTransactionalStatus[projectFullName];
 
@@ -1098,8 +1091,9 @@ void MerginApi::downloadFileReplyFinished()
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     deleteReply( r, projectFullName );
+
     // Send another request afterwards
-    emit downloadFileFinished( projectFullName, version, chunkNo, true );
+    continueDownloadFiles( projectFullName, version, chunkNo );
   }
   else
   {
@@ -1110,7 +1104,9 @@ void MerginApi::downloadFileReplyFinished()
     }
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     deleteReply( r, projectFullName );
-    emit downloadFileFinished( projectFullName, version, chunkNo, false );
+
+    updateCancel( projectFullName );
+
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
   }
 }
