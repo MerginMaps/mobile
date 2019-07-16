@@ -30,9 +30,9 @@ struct MerginFile
 
 struct TransactionStatus
 {
-  qreal totalSize = 0;
-  int transferedSize = 0;
-  QString transactionUUID; // only for upload
+  qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
+  int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
+  QString transactionUUID; //!< only for upload. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
   QNetworkReply *openReply = nullptr; // all sync replies except cancel
   QList<MerginFile> files; // either to upload or download
   bool waitingForUpload = false;   // true when uploading a project, but doing an update first
