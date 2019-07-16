@@ -105,41 +105,38 @@ void MerginProjectModel::resetProjects( const ProjectList &merginProjects )
   endResetModel();
 }
 
-void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully )
+int MerginProjectModel::findProjectIndex( const QString &projectFullName )
 {
-  Q_UNUSED( projectFolder );
   int row = 0;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
     if ( MerginApi::getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
-    {
-      if ( successfully )
-      {
-        project->status = ProjectStatus::UpToDate;
-      }
-      setPending( row, false ); // emits dataChanged
-      return;
-    }
+      return row;
     row++;
   }
+  return -1;
+}
+
+void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully )
+{
+  Q_UNUSED( projectFolder );
+  Q_UNUSED( successfully );
+  int row = findProjectIndex( projectFullName );
+  if ( row < 0 )
+    return;
+
+  setPending( row, false ); // emits dataChanged
 }
 
 void MerginProjectModel::syncProgressUpdated( const QString &projectFullName, qreal progress )
 {
-  int row = 0;
-  for ( std::shared_ptr<MerginProject> project : mMerginProjects )
-  {
-    if ( MerginApi::getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
-    {
-      if ( row < 0 || row > mMerginProjects.length() - 1 ) return;
+  Q_UNUSED( progress );
+  int row = findProjectIndex( projectFullName );
+  if ( row < 0 )
+    return;
 
-      QModelIndex ix = index( row );
-      project->progress = progress;
-      emit dataChanged( ix, ix );
-      return;
-    }
-    row++;
-  }
+  QModelIndex ix = index( row );
+  emit dataChanged( ix, ix );
 }
 
 int MerginProjectModel::filterWriter() const

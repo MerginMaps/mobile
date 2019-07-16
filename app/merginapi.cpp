@@ -270,6 +270,9 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].openReply = reply;
+
+    updateProjectSyncProgress( projectFullName, 0 );
+
     connect( reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished );
   }
 }
@@ -285,6 +288,8 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   syncStatus.transactionUUID = projectFullName;
   Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
   mTransactionalStatus.insert( projectFullName, syncStatus );
+
+  updateProjectSyncProgress( projectFullName, 0 );
 
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
@@ -1089,7 +1094,8 @@ void MerginApi::downloadFileReplyFinished()
     handleOctetStream( data, tempFoler, filename, closeFile, overwrite );
     transaction.transferedSize += data.size();
 
-    emit syncProgressUpdated( projectFullName, transaction.transferedSize / transaction.totalSize );
+    updateProjectSyncProgress( projectFullName, transaction.transferedSize / transaction.totalSize );
+
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
     deleteReply( r, projectFullName );
     // Send another request afterwards
@@ -1192,7 +1198,8 @@ void MerginApi::uploadFileReplyFinished()
     else
     {
       transaction.transferedSize += currentFile.size;
-      emit syncProgressUpdated( projectFullName, transaction.transferedSize / transaction.totalSize );
+
+      updateProjectSyncProgress( projectFullName, transaction.transferedSize / transaction.totalSize );
       transaction.files.removeFirst();
 
       if ( !transaction.files.isEmpty() )
@@ -1914,4 +1921,11 @@ QSet<QString> MerginApi::listFiles( const QString &path )
     }
   }
   return files;
+}
+
+void MerginApi::updateProjectSyncProgress( const QString &projectFullName, qreal progress )
+{
+  if ( std::shared_ptr<MerginProject> project = getProject( projectFullName ) )
+    project->progress = progress;
+  emit syncProgressUpdated( projectFullName, progress );
 }
