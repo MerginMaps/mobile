@@ -103,6 +103,9 @@ android {
     QT += androidextras
 }
 
+# path to test data
+DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
+
 
 SOURCES += \
 main.cpp \
