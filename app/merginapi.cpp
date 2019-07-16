@@ -1253,7 +1253,7 @@ void MerginApi::updateInfoReplyFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1" ).arg( message ) );
     deleteReply( r, projectFullName );
-    updateCancel( projectFullName );
+    emit syncProjectFinished( QString(), projectFullName, false );
   }
 }
 
