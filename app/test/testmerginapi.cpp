@@ -107,11 +107,16 @@ void TestMerginApi::testDownloadProject()
   QString projectNamespace = mUsername;
   createRemoteProject( projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
+  QCOMPARE( mApi->transactions().count(), 0 );
+
   // try to download the project
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
   mApi->updateProject( projectNamespace, projectName );
+  QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
+
+  QCOMPARE( mApi->transactions().count(), 0 );
 
   ProjectList projects = mMerginProjectModel->projects();
   QVERIFY( !mMerginProjectModel->projects().isEmpty() );
@@ -149,7 +154,6 @@ void TestMerginApi::createRemoteProject( const QString &projectNamespace, const 
 
   // Copy data
   QString projectDir = mApi->projectsPath() + projectName + "/";
-  qDebug() << sourcePath << projectDir;
   InputUtils::cpDir( sourcePath, projectDir );
 
   // Upload data
@@ -187,11 +191,14 @@ void TestMerginApi::testCancelDownloadProject()
 
   createRemoteProject( mUsername, projectName, mTestDataPath + "/" + TestMerginApi::TEST_PROJECT_NAME + "/" );
 
+  QCOMPARE( mApi->transactions().count(), 0 );
+
   QString projectDir = mApi->projectsPath() + projectName + "/";
 
   // Test download and cancel before transaction actually starts
   QSignalSpy spy5( mApi, &MerginApi::syncProjectFinished );
   mApi->updateProject( mUsername, projectName );
+  QCOMPARE( mApi->transactions().count(), 1 );
   mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
@@ -202,6 +209,7 @@ void TestMerginApi::testCancelDownloadProject()
   QCOMPARE( QFileInfo( projectDir ).size(), 0 );
   QVERIFY( QDir( projectDir ).isEmpty() );
 
+  QCOMPARE( mApi->transactions().count(), 0 );
 
   // Test download and cancel after transcation starts
   QSignalSpy spy6( mApi, &MerginApi::pullFilesStarted );
@@ -232,7 +240,7 @@ void TestMerginApi::testCreateProjectTwice()
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "2";
   QString projectNamespace = mUsername;
   ProjectList projects = getProjectList();
-  QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ) );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   mApi->createProject( projectNamespace, projectName );
@@ -241,7 +249,7 @@ void TestMerginApi::testCreateProjectTwice()
 
   projects = getProjectList();
   QVERIFY( !mMerginProjectModel->projects().isEmpty() );
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
 
   // Create again, expecting error
   QSignalSpy spy2( mApi, &MerginApi::networkErrorOccurred );
@@ -261,7 +269,7 @@ void TestMerginApi::testCreateProjectTwice()
   spy3.wait( SHORT_REPLY );
 
   projects = getProjectList();
-  QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ) );
 
   qDebug() << "TestMerginApi::testCreateProjectTwice PASSED";
 }
@@ -274,7 +282,7 @@ void TestMerginApi::testDeleteNonExistingProject()
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "_DOESNT_EXISTS";
   QString projectNamespace = mUsername;
   ProjectList projects = getProjectList();
-  QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ) );
 
   // Try to delete non-existing project
   QSignalSpy spy( mApi, &MerginApi::networkErrorOccurred );
@@ -297,7 +305,7 @@ void TestMerginApi::testCreateDeleteProject()
   QString projectName = TestMerginApi::TEST_PROJECT_NAME + "_CREATE_DELETE";
   QString projectNamespace = mUsername;
   ProjectList projects = getProjectList();
-  QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ) );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   mApi->createProject( projectNamespace, projectName );
@@ -306,7 +314,7 @@ void TestMerginApi::testCreateDeleteProject()
 
   projects = getProjectList();
   QVERIFY( !mMerginProjectModel->projects().isEmpty() );
-  Q_ASSERT( hasProject( projectNamespace, projectName, projects ) );
+  Q_ASSERT( _findProjectByName( projectNamespace, projectName, projects ) );
 
   // Delete created project
   QSignalSpy spy2( mApi, &MerginApi::serverProjectDeleted );
@@ -314,7 +322,7 @@ void TestMerginApi::testCreateDeleteProject()
   spy.wait( SHORT_REPLY );
 
   projects = getProjectList();
-  QVERIFY( !hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ) );
 
   qDebug() << "TestMerginApi::testCreateDeleteProject PASSED";
 }
@@ -338,7 +346,7 @@ void TestMerginApi::testUploadProject()
   QVERIFY( !arguments.at( 2 ).toBool() );
 
   ProjectList projects = getProjectList();
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
 
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT1 = project->serverUpdated;
@@ -375,7 +383,7 @@ void TestMerginApi::testPushRemovedFile()
   ProjectList projects = getProjectList();
   int projectNo0 = projects.size();
   int localProjectNo0 = mProjectModel->rowCount();
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT1 = project->serverUpdated;
   // Remove file
@@ -395,7 +403,7 @@ void TestMerginApi::testPushRemovedFile()
   projects = getProjectList();
   int projectNo1 = projects.size();
   int localProjectNo1 = mProjectModel->rowCount();
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT2 = project->serverUpdated;
   QVERIFY( serverT1 < serverT2 );
@@ -423,7 +431,7 @@ void TestMerginApi::testPushChangesOfProject()
   ProjectList projects = getProjectList();
   int projectNo0 = projects.size();
   int localProjectNo0 = mProjectModel->rowCount();
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT1 = project->serverUpdated;
 
@@ -446,7 +454,7 @@ void TestMerginApi::testPushChangesOfProject()
   projects = getProjectList();
   int projectNo1 = projects.size();
   int localProjectNo1 = mProjectModel->rowCount();
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT2 = project->serverUpdated;
   QVERIFY( serverT1 < serverT2 );
@@ -539,19 +547,6 @@ ProjectList TestMerginApi::getProjectList()
   return mApi->projects();
 }
 
-bool TestMerginApi::hasProject( QString projectNamespace, QString projectName, ProjectList projects )
-{
-  QString projectFullName = MerginApi::getFullProjectName( projectNamespace, projectName );
-  for ( std::shared_ptr<MerginProject> p : projects )
-  {
-    if ( MerginApi::getFullProjectName( p->projectNamespace, p->name ) == projectFullName )
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 void TestMerginApi::initTestProject()
 {
   QString projectName = TestMerginApi::TEST_PROJECT_NAME;
@@ -564,7 +559,7 @@ void TestMerginApi::initTestProject()
 
   ProjectList projects = getProjectList();
   QVERIFY( !mMerginProjectModel->projects().isEmpty() );
-  QVERIFY( hasProject( projectNamespace, projectName, projects ) );
+  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
   qDebug() << "TestMerginApi::initTestProject DONE";
 
   // copy project's test data to the new project directory
