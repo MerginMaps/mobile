@@ -53,10 +53,9 @@ void TestMerginApi::initTestCase()
 
   mUsername = username;  // keep for later
 
-  // figure out the directory with our test data (in this git repo)
-  QDir dir = QFileInfo( __FILE__ ).dir();
-  QVERIFY( dir.cd( "../../test/test_data" ) );
-  mTestDataPath = dir.absolutePath();
+  QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
+  mTestDataPath = testDataDir.canonicalPath();  // get rid of any ".." that may cause problems later
+  qDebug() << "test data dir:" << mTestDataPath;
 
   initTestProject();
 
