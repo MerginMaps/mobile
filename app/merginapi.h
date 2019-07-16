@@ -52,7 +52,7 @@ struct MerginProject
   bool pending = false; // if there is a pending request for downlaod/update a project
   ProjectStatus status = NoVersion;
   int filesCount = -1;  // it's here in addition to "files" because project list only contains this information
-  qreal progress;
+  qreal progress = 0;  // progress in case of pending download/upload (values [0..1])
   int creator; // server-side user ID of the project owner (creator)
   QList<int> writers; // server-side user IDs of users having write access to the project
 };
@@ -380,6 +380,10 @@ class MerginApi: public QObject
     */
     QString findUniqueProjectDirectoryName( QString path );
     QNetworkReply *getProjectInfo( const QString &projectFullName );
+
+    //! Updates mergin project's sync status and emits syncProgressUpdated() signal
+    void updateProjectSyncProgress( const QString &projectFullName, qreal progress );
+
     /**
     * Used to store metadata about projects inbetween info and sync_data request.
     * MerginProjects list is updated with those data only if transfer has been successful.

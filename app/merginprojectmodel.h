@@ -49,6 +49,9 @@ class MerginProjectModel: public QAbstractListModel
     void syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully );
     void syncProgressUpdated( const QString &projectFullName, qreal progress );
   private:
+
+    int findProjectIndex( const QString &projectFullName );
+
     ProjectList mMerginProjects;
     int mFilterCreator;
     int mFilterWriter;
