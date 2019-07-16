@@ -295,7 +295,8 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
       return;
     }
 
-    mWaitingForUpload.insert( projectFullName );
+    mTransactionalStatus[projectFullName].waitingForUpload = true;
+
     updateProject( projectNamespace, projectName );
     connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
   }
@@ -1203,7 +1204,7 @@ void MerginApi::updateInfoReplyFinished()
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
     ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
-    if ( !mWaitingForUpload.contains( projectFullName ) )
+    if ( !mTransactionalStatus[projectFullName].waitingForUpload )
     {
       QSet<QString> obsoleteFiles;
       for ( MerginFile file : diff.removed )
@@ -1675,7 +1676,7 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
   Q_UNUSED( projectDir )
 
   disconnect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
-  mWaitingForUpload.remove( projectFullName );
+  mTransactionalStatus[projectFullName].waitingForUpload = false;
 
   if ( !successfully )
   {

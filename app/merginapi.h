@@ -35,6 +35,7 @@ struct TransactionStatus
   QString transactionUUID; // only for upload
   QNetworkReply *openReply = nullptr; // all sync replies except cancel
   QList<MerginFile> files; // either to upload or download
+  bool waitingForUpload = false;   // true when uploading a project, but doing an update first
 };
 
 struct MerginProject
@@ -401,7 +402,6 @@ class MerginApi: public QObject
     static const QNetworkRequest::Attribute AttrProjectFullName = QNetworkRequest::User;
 
     QHash<QString, QSet<QString>> mObsoleteFiles; // projectPath -> files
-    QSet<QString> mWaitingForUpload; // projectNamespace/projectName
     QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
     QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
