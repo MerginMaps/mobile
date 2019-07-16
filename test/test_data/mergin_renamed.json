@@ -1,0 +1,21 @@
+{
+    "clientUpdated": "2019-06-28T15:12:13.493Z",
+    "files": [
+        {
+            "checksum": "f468fa5d1a963d4706781a1af35000642b233a98",
+            "mtime": "2019-06-12T09:51:34.793Z",
+            "path": "project_renamed.qgs",
+            "size": 45
+        },
+        {
+            "checksum": "02290ab2cac5eee117c89bcdc2c5ac2a45e31370",
+            "mtime": "2019-05-31T14:12:19.482Z",
+            "path": "test1.txt",
+            "size": 13
+        }
+    ],
+    "lastSync": "2019-06-28T15:14:15.911Z",
+    "name": "test_compare",
+    "namespace": "viktor",
+    "version": "v1"
+}
