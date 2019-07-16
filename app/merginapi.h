@@ -397,7 +397,9 @@ class MerginApi: public QObject
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
 
-    QHash<QUrl, QString >mPendingRequests; // url -> projectNamespace/projectName
+    //! our custom attribute(s) for network requests
+    static const QNetworkRequest::Attribute AttrProjectFullName = QNetworkRequest::User;
+
     QHash<QString, QSet<QString>> mObsoleteFiles; // projectPath -> files
     QSet<QString> mWaitingForUpload; // projectNamespace/projectName
     QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
