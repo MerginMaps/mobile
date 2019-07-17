@@ -335,6 +335,11 @@ void TestMerginApi::testUploadProject()
   QString projectNamespace = mUsername;
   std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
 
+  //
+  // try to upload, but cancel it immediately afterwards
+  // (this verifies we can cancel upload before a transaction is started)
+  //
+
   QDateTime serverT0 = project->serverUpdated;
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
   mApi->uploadProject( projectNamespace, projectName );
@@ -351,6 +356,33 @@ void TestMerginApi::testUploadProject()
   project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QDateTime serverT1 = project->serverUpdated;
   QCOMPARE( serverT0, serverT1 );
+
+  //
+  // try to upload, but cancel it after started to upload files
+  // (so that we test also cancellation of transaction)
+  //
+
+  QSignalSpy spyX( mApi, &MerginApi::syncProjectFinished );
+  QSignalSpy spyY( mApi, &MerginApi::pushFilesStarted );
+  mApi->uploadProject( projectNamespace, projectName );
+  spyY.wait( LONG_REPLY );
+  QCOMPARE( spyY.count(), 1 );
+
+  mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+
+  // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
+  QCOMPARE( spyX.count(), 1 );
+  QList<QVariant> argumentsX = spyX.takeFirst();
+  QVERIFY( !argumentsX.at( 2 ).toBool() );
+
+  projects = getProjectList();
+  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  serverT1 = project->serverUpdated;
+  QCOMPARE( serverT0, serverT1 );
+
+  //
+  // try to upload - and let the upload finish successfully
+  //
 
   mApi->uploadProject( projectNamespace, projectName );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
