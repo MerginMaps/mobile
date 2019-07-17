@@ -33,6 +33,7 @@ class TestMerginApi: public QObject
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
     void testUploadProject();
+    void testPushAddedFile();
     void testPushRemovedFile();
     void testPushChangesOfProject();
 
@@ -59,6 +60,12 @@ class TestMerginApi: public QObject
     void createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
     //! Deletes a project on the server
     void deleteRemoteProject( const QString &projectNamespace, const QString &projectName );
+
+    //! Downloads a remote project to the local drive
+    void downloadRemoteProject( const QString &projectNamespace, const QString &projectName );
+
+    //! Uploads any local changes in the local project to the remote project
+    void uploadRemoteProject( const QString &projectNamespace, const QString &projectName );
 
     //! Deletes a project from the local drive
     void deleteLocalProject( const QString &projectNamespace, const QString &projectName );

@@ -366,6 +366,38 @@ void TestMerginApi::testUploadProject()
   qDebug() << "TestMerginApi::testUploadProject PASSED";
 }
 
+
+void TestMerginApi::testPushAddedFile()
+{
+  QString projectName = "test_mergin_push_added_file";
+
+  createRemoteProject( mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mUsername, projectName );
+
+  // add a single file
+  QString newFilePath = mApi->projectsPath() + projectName + "/added.txt";
+  QFile file( newFilePath );
+  QVERIFY( file.open( QIODevice::WriteOnly ) );
+  file.write( "added file content\n" );
+  file.close();
+
+  // TODO: check that the status is "modified"
+
+  // upload
+  uploadRemoteProject( mUsername, projectName );
+
+  deleteLocalProject( mUsername, projectName );
+
+  downloadRemoteProject( mUsername, projectName );
+
+  // check it has the new file
+  QFileInfo fi( newFilePath );
+  QVERIFY( fi.exists() );
+
+  deleteLocalProject( mUsername, projectName );
+  deleteRemoteProject( mUsername, projectName );
+}
+
 void TestMerginApi::testPushRemovedFile()
 {
   qDebug() << "TestMerginApi::testPushRemovedFile START";
@@ -600,4 +632,20 @@ void TestMerginApi::deleteLocalProject( const QString &projectNamespace, const Q
   QDir projectDir( project->projectDir );
   projectDir.removeRecursively();
   mApi->clearProject( project );
+}
+
+void TestMerginApi::downloadRemoteProject( const QString &projectNamespace, const QString &projectName )
+{
+  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
+  mApi->updateProject( projectNamespace, projectName );
+  QCOMPARE( mApi->transactions().count(), 1 );
+  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
+}
+
+void TestMerginApi::uploadRemoteProject( const QString &projectNamespace, const QString &projectName )
+{
+  mApi->uploadProject( projectNamespace, projectName );
+  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
+  QVERIFY( spy.wait( LONG_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
 }
