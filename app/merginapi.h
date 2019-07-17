@@ -261,6 +261,8 @@ class MerginApi: public QObject
     void userInfoChanged();
     void pingMerginFinished( const QString &apiVersion, const QString &msg );
     void pullFilesStarted();
+    //! Emitted when started to upload chunks (useful for unit testing)
+    void pushFilesStarted();
 
   public slots:
     void projectDeleted( const QString &projecFullName );
