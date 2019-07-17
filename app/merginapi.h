@@ -28,12 +28,24 @@ struct MerginFile
   QStringList chunks; // used only for upload otherwise suppose to be empty
 };
 
+#include <QPointer>
+
 struct TransactionStatus
 {
   qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
   int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for upload. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
-  QNetworkReply *openReply = nullptr; // all sync replies except cancel
+
+  // download replies
+  QPointer<QNetworkReply> replyProjectInfo;
+  QPointer<QNetworkReply> replyDownloadFile;
+
+  // upload replies
+  QPointer<QNetworkReply> replyUploadProjectInfo;
+  QPointer<QNetworkReply> replyUploadStart;
+  QPointer<QNetworkReply> replyUploadFile;
+  QPointer<QNetworkReply> replyUploadFinish;
+
   QList<MerginFile> files; // either to upload or download
   bool waitingForUpload = false;   // true when uploading a project, but doing an update first
 };
@@ -287,6 +299,9 @@ class MerginApi: public QObject
     QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
 
+    /** Called when download has failed (aborted by user or due to network error) to clean up */
+    void updateFailed( const QString &projectFullName );
+
     /**
      * Sends non-blocking GET request to the server to download a file (chunk).
      * \param projectFullName Namespace/name
@@ -319,13 +334,14 @@ class MerginApi: public QObject
      */
     void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
 
+    void sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID );
+
     bool writeData( const QByteArray &data, const QString &path );
     void handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
     bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
     void createEmptyFile( const QString &path );
     void takeFirstAndDownload( const QString &projectFullName, const QString &version );
-    void deleteReply( QNetworkReply *r, const QString &projectFullName );
     /**
     *
     * \param localUpdated Timestamp version of local copy of the project
