@@ -51,7 +51,7 @@
 #include "loader.h"
 #include "appsettings.h"
 
-static QString getDataDir( bool isTest = false )
+static QString getDataDir()
 {
 #ifdef QGIS_QUICK_DATA_PATH
   QString dataPathRaw( STR( QGIS_QUICK_DATA_PATH ) );
@@ -77,10 +77,6 @@ static QString getDataDir( bool isTest = false )
     }
   }
 #endif
-  if ( isTest && ::getenv( "TEST_PATH_SUFFIX" ) )
-  {
-    dataPathRaw += ::getenv( "TEST_PATH_SUFFIX" );
-  }
   ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
 #else
   qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
@@ -200,8 +196,21 @@ int main( int argc, char *argv[] )
   AndroidUtils::requirePermissions();
 #endif
   // Set/Get enviroment
-  QString dataDir = getDataDir( IS_TEST );
+  QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects/";
+
+  if ( IS_TEST )
+  {
+    // override the path where local projects are stored
+    // and wipe the temporary projects dir if it already exists
+    QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
+    QDir testProjectsDir( testDataDir.path() + "/../temp_projects" );
+    if ( testProjectsDir.exists() )
+      testProjectsDir.removeRecursively();
+    QDir( testDataDir.path() + "/.." ).mkpath( "temp_projects" );
+    projectDir = testProjectsDir.canonicalPath() + "/";
+  }
+
   InputUtils::setLogFilename( projectDir + ".logs" );
   setEnvironmentQgisPrefixPath();
 

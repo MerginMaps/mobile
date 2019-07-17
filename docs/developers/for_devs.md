@@ -114,10 +114,9 @@ Quick guide:
 ## Running tests
 
 You need to set few env variables:
-- TEST_MERGIN_URL
+- TEST_MERGIN_URL - URL of the test server, e.g. `http://127.0.0.1:5000/`
 - TEST_API_USERNAME
 - TEST_API_PASSWORD
-- TEST_PATH_SUFFIX
 
 Run:
 ```
