@@ -57,6 +57,13 @@ void TestMerginApi::initTestCase()
   mTestDataPath = testDataDir.canonicalPath();  // get rid of any ".." that may cause problems later
   qDebug() << "test data dir:" << mTestDataPath;
 
+  // remove any projects on the server that may prevent us from creating them
+  deleteRemoteProject( mUsername, "testListProject" );
+  deleteRemoteProject( mUsername, "testDownloadProject" );
+  deleteRemoteProject( mUsername, "testPushAddedFile" );
+  deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME );
+  deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
+
   initTestProject();
 
   qDebug() << "TestMerginApi::initTestCase DONE";
@@ -64,34 +71,31 @@ void TestMerginApi::initTestCase()
 
 void TestMerginApi::cleanupTestCase()
 {
-  // remove test projects on the server
-  deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME );
-  deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
+  // do not remove test projects on the server - keep them around for inspection (deleted when tests are starting)
 
   // do not remove project data locally - keep them around so it's possible to inspect their final state if needed
 }
 
 void TestMerginApi::testListProject()
 {
+  QString projectName = "testListProject";
+
   // check that there's no hello world project
   QSignalSpy spy0( mApi, &MerginApi::listProjectsFinished );
   mApi->listProjects( QString() );
   QVERIFY( spy0.wait( SHORT_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
-  QVERIFY( !_findProjectByName( mUsername, "hello world project", mMerginProjectModel->projects() ) );
+  QVERIFY( !_findProjectByName( mUsername, projectName, mMerginProjectModel->projects() ) );
 
   // create the project on the server (the content is not important)
-  createRemoteProject( mUsername, "hello world project", mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  createRemoteProject( mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
   // check the project exists on the server
   QSignalSpy spy( mApi, &MerginApi::listProjectsFinished );
   mApi->listProjects( QString() );
   QVERIFY( spy.wait( SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
-  QVERIFY( _findProjectByName( mUsername, "hello world project", mMerginProjectModel->projects() ) );
-
-  // get rid of the project again
-  deleteRemoteProject( mUsername, "hello world project" );
+  QVERIFY( _findProjectByName( mUsername, projectName, mMerginProjectModel->projects() ) );
 }
 
 /**
@@ -100,7 +104,7 @@ void TestMerginApi::testListProject()
 void TestMerginApi::testDownloadProject()
 {
   // create the project on the server (the content is not important)
-  QString projectName = "mobile_demo_mod";
+  QString projectName = "testDownloadProject";
   QString projectNamespace = mUsername;
   createRemoteProject( projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
@@ -136,9 +140,6 @@ void TestMerginApi::testDownloadProject()
   // there should be something in the directory
   QStringList projectDirEntries = QDir( project->projectDir ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
   QCOMPARE( projectDirEntries.count(), 2 );
-
-  deleteLocalProject( projectNamespace, projectName );
-  deleteRemoteProject( projectNamespace, projectName );
 }
 
 void TestMerginApi::createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath )
@@ -398,7 +399,7 @@ void TestMerginApi::testUploadProject()
 
 void TestMerginApi::testPushAddedFile()
 {
-  QString projectName = "test_mergin_push_added_file";
+  QString projectName = "testPushAddedFile";
 
   createRemoteProject( mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
   downloadRemoteProject( mUsername, projectName );
@@ -422,9 +423,6 @@ void TestMerginApi::testPushAddedFile()
   // check it has the new file
   QFileInfo fi( newFilePath );
   QVERIFY( fi.exists() );
-
-  deleteLocalProject( mUsername, projectName );
-  deleteRemoteProject( mUsername, projectName );
 }
 
 void TestMerginApi::testPushRemovedFile()
