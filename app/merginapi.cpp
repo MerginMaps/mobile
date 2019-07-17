@@ -69,7 +69,7 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
   }
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkRequest request;
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3" ).arg( projectFullName ).arg( filename ).arg( version ) );
@@ -98,7 +98,7 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
   }
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QString projectNamespace;
   QString projectName;
@@ -136,7 +136,7 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   }
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   // Has been canceled
   if ( transaction.transactionUUID.isEmpty() )
@@ -168,7 +168,7 @@ void MerginApi::uploadCancel( const QString &projectFullName )
   if ( !mTransactionalStatus.contains( projectFullName ) )
     return;
 
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkReply *reply = transaction.openReply;
   // There is an open transaction, abort it followed by calling cancelUpload again.
@@ -210,7 +210,7 @@ void MerginApi::updateCancel( const QString &projectFullName )
   if ( !mTransactionalStatus.contains( projectFullName ) )
     return;
 
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkReply *reply = transaction.openReply;
   if ( reply )
@@ -240,7 +240,7 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   }
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   if ( transaction.transactionUUID.isEmpty() )
   {
@@ -1007,7 +1007,7 @@ void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QStr
 void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   MerginFile currentFile = transaction.files.first();
   if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
@@ -1037,7 +1037,7 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
 void MerginApi::deleteReply( QNetworkReply *r, const QString &projectFullName )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   Q_ASSERT( r == transaction.openReply );
   r->deleteLater();
@@ -1052,7 +1052,7 @@ void MerginApi::downloadFileReplyFinished()
   QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
@@ -1119,7 +1119,7 @@ void MerginApi::uploadStartReplyFinished()
   QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -1174,7 +1174,7 @@ void MerginApi::uploadFileReplyFinished()
   QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QStringList params = ( r->url().toString().split( "/" ) );
   QString transactionUUID = params.at( params.length() - 2 );
@@ -1228,7 +1228,7 @@ void MerginApi::updateInfoReplyFinished()
   QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QString projectNamespace;
   QString projectName;
@@ -1304,7 +1304,7 @@ void MerginApi::uploadInfoReplyFinished()
   QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QString projectNamespace;
   QString projectName;
@@ -1734,7 +1734,7 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
   disconnect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus& transaction = mTransactionalStatus[projectFullName];
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   transaction.waitingForUpload = false;
 
