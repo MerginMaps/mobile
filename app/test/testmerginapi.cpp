@@ -68,10 +68,7 @@ void TestMerginApi::cleanupTestCase()
   deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME );
   deleteRemoteProject( mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
-  // remove project data locally
-  QDir testDir( mApi->projectsPath() );
-  testDir.removeRecursively();
-  qDebug() << "TestMerginApi::cleanupTestCase DONE";
+  // do not remove project data locally - keep them around so it's possible to inspect their final state if needed
 }
 
 void TestMerginApi::testListProject()

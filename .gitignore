@@ -3,3 +3,4 @@
 *build*/
 app/config.pri
 *.idea
+test/temp_projects/
