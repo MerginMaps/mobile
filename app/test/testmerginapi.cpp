@@ -79,6 +79,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testListProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
@@ -544,6 +545,34 @@ void TestMerginApi::testPushChangesOfProject()
   QCOMPARE( projectNo0, projectNo1 );
 
   qDebug() << "TestMerginApi::testPushChangesOfProject PASSED";
+}
+
+void TestMerginApi::testUpdateRemovedFiles()
+{
+  // this tests downloads a project, then a file gets removed on the server
+  // and we check whether the update was correct (i.e. the file got removed too)
+
+  QString projectName = "testUpdateRemovedFiles";
+  QString projectDir = mApi->projectsPath() + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // download initial version
+  downloadRemoteProject( mApi, mUsername, projectName );
+  QVERIFY( QFile::exists( projectDir + "/test1.txt" ) );
+
+  // remove a file on the server
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QVERIFY( QFile::remove( extraProjectDir + "/test1.txt" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // now try to update
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that the removed file is not there anymore
+  QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
+  QVERIFY( !QFile::exists( projectDir + "/test1.txt" ) );
 }
 
 void TestMerginApi::testParseAndCompareNoChanges()

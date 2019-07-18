@@ -507,18 +507,6 @@ ProjectList MerginApi::updateMerginProjectList( const ProjectList &serverProject
   return serverProjects;
 }
 
-void MerginApi::deleteObsoleteFiles( const QString &projectPath )
-{
-  if ( !mObsoleteFiles.value( projectPath ).isEmpty() )
-  {
-    for ( QString filename : mObsoleteFiles.value( projectPath ) )
-    {
-      QFile file( projectPath + filename );
-      file.remove();
-    }
-    mObsoleteFiles.remove( projectPath );
-  }
-}
 
 void MerginApi::saveAuthData()
 {
@@ -1024,6 +1012,7 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  Q_ASSERT( !transaction.files.isEmpty() );
   MerginFile currentFile = transaction.files.first();
   if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
   {
@@ -1038,15 +1027,30 @@ void MerginApi::continueDownloadFiles( const QString &projectFullName, const QSt
     }
     else
     {
-      QString projectNamespace;
-      QString projectName;
-      extractProjectName( projectFullName, projectNamespace, projectName );
-      QString projectDir = getProjectDir( projectNamespace, projectName );
-      copyTempFilesToProject( projectDir, projectFullName );
-
-      emit syncProjectFinished( projectDir, projectFullName, true );
+      finalizeProjectUpdate( projectFullName );
     }
   }
+}
+
+void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
+{
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  std::shared_ptr<MerginProject> project = getProject( projectFullName );
+  Q_ASSERT( project );
+  QString projectDir = project->projectDir;
+
+  copyTempFilesToProject( projectDir, projectFullName );
+
+  // remove files that have been removed from the server
+  for ( QString filename : transaction.filesToDelete )
+  {
+    QFile file( projectDir + "/" + filename );
+    file.remove();
+  }
+
+  emit syncProjectFinished( projectDir, projectFullName, true );
 }
 
 
@@ -1300,15 +1304,14 @@ void MerginApi::updateInfoReplyFinished()
     ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
     if ( !transaction.waitingForUpload )
     {
-      QSet<QString> obsoleteFiles;
+      // TODO: not sure if this logic with "waitingForUpload" is correct.
+      // We depend on that flag regarding whether we delete files or not. But some files
+      // may have been added and some may have been truly removed on the server.
+      // Or a file may have been removed on server but recreated (with different content in client)
+
       for ( MerginFile file : diff.removed )
       {
-        obsoleteFiles.insert( file.path );
-      }
-      if ( !obsoleteFiles.isEmpty() )
-      {
-        QString projectPath = getProjectDir( projectNamespace, projectName );
-        mObsoleteFiles.insert( projectPath, obsoleteFiles );
+        transaction.filesToDelete.insert( file.path );
       }
     }
 
@@ -1335,6 +1338,11 @@ void MerginApi::updateInfoReplyFinished()
     {
       takeFirstAndDownload( projectFullName, serverProject.version );
       emit pullFilesStarted();
+    }
+    else
+    {
+      // there's nothing to download so just finalize the update
+      finalizeProjectUpdate( projectFullName );
     }
   }
   else

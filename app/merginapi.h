@@ -48,6 +48,7 @@ struct TransactionStatus
 
   QList<MerginFile> files; // either to upload or download
   bool waitingForUpload = false;   // true when uploading a project, but doing an update first
+  QSet<QString> filesToDelete;   //!< used during download/update: files that should be deleted (because they were removed on server)
 };
 
 struct MerginProject
@@ -362,7 +363,6 @@ class MerginApi: public QObject
     * \param serverProjects List of mergin projects to be merged with current merginList project.
     */
     ProjectList updateMerginProjectList( const ProjectList &serverProjects );
-    void deleteObsoleteFiles( const QString &projectPath );
     void loadAuthData();
     bool validateAuthAndContinute();
     void checkMerginVersion( QString apiVersion, QString msg = QStringLiteral() );
@@ -403,6 +403,9 @@ class MerginApi: public QObject
     //! Creates a unique project directory for given project name (used for initial download of a project)
     QString createUniqueProjectDirectory( const QString &projectName );
 
+    //! Called when download/update of project data has finished to finalize things and emit sync finished signal
+    void finalizeProjectUpdate( const QString &projectFullName );
+
     /**
     * Used to store metadata about projects inbetween info and sync_data request.
     * MerginProjects list is updated with those data only if transfer has been successful.
@@ -424,7 +427,6 @@ class MerginApi: public QObject
     //! our custom attribute(s) for network requests
     static const QNetworkRequest::Attribute AttrProjectFullName = QNetworkRequest::User;
 
-    QHash<QString, QSet<QString>> mObsoleteFiles; // projectPath -> files
     QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
     QSet<QString> mIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
     QSet<QString> mIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
