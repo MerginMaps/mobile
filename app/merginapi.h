@@ -380,8 +380,7 @@ class MerginApi: public QObject
     */
     QString extractServerErrorMsg( const QByteArray &data );
     /**
-    * Returns mergin project directory according projectNamespace and projectName. Either it already exists
-    * or it creates a new folder for the project and returns its path.
+    * Returns mergin project directory according projectNamespace and projectName. If it is unknown, it returns empty string.
     * \param projectNamespace QString to find a project according namespace as a part of full project name
     * \param projectName QString to find a project according name as a part of full project name
     */
@@ -400,6 +399,9 @@ class MerginApi: public QObject
 
     //! Updates mergin project's sync status and emits syncProgressUpdated() signal
     void updateProjectSyncProgress( const QString &projectFullName, qreal progress );
+
+    //! Creates a unique project directory for given project name (used for initial download of a project)
+    QString createUniqueProjectDirectory( const QString &projectName );
 
     /**
     * Used to store metadata about projects inbetween info and sync_data request.

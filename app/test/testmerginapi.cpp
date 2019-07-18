@@ -129,12 +129,6 @@ void TestMerginApi::testDownloadProject()
   createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
   // add an entry about this project to main API - otherwise it fails
-  // TODO: this should not be necessary
-  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
-  p->name = projectName;
-  p->projectNamespace = projectNamespace;
-  mApi->addProject( p );
-
   QCOMPARE( mApi->transactions().count(), 0 );
 
   // try to download the project
@@ -181,14 +175,14 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   QString projectDir = api->projectsPath() + projectName + "/";
   InputUtils::cpDir( sourcePath, projectDir );
 
-  // Upload data
-  MerginProject project;
-  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>( project );
+  // make MerginApi aware of the project and its directory
+  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
   p->name = projectName;
   p->projectNamespace = projectNamespace;
   p->projectDir = projectDir;
   api->addProject( p );
 
+  // Upload data
   QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
   api->uploadProject( projectNamespace, projectName );
   QVERIFY( spy3.wait( LONG_REPLY ) );
@@ -215,13 +209,6 @@ void TestMerginApi::testCancelDownloadProject()
   QString projectName = TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD;
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TestMerginApi::TEST_PROJECT_NAME + "/" );
-
-  // add an entry about this project to main API - otherwise it fails
-  // TODO: this should not be necessary
-  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
-  p->name = projectName;
-  p->projectNamespace = mUsername;
-  mApi->addProject( p );
 
   QCOMPARE( mApi->transactions().count(), 0 );
 
@@ -436,13 +423,6 @@ void TestMerginApi::testPushAddedFile()
   QString projectName = "testPushAddedFile";
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
-
-  // add an entry about this project to main API - otherwise it fails
-  // TODO: this should not be necessary
-  std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
-  p->name = projectName;
-  p->projectNamespace = mUsername;
-  mApi->addProject( p );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
