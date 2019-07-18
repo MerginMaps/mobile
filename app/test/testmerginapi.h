@@ -51,24 +51,26 @@ class TestMerginApi: public QObject
     ProjectModel *mProjectModel;
     QString mUsername;
     QString mTestDataPath;
+    //! extra API to do requests we are not testing (as if some other user did those)
+    MerginApi *mApiExtra = nullptr;
 
     ProjectList getProjectList();
     void initTestProject();
     std::shared_ptr<MerginProject> prepareTestProjectUpload();
 
     //! Creates a project on the server and pushes an initial version and removes the local copy.
-    void createRemoteProject( const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
+    void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
     //! Deletes a project on the server
-    void deleteRemoteProject( const QString &projectNamespace, const QString &projectName );
+    void deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Downloads a remote project to the local drive
-    void downloadRemoteProject( const QString &projectNamespace, const QString &projectName );
+    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Uploads any local changes in the local project to the remote project
-    void uploadRemoteProject( const QString &projectNamespace, const QString &projectName );
+    void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Deletes a project from the local drive
-    void deleteLocalProject( const QString &projectNamespace, const QString &projectName );
+    void deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 };
 
 # endif // TESTMERGINAPI_H
