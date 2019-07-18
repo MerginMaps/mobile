@@ -844,30 +844,22 @@ QString MerginApi::findUniqueProjectDirectoryName( QString path )
   }
 }
 
+QString MerginApi::createUniqueProjectDirectory( const QString &projectName )
+{
+  QString projectDirPath = findUniqueProjectDirectoryName( mDataDir + projectName );
+  QDir projectDir( projectDirPath );
+  if ( !projectDir.exists() )
+  {
+    QDir dir( "" );
+    dir.mkdir( projectDirPath );
+  }
+  return projectDirPath;
+}
+
 QString MerginApi::getProjectDir( const QString &projectNamespace, const QString &projectName )
 {
-  QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  std::shared_ptr<MerginProject> project = getProject( projectFullName );
-  if ( project )
-  {
-    if ( project->projectDir.isEmpty() )
-    {
-      QString projectDirPath = findUniqueProjectDirectoryName( mDataDir + projectName );
-      QDir projectDir( projectDirPath );
-      if ( !projectDir.exists() )
-      {
-        QDir dir( "" );
-        dir.mkdir( projectDirPath );
-      }
-      project->projectDir = projectDirPath;
-      return projectDir.path();
-    }
-    else
-    {
-      return project->projectDir;
-    }
-  }
-  return QStringLiteral();
+  std::shared_ptr<MerginProject> project = getProject( getFullProjectName( projectNamespace, projectName ) );
+  return project ? project->projectDir : QString();
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -1278,6 +1270,24 @@ void MerginApi::updateInfoReplyFinished()
 
     transaction.replyProjectInfo->deleteLater();
     transaction.replyProjectInfo = nullptr;
+
+    if ( !getProject( projectFullName ) )
+    {
+      // there's no entry in the list of projects yet - most likely projects were not listed yet
+      // (or the project did not exist at the time of last listing)
+      std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
+      p->name = projectName;
+      p->projectNamespace = projectNamespace;
+      addProject( p );
+    }
+
+    std::shared_ptr<MerginProject> project = getProject( projectFullName );
+    Q_ASSERT( project );
+    if ( project->projectDir.isEmpty() )
+    {
+      // project has not been downloaded yet - we need to create a directory for it
+      project->projectDir = createUniqueProjectDirectory( projectName );
+    }
 
     QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
     Q_ASSERT( projectPath != "/" );  // that would mean we do not have entry -> fail getting local files
