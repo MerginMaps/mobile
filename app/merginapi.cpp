@@ -1280,6 +1280,7 @@ void MerginApi::updateInfoReplyFinished()
     transaction.replyProjectInfo = nullptr;
 
     QString projectPath = getProjectDir( projectNamespace, projectName ) + "/";
+    Q_ASSERT( projectPath != "/" );  // that would mean we do not have entry -> fail getting local files
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
 
     MerginProject serverProject = readProjectMetadata( data );
