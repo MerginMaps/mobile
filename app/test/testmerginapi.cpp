@@ -83,6 +83,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteUpdateLocalUpdate" );
+  deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteAddLocalAdd" );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
@@ -636,6 +637,46 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   // and the local version should go to test1.txt_conflict
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "local content" ) );
+}
+
+void TestMerginApi::testConflictRemoteAddLocalAdd()
+{
+  // this test downloads a project, creates a new file
+  // in the meanwhile it creates the same file on the server to create
+  // a conflict. Finally it tries to upload the local change to test
+  // the code responsible for conflict resolution (renames the local file)
+
+  QString projectName = "testConflictRemoteAddLocalAdd";
+  QString projectDir = mApi->projectsPath() + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + projectName;
+  QString filename = projectDir + "/test-new-file.txt";
+  QString extraFilename = extraProjectDir + "/test-new-file.txt";
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  qDebug() << "download initial version";
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  qDebug() << "create test-new-file.txt on the server";
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( extraFilename, QByteArray( "new remote content" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  qDebug() << "create test-new-file.txt locally and do the sync";
+  writeFileContent( filename, QByteArray( "new local content" ) );
+  //
+  // TODO: upload should figure out it needs to run update first without this
+  // (the simple check in uploadProject() likely won't be good enough to find
+  // out... in upload's project info handler if there is a need for update,
+  // the upload should be cancelled (or paused to update first).
+  //
+  downloadRemoteProject( mApi, mUsername, projectName );
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // verify the result: the server version should be in test1.txt
+  // and the local version should go to test1.txt_conflict
+  QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
+  QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "new local content" ) );
 }
 
 

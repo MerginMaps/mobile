@@ -1051,7 +1051,16 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
     }
   }
 
-  // TODO: resolve conflicts with remote add vs. local add
+  // rename local conflicting files that were added when also the server got those files added
+  for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
+  {
+    InputUtils::log( projectFullName, "conflicting remote add/local add: " + filePath );
+    QString origPath = projectDir + "/" + filePath;
+    if ( !QFile::rename( origPath, origPath + "_conflict" ) )
+    {
+      InputUtils::log( projectFullName, "failed rename of conflicting file: " + filePath );
+    }
+  }
 
   copyTempFilesToProject( projectDir, projectFullName );
 
@@ -1338,6 +1347,15 @@ void MerginApi::updateInfoReplyFinished()
 
     // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
     for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
+    {
+      MerginFile file = serverProject.fileInfo( filePath );
+      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+      filesToDownload << file;
+      totalSize += file.size;
+    }
+
+    // also download files which were added both on the server and locally (the local version will be renamed as conflicting copy)
+    for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
     {
       MerginFile file = serverProject.fileInfo( filePath );
       file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
