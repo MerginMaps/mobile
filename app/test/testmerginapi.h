@@ -38,6 +38,7 @@ class TestMerginApi: public QObject
     void testPushModifiedFile();
     void testUpdateRemovedFiles();
     void testUpdateRemovedVsModifiedFiles();
+    void testConflictRemoteUpdateLocalUpdate();
 
     void testParseAndCompareNoChanges();
     void testParseAndCompareRemovedAdded();
@@ -73,6 +74,11 @@ class TestMerginApi: public QObject
 
     //! Deletes a project from the local drive
     void deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+
+    //! Write all of "data" as the content to the given filename
+    void writeFileContent( const QString &filename, const QByteArray &data );
+    //! Read content of the given filename
+    QByteArray readFileContent( const QString &filename );
 };
 
 # endif // TESTMERGINAPI_H
