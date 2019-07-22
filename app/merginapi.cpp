@@ -343,7 +343,6 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
     }
 
     Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-    mTransactionalStatus[projectFullName].waitingForUpload = true;
 
     updateProject( projectNamespace, projectName );
     connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
@@ -1041,10 +1040,12 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   Q_ASSERT( project );
   QString projectDir = project->projectDir;
 
+  // TODO: rename local conflicting files
+
   copyTempFilesToProject( projectDir, projectFullName );
 
   // remove files that have been removed from the server
-  for ( QString filename : transaction.filesToDelete )
+  for ( QString filename : transaction.diff.remoteDeleted )
   {
     QFile file( projectDir + "/" + filename );
     file.remove();
@@ -1269,7 +1270,8 @@ void MerginApi::updateInfoReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+    QString url = r->url().toString();
+    InputUtils::log( url, QStringLiteral( "FINISHED" ) );
     QByteArray data = r->readAll();
 
     transaction.replyProjectInfo->deleteLater();
@@ -1298,34 +1300,26 @@ void MerginApi::updateInfoReplyFinished()
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
 
     MerginProject serverProject = readProjectMetadata( data );
+    std::shared_ptr<MerginProject> oldServerProject = readProjectMetadataFromPath( project->projectDir ); // may be null if the project has not been downloaded yet
     serverProject.projectDir = projectPath;
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
-    ProjectDiff diff = compareProjectFiles( serverProject.files, localFiles );
-    if ( !transaction.waitingForUpload )
-    {
-      // TODO: not sure if this logic with "waitingForUpload" is correct.
-      // We depend on that flag regarding whether we delete files or not. But some files
-      // may have been added and some may have been truly removed on the server.
-      // Or a file may have been removed on server but recreated (with different content in client)
-
-      for ( MerginFile file : diff.removed )
-      {
-        transaction.filesToDelete.insert( file.path );
-      }
-    }
+    transaction.diff = compareProjectFiles2( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
+    InputUtils::log( url, transaction.diff.dump() );
 
     QList<MerginFile> filesToDownload;
     qint64 totalSize = 0;
-    for ( MerginFile file : diff.added )
+    for ( QString filePath : transaction.diff.remoteAdded )
     {
+      MerginFile file = serverProject.fileInfo( filePath );
       file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
       totalSize += file.size;
     }
 
-    for ( MerginFile file : diff.modified )
+    for ( QString filePath : transaction.diff.remoteUpdated )
     {
+      MerginFile file = serverProject.fileInfo( filePath );
       file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
       filesToDownload << file;
       totalSize += file.size;
@@ -1357,6 +1351,19 @@ void MerginApi::updateInfoReplyFinished()
   }
 }
 
+
+static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
+{
+  for ( const MerginFile &merginFile : files )
+  {
+    if ( merginFile.path == filePath )
+      return merginFile;
+  }
+  qDebug() << "requested findFile() for non-existant file! " << filePath;
+  return MerginFile();
+}
+
+
 void MerginApi::uploadInfoReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -1374,7 +1381,6 @@ void MerginApi::uploadInfoReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    QJsonObject changes;
     QString url = r->url().toString();
     InputUtils::log( url, QStringLiteral( "FINISHED" ) );
     QByteArray data = r->readAll();
@@ -1386,18 +1392,46 @@ void MerginApi::uploadInfoReplyFinished()
     QList<MerginFile> localFiles = getLocalProjectFiles( projectPath );
 
     MerginProject serverProject = readProjectMetadata( data );
-    ProjectDiff diff = compareProjectFiles( localFiles, serverProject.files );
+
+    std::shared_ptr<MerginProject> project = getProject( projectFullName );
+    Q_ASSERT( project );
+    std::shared_ptr<MerginProject> oldServerProject = readProjectMetadataFromPath( project->projectDir ); // may be null if the project has not been downloaded yet
+
+    transaction.diff = compareProjectFiles2( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
+    InputUtils::log( url, transaction.diff.dump() );
+
+    // TODO: make sure there are no remote files to add/update/remove nor conflicts
+
     QList<MerginFile> filesToUpload;
+    QList<MerginFile> addedMerginFiles, updatedMerginFiles, deletedMerginFiles;
+    for ( QString filePath : transaction.diff.localAdded )
+    {
+      MerginFile merginFile = findFile( filePath, localFiles );
+      merginFile.chunks = generateChunkIdsForSize( merginFile.size );
+      addedMerginFiles.append( merginFile );
+    }
+    for ( QString filePath : transaction.diff.localUpdated )
+    {
+      MerginFile merginFile = findFile( filePath, localFiles );
+      merginFile.chunks = generateChunkIdsForSize( merginFile.size );
+      updatedMerginFiles.append( merginFile );
+    }
+    for ( QString filePath : transaction.diff.localDeleted )
+    {
+      MerginFile merginFile = findFile( filePath, serverProject.files );
+      deletedMerginFiles.append( merginFile );
+    }
 
-    QJsonArray added = prepareUploadChangesJSON( diff.added );
-    filesToUpload.append( diff.added );
+    QJsonArray added = prepareUploadChangesJSON( addedMerginFiles );
+    filesToUpload.append( addedMerginFiles );
 
-    QJsonArray modified = prepareUploadChangesJSON( diff.modified );
-    filesToUpload.append( diff.modified );
+    QJsonArray modified = prepareUploadChangesJSON( updatedMerginFiles );
+    filesToUpload.append( updatedMerginFiles );
 
-    QJsonArray removed = prepareUploadChangesJSON( diff.removed );
+    QJsonArray removed = prepareUploadChangesJSON( deletedMerginFiles );
     // removed not in filesToUpload
 
+    QJsonObject changes;
     changes.insert( "added", added );
     changes.insert( "removed", removed );
     changes.insert( "updated", modified );
@@ -1417,11 +1451,6 @@ void MerginApi::uploadInfoReplyFinished()
     json.insert( QStringLiteral( "version" ), serverProject.version );
     QJsonDocument jsonDoc;
     jsonDoc.setObject( json );
-
-    QString info = QString( "PUSH request - added: %1, updated: %2, removed: %3" )
-                   .arg( InputUtils::filesToString( diff.added ) ).arg( InputUtils::filesToString( diff.modified ) )
-                   .arg( InputUtils::filesToString( diff.removed ) );
-    InputUtils::log( url, info );
 
     uploadStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
   }
@@ -1560,6 +1589,142 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
   for ( MerginFile file : currentFilesMap )
   {
     diff.removed.append( file );
+  }
+
+  return diff;
+}
+
+
+
+ProjectDiff2 MerginApi::compareProjectFiles2(const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles)
+{
+  ProjectDiff2 diff;
+  QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
+
+  for ( MerginFile file : newServerFiles )
+  {
+    newServerFilesMap.insert( file.path, file );
+  }
+  for ( MerginFile file : oldServerFiles )
+  {
+    oldServerFilesMap.insert( file.path, file );
+  }
+
+  for ( MerginFile localFile : localFiles )
+  {
+    QString filePath = localFile.path;
+    bool hasOldServer = oldServerFilesMap.contains( localFile.path );
+    bool hasNewServer = newServerFilesMap.contains( localFile.path );
+    QString chkOld = oldServerFilesMap.value( localFile.path ).checksum;
+    QString chkNew = newServerFilesMap.value( localFile.path ).checksum;
+    QString chkLocal = localFile.checksum;
+
+    if ( !hasOldServer && !hasNewServer )
+    {
+      // L-A
+      diff.localAdded << filePath;
+    }
+    else if ( hasOldServer && !hasNewServer )
+    {
+      if ( chkOld == chkLocal )
+      {
+        // R-D
+        diff.remoteDeleted << filePath;
+      }
+      else
+      {
+        // C/R-D/L-U
+        diff.conflictRemoteDeletedLocalUpdated << filePath;
+      }
+    }
+    else if ( !hasOldServer && hasNewServer )
+    {
+      if ( chkNew != chkLocal )
+      {
+        // C/R-A/L-A
+        diff.conflictRemoteAddedLocalAdded << filePath;
+      }
+      else
+      {
+        // R-A/L-A
+        // TODO: need to do anything?
+      }
+    }
+    else if ( hasOldServer && hasNewServer )
+    {
+      // file has already existed
+      if ( chkOld == chkNew )
+      {
+        if ( chkNew != chkLocal )
+        {
+          // L-U
+          diff.localUpdated << filePath;
+        }
+        else
+        {
+          // no change :-)
+        }
+      }
+      else   // v1 != v2
+      {
+        if ( chkNew != chkLocal && chkOld != chkLocal )
+        {
+          // C/R-U/L-U
+          diff.conflictRemoteUpdatedLocalDeleted << filePath;
+        }
+        else if ( chkNew != chkLocal )  // && old == local
+        {
+          // R-U
+          diff.remoteUpdated << filePath;
+        }
+        else if ( chkOld != chkLocal )  // && new == local
+        {
+          // R-U/L-U
+          // TODO: need to do anything?
+        }
+        else
+          Q_ASSERT( false );   // impossible - should be handled already
+      }
+    }
+
+    if ( hasOldServer )
+      oldServerFilesMap.remove( filePath );
+    if ( hasNewServer)
+      newServerFilesMap.remove( filePath );
+  }
+
+  // go through files listed on the server, but not available locally
+  for ( MerginFile file : newServerFilesMap )
+  {
+    bool hasOldServer = oldServerFilesMap.contains( file.path );
+
+    if ( hasOldServer )
+    {
+      if ( oldServerFilesMap.value( file.path ).checksum == file.checksum )
+      {
+        // L-D
+        diff.localDeleted << file.path;
+      }
+      else
+      {
+        // C/R-U/L-D
+        diff.conflictRemoteUpdatedLocalDeleted << file.path;
+      }
+    }
+    else
+    {
+      // R-A
+      diff.remoteAdded << file.path;
+    }
+
+    if ( hasOldServer )
+      oldServerFilesMap.remove( file.path );
+  }
+
+  for ( MerginFile file : oldServerFilesMap )
+  {
+    // R-D/L-D
+    // TODO: need to do anything?
   }
 
   return diff;
@@ -1806,8 +1971,6 @@ void MerginApi::continueWithUpload( const QString &projectDir, const QString &pr
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-
-  transaction.waitingForUpload = false;
 
   if ( !successfully )
   {

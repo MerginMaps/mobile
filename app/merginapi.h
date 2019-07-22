@@ -30,6 +30,51 @@ struct MerginFile
 
 #include <QPointer>
 
+
+struct ProjectDiff2
+{
+  // changes that should be pushed (uploaded)
+  QSet<QString> localAdded;
+  QSet<QString> localUpdated;
+  QSet<QString> localDeleted;
+
+  // changes that should be pulled (downloaded)
+  QSet<QString> remoteAdded;
+  QSet<QString> remoteUpdated;
+  QSet<QString> remoteDeleted;
+
+  // to resolve conflict: we make a copy of the file
+  QSet<QString> conflictRemoteUpdatedLocalUpdated;
+  QSet<QString> conflictRemoteAddedLocalAdded;
+
+  // to resolve conflict: we keep the updated version
+  QSet<QString> conflictRemoteDeletedLocalUpdated;
+  QSet<QString> conflictRemoteUpdatedLocalDeleted;
+
+  // TODO: non-conflicting changes? R-A/L-A, R-U/L-U, R-D/L-D
+
+  QString dump() const
+  {
+    QStringList lines;
+    lines << "--- project diff ---";
+    lines << QString( "local: %1 added, %2 updated, %3 deleted" )
+             .arg( localAdded.count() )
+             .arg( localUpdated.count() )
+             .arg( localDeleted.count() );
+    lines << QString( "remote: %1 added, %2 updated, %3 deleted" )
+             .arg( remoteAdded.count() )
+             .arg( remoteUpdated.count() )
+             .arg( remoteDeleted.count() );
+    lines << QString( "conflicts: %1 RU-LU, %2 RA-LA, %3 RD-LU, %4 RU-LD" )
+             .arg( conflictRemoteUpdatedLocalUpdated.count() )
+             .arg( conflictRemoteAddedLocalAdded.count() )
+             .arg( conflictRemoteDeletedLocalUpdated.count() )
+             .arg( conflictRemoteUpdatedLocalDeleted.count() );
+    return lines.join( "\n" );
+  }
+};
+
+
 struct TransactionStatus
 {
   qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
@@ -47,8 +92,8 @@ struct TransactionStatus
   QPointer<QNetworkReply> replyUploadFinish;
 
   QList<MerginFile> files; // either to upload or download
-  bool waitingForUpload = false;   // true when uploading a project, but doing an update first
-  QSet<QString> filesToDelete;   //!< used during download/update: files that should be deleted (because they were removed on server)
+
+  ProjectDiff2 diff;
 };
 
 struct MerginProject
@@ -68,6 +113,17 @@ struct MerginProject
   qreal progress = 0;  // progress in case of pending download/upload (values [0..1])
   int creator; // server-side user ID of the project owner (creator)
   QList<int> writers; // server-side user IDs of users having write access to the project
+
+  MerginFile fileInfo( const QString &filePath ) const
+  {
+    for ( const MerginFile &merginFile : files )
+    {
+      if ( merginFile.path == filePath )
+        return merginFile;
+    }
+    qDebug() << "requested fileInfo() for non-existant file! " << filePath;
+    return MerginFile();
+  }
 };
 
 struct ProjectDiff
@@ -76,6 +132,7 @@ struct ProjectDiff
   QList<MerginFile> modified;
   QList<MerginFile> removed;
 };
+
 
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 
@@ -215,6 +272,9 @@ class MerginApi: public QObject
     * \param currentFiles List of MerginFiles which are taken as base in a comparison.
     */
     ProjectDiff compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles );
+
+    static ProjectDiff2 compareProjectFiles2( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles );
+
     ProjectList projects();
     QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
     /**
@@ -299,7 +359,7 @@ class MerginApi: public QObject
     ProjectList parseAllProjectsMetadata();
     ProjectList parseListProjectsMetadata( const QByteArray &data );
     QJsonDocument createProjectMetadataJson( std::shared_ptr<MerginProject> project );
-    QStringList generateChunkIdsForSize( qint64 fileSize );
+    static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
 
     /** Called when download has failed (aborted by user or due to network error) to clean up */
@@ -433,8 +493,8 @@ class MerginApi: public QObject
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
 
-    const int CHUNK_SIZE = 65536;
-    const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+    static const int CHUNK_SIZE = 65536;
+    static const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
 
     friend class TestMerginApi;

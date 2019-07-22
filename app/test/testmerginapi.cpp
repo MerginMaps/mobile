@@ -79,7 +79,9 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testListProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
+  deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
@@ -496,55 +498,37 @@ void TestMerginApi::testPushRemovedFile()
   qDebug() << "TestMerginApi::testPushRemovedFile PASSED";
 }
 
-void TestMerginApi::testPushChangesOfProject()
+void TestMerginApi::testPushModifiedFile()
 {
-  qDebug() << "TestMerginApi::testPushChangesOfProject START";
+  QString projectName = "testPushModifiedFile";
 
-  QString projectName = TestMerginApi::TEST_PROJECT_NAME;
-  QString projectNamespace = mUsername;
-  std::shared_ptr<MerginProject> project = prepareTestProjectUpload();
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
-  QDateTime serverT0 = project->serverUpdated;
-  mApi->uploadProject( projectNamespace, projectName );
-  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  downloadRemoteProject( mApi, mUsername, projectName );
 
-  ProjectList projects = getProjectList();
-  int projectNo0 = projects.size();
-  int localProjectNo0 = mProjectModel->rowCount();
-  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
-  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QDateTime serverT1 = project->serverUpdated;
-
-  // Update file
-  QFile file( mApi->projectsPath() + projectName + "/project.qgs" );
-  if ( !file.open( QIODevice::Append ) )
-  {
-    QVERIFY( false );
-  }
-
+  // modify a single file
+  QString filename = mApi->projectsPath() + projectName + "/project.qgs";
+  QFile file( filename );
+  QVERIFY( file.open( QIODevice::WriteOnly ) );
   file.write( QByteArray( "v2" ) );
   file.close();
 
-  // upload changes
-  mApi->uploadProject( projectNamespace, projectName );
-  QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
-  QVERIFY( spy2.wait( LONG_REPLY ) );
-  QCOMPARE( spy2.count(), 1 );
+  // TODO: check that the status is "modified"
 
-  projects = getProjectList();
-  int projectNo1 = projects.size();
-  int localProjectNo1 = mProjectModel->rowCount();
-  QVERIFY( _findProjectByName( projectNamespace, projectName, projects ) );
-  project = mApi->getProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QDateTime serverT2 = project->serverUpdated;
-  QVERIFY( serverT1 < serverT2 );
+  // upload
+  uploadRemoteProject( mApi, mUsername, projectName );
 
-  QCOMPARE( localProjectNo0, localProjectNo1 );
-  QCOMPARE( projectNo0, projectNo1 );
+  // verify the remote project has updated file
 
-  qDebug() << "TestMerginApi::testPushChangesOfProject PASSED";
+  deleteLocalProject( mApi, mUsername, projectName );
+
+  QVERIFY( !file.open( QIODevice::ReadOnly ) );  // it should not exist at this point
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( file.open( QIODevice::ReadOnly ) );
+  QCOMPARE( file.readAll(), QByteArray( "v2" ) );
+  file.close();
 }
 
 void TestMerginApi::testUpdateRemovedFiles()
@@ -573,6 +557,44 @@ void TestMerginApi::testUpdateRemovedFiles()
   // check that the removed file is not there anymore
   QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
   QVERIFY( !QFile::exists( projectDir + "/test1.txt" ) );
+}
+
+void TestMerginApi::testUpdateRemovedVsModifiedFiles()
+{
+  // this test downloads a project, then a files gets removed on the server,
+  // but it also gets re-created locally with different content. It should be
+  // correctly detected that the file is a local modification and it should be kept
+
+  QString projectName = "testUpdateRemovedVsModifiedFiles";
+  QString projectDir = mApi->projectsPath() + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // download initial version
+  downloadRemoteProject( mApi, mUsername, projectName );
+  QVERIFY( QFile::exists( projectDir + "/test1.txt" ) );
+
+  // remove a file on the server
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QVERIFY( QFile::remove( extraProjectDir + "/test1.txt" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // modify the same file locally
+  QFile file( projectDir + "/test1.txt" );
+  QVERIFY( file.open( QIODevice::WriteOnly ) );
+  file.write( QByteArray( "muhaha!" ) );
+  file.close();
+
+  // now try to update
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that the file removed on the server is still there, with modified content
+  QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
+  QVERIFY( QFile::exists( projectDir + "/test1.txt" ) );
+  QVERIFY( file.open( QIODevice::ReadOnly ) );
+  QCOMPARE( file.readAll(), QByteArray( "muhaha!" ) );
+  file.close();
 }
 
 void TestMerginApi::testParseAndCompareNoChanges()
