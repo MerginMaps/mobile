@@ -1040,7 +1040,18 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   Q_ASSERT( project );
   QString projectDir = project->projectDir;
 
-  // TODO: rename local conflicting files
+  // rename local conflicting files that were updated when also the server got updated
+  for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
+  {
+    InputUtils::log( projectFullName, "conflicting remote update/local update: " + filePath );
+    QString origPath = projectDir + "/" + filePath;
+    if ( !QFile::rename( origPath, origPath + "_conflict" ) )
+    {
+      InputUtils::log( projectFullName, "failed rename of conflicting file: " + filePath );
+    }
+  }
+
+  // TODO: resolve conflicts with remote add vs. local add
 
   copyTempFilesToProject( projectDir, projectFullName );
 
@@ -1325,6 +1336,15 @@ void MerginApi::updateInfoReplyFinished()
       totalSize += file.size;
     }
 
+    // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
+    for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
+    {
+      MerginFile file = serverProject.fileInfo( filePath );
+      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+      filesToDownload << file;
+      totalSize += file.size;
+    }
+
     transaction.totalSize = totalSize;
     transaction.files = filesToDownload;
 
@@ -1596,7 +1616,7 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, c
 
 
 
-ProjectDiff2 MerginApi::compareProjectFiles2(const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles)
+ProjectDiff2 MerginApi::compareProjectFiles2( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles )
 {
   ProjectDiff2 diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
@@ -1670,7 +1690,7 @@ ProjectDiff2 MerginApi::compareProjectFiles2(const QList<MerginFile> &oldServerF
         if ( chkNew != chkLocal && chkOld != chkLocal )
         {
           // C/R-U/L-U
-          diff.conflictRemoteUpdatedLocalDeleted << filePath;
+          diff.conflictRemoteUpdatedLocalUpdated << filePath;
         }
         else if ( chkNew != chkLocal )  // && old == local
         {
@@ -1689,7 +1709,7 @@ ProjectDiff2 MerginApi::compareProjectFiles2(const QList<MerginFile> &oldServerF
 
     if ( hasOldServer )
       oldServerFilesMap.remove( filePath );
-    if ( hasNewServer)
+    if ( hasNewServer )
       newServerFilesMap.remove( filePath );
   }
 

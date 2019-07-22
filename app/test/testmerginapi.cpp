@@ -82,6 +82,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
+  deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteUpdateLocalUpdate" );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME );
   deleteRemoteProject( mApiExtra, mUsername, TestMerginApi::TEST_PROJECT_NAME_DOWNLOAD );
 
@@ -597,6 +598,47 @@ void TestMerginApi::testUpdateRemovedVsModifiedFiles()
   file.close();
 }
 
+void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
+{
+  // this test downloads a project, makes a local update of a file,
+  // in the meanwhile it does remote update of the same file to create
+  // a conflict. Finally it tries to upload the local change to test
+  // the code responsible for conflict resolution (renames the local file)
+
+  QString projectName = "testConflictRemoteUpdateLocalUpdate";
+  QString projectDir = mApi->projectsPath() + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + projectName;
+  QString filename = projectDir + "/test1.txt";
+  QString extraFilename = extraProjectDir + "/test1.txt";
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  qDebug() << "download initial version";
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  qDebug() << "modify test1.txt on the server";
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( extraFilename, QByteArray( "remote content" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  qDebug() << "modify test1.txt locally and do the sync";
+  writeFileContent( filename, QByteArray( "local content" ) );
+  //
+  // TODO: upload should figure out it needs to run update first without this
+  // (the simple check in uploadProject() likely won't be good enough to find
+  // out... in upload's project info handler if there is a need for update,
+  // the upload should be cancelled (or paused to update first).
+  //
+  downloadRemoteProject( mApi, mUsername, projectName );
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // verify the result: the server version should be in test1.txt
+  // and the local version should go to test1.txt_conflict
+  QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
+  QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "local content" ) );
+}
+
+
 void TestMerginApi::testParseAndCompareNoChanges()
 {
   qDebug() << "TestMerginApi::parseAndCompareTestNoChanges START";
@@ -748,4 +790,21 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   QVERIFY( spy.wait( LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
+}
+
+void TestMerginApi::writeFileContent( const QString &filename, const QByteArray &data )
+{
+  QFile f( filename );
+  Q_ASSERT( f.open( QIODevice::WriteOnly ) );
+  f.write( data );
+  f.close();
+}
+
+QByteArray TestMerginApi::readFileContent( const QString &filename )
+{
+  QFile f( filename );
+  Q_ASSERT( f.open( QIODevice::ReadOnly ) );
+  QByteArray data = f.readAll();
+  f.close();
+  return data;
 }
