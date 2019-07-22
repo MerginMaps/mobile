@@ -35,8 +35,9 @@ class TestMerginApi: public QObject
     void testUploadProject();
     void testPushAddedFile();
     void testPushRemovedFile();
-    void testPushChangesOfProject();
+    void testPushModifiedFile();
     void testUpdateRemovedFiles();
+    void testUpdateRemovedVsModifiedFiles();
 
     void testParseAndCompareNoChanges();
     void testParseAndCompareRemovedAdded();
