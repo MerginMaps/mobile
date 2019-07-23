@@ -42,11 +42,6 @@ class TestMerginApi: public QObject
     void testConflictRemoteUpdateLocalUpdate();
     void testConflictRemoteAddLocalAdd();
 
-    void testParseAndCompareNoChanges();
-    void testParseAndCompareRemovedAdded();
-    void testParseAndCompareUpdated();
-    void testParseAndCompareRenamed();
-
   private:
     int SHORT_REPLY = 1000;
     int LONG_REPLY = 5000;

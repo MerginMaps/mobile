@@ -31,7 +31,7 @@ struct MerginFile
 #include <QPointer>
 
 
-struct ProjectDiff2
+struct ProjectDiff
 {
   // changes that should be pushed (uploaded)
   QSet<QString> localAdded;
@@ -93,7 +93,7 @@ struct TransactionStatus
 
   QList<MerginFile> files; // either to upload or download
 
-  ProjectDiff2 diff;
+  ProjectDiff diff;
 };
 
 struct MerginProject
@@ -124,13 +124,6 @@ struct MerginProject
     qDebug() << "requested fileInfo() for non-existant file! " << filePath;
     return MerginFile();
   }
-};
-
-struct ProjectDiff
-{
-  QList<MerginFile> added;
-  QList<MerginFile> modified;
-  QList<MerginFile> removed;
 };
 
 
@@ -265,15 +258,19 @@ class MerginApi: public QObject
     void clearTokenData();
 
     // Production and Test functions (therefore not private)
-    /**
-    * Compares files from newFiles with files from current. For instance, of there is an extra file in new,
-    * it suppose to appear in 'added'. If there is a missing file in new, it suppose to appear in removed.
-    * \param newFiles List of MerginFiles which are compared with current files.
-    * \param currentFiles List of MerginFiles which are taken as base in a comparison.
-    */
-    ProjectDiff compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles );
 
-    static ProjectDiff2 compareProjectFiles2( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles );
+    /**
+     * Compares project files from three sources:
+     * - "old" server version (what was downloaded from server) - read from the project directory's stored metadata
+     * - "new" server version (what is currently available on server) - newly fetched from the server
+     * - local file version (what is currently in the project directory) - created on the fly from the local directory content
+     *
+     * The function assigns each of the files to the kind of change that happened to it.
+     * Files that have not been changed are not present in the final diff.
+     *
+     * Without the three sources it is possible to miss some of the updates that need to be handled (e.g. conflicts)
+     */
+    static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles );
 
     ProjectList projects();
     QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
