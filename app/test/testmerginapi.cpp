@@ -80,6 +80,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUpdateAddedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteUpdateLocalUpdate" );
@@ -531,6 +532,37 @@ void TestMerginApi::testPushModifiedFile()
   QVERIFY( file.open( QIODevice::ReadOnly ) );
   QCOMPARE( file.readAll(), QByteArray( "v2" ) );
   file.close();
+}
+
+void TestMerginApi::testUpdateAddedFile()
+{
+  // this test downloads a project, then a file gets added on the server
+  // and we check whether the update was correct (i.e. the file got added too)
+
+  QString projectName = "testUpdateAddedFile";
+  QString projectDir = mApi->projectsPath() + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // download initial version
+  downloadRemoteProject( mApi, mUsername, projectName );
+  QVERIFY( !QFile::exists( projectDir + "/test-remote-new.txt" ) );
+
+  // remove a file on the server
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( extraProjectDir + "/test-remote-new.txt", QByteArray( "my new content" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  QVERIFY( QFile::exists( extraProjectDir + "/test-remote-new.txt" ) );
+
+  // now try to update
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that the added file is there
+  QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
+  QVERIFY( QFile::exists( projectDir + "/test1.txt" ) );
+  QVERIFY( QFile::exists( projectDir + "/test-remote-new.txt" ) );
+  QCOMPARE( readFileContent( projectDir + "/test-remote-new.txt" ), QByteArray( "my new content" ) );
 }
 
 void TestMerginApi::testUpdateRemovedFiles()
