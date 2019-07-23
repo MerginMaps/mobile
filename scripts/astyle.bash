@@ -7,7 +7,7 @@ if [ $# -eq 0 ]; then
 else
     FILES="$@"
 fi
-echo "running mdal_astyle for $FILES"
+echo "running astyle for $FILES"
 
 # see https://github.com/qgis/QGIS/blob/master/scripts/astyle.options
 OPTIONS=$(cat <<-END
@@ -51,7 +51,7 @@ for FILE in $FILES; do
         if [ $? -ne 0 ]; then
             echo "Changed $FILE" >&2
             RETURN=1
-            diff $FILE $FILE.astyle >&2
+            diff -u $FILE $FILE.astyle >&2
 	        mv $FILE.astyle $FILE
         else
             rm $FILE.astyle
