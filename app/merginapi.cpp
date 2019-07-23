@@ -1297,18 +1297,17 @@ void MerginApi::updateInfoReplyFinished()
     transaction.replyProjectInfo->deleteLater();
     transaction.replyProjectInfo = nullptr;
 
-    if ( !getProject( projectFullName ) )
+    std::shared_ptr<MerginProject> project = getProject( projectFullName );
+    if ( !project )
     {
       // there's no entry in the list of projects yet - most likely projects were not listed yet
       // (or the project did not exist at the time of last listing)
-      std::shared_ptr<MerginProject> p = std::make_shared<MerginProject>();
-      p->name = projectName;
-      p->projectNamespace = projectNamespace;
-      addProject( p );
+      project = std::make_shared<MerginProject>();
+      project->name = projectName;
+      project->projectNamespace = projectNamespace;
+      addProject( project );
     }
 
-    std::shared_ptr<MerginProject> project = getProject( projectFullName );
-    Q_ASSERT( project );
     if ( project->projectDir.isEmpty() )
     {
       // project has not been downloaded yet - we need to create a directory for it
