@@ -157,7 +157,7 @@ void TestMerginApi::testDownloadProject()
   QCOMPARE( project->name, projectName );
   QCOMPARE( project->projectNamespace, projectNamespace );
   QCOMPARE( project->projectDir, mApi->projectsPath() + projectName );  // assuming no name clash that would require renaming of the dir
-  QCOMPARE( project->version, "v2" );  // for some unknown reason, first version in Mergin is v2 :-)
+  QCOMPARE( project->version, "v1" );
   QCOMPARE( project->filesCount, 2 );  // .qgs + .txt file
   QCOMPARE( project->status, UpToDate );
 
@@ -709,77 +709,6 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
   // and the local version should go to test1.txt_conflict
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "new local content" ) );
-}
-
-
-void TestMerginApi::testParseAndCompareNoChanges()
-{
-  qDebug() << "TestMerginApi::parseAndCompareTestNoChanges START";
-
-  std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin.json" ) );
-  QVERIFY( project );
-  ProjectDiff diff = mApi->compareProjectFiles( project->files, project->files );
-  QVERIFY( diff.added.isEmpty() );
-  QVERIFY( diff.removed.isEmpty() );
-  QVERIFY( diff.modified.isEmpty() );
-
-  qDebug() << "TestMerginApi::parseAndCompareTestNoChanges PASSED";
-}
-
-void TestMerginApi::testParseAndCompareRemovedAdded()
-{
-  qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded START";
-
-  std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin.json" ) );
-  std::shared_ptr<MerginProject> project_added = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin_added.json" ) );
-  QVERIFY( project );
-  QVERIFY( project_added );
-
-  ProjectDiff diff = mApi->compareProjectFiles( project_added->files, project->files );
-  QCOMPARE( diff.added.size(), 1 );
-  QVERIFY( diff.removed.isEmpty() );
-  QVERIFY( diff.modified.isEmpty() );
-
-  ProjectDiff diff_removed = mApi->compareProjectFiles( project->files, project_added->files );
-  QVERIFY( diff_removed.added.isEmpty() );
-  QCOMPARE( diff_removed.removed.size(), 1 );
-  QVERIFY( diff_removed.modified.isEmpty() );
-
-  qDebug() << "TestMerginApi::testParseAndCompareRemovedAdded PASSED";
-}
-
-void TestMerginApi::testParseAndCompareUpdated()
-{
-  qDebug() << "TestMerginApi::testParseAndCompareUpdated START";
-
-  std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin.json" ) );
-  std::shared_ptr<MerginProject> project_updated = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin_updated.json" ) );
-  QVERIFY( project );
-  QVERIFY( project_updated );
-
-  ProjectDiff diff = mApi->compareProjectFiles( project_updated->files, project->files );
-  QVERIFY( diff.added.isEmpty() );
-  QVERIFY( diff.removed.isEmpty() );
-  QCOMPARE( diff.modified.size(), 1 );
-
-  qDebug() << "TestMerginApi::testParseAndCompareUpdated PASSED";
-}
-
-void TestMerginApi::testParseAndCompareRenamed()
-{
-  qDebug() << "TestMerginApi::testParseAndCompareRenamed START";
-
-  std::shared_ptr<MerginProject> project = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin.json" ) );
-  std::shared_ptr<MerginProject> project_renamed = mApi->readProjectMetadataFromPath( mTestDataPath, QStringLiteral( "mergin_renamed.json" ) );
-  QVERIFY( project );
-  QVERIFY( project_renamed );
-
-  ProjectDiff diff = mApi->compareProjectFiles( project_renamed->files, project->files );
-  QCOMPARE( diff.added.size(), 1 );
-  QCOMPARE( diff.removed.size(), 1 );
-  QVERIFY( diff.modified.isEmpty() );
-
-  qDebug() << "TestMerginApi::testParseAndCompareRenamed PASSED";
 }
 
 

@@ -1323,7 +1323,7 @@ void MerginApi::updateInfoReplyFinished()
     serverProject.projectDir = projectPath;
     mTempMerginProjects.insert( projectNamespace + "/" + projectName, serverProject );
 
-    transaction.diff = compareProjectFiles2( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
+    transaction.diff = compareProjectFiles( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
     InputUtils::log( url, transaction.diff.dump() );
 
     QList<MerginFile> filesToDownload;
@@ -1434,7 +1434,7 @@ void MerginApi::uploadInfoReplyFinished()
     Q_ASSERT( project );
     std::shared_ptr<MerginProject> oldServerProject = readProjectMetadataFromPath( project->projectDir ); // may be null if the project has not been downloaded yet
 
-    transaction.diff = compareProjectFiles2( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
+    transaction.diff = compareProjectFiles( oldServerProject ? oldServerProject->files : QList<MerginFile>(), serverProject.files, localFiles );
     InputUtils::log( url, transaction.diff.dump() );
 
     // TODO: make sure there are no remote files to add/update/remove nor conflicts
@@ -1594,48 +1594,10 @@ void MerginApi::getUserInfoFinished()
   emit userInfoChanged();
 }
 
-ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &newFiles, const QList<MerginFile> &currentFiles )
+
+ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles )
 {
   ProjectDiff diff;
-  QHash<QString, MerginFile> currentFilesMap;
-
-  for ( MerginFile currentFile : currentFiles )
-  {
-    currentFilesMap.insert( currentFile.path, currentFile );
-  }
-
-  for ( MerginFile newFile : newFiles )
-  {
-    MerginFile currentFile = currentFilesMap.value( newFile.path );
-    newFile.chunks = generateChunkIdsForSize( newFile.size );
-
-    if ( currentFile.checksum.isEmpty() )
-    {
-      diff.added.append( newFile );
-    }
-
-    else if ( currentFile.checksum != newFile.checksum )
-    {
-      diff.modified.append( newFile );
-    }
-
-    currentFilesMap.remove( currentFile.path );
-  }
-
-  // Rest files are extra, therefore put to remove
-  for ( MerginFile file : currentFilesMap )
-  {
-    diff.removed.append( file );
-  }
-
-  return diff;
-}
-
-
-
-ProjectDiff2 MerginApi::compareProjectFiles2( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles )
-{
-  ProjectDiff2 diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
 
   for ( MerginFile file : newServerFiles )
@@ -1875,7 +1837,7 @@ MerginProject MerginApi::readProjectMetadata( const QByteArray &data )
     project.serverUpdated = QDateTime::fromString( docObj.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
     if ( project.version.isEmpty() )
     {
-      project.version = QStringLiteral( "v1" );
+      project.version = QStringLiteral( "v0" );
     }
     // extra data to server
     project.clientUpdated = QDateTime::fromString( docObj.value( QStringLiteral( "clientUpdated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
