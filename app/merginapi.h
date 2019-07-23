@@ -58,18 +58,18 @@ struct ProjectDiff2
     QStringList lines;
     lines << "--- project diff ---";
     lines << QString( "local: %1 added, %2 updated, %3 deleted" )
-             .arg( localAdded.count() )
-             .arg( localUpdated.count() )
-             .arg( localDeleted.count() );
+          .arg( localAdded.count() )
+          .arg( localUpdated.count() )
+          .arg( localDeleted.count() );
     lines << QString( "remote: %1 added, %2 updated, %3 deleted" )
-             .arg( remoteAdded.count() )
-             .arg( remoteUpdated.count() )
-             .arg( remoteDeleted.count() );
+          .arg( remoteAdded.count() )
+          .arg( remoteUpdated.count() )
+          .arg( remoteDeleted.count() );
     lines << QString( "conflicts: %1 RU-LU, %2 RA-LA, %3 RD-LU, %4 RU-LD" )
-             .arg( conflictRemoteUpdatedLocalUpdated.count() )
-             .arg( conflictRemoteAddedLocalAdded.count() )
-             .arg( conflictRemoteDeletedLocalUpdated.count() )
-             .arg( conflictRemoteUpdatedLocalDeleted.count() );
+          .arg( conflictRemoteUpdatedLocalUpdated.count() )
+          .arg( conflictRemoteAddedLocalAdded.count() )
+          .arg( conflictRemoteDeletedLocalUpdated.count() )
+          .arg( conflictRemoteUpdatedLocalDeleted.count() );
     return lines.join( "\n" );
   }
 };
