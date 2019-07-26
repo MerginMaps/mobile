@@ -45,6 +45,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
         case ProjectStatus::Modified:
           return QVariant( QStringLiteral( "modified" ) );
       }
+      break;
     }
     case Pending: return QVariant( project->pending );
     case SyncProgress: return QVariant( project->progress );
@@ -93,7 +94,7 @@ ProjectList MerginProjectModel::projects()
 
 int MerginProjectModel::rowCount( const QModelIndex &parent ) const
 {
-  Q_UNUSED( parent );
+  Q_UNUSED( parent )
   return mMerginProjects.count();
 }
 
@@ -119,8 +120,8 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
 
 void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully )
 {
-  Q_UNUSED( projectFolder );
-  Q_UNUSED( successfully );
+  Q_UNUSED( projectFolder )
+  Q_UNUSED( successfully )
   int row = findProjectIndex( projectFullName );
   if ( row < 0 )
     return;
@@ -130,7 +131,7 @@ void MerginProjectModel::syncProjectFinished( const QString &projectFolder, cons
 
 void MerginProjectModel::syncProgressUpdated( const QString &projectFullName, qreal progress )
 {
-  Q_UNUSED( progress );
+  Q_UNUSED( progress )
   int row = findProjectIndex( projectFullName );
   if ( row < 0 )
     return;
