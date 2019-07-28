@@ -312,14 +312,11 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
   updateProjectSyncProgress( projectFullName, 0 );
 
-  for ( std::shared_ptr<MerginProject> project : mMerginProjects )
+  if ( std::shared_ptr<MerginProject> project = getProject( projectFullName ) )
   {
-    if ( getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
+    if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->lastSyncClient.toUTC() )
     {
-      if ( project->clientUpdated < project->serverUpdated && project->serverUpdated > project->lastSyncClient.toUTC() )
-      {
-        onlyUpload = false;
-      }
+      onlyUpload = false;
     }
   }
 
