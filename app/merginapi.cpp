@@ -623,8 +623,9 @@ void MerginApi::pingMerginReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QJsonObject obj = doc.object();
-      apiVersion = obj.value( QStringLiteral( "version" ) ).toString();
+      QJsonObject obj  = doc.object();
+      QJsonObject info = obj.value( QStringLiteral( "info" ) ).toObject();
+      apiVersion = info.value( QStringLiteral( "version" ) ).toString();
     }
   }
   else
@@ -760,9 +761,6 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
   }
-
-  // TODO remove, only for te4eting
-  setApiVersionStatus( MerginApiStatus::OK );
 }
 
 bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )
@@ -897,7 +895,7 @@ void MerginApi::pingMergin()
   setApiVersionStatus( MerginApiStatus::PENDING );
 
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/swagger.json" ) );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );

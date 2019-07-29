@@ -228,7 +228,7 @@ class MerginApi: public QObject
     */
     std::shared_ptr<MerginProject> getProject( const QString &projectFullName );
 
-    static const int MERGIN_API_VERSION_MAJOR = 2019;
+    static const int MERGIN_API_VERSION_MAJOR = 0;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
 
