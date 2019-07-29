@@ -349,16 +349,8 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   }
 }
 
-void MerginApi::authorize( const QString &username, const QString &password )
+void MerginApi::authorize( const QString &login, const QString &password )
 {
-  if ( username.contains( "@" ) )
-  {
-    mUsername = username.split( "@" ).first();
-  }
-  else
-  {
-    mUsername = username;
-  }
   mPassword = password;
 
   QNetworkRequest request;
@@ -369,7 +361,7 @@ void MerginApi::authorize( const QString &username, const QString &password )
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "login" ), mUsername );
+  jsonObject.insert( QStringLiteral( "login" ), login );
   jsonObject.insert( QStringLiteral( "password" ), mPassword );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
@@ -581,6 +573,7 @@ void MerginApi::authorizeFinished()
       mUserId = docObj.value( QStringLiteral( "id" ) ).toInt();
       mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
       mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
+      mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
     }
     emit authChanged();
   }
