@@ -260,6 +260,9 @@ Drawer {
         }
     }
 
-    ExternalResourceBundle {id: externalResourceBundle}
+    ExternalResourceBundle {
+      id: externalResourceBundle
+      customPrefix: __merginApi.username
+    }
 
 }

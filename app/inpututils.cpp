@@ -270,6 +270,37 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
   return true;
 }
 
+QString InputUtils::renameFile( const QString &srcPath, const QString &prefix )
+{
+  QFile file( srcPath );
+
+  if ( file.exists() )
+  {
+    QFileInfo info( srcPath );
+    QString newFilename;
+    QString currTime = QDateTime::currentDateTime().toUTC().toString( "yyyy-MM-dd_hh_mm_ss.zzz" );
+    if ( !prefix.isEmpty() )
+    {
+      newFilename = QString( "%1_%2.%3" ).arg( prefix ).arg( currTime ).arg( info.suffix() );
+    }
+    else
+    {
+      newFilename = QString( "%1.%2" ).arg( currTime ).arg( info.suffix() );;
+    }
+    QString newPath( info.absolutePath() + "/" + newFilename );
+
+    if ( file.rename( newPath ) ) {
+        return newPath;
+    } else {
+        return QString();
+    }
+
+    if ( file.rename( newPath ) ) return newPath; else return QString();
+  }
+
+  return QString();
+}
+
 void InputUtils::log( const QString &msg, const QString &info )
 {
   QString logFilePath;
