@@ -7,6 +7,7 @@ import "."  // import InputStyle singleton
 Item {
 
     property alias handler: externalResourceHandler
+    property string customPrefix;
 
     QtObject {
         id: externalResourceHandler
@@ -39,17 +40,35 @@ Item {
             }
         }
 
-        property var imageSelected: function imageSelected(imagePath) {
-            var homePath  = featureForm.project ? featureForm.project.homePath : ""
-            var fileName = QgsQuick.Utils.getRelativePath(imagePath, homePath)
-            if (!fileName) {
-                fileName = __inputUtils.getFileName(imagePath)
-            }
-            if (!QgsQuick.Utils.fileExists(homePath, fileName)) {
-                __inputUtils.copyFile(imagePath, homePath + "/" + fileName)
-            }
-            externalResourceHandler.itemWidget.valueChanged(fileName, false)
+        property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
+          var newPath = __inputUtils.renameFile(prefixToRelativePath + "/" + value, customPrefix)
+          if (newPath) {
+            externalResourceHandler.itemWidget = itemWidget
+            var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
+            externalResourceHandler.itemWidget.image.currentValue = newCurrentValue
+            externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
             externalResourceHandler.itemWidget = undefined
+          }
+        }
+
+        property var imageSelected: function imageSelected(imagePath) {
+          // if prefixToRelativePath is empty (widget is using absolute path), then use targetDir
+          var prefix = (externalResourceHandler.itemWidget.prefixToRelativePath) ?
+                externalResourceHandler.itemWidget.prefixToRelativePath:
+                externalResourceHandler.itemWidget.targetDir
+
+          var filename = __inputUtils.getFileName(imagePath)
+          var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(prefix, filename)
+          if (!QgsQuick.Utils.fileExists(absolutePath)) {
+            __inputUtils.copyFile(imagePath, absolutePath)
+          }
+
+          var newValue = externalResourceHandler.itemWidget.prefixToRelativePath ?
+                QgsQuick.Utils.getRelativePath(absolutePath, externalResourceHandler.itemWidget.prefixToRelativePath) :
+                absolutePath
+
+          externalResourceHandler.itemWidget.valueChanged(newValue, false)
+          externalResourceHandler.itemWidget = undefined
         }
 
         property var onFormSave: function onFormSave(itemWidget) {
@@ -109,10 +128,12 @@ Item {
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
+            externalResourceHandler.itemWidget.image.currentValue = ""
             externalResourceHandler.itemWidget.valueChanged("", false)
             visible = false
         }
         onNo: {
+            externalResourceHandler.itemWidget.image.currentValue = ""
             externalResourceHandler.itemWidget.valueChanged("", false)
             // visible = false called afterwards when onReject
         }

@@ -45,6 +45,8 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
+    Q_INVOKABLE static QString renameFile( const QString &srcPath, const QString &newFileName );
+
     static bool cpDir( const QString &srcPath, const QString &dstPath );
 
     static void log( const QString &msg, const QString &info = QStringLiteral() );
