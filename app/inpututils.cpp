@@ -289,10 +289,13 @@ QString InputUtils::renameFile( const QString &srcPath, const QString &prefix )
     }
     QString newPath( info.absolutePath() + "/" + newFilename );
 
-    if ( file.rename( newPath ) ) {
-        return newPath;
-    } else {
-        return QString();
+    if ( file.rename( newPath ) )
+    {
+      return newPath;
+    }
+    else
+    {
+      return QString();
     }
 
     if ( file.rename( newPath ) ) return newPath; else return QString();
