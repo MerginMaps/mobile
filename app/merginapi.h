@@ -179,10 +179,10 @@ class MerginApi: public QObject
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
-    * \param username Login user name to Mergin
+    * \param username Login user name to Mergin - either username or registered email
     * \param password Password to given username to log in to Mergin
     */
-    Q_INVOKABLE void authorize( const QString &username, const QString &password );
+    Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo( const QString &username );
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
