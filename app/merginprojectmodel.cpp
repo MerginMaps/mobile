@@ -2,9 +2,15 @@
 
 #include <QString>
 
-MerginProjectModel::MerginProjectModel( QObject *parent )
+MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QObject *parent )
   : QAbstractListModel( parent )
+  , mLocalProjects( localProjects )
 {
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectSyncPendingChanged, this, &MerginProjectModel::projectDirChanged );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectSyncProgressChanged, this, &MerginProjectModel::projectDirChanged );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectStatusChanged, this, &MerginProjectModel::projectDirChanged );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
 }
 
 QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
@@ -22,6 +28,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
     case ProjectNamespace: return QVariant( project->projectNamespace );
     case ProjectInfo:
     {
+      // TODO: better project info
+      // TODO: clientUpdated currently not being set
       if ( !project->clientUpdated.isValid() )
       {
         return project->serverUpdated.toString();
@@ -66,13 +74,6 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
   return QVariant();
 }
 
-void MerginProjectModel::setPending( int row, bool pending )
-{
-  if ( row < 0 || row > mMerginProjects.length() - 1 ) return;
-  QModelIndex ix = index( row );
-  mMerginProjects.at( row )->pending = pending;
-  emit dataChanged( ix, ix );
-}
 
 QHash<int, QByteArray> MerginProjectModel::roleNames() const
 {
@@ -98,11 +99,30 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects( const ProjectList &merginProjects )
+void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects )
 {
-  mMerginProjects.clear();
   beginResetModel();
-  mMerginProjects = merginProjects;
+  mMerginProjects.clear();
+  for ( MerginProjectListEntry entry : merginProjects )
+  {
+    std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
+    project->projectNamespace = entry.projectNamespace;
+    project->name = entry.projectName;
+    project->creator = entry.creator;
+    project->writers = entry.writers;
+    project->serverUpdated = entry.serverUpdated;
+
+    // figure out info from local projects (projectDir etc)
+    LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( entry.projectNamespace, entry.projectName );
+    if ( localProject.isValid() )
+    {
+      project->projectDir = localProject.projectDir;
+      project->status = localProject.status;
+      // TODO: what else to copy?
+    }
+
+    mMerginProjects << project;
+  }
   endResetModel();
 }
 
@@ -118,26 +138,56 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
   return -1;
 }
 
-void MerginProjectModel::syncProjectFinished( const QString &projectFolder, const QString &projectFullName, bool successfully )
+void MerginProjectModel::projectDirChanged( const QString &projectDir )
 {
-  Q_UNUSED( projectFolder )
-  Q_UNUSED( successfully )
-  int row = findProjectIndex( projectFullName );
-  if ( row < 0 )
-    return;
+  int row = 0;
+  for ( std::shared_ptr<MerginProject> project : mMerginProjects )
+  {
+    if ( project->projectDir == projectDir )
+    {
+      LocalProjectInfo localProject = mLocalProjects.projectFromDirectory( projectDir );
+      if ( !localProject.isValid() )
+        return;
 
-  setPending( row, false ); // emits dataChanged
+      // update cached information
+      project->status = localProject.status;
+      project->pending = localProject.syncPending;
+      project->progress = localProject.syncProgress;
+
+      QModelIndex ix = index( row );
+      emit dataChanged( ix, ix );
+      return;
+    }
+    row++;
+  }
 }
 
-void MerginProjectModel::syncProgressUpdated( const QString &projectFullName, qreal progress )
+void MerginProjectModel::onLocalProjectAdded( const QString &projectDir )
 {
-  Q_UNUSED( progress )
-  int row = findProjectIndex( projectFullName );
-  if ( row < 0 )
+  LocalProjectInfo localProject = mLocalProjects.projectFromDirectory( projectDir );
+  if ( !localProject.isValid() )
     return;
 
-  QModelIndex ix = index( row );
-  emit dataChanged( ix, ix );
+  QString projectFullName = MerginApi::getFullProjectName( localProject.projectNamespace, localProject.projectName );
+  int i = findProjectIndex( projectFullName );
+  if ( i == -1 )
+    return;
+
+  std::shared_ptr<MerginProject> project = mMerginProjects[i];
+
+  // store project dir
+  project->projectDir = localProject.projectDir;
+
+  // update metadata and emit dataChanged() signal
+  projectDirChanged( projectDir );
+}
+
+void MerginProjectModel::onLocalProjectRemoved( const QString &projectDir )
+{
+  // TODO: implement
+  // (at this point this is not needed because after removal we need to switch tab
+  // and that will re-fetch the list of projects)
+  Q_UNUSED( projectDir );
 }
 
 int MerginProjectModel::filterWriter() const

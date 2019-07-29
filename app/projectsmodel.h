@@ -21,6 +21,8 @@
 #include <QString>
 #include <QModelIndex>
 
+class LocalProjectsManager;
+
 /*
  * Given data directory, find all QGIS projects (*.qgs or *.qgz) in the directory and subdirectories
  * and create list model from them. Available are full path to the file, name of the project
@@ -47,7 +49,7 @@ class ProjectModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit ProjectModel( const QString &dataDir, QObject *parent = nullptr );
+    explicit ProjectModel( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~ProjectModel();
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
@@ -67,15 +69,11 @@ class ProjectModel : public QAbstractListModel
     // Test function
     bool containsProject( const QString &projectNamespace, const QString &projectName );
 
-  signals:
-    void projectDeletedOnPath( QString projectDir );
-
   public slots:
     void addProject( QString projectFolder, QString projectName, bool successful );
 
   private:
     void findProjectFiles();
-    void addProjectFromPath( QString path );
 
     struct ProjectFile
     {
@@ -108,8 +106,8 @@ class ProjectModel : public QAbstractListModel
         else return false;
       }
     };
+    LocalProjectsManager &mLocalProjects;
     QList<ProjectFile> mProjectFiles;
-    QString mDataDir;
     const int mMaxShortNameChars = 10;
     QString mSearchExpression;
 

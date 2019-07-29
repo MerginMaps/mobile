@@ -465,11 +465,9 @@ Item {
           if (status === "noVersion" || status === "outOfDate") {
             __merginApi.updateCancel(projectNamespace + "/" + name)
           }
-          __merginProjectsModel.setPending(index, false)
           return
         }
 
-        __merginProjectsModel.setPending(index, true)
         if (status === "noVersion" || status === "outOfDate") {
           __merginApi.updateProject(projectNamespace, name)
         } else if (status === "modified") {

@@ -166,7 +166,7 @@ void initDeclarative()
 
 void initTestDeclarative()
 {
-  qRegisterMetaType<ProjectList>( "ProjectList" );
+  qRegisterMetaType<MerginProjectList>( "MerginProjectList" );
 }
 
 int main( int argc, char *argv[] )
@@ -197,7 +197,7 @@ int main( int argc, char *argv[] )
 #endif
   // Set/Get enviroment
   QString dataDir = getDataDir();
-  QString projectDir = dataDir + "/projects/";
+  QString projectDir = dataDir + "/projects";
 
   if ( IS_TEST )
   {
@@ -208,10 +208,10 @@ int main( int argc, char *argv[] )
     if ( testProjectsDir.exists() )
       testProjectsDir.removeRecursively();
     QDir( testDataDir.path() + "/.." ).mkpath( "temp_projects" );
-    projectDir = testProjectsDir.canonicalPath() + "/";
+    projectDir = testProjectsDir.canonicalPath();
   }
 
-  InputUtils::setLogFilename( projectDir + ".logs" );
+  InputUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
 
   init_qgis( dataDir + "/qgis-data" );
@@ -220,29 +220,23 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   InputUtils iu;
-  ProjectModel pm( projectDir );
-  if ( pm.rowCount() == 0 && !IS_TEST )
-  {
-    qDebug() << "Unable to find any QGIS project in the folder " << projectDir;
-  }
+  LocalProjectsManager localProjects( projectDir );
+  ProjectModel pm( localProjects );
   Loader loader;
   LayersModel lm( loader.project() );
   MapThemesModel mtm( loader.project() );
   AppSettings as;
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( projectDir ) );
-  MerginProjectModel mpm;
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
+  MerginProjectModel mpm( localProjects );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
   QObject::connect( &loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers );
   QObject::connect( &loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes );
   QObject::connect( &mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers );
-  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &mpm, &MerginProjectModel::syncProjectFinished );
-  QObject::connect( ma.get(), &MerginApi::syncProgressUpdated, &mpm, &MerginProjectModel::syncProgressUpdated );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-  QObject::connect( &pm, &ProjectModel::projectDeletedOnPath, ma.get(), &MerginApi::projectDeletedOnPath );
 
   if ( IS_TEST )
   {

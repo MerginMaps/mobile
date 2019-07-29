@@ -18,7 +18,6 @@ class TestMerginApi: public QObject
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
-    static const QString TEST_PROJECT_NAME_DOWNLOAD;
 
   private slots:
 
@@ -53,10 +52,9 @@ class TestMerginApi: public QObject
     QString mTestDataPath;
     //! extra API to do requests we are not testing (as if some other user did those)
     MerginApi *mApiExtra = nullptr;
+    LocalProjectsManager *mLocalProjectsExtra = nullptr;
 
-    ProjectList getProjectList();
-    void initTestProject();
-    std::shared_ptr<MerginProject> prepareTestProjectUpload();
+    MerginProjectList getProjectList();
 
     //! Creates a project on the server and pushes an initial version and removes the local copy.
     void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );

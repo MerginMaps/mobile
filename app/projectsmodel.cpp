@@ -22,9 +22,9 @@
 
 #include "merginapi.h"
 
-ProjectModel::ProjectModel( const QString &dataDir, QObject *parent )
+ProjectModel::ProjectModel( LocalProjectsManager &localProjects, QObject *parent )
   : QAbstractListModel( parent )
-  , mDataDir( dataDir )
+  , mLocalProjects( localProjects )
 {
   findProjectFiles();
 }
@@ -33,19 +33,48 @@ ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles()
 {
+  /*
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
   for ( QString folderName : entryList )
   {
     addProjectFromPath( mDataDir + "/" + folderName );
   }
+  */
+
+  // populate from mLocalProjects
+  mProjectFiles.clear();
+  const QList<LocalProjectInfo> projects = mLocalProjects.projects();
+  for ( const LocalProjectInfo &project : projects )
+  {
+    QDir dir( project.projectDir );
+    QFileInfo fi( project.qgisProjectFilePath );
+
+    ProjectFile projectFile;
+    projectFile.name = fi.fileName().remove( ".qgs" ).remove( ".qgz" );   // TODO: shouldn't this be mergin project name??
+    projectFile.path = project.qgisProjectFilePath;
+    projectFile.folderName = dir.dirName();
+    projectFile.projectNamespace = project.projectNamespace;
+    QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
+    if ( !project.qgisProjectFilePath.isEmpty() )
+    {
+      projectFile.info = QString( created.toString() );
+      projectFile.isValid = true;
+    }
+    else
+    {
+      projectFile.info = "invalid project";
+      projectFile.isValid = false;
+    }
+    mProjectFiles << projectFile;
+  }
+
   std::sort( mProjectFiles.begin(), mProjectFiles.end() );
 }
 
+#if 0
 void ProjectModel::addProjectFromPath( QString path )
 {
   if ( path.isEmpty() ) return;
-
-  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
 
   int i = 0;
   int projectExistsAt = -1;
@@ -59,6 +88,7 @@ void ProjectModel::addProjectFromPath( QString path )
   }
 
   QList<ProjectFile> foundProjects;
+  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
   while ( it.hasNext() )
   {
     it.next();
@@ -99,12 +129,13 @@ void ProjectModel::addProjectFromPath( QString path )
   if ( projectExistsAt >= 0 )
     mProjectFiles.removeAt( projectExistsAt );
 
-  std::shared_ptr<MerginProject> merginProject = MerginApi::readProjectMetadataFromPath( path );
-  if ( merginProject )
-    project.projectNamespace = merginProject->projectNamespace;
+  MerginProjectMetadata projectMeta = MerginProjectMetadata::fromCachedJson( path + "/" + MerginApi::sMetadataFile );
+  if ( projectMeta.isValid() )
+    project.projectNamespace = projectMeta.projectNamespace;
 
   mProjectFiles.append( project );
 }
+#endif
 
 QVariant ProjectModel::data( const QModelIndex &index, int role ) const
 {
@@ -165,12 +196,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 void ProjectModel::deleteProject( int row )
 {
   ProjectFile project = mProjectFiles.at( row );
-  QDir dir( mDataDir + project.folderName );
-  dir.removeRecursively();
+
+  mLocalProjects.deleteProjectDirectory( mLocalProjects.dataDir() + "/" + project.folderName );
+
   beginResetModel();
   mProjectFiles.removeAt( row );
   endResetModel();
-  emit projectDeletedOnPath( project.folderName );
 }
 
 int ProjectModel::rowCount( const QModelIndex &parent ) const
@@ -181,7 +212,7 @@ int ProjectModel::rowCount( const QModelIndex &parent ) const
 
 QString ProjectModel::dataDir() const
 {
-  return mDataDir;
+  return mLocalProjects.dataDir();
 }
 
 QString ProjectModel::searchExpression() const
@@ -201,15 +232,7 @@ void ProjectModel::setSearchExpression( const QString &searchExpression )
 
 bool ProjectModel::containsProject( const QString &projectNamespace, const QString &projectName )
 {
-  QString projectFullName = MerginApi::getFullProjectName( projectNamespace, projectName );
-  for ( ProjectFile prj : mProjectFiles )
-  {
-    if ( MerginApi::getFullProjectName( prj.projectNamespace, prj.folderName ) == projectFullName )
-    {
-      return true;
-    }
-  }
-  return false;
+  return mLocalProjects.hasMerginProject( projectNamespace, projectName );
 }
 
 void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )
@@ -220,7 +243,8 @@ void ProjectModel::addProject( QString projectFolder, QString projectName, bool 
 
   Q_UNUSED( projectName );
   beginResetModel();
-  addProjectFromPath( projectFolder );
-  std::sort( mProjectFiles.begin(), mProjectFiles.end() );
+  //addProjectFromPath( projectFolder );
+  //std::sort( mProjectFiles.begin(), mProjectFiles.end() );
+  findProjectFiles();
   endResetModel();
 }
