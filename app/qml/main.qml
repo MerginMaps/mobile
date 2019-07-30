@@ -202,6 +202,10 @@ ApplicationWindow {
         identifyMode: QgsQuick.IdentifyKit.TopDownAll
       }
 
+      onIsRenderingChanged: {
+        loadingIndicator.toggle(isRendering)
+      }
+
       onClicked: {
        // no identify action in record state
        if (stateManager.state === "record") return
@@ -581,5 +585,9 @@ ApplicationWindow {
         onEditGeometryClicked: {
             stateManager.state = "edit"
         }
+    }
+
+    LoadingIndicator {
+        id: loadingIndicator
     }
 }
