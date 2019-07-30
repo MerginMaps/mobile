@@ -173,7 +173,7 @@ void LocalProjectsManager::updateMerginSyncPending( const QString &projectDir, b
     {
       mProjects[i].syncPending = pending;
       updateProjectStatus( mProjects[i] );
-      emit projectSyncPendingChanged( projectDir, pending );
+      emit projectMetadataChanged( projectDir );
       return;
     }
   }
@@ -187,7 +187,7 @@ void LocalProjectsManager::updateMerginSyncProgress( const QString &projectDir, 
     if ( mProjects[i].projectDir == projectDir )
     {
       mProjects[i].syncProgress = progress;
-      emit projectSyncProgressChanged( projectDir, progress );
+      emit projectMetadataChanged( projectDir );
       return;
     }
   }
@@ -266,6 +266,6 @@ void LocalProjectsManager::updateProjectStatus( LocalProjectInfo &project )
   if ( newStatus != project.status )
   {
     project.status = newStatus;
-    emit projectStatusChanged( project.projectDir );
+    emit projectMetadataChanged( project.projectDir );
   }
 }

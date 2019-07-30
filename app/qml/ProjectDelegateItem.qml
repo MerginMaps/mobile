@@ -19,7 +19,7 @@ Rectangle {
     property bool highlight: false
     property bool pending: false
     property string statusIconSource: "more_menu.svg"
-    property string projectName: name // <namespace>/<projectName>
+    property string projectFullName   // <namespace>/<projectName>
     property bool disabled: false
     property real itemMargin: InputStyle.panelMargin
     property real progressValue: 0
@@ -91,7 +91,7 @@ Rectangle {
 
                 Text {
                     id: mainText
-                    text: __inputUtils.formatProjectName(itemContainer.projectName)
+                    text: __inputUtils.formatProjectName(itemContainer.projectFullName)
                     height: textContainer.height/2
                     width: textContainer.width
                     font.pixelSize: InputStyle.fontPixelSizeNormal

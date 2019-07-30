@@ -108,9 +108,9 @@ DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 
 
 SOURCES += \
-  localprojectsmanager.cpp \
+localprojectsmanager.cpp \
 main.cpp \
-  merginprojectmetadata.cpp \
+merginprojectmetadata.cpp \
 projectsmodel.cpp \
 layersmodel.cpp \
 loader.cpp \
@@ -125,8 +125,8 @@ inpututils.cpp \
 test/testmerginapi.cpp
 
 HEADERS += \
-  localprojectsmanager.h \
-  merginprojectmetadata.h \
+localprojectsmanager.h \
+merginprojectmetadata.h \
 projectsmodel.h \
 layersmodel.h \
 loader.h \
