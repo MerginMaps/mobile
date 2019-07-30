@@ -272,7 +272,6 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectList &merginProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
-    void syncProgressUpdated( const QString &projectFullName, qreal progress );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
     void notify( const QString &message );
@@ -391,7 +390,7 @@ class MerginApi: public QObject
     QString findUniqueProjectDirectoryName( QString path );
     QNetworkReply *getProjectInfo( const QString &projectFullName );
 
-    //! Updates mergin project's sync status and emits syncProgressUpdated() signal
+    //! Updates mergin project's sync status
     void updateProjectSyncProgress( const QString &projectFullName, qreal progress );
     //! Updates mergin project's sync pending status
     void updateProjectSyncPending( const QString &projectFullName, bool pending );

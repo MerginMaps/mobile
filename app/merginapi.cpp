@@ -1891,8 +1891,6 @@ void MerginApi::updateProjectSyncProgress( const QString &projectFullName, qreal
   LocalProjectInfo project = getLocalProject( projectFullName );
   if ( project.isValid() )
     mLocalProjects.updateMerginSyncProgress( project.projectDir, progress );
-
-  emit syncProgressUpdated( projectFullName, progress );
 }
 
 void MerginApi::updateProjectSyncPending( const QString &projectFullName, bool pending )
