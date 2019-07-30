@@ -508,9 +508,9 @@ ApplicationWindow {
 
         onActiveProjectIndexChanged: {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
+            __appSettings.defaultProject = openProjectPanel.activeProjectPath
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-
             updateActiveLayerByName(__appSettings.defaultLayer)
         }
     }
@@ -560,9 +560,6 @@ ApplicationWindow {
         onNotify: {
             showMessage(message)
         }
-        onNotifyDialog: {
-          showDialog(message)
-        }
     }
 
     FeaturePanel {
@@ -589,5 +586,21 @@ ApplicationWindow {
 
     LoadingIndicator {
         id: loadingIndicator
+        width: parent.width
+        height: 8 * QgsQuick.Utils.dp
+        z: zPanel + 1000 // the most top
+    }
+
+    Connections {
+        target: __loader
+        onLoadingStarted: projectLoadingScreen.visible = true
+        onLoadingFinished: projectLoadingScreen.visible = false
+    }
+
+    ProjectLoadingScreen {
+      id: projectLoadingScreen
+      anchors.fill: parent
+      visible: false
+      z: zPanel + 1000 // the most top
     }
 }

@@ -6,13 +6,13 @@ ProgressBar {
     id: loadingIndicator
     anchors.top: parent.top
     value: 0
-    height: 5
-    width: parent.width
     clip: true
 
     property int easingType: Easing.InOutQuad
 
     function toggle(value) {
+      if (loadingIndicatorAnimation.running === value) return
+
       loadingIndicatorAnimation.running = value
       visible = value
     }
@@ -73,6 +73,7 @@ ProgressBar {
         property: "value"
         from: 1
         to: 1
+        duration: 100
         running: true
         loops: Animation.Infinite
         easing.type: easingType
