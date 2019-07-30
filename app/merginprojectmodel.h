@@ -17,7 +17,7 @@
  */
 struct MerginProject
 {
-  QString name;
+  QString projectName;
   QString projectNamespace;
   QString projectDir;  // full path to the project directory
   QDateTime clientUpdated; // client's version of project files
@@ -41,7 +41,7 @@ class MerginProjectModel: public QAbstractListModel
   public:
     enum Roles
     {
-      Name = Qt::UserRole + 1,
+      ProjectName = Qt::UserRole + 1,
       ProjectNamespace,
       Size,
       ProjectInfo,
@@ -72,7 +72,7 @@ class MerginProjectModel: public QAbstractListModel
 
   private slots:
 
-    void projectDirChanged( const QString &projectDir );
+    void projectMetadataChanged( const QString &projectDir );
     void onLocalProjectAdded( const QString &projectDir );
     void onLocalProjectRemoved( const QString &projectDir );
 

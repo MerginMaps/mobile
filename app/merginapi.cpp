@@ -77,14 +77,14 @@ void MerginApi::downloadFile( const QString &projectFullName, const QString &fil
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3" ).arg( projectFullName ).arg( filename ).arg( version ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  request.setAttribute( QNetworkRequest::User, QVariant( chunkNo ) );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ), QVariant( chunkNo ) );
 
   QString range;
   int from = UPLOAD_CHUNK_SIZE * chunkNo;
   int to = UPLOAD_CHUNK_SIZE * ( chunkNo + 1 ) - 1;
   range = QStringLiteral( "bytes=%1-%2" ).arg( from ).arg( to );
   request.setRawHeader( "Range", range.toUtf8() );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyDownloadFile );
   transaction.replyDownloadFile = mManager.get( request );
@@ -119,7 +119,7 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/octet-stream" );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyUploadFile );
   transaction.replyUploadFile = mManager.post( request, data );
@@ -143,7 +143,7 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyUploadStart );
   transaction.replyUploadStart = mManager.post( request, json );
@@ -206,7 +206,7 @@ void MerginApi::sendUploadCancelRequest( const QString &projectFullName, const Q
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   QNetworkReply *reply = mManager.post( request, QByteArray() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::uploadCancelReplyFinished );
@@ -256,7 +256,7 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyUploadFinish );
   transaction.replyUploadFinish = mManager.post( request, QByteArray() );
@@ -410,7 +410,7 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
-  request.setAttribute( AttrProjectFullName, getFullProjectName( projectNamespace, projectName ) );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), getFullProjectName( projectNamespace, projectName ) );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
@@ -435,7 +435,7 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1/%2" ).arg( projectNamespace ).arg( projectName ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  request.setAttribute( AttrProjectFullName, getFullProjectName( projectNamespace, projectName ) );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), getFullProjectName( projectNamespace, projectName ) );
   QNetworkReply *reply = mManager.deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
@@ -466,7 +466,7 @@ void MerginApi::createProjectFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -490,7 +490,7 @@ void MerginApi::deleteProjectFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -595,7 +595,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
 
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  request.setAttribute( AttrProjectFullName, projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
   return mManager.get( request );
@@ -987,7 +987,7 @@ void MerginApi::downloadFileReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -996,7 +996,7 @@ void MerginApi::downloadFileReplyFinished()
   QUrlQuery query( r->url().query() );
   QString filename = query.queryItemValue( "file" );
   QString version = query.queryItemValue( "version" );
-  int chunkNo = r->request().attribute( QNetworkRequest::User ).toInt();
+  int chunkNo = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ) ).toInt();
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -1063,7 +1063,7 @@ void MerginApi::uploadStartReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1127,7 +1127,7 @@ void MerginApi::uploadFileReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1187,7 +1187,7 @@ void MerginApi::updateInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1309,7 +1309,7 @@ void MerginApi::uploadInfoReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1408,7 +1408,7 @@ void MerginApi::uploadFinishReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1446,7 +1446,7 @@ void MerginApi::uploadCancelReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( AttrProjectFullName ).toString();
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   if ( r->error() == QNetworkReply::NoError )
   {

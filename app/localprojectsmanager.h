@@ -89,9 +89,7 @@ class LocalProjectsManager : public QObject
     static ProjectStatus currentProjectStatus( const LocalProjectInfo &project );
 
   signals:
-    void projectSyncPendingChanged( const QString &projectDir, bool pending );
-    void projectSyncProgressChanged( const QString &projectDir, qreal progress );
-    void projectStatusChanged( const QString &projectDir );
+    void projectMetadataChanged( const QString &projectDir );
     void localProjectAdded( const QString &projectDir );
     void localProjectRemoved( const QString &projectDir );
 

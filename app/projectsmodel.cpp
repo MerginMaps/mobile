@@ -33,14 +33,6 @@ ProjectModel::~ProjectModel() {}
 
 void ProjectModel::findProjectFiles()
 {
-  /*
-  QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-  for ( QString folderName : entryList )
-  {
-    addProjectFromPath( mDataDir + "/" + folderName );
-  }
-  */
-
   // populate from mLocalProjects
   mProjectFiles.clear();
   const QList<LocalProjectInfo> projects = mLocalProjects.projects();
@@ -50,9 +42,9 @@ void ProjectModel::findProjectFiles()
     QFileInfo fi( project.qgisProjectFilePath );
 
     ProjectFile projectFile;
-    projectFile.name = fi.fileName().remove( ".qgs" ).remove( ".qgz" );   // TODO: shouldn't this be mergin project name??
     projectFile.path = project.qgisProjectFilePath;
     projectFile.folderName = dir.dirName();
+    projectFile.projectName = project.projectName;
     projectFile.projectNamespace = project.projectNamespace;
     QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
     if ( !project.qgisProjectFilePath.isEmpty() )
@@ -71,71 +63,6 @@ void ProjectModel::findProjectFiles()
   std::sort( mProjectFiles.begin(), mProjectFiles.end() );
 }
 
-#if 0
-void ProjectModel::addProjectFromPath( QString path )
-{
-  if ( path.isEmpty() ) return;
-
-  int i = 0;
-  int projectExistsAt = -1;
-  for ( ProjectFile projectFile : mProjectFiles )
-  {
-    if ( QDir( mDataDir + projectFile.folderName ) == QDir( path ) )
-    {
-      projectExistsAt = i;
-    }
-    i++;
-  }
-
-  QList<ProjectFile> foundProjects;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    ProjectFile projectFile;
-    projectFile.name = it.fileName().remove( ".qgs" ).remove( ".qgz" );
-    projectFile.path = it.filePath();
-    QDir projectDir( path );
-    projectFile.folderName = projectDir.dirName();
-    QFileInfo fileInfo( it.filePath() );
-    QDateTime created = fileInfo.created().toUTC();
-    projectFile.info = QString( created.toString() );
-    projectFile.isValid = true;
-
-    foundProjects.append( projectFile );
-    qDebug() << "Found QGIS project: " << it.filePath();
-  }
-
-  ProjectFile project;
-  if ( !foundProjects.isEmpty() )
-  {
-    project = foundProjects.at( 0 );
-    if ( foundProjects.length() > 1 )
-    {
-      project.info = "invalid project";
-      project.isValid = false;
-    }
-  }
-  else
-  {
-    project.name = "";
-    QDir projectDir( path );
-    project.folderName = projectDir.dirName();
-    project.path = path;
-    project.info = "invalid project";
-    project.isValid = false;
-  }
-
-  if ( projectExistsAt >= 0 )
-    mProjectFiles.removeAt( projectExistsAt );
-
-  MerginProjectMetadata projectMeta = MerginProjectMetadata::fromCachedJson( path + "/" + MerginApi::sMetadataFile );
-  if ( projectMeta.isValid() )
-    project.projectNamespace = projectMeta.projectNamespace;
-
-  mProjectFiles.append( project );
-}
-#endif
 
 QVariant ProjectModel::data( const QModelIndex &index, int role ) const
 {
@@ -147,10 +74,9 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
 
   switch ( role )
   {
-    case Name: return QVariant( projectFile.name );
+    case ProjectName: return QVariant( projectFile.projectName );
     case ProjectNamespace: return QVariant( projectFile.projectNamespace );
     case FolderName: return QVariant( projectFile.folderName );
-    case ShortName: return QVariant( projectFile.name.left( mMaxShortNameChars - 3 ) + "..." );
     case Path: return QVariant( projectFile.path );
     case ProjectInfo: return QVariant( projectFile.info );
     case IsValid: return QVariant( projectFile.isValid );
@@ -163,10 +89,9 @@ QVariant ProjectModel::data( const QModelIndex &index, int role ) const
 QHash<int, QByteArray> ProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-  roleNames[Name] = "name";
+  roleNames[ProjectName] = "projectName";
   roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[FolderName] = "folderName";
-  roleNames[ShortName] = "shortName";
   roleNames[Path] = "path";
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[IsValid] = "isValid";
@@ -243,8 +168,6 @@ void ProjectModel::addProject( QString projectFolder, QString projectName, bool 
 
   Q_UNUSED( projectName );
   beginResetModel();
-  //addProjectFromPath( projectFolder );
-  //std::sort( mProjectFiles.begin(), mProjectFiles.end() );
   findProjectFiles();
   endResetModel();
 }

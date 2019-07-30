@@ -80,7 +80,7 @@ struct TransactionStatus
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
-  bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remote the
+  bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -359,7 +359,7 @@ class MerginApi: public QObject
     void createEmptyFile( const QString &path );
     void takeFirstAndDownload( const QString &projectFullName, const QString &version );
 
-    QByteArray getChecksum( const QString &filePath );
+    static QByteArray getChecksum( const QString &filePath );
     QSet<QString> listFiles( const QString &projectPath );
 
     void loadAuthData();
@@ -414,8 +414,11 @@ class MerginApi: public QObject
     int mDiskUsage = 0; // in Bytes
     int mStorageLimit = 0; // in Bytes
 
-    //! our custom attribute(s) for network requests
-    static const QNetworkRequest::Attribute AttrProjectFullName = QNetworkRequest::User;
+    enum CustomAttribute
+    {
+      AttrProjectFullName = QNetworkRequest::User,
+      AttrChunkNo         = QNetworkRequest::User + 1,
+    };
 
     QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;

@@ -89,6 +89,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testUploadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -417,6 +418,42 @@ void TestMerginApi::testUploadProject()
   QCOMPARE( project3.serverVersion, 1 );
   QCOMPARE( project3.localVersion, 1 );
   QCOMPARE( project3.status, UpToDate );
+}
+
+void TestMerginApi::testMultiChunkUploadDownload()
+{
+  // this will try to upload a file that needs to be split into multiple chunks
+  // and then also download it correctly again in a clean new download
+
+  QString projectName = "testMultiChunkUploadDownload";
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // create a big file (21mb)
+  QString bigFilePath = mApi->projectsPath() + "/" + projectName + "/" + "big_file.dat";
+  QFile bigFile( bigFilePath );
+  QVERIFY( bigFile.open( QIODevice::WriteOnly ) );
+  for ( int i = 0; i < 21; ++i )   // 21 times 1mb -> should be three chunks when chunk size == 10mb
+    bigFile.write( QByteArray( 1024 * 1024, static_cast<char>( 'A' + i ) ) );   // AAAA.....BBBB.....CCCC.....
+  bigFile.close();
+
+  QByteArray checksum = MerginApi::getChecksum( bigFilePath );
+  QVERIFY( !checksum.isEmpty() );
+
+  // upload
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // download again
+  deleteLocalProject( mApi, mUsername, projectName );
+  QVERIFY( !QFileInfo::exists( bigFilePath ) );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // verify it's there and with correct content
+  QByteArray checksum2 = MerginApi::getChecksum( bigFilePath );
+  QVERIFY( QFileInfo::exists( bigFilePath ) );
+  QCOMPARE( checksum, checksum2 );
 }
 
 

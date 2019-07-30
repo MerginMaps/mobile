@@ -37,11 +37,10 @@ class ProjectModel : public QAbstractListModel
   public:
     enum Roles
     {
-      Name = Qt::UserRole + 1, // name of a project file
+      ProjectName = Qt::UserRole + 1, // name of a project file
       ProjectNamespace,
       FolderName,
       Path,
-      ShortName, // name shortened to maxShortNameChars
       ProjectInfo,
       Size,
       IsValid,
@@ -50,7 +49,7 @@ class ProjectModel : public QAbstractListModel
     Q_ENUMS( Roles )
 
     explicit ProjectModel( LocalProjectsManager &localProjects, QObject *parent = nullptr );
-    ~ProjectModel();
+    ~ProjectModel() override;
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row ) const;
@@ -59,7 +58,7 @@ class ProjectModel : public QAbstractListModel
 
     QHash<int, QByteArray> roleNames() const override;
 
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     QString dataDir() const;
 
@@ -77,15 +76,23 @@ class ProjectModel : public QAbstractListModel
 
     struct ProjectFile
     {
-      QString name;
-      QString projectNamespace;
-      QString folderName;
-      QString path;
+      QString projectName;        //!< mergin project name (second part of "namespace/project"). empty for non-mergin project
+      QString projectNamespace;   //!< mergin project namespace (first part of "namespace/project"). empty for non-mergin project
+      QString folderName;         //!< name of the project folder (not the full path)
+      QString path;               //!< path to the .qgs/.qgz project file
       QString info;
       bool isValid;
 
+      /**
+       * Ordering of local projects: first non-mergin projects (using folder name),
+       * then mergin projects (sorted first by namespace, then project name)
+       */
       bool operator < ( const ProjectFile &other ) const
       {
+        if ( projectNamespace.isEmpty() && other.projectNamespace.isEmpty() )
+        {
+          return folderName.compare( other.folderName, Qt::CaseInsensitive ) < 0;
+        }
         if ( !projectNamespace.isEmpty() && other.projectNamespace.isEmpty() )
         {
           return false;
@@ -97,18 +104,18 @@ class ProjectModel : public QAbstractListModel
 
         if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) == 0 )
         {
-          return folderName.compare( other.folderName, Qt::CaseInsensitive ) < 0;
+          return projectName.compare( other.projectName, Qt::CaseInsensitive ) < 0;
         }
         if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) < 0 )
         {
           return true;
         }
-        else return false;
+        else
+          return false;
       }
     };
     LocalProjectsManager &mLocalProjects;
     QList<ProjectFile> mProjectFiles;
-    const int mMaxShortNameChars = 10;
     QString mSearchExpression;
 
 };

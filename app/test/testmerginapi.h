@@ -32,6 +32,7 @@ class TestMerginApi: public QObject
     void testDeleteNonExistingProject();
     void testCreateDeleteProject();
     void testUploadProject();
+    void testMultiChunkUploadDownload();
     void testPushAddedFile();
     void testPushRemovedFile();
     void testPushModifiedFile();

@@ -6,9 +6,7 @@ MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QOb
   : QAbstractListModel( parent )
   , mLocalProjects( localProjects )
 {
-  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectSyncPendingChanged, this, &MerginProjectModel::projectDirChanged );
-  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectSyncProgressChanged, this, &MerginProjectModel::projectDirChanged );
-  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectStatusChanged, this, &MerginProjectModel::projectDirChanged );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::projectMetadataChanged, this, &MerginProjectModel::projectMetadataChanged );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
 }
@@ -23,8 +21,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
 
   switch ( role )
   {
-    case Name:
-      return QVariant( project->name );
+    case ProjectName:
+      return QVariant( project->projectName );
     case ProjectNamespace: return QVariant( project->projectNamespace );
     case ProjectInfo:
     {
@@ -78,7 +76,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
 QHash<int, QByteArray> MerginProjectModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-  roleNames[Name] = "name";
+  roleNames[ProjectName] = "projectName";
   roleNames[ProjectNamespace] = "projectNamespace";
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
@@ -107,7 +105,7 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects 
   {
     std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
     project->projectNamespace = entry.projectNamespace;
-    project->name = entry.projectName;
+    project->projectName = entry.projectName;
     project->creator = entry.creator;
     project->writers = entry.writers;
     project->serverUpdated = entry.serverUpdated;
@@ -131,14 +129,14 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
   int row = 0;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
   {
-    if ( MerginApi::getFullProjectName( project->projectNamespace, project->name ) == projectFullName )
+    if ( MerginApi::getFullProjectName( project->projectNamespace, project->projectName ) == projectFullName )
       return row;
     row++;
   }
   return -1;
 }
 
-void MerginProjectModel::projectDirChanged( const QString &projectDir )
+void MerginProjectModel::projectMetadataChanged( const QString &projectDir )
 {
   int row = 0;
   for ( std::shared_ptr<MerginProject> project : mMerginProjects )
@@ -179,7 +177,7 @@ void MerginProjectModel::onLocalProjectAdded( const QString &projectDir )
   project->projectDir = localProject.projectDir;
 
   // update metadata and emit dataChanged() signal
-  projectDirChanged( projectDir );
+  projectMetadataChanged( projectDir );
 }
 
 void MerginProjectModel::onLocalProjectRemoved( const QString &projectDir )

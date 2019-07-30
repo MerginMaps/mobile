@@ -11,7 +11,6 @@ Item {
 
   property int activeProjectIndex: -1
   property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
-  property string activeProjectName: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Name)
   property string merginSearchExpression: ""
   property var busyIndicator
 
@@ -419,7 +418,7 @@ Item {
       visible: height ? true : false
       statusIconSource: "trash.svg"
       itemMargin: projectsPanel.panelMargin
-      projectName: projectNamespace + "/" + folderName
+      projectFullName: (projectNamespace && projectName) ? (projectNamespace + "/" + projectName) : folderName
       disabled: !isValid // invalid project
       highlight: {
         if (disabled) return true
@@ -452,7 +451,7 @@ Item {
       pending: pendingProject
       statusIconSource: getStatusIcon(status, pendingProject)
       iconSize: projectsPanel.iconSize
-      projectName: projectNamespace + "/" + name
+      projectFullName: projectNamespace + "/" + projectName
       progressValue: syncProgress
 
       onMenuClicked: {
@@ -460,18 +459,18 @@ Item {
 
         if (pendingProject) {
           if (status === "modified") {
-            __merginApi.uploadCancel(projectNamespace + "/" + name)
+            __merginApi.uploadCancel(projectFullName)
           }
           if (status === "noVersion" || status === "outOfDate") {
-            __merginApi.updateCancel(projectNamespace + "/" + name)
+            __merginApi.updateCancel(projectFullName)
           }
           return
         }
 
         if (status === "noVersion" || status === "outOfDate") {
-          __merginApi.updateProject(projectNamespace, name)
+          __merginApi.updateProject(projectNamespace, projectName)
         } else if (status === "modified") {
-          __merginApi.uploadProject(projectNamespace, name)
+          __merginApi.uploadProject(projectNamespace, projectName)
         }
       }
 
