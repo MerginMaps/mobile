@@ -55,6 +55,9 @@ class Loader: public QObject
     void positionKitChanged();
     void recordingChanged();
 
+    void loadingStarted();
+    void loadingFinished();
+
   public slots:
     void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
