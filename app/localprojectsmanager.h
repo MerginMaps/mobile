@@ -33,10 +33,11 @@ struct LocalProjectInfo
   int localVersion = -1;  //!< the project version that is currently available locally
   int serverVersion = -1;  //!< the project version most recently seen on server (may be -1 if no info from server is available)
 
-  bool syncPending = false;  //!< whether sync is currently in progress
-  qreal syncProgress = -1;  //!< progress in case of pending download/upload (values [0..1])
   ProjectStatus status = NoVersion;
 
+  // Sync status (e.g. progress) is not kept here because if a project does not exist locally yet
+  // and it is only being downloaded for the first time, it's not in the list of local projects either
+  // and we would need to do some workarounds for that.
 };
 
 
@@ -78,12 +79,6 @@ class LocalProjectsManager : public QObject
 
     //! after receiving project info with server version (local version stays the same
     void updateMerginServerVersion( const QString &projectDir, int version );
-
-    //! sets whether we're doing update/upload right now
-    void updateMerginSyncPending( const QString &projectDir, bool pending );
-
-    //! during mergin sync - this may be called many times to update the progress
-    void updateMerginSyncProgress( const QString &projectDir, qreal progress );
 
 
     static ProjectStatus currentProjectStatus( const LocalProjectInfo &project );

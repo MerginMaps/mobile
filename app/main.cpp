@@ -236,6 +236,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
+  QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
 
   if ( IS_TEST )

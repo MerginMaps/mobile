@@ -272,6 +272,12 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectList &merginProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    /**
+     * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
+     * Normally progress is in interval [0, 1] as data get uploaded or downloaded.
+     * With no pending sync, progress is set to -1
+     */
+    void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
     void notify( const QString &message );
@@ -389,11 +395,6 @@ class MerginApi: public QObject
     */
     QString findUniqueProjectDirectoryName( QString path );
     QNetworkReply *getProjectInfo( const QString &projectFullName );
-
-    //! Updates mergin project's sync status
-    void updateProjectSyncProgress( const QString &projectFullName, qreal progress );
-    //! Updates mergin project's sync pending status
-    void updateProjectSyncPending( const QString &projectFullName, bool pending );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     QString createUniqueProjectDirectory( const QString &projectName );

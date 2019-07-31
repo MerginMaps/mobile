@@ -70,6 +70,9 @@ class MerginProjectModel: public QAbstractListModel
     int filterWriter() const;
     void setFilterWriter( int filterWriter );
 
+  public slots:
+    void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
+
   private slots:
 
     void projectMetadataChanged( const QString &projectDir );

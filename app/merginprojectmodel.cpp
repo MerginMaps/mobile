@@ -136,6 +136,21 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
   return -1;
 }
 
+void MerginProjectModel::syncProjectStatusChanged( const QString &projectFullName, qreal progress )
+{
+  int row = findProjectIndex( projectFullName );
+  if ( row == -1 )
+    return;
+
+  std::shared_ptr<MerginProject> project = mMerginProjects[row];
+  project->pending = progress >= 0;
+  project->progress = progress >= 0 ? progress : 0;
+
+  QModelIndex ix = index( row );
+  emit dataChanged( ix, ix );
+}
+
+
 void MerginProjectModel::projectMetadataChanged( const QString &projectDir )
 {
   int row = 0;
@@ -149,8 +164,6 @@ void MerginProjectModel::projectMetadataChanged( const QString &projectDir )
 
       // update cached information
       project->status = localProject.status;
-      project->pending = localProject.syncPending;
-      project->progress = localProject.syncProgress;
 
       QModelIndex ix = index( row );
       emit dataChanged( ix, ix );
