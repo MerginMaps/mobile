@@ -165,36 +165,6 @@ void LocalProjectsManager::updateMerginServerVersion( const QString &projectDir,
   Q_ASSERT( false );  // should not happen
 }
 
-void LocalProjectsManager::updateMerginSyncPending( const QString &projectDir, bool pending )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      mProjects[i].syncPending = pending;
-      updateProjectStatus( mProjects[i] );
-      emit projectMetadataChanged( projectDir );
-      return;
-    }
-  }
-  Q_ASSERT( false );  // should not happen
-}
-
-void LocalProjectsManager::updateMerginSyncProgress( const QString &projectDir, qreal progress )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      mProjects[i].syncProgress = progress;
-      emit projectMetadataChanged( projectDir );
-      return;
-    }
-  }
-  Q_ASSERT( false );  // should not happen
-}
-
-
 static QDateTime _getLastModifiedFileDateTime( const QString &path )
 {
   QDateTime lastModified;

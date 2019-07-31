@@ -275,8 +275,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyProjectInfo = reply;
 
-    updateProjectSyncPending( projectFullName, true );
-    updateProjectSyncProgress( projectFullName, 0 );
+    emit syncProjectStatusChanged( projectFullName, 0 );
 
     connect( reply, &QNetworkReply::finished, this, &MerginApi::updateInfoReplyFinished );
   }
@@ -291,8 +290,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
   mTransactionalStatus.insert( projectFullName, TransactionStatus() );
 
-  updateProjectSyncPending( projectFullName, true );
-  updateProjectSyncProgress( projectFullName, 0 );
+  emit syncProjectStatusChanged( projectFullName, 0 );
 
   // TODO: verify in tests this works correctly
   LocalProjectInfo project = mLocalProjects.projectFromMerginName( projectFullName );
@@ -1021,7 +1019,7 @@ void MerginApi::downloadFileReplyFinished()
     handleOctetStream( data, tempFoler, filename, closeFile, overwrite );
     transaction.transferedSize += data.size();
 
-    updateProjectSyncProgress( projectFullName, transaction.transferedSize / transaction.totalSize );
+    emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
 
     InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
 
@@ -1155,7 +1153,7 @@ void MerginApi::uploadFileReplyFinished()
     {
       transaction.transferedSize += currentFile.size;
 
-      updateProjectSyncProgress( projectFullName, transaction.transferedSize / transaction.totalSize );
+      emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
       transaction.files.removeFirst();
 
       if ( !transaction.files.isEmpty() )
@@ -1725,7 +1723,7 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
   Q_UNUSED( projectDir );
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
 
-  updateProjectSyncPending( projectFullName, false );
+  emit syncProjectStatusChanged( projectFullName, -1 );   // -1 means there's no sync going on
 
   if ( syncSuccessful )
   {
@@ -1884,18 +1882,4 @@ QSet<QString> MerginApi::listFiles( const QString &path )
     }
   }
   return files;
-}
-
-void MerginApi::updateProjectSyncProgress( const QString &projectFullName, qreal progress )
-{
-  LocalProjectInfo project = getLocalProject( projectFullName );
-  if ( project.isValid() )
-    mLocalProjects.updateMerginSyncProgress( project.projectDir, progress );
-}
-
-void MerginApi::updateProjectSyncPending( const QString &projectFullName, bool pending )
-{
-  LocalProjectInfo project = getLocalProject( projectFullName );
-  if ( project.isValid() )
-    mLocalProjects.updateMerginSyncPending( project.projectDir, pending );
 }
