@@ -43,8 +43,8 @@ class TestMerginApi: public QObject
     void testConflictRemoteAddLocalAdd();
 
   private:
-    int SHORT_REPLY = 1000;
-    int LONG_REPLY = 5000;
+    static const int SHORT_REPLY = 1000;
+    static const int LONG_REPLY = 5000;
 
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
@@ -63,10 +63,10 @@ class TestMerginApi: public QObject
     void deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Downloads a remote project to the local drive
-    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int timeout = LONG_REPLY * 5 );
 
     //! Uploads any local changes in the local project to the remote project
-    void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+    void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int timeout = LONG_REPLY );
 
     //! Deletes a project from the local drive
     void deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );

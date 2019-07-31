@@ -90,6 +90,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
+  deleteRemoteProject( mApiExtra, mUsername, "testCreateProjectTwice" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -443,12 +444,12 @@ void TestMerginApi::testMultiChunkUploadDownload()
   QVERIFY( !checksum.isEmpty() );
 
   // upload
-  uploadRemoteProject( mApi, mUsername, projectName );
+  uploadRemoteProject( mApi, mUsername, projectName, LONG_REPLY * 10 );
 
   // download again
   deleteLocalProject( mApi, mUsername, projectName );
   QVERIFY( !QFileInfo::exists( bigFilePath ) );
-  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName, LONG_REPLY * 10 );
 
   // verify it's there and with correct content
   QByteArray checksum2 = MerginApi::getChecksum( bigFilePath );
@@ -840,19 +841,19 @@ void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNa
   api->localProjectsManager().removeProject( project.projectDir );
 }
 
-void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int timeout )
 {
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   api->updateProject( projectNamespace, projectName );
   QCOMPARE( api->transactions().count(), 1 );
-  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
+  QVERIFY( spy.wait( timeout ) );
 }
 
-void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int timeout )
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( LONG_REPLY ) );
+  QVERIFY( spy.wait( timeout ) );
   QCOMPARE( spy.count(), 1 );
 }
 
