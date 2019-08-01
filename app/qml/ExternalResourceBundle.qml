@@ -67,7 +67,6 @@ Item {
             var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
             externalResourceHandler.itemWidget.image.currentValue = newCurrentValue
             externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
-            externalResourceHandler.itemWidget = undefined
           }
         }
 
@@ -88,7 +87,6 @@ Item {
                 absolutePath
 
           externalResourceHandler.itemWidget.valueChanged(newValue, false)
-          externalResourceHandler.itemWidget = undefined
         }
 
         property var onFormSave: function onFormSave(itemWidget) {
