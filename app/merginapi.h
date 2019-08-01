@@ -316,7 +316,6 @@ class MerginApi: public QObject
     void deleteProjectFinished();
     void authorizeFinished();
     void pingMerginReplyFinished();
-    void updateProjectMetadata( const QString &projectNamespace, const QString &projectName, bool syncSuccessful = true );
     void copyTempFilesToProject( const QString &projectDir, const QString &projectFullName );
 
   private:
@@ -401,6 +400,9 @@ class MerginApi: public QObject
 
     //! Called when download/update of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectUpdate( const QString &projectFullName );
+
+    //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
+    void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
