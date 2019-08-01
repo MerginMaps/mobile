@@ -46,13 +46,12 @@ class InputUtils: public QObject
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
     /**
-     * Renames a file located at a given path with given prefix and current timestamp. Prefix is omitted of empty.
+     * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
      * \param srcPath Absolute path to a file.
-     * \param prefix String that is used as a prefix for a new unique name.
-     * \param dateTime Used as a part of a new name.
+     * \param dateTime new name of a file. If is invalid, current dateTime is used.
      * \result Either absolute path of a rename file or empty string.
      */
-    Q_INVOKABLE static QString renameWithUniqueName( const QString &srcPath, const QString &prefix, const QDateTime &dateTime );
+    Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
     static bool cpDir( const QString &srcPath, const QString &dstPath );
 

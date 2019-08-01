@@ -53,6 +53,7 @@ Item {
 
         /**
          * Called when a photo is taken and confirmed (clicked on check/ok button).
+         * Original photo file is renamed with current date time to avoid name conflicts.
          * ItemWidget reference is always set here to avoid ambiguity in case of
          * multiple external resource (attachment) fields.
          * \param itemWidget editorWidget for a modified field to send valueChanged signal.
@@ -60,7 +61,7 @@ Item {
          * \value depends on widget's config, see more in qgsquickexternalwidget.qml
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
-          var newPath = __inputUtils.renameWithUniqueName(prefixToRelativePath + "/" + value, customPrefix)
+          var newPath = __inputUtils.renameWithDateTime(prefixToRelativePath + "/" + value)
           if (newPath) {
             externalResourceHandler.itemWidget = itemWidget
             var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
