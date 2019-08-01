@@ -90,6 +90,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -807,6 +808,47 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
   // and the local version should go to test1.txt_conflict
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "new local content" ) );
+}
+
+void TestMerginApi::testUploadWithUpdate()
+{
+  // this test triggers the situation when the request to upload a project
+  // first needs to do an update and only afterwards it uploads changes
+
+  QString projectName = "testUploadWithUpdate";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + "/" + projectName;
+  QString filenameLocal = projectDir + "/test-new-local-file.txt";
+  QString filenameRemote = projectDir + "/test-new-remote-file.txt";
+  QString extraFilenameRemote = extraProjectDir + "/test-new-remote-file.txt";
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( extraFilenameRemote, QByteArray( "new remote content" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  writeFileContent( filenameLocal, QByteArray( "new local content" ) );
+
+  qDebug() << "now do both update + upload";
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  QCOMPARE( readFileContent( filenameLocal ), QByteArray( "new local content" ) );
+  QCOMPARE( readFileContent( filenameRemote ), QByteArray( "new remote content" ) );
+
+  // try to re-download the project and see if everything went fine
+  deleteLocalProject( mApi, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QCOMPARE( project3.serverVersion, 3 );
+  QCOMPARE( project3.localVersion, 3 );
+  QCOMPARE( project3.status, UpToDate );
+
+  QCOMPARE( readFileContent( filenameLocal ), QByteArray( "new local content" ) );
+  QCOMPARE( readFileContent( filenameRemote ), QByteArray( "new remote content" ) );
 }
 
 

@@ -7,7 +7,6 @@
 #include <QDate>
 #include <QByteArray>
 #include <QSet>
-#include <QMessageBox>
 #include <QUuid>
 #include <QtMath>
 
@@ -282,42 +281,19 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
 
 void MerginApi::uploadProject( const QString &projectNamespace, const QString &projectName )
 {
-  bool onlyUpload = true;
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
   // create entry about pending upload for the project
   Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
   mTransactionalStatus.insert( projectFullName, TransactionStatus() );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  emit syncProjectStatusChanged( projectFullName, 0 );
-
-  // TODO: verify in tests this works correctly
-  LocalProjectInfo project = mLocalProjects.projectFromMerginName( projectFullName );
-  if ( project.isValid() && project.localVersion != -1 && project.localVersion < project.serverVersion )
+  transaction.replyUploadProjectInfo = getProjectInfo( projectFullName );
+  if ( transaction.replyUploadProjectInfo )
   {
-    onlyUpload = false;
-  }
+    emit syncProjectStatusChanged( projectFullName, 0 );
 
-  if ( onlyUpload )
-  {
-    continueWithUpload( QString(), projectFullName, true );
-  }
-  else
-  {
-    QMessageBox msgBox;
-    msgBox.setText( QStringLiteral( "The project has been updated on the server in the meantime. Your files will be updated before upload." ) );
-    msgBox.setInformativeText( "Do you want to continue?" );
-    msgBox.setStandardButtons( QMessageBox::Ok | QMessageBox::Cancel );
-    msgBox.setDefaultButton( QMessageBox::Cancel );
-
-    if ( msgBox.exec() == QMessageBox::Cancel )
-    {
-      finishProjectSync( projectFullName, false );
-      return;
-    }
-
-    updateProject( projectNamespace, projectName );
-    connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
+    connect( transaction.replyUploadProjectInfo, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
   }
 }
 
@@ -1183,10 +1159,6 @@ void MerginApi::updateInfoReplyFinished()
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
   Q_ASSERT( r == transaction.replyProjectInfo );
 
-  QString projectNamespace;
-  QString projectName;
-  extractProjectName( projectFullName, projectNamespace, projectName );
-
   if ( r->error() == QNetworkReply::NoError )
   {
     QString url = r->url().toString();
@@ -1196,78 +1168,7 @@ void MerginApi::updateInfoReplyFinished()
     transaction.replyProjectInfo->deleteLater();
     transaction.replyProjectInfo = nullptr;
 
-    LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-    if ( projectInfo.isValid() )
-    {
-      transaction.projectDir = projectInfo.projectDir;
-    }
-    else
-    {
-      // project has not been downloaded yet - we need to create a directory for it
-      transaction.projectDir = createUniqueProjectDirectory( projectName );
-      transaction.firstTimeDownload = true;
-    }
-
-    Q_ASSERT( !transaction.projectDir.isEmpty() );  // that would mean we do not have entry -> fail getting local files
-
-    QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-    MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-
-    transaction.projectMetadata = data;
-    transaction.version = serverProject.version;
-    transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles );
-    InputUtils::log( url, transaction.diff.dump() );
-
-    QList<MerginFile> filesToDownload;
-    qint64 totalSize = 0;
-    for ( QString filePath : transaction.diff.remoteAdded )
-    {
-      MerginFile file = serverProject.fileInfo( filePath );
-      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-      filesToDownload << file;
-      totalSize += file.size;
-    }
-
-    for ( QString filePath : transaction.diff.remoteUpdated )
-    {
-      MerginFile file = serverProject.fileInfo( filePath );
-      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-      filesToDownload << file;
-      totalSize += file.size;
-    }
-
-    // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
-    for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
-    {
-      MerginFile file = serverProject.fileInfo( filePath );
-      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-      filesToDownload << file;
-      totalSize += file.size;
-    }
-
-    // also download files which were added both on the server and locally (the local version will be renamed as conflicting copy)
-    for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
-    {
-      MerginFile file = serverProject.fileInfo( filePath );
-      file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-      filesToDownload << file;
-      totalSize += file.size;
-    }
-
-    transaction.totalSize = totalSize;
-    transaction.files = filesToDownload;
-
-    if ( !filesToDownload.isEmpty() )
-    {
-      takeFirstAndDownload( projectFullName, QString( "v%1" ).arg( serverProject.version ) );
-      emit pullFilesStarted();
-    }
-    else
-    {
-      // there's nothing to download so just finalize the update
-      finalizeProjectUpdate( projectFullName );
-    }
+    startProjectUpdate( projectFullName, data );
   }
   else
   {
@@ -1278,6 +1179,89 @@ void MerginApi::updateInfoReplyFinished()
     transaction.replyProjectInfo = nullptr;
 
     finishProjectSync( projectFullName, false );
+  }
+}
+
+void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteArray &data )
+{
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  if ( projectInfo.isValid() )
+  {
+    transaction.projectDir = projectInfo.projectDir;
+  }
+  else
+  {
+    QString projectNamespace;
+    QString projectName;
+    extractProjectName( projectFullName, projectNamespace, projectName );
+
+    // project has not been downloaded yet - we need to create a directory for it
+    transaction.projectDir = createUniqueProjectDirectory( projectName );
+    transaction.firstTimeDownload = true;
+  }
+
+  Q_ASSERT( !transaction.projectDir.isEmpty() );  // that would mean we do not have entry -> fail getting local files
+
+  QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
+  MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+  MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
+
+  transaction.projectMetadata = data;
+  transaction.version = serverProject.version;
+  transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles );
+  InputUtils::log( "update", transaction.diff.dump() );
+
+  QList<MerginFile> filesToDownload;
+  qint64 totalSize = 0;
+  for ( QString filePath : transaction.diff.remoteAdded )
+  {
+    MerginFile file = serverProject.fileInfo( filePath );
+    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+    filesToDownload << file;
+    totalSize += file.size;
+  }
+
+  for ( QString filePath : transaction.diff.remoteUpdated )
+  {
+    MerginFile file = serverProject.fileInfo( filePath );
+    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+    filesToDownload << file;
+    totalSize += file.size;
+  }
+
+  // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
+  for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
+  {
+    MerginFile file = serverProject.fileInfo( filePath );
+    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+    filesToDownload << file;
+    totalSize += file.size;
+  }
+
+  // also download files which were added both on the server and locally (the local version will be renamed as conflicting copy)
+  for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
+  {
+    MerginFile file = serverProject.fileInfo( filePath );
+    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
+    filesToDownload << file;
+    totalSize += file.size;
+  }
+
+  transaction.totalSize = totalSize;
+  transaction.files = filesToDownload;
+
+  if ( !filesToDownload.isEmpty() )
+  {
+    takeFirstAndDownload( projectFullName, QString( "v%1" ).arg( serverProject.version ) );
+    emit pullFilesStarted();
+  }
+  else
+  {
+    // there's nothing to download so just finalize the update
+    finalizeProjectUpdate( projectFullName );
   }
 }
 
@@ -1318,8 +1302,20 @@ void MerginApi::uploadInfoReplyFinished()
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
-    QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+    // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
+    projectInfo.serverVersion = serverProject.version;
+
+    // now let's figure a key question: are we on the most recent version of the project
+    // if we're about to do upload? because if not, we need to do local update first
+    if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < projectInfo.serverVersion )
+    {
+      transaction.updateBeforeUpload = true;
+      startProjectUpdate( projectFullName, data );
+      return;
+    }
+
+    QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
 
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, serverProject.version );
@@ -1727,11 +1723,21 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
   }
 
+  bool updateBeforeUpload = transaction.updateBeforeUpload;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
-
   mTransactionalStatus.remove( projectFullName );
 
-  emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
+  if ( updateBeforeUpload )
+  {
+    // we're done only with the download part before the actual upload - so let's continue with upload
+    QString projectNamespace, projectName;
+    extractProjectName( projectFullName, projectNamespace, projectName );
+    uploadProject( projectNamespace, projectName );
+  }
+  else
+  {
+    emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
+  }
 }
 
 void MerginApi::copyTempFilesToProject( const QString &projectDir, const QString &projectFullName )
@@ -1754,25 +1760,6 @@ bool MerginApi::writeData( const QByteArray &data, const QString &path )
   file.close();
 
   return true;
-}
-
-void MerginApi::continueWithUpload( const QString &, const QString &projectFullName, bool successfully )
-{
-  disconnect( this, &MerginApi::syncProjectFinished, this, &MerginApi::continueWithUpload );
-
-  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-
-  if ( !successfully )
-  {
-    return;
-  }
-
-  transaction.replyUploadProjectInfo = getProjectInfo( projectFullName );
-  if ( transaction.replyUploadProjectInfo )
-  {
-    connect( transaction.replyUploadProjectInfo, &QNetworkReply::finished, this, &MerginApi::uploadInfoReplyFinished );
-  }
 }
 
 void MerginApi::handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
