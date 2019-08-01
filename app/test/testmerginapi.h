@@ -41,6 +41,7 @@ class TestMerginApi: public QObject
     void testUpdateRemovedVsModifiedFiles();
     void testConflictRemoteUpdateLocalUpdate();
     void testConflictRemoteAddLocalAdd();
+    void testUploadWithUpdate();
 
   private:
     int SHORT_REPLY = 1000;

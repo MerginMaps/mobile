@@ -81,6 +81,7 @@ struct TransactionStatus
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
+  bool updateBeforeUpload = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -308,7 +309,6 @@ class MerginApi: public QObject
     void uploadFileReplyFinished();
     void uploadFinishReplyFinished();
     void uploadCancelReplyFinished();
-    void continueWithUpload( const QString &projectDir, const QString &projectName, bool successfully = true );
 
     void getUserInfoFinished();
     void saveAuthData();
@@ -403,6 +403,8 @@ class MerginApi: public QObject
 
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
     void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
+
+    void startProjectUpdate( const QString &projectFullName, const QByteArray &data );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
