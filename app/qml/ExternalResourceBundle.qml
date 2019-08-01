@@ -15,6 +15,17 @@ Item {
         // field editor widget related to current action
         property var itemWidget
 
+        /**
+         * Called when clicked on the gallery icon to choose a file from a gallery.
+         * ItemWidget reference is set here and kept for the whole workflow to avoid ambiguity in case of
+         * multiple external resource (attachment) fields. All usecases and bundle itself counts with one interaction
+         * per one time.
+         *
+         * The workflow of choosing an image from a gallery starts here and goes as follows:
+         * Android gallery even is evoked. When a user chooses image, "imageSelected( selectedImagePath )" is emitted.
+         * Then "imageSelected" caught the signal, handles changes and sends signal "valueChanged".
+         * \param itemWidget editorWidget for modified field to send valueChanged signal.
+         */
         property var chooseImage: function chooseImage(itemWidget) {
             externalResourceHandler.itemWidget = itemWidget
             if (__androidUtils.isAndroid) {
@@ -40,8 +51,16 @@ Item {
             }
         }
 
+        /**
+         * Called when a photo is taken and confirmed (clicked on check/ok button).
+         * ItemWidget reference is always set here to avoid ambiguity in case of
+         * multiple external resource (attachment) fields.
+         * \param itemWidget editorWidget for a modified field to send valueChanged signal.
+         * \param prefixToRelativePath depends on widget's config, see more qgsquickexternalwidget.qml
+         * \value depends on widget's config, see more in qgsquickexternalwidget.qml
+         */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
-          var newPath = __inputUtils.renameFile(prefixToRelativePath + "/" + value, customPrefix)
+          var newPath = __inputUtils.renameWithUniqueName(prefixToRelativePath + "/" + value, customPrefix)
           if (newPath) {
             externalResourceHandler.itemWidget = itemWidget
             var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
