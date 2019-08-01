@@ -23,7 +23,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
 {
-  QObject::connect( this, &MerginApi::syncProjectFinished, this, &MerginApi::updateProjectMetadata );
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
@@ -313,7 +312,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
     if ( msgBox.exec() == QMessageBox::Cancel )
     {
-      emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+      finishProjectSync( projectFullName, false );
       return;
     }
 
@@ -969,7 +968,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
     mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
 
-  emit syncProjectFinished( projectDir, projectFullName, true );
+  finishProjectSync( projectFullName, true );
 }
 
 
@@ -1043,7 +1042,7 @@ void MerginApi::downloadFileReplyFinished()
       QDir( transaction.projectDir ).removeRecursively();
     }
 
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
 
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
   }
@@ -1092,7 +1091,7 @@ void MerginApi::uploadStartReplyFinished()
       transaction.projectMetadata = data;
       transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-      emit syncProjectFinished( transaction.projectDir, projectFullName, true );
+      finishProjectSync( projectFullName, true );
     }
   }
   else
@@ -1109,7 +1108,7 @@ void MerginApi::uploadStartReplyFinished()
     transaction.replyUploadStart = nullptr;
 
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), showAsDialog );
-    emit syncProjectFinished( QString(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -1169,7 +1168,7 @@ void MerginApi::uploadFileReplyFinished()
     transaction.replyUploadFile->deleteLater();
     transaction.replyUploadFile = nullptr;
 
-    emit syncProjectFinished( QString(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -1278,7 +1277,7 @@ void MerginApi::updateInfoReplyFinished()
     transaction.replyProjectInfo->deleteLater();
     transaction.replyProjectInfo = nullptr;
 
-    emit syncProjectFinished( QString(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -1390,7 +1389,7 @@ void MerginApi::uploadInfoReplyFinished()
     transaction.replyUploadProjectInfo->deleteLater();
     transaction.replyUploadProjectInfo = nullptr;
 
-    emit syncProjectFinished( QStringLiteral(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -1417,7 +1416,7 @@ void MerginApi::uploadFinishReplyFinished()
     transaction.projectMetadata = data;
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-    emit syncProjectFinished( transaction.projectDir, projectFullName, true );
+    finishProjectSync( projectFullName, true );
   }
   else
   {
@@ -1428,7 +1427,7 @@ void MerginApi::uploadFinishReplyFinished()
     transaction.replyUploadFinish->deleteLater();
     transaction.replyUploadFinish = nullptr;
 
-    emit syncProjectFinished( QString(), projectFullName, false );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -1711,17 +1710,16 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
   return jsonArray;
 }
 
-void MerginApi::updateProjectMetadata( const QString &projectDir, const QString &projectFullName, bool syncSuccessful )
+void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSuccessful )
 {
-  Q_UNUSED( projectDir );
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   emit syncProjectStatusChanged( projectFullName, -1 );   // -1 means there's no sync going on
 
   if ( syncSuccessful )
   {
     // update the local metadata file
-    TransactionStatus &transaction = mTransactionalStatus[projectFullName];
     writeData( transaction.projectMetadata, transaction.projectDir + "/" + MerginApi::sMetadataFile );
 
     // update info of local projects
@@ -1729,7 +1727,11 @@ void MerginApi::updateProjectMetadata( const QString &projectDir, const QString 
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
   }
 
+  QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
+
   mTransactionalStatus.remove( projectFullName );
+
+  emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
 }
 
 void MerginApi::copyTempFilesToProject( const QString &projectDir, const QString &projectFullName )
