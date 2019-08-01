@@ -11,7 +11,7 @@
 #include <QFileInfo>
 
 QString InputUtils::sLogFile = QStringLiteral();
-static const QString DATE_TIME_FORMAT = QStringLiteral( "YYMMDD-HHMMSS" );
+static const QString DATE_TIME_FORMAT = QStringLiteral( "yymmdd-hhmmss" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -271,22 +271,13 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
   return true;
 }
 
-QString InputUtils::renameWithUniqueName( const QString &srcPath, const QString &prefix, const QDateTime &dateTime )
+QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )
 {
   if ( QFile::exists( srcPath ) )
   {
     QFileInfo info( srcPath );
-    QString newFilename;
     QString timestamp = ( dateTime.isValid() ) ? dateTime.toString( DATE_TIME_FORMAT ) : QDateTime::currentDateTime().toString( DATE_TIME_FORMAT );
-
-    if ( !prefix.isEmpty() )
-    {
-      newFilename = QString( "%1_%2.%3" ).arg( prefix ).arg( timestamp ).arg( info.suffix() );
-    }
-    else
-    {
-      newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );;
-    }
+    QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );;
     QString newPath( info.absolutePath() + "/" + newFilename );
 
     if ( QFile::rename( srcPath, newPath ) ) return newPath; else return QString();
