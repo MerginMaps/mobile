@@ -599,7 +599,8 @@ Item {
     y: searchBar.y
     height: contentLayout.height + searchBar.height
     width: parent.width
-    onAuthFailed: myProjectsBtn.activated()
+    onAuthFailed: homeBtn.activated()
+    toolbarHeight: toolbar.height
     onPendingChanged: busyIndicator.running = authPanel.pending
   }
 
