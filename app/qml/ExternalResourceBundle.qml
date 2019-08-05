@@ -99,6 +99,7 @@ Item {
                 QgsQuick.Utils.getRelativePath(absolutePath, externalResourceHandler.itemWidget.prefixToRelativePath) :
                 absolutePath
 
+          externalResourceHandler.itemWidget.image.currentValue = newValue
           externalResourceHandler.itemWidget.valueChanged(newValue, false)
         }
 
