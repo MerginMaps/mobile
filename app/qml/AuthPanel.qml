@@ -56,7 +56,7 @@ Item {
     Rectangle {
       id: loginForm
       width: parent.width
-      height: parent.height - staticPane.height
+      height: loginForm.childrenRect.height
       y: Math.min(Qt.inputMethod.keyboardRectangle.height ? (staticPane.height + toolbarHeight + panelMargin) - Qt.inputMethod.keyboardRectangle.height: 0, 0)
       color: root.bgColor
 
@@ -64,7 +64,6 @@ Item {
         id: columnLayout
         spacing: root.panelMargin/2
         width: parent.width
-        anchors.bottom: parent.bottom
 
         Image {
           source: "mergin_color.svg"
@@ -303,9 +302,9 @@ Item {
     Rectangle {
       id: staticPane
       width: parent.width
-      height: parent.height/5
-      color:root.bgColor
-      anchors.top: loginForm.bottom
+      height: parent.height - loginForm.height
+      color: root.bgColor
+      anchors.bottom: parent.bottom
 
       Column {
         anchors.fill: parent
