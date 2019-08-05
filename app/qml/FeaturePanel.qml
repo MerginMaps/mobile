@@ -262,7 +262,6 @@ Drawer {
 
     ExternalResourceBundle {
       id: externalResourceBundle
-      customPrefix: __merginApi.username
     }
 
 }

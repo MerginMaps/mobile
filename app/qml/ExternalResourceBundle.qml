@@ -7,12 +7,11 @@ import "."  // import InputStyle singleton
 Item {
 
     property alias handler: externalResourceHandler
-    property string customPrefix;
 
     QtObject {
         id: externalResourceHandler
 
-        // field editor widget related to current action
+        // Has to be set for actions with callbacks
         property var itemWidget
 
         /**
@@ -35,19 +34,29 @@ Item {
             }
         }
 
+        /**
+         * Called to show an image preview.
+         * \param imagePath Absolute path to an image.
+         */
         property var previewImage: function previewImage(imagePath) {
             imagePreview.source = "file://" +  imagePath
             imagePreview.width = window.width - 2 * InputStyle.panelMargin
             previewImageWrapper.open()
         }
 
+        /**
+         * Called to remove an image from a widget. A confirmation dialog is open first if a file exists.
+         * ItemWidget reference is set here to delete an image for certain widget.
+         * \param itemWidget editorWidget for modified field to send valueChanged signal.
+         * \param imagePath Absolute path to an image.
+         */
         property var removeImage: function removeImage(itemWidget, imagePath) {
-            externalResourceHandler.itemWidget = itemWidget
             if (QgsQuick.Utils.fileExists(imagePath)) {
+              externalResourceHandler.itemWidget = itemWidget
               imageDeleteDialog.imagePath = imagePath
               imageDeleteDialog.open()
             } else {
-              externalResourceHandler.itemWidget.valueChanged("", false)
+              itemWidget.valueChanged("", false)
             }
         }
 
@@ -58,18 +67,22 @@ Item {
          * multiple external resource (attachment) fields.
          * \param itemWidget editorWidget for a modified field to send valueChanged signal.
          * \param prefixToRelativePath depends on widget's config, see more qgsquickexternalwidget.qml
-         * \value depends on widget's config, see more in qgsquickexternalwidget.qml
+         * \param value depends on widget's config, see more in qgsquickexternalwidget.qml
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
           var newPath = __inputUtils.renameWithDateTime(prefixToRelativePath + "/" + value)
           if (newPath) {
-            externalResourceHandler.itemWidget = itemWidget
             var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
-            externalResourceHandler.itemWidget.image.currentValue = newCurrentValue
-            externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+            itemWidget.image.currentValue = newCurrentValue
+            itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
 
+        /**
+         * Called when an image is selected from a gallery. If the image doesn't exist in a folder
+         * set in widget's config, it is copied to the destination and value is set according a new copy.
+         * \param imagePath Absolute path to a selected image
+         */
         property var imageSelected: function imageSelected(imagePath) {
           // if prefixToRelativePath is empty (widget is using absolute path), then use targetDir
           var prefix = (externalResourceHandler.itemWidget.prefixToRelativePath) ?

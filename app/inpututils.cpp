@@ -11,7 +11,7 @@
 #include <QFileInfo>
 
 QString InputUtils::sLogFile = QStringLiteral();
-static const QString DATE_TIME_FORMAT = QStringLiteral( "yymmdd-hhmmss" );
+static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -280,7 +280,7 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
     QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );;
     QString newPath( info.absolutePath() + "/" + newFilename );
 
-    if ( QFile::rename( srcPath, newPath ) ) return newPath; else return QString();
+    if ( QFile::rename( srcPath, newPath ) ) return newPath;
   }
 
   return QString();
