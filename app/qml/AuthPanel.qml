@@ -14,6 +14,11 @@ Item {
     property alias merginLink: merginLink
     property alias loginName: loginName
     property alias password: password
+    /**
+    * Suppose to be true if auth request is pending. Then busy indicator is running and
+    * the loginButton is disabled.
+    */
+    property bool pending: false
     property string errorText: errorText
 
     property real fieldHeight: InputStyle.rowHeight
@@ -198,12 +203,14 @@ Item {
                 Button {
                     id: loginButton
                     visible: !warningMsgContainer.visible
+                    enabled: !root.pending
                     width: loginForm.width - 2* root.panelMargin
                     height: fieldHeight
                     text: qsTr("Sign in")
                     font.pixelSize: loginButton.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
+                        root.pending = true
                         __merginApi.authorize(loginName.text, password.text)
                     }
                     background: Rectangle {
