@@ -299,6 +299,13 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
 void MerginApi::authorize( const QString &login, const QString &password )
 {
+  if ( login.isEmpty() || password.isEmpty() )
+  {
+    emit authFailed();
+    emit notify( QStringLiteral( "Please enter your login details" ) );
+    return;
+  }
+
   mPassword = password;
 
   QNetworkRequest request;

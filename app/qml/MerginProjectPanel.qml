@@ -67,6 +67,7 @@ Item {
       authPanel.visible = true
     }
     onAuthChanged: {
+      authPanel.pending = false
       if (__merginApi.hasAuthData()) {
         authPanel.close()
         myProjectsBtn.activated()
@@ -74,6 +75,7 @@ Item {
         homeBtn.activated()
       }
     }
+    onAuthFailed: authPanel.pending = false
   }
 
   id: projectsPanel
@@ -105,6 +107,7 @@ Item {
     running: false
     visible: running
     anchors.centerIn: parent
+    z: authPanel.z + 1
   }
 
   PanelHeader {
@@ -597,6 +600,7 @@ Item {
     height: contentLayout.height + searchBar.height
     width: parent.width
     onAuthFailed: myProjectsBtn.activated()
+    onPendingChanged: busyIndicator.running = authPanel.pending
   }
 
   AccountPage {
