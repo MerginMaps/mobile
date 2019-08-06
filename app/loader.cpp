@@ -127,6 +127,7 @@ QString Loader::mapTipHtml( QgsQuickFeatureLayerPair pair )
 
 QString Loader::mapTipType( QgsQuickFeatureLayerPair pair )
 {
+  // Stripping extra CR char to unify Windows lines with Unix.
   QString mapTip = pair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
   if ( mapTip.startsWith( "# image\n" ) )
     return "image";
