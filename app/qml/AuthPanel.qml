@@ -56,19 +56,25 @@ Item {
     Rectangle {
       id: loginForm
       width: parent.width
-      height: loginForm.childrenRect.height
-      y: Math.min(Qt.inputMethod.keyboardRectangle.height ? (staticPane.height + toolbarHeight + panelMargin) - Qt.inputMethod.keyboardRectangle.height: 0, 0)
+      height: parent.height - staticPane.height
       color: root.bgColor
+      anchors.bottom: staticPane.top
+      anchors.bottomMargin: {
+        Math.max(Qt.inputMethod.keyboardRectangle.height ?
+                   Qt.inputMethod.keyboardRectangle.height - (staticPane.height + toolbarHeight + panelMargin):
+                   0, 0)
+      }
 
       Column {
         id: columnLayout
         spacing: root.panelMargin/2
         width: parent.width
+        anchors.bottom: parent.bottom
 
         Image {
           source: "mergin_color.svg"
-          width: loginForm.width/2
-          sourceSize.width: width
+          height: fieldHeight
+          sourceSize.height: height
           anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -302,12 +308,12 @@ Item {
     Rectangle {
       id: staticPane
       width: parent.width
-      height: parent.height - loginForm.height
+      height: childrenRect.height // parent.height - loginForm.height
       color: root.bgColor
       anchors.bottom: parent.bottom
 
       Column {
-        anchors.fill: parent
+        //anchors.fill: parent
         spacing: root.panelMargin/2
 
         Button {
