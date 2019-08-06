@@ -203,7 +203,7 @@ ApplicationWindow {
       }
 
       onIsRenderingChanged: {
-        loadingIndicator.toggle(isRendering)
+        loadingIndicator.visible = isRendering
       }
 
       onClicked: {
@@ -586,8 +586,9 @@ ApplicationWindow {
 
     LoadingIndicator {
         id: loadingIndicator
+        visible: false
         width: parent.width
-        height: 8 * QgsQuick.Utils.dp
+        height: 7 * QgsQuick.Utils.dp
         z: zPanel + 1000 // the most top
     }
 
