@@ -127,7 +127,7 @@ QString Loader::mapTipHtml( QgsQuickFeatureLayerPair pair )
 
 QString Loader::mapTipType( QgsQuickFeatureLayerPair pair )
 {
-  QString mapTip = pair.layer()->mapTipTemplate();
+  QString mapTip = pair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
   if ( mapTip.startsWith( "# image\n" ) )
     return "image";
   else if ( mapTip.startsWith( "# fields\n" ) || mapTip.isEmpty() )
