@@ -191,10 +191,8 @@ android {
         $${QGIS_LIB_DIR}/libzip.so \
         $${QGIS_LIB_DIR}/libspatialiteprovider.so \
         $${QGIS_LIB_DIR}/libdelimitedtextprovider.so \
-        $${QGIS_LIB_DIR}/libgdalprovider.so \
         $${QGIS_LIB_DIR}/libgpxprovider.so \
         $${QGIS_LIB_DIR}/libmssqlprovider.so \
-        $${QGIS_LIB_DIR}/libogrprovider.so \
         $${QGIS_LIB_DIR}/libowsprovider.so \
         $${QGIS_LIB_DIR}/libpostgresprovider.so \
         $${QGIS_LIB_DIR}/libspatialiteprovider.so \
