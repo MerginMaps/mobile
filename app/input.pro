@@ -158,10 +158,11 @@ QMAKE_CXXFLAGS += -std=c++11
 
 # files from this folder will be added to the package
 # (and will override any default files from Qt - template is in $QTDIR/src/android)
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+system($$PWD/../scripts/patch_manifest.bash $${ANDROID_VERSION_NAME} $${ANDROID_VERSION_CODE} $$PWD/android $$OUT_PWD/android_patched)
+ANDROID_PACKAGE_SOURCE_DIR = $$OUT_PWD/android_patched
 
 # this makes the manifest visible from Qt Creator
-DISTFILES += android/AndroidManifest.xml \
+DISTFILES += $$OUT_PWD/android_patched/AndroidManifest.xml \
     qml/MapThemePanel.qml \
     qml/Notification.qml
 
@@ -191,10 +192,8 @@ android {
         $${QGIS_LIB_DIR}/libzip.so \
         $${QGIS_LIB_DIR}/libspatialiteprovider.so \
         $${QGIS_LIB_DIR}/libdelimitedtextprovider.so \
-        $${QGIS_LIB_DIR}/libgdalprovider.so \
         $${QGIS_LIB_DIR}/libgpxprovider.so \
         $${QGIS_LIB_DIR}/libmssqlprovider.so \
-        $${QGIS_LIB_DIR}/libogrprovider.so \
         $${QGIS_LIB_DIR}/libowsprovider.so \
         $${QGIS_LIB_DIR}/libpostgresprovider.so \
         $${QGIS_LIB_DIR}/libspatialiteprovider.so \
@@ -208,7 +207,8 @@ android {
         $$QT_LIBS_DIR/libQt5Network.so \
         $$QT_LIBS_DIR/libQt5Sql.so \
         $$QT_LIBS_DIR/libQt5Svg.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras.so
+        $$QT_LIBS_DIR/libQt5AndroidExtras.so \
+
 
     ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
 }

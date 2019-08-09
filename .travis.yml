@@ -14,15 +14,20 @@ before_install:
 - pip3 install dropbox
 
 script:
-- export SDK_VERSION=release-2
-- export OSGEO4A_SDK=lutraconsulting/osgeo4a:${SDK_VERSION}
-- docker pull ${OSGEO4A_SDK}
-- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${OSGEO4A_SDK} /usr/src/input/scripts/docker-build.sh
+- export SDK_VERSION=qt-5.13.0-1
+- export INPUT_SDK=lutraconsulting/input-sdk:${SDK_VERSION}
+- docker pull ${INPUT_SDK}
+- docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${INPUT_SDK} /usr/src/input/scripts/docker-build.sh
 - "./scripts/upload-artifacts.sh"
 
 jobs:
   include:
   - stage: build
-    name: "Build ARMv7"
+    name: "Build armeabi-v7a"
     env:
     - ARCH=armv7
+  - stage: build
+    name: "Build arm64-v8a"
+    env:
+    - ARCH=arm64_v8a
+

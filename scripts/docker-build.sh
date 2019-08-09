@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is intended to be run within a lutraconsulting/osgeo4a docker container.
+# This is intended to be run within a lutraconsulting/input-sdk docker container.
 
 SOURCE_DIR=/usr/src/input
 if [[ -z ${BUILD_FOLDER+x} ]]; then
