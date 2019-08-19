@@ -99,8 +99,10 @@ QHash<int, QByteArray> ProjectModel::roleNames() const
   return roleNames;
 }
 
-QModelIndex ProjectModel::index( int row ) const
+QModelIndex ProjectModel::index( int row, int column, const QModelIndex &parent ) const
 {
+  Q_UNUSED( column );
+  Q_UNUSED( parent );
   return createIndex( row, 0, nullptr );
 }
 

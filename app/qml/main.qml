@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQml.Models 2.2
 import QtQuick.Dialogs 1.1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
@@ -305,7 +306,7 @@ ApplicationWindow {
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 
-    /** Position Kit and Marker */
+    // Position Kit and Marker
     QgsQuick.PositionKit {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
@@ -604,4 +605,5 @@ ApplicationWindow {
       visible: false
       z: zPanel + 1000 // the most top
     }
+
 }

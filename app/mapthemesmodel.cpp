@@ -78,8 +78,10 @@ QHash<int, QByteArray> MapThemesModel::roleNames() const
   return roleNames;
 }
 
-QModelIndex MapThemesModel::index( int row ) const
+QModelIndex MapThemesModel::index( int row, int column, const QModelIndex &parent ) const
 {
+  Q_UNUSED( column );
+  Q_UNUSED( parent );
   return createIndex( row, 0, nullptr );
 }
 

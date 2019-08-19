@@ -42,15 +42,15 @@ class LayersModel : public QAbstractListModel
     Q_ENUMS( Roles )
 
     explicit LayersModel( QgsProject *project, QObject *parent = nullptr );
-    ~LayersModel();
+    ~LayersModel() override;
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
     Q_INVOKABLE int noOfEditableLayers() const;
     Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
 
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     QHash<int, QByteArray> roleNames() const override;
 
