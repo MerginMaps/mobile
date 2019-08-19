@@ -6,9 +6,13 @@
 
 Mobile application based on QGIS's library QgsQuick.
 
+#iOS 
+
+see [ios notes](ios.md)
+
 # Development
 
-Tested: Linux, MacOs (Desktop only)
+Tested: Linux, MacOs (Desktop only), iOS
 In general you need `qgis_core` and `qgis_quick` libraries build for target platform.
 
 You need to copy and edit config.in with your paths!

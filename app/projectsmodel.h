@@ -52,7 +52,7 @@ class ProjectModel : public QAbstractListModel
     ~ProjectModel() override;
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE int rowAccordingPath( QString path ) const;
     Q_INVOKABLE void deleteProject( int row );
 

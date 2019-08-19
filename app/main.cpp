@@ -12,7 +12,9 @@
 #include <QDesktopWidget>
 #include <QQmlContext>
 #include <QQuickWindow>
+#ifdef INPUT_TEST
 #include <QTest>
+#endif
 #include <qqml.h>
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
@@ -27,22 +29,28 @@
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
 
+#ifdef INPUT_TEST
 #include "test/testmerginapi.h"
+#endif
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
 
 #ifndef NDEBUG
-//#include <QQmlDebuggingEnabler>
+// #include <QQmlDebuggingEnabler>
+#endif
+
+#ifdef MOBILE_OS
+#include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #endif
 
 #ifdef ANDROID
-#include <QFile>
-#include <QDir>
 #include <QtAndroidExtras>
 #endif
 
-#ifndef ANDROID
+#ifdef DESKTOP_OS
 #include <QCommandLineParser>
 #include <qgis.h>
 #endif
@@ -50,6 +58,10 @@
 #include "qgsapplication.h"
 #include "loader.h"
 #include "appsettings.h"
+
+#ifdef Q_OS_IOS
+#include "qgsquickplugin.h"
+#endif
 
 static QString getDataDir()
 {
@@ -77,6 +89,18 @@ static QString getDataDir()
     }
   }
 #endif
+
+#ifdef Q_OS_IOS
+  QString appLocation = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation ).value( 0 );
+
+  QDir myDir( appLocation );
+  if ( !myDir.exists() )
+  {
+    myDir.mkpath( appLocation );
+  }
+  dataPathRaw = appLocation + "/" + dataPathRaw;
+#endif
+
   ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
 #else
   qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
@@ -88,7 +112,7 @@ static QString getDataDir()
 
 static void setEnvironmentQgisPrefixPath()
 {
-#ifndef ANDROID
+#ifdef DESKTOP_OS
 #ifdef QGIS_PREFIX_PATH
   ::setenv( "QGIS_PREFIX_PATH", STR( QGIS_PREFIX_PATH ), true );
 #endif
@@ -99,7 +123,7 @@ static void setEnvironmentQgisPrefixPath()
   }
 #endif
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   QDir myDir( QDir::homePath() );
   myDir.cdUp();
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
@@ -112,17 +136,22 @@ static void setEnvironmentQgisPrefixPath()
 // Copies resources folder to package folder
 static void expand_pkg_data( const QString &pkgPath )
 {
-#ifdef ANDROID
+
+#if defined (ANDROID)
   QString assetsBasePath( "assets:" );
+  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
+#elif defined(Q_OS_IOS)
+  QString assetsBasePath( "Documents" );
   InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
   Q_UNUSED( pkgPath );
 #endif
+// on IOS the files are already in the bundle
 }
 
 static void copy_demo_projects( const QString &projectDir )
 {
-#ifdef ANDROID
+#ifdef MOBILE_OS
   QString assetsBasePath( "assets:" );
   qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
   InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
@@ -139,7 +168,7 @@ static void init_qgis( const QString &pkgPath )
   QgsApplication::init();
   QgsApplication::initQgis();
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
   QgsApplication::setPkgDataPath( pkgPath );
@@ -164,10 +193,12 @@ void initDeclarative()
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
 }
 
+#ifdef INPUT_TEST
 void initTestDeclarative()
 {
   qRegisterMetaType<MerginProjectList>( "MerginProjectList" );
 }
+#endif
 
 int main( int argc, char *argv[] )
 {
@@ -184,11 +215,13 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion( version );
 
+#ifdef INPUT_TEST
   bool IS_TEST = false;
   for ( int i = 0; i < argc; ++i )
   {
     if ( std::string( argv[i] ) == "--test" ) IS_TEST = true;
   }
+#endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
   // Require permissions before accessing data folder
@@ -199,6 +232,7 @@ int main( int argc, char *argv[] )
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
 
+#ifdef INPUT_TEST
   if ( IS_TEST )
   {
     // override the path where local projects are stored
@@ -210,6 +244,7 @@ int main( int argc, char *argv[] )
     QDir( testDataDir.path() + "/.." ).mkpath( "temp_projects" );
     projectDir = testProjectsDir.canonicalPath();
   }
+#endif
 
   InputUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
@@ -239,6 +274,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
 
+#ifdef INPUT_TEST
   if ( IS_TEST )
   {
     initTestDeclarative();
@@ -246,6 +282,7 @@ int main( int argc, char *argv[] )
     QTest::qExec( &test );
     return 0;
   }
+#endif
 
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
@@ -261,8 +298,21 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Lato" ) );
 
   copy_demo_projects( projectDir );
+
+#ifdef Q_OS_IOS
+  // REQUIRED FOR IOS  - to load QgsQuick C++ classes
+  QgsQuickPlugin plugin;
+  plugin.registerTypes( "QgsQuick" );
+#endif
+
   QQmlEngine engine;
+#ifdef MOBILE_OS
   engine.addImportPath( QgsApplication::qmlImportPath() );
+#endif
+#ifdef Q_OS_IOS
+  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
+  engine.addImportPath( "qrc:///" );
+#endif
   initDeclarative();
 
   // QGIS environment variables to set
@@ -281,10 +331,10 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 0 );
-  engine.rootContext()->setContextProperty( "__appwindowheight", 0 );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", QVariant( 0 ) );
+  engine.rootContext()->setContextProperty( "__appwindowheight", QVariant( 0 ) );
 #else
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed" );
   engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
@@ -293,7 +343,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__version", version );
 
   // Set simulated position for desktop builds
-#ifndef ANDROID
+#ifdef DESKTOP_OS
   bool use_simulated_position = true;
 #else
   bool use_simulated_position = false;
@@ -318,18 +368,26 @@ int main( int argc, char *argv[] )
     qDebug() << "****************************************";
   }
 
-  if ( object == 0 )
+  if ( object == nullptr )
   {
     qDebug() << "FATAL ERROR: unable to create main.qml";
     return EXIT_FAILURE;
   }
 
+
+#ifdef Q_OS_IOS
+  QString logoUrl = "qrc:logo.png";
+#else
+  QString logoUrl = ":/logo.png";
+#endif
   if ( QQuickWindow *quickWindow = qobject_cast<QQuickWindow *>( object ) )
   {
-    quickWindow->setIcon( QIcon( ":/logo.png" ) );
+    quickWindow->setIcon( QIcon( logoUrl ) );
   }
 
-#ifndef ANDROID
+
+
+#ifdef DESKTOP_OS
   QCommandLineParser parser;
   parser.addVersionOption();
   parser.process( app );

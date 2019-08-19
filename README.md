@@ -12,6 +12,8 @@ Click here to download the app on your Android device:
 
 For more information on how to use the app, see [Documentation](#documentation)
 
+iOS application -- soon too!
+
 ## Features
 
 Input features touch optimised GUI components based on Qt Quick (based on QGIS core library).  
