@@ -4,7 +4,18 @@ TARGET = Input
 include(config.pri)
 include(version.pri)
 
-# Mac specific includes/libraries paths
+# some defines to simplify C++ code
+ios {
+  DEFINES += MOBILE_OS
+}
+android {
+  DEFINES += MOBILE_OS
+}
+!android:!ios {
+  DEFINES += DESKTOP_OS
+}
+
+# Mac+iOS specific includes/libraries paths
 mac {
   QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/qml
   QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
@@ -28,12 +39,40 @@ mac {
           -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
 
   LIBS += -framework qgis_quick \
-          -framework qgis_native \
           -framework qgis_core
 }
 
+# MacOS only
+macx {
+  LIBS +=  -framework qgis_native
+}
+
+# ios specific includes/libraries paths
+ios {
+    QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+    QGIS_PROVIDER_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
+
+    CONFIG -= bitcode
+    CONFIG += static
+    DEFINES += QT_NO_SSL
+
+    QTPLUGIN += qsvg qsvgicon qtsensors_ios qios qtposition_cl qsqlite
+
+    LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
+    LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
+    LIBS += -lexpat -lgsl -lgslcblas -lcharset -lfreexl
+    LIBS += -ltiff -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
+    LIBS += -lzip -liconv -lbz2
+    LIBS += -lqgis_quick_plugin
+
+    RESOURCES += $$QGIS_QML_DIR/QgsQuick/qgsquick.qrc
+    QMAKE_RPATHDIR += @executable_path/../Frameworks
+
+    QMAKE_INFO_PLIST = ios/Info.plist
+}
+
 # Linux+Android specific includes/libraries paths
-!mac {
+!mac:!ios {
   QT_LIBS_DIR = $$dirname(QMAKE_QMAKE)/../lib
 
   !isEmpty(QGIS_INSTALL_PATH) {
@@ -95,121 +134,29 @@ CONFIG(debug, debug|release) {
   DEFINES += "QGIS_QUICK_EXPAND_TEST_DATA"
 }
 
-QT += qml quick xml concurrent positioning quickcontrols2
-QT += network svg printsupport sql
+QT += quick qml xml concurrent positioning quickcontrols2
+QT += network svg sql
 QT += opengl
 QT += testlib
+
+ios {
+  QT += core
+}
+!ios {
+  QT += printsupport
+}
 android {
-    QT += androidextras
+  QT += androidextras
 }
 
 # path to test data
 DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 
-
-SOURCES += \
-localprojectsmanager.cpp \
-main.cpp \
-merginprojectmetadata.cpp \
-projectsmodel.cpp \
-layersmodel.cpp \
-loader.cpp \
-digitizingcontroller.cpp \
-mapthemesmodel.cpp \
-appsettings.cpp \
-merginapi.cpp \
-merginapistatus.cpp \
-merginprojectmodel.cpp \
-androidutils.cpp \
-inpututils.cpp \
-test/testmerginapi.cpp
-
-HEADERS += \
-localprojectsmanager.h \
-merginprojectmetadata.h \
-projectsmodel.h \
-layersmodel.h \
-loader.h \
-digitizingcontroller.h \
-mapthemesmodel.h \
-appsettings.h \
-merginapi.h \
-merginapistatus.h \
-merginprojectmodel.h \
-androidutils.h \
-inpututils.h \
-test/testmerginapi.h
-
-RESOURCES += \
-    img/pics.qrc \
-    qml/qml.qrc \
-    fonts/fonts.qrc
-
-TRANSLATIONS +=
-
-#lupdate_only {
-#    SOURCES += qml/*.qml
-#}
+include(sources.pri)
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGIS_QML_DIR}
 
 QMAKE_CXXFLAGS += -std=c++11
 
-# files from this folder will be added to the package
-# (and will override any default files from Qt - template is in $QTDIR/src/android)
-system($$PWD/../scripts/patch_manifest.bash $${ANDROID_VERSION_NAME} $${ANDROID_VERSION_CODE} $$PWD/android $$OUT_PWD/android_patched)
-ANDROID_PACKAGE_SOURCE_DIR = $$OUT_PWD/android_patched
-
-# this makes the manifest visible from Qt Creator
-DISTFILES += $$OUT_PWD/android_patched/AndroidManifest.xml \
-    qml/MapThemePanel.qml \
-    qml/Notification.qml
-
-# packaging
-android {
-    ANDROID_EXTRA_LIBS += \
-        $${QGIS_LIB_DIR}/libcrypto.so \
-        $${QGIS_LIB_DIR}/libexpat.so \
-        $${QGIS_LIB_DIR}/libgeos.so \
-        $${QGIS_LIB_DIR}/libgeos_c.so \
-        $${QGIS_LIB_DIR}/libgslcblas.so \
-        $${QGIS_LIB_DIR}/libsqlite3.so \
-        $${QGIS_LIB_DIR}/libcharset.so \
-        $${QGIS_LIB_DIR}/libiconv.so \
-        $${QGIS_LIB_DIR}/libfreexl.so \
-        $${QGIS_LIB_DIR}/libtiff.so \
-        $${QGIS_LIB_DIR}/libgdal.so \
-        $${QGIS_LIB_DIR}/libproj.so \
-        $${QGIS_LIB_DIR}/libspatialindex.so \
-        $${QGIS_LIB_DIR}/libpq.so \
-        $${QGIS_LIB_DIR}/libspatialite.so \
-        $${QGIS_LIB_DIR}/libqca-qt5.so \
-        $${QGIS_LIB_DIR}/libqgis_core.so \
-        $${QGIS_LIB_DIR}/libqgis_quick.so \
-        $${QGIS_LIB_DIR}/libqgis_native.so \
-        $${QGIS_LIB_DIR}/libqt5keychain.so \
-        $${QGIS_LIB_DIR}/libzip.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider.so \
-        $${QGIS_LIB_DIR}/libdelimitedtextprovider.so \
-        $${QGIS_LIB_DIR}/libgpxprovider.so \
-        $${QGIS_LIB_DIR}/libmssqlprovider.so \
-        $${QGIS_LIB_DIR}/libowsprovider.so \
-        $${QGIS_LIB_DIR}/libpostgresprovider.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider.so \
-        $${QGIS_LIB_DIR}/libssl.so \
-        $${QGIS_LIB_DIR}/libwcsprovider.so \
-        $${QGIS_LIB_DIR}/libwfsprovider.so \
-        $${QGIS_LIB_DIR}/libwmsprovider.so \
-        $$QT_LIBS_DIR/libQt5OpenGL.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport.so \
-        $$QT_LIBS_DIR/libQt5Sensors.so \
-        $$QT_LIBS_DIR/libQt5Network.so \
-        $$QT_LIBS_DIR/libQt5Sql.so \
-        $$QT_LIBS_DIR/libQt5Svg.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras.so \
-
-
-    ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
-}
-
+include(android.pri)

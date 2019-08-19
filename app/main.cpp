@@ -33,16 +33,20 @@
 #include "qgsproject.h"
 
 #ifndef NDEBUG
-//#include <QQmlDebuggingEnabler>
+// #include <QQmlDebuggingEnabler>
+#endif
+
+#ifdef MOBILE_OS
+#include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #endif
 
 #ifdef ANDROID
-#include <QFile>
-#include <QDir>
 #include <QtAndroidExtras>
 #endif
 
-#ifndef ANDROID
+#ifdef DESKTOP_OS
 #include <QCommandLineParser>
 #include <qgis.h>
 #endif
@@ -50,6 +54,10 @@
 #include "qgsapplication.h"
 #include "loader.h"
 #include "appsettings.h"
+
+#ifdef Q_OS_IOS
+#include "qgsquickplugin.h"
+#endif
 
 static QString getDataDir()
 {
@@ -77,6 +85,17 @@ static QString getDataDir()
     }
   }
 #endif
+
+#ifdef Q_OS_IOS
+  QString appLocation = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation ).value(0);
+
+  QDir myDir(appLocation);
+  if (!myDir.exists()) {
+      myDir.mkpath(appLocation);
+  }
+  dataPathRaw = appLocation + "/" + dataPathRaw;
+#endif
+
   ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
 #else
   qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
@@ -88,7 +107,7 @@ static QString getDataDir()
 
 static void setEnvironmentQgisPrefixPath()
 {
-#ifndef ANDROID
+#ifdef DESKTOP_OS
 #ifdef QGIS_PREFIX_PATH
   ::setenv( "QGIS_PREFIX_PATH", STR( QGIS_PREFIX_PATH ), true );
 #endif
@@ -99,7 +118,7 @@ static void setEnvironmentQgisPrefixPath()
   }
 #endif
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   QDir myDir( QDir::homePath() );
   myDir.cdUp();
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
@@ -112,7 +131,7 @@ static void setEnvironmentQgisPrefixPath()
 // Copies resources folder to package folder
 static void expand_pkg_data( const QString &pkgPath )
 {
-#ifdef ANDROID
+#ifdef MOBILE_OS
   QString assetsBasePath( "assets:" );
   InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
@@ -122,7 +141,7 @@ static void expand_pkg_data( const QString &pkgPath )
 
 static void copy_demo_projects( const QString &projectDir )
 {
-#ifdef ANDROID
+#ifdef MOBILE_OS
   QString assetsBasePath( "assets:" );
   qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
   InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
@@ -139,7 +158,7 @@ static void init_qgis( const QString &pkgPath )
   QgsApplication::init();
   QgsApplication::initQgis();
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
   QgsApplication::setPkgDataPath( pkgPath );
@@ -261,8 +280,21 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Lato" ) );
 
   copy_demo_projects( projectDir );
+
+#ifdef Q_OS_IOS
+  // REQUIRED FOR IOS  - to load QgsQuick C++ classes
+  QgsQuickPlugin plugin;
+  plugin.registerTypes("QgsQuick");
+#endif
+
   QQmlEngine engine;
+#ifdef ANDROID
   engine.addImportPath( QgsApplication::qmlImportPath() );
+#endif
+#ifdef Q_OS_IOS
+  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
+  engine.addImportPath("qrc:///");
+#endif
   initDeclarative();
 
   // QGIS environment variables to set
@@ -281,7 +313,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
 
-#ifdef ANDROID
+#ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );
   engine.rootContext()->setContextProperty( "__appwindowwidth", 0 );
   engine.rootContext()->setContextProperty( "__appwindowheight", 0 );
@@ -293,7 +325,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__version", version );
 
   // Set simulated position for desktop builds
-#ifndef ANDROID
+#ifdef DESKTOP_OS
   bool use_simulated_position = true;
 #else
   bool use_simulated_position = false;
@@ -324,12 +356,20 @@ int main( int argc, char *argv[] )
     return EXIT_FAILURE;
   }
 
+
+#ifdef Q_OS_IOS
+  QString logoUrl = "qrc:logo.png";
+#else
+  QString logoUrl = ":/logo.png";
+#endif
   if ( QQuickWindow *quickWindow = qobject_cast<QQuickWindow *>( object ) )
   {
-    quickWindow->setIcon( QIcon( ":/logo.png" ) );
+    quickWindow->setIcon( QIcon( logoUrl ) );
   }
 
-#ifndef ANDROID
+
+
+#ifdef DESKTOP_OS
   QCommandLineParser parser;
   parser.addVersionOption();
   parser.process( app );

@@ -73,7 +73,6 @@ Item {
                     sourceSize.height: height
                     source: root.activeLayerIcon
                     fillMode: Image.PreserveAspectFit
-                    anchors.right: label.left
                 }
 
                 ColorOverlay {
