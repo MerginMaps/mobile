@@ -160,3 +160,4 @@ QML_IMPORT_PATH = $${QGIS_QML_DIR}
 QMAKE_CXXFLAGS += -std=c++11
 
 include(android.pri)
+include(ios.pri)

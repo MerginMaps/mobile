@@ -131,12 +131,17 @@ static void setEnvironmentQgisPrefixPath()
 // Copies resources folder to package folder
 static void expand_pkg_data( const QString &pkgPath )
 {
-#ifdef MOBILE_OS
+
+#if defined (ANDROID)
   QString assetsBasePath( "assets:" );
+  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
+#elif defined(Q_OS_IOS)
+  QString assetsBasePath( "Documents" );
   InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
   Q_UNUSED( pkgPath );
 #endif
+// on IOS the files are already in the bundle
 }
 
 static void copy_demo_projects( const QString &projectDir )

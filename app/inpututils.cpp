@@ -246,6 +246,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
   {
     QString srcItemPath = srcPath + "/" + info.fileName();
     QString dstItemPath = dstPath + "/" + info.fileName();
+    qDebug() << " Copy " << srcItemPath << " > " << dstItemPath;
     if ( info.isDir() )
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
