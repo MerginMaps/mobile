@@ -54,6 +54,14 @@ void Loader::setRecording( bool isRecordingOn )
 bool Loader::load( const QString &filePath )
 {
   qDebug() << "Loading " << filePath;
+  // Just clear project if empty
+  if ( filePath.isEmpty() )
+  {
+    mProject->clear();
+    emit projectReloaded();
+    return true;
+  }
+
   emit loadingStarted();
 
   // Give some time to other (GUI) processes before loading a project in the main thread
@@ -62,14 +70,6 @@ bool Loader::load( const QString &filePath )
   t.connect( &t, &QTimer::timeout, &loop, &QEventLoop::quit );
   t.start( 10 );
   loop.exec();
-
-  // Just clear project if empty
-  if ( filePath.isEmpty() )
-  {
-    mProject->clear();
-    emit projectReloaded();
-    return true;
-  }
 
   bool res = true;
   if ( mProject->fileName() != filePath )
