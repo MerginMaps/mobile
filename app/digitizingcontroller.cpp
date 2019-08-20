@@ -168,7 +168,7 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsP
   QgsGeometry geom( mapPoint );
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
-  QgsFeature feat = QgsVectorLayerUtils::createFeature(featureLayerPair().layer(), geom, attrs.toMap(), &context);
+  QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geom, attrs.toMap(), &context );
 
   return QgsQuickFeatureLayerPair( feat, featureLayerPair().layer() );
 }
@@ -245,11 +245,9 @@ QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
     geom = QgsGeometry( polygon );
   }
 
-  QgsFeature f;
-  f.setGeometry( geom );
-  f.setFields( featureLayerPair().layer()->fields() );
-  QgsAttributes attrs( f.fields().count() );
-  f.setAttributes( attrs );
+  QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
+  QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  QgsFeature f = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geom, attrs.toMap(), &context );
 
   return QgsQuickFeatureLayerPair( f, featureLayerPair().layer() );
 }
