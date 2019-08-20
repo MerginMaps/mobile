@@ -1,10 +1,11 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+
 
 Dialog {
     property string linkFieldText: __merginApi.apiRoot
@@ -16,10 +17,10 @@ Dialog {
     signal closing()
 
     id: merginLinkDialog
-    modality: Qt.WindowModal
+    modal: true
     title: "Set Mergin instance"
 
-    onApply: {
+    onAccepted: {
         __merginApi.apiRoot = linkField.text
         merginLinkDialog.close()
         closing()

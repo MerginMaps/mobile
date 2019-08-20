@@ -137,7 +137,7 @@ Item {
             fillMode: Image.PreserveAspectFit
         }
     }
-
+/*
     FileDialog {
         id: fileDialog
         title: qsTr( "Open Image" )
@@ -148,7 +148,7 @@ Item {
 
         onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
-
+*/
     MessageDialog {
         property string imagePath
 

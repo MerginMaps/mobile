@@ -562,7 +562,7 @@ ApplicationWindow {
             showMessage(message)
         }
     }
-/*
+
     FeaturePanel {
         id: featurePanel
         height: window.height
@@ -584,7 +584,7 @@ ApplicationWindow {
             stateManager.state = "edit"
         }
     }
-*/
+
     LoadingIndicator {
         id: loadingIndicator
         visible: false
