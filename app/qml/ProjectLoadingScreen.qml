@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.2
 
 Item {
 
@@ -23,10 +23,8 @@ Item {
     anchors.verticalCenterOffset: parent.height/6
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
-    font.italic: true
     font.pixelSize: InputStyle.fontPixelSizeNormal
     color: "white"
-    opacity: 0.75
   }
 
 }
