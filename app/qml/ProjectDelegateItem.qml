@@ -8,7 +8,7 @@ import "."  // import InputStyle singleton
 
 Rectangle {
     id: itemContainer
-    color: itemContainer.highlight ? itemContainer.secondaryColor : itemContainer.primaryColor
+    color: itemContainer.highlight ? InputStyle.fontColorBright : itemContainer.primaryColor
 
     property color primaryColor: InputStyle.clrPanelMain
     property color secondaryColor: InputStyle.fontColor

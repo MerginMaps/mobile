@@ -6,6 +6,7 @@
 #include "qgspolygon.h"
 
 #include "qgsquickutils.h"
+#include "qgsvectorlayerutils.h"
 
 DigitizingController::DigitizingController( QObject *parent )
   : QObject( parent )
@@ -165,13 +166,11 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsP
   QgsPoint *mapPoint = new QgsPoint( layerPoint );
   fixZ( mapPoint );
   QgsGeometry geom( mapPoint );
+  QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
+  QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geom, attrs.toMap(), &context );
 
-  QgsFeature f;
-  f.setGeometry( geom );
-  f.setFields( featureLayerPair().layer()->fields() );
-  QgsAttributes attrs( f.fields().count() );
-  f.setAttributes( attrs );
-  return QgsQuickFeatureLayerPair( f, featureLayerPair().layer() );
+  return QgsQuickFeatureLayerPair( feat, featureLayerPair().layer() );
 }
 
 void DigitizingController::startRecording()
@@ -246,11 +245,9 @@ QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
     geom = QgsGeometry( polygon );
   }
 
-  QgsFeature f;
-  f.setGeometry( geom );
-  f.setFields( featureLayerPair().layer()->fields() );
-  QgsAttributes attrs( f.fields().count() );
-  f.setAttributes( attrs );
+  QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
+  QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  QgsFeature f = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geom, attrs.toMap(), &context );
 
   return QgsQuickFeatureLayerPair( f, featureLayerPair().layer() );
 }
