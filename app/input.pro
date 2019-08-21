@@ -56,7 +56,8 @@ ios {
     CONFIG += static
     DEFINES += QT_NO_SSL
 
-    QTPLUGIN += qsvg qsvgicon qtsensors_ios qios qtposition_cl qsqlite
+    QT += multimedia sensors
+    QTPLUGIN += qsvg qsvgicon qtsensors_ios qios qtposition_cl qsqlite qavfcamera
 
     LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal

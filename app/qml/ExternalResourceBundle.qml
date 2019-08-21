@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
@@ -145,10 +145,11 @@ Item {
         nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
         width: window.width
         height: window.height
-
+        folder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
         onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
 */
+
     MessageDialog {
         property string imagePath
 
