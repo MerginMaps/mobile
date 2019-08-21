@@ -51,6 +51,7 @@ macx {
 ios {
     QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
     QGIS_PROVIDER_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
+    QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
 
     CONFIG -= bitcode
     CONFIG += static
