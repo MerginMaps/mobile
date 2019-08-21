@@ -87,11 +87,12 @@ static QString getDataDir()
 #endif
 
 #ifdef Q_OS_IOS
-  QString appLocation = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation ).value(0);
+  QString appLocation = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation ).value( 0 );
 
-  QDir myDir(appLocation);
-  if (!myDir.exists()) {
-      myDir.mkpath(appLocation);
+  QDir myDir( appLocation );
+  if ( !myDir.exists() )
+  {
+    myDir.mkpath( appLocation );
   }
   dataPathRaw = appLocation + "/" + dataPathRaw;
 #endif
@@ -289,7 +290,7 @@ int main( int argc, char *argv[] )
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS  - to load QgsQuick C++ classes
   QgsQuickPlugin plugin;
-  plugin.registerTypes("QgsQuick");
+  plugin.registerTypes( "QgsQuick" );
 #endif
 
   QQmlEngine engine;
@@ -298,7 +299,7 @@ int main( int argc, char *argv[] )
 #endif
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
-  engine.addImportPath("qrc:///");
+  engine.addImportPath( "qrc:///" );
 #endif
   initDeclarative();
 
