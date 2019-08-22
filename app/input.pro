@@ -55,6 +55,7 @@ ios {
     QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
     QGIS_PROVIDER_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
     QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
+    QGSQUICK_IMAGE_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Resources/images/QgsQuick
 
     CONFIG -= bitcode
     CONFIG += static
@@ -71,6 +72,8 @@ ios {
     LIBS += -lqgis_quick_plugin
 
     RESOURCES += $$QGIS_QML_DIR/QgsQuick/qgsquick.qrc
+    RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc
+
     QMAKE_RPATHDIR += @executable_path/../Frameworks
 
     QMAKE_INFO_PLIST = ios/Info.plist
