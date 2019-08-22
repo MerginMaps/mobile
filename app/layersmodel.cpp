@@ -121,7 +121,7 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
       QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
       if ( vectorLayer )
       {
-        return vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::NullGeometry;
+        return vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::Unknown;
       }
       return false;
     }
@@ -142,8 +142,10 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   return roleNames;
 }
 
-QModelIndex LayersModel::index( int row ) const
+QModelIndex LayersModel::index( int row, int column, const QModelIndex &parent ) const
 {
+  Q_UNUSED( column );
+  Q_UNUSED( parent );
   return createIndex( row, 0, nullptr );
 }
 

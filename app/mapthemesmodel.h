@@ -40,10 +40,10 @@ class MapThemesModel : public QAbstractListModel
     ~MapThemesModel();
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row ) const;
+    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE void applyTheme( const QString &name );
 
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     QHash<int, QByteArray> roleNames() const override;
 
