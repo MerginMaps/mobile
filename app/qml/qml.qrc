@@ -25,7 +25,6 @@
         <file>NumberSpin.qml</file>
         <file>ProjectDelegateItem.qml</file>
         <file>AuthPanel.qml</file>
-        <file>MerginSettingDialog.qml</file>
         <file>ExternalResourceBundle.qml</file>
         <file>RecordToolbar.qml</file>
         <file>RecordCrosshair.qml</file>

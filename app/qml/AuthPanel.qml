@@ -353,7 +353,7 @@ Item {
               width: iconContainerMergin.width
               height: iconContainerMergin.height
               onClicked: {
-                merginDialog.open()
+                merginLink.enabled = !merginLink.enabled
               }
             }
 
@@ -361,7 +361,7 @@ Item {
               id: iconLink
               anchors.fill: parent
               anchors.margins: parent.height * 0.25
-              source: 'edit.svg'
+              source: merginLink.enabled ? 'check.svg' : 'edit.svg'
               sourceSize.width: width
               sourceSize.height: height
               fillMode: Image.PreserveAspectFit
@@ -374,30 +374,27 @@ Item {
             }
           }
 
-          Label {
+          TextField {
             id: merginLink
             text: __merginApi.apiRoot
             height: fieldHeight/2
             color: root.fontColor
             verticalAlignment: Text.AlignVCenter
+            enabled: false
 
-            MouseArea {
-              width: parent.width
-              height: parent.height
-              onClicked: {
-                merginDialog.open()
+            background: Rectangle {
+              anchors.fill: parent
+              color: enabled ? InputStyle.panelBackgroundLight : root.bgColor
+            }
+
+            onEnabledChanged: {
+              if (!enabled && __merginApi.apiRoot !== merginLink.text) {
+                __merginApi.apiRoot = merginLink.text
               }
             }
           }
         }
       }
     }
-  }
-
-  MerginSettingDialog {
-    id: merginDialog
-    onClosing: root.forceActiveFocus()
-    height: __androidUtils.isAndroid ? 0 : fieldHeight * 4
-    width: __androidUtils.isAndroid ? 0 : window.width - 2 * merginDialog.panelMargin
   }
 }
