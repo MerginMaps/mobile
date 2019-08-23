@@ -135,6 +135,10 @@
 	<string>${IPHONEOS_DEPLOYMENT_TARGET}</string>
 	<key>NSLocationUsageDescription</key>
     <string>Program requires GPS to show you current position on map</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Program requires GPS to show you current position on map</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Program requires GPS to show you current position on map</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Program requires access to gallery to attach pictures to features on map</string>
     <key>NSPhotoLibraryAddUsageDescription</key>

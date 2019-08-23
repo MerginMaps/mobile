@@ -585,6 +585,13 @@ ApplicationWindow {
         }
     }
 
+    /*
+    CheckBox {
+        text: "aaaa"
+        display: CheckBox.TextOnly
+    }
+    */
+
     LoadingIndicator {
         id: loadingIndicator
         visible: false
