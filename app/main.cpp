@@ -166,7 +166,6 @@ static void init_qgis( const QString &pkgPath )
   t.start();
 
   QgsApplication::init();
-  QgsApplication::initQgis();
 
 #ifdef MOBILE_OS
   // QGIS plugins on Android are in the same path as other libraries
@@ -175,6 +174,8 @@ static void init_qgis( const QString &pkgPath )
 #else
   Q_UNUSED( pkgPath )
 #endif
+
+  QgsApplication::initQgis();
 
   // make sure the DB exists - otherwise custom projections will be failing
   if ( !QgsApplication::createDatabase() )
