@@ -307,9 +307,7 @@ int main( int argc, char *argv[] )
 #endif
 
   QQmlEngine engine;
-#ifdef MOBILE_OS
   engine.addImportPath( QgsApplication::qmlImportPath() );
-#endif
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
   engine.addImportPath( "qrc:///" );
