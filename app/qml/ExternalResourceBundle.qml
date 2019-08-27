@@ -137,7 +137,7 @@ Item {
             fillMode: Image.PreserveAspectFit
         }
     }
-/*
+
     FileDialog {
         id: fileDialog
         title: qsTr( "Open Image" )
@@ -148,7 +148,6 @@ Item {
         folder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
         onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
-*/
 
     MessageDialog {
         property string imagePath
