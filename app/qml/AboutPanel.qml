@@ -12,6 +12,7 @@ Item {
     property real fieldHeight: InputStyle.rowHeight
     property real panelMargin: fieldHeight/4
     property color fontColor: "white"
+    property color bgColor: InputStyle.fontColor
 
     function close() {
         visible = false
@@ -29,7 +30,19 @@ Item {
 
 
         background: Rectangle {
-            color: InputStyle.fontColor
+            color: root.bgColor
+        }
+
+        PanelHeader {
+          id: header
+          height: InputStyle.rowHeightHeader
+          width: parent.width
+          color: root.bgColor
+          rowHeight: InputStyle.rowHeightHeader
+          titleText: ""
+
+          onBack: root.close()
+          withBackButton: true
         }
 
         Item {
