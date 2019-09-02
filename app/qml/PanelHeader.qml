@@ -29,12 +29,10 @@ Rectangle {
             sourceSize.width: width
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit
-            anchors.bottomMargin: (header.rowHeight - height)/2
-            anchors.topMargin: (header.rowHeight - height)/2
-            anchors.bottom: parent.bottom
+            anchors.bottomMargin: (parent.height - height)/2
+            anchors.topMargin: anchors.bottomMargin
             anchors.left: parent.left
-            anchors.top: parent.top
-
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         ColorOverlay {
