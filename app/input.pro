@@ -70,6 +70,8 @@ ios {
     LIBS += -ltiff -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
     LIBS += -lzip -liconv -lbz2
     LIBS += -lqgis_quick_plugin
+    # static providers
+    LIBS += -lwmsprovider_a
 
     RESOURCES += $$QGIS_QML_DIR/QgsQuick/qgsquick.qrc
     RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc
