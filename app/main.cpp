@@ -91,14 +91,14 @@ static QString getDataDir()
 #endif
 
 #ifdef Q_OS_IOS
-  QString appLocation = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation ).value( 0 );
+  QString docsLocation = QStandardPaths::standardLocations( QStandardPaths::DocumentsLocation ).value( 0 );
 
-  QDir myDir( appLocation );
+  QDir myDir( docsLocation );
   if ( !myDir.exists() )
   {
-    myDir.mkpath( appLocation );
+    myDir.mkpath( docsLocation );
   }
-  dataPathRaw = appLocation + "/" + dataPathRaw;
+  dataPathRaw = docsLocation + "/" + dataPathRaw;
 #endif
 
   ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
@@ -139,9 +139,6 @@ static void expand_pkg_data( const QString &pkgPath )
 
 #if defined (ANDROID)
   QString assetsBasePath( "assets:" );
-  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
-#elif defined(Q_OS_IOS)
-  QString assetsBasePath( "Documents" );
   InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
 #else
   Q_UNUSED( pkgPath );
