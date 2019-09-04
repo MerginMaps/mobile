@@ -247,7 +247,14 @@ int main( int argc, char *argv[] )
   InputUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
 
-  init_qgis( dataDir + "/qgis-data" );
+  QString appBundleDir;
+#ifdef ANDROID
+    appBundleDir = dataDir;
+#endif
+#ifdef Q_OS_IOS
+    appBundleDir = QCoreApplication::applicationDirPath();
+#endif
+  init_qgis( QString( "%1/qgis-data").arg(appBundleDir) );
   expand_pkg_data( QgsApplication::pkgDataPath() );
 
   // Create Input classes
