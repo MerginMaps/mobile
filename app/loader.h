@@ -40,8 +40,6 @@ class Loader: public QObject
     bool isRecording() const { return mRecording; }
     void setRecording( bool isRecording );
 
-    QString loadingFile() const;
-
     Q_INVOKABLE bool load( const QString &filePath );
     Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
     Q_INVOKABLE QString featureTitle( QgsQuickFeatureLayerPair pair );
@@ -50,6 +48,8 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
 
+    //! A File on this path represents a project is loading and exists only during the process.
+    static const QString LOADING_FLAG_FILE_PATH;
   signals:
     void projectChanged();
     void projectReloaded();
@@ -70,8 +70,6 @@ class Loader: public QObject
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;
-    //! Exists only while loading project with non-empty path
-    QString mLoadingFile = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 };
 
 #endif // LOADER_H

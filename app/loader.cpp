@@ -21,6 +21,8 @@
 #endif
 #include <QDebug>
 
+const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
+
 Loader::Loader( QObject *parent )
   : QObject( parent )
 {
@@ -63,8 +65,9 @@ bool Loader::load( const QString &filePath )
   }
 
   emit loadingStarted();
-  QFile flagFile( loadingFile() );
+  QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
+  flagFile.close();
 
   // Give some time to other (GUI) processes before loading a project in the main thread
   QEventLoop loop;
@@ -215,9 +218,4 @@ QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer
   scopes << QgsExpressionContextUtils::projectScope( mProject );
   scopes << QgsExpressionContextUtils::layerScope( layer );
   return scopes;
-}
-
-QString Loader::loadingFile() const
-{
-  return mLoadingFile;
 }
