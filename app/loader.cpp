@@ -63,6 +63,8 @@ bool Loader::load( const QString &filePath )
   }
 
   emit loadingStarted();
+  QFile flagFile( loadingFile() );
+  flagFile.open( QIODevice::WriteOnly );
 
   // Give some time to other (GUI) processes before loading a project in the main thread
   QEventLoop loop;
@@ -78,6 +80,7 @@ bool Loader::load( const QString &filePath )
     emit projectReloaded();
   }
 
+  flagFile.remove();
   emit loadingFinished();
   return res;
 }
@@ -212,4 +215,9 @@ QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer
   scopes << QgsExpressionContextUtils::projectScope( mProject );
   scopes << QgsExpressionContextUtils::layerScope( layer );
   return scopes;
+}
+
+QString Loader::loadingFile() const
+{
+  return mLoadingFile;
 }
