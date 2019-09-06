@@ -21,6 +21,8 @@
 #endif
 #include <QDebug>
 
+const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
+
 Loader::Loader( QObject *parent )
   : QObject( parent )
 {
@@ -63,6 +65,9 @@ bool Loader::load( const QString &filePath )
   }
 
   emit loadingStarted();
+  QFile flagFile( LOADING_FLAG_FILE_PATH );
+  flagFile.open( QIODevice::WriteOnly );
+  flagFile.close();
 
   // Give some time to other (GUI) processes before loading a project in the main thread
   QEventLoop loop;
@@ -78,6 +83,7 @@ bool Loader::load( const QString &filePath )
     emit projectReloaded();
   }
 
+  flagFile.remove();
   emit loadingFinished();
   return res;
 }

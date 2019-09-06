@@ -48,6 +48,8 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
 
+    //! A File on this path represents a project is loading and exists only during the process.
+    static const QString LOADING_FLAG_FILE_PATH;
   signals:
     void projectChanged();
     void projectReloaded();

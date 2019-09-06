@@ -279,6 +279,15 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
 
+  QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
+  if ( projectLoadingFile.exists() )
+  {
+    // Cleaning default project due to a project loading has crashed during the last run.
+    as.setDefaultProject( QString() );
+    projectLoadingFile.remove();
+    InputUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
+  }
+
 #ifdef INPUT_TEST
   if ( IS_TEST )
   {
