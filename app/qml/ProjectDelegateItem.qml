@@ -87,7 +87,7 @@ Rectangle {
             Item {
                 id: textContainer
                 height: itemContainer.cellHeight
-                width: row.width - iconContainer.width - statusContainer.width - (2* row.spacing)
+                Layout.fillWidth: true
 
                 Text {
                     id: mainText
