@@ -12,6 +12,7 @@ merginapi.cpp \
 merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
+iosutils.cpp \
 inpututils.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ merginapi.h \
 merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
+iosutils.h \
 inpututils.h
 
 contains(DEFINES, INPUT_TEST) {

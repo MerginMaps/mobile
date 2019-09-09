@@ -61,7 +61,7 @@ ios {
     CONFIG += static
     DEFINES += QT_NO_SSL
 
-    QT += multimedia sensors
+    QT += multimedia multimediawidgets location sensors
     QTPLUGIN += qios
 
     LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/

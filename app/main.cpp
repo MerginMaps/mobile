@@ -20,6 +20,7 @@
 #include "qgsconfig.h"
 
 #include "androidutils.h"
+#include "iosutils.h"
 #include "inpututils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
@@ -259,6 +260,7 @@ int main( int argc, char *argv[] )
 
   // Create Input classes
   AndroidUtils au;
+  IosUtils iosUtils;
   InputUtils iu;
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
@@ -334,6 +336,7 @@ int main( int argc, char *argv[] )
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
+  engine.rootContext()->setContextProperty( "__iosUtils", &iosUtils );
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
@@ -396,8 +399,6 @@ int main( int argc, char *argv[] )
   {
     quickWindow->setIcon( QIcon( logoUrl ) );
   }
-
-
 
 #ifdef DESKTOP_OS
   QCommandLineParser parser;

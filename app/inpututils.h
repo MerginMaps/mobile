@@ -63,6 +63,11 @@ class InputUtils: public QObject
 
   private:
 
+    // on iOS the names from gallery pickers are like
+    // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
+    // we need to change it to something more readable
+    QString sanitizeName( const QString &path );
+
     static QString sLogFile;
 
     static void appendLog( const QByteArray &data, const QString &path );
