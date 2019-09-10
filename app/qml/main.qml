@@ -196,6 +196,20 @@ ApplicationWindow {
         __loader.recording = digitizing.recording
     }
 
+    // iOS workaround for displaying the native
+    // dialog asking for permissions for GPS services.
+    // Without this position source, the dialog immediately
+    // dissapears and user is not able to confirm
+    PositionSource {
+        id: iosGPSfix
+        updateInterval: 1000
+        active: __iosUtils.isIos
+        onPositionChanged: {
+            console.log("iOS workaround stop")
+            iosGPSfix.stop()
+        }
+    }
+
     QgsQuick.MapCanvas {
       id: mapCanvas
 
