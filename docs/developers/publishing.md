@@ -40,4 +40,7 @@ The publish process can take from several minutes to even sever hours (see publi
 
 Now it should appear in https://appstoreconnect.apple.com/ so you can publish it on appstore/testflight
 
+1. Release on TestFlight -> test on all devices
+2. If the tests are going well -> release on app store
+
 Note: Make sure you tag the repo and write down build number. also tag input-sdk
