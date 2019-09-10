@@ -6,8 +6,8 @@ ios {
     QMAKE_BUNDLE_DATA += crsFiles
 
     # app icon
-    appIcons.files = $$files($$PWD/ios/appicon/*.png)
-    QMAKE_BUNDLE_DATA += appIcons
+    QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
+    QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
 
     # launch screen
     app_launch_images.files = $$PWD/ios/launchscreen/Launch.xib $$files($$PWD/ios/launchscreen/*.png)

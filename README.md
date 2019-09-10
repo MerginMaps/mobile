@@ -40,7 +40,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 ## Developers
 
-For more information on building Input please have a look in [developer documentation](docs/developers/for_devs.md).
+For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
 
 ## Privacy policy
 Read more about the app privacy policy [here](privacy_policy.md)

@@ -1,4 +1,4 @@
-# Publishing
+# Publishing android
 
 ## Release build of apk (QT Creator)
 
@@ -27,4 +27,17 @@ The publish process can take from several minutes to even sever hours (see publi
 * Fill all info and add all necessary files to `Store listing` in `Store presence` section. Do not forget about privacy policy.
 * Fill form in `Pricing & distribution ` in `Store presence` section.
 
+# Publishin ios 
 
+## Release build of package (XCode)
+
+1. Click on project, modify version (e.g. 0.4.2) and build (incremental in case more builds for same version)
+2. Set generic ios device 
+3. Signing: Set Team: LUTRA CONSULING LIMITED
+4. Signing: Set Profile: LutraConsultingLtd.Input.AppStore
+5. Product->Archive
+6. Distribute app -> upload to AppStore
+
+Now it should appear in https://appstoreconnect.apple.com/ so you can publish it on appstore/testflight
+
+Note: Make sure you tag the repo and write down build number. also tag input-sdk

@@ -1,3 +1,5 @@
+looking for ios [publishing](./publishing.md)
+
 # development certificate
 
 - device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
@@ -9,6 +11,8 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
 - set in Qt Creator
 
 # application icon
+
+see: https://appbus.wordpress.com/2017/10/06/ios-11-and-xcode-9-in-qt-5-9-x-projects/
 
 NOTE: icon must be without transparency!
 
