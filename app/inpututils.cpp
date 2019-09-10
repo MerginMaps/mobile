@@ -9,6 +9,7 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
@@ -31,13 +32,40 @@ bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
     modSrcPath = modSrcPath.replace( "file://", "" );
   }
 
+  // https://github.com/lutraconsulting/input/issues/418
+  // does not work for iOS files with format
+  // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
+
   return QFile::copy( modSrcPath, dstPath );
 }
 
 QString InputUtils::getFileName( const QString &filePath )
 {
-  QFileInfo fileInfo( filePath );
+  QFileInfo fileInfo( sanitizeName( filePath ) );
   return fileInfo.fileName();
+}
+
+QString InputUtils::sanitizeName( const QString &path )
+{
+#ifdef Q_OS_IOS
+  QRegularExpression reAbs( "(.+)\\/asset\\.PNG%.Fid=(\\S+)&ext=" );
+  QRegularExpressionMatch matchAbs = reAbs.match( path );
+  if ( matchAbs.hasMatch() )
+  {
+    QString base = matchAbs.captured( 1 );
+    QString name = matchAbs.captured( 2 );
+    return base + "/" + name + ".png";
+  }
+
+  QRegularExpression reRel( "asset\\.PNG%.Fid=(\\S+)&ext=" );
+  QRegularExpressionMatch matchRel = reRel.match( path );
+  if ( matchRel.hasMatch() )
+  {
+    QString matched = matchRel.captured( 1 );
+    return matched + ".png";
+  }
+#endif
+  return path;
 }
 
 QString InputUtils::formatProjectName( const QString &fullProjectName )

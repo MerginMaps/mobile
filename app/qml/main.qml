@@ -1,6 +1,15 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+
+// Required for iOS to get rid of "module "QtMultimedia" is not installed".
+// It looks like static QT plugins are not copied to the distribution
+// bundle if they are only referenced from QgsQuick
+import QtMultimedia 5.8
 import QtQml.Models 2.2
+import QtPositioning 5.8
+import QtLocation 5.8
+
+
 import QtQuick.Dialogs 1.1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0

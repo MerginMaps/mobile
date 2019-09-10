@@ -29,6 +29,9 @@ Item {
             externalResourceHandler.itemWidget = itemWidget
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
+            } else if (__iosUtils.isIos) {
+                // https://github.com/lutraconsulting/input/issues/418
+                pickerNotImplementedInfo.visible = true
             } else {
                 fileDialog.open()
             }
@@ -91,8 +94,13 @@ Item {
 
           var filename = __inputUtils.getFileName(imagePath)
           var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(prefix, filename)
+
           if (!QgsQuick.Utils.fileExists(absolutePath)) {
-            __inputUtils.copyFile(imagePath, absolutePath)
+            var success = __inputUtils.copyFile(imagePath, absolutePath)
+            if (!success)
+            {
+                print("error: Unable to copy file " + imagePath + " to the project directory")
+            }
           }
 
           var newValue = externalResourceHandler.itemWidget.prefixToRelativePath ?
@@ -135,6 +143,14 @@ Item {
             visible: true
             autoTransform: true
             fillMode: Image.PreserveAspectFit
+
+            // on iOS automatic closePolicy does not work
+            MouseArea {
+              anchors.fill: parent
+              onClicked: {
+                previewImageWrapper.close()
+              }
+            }
         }
     }
 
@@ -169,6 +185,18 @@ Item {
             externalResourceHandler.itemWidget.valueChanged("", false)
             // visible = false called afterwards when onReject
         }
+        onRejected: {
+           visible = false
+        }
+    }
+
+    MessageDialog {
+        id: pickerNotImplementedInfo
+        visible: false
+        title: qsTr( "Not implemented" )
+        text: qsTr( "Picker from gallery on iOS is not supported yet." )
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Cancel
         onRejected: {
            visible = false
         }
