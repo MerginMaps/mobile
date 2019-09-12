@@ -39,6 +39,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 - [Moving data between desktop and mobile](docs/users/data_sync.md)
 - [Capturing data and editing forms using Input](docs/users/using_input.md)
 - [Input user interface](docs/users/input_ui.md)
+- [License](docs/users/licensing.md)
 
 ## Developers
 
