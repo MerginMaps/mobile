@@ -6,13 +6,15 @@
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
 ## Download
-Click here to download the app on your Android device:
+Click here to download the app on your mobile device:
 
-<a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170" /></a>
+<p>
+<a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='images/google-play-store-badge.png' height="57" /></a>
+<a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="170" /></a>
+</p>
+
 
 For more information on how to use the app, see [Documentation](#documentation)
-
-iOS application -- soon too!
 
 ## Features
 
