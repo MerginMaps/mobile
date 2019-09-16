@@ -178,6 +178,7 @@ Item {
         title: "Menu"
         x:parent.width - rootMenu.width
         y: -rootMenu.height
+        visible: menuBtn.visible
         property bool isOpen: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnPressOutside
