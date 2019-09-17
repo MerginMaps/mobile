@@ -158,17 +158,18 @@ Item {
             visible: !settingsItem.visible
 
             MainPanelButton {
-                id: menuBtn
-                width: mainPanel.itemSize
-                text: qsTr("More")
-                imageSource: "more_menu.svg"
-                onActivated: {
-                    if (rootMenu.isOpen) {
-                        rootMenu.close()
-                    } else {
-                        rootMenu.open()
-                    }
+              id: menuBtn
+              width: mainPanel.itemSize
+              text: qsTr("More")
+              imageSource: "more_menu.svg"
+              onActivated: {
+                if (rootMenu.isClosing) {
+                  rootMenu.isClosing = false
+                } else {
+                  rootMenu.open()
                 }
+
+              }
             }
         }
     }
@@ -179,12 +180,11 @@ Item {
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         visible: menuBtn.visible
-        property bool isOpen: false
+        property bool isClosing: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
-        closePolicy: Popup.CloseOnPressOutside
+        closePolicy: Popup.CloseOnReleaseOutside
 
-        onClosed: isOpen = false
-        onOpened: isOpen = true
+        onAboutToHide: isClosing = true
 
         MenuItem {
             width: parent.width
@@ -317,7 +317,7 @@ Item {
         height: rootMenu.height
         layer.enabled: true
         layer.effect: Shadow {}
-        visible: rootMenu.isOpen
+        visible: rootMenu.opened
     }
 
 
