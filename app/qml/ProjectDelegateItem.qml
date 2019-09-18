@@ -114,6 +114,7 @@ Rectangle {
                     color: itemContainer.highlight ? itemContainer.primaryColor : InputStyle.panelBackgroundDark
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignTop
+                    elide: Text.ElideRight
                 }
 
                 ProgressBar {
