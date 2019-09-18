@@ -179,7 +179,6 @@ Item {
         title: "Menu"
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        visible: menuBtn.visible
         property bool isClosing: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnReleaseOutside
@@ -216,12 +215,22 @@ Item {
                 width: parent.width
                 contentText: qsTr("GPS")
                 imageSource: __appSettings.autoCenterMapChecked ? "ic_gps_fixed_48px.svg" : "ic_gps_not_fixed_48px.svg"
+
+                RoundIndicator {
+                    width: parent.height/4
+                    height: width
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.margins : parent.height/8
+                    color: gpsIndicatorColor
+                }
             }
 
             onClicked: {
                 myLocationBtn.activated()
                 rootMenu.close()
             }
+            onPressAndHold: mainPanel.myLocationHold()
         }
 
         MenuItem {
@@ -265,7 +274,7 @@ Item {
             }
 
             onClicked: {
-                zoomToProjectBtn.activcated()
+                zoomToProjectBtn.activated()
                 rootMenu.close()
             }
         }
