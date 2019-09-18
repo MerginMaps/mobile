@@ -286,8 +286,13 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
     {
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
       {
-        qDebug() << "Cannot copy file " << srcItemPath << " > " << dstItemPath;
-        return false;
+        QFile::remove( dstItemPath );
+        if ( !QFile::copy( srcItemPath, dstItemPath ) )
+        {
+          qDebug() << "Cannot copy file " << srcItemPath << " > " << dstItemPath;
+          return false;
+        }
+
       }
       QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
     }
