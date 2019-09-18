@@ -553,7 +553,7 @@ Item {
         MainPanelButton {
           id: sharedProjectsBtn
           width: toolbar.itemSize
-          text: qsTr("Shared with me")
+          text: parent.width > sharedProjectsBtn.width * 2 ? qsTr("Shared with me") : qsTr("Shared")
           imageSource: "account-multi.svg"
           faded: toolbar.highlighted !== sharedProjectsBtn.text
 

@@ -54,6 +54,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             anchors.leftMargin: header.rowHeight/4
+            visible: (title.contentWidth + backButton.width * 2) > header.width ? false : true
         }
 
         MouseArea {
