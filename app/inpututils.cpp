@@ -262,6 +262,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
 {
+  bool result  = true;
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
@@ -278,25 +279,34 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
       {
-        qDebug() << "Cannot copy dir " << srcItemPath << " > " << dstItemPath;
-        return false;
+        log( QString( "Cannot copy a dir from %1 to %2" ).arg( srcItemPath ).arg( dstItemPath ) );
+        result = false;
       }
     }
     else if ( info.isFile() )
     {
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
       {
-        qDebug() << "Cannot copy file " << srcItemPath << " > " << dstItemPath;
-        return false;
+        if ( !QFile::remove( dstItemPath ) )
+        {
+          log( QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
+          result =  false;
+        }
+        else if ( !QFile::copy( srcItemPath, dstItemPath ) )
+        {
+          log( QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
+          result =  false;
+        }
+
       }
       QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
     }
     else
     {
-      qDebug() << "Unhandled item" << info.filePath() << "in cpDir";
+      log( QString( "Unhandled item %1 in cpDir" ).arg( info.filePath() ) );
     }
   }
-  return true;
+  return result;
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )
