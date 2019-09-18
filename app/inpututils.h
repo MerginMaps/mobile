@@ -55,10 +55,10 @@ class InputUtils: public QObject
 
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
-     * removes it and tries again (overwrite a file).
+     * removes it and tries again (overwrite a file). If failes again, skips the file, sets result to false and continue.
      * \param srcPath Source path
      * \param dstPath Destination path
-     * \result True if operation was successful otherwise false.
+     * \result True if operation was fully successful otherwise false.
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath );
 
