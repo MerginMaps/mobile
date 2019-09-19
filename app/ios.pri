@@ -10,6 +10,6 @@ ios {
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
 
     # launch screen
-    app_launch_images.files = $$PWD/ios/launchscreen/Launch.xib $$files($$PWD/ios/launchscreen/*.png)
+    app_launch_images.files = $$PWD/ios/launchscreen/LaunchScreen.xib $$files($$PWD/ios/launchscreen/*.png)
     QMAKE_BUNDLE_DATA += app_launch_images
 }
