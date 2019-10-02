@@ -31,7 +31,11 @@ Item {
         anchors.fill: parent
         height: mainPanel.itemSize
         property real itemWidth: mainPanel.height * 1.2
-        property int itemsToShow: Math.min((width / panelRow.itemWidth), children.length) - 1
+        property int minItemNumber: 4
+        property int itemsToShow: {
+          var possibleItems = Math.min((width / panelRow.itemWidth), children.length) - 1
+          return minItemNumber >= possibleItems ? minItemNumber : possibleItems
+        }
         property real calculatedItemWidth: itemsToShow ? parent.width/itemsToShow : parent.width
 
         Item {
