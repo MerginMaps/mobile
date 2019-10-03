@@ -25,7 +25,7 @@ Drawer {
     id: featurePanel
     visible: false
     modal: false
-    interactive: false
+    interactive: previewPanel.visible
     dragMargin: 0 // prevents opening the drawer by dragging.
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
