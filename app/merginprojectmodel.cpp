@@ -55,18 +55,6 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
     }
     case Pending: return QVariant( project->pending );
     case SyncProgress: return QVariant( project->progress );
-    case PassesFilter:
-    {
-      if ( mFilterCreator >= 0 )
-      {
-        return project->creator == mFilterCreator;
-      }
-      else if ( mFilterWriter >= 0 )
-      {
-        return project->creator != mFilterWriter && project->writers.contains( mFilterWriter );
-      }
-      return true;
-    }
   }
 
   return QVariant();
@@ -81,7 +69,6 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
-  roleNames[PassesFilter] = "passesFilter";
   roleNames[SyncProgress] = "syncProgress";
   return roleNames;
 }

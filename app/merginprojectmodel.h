@@ -47,7 +47,6 @@ class MerginProjectModel: public QAbstractListModel
       ProjectInfo,
       Status,
       Pending,
-      PassesFilter,
       SyncProgress
     };
     Q_ENUMS( Roles )

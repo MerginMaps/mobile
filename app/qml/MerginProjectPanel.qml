@@ -417,7 +417,7 @@ Item {
       cellHeight: projectsPanel.rowHeight
       iconSize: projectsPanel.iconSize
       width: cellWidth
-      height: passesFilter ? cellHeight : 0
+      height: cellHeight
       visible: height ? true : false
       statusIconSource: "trash.svg"
       itemMargin: projectsPanel.panelMargin
@@ -448,7 +448,7 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: passesFilter ? cellHeight : 0
+      height: cellHeight
       visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status, pendingProject)
@@ -542,7 +542,7 @@ Item {
             showMergin = true
             __merginProjectsModel.filterCreator = __merginApi.userId
             __merginProjectsModel.filterWriter = -1
-            __merginApi.listProjects(searchField.text)
+            __merginApi.listProjects(searchField.text, "created")
           }
         }
       }
@@ -563,7 +563,7 @@ Item {
             showMergin = true
             __merginProjectsModel.filterCreator = -1
             __merginProjectsModel.filterWriter = __merginApi.userId
-            __merginApi.listProjects(searchField.text)
+            __merginApi.listProjects(searchField.text, "shared")
           }
         }
       }
@@ -582,6 +582,7 @@ Item {
             toolbar.highlighted = exploreBtn.text
             busyIndicator.running = true
             showMergin = true
+            authPanel.visible = false
             __merginProjectsModel.filterCreator = -1
             __merginProjectsModel.filterWriter = -1
             __merginApi.listProjects(searchField.text)

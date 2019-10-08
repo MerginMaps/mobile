@@ -29,10 +29,12 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   loadAuthData();
 }
 
-void MerginApi::listProjects( const QString &searchExpression, const QString &user,
+void MerginApi::listProjects( const QString &searchExpression,
                               const QString &flag, const QString &filterTag )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+
+  bool authorize = !flag.isEmpty();
+  if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -50,11 +52,14 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &us
   }
   if ( !flag.isEmpty() )
   {
-    urlString += QStringLiteral( "&flag=%1&user=%2" ).arg( flag ).arg( user );
+    urlString += QStringLiteral( "&flag=%1" ).arg( flag );
   }
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+
+  // Even if the authorization is not required, it can be include to fetch more results
+  if ( hasAuthData() )
+    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( url.toString(), QStringLiteral( "STARTED" ) );
