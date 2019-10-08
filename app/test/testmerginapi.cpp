@@ -857,7 +857,7 @@ void TestMerginApi::testUploadWithUpdate()
 MerginProjectList TestMerginApi::getProjectList()
 {
   QSignalSpy spy( mApi,  &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString(), mUsername, QString(), QString() );
+  mApi->listProjects( QString(), mUsername, QString() );
   spy.wait( SHORT_REPLY );
 
   return mApi->projects();

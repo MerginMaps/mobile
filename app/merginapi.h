@@ -131,14 +131,14 @@ class MerginApi: public QObject
 
     /**
      * Sends non-blocking GET request to the server to listProjects. On listProjectsReplyFinished,
-     * when a response is received, parses projects json and sets mMerginProjects.
+     * when a response is received, parses projects json and sets mMerginProjects. The authorization is not required
+     * for "exploring" all public projects. However, it can be applied to fetch more results.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * \param searchExpression Search filter on projects name.
-     * \param user Mergin username used with flag
-     * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with given username
+     * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
      * \param withFilter If true, applies "input" tag in request.
      */
-    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(), const QString &user = QStringLiteral(),
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
 
     /**
