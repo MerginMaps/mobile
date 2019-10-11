@@ -11,7 +11,6 @@ Item {
 
   property int activeProjectIndex: -1
   property string activeProjectPath: __projectsModel.data(__projectsModel.index(activeProjectIndex), ProjectModel.Path)
-  property string merginSearchExpression: ""
   property var busyIndicator
 
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
@@ -56,7 +55,7 @@ Item {
         if (__merginApi.hasAuthData()) {
           authPanel.visible = false
           // filters should be set already
-          __merginApi.listProjects(searchField.text)
+          __merginApi.listProjects("", "created")
         }
       } else if (toolbar.highlighted !== homeBtn.text) {
         authPanel.visible = true
@@ -221,13 +220,12 @@ Item {
           if (toolbar.highlighted === homeBtn.text) {
             __projectsModel.searchExpression = searchField.text
           } else if (toolbar.highlighted === exploreBtn.text) {
+            // Filtered by request
             exploreBtn.activated()
           } else if (toolbar.highlighted === sharedProjectsBtn.text) {
-            sharedProjectsBtn.activated()
+            __merginProjectsModel.searchExpression = searchField.text
           } else if (toolbar.highlighted === myProjectsBtn.text) {
-            myProjectsBtn.activated()
-          }else {
-            merginSearchExpression = searchField.text
+            __merginProjectsModel.searchExpression = searchField.text
           }
         }
       }
@@ -417,7 +415,7 @@ Item {
       cellHeight: projectsPanel.rowHeight
       iconSize: projectsPanel.iconSize
       width: cellWidth
-      height: cellHeight
+      height: passesFilter ? cellHeight : 0
       visible: height ? true : false
       statusIconSource: "trash.svg"
       itemMargin: projectsPanel.panelMargin
@@ -448,7 +446,7 @@ Item {
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       width: cellWidth
-      height: cellHeight
+      height: passesFilter ? cellHeight : 0
       visible: height ? true : false
       pending: pendingProject
       statusIconSource: getStatusIcon(status, pendingProject)
@@ -540,9 +538,7 @@ Item {
             toolbar.highlighted = myProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginProjectsModel.filterCreator = __merginApi.userId
-            __merginProjectsModel.filterWriter = -1
-            __merginApi.listProjects(searchField.text, "created")
+            __merginApi.listProjects("", "created")
           }
         }
       }
@@ -561,9 +557,7 @@ Item {
             toolbar.highlighted = sharedProjectsBtn.text
             busyIndicator.running = true
             showMergin = true
-            __merginProjectsModel.filterCreator = -1
-            __merginProjectsModel.filterWriter = __merginApi.userId
-            __merginApi.listProjects(searchField.text, "shared")
+            __merginApi.listProjects("", "shared")
           }
         }
       }
@@ -583,8 +577,6 @@ Item {
             busyIndicator.running = true
             showMergin = true
             authPanel.visible = false
-            __merginProjectsModel.filterCreator = -1
-            __merginProjectsModel.filterWriter = -1
             __merginApi.listProjects(searchField.text)
           }
         }
