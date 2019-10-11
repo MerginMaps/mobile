@@ -54,6 +54,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       break;
     }
     case Pending: return QVariant( project->pending );
+    case PassesFilter: return mSearchExpression.isEmpty() || project->projectName.contains( mSearchExpression, Qt::CaseInsensitive )
+                                || project->projectNamespace.contains( mSearchExpression, Qt::CaseInsensitive );
     case SyncProgress: return QVariant( project->progress );
   }
 
@@ -69,6 +71,7 @@ QHash<int, QByteArray> MerginProjectModel::roleNames() const
   roleNames[ProjectInfo] = "projectInfo";
   roleNames[Status] = "status";
   roleNames[Pending] = "pendingProject";
+  roleNames[PassesFilter] = "passesFilter";
   roleNames[SyncProgress] = "syncProgress";
   return roleNames;
 }
@@ -121,6 +124,21 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
     row++;
   }
   return -1;
+}
+
+QString MerginProjectModel::searchExpression() const
+{
+  return mSearchExpression;
+}
+
+void MerginProjectModel::setSearchExpression( const QString &searchExpression )
+{
+  if ( searchExpression != mSearchExpression )
+  {
+    mSearchExpression = searchExpression;
+    // Hack to model changed signal
+    endResetModel();
+  }
 }
 
 void MerginProjectModel::syncProjectStatusChanged( const QString &projectFullName, qreal progress )
@@ -188,22 +206,3 @@ void MerginProjectModel::onLocalProjectRemoved( const QString &projectDir )
   Q_UNUSED( projectDir );
 }
 
-int MerginProjectModel::filterWriter() const
-{
-  return mFilterWriter;
-}
-
-void MerginProjectModel::setFilterWriter( int filterWriter )
-{
-  mFilterWriter = filterWriter;
-}
-
-int MerginProjectModel::filterCreator() const
-{
-  return mFilterCreator;
-}
-
-void MerginProjectModel::setFilterCreator( int filterCreator )
-{
-  mFilterCreator = filterCreator;
-}

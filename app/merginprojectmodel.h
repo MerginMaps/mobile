@@ -35,8 +35,7 @@ typedef QList<std::shared_ptr<MerginProject>> ProjectList;
 class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( int filterCreator READ filterCreator WRITE setFilterCreator )
-    Q_PROPERTY( int filterWriter READ filterWriter WRITE setFilterWriter )
+    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
 
   public:
     enum Roles
@@ -47,6 +46,7 @@ class MerginProjectModel: public QAbstractListModel
       ProjectInfo,
       Status,
       Pending,
+      PassesFilter,
       SyncProgress
     };
     Q_ENUMS( Roles )
@@ -69,6 +69,9 @@ class MerginProjectModel: public QAbstractListModel
     int filterWriter() const;
     void setFilterWriter( int filterWriter );
 
+    QString searchExpression() const;
+    void setSearchExpression( const QString &searchExpression );
+
   public slots:
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
 
@@ -84,8 +87,7 @@ class MerginProjectModel: public QAbstractListModel
 
     ProjectList mMerginProjects;
     LocalProjectsManager &mLocalProjects;
-    int mFilterCreator;
-    int mFilterWriter;
+    QString mSearchExpression;
 
 };
 #endif // MERGINPROJECTMODEL_H
