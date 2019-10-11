@@ -76,7 +76,6 @@ Item {
           var newPath = __inputUtils.renameWithDateTime(prefixToRelativePath + "/" + value)
           if (newPath) {
             var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
-            itemWidget.image.currentValue = newCurrentValue
             itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
@@ -106,8 +105,6 @@ Item {
           var newValue = externalResourceHandler.itemWidget.prefixToRelativePath ?
                 QgsQuick.Utils.getRelativePath(absolutePath, externalResourceHandler.itemWidget.prefixToRelativePath) :
                 absolutePath
-
-          externalResourceHandler.itemWidget.image.currentValue = newValue
           externalResourceHandler.itemWidget.valueChanged(newValue, false)
         }
 
@@ -176,12 +173,10 @@ Item {
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
-            externalResourceHandler.itemWidget.image.currentValue = ""
             externalResourceHandler.itemWidget.valueChanged("", false)
             visible = false
         }
         onNo: {
-            externalResourceHandler.itemWidget.image.currentValue = ""
             externalResourceHandler.itemWidget.valueChanged("", false)
             // visible = false called afterwards when onReject
         }
