@@ -34,6 +34,16 @@ Item {
     return "more_menu.svg"
   }
 
+  function refreshProjectList() {
+    if (toolbar.highlighted === exploreBtn.text) {
+      exploreBtn.activated()
+    } else if (toolbar.highlighted === sharedProjectsBtn.text) {
+      sharedProjectsBtn.activated()
+    } else if (toolbar.highlighted === myProjectsBtn.text) {
+      myProjectsBtn.activated()
+    } else homeBtn.activated()
+  }
+
   Component.onCompleted: {
     // load model just after all components are prepared
     // otherwise GridView's delegate item is initialized invalidately
@@ -54,8 +64,7 @@ Item {
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
         if (__merginApi.hasAuthData()) {
           authPanel.visible = false
-          // filters should be set already
-          __merginApi.listProjects("", "created")
+          refreshProjectList()
         }
       } else if (toolbar.highlighted !== homeBtn.text) {
         authPanel.visible = true
@@ -69,7 +78,7 @@ Item {
       authPanel.pending = false
       if (__merginApi.hasAuthData()) {
         authPanel.close()
-        myProjectsBtn.activated()
+        refreshProjectList()
       } else {
         homeBtn.activated()
       }
