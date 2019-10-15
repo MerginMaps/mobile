@@ -11,6 +11,9 @@
 #include <QtMath>
 
 #include "inpututils.h"
+#include "geodiffutils.h"
+
+#include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
@@ -27,6 +30,8 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
 
   loadAuthData();
+
+  GEODIFF_init();
 }
 
 void MerginApi::listProjects( const QString &searchExpression,
@@ -108,7 +113,13 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
 
   QString chunkID = file.chunks.at( chunkNo );
 
-  QFile f( transaction.projectDir + "/" + file.path );
+  QString filePath;
+  if ( file.diffName.isEmpty() )
+    filePath = transaction.projectDir + "/" + file.path;
+  else  // use diff file instead of full file
+    filePath = transaction.projectDir + "/.mergin/" + file.diffName;
+
+  QFile f( filePath );
   QByteArray data;
 
   if ( f.open( QIODevice::ReadOnly ) )
@@ -692,6 +703,14 @@ LocalProjectInfo MerginApi::getLocalProject( const QString &projectFullName )
   return mLocalProjects.projectFromMerginName( projectFullName );
 }
 
+ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
+{
+  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
+  QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
+
+  return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir );
+}
+
 QString MerginApi::findUniqueProjectDirectoryName( QString path )
 {
   QDir projectDir( path );
@@ -1223,7 +1242,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
 
   transaction.projectMetadata = data;
   transaction.version = serverProject.version;
-  transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles );
+  transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
   InputUtils::log( "update", transaction.diff.dump() );
 
   QList<MerginFile> filesToDownload;
@@ -1332,13 +1351,14 @@ void MerginApi::uploadInfoReplyFinished()
 
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, serverProject.version );
 
-    transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles );
+    transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
     InputUtils::log( url, transaction.diff.dump() );
 
     // TODO: make sure there are no remote files to add/update/remove nor conflicts
 
     QList<MerginFile> filesToUpload;
     QList<MerginFile> addedMerginFiles, updatedMerginFiles, deletedMerginFiles;
+    QList<MerginFile> diffFiles;
     for ( QString filePath : transaction.diff.localAdded )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
@@ -1349,6 +1369,36 @@ void MerginApi::uploadInfoReplyFinished()
     {
       MerginFile merginFile = findFile( filePath, localFiles );
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
+
+      if ( MerginApi::isFileDiffable( filePath ) )
+      {
+        // try to create a diff
+        QString diffPath, basePath;
+        int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, filePath, diffPath, basePath );
+        if ( geodiffRes == GEODIFF_SUCCESS )
+        {
+          InputUtils::log( url, "Using geodiff on " + filePath );
+
+          QByteArray checksumDiff = getChecksum( diffPath );
+          QByteArray checksumBase = getChecksum( basePath );
+
+          merginFile.diffName = QFileInfo( diffPath ).fileName();
+          merginFile.diffChecksum = QString::fromLatin1( checksumDiff.data(), checksumDiff.size() );
+          merginFile.diffSize = QFileInfo( diffPath ).size();
+          merginFile.chunks = generateChunkIdsForSize( merginFile.diffSize );
+          merginFile.diffBaseChecksum = QString::fromLatin1( checksumBase.data(), checksumBase.size() );
+
+          diffFiles.append( merginFile );
+
+          InputUtils::log( url, QString( "Diff: total size %2 bytes" ).arg( merginFile.diffSize ) );
+        }
+        else
+        {
+          // TODO: remove the diff file (if exists)
+          InputUtils::log( url, QString( "Geodiff create changeset on %1 failed with error %2 (will do full upload)" ).arg( filePath ).arg( geodiffRes ) );
+        }
+      }
+
       updatedMerginFiles.append( merginFile );
     }
     for ( QString filePath : transaction.diff.localDeleted )
@@ -1375,11 +1425,15 @@ void MerginApi::uploadInfoReplyFinished()
     qint64 totalSize = 0;
     for ( MerginFile file : filesToUpload )
     {
-      totalSize += file.size;
+      if ( !file.diffName.isEmpty() )
+        totalSize += file.diffSize;
+      else
+        totalSize += file.size;
     }
 
     transaction.totalSize = totalSize;
     transaction.files = filesToUpload;
+    transaction.diffFiles = diffFiles;
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
@@ -1423,6 +1477,32 @@ void MerginApi::uploadFinishReplyFinished()
 
     transaction.projectMetadata = data;
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
+
+    // clean up diff-related files
+    for ( const MerginFile &merginFile : qgis::as_const( transaction.diffFiles ) )
+    {
+      QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
+
+      // update basefile (unmodified file that should be equivalent to the server)
+      QString basePath = transaction.projectDir + "/.mergin/" + merginFile.path;
+      QString basePatchedPath = basePath + "-patched";
+      int res = GEODIFF_applyChangeset( basePath.toUtf8(), basePatchedPath.toUtf8(), diffPath.toUtf8() );
+      if ( res == GEODIFF_SUCCESS )
+      {
+        if ( !QFile::remove( basePath ) )
+          InputUtils::log( projectFullName, "Failed to remove old base file: " + basePath );
+        if ( !QFile::rename( basePatchedPath, basePath ) )
+          InputUtils::log( projectFullName, "Failed to rename patched base file: " + basePatchedPath + " to " + basePath );
+      }
+      else
+      {
+        InputUtils::log( projectFullName, QString( "Failed to apply changeset %1 to basefile %2 - error %3" ).arg( diffPath ).arg( basePath ).arg( res ) );
+      }
+
+      // remove temporary diff files
+      if ( !QFile::remove( diffPath ) )
+        InputUtils::log( projectFullName, "Failed to remove diff: " + diffPath );
+    }
 
     finishProjectSync( projectFullName, true );
   }
@@ -1489,7 +1569,7 @@ void MerginApi::getUserInfoFinished()
 }
 
 
-ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles )
+ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir )
 {
   ProjectDiff diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
@@ -1551,7 +1631,15 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
         if ( chkNew != chkLocal )
         {
           // L-U
-          diff.localUpdated << filePath;
+          if ( isFileDiffable( filePath ) )
+          {
+            // we need to do a diff here to figure out whether the file is actually changed or not
+            // because the real content may be the same although the checksums do not match
+            if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
+                diff.localUpdated << filePath;
+          }
+          else
+            diff.localUpdated << filePath;
         }
         else
         {
@@ -1703,9 +1791,24 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
     QJsonObject fileObject;
     fileObject.insert( "path", file.path );
 
-    fileObject.insert( "checksum", file.checksum );
     fileObject.insert( "size", file.size );
     fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+
+    if (!file.diffName.isEmpty())
+    {
+      // doing diff-based upload
+      QJsonObject diffObject;
+      diffObject.insert( "path", file.diffName );
+      diffObject.insert( "checksum", file.diffChecksum );
+      diffObject.insert( "size", file.diffSize );
+
+      fileObject.insert( "diff", diffObject );
+      fileObject.insert( "checksum", file.diffBaseChecksum );
+    }
+    else
+    {
+      fileObject.insert( "checksum", file.checksum );
+    }
 
     QJsonArray chunksJson;
     for ( QString id : file.chunks )
@@ -1756,6 +1859,10 @@ void MerginApi::copyTempFilesToProject( const QString &projectDir, const QString
 {
   QString tempProjectDir = getTempProjectDir( projectFullName );
   InputUtils::cpDir( tempProjectDir, projectDir );
+
+  // copy diffable files (e.g. gpkg) we have downloaded to the .mergin directory, so we can use them as base files
+  InputUtils::cpDir( tempProjectDir, projectDir + "/.mergin", true );
+
   QDir( tempProjectDir ).removeRecursively();
 }
 

@@ -7,6 +7,7 @@
 
 #include "testmerginapi.h"
 #include "inpututils.h"
+#include "geodiffutils.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 
@@ -91,6 +92,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
+  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpload" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -851,6 +853,39 @@ void TestMerginApi::testUploadWithUpdate()
   QCOMPARE( readFileContent( filenameRemote ), QByteArray( "new remote content" ) );
 }
 
+void TestMerginApi::testDiffUpload()
+{
+  QString projectName = "testDiffUpload";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  // replace gpkg with a new version with a modified geometry
+  QFile::remove(projectDir + "/base.gpkg");
+  QFile::copy(mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg");
+
+  ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
+  ProjectDiff expectedDiff;
+  expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
+  QCOMPARE( diff, expectedDiff );
+
+  GeodiffUtils::ChangesetSummary expectedSummary;
+  expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
+  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
+  QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
+  GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
+  QCOMPARE( summary, expectedSummary );
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+}
 
 //////// HELPER FUNCTIONS ////////
 

@@ -13,6 +13,15 @@ struct MerginFile
   QDateTime mtime;
   QStringList chunks; // used only for upload otherwise suppose to be empty
 
+  //
+  // these are members only used for upload of changed file through a geo-diff
+  //
+
+  QString diffName;          //!< if non-empty, we are uploading diff for this file and this is filename (relative to project's .mergin dir)
+  QString diffChecksum;      //!< checksum for the diff file
+  QString diffBaseChecksum;  //!< checksum of the base file
+  qint64 diffSize;           //!< size (in bytes) of the diff file
+
   static MerginFile fromJsonObject( const QJsonObject &merginFileInfo );
 };
 

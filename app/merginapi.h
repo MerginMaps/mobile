@@ -38,6 +38,20 @@ struct ProjectDiff
 
   // TODO: non-conflicting changes? R-A/L-A, R-U/L-U, R-D/L-D
 
+  bool operator==( const ProjectDiff &other ) const
+  {
+    return localAdded == other.localAdded &&
+        localUpdated == other.localUpdated &&
+        localDeleted == other.localDeleted &&
+        remoteAdded == other.remoteAdded &&
+        remoteUpdated == other.remoteUpdated &&
+        remoteDeleted == other.remoteDeleted &&
+        conflictRemoteUpdatedLocalUpdated == other.conflictRemoteUpdatedLocalUpdated &&
+        conflictRemoteAddedLocalAdded == other.conflictRemoteAddedLocalAdded &&
+        conflictRemoteDeletedLocalUpdated == other.conflictRemoteDeletedLocalUpdated &&
+        conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
+  }
+
   QString dump() const
   {
     QStringList lines;
@@ -77,6 +91,8 @@ struct TransactionStatus
   QPointer<QNetworkReply> replyUploadFinish;
 
   QList<MerginFile> files; // either to upload or download
+
+  QList<MerginFile> diffFiles;  //!< these are just diff files for upload - we don't remove them when uploading chunks (needed for finalization)
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
@@ -204,6 +220,13 @@ class MerginApi: public QObject
 
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
 
+    static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
+
+    //! Get a list of all files that can be used with geodiff
+    QStringList projectDiffableFiles( const QString &projectFullName );
+
+    static ProjectDiff localProjectChanges( const QString &projectDir );
+
     /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
@@ -240,12 +263,12 @@ class MerginApi: public QObject
      *
      * Without the three sources it is possible to miss some of the updates that need to be handled (e.g. conflicts)
      */
-    static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles );
+    static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir );
 
     //! Returns the most recent list of projects fetched from the server
     MerginProjectList projects();
 
-    QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
+    static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
     QString username() const;
 
@@ -365,7 +388,7 @@ class MerginApi: public QObject
     void takeFirstAndDownload( const QString &projectFullName, const QString &version );
 
     static QByteArray getChecksum( const QString &filePath );
-    QSet<QString> listFiles( const QString &projectPath );
+    static QSet<QString> listFiles( const QString &projectPath );
 
     void loadAuthData();
     bool validateAuthAndContinute();

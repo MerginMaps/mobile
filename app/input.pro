@@ -130,7 +130,7 @@ ios {
   }
 
   exists($${QGIS_LIB_DIR}/libqgis_core.so) {
-	message("Building from QGIS: $${QGIS_INSTALL_PATH}") 
+    message("Building from QGIS: $${QGIS_SRC_DIR} and $${QGIS_BUILD_DIR}")
   } else {
 	error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
   }
@@ -138,6 +138,10 @@ ios {
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
   LIBS += -L$${QGIS_LIB_DIR}
   LIBS += -lqgis_core -lqgis_quick
+
+  # geodiff support
+  LIBS += -L$${GEODIFF_BUILD_DIR} -lgeodiff
+  INCLUDEPATH += $${GEODIFF_SRC_DIR}/geodiff/src
 }
 
 # WIN 32 builds
@@ -172,6 +176,8 @@ win32 {
   DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 }
 
+DEFINES += "CORE_EXPORT="
+DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 
 CONFIG(debug, debug|release) {
@@ -207,3 +213,9 @@ win32 {
 
 include(android.pri)
 include(ios.pri)
+
+HEADERS += \
+  geodiffutils.h
+
+SOURCES += \
+  geodiffutils.cpp

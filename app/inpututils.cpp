@@ -260,7 +260,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
   return resultList.join( ", " );
 }
 
-bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
+bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
 {
   bool result  = true;
   QDir parentDstDir( QFileInfo( dstPath ).path() );
@@ -285,6 +285,9 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath )
     }
     else if ( info.isFile() )
     {
+      if ( onlyDiffable && !MerginApi::isFileDiffable( info.fileName() ) )
+        continue;
+
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
       {
         if ( !QFile::remove( dstItemPath ) )

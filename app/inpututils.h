@@ -60,7 +60,7 @@ class InputUtils: public QObject
      * \param dstPath Destination path
      * \result True if operation was fully successful otherwise false.
      */
-    static bool cpDir( const QString &srcPath, const QString &dstPath );
+    static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
     static void log( const QString &msg, const QString &info = QStringLiteral() );
 
