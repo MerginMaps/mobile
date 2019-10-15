@@ -153,6 +153,7 @@ void ProjectModel::setSearchExpression( const QString &searchExpression )
   {
     mSearchExpression = searchExpression;
     // Hack to model changed signal
+    beginResetModel();
     endResetModel();
   }
 }
