@@ -22,6 +22,13 @@ struct MerginFile
   QString diffBaseChecksum;  //!< checksum of the base file
   qint64 diffSize;           //!< size (in bytes) of the diff file
 
+  //
+  // these are members only user for update of changed file through geodiff
+  // (could be multiple diffs that need to be applied sequentially)
+  //
+
+  QList< QPair<QString, int> > diffFilesToFetch;   //!< list of files that will need to be fetched and their sizes
+
   static MerginFile fromJsonObject( const QJsonObject &merginFileInfo );
 };
 

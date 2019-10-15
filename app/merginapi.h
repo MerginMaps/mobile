@@ -94,6 +94,8 @@ struct TransactionStatus
 
   QList<MerginFile> diffFiles;  //!< these are just diff files for upload - we don't remove them when uploading chunks (needed for finalization)
 
+  QMap<QString, QStringList> diffUpdates;  //!< map where key = path to basefile, value = ordered list of diff files to apply
+
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
@@ -416,7 +418,11 @@ class MerginApi: public QObject
     * \param QString path
     */
     QString findUniqueProjectDirectoryName( QString path );
-    QNetworkReply *getProjectInfo( const QString &projectFullName );
+    /** Creates a request to get project details (list of project files).
+     * If the sinceVersion is not a negative number, it will also request history of diffable
+     * files since this version (the history contains references diff files)
+     */
+    QNetworkReply *getProjectInfo( const QString &projectFullName, int sinceVersion = -1 );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     QString createUniqueProjectDirectory( const QString &projectName );
