@@ -32,13 +32,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   loadAuthData();
 
   GEODIFF_init();
-
-  int r = GEODIFF_createRebasedChangeset(
-            "/home/martin/tmp/geodiff-bug/base.gpkg",
-            "/home/martin/tmp/geodiff-bug/modified.gpkg",
-            "/home/martin/tmp/geodiff-bug/base2theirs.bin",
-            "/home/martin/tmp/geodiff-bug/rebased.bin" );
-  Q_ASSERT( r == GEODIFF_SUCCESS );
 }
 
 void MerginApi::listProjects( const QString &searchExpression,
