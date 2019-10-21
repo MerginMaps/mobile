@@ -7,37 +7,37 @@
 
 class GeodiffUtils
 {
-public:
+  public:
 
-  struct TableSummary
-  {
-    TableSummary(int ins = 0, int upd = 0, int del = 0)
-      : inserts(ins), updates(upd), deletes(del) {}
-
-    bool operator==( const TableSummary &other ) const
+    struct TableSummary
     {
-      return inserts == other.inserts && updates == other.updates && deletes == other.deletes;
-    }
+      TableSummary( int ins = 0, int upd = 0, int del = 0 )
+        : inserts( ins ), updates( upd ), deletes( del ) {}
 
-    int inserts;
-    int updates;
-    int deletes;
-  };
+      bool operator==( const TableSummary &other ) const
+      {
+        return inserts == other.inserts && updates == other.updates && deletes == other.deletes;
+      }
 
-  typedef QMap<QString, TableSummary> ChangesetSummary;
+      int inserts;
+      int updates;
+      int deletes;
+    };
 
-  //! Test whether the file has changed according to geodiff compared to the original server version
-  static bool hasPendingChanges( const QString &projectDir, const QString &filePath );
+    typedef QMap<QString, TableSummary> ChangesetSummary;
 
-  //! Take JSON changeset summary string and parse it
-  static ChangesetSummary parseChangesetSummary( const QString &json );
+    //! Test whether the file has changed according to geodiff compared to the original server version
+    static bool hasPendingChanges( const QString &projectDir, const QString &filePath );
 
-  //! Returns JSON with local pending changes o a diffable file
-  static QString diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary );
+    //! Take JSON changeset summary string and parse it
+    static ChangesetSummary parseChangesetSummary( const QString &json );
 
-  //! run geodiff on a local project's file, compare it to locally cached original and create a diff file
-  //! (diff file path returned in the argument, returns geodiff return value - zero on success)
-  static int createChangeset(const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath);
+    //! Returns JSON with local pending changes o a diffable file
+    static QString diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary );
+
+    //! run geodiff on a local project's file, compare it to locally cached original and create a diff file
+    //! (diff file path returned in the argument, returns geodiff return value - zero on success)
+    static int createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath );
 
 };
 

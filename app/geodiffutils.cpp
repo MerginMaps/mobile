@@ -9,7 +9,7 @@
 #include <geodiff.h>
 
 
-QString GeodiffUtils::diffableFilePendingChanges(const QString &projectDir, const QString &filePath, bool onlySummary)
+QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary )
 {
   QString diffPath, basePath;
   int res = createChangeset( projectDir, filePath, diffPath, basePath );
@@ -27,8 +27,8 @@ QString GeodiffUtils::diffableFilePendingChanges(const QString &projectDir, cons
 
     if ( resList == GEODIFF_SUCCESS )
     {
-      QFile fJson(jsonPath);
-      fJson.open(QIODevice::ReadOnly);
+      QFile fJson( jsonPath );
+      fJson.open( QIODevice::ReadOnly );
       QString json = QString::fromUtf8( fJson.readAll() );
       fJson.close();
       QFile::remove( jsonPath );  // we don't need the temporary json file anymore
@@ -40,9 +40,9 @@ QString GeodiffUtils::diffableFilePendingChanges(const QString &projectDir, cons
 }
 
 
-int GeodiffUtils::createChangeset(const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath)
+int GeodiffUtils::createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath )
 {
-  QString uuid = QUuid::createUuid().toString().remove('{').remove('}');  // TODO: ugly
+  QString uuid = QUuid::createUuid().toString().remove( '{' ).remove( '}' ); // TODO: ugly
   QString diffName = filePath + "-diff-" + uuid;
   QString modifiedPath = projectDir + "/" + filePath;
   basePath = projectDir + "/.mergin/" + filePath;

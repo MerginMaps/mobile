@@ -41,15 +41,15 @@ struct ProjectDiff
   bool operator==( const ProjectDiff &other ) const
   {
     return localAdded == other.localAdded &&
-        localUpdated == other.localUpdated &&
-        localDeleted == other.localDeleted &&
-        remoteAdded == other.remoteAdded &&
-        remoteUpdated == other.remoteUpdated &&
-        remoteDeleted == other.remoteDeleted &&
-        conflictRemoteUpdatedLocalUpdated == other.conflictRemoteUpdatedLocalUpdated &&
-        conflictRemoteAddedLocalAdded == other.conflictRemoteAddedLocalAdded &&
-        conflictRemoteDeletedLocalUpdated == other.conflictRemoteDeletedLocalUpdated &&
-        conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
+           localUpdated == other.localUpdated &&
+           localDeleted == other.localDeleted &&
+           remoteAdded == other.remoteAdded &&
+           remoteUpdated == other.remoteUpdated &&
+           remoteDeleted == other.remoteDeleted &&
+           conflictRemoteUpdatedLocalUpdated == other.conflictRemoteUpdatedLocalUpdated &&
+           conflictRemoteAddedLocalAdded == other.conflictRemoteAddedLocalAdded &&
+           conflictRemoteDeletedLocalUpdated == other.conflictRemoteDeletedLocalUpdated &&
+           conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
   }
 
   QString dump() const
