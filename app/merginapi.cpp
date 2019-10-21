@@ -32,6 +32,13 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   loadAuthData();
 
   GEODIFF_init();
+
+  int r = GEODIFF_createRebasedChangeset(
+            "/home/martin/tmp/geodiff-bug/base.gpkg",
+            "/home/martin/tmp/geodiff-bug/modified.gpkg",
+            "/home/martin/tmp/geodiff-bug/base2theirs.bin",
+            "/home/martin/tmp/geodiff-bug/rebased.bin" );
+  Q_ASSERT( r == GEODIFF_SUCCESS );
 }
 
 void MerginApi::listProjects( const QString &searchExpression,
@@ -948,8 +955,9 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
 
   QString projectDir = transaction.projectDir;
 
-  // rebase locally modified files that have been also updated on the server
-  // TODO: this is all untested
+  // update diffable files that have been modified on the server
+  // - if they were not modified locally, the server changes will be simply applied
+  // - if they were modified locally, local changes will be rebased on top of server changes
   for ( QString filePath : transaction.diffUpdates.keys() )
   {
     QString temp_dir = getTempProjectDir( projectFullName );
@@ -958,26 +966,30 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
     QString dest = projectDir + "/" + filePath;
     QString basefile = projectDir + "/.mergin/" + filePath;
 
-    QString server_diff = temp_dir + "/" + filePath + "-server_diff";  // single origin diff from 'diffs' for use in rebase
-    QString rebased_diff = temp_dir + "/" + filePath + "-rebased";
-    QString patchedfile = temp_dir + "/" + filePath + "-patched";  // patched server version with local changes
-    QString changeset = temp_dir + "/" + filePath + "-local_diff";  // final changeset to be potentially committed
+    int res = GEODIFF_rebase( basefile.toUtf8().constData(), src.toUtf8().constData(), dest.toUtf8().constData() );
+    if ( res == GEODIFF_SUCCESS )
+    {
+      InputUtils::log( projectFullName, "geodiff rebase successful: " + filePath );
+    }
+    else
+    {
+      InputUtils::log( projectFullName, "geodiff rebase failed! " + filePath );
 
-    // step 1: create concatenated diff between the base file and the server file
-    int res1 = GEODIFF_createChangeset( basefile.toUtf8().constData(), src.toUtf8().constData(), server_diff.toUtf8().constData() );
+      // not good... something went wrong in rebase - we need to save the local changes
+      // let's put them into a conflict file and use the server version
+      if ( !QFile::rename( dest, dest + "_conflict" ) )
+      {
+        InputUtils::log( projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
+      }
+      if ( !QFile::copy( src, dest ) )
+      {
+        InputUtils::log( projectFullName, "failed to update local conflicting file after failed geodiff rebase: " + filePath );
+      }
+    }
 
-    // step 2: rebase the locally modified file
-    int res2 = GEODIFF_createRebasedChangeset( basefile.toUtf8().constData(), dest.toUtf8().constData(),
-                                               server_diff.toUtf8().constData(), rebased_diff.toUtf8().constData() );
-
-    // step 3: apply the rebased changeset
-    int res3 = GEODIFF_applyChangeset( src.toUtf8().constData(), patchedfile.toUtf8().constData(), rebased_diff.toUtf8().constData() );
-
-    qDebug() << "GEODIFF RES" << res1 << res2 << res3;
-
-    // TODO: this is probably dangerous (copying of gpkg files that may be open)
-    QFile::copy( src, basefile );
-    QFile::copy( patchedfile, dest );
+    // update our local basefile from the server version
+    QFile::remove( basefile );
+    QFile::rename( src, basefile );
   }
 
   // rename local conflicting files that were updated when also the server got updated
@@ -1301,7 +1313,9 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
 
   for ( QString filePath : transaction.diff.remoteUpdated )
   {
-    // TODO: for diffable files - download diffs and apply to the basefile  (use MerginFile::diffFilesToFetch)
+    // for diffable files - download and apply to the basefile (without rebase)
+    // TODO: download diffs instead of full download of gpkg file from server
+    transaction.diffUpdates[filePath] = QStringList();
 
     MerginFile file = serverProject.fileInfo( filePath );
     file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
@@ -1312,7 +1326,8 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
   for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
   {
-    // use diffFileToFetch here as well
+    // for diffable files - download and apply to the basefile (will also do rebase)
+    // TODO: download diffs instead of full download of gpkg file from server
     transaction.diffUpdates[filePath] = QStringList();
 
     MerginFile file = serverProject.fileInfo( filePath );
@@ -1537,14 +1552,10 @@ void MerginApi::uploadFinishReplyFinished()
 
       // update basefile (unmodified file that should be equivalent to the server)
       QString basePath = transaction.projectDir + "/.mergin/" + merginFile.path;
-      QString basePatchedPath = basePath + "-patched";
-      int res = GEODIFF_applyChangeset( basePath.toUtf8(), basePatchedPath.toUtf8(), diffPath.toUtf8() );
+      int res = GEODIFF_applyChangeset( basePath.toUtf8(), diffPath.toUtf8() );
       if ( res == GEODIFF_SUCCESS )
       {
-        if ( !QFile::remove( basePath ) )
-          InputUtils::log( projectFullName, "Failed to remove old base file: " + basePath );
-        if ( !QFile::rename( basePatchedPath, basePath ) )
-          InputUtils::log( projectFullName, "Failed to rename patched base file: " + basePatchedPath + " to " + basePath );
+        InputUtils::log( projectFullName, QString( "Applied %1 to base file of %2" ).arg( merginFile.diffName, merginFile.path ) );
       }
       else
       {
@@ -1688,7 +1699,7 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
             // we need to do a diff here to figure out whether the file is actually changed or not
             // because the real content may be the same although the checksums do not match
             if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
-                diff.localUpdated << filePath;
+              diff.localUpdated << filePath;
           }
           else
             diff.localUpdated << filePath;
@@ -1703,7 +1714,17 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
         if ( chkNew != chkLocal && chkOld != chkLocal )
         {
           // C/R-U/L-U
-          diff.conflictRemoteUpdatedLocalUpdated << filePath;
+          if ( isFileDiffable( filePath ) )
+          {
+            // we need to do a diff here to figure out whether the file is actually changed or not
+            // because the real content may be the same although the checksums do not match
+            if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
+              diff.conflictRemoteUpdatedLocalUpdated << filePath;
+            else
+              diff.remoteUpdated << filePath;
+          }
+          else
+            diff.conflictRemoteUpdatedLocalUpdated << filePath;
         }
         else if ( chkNew != chkLocal )  // && old == local
         {
@@ -1846,7 +1867,7 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
     fileObject.insert( "size", file.size );
     fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
 
-    if (!file.diffName.isEmpty())
+    if ( !file.diffName.isEmpty() )
     {
       // doing diff-based upload
       QJsonObject diffObject;

@@ -43,6 +43,9 @@ class TestMerginApi: public QObject
     void testConflictRemoteAddLocalAdd();
     void testUploadWithUpdate();
     void testDiffUpload();
+    void testDiffUpdateBasic();
+    void testDiffUpdateWithRebase();
+    void testDiffUpdateWithRebaseFailed();
 
   private:
     int SHORT_REPLY = 1000;

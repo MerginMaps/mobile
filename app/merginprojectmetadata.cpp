@@ -23,17 +23,17 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
       versions << key.mid( 1 ).toInt();
     qSort( versions );
     // remove the first version (which we already have)
-    Q_ASSERT( versions.count() > 1 );
+    Q_ASSERT( versions.count() > 0 );
     versions.removeAt( 0 );
     qDebug() << "HISTORY";
     for ( int key : versions )
     {
-      QJsonObject obj = history.value( QString("v%1").arg(key) ).toObject();
+      QJsonObject obj = history.value( QString( "v%1" ).arg( key ) ).toObject();
       QJsonObject diffObj = obj["diff"].toObject();
       QString diffFile = diffObj["path"].toString();
       int fileSize = diffObj["size"].toInt();
       qDebug() << key << diffFile;
-      merginFile.diffFilesToFetch << qMakePair(diffFile, fileSize);
+      merginFile.diffFilesToFetch << qMakePair( diffFile, fileSize );
     }
   }
 

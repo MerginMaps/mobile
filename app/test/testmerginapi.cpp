@@ -93,6 +93,8 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpload" );
+  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateBasic" );
+  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebase" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -867,8 +869,8 @@ void TestMerginApi::testDiffUpload()
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
 
   // replace gpkg with a new version with a modified geometry
-  QFile::remove(projectDir + "/base.gpkg");
-  QFile::copy(mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg");
+  QFile::remove( projectDir + "/base.gpkg" );
+  QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg" );
 
   ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
   ProjectDiff expectedDiff;
@@ -885,6 +887,134 @@ void TestMerginApi::testDiffUpload()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+}
+
+void TestMerginApi::testDiffUpdateBasic()
+{
+  // test case where there is no local change in a gpkg, it is only modified on the server
+  // and the local file should get the new stuff from server
+
+  QString projectName = "testDiffUpdateBasic";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl0->isValid() );
+  QCOMPARE( vl0->featureCount(), 3 );
+  delete vl0;
+
+  //
+  // download with mApiExtra + modify + upload
+  //
+
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // update our local version now
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  //
+  // check the result
+  //
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), 4 );
+  delete vl;
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+}
+
+void TestMerginApi::testDiffUpdateWithRebase()
+{
+  // a test case where there is a local change in a gpkg that is also modified on the server
+  // and the local change will get rebased on top of the server's change
+
+  QString projectName = "testDiffUpdateWithRebase";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  //
+  // download with mApiExtra + modify + upload
+  //
+
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  //
+  // do a local update of the file
+  //
+
+  QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl0->isValid() );
+  QCOMPARE( vl0->featureCount(), 3 );
+  vl0->startEditing();
+  QgsFeature f( vl0->fields() );
+  f.setAttribute( "name", "def" );
+  f.setAttribute( "rating", 456 );
+  f.setGeometry( QgsGeometry::fromPointXY( QgsPointXY( 4, 5 ) ) );
+  vl0->addFeature( f );
+  vl0->commitChanges();
+  QCOMPARE( vl0->featureCount(), 4 );
+  delete vl0;
+
+  // check that the file is marked as changed
+  ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
+  ProjectDiff expectedDiff;
+  expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
+  QCOMPARE( diff, expectedDiff );
+
+  // check that geodiff knows there was one added feature
+  GeodiffUtils::ChangesetSummary expectedSummary;
+  expectedSummary["simple"] = GeodiffUtils::TableSummary( 1, 0, 0 );
+  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
+  QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
+  GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
+  QCOMPARE( summary, expectedSummary );
+
+  // update our local version now
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  //
+  // check the result
+  //
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), 5 );
+  delete vl;
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+}
+
+void TestMerginApi::testDiffUpdateWithRebaseFailed()
+{
+  // TODO: a test case where the local change is something that geodiff does not support
+  // and thus cannot rebase the changes (should create a conflict file instead)
 }
 
 //////// HELPER FUNCTIONS ////////
