@@ -4,4 +4,5 @@
 app/config.pri
 *.idea
 test/temp_projects/
+test/temp_extra_projects/
 input.pro.user*
