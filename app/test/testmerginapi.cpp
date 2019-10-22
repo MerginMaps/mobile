@@ -1006,9 +1006,9 @@ void TestMerginApi::testDiffUpdateWithRebase()
   QCOMPARE( vl->featureCount(), 5 );
   delete vl;
 
-  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-
-  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+  // like before the update - there should be locally modified base.gpkg with the changes we did
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiff );
+  QCOMPARE( GeodiffUtils::parseChangesetSummary( changes ), expectedSummary );
 }
 
 void TestMerginApi::testDiffUpdateWithRebaseFailed()

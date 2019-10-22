@@ -988,6 +988,9 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   // rename local conflicting files that were updated when also the server got updated
   for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
   {
+    if ( transaction.diffUpdates.contains( filePath ) )
+      continue;  // already addressed in the section above with geodiff
+
     InputUtils::log( projectFullName, "conflicting remote update/local update: " + filePath );
     QString origPath = projectDir + "/" + filePath;
     if ( !QFile::rename( origPath, origPath + "_conflict" ) )
