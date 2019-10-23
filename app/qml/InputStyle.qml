@@ -53,6 +53,8 @@ QtObject {
     property var cameraIcon: "qrc:/add_photo.svg"
     property var removeIcon: "qrc:/trash.svg"
     property var galleryIcon: "qrc:/gallery.svg"
+    property var backIcon: "qrc:/back.svg"
+
 
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
