@@ -39,6 +39,8 @@ class GeodiffUtils
     //! (diff file path returned in the argument, returns geodiff return value - zero on success)
     static int createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath );
 
+    //! Takes "src" file and applies a sequence of changesets for the list in "diffFiles"
+    static bool applyDiffs( const QString &src, const QStringList &diffFiles );
 };
 
 #endif // GEODIFFUTILS_H

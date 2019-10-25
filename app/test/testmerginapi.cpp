@@ -96,6 +96,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateBasic" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebase" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebaseFailed" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithDiffs" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -1045,7 +1046,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   // do a local update of the file
   //
 
-  bool r2 = QFile::remove( projectDir+ "/base.gpkg" );
+  bool r2 = QFile::remove( projectDir + "/base.gpkg" );
   bool r3 = QFile::copy( mTestDataPath + "/added_column.gpkg", projectDir + "/base.gpkg" );
   QVERIFY( r2 && r3 );
 
@@ -1074,6 +1075,54 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   ProjectDiff expectedDiffFinal;
   expectedDiffFinal.localAdded = QSet<QString>() << "base.gpkg_conflict";
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiffFinal );
+}
+
+void TestMerginApi::testUpdateWithDiffs()
+{
+  // a test case where we download initial version (v1), then there will be
+  // two versions with diffs (v2 and v3), afterwards we try to update the local project.
+
+  QString projectName = "testUpdateWithDiffs";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+  //
+  // download with mApiExtra + modify + upload
+  //
+
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // one more change + upload
+  bool r2 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r3 = QFile::copy( mTestDataPath + "/added_row_2.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r2 && r3 );
+  writeFileContent( projectDirExtra + "/dummy.txt", "first" );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  //
+  // now update project locally
+  //
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), 5 );
+  delete vl;
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
+  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
 
 //////// HELPER FUNCTIONS ////////

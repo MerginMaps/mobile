@@ -7,6 +7,7 @@
 #include <memory>
 #include <QFile>
 #include <QFileInfo>
+#include <QUuid>
 
 #include "merginapistatus.h"
 #include "merginprojectmetadata.h"
@@ -74,6 +75,51 @@ struct ProjectDiff
 };
 
 
+/**
+ * A unit of download that should be downloaded during project update (pull).
+ * This is either a chunk of a full file or it is a single diff between two versions.
+ */
+struct DownloadQueueItem
+{
+  DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false )
+    : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
+  {
+    tempFileName = QUuid::createUuid().toString( QUuid::WithoutBraces );
+  }
+
+  QString filePath;          //!< path within the project
+  int size;                  //!< size of the item in bytes
+  int version = -1;          //!< what version to download  (for ordinary files it will be the target version, for diffs it can be different version)
+  int rangeFrom = -1;        //!< what range of bytes to download (-1 if downloading the whole file)
+  int rangeTo = -1;          //!< what range of bytes to download (-1 if downloading the whole file)
+  bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
+  QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
+};
+
+
+/**
+ * Entry for each file that will be updated. At the end of a successful download of new data,
+ * all the tasks are executed.
+ */
+struct UpdateTask
+{
+  enum Method
+  {
+    Copy,           //!< simply write a new version of the file
+    CopyConflict,   //!< like Copy, but also create a conflict file of the locally modified file
+    ApplyDiff,      //!< apply diffs
+    Delete,         //!< remove files that have been removed from the server
+  };
+
+  UpdateTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
+    : method( m ), filePath( fp ), data( d ) {}
+
+  Method method;                  //!< what to do with the file
+  QString filePath;               //!< what is the file path within project
+  QList<DownloadQueueItem> data;  //!< list of chunks / list of diffs to apply
+};
+
+
 struct TransactionStatus
 {
   qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
@@ -82,7 +128,7 @@ struct TransactionStatus
 
   // download replies
   QPointer<QNetworkReply> replyProjectInfo;
-  QPointer<QNetworkReply> replyDownloadFile;
+  QPointer<QNetworkReply> replyDownloadItem;
 
   // upload replies
   QPointer<QNetworkReply> replyUploadProjectInfo;
@@ -90,11 +136,13 @@ struct TransactionStatus
   QPointer<QNetworkReply> replyUploadFile;
   QPointer<QNetworkReply> replyUploadFinish;
 
-  QList<MerginFile> files; // either to upload or download
+  // download-related data
+  QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
+  QList<UpdateTask> updateTasks;  //!< tasks to do at the end of update (pull) when everything has been downloaded
 
-  QList<MerginFile> diffFiles;  //!< these are just diff files for upload - we don't remove them when uploading chunks (needed for finalization)
-
-  QMap<QString, QStringList> diffUpdates;  //!< map where key = path to basefile, value = ordered list of diff files to apply
+  // upload-related data
+  QList<MerginFile> uploadQueue; //!< pending list of files to upload (at the end of transaction it is empty)
+  QList<MerginFile> uploadDiffFiles;  //!< these are just diff files for upload - we don't remove them when uploading chunks (needed for finalization)
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
@@ -325,8 +373,7 @@ class MerginApi: public QObject
 
     // Pull slots
     void updateInfoReplyFinished();
-    void continueDownloadFiles( const QString &projectName, const QString &version, int chunkNo = 0 );
-    void downloadFileReplyFinished();
+    void downloadItemReplyFinished();
 
     // Push slots
     void uploadStartReplyFinished();
@@ -341,21 +388,11 @@ class MerginApi: public QObject
     void deleteProjectFinished();
     void authorizeFinished();
     void pingMerginReplyFinished();
-    void copyTempFilesToProject( const QString &projectDir, const QString &projectFullName );
 
   private:
     MerginProjectList parseListProjectsMetadata( const QByteArray &data );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
-
-    /**
-     * Sends non-blocking GET request to the server to download a file (chunk).
-     * \param projectFullName Namespace/name
-     * \param filename Name of file to be downloaded
-     * \param version version of file to be downloaded
-     * \param chunkNo Chunk number of given file to be downloaded
-     */
-    void downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo = 0 );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
@@ -383,11 +420,7 @@ class MerginApi: public QObject
     void sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
-    void handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite );
-    bool saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite = false );
     void createPathIfNotExists( const QString &filePath );
-    void createEmptyFile( const QString &path );
-    void takeFirstAndDownload( const QString &projectFullName, const QString &version );
 
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
@@ -430,10 +463,16 @@ class MerginApi: public QObject
     //! Called when download/update of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectUpdate( const QString &projectFullName );
 
+    void finalizeProjectUpdateCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+    void finalizeProjectUpdateApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
     void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
 
     void startProjectUpdate( const QString &projectFullName, const QByteArray &data );
+
+    //! Starts download request of another item
+    void downloadNextItem( const QString &projectFullName );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
@@ -451,7 +490,7 @@ class MerginApi: public QObject
     enum CustomAttribute
     {
       AttrProjectFullName = QNetworkRequest::User,
-      AttrChunkNo         = QNetworkRequest::User + 1,
+      AttrTempFileName    = QNetworkRequest::User + 1,
     };
 
     QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
@@ -461,8 +500,11 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
 
     static const int CHUNK_SIZE = 65536;
-    static const int UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+    static const int UPLOAD_CHUNK_SIZE;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
+
+    static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );
+    static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     friend class TestMerginApi;
 };

@@ -8,6 +8,8 @@
 
 #include <geodiff.h>
 
+#include "inpututils.h"
+
 
 QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary )
 {
@@ -42,7 +44,7 @@ QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, con
 
 int GeodiffUtils::createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath )
 {
-  QString uuid = QUuid::createUuid().toString().remove( '{' ).remove( '}' ); // TODO: ugly
+  QString uuid = QUuid::createUuid().toString( QUuid::WithoutBraces );
   QString diffName = filePath + "-diff-" + uuid;
   QString modifiedPath = projectDir + "/" + filePath;
   basePath = projectDir + "/.mergin/" + filePath;
@@ -76,4 +78,19 @@ GeodiffUtils::ChangesetSummary GeodiffUtils::parseChangesetSummary( const QStrin
     summary[tableName] = tableSummary;
   }
   return summary;
+}
+
+
+bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles )
+{
+  for ( QString diffFile : diffFiles )
+  {
+    int res = GEODIFF_applyChangeset( src.toUtf8().constData(), diffFile.toUtf8().constData() );
+    if ( res != GEODIFF_SUCCESS )
+    {
+      InputUtils::log( "GEODIFF", "assemble server file fail: apply changeset failed " + diffFile );
+      return false;
+    }
+  }
+  return true;
 }

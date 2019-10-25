@@ -46,6 +46,7 @@ class TestMerginApi: public QObject
     void testDiffUpdateBasic();
     void testDiffUpdateWithRebase();
     void testDiffUpdateWithRebaseFailed();
+    void testUpdateWithDiffs();
 
   private:
     int SHORT_REPLY = 1000;

@@ -18,6 +18,7 @@
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
+const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
@@ -71,35 +72,121 @@ void MerginApi::listProjects( const QString &searchExpression,
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
 
-void MerginApi::downloadFile( const QString &projectFullName, const QString &filename, const QString &version, int chunkNo )
-{
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
-  {
-    return;
-  }
 
+void MerginApi::downloadNextItem( const QString &projectFullName )
+{
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  if ( transaction.downloadQueue.isEmpty() )
+  {
+    // there's nothing to download so just finalize the update
+    finalizeProjectUpdate( projectFullName );
+    return;
+  }
+
+  DownloadQueueItem item = transaction.downloadQueue.takeFirst();
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/" ) + projectFullName );
+  QUrlQuery query;
+  query.addQueryItem( "file", item.filePath );
+  query.addQueryItem( "version", QStringLiteral( "v%1" ).arg( item.version ) );
+  if ( item.downloadDiff )
+    query.addQueryItem( "diff", "true" );
+  url.setQuery( query );
+
   QNetworkRequest request;
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/%1?file=%2&version=%3" ).arg( projectFullName ).arg( filename ).arg( version ) );
   request.setUrl( url );
   request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
-  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ), QVariant( chunkNo ) );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrTempFileName ), item.tempFileName );
 
   QString range;
-  int from = UPLOAD_CHUNK_SIZE * chunkNo;
-  int to = UPLOAD_CHUNK_SIZE * ( chunkNo + 1 ) - 1;
-  range = QStringLiteral( "bytes=%1-%2" ).arg( from ).arg( to );
-  request.setRawHeader( "Range", range.toUtf8() );
-  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
+  if ( item.rangeFrom != -1 && item.rangeTo != -1 )
+  {
+    range = QStringLiteral( "bytes=%1-%2" ).arg( item.rangeFrom ).arg( item.rangeTo );
+    request.setRawHeader( "Range", range.toUtf8() );
+  }
 
-  Q_ASSERT( !transaction.replyDownloadFile );
-  transaction.replyDownloadFile = mManager.get( request );
-  connect( transaction.replyDownloadFile, &QNetworkReply::finished, this, &MerginApi::downloadFileReplyFinished );
+  Q_ASSERT( !transaction.replyDownloadItem );
+  transaction.replyDownloadItem = mManager.get( request );
+  connect( transaction.replyDownloadItem, &QNetworkReply::finished, this, &MerginApi::downloadItemReplyFinished );
 
-  InputUtils::log( url.toString() + " Range: " + range, QStringLiteral( "STARTED" ) );
+  InputUtils::log( url.toString() + ( item.downloadDiff ? QString( " diff " ) : QString() ) +
+                   ( !range.isEmpty() ? " Range: " + range : QString() ), QStringLiteral( "STARTED" ) );
 }
+
+
+void MerginApi::downloadItemReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+  QString tempFileName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrTempFileName ) ).toString();
+
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+  Q_ASSERT( r == transaction.replyDownloadItem );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QByteArray data = r->readAll();
+
+    QString tempFolder = getTempProjectDir( projectFullName );
+    QString tempFilePath = tempFolder + "/" + tempFileName;
+    createPathIfNotExists( tempFilePath );
+
+    // save to a tmp file, assemble at the end
+    QFile file( tempFilePath );
+    if ( file.open( QIODevice::WriteOnly ) )
+    {
+      file.write( data );
+      file.close();
+    }
+    else
+    {
+      InputUtils::log( r->url().toString(), "Failed to open for writing: " + file.fileName() );
+    }
+
+    transaction.transferedSize += data.size();
+    emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
+
+    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
+
+    transaction.replyDownloadItem->deleteLater();
+    transaction.replyDownloadItem = nullptr;
+
+    // Send another request (or finish)
+    downloadNextItem( projectFullName );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( serverMsg.isEmpty() )
+    {
+      serverMsg = r->errorString();
+    }
+    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+
+    transaction.replyDownloadItem->deleteLater();
+    transaction.replyDownloadItem = nullptr;
+
+    // get rid of the temporary download dir where we may have left some downloaded files
+    QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
+
+    if ( transaction.firstTimeDownload )
+    {
+      Q_ASSERT( !transaction.projectDir.isEmpty() );
+      QDir( transaction.projectDir ).removeRecursively();
+    }
+
+    finishProjectSync( projectFullName, false );
+
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
+  }
+}
+
 
 void MerginApi::uploadFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo )
 {
@@ -242,11 +329,11 @@ void MerginApi::updateCancel( const QString &projectFullName )
     InputUtils::log( transaction.replyProjectInfo->url().toString(), QStringLiteral( "ABORT" ) );
     transaction.replyProjectInfo->abort();  // abort will trigger updateInfoReplyFinished() slot
   }
-  else if ( transaction.replyDownloadFile )
+  else if ( transaction.replyDownloadItem )
   {
     // we're already downloading some files
-    InputUtils::log( transaction.replyDownloadFile->url().toString(), QStringLiteral( "ABORT" ) );
-    transaction.replyDownloadFile->abort();  // abort will trigger downloadFileReplyFinished slot
+    InputUtils::log( transaction.replyDownloadItem->url().toString(), QStringLiteral( "ABORT" ) );
+    transaction.replyDownloadItem->abort();  // abort will trigger downloadItemReplyFinished slot
   }
   else
   {
@@ -901,44 +988,111 @@ void MerginApi::listProjectsReplyFinished()
   emit listProjectsFinished( mRemoteProjects );
 }
 
-void MerginApi::takeFirstAndDownload( const QString &projectFullName, const QString &version )
+
+void MerginApi::finalizeProjectUpdateCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
 {
-  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  MerginFile nextFile = mTransactionalStatus[projectFullName].files.first();
-  if ( !nextFile.size )
+  QString dest = projectDir + "/" + filePath;
+  createPathIfNotExists( dest );
+
+  QFile f( dest );
+  if ( !f.open( QIODevice::WriteOnly ) )
   {
-    createEmptyFile( getTempProjectDir( projectFullName ) + "/" + nextFile.path );
-    continueDownloadFiles( projectFullName, version, 0 );
+    InputUtils::log( projectFullName, "Failed to open file for writing " + dest );
+    return;
   }
-  else
+
+  // assemble file from tmp files
+  for ( const auto &item : items )
   {
-    downloadFile( projectFullName, nextFile.path, version, 0 );
+    QFile fTmp( tempDir + "/" + item.tempFileName );
+    if ( !fTmp.open( QIODevice::ReadOnly ) )
+    {
+      InputUtils::log( projectFullName, "Failed to open temp file for reading " + item.tempFileName );
+      return;
+    }
+    f.write( fTmp.readAll() );
+  }
+
+  f.close();
+
+  // if diffable, copy to .mergin dir so we have a basefile
+  if ( MerginApi::isFileDiffable( filePath ) )
+  {
+    QString basefile = projectDir + "/.mergin/" + filePath;
+    createPathIfNotExists( basefile );
+
+    QFile::remove( basefile );
+    QFile::copy( dest, basefile );
   }
 }
 
-void MerginApi::continueDownloadFiles( const QString &projectFullName, const QString &version, int lastChunkNo )
-{
-  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  Q_ASSERT( !transaction.files.isEmpty() );
-  MerginFile currentFile = transaction.files.first();
-  if ( lastChunkNo + 1 <= currentFile.chunks.size() - 1 )
+void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
+{
+  // update diffable files that have been modified on the server
+  // - if they were not modified locally, the server changes will be simply applied
+  // - if they were modified locally, local changes will be rebased on top of server changes
+
+  QString src = tempDir + "/" + QUuid::createUuid().toString( QUuid::WithoutBraces );
+  QString dest = projectDir + "/" + filePath;
+  QString basefile = projectDir + "/.mergin/" + filePath;
+
+  createPathIfNotExists( dest );
+  createPathIfNotExists( basefile );
+
+  QStringList diffFiles;
+  for ( const auto &item : items )
+    diffFiles << tempDir + "/" + item.tempFileName;
+
+  //
+  // let's first assemble server's file from our basefile + diffs
+  //
+
+  if ( !QFile::copy( basefile, src ) )
   {
-    downloadFile( projectFullName, currentFile.path, version, lastChunkNo + 1 );
+    InputUtils::log( projectFullName, "assemble server file fail: copying failed " + basefile + " to " + src );
+  }
+
+  if ( !GeodiffUtils::applyDiffs( src, diffFiles ) )
+  {
+    InputUtils::log( projectFullName, "server file assembly failed: " + filePath );
   }
   else
   {
-    transaction.files.removeFirst();
-    if ( !transaction.files.isEmpty() )
+    InputUtils::log( projectFullName, "server file assembly successful: " + filePath );
+  }
+
+  //
+  // now we are ready for the update of our local file
+  //
+
+  int res = GEODIFF_rebase( basefile.toUtf8().constData(), src.toUtf8().constData(), dest.toUtf8().constData() );
+  if ( res == GEODIFF_SUCCESS )
+  {
+    InputUtils::log( projectFullName, "geodiff rebase successful: " + filePath );
+  }
+  else
+  {
+    InputUtils::log( projectFullName, "geodiff rebase failed! " + filePath );
+
+    // not good... something went wrong in rebase - we need to save the local changes
+    // let's put them into a conflict file and use the server version
+    if ( !QFile::rename( dest, dest + "_conflict" ) )
     {
-      takeFirstAndDownload( projectFullName, version );
+      InputUtils::log( projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
     }
-    else
+    if ( !QFile::copy( src, dest ) )
     {
-      finalizeProjectUpdate( projectFullName );
+      InputUtils::log( projectFullName, "failed to update local conflicting file after failed geodiff rebase: " + filePath );
     }
   }
+
+  //
+  // finally update our basefile
+  //
+
+  QFile::remove( basefile );
+  QFile::rename( src, basefile );
 }
 
 void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
@@ -947,77 +1101,61 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QString projectDir = transaction.projectDir;
+  QString tempProjectDir = getTempProjectDir( projectFullName );
 
-  // update diffable files that have been modified on the server
-  // - if they were not modified locally, the server changes will be simply applied
-  // - if they were modified locally, local changes will be rebased on top of server changes
-  for ( QString filePath : transaction.diffUpdates.keys() )
+  for ( const UpdateTask &finalizationItem : transaction.updateTasks )
   {
-    QString temp_dir = getTempProjectDir( projectFullName );
-
-    QString src = temp_dir + "/" + filePath;
-    QString dest = projectDir + "/" + filePath;
-    QString basefile = projectDir + "/.mergin/" + filePath;
-
-    int res = GEODIFF_rebase( basefile.toUtf8().constData(), src.toUtf8().constData(), dest.toUtf8().constData() );
-    if ( res == GEODIFF_SUCCESS )
+    switch ( finalizationItem.method )
     {
-      InputUtils::log( projectFullName, "geodiff rebase successful: " + filePath );
-    }
-    else
-    {
-      InputUtils::log( projectFullName, "geodiff rebase failed! " + filePath );
-
-      // not good... something went wrong in rebase - we need to save the local changes
-      // let's put them into a conflict file and use the server version
-      if ( !QFile::rename( dest, dest + "_conflict" ) )
+      case UpdateTask::Copy:
       {
-        InputUtils::log( projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
+        finalizeProjectUpdateCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        break;
       }
-      if ( !QFile::copy( src, dest ) )
+
+      case UpdateTask::CopyConflict:
       {
-        InputUtils::log( projectFullName, "failed to update local conflicting file after failed geodiff rebase: " + filePath );
+        // move local file to conflict file
+        QString origPath = projectDir + "/" + finalizationItem.filePath;
+        if ( !QFile::rename( origPath, origPath + "_conflict" ) )
+        {
+          InputUtils::log( projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
+        }
+        finalizeProjectUpdateCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        break;
+      }
+
+      case UpdateTask::ApplyDiff:
+      {
+        finalizeProjectUpdateApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        break;
+      }
+
+      case UpdateTask::Delete:
+      {
+        QFile file( projectDir + "/" + finalizationItem.filePath );
+        file.remove();
+        break;
       }
     }
 
-    // update our local basefile from the server version
-    QFile::remove( basefile );
-    QFile::rename( src, basefile );
-  }
-
-  // rename local conflicting files that were updated when also the server got updated
-  for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
-  {
-    if ( transaction.diffUpdates.contains( filePath ) )
-      continue;  // already addressed in the section above with geodiff
-
-    InputUtils::log( projectFullName, "conflicting remote update/local update: " + filePath );
-    QString origPath = projectDir + "/" + filePath;
-    if ( !QFile::rename( origPath, origPath + "_conflict" ) )
+    // remove tmp files associated with this item
+    for ( const auto &downloadItem : finalizationItem.data )
     {
-      InputUtils::log( projectFullName, "failed rename of conflicting file: " + filePath );
+      if ( !QFile::remove( tempProjectDir + "/" + downloadItem.tempFileName ) )
+        InputUtils::log( projectFullName, "Failed to remove temporary file " + downloadItem.tempFileName );
     }
   }
 
-  // rename local conflicting files that were added when also the server got those files added
-  for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
+  // check there are no files left
+  int tmpFilesLeft = QDir( tempProjectDir ).entryList( QDir::NoDotAndDotDot ).count();
+  if ( tmpFilesLeft )
   {
-    InputUtils::log( projectFullName, "conflicting remote add/local add: " + filePath );
-    QString origPath = projectDir + "/" + filePath;
-    if ( !QFile::rename( origPath, origPath + "_conflict" ) )
-    {
-      InputUtils::log( projectFullName, "failed rename of conflicting file: " + filePath );
-    }
+    InputUtils::log( projectFullName, "Some temporary files were left - this should not happen..." );
+    Q_ASSERT( false );
   }
 
-  copyTempFilesToProject( projectDir, projectFullName );
-
-  // remove files that have been removed from the server
-  for ( QString filename : transaction.diff.remoteDeleted )
-  {
-    QFile file( projectDir + "/" + filename );
-    file.remove();
-  }
+  QDir( tempProjectDir ).removeRecursively();
 
   // add the local project if not there yet
   if ( !mLocalProjects.projectFromMerginName( projectFullName ).isValid() )
@@ -1030,82 +1168,6 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   finishProjectSync( projectFullName, true );
 }
 
-
-void MerginApi::downloadFileReplyFinished()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
-  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
-
-  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-  Q_ASSERT( r == transaction.replyDownloadFile );
-
-  QUrlQuery query( r->url().query() );
-  QString filename = query.queryItemValue( "file" );
-  QString version = query.queryItemValue( "version" );
-  int chunkNo = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ) ).toInt();
-
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    bool overwrite = true; // chunkNo == 0
-    bool closeFile = false;
-
-    QList<MerginFile> files = transaction.files;
-    if ( !files.isEmpty() )
-    {
-      MerginFile file = transaction.files.first();
-      overwrite  = file.chunks.size() <= 1;
-
-      if ( chunkNo == file.chunks.size() - 1 )
-      {
-        closeFile = true;
-      }
-    }
-
-    QString tempFoler = getTempProjectDir( projectFullName );
-    createPathIfNotExists( tempFoler );
-    QByteArray data = r->readAll();
-    handleOctetStream( data, tempFoler, filename, closeFile, overwrite );
-    transaction.transferedSize += data.size();
-
-    emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
-
-    InputUtils::log( r->url().toString(), QStringLiteral( "FINISHED" ) );
-
-    transaction.replyDownloadFile->deleteLater();
-    transaction.replyDownloadFile = nullptr;
-
-    // Send another request afterwards
-    continueDownloadFiles( projectFullName, version, chunkNo );
-  }
-  else
-  {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    if ( serverMsg.isEmpty() )
-    {
-      serverMsg = r->errorString();
-    }
-    InputUtils::log( r->url().toString(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-
-    transaction.replyDownloadFile->deleteLater();
-    transaction.replyDownloadFile = nullptr;
-
-    // get rid of the temporary download dir where we may have left some downloaded files
-    QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
-
-    if ( transaction.firstTimeDownload )
-    {
-      Q_ASSERT( !transaction.projectDir.isEmpty() );
-      QDir( transaction.projectDir ).removeRecursively();
-    }
-
-    finishProjectSync( projectFullName, false );
-
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
-  }
-}
 
 void MerginApi::uploadStartReplyFinished()
 {
@@ -1126,7 +1188,7 @@ void MerginApi::uploadStartReplyFinished()
     transaction.replyUploadStart->deleteLater();
     transaction.replyUploadStart = nullptr;
 
-    QList<MerginFile> files = transaction.files;
+    QList<MerginFile> files = transaction.uploadQueue;
     if ( !files.isEmpty() )
     {
       QString transactionUUID;
@@ -1194,7 +1256,7 @@ void MerginApi::uploadFileReplyFinished()
     transaction.replyUploadFile->deleteLater();
     transaction.replyUploadFile = nullptr;
 
-    MerginFile currentFile = transaction.files.first();
+    MerginFile currentFile = transaction.uploadQueue.first();
     int chunkNo = currentFile.chunks.indexOf( chunkID );
     if ( chunkNo < currentFile.chunks.size() - 1 )
     {
@@ -1205,11 +1267,11 @@ void MerginApi::uploadFileReplyFinished()
       transaction.transferedSize += currentFile.size;
 
       emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
-      transaction.files.removeFirst();
+      transaction.uploadQueue.removeFirst();
 
-      if ( !transaction.files.isEmpty() )
+      if ( !transaction.uploadQueue.isEmpty() )
       {
-        MerginFile nextFile = transaction.files.first();
+        MerginFile nextFile = transaction.uploadQueue.first();
         uploadFile( projectFullName, transactionUUID, nextFile );
       }
       else
@@ -1297,63 +1359,102 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
   InputUtils::log( "update", transaction.diff.dump() );
 
-  QList<MerginFile> filesToDownload;
-  qint64 totalSize = 0;
   for ( QString filePath : transaction.diff.remoteAdded )
   {
     MerginFile file = serverProject.fileInfo( filePath );
-    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-    filesToDownload << file;
-    totalSize += file.size;
+    QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
+    transaction.updateTasks << UpdateTask( UpdateTask::Copy, filePath, items );
   }
 
   for ( QString filePath : transaction.diff.remoteUpdated )
   {
-    // for diffable files - download and apply to the basefile (without rebase)
-    // TODO: download diffs instead of full download of gpkg file from server
-    transaction.diffUpdates[filePath] = QStringList();
-
     MerginFile file = serverProject.fileInfo( filePath );
-    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-    filesToDownload << file;
-    totalSize += file.size;
+
+    // for diffable files - download and apply to the basefile (without rebase)
+    if ( isFileDiffable( filePath ) && file.pullCanUseDiff )
+    {
+      QList<DownloadQueueItem> items = itemsForFileDiffs( file );
+      transaction.updateTasks << UpdateTask( UpdateTask::ApplyDiff, filePath, items );
+    }
+    else
+    {
+      QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
+      transaction.updateTasks << UpdateTask( UpdateTask::Copy, filePath, items );
+    }
   }
 
   // also download files which were changed both on the server and locally (the local version will be renamed as conflicting copy)
   for ( QString filePath : transaction.diff.conflictRemoteUpdatedLocalUpdated )
   {
-    // for diffable files - download and apply to the basefile (will also do rebase)
-    // TODO: download diffs instead of full download of gpkg file from server
-    transaction.diffUpdates[filePath] = QStringList();
-
     MerginFile file = serverProject.fileInfo( filePath );
-    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-    filesToDownload << file;
-    totalSize += file.size;
+
+    // for diffable files - download and apply to the basefile (will also do rebase)
+    if ( isFileDiffable( filePath ) && file.pullCanUseDiff )
+    {
+      QList<DownloadQueueItem> items = itemsForFileDiffs( file );
+      transaction.updateTasks << UpdateTask( UpdateTask::ApplyDiff, filePath, items );
+    }
+    else
+    {
+      QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
+      transaction.updateTasks << UpdateTask( UpdateTask::CopyConflict, filePath, items );
+    }
   }
 
   // also download files which were added both on the server and locally (the local version will be renamed as conflicting copy)
   for ( QString filePath : transaction.diff.conflictRemoteAddedLocalAdded )
   {
     MerginFile file = serverProject.fileInfo( filePath );
-    file.chunks = generateChunkIdsForSize( file.size ); // doesnt really matter whats there, only how many chunks are expected
-    filesToDownload << file;
-    totalSize += file.size;
+    QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
+    transaction.updateTasks << UpdateTask( UpdateTask::CopyConflict, filePath, items );
   }
 
+  // schedule removed files to be deleted
+  for ( QString filePath : transaction.diff.remoteDeleted )
+  {
+    transaction.updateTasks << UpdateTask( UpdateTask::Delete, filePath, QList<DownloadQueueItem>() );
+  }
+
+  // prepare the download queue
+  for ( const UpdateTask &item : transaction.updateTasks )
+  {
+    transaction.downloadQueue << item.data;
+  }
+
+  qint64 totalSize = 0;
+  for ( const DownloadQueueItem &item : transaction.downloadQueue )
+  {
+    totalSize += item.size;
+  }
   transaction.totalSize = totalSize;
-  transaction.files = filesToDownload;
 
-  if ( !filesToDownload.isEmpty() )
+  emit pullFilesStarted();
+  downloadNextItem( projectFullName );
+}
+
+
+QList<DownloadQueueItem> MerginApi::itemsForFileChunks( const MerginFile &file, int version )
+{
+  QList<DownloadQueueItem> lst;
+  int from = 0;
+  while ( from < file.size )
   {
-    takeFirstAndDownload( projectFullName, QString( "v%1" ).arg( serverProject.version ) );
-    emit pullFilesStarted();
+    int size = qMin( MerginApi::UPLOAD_CHUNK_SIZE, static_cast<int>( file.size ) - from );
+    lst << DownloadQueueItem( file.path, size, version, from, from + size - 1 );
+    from += size;
   }
-  else
+  return lst;
+}
+
+QList<DownloadQueueItem> MerginApi::itemsForFileDiffs( const MerginFile &file )
+{
+  QList<DownloadQueueItem> items;
+  // download diffs instead of full download of gpkg file from server
+  for ( const auto &d : file.pullDiffFiles )
   {
-    // there's nothing to download so just finalize the update
-    finalizeProjectUpdate( projectFullName );
+    items << DownloadQueueItem( file.path, d.second, d.first, -1, -1, true );
   }
+  return items;
 }
 
 
@@ -1495,8 +1596,8 @@ void MerginApi::uploadInfoReplyFinished()
     }
 
     transaction.totalSize = totalSize;
-    transaction.files = filesToUpload;
-    transaction.diffFiles = diffFiles;
+    transaction.uploadQueue = filesToUpload;
+    transaction.uploadDiffFiles = diffFiles;
 
     QJsonObject json;
     json.insert( QStringLiteral( "changes" ), changes );
@@ -1542,7 +1643,7 @@ void MerginApi::uploadFinishReplyFinished()
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
     // clean up diff-related files
-    for ( const MerginFile &merginFile : qgis::as_const( transaction.diffFiles ) )
+    for ( const MerginFile &merginFile : qgis::as_const( transaction.uploadDiffFiles ) )
     {
       QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
 
@@ -1924,17 +2025,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   }
 }
 
-void MerginApi::copyTempFilesToProject( const QString &projectDir, const QString &projectFullName )
-{
-  QString tempProjectDir = getTempProjectDir( projectFullName );
-  InputUtils::cpDir( tempProjectDir, projectDir );
-
-  // copy diffable files (e.g. gpkg) we have downloaded to the .mergin directory, so we can use them as base files
-  InputUtils::cpDir( tempProjectDir, projectDir + "/.mergin", true );
-
-  QDir( tempProjectDir ).removeRecursively();
-}
-
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
 {
   QFile file( path );
@@ -1950,41 +2040,6 @@ bool MerginApi::writeData( const QByteArray &data, const QString &path )
   return true;
 }
 
-void MerginApi::handleOctetStream( const QByteArray &data, const QString &projectDir, const QString &filename, bool closeFile, bool overwrite )
-{
-  QFile file;
-  QString activeFilePath = projectDir + '/' + filename;
-  file.setFileName( activeFilePath );
-  createPathIfNotExists( activeFilePath );
-  saveFile( data, file, closeFile, overwrite );
-}
-
-bool MerginApi::saveFile( const QByteArray &data, QFile &file, bool closeFile, bool overwrite )
-{
-  if ( !file.isOpen() )
-  {
-    if ( overwrite )
-    {
-      if ( !file.open( QIODevice::WriteOnly ) )
-      {
-        return false;
-      }
-    }
-    else
-    {
-      if ( !file.open( QIODevice::Append ) )
-      {
-        return false;
-      }
-    }
-  }
-
-  file.write( data );
-  if ( closeFile )
-    file.close();
-
-  return true;
-}
 
 void MerginApi::createPathIfNotExists( const QString &filePath )
 {
@@ -1995,24 +2050,11 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
   QFileInfo newFile( filePath );
   if ( !newFile.absoluteDir().exists() )
   {
-    if ( !QDir( dir ).mkpath( newFile.absolutePath() ) )
+    if ( !dir.mkpath( newFile.absolutePath() ) )
     {
       InputUtils::log( QString( "Creating a folder failed for path: %1" ).arg( filePath ) );
     }
   }
-}
-
-void MerginApi::createEmptyFile( const QString &path )
-{
-  QDir dir;
-  QFileInfo info( path );
-  QString parentDir( info.dir().path() );
-  if ( !dir.exists( parentDir ) )
-    dir.mkpath( parentDir );
-
-  QFile file( path );
-  file.open( QIODevice::ReadWrite );
-  file.close();
 }
 
 bool MerginApi::isInIgnore( const QFileInfo &info )
