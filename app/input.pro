@@ -130,7 +130,7 @@ ios {
   }
 
   exists($${QGIS_LIB_DIR}/libqgis_core.so) {
-    message("Building from QGIS: $${QGIS_SRC_DIR} and $${QGIS_BUILD_DIR}")
+    message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core.so")
   } else {
 	error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
   }
@@ -138,13 +138,19 @@ ios {
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
   LIBS += -L$${QGIS_LIB_DIR}
   LIBS += -lqgis_core -lqgis_quick
+}
 
-  # geodiff support
-  !isEmpty(GEODIFF_SRC_DIR) {
-    LIBS += -L$${GEODIFF_BUILD_DIR}
-    INCLUDEPATH += $${GEODIFF_SRC_DIR}/geodiff/src
-  }
-  LIBS += -lgeodiff
+# geodiff support
+exists($${GEODIFF_LIB_DIR}) {
+    LIBS += -L$${GEODIFF_LIB_DIR}
+    LIBS += -lgeodiff
+} else {
+    error("Missing GEODIFF_LIB_DIR variable in config.pri")
+}
+exists($${GEODIFF_INCLUDE_DIR}/geodiff.h) {
+    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
+} else {
+    error("Missing geodiff header in $${GEODIFF_INCLUDE_DIR}")
 }
 
 # WIN 32 builds
