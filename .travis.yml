@@ -14,7 +14,7 @@ before_install:
 - pip3 install dropbox
 
 script:
-- export SDK_VERSION=android-4
+- export SDK_VERSION=android-5
 - export INPUT_SDK=lutraconsulting/input-sdk:${SDK_VERSION}
 - docker pull ${INPUT_SDK}
 - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${INPUT_SDK} /usr/src/input/scripts/docker-build.sh

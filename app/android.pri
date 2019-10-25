@@ -11,6 +11,7 @@ android {
     ANDROID_EXTRA_LIBS += \
         $${QGIS_LIB_DIR}/libcrypto.so \
         $${QGIS_LIB_DIR}/libexpat.so \
+        $${QGIS_LIB_DIR}/libgeodiff.so \
         $${QGIS_LIB_DIR}/libgeos.so \
         $${QGIS_LIB_DIR}/libgeos_c.so \
         $${QGIS_LIB_DIR}/libgslcblas.so \

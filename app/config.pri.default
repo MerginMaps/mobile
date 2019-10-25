@@ -34,3 +34,7 @@ win32 {
   QGIS_INSTALL_PATH =  $${BASE_DIR}/input-sdk/x86_64/stage
   QGIS_QUICK_DATA_PATH = C:/input-data
 }
+
+# geodiff library - if being used from a custom build
+GEODIFF_SRC_DIR = /my/path/to/geodiff
+GEODIFF_BUILD_DIR = $${GEODIFF_SRC_DIR}/build
