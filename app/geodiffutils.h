@@ -5,6 +5,9 @@
 #include <QString>
 
 
+/**
+ * Utility functions for working with geodiff library
+ */
 class GeodiffUtils
 {
   public:
@@ -26,16 +29,16 @@ class GeodiffUtils
 
     typedef QMap<QString, TableSummary> ChangesetSummary;
 
-    //! Test whether the file has changed according to geodiff compared to the original server version
+    //! Tests whether the file has changed according to geodiff compared to the original server version
     static bool hasPendingChanges( const QString &projectDir, const QString &filePath );
 
-    //! Take JSON changeset summary string and parse it
+    //! Takes JSON changeset summary string and parses it
     static ChangesetSummary parseChangesetSummary( const QString &json );
 
     //! Returns JSON with local pending changes o a diffable file
     static QString diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary );
 
-    //! run geodiff on a local project's file, compare it to locally cached original and create a diff file
+    //! Runs geodiff on a local project's file, compares it to locally cached original and creates a diff file
     //! (diff file path returned in the argument, returns geodiff return value - zero on success)
     static int createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath );
 
