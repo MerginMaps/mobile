@@ -14,7 +14,6 @@ android {
         $${QGIS_LIB_DIR}/libgeodiff.so \
         $${QGIS_LIB_DIR}/libgeos.so \
         $${QGIS_LIB_DIR}/libgeos_c.so \
-        $${QGIS_LIB_DIR}/libgslcblas.so \
         $${QGIS_LIB_DIR}/libsqlite3.so \
         $${QGIS_LIB_DIR}/libcharset.so \
         $${QGIS_LIB_DIR}/libiconv.so \
