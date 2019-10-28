@@ -45,22 +45,23 @@ void MerginApi::listProjects( const QString &searchExpression,
     return;
   }
 
-  QNetworkRequest request;
-  // projects filtered by tag "input_use"
-  QString urlString = mApiRoot + QStringLiteral( "/v1/project" );
+  QUrlQuery query;
   if ( !filterTag.isEmpty() )
   {
-    urlString += QStringLiteral( "?tags=" ) + filterTag;
+    query.addQueryItem( "tags", filterTag );
   }
   if ( !searchExpression.isEmpty() )
   {
-    urlString += QStringLiteral( "&q=" ) + searchExpression;
+    query.addQueryItem( "q", searchExpression );
   }
   if ( !flag.isEmpty() )
   {
-    urlString += QStringLiteral( "&flag=%1" ).arg( flag );
+    query.addQueryItem( "flag", flag );
   }
-  QUrl url( urlString );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project" ) );
+  url.setQuery( query );
+
+  QNetworkRequest request;
   request.setUrl( url );
 
   // Even if the authorization is not required, it can be include to fetch more results

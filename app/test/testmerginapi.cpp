@@ -90,6 +90,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteAddLocalAdd" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testCreateProjectTwice" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
@@ -1158,7 +1159,7 @@ void TestMerginApi::testUpdateWithDiffs()
 MerginProjectList TestMerginApi::getProjectList()
 {
   QSignalSpy spy( mApi,  &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString(), mUsername, QString() );
+  mApi->listProjects( QString(), "created", QString() );
   spy.wait( SHORT_REPLY );
 
   return mApi->projects();
