@@ -279,7 +279,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
       {
-        log( QString( "Cannot copy a dir from %1 to %2" ).arg( srcItemPath ).arg( dstItemPath ) );
+        log( "cpDir", QString( "Cannot copy a dir from %1 to %2" ).arg( srcItemPath ).arg( dstItemPath ) );
         result = false;
       }
     }
@@ -292,12 +292,12 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
       {
         if ( !QFile::remove( dstItemPath ) )
         {
-          log( QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
+          log( "cpDir", QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
           result =  false;
         }
         else if ( !QFile::copy( srcItemPath, dstItemPath ) )
         {
-          log( QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
+          log( "cpDir", QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
           result =  false;
         }
 
@@ -306,7 +306,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
     else
     {
-      log( QString( "Unhandled item %1 in cpDir" ).arg( info.filePath() ) );
+      log( "cpDir", QString( "Unhandled item %1 in cpDir" ).arg( info.filePath() ) );
     }
   }
   return result;
@@ -327,11 +327,11 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
-void InputUtils::log( const QString &msg, const QString &info )
+void InputUtils::log( const QString &topic, const QString &info )
 {
   QString logFilePath;
   QByteArray data;
-  data.append( QString( "%1 - %2. %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( msg ).arg( info ) );
+  data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ) );
 
   qDebug() << data;
   appendLog( data, sLogFile );

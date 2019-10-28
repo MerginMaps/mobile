@@ -62,7 +62,7 @@ class InputUtils: public QObject
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
-    static void log( const QString &msg, const QString &info = QStringLiteral() );
+    static void log( const QString &topic, const QString &info );
 
     static void setLogFilename( const QString &value );
 
