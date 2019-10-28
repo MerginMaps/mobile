@@ -1571,6 +1571,16 @@ void MerginApi::uploadInfoReplyFinished()
       deletedMerginFiles.append( merginFile );
     }
 
+    if ( addedMerginFiles.isEmpty() && updatedMerginFiles.isEmpty() && deletedMerginFiles.isEmpty() )
+    {
+      // if nothing has changed, there is no point to even start upload transaction
+      transaction.projectMetadata = data;
+      transaction.version = MerginProjectMetadata::fromJson( data ).version;
+
+      finishProjectSync( projectFullName, true );
+      return;
+    }
+
     QJsonArray added = prepareUploadChangesJSON( addedMerginFiles );
     filesToUpload.append( addedMerginFiles );
 

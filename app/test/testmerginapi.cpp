@@ -82,6 +82,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushRemovedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
+  deleteRemoteProject( mApiExtra, mUsername, "testPushNoChanges" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateAddedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
@@ -619,6 +620,33 @@ void TestMerginApi::testPushModifiedFile()
   QVERIFY( file.open( QIODevice::ReadOnly ) );
   QCOMPARE( file.readAll(), QByteArray( "v2" ) );
   file.close();
+}
+
+void TestMerginApi::testPushNoChanges()
+{
+  QString projectName = "testPushNoChanges";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that the status is still "up-to-date"
+  mApi->localProjectsManager().updateProjectStatus( projectDir );  // force update of status
+  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QCOMPARE( project1.serverVersion, 1 );
+  QCOMPARE( project1.localVersion, 1 );
+  QCOMPARE( project1.status, UpToDate );
+
+  // upload - should do nothing
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QCOMPARE( project2.serverVersion, 1 );
+  QCOMPARE( project2.localVersion, 1 );
+  QCOMPARE( project2.status, UpToDate );
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
 }
 
 void TestMerginApi::testUpdateAddedFile()
