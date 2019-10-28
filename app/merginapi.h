@@ -452,10 +452,8 @@ class MerginApi: public QObject
     */
     QString findUniqueProjectDirectoryName( QString path );
     /** Creates a request to get project details (list of project files).
-     * If the sinceVersion is not a negative number, it will also request history of diffable
-     * files since this version (the history contains references diff files)
      */
-    QNetworkReply *getProjectInfo( const QString &projectFullName, int sinceVersion = -1 );
+    QNetworkReply *getProjectInfo( const QString &projectFullName );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     QString createUniqueProjectDirectory( const QString &projectName );

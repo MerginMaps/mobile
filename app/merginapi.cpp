@@ -370,15 +370,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
-  int sinceVersion = -1;
-  LocalProjectInfo projectInfo = getLocalProject( projectFullName );
-  if ( projectInfo.isValid() )
-  {
-    // let's also fetch the recent history of diffable files
-    sinceVersion = projectInfo.localVersion;
-  }
-
-  QNetworkReply *reply = getProjectInfo( projectFullName, sinceVersion );
+  QNetworkReply *reply = getProjectInfo( projectFullName );
   if ( reply )
   {
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
@@ -668,11 +660,19 @@ void MerginApi::pingMerginReplyFinished()
 }
 
 
-QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, int sinceVersion )
+QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return nullptr;
+  }
+
+  int sinceVersion = -1;
+  LocalProjectInfo projectInfo = getLocalProject( projectFullName );
+  if ( projectInfo.isValid() )
+  {
+    // let's also fetch the recent history of diffable files
+    sinceVersion = projectInfo.localVersion;
   }
 
   QString queryString = QStringLiteral( "/v1/project/%1" ).arg( projectFullName );
