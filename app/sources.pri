@@ -12,8 +12,11 @@ merginapi.cpp \
 merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-iosutils.cpp \
-inpututils.cpp
+inpututils.cpp \
+ios/iosdevice.cpp \
+ios/iosimagepicker.cpp \
+ios/iossystemdispatcher.cpp \
+ios/iosutils.cpp \
 
 HEADERS += \
 localprojectsmanager.h \
@@ -28,8 +31,19 @@ merginapi.h \
 merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
-iosutils.h \
-inpututils.h
+inpututils.h \
+ios/iosdevice.h \
+ios/iosimagepicker.h \
+ios/iossystemdispatcher.h \
+ios/iosutils.h \
+ios/iosviewdelegate.h \
+
+QMAKE_CXXFLAGS += -fobjc-arc
+
+OBJECTIVE_SOURCES += \
+ios/iosviewdelegate.mm \
+ios/iossystemutils.mm \
+ios/iosdevice.mm \
 
 contains(DEFINES, INPUT_TEST) {
   SOURCES += test/testmerginapi.cpp

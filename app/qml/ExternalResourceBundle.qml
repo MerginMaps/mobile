@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
 
@@ -30,8 +31,8 @@ Item {
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
-                // https://github.com/lutraconsulting/input/issues/418
-                pickerNotImplementedInfo.visible = true
+              picker.itemWidget = itemWidget
+              picker.show()
             } else {
                 fileDialog.open()
             }
@@ -195,6 +196,29 @@ Item {
         onRejected: {
            visible = false
         }
+    }
+
+    // iOS Image picker
+    ImagePicker {
+      id : picker
+      property var itemWidget
+
+      onReady: {
+        if (status === ImagePicker.Ready) {
+          picker.busy = true;
+          picker.saveAsTemp();
+        }
+      }
+
+      onSaved: {
+        var newPath = url
+        if (newPath) {
+          var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, "")
+          picker.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+        }
+        picker.close();
+        picker.busy = false;
+      }
     }
 }
 

@@ -29,6 +29,8 @@
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
+#include "iossystemdispatcher.h"
+#include "iosimagepicker.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -190,6 +192,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
+  qmlRegisterType<QIImagePicker>("lc",1,0,"ImagePicker");
 }
 
 #ifdef INPUT_TEST
