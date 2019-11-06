@@ -9,7 +9,7 @@
 #include <QMap>
 #include <QVariantMap>
 
-/// QIImagePicker provides a simple interface to access camera and camera roll via the UIImagePickerController
+/// IOSImagePicker provides a simple interface to access camera and camera roll via the UIImagePickerController
 class IOSImagePicker : public QObject
 {
     Q_OBJECT
@@ -22,7 +22,6 @@ class IOSImagePicker : public QObject
     Q_PROPERTY(QString mediaType READ mediaType WRITE setMediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(QString mediaUrl READ mediaUrl WRITE setMediaUrl NOTIFY mediaUrlChanged)
     Q_PROPERTY(QString referenceUrl READ referenceUrl WRITE setReferenceUrl NOTIFY referenceUrlChanged)
-
     Q_PROPERTY(QString targetPath READ targetPath WRITE setTargetPath NOTIFY targetPathChanged)
 
 public:
@@ -48,8 +47,7 @@ public:
 
     Q_INVOKABLE void save(QString fileName);
 
-    /// Save the stored image to tmp file.
-    Q_INVOKABLE void saveAsTemp();
+    Q_INVOKABLE void saveImage();
 
     Q_INVOKABLE void clear();
 
@@ -95,17 +93,17 @@ private:
 
     Q_INVOKABLE void endSave(QString fileName);
 
-    SourceType m_sourceType;
-    QImage m_image;
-    Status m_status;
+    SourceType mSourceType = PhotoLibrary;
+    QImage mImage;
+    Status mStatus;
 
-    QString m_mediaType;
-    QString m_mediaUrl;
-    QString m_referenceUrl;
+    QString mMediaType;
+    QString mMediaUrl;
+    QString mReferenceUrl;
 
     QString mTargetPath;
 
-    bool m_busy;
+    bool mBusy;
 };
 
 #endif // QIIMAGEPICKER_H

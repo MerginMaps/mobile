@@ -32,7 +32,6 @@ Item {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
               picker.itemWidget = itemWidget
-              // TODO rename targetPath -> targetDir
               picker.targetPath = picker.itemWidget.targetDir
               picker.show()
             } else {
@@ -194,32 +193,23 @@ Item {
       property var itemWidget
       property var targetDir
 
-
       onReady: {
         if (status === ImagePicker.Ready) {
-          picker.busy = true;
-          picker.saveAsTemp();
+          picker.busy = true
+          picker.saveImage()
         }
       }
 
       onSaved: {
-        console.log("Image saved at ", url)
-        var newPath = url
-        var prefix = (picker.itemWidget.prefixToRelativePath) ?
-              picker.itemWidget.prefixToRelativePath:
-              picker.itemWidget.targetDir
-        console.log('TARGET DIR', picker.itemWidget.targetDir )
-        console.log('PREFIX DIR', picker.itemWidget.prefixToRelativePath )
-        console.log('MEDIA URL', picker.mediaUrl)
-        console.log('REFERENCE URL', picker.referenceUrl)
-
-        if (newPath) {
-          var newCurrentValue = __inputUtils.extractRelativePath(newPath, picker.itemWidget.targetDir)
-          console.log('newCurrentValue URL', newCurrentValue)
+        if (url) {
+          // Prefix has to end with '/' to get a valid relative path (QgsQuick.Utils.getRelativePath for iOS doesnt make cannonical
+          // path out of it)
+          var prefixPath = picker.itemWidget.targetDir.endsWith("/") ? picker.itemWidget.targetDir : picker.itemWidget.targetDir + "/"
+          var newCurrentValue = QgsQuick.Utils.getRelativePath(url, prefixPath)
           picker.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
         }
-        picker.close();
-        picker.busy = false;
+        picker.close()
+        picker.busy = false
       }
     }
 }

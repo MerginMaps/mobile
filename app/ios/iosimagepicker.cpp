@@ -22,27 +22,8 @@ public:
 
     /// <#Description#>
     void run() {
-        if (absoluteImagePath.isNull()) { // Save as temp
-            QTemporaryFile tmp;
-            QStringList paths = QStandardPaths::standardLocations(QStandardPaths::TempLocation);
-            //QString tmpPath = paths.at(0);
-            //QStringList paths = QCoreApplication::applicationDirPath();
-            QString tmpPath = owner->targetPath();
-
-            tmp.setFileTemplate(tmpPath + "/"+ QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) )+ ".jpg");
-            tmp.open();
-            //absoluteImagePath = tmp.fileName();
-            absoluteImagePath = tmpPath + "/"+ QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) )+ ".jpg";
-            //fileName = InputUtils::renameWithDateTime(fileName);
-            tmp.close();
-
-//            QString tmpPath = owner->targetPath();
-//            fileName = QString("")
-//            QString basename =
-//            qDebug() << "BASENAME: "<< basename << "|";
-//            qDebug() << "MEdia: "<< owner->mediaUrl() << "|" << owner->referenceUrl();
-//            fileName = QString("%1/%2").arg(owner->targetPath(), basename);
-//            qDebug() << "fileNAME: "<< fileName << "|";
+        if (absoluteImagePath.isNull()) {
+            absoluteImagePath = QString("%1/%2.jpg").arg(owner->targetPath(), QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) ));
         }
 
         image.save(absoluteImagePath);
@@ -61,9 +42,9 @@ public:
 
 IOSImagePicker::IOSImagePicker(QObject *parent) : QObject(parent)
 {
-    m_sourceType = PhotoLibrary;
-    m_status = Null;
-    m_busy = false;
+    mSourceType = PhotoLibrary;
+    mStatus = Null;
+    mBusy = false;
 }
 
 IOSImagePicker::~IOSImagePicker()
@@ -73,7 +54,7 @@ IOSImagePicker::~IOSImagePicker()
 
 void IOSImagePicker::show(bool animated)
 {
-    if (m_status == Running || m_status == Saving) {
+    if (mStatus == Running || mStatus == Saving) {
         return;
     }
 
@@ -81,7 +62,7 @@ void IOSImagePicker::show(bool animated)
     QISystemDispatcher* system = QISystemDispatcher::instance();
 
     QVariantMap data;
-    data["sourceType"] = m_sourceType;
+    data["sourceType"] = mSourceType;
     data["animated"] = animated;
 
     connect(system,SIGNAL(dispatched(QString,QVariantMap)),
@@ -110,12 +91,12 @@ void IOSImagePicker::save(QString fileName)
     saver->setAutoDelete(true);
     saver->owner = this;
     saver->absoluteImagePath = fileName;
-    saver->image = m_image;
+    saver->image = mImage;
 
     QThreadPool::globalInstance()->start(saver);
 }
 
-void IOSImagePicker::saveAsTemp()
+void IOSImagePicker::saveImage()
 {
     save(QString());
 }
@@ -129,26 +110,26 @@ void IOSImagePicker::clear()
 
 IOSImagePicker::SourceType IOSImagePicker::sourceType() const
 {
-    return m_sourceType;
+    return mSourceType;
 }
 
 void IOSImagePicker::setSourceType(const SourceType &sourceType)
 {
-    m_sourceType = sourceType;
+    mSourceType = sourceType;
     emit sourceTypeChanged();
 }
 
 QImage IOSImagePicker::image() const
 {
-    return m_image;
+    return mImage;
 }
 
 void IOSImagePicker::setImage(const QImage &image)
 {
-    m_image = image;
+    mImage = image;
     if (true) {
         QString mFilename;
-        m_image.save(mFilename, "PNG");
+        mImage.save(mFilename, "PNG");
     }
 
     emit imageChanged();
@@ -156,14 +137,14 @@ void IOSImagePicker::setImage(const QImage &image)
 
 IOSImagePicker::Status IOSImagePicker::status() const
 {
-    return m_status;
+    return mStatus;
 }
 
 void IOSImagePicker::setStatus(const Status &status)
 {
-    if (m_status == status)
+    if (mStatus == status)
         return;
-    m_status = status;
+    mStatus = status;
     emit statusChanged();
 }
 
@@ -197,7 +178,7 @@ void IOSImagePicker::endSave(QString fileName)
 
     emit saved(url.toString());
 
-    if (m_image.isNull()) {
+    if (mImage.isNull()) {
         setStatus(Null);
     } else {
         setStatus(Ready);
@@ -216,52 +197,52 @@ void IOSImagePicker::setTargetPath(const QString &targetPath)
 }
 QString IOSImagePicker::referenceUrl() const
 {
-    return m_referenceUrl;
+    return mReferenceUrl;
 }
 
 void IOSImagePicker::setReferenceUrl(const QString &referenceUrl)
 {
-    m_referenceUrl = referenceUrl;
+    mReferenceUrl = referenceUrl;
     emit referenceUrlChanged();
 }
 
 QString IOSImagePicker::mediaUrl() const
 {
-    return m_mediaUrl;
+    return mMediaUrl;
 }
 
 void IOSImagePicker::setMediaUrl(const QString &mediaUrl)
 {
-    m_mediaUrl = mediaUrl;
+    mMediaUrl = mediaUrl;
     emit mediaUrlChanged();
 }
 
 QString IOSImagePicker::mediaType() const
 {
-    return m_mediaType;
+    return mMediaType;
 }
 
 void IOSImagePicker::setMediaType(const QString &mediaType)
 {
-    m_mediaType = mediaType;
+    mMediaType = mediaType;
     emit mediaTypeChanged();
 }
 
 bool IOSImagePicker::busy() const
 {
-    return m_busy;
+    return mBusy;
 }
 
 void IOSImagePicker::setBusy(bool busy)
 {
-    if (m_busy == busy)
+    if (mBusy == busy)
         return;
 
-    m_busy = busy;
+    mBusy = busy;
     QISystemDispatcher* system = QISystemDispatcher::instance();
 
     QVariantMap data;
-    data["active"] = m_busy;
+    data["active"] = mBusy;
 
     system->dispatch("imagePickerControllerSetIndicator",data);
     emit busyChanged();
