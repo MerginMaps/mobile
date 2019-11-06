@@ -12,4 +12,9 @@ ios {
     # launch screen
     app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib $$files($$PWD/ios/launchscreen/*.png)
     QMAKE_BUNDLE_DATA += app_launch_images
+
+    OBJECTIVE_SOURCES += \
+    ios/iosviewdelegate.mm \
+    ios/iossystemutils.mm \
+    ios/iosdevice.mm \
 }

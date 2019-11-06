@@ -40,11 +40,6 @@ ios/iosviewdelegate.h \
 
 QMAKE_CXXFLAGS += -fobjc-arc
 
-OBJECTIVE_SOURCES += \
-ios/iosviewdelegate.mm \
-ios/iossystemutils.mm \
-ios/iosdevice.mm \
-
 contains(DEFINES, INPUT_TEST) {
   SOURCES += test/testmerginapi.cpp
   HEADERS += test/testmerginapi.h
