@@ -245,40 +245,40 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
   return data;
 }
 
-QString InputUtils::extractRelativePath(const QString &path, const QString &prefixPath)
+QString InputUtils::extractRelativePath( const QString &path, const QString &prefixPath )
 {
-    QString modPath = path;
-    QString filePrefix( "file://" );
+  QString modPath = path;
+  QString filePrefix( "file://" );
 
-    if ( path.startsWith( filePrefix ) )
+  if ( path.startsWith( filePrefix ) )
+  {
+    modPath = modPath.replace( filePrefix, QString() );
+  }
+
+  if ( prefixPath.isEmpty() ) return modPath;
+
+  // Do not use a canonical path for non-existing path
+  if ( !QFileInfo( path ).exists() )
+  {
+    if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath + "/" ) )
     {
-      modPath = modPath.replace( filePrefix, QString() );
+      return modPath.replace( prefixPath + "/", QString() );
     }
+  }
+  else
+  {
+    QDir absoluteDir( modPath );
+    QDir prefixDir( prefixPath );
+    QString canonicalPath = absoluteDir.canonicalPath();
+    QString prefixCanonicalPath = prefixDir.canonicalPath() + "/";
 
-    if ( prefixPath.isEmpty() ) return modPath;
-
-    // Do not use a canonical path for non-existing path
-    if ( !QFileInfo( path ).exists() )
+    if ( prefixCanonicalPath.length() > 1 && canonicalPath.startsWith( prefixCanonicalPath ) )
     {
-      if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath + "/") )
-      {
-        return modPath.replace( prefixPath + "/", QString() );
-      }
+      return canonicalPath.replace( prefixCanonicalPath, QString() );
     }
-    else
-    {
-      QDir absoluteDir( modPath );
-      QDir prefixDir( prefixPath );
-      QString canonicalPath = absoluteDir.canonicalPath();
-      QString prefixCanonicalPath = prefixDir.canonicalPath() + "/";
+  }
 
-      if ( prefixCanonicalPath.length() > 1 && canonicalPath.startsWith( prefixCanonicalPath ) )
-      {
-        return canonicalPath.replace( prefixCanonicalPath, QString() );
-      }
-    }
-
-    return QString();
+  return QString();
 }
 
 void InputUtils::setLogFilename( const QString &value )

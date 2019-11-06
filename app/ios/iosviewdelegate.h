@@ -5,19 +5,20 @@
 #include <UIKit/UIKit.h>
 
 @interface QIViewDelegate : NSObject<UIAlertViewDelegate,
-                                     UIActionSheetDelegate,
-                                     UIImagePickerControllerDelegate,
-                                     UINavigationControllerDelegate> {
+  UIActionSheetDelegate,
+  UIImagePickerControllerDelegate,
+  UINavigationControllerDelegate>
+{
 
-    @public
+@public
 
-    void ( ^ alertViewClickedButtonAtIndex )( int );
-    void ( ^ alertViewDismissWithButtonIndex )( int );
+  void ( ^ alertViewClickedButtonAtIndex )( int );
+  void ( ^ alertViewDismissWithButtonIndex )( int );
 
-    void ( ^ actionSheetClickedButtonAtIndex) (int);
-    void ( ^ actionSheetDidDismissWithButtonIndex) (int);
+  void ( ^ actionSheetClickedButtonAtIndex )( int );
+  void ( ^ actionSheetDidDismissWithButtonIndex )( int );
 
-    void (^ imagePickerControllerDidFinishPickingMediaWithInfo)(UIImagePickerController* picker,NSDictionary* info);
-    void (^ imagePickerControllerDidCancel)(UIImagePickerController* picker);
+  void ( ^ imagePickerControllerDidFinishPickingMediaWithInfo )( UIImagePickerController * picker, NSDictionary * info );
+  void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );
 }
 @end

@@ -14,37 +14,42 @@
 
 #include "inpututils.h"
 
-class IOSImagePickerSaver : public QRunnable {
-public:
+class IOSImagePickerSaver : public QRunnable
+{
+  public:
     QPointer<IOSImagePicker> owner;
     QImage image;
     QString absoluteImagePath;
 
     /// <#Description#>
-    void run() {
-        if (absoluteImagePath.isNull()) {
-            absoluteImagePath = QString("%1/%2.jpg").arg(owner->targetPath(), QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) ));
-        }
+    void run()
+    {
+      if ( absoluteImagePath.isNull() )
+      {
+        absoluteImagePath = QString( "%1/%2.jpg" ).arg( owner->targetPath(), QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) ) );
+      }
 
-        image.save(absoluteImagePath);
-        QImageWriter writer;
-        writer.setFileName(absoluteImagePath);
-        if (!writer.write(image)) {
-            qWarning() << QString("Failed to save %1 : %2").arg(absoluteImagePath).arg(writer.errorString());
-        }
+      image.save( absoluteImagePath );
+      QImageWriter writer;
+      writer.setFileName( absoluteImagePath );
+      if ( !writer.write( image ) )
+      {
+        qWarning() << QString( "Failed to save %1 : %2" ).arg( absoluteImagePath ).arg( writer.errorString() );
+      }
 
-        if (!owner.isNull()) {
-            QMetaObject::invokeMethod(owner.data(),"endSave",Qt::QueuedConnection,
-                                      Q_ARG(QString, absoluteImagePath));
-        }
+      if ( !owner.isNull() )
+      {
+        QMetaObject::invokeMethod( owner.data(), "endSave", Qt::QueuedConnection,
+                                   Q_ARG( QString, absoluteImagePath ) );
+      }
     }
 };
 
-IOSImagePicker::IOSImagePicker(QObject *parent) : QObject(parent)
+IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
-    mSourceType = PhotoLibrary;
-    mStatus = Null;
-    mBusy = false;
+  mSourceType = PhotoLibrary;
+  mStatus = Null;
+  mBusy = false;
 }
 
 IOSImagePicker::~IOSImagePicker()
@@ -52,200 +57,207 @@ IOSImagePicker::~IOSImagePicker()
 
 }
 
-void IOSImagePicker::show(bool animated)
+void IOSImagePicker::show( bool animated )
 {
-    if (mStatus == Running || mStatus == Saving) {
-        return;
-    }
+  if ( mStatus == Running || mStatus == Saving )
+  {
+    return;
+  }
 
 #ifdef Q_OS_IOS
-    QISystemDispatcher* system = QISystemDispatcher::instance();
+  QISystemDispatcher *system = QISystemDispatcher::instance();
 
-    QVariantMap data;
-    data["sourceType"] = mSourceType;
-    data["animated"] = animated;
+  QVariantMap data;
+  data["sourceType"] = mSourceType;
+  data["animated"] = animated;
 
-    connect(system,SIGNAL(dispatched(QString,QVariantMap)),
-            this,SLOT(onReceived(QString,QVariantMap)));
+  connect( system, SIGNAL( dispatched( QString, QVariantMap ) ),
+           this, SLOT( onReceived( QString, QVariantMap ) ) );
 
-    bool res = system->dispatch("imagePickerControllerPresent",data);
+  bool res = system->dispatch( "imagePickerControllerPresent", data );
 
-    if (res) {
-        setStatus(Running);
-    }
+  if ( res )
+  {
+    setStatus( Running );
+  }
 #endif
 }
 
-void IOSImagePicker::close(bool animated)
+void IOSImagePicker::close( bool animated )
 {
-    QISystemDispatcher* system = QISystemDispatcher::instance();
-    QVariantMap data;
-    data["animated"] = animated;
+  QISystemDispatcher *system = QISystemDispatcher::instance();
+  QVariantMap data;
+  data["animated"] = animated;
 
-    system->dispatch("imagePickerControllerDismiss",data);
+  system->dispatch( "imagePickerControllerDismiss", data );
 }
 
-void IOSImagePicker::save(QString fileName)
+void IOSImagePicker::save( QString fileName )
 {
-    IOSImagePickerSaver* saver = new IOSImagePickerSaver();
-    saver->setAutoDelete(true);
-    saver->owner = this;
-    saver->absoluteImagePath = fileName;
-    saver->image = mImage;
+  IOSImagePickerSaver *saver = new IOSImagePickerSaver();
+  saver->setAutoDelete( true );
+  saver->owner = this;
+  saver->absoluteImagePath = fileName;
+  saver->image = mImage;
 
-    QThreadPool::globalInstance()->start(saver);
+  QThreadPool::globalInstance()->start( saver );
 }
 
 void IOSImagePicker::saveImage()
 {
-    save(QString());
+  save( QString() );
 }
 
 void IOSImagePicker::clear()
 {
-    setImage(QImage());
-    emit imageChanged();
-    setStatus(Null);
+  setImage( QImage() );
+  emit imageChanged();
+  setStatus( Null );
 }
 
 IOSImagePicker::SourceType IOSImagePicker::sourceType() const
 {
-    return mSourceType;
+  return mSourceType;
 }
 
-void IOSImagePicker::setSourceType(const SourceType &sourceType)
+void IOSImagePicker::setSourceType( const SourceType &sourceType )
 {
-    mSourceType = sourceType;
-    emit sourceTypeChanged();
+  mSourceType = sourceType;
+  emit sourceTypeChanged();
 }
 
 QImage IOSImagePicker::image() const
 {
-    return mImage;
+  return mImage;
 }
 
-void IOSImagePicker::setImage(const QImage &image)
+void IOSImagePicker::setImage( const QImage &image )
 {
-    mImage = image;
-    if (true) {
-        QString mFilename;
-        mImage.save(mFilename, "PNG");
-    }
+  mImage = image;
+  if ( true )
+  {
+    QString mFilename;
+    mImage.save( mFilename, "PNG" );
+  }
 
-    emit imageChanged();
+  emit imageChanged();
 }
 
 IOSImagePicker::Status IOSImagePicker::status() const
 {
-    return mStatus;
+  return mStatus;
 }
 
-void IOSImagePicker::setStatus(const Status &status)
+void IOSImagePicker::setStatus( const Status &status )
 {
-    if (mStatus == status)
-        return;
-    mStatus = status;
-    emit statusChanged();
+  if ( mStatus == status )
+    return;
+  mStatus = status;
+  emit statusChanged();
 }
 
-void IOSImagePicker::onReceived(QString name, QVariantMap data)
+void IOSImagePicker::onReceived( QString name, QVariantMap data )
 {
-    QISystemDispatcher* system = QISystemDispatcher::instance();
+  QISystemDispatcher *system = QISystemDispatcher::instance();
 
-    if (name == "imagePickerControllerDidCancel") {
-        setStatus(Null);
-        system->disconnect(this);
-        close();
-    }
+  if ( name == "imagePickerControllerDidCancel" )
+  {
+    setStatus( Null );
+    system->disconnect( this );
+    close();
+  }
 
-    if (name != "imagePickerControllerDisFinishPickingMetaWithInfo")
-        return;
+  if ( name != "imagePickerControllerDisFinishPickingMetaWithInfo" )
+    return;
 
-    system->disconnect(this);
-    QImage image = data["image"].value<QImage>();
-    setImage(image);
-    setMediaType(data["mediaType"].toString());
-    setMediaUrl(data["mediaUrl"].toString());
-    setReferenceUrl(data["referenceUrl"].toString());
+  system->disconnect( this );
+  QImage image = data["image"].value<QImage>();
+  setImage( image );
+  setMediaType( data["mediaType"].toString() );
+  setMediaUrl( data["mediaUrl"].toString() );
+  setReferenceUrl( data["referenceUrl"].toString() );
 
-    setStatus(Ready);
-    emit ready();
+  setStatus( Ready );
+  emit ready();
 }
 
-void IOSImagePicker::endSave(QString fileName)
+void IOSImagePicker::endSave( QString fileName )
 {
-    QUrl url = QUrl::fromLocalFile(fileName);
+  QUrl url = QUrl::fromLocalFile( fileName );
 
-    emit saved(url.toString());
+  emit saved( url.toString() );
 
-    if (mImage.isNull()) {
-        setStatus(Null);
-    } else {
-        setStatus(Ready);
-    }
+  if ( mImage.isNull() )
+  {
+    setStatus( Null );
+  }
+  else
+  {
+    setStatus( Ready );
+  }
 }
 
 QString IOSImagePicker::targetPath() const
 {
-    return mTargetPath;
+  return mTargetPath;
 }
 
-void IOSImagePicker::setTargetPath(const QString &targetPath)
+void IOSImagePicker::setTargetPath( const QString &targetPath )
 {
-    mTargetPath = targetPath;
-    emit targetPathChanged();
+  mTargetPath = targetPath;
+  emit targetPathChanged();
 }
 QString IOSImagePicker::referenceUrl() const
 {
-    return mReferenceUrl;
+  return mReferenceUrl;
 }
 
-void IOSImagePicker::setReferenceUrl(const QString &referenceUrl)
+void IOSImagePicker::setReferenceUrl( const QString &referenceUrl )
 {
-    mReferenceUrl = referenceUrl;
-    emit referenceUrlChanged();
+  mReferenceUrl = referenceUrl;
+  emit referenceUrlChanged();
 }
 
 QString IOSImagePicker::mediaUrl() const
 {
-    return mMediaUrl;
+  return mMediaUrl;
 }
 
-void IOSImagePicker::setMediaUrl(const QString &mediaUrl)
+void IOSImagePicker::setMediaUrl( const QString &mediaUrl )
 {
-    mMediaUrl = mediaUrl;
-    emit mediaUrlChanged();
+  mMediaUrl = mediaUrl;
+  emit mediaUrlChanged();
 }
 
 QString IOSImagePicker::mediaType() const
 {
-    return mMediaType;
+  return mMediaType;
 }
 
-void IOSImagePicker::setMediaType(const QString &mediaType)
+void IOSImagePicker::setMediaType( const QString &mediaType )
 {
-    mMediaType = mediaType;
-    emit mediaTypeChanged();
+  mMediaType = mediaType;
+  emit mediaTypeChanged();
 }
 
 bool IOSImagePicker::busy() const
 {
-    return mBusy;
+  return mBusy;
 }
 
-void IOSImagePicker::setBusy(bool busy)
+void IOSImagePicker::setBusy( bool busy )
 {
-    if (mBusy == busy)
-        return;
+  if ( mBusy == busy )
+    return;
 
-    mBusy = busy;
-    QISystemDispatcher* system = QISystemDispatcher::instance();
+  mBusy = busy;
+  QISystemDispatcher *system = QISystemDispatcher::instance();
 
-    QVariantMap data;
-    data["active"] = mBusy;
+  QVariantMap data;
+  data["active"] = mBusy;
 
-    system->dispatch("imagePickerControllerSetIndicator",data);
-    emit busyChanged();
+  system->dispatch( "imagePickerControllerSetIndicator", data );
+  emit busyChanged();
 }
 
 
