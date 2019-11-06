@@ -45,6 +45,8 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
+    Q_INVOKABLE QString extractRelativePath( const QString &path, const QString &prefixPath );
+
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
      * \param srcPath Absolute path to a file.

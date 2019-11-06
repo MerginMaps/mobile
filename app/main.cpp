@@ -20,7 +20,7 @@
 #include "qgsconfig.h"
 
 #include "androidutils.h"
-#include "iosutils.h"
+#include "ios/iosutils.h"
 #include "inpututils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
@@ -29,8 +29,8 @@
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
-#include "iossystemdispatcher.h"
-#include "iosimagepicker.h"
+#include "ios/iossystemdispatcher.h"
+#include "ios/iosimagepicker.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -192,7 +192,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
-  qmlRegisterType<QIImagePicker>("lc",1,0,"ImagePicker");
+  qmlRegisterType<IOSImagePicker>("lc",1,0,"ImagePicker");
 }
 
 #ifdef INPUT_TEST

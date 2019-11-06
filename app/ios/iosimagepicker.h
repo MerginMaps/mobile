@@ -10,7 +10,7 @@
 #include <QVariantMap>
 
 /// QIImagePicker provides a simple interface to access camera and camera roll via the UIImagePickerController
-class QIImagePicker : public QObject
+class IOSImagePicker : public QObject
 {
     Q_OBJECT
     Q_ENUMS(SourceType)
@@ -22,6 +22,8 @@ class QIImagePicker : public QObject
     Q_PROPERTY(QString mediaType READ mediaType WRITE setMediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(QString mediaUrl READ mediaUrl WRITE setMediaUrl NOTIFY mediaUrlChanged)
     Q_PROPERTY(QString referenceUrl READ referenceUrl WRITE setReferenceUrl NOTIFY referenceUrlChanged)
+
+    Q_PROPERTY(QString targetPath READ targetPath WRITE setTargetPath NOTIFY targetPathChanged)
 
 public:
     enum SourceType {
@@ -37,8 +39,8 @@ public:
         Saving // The image is saving
     };
 
-    QIImagePicker(QObject* parent = nullptr);
-    ~QIImagePicker();
+    IOSImagePicker(QObject* parent = nullptr);
+    ~IOSImagePicker();
 
     Q_INVOKABLE void show(bool animated = true);
 
@@ -72,6 +74,9 @@ public:
     QString referenceUrl() const;
     void setReferenceUrl(const QString &referenceUrl);
 
+    QString targetPath() const;
+    void setTargetPath(const QString &targetPath);
+
 signals:
     void sourceTypeChanged();
     void imageChanged();
@@ -80,6 +85,7 @@ signals:
     void referenceUrlChanged();
     void mediaTypeChanged();
     void mediaUrlChanged();
+    void targetPathChanged();
 
     void ready();
     void saved(QString url);
@@ -96,6 +102,8 @@ private:
     QString m_mediaType;
     QString m_mediaUrl;
     QString m_referenceUrl;
+
+    QString mTargetPath;
 
     bool m_busy;
 };

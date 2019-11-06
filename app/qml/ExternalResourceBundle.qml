@@ -32,6 +32,8 @@ Item {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
               picker.itemWidget = itemWidget
+              // TODO rename targetPath -> targetDir
+              picker.targetPath = picker.itemWidget.targetDir
               picker.show()
             } else {
                 fileDialog.open()
@@ -186,22 +188,12 @@ Item {
         }
     }
 
-    MessageDialog {
-        id: pickerNotImplementedInfo
-        visible: false
-        title: qsTr( "Not implemented" )
-        text: qsTr( "Picker from gallery on iOS is not supported yet." )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Cancel
-        onRejected: {
-           visible = false
-        }
-    }
-
     // iOS Image picker
     ImagePicker {
       id : picker
       property var itemWidget
+      property var targetDir
+
 
       onReady: {
         if (status === ImagePicker.Ready) {
@@ -211,9 +203,19 @@ Item {
       }
 
       onSaved: {
+        console.log("Image saved at ", url)
         var newPath = url
+        var prefix = (picker.itemWidget.prefixToRelativePath) ?
+              picker.itemWidget.prefixToRelativePath:
+              picker.itemWidget.targetDir
+        console.log('TARGET DIR', picker.itemWidget.targetDir )
+        console.log('PREFIX DIR', picker.itemWidget.prefixToRelativePath )
+        console.log('MEDIA URL', picker.mediaUrl)
+        console.log('REFERENCE URL', picker.referenceUrl)
+
         if (newPath) {
-          var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, "")
+          var newCurrentValue = __inputUtils.extractRelativePath(newPath, picker.itemWidget.targetDir)
+          console.log('newCurrentValue URL', newCurrentValue)
           picker.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
         }
         picker.close();

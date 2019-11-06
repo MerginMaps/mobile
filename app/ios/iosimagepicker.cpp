@@ -10,52 +10,68 @@
 #include "iossystemdispatcher.h"
 #include "iosimagepicker.h"
 #include <QtDebug>
+#include <QCoreApplication>
 
-class QIImagePickerSaver : public QRunnable {
+#include "inpututils.h"
+
+class IOSImagePickerSaver : public QRunnable {
 public:
-    QPointer<QIImagePicker> owner;
+    QPointer<IOSImagePicker> owner;
     QImage image;
-    QString fileName;
+    QString absoluteImagePath;
 
+    /// <#Description#>
     void run() {
-        if (fileName.isNull()) { // Save as temp
+        if (absoluteImagePath.isNull()) { // Save as temp
             QTemporaryFile tmp;
             QStringList paths = QStandardPaths::standardLocations(QStandardPaths::TempLocation);
-            QString tmpPath = paths.at(0);
+            //QString tmpPath = paths.at(0);
+            //QStringList paths = QCoreApplication::applicationDirPath();
+            QString tmpPath = owner->targetPath();
 
-            tmp.setFileTemplate(tmpPath + "/XXXXXX.jpg");
+            tmp.setFileTemplate(tmpPath + "/"+ QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) )+ ".jpg");
             tmp.open();
-            fileName = tmp.fileName();
+            //absoluteImagePath = tmp.fileName();
+            absoluteImagePath = tmpPath + "/"+ QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) )+ ".jpg";
+            //fileName = InputUtils::renameWithDateTime(fileName);
             tmp.close();
+
+//            QString tmpPath = owner->targetPath();
+//            fileName = QString("")
+//            QString basename =
+//            qDebug() << "BASENAME: "<< basename << "|";
+//            qDebug() << "MEdia: "<< owner->mediaUrl() << "|" << owner->referenceUrl();
+//            fileName = QString("%1/%2").arg(owner->targetPath(), basename);
+//            qDebug() << "fileNAME: "<< fileName << "|";
         }
 
-        image.save(fileName);
+        image.save(absoluteImagePath);
         QImageWriter writer;
-        writer.setFileName(fileName);
+        writer.setFileName(absoluteImagePath);
         if (!writer.write(image)) {
-            qWarning() << QString("Failed to save %1 : %2").arg(fileName).arg(writer.errorString());
+            qWarning() << QString("Failed to save %1 : %2").arg(absoluteImagePath).arg(writer.errorString());
         }
 
         if (!owner.isNull()) {
             QMetaObject::invokeMethod(owner.data(),"endSave",Qt::QueuedConnection,
-                                      Q_ARG(QString,fileName));
+                                      Q_ARG(QString, absoluteImagePath));
         }
     }
 };
 
-QIImagePicker::QIImagePicker(QObject *parent) : QObject(parent)
+IOSImagePicker::IOSImagePicker(QObject *parent) : QObject(parent)
 {
     m_sourceType = PhotoLibrary;
     m_status = Null;
     m_busy = false;
 }
 
-QIImagePicker::~QIImagePicker()
+IOSImagePicker::~IOSImagePicker()
 {
 
 }
 
-void QIImagePicker::show(bool animated)
+void IOSImagePicker::show(bool animated)
 {
     if (m_status == Running || m_status == Saving) {
         return;
@@ -76,43 +92,10 @@ void QIImagePicker::show(bool animated)
     if (res) {
         setStatus(Running);
     }
-
-#else
-    Q_UNUSED(animated);
-    // For desktop preview
-    qDebug() << "DESKTOP PREIVEW!!!!!!";
-    setStatus(Running);
-    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation);
-
-    QString file = QFileDialog::getOpenFileName (0,
-                                                 tr("Import Image"),
-                                                 paths.at(0),
-                                                 "Images (*.png *.xpm *.jpg)");
-
-    if (file.isNull()) {
-        setStatus(Null);
-    } else {
-        QImageReader reader;
-        reader.setFileName(file);
-        QImage image = reader.read();
-
-        if (image.isNull()) {
-            setStatus(Null);
-        } else {
-            QUrl url = QUrl::fromLocalFile(file);
-
-            setImage(image);
-            setMediaType("public.image");
-            setReferenceUrl(url.toString());
-
-            setStatus(Ready);
-            emit ready();
-        }
-    }
 #endif
 }
 
-void QIImagePicker::close(bool animated)
+void IOSImagePicker::close(bool animated)
 {
     QISystemDispatcher* system = QISystemDispatcher::instance();
     QVariantMap data;
@@ -121,46 +104,46 @@ void QIImagePicker::close(bool animated)
     system->dispatch("imagePickerControllerDismiss",data);
 }
 
-void QIImagePicker::save(QString fileName)
+void IOSImagePicker::save(QString fileName)
 {
-    QIImagePickerSaver* saver = new QIImagePickerSaver();
+    IOSImagePickerSaver* saver = new IOSImagePickerSaver();
     saver->setAutoDelete(true);
     saver->owner = this;
-    saver->fileName = fileName;
+    saver->absoluteImagePath = fileName;
     saver->image = m_image;
 
     QThreadPool::globalInstance()->start(saver);
 }
 
-void QIImagePicker::saveAsTemp()
+void IOSImagePicker::saveAsTemp()
 {
     save(QString());
 }
 
-void QIImagePicker::clear()
+void IOSImagePicker::clear()
 {
     setImage(QImage());
     emit imageChanged();
     setStatus(Null);
 }
 
-QIImagePicker::SourceType QIImagePicker::sourceType() const
+IOSImagePicker::SourceType IOSImagePicker::sourceType() const
 {
     return m_sourceType;
 }
 
-void QIImagePicker::setSourceType(const SourceType &sourceType)
+void IOSImagePicker::setSourceType(const SourceType &sourceType)
 {
     m_sourceType = sourceType;
     emit sourceTypeChanged();
 }
 
-QImage QIImagePicker::image() const
+QImage IOSImagePicker::image() const
 {
     return m_image;
 }
 
-void QIImagePicker::setImage(const QImage &image)
+void IOSImagePicker::setImage(const QImage &image)
 {
     m_image = image;
     if (true) {
@@ -171,12 +154,12 @@ void QIImagePicker::setImage(const QImage &image)
     emit imageChanged();
 }
 
-QIImagePicker::Status QIImagePicker::status() const
+IOSImagePicker::Status IOSImagePicker::status() const
 {
     return m_status;
 }
 
-void QIImagePicker::setStatus(const Status &status)
+void IOSImagePicker::setStatus(const Status &status)
 {
     if (m_status == status)
         return;
@@ -184,7 +167,7 @@ void QIImagePicker::setStatus(const Status &status)
     emit statusChanged();
 }
 
-void QIImagePicker::onReceived(QString name, QVariantMap data)
+void IOSImagePicker::onReceived(QString name, QVariantMap data)
 {
     QISystemDispatcher* system = QISystemDispatcher::instance();
 
@@ -208,7 +191,7 @@ void QIImagePicker::onReceived(QString name, QVariantMap data)
     emit ready();
 }
 
-void QIImagePicker::endSave(QString fileName)
+void IOSImagePicker::endSave(QString fileName)
 {
     QUrl url = QUrl::fromLocalFile(fileName);
 
@@ -220,45 +203,56 @@ void QIImagePicker::endSave(QString fileName)
         setStatus(Ready);
     }
 }
-QString QIImagePicker::referenceUrl() const
+
+QString IOSImagePicker::targetPath() const
+{
+    return mTargetPath;
+}
+
+void IOSImagePicker::setTargetPath(const QString &targetPath)
+{
+    mTargetPath = targetPath;
+    emit targetPathChanged();
+}
+QString IOSImagePicker::referenceUrl() const
 {
     return m_referenceUrl;
 }
 
-void QIImagePicker::setReferenceUrl(const QString &referenceUrl)
+void IOSImagePicker::setReferenceUrl(const QString &referenceUrl)
 {
     m_referenceUrl = referenceUrl;
     emit referenceUrlChanged();
 }
 
-QString QIImagePicker::mediaUrl() const
+QString IOSImagePicker::mediaUrl() const
 {
     return m_mediaUrl;
 }
 
-void QIImagePicker::setMediaUrl(const QString &mediaUrl)
+void IOSImagePicker::setMediaUrl(const QString &mediaUrl)
 {
     m_mediaUrl = mediaUrl;
     emit mediaUrlChanged();
 }
 
-QString QIImagePicker::mediaType() const
+QString IOSImagePicker::mediaType() const
 {
     return m_mediaType;
 }
 
-void QIImagePicker::setMediaType(const QString &mediaType)
+void IOSImagePicker::setMediaType(const QString &mediaType)
 {
     m_mediaType = mediaType;
     emit mediaTypeChanged();
 }
 
-bool QIImagePicker::busy() const
+bool IOSImagePicker::busy() const
 {
     return m_busy;
 }
 
-void QIImagePicker::setBusy(bool busy)
+void IOSImagePicker::setBusy(bool busy)
 {
     if (m_busy == busy)
         return;
