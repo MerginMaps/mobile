@@ -15,18 +15,16 @@ ios {
 
     SOURCES += \
         ios/ioshandler.cpp \
+        ios/iosimagepicker.cpp
 
     HEADERS += \
         ios/ioshandler.h \
-        ios/iosinterface.h
+        ios/iosinterface.h \
+        ios/iosimagepicker.h \
+        ios/iosviewdelegate.h \
 
     OBJECTIVE_SOURCES += \
         ios/ioshandler.mm \
-        ios/iosinterface.mm
+        ios/iosinterface.mm \
+        ios/iosviewdelegate.mm
 }
-
-HEADERS += \
-  $$PWD/ios/iosimagepicker.h
-
-SOURCES += \
-  $$PWD/ios/iosimagepicker.cpp

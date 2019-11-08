@@ -3,8 +3,10 @@
 
 #include <UIKit/UIKit.h>
 
-@interface MyClass :NSObject
--(void)hello:(int)num1;
+#include <QVariantMap>
+
+@interface IOSInterface :NSObject
+-(void)showImagePicker:(int)num1;
 @end
 
 #endif // IOSINTERFACE_H

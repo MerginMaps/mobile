@@ -4,6 +4,9 @@
 
 #include "ioshandler.h"
 
+
+// NOTE: WILL BE PROBABLY EMPTY -- no implemenation --
+
 IOSHandler::IOSHandler(QObject *parent) : QObject(parent)
 {
 
