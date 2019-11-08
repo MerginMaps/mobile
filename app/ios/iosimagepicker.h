@@ -13,8 +13,6 @@ public:
 
     Q_INVOKABLE void test();
 
-    //Q_INVOKABLE int someMethod (void *objectiveCObject, void *aParameter);
-
 signals:
 
 public slots:
