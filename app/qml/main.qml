@@ -615,4 +615,14 @@ ApplicationWindow {
       z: zPanel + 1000 // the most top
     }
 
+    ImagePicker {
+      id: picker
+    }
+
+    Button {
+      width: 100
+      height: width
+      onClicked: picker.test()
+    }
+
 }
