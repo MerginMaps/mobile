@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
 
@@ -31,7 +32,9 @@ Item {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
                 // https://github.com/lutraconsulting/input/issues/418
-                pickerNotImplementedInfo.visible = true
+                //pickerNotImplementedInfo.visible = true
+                picker.targetDir = itemWidget.targetDir
+                picker.showImagePicker();
             } else {
                 fileDialog.open()
             }
@@ -196,6 +199,23 @@ Item {
            visible = false
         }
     }
+
+    ImagePicker {
+      id: picker
+      handler: __imagePickerHandler
+
+      onImageSaved: {
+        console.log("QML pICKER onImageSaved", absoluteImagePath)
+        if (absoluteImagePath) {
+          var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
+                externalResourceHandler.itemWidget.targetDir :
+                externalResourceHandler.itemWidget.targetDir + "/"
+          var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
+          externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+        }
+      }
+    }
+
 }
 
 

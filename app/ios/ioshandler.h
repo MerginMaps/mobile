@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QVariantMap>
 
 class IOSHandler : public QObject
 {
@@ -10,15 +11,15 @@ class IOSHandler : public QObject
 public:
     explicit IOSHandler(QObject *parent = nullptr);
 
-    static void objectiveC_Call();
+    Q_INVOKABLE static void showImagePicker();
 
-//    static IOSHandler* instance();
-
-//    static IOSHandler* mInstance;
-
-signals:
+    static IOSHandler* instance();
 
 public slots:
+    void imagePickerChoosen(QString name , QVariantMap data);
+
+signals:
+    void imagePickerFinished(QString name , QVariantMap data);
 };
 
 #endif // IOSHANDLER_H
