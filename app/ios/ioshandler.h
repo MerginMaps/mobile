@@ -8,18 +8,20 @@
 class IOSHandler : public QObject
 {
     Q_OBJECT
-public:
-    explicit IOSHandler(QObject *parent = nullptr);
+  public:
+    explicit IOSHandler( QObject *parent = nullptr );
 
     Q_INVOKABLE static void showImagePicker();
 
-    static IOSHandler* instance();
+    static IOSHandler *instance();
 
-public slots:
-    void imagePickerChoosen(QString name , QVariantMap data);
+  public slots:
+    //! Middle step method between iOSInterface and iOSImagePicker
+    void imagePickerFinished( bool successful, QVariantMap data );
 
-signals:
-    void imagePickerFinished(QString name , QVariantMap data);
+  signals:
+    //! Forwarded signal from iOSInterface's ImagePicker
+    void forwardedImagePickerFinished( bool successful, QVariantMap data );
 };
 
 #endif // IOSHANDLER_H

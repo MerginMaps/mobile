@@ -4,12 +4,13 @@
 #include <UIKit/UIKit.h>
 
 @interface IOSViewDelegate : NSObject<UIImagePickerControllerDelegate,
-                                     UINavigationControllerDelegate> {
+  UINavigationControllerDelegate>
+{
 
-    @public
+@public
 
-    void (^ imagePickerControllerDidFinishPickingMediaWithInfo)(UIImagePickerController* picker,NSDictionary* info);
-    void (^ imagePickerControllerDidCancel)(UIImagePickerController* picker);
+  void ( ^ imagePickerControllerDidFinishPickingMediaWithInfo )( UIImagePickerController * picker, NSDictionary * info );
+  void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );
 }
 @end
 

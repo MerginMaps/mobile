@@ -273,7 +273,7 @@ int main( int argc, char *argv[] )
   AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
-  IOSHandler* handler = IOSHandler::instance();
+  IOSHandler *handler = IOSHandler::instance();
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

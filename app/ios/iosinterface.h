@@ -5,8 +5,8 @@
 
 #include <QVariantMap>
 
-@interface IOSInterface :NSObject
--(void)showImagePicker:(int)num1;
+@interface IOSInterface : NSObject
+-( void )showImagePicker;
 @end
 
 #endif // IOSINTERFACE_H

@@ -6,42 +6,38 @@
 #include <QImageWriter>
 #include <QUrl>
 
-IOSImagePicker::IOSImagePicker(QObject *parent) : QObject(parent)
+IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 
 }
 
 void IOSImagePicker::showImagePicker()
 {
-    //IOSHandler* instance = IOSHandler::instance();
-    QObject::connect( mHandler, SIGNAL( imagePickerFinished( QString, QVariantMap ) ),
-                      this, SLOT( onImagePickerFinished( QString, QVariantMap ) ) );
-    mHandler->showImagePicker();
+  QObject::connect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
+                    this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
+  mHandler->showImagePicker();
 }
 
 QString IOSImagePicker::targetDir() const
 {
-    return mTargetDir;
+  return mTargetDir;
 }
 
-void IOSImagePicker::setTargetDir(const QString &targetDir)
+void IOSImagePicker::setTargetDir( const QString &targetDir )
 {
-    mTargetDir = targetDir;
-    emit targetDirChanged();
+  mTargetDir = targetDir;
+  emit targetDirChanged();
 }
 
-void IOSImagePicker::onImagePickerFinished(QString name, QVariantMap data)
+void IOSImagePicker::onImagePickerFinished( bool successful, QVariantMap data )
 {
-    qDebug() << "IOSImagePicker::onImageSaved!!!" << name;
-    QObject::disconnect( mHandler, SIGNAL( imagePickerFinished( QString, QVariantMap ) ),
-                      this, SLOT( onImagePickerFinished( QString, QVariantMap ) ) );
 
+  QObject::disconnect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
+                       this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
+
+  if ( successful )
+  {
     QImage image = data["image"].value<QImage>();
-    //      setImage( image );
-    //      setMediaType( data["mediaType"].toString() );
-    //      setMediaUrl( data["mediaUrl"].toString() );
-    //      setReferenceUrl( data["referenceUrl"].toString() );
-
     QString absoluteImagePath = QString( "%1/%2.jpg" ).arg( mTargetDir, QDateTime::currentDateTime().toString( QStringLiteral( "yyMMdd-hhmmss" ) ) );
 
     image.save( absoluteImagePath );
@@ -49,20 +45,21 @@ void IOSImagePicker::onImagePickerFinished(QString name, QVariantMap data)
     writer.setFileName( absoluteImagePath );
     if ( !writer.write( image ) )
     {
-        qWarning() << QString( "Failed to save %1 : %2" ).arg( absoluteImagePath ).arg( writer.errorString() );
+      qWarning() << QString( "Failed to save %1 : %2" ).arg( absoluteImagePath ).arg( writer.errorString() );
     }
 
     QUrl url = QUrl::fromLocalFile( absoluteImagePath );
     emit imageSaved( url.toString() );
+  }
 }
 
 IOSHandler *IOSImagePicker::handler() const
 {
-    return mHandler;
+  return mHandler;
 }
 
-void IOSImagePicker::setHandler(IOSHandler *handler)
+void IOSImagePicker::setHandler( IOSHandler *handler )
 {
-    mHandler = handler;
-    emit handlerChange();
+  mHandler = handler;
+  emit handlerChange();
 }
