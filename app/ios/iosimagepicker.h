@@ -43,7 +43,7 @@ class IOSImagePicker : public QObject
     /**
      * Callback after succesfuly choosing an image - saves image at targetDir location.
      */
-    void onImagePickerFinished( bool successful, QVariantMap data );
+    void onImagePickerFinished( bool successful, const QVariantMap &data );
 
   private:
     QString mTargetDir;

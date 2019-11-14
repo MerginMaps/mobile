@@ -29,7 +29,7 @@ void IOSImagePicker::setTargetDir( const QString &targetDir )
   emit targetDirChanged();
 }
 
-void IOSImagePicker::onImagePickerFinished( bool successful, QVariantMap data )
+void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &data )
 {
   if ( successful )
   {

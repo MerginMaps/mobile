@@ -91,8 +91,6 @@ static QImage fromUIImage(UIImage* image) {
     UIWindow* rootWindow = app.windows[0];
     UIViewController* rootViewController = rootWindow.rootViewController;
 
-    //int sourceType = 1; // PhotoGallery
-
   if (![UIImagePickerController isSourceTypeAvailable:(UIImagePickerControllerSourceType) sourceType]) {
 
 
@@ -135,7 +133,7 @@ static QImage fromUIImage(UIImage* image) {
 
             QMetaObject::invokeMethod(delegate->handler,"onImagePickerFinished",Qt::DirectConnection,
                                       Q_ARG(bool, true),
-                                      Q_ARG(QVariantMap, data));
+                                      Q_ARG(const QVariantMap, data));
             }
 
 
@@ -151,8 +149,6 @@ static QImage fromUIImage(UIImage* image) {
     delegate->imagePickerControllerDidCancel = ^(UIImagePickerController *picker) {
         qWarning() << "Image Picker: Cancel event (imagePickerControllerDidCancel)";
         [picker dismissViewControllerAnimated:YES completion:nil];
-
-        // TODO send unsuccessful signal
     };
     
     picker.delegate = delegate;
