@@ -40,6 +40,9 @@ class IOSImagePicker : public QObject
     void imageSaved( const QString &absoluteImagePath );
 
   public slots:
+    /**
+     * Callback after succesfuly choosing an image - saves image at targetDir location.
+     */
     void onImagePickerFinished( bool successful, QVariantMap data );
 
   private:
@@ -48,6 +51,6 @@ class IOSImagePicker : public QObject
     /**
      * Calls the objective-c function to show image picker.
      */
-    void showImagePickerDirect( int sourceType, IOSImagePicker *handler);
+    void showImagePickerDirect( int sourceType, IOSImagePicker *handler );
 };
 #endif // IOSIMAGEPICKER_H
