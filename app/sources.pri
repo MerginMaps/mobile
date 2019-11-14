@@ -13,6 +13,8 @@ merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
+ios/ioshandler.cpp \
+ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
 HEADERS += \
@@ -29,6 +31,8 @@ merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
 inpututils.h \
+ios/ioshandler.h \
+ios/iosimagepicker.h \
 ios/iosutils.h \
 
 contains(DEFINES, INPUT_TEST) {

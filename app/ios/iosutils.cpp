@@ -1,4 +1,4 @@
-#include "ios/iosutils.h"
+#include "iosutils.h"
 
 IosUtils::IosUtils( QObject *parent ): QObject( parent )
 {

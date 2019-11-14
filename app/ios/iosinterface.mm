@@ -78,7 +78,6 @@ static QImage fromUIImage(UIImage* image) {
     UIViewController* rootViewController = rootWindow.rootViewController;
 
     int sourceType = 0; // PhotoGallery
-    bool animated = true;
 
   if (![UIImagePickerController isSourceTypeAvailable:(UIImagePickerControllerSourceType) sourceType]) {
 
@@ -87,24 +86,14 @@ static QImage fromUIImage(UIImage* image) {
     NSString *alertMessage = @"The functionality is not available";
     NSString *alertOkButtonText = @"Ok";
 
-    if (@available(iOS 8, *)) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                            message:alertMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:alertOkButtonText, nil];
-        [alertView show];
-    }
-    else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
-                                                                                 message:alertMessage
-                                                                          preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionOk = [UIAlertAction actionWithTitle:alertOkButtonText
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:nil]; //You can use a block here to handle a press on this button
-        [alertController addAction:actionOk];
-        [rootViewController presentViewController:alertController animated:YES completion:nil];
-    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
+                                                                             message:alertMessage
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *actionOk = [UIAlertAction actionWithTitle:alertOkButtonText
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:nil]; //You can use a block here to handle a press on this button
+    [alertController addAction:actionOk];
+    [rootViewController presentViewController:alertController animated:YES completion:nil];
 } else
 {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -129,12 +118,12 @@ static QImage fromUIImage(UIImage* image) {
 
             IOSHandler* handler = IOSHandler::instance();
             QMetaObject::invokeMethod(handler,"imagePickerFinished",Qt::DirectConnection,
-                                          Q_ARG(bool , true),
-                                          Q_ARG(QVariantMap,data));
+                                          Q_ARG(bool, true),
+                                          Q_ARG(QVariantMap, data));
         }
 
         delegate = nil;
-        [picker dismissViewControllerAnimated:animated completion:nil];
+        [picker dismissViewControllerAnimated:YES completion:nil];
         
     };
 
@@ -142,7 +131,7 @@ static QImage fromUIImage(UIImage* image) {
     // Cancel event
     delegate->imagePickerControllerDidCancel = ^(UIImagePickerController *picker) {
         qWarning() << "Image Picker: Cancel event (imagePickerControllerDidCancel)";
-        [picker dismissViewControllerAnimated:animated completion:nil];
+        [picker dismissViewControllerAnimated:YES completion:nil];
 
         // TODO send unsuccessful signal
     };
@@ -152,7 +141,7 @@ static QImage fromUIImage(UIImage* image) {
     imagePickerIndicatorView.center = picker.view.center;
     [picker.view addSubview:imagePickerIndicatorView];
 
-    [rootViewController presentViewController:picker animated:animated completion:nil];
+    [rootViewController presentViewController:picker animated:YES completion:nil];
     
   }
 }

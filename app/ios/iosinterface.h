@@ -5,6 +5,10 @@
 
 #include <QVariantMap>
 
+
+/**
+ * The interface of objective-c methods.
+*/
 @interface IOSInterface : NSObject
 -( void )showImagePicker;
 @end

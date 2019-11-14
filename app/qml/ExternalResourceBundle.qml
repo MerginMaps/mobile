@@ -188,7 +188,6 @@ Item {
 
     ImagePicker {
       id: picker
-      handler: __imagePickerHandler
 
       onImageSaved: {
         console.log("QML pICKER onImageSaved", absoluteImagePath)

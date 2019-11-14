@@ -8,13 +8,10 @@
 
 #include "iosinterface.h"
 #include "ioshandler.h"
-#include "iosviewdelegate.h"
 
 void IOSHandler::showImagePicker()
 {
-    //Objective C code calling.....
-    IOSInterface *obj=[[IOSInterface alloc]init]; //Allocating the new object for the objective C   class we created
-    [obj showImagePicker];   //Calling the function we defined
+    IOSInterface *obj=[[IOSInterface alloc]init];
+    [obj showImagePicker];
 }
 
-// TODO catch invokedMethod from interface, even better in imagepicker

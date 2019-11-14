@@ -8,14 +8,16 @@
 
 IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
-
+  mHandler = IOSHandler::instance();
 }
 
 void IOSImagePicker::showImagePicker()
 {
+#ifdef Q_OS_IOS
   QObject::connect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
                     this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
   mHandler->showImagePicker();
+#endif
 }
 
 QString IOSImagePicker::targetDir() const
@@ -51,15 +53,4 @@ void IOSImagePicker::onImagePickerFinished( bool successful, QVariantMap data )
     QUrl url = QUrl::fromLocalFile( absoluteImagePath );
     emit imageSaved( url.toString() );
   }
-}
-
-IOSHandler *IOSImagePicker::handler() const
-{
-  return mHandler;
-}
-
-void IOSImagePicker::setHandler( IOSHandler *handler )
-{
-  mHandler = handler;
-  emit handlerChange();
 }

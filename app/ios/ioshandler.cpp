@@ -3,9 +3,6 @@
 #include <QtCore>
 #include <QDebug>
 
-#include <QImageWriter>
-#include <QImageReader>
-
 #include "ioshandler.h"
 
 static IOSHandler *mInstance;

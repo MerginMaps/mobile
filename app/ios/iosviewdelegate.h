@@ -3,6 +3,9 @@
 
 #include <UIKit/UIKit.h>
 
+/**
+ * View controller for iOSImagePicker
+*/
 @interface IOSViewDelegate : NSObject<UIImagePickerControllerDelegate,
   UINavigationControllerDelegate>
 {

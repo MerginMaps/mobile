@@ -21,7 +21,6 @@
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
-#include "ios/ioshandler.h"
 #include "inpututils.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
@@ -273,7 +272,6 @@ int main( int argc, char *argv[] )
   AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
-  IOSHandler *handler = IOSHandler::instance();
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -349,7 +347,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
-  engine.rootContext()->setContextProperty( "__imagePickerHandler", handler );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );

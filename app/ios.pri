@@ -13,14 +13,8 @@ ios {
     app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib $$files($$PWD/ios/launchscreen/*.png)
     QMAKE_BUNDLE_DATA += app_launch_images
 
-    SOURCES += \
-        ios/ioshandler.cpp \
-        ios/iosimagepicker.cpp
-
     HEADERS += \
-        ios/ioshandler.h \
         ios/iosinterface.h \
-        ios/iosimagepicker.h \
         ios/iosviewdelegate.h \
 
     OBJECTIVE_SOURCES += \
