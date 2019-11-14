@@ -191,7 +191,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
-  qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "ImagePicker" );
+  qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
 }
 
 #ifdef INPUT_TEST

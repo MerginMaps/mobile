@@ -1,8 +1,22 @@
+/***************************************************************************
+  iosinterface.mm
+  --------------------------------------
+  Date                 : Nov 2019
+  Copyright            : (C) 2019 by Viktor Sklencar
+  Email                : viktor.sklencar@lutraconsulting.co.uk
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <QtCore>
 #include <QImage>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
-#include "ioshandler.h"
 
 @implementation IOSInterface
 
@@ -66,7 +80,7 @@ static QImage fromUIImage(UIImage* image) {
     return result;
 }
 
--(void)showImagePicker
+-(void)showImagePicker:(int)sourceType:(IOSHandler*)handler
 {
     UIApplication* app = [UIApplication sharedApplication];
 
@@ -77,7 +91,7 @@ static QImage fromUIImage(UIImage* image) {
     UIWindow* rootWindow = app.windows[0];
     UIViewController* rootViewController = rootWindow.rootViewController;
 
-    int sourceType = 0; // PhotoGallery
+    //int sourceType = 1; // PhotoGallery
 
   if (![UIImagePickerController isSourceTypeAvailable:(UIImagePickerControllerSourceType) sourceType]) {
 
@@ -100,11 +114,12 @@ static QImage fromUIImage(UIImage* image) {
     imagePickerController = picker;
     picker.sourceType = (UIImagePickerControllerSourceType) sourceType;
     static IOSViewDelegate *delegate = nullptr;
-    delegate = [IOSViewDelegate alloc];
+    delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^(UIImagePickerController *picker, NSDictionary* info) {
-        Q_UNUSED(picker);
+        Q_UNUSED(picker)
+        qWarning() << "imagePickerControllerDidFinishPickingMediaWithInfo IS RUNNING";
 
         UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
         if (!chosenImage) {
@@ -116,10 +131,14 @@ static QImage fromUIImage(UIImage* image) {
             QVariantMap data;
             data["image"] = image;
 
-            IOSHandler* handler = IOSHandler::instance();
-            QMetaObject::invokeMethod(handler,"imagePickerFinished",Qt::DirectConnection,
-                                          Q_ARG(bool, true),
-                                          Q_ARG(QVariantMap, data));
+            if (delegate->handler) {
+
+            QMetaObject::invokeMethod(delegate->handler,"imagePickerFinished",Qt::DirectConnection,
+                                      Q_ARG(bool, true),
+                                      Q_ARG(QVariantMap, data));
+            }
+
+
         }
 
         delegate = nil;

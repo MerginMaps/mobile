@@ -186,7 +186,7 @@ Item {
         }
     }
 
-    ImagePicker {
+    IOSImagePicker {
       id: picker
 
       onImageSaved: {

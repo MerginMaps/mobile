@@ -11,12 +11,12 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
   mHandler = IOSHandler::instance();
 }
 
-void IOSImagePicker::showImagePicker()
+void IOSImagePicker::showImagePicker( int sourceType )
 {
 #ifdef Q_OS_IOS
   QObject::connect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
                     this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
-  mHandler->showImagePicker();
+  mHandler->showImagePicker( sourceType, mHandler );
 #endif
 }
 
