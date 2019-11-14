@@ -18,7 +18,7 @@ ios {
         ios/iosviewdelegate.h \
 
     OBJECTIVE_SOURCES += \
-        ios/ioshandler.mm \
         ios/iosinterface.mm \
-        ios/iosviewdelegate.mm
+        ios/iosviewdelegate.mm \
+        ios/iosimagepicker.mm
 }

@@ -18,8 +18,6 @@
 
 #include <QObject>
 #include <QVariantMap>
-#include "ios/ioshandler.h"
-
 
 /**
  * The class suppose to be used in QML to invoke iOS image picker and postprocess the image if any has been choosen.
@@ -31,8 +29,8 @@ class IOSImagePicker : public QObject
     explicit IOSImagePicker( QObject *parent = nullptr );
     //! Absolute path to the location where an image suppose to be copied according external widget
     Q_PROPERTY( QString targetDir READ targetDir WRITE setTargetDir NOTIFY targetDirChanged )
-
-    Q_INVOKABLE void showImagePicker( int sourceType );
+    //! Method suppose to be used in QML and calls IOSImagePicker::showImagePickerDirect which invokes IOSViewDelegate and image picker.
+    Q_INVOKABLE void showImagePicker();
 
     QString targetDir() const;
     void setTargetDir( const QString &targetDir );
@@ -46,6 +44,10 @@ class IOSImagePicker : public QObject
 
   private:
     QString mTargetDir;
-    IOSHandler *mHandler; // = nullptr;
+
+    /**
+     * Calls the objective-c function to show image picker.
+     */
+    void showImagePickerDirect( int sourceType, IOSImagePicker *handler);
 };
 #endif // IOSIMAGEPICKER_H

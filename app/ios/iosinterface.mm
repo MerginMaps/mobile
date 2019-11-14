@@ -80,7 +80,7 @@ static QImage fromUIImage(UIImage* image) {
     return result;
 }
 
--(void)showImagePicker:(int)sourceType:(IOSHandler*)handler
+-(void)showImagePicker:(int)sourceType:(IOSImagePicker*)handler
 {
     UIApplication* app = [UIApplication sharedApplication];
 
@@ -133,7 +133,7 @@ static QImage fromUIImage(UIImage* image) {
 
             if (delegate->handler) {
 
-            QMetaObject::invokeMethod(delegate->handler,"imagePickerFinished",Qt::DirectConnection,
+            QMetaObject::invokeMethod(delegate->handler,"onImagePickerFinished",Qt::DirectConnection,
                                       Q_ARG(bool, true),
                                       Q_ARG(QVariantMap, data));
             }

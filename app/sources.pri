@@ -13,7 +13,6 @@ merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
-ios/ioshandler.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -31,7 +30,6 @@ merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
 inpututils.h \
-ios/ioshandler.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 

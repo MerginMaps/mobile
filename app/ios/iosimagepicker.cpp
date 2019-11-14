@@ -1,22 +1,20 @@
 #include "iosimagepicker.h"
-#include "ioshandler.h"
 #include "qdatetime.h"
 
 #include <QDebug>
+#include <QImage>
 #include <QImageWriter>
 #include <QUrl>
 
 IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
-  mHandler = IOSHandler::instance();
 }
 
-void IOSImagePicker::showImagePicker( int sourceType )
+void IOSImagePicker::showImagePicker()
 {
 #ifdef Q_OS_IOS
-  QObject::connect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
-                    this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
-  mHandler->showImagePicker( sourceType, mHandler );
+    int sourceType = 0; // ImageGallery
+    showImagePickerDirect(sourceType, this);
 #endif
 }
 
@@ -33,10 +31,6 @@ void IOSImagePicker::setTargetDir( const QString &targetDir )
 
 void IOSImagePicker::onImagePickerFinished( bool successful, QVariantMap data )
 {
-
-  QObject::disconnect( mHandler, SIGNAL( forwardedImagePickerFinished( bool, QVariantMap ) ),
-                       this, SLOT( onImagePickerFinished( bool, QVariantMap ) ) );
-
   if ( successful )
   {
     QImage image = data["image"].value<QImage>();

@@ -22,7 +22,7 @@
 
 @implementation IOSViewDelegate
 
--(id) initWithHandler:(IOSHandler*)handler {
+-(id) initWithHandler:(IOSImagePicker*)handler {
     self = [super init];
     if (self) {
         self->handler = handler;

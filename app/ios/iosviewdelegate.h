@@ -18,7 +18,7 @@
 
 #include <UIKit/UIKit.h>
 
-#include "ioshandler.h"
+#include "iosimagepicker.h"
 /**
  * View controller for iOSImagePicker
 */
@@ -27,12 +27,12 @@
 {
 @public
 
-  IOSHandler *handler;
+  IOSImagePicker *handler;
 
   void ( ^ imagePickerControllerDidFinishPickingMediaWithInfo )( UIImagePickerController * picker, NSDictionary * info );
   void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );
 }
-- ( id ) initWithHandler:( IOSHandler * )handler;
+- ( id ) initWithHandler:( IOSImagePicker * )handler;
 @end
 
 #endif // IOSVIEWDELEGATE_H
