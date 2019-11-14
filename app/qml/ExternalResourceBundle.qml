@@ -190,7 +190,6 @@ Item {
       id: picker
 
       onImageSaved: {
-        console.log("QML pICKER onImageSaved", absoluteImagePath)
         if (absoluteImagePath) {
           var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
                 externalResourceHandler.itemWidget.targetDir :

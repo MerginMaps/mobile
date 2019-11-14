@@ -14,7 +14,7 @@ class IOSHandler : public QObject
     Q_OBJECT
   public:
     explicit IOSHandler( QObject *parent = nullptr );
-#ifdef MOBILE_OS
+#ifdef Q_OS_IOS
     /* Method calls IOSInterface::showImagePicker which invokes IOSViewDelegate and Image picker
      *
      */
