@@ -8,7 +8,7 @@ set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
 set REPO_PATH=%ROOT_DIR%\repo\input
 set DOWNLOAD_PATH=%ROOT_DIR%\download
-set RESULT_FILE=%ROOT_DIR%\..\input-win-x86_64.zip
+set RESULT_FILE=%ROOT_DIR%\..\inputapp-win-x86_64.exe
 
 if not exist %ROOT_DIR% mkdir %ROOT_DIR%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
@@ -24,24 +24,6 @@ call "%VS14ROOT%\VC\vcvarsall.bat" amd64
 path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
 
-rem set KIT8=%PF86%\Windows Kits\8.1
-rem set KIT10=%PF86%\Windows Kits\10
-rem set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
-rem set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib
-rem set LIB=%LIB%;%INPUT_SDK_DIR%\lib
-rem set LIB=%LIB%;%KIT8%\Lib\winv6.3\um\x64
-rem set LIB=%LIB%;%VS14ROOT%\VC\lib\amd64
-rem set LIB=%LIB%;%KIT10%\Lib\10.0.10150.0\ucrt\arm64
-rem echo LIB: %LIB%
-
-rem set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include
-rem set INCLUDE=%INCLUDE%;%INPUT_SDK_DIR%\include
-rem set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include
-rem set INCLUDE=%INCLUDE%;%KIT10%\Include\10.0.10150.0\ucrt\
-rem set INCLUDE=%INCLUDE%;%KIT8%\Include\um\
-rem set INCLUDE=%INCLUDE%;%KIT8%\Include\shared\
-rem echo INCLUDE: %LIB%
-
 set URL_input=https://github.com/lutraconsulting/input/archive/master.tar.gz
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 
@@ -54,16 +36,16 @@ IF NOT EXIST %REPO_PATH% (
 )
 
 cd %BUILD_PATH%
-rem IF NOT EXIST "%BUILD_PATH%\release\Input.exe" (
+IF NOT EXIST "%BUILD_PATH%\release\Input.exe" (
   qmake CONFIG+=force_debug_info %REPO_PATH%\app
   nmake release VERBOSE=1
-rem )
+  rem for debugging use %BUILD_PATH%\release\*.pdb
+)
 IF NOT EXIST "%BUILD_PATH%\release\Input.exe" goto error
 
 :package
 
 xcopy %BUILD_PATH%\release\Input.exe %STAGE_PATH%\ /Y
-xcopy %BUILD_PATH%\release\*.pdb %STAGE_PATH%\ /Y
 
 call %INPUT_SDK_DIR%\apps\Qt5\bin\qtenv2.bat
 %INPUT_SDK_DIR%\apps\Qt5\bin\windeployqt --release %STAGE_PATH%\Input.exe 
@@ -139,9 +121,15 @@ robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtQuick %STAGE_PATH%\qml\QtQuick /E /NFL /
 robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtQuick.2 %STAGE_PATH%\qml\QtQuick.2 /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtPositioning %STAGE_PATH%\qml\QtPositioning /E /NFL /XF *d.dll
 
-rem IF NOT EXIST %RESULT_FILE% 7z a %RESULT_FILE% %STAGE_PATH%\*
-rem dir %RESULT_FILE%
+robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\position %STAGE_PATH%\position /E /NFL /XF *d.dll
+robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\sqldrivers %STAGE_PATH%\sqldrivers /E /NFL /XF *d.dll
+robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\imageformats %STAGE_PATH%\imageformats /E /NFL /XF *d.dll
+robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\crypto %STAGE_PATH%\crypto /E /NFL /XF *d.dll
 
+IF NOT EXIST %RESULT_FILE% "C:\Program Files (x86)\NSIS\makensis.exe" %REPO_PATH%\scripts\input_win.nsi
+dir %RESULT_FILE%
+
+IF NOT EXIST %RESULT_FILE% goto error
 
 
 set PATH=%OLD_PATH%
