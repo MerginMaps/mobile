@@ -12,8 +12,9 @@ merginapi.cpp \
 merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
-iosutils.cpp \
-inpututils.cpp
+inpututils.cpp \
+ios/iosimagepicker.cpp \
+ios/iosutils.cpp \
 
 HEADERS += \
 localprojectsmanager.h \
@@ -28,8 +29,9 @@ merginapi.h \
 merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
-iosutils.h \
-inpututils.h
+inpututils.h \
+ios/iosimagepicker.h \
+ios/iosutils.h \
 
 contains(DEFINES, INPUT_TEST) {
   SOURCES += test/testmerginapi.cpp

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
 
@@ -30,8 +31,8 @@ Item {
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
-                // https://github.com/lutraconsulting/input/issues/418
-                pickerNotImplementedInfo.visible = true
+                picker.targetDir = itemWidget.targetDir
+                picker.showImagePicker();
             } else {
                 fileDialog.open()
             }
@@ -185,17 +186,20 @@ Item {
         }
     }
 
-    MessageDialog {
-        id: pickerNotImplementedInfo
-        visible: false
-        title: qsTr( "Not implemented" )
-        text: qsTr( "Picker from gallery on iOS is not supported yet." )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Cancel
-        onRejected: {
-           visible = false
+    IOSImagePicker {
+      id: picker
+
+      onImageSaved: {
+        if (absoluteImagePath) {
+          var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
+                externalResourceHandler.itemWidget.targetDir :
+                externalResourceHandler.itemWidget.targetDir + "/"
+          var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
+          externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
         }
+      }
     }
+
 }
 
 
