@@ -314,7 +314,7 @@ ApplicationWindow {
 
       gpsIndicatorColor: getGpsIndicatorColor()
     }
-
+	
     // Position Kit and Marker
     QgsQuick.PositionKit {
       id: positionKit
