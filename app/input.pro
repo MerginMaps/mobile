@@ -16,7 +16,7 @@ android {
 }
 
 win32 {
-  DEFINES += DESKTOP_OS
+  DEFINES += MOBILE_OS
   CONFIG += windows
 }
 
