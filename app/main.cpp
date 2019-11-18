@@ -105,14 +105,14 @@ static QString getDataDir()
 #endif
 
 #ifdef Q_OS_WIN32
- QString appLocation = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
+  QString appLocation = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
 
- QDir myDir( appLocation );
- if ( !myDir.exists() )
- {
+  QDir myDir( appLocation );
+  if ( !myDir.exists() )
+  {
     myDir.mkpath( appLocation );
- }
- dataPathRaw = appLocation + "/" + dataPathRaw;
+  }
+  dataPathRaw = appLocation + "/" + dataPathRaw;
 #endif
 
   qputenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData() );
