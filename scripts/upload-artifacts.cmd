@@ -6,7 +6,10 @@ if [%APPVEYOR_REPO_TAG%]==[true] (
 ) else (
     set APK_FILE=inputapp-win-x86_64-%APPVEYOR_REPO_COMMIT%.exe
 )
-xcopy C:\projects\input\x86_64\inputapp-win-x86_64.exe %APK_FILE% /Y
+set SRC_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
+if not exist %SRC_FILE% (echo missing_result & goto error)
+
+xcopy %SRC_FILE% %APK_FILE% /Y
 
 if [%APPVEYOR_PULL_REQUEST_TITLE%] != [] (
     echo "Deploying pull request
@@ -29,7 +32,7 @@ if [%APPVEYOR_PULL_REQUEST_TITLE%] != [] (
 rem do not leak DROPBOX_TOKEN
 echo "C:\Python36-x64\python ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%""
 @echo off
-C:\Python36-x64\python ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token %DROPBOX_TOKEN% > uploader.log
+%PYEXE% ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token %DROPBOX_TOKEN% > uploader.log
 @echo off
 
 tail -n 1 uploader.log > last_line.log
@@ -39,3 +42,12 @@ rem do not leak GITHUB_TOKEN
 @echo off
 curl -u inputapp-bot:%GITHUB_TOKEN% -X POST --data '{"body": "win-apk: [x86_64]('%APK_URL%') (SDK: ['%WINSDKTAG%'](https://github.com/lutraconsulting/input-sdk/releases/tag/'%WINSDKTAG%'))"}' %GITHUB_API%
 @echo off
+
+echo "all done!"
+goto end
+:error
+echo ENV ERROR %ERRORLEVEL%: %DATE% %TIME%
+echo "error!"
+exit /b 1
+
+:end
