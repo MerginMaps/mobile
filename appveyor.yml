@@ -11,7 +11,7 @@ environment:
 
 install:
   - choco install wintail
-  - (get-item env:PYEXE).Value  -m pip install dropbox
+  - (get-item env:PYEXE)  -m pip install dropbox
   - call .\\scripts\\download_sdk.cmd
   - call .\\scripts\\build_win.cmd
   - call .\\scripts\\upload-artifacts.cmd
