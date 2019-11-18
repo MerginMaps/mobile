@@ -38,10 +38,13 @@ echo "%PYEXE% C:\projects\input\scripts\uploader.py --source %APK_FILE% --destin
 tail -n 1 uploader.log > last_line.log
 set /p APK_URL= < last_line.log
 
+echo "Dropbox URL: %APK_URL%"
+
 rem do not leak GITHUB_TOKEN
 echo "push to github comment"
 @echo off
-curl -u inputapp-bot:%GITHUB_TOKEN% -X POST --data '{"body": "win-apk: [x86_64]('%APK_URL%') (SDK: ['%WINSDKTAG%'](https://github.com/lutraconsulting/input-sdk/releases/tag/'%WINSDKTAG%'))"}' %GITHUB_API%
+set GITHUB_DATA={"body": "win-apk: [x86_64](%APK_URL%) (SDK: [%WINSDKTAG%](https://github.com/lutraconsulting/input-sdk/releases/tag/%WINSDKTAG%))"}
+curl -u inputapp-bot:%GITHUB_TOKEN% -X POST --data %GITHUB_DATA% %GITHUB_API%
 @echo off
 
 echo "all done!"
