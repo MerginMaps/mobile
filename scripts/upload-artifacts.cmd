@@ -11,15 +11,15 @@ if not exist %SRC_FILE% (echo missing_result & goto error)
 
 echo f | xcopy /f /Y %SRC_FILE% %APK_FILE%
 
-if not [%APPVEYOR_PULL_REQUEST_TITLE%]==[] (
+if not ["%APPVEYOR_PULL_REQUEST_TITLE%"]==[""] (
     echo "Deploying pull request
     set DROPBOX_FOLDER="pulls"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/issues/%APPVEYOR_PULL_REQUEST_NUMBER%/comments
-) else if [%APPVEYOR_REPO_TAG%]==[true] (
+) else if ["%APPVEYOR_REPO_TAG%"]==["true"] (
     echo "Deploying tagged release"
     set DROPBOX_FOLDER="tags"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
-) else if [%APPVEYOR_REPO_BRANCH%]==[master] (
+) else if ["%APPVEYOR_REPO_BRANCH%"]==["master"] (
     echo "Deploying master branch"
     set DROPBOX_FOLDER="master"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
