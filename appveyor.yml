@@ -6,15 +6,15 @@ environment:
     DROPBOX_TOKEN:
       secure: SbA10ZSj12UGtUP6o9r0gEATY+S3ZO6h0KhRZfZ3L2iM6Kx1T0gd+KgTD1D4C8ye0qKHbkRdCHxKwt5ETyo0iAK59b6UgRTbIUhmrvnWXIU=
     WINSDKTAG: win-3
-    WINSDK: https://www.dropbox.com/s/g7217z2tn61bafh/input-sdk-win-x86_64-3.zip?dl=1
-    PYEXE: C:\Python36-x64\python
+    WINSDK: "https://www.dropbox.com/s/g7217z2tn61bafh/input-sdk-win-x86_64-3.zip?dl=1"
+    PYEXE: "C:\\Python36-x64\\python"
 
 install:
-  - choco install wintail
-  - C:\Python36-x64\python -m pip install dropbox
-  - call .\\scripts\\download_sdk.cmd
-  - call .\\scripts\\build_win.cmd
-  - call .\\scripts\\upload-artifacts.cmd
+  - "choco install wintail"
+  - "%PYEXE% -m pip install dropbox"
+  - cmd: ".\\scripts\\download_sdk.cmd"
+  - cmd: ".\\scripts\\build_win.cmd"
+  - cmd: ".\\scripts\\upload-artifacts.cmd"
 
 build: off
 
