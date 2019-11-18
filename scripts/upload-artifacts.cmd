@@ -9,7 +9,7 @@ if [%APPVEYOR_REPO_TAG%]==[true] (
 set SRC_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
 if not exist %SRC_FILE% (echo missing_result & goto error)
 
-xcopy %SRC_FILE% %APK_FILE% /Y
+echo f | xcopy /f /Y %SRC_FILE% %APK_FILE%
 
 if [%APPVEYOR_PULL_REQUEST_TITLE%] != [] (
     echo "Deploying pull request
