@@ -1,0 +1,33 @@
+image: Visual Studio 2015
+environment:
+  GITHUB_TOKEN:
+    secure: gqLWRiVUFKd+MsoevoouKEHG0tpvM9zhhSnCpzj9lRg4vcGq+ssWIG2m7kCbgLAC
+  WINSDKTAG: win-3
+  WINSDK: https://www.dropbox.com/s/g7217z2tn61bafh/input-sdk-win-x86_64-3.zip?dl=1
+
+install:
+  - choco install wintail
+  - call .\\scripts\\download_sdk.cmd
+  - call .\\scripts\\build_win.cmd
+  - call .\\scripts\\upload-artifacts.cmd
+
+build: off
+
+# Do not build feature branch with open Pull Requests
+skip_branch_with_pr: false
+
+#artifacts:
+#  - path: input-sdk-win-x86_64.zip
+#    name: input-sdk-win-x86_64
+
+#deploy:
+#  - provider: GitHub
+#    description: 'input-sdk windows release'
+#    auth_token:
+#      secure: gqLWRiVUFKd+MsoevoouKEHG0tpvM9zhhSnCpzj9lRg4vcGq+ssWIG2m7kCbgLAC
+#    artifact: input-sdk-win-x86_64
+#    draft: false
+#    prerelease: false
+#    on:
+#      branch: master
+#      APPVEYOR_REPO_TAG: true
