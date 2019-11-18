@@ -15,6 +15,11 @@ android {
   DEFINES += DESKTOP_OS
 }
 
+win32 {
+  DEFINES += MOBILE_OS
+  CONFIG += windows
+}
+
 # Mac+iOS specific includes/libraries paths
 mac {
   QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/qml
@@ -81,8 +86,8 @@ ios {
     QMAKE_INFO_PLIST = ios/Info.plist
 }
 
-# Linux+Android specific includes/libraries paths
-!mac:!ios {
+# Linux+Android+Win32 specific includes/libraries paths
+!mac:!ios:!win32 {
   QT_LIBS_DIR = $$dirname(QMAKE_QMAKE)/../lib
 
   !isEmpty(QGIS_INSTALL_PATH) {
@@ -125,9 +130,9 @@ ios {
   }
 
   exists($${QGIS_LIB_DIR}/libqgis_core.so) {
-    message("Building from QGIS: $${QGIS_INSTALL_PATH}")
+	message("Building from QGIS: $${QGIS_INSTALL_PATH}") 
   } else {
-    error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
+	error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
   }
 
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
@@ -135,16 +140,38 @@ ios {
   LIBS += -lqgis_core -lqgis_quick
 }
 
+# WIN 32 builds
+win32 {
+  QT_LIBS_DIR = $$dirname(QMAKE_QMAKE)/../lib
+
+  !isEmpty(QGIS_INSTALL_PATH) {
+    # using installed QGIS
+    QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
+    QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+    QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+    QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/qml
+  }
+  
+  exists($${QGIS_LIB_DIR}/qgis_core.lib) {
+	message("Building from QGIS: $${QGIS_INSTALL_PATH}")
+  } else {
+	error("Missing QGIS Core library in $${QGIS_LIB_DIR}/qgis_core.lib")
+  }
+  
+  INCLUDEPATH += $${QGIS_INCLUDE_DIR}
+  LIBS += -L$${QGIS_LIB_DIR}
+  LIBS += -lqgis_core -lqgis_quick
+  
+}
+
 # TESTING stuff (only desktop)
-!android:!ios {
+!android:!ios:!win32 {
   DEFINES += "INPUT_TEST"
   QT += testlib
   # path to test data
   DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 }
 
-DEFINES += "CORE_EXPORT="
-DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 
 CONFIG(debug, debug|release) {
@@ -171,7 +198,12 @@ include(sources.pri)
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGIS_QML_DIR}
 
-QMAKE_CXXFLAGS += -std=c++11
+win32 {
+  CONFIG += c++11
+  DEFINES += "_USE_MATH_DEFINES"
+} else {
+  QMAKE_CXXFLAGS += -std=c++11
+}
 
 include(android.pri)
 include(ios.pri)

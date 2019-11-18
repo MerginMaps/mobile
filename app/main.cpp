@@ -10,6 +10,7 @@
 #include <QtDebug>
 #include <QQmlError>
 #include <QDesktopWidget>
+#include <QtGlobal>
 #include <QQmlContext>
 #include <QQuickWindow>
 #ifdef INPUT_TEST
@@ -103,11 +104,11 @@ static QString getDataDir()
   dataPathRaw = docsLocation + "/" + dataPathRaw;
 #endif
 
-  ::setenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData(), true );
+  qputenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData() );
 #else
   qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
 #endif
-  QString dataDir( ::getenv( "QGIS_QUICK_DATA_PATH" ) );
+  QString dataDir = QString::fromLocal8Bit( qgetenv( "QGIS_QUICK_DATA_PATH" ) ) ;
   qDebug() << "QGIS_QUICK_DATA_PATH: " << dataDir;
   return dataDir;
 }
@@ -116,9 +117,9 @@ static void setEnvironmentQgisPrefixPath()
 {
 #ifdef DESKTOP_OS
 #ifdef QGIS_PREFIX_PATH
-  ::setenv( "QGIS_PREFIX_PATH", STR( QGIS_PREFIX_PATH ), true );
+  qputenv( "QGIS_PREFIX_PATH", STR( QGIS_PREFIX_PATH ) );
 #endif
-  if ( ::getenv( "QGIS_PREFIX_PATH" ) == 0 )
+  if ( QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) ).isEmpty() )
   {
     // if not on Android, QGIS_PREFIX_PATH env variable should have been set already or defined as C++ define
     qDebug( "== Must set QGIS_PREFIX_PATH in order to get QGIS Quick module running! ==" );
@@ -129,10 +130,10 @@ static void setEnvironmentQgisPrefixPath()
   QDir myDir( QDir::homePath() );
   myDir.cdUp();
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
-  ::setenv( "QGIS_PREFIX_PATH", prefixPath.toUtf8().constData(), true );
+  qputenv( "QGIS_PREFIX_PATH", prefixPath.toUtf8().constData() );
 #endif
 
-  qDebug() << "QGIS_PREFIX_PATH: " << ::getenv( "QGIS_PREFIX_PATH" );
+  qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
 // Copies resources folder to package folder
@@ -334,7 +335,7 @@ int main( int argc, char *argv[] )
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
   // and properly close connection after writting changes to gpkg.
-  ::setenv( "OGR_SQLITE_JOURNAL", "DELETE", 1 );
+  qputenv( "OGR_SQLITE_JOURNAL", "DELETE" );
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
