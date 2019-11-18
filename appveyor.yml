@@ -12,6 +12,7 @@ environment:
 install:
   - "choco install wintail"
   - "%PYEXE% -m pip install dropbox"
+  - cmd: "xcopy scripts\ci\config.pri app\ /Y"
   - cmd: ".\\scripts\\download_sdk.cmd"
   - cmd: ".\\scripts\\build_win.cmd"
   - cmd: ".\\scripts\\upload-artifacts.cmd"
