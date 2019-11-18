@@ -6,6 +6,8 @@ if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
+set RESULT_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
+
 IF EXIST "C:\projects\input\app\input.pro" (
     rem in APPVEYOR environment
     set REPO_PATH=C:\projects\input
@@ -115,11 +117,11 @@ robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\sqldrivers %STAGE_PATH%\sqldrivers /E 
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\imageformats %STAGE_PATH%\imageformats /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\crypto %STAGE_PATH%\crypto /E /NFL /XF *d.dll
 
+
 IF NOT EXIST %RESULT_FILE% "C:\Program Files (x86)\NSIS\makensis.exe" %REPO_PATH%\scripts\input_win.nsi
 dir %RESULT_FILE%
 
 IF NOT EXIST %RESULT_FILE% goto error
-
 
 set PATH=%OLD_PATH%
 cd %~dp0
