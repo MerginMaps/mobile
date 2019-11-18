@@ -13,7 +13,6 @@ IF EXIST "C:\projects\input\app\input.pro" (
 if not exist %ROOT_DIR% mkdir %ROOT_DIR%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 if not exist %STAGE_PATH%  mkdir %STAGE_PATH%
-if not exist %DOWNLOAD_PATH% mkdir %DOWNLOAD_PATH%
 IF NOT EXIST %REPO_PATH% (echo INPUT REPO not cloned & goto error)
 
 if not "%PROGRAMFILES(X86)%"=="" set PF86=%PROGRAMFILES(X86)%
