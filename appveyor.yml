@@ -15,7 +15,7 @@ install:
   - "xcopy scripts\\ci\\config.pri app\\ /Y"
   - cmd: ".\\scripts\\download_sdk.cmd"
   - cmd: ".\\scripts\\build_win.cmd"
-  - cmd: ".\\scripts\\upload-artifacts.cmd"
+  - cmd: ".\\upload-artifacts.cmd"
 
 build: off
 
