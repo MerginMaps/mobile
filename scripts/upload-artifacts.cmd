@@ -30,9 +30,9 @@ if not [%APPVEYOR_PULL_REQUEST_TITLE%]==[] (
 )
 
 rem do not leak DROPBOX_TOKEN
-echo "%PYEXE% ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%""
+echo "%PYEXE% C:\projects\input\scripts\uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%""
 @echo off
-%PYEXE% ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token %DROPBOX_TOKEN% > uploader.log
+%PYEXE% C:\projects\input\scripts\uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token %DROPBOX_TOKEN% > uploader.log
 @echo off
 
 tail -n 1 uploader.log > last_line.log
