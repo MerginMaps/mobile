@@ -104,6 +104,17 @@ static QString getDataDir()
   dataPathRaw = docsLocation + "/" + dataPathRaw;
 #endif
 
+#ifdef Q_OS_WIN32
+ QString appLocation = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
+
+ QDir myDir( appLocation );
+ if ( !myDir.exists() )
+ {
+    myDir.mkpath( appLocation );
+ }
+ dataPathRaw = appLocation + "/" + dataPathRaw;
+#endif
+
   qputenv( "QGIS_QUICK_DATA_PATH", dataPathRaw.toUtf8().constData() );
 #else
   qDebug( "== Must set QGIS_QUICK_DATA_PATH in order to get QGIS Quick running! ==" );
@@ -126,10 +137,13 @@ static void setEnvironmentQgisPrefixPath()
   }
 #endif
 
-#ifdef MOBILE_OS
+#if defined (ANDROID) || defined (Q_OS_IOS)
   QDir myDir( QDir::homePath() );
   myDir.cdUp();
   QString prefixPath = myDir.absolutePath();  // something like: /data/data/org.qgis.quick
+  qputenv( "QGIS_PREFIX_PATH", prefixPath.toUtf8().constData() );
+#elif defined (Q_OS_WIN32)
+  QString prefixPath = QCoreApplication::applicationDirPath();
   qputenv( "QGIS_PREFIX_PATH", prefixPath.toUtf8().constData() );
 #endif
 
@@ -146,15 +160,17 @@ static void expand_pkg_data( const QString &pkgPath )
 #else
   Q_UNUSED( pkgPath );
 #endif
-// on IOS the files are already in the bundle
+// on IOS and WIN32 the files are already in the bundle
 }
 
 static void copy_demo_projects( const QString &projectDir )
 {
-#ifdef MOBILE_OS
+#if defined (ANDROID) || defined (Q_OS_IOS)
   QString assetsBasePath( "assets:" );
   qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
   InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
+#elif defined (Q_OS_WIN32)
+  InputUtils::cpDir( QCoreApplication::applicationDirPath() + "/demo-projects", projectDir );
 #else
   Q_UNUSED( projectDir );
 #endif

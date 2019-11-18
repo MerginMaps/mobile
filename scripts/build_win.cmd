@@ -6,8 +6,8 @@ if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
-set RESULT_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
-
+set RESULT_FILE=%ROOT_DIR%\inputapp-win-x86_64.exe
+set REPO_PATH=%ROOT_DIR%\repo\input
 IF EXIST "C:\projects\input\app\input.pro" (
     rem in APPVEYOR environment
     set REPO_PATH=C:\projects\input
@@ -27,11 +27,10 @@ path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
 
 cd %BUILD_PATH%
-IF NOT EXIST "%BUILD_PATH%\release\Input.exe" (
-  qmake CONFIG+=force_debug_info %REPO_PATH%\app
-  nmake release VERBOSE=1
-  rem for debugging use %BUILD_PATH%\release\*.pdb
-)
+qmake CONFIG+=force_debug_info %REPO_PATH%\app
+nmake release VERBOSE=1
+IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
+rem for debugging use %BUILD_PATH%\release\*.pdb
 IF NOT EXIST "%BUILD_PATH%\release\Input.exe" goto error
 
 :package
@@ -117,6 +116,8 @@ robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\sqldrivers %STAGE_PATH%\sqldrivers /E 
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\imageformats %STAGE_PATH%\imageformats /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\crypto %STAGE_PATH%\crypto /E /NFL /XF *d.dll
 
+robocopy %REPO_PATH%\app\android\assets\qgis-data %STAGE_PATH%\qgis-data /E /NFL
+robocopy %REPO_PATH%\app\android\assets\demo-projects %STAGE_PATH%\demo-projects /E /NFL
 
 IF NOT EXIST %RESULT_FILE% "C:\Program Files (x86)\NSIS\makensis.exe" %REPO_PATH%\scripts\input_win.nsi
 dir %RESULT_FILE%
