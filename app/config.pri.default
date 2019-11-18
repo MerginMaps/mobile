@@ -29,3 +29,8 @@ ios {
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
 }
+
+win32 {
+  QGIS_INSTALL_PATH =  $${BASE_DIR}/input-sdk/x86_64/stage
+  QGIS_QUICK_DATA_PATH = C:/input-data
+}

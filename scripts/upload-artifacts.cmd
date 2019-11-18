@@ -9,17 +9,17 @@ if [%APPVEYOR_REPO_TAG%]==[true] (
 set SRC_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
 if not exist %SRC_FILE% (echo missing_result & goto error)
 
-xcopy %SRC_FILE% %APK_FILE% /Y
+echo f | xcopy /f /Y %SRC_FILE% %APK_FILE%
 
-if [%APPVEYOR_PULL_REQUEST_TITLE%] != [] (
+if not ["%APPVEYOR_PULL_REQUEST_TITLE%"]==[""] (
     echo "Deploying pull request
     set DROPBOX_FOLDER="pulls"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/issues/%APPVEYOR_PULL_REQUEST_NUMBER%/comments
-) else if [%APPVEYOR_REPO_TAG%]==[true] (
+) else if ["%APPVEYOR_REPO_TAG%"]==["true"] (
     echo "Deploying tagged release"
     set DROPBOX_FOLDER="tags"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
-) else if [%APPVEYOR_REPO_BRANCH%] == [master] (
+) else if ["%APPVEYOR_REPO_BRANCH%"]==["master"] (
     echo "Deploying master branch"
     set DROPBOX_FOLDER="master"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
@@ -30,17 +30,22 @@ if [%APPVEYOR_PULL_REQUEST_TITLE%] != [] (
 )
 
 rem do not leak DROPBOX_TOKEN
-echo "C:\Python36-x64\python ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%""
+echo "%PYEXE% C:\projects\input\scripts\uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%""
 @echo off
-%PYEXE% ./scripts/uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token %DROPBOX_TOKEN% > uploader.log
+%PYEXE% C:\projects\input\scripts\uploader.py --source %APK_FILE% --destination "/%DROPBOX_FOLDER%/%APK_FILE%" --token DROPBOX_TOKEN  > uploader.log
 @echo off
 
 tail -n 1 uploader.log > last_line.log
 set /p APK_URL= < last_line.log
 
+echo "Dropbox URL: %APK_URL%"
+
 rem do not leak GITHUB_TOKEN
+echo "push to github comment"
+echo { "body": "win-apk: [x86_64](%APK_URL%) (SDK: [%WINSDKTAG%](https://github.com/lutraconsulting/input-sdk/releases/tag/%WINSDKTAG%))"} > github.json
+type github.json
 @echo off
-curl -u inputapp-bot:%GITHUB_TOKEN% -X POST --data '{"body": "win-apk: [x86_64]('%APK_URL%') (SDK: ['%WINSDKTAG%'](https://github.com/lutraconsulting/input-sdk/releases/tag/'%WINSDKTAG%'))"}' %GITHUB_API%
+curl -u inputapp-bot:%GITHUB_TOKEN% -X POST -d @github.json %GITHUB_API% --header "Content-Type: application/json"
 @echo off
 
 echo "all done!"

@@ -6,14 +6,16 @@ if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
-set REPO_PATH=%ROOT_DIR%\repo\input
-set DOWNLOAD_PATH=%ROOT_DIR%\download
-set RESULT_FILE=%ROOT_DIR%\..\inputapp-win-x86_64.exe
+set RESULT_FILE=C:\projects\input\x86_64\inputapp-win-x86_64.exe
 
+IF EXIST "C:\projects\input\app\input.pro" (
+    rem in APPVEYOR environment
+    set REPO_PATH=C:\projects\input
+)
 if not exist %ROOT_DIR% mkdir %ROOT_DIR%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 if not exist %STAGE_PATH%  mkdir %STAGE_PATH%
-if not exist %DOWNLOAD_PATH% mkdir %DOWNLOAD_PATH%
+IF NOT EXIST %REPO_PATH% (echo INPUT REPO not cloned & goto error)
 
 if not "%PROGRAMFILES(X86)%"=="" set PF86=%PROGRAMFILES(X86)%
 if "%PF86%"=="" set PF86=%PROGRAMFILES%
@@ -23,17 +25,6 @@ set VS14ROOT=%PF86%\Microsoft Visual Studio 14.0
 call "%VS14ROOT%\VC\vcvarsall.bat" amd64
 path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
-
-set URL_input=https://github.com/lutraconsulting/input/archive/master.tar.gz
-if not exist %BUILD_PATH% mkdir %BUILD_PATH%
-
-IF NOT EXIST %REPO_PATH% (
-  cd %DOWNLOAD_PATH%
-  curl -fsSL --connect-timeout 60 -o input.tar.gz %URL_input%
-
-  7z x "input.tar.gz" -so | 7z x -aoa -si -ttar -o"src"
-  move src\input-master %REPO_PATH%
-)
 
 cd %BUILD_PATH%
 IF NOT EXIST "%BUILD_PATH%\release\Input.exe" (
@@ -126,11 +117,11 @@ robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\sqldrivers %STAGE_PATH%\sqldrivers /E 
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\imageformats %STAGE_PATH%\imageformats /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\crypto %STAGE_PATH%\crypto /E /NFL /XF *d.dll
 
+
 IF NOT EXIST %RESULT_FILE% "C:\Program Files (x86)\NSIS\makensis.exe" %REPO_PATH%\scripts\input_win.nsi
 dir %RESULT_FILE%
 
 IF NOT EXIST %RESULT_FILE% goto error
-
 
 set PATH=%OLD_PATH%
 cd %~dp0

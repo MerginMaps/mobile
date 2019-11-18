@@ -1,6 +1,7 @@
-curl -fsSL --connect-timeout 60 -o geodiff.tar.gz %URL_geodiff%
-7z x %WINSDK% -so | 7z x -aoa -si -ttar -o"input-sdk"
-dir input-sdk
+@echo on
 set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage
-robocopy input-sdk %INPUT_SDK_DIR% /E
+mkdir %INPUT_SDK_DIR%
+
+curl -fsSL --connect-timeout 60 -o input-sdk-download.zip "%WINSDK%"
+7z x input-sdk-download.zip -o%INPUT_SDK_DIR%
 dir %INPUT_SDK_DIR%
