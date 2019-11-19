@@ -44,3 +44,11 @@ Now it should appear in https://appstoreconnect.apple.com/ so you can publish it
 2. If the tests are going well -> release on app store
 
 Note: Make sure you tag the repo and write down build number. also tag input-sdk
+
+# Publishing win
+
+1. update version in scripts/version.cmd
+2. tag repo and get the generated installer from github comment
+3. rename installer with version from point 1
+4. upload installer to dropbox folder 
+5. update link on webpages?

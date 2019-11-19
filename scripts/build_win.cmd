@@ -1,5 +1,8 @@
 @echo on
 
+call %~dp0\version.cmd
+echo Building InputApp: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
+
 set OLD_PATH=%PATH%
 set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage
 if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
@@ -35,10 +38,17 @@ IF NOT EXIST "%BUILD_PATH%\release\Input.exe" goto error
 
 :package
 
+rem Input
 xcopy %BUILD_PATH%\release\Input.exe %STAGE_PATH%\ /Y
 
 call %INPUT_SDK_DIR%\apps\Qt5\bin\qtenv2.bat
 %INPUT_SDK_DIR%\apps\Qt5\bin\windeployqt --release %STAGE_PATH%\Input.exe 
+
+robocopy %REPO_PATH%\app\android\assets\qgis-data %STAGE_PATH%\qgis-data /E /NFL
+robocopy %REPO_PATH%\app\android\assets\demo-projects %STAGE_PATH%\demo-projects /E /NFL
+if not exist %STAGE_PATH%\images mkdir %STAGE_PATH%\images
+xcopy %REPO_PATH%\images\AppIcon.ico %STAGE_PATH%\images\ /Y
+more /P %REPO_PATH%\LICENSE > %STAGE_PATH%\license.txt
 
 rem OSGeo
 xcopy %INPUT_SDK_DIR%\bin\qgis_core.dll %STAGE_PATH%\ /Y
@@ -84,6 +94,7 @@ rem system
 xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll %STAGE_PATH%\ /Y
 xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vccorlib140.dll %STAGE_PATH%\ /Y
 xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\bin\msvcr100.dll %STAGE_PATH%\ /Y
 
 rem Qt5
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Sql.dll %STAGE_PATH%\ /Y
@@ -110,15 +121,15 @@ robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtQml %STAGE_PATH%\qml\QtQml /E /NFL /XF *
 robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtQuick %STAGE_PATH%\qml\QtQuick /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtQuick.2 %STAGE_PATH%\qml\QtQuick.2 /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtPositioning %STAGE_PATH%\qml\QtPositioning /E /NFL /XF *d.dll
+robocopy %INPUT_SDK_DIR%\apps\Qt5\qml\QtGraphicalEffects %STAGE_PATH%\qml\QtGraphicalEffects /E /NFL /XF *d.dll
 
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\position %STAGE_PATH%\position /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\sqldrivers %STAGE_PATH%\sqldrivers /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\imageformats %STAGE_PATH%\imageformats /E /NFL /XF *d.dll
 robocopy %INPUT_SDK_DIR%\apps\Qt5\plugins\crypto %STAGE_PATH%\crypto /E /NFL /XF *d.dll
 
-robocopy %REPO_PATH%\app\android\assets\qgis-data %STAGE_PATH%\qgis-data /E /NFL
-robocopy %REPO_PATH%\app\android\assets\demo-projects %STAGE_PATH%\demo-projects /E /NFL
 
+cd %STAGE_PATH%
 IF NOT EXIST %RESULT_FILE% "C:\Program Files (x86)\NSIS\makensis.exe" %REPO_PATH%\scripts\input_win.nsi
 dir %RESULT_FILE%
 
