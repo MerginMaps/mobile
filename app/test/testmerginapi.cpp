@@ -1196,7 +1196,7 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( LONG_REPLY * 5) );
+  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 }
 
