@@ -12,4 +12,6 @@ android {
 win32 {
   QGIS_INSTALL_PATH =  C:/projects/input-sdk/x86_64/stage
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
+  GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
