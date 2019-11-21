@@ -130,7 +130,7 @@ ios {
   }
 
   exists($${QGIS_LIB_DIR}/libqgis_core.so) {
-	message("Building from QGIS: $${QGIS_INSTALL_PATH}") 
+    message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core.so")
   } else {
 	error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
   }
@@ -138,6 +138,19 @@ ios {
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
   LIBS += -L$${QGIS_LIB_DIR}
   LIBS += -lqgis_core -lqgis_quick
+}
+
+# geodiff support
+exists($${GEODIFF_LIB_DIR}) {
+    LIBS += -L$${GEODIFF_LIB_DIR}
+    LIBS += -lgeodiff
+} else {
+    error("Missing GEODIFF_LIB_DIR variable in config.pri")
+}
+exists($${GEODIFF_INCLUDE_DIR}/geodiff.h) {
+    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
+} else {
+    error("Missing geodiff header in $${GEODIFF_INCLUDE_DIR}")
 }
 
 # WIN 32 builds
@@ -172,6 +185,8 @@ win32 {
   DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 }
 
+DEFINES += "CORE_EXPORT="
+DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 
 CONFIG(debug, debug|release) {

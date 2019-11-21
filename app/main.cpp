@@ -314,7 +314,15 @@ int main( int argc, char *argv[] )
   {
     initTestDeclarative();
     TestMerginApi test( ma.get(), &mpm, &pm );
-    QTest::qExec( &test );
+    // use command line args we got, but filter out "--test" that's recognized by us but not by QTest framework
+    // (command line args may be used to filter function names that should be executed)
+    QVector<char *> args;
+    for ( int i = 0; i < argc; ++i )
+    {
+      if ( QString( argv[i] ) != "--test" )
+        args << argv[i];
+    }
+    QTest::qExec( &test, args.count(), args.data() );
     return 0;
   }
 #endif

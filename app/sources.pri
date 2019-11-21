@@ -13,6 +13,7 @@ merginapistatus.cpp \
 merginprojectmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
+geodiffutils.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -30,6 +31,7 @@ merginapistatus.h \
 merginprojectmodel.h \
 androidutils.h \
 inpututils.h \
+geodiffutils.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 

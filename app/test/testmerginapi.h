@@ -36,12 +36,18 @@ class TestMerginApi: public QObject
     void testPushAddedFile();
     void testPushRemovedFile();
     void testPushModifiedFile();
+    void testPushNoChanges();
     void testUpdateAddedFile();
     void testUpdateRemovedFiles();
     void testUpdateRemovedVsModifiedFiles();
     void testConflictRemoteUpdateLocalUpdate();
     void testConflictRemoteAddLocalAdd();
     void testUploadWithUpdate();
+    void testDiffUpload();
+    void testDiffUpdateBasic();
+    void testDiffUpdateWithRebase();
+    void testDiffUpdateWithRebaseFailed();
+    void testUpdateWithDiffs();
 
   private:
     int SHORT_REPLY = 1000;
