@@ -43,7 +43,6 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
         if ( obj.contains( "diff" ) )
         {
           QJsonObject diffObj = obj["diff"].toObject();
-          //QString diffFile = diffObj["path"].toString();
           int fileSize = diffObj["size"].toInt();
           merginFile.pullDiffFiles << qMakePair( key, fileSize );
         }
