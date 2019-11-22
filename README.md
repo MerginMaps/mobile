@@ -16,6 +16,7 @@ Click here to download the app on your mobile device:
 </p>
 
 **Beta Release**
+<p>
 <a href='https://play.google.com/apps/testing/uk.co.lutraconsulting'><img alt='Get it on Google Play' src='images/google-play-store-badge.png' height="57" /></a>
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="170" /></a>
 </p>
