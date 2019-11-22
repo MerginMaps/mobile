@@ -5,8 +5,8 @@ environment:
       secure: gqLWRiVUFKd+MsoevoouKEHG0tpvM9zhhSnCpzj9lRg4vcGq+ssWIG2m7kCbgLAC
     DROPBOX_TOKEN:
       secure: SbA10ZSj12UGtUP6o9r0gEATY+S3ZO6h0KhRZfZ3L2iM6Kx1T0gd+KgTD1D4C8ye0qKHbkRdCHxKwt5ETyo0iAK59b6UgRTbIUhmrvnWXIU=
-    WINSDKTAG: win-4
-    WINSDK: "https://www.dropbox.com/s/9l8zsx8snj4bz7r/input-sdk-win-x86_64-4.zip?dl=1"
+    WINSDKTAG: win-5
+    WINSDK: "https://www.dropbox.com/s/9nw87z71uzcc54v/input-sdk-win-x86_64-5.zip?dl=1"
     PYEXE: "C:\\Python36-x64\\python"
 
 install:

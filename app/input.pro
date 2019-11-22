@@ -86,7 +86,7 @@ ios {
     QMAKE_INFO_PLIST = ios/Info.plist
 }
 
-# Linux+Android+Win32 specific includes/libraries paths
+# Linux+Android specific includes/libraries paths
 !mac:!ios:!win32 {
   QT_LIBS_DIR = $$dirname(QMAKE_QMAKE)/../lib
 
@@ -185,8 +185,6 @@ win32 {
   DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 }
 
-DEFINES += "CORE_EXPORT="
-DEFINES += "QUICK_EXPORT="
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 
 CONFIG(debug, debug|release) {

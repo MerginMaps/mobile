@@ -86,6 +86,7 @@ xcopy %INPUT_SDK_DIR%\bin\libssl-*.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\hdf5_hl.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\libeay32.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\ssleay32.dll %STAGE_PATH%\ /Y 
+xcopy %INPUT_SDK_DIR%\bin\geodiff.dll %STAGE_PATH%\ /Y 
 
 robocopy %INPUT_SDK_DIR%\qml %STAGE_PATH%\qml /E
 robocopy %INPUT_SDK_DIR%\images\QgsQuick %STAGE_PATH%\images\QgsQuick /E
