@@ -183,7 +183,7 @@ static void init_qgis( const QString &pkgPath )
   t.start();
 
 #ifdef Q_OS_WIN32
- // PROJ3
+// PROJ3
   QString prefixPath = QCoreApplication::applicationDirPath() + "\\share\\proj";
   qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
 #endif
