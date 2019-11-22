@@ -7,7 +7,7 @@
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
  
-InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAME}"
+InstallDir "$PROGRAMFILES64\${COMPANYNAME}\${APPNAME}"
 
 LicenseData "C:\projects\input\x86_64\stage\license.txt"
 # This will be in the installer/uninstaller's title bar

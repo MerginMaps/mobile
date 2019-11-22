@@ -19,6 +19,7 @@
 #include <qqml.h>
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
+#include "qgsproviderregistry.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -181,6 +182,12 @@ static void init_qgis( const QString &pkgPath )
   QTime t;
   t.start();
 
+#ifdef Q_OS_WIN32
+ // PROJ3
+  QString prefixPath = QCoreApplication::applicationDirPath() + "\\share\\proj";
+  qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
+#endif
+
   QgsApplication::init();
 
 #ifdef MOBILE_OS
@@ -198,6 +205,7 @@ static void init_qgis( const QString &pkgPath )
     qDebug( "Can't create qgis user DB!!!" );
 
   qDebug( "qgis_init %f [s]", t.elapsed() / 1000.0 );
+  qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
 void initDeclarative()
