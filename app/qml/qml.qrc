@@ -34,5 +34,6 @@
         <file>Highlight.qml</file>
         <file>LoadingIndicator.qml</file>
         <file>ProjectLoadingScreen.qml</file>
+        <file>StatusPanel.qml</file>
     </qresource>
 </RCC>

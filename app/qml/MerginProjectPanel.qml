@@ -420,13 +420,14 @@ Item {
   Component {
     id: delegateItem
     ProjectDelegateItem {
+      id: delegateItemContent
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       iconSize: projectsPanel.iconSize
       width: cellWidth
       height: passesFilter ? cellHeight : 0
       visible: height ? true : false
-      statusIconSource: "trash.svg"
+      statusIconSource: "more_menu.svg"
       itemMargin: projectsPanel.panelMargin
       projectFullName: (projectNamespace && projectName) ? (projectNamespace + "/" + projectName) : folderName
       disabled: !isValid // invalid project
@@ -435,6 +436,26 @@ Item {
         return path === projectsPanel.activeProjectPath ? true : false
       }
 
+      Menu {
+              id: contextMenu
+              MenuItem {
+                text: "Info"
+                onClicked: statusPanel.open(delegateItemContent.projectFullName)
+              }
+              MenuItem {
+                text: "Sync"
+                // TODO
+              }
+              MenuItem {
+                text: "Delete project"
+                onClicked: {
+                  deleteDialog.relatedProjectIndex = index
+                  deleteDialog.open()
+                }
+
+              }
+          }
+
       onItemClicked: {
         if (showMergin) return
 
@@ -442,10 +463,7 @@ Item {
         projectsPanel.visible = false
       }
 
-      onMenuClicked: {
-        deleteDialog.relatedProjectIndex = index
-        deleteDialog.open()
-      }
+      onMenuClicked:contextMenu.popup()
     }
   }
 
@@ -672,5 +690,11 @@ Item {
             elide: Text.ElideRight
         }
     }
+  }
+
+  StatusPanel {
+    id: statusPanel
+    anchors.fill: parent
+    visible: false
   }
 }

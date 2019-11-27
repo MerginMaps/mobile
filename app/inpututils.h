@@ -68,6 +68,9 @@ class InputUtils: public QObject
 
     static QString filesToString( QList<MerginFile> files );
 
+  signals:
+    Q_INVOKABLE void notify( const QString &message );
+
   private:
 
     // on iOS the names from gallery pickers are like

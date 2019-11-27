@@ -572,6 +572,13 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: __inputUtils
+        onNotify: {
+            showMessage(message)
+        }
+    }
+
     FeaturePanel {
         id: featurePanel
         height: window.height

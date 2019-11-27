@@ -11,6 +11,7 @@ appsettings.cpp \
 merginapi.cpp \
 merginapistatus.cpp \
 merginprojectmodel.cpp \
+merginprojectstatusmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
 geodiffutils.cpp \
@@ -29,6 +30,7 @@ appsettings.h \
 merginapi.h \
 merginapistatus.h \
 merginprojectmodel.h \
+merginprojectstatusmodel.h \
 androidutils.h \
 inpututils.h \
 geodiffutils.h \

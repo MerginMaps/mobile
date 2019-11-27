@@ -245,6 +245,12 @@ class MerginApi: public QObject
     Q_INVOKABLE void updateCancel( const QString &projectFullName );
 
     /**
+     * TODO @vsklencar
+     * \param projectFullName Project's full name to get info about
+     */
+    Q_INVOKABLE bool infoProject( const QString &projectFullName );
+
+    /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
     * \param username Login user name to Mergin - either username or registered email
     * \param password Password to given username to log in to Mergin
@@ -367,6 +373,7 @@ class MerginApi: public QObject
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
     void pushFilesStarted();
+    void infoProjectFinished( const ProjectDiff &projectDiff, const QString &projectDir );
 
   private slots:
     void listProjectsReplyFinished();
@@ -388,6 +395,7 @@ class MerginApi: public QObject
     void deleteProjectFinished();
     void authorizeFinished();
     void pingMerginReplyFinished();
+    void infoProjectReplyFinished();
 
   private:
     MerginProjectList parseListProjectsMetadata( const QByteArray &data );

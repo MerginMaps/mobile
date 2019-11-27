@@ -145,7 +145,7 @@ Item {
                 id: addButton
                 width: root.itemSize
                 text: qsTr("Add Point")
-                imageSource: "plus.svg"
+                imageSource: InputStyle.plusIcon
                 enabled: manualRecordig
 
                 onActivated: root.addClicked()

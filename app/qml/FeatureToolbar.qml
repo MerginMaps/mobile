@@ -51,7 +51,7 @@ Item {
                 id: openProjectBtn
                 width: toolbar.itemSize
                 text: qsTr("Edit")
-                imageSource: "edit.svg"
+                imageSource: InputStyle.editIcon
 
                 onActivated: {
                     toolbar.editClicked()
@@ -105,7 +105,7 @@ Item {
 
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
-                imageSource: "edit.svg"
+                imageSource: InputStyle.editIcon
                 enabled: isFeaturePoint
 
                 onActivated: {

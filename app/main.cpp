@@ -30,6 +30,7 @@
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
+#include "merginprojectstatusmodel.h"
 #include "ios/iosimagepicker.h"
 
 #ifdef INPUT_TEST
@@ -289,6 +290,7 @@ int main( int argc, char *argv[] )
   AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
+  MerginProjectStatusModel mpsm( localProjects );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -299,6 +301,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( ma.get(), &MerginApi::infoProjectFinished, &mpsm, &MerginProjectStatusModel::infoProjectUpdated );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
@@ -372,6 +375,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
+  engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );
