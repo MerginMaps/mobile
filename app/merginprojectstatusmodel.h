@@ -8,7 +8,7 @@
 struct ProjectStatusItem
 {
   QString status;
-  QString filename;
+  QString text;
   QString section;
 };
 
@@ -21,7 +21,7 @@ class MerginProjectStatusModel : public QAbstractListModel
     enum Roles
     {
       Status = Qt::UserRole + 1, // added, removed, modified
-      Filename,
+      Text,
       Section
     };
     Q_ENUMS( Roles )

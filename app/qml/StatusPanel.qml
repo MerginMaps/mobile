@@ -81,57 +81,27 @@ Item {
         width: parent.width
 
         ExtendedMenuItem {
-          id: fileSummaryItem
-          visible: section !== "Changelog"
-          height: statusPanel.rowHeight
-          width: parent.width
-          contentText: "Inserted 1, Updated 1, Deleted 0"
-          imageSource: "project.svg"
-          overlayImage: true
-        }
-
-        ExtendedMenuItem {
             id: item
-            visible: !fileSummaryItem.visible
             height: statusPanel.rowHeight
             width: parent.width
-            contentText: filename
-            imageSource: "file.svg"
-            overlayImage: true
+            contentText: text
+            panelMargin: 0
+            rowHeight: statusPanel.rowHeight
+            imageSource: {
+              if (fileStatus === "Added") return InputStyle.plusIcon
+              else if (fileStatus === "Removed") return InputStyle.removeIcon
+              else if (fileStatus === "Updated") return InputStyle.editIcon
+              else if (fileStatus === "Changelog") return "info.svg"
 
-            Item {
-              id: iconContainer
-              height: rowHeight
-              width: rowHeight
-              anchors.right: parent.right
-
-              Image {
-                id: icon
-                anchors.fill: parent
-                anchors.margins: statusPanel.rowHeight/4
-                source:  {
-                  if (fileStatus === "Added") return InputStyle.plusIcon
-                  else if (fileStatus === "Removed") return InputStyle.removeIcon
-                  else if (fileStatus === "Updated") return InputStyle.editIcon
-
-                  return ""
-                }
-                sourceSize.width: width
-                sourceSize.height: height
-                fillMode: Image.PreserveAspectFit
-              }
-
-              ColorOverlay {
-                anchors.fill: icon
-                source: icon
-                color: {
-                  if (fileStatus === "Added") return InputStyle.fontColor
-                  else if (fileStatus === "Removed") return "red"
-                  else if (fileStatus === "Updated") return InputStyle.highlightColor
-                  else return InputStyle.fontColor
-                }
-              }
+              return ""
             }
+            imageColor: {
+              if (fileStatus === "Added") return InputStyle.fontColor
+              else if (fileStatus === "Removed") return "red"
+              else if (fileStatus === "Updated") return InputStyle.highlightColor
+              else return InputStyle.fontColor
+            }
+            overlayImage: true
         }
       }
     }

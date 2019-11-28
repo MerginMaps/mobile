@@ -16,6 +16,7 @@ Item {
     property color fontColor: InputStyle.fontColor
     property color panelColor: InputStyle.clrPanelMain
     property color highlightColor: InputStyle.fontColorBright
+    property color imageColor: root.highlight ? root.panelColor : root.fontColor
 
     anchors.fill: parent
 
@@ -43,7 +44,7 @@ Item {
             ColorOverlay {
                 anchors.fill: icon
                 source: icon
-                color: root.highlight ? root.panelColor : root.fontColor
+                color: imageColor
                 visible: overlayImage
             }
         }
@@ -66,6 +67,7 @@ Item {
                 color: root.highlight ? root.panelColor : root.fontColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
             }
         }
     }

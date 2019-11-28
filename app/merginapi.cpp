@@ -422,14 +422,16 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
 
 bool MerginApi::infoProject( const QString &projectFullName )
 {
-
-  InputUtils::log( "info " + projectFullName, "### Starting ###" );
   LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( !projectInfo.projectDir.isEmpty() )
   {
-    ProjectDiff diff = localProjectChanges( projectInfo.projectDir );
-    emit infoProjectFinished( diff, projectInfo.projectDir );
-    return true;
+      ProjectDiff diff = localProjectChanges( projectInfo.projectDir );
+      if (diff.localAdded.isEmpty() && diff.localUpdated.isEmpty() && diff.localDeleted.isEmpty())
+          return false;
+      else {
+          emit infoProjectFinished( diff, projectInfo.projectDir );
+          return true;
+      }
   }
   return false;
 }

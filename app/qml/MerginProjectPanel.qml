@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
@@ -427,7 +427,7 @@ Item {
       width: cellWidth
       height: passesFilter ? cellHeight : 0
       visible: height ? true : false
-      statusIconSource: "more_menu.svg"
+      statusIconSource:"more_menu.svg"
       itemMargin: projectsPanel.panelMargin
       projectFullName: (projectNamespace && projectName) ? (projectNamespace + "/" + projectName) : folderName
       disabled: !isValid // invalid project
@@ -437,24 +437,51 @@ Item {
       }
 
       Menu {
-              id: contextMenu
-              MenuItem {
-                text: "Info"
-                onClicked: statusPanel.open(delegateItemContent.projectFullName)
-              }
-              MenuItem {
-                text: "Sync"
-                // TODO
-              }
-              MenuItem {
-                text: "Delete project"
-                onClicked: {
-                  deleteDialog.relatedProjectIndex = index
-                  deleteDialog.open()
-                }
+        property real menuItemHeight: projectsPanel.rowHeight * 0.8
+        id: contextMenu
+        height: (projectNamespace && projectName) ? menuItemHeight * 2 : menuItemHeight
+        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
 
-              }
+        MenuItem {
+          height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
+          visible: (projectNamespace && projectName)
+          ExtendedMenuItem {
+              height: parent.height
+              rowHeight: parent.height
+              width: parent.width
+              contentText: "Project status"
+              imageSource: "info.svg"
+              overlayImage: true
           }
+          onClicked: statusPanel.open(delegateItemContent.projectFullName)
+        }
+        MenuItem {
+          height: contextMenu.menuItemHeight
+          ExtendedMenuItem {
+              height: parent.height
+              rowHeight: parent.height
+              width: parent.width
+              contentText: "Delete project"
+              imageSource: "trash.svg"
+              overlayImage: true
+          }
+          onClicked: {
+            deleteDialog.relatedProjectIndex = index
+            deleteDialog.open()
+          }
+
+        }
+
+//        MenuItem {
+//            text: "New..."
+//        }
+//        MenuItem {
+//            text: "Open..."
+//        }
+//        MenuItem {
+//            text: "Save"
+//        }
+      }
 
       onItemClicked: {
         if (showMergin) return
