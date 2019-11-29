@@ -51,7 +51,7 @@ void TestMerginApi::initTestCase()
   mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
-  Q_ASSERT( spy.wait( LONG_REPLY * 5 ) );
+  Q_ASSERT( spy.wait( LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
 
   mUsername = username;  // keep for later
