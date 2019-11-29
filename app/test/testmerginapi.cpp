@@ -51,7 +51,7 @@ void TestMerginApi::initTestCase()
   mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
-  Q_ASSERT( spy.wait( LONG_REPLY ) );
+  Q_ASSERT( spy.wait( LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 
   mUsername = username;  // keep for later
@@ -803,6 +803,30 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   // and the local version should go to test1.txt_conflict
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "local content" ) );
+
+  // Second conflict
+  qDebug() << "modify test1.txt on the server";
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( extraFilename, QByteArray( "remote content 2" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  qDebug() << "modify test1.txt locally and do the sync";
+  writeFileContent( filename, QByteArray( "local content 2" ) );
+  //
+  // TODO: upload should figure out it needs to run update first without this
+  // (the simple check in uploadProject() likely won't be good enough to find
+  // out... in upload's project info handler if there is a need for update,
+  // the upload should be cancelled (or paused to update first).
+  //
+  downloadRemoteProject( mApi, mUsername, projectName );
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // verify the result: the server version should be in test1.txt
+  // and the local version should go to test1.txt_conflict0
+  // Note: test1.txt_conflict should be still same
+  QCOMPARE( readFileContent( filename ), QByteArray( "remote content 2" ) );
+  QCOMPARE( readFileContent( filename + "_conflict" ), QByteArray( "local content" ) );
+  QCOMPARE( readFileContent( filename + "_conflict0" ), QByteArray( "local content 2" ) );
 }
 
 void TestMerginApi::testConflictRemoteAddLocalAdd()

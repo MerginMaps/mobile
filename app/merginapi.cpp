@@ -834,14 +834,14 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir );
 }
 
-QString MerginApi::findUniqueProjectDirectoryName( QString path )
+QString MerginApi::findUniquePath( const QString &path, bool isPathDir )
 {
-  QDir projectDir( path );
-  if ( projectDir.exists() )
+  QFileInfo pathInfo( path );
+  if ( pathInfo.exists() )
   {
     int i = 0;
     QFileInfo info( path + QString::number( i ) );
-    while ( info.exists() && info.isDir() )
+    while ( info.exists() && ( info.isDir() || !isPathDir ) )
     {
       ++i;
       info.setFile( path + QString::number( i ) );
@@ -854,9 +854,10 @@ QString MerginApi::findUniqueProjectDirectoryName( QString path )
   }
 }
 
+
 QString MerginApi::createUniqueProjectDirectory( const QString &projectName )
 {
-  QString projectDirPath = findUniqueProjectDirectoryName( mDataDir + "/" + projectName );
+  QString projectDirPath = findUniquePath( mDataDir + "/" + projectName );
   QDir projectDir( projectDirPath );
   if ( !projectDir.exists() )
   {
@@ -1111,7 +1112,8 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
-    if ( !QFile::rename( dest, dest + "_conflict" ) )
+    QString newDest = findUniquePath( QString( "%1_conflict" ).arg( dest ), false );
+    if ( !QFile::rename( dest, newDest ) )
     {
       InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
     }
@@ -1159,7 +1161,8 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
       {
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
-        if ( !QFile::rename( origPath, origPath + "_conflict" ) )
+        QString newPath = findUniquePath( QString( "%1_conflict" ).arg( origPath ), false );
+        if ( !QFile::rename( origPath, newPath ) )
         {
           InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
         }

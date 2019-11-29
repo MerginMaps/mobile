@@ -449,8 +449,9 @@ class MerginApi: public QObject
     /**
     * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
     * \param QString path
+    * \param QString isPathDir True if the result path suppose to be a folder
     */
-    QString findUniqueProjectDirectoryName( QString path );
+    QString findUniquePath( const QString &path, bool isPathDir = true );
     /** Creates a request to get project details (list of project files).
      */
     QNetworkReply *getProjectInfo( const QString &projectFullName );
