@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
@@ -449,8 +449,8 @@ Item {
               height: parent.height
               rowHeight: parent.height
               width: parent.width
-              contentText: "Project status"
-              imageSource: "info.svg"
+              contentText: qsTr("Project status")
+              imageSource: InputStyle.infoIcon
               overlayImage: true
           }
           onClicked: statusPanel.open(delegateItemContent.projectFullName)
@@ -461,26 +461,15 @@ Item {
               height: parent.height
               rowHeight: parent.height
               width: parent.width
-              contentText: "Delete project"
-              imageSource: "trash.svg"
+              contentText: qsTr("Delete project")
+              imageSource: InputStyle.removeIcon
               overlayImage: true
           }
           onClicked: {
             deleteDialog.relatedProjectIndex = index
             deleteDialog.open()
           }
-
         }
-
-//        MenuItem {
-//            text: "New..."
-//        }
-//        MenuItem {
-//            text: "Open..."
-//        }
-//        MenuItem {
-//            text: "Save"
-//        }
       }
 
       onItemClicked: {

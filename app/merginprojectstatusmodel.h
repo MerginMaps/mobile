@@ -43,8 +43,6 @@ class MerginProjectStatusModel : public QAbstractListModel
     ProjectDiff mProjectDiff;
     QList<ProjectStatusItem> mItems;
 
-
-
 };
 
 #endif // MERGINPROJECTSTATUSMODEL_H

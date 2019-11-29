@@ -395,7 +395,6 @@ class MerginApi: public QObject
     void deleteProjectFinished();
     void authorizeFinished();
     void pingMerginReplyFinished();
-    void infoProjectReplyFinished();
 
   private:
     MerginProjectList parseListProjectsMetadata( const QByteArray &data );

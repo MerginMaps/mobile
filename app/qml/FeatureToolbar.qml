@@ -74,7 +74,7 @@ Item {
             MainPanelButton {
                 width: toolbar.itemSize
                 text: qsTr("Delete")
-                imageSource: "trash.svg"
+                imageSource: InputStyle.removeIcon
 
                 onActivated: {
                     toolbar.deleteClicked()

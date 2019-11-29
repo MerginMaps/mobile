@@ -56,6 +56,7 @@ QtObject {
     property var backIcon: "qrc:/back.svg"
     property var plusIcon: "qrc:/plus.svg"
     property var editIcon: "qrc:/edit.svg"
+    property var infoIcon: "qrc:/info.svg"
 
 
     // Scaling function using QgsQuick screenDensity and deviceRatio

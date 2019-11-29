@@ -89,15 +89,15 @@ Item {
             rowHeight: statusPanel.rowHeight
             imageSource: {
               if (fileStatus === "Added") return InputStyle.plusIcon
-              else if (fileStatus === "Removed") return InputStyle.removeIcon
+              else if (fileStatus === "Deleted") return InputStyle.removeIcon
               else if (fileStatus === "Updated") return InputStyle.editIcon
-              else if (fileStatus === "Changelog") return "info.svg"
+              else if (fileStatus === "Changelog") return InputStyle.infoIcon
 
               return ""
             }
             imageColor: {
               if (fileStatus === "Added") return InputStyle.fontColor
-              else if (fileStatus === "Removed") return "red"
+              else if (fileStatus === "Deleted") return "red"
               else if (fileStatus === "Updated") return InputStyle.highlightColor
               else return InputStyle.fontColor
             }
