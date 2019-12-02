@@ -44,6 +44,7 @@ class TestMerginApi: public QObject
     void testConflictRemoteAddLocalAdd();
     void testUploadWithUpdate();
     void testDiffUpload();
+    void testDiffSubdirsUpload();
     void testDiffUpdateBasic();
     void testDiffUpdateWithRebase();
     void testDiffUpdateWithRebaseFailed();

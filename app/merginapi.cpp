@@ -12,6 +12,7 @@
 
 #include "inpututils.h"
 #include "geodiffutils.h"
+#include "qgsquickutils.h"
 
 #include <geodiff.h>
 
@@ -1602,12 +1603,13 @@ void MerginApi::uploadInfoReplyFinished()
         if ( geodiffRes == GEODIFF_SUCCESS )
         {
           QByteArray checksumDiff = getChecksum( diffPath );
+          //QByteArray checksumBase = getChecksum( basePath );
 
           // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
           // basefile (because each of them have applied the diff independently) so we have to fake it
           QByteArray checksumBase = serverProject.fileInfo( filePath ).checksum.toLatin1();
 
-          merginFile.diffName = QFileInfo( diffPath ).fileName();
+          merginFile.diffName = QgsQuickUtils::getRelativePath( diffPath, transaction.projectDir + "/.mergin/" );
           merginFile.diffChecksum = QString::fromLatin1( checksumDiff.data(), checksumDiff.size() );
           merginFile.diffSize = QFileInfo( diffPath ).size();
           merginFile.chunks = generateChunkIdsForSize( merginFile.diffSize );

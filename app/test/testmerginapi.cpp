@@ -944,6 +944,43 @@ void TestMerginApi::testDiffUpload()
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
 }
 
+void TestMerginApi::testDiffSubdirsUpload()
+{
+  QString projectName = "testDiffSubdirsUpload";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project_subs" + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  const QString base( "subdir/subsubdir/base.gpkg" );
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/" + base ) );
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+
+
+  // replace gpkg with a new version with a modified geometry
+  QFile::remove( projectDir + "/" + base );
+  QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/" + base );
+
+  ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
+  ProjectDiff expectedDiff;
+  expectedDiff.localUpdated = QSet<QString>() << base ;
+  QCOMPARE( diff, expectedDiff );
+
+  GeodiffUtils::ChangesetSummary expectedSummary;
+  expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
+  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
+  QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, base, true );
+  GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
+  QCOMPARE( summary, expectedSummary );
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+}
+
+
 void TestMerginApi::testDiffUpdateBasic()
 {
   // test case where there is no local change in a gpkg, it is only modified on the server
