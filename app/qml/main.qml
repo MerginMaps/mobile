@@ -574,7 +574,7 @@ ApplicationWindow {
 
     Connections {
         target: __inputUtils
-        onNotify: {
+        onShowNotificationRequested: {
             showMessage(message)
         }
     }

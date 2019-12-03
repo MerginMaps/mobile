@@ -24,14 +24,21 @@ class MerginProjectStatusModel : public QAbstractListModel
     {
       ProjectChangelogStatus status;
       QString text;
+      QString filename;
+      int inserts;
+      int updates;
+      int deletes;
       QString section;
     };
 
     enum Roles
     {
-      Status = Qt::UserRole + 1, // added, removed, modified
+      Status = Qt::UserRole + 1,
       Text,
-      Subtext,
+      Filename,
+      Inserts,
+      Deletes,
+      Updates,
       Section
     };
     Q_ENUMS( Roles )

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import lc 1.0
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   id: statusPanel
@@ -11,12 +12,12 @@ Item {
   function open(projectFullName) {
     if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
       statusPanel.visible = true;
-    } else __inputUtils.notify(qsTr("No Changes"))
+    } else __inputUtils.showNotification(qsTr("No Changes"))
   }
 
   function close() {
-      statusPanel.visible = false
-   }
+    statusPanel.visible = false
+  }
 
   // background
   Rectangle {
@@ -32,6 +33,7 @@ Item {
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Status")
+    z: contentLayout.z + 1
 
     onBack: {
       statusPanel.visible = false
@@ -62,10 +64,10 @@ Item {
 
         Rectangle {
           anchors.fill: parent
-          color:  InputStyle.fontColor
+          color: InputStyle.panelBackgroundLight
 
           Text {
-            color: "white"
+            color: InputStyle.panelBackgroundDarker
             anchors.fill: parent
             text: section
             horizontalAlignment: Text.AlignHCenter
@@ -76,32 +78,109 @@ Item {
         }
       }
 
+
       delegate: Item {
+        id: delegateItem
         height: statusPanel.rowHeight
         width: parent.width
 
-        ExtendedMenuItem {
-            id: item
-            height: statusPanel.rowHeight
-            width: parent.width
-            contentText: text
-            panelMargin: 0
-            rowHeight: statusPanel.rowHeight
-            imageSource: {
-              if (fileStatus === MerginProjectStatusModel.Added ) return InputStyle.plusIcon
-              else if (fileStatus === MerginProjectStatusModel.Deleted) return InputStyle.removeIcon
-              else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.editIcon
-              else if (fileStatus === MerginProjectStatusModel.Changelog) return InputStyle.infoIcon
+        RowLayout {
+          id: row
+          anchors.fill: parent
+          anchors.rightMargin: InputStyle.panelMargin/2
+          anchors.leftMargin: InputStyle.panelMargin/2
+          spacing: 0
 
-              return ""
+          Item {
+            id: textContainer
+            height: statusPanel.rowHeight
+            Layout.fillWidth: true
+
+
+            Text {
+              id: mainText
+              text:itemText
+              height: fileStatus === MerginProjectStatusModel.Changelog ? textContainer.height/2 : textContainer.height
+              width: textContainer.width
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+              color: InputStyle.fontColor
+              horizontalAlignment: Text.AlignLeft
+              verticalAlignment: fileStatus === MerginProjectStatusModel.Changelog ? Text.AlignBottom : Text.AlignVCenter
+              elide: Text.ElideRight
+              font.bold: true
             }
-            imageColor: {
-              if (fileStatus === MerginProjectStatusModel.Added) return InputStyle.fontColor
-              else if (fileStatus === MerginProjectStatusModel.Deleted) return "red"
-              else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.highlightColor
-              else return InputStyle.fontColor
+
+            Item {
+              id: extendedText
+              height: textContainer.height - mainText.height
+              visible: extendedText.height
+
+              Row {
+
+
+              }
+
             }
-            overlayImage: true
+
+//            Text {
+//              id: secondaryText
+//              height: textContainer.height - mainText.height
+//              visible: secondaryText.height
+//              text: subtext
+//              anchors.right: parent.right
+//              anchors.bottom: parent.bottom
+//              anchors.left: parent.left
+//              anchors.top: mainText.bottom
+//              font.pixelSize: InputStyle.fontPixelSizeNormal
+//              color: InputStyle.fontColor
+//              horizontalAlignment: Text.AlignLeft
+//              verticalAlignment: Text.AlignTop
+//              elide: Text.ElideRight
+//            }
+          }
+
+          Item {
+            id: statusContainer
+            height: statusPanel.rowHeight
+            width: statusPanel.rowHeight
+            y: 0
+
+            Image {
+              id: statusIcon
+              anchors.centerIn: parent
+              source: {
+                if (fileStatus === MerginProjectStatusModel.Added ) return InputStyle.plusIcon
+                else if (fileStatus === MerginProjectStatusModel.Deleted) return InputStyle.removeIcon
+                else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.editIcon
+                else if (fileStatus === MerginProjectStatusModel.Changelog) return InputStyle.tableIcon
+
+                return ""
+              }
+              height: statusPanel.rowHeight/2
+              width: height
+              sourceSize.width: width
+              sourceSize.height: height
+              fillMode: Image.PreserveAspectFit
+            }
+
+            ColorOverlay {
+              anchors.fill: statusIcon
+              source: statusIcon
+              color: {
+                if (fileStatus === MerginProjectStatusModel.Added) return InputStyle.fontColor
+                else if (fileStatus === MerginProjectStatusModel.Deleted) return "red"
+                else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.highlightColor
+                else return InputStyle.fontColor
+              }
+            }
+          }
+        }
+        Rectangle {
+          id: borderLine
+          color: InputStyle.panelBackground2
+          width: delegateItem.width
+          height: 1 * QgsQuick.Utils.dp
+          anchors.bottom: parent.bottom
         }
       }
     }

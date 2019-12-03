@@ -53,6 +53,8 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
+    Q_INVOKABLE void showNotification( const QString &message );
+
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
      * removes it and tries again (overwrite a file). If failes again, skips the file, sets result to false and continue.
@@ -69,7 +71,7 @@ class InputUtils: public QObject
     static QString filesToString( QList<MerginFile> files );
 
   signals:
-    Q_INVOKABLE void notify( const QString &message );
+    Q_INVOKABLE void showNotificationRequested( const QString &message );
 
   private:
 
