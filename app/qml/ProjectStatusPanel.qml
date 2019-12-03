@@ -9,7 +9,7 @@ Item {
   property real rowHeight: InputStyle.rowHeightHeader * 1.2
 
   function open(projectFullName) {
-    if (__merginApi.infoProject(projectFullName)) {
+    if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
       statusPanel.visible = true;
     } else __inputUtils.notify(qsTr("No Changes"))
   }
@@ -54,7 +54,7 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
 
-      section.property: "section"
+      section.property: qsTr("section")
       section.criteria: ViewSection.FullString
       section.delegate: Item {
         height: statusPanel.rowHeight/2
@@ -88,17 +88,17 @@ Item {
             panelMargin: 0
             rowHeight: statusPanel.rowHeight
             imageSource: {
-              if (fileStatus === "Added") return InputStyle.plusIcon
-              else if (fileStatus === "Deleted") return InputStyle.removeIcon
-              else if (fileStatus === "Updated") return InputStyle.editIcon
-              else if (fileStatus === "Changelog") return InputStyle.infoIcon
+              if (fileStatus === MerginProjectStatusModel.Added ) return InputStyle.plusIcon
+              else if (fileStatus === MerginProjectStatusModel.Deleted) return InputStyle.removeIcon
+              else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.editIcon
+              else if (fileStatus === MerginProjectStatusModel.Changelog) return InputStyle.infoIcon
 
               return ""
             }
             imageColor: {
-              if (fileStatus === "Added") return InputStyle.fontColor
-              else if (fileStatus === "Deleted") return "red"
-              else if (fileStatus === "Updated") return InputStyle.highlightColor
+              if (fileStatus === MerginProjectStatusModel.Added) return InputStyle.fontColor
+              else if (fileStatus === MerginProjectStatusModel.Deleted) return "red"
+              else if (fileStatus === MerginProjectStatusModel.Updated) return InputStyle.highlightColor
               else return InputStyle.fontColor
             }
             overlayImage: true

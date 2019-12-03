@@ -267,7 +267,6 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
-
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
     static const int MERGIN_API_VERSION_MAJOR = 2019;

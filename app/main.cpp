@@ -208,6 +208,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
+  qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
 }
@@ -301,7 +302,6 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-  QObject::connect( ma.get(), &MerginApi::infoProjectFinished, &mpsm, &MerginProjectStatusModel::infoProjectUpdated );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )

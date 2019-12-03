@@ -5,23 +5,33 @@
 #include <QAbstractListModel>
 #include "merginapi.h"
 
-struct ProjectStatusItem
-{
-  QString status;
-  QString text;
-  QString section;
-};
-
-
 class MerginProjectStatusModel : public QAbstractListModel
 {
     Q_OBJECT
 
   public:
+
+    enum ProjectChangelogStatus
+    {
+      Added = Qt::UserRole + 1, // added, removed, modified
+      Deleted,
+      Updated,
+      Changelog
+    };
+    Q_ENUMS( ProjectChangelogStatus )
+
+    struct ProjectStatusItem
+    {
+      ProjectChangelogStatus status;
+      QString text;
+      QString section;
+    };
+
     enum Roles
     {
       Status = Qt::UserRole + 1, // added, removed, modified
       Text,
+      Subtext,
       Section
     };
     Q_ENUMS( Roles )
@@ -32,16 +42,16 @@ class MerginProjectStatusModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
 
-  signals:
-
-  public slots:
-    void infoProjectUpdated( const ProjectDiff &projectDiff, const QString &projectDir );
+    Q_INVOKABLE bool loadProjectInfo( const QString &projectFullName );
 
   private:
-    void insertIntoItems( const QSet<QString> &files, const QString &status, const QString &projectDir );
+    void insertIntoItems( const QSet<QString> &files, const ProjectChangelogStatus &status, const QString &projectDir );
+    void infoProjectUpdated( const ProjectDiff &projectDiff, const QString &projectDir );
 
     ProjectDiff mProjectDiff;
     QList<ProjectStatusItem> mItems;
+
+    LocalProjectsManager &mLocalProjects;
 
 };
 

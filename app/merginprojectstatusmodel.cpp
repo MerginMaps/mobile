@@ -1,9 +1,11 @@
 #include "merginprojectstatusmodel.h"
 #include "geodiffutils.h"
+#include "inpututils.h"
 
-MerginProjectStatusModel::MerginProjectStatusModel( LocalProjectsManager &localProjects, QObject *parent ) : QAbstractListModel( parent )
+MerginProjectStatusModel::MerginProjectStatusModel( LocalProjectsManager &localProjects, QObject *parent )
+    : QAbstractListModel( parent )
+    , mLocalProjects( localProjects )
 {
-
 }
 
 int MerginProjectStatusModel::rowCount( const QModelIndex &parent ) const
@@ -16,6 +18,7 @@ QHash<int, QByteArray> MerginProjectStatusModel::roleNames() const
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[Status] = "fileStatus";
   roleNames[Text] = "text";
+  roleNames[Subtext] = "subtext";
   roleNames[Section] = "section";
   return roleNames;
 }
@@ -32,13 +35,14 @@ QVariant MerginProjectStatusModel::data( const QModelIndex &index, int role ) co
   {
     case Status: return item.status;
     case Text: return item.text;
+    case Subtext: return item.text;
     case Section: return item.section;
   }
   return QVariant();
 
 }
 
-void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, const QString &status, const QString &projectDir )
+void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, const ProjectChangelogStatus &status, const QString &projectDir )
 {
   for ( QString file : files )
   {
@@ -47,7 +51,7 @@ void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, cons
       ProjectStatusItem item;
       item.status = status;
       item.text = file;
-      item.section = "Changelog";
+      item.section = "Changes";
       mItems.append( item );
     }
   }
@@ -58,6 +62,10 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
   beginResetModel();
   mItems.clear();
 
+  insertIntoItems( projectDiff.localUpdated, ProjectChangelogStatus::Updated, projectDir );
+  insertIntoItems( projectDiff.localAdded, ProjectChangelogStatus::Added, projectDir );
+  insertIntoItems( projectDiff.localDeleted, ProjectChangelogStatus::Deleted, projectDir );
+
   for ( QString file : projectDiff.localUpdated )
   {
     if ( MerginApi::isFileDiffable( file ) )
@@ -65,23 +73,43 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
       QString summaryJson = GeodiffUtils::diffableFilePendingChanges( projectDir, file, true );
       if ( !summaryJson.startsWith( "ERROR" ) )
       {
-        GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( summaryJson ) ;
-        for ( QString key : summary.keys() )
-        {
-          ProjectStatusItem item;
-          item.status = "Changelog";
-          item.text = QString( "%1 - inserted %2, updated %3, deleted %4" ).arg( key )
-                      .arg( summary[key].inserts ).arg( summary[key].updates )
-                      .arg( summary[key].updates ).arg( summary[key].deletes );
-          item.section = file;
-          mItems.append( item );
-        }
+          InputUtils::log( "MerginProjectStatusModel", QString("Diff summary JSON for %1 in %2 has an error.").arg(projectDir).arg(file) );
+      }
+      else {
+          GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( summaryJson ) ;
+          for ( QString key : summary.keys() )
+          {
+            ProjectStatusItem item;
+            item.status = ProjectChangelogStatus::Changelog;
+            QString text = QString("%1 - ").arg(key);
+            if (summary[key].inserts != 0) text.append(QString("inserted %1").arg( summary[key].inserts));
+            if (summary[key].updates != 0) text.append(QString("updated %1").arg( summary[key].updates));
+            if (summary[key].deletes != 0) text.append(QString("deleted %1").arg( summary[key].deletes));
+            item.text = text;
+
+            item.section = file;
+            mItems.append( item );
+          }
+
       }
     }
   }
-
-  insertIntoItems( projectDiff.localUpdated, "Updated", projectDir );
-  insertIntoItems( projectDiff.localAdded, "Added", projectDir );
-  insertIntoItems( projectDiff.localDeleted, "Deleted", projectDir );
   endResetModel();
+}
+
+bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
+{
+  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  if ( !projectInfo.projectDir.isEmpty() )
+  {
+    ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
+    if ( diff.localAdded.isEmpty() && diff.localUpdated.isEmpty() && diff.localDeleted.isEmpty() )
+      return false;
+    else
+    {
+      infoProjectUpdated(diff, projectInfo.projectDir );
+      return true;
+    }
+  }
+  return false;
 }

@@ -440,7 +440,9 @@ Item {
         property real menuItemHeight: projectsPanel.rowHeight * 0.8
         id: contextMenu
         height: (projectNamespace && projectName) ? menuItemHeight * 2 : menuItemHeight
-        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
+        width:Math.min( parent.width, 300 * QgsQuick.Utils.dp )
+        modal: true
+        dim: false
 
         MenuItem {
           height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
@@ -708,7 +710,7 @@ Item {
     }
   }
 
-  StatusPanel {
+  ProjectStatusPanel {
     id: statusPanel
     anchors.fill: parent
     visible: false
