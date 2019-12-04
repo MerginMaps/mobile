@@ -9,11 +9,17 @@ Input makes surveying of geospatial data easy. You can design your survey projec
 ## Download
 Click here to download the app on your mobile device:
 
+**Current Release**
 <p>
 <a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='images/google-play-store-badge.png' height="57" /></a>
 <a href='https://apps.apple.com/us/app/input/id1478603559?ls=1'><img alt='Download it from TestFlight' src='images/app-store.png' width="170" /></a>
 </p>
 
+**Beta Release**
+<p>
+<a href='https://play.google.com/apps/testing/uk.co.lutraconsulting'><img alt='Get it on Google Play' src='images/google-play-store-badge.png' height="28.5" /></a>
+<a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
+</p>
 
 For more information on how to use the app, see [Documentation](#documentation)
 
