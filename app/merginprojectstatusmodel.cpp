@@ -39,10 +39,10 @@ QVariant MerginProjectStatusModel::data( const QModelIndex &index, int role ) co
     case Status: return item.status;
     case Text: return item.text;
     case Filename: return item.filename;
-  case Inserts: return item.inserts;
-  case Deletes: return item.deletes;
-  case Updates: return item.updates;
-  case Section: return item.section;
+    case Inserts: return item.inserts;
+    case Deletes: return item.deletes;
+    case Updates: return item.updates;
+    case Section: return item.section;
   }
   return QVariant();
 
