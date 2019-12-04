@@ -261,7 +261,6 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
-
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
     static const int MERGIN_API_VERSION_MAJOR = 2019;
@@ -367,6 +366,7 @@ class MerginApi: public QObject
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
     void pushFilesStarted();
+    void infoProjectFinished( const ProjectDiff &projectDiff, const QString &projectDir );
 
   private slots:
     void listProjectsReplyFinished();

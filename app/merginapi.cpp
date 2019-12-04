@@ -345,7 +345,6 @@ void MerginApi::updateCancel( const QString &projectFullName )
   }
 }
 
-
 void MerginApi::uploadFinish( const QString &projectFullName, const QString &transactionUUID )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
@@ -682,7 +681,6 @@ void MerginApi::pingMerginReplyFinished()
   r->deleteLater();
   emit pingMerginFinished( apiVersion, serverMsg );
 }
-
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
 {

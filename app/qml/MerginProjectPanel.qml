@@ -420,19 +420,58 @@ Item {
   Component {
     id: delegateItem
     ProjectDelegateItem {
+      id: delegateItemContent
       cellWidth: projectsPanel.width
       cellHeight: projectsPanel.rowHeight
       iconSize: projectsPanel.iconSize
       width: cellWidth
       height: passesFilter ? cellHeight : 0
       visible: height ? true : false
-      statusIconSource: "trash.svg"
+      statusIconSource:"more_menu.svg"
       itemMargin: projectsPanel.panelMargin
       projectFullName: (projectNamespace && projectName) ? (projectNamespace + "/" + projectName) : folderName
       disabled: !isValid // invalid project
       highlight: {
         if (disabled) return true
         return path === projectsPanel.activeProjectPath ? true : false
+      }
+
+      Menu {
+        property real menuItemHeight: projectsPanel.rowHeight * 0.8
+        id: contextMenu
+        height: (projectNamespace && projectName) ? menuItemHeight * 2 : menuItemHeight
+        width:Math.min( parent.width, 300 * QgsQuick.Utils.dp )
+        modal: true
+        dim: false
+
+        MenuItem {
+          height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
+          visible: (projectNamespace && projectName)
+          ExtendedMenuItem {
+              height: parent.height
+              rowHeight: parent.height
+              width: parent.width
+              contentText: qsTr("Project status")
+              imageSource: InputStyle.infoIcon
+              overlayImage: true
+          }
+          onClicked: statusPanel.open(delegateItemContent.projectFullName)
+        }
+        MenuItem {
+          height: contextMenu.menuItemHeight
+          ExtendedMenuItem {
+              height: parent.height
+              rowHeight: parent.height
+              width: parent.width
+              contentText: qsTr("Delete project")
+              imageSource: InputStyle.removeIcon
+              overlayImage: true
+          }
+          onClicked: {
+            deleteDialog.relatedProjectIndex = index
+            deleteDialog.open()
+          }
+        }
       }
 
       onItemClicked: {
@@ -442,10 +481,7 @@ Item {
         projectsPanel.visible = false
       }
 
-      onMenuClicked: {
-        deleteDialog.relatedProjectIndex = index
-        deleteDialog.open()
-      }
+      onMenuClicked:contextMenu.popup()
     }
   }
 
@@ -672,5 +708,11 @@ Item {
             elide: Text.ElideRight
         }
     }
+  }
+
+  ProjectStatusPanel {
+    id: statusPanel
+    anchors.fill: parent
+    visible: false
   }
 }

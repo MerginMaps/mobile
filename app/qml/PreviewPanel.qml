@@ -81,7 +81,7 @@ Item {
                             anchors.fill: parent
                             anchors.margins: rowHeight/4
                             anchors.rightMargin: 0
-                            source: "edit.svg"
+                            source: InputStyle.editIcon
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit

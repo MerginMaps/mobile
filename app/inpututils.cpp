@@ -327,6 +327,11 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
+void InputUtils::showNotification( const QString &message )
+{
+  emit showNotificationRequested( message );
+}
+
 void InputUtils::log( const QString &topic, const QString &info )
 {
   QString logFilePath;

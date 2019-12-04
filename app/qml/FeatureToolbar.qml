@@ -51,7 +51,7 @@ Item {
                 id: openProjectBtn
                 width: toolbar.itemSize
                 text: qsTr("Edit")
-                imageSource: "edit.svg"
+                imageSource: InputStyle.editIcon
 
                 onActivated: {
                     toolbar.editClicked()
@@ -74,7 +74,7 @@ Item {
             MainPanelButton {
                 width: toolbar.itemSize
                 text: qsTr("Delete")
-                imageSource: "trash.svg"
+                imageSource: InputStyle.removeIcon
 
                 onActivated: {
                     toolbar.deleteClicked()
@@ -105,7 +105,7 @@ Item {
 
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
-                imageSource: "edit.svg"
+                imageSource: InputStyle.editIcon
                 enabled: isFeaturePoint
 
                 onActivated: {
