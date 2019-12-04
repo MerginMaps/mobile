@@ -245,12 +245,6 @@ class MerginApi: public QObject
     Q_INVOKABLE void updateCancel( const QString &projectFullName );
 
     /**
-     * TODO @vsklencar
-     * \param projectFullName Project's full name to get info about
-     */
-    Q_INVOKABLE bool infoProject( const QString &projectFullName );
-
-    /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
     * \param username Login user name to Mergin - either username or registered email
     * \param password Password to given username to log in to Mergin

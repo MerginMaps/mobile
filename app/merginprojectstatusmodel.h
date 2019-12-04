@@ -13,10 +13,11 @@ class MerginProjectStatusModel : public QAbstractListModel
 
     enum ProjectChangelogStatus
     {
-      Added = Qt::UserRole + 1, // added, removed, modified
+      Added = Qt::UserRole + 1,
       Deleted,
       Updated,
-      Changelog
+      Changelog, // Diffable file with number of changes per each category (above)
+      Message // Error message
     };
     Q_ENUMS( ProjectChangelogStatus )
 
@@ -25,9 +26,9 @@ class MerginProjectStatusModel : public QAbstractListModel
       ProjectChangelogStatus status;
       QString text;
       QString filename;
-      int inserts;
-      int updates;
-      int deletes;
+      int inserts = 0;
+      int updates = 0;
+      int deletes = 0;
       QString section;
     };
 

@@ -80,16 +80,20 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
       if ( summaryJson.startsWith( "ERROR" ) )
       {
         InputUtils::log( "MerginProjectStatusModel", QString( "Diff summary JSON for %1 in %2 has an error." ).arg( projectDir ).arg( file ) );
+
+        ProjectStatusItem item;
+        item.status = ProjectChangelogStatus::Message;
+        item.text =  QStringLiteral( "Unable to determine changes" );
+        item.filename = file;
+        item.section = file;
+
+        mItems.append( item );
       }
       else
       {
         GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( summaryJson ) ;
         for ( QString key : summary.keys() )
         {
-          QString subtext;
-          if ( summary[key].inserts != 0 ) subtext.append( QString( "inserted %1;" ).arg( summary[key].inserts ) );
-          if ( summary[key].updates != 0 ) subtext.append( QString( "updated %1;" ).arg( summary[key].updates ) );
-          if ( summary[key].deletes != 0 ) subtext.append( QString( "deleted %1;" ).arg( summary[key].deletes ) );
 
           ProjectStatusItem item;
           item.status = ProjectChangelogStatus::Changelog;

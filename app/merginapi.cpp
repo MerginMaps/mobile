@@ -419,24 +419,6 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
   }
 }
 
-
-bool MerginApi::infoProject( const QString &projectFullName )
-{
-  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-  if ( !projectInfo.projectDir.isEmpty() )
-  {
-    ProjectDiff diff = localProjectChanges( projectInfo.projectDir );
-    if ( diff.localAdded.isEmpty() && diff.localUpdated.isEmpty() && diff.localDeleted.isEmpty() )
-      return false;
-    else
-    {
-      emit infoProjectFinished( diff, projectInfo.projectDir );
-      return true;
-    }
-  }
-  return false;
-}
-
 void MerginApi::authorize( const QString &login, const QString &password )
 {
   if ( login.isEmpty() || password.isEmpty() )
