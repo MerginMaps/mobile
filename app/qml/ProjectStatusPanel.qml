@@ -7,7 +7,7 @@ import QgsQuick 0.1 as QgsQuick
 
 Item {
   id: statusPanel
-  property real rowHeight: InputStyle.rowHeightHeader * 1.2
+  property real rowHeight: InputStyle.rowHeight * 1.2
 
   function open(projectFullName) {
     if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
@@ -81,7 +81,7 @@ Item {
 
       delegate: Item {
         id: delegateItem
-        height: statusPanel.rowHeight
+        height: fileStatus === MerginProjectStatusModel.Changelog ? statusPanel.rowHeight * 1.2 : statusPanel.rowHeight
         width: parent.width
 
         RowLayout {
@@ -113,30 +113,56 @@ Item {
             Item {
               id: extendedText
               height: textContainer.height - mainText.height
+              width: parent.width
               visible: extendedText.height
+              y: mainText.height
+              x: 0
+              property real tileWidth: extendedText.width/3
 
-              Row {
 
-
+                ExtendedMenuItem {
+                  id: insertsCount
+                  height: parent.height
+                  width: inserts ? extendedText.tileWidth : 0
+                  visible: width
+                  contentText: inserts
+                  rowHeight: parent.height
+                  panelMargin: 0
+                  imageColor: InputStyle.fontColor
+                  imageSource: InputStyle.plusIcon
+                  anchors.fill: undefined
+                  showBorder:false
+                  x: 0
+                }
+                ExtendedMenuItem {
+                  id: updatesCount
+                  height: parent.height
+                  width: updates ? extendedText.tileWidth : 0
+                  visible: width
+                  contentText: updates
+                  rowHeight: parent.height
+                  panelMargin: 0
+                  imageColor: InputStyle.highlightColor
+                  imageSource: InputStyle.editIcon
+                  anchors.fill: undefined
+                  showBorder:false
+                  x: insertsCount.width
+                }
+                ExtendedMenuItem {
+                  id: removalsCount
+                  height: parent.height
+                  width: deletes ? extendedText.tileWidth : 0
+                  visible: width
+                  contentText: deletes
+                  rowHeight: parent.height
+                  panelMargin: 0
+                  imageColor: "red"
+                  imageSource: InputStyle.removeIcon
+                  anchors.fill: undefined
+                  showBorder:false
+                  x: insertsCount.width + updatesCount.width
+                }
               }
-
-            }
-
-//            Text {
-//              id: secondaryText
-//              height: textContainer.height - mainText.height
-//              visible: secondaryText.height
-//              text: subtext
-//              anchors.right: parent.right
-//              anchors.bottom: parent.bottom
-//              anchors.left: parent.left
-//              anchors.top: mainText.bottom
-//              font.pixelSize: InputStyle.fontPixelSizeNormal
-//              color: InputStyle.fontColor
-//              horizontalAlignment: Text.AlignLeft
-//              verticalAlignment: Text.AlignTop
-//              elide: Text.ElideRight
-//            }
           }
 
           Item {
@@ -156,7 +182,7 @@ Item {
 
                 return ""
               }
-              height: statusPanel.rowHeight/2
+              height: statusPanel.rowHeight/3
               width: height
               sourceSize.width: width
               sourceSize.height: height
@@ -186,3 +212,5 @@ Item {
     }
   }
 }
+
+
