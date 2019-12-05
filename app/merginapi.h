@@ -473,6 +473,8 @@ class MerginApi: public QObject
     //! Starts download request of another item
     void downloadNextItem( const QString &projectFullName );
 
+    QNetworkRequest getDefaultRequest( bool withAuth = true );
+
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
