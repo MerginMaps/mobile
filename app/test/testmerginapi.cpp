@@ -95,6 +95,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpload" );
+  deleteRemoteProject( mApiExtra, mUsername, "testDiffSubdirsUpload" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateBasic" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebase" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebaseFailed" );
@@ -1257,7 +1258,7 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
+  QVERIFY( spy.wait( LONG_REPLY * 10 ) );
   QCOMPARE( spy.count(), 1 );
 }
 
