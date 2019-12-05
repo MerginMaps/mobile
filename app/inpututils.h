@@ -70,6 +70,8 @@ class InputUtils: public QObject
 
     static QString filesToString( QList<MerginFile> files );
 
+    static QString appInfo();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

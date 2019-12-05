@@ -62,12 +62,9 @@ void MerginApi::listProjects( const QString &searchExpression,
   QUrl url( mApiRoot + QStringLiteral( "/v1/project" ) );
   url.setQuery( query );
 
-  QNetworkRequest request;
-  request.setUrl( url );
-
   // Even if the authorization is not required, it can be include to fetch more results
-  if ( hasAuthData() )
-    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+  QNetworkRequest request = getDefaultRequest( hasAuthData() );
+  request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
@@ -97,9 +94,8 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
     query.addQueryItem( "diff", "true" );
   url.setQuery( query );
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrTempFileName ), item.tempFileName );
 
@@ -116,6 +112,17 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
 
   InputUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting item: " ) + url.toString() +
                    ( !range.isEmpty() ? " Range: " + range : QString() ) );
+}
+
+QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
+{
+  QNetworkRequest request;
+  QString info = InputUtils::appInfo();
+  request.setRawHeader( "User-Agent", QByteArray( info.toUtf8() ) );
+  if ( withAuth )
+    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+
+  return request;
 }
 
 
@@ -217,10 +224,9 @@ void MerginApi::uploadFile( const QString &projectFullName, const QString &trans
     data = f.read( UPLOAD_CHUNK_SIZE );
   }
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID ).arg( chunkID ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/octet-stream" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
@@ -241,10 +247,9 @@ void MerginApi::uploadStart( const QString &projectFullName, const QByteArray &j
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "v1/project/push/%1" ).arg( projectFullName ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
@@ -306,10 +311,9 @@ void MerginApi::uploadCancel( const QString &projectFullName )
 
 void MerginApi::sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID )
 {
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
@@ -355,10 +359,9 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "v1/project/push/finish/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
@@ -431,7 +434,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
 
   mPassword = password;
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest( false );
   QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
   QUrl url( urlString );
   request.setUrl( url );
@@ -456,11 +459,10 @@ void MerginApi::getUserInfo( const QString &username )
     return;
   }
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QString urlString = mApiRoot + QStringLiteral( "v1/user/" ) + username;
   QUrl url( urlString );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( "user info", QStringLiteral( "Requesting user info: " ) + url.toString() );
@@ -501,10 +503,9 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
 
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QString( "/v1/project/%1" ).arg( projectNamespace ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setRawHeader( "Accept", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -530,10 +531,9 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
 
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1" ).arg( projectFullName ) );
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   QNetworkReply *reply = mManager.deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
@@ -705,10 +705,8 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1" ).arg( projectFullName ) );
   url.setQuery( query );
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest(!withoutAuth);
   request.setUrl( url );
-  if ( !withoutAuth )
-    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   return mManager.get( request );
@@ -915,7 +913,7 @@ void MerginApi::pingMergin()
 
   setApiVersionStatus( MerginApiStatus::PENDING );
 
-  QNetworkRequest request;
+  QNetworkRequest request = getDefaultRequest( false );
   QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
   request.setUrl( url );
 
