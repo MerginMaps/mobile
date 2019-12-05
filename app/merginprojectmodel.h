@@ -25,8 +25,6 @@ struct MerginProject
   bool pending = false; // if there is a pending request for downlaod/update a project
   ProjectStatus status = NoVersion;
   qreal progress = 0;  // progress in case of pending download/upload (values [0..1])
-  int creator; // server-side user ID of the project owner (creator)
-  QList<int> writers; // server-side user IDs of users having write access to the project
 };
 
 typedef QList<std::shared_ptr<MerginProject>> ProjectList;

@@ -496,7 +496,7 @@ Item {
       pending: pendingProject
       statusIconSource: getStatusIcon(status, pendingProject)
       iconSize: projectsPanel.iconSize
-      projectFullName: projectNamespace + "/" + projectName
+      projectFullName: __merginApi.getFullProjectName(projectNamespace, projectName)
       progressValue: syncProgress
 
       onMenuClicked: {
@@ -513,9 +513,14 @@ Item {
         }
 
         if (status === "noVersion" || status === "outOfDate") {
-          __merginApi.updateProject(projectNamespace, projectName)
+          var withoutAuth = !__merginApi.hasAuthData() && toolbar.highlighted === exploreBtn.text
+          __merginApi.updateProject(projectNamespace, projectName, withoutAuth)
         } else if (status === "modified") {
-          __merginApi.uploadProject(projectNamespace, projectName)
+          if (__merginApi.hasWriteAccess(projectFullName)) {
+            __merginApi.uploadProject(projectNamespace, projectName)
+          } else {
+            __inputUtils.showNotification(qsTr("No write access"))
+          }
         }
       }
 
