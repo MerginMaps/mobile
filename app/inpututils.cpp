@@ -264,7 +264,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 QString InputUtils::appInfo()
 {
   return QString( "%1/%2 (%3/%4)" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
-                 .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
+         .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
