@@ -1,8 +1,5 @@
 #include "inpututils.h"
 
-#define STR1(x)  #x
-#define STR(x)  STR1(x)
-
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
 #include "qgslinestring.h"
@@ -266,14 +263,8 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 
 QString InputUtils::appInfo()
 {
-#ifdef INPUT_VERSION
-  QString version = STR( INPUT_VERSION );
-#elif
-  QString version = QStringLiteral( ". unknown" );
-#endif
-  QString info = QString( "%1 v%2; %3 %4" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
+  return QString( "%1/%2 (%3/%4)" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
                  .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
-  return info;
 }
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
