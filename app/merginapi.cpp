@@ -705,7 +705,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1" ).arg( projectFullName ) );
   url.setQuery( query );
 
-  QNetworkRequest request = getDefaultRequest(!withoutAuth);
+  QNetworkRequest request = getDefaultRequest( !withoutAuth );
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
