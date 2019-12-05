@@ -96,8 +96,6 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects 
     std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
     project->projectNamespace = entry.projectNamespace;
     project->projectName = entry.projectName;
-    project->creator = entry.creator;
-    project->writers = entry.writers;
     project->serverUpdated = entry.serverUpdated;
 
     // figure out info from local projects (projectDir etc)

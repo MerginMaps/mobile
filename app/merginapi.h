@@ -162,9 +162,6 @@ struct MerginProjectListEntry
   QString projectName;
   QString projectNamespace;
   int version = -1;
-
-  int creator; // server-side user ID of the project owner (creator)
-  QList<int> writers; // server-side user IDs of users having write access to the project
   QDateTime serverUpdated; // available latest version of project files on server
 
 };
@@ -215,8 +212,9 @@ class MerginApi: public QObject
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
+     * \param withoutAuth If True, a request is  without authorization (only public projects dont require auth)
      */
-    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName );
+    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName, bool withoutAuth = false );
 
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
@@ -261,6 +259,8 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
+    Q_INVOKABLE bool hasWriteAccess( const QString &projectFullName );
+
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
     static const int MERGIN_API_VERSION_MAJOR = 2019;
@@ -281,7 +281,7 @@ class MerginApi: public QObject
     * \param projectPath Full path to project's folder
     * \param metadataFile Relative path of metafile to project's folder
     */
-    static QString getFullProjectName( QString projectNamespace, QString projectName );
+    Q_INVOKABLE static QString getFullProjectName( QString projectNamespace, QString projectName );
 
     // Test functions
     /**
@@ -454,7 +454,7 @@ class MerginApi: public QObject
     QString findUniquePath( const QString &path, bool isPathDir = true );
     /** Creates a request to get project details (list of project files).
      */
-    QNetworkReply *getProjectInfo( const QString &projectFullName );
+    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withoutAuth = false );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     QString createUniqueProjectDirectory( const QString &projectName );

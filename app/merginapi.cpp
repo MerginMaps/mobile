@@ -369,13 +369,13 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   InputUtils::log( "push " + projectFullName, QStringLiteral( "Requesting transaction finish: " ) + transactionUUID );
 }
 
-void MerginApi::updateProject( const QString &projectNamespace, const QString &projectName )
+void MerginApi::updateProject( const QString &projectNamespace, const QString &projectName, bool withoutAuth )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
   InputUtils::log( "pull " + projectFullName, "### Starting ###" );
 
-  QNetworkReply *reply = getProjectInfo( projectFullName );
+  QNetworkReply *reply = getProjectInfo( projectFullName, withoutAuth );
   if ( reply )
   {
     InputUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting project info: " ) + reply->request().url().toString() );
@@ -682,9 +682,10 @@ void MerginApi::pingMerginReplyFinished()
   emit pingMerginFinished( apiVersion, serverMsg );
 }
 
-QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
+
+QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( ( !withoutAuth && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
     return nullptr;
   }
@@ -706,7 +707,8 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName )
 
   QNetworkRequest request;
   request.setUrl( url );
-  request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+  if ( !withoutAuth )
+    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   return mManager.get( request );
@@ -920,6 +922,19 @@ void MerginApi::pingMergin()
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( "ping", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
+}
+
+bool MerginApi::hasWriteAccess( const QString &projectFullName )
+{
+  if ( !hasAuthData() )
+  {
+    return false;
+  }
+
+  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  QString projectDir = projectInfo.projectDir;
+  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
+  return projectMetadata.writers.contains( mUserId );
 }
 
 QString MerginApi::apiRoot() const
@@ -1981,18 +1996,6 @@ MerginProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
       {
         versionStr = versionStr.mid( 1 );
         project.version = versionStr.toInt();
-      }
-
-      project.creator = projectMap.value( QStringLiteral( "creator" ) ).toInt();
-
-      QJsonValue access = projectMap.value( QStringLiteral( "access" ) );
-      if ( access.isObject() )
-      {
-        QJsonArray writers = access.toObject().value( "writers" ).toArray();
-        for ( QJsonValueRef tag : writers )
-        {
-          project.writers.append( tag.toInt() );
-        }
       }
 
       QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
