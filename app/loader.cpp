@@ -112,6 +112,9 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
     QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
     extent.combineExtentWith( layerExtent );
   }
+  if(extent.isEmpty()){
+     extent.combineExtentWith( QgsRectangle(10.0,10.0,20.0,20.0) );
+  }
   extent.scale( 1.05 );
   mapSettings->setExtent( extent );
 }
