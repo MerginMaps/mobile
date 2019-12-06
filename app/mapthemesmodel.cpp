@@ -112,3 +112,17 @@ void MapThemesModel::applyTheme( const QString &name )
   mProject->mapThemeCollection()->applyTheme( name, root, &model );
   emit reloadLayers();
 }
+
+int MapThemesModel::rowAccordingName( QString name, int defaultIndex ) const
+{
+  int i = 0;
+  for ( QString theme : mMapThemes )
+  {
+    if ( theme == name )
+    {
+      return i;
+    }
+    i++;
+  }
+  return defaultIndex;
+}

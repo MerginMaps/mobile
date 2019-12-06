@@ -11,6 +11,7 @@ class AppSettings: public QObject
     Q_PROPERTY( QString activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
     Q_PROPERTY( QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged )
     Q_PROPERTY( QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged )
+    Q_PROPERTY( QString defaultMapTheme READ defaultMapTheme WRITE setDefaultMapTheme NOTIFY defaultMapThemeChanged )
     Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
@@ -38,10 +39,14 @@ class AppSettings: public QObject
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
 
+    QString defaultMapTheme() const;
+    void setDefaultMapTheme( const QString &value );
+
   signals:
     void defaultProjectChanged();
     void activeProjectChanged();
     void defaultLayerChanged();
+    void defaultMapThemeChanged();
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
@@ -60,6 +65,9 @@ class AppSettings: public QObject
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;
+
+    // Projects path -> defaultMapTheme name
+    QHash<QString, QString> mDefaultMapTheme;
 
     const QString mGroupName = QString( "inputApp" );
 

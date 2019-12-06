@@ -50,8 +50,6 @@ ApplicationWindow {
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = true
-                recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
-                updateRecordToolbar()
                 recordToolbar.gpsSwitchClicked()
             }
             else if (stateManager.state === "edit") {
@@ -163,8 +161,15 @@ ApplicationWindow {
         recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
     }
 
-    function updateActiveLayerByName(layerName) {
-        activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(layerName,
+    function updateActiveMapTheme() {
+        mapThemesPanel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
+        mapThemesPanel.activeThemeIndexChanged()
+
+        updateActiveLayer()
+    }
+
+    function updateActiveLayer() {
+        activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
                                                                            __layersModel.firstNonOnlyReadableLayerIndex())
         activeLayerPanel.activeLayerIndexChanged()
         recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
@@ -521,7 +526,7 @@ ApplicationWindow {
             __appSettings.defaultProject = openProjectPanel.activeProjectPath
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            updateActiveLayerByName(__appSettings.defaultLayer)
+            updateActiveMapTheme()
         }
     }
 
@@ -544,6 +549,13 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
+
+        onActiveThemeIndexChanged:
+        {
+          __appSettings.defaultMapTheme = activeMapThemeName
+          __mapThemesModel.applyTheme(activeMapThemeName)
+          updateActiveLayer()
+        }
     }
 
     Notification {

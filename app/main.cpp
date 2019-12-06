@@ -213,6 +213,7 @@ void initDeclarative()
 {
   qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
+  qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
@@ -303,8 +304,8 @@ int main( int argc, char *argv[] )
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
-  QObject::connect( &loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers );
   QObject::connect( &loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes );
+  QObject::connect( &loader, &Loader::projectReloaded, &lm, &LayersModel::reloadLayers );
   QObject::connect( &mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );

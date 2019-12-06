@@ -42,6 +42,7 @@ class MapThemesModel : public QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE void applyTheme( const QString &name );
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
