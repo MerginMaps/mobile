@@ -113,9 +113,9 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
     extent.combineExtentWith( layerExtent );
   }
   if ( extent.isEmpty() )
-   {
-     extent.grow( mProject->crs().isGeographic() ? 0.01 : 1000.0 );
-   }
+  {
+    extent.grow( mProject->crs().isGeographic() ? 0.01 : 1000.0 );
+  }
   extent.scale( 1.05 );
   mapSettings->setExtent( extent );
 }
