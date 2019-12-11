@@ -25,34 +25,25 @@ Drawer {
 
     id: layerPanel
     visible: false
-    modal: false
-    interactive: true
+    modal: true
+    interactive: false
     dragMargin: 0 // prevents opening the drawer by dragging.
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
 
-    Rectangle {
-        id: header
-        height: InputStyle.rowHeightHeader
-        width: parent.width
-        color: InputStyle.panelBackgroundLight
-
-        Text {
-            anchors.fill: parent
-            anchors.leftMargin: InputStyle.panelMargin
-            anchors.rightMargin: InputStyle.panelMargin
-            text: qsTr("Survey layer")
-            color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeTitle
-            font.bold: true
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        layer.enabled: true
-        layer.effect: Shadow {}
+    PanelHeader {
+      id: header
+      height: InputStyle.rowHeightHeader
+      width: parent.width
+      color: root.bgColor
+      rowHeight: InputStyle.rowHeightHeader
+      titleText: qsTr("Select Active Layer")
+      onBack: layerPanel.close()
+      withBackButton: true
+      layer.enabled: true
+      layer.effect: Shadow {}
     }
 
     ListView {
