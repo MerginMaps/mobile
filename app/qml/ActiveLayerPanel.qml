@@ -54,6 +54,7 @@ Drawer {
         implicitWidth: parent.width
         implicitHeight: contentHeight
         model: __layersModel
+        clip: true
         delegate: delegateItem
 
         property int cellWidth: width
