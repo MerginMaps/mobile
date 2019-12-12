@@ -7,7 +7,6 @@
 | freexl       | yes    |    yes   |  MPL-1.1/GPL-2+/LGPL-2.1+ | [freexl](https://www.gaia-gis.it/fossil/freexl)           |
 | gdal         | yes    |    yes   |  X/MIT                    | [gdal](https://github.com/OSGeo/gdal)                     |
 | geos         | yes    |    yes   |  LGPL-2.1                 | [geos](https://github.com/libgeos/geos)                   |
-| gsl          | yes    |    yes   |  GPL                      | [gsl](https://www.gnu.org/software/gsl/)                  |
 | iconv        | yes    |    yes   |  GPL/LGPL                 | [iconv](https://www.gnu.org/software/libiconv/)           |
 | spatialindex | yes    |    yes   |  MIT                      | [libspatialindex](https://libspatialindex.org)            |
 | spatialite   | yes    |    yes   |  MPL-1.1/GPL-2+/LGPL-2.1+ | [spatialite](https://www.gaia-gis.it/fossil/libspatialite)|
@@ -20,10 +19,7 @@
 | proj         | yes    |    yes   |  MIT                      | [proj](https://github.com/OSGeo/proj)                     |
 | qca          | yes    |    yes   |  LGPL-2.1                 | [qca](https://github.com/KDE/qca)                         |
 | qgis         | yes    |    yes   |  GPL-2                    | [qgis](https://github.com/qgis/QGIS)                      |
-| qscintilla   | no     |    yes   |  GPL-3                    | [qscintilla](https://www.riverbankcomputing.com/software/qscintilla/license)|
 | qtkeychain   | yes    |    yes   |  BSD-2-Clause             | [qtkeychain](https://github.com/frankosterfeld/qtkeychain)|
-| qwt          | no     |    yes   |  QWT-1                    | [qwt](https://qwt.sourceforge.io/index.html#license)      |
-| qwtpolar     | no     |    yes   |  QWT-1                    | [qwtpolar](https://qwtpolar.sourceforge.io)               |
 | sqlite3      | yes\** |    yes   |  Public Domain            | [sqlite3](https://sqlite.org/index.html)                  |
 | zlib         | no     |    yes   |  GNU license              | [zlib](https://www.zlib.net)                              |
 
