@@ -28,6 +28,7 @@ class MapThemesModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QList<QString> mapThemes READ mapThemes WRITE setMapThemes NOTIFY mapThemesChanged )
+    Q_PROPERTY( int activeThemeIndex READ activeThemeIndex WRITE setActiveThemeIndex NOTIFY activeThemeIndexChanged )
 
   public:
     enum Roles
@@ -51,9 +52,14 @@ class MapThemesModel : public QAbstractListModel
     QList<QString> mapThemes() const;
     void setMapThemes( const QList<QString> &mapThemes );
 
+    int activeThemeIndex() const;
+    void setActiveThemeIndex( int activeThemeIndex );
+
   signals:
     void mapThemesChanged();
     void reloadLayers();
+    void activeThemeIndexChanged();
+    void mapThemeChanged( const QString &name );
 
   public slots:
     void reloadMapThemes();
@@ -61,6 +67,7 @@ class MapThemesModel : public QAbstractListModel
   private:
     QgsProject *mProject;
     QList<QString> mMapThemes;
+    int mActiveThemeIndex;
 };
 
 #endif // MapThemesModel_H

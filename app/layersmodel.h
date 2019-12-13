@@ -28,6 +28,7 @@ class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersChanged )
+    Q_PROPERTY( int activeIndex READ activeIndex WRITE setActiveIndex NOTIFY activeIndexChanged )
 
   public:
     enum Roles
@@ -50,6 +51,8 @@ class LayersModel : public QAbstractListModel
     Q_INVOKABLE int noOfEditableLayers() const;
     Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
 
+    Q_INVOKABLE QgsMapLayer *activeLayer();
+
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     QHash<int, QByteArray> roleNames() const override;
@@ -59,16 +62,23 @@ class LayersModel : public QAbstractListModel
     int defaultLayerIndex() const;
     void setDefaultLayerIndex( int index );
 
+    int activeIndex() const;
+    void setActiveIndex( int activeIndex );
+
   signals:
     void layersChanged();
     void defaultLayerIndexChanged();
+    void activeIndexChanged();
+    void activeLayerNameChanged( const QString &name );
 
   public slots:
     void reloadLayers(); //when project file changes, reload all layers, etc.
+    void updateActiveLayer( const QString &name );
 
   private:
     QgsProject *mProject;
     QList<QgsMapLayer *> mLayers; // all layers
+    int mActiveIndex;
 };
 
 #endif // LAYERSMODEL_H

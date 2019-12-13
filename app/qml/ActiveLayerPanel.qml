@@ -6,21 +6,13 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property int activeLayerIndex: -1
-    property QgsQuick.VectorLayer activeVectorLayer: (activeLayerIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer) :
+    property QgsQuick.VectorLayer activeVectorLayer: (__layersModel.activeLayerIndex >= 0) ?
+                                                         __layersModel.data(__layersModel.index(__layersModel.activeLayerIndex), LayersModel.VectorLayer) :
                                                          null
-    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
     property string title: "Survey Layer"
-
-    signal layerSettingChanged()
 
     function openPanel() {
         layerPanel.visible = true
-    }
-
-    onActiveLayerNameChanged: {
-        __appSettings.defaultLayer = activeLayerName
     }
 
     id: layerPanel
@@ -28,6 +20,8 @@ Drawer {
     modal: true
     interactive: false
     dragMargin: 0 // prevents opening the drawer by dragging.
+
+    signal updateRecordPanel
 
     background: Rectangle {
         color: InputStyle.clrPanelMain
@@ -89,13 +83,13 @@ Drawer {
             color: item.highlight ? secondaryColor : primaryColor
 
             MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    layerPanel.activeLayerIndex = index
-                    layerPanel.visible = false
-                    __appSettings.defaultLayer = name
-                    layerPanel.layerSettingChanged()
-                }
+              anchors.fill: parent
+              onClicked: {
+                __layersModel.activeIndex = index
+                layerPanel.visible = false
+                updateRecordPanel()
+                // TODO emit singals
+              }
             }
 
             ExtendedMenuItem {
@@ -105,8 +99,8 @@ Drawer {
                 contentText: name ? name : ""
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: activeLayerIndex === index
-                showBorder: !__appSettings.defaultLayer || layerPanel.activeLayerIndex - 1 !== index
+                highlight: __layersModel.activeIndex === index
+                showBorder: !__appSettings.defaultLayer || __layersModel.activeIndex - 1 !== index
             }
         }
 

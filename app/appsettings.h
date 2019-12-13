@@ -26,7 +26,6 @@ class AppSettings: public QObject
     void setActiveProject( const QString &value );
 
     QString defaultLayer() const;
-    void setDefaultLayer( const QString &value );
 
     bool autoCenterMapChecked();
     void setAutoCenterMapChecked( const bool value );
@@ -40,7 +39,7 @@ class AppSettings: public QObject
     void setLineRecordingInterval( int lineRecordingInterval );
 
     QString defaultMapTheme() const;
-    void setDefaultMapTheme( const QString &value );
+
 
   signals:
     void defaultProjectChanged();
@@ -50,6 +49,11 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
+    void reloadDefaultLayerSignal( const QString &name );
+  public slots:
+    void setDefaultMapTheme( const QString &value );
+    void setDefaultLayer( const QString &value );
+    void reloadDefaultLayer();
 
   private:
     // Projects path

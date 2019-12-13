@@ -57,6 +57,25 @@ void MapThemesModel::reloadMapThemes()
   }
 }
 
+int MapThemesModel::activeThemeIndex() const
+{
+  return mActiveThemeIndex;
+}
+
+void MapThemesModel::setActiveThemeIndex( int activeThemeIndex )
+{
+  if ( mActiveThemeIndex != activeThemeIndex )
+  {
+    mActiveThemeIndex = activeThemeIndex;
+    // Apply theme and reload layers
+    applyTheme( mMapThemes.at( activeThemeIndex ) );
+    // Reset active layer | TODO move after reloading layers??
+    emit activeThemeIndexChanged();
+    // Set new map theme default to AppSettings
+    emit mapThemeChanged( mMapThemes.at( activeThemeIndex ) );
+  }
+}
+
 QVariant MapThemesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
@@ -115,14 +134,5 @@ void MapThemesModel::applyTheme( const QString &name )
 
 int MapThemesModel::rowAccordingName( QString name, int defaultIndex ) const
 {
-  int i = 0;
-  for ( QString theme : mMapThemes )
-  {
-    if ( theme == name )
-    {
-      return i;
-    }
-    i++;
-  }
-  return defaultIndex;
+  return mMapThemes.indexOf( name );
 }

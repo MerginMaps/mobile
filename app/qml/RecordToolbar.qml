@@ -25,12 +25,11 @@ Item {
     property bool manualRecordig: false
     property bool extraPanelVisible: true
 
-    property int activeLayerIndex: -1
-    property QgsQuick.VectorLayer activeVectorLayer: (activeLayerIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer) :
+    property QgsQuick.VectorLayer activeVectorLayer: (__layersModel.activeIndex >= 0) ?
+                                                         __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.VectorLayer) :
                                                          null
-    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
-    property string activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
+    property string activeLayerName: __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.Name)
+    property string activeLayerIcon: __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.IconSource)
 
     id: root
     onClose: visible = false

@@ -61,6 +61,11 @@ void AppSettings::reloadDefaultLayers()
   settings.endGroup();
 }
 
+void AppSettings::reloadDefaultLayer()
+{
+  emit reloadDefaultLayerSignal( mDefaultLayers.find( mActiveProject ).value() );
+}
+
 
 QString AppSettings::defaultProject() const
 {

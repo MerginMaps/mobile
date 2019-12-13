@@ -114,7 +114,7 @@ ApplicationWindow {
         var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
         var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
 
-        if (digitizing.hasPointGeometry(activeLayerPanel.activeVectorLayer)) {
+        if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
             var pair = digitizing.pointFeatureFromPoint(centerPoint)
             saveRecordedFeature(pair)
         } else {
@@ -145,6 +145,8 @@ ApplicationWindow {
     }
 
     function updateRecordToolbar() {
+
+        recordToolbar.activeVectorLayer = __layersModel.activeLayer()
         var layer = recordToolbar.activeVectorLayer
         if (!layer)
         {
@@ -157,23 +159,8 @@ ApplicationWindow {
         } else {
             recordToolbar.pointLayerSelected = false
         }
-        recordToolbar.activeLayerName= __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.Name)
-        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
-    }
-
-    function updateActiveMapTheme() {
-        mapThemesPanel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
-        mapThemesPanel.activeThemeIndexChanged()
-
-        updateActiveLayer()
-    }
-
-    function updateActiveLayer() {
-        activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(__appSettings.defaultLayer,
-                                                                           __layersModel.firstNonOnlyReadableLayerIndex())
-        activeLayerPanel.activeLayerIndexChanged()
-        recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
-        recordToolbar.activeLayerIndexChanged()
+        recordToolbar.activeLayerName = __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.Name)
+        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.IconSource)
     }
 
     Component.onCompleted: {
@@ -345,7 +332,7 @@ ApplicationWindow {
     DigitizingController {
         id: digitizing
         positionKit: positionMarker.positionKit
-        layer: activeLayerPanel.activeVectorLayer
+        layer: recordToolbar.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
 
@@ -402,6 +389,13 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+      target: __layersModel
+      onActiveIndexChanged: {
+        updateRecordToolbar()
+      }
+    }
+
     RecordToolbar {
         id: recordToolbar
         width: window.width
@@ -411,13 +405,8 @@ ApplicationWindow {
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
-        activeLayerIndex: activeLayerPanel.activeLayerIndex
         // reset manualRecording after opening
         onVisibleChanged: if (visible) digitizing.manualRecording = true
-
-        onActiveLayerIndexChanged: {
-            updateRecordToolbar()
-        }
 
         onAddClicked: {
             if (stateManager.state === "record") {
@@ -522,11 +511,13 @@ ApplicationWindow {
         z: zPanel
 
         onActiveProjectIndexChanged: {
+          console.log("!!!!onActiveProjectIndexChanged")
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.defaultProject = openProjectPanel.activeProjectPath
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            updateActiveMapTheme()
+            __mapThemesModel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
+            //__mapThemesModel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
         }
     }
 
@@ -537,9 +528,9 @@ ApplicationWindow {
         edge: Qt.BottomEdge
         z: zPanel
 
-        onLayerSettingChanged: {
-            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
-            updateRecordToolbar()
+        onUpdateRecordPanel: {
+          console.log("!!!!onUpdateRecordPanel")
+          updateRecordToolbar()
         }
     }
 
@@ -549,13 +540,6 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
-
-        onActiveThemeIndexChanged:
-        {
-          __appSettings.defaultMapTheme = activeMapThemeName
-          __mapThemesModel.applyTheme(activeMapThemeName)
-          updateActiveLayer()
-        }
     }
 
     Notification {

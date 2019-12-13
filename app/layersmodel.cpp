@@ -67,6 +67,27 @@ void LayersModel::reloadLayers()
   }
 }
 
+void LayersModel::updateActiveLayer( const QString &name )
+{
+  int row = rowAccordingName( name, firstNonOnlyReadableLayerIndex() );
+  setActiveIndex( row );
+}
+
+int LayersModel::activeIndex() const
+{
+  return mActiveIndex;
+}
+
+void LayersModel::setActiveIndex( int activeIndex )
+{
+  if ( mActiveIndex != activeIndex )
+  {
+    mActiveIndex = activeIndex;
+  }
+  emit activeIndexChanged();
+  emit activeLayerNameChanged( mLayers.at( mActiveIndex )->name() );
+}
+
 QVariant LayersModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
@@ -190,6 +211,11 @@ int LayersModel::firstNonOnlyReadableLayerIndex() const
   }
 
   return -1;
+}
+
+QgsMapLayer *LayersModel::activeLayer()
+{
+  return mLayers.at( activeIndex() );
 }
 
 int LayersModel::rowCount( const QModelIndex &parent ) const
