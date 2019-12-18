@@ -511,13 +511,10 @@ ApplicationWindow {
         z: zPanel
 
         onActiveProjectIndexChanged: {
-          console.log("!!!!onActiveProjectIndexChanged")
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.defaultProject = openProjectPanel.activeProjectPath
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            __mapThemesModel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
-            //__mapThemesModel.activeThemeIndex = __mapThemesModel.rowAccordingName(__appSettings.defaultMapTheme)
         }
     }
 
@@ -529,7 +526,6 @@ ApplicationWindow {
         z: zPanel
 
         onUpdateRecordPanel: {
-          console.log("!!!!onUpdateRecordPanel")
           updateRecordToolbar()
         }
     }

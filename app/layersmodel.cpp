@@ -63,7 +63,7 @@ void LayersModel::reloadLayers()
     mLayers = allLayers;
     endResetModel();
 
-    emit layersChanged();
+    emit layersReloaded();
   }
 }
 
@@ -71,6 +71,19 @@ void LayersModel::updateActiveLayer( const QString &name )
 {
   int row = rowAccordingName( name, firstNonOnlyReadableLayerIndex() );
   setActiveIndex( row );
+}
+
+QString LayersModel::activeLayerName() const
+{
+  return mActiveLayerName;
+}
+
+void LayersModel::setActiveLayerName( const QString &activeLayerName )
+{
+
+  mActiveLayerName = activeLayerName;
+  updateActiveLayer( mActiveLayerName );
+  emit activeLayerNameChanged( mActiveLayerName );
 }
 
 int LayersModel::activeIndex() const

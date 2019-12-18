@@ -27,8 +27,9 @@ class QgsProject;
 class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersChanged )
+    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersReloaded )
     Q_PROPERTY( int activeIndex READ activeIndex WRITE setActiveIndex NOTIFY activeIndexChanged )
+    Q_PROPERTY( QString activeLayerName READ activeLayerName WRITE setActiveLayerName NOTIFY activeLayerNameChanged )
 
   public:
     enum Roles
@@ -65,8 +66,11 @@ class LayersModel : public QAbstractListModel
     int activeIndex() const;
     void setActiveIndex( int activeIndex );
 
+    QString activeLayerName() const;
+    void setActiveLayerName( const QString &activeLayerName );
+
   signals:
-    void layersChanged();
+    void layersReloaded();
     void defaultLayerIndexChanged();
     void activeIndexChanged();
     void activeLayerNameChanged( const QString &name );
@@ -79,6 +83,7 @@ class LayersModel : public QAbstractListModel
     QgsProject *mProject;
     QList<QgsMapLayer *> mLayers; // all layers
     int mActiveIndex;
+    QString mActiveLayerName;
 };
 
 #endif // LAYERSMODEL_H

@@ -63,7 +63,12 @@ void AppSettings::reloadDefaultLayers()
 
 void AppSettings::reloadDefaultLayer()
 {
-  emit reloadDefaultLayerSignal( mDefaultLayers.find( mActiveProject ).value() );
+  emit reloadDefaultLayerSignal( defaultLayer() );
+}
+
+void AppSettings::reloadDefaultMapTheme()
+{
+  emit reloadDefaultMapThemeSignal( defaultMapTheme() );
 }
 
 

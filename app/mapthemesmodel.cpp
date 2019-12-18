@@ -53,7 +53,16 @@ void MapThemesModel::reloadMapThemes()
     beginResetModel();
     mMapThemes = allThemes;
     endResetModel();
-    emit mapThemesChanged();
+    emit mapThemesReloaded();
+  }
+}
+
+void MapThemesModel::updateMapTheme( const QString name )
+{
+  int row = rowAccordingName( name, 0 );
+  if ( row >= 0 )
+  {
+    setActiveThemeIndex( row );
   }
 }
 
@@ -64,16 +73,9 @@ int MapThemesModel::activeThemeIndex() const
 
 void MapThemesModel::setActiveThemeIndex( int activeThemeIndex )
 {
-  if ( mActiveThemeIndex != activeThemeIndex )
-  {
-    mActiveThemeIndex = activeThemeIndex;
-    // Apply theme and reload layers
-    applyTheme( mMapThemes.at( activeThemeIndex ) );
-    // Reset active layer | TODO move after reloading layers??
-    emit activeThemeIndexChanged();
-    // Set new map theme default to AppSettings
-    emit mapThemeChanged( mMapThemes.at( activeThemeIndex ) );
-  }
+  mActiveThemeIndex = activeThemeIndex;
+  applyTheme( mMapThemes.at( activeThemeIndex ) );
+  emit activeThemeIndexChanged();
 }
 
 QVariant MapThemesModel::data( const QModelIndex &index, int role ) const
@@ -121,7 +123,7 @@ void MapThemesModel::setMapThemes( const QList<QString> &mapThemes )
     return;
 
   mMapThemes = mapThemes;
-  emit mapThemesChanged();
+  emit mapThemesReloaded();
 }
 
 void MapThemesModel::applyTheme( const QString &name )
@@ -129,10 +131,14 @@ void MapThemesModel::applyTheme( const QString &name )
   QgsLayerTree *root = mProject->layerTreeRoot();
   QgsLayerTreeModel model( root );
   mProject->mapThemeCollection()->applyTheme( name, root, &model );
-  emit reloadLayers();
+  emit mapThemeChanged( name );
 }
 
 int MapThemesModel::rowAccordingName( QString name, int defaultIndex ) const
 {
-  return mMapThemes.indexOf( name );
+  int index = mMapThemes.indexOf( name );
+  if ( index < 0 )
+    return defaultIndex;
+  else
+    return index;
 }

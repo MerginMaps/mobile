@@ -27,7 +27,7 @@ class QgsProject;
 class MapThemesModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QString> mapThemes READ mapThemes WRITE setMapThemes NOTIFY mapThemesChanged )
+    Q_PROPERTY( QList<QString> mapThemes READ mapThemes WRITE setMapThemes NOTIFY mapThemesReloaded )
     Q_PROPERTY( int activeThemeIndex READ activeThemeIndex WRITE setActiveThemeIndex NOTIFY activeThemeIndexChanged )
 
   public:
@@ -55,14 +55,18 @@ class MapThemesModel : public QAbstractListModel
     int activeThemeIndex() const;
     void setActiveThemeIndex( int activeThemeIndex );
 
+    QString activeTheme() const;
+    void setActiveTheme( const QString &activeTheme );
+
   signals:
-    void mapThemesChanged();
+    void mapThemesReloaded();
+    void mapThemeChanged( const QString &name );
     void reloadLayers();
     void activeThemeIndexChanged();
-    void mapThemeChanged( const QString &name );
 
   public slots:
     void reloadMapThemes();
+    void updateMapTheme( const QString name );
 
   private:
     QgsProject *mProject;

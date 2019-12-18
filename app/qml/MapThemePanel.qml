@@ -7,8 +7,6 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property string activeMapThemeName: __mapThemesModel.data(__mapThemesModel.index(__mapThemesModel.activeThemeIndex), MapThemesModel.Name)
-
     id: mapThemePanel
     visible: false
     modal: true

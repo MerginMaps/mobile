@@ -6,9 +6,6 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property QgsQuick.VectorLayer activeVectorLayer: (__layersModel.activeLayerIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(__layersModel.activeLayerIndex), LayersModel.VectorLayer) :
-                                                         null
     property string title: "Survey Layer"
 
     function openPanel() {
@@ -88,7 +85,6 @@ Drawer {
                 __layersModel.activeIndex = index
                 layerPanel.visible = false
                 updateRecordPanel()
-                // TODO emit singals
               }
             }
 

@@ -304,16 +304,18 @@ int main( int argc, char *argv[] )
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
-  QObject::connect( &mtm, &MapThemesModel::reloadLayers, &lm, &LayersModel::reloadLayers );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::addProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
 
   QObject::connect( &loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes );
-  QObject::connect( &mtm, &MapThemesModel::mapThemesChanged, &lm, &LayersModel::reloadLayers );
+  QObject::connect( &mtm, &MapThemesModel::mapThemesReloaded, &as, &AppSettings::reloadDefaultMapTheme );
+  QObject::connect( &as, &AppSettings::reloadDefaultMapThemeSignal, &mtm, &MapThemesModel::updateMapTheme );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &as, &AppSettings::setDefaultMapTheme );
-  QObject::connect( &lm, &LayersModel::layersChanged, &as, &AppSettings::reloadDefaultLayer );
+  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &lm, &LayersModel::reloadLayers );
+
+  QObject::connect( &lm, &LayersModel::layersReloaded, &as, &AppSettings::reloadDefaultLayer );
   QObject::connect( &as, &AppSettings::reloadDefaultLayerSignal, &lm, &LayersModel::updateActiveLayer );
   QObject::connect( &lm, &LayersModel::activeLayerNameChanged, &as, &AppSettings::setDefaultLayer );
 

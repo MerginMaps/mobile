@@ -50,10 +50,12 @@ class AppSettings: public QObject
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
     void reloadDefaultLayerSignal( const QString &name );
+    void reloadDefaultMapThemeSignal( const QString &name );
   public slots:
     void setDefaultMapTheme( const QString &value );
     void setDefaultLayer( const QString &value );
     void reloadDefaultLayer();
+    void reloadDefaultMapTheme();
 
   private:
     // Projects path
