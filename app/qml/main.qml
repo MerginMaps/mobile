@@ -524,10 +524,6 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
-
-        onUpdateRecordPanel: {
-          updateRecordToolbar()
-        }
     }
 
     MapThemePanel {

@@ -18,8 +18,6 @@ Drawer {
     interactive: false
     dragMargin: 0 // prevents opening the drawer by dragging.
 
-    signal updateRecordPanel
-
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
@@ -84,7 +82,6 @@ Drawer {
               onClicked: {
                 __layersModel.activeIndex = index
                 layerPanel.visible = false
-                updateRecordPanel()
               }
             }
 
