@@ -73,19 +73,6 @@ void LayersModel::updateActiveLayer( const QString &name )
   setActiveIndex( row );
 }
 
-QString LayersModel::activeLayerName() const
-{
-  return mActiveLayerName;
-}
-
-void LayersModel::setActiveLayerName( const QString &activeLayerName )
-{
-
-  mActiveLayerName = activeLayerName;
-  updateActiveLayer( mActiveLayerName );
-  emit activeLayerNameChanged( mActiveLayerName );
-}
-
 int LayersModel::activeIndex() const
 {
   return mActiveIndex;
@@ -98,7 +85,7 @@ void LayersModel::setActiveIndex( int activeIndex )
     mActiveIndex = activeIndex;
   }
   emit activeIndexChanged();
-  emit activeLayerNameChanged( mLayers.at( mActiveIndex )->name() );
+  emit activeLayerNameChanged( activeLayer()->name() );
 }
 
 QVariant LayersModel::data( const QModelIndex &index, int role ) const
