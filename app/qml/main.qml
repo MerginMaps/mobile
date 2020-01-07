@@ -57,7 +57,7 @@ ApplicationWindow {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
                 recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
-                                                                                   __layersModel.firstNonOnlyReadableLayerIndex())
+                                                                                   __layersModel.firstWritableLayerIndex())
                 updateRecordToolbar()
 
                 var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)

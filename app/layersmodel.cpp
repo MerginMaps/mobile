@@ -69,7 +69,7 @@ void LayersModel::reloadLayers()
 
 void LayersModel::updateActiveLayer( const QString &name )
 {
-  int row = rowAccordingName( name, firstNonOnlyReadableLayerIndex() );
+  int row = rowAccordingName( name, firstWritableLayerIndex() );
   setActiveIndex( row );
 }
 
@@ -85,7 +85,12 @@ void LayersModel::setActiveIndex( int activeIndex )
     mActiveIndex = activeIndex;
   }
   emit activeIndexChanged();
-  emit activeLayerNameChanged( activeLayer()->name() );
+
+  QgsMapLayer *layer = activeLayer();
+  if ( layer )
+  {
+    emit activeLayerNameChanged( layer->name() );
+  }
 }
 
 QVariant LayersModel::data( const QModelIndex &index, int role ) const
@@ -170,7 +175,7 @@ QModelIndex LayersModel::index( int row, int column, const QModelIndex &parent )
   return createIndex( row, 0, nullptr );
 }
 
-int LayersModel::rowAccordingName( QString name, int defaultIndex ) const
+int LayersModel::rowAccordingName( QString name, int defaultRow ) const
 {
   int i = 0;
   for ( QgsMapLayer *layer : mLayers )
@@ -181,7 +186,7 @@ int LayersModel::rowAccordingName( QString name, int defaultIndex ) const
     }
     i++;
   }
-  return defaultIndex;
+  return defaultRow;
 }
 
 int LayersModel::noOfEditableLayers() const
@@ -198,7 +203,7 @@ int LayersModel::noOfEditableLayers() const
   return count;
 }
 
-int LayersModel::firstNonOnlyReadableLayerIndex() const
+int LayersModel::firstWritableLayerIndex() const
 {
   int i = 0;
   for ( QgsMapLayer *layer : mLayers )
@@ -215,6 +220,8 @@ int LayersModel::firstNonOnlyReadableLayerIndex() const
 
 QgsMapLayer *LayersModel::activeLayer()
 {
+  if ( mActiveIndex < 0 || mActiveIndex >= mLayers.length() )
+    return nullptr;
   return mLayers.at( activeIndex() );
 }
 

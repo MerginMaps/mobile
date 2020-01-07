@@ -313,7 +313,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &mtm, &MapThemesModel::mapThemesReloaded, &as, &AppSettings::reloadDefaultMapTheme );
   QObject::connect( &as, &AppSettings::reloadDefaultMapThemeSignal, &mtm, &MapThemesModel::updateMapTheme );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &as, &AppSettings::setDefaultMapTheme );
-  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &lm, &LayersModel::reloadLayers );
+  QObject::connect( &mtm, &MapThemesModel::activeThemeIndexChanged, &lm, &LayersModel::reloadLayers );
 
   QObject::connect( &lm, &LayersModel::layersReloaded, &as, &AppSettings::reloadDefaultLayer );
   QObject::connect( &as, &AppSettings::reloadDefaultLayerSignal, &lm, &LayersModel::updateActiveLayer );

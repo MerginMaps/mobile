@@ -43,7 +43,8 @@ class MapThemesModel : public QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE void applyTheme( const QString &name );
-    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
+    //! Returns row number of the first matching map theme name with the given name, otherwise return defaultRow.
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultRow = -1 ) const;
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
@@ -54,9 +55,6 @@ class MapThemesModel : public QAbstractListModel
 
     int activeThemeIndex() const;
     void setActiveThemeIndex( int activeThemeIndex );
-
-    QString activeTheme() const;
-    void setActiveTheme( const QString &activeTheme );
 
   signals:
     void mapThemesReloaded();
@@ -71,7 +69,7 @@ class MapThemesModel : public QAbstractListModel
   private:
     QgsProject *mProject;
     QList<QString> mMapThemes;
-    int mActiveThemeIndex;
+    int mActiveThemeIndex = -1;
 };
 
 #endif // MapThemesModel_H

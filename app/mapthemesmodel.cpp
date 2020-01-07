@@ -53,8 +53,8 @@ void MapThemesModel::reloadMapThemes()
     beginResetModel();
     mMapThemes = allThemes;
     endResetModel();
-    emit mapThemesReloaded();
   }
+  emit mapThemesReloaded();
 }
 
 void MapThemesModel::updateMapTheme( const QString name )
@@ -74,7 +74,11 @@ int MapThemesModel::activeThemeIndex() const
 void MapThemesModel::setActiveThemeIndex( int activeThemeIndex )
 {
   mActiveThemeIndex = activeThemeIndex;
-  applyTheme( mMapThemes.at( activeThemeIndex ) );
+
+  if ( activeThemeIndex >= 0 && activeThemeIndex < mMapThemes.length() )
+  {
+    applyTheme( mMapThemes.at( activeThemeIndex ) );
+  }
   emit activeThemeIndexChanged();
 }
 
@@ -134,11 +138,11 @@ void MapThemesModel::applyTheme( const QString &name )
   emit mapThemeChanged( name );
 }
 
-int MapThemesModel::rowAccordingName( QString name, int defaultIndex ) const
+int MapThemesModel::rowAccordingName( QString name, int defaultRow ) const
 {
   int index = mMapThemes.indexOf( name );
   if ( index < 0 )
-    return defaultIndex;
+    return defaultRow;
   else
     return index;
 }

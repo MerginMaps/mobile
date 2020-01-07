@@ -47,10 +47,10 @@ class LayersModel : public QAbstractListModel
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultRow = -1 ) const;
     Q_INVOKABLE int noOfEditableLayers() const;
-    Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
-
+    Q_INVOKABLE int firstWritableLayerIndex() const;
+    //! Returns pointer to activeLayer or nullptr
     Q_INVOKABLE QgsMapLayer *activeLayer();
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
@@ -77,7 +77,7 @@ class LayersModel : public QAbstractListModel
   private:
     QgsProject *mProject;
     QList<QgsMapLayer *> mLayers; // all layers
-    int mActiveIndex;
+    int mActiveIndex = -1;
 };
 
 #endif // LAYERSMODEL_H
