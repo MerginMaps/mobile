@@ -37,7 +37,7 @@ class MapThemesModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MapThemesModel( QgsProject *project, QObject *parent = nullptr );
+    explicit MapThemesModel( QObject *parent = nullptr );
     ~MapThemesModel();
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
@@ -54,7 +54,18 @@ class MapThemesModel : public QAbstractListModel
     void setMapThemes( const QList<QString> &mapThemes );
 
     int activeThemeIndex() const;
-    void setActiveThemeIndex( int activeThemeIndex );
+    /**
+     * Sets and applies mapTheme if index is in mapThemes list length range.
+     * @param activeThemeIndex index of the theme from the list of themes
+     * @return Name of the newly activated map theme.
+     */
+    QString setActiveThemeIndex( int activeThemeIndex );
+    /**
+     * Sets active map theme according given name
+     * @param name QString represents map theme name
+     */
+    void updateMapTheme( const QString name );
+    void reloadMapThemes( QgsProject *project );
 
   signals:
     void mapThemesReloaded();
@@ -62,12 +73,8 @@ class MapThemesModel : public QAbstractListModel
     void reloadLayers();
     void activeThemeIndexChanged();
 
-  public slots:
-    void reloadMapThemes();
-    void updateMapTheme( const QString name );
-
   private:
-    QgsProject *mProject;
+    QgsProject *mProject = nullptr;
     QList<QString> mMapThemes;
     int mActiveThemeIndex = -1;
 };

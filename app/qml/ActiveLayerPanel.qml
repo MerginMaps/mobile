@@ -80,7 +80,7 @@ Drawer {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                __layersModel.activeIndex = index
+                __loader.setActiveLayer(index)
                 layerPanel.visible = false
               }
             }

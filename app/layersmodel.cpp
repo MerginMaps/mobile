@@ -27,11 +27,9 @@
 
 #include <QString>
 
-LayersModel::LayersModel( QgsProject *project, QObject *parent )
+LayersModel::LayersModel( QObject *parent )
   : QAbstractListModel( parent )
-  , mProject( project )
 {
-  reloadLayers();
 }
 
 LayersModel::~LayersModel()
@@ -39,9 +37,12 @@ LayersModel::~LayersModel()
 }
 
 
-void LayersModel::reloadLayers()
+void LayersModel::reloadLayers( QgsProject *project )
 {
-  QgsLayerTreeGroup *root = mProject->layerTreeRoot();
+
+  if ( !project ) return;
+
+  QgsLayerTreeGroup *root = project->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
   QList< QgsMapLayer * > allLayers;
@@ -78,7 +79,7 @@ int LayersModel::activeIndex() const
   return mActiveIndex;
 }
 
-void LayersModel::setActiveIndex( int activeIndex )
+QString LayersModel::setActiveIndex( int activeIndex )
 {
   if ( mActiveIndex != activeIndex )
   {
@@ -88,9 +89,9 @@ void LayersModel::setActiveIndex( int activeIndex )
 
   QgsMapLayer *layer = activeLayer();
   if ( layer )
-  {
-    emit activeLayerNameChanged( layer->name() );
-  }
+    return layer->name();
+  else
+    return QString();
 }
 
 QVariant LayersModel::data( const QModelIndex &index, int role ) const

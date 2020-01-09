@@ -31,6 +31,7 @@ class AppSettings: public QObject
     void setAutoCenterMapChecked( const bool value );
 
     QString defaultProjectName() const;
+    void setDefaultLayer( const QString &value );
 
     int gpsAccuracyTolerance() const;
     void setGpsAccuracyTolerance( int gpsAccuracyTolerance );
@@ -39,7 +40,7 @@ class AppSettings: public QObject
     void setLineRecordingInterval( int lineRecordingInterval );
 
     QString defaultMapTheme() const;
-
+    void setDefaultMapTheme( const QString &value );
 
   signals:
     void defaultProjectChanged();
@@ -49,13 +50,6 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
-    void reloadDefaultLayerSignal( const QString &name );
-    void reloadDefaultMapThemeSignal( const QString &name );
-  public slots:
-    void setDefaultMapTheme( const QString &value );
-    void setDefaultLayer( const QString &value );
-    void reloadDefaultLayer();
-    void reloadDefaultMapTheme();
 
   private:
     // Projects path
@@ -78,6 +72,7 @@ class AppSettings: public QObject
     const QString mGroupName = QString( "inputApp" );
 
     void reloadDefaultLayers();
+    void reloadDefaultMapThemes();
 };
 
 #endif // APPSETTINGS_H

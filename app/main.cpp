@@ -294,10 +294,10 @@ int main( int argc, char *argv[] )
   InputUtils iu;
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
-  Loader loader;
+  MapThemesModel mtm;
+  LayersModel lm;
   AppSettings as;
-  LayersModel lm( loader.project() );
-  MapThemesModel mtm( loader.project() );
+  Loader loader( mtm, lm, as );
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
@@ -308,16 +308,6 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-
-  QObject::connect( &loader, &Loader::projectReloaded, &mtm, &MapThemesModel::reloadMapThemes );
-  QObject::connect( &mtm, &MapThemesModel::mapThemesReloaded, &as, &AppSettings::reloadDefaultMapTheme );
-  QObject::connect( &as, &AppSettings::reloadDefaultMapThemeSignal, &mtm, &MapThemesModel::updateMapTheme );
-  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &as, &AppSettings::setDefaultMapTheme );
-  QObject::connect( &mtm, &MapThemesModel::activeThemeIndexChanged, &lm, &LayersModel::reloadLayers );
-
-  QObject::connect( &lm, &LayersModel::layersReloaded, &as, &AppSettings::reloadDefaultLayer );
-  QObject::connect( &as, &AppSettings::reloadDefaultLayerSignal, &lm, &LayersModel::updateActiveLayer );
-  QObject::connect( &lm, &LayersModel::activeLayerNameChanged, &as, &AppSettings::setDefaultLayer );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )

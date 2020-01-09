@@ -25,23 +25,22 @@
 
 #include <QString>
 
-MapThemesModel::MapThemesModel( QgsProject *project, QObject *parent )
+MapThemesModel::MapThemesModel( QObject *parent )
   : QAbstractListModel( parent )
-  , mProject( project )
 {
-  reloadMapThemes();
 }
 
 MapThemesModel::~MapThemesModel()
 {
 }
 
-void MapThemesModel::reloadMapThemes()
+void MapThemesModel::reloadMapThemes( QgsProject *project )
 {
-  if ( !mProject ) return;
+  if ( !project ) return;
 
+  mProject = project;
   QList<QString>allThemes;
-  QgsMapThemeCollection *collection = mProject->mapThemeCollection();
+  QgsMapThemeCollection *collection = project->mapThemeCollection();
   for ( QString name : collection->mapThemes() )
   {
     allThemes << name;
@@ -71,15 +70,18 @@ int MapThemesModel::activeThemeIndex() const
   return mActiveThemeIndex;
 }
 
-void MapThemesModel::setActiveThemeIndex( int activeThemeIndex )
+QString MapThemesModel::setActiveThemeIndex( int activeThemeIndex )
 {
   mActiveThemeIndex = activeThemeIndex;
-
+  QString name;
   if ( activeThemeIndex >= 0 && activeThemeIndex < mMapThemes.length() )
   {
-    applyTheme( mMapThemes.at( activeThemeIndex ) );
+    name = mMapThemes.at( activeThemeIndex );
+    applyTheme( name );
   }
   emit activeThemeIndexChanged();
+
+  return name;
 }
 
 QVariant MapThemesModel::data( const QModelIndex &index, int role ) const
@@ -132,6 +134,8 @@ void MapThemesModel::setMapThemes( const QList<QString> &mapThemes )
 
 void MapThemesModel::applyTheme( const QString &name )
 {
+  if ( !mProject ) return;
+
   QgsLayerTree *root = mProject->layerTreeRoot();
   QgsLayerTreeModel model( root );
   mProject->mapThemeCollection()->applyTheme( name, root, &model );

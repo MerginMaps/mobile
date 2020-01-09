@@ -61,16 +61,21 @@ void AppSettings::reloadDefaultLayers()
   settings.endGroup();
 }
 
-void AppSettings::reloadDefaultLayer()
+void AppSettings::reloadDefaultMapThemes()
 {
-  emit reloadDefaultLayerSignal( defaultLayer() );
-}
+  QSettings settings;
+  settings.beginGroup( mGroupName );
+  for ( QString key : settings.allKeys() )
+  {
+    if ( key.startsWith( "defaultMapTheme/" ) )
+    {
+      QVariant value = settings.value( key );
+      mDefaultMapTheme.insert( key.replace( "defaultMapTheme", "" ), value.toString() );
+    }
+  }
 
-void AppSettings::reloadDefaultMapTheme()
-{
-  emit reloadDefaultMapThemeSignal( defaultMapTheme() );
+  settings.endGroup();
 }
-
 
 QString AppSettings::defaultProject() const
 {

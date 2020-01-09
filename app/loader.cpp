@@ -23,8 +23,11 @@
 
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-Loader::Loader( QObject *parent )
+Loader::Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, QObject *parent )
   : QObject( parent )
+  , mMapThemeModel( mapThemeModel )
+  , mLayersModel( layersModel )
+  , mAppSettings( appSettings )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -80,6 +83,13 @@ bool Loader::load( const QString &filePath )
   if ( mProject->fileName() != filePath )
   {
     res = mProject->read( filePath );
+
+    mMapThemeModel.reloadMapThemes( mProject );
+    mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
+
+    mLayersModel.reloadLayers( mProject );
+    mLayersModel.updateActiveLayer( mAppSettings.defaultLayer() );
+
     emit projectReloaded();
   }
 
@@ -193,6 +203,21 @@ QStringList Loader::mapTipFields( QgsQuickFeatureLayerPair pair )
     }
   }
   return lst;
+}
+
+void Loader::setActiveMapTheme( int index )
+{
+  QString name = mMapThemeModel.setActiveThemeIndex( index );
+  mAppSettings.setDefaultMapTheme( name );
+
+  mLayersModel.reloadLayers( mProject );
+  mLayersModel.updateActiveLayer( mAppSettings.defaultLayer() );
+}
+
+void Loader::setActiveLayer( int index )
+{
+  QString name = mLayersModel.setActiveIndex( index );
+  mAppSettings.setDefaultLayer( name );
 }
 
 void Loader::appStateChanged( Qt::ApplicationState state )
