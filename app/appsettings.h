@@ -22,16 +22,16 @@ class AppSettings: public QObject
     QString defaultProject() const;
     void setDefaultProject( const QString &value );
 
+    QString defaultProjectName() const;
+
     QString activeProject() const;
     void setActiveProject( const QString &value );
 
     QString defaultLayer() const;
+    void setDefaultLayer( const QString &value );
 
     bool autoCenterMapChecked();
     void setAutoCenterMapChecked( const bool value );
-
-    QString defaultProjectName() const;
-    void setDefaultLayer( const QString &value );
 
     int gpsAccuracyTolerance() const;
     void setGpsAccuracyTolerance( int gpsAccuracyTolerance );
