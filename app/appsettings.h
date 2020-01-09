@@ -71,8 +71,6 @@ class AppSettings: public QObject
 
     const QString mGroupName = QString( "inputApp" );
 
-    void reloadDefaultLayers();
-    void reloadDefaultMapThemes();
 };
 
 #endif // APPSETTINGS_H

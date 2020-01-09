@@ -5,9 +5,6 @@
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
-  mDefaultLayers = QHash<QString, QString>();
-  reloadDefaultLayers();
-
   QSettings settings;
   settings.beginGroup( mGroupName );
   QString path = settings.value( "defaultProject", "" ).toString();
@@ -43,38 +40,6 @@ void AppSettings::setDefaultLayer( const QString &value )
     mDefaultLayers.insert( mActiveProject, value );
     emit defaultLayerChanged();
   }
-}
-
-void AppSettings::reloadDefaultLayers()
-{
-  QSettings settings;
-  settings.beginGroup( mGroupName );
-  for ( QString key : settings.allKeys() )
-  {
-    if ( key.startsWith( "defaultLayer/" ) )
-    {
-      QVariant value = settings.value( key );
-      mDefaultLayers.insert( key.replace( "defaultLayer", "" ), value.toString() );
-    }
-  }
-
-  settings.endGroup();
-}
-
-void AppSettings::reloadDefaultMapThemes()
-{
-  QSettings settings;
-  settings.beginGroup( mGroupName );
-  for ( QString key : settings.allKeys() )
-  {
-    if ( key.startsWith( "defaultMapTheme/" ) )
-    {
-      QVariant value = settings.value( key );
-      mDefaultMapTheme.insert( key.replace( "defaultMapTheme", "" ), value.toString() );
-    }
-  }
-
-  settings.endGroup();
 }
 
 QString AppSettings::defaultProject() const
