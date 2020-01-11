@@ -9,6 +9,7 @@ Rectangle {
     property real rowHeight
     property string titleText: ""
     property bool withBackButton: true
+    property bool backTextVisible: true
 
     signal back()
 
@@ -54,7 +55,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             anchors.leftMargin: header.rowHeight/4
-            visible: (title.contentWidth + backButton.width * 2) > header.width ? false : true
+            visible: ((title.contentWidth + backButton.width * 2) > header.width) || !backTextVisible ? false : true
         }
 
         MouseArea {
