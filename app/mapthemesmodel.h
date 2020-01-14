@@ -27,7 +27,8 @@ class QgsProject;
 class MapThemesModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QString> mapThemes READ mapThemes WRITE setMapThemes NOTIFY mapThemesChanged )
+    Q_PROPERTY( QList<QString> mapThemes READ mapThemes WRITE setMapThemes NOTIFY mapThemesReloaded )
+    Q_PROPERTY( int activeThemeIndex READ activeThemeIndex WRITE setActiveThemeIndex NOTIFY activeThemeIndexChanged )
 
   public:
     enum Roles
@@ -36,12 +37,14 @@ class MapThemesModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit MapThemesModel( QgsProject *project, QObject *parent = nullptr );
+    explicit MapThemesModel( QObject *parent = nullptr );
     ~MapThemesModel();
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
     Q_INVOKABLE void applyTheme( const QString &name );
+    //! Returns row number of the first matching map theme name with the given name, otherwise return defaultRow.
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultRow = -1 ) const;
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
@@ -50,16 +53,30 @@ class MapThemesModel : public QAbstractListModel
     QList<QString> mapThemes() const;
     void setMapThemes( const QList<QString> &mapThemes );
 
-  signals:
-    void mapThemesChanged();
-    void reloadLayers();
+    int activeThemeIndex() const;
+    /**
+     * Sets and applies mapTheme if index is in mapThemes list length range.
+     * \param activeThemeIndex index of the theme from the list of themes
+     * \return Name of the newly activated map theme.
+     */
+    QString setActiveThemeIndex( int activeThemeIndex );
+    /**
+     * Sets active map theme according given name
+     * \param name QString represents map theme name
+     */
+    void updateMapTheme( const QString name );
+    void reloadMapThemes( QgsProject *project );
 
-  public slots:
-    void reloadMapThemes();
+  signals:
+    void mapThemesReloaded();
+    void mapThemeChanged( const QString &name );
+    void reloadLayers();
+    void activeThemeIndexChanged();
 
   private:
-    QgsProject *mProject;
+    QgsProject *mProject = nullptr;
     QList<QString> mMapThemes;
+    int mActiveThemeIndex = -1;
 };
 
 #endif // MapThemesModel_H

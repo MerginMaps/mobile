@@ -9,7 +9,7 @@ services:
 
 before_install:
 - if [ -n "${STOREPASS}" ]; then openssl aes-256-cbc -K $encrypted_d617236a007d_key -iv $encrypted_d617236a007d_iv -in Input_keystore.keystore.enc -out Input_keystore.keystore -d; fi;
-- gem update --system
+- gem update bundler
 - gem --version
 - pip3 install dropbox
 

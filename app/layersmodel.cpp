@@ -27,11 +27,9 @@
 
 #include <QString>
 
-LayersModel::LayersModel( QgsProject *project, QObject *parent )
+LayersModel::LayersModel( QObject *parent )
   : QAbstractListModel( parent )
-  , mProject( project )
 {
-  reloadLayers();
 }
 
 LayersModel::~LayersModel()
@@ -39,9 +37,12 @@ LayersModel::~LayersModel()
 }
 
 
-void LayersModel::reloadLayers()
+void LayersModel::reloadLayers( QgsProject *project )
 {
-  QgsLayerTreeGroup *root = mProject->layerTreeRoot();
+
+  if ( !project ) return;
+
+  QgsLayerTreeGroup *root = project->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
   QList< QgsMapLayer * > allLayers;
@@ -63,8 +64,34 @@ void LayersModel::reloadLayers()
     mLayers = allLayers;
     endResetModel();
 
-    emit layersChanged();
+    emit layersReloaded();
   }
+}
+
+void LayersModel::updateActiveLayer( const QString &name )
+{
+  int row = rowAccordingName( name, firstWritableLayerIndex() );
+  setActiveIndex( row );
+}
+
+int LayersModel::activeIndex() const
+{
+  return mActiveIndex;
+}
+
+QString LayersModel::setActiveIndex( int activeIndex )
+{
+  if ( mActiveIndex != activeIndex )
+  {
+    mActiveIndex = activeIndex;
+  }
+  emit activeIndexChanged();
+
+  QgsMapLayer *layer = activeLayer();
+  if ( layer )
+    return layer->name();
+  else
+    return QString();
 }
 
 QVariant LayersModel::data( const QModelIndex &index, int role ) const
@@ -149,7 +176,7 @@ QModelIndex LayersModel::index( int row, int column, const QModelIndex &parent )
   return createIndex( row, 0, nullptr );
 }
 
-int LayersModel::rowAccordingName( QString name, int defaultIndex ) const
+int LayersModel::rowAccordingName( QString name, int defaultRow ) const
 {
   int i = 0;
   for ( QgsMapLayer *layer : mLayers )
@@ -160,7 +187,7 @@ int LayersModel::rowAccordingName( QString name, int defaultIndex ) const
     }
     i++;
   }
-  return defaultIndex;
+  return defaultRow;
 }
 
 int LayersModel::noOfEditableLayers() const
@@ -177,7 +204,7 @@ int LayersModel::noOfEditableLayers() const
   return count;
 }
 
-int LayersModel::firstNonOnlyReadableLayerIndex() const
+int LayersModel::firstWritableLayerIndex() const
 {
   int i = 0;
   for ( QgsMapLayer *layer : mLayers )
@@ -190,6 +217,13 @@ int LayersModel::firstNonOnlyReadableLayerIndex() const
   }
 
   return -1;
+}
+
+QgsMapLayer *LayersModel::activeLayer()
+{
+  if ( mActiveIndex < 0 || mActiveIndex >= mLayers.length() )
+    return nullptr;
+  return mLayers.at( activeIndex() );
 }
 
 int LayersModel::rowCount( const QModelIndex &parent ) const

@@ -5,13 +5,11 @@
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
-  mDefaultLayers = QHash<QString, QString>();
-  reloadDefaultLayers();
-
   QSettings settings;
   settings.beginGroup( mGroupName );
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
+  QString mapTheme = settings.value( "defaultMapTheme/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
@@ -20,6 +18,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setDefaultProject( path );
   setActiveProject( path );
   setDefaultLayer( layer );
+  setDefaultMapTheme( mapTheme );
   setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
   setLineRecordingInterval( lineRecordingInterval );
@@ -42,23 +41,6 @@ void AppSettings::setDefaultLayer( const QString &value )
     emit defaultLayerChanged();
   }
 }
-
-void AppSettings::reloadDefaultLayers()
-{
-  QSettings settings;
-  settings.beginGroup( mGroupName );
-  for ( QString key : settings.allKeys() )
-  {
-    if ( key.startsWith( "defaultLayer/" ) )
-    {
-      QVariant value = settings.value( key );
-      mDefaultLayers.insert( key.replace( "defaultLayer", "" ), value.toString() );
-    }
-  }
-
-  settings.endGroup();
-}
-
 
 QString AppSettings::defaultProject() const
 {
@@ -161,5 +143,23 @@ void AppSettings::setLineRecordingInterval( int value )
     settings.endGroup();
 
     emit lineRecordingIntervalChanged();
+  }
+}
+
+QString AppSettings::defaultMapTheme() const
+{
+  return mDefaultMapTheme.value( mActiveProject );
+}
+
+void AppSettings::setDefaultMapTheme( const QString &value )
+{
+  if ( defaultMapTheme() != value )
+  {
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "defaultMapTheme/" + mActiveProject, value );
+    settings.endGroup();
+    mDefaultMapTheme.insert( mActiveProject, value );
+    emit defaultMapThemeChanged();
   }
 }

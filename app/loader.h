@@ -21,6 +21,10 @@
 #include "qgsproject.h"
 #include "qgsquickutils.h"
 #include "qgsquickpositionkit.h"
+#include "layersmodel.h"
+#include "mapthemesmodel.h"
+#include "appsettings.h"
+
 
 class Loader: public QObject
 {
@@ -30,7 +34,7 @@ class Loader: public QObject
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
 
   public:
-    explicit Loader( QObject *parent = nullptr );
+    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -47,6 +51,17 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
+
+    /**
+     * Updates active map theme.
+     * \param index Represents row number in the map theme model.
+     */
+    Q_INVOKABLE void setActiveMapTheme( int index );
+    /**
+     * Updates active layer.
+     * \param index Represents row number in the layer model.
+     */
+    Q_INVOKABLE void setActiveLayer( int index );
 
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
@@ -66,10 +81,14 @@ class Loader: public QObject
     bool reloadProject( QString projectDir );
   private:
     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
-  private:
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;
+
+    MapThemesModel &mMapThemeModel;
+    LayersModel &mLayersModel;
+    AppSettings &mAppSettings;
+
 };
 
 #endif // LOADER_H

@@ -6,21 +6,10 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property int activeLayerIndex: -1
-    property QgsQuick.VectorLayer activeVectorLayer: (activeLayerIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer) :
-                                                         null
-    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
     property string title: "Survey Layer"
-
-    signal layerSettingChanged()
 
     function openPanel() {
         layerPanel.visible = true
-    }
-
-    onActiveLayerNameChanged: {
-        __appSettings.defaultLayer = activeLayerName
     }
 
     id: layerPanel
@@ -89,13 +78,11 @@ Drawer {
             color: item.highlight ? secondaryColor : primaryColor
 
             MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    layerPanel.activeLayerIndex = index
-                    layerPanel.visible = false
-                    __appSettings.defaultLayer = name
-                    layerPanel.layerSettingChanged()
-                }
+              anchors.fill: parent
+              onClicked: {
+                __loader.setActiveLayer(index)
+                layerPanel.visible = false
+              }
             }
 
             ExtendedMenuItem {
@@ -105,8 +92,8 @@ Drawer {
                 contentText: name ? name : ""
                 imageSource: iconSource ? iconSource : ""
                 overlayImage: false
-                highlight: activeLayerIndex === index
-                showBorder: !__appSettings.defaultLayer || layerPanel.activeLayerIndex - 1 !== index
+                highlight: __layersModel.activeIndex === index
+                showBorder: !__appSettings.defaultLayer || __layersModel.activeIndex - 1 !== index
             }
         }
 

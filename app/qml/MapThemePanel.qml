@@ -7,8 +7,6 @@ import "."  // import InputStyle singleton
 
 Drawer {
 
-    property int activeThemeIndex: 0
-
     id: mapThemePanel
     visible: false
     modal: true
@@ -75,9 +73,8 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    __mapThemesModel.applyTheme(name)
-                    activeThemeIndex = index
-                    mapThemePanel.close()
+                  __loader.setActiveMapTheme(index)
+                  mapThemePanel.close()
                 }
             }
 
@@ -88,8 +85,8 @@ Drawer {
                 imageSource: "map_styles.svg"
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
-                highlight: activeThemeIndex === index
-                showBorder: activeThemeIndex - 1 !== index
+                highlight: __mapThemesModel.activeThemeIndex === index
+                showBorder: __mapThemesModel.activeThemeIndex - 1 !== index
             }
         }
 

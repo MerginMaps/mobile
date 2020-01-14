@@ -27,7 +27,8 @@ class QgsProject;
 class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersChanged )
+    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersReloaded )
+    Q_PROPERTY( int activeIndex READ activeIndex WRITE setActiveIndex NOTIFY activeIndexChanged )
 
   public:
     enum Roles
@@ -41,14 +42,16 @@ class LayersModel : public QAbstractListModel
     };
     Q_ENUMS( Roles )
 
-    explicit LayersModel( QgsProject *project, QObject *parent = nullptr );
+    explicit LayersModel( QObject *parent = nullptr );
     ~LayersModel() override;
 
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
+    Q_INVOKABLE int rowAccordingName( QString name, int defaultRow = -1 ) const;
     Q_INVOKABLE int noOfEditableLayers() const;
-    Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
+    Q_INVOKABLE int firstWritableLayerIndex() const;
+    //! Returns nullptr pointer to activeLayer according mActiveIndex
+    Q_INVOKABLE QgsMapLayer *activeLayer();
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
@@ -56,19 +59,27 @@ class LayersModel : public QAbstractListModel
 
     QList<QgsMapLayer *> layers() const;
 
-    int defaultLayerIndex() const;
-    void setDefaultLayerIndex( int index );
+    int activeIndex() const;
+    /**
+     * Sets layer if index is in layers list length range.
+     * \param activeIndex index of the layder from mLayers
+     * \return Name of the activated layer.
+     */
+    QString setActiveIndex( int activeIndex );
+    /**
+     * Sets active layer according given name
+     * \param name QString represents layer name
+     */
+    void updateActiveLayer( const QString &name );
+    void reloadLayers( QgsProject *project ); //when project file changes, reload all layers, etc.
 
   signals:
-    void layersChanged();
-    void defaultLayerIndexChanged();
-
-  public slots:
-    void reloadLayers(); //when project file changes, reload all layers, etc.
+    void layersReloaded();
+    void activeIndexChanged();
 
   private:
-    QgsProject *mProject;
     QList<QgsMapLayer *> mLayers; // all layers
+    int mActiveIndex = -1;
 };
 
 #endif // LAYERSMODEL_H
