@@ -62,13 +62,13 @@ class LayersModel : public QAbstractListModel
     int activeIndex() const;
     /**
      * Sets layer if index is in layers list length range.
-     * @param activeIndex index of the layder from mLayers
-     * @return Name of the activated layer.
+     * \param activeIndex index of the layder from mLayers
+     * \return Name of the activated layer.
      */
     QString setActiveIndex( int activeIndex );
     /**
      * Sets active layer according given name
-     * @param name QString represents layer name
+     * \param name QString represents layer name
      */
     void updateActiveLayer( const QString &name );
     void reloadLayers( QgsProject *project ); //when project file changes, reload all layers, etc.

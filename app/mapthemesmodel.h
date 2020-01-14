@@ -56,13 +56,13 @@ class MapThemesModel : public QAbstractListModel
     int activeThemeIndex() const;
     /**
      * Sets and applies mapTheme if index is in mapThemes list length range.
-     * @param activeThemeIndex index of the theme from the list of themes
-     * @return Name of the newly activated map theme.
+     * \param activeThemeIndex index of the theme from the list of themes
+     * \return Name of the newly activated map theme.
      */
     QString setActiveThemeIndex( int activeThemeIndex );
     /**
      * Sets active map theme according given name
-     * @param name QString represents map theme name
+     * \param name QString represents map theme name
      */
     void updateMapTheme( const QString name );
     void reloadMapThemes( QgsProject *project );
