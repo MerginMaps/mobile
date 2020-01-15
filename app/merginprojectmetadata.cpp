@@ -98,6 +98,11 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
     {
       project.writers.append( tag.toInt() );
     }
+    QJsonArray writersnames = access.toObject().value( "writersnames" ).toArray();
+    for ( QJsonValueRef tag : writersnames )
+    {
+      project.writersnames.append( tag.toString() );
+    }
   }
 
   QString versionStr = docObj.value( QStringLiteral( "version" ) ).toString();

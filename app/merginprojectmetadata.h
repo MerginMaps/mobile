@@ -41,6 +41,7 @@ struct MerginProjectMetadata
   QString projectNamespace;
 
   QList<int> writers;
+  QList<QString> writersnames;
   int version = -1;
   QList<MerginFile> files;
 

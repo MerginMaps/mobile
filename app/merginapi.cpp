@@ -623,7 +623,7 @@ void MerginApi::authorizeFinished()
       QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
       mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
       mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-      mUserId = docObj.value( QStringLiteral( "id" ) ).toInt();
+      mUserId = docObj.value( QStringLiteral( "id" ) ).toInt(-1);
       mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
       mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
       mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
@@ -932,7 +932,9 @@ bool MerginApi::hasWriteAccess( const QString &projectFullName )
   LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   QString projectDir = projectInfo.projectDir;
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  return projectMetadata.writers.contains( mUserId );
+  bool accessThroughID = projectMetadata.writers.contains( mUserId );
+  bool accessThroughUsername = projectMetadata.writersnames.contains(mUsername);
+  return accessThroughID || accessThroughUsername;
 }
 
 QString MerginApi::apiRoot() const
