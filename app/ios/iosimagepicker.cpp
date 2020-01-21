@@ -25,10 +25,10 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 }
 
-void IOSImagePicker::showImagePicker()
+void IOSImagePicker::showImagePicker(int sourceType)
 {
 #ifdef Q_OS_IOS
-  int sourceType = 0; // ImageGallery
+  //int sourceType = 0; // ImageGallery
   showImagePickerDirect( sourceType, this );
 #endif
 }

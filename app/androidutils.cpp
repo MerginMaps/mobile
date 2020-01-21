@@ -89,6 +89,34 @@ void AndroidUtils::callImagePicker()
 #endif
 }
 
+void AndroidUtils::callCamera(const QString &targetPath)
+{
+#ifdef ANDROID
+    const QString IMAGE_CAPTURE_ACTION = QString("android.media.action.IMAGE_CAPTURE");
+
+    QAndroidJniObject activity = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+    QAndroidJniObject intent = QAndroidJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
+
+    QAndroidJniObject packageName = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+    QAndroidJniObject className = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+
+    intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
+
+    QAndroidJniObject extra = QAndroidJniObject::fromString( "targetPath" );
+    QAndroidJniObject my_prefix = QAndroidJniObject::fromString( targetPath );
+
+    intent.callObjectMethod("putExtra",
+                            "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
+                            extra.object<jstring>(),
+                            my_prefix.object<jstring>());
+
+    if (intent.isValid())
+    {
+        QtAndroid::startActivity(intent.object<jobject>(), CAMERA_CODE, this);
+    }
+#endif
+}
+
 #ifdef ANDROID
 void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data )
 {
@@ -109,6 +137,13 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QAndroidJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
     QString selectedImagePath = "file://" + result.toString();
     emit imageSelected( selectedImagePath );
+  }
+  else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK ) {
+      QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+      QAndroidJniObject absolutePathJNI = data.callObjectMethod("getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>());
+      QString absolutePath = absolutePathJNI.toString();
+
+      emit imageSelected( absolutePath );
   }
   else
   {

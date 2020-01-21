@@ -30,7 +30,7 @@ class IOSImagePicker : public QObject
     //! Absolute path to the location where an image suppose to be copied according external widget
     Q_PROPERTY( QString targetDir READ targetDir WRITE setTargetDir NOTIFY targetDirChanged )
     //! Method suppose to be used in QML and calls IOSImagePicker::showImagePickerDirect which invokes IOSViewDelegate and image picker.
-    Q_INVOKABLE void showImagePicker();
+    Q_INVOKABLE void showImagePicker( int sourceMode = 0 );
 
     QString targetDir() const;
     void setTargetDir( const QString &targetDir );

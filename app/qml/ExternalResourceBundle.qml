@@ -24,6 +24,20 @@ Item {
         // Has to be set for actions with callbacks
         property var itemWidget
 
+        property var capturePhoto: function capturePhoto(itemWidget, showDefaultPanelFn) {
+          console.log("Budnle capturePhoto")
+          externalResourceHandler.itemWidget = itemWidget
+          if (__androidUtils.isAndroid) {
+              //showDefaultPanelFn()
+              __androidUtils.callCamera(itemWidget.targetDir)
+          } else if (__iosUtils.isIos) {
+              picker.targetDir = itemWidget.targetDir
+              picker.showImagePicker(1);
+          } else {
+              showDefaultPanelFn()
+          }
+        }
+
         /**
          * Called when clicked on the gallery icon to choose a file from a gallery.
          * ItemWidget reference is set here and kept for the whole workflow to avoid ambiguity in case of
