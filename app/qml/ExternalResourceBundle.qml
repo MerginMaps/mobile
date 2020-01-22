@@ -24,18 +24,18 @@ Item {
         // Has to be set for actions with callbacks
         property var itemWidget
 
-        property var capturePhoto: function capturePhoto(itemWidget, showDefaultPanelFn) {
-          console.log("Budnle capturePhoto")
+        /**
+         * Called when clicked on the camera icon to capture an image.
+         * \param itemWidget editorWidget for modified field to send valueChanged signal.
+         */
+        property var capturePhoto: function capturePhoto(itemWidget) {
           externalResourceHandler.itemWidget = itemWidget
           if (__androidUtils.isAndroid) {
-              //showDefaultPanelFn()
               __androidUtils.callCamera(itemWidget.targetDir)
           } else if (__iosUtils.isIos) {
-              picker.targetDir = itemWidget.targetDir
-              picker.showImagePicker(1);
-          } else {
-              showDefaultPanelFn()
+              picker.showImagePicker(1, itemWidget.targetDir);
           }
+          // TODO else {}
         }
 
         /**
@@ -54,8 +54,7 @@ Item {
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
-                picker.targetDir = itemWidget.targetDir
-                picker.showImagePicker();
+                picker.showImagePicker(0, itemWidget.targetDir);
             } else {
                 fileDialog.open()
             }
@@ -132,6 +131,21 @@ Item {
           externalResourceHandler.itemWidget.valueChanged(newValue, false)
         }
 
+        /**
+         * Called when an image is captured by a camera. Method sets proper value according given absolute path of the image
+         * and prefixPath set in thd project settings.
+         * \param imagePath Absolute path to a captured image
+         */
+        property var imageCaptured: function imageCaptured(absoluteImagePath) {
+          if (absoluteImagePath) {
+            var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
+                  externalResourceHandler.itemWidget.targetDir :
+                  externalResourceHandler.itemWidget.targetDir + "/"
+            var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
+            externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+          }
+        }
+
         property var onFormSave: function onFormSave(itemWidget) {
           __inputUtils.removeFile(itemWidget.sourceToDelete)
           itemWidget.sourceToDelete = ""
@@ -145,6 +159,7 @@ Item {
     Connections {
         target: __androidUtils
         onImageSelected: externalResourceHandler.imageSelected(imagePath)
+        onImageCapture: externalResourceHandler.imageSelected(imagePath)
     }
 
     Popup {
@@ -212,14 +227,8 @@ Item {
     IOSImagePicker {
       id: picker
 
-      onImageSaved: {
-        if (absoluteImagePath) {
-          var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
-                externalResourceHandler.itemWidget.targetDir :
-                externalResourceHandler.itemWidget.targetDir + "/"
-          var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
-          externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
-        }
+      onImageCaptured: {
+        externalResourceHandler.imageCaptured(absoluteImagePath)
       }
     }
 

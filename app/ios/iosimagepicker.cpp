@@ -25,10 +25,10 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 }
 
-void IOSImagePicker::showImagePicker(int sourceType)
+void IOSImagePicker::showImagePicker(int sourceType, const QString  &targetDir)
 {
 #ifdef Q_OS_IOS
-  //int sourceType = 0; // ImageGallery
+  setTargetDir(targetDir);
   showImagePickerDirect( sourceType, this );
 #endif
 }
@@ -60,6 +60,6 @@ void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &
     }
 
     QUrl url = QUrl::fromLocalFile( absoluteImagePath );
-    emit imageSaved( url.toString() );
+    emit imageCaptured( url.toString() );
   }
 }
