@@ -25,10 +25,10 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 }
 
-void IOSImagePicker::showImagePicker(int sourceType, const QString  &targetDir)
+void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir )
 {
 #ifdef Q_OS_IOS
-  setTargetDir(targetDir);
+  setTargetDir( targetDir );
   showImagePickerDirect( sourceType, this );
 #endif
 }
@@ -59,7 +59,7 @@ void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &
       qWarning() << QString( "Failed to save %1 : %2" ).arg( absoluteImagePath ).arg( writer.errorString() );
     }
 
-    QUrl url = QUrl::fromLocalFile( absoluteImagePath );
-    emit imageCaptured( url.toString() );
+    //QUrl url = QUrl::fromLocalFile( absoluteImagePath );
+    emit imageCaptured( absoluteImagePath );
   }
 }

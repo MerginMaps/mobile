@@ -37,7 +37,7 @@ class AndroidUtils: public QObject
       * handler of the activity emits imageSelected signal.
       * */
     Q_INVOKABLE void callImagePicker();
-    Q_INVOKABLE void callCamera(const QString &targetPath);
+    Q_INVOKABLE void callCamera( const QString &targetPath );
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;
     const static int CAMERA_CODE = 102;

@@ -117,7 +117,6 @@ static QImage fromUIImage(UIImage* image) {
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^(UIImagePickerController *picker, NSDictionary* info) {
         Q_UNUSED(picker)
-        qWarning() << "imagePickerControllerDidFinishPickingMediaWithInfo IS RUNNING";
 
         UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
         if (!chosenImage) {

@@ -12,7 +12,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
-import lc 1.0
 
 Item {
 
@@ -33,7 +32,7 @@ Item {
           if (__androidUtils.isAndroid) {
               __androidUtils.callCamera(itemWidget.targetDir)
           } else if (__iosUtils.isIos) {
-              picker.showImagePicker(1, itemWidget.targetDir);
+              __iosUtils.callCamera(itemWidget.targetDir)
           }
           // TODO else {}
         }
@@ -54,7 +53,7 @@ Item {
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
-                picker.showImagePicker(0, itemWidget.targetDir);
+                __iosUtils.callImagePicker(itemWidget.targetDir)
             } else {
                 fileDialog.open()
             }
@@ -96,9 +95,8 @@ Item {
          * \param value depends on widget's config, see more in qgsquickexternalwidget.qml
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
-          var newPath = __inputUtils.renameWithDateTime(prefixToRelativePath + "/" + value)
-          if (newPath) {
-            var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
+          if (value) {
+            var newCurrentValue = QgsQuick.Utils.getRelativePath(value, prefixToRelativePath)
             itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
@@ -125,10 +123,7 @@ Item {
             }
           }
 
-          var newValue = externalResourceHandler.itemWidget.prefixToRelativePath ?
-                QgsQuick.Utils.getRelativePath(absolutePath, externalResourceHandler.itemWidget.prefixToRelativePath) :
-                absolutePath
-          externalResourceHandler.itemWidget.valueChanged(newValue, false)
+          externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefix, absolutePath)
         }
 
         /**
@@ -141,8 +136,7 @@ Item {
             var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
                   externalResourceHandler.itemWidget.targetDir :
                   externalResourceHandler.itemWidget.targetDir + "/"
-            var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
-            externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+            externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefixPath, absoluteImagePath)
           }
         }
 
@@ -159,7 +153,13 @@ Item {
     Connections {
         target: __androidUtils
         onImageSelected: externalResourceHandler.imageSelected(imagePath)
-        onImageCapture: externalResourceHandler.imageSelected(imagePath)
+        onImageCapture: externalResourceHandler.imageCaptured(imagePath)
+    }
+
+    Connections {
+        target: __iosUtils
+        // used for both gallery and camera
+        onImageCaptured: externalResourceHandler.imageCaptured(absoluteImagePath)
     }
 
     Popup {
@@ -222,14 +222,6 @@ Item {
         onRejected: {
            visible = false
         }
-    }
-
-    IOSImagePicker {
-      id: picker
-
-      onImageCaptured: {
-        externalResourceHandler.imageCaptured(absoluteImagePath)
-      }
     }
 
 }

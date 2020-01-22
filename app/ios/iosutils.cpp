@@ -11,6 +11,8 @@
 
 IosUtils::IosUtils( QObject *parent ): QObject( parent )
 {
+  mImagePicker = new IOSImagePicker();
+  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, &IosUtils::imageCaptured );
 }
 
 bool IosUtils::isIos() const
@@ -20,4 +22,19 @@ bool IosUtils::isIos() const
 #else
   return false;
 #endif
+}
+
+void IosUtils::callImagePicker( const QString &targetPath )
+{
+  mImagePicker->showImagePicker( 0, targetPath );
+}
+
+void IosUtils::callCamera( const QString &targetPath )
+{
+  mImagePicker->showImagePicker( 1, targetPath );
+}
+
+IOSImagePicker *IosUtils::imagePicker() const
+{
+  return mImagePicker;
 }
