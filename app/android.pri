@@ -42,7 +42,11 @@ android {
     # this makes the manifest visible from Qt Creator
     DISTFILES += $$OUT_PWD/android_patched/AndroidManifest.xml
     DISTFILES += $$OUT_PWD/res/xml/file_paths.xml
-    DISTFILES += $$PWD/build.gradle
+    DISTFILES += $$PWD/build.gradle \
+        $$PWD/android/gradlew \
+        $$PWD/android/gradle/wrapper/gradle-wrapper.properties \
+        $$PWD/gradle/wrapper/gradle-wrapper.jar \
+        $$PWD/android/gradlew.bat
 
     # packaging
     ANDROID_EXTRA_LIBS += \
