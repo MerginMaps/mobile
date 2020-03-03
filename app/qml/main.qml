@@ -84,6 +84,7 @@ ApplicationWindow {
             popup.open()
         }
         stateManager.state = "view"
+        digitizing.useGpsPoint = false  // TODO @vsklendar move to cpp??
     }
 
 
@@ -111,18 +112,41 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-        var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+      // digitizing.manualRecording @???
+        //if (digitizing.useGpsPoint) {
+      console.log("Point with Z!±!±±±!@#!#@", digitizing.useGpsPoint)
+        if (digitizing.useGpsPoint) {
 
-        if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-            var pair = digitizing.pointFeatureFromPoint(centerPoint)
-            saveRecordedFeature(pair)
-        } else {
+          if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
+              var pair = digitizing.pointFeatureFromPoint(positionKit.projectedPosition, true)
+              saveRecordedFeature(pair)
+          } else {
             if (!digitizing.recording) {
                 digitizing.startRecording()
+                digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
             }
-            digitizing.addRecordPoint(centerPoint)
+            digitizing.addRecordPoint(positionKit.projectedPosition, true)
+          }
         }
+
+
+        else {
+          var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+          var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+
+          if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
+              var pair = digitizing.pointFeatureFromPoint(centerPoint, false)
+              saveRecordedFeature(pair)
+          } else {
+              if (!digitizing.recording) {
+                  digitizing.startRecording()
+                  digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
+              }
+              digitizing.addRecordPoint(centerPoint, false)
+          }
+        }
+
+
     }
 
     function getGpsIndicatorColor() {
@@ -363,7 +387,10 @@ ApplicationWindow {
 
         onOpenProjectClicked: openProjectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+        onMyLocationClicked: {
+          mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+          digitizing.useGpsPoint = true
+        }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
             popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
@@ -423,12 +450,14 @@ ApplicationWindow {
                 return // leaving when no gps is available
             }
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+            digitizing.useGpsPoint = true
         }
 
         onManualRecordingClicked: {
             digitizing.manualRecording = !digitizing.manualRecording
             if (!digitizing.manualRecording && stateManager.state === "record") {
                 digitizing.startRecording()
+                digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
             }
         }
 
@@ -480,6 +509,7 @@ ApplicationWindow {
     Connections {
         target: mapCanvas.mapSettings
         onExtentChanged: {
+            digitizing.useGpsPoint = false
             scaleBar.visible = true
         }
     }

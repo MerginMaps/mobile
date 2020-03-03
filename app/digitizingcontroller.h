@@ -24,6 +24,7 @@ class DigitizingController : public QObject
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( QgsQuickAttributeModel *recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( bool useGpsPoint MEMBER mUseGpsPoint NOTIFY useGpsPointChanged )
 
   public:
     explicit DigitizingController( QObject *parent = nullptr );
@@ -43,7 +44,7 @@ class DigitizingController : public QObject
     Q_INVOKABLE bool isPairValid( QgsQuickFeatureLayerPair pair ) const;
 
     //! Creates a new QgsFeature with point geometry from the given point with map coordinates.
-    Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint( const QgsPoint &point );
+    Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint );
     //! Creates a new QgsFeature with line/polygon geometry from the points stored since the start of recording
     Q_INVOKABLE QgsQuickFeatureLayerPair lineOrPolygonFeature();
     //! Returns (point geom) featurePair coords in map coordinates.
@@ -51,7 +52,7 @@ class DigitizingController : public QObject
     //! Changes point geometry of given pair according given point.
     Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point );
 
-    Q_INVOKABLE void addRecordPoint( const QgsPoint &point );
+    Q_INVOKABLE void addRecordPoint( const QgsPoint &point, bool isGpsPoint );
     Q_INVOKABLE void removeLastPoint();
 
     Q_INVOKABLE void startRecording();
@@ -66,7 +67,10 @@ class DigitizingController : public QObject
     bool manualRecording() const;
     void setManualRecording( bool manualRecording );
 
-  signals:
+    bool useGpsPoint() const;
+    void setUseGpsPoint(bool useGpsPoint);
+
+signals:
     void layerChanged();
     void recordingChanged();
     void manualRecordingChanged();
@@ -74,6 +78,7 @@ class DigitizingController : public QObject
     void recordingFeatureModelChanged();
     void mapSettingsChanged();
     void lineRecordingIntervalChanged();
+    void useGpsPointChanged();
 
   private slots:
     void onPositionChanged();
@@ -95,6 +100,7 @@ class DigitizingController : public QObject
     QgsQuickMapSettings *mMapSettings = nullptr;
     int mLineRecordingInterval = 3; // in seconds
     QDateTime mLastTimeRecorded;
+    bool mUseGpsPoint = false;
 };
 
 #endif // DIGITIZINGCONTROLLER_H

@@ -130,14 +130,25 @@ bool DigitizingController::hasEnoughPoints() const
   return true;
 }
 
+bool DigitizingController::useGpsPoint() const
+{
+    return mUseGpsPoint;
+}
+
+void DigitizingController::setUseGpsPoint(bool useGpsPoint)
+{
+    mUseGpsPoint = useGpsPoint;
+    emit useGpsPointChanged();
+}
+
 bool DigitizingController::manualRecording() const
 {
-  return mManualRecording;
+    return mManualRecording;
 }
 
 void DigitizingController::setManualRecording( bool manualRecording )
 {
-  mManualRecording = manualRecording;
+    mManualRecording = manualRecording;
   emit manualRecordingChanged();
 }
 
@@ -152,7 +163,7 @@ void DigitizingController::setLineRecordingInterval( int lineRecordingInterval )
   emit lineRecordingIntervalChanged();
 }
 
-QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point )
+QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint )
 {
   if ( !featureLayerPair().layer() )
     return QgsQuickFeatureLayerPair();
@@ -162,10 +173,17 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsP
     return QgsQuickFeatureLayerPair();
   }
 
-  QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-  QgsPoint *mapPoint = new QgsPoint( layerPoint );
-  fixZ( mapPoint );
-  QgsGeometry geom( mapPoint );
+  QgsGeometry geom;
+  if (isGpsPoint) {
+      QgsPoint *mapPoint = new QgsPoint( point );
+      geom = QgsGeometry( mapPoint );
+  } else {
+      QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
+      QgsPoint *mapPoint = new QgsPoint( layerPoint );
+      fixZ( mapPoint );
+      geom = QgsGeometry( mapPoint );
+  }
+
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
   QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geom, attrs.toMap(), &context );
@@ -272,13 +290,19 @@ QgsQuickFeatureLayerPair DigitizingController::changePointGeometry( QgsQuickFeat
   return pair;
 }
 
-void DigitizingController::addRecordPoint( const QgsPoint &point )
+void DigitizingController::addRecordPoint( const QgsPoint &point, bool isGpsPoint )
 {
   if ( !mRecording )
     return;
 
-  QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-  QgsPoint layerPoint( layerPointXY );
+   QgsPoint layerPoint;
+  if (isGpsPoint) {
+      layerPoint = QgsPoint( point );
+  } else {
+      QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
+      layerPoint = QgsPoint( layerPointXY );
+  }
+
   fixZ( &layerPoint );
   mRecordedPoints.append( layerPoint );
 
