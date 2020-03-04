@@ -173,16 +173,15 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsP
     return QgsQuickFeatureLayerPair();
   }
 
-  QgsGeometry geom;
+  QgsPoint *mapPoint = nullptr;
   if (isGpsPoint) {
-      QgsPoint *mapPoint = new QgsPoint( point );
-      geom = QgsGeometry( mapPoint );
+      mapPoint = new QgsPoint( point );
   } else {
       QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-      QgsPoint *mapPoint = new QgsPoint( layerPoint );
-      fixZ( mapPoint );
-      geom = QgsGeometry( mapPoint );
+      mapPoint = new QgsPoint( layerPoint );
   }
+  fixZ( mapPoint );
+  QgsGeometry geom( mapPoint );
 
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();

@@ -112,41 +112,23 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-      // digitizing.manualRecording @???
-        //if (digitizing.useGpsPoint) {
-      console.log("Point with Z!±!±±±!@#!#@", digitizing.useGpsPoint)
-        if (digitizing.useGpsPoint) {
+      var pointToAdd
+      if (digitizing.useGpsPoint) {
+         pointToAdd = positionKit.projectedPosition
+      } else {
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        pointToAdd = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+      }
 
-          if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-              var pair = digitizing.pointFeatureFromPoint(positionKit.projectedPosition, true)
-              saveRecordedFeature(pair)
-          } else {
-            if (!digitizing.recording) {
-                digitizing.startRecording()
-                digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
-            }
-            digitizing.addRecordPoint(positionKit.projectedPosition, true)
+      if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
+          var pair = digitizing.pointFeatureFromPoint(pointToAdd, digitizing.useGpsPoint)
+          saveRecordedFeature(pair)
+      } else {
+          if (!digitizing.recording) {
+              digitizing.startRecording()
           }
-        }
-
-
-        else {
-          var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-          var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-
-          if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-              var pair = digitizing.pointFeatureFromPoint(centerPoint, false)
-              saveRecordedFeature(pair)
-          } else {
-              if (!digitizing.recording) {
-                  digitizing.startRecording()
-                  digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
-              }
-              digitizing.addRecordPoint(centerPoint, false)
-          }
-        }
-
-
+          digitizing.addRecordPoint(pointToAdd, digitizing.useGpsPoint)
+      }
     }
 
     function getGpsIndicatorColor() {
@@ -338,11 +320,10 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
-        if (__appSettings.autoCenterMapChecked) {
-          var border = mainPanel.height
-          if (isPositionOutOfExtent(border)) {
+        if (digitizing.useGpsPoint || (__appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+            var useGpsPoint = digitizing.useGpsPoint
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
-          }
+            digitizing.useGpsPoint = useGpsPoint
         }
       }
     }
