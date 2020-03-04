@@ -132,23 +132,23 @@ bool DigitizingController::hasEnoughPoints() const
 
 bool DigitizingController::useGpsPoint() const
 {
-    return mUseGpsPoint;
+  return mUseGpsPoint;
 }
 
-void DigitizingController::setUseGpsPoint(bool useGpsPoint)
+void DigitizingController::setUseGpsPoint( bool useGpsPoint )
 {
-    mUseGpsPoint = useGpsPoint;
-    emit useGpsPointChanged();
+  mUseGpsPoint = useGpsPoint;
+  emit useGpsPointChanged();
 }
 
 bool DigitizingController::manualRecording() const
 {
-    return mManualRecording;
+  return mManualRecording;
 }
 
 void DigitizingController::setManualRecording( bool manualRecording )
 {
-    mManualRecording = manualRecording;
+  mManualRecording = manualRecording;
   emit manualRecordingChanged();
 }
 
@@ -174,11 +174,14 @@ QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsP
   }
 
   QgsPoint *mapPoint = nullptr;
-  if (isGpsPoint) {
-      mapPoint = new QgsPoint( point );
-  } else {
-      QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-      mapPoint = new QgsPoint( layerPoint );
+  if ( isGpsPoint )
+  {
+    mapPoint = new QgsPoint( point );
+  }
+  else
+  {
+    QgsPointXY layerPoint = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
+    mapPoint = new QgsPoint( layerPoint );
   }
   fixZ( mapPoint );
   QgsGeometry geom( mapPoint );
@@ -294,12 +297,15 @@ void DigitizingController::addRecordPoint( const QgsPoint &point, bool isGpsPoin
   if ( !mRecording )
     return;
 
-   QgsPoint layerPoint;
-  if (isGpsPoint) {
-      layerPoint = QgsPoint( point );
-  } else {
-      QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-      layerPoint = QgsPoint( layerPointXY );
+  QgsPoint layerPoint;
+  if ( isGpsPoint )
+  {
+    layerPoint = QgsPoint( point );
+  }
+  else
+  {
+    QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
+    layerPoint = QgsPoint( layerPointXY );
   }
 
   fixZ( &layerPoint );

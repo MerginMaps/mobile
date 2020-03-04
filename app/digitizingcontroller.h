@@ -68,9 +68,9 @@ class DigitizingController : public QObject
     void setManualRecording( bool manualRecording );
 
     bool useGpsPoint() const;
-    void setUseGpsPoint(bool useGpsPoint);
+    void setUseGpsPoint( bool useGpsPoint );
 
-signals:
+  signals:
     void layerChanged();
     void recordingChanged();
     void manualRecordingChanged();

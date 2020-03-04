@@ -84,7 +84,7 @@ ApplicationWindow {
             popup.open()
         }
         stateManager.state = "view"
-        digitizing.useGpsPoint = false  // TODO @vsklendar move to cpp??
+        digitizing.useGpsPoint = false
     }
 
 
@@ -438,7 +438,7 @@ ApplicationWindow {
             digitizing.manualRecording = !digitizing.manualRecording
             if (!digitizing.manualRecording && stateManager.state === "record") {
                 digitizing.startRecording()
-                digitizing.useGpsPoint = true  // TODO @vsklencar move to cpp
+                digitizing.useGpsPoint = true
             }
         }
 
