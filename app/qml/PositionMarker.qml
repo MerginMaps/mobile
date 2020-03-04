@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtGraphicalEffects 1.0
+import QtSensors 5.11
 import QgsQuick 0.1 as QgsQuick
 import "."
 
@@ -11,7 +12,31 @@ Item {
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
+    property int interval: 200 // Interval of direction marker updates in ms
+    property real threshold: 3 // threshold used to minimized direction marker updates (otherwise shaking)
+    property real speedLimit: 5  // TODO set proper limit
+    property real direction
+    property real groundSpeed
 
+    Timer {
+      interval: positionMarker.interval; running: true; repeat: true
+      onTriggered: {
+        positionMarker.groundSpeed = __inputUtils.groundSpeedFromSource(positionKit)
+        var newDirection = compass.reading && groundSpeed < speedLimit ? compass.reading.azimuth : positionKit.direction
+        if (Math.abs(positionMarker.direction - newDirection) > positionMarker.threshold) {
+          positionMarker.direction = newDirection
+        }
+      }
+    }
+
+    Compass {
+      id: compass
+      active: true
+
+      Component.onCompleted: {
+        compas.setBufferSize(100)
+      }
+    }
 
     Rectangle {
         id: accuracyIndicator
@@ -32,14 +57,16 @@ Item {
         id: direction
         source: "gps_direction.svg"
         fillMode: Image.PreserveAspectFit
-        rotation: positionKit.direction
+        rotation: positionMarker.direction
         transformOrigin: Item.Bottom
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && positionKit.direction >= 0
+        visible: positionKit.hasPosition
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
+
+        Behavior on rotation { SmoothedAnimation { velocity: 500 } }
     }
 
     Image {

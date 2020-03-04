@@ -2,9 +2,12 @@
 #define INPUTUTILS_H
 
 #include <QObject>
+#include <QGeoPositionInfoSource>
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
+#include "qgsquickpositionkit.h"
+
 
 class InputUtils: public QObject
 {
@@ -54,6 +57,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
     Q_INVOKABLE void showNotification( const QString &message );
+
+    Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
 
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,

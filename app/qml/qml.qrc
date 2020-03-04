@@ -35,5 +35,6 @@
         <file>LoadingIndicator.qml</file>
         <file>ProjectLoadingScreen.qml</file>
         <file>ProjectStatusPanel.qml</file>
+        <file>PositionInfoPanel.qml</file>
     </qresource>
 </RCC>
