@@ -15,7 +15,7 @@ Item {
     property int interval: 200 // Interval of direction marker updates in ms
     property real threshold: 3 // threshold used to minimized direction marker updates (otherwise shaking)
     property real speedLimit: 5  // TODO set proper limit
-    property real direction
+    property real direction: 0
     property real groundSpeed
 
     Timer {
@@ -23,10 +23,11 @@ Item {
       onTriggered: {
         positionMarker.groundSpeed = __inputUtils.groundSpeedFromSource(positionKit)
         var newDirection = compass.reading && groundSpeed < speedLimit ? compass.reading.azimuth : positionKit.direction
-        if (Math.abs(positionMarker.direction - newDirection) > positionMarker.threshold) {
-          positionMarker.direction = newDirection
-        }
-      }
+        var deltaAbsDirection = Math.abs(positionMarker.direction - newDirection)
+
+        if (deltaAbsDirection < positionMarker.threshold) return
+        positionMarker.direction = newDirection
+       }
     }
 
     Compass {
@@ -66,7 +67,7 @@ Item {
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
 
-        Behavior on rotation { SmoothedAnimation { velocity: 500 } }
+        Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
     }
 
     Image {

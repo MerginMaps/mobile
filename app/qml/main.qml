@@ -610,13 +610,4 @@ ApplicationWindow {
       z: zPanel + 1000 // the most top
     }
 
-    // TODO
-
-    PositionInfoPanel {
-      positionKit: positionKit
-      positionMarker: positionMarker
-      y: 0
-      z: 100000
-    }
-
 }
