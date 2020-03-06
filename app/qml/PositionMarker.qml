@@ -15,14 +15,19 @@ Item {
     property int interval: 200 // Interval of direction marker updates in ms
     property real threshold: 3 // threshold used to minimized direction marker updates (otherwise shaking)
     property real speedLimit: 15  // Over speed limit, directions depends on direction of movement
-    property real direction: 0
-    property real groundSpeed
+    property real direction: -1
+    property real groundSpeed: -1
 
     Timer {
       interval: positionMarker.interval; running: true; repeat: true
       onTriggered: {
         positionMarker.groundSpeed = __inputUtils.groundSpeedFromSource(positionKit)
-        var newDirection = compass.reading && groundSpeed < speedLimit ? compass.reading.azimuth : positionKit.direction
+        if (groundSpeed > 0) {
+          var newDirection = compass.reading && groundSpeed < speedLimit ? compass.reading.azimuth : positionKit.direction
+        } else {
+          newDirection = compass.reading ? compass.reading.azimuth  : -1
+        }
+
         var deltaAbsDirection = Math.abs(positionMarker.direction - newDirection)
         if (deltaAbsDirection > positionMarker.threshold) {
           positionMarker.direction = newDirection + compass.userOrientation
@@ -34,15 +39,19 @@ Item {
           id: orientationSensor
           active: true
 
+          Component.onCompleted: {
+            orientationSensor.start()
+          }
+
           onReadingChanged: {
             if (reading.orientation == OrientationReading.TopUp) {
                 compass.userOrientation = 0;
             } else if (reading.orientation == OrientationReading.TopDown) {
                 compass.userOrientation = 180;
             } else if (reading.orientation == OrientationReading.RightUp) {
-                compass.userOrientation = 270;
-            } else if (reading.orientation == OrientationReading.LeftUp) {
                 compass.userOrientation = 90;
+            } else if (reading.orientation == OrientationReading.LeftUp) {
+                compass.userOrientation = 270;
             }
           }
       }
@@ -52,7 +61,12 @@ Item {
       active: true
       axesOrientationMode: Sensor.AutomaticOrientation
       skipDuplicates: true
-      bufferSize: 100
+      bufferSize: 1
+      dataRate: 1
+
+      Component.onCompleted: {
+        compass.start()
+      }
     }
 
     Rectangle {
