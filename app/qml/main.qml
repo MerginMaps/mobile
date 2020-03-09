@@ -56,8 +56,8 @@ ApplicationWindow {
                 featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
-                recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
-                                                                                   __layersModel.firstWritableLayerIndex())
+                __layersModel.activeIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
+                                                                                __layersModel.firstWritableLayerIndex())
                 updateRecordToolbar()
 
                 var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
@@ -88,6 +88,16 @@ ApplicationWindow {
     }
 
 
+    //! Returns point from gps (WGS84) or center screen point in map CRS
+    function getRecordedPoint() {
+      if (digitizing.useGpsPoint) {
+         return positionKit.position  // WGS84
+      } else {
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        return mapCanvas.mapSettings.screenToCoordinate(screenPoint)  // map CRS
+      }
+    }
+
     function editFeature() {
         var layer = featurePanel.feature.layer
         if (!layer)
@@ -100,11 +110,8 @@ ApplicationWindow {
             // TODO
         }
         else if (digitizing.hasPointGeometry(layer)) {
-            // assuming layer with point geometry
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-
-            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, centerPoint)
+            var recordedPoint = getRecordedPoint()
+            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
             featurePanel.saveFeatureGeom()
             stateManager.state = "view"
             featurePanel.show_panel(featurePanel.feature, "Edit", "form")
@@ -112,22 +119,15 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-      var pointToAdd
-      if (digitizing.useGpsPoint) {
-         pointToAdd = positionKit.position  // WGS84
-      } else {
-        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-        pointToAdd = mapCanvas.mapSettings.screenToCoordinate(screenPoint)  // map CRS
-      }
-
+      var recordedPoint = getRecordedPoint()
       if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-          var pair = digitizing.pointFeatureFromPoint(pointToAdd, digitizing.useGpsPoint)
+          var pair = digitizing.pointFeatureFromPoint(recordedPoint, digitizing.useGpsPoint)
           saveRecordedFeature(pair)
       } else {
           if (!digitizing.recording) {
               digitizing.startRecording()
           }
-          digitizing.addRecordPoint(pointToAdd, digitizing.useGpsPoint)
+          digitizing.addRecordPoint(recordedPoint, digitizing.useGpsPoint)
       }
     }
 
@@ -151,7 +151,6 @@ ApplicationWindow {
     }
 
     function updateRecordToolbar() {
-
         recordToolbar.activeVectorLayer = __layersModel.activeLayer()
         var layer = recordToolbar.activeVectorLayer
         if (!layer)

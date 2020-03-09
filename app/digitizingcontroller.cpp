@@ -298,10 +298,9 @@ QgsPoint DigitizingController::pointFeatureMapCoordinates( QgsQuickFeatureLayerP
   return QgsPoint( res );
 }
 
-QgsQuickFeatureLayerPair DigitizingController::changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point )
+QgsQuickFeatureLayerPair DigitizingController::changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point, bool isGpsPoint )
 {
-  QgsGeometry geom = getPointGeometry( point, false );
-
+  QgsGeometry geom = getPointGeometry( point, isGpsPoint );
   pair.featureRef().setGeometry( geom );
   return pair;
 }

@@ -50,11 +50,7 @@ class DigitizingController : public QObject
     //! Returns (point geom) featurePair coords in map coordinates.
     Q_INVOKABLE QgsPoint pointFeatureMapCoordinates( QgsQuickFeatureLayerPair pair );
     //! Changes point geometry of given pair according given point.
-    Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point );
-
-    QgsPoint *getLayerPoint( const QgsPoint &point, bool isGpsPoint );
-    QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
-    QgsQuickFeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
+    Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point, bool isGpsPoint );
 
     Q_INVOKABLE void addRecordPoint( const QgsPoint &point, bool isGpsPoint );
     Q_INVOKABLE void removeLastPoint();
@@ -63,6 +59,9 @@ class DigitizingController : public QObject
     Q_INVOKABLE void stopRecording();
     bool isRecording() const { return mRecording; }
 
+    QgsPoint *getLayerPoint( const QgsPoint &point, bool isGpsPoint );
+    QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
+    QgsQuickFeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
     QgsQuickAttributeModel *recordingFeatureModel() const { return mRecordingModel; }
 
     int lineRecordingInterval() const;
