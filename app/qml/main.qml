@@ -114,10 +114,10 @@ ApplicationWindow {
     function recordFeature() {
       var pointToAdd
       if (digitizing.useGpsPoint) {
-         pointToAdd = positionKit.projectedPosition
+         pointToAdd = positionKit.position  // WGS84
       } else {
         var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-        pointToAdd = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+        pointToAdd = mapCanvas.mapSettings.screenToCoordinate(screenPoint)  // map CRS
       }
 
       if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {

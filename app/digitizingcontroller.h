@@ -52,6 +52,10 @@ class DigitizingController : public QObject
     //! Changes point geometry of given pair according given point.
     Q_INVOKABLE QgsQuickFeatureLayerPair changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point );
 
+    QgsPoint *getLayerPoint( const QgsPoint &point, bool isGpsPoint );
+    QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
+    QgsQuickFeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
+
     Q_INVOKABLE void addRecordPoint( const QgsPoint &point, bool isGpsPoint );
     Q_INVOKABLE void removeLastPoint();
 
