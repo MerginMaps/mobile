@@ -94,26 +94,29 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects 
 
   for ( MerginProjectListEntry entry : merginProjects )
   {
-    QString fullProjectName = MerginApi::getFullProjectName(entry.projectNamespace, entry.projectName );
+    QString fullProjectName = MerginApi::getFullProjectName( entry.projectNamespace, entry.projectName );
     std::shared_ptr<MerginProject> currentMerginProject = findProjectByFullName( fullProjectName );
-    if (currentMerginProject && currentMerginProject->pending) {
-        newProjects << currentMerginProject;
-    } else {
-        std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
-        project->projectNamespace = entry.projectNamespace;
-        project->projectName = entry.projectName;
-        project->serverUpdated = entry.serverUpdated;
+    if ( currentMerginProject && currentMerginProject->pending )
+    {
+      newProjects << currentMerginProject;
+    }
+    else
+    {
+      std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
+      project->projectNamespace = entry.projectNamespace;
+      project->projectName = entry.projectName;
+      project->serverUpdated = entry.serverUpdated;
 
-        // figure out info from local projects (projectDir etc)
-        LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( entry.projectNamespace, entry.projectName );
-        if ( localProject.isValid() )
-        {
-          project->projectDir = localProject.projectDir;
-          project->status = localProject.status;
-          // TODO: what else to copy?
-        }
+      // figure out info from local projects (projectDir etc)
+      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( entry.projectNamespace, entry.projectName );
+      if ( localProject.isValid() )
+      {
+        project->projectDir = localProject.projectDir;
+        project->status = localProject.status;
+        // TODO: what else to copy?
+      }
 
-        newProjects << project;
+      newProjects << project;
     }
   }
 
@@ -136,11 +139,14 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
 
 std::shared_ptr<MerginProject> MerginProjectModel::findProjectByFullName( const QString &projectFullName )
 {
-  int index = findProjectIndex(projectFullName);
-  if (index < 0) {
-      return nullptr;
-  } else {
-      return mMerginProjects.at(index);
+  int index = findProjectIndex( projectFullName );
+  if ( index < 0 )
+  {
+    return nullptr;
+  }
+  else
+  {
+    return mMerginProjects.at( index );
   }
 }
 
