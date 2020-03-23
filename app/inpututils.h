@@ -2,7 +2,6 @@
 #define INPUTUTILS_H
 
 #include <QObject>
-#include <QGeoPositionInfoSource>
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
