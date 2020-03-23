@@ -33,8 +33,9 @@ Item {
               __androidUtils.callCamera(itemWidget.targetDir)
           } else if (__iosUtils.isIos) {
               __iosUtils.callCamera(itemWidget.targetDir)
+          } else {
+            itemWidget.showDefaultPanel()
           }
-          // TODO else {}
         }
 
         /**
