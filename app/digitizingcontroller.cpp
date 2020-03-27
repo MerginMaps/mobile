@@ -77,7 +77,7 @@ bool DigitizingController::isPairValid( QgsQuickFeatureLayerPair pair ) const
   return pair.isValid() && hasEnoughPoints();
 }
 
-void DigitizingController::fixZ( QgsPoint *point ) const
+void DigitizingController::fixZ( std::unique_ptr<QgsPoint> &point ) const
 {
   Q_ASSERT( point );
 
@@ -87,6 +87,11 @@ void DigitizingController::fixZ( QgsPoint *point ) const
   bool layerIs3D = QgsWkbTypes::hasZ( featureLayerPair().layer()->wkbType() );
   bool pointIs3D = QgsWkbTypes::hasZ( point->wkbType() );
 
+
+  QgsWkbTypes::GeometryType faeetureType = featureLayerPair().feature().geometry().type();
+  QgsWkbTypes::GeometryType layerType = featureLayerPair().layer()->geometryType();
+
+  qDebug() << "!!!!!COMPATE TYPES !!!!" << faeetureType << layerType;
   if ( layerIs3D )
   {
     if ( !pointIs3D )
@@ -164,9 +169,9 @@ void DigitizingController::setLineRecordingInterval( int lineRecordingInterval )
 }
 
 
-QgsPoint *DigitizingController::getLayerPoint( const QgsPoint &point, bool isGpsPoint )
+std::unique_ptr<QgsPoint> DigitizingController::getLayerPoint( const QgsPoint &point, bool isGpsPoint )
 {
-  QgsPoint *layerPoint = nullptr;
+  std::unique_ptr<QgsPoint> layerPoint = nullptr;
   if ( isGpsPoint )
   {
 
@@ -174,12 +179,13 @@ QgsPoint *DigitizingController::getLayerPoint( const QgsPoint &point, bool isGps
     QgsGeometry geom( tempPoint );
     QgsCoordinateTransform ct( mPositionKit->positionCRS(), featureLayerPair().layer()->crs(), mMapSettings->mapSettings().transformContext() );
     geom.transform( ct );
-    layerPoint = qgsgeometry_cast<QgsPoint *>( geom.get() )->clone();
+    layerPoint = std::unique_ptr<QgsPoint>( qgsgeometry_cast<QgsPoint *>( geom.get() )->clone() );
+
   }
   else
   {
     QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
-    layerPoint = new QgsPoint( layerPointXY );
+    layerPoint = std::unique_ptr<QgsPoint>( new QgsPoint( layerPointXY ) );
   }
   fixZ( layerPoint );
 
@@ -188,8 +194,8 @@ QgsPoint *DigitizingController::getLayerPoint( const QgsPoint &point, bool isGps
 
 QgsGeometry DigitizingController::getPointGeometry( const QgsPoint &point, bool isGpsPoint )
 {
-  QgsPoint *layerPoint = getLayerPoint( point, isGpsPoint );
-  QgsGeometry geom( layerPoint );
+  std::unique_ptr<QgsPoint> layerPoint = getLayerPoint( point, isGpsPoint );
+  QgsGeometry geom( layerPoint.release() );
 
   return geom;
 }
@@ -205,13 +211,9 @@ QgsQuickFeatureLayerPair DigitizingController::createFeatureLayerPair( const Qgs
 
 QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint )
 {
-  if ( !featureLayerPair().layer() )
+  if ( !featureLayerPair().layer() || !mMapSettings )
     return QgsQuickFeatureLayerPair();
 
-  if ( !mMapSettings )
-  {
-    return QgsQuickFeatureLayerPair();
-  }
   QgsGeometry geom = getPointGeometry( point, isGpsPoint );
 
   return createFeatureLayerPair( geom );
@@ -244,12 +246,12 @@ void DigitizingController::onPositionChanged()
     return;
 
   QgsPoint point = mPositionKit->position();
-  QgsPoint *layerPoint = getLayerPoint( point, true );
+  std::unique_ptr<QgsPoint> layerPoint = getLayerPoint( point, true );
 
   if ( mLastTimeRecorded.addSecs( mLineRecordingInterval ) <= QDateTime::currentDateTime() )
   {
     mLastTimeRecorded = QDateTime::currentDateTime();
-    mRecordedPoints.append( *layerPoint );
+    mRecordedPoints.append( *layerPoint.get() );
   }
   else
   {
@@ -310,8 +312,8 @@ void DigitizingController::addRecordPoint( const QgsPoint &point, bool isGpsPoin
   if ( !mRecording )
     return;
 
-  QgsPoint *layerPoint = getLayerPoint( point, isGpsPoint );
-  mRecordedPoints.append( *layerPoint );
+  std::unique_ptr<QgsPoint> layerPoint = getLayerPoint( point, isGpsPoint );
+  mRecordedPoints.append( *layerPoint.get() );
 
   // update geometry so we can use the model for highlight in map
   mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );

@@ -322,6 +322,7 @@ ApplicationWindow {
         if (digitizing.useGpsPoint || (__appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
             var useGpsPoint = digitizing.useGpsPoint
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+            // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
             digitizing.useGpsPoint = useGpsPoint
         }
       }

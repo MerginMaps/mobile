@@ -24,6 +24,7 @@ class DigitizingController : public QObject
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( QgsQuickAttributeModel *recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
+    //! If True, recorded point is from GPS and contains z-coord
     Q_PROPERTY( bool useGpsPoint MEMBER mUseGpsPoint NOTIFY useGpsPointChanged )
 
   public:
@@ -59,7 +60,7 @@ class DigitizingController : public QObject
     Q_INVOKABLE void stopRecording();
     bool isRecording() const { return mRecording; }
 
-    QgsPoint *getLayerPoint( const QgsPoint &point, bool isGpsPoint );
+    std::unique_ptr<QgsPoint> getLayerPoint( const QgsPoint &point, bool isGpsPoint );
     QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
     QgsQuickFeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
     QgsQuickAttributeModel *recordingFeatureModel() const { return mRecordingModel; }
@@ -87,7 +88,7 @@ class DigitizingController : public QObject
     void onPositionChanged();
 
   private:
-    void fixZ( QgsPoint *point ) const; // add/remove Z coordinate based on layer wkb type
+    void fixZ( std::unique_ptr<QgsPoint> &point ) const; // add/remove Z coordinate based on layer wkb type
     QgsCoordinateTransform transformer() const;
     QgsQuickFeatureLayerPair lineFeature();
     QgsQuickFeatureLayerPair polygonFeature();
