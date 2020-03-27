@@ -87,41 +87,39 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects )
+void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects )
 {
   beginResetModel();
-  ProjectList newProjects;
+  mMerginProjects.clear();
 
   for ( MerginProjectListEntry entry : merginProjects )
   {
     QString fullProjectName = MerginApi::getFullProjectName( entry.projectNamespace, entry.projectName );
-    std::shared_ptr<MerginProject> currentMerginProject = findProjectByFullName( fullProjectName );
-    if ( currentMerginProject && currentMerginProject->pending )
-    {
-      newProjects << currentMerginProject;
-    }
-    else
-    {
-      std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
-      project->projectNamespace = entry.projectNamespace;
-      project->projectName = entry.projectName;
-      project->serverUpdated = entry.serverUpdated;
+    std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
+    project->projectNamespace = entry.projectNamespace;
+    project->projectName = entry.projectName;
+    project->serverUpdated = entry.serverUpdated;
 
-      // figure out info from local projects (projectDir etc)
-      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( entry.projectNamespace, entry.projectName );
-      if ( localProject.isValid() )
-      {
-        project->projectDir = localProject.projectDir;
-        project->status = localProject.status;
-        // TODO: what else to copy?
-      }
-
-      newProjects << project;
+    // figure out info from local projects (projectDir etc)
+    LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( entry.projectNamespace, entry.projectName );
+    if ( localProject.isValid() )
+    {
+      project->projectDir = localProject.projectDir;
+      project->status = localProject.status;
+      // TODO: what else to copy?
     }
+
+    if ( pendingProjects.contains( fullProjectName ) )
+    {
+
+      TransactionStatus projectTransaction = pendingProjects.value( fullProjectName );
+      project->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
+      project->pending = project->progress >= 0;
+    }
+
+    mMerginProjects << project;
   }
 
-  //mMerginProjects.clear();
-  mMerginProjects = newProjects;
   endResetModel();
 }
 
@@ -175,6 +173,8 @@ void MerginProjectModel::syncProjectStatusChanged( const QString &projectFullNam
   std::shared_ptr<MerginProject> project = mMerginProjects[row];
   project->pending = progress >= 0;
   project->progress = progress >= 0 ? progress : 0;
+
+  //if project->pending()
 
   QModelIndex ix = index( row );
   emit dataChanged( ix, ix );

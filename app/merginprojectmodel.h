@@ -59,7 +59,8 @@ class MerginProjectModel: public QAbstractListModel
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    void resetProjects( const MerginProjectList &merginProjects );
+     //! Updates list of projects with synchronization progress if a project is pending
+    void resetProjects( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects );
 
     int filterCreator() const;
     void setFilterCreator( int filterCreator );
@@ -85,6 +86,7 @@ class MerginProjectModel: public QAbstractListModel
     std::shared_ptr<MerginProject> findProjectByFullName( const QString &projectFullName );
 
     ProjectList mMerginProjects;
+    ProjectList mMerginPendingProjects;
     LocalProjectsManager &mLocalProjects;
     QString mSearchExpression;
 

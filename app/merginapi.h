@@ -342,7 +342,7 @@ class MerginApi: public QObject
     static bool isInIgnore( const QFileInfo &info );
 
   signals:
-    void listProjectsFinished( const MerginProjectList &merginProjects );
+    void listProjectsFinished( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     /**
