@@ -326,6 +326,7 @@ ApplicationWindow {
     PositionMarker {
       id: positionMarker
       positionKit: positionKit
+      direction: digitizing.direction
       z: zMapCanvas + 2
     }
 
@@ -338,6 +339,10 @@ ApplicationWindow {
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
+        }
+
+        onDirectionChanged: {
+          positionMarker.direction = digitizing.direction
         }
     }
 

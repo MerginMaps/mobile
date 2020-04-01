@@ -57,6 +57,11 @@ class InputUtils: public QObject
 
     Q_INVOKABLE void showNotification( const QString &message );
 
+    /**
+     * Returns speed from positionKit's QGeoPositionInfo.
+     * \param QgsQuickPositionKit positionKit.
+     * \result The ground speed, in meters/sec.
+     */
     Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
 
     /**

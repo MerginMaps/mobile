@@ -2,6 +2,8 @@
 #define DIGITIZINGCONTROLLER_H
 
 #include <QObject>
+#include <QOrientationSensor>
+#include <QCompass>
 
 #include "qgscoordinatetransform.h"
 #include "qgsfeature.h"
@@ -24,6 +26,7 @@ class DigitizingController : public QObject
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( QgsQuickAttributeModel *recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( qreal direction MEMBER mDirection NOTIFY directionChanged )
 
   public:
     explicit DigitizingController( QObject *parent = nullptr );
@@ -66,6 +69,9 @@ class DigitizingController : public QObject
     bool manualRecording() const;
     void setManualRecording( bool manualRecording );
 
+    qreal direction() const;
+    void setDirection( const qreal &direction );
+
   signals:
     void layerChanged();
     void recordingChanged();
@@ -74,9 +80,11 @@ class DigitizingController : public QObject
     void recordingFeatureModelChanged();
     void mapSettingsChanged();
     void lineRecordingIntervalChanged();
+    void directionChanged();
 
   private slots:
     void onPositionChanged();
+    void updateDirection();
 
   private:
     void fixZ( QgsPoint *point ) const; // add/remove Z coordinate based on layer wkb type
@@ -95,6 +103,15 @@ class DigitizingController : public QObject
     QgsQuickMapSettings *mMapSettings = nullptr;
     int mLineRecordingInterval = 3; // in seconds
     QDateTime mLastTimeRecorded;
+
+    // Direction related
+    qreal mDirection;
+    QOrientationSensor *mOrientationSensor = nullptr;
+    QCompass *mCompass = nullptr;
+    QTimer mTimer;
+    const qreal mDirectionTrahsold = 3; //! in degrees.
+    const qreal mSpeedLimit = 4.16;  //! 4.16 m/s ~= 15km/h. Over speed limit, directions depends on direction of movement.
+    qreal angleBetween( qreal d1, qreal d2 );
 };
 
 #endif // DIGITIZINGCONTROLLER_H

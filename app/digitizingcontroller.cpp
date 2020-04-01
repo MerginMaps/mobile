@@ -13,6 +13,15 @@ DigitizingController::DigitizingController( QObject *parent )
   , mMapSettings( nullptr )
 {
   mRecordingModel = new QgsQuickAttributeModel( this );
+  mOrientationSensor = new QOrientationSensor( this );
+  mCompass = new QCompass( this );
+
+  mOrientationSensor->start();
+  mCompass->start();
+  mTimer.setInterval( 200 );
+  mTimer.start();
+
+  QObject::connect( &mTimer, &QTimer::timeout, this, &DigitizingController::updateDirection );
 }
 
 void DigitizingController::setPositionKit( QgsQuickPositionKit *kit )
@@ -130,6 +139,21 @@ bool DigitizingController::hasEnoughPoints() const
   return true;
 }
 
+qreal DigitizingController::angleBetween( qreal d1, qreal d2 )
+{
+  return 180 - abs( abs( d1 - d2 ) - 180 );
+}
+
+qreal DigitizingController::direction() const
+{
+  return mDirection;
+}
+
+void DigitizingController::setDirection( const qreal &direction )
+{
+  mDirection = direction;
+}
+
 bool DigitizingController::manualRecording() const
 {
   return mManualRecording;
@@ -220,6 +244,37 @@ void DigitizingController::onPositionChanged()
     }
   }
   mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
+}
+
+void DigitizingController::updateDirection()
+{
+
+  qreal groundSpeed = -1;
+  //int userOrientation = 0;
+
+  if ( mPositionKit == nullptr ) return;
+
+  if ( mPositionKit->source()->lastKnownPosition().isValid() )
+  {
+    groundSpeed =  mPositionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
+  }
+
+  qreal newDirection = -1;
+  if ( groundSpeed >= mSpeedLimit )
+    newDirection = mPositionKit->direction();
+
+  else if ( mCompass->reading() )
+  {
+    newDirection = mCompass->reading()->azimuth() + mCompass->userOrientation();
+  }
+  qreal delta = angleBetween( mDirection, newDirection );
+
+  if ( delta > mDirectionTrahsold )
+  {
+    mDirection = newDirection;
+    emit directionChanged();
+  }
+
 }
 
 QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
