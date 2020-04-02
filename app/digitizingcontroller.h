@@ -85,6 +85,7 @@ class DigitizingController : public QObject
   private slots:
     void onPositionChanged();
     void updateDirection();
+    void setUserOrientation();
 
   private:
     void fixZ( QgsPoint *point ) const; // add/remove Z coordinate based on layer wkb type
@@ -105,6 +106,8 @@ class DigitizingController : public QObject
     QDateTime mLastTimeRecorded;
 
     // Direction related
+    //! any direction value in degrees that is < -180 is not valid.
+    const qreal MIN_INVALID_DIRECTION = -180.1;
     qreal mDirection;
     QOrientationSensor *mOrientationSensor = nullptr;
     QCompass *mCompass = nullptr;

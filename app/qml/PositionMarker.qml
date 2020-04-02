@@ -43,7 +43,7 @@ Item {
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition
+        visible: positionKit.hasPosition && positionMarker.direction
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
 
