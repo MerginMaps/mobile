@@ -15,6 +15,7 @@ merginprojectstatusmodel.cpp \
 androidutils.cpp \
 inpututils.cpp \
 geodiffutils.cpp \
+positiondirection.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -34,6 +35,7 @@ merginprojectstatusmodel.h \
 androidutils.h \
 inpututils.h \
 geodiffutils.h \
+positiondirection.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 

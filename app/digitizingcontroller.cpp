@@ -1,7 +1,5 @@
 #include "digitizingcontroller.h"
 
-#include <QOrientationReading>
-
 #include "qgslinestring.h"
 #include "qgsvectorlayer.h"
 #include "qgswkbtypes.h"
@@ -15,16 +13,6 @@ DigitizingController::DigitizingController( QObject *parent )
   , mMapSettings( nullptr )
 {
   mRecordingModel = new QgsQuickAttributeModel( this );
-  mOrientationSensor = new QOrientationSensor( this );
-  mCompass = new QCompass( this );
-
-  mOrientationSensor->start();
-  mCompass->start();
-  mTimer.setInterval( 200 );
-  mTimer.start();
-
-  QObject::connect( &mTimer, &QTimer::timeout, this, &DigitizingController::updateDirection );
-  QObject::connect( mOrientationSensor, &QOrientationSensor::readingChanged, this, &DigitizingController::setUserOrientation );
 }
 
 void DigitizingController::setPositionKit( QgsQuickPositionKit *kit )
@@ -142,21 +130,6 @@ bool DigitizingController::hasEnoughPoints() const
   return true;
 }
 
-qreal DigitizingController::angleBetween( qreal d1, qreal d2 )
-{
-  return 180 - abs( abs( d1 - d2 ) - 180 );
-}
-
-qreal DigitizingController::direction() const
-{
-  return mDirection;
-}
-
-void DigitizingController::setDirection( const qreal &direction )
-{
-  mDirection = direction;
-}
-
 bool DigitizingController::manualRecording() const
 {
   return mManualRecording;
@@ -249,62 +222,6 @@ void DigitizingController::onPositionChanged()
   mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
 }
 
-void DigitizingController::updateDirection()
-{
-
-  qreal groundSpeed = -1;
-  if ( mPositionKit == nullptr ) return;
-
-  if ( mPositionKit->source()->lastKnownPosition().isValid() )
-  {
-    groundSpeed =  mPositionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
-  }
-
-
-  qreal newDirection = MIN_INVALID_DIRECTION;
-  if ( groundSpeed >= mSpeedLimit )
-    newDirection = mPositionKit->direction();
-  else if ( mCompass->reading() )
-  {
-    newDirection = mCompass->reading()->azimuth() + mCompass->userOrientation();
-  }
-
-  // invalid direction
-  if ( newDirection > MIN_INVALID_DIRECTION )
-  {
-    mDirection = newDirection;
-    emit directionChanged();
-    return;
-  }
-
-  qreal delta = angleBetween( mDirection, newDirection );
-  if ( mDirection <= 0 || delta > mDirectionTrahsold )
-  {
-    mDirection = newDirection;
-    emit directionChanged();
-  }
-
-}
-
-void DigitizingController::setUserOrientation()
-{
-  if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::TopUp )
-  {
-    mCompass->setUserOrientation( 0 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::TopDown )
-  {
-    mCompass->setUserOrientation( 180 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::RightUp )
-  {
-    mCompass->setUserOrientation( 90 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::LeftUp )
-  {
-    mCompass->setUserOrientation( 270 );
-  }
-}
 
 QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
 {

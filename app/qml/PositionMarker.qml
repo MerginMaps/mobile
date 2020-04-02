@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.0
 import QtSensors 5.11
 import QgsQuick 0.1 as QgsQuick
 import "."
+import lc 1.0
 
 Item {
     id: positionMarker
@@ -13,6 +14,13 @@ Item {
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
     property real direction: -1
+
+    onPositionKitChanged: positionDirection.positionKit = positionMarker.positionKit
+
+    PositionDirection {
+      id: positionDirection
+      onDirectionChanged: direction.rotation = positionDirection.direction
+    }
 
     Rectangle {
         id: accuracyIndicator
@@ -33,12 +41,12 @@ Item {
         id: direction
         source: "gps_direction.svg"
         fillMode: Image.PreserveAspectFit
-        rotation: positionMarker.direction
+        rotation: positionDirection.direction
         transformOrigin: Item.Bottom
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && positionMarker.direction
+        visible: positionKit.hasPosition && positionDirection.direction > positionDirection.MIN_INVALID_DIRECTION
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
 

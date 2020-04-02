@@ -203,7 +203,7 @@ ios {
   QT += printsupport
 }
 android {
-  QT += androidextras
+  QT += androidextras sensors
 }
 
 include(sources.pri)
