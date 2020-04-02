@@ -77,33 +77,26 @@ bool DigitizingController::isPairValid( QgsQuickFeatureLayerPair pair ) const
   return pair.isValid() && hasEnoughPoints();
 }
 
-void DigitizingController::fixZ( std::unique_ptr<QgsPoint> &point ) const
+void DigitizingController::fixZ( QgsPoint &point ) const
 {
-  Q_ASSERT( point );
-
   if ( !featureLayerPair().layer() )
     return;
 
   bool layerIs3D = QgsWkbTypes::hasZ( featureLayerPair().layer()->wkbType() );
-  bool pointIs3D = QgsWkbTypes::hasZ( point->wkbType() );
+  bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
 
-
-  QgsWkbTypes::GeometryType faeetureType = featureLayerPair().feature().geometry().type();
-  QgsWkbTypes::GeometryType layerType = featureLayerPair().layer()->geometryType();
-
-  qDebug() << "!!!!!COMPATE TYPES !!!!" << faeetureType << layerType;
   if ( layerIs3D )
   {
     if ( !pointIs3D )
     {
-      point->addZValue();
+      point.addZValue();
     }
   }
   else /* !layerIs3D */
   {
     if ( pointIs3D )
     {
-      point->dropZValue();
+      point.dropZValue();
     }
   }
 }
@@ -187,7 +180,7 @@ std::unique_ptr<QgsPoint> DigitizingController::getLayerPoint( const QgsPoint &p
     QgsPointXY layerPointXY = mMapSettings->mapSettings().mapToLayerCoordinates( featureLayerPair().layer(), QgsPointXY( point.x(), point.y() ) );
     layerPoint = std::unique_ptr<QgsPoint>( new QgsPoint( layerPointXY ) );
   }
-  fixZ( layerPoint );
+  fixZ( *layerPoint );
 
   return layerPoint;
 }

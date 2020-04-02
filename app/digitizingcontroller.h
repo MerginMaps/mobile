@@ -88,7 +88,7 @@ class DigitizingController : public QObject
     void onPositionChanged();
 
   private:
-    void fixZ( std::unique_ptr<QgsPoint> &point ) const; // add/remove Z coordinate based on layer wkb type
+    void fixZ( QgsPoint &point ) const; // add/remove Z coordinate based on layer wkb type
     QgsCoordinateTransform transformer() const;
     QgsQuickFeatureLayerPair lineFeature();
     QgsQuickFeatureLayerPair polygonFeature();
