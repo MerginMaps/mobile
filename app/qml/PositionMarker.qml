@@ -14,11 +14,6 @@ Item {
     property bool withAccuracy: true
     property real direction: -1
 
-    Connections {
-      target: __digit
-
-    }
-
     Rectangle {
         id: accuracyIndicator
         visible: withAccuracy &&
