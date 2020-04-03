@@ -87,12 +87,14 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects )
+void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects )
 {
   beginResetModel();
   mMerginProjects.clear();
+
   for ( MerginProjectListEntry entry : merginProjects )
   {
+    QString fullProjectName = MerginApi::getFullProjectName( entry.projectNamespace, entry.projectName );
     std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
     project->projectNamespace = entry.projectNamespace;
     project->projectName = entry.projectName;
@@ -107,8 +109,17 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects 
       // TODO: what else to copy?
     }
 
+    if ( pendingProjects.contains( fullProjectName ) )
+    {
+
+      TransactionStatus projectTransaction = pendingProjects.value( fullProjectName );
+      project->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
+      project->pending = true;
+    }
+
     mMerginProjects << project;
   }
+
   endResetModel();
 }
 

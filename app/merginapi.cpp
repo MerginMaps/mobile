@@ -1001,7 +1001,8 @@ void MerginApi::listProjectsReplyFinished()
     // for any local projects we can update the latest server version
     for ( MerginProjectListEntry project : mRemoteProjects )
     {
-      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( getFullProjectName( project.projectNamespace, project.projectName ) );
+      QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );
+      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( fullProjectName );
       if ( localProject.isValid() )
       {
         mLocalProjects.updateMerginServerVersion( localProject.projectDir, project.version );
@@ -1022,7 +1023,7 @@ void MerginApi::listProjectsReplyFinished()
   }
 
   r->deleteLater();
-  emit listProjectsFinished( mRemoteProjects );
+  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus );
 }
 
 
