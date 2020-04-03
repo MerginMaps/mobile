@@ -47,9 +47,11 @@ bool AndroidUtils::isAndroid() const
 #endif
 }
 
+//! https://stackoverflow.com/questions/35973235/android-permission-denial-starting-intent-with-revoked-permission-android-perms
 void AndroidUtils::requirePermissions()
 {
   checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" );
+  checkAndAcquirePermissions( "android.permission.CAMERA" );
 }
 
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
@@ -144,7 +146,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QAndroidJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     QString absolutePath = absolutePathJNI.toString();
 
-    emit imageSelected( absolutePath );
+    emit imageCaptured( absolutePath );
   }
   else
   {
