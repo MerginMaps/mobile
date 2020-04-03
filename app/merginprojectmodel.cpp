@@ -114,7 +114,7 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects,
 
       TransactionStatus projectTransaction = pendingProjects.value( fullProjectName );
       project->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
-      project->pending = project->progress >= 0;
+      project->pending = true;
     }
 
     mMerginProjects << project;
@@ -133,19 +133,6 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
     row++;
   }
   return -1;
-}
-
-std::shared_ptr<MerginProject> MerginProjectModel::findProjectByFullName( const QString &projectFullName )
-{
-  int index = findProjectIndex( projectFullName );
-  if ( index < 0 )
-  {
-    return nullptr;
-  }
-  else
-  {
-    return mMerginProjects.at( index );
-  }
 }
 
 QString MerginProjectModel::searchExpression() const
@@ -173,8 +160,6 @@ void MerginProjectModel::syncProjectStatusChanged( const QString &projectFullNam
   std::shared_ptr<MerginProject> project = mMerginProjects[row];
   project->pending = progress >= 0;
   project->progress = progress >= 0 ? progress : 0;
-
-  //if project->pending()
 
   QModelIndex ix = index( row );
   emit dataChanged( ix, ix );

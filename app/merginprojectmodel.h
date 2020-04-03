@@ -83,10 +83,8 @@ class MerginProjectModel: public QAbstractListModel
   private:
 
     int findProjectIndex( const QString &projectFullName );
-    std::shared_ptr<MerginProject> findProjectByFullName( const QString &projectFullName );
 
     ProjectList mMerginProjects;
-    ProjectList mMerginPendingProjects;
     LocalProjectsManager &mLocalProjects;
     QString mSearchExpression;
 
