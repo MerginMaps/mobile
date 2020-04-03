@@ -56,8 +56,8 @@ ApplicationWindow {
                 featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
-                recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
-                                                                                   __layersModel.firstWritableLayerIndex())
+                __layersModel.activeIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
+                                                                                __layersModel.firstWritableLayerIndex())
                 updateRecordToolbar()
 
                 var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
@@ -84,8 +84,19 @@ ApplicationWindow {
             popup.open()
         }
         stateManager.state = "view"
+        digitizing.useGpsPoint = false
     }
 
+
+    //! Returns point from gps (WGS84) or center screen point in map CRS
+    function getRecordedPoint() {
+      if (digitizing.useGpsPoint) {
+         return positionKit.position  // WGS84
+      } else {
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        return mapCanvas.mapSettings.screenToCoordinate(screenPoint)  // map CRS
+      }
+    }
 
     function editFeature() {
         var layer = featurePanel.feature.layer
@@ -99,11 +110,8 @@ ApplicationWindow {
             // TODO
         }
         else if (digitizing.hasPointGeometry(layer)) {
-            // assuming layer with point geometry
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-
-            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, centerPoint)
+            var recordedPoint = getRecordedPoint()
+            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
             featurePanel.saveFeatureGeom()
             stateManager.state = "view"
             featurePanel.show_panel(featurePanel.feature, "Edit", "form")
@@ -111,18 +119,16 @@ ApplicationWindow {
     }
 
     function recordFeature() {
-        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-        var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-
-        if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-            var pair = digitizing.pointFeatureFromPoint(centerPoint)
-            saveRecordedFeature(pair)
-        } else {
-            if (!digitizing.recording) {
-                digitizing.startRecording()
-            }
-            digitizing.addRecordPoint(centerPoint)
-        }
+      var recordedPoint = getRecordedPoint()
+      if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
+          var pair = digitizing.pointFeatureFromPoint(recordedPoint, digitizing.useGpsPoint)
+          saveRecordedFeature(pair)
+      } else {
+          if (!digitizing.recording) {
+              digitizing.startRecording()
+          }
+          digitizing.addRecordPoint(recordedPoint, digitizing.useGpsPoint)
+      }
     }
 
     function getGpsIndicatorColor() {
@@ -145,7 +151,6 @@ ApplicationWindow {
     }
 
     function updateRecordToolbar() {
-
         recordToolbar.activeVectorLayer = __layersModel.activeLayer()
         var layer = recordToolbar.activeVectorLayer
         if (!layer)
@@ -314,11 +319,11 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
-        if (__appSettings.autoCenterMapChecked) {
-          var border = mainPanel.height
-          if (isPositionOutOfExtent(border)) {
+        if (digitizing.useGpsPoint || (__appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+            var useGpsPoint = digitizing.useGpsPoint
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
-          }
+            // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
+            digitizing.useGpsPoint = useGpsPoint
         }
       }
     }
@@ -363,7 +368,10 @@ ApplicationWindow {
 
         onOpenProjectClicked: openProjectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+        onMyLocationClicked: {
+          mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+          digitizing.useGpsPoint = true
+        }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
             popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
@@ -423,12 +431,14 @@ ApplicationWindow {
                 return // leaving when no gps is available
             }
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+            digitizing.useGpsPoint = true
         }
 
         onManualRecordingClicked: {
             digitizing.manualRecording = !digitizing.manualRecording
             if (!digitizing.manualRecording && stateManager.state === "record") {
                 digitizing.startRecording()
+                digitizing.useGpsPoint = true
             }
         }
 
@@ -480,6 +490,7 @@ ApplicationWindow {
     Connections {
         target: mapCanvas.mapSettings
         onExtentChanged: {
+            digitizing.useGpsPoint = false
             scaleBar.visible = true
         }
     }
