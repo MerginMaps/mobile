@@ -66,9 +66,6 @@ class DigitizingController : public QObject
     bool manualRecording() const;
     void setManualRecording( bool manualRecording );
 
-    qreal direction() const;
-    void setDirection( const qreal &direction );
-
   signals:
     void layerChanged();
     void recordingChanged();

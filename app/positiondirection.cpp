@@ -44,14 +44,16 @@ void PositionDirection::updateDirection()
   if ( mDirection <= MIN_INVALID_DIRECTION && newDirection > MIN_INVALID_DIRECTION )
   {
     mDirection = newDirection;
+    setHasDirection( true );
     emit directionChanged();
     return;
   }
 
   qreal delta = angleBetween( mDirection, newDirection );
-  if ( delta > mDirectionTrahsold )
+  if ( delta > mUpdateMinAngleDelta )
   {
     mDirection = newDirection;
+    setHasDirection( true );
     emit directionChanged();
   }
 
@@ -77,9 +79,20 @@ void PositionDirection::setUserOrientation()
   }
 }
 
+bool PositionDirection::hasDirection() const
+{
+  return mHasDirection;
+}
+
+void PositionDirection::setHasDirection( bool hasDirection )
+{
+  mHasDirection = hasDirection;
+  emit hasDirectionChanged();
+}
+
 qreal PositionDirection::angleBetween( qreal d1, qreal d2 )
 {
-  return 180 - abs( abs( d1 - d2 ) - 180 );
+  return abs( 180 - abs( abs( d1 - d2 ) - 180 ) );
 }
 #endif
 
@@ -101,4 +114,15 @@ void PositionDirection::setPositionKit( QgsQuickPositionKit *positionKit )
 qreal PositionDirection::minInvalidDirection() const
 {
   return MIN_INVALID_DIRECTION;
+}
+
+bool PositionDirection::hasDirection() const
+{
+  return mHasDirection;
+}
+
+void PositionDirection::setHasDirection( bool hasDirection )
+{
+  mHasDirection = hasDirection;
+  emit hasDirectionChanged();
 }

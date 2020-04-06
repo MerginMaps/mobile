@@ -13,13 +13,11 @@ Item {
     property QgsQuick.PositionKit positionKit
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
-    property real direction: -1
 
     onPositionKitChanged: positionDirection.positionKit = positionMarker.positionKit
 
     PositionDirection {
       id: positionDirection
-      onDirectionChanged: direction.rotation = positionDirection.direction
     }
 
     Rectangle {
@@ -46,7 +44,7 @@ Item {
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && positionDirection.direction > positionDirection.MIN_INVALID_DIRECTION
+        visible: positionKit.hasPosition && positionDirection.hasDirection
         x: positionKit.screenPosition.x - width/2
         y: positionKit.screenPosition.y - (height * 1)
 
