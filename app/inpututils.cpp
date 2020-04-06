@@ -339,6 +339,17 @@ void InputUtils::showNotification( const QString &message )
   emit showNotificationRequested( message );
 }
 
+qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
+{
+  if ( positionKit == nullptr ) return 0;
+
+  if ( positionKit->source()->lastKnownPosition().isValid() )
+  {
+    return positionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
+  }
+  return 0;
+}
+
 void InputUtils::log( const QString &topic, const QString &info )
 {
   QString logFilePath;

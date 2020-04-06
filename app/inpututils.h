@@ -5,6 +5,8 @@
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
+#include "qgsquickpositionkit.h"
+
 
 class InputUtils: public QObject
 {
@@ -54,6 +56,13 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
     Q_INVOKABLE void showNotification( const QString &message );
+
+    /**
+     * Returns speed from positionKit's QGeoPositionInfo.
+     * \param QgsQuickPositionKit positionKit.
+     * \result The ground speed, in meters/sec.
+     */
+    Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
 
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,

@@ -66,7 +66,7 @@ ios {
     CONFIG += static
     DEFINES += QT_NO_SSL
 
-    QT += multimedia multimediawidgets location sensors
+    QT += multimedia multimediawidgets location
     QTPLUGIN += qios
 
     LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
@@ -192,7 +192,7 @@ CONFIG(debug, debug|release) {
   DEFINES += "QGIS_QUICK_EXPAND_TEST_DATA"
 }
 
-QT += quick qml xml concurrent positioning quickcontrols2
+QT += quick qml xml concurrent positioning sensors quickcontrols2
 QT += network svg sql
 QT += opengl
 

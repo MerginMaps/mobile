@@ -24,6 +24,7 @@
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
+#include "positiondirection.h"
 #include "projectsmodel.h"
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
@@ -219,6 +220,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
+  qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
 }
 

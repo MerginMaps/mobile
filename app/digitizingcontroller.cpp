@@ -258,6 +258,7 @@ void DigitizingController::onPositionChanged()
   mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
 }
 
+
 QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
 {
   if ( !featureLayerPair().layer() )
