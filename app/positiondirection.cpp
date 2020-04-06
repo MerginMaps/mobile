@@ -2,7 +2,6 @@
 
 PositionDirection::PositionDirection( QObject *parent ) : QObject( parent )
 {
-#ifdef MOBILE_OS
   mOrientationSensor = new QOrientationSensor( this );
   mCompass = new QCompass( this );
 
@@ -13,16 +12,13 @@ PositionDirection::PositionDirection( QObject *parent ) : QObject( parent )
 
   QObject::connect( &mTimer, &QTimer::timeout, this, &PositionDirection::updateDirection );
   QObject::connect( mOrientationSensor, &QOrientationSensor::readingChanged, this, &PositionDirection::setUserOrientation );
-#endif
 }
 
-#ifdef MOBILE_OS
 void PositionDirection::updateDirection()
 {
   qreal groundSpeed = -1;
   if ( mPositionKit == nullptr )
   {
-    qDebug() << "NULL PTE POSITION KIT";
     return;
   }
 
@@ -94,7 +90,6 @@ qreal PositionDirection::angleBetween( qreal d1, qreal d2 )
 {
   return abs( 180 - abs( abs( d1 - d2 ) - 180 ) );
 }
-#endif
 
 qreal PositionDirection::direction() const
 {
@@ -109,20 +104,4 @@ QgsQuickPositionKit *PositionDirection::positionKit() const
 void PositionDirection::setPositionKit( QgsQuickPositionKit *positionKit )
 {
   mPositionKit = positionKit;
-}
-
-qreal PositionDirection::minInvalidDirection() const
-{
-  return MIN_INVALID_DIRECTION;
-}
-
-bool PositionDirection::hasDirection() const
-{
-  return mHasDirection;
-}
-
-void PositionDirection::setHasDirection( bool hasDirection )
-{
-  mHasDirection = hasDirection;
-  emit hasDirectionChanged();
 }

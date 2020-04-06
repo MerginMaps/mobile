@@ -3,11 +3,8 @@
 
 #include <QObject>
 #include <QTimer>
-
-#ifdef MOBILE_OS
 #include <QOrientationSensor>
 #include <QCompass>
-#endif
 
 #include "qgsquickpositionkit.h"
 
@@ -35,21 +32,16 @@ class PositionDirection : public QObject
     QgsQuickPositionKit *positionKit() const;
     void setPositionKit( QgsQuickPositionKit *positionKit );
 
-    qreal minInvalidDirection() const;
-
     bool hasDirection() const;
     void setHasDirection( bool hasDirection );
 
   signals:
     void directionChanged();
     void positionKitChanged();
-    void minInvalidDirectionChanged();
     void hasDirectionChanged();
   public slots:
-#ifdef MOBILE_OS
     void updateDirection();
     void setUserOrientation();
-#endif
 
   private:
     //! any direction value in degrees that is < -180 is not valid.
@@ -57,7 +49,6 @@ class PositionDirection : public QObject
     qreal mDirection = MIN_INVALID_DIRECTION;
     bool mHasDirection = false;
     QgsQuickPositionKit *mPositionKit = nullptr;
-#ifdef MOBILE_OS
     QOrientationSensor *mOrientationSensor = nullptr;
     QCompass *mCompass = nullptr;
     QTimer mTimer;
@@ -65,7 +56,6 @@ class PositionDirection : public QObject
     const qreal mSpeedLimit = 4.16;  //! 4.16 m/s ~= 15km/h. Over speed limit, directions depends on direction of movement.
     //! Returns difference of angles. Result is in interval <0,180> degrees.
     qreal angleBetween( qreal d1, qreal d2 );
-#endif
 };
 
 #endif // POSITIONDIRECTION_H
