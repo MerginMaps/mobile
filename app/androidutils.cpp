@@ -129,9 +129,20 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
   if ( resultCode == RESULT_CANCELED )
   {
     QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    // User has triggered cancel, result has no data.
+    if ( !data.isValid() )
+    {
+      return;
+    }
+
     QAndroidJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
-    QString errorMsg = errorJNI.toString();
-    showToast( errorMsg );
+    // Internal cancelation due to an error
+    if ( !errorJNI.isValid() )
+    {
+      qDebug() << "errorJNI not valid123423541!#!#!";
+      QString errorMsg = errorJNI.toString();
+      showToast( errorMsg );
+    }
     return;
   }
 
@@ -157,11 +168,14 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QAndroidJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     QString absolutePath = absolutePathJNI.toString();
 
-    emit imageCaptured( absolutePath );
+    QString selectedImagePath = "file://" + absolutePath;
+    emit imageSelected( absolutePath );
   }
   else
   {
-    qDebug() << "Something went wrong with media store activity";
+    QString msg( "Something went wrong with media store activity" );
+    qDebug() << msg;
+    showToast( msg );
   }
 
 }

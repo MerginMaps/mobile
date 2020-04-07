@@ -153,15 +153,14 @@ Item {
 
     Connections {
         target: __androidUtils
-        onImageSelected: externalResourceHandler.imageSelected(imagePath)
-        onImageCaptured: externalResourceHandler.imageCaptured(imagePath)
-        onErrorOccured: console.log("QML$#%ˆ&DJKHFG", errorMsg)
+        // used for both gallery and camera
+        onImageSelected:externalResourceHandler.imageSelected(imagePath)
     }
 
     Connections {
         target: __iosUtils
         // used for both gallery and camera
-        onImageCaptured: externalResourceHandler.imageCaptured(absoluteImagePath)
+        onImageSelected: externalResourceHandler.imageCaptured(imagePath)
     }
 
     Popup {

@@ -12,7 +12,7 @@
 IosUtils::IosUtils( QObject *parent ): QObject( parent )
 {
   mImagePicker = new IOSImagePicker();
-  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, &IosUtils::imageCaptured );
+  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, &IosUtils::imageSelected );
 }
 
 bool IosUtils::isIos() const
