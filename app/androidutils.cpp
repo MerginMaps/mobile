@@ -139,7 +139,6 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     // Internal cancelation due to an error
     if ( !errorJNI.isValid() )
     {
-      qDebug() << "errorJNI not valid123423541!#!#!";
       QString errorMsg = errorJNI.toString();
       showToast( errorMsg );
     }
