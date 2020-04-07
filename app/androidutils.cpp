@@ -124,6 +124,17 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 {
 
   jint RESULT_OK = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
+  jint RESULT_CANCELED = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
+
+  if ( resultCode == RESULT_CANCELED )
+  {
+    QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    QAndroidJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    QString errorMsg = errorJNI.toString();
+    showToast( errorMsg );
+    return;
+  }
+
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
     QAndroidJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );

@@ -154,7 +154,8 @@ Item {
     Connections {
         target: __androidUtils
         onImageSelected: externalResourceHandler.imageSelected(imagePath)
-        onImageCapture: externalResourceHandler.imageCaptured(imagePath)
+        onImageCaptured: externalResourceHandler.imageCaptured(imagePath)
+        onErrorOccured: console.log("QML$#%ˆ&DJKHFG", errorMsg)
     }
 
     Connections {
