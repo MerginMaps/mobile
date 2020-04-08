@@ -1,18 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest package="uk.co.lutraconsulting"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionName="-- %%INSERT_VERSION_NAME%% --"
-          android:versionCode="-- %%INSERT_VERSION_CODE%% --"
+          android:versionName="__BASH_REPLACE_VERSION__"
+          android:versionCode="__BASH_REPLACE_CODE__"
           android:installLocation="auto">
     <application android:hardwareAccelerated="true"
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
                  android:label="-- %%INSERT_APP_NAME%% --"
+                 android:icon="@mipmap/ic_input"
                  android:extractNativeLibs="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:name="uk.co.lutraconsulting.InputActivity"
                   android:label="Input"
                   android:screenOrientation="unspecified"
-                  android:launchMode="singleTop">
+                  android:launchMode="singleTop"
+                  android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -37,7 +39,6 @@
             <meta-data android:value="@string/fatal_error_msg" android:name="android.app.fatal_error_msg"/>
             <meta-data android:value="@string/unsupported_android_version" android:name="android.app.unsupported_android_version"/>
             <!--  Messages maps -->
-
             <!-- Splash screen -->
             <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splashscreen"/>
             <meta-data android:name="android.app.splash_screen_sticky" android:value="true"/>
@@ -80,6 +81,7 @@
     </application>
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
