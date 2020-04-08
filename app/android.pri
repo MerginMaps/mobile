@@ -7,12 +7,7 @@ android {
     # this makes the manifest visible from Qt Creator
     DISTFILES += $$OUT_PWD/android_patched/AndroidManifest.xml
     DISTFILES += $$OUT_PWD/res/xml/file_paths.xml
-    DISTFILES += \
-         $$PWD/build.gradle \
-         $$PWD/android/gradlew \
-         $$PWD/android/gradle/wrapper/gradle-wrapper.properties \
-         $$PWD/gradle/wrapper/gradle-wrapper.jar \
-         $$PWD/android/gradlew.bat
+    DISTFILES += $$PWD/build.gradle
 
     # packaging
     ANDROID_EXTRA_LIBS += \
@@ -54,6 +49,7 @@ android {
         $$QT_LIBS_DIR/libQt5Sql_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/../plugins/platforms/libplugins_platforms_qtforandroid_$${ANDROID_TARGET_ARCH}.so
 
 

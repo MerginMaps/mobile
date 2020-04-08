@@ -235,3 +235,11 @@ win32 {
 
 include(android.pri)
 include(ios.pri)
+
+DISTFILES += \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/build.gradle \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/gradle/wrapper/gradle-wrapper.jar \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/gradle/wrapper/gradle-wrapper.properties \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/gradlew \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/gradlew.bat \
+  ../build-input-Android_for_armeabi_v7a_arm64_v8a_x86_x86_64_Clang_Qt_5_14_1_for_Android-Release/android_patched/res/values/libs.xml
