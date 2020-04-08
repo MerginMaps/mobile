@@ -19,7 +19,7 @@ Requirements:
 - Qt5.x
 - QGIS 3.x prerequsities
 
-You can either build qgis_quick library or use ony from QGIS 3.4+ installation
+You can either build qgis_quick library or use ony from QGIS 3.10+ installation
 For building QGIS use these flags WITH_QUICK=TRUE, WITH_GUI=FALSE, WITH_DESKTOP=FALSE, WITH_BINDINGS=FALSE
 
 ```
@@ -69,7 +69,7 @@ So far only working if you want to build desktop version of the application
 Requirements:
  - All QGIS dependencies for qgis-3 receipt from https://github.com/OSGeo/homebrew-osgeo4mac
 
-You can either build qgis_quick library or use ony from QGIS 3.4+ installation. Use same flags as for Linux
+You can either build qgis_quick library or use ony from QGIS 3.10+ installation. Use same flags as for Linux
 Now you need to edit input/config.pri with paths to your QGIS installation and build with qmake
 
 To run the application from build tree, you need to:
@@ -100,8 +100,8 @@ Quick guide:
 - download SDK command line tools and unzip to `/opt/android-sdk`
 - sdk: install lldb, build tools, platform android X, cmake, platform-tools
 - download QT armv7 to `/opt/Qt`
-- download crystax and install to `/opt/crystax-10.3.2`
-- compile OSGeo4a
+- download NDK and install to `/opt/android-ndk-<ver>`
+- compile input-SDK
 - open QtCreator -> Manage Kits -> add SDK and NDK. compilers should be autodetected
 - enable connection on the device from MacOS when requested
 

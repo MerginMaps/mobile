@@ -40,6 +40,17 @@
             <meta-data android:name="android.app.background_running" android:value="false"/>
             <!-- Background running -->
         </activity>
+
+        <!-- Activity Android native camera -->
+        <activity android:name="uk.co.lutraconsulting.CameraActivity" android:label="Input" android:parentActivityName="uk.co.lutraconsulting.InputActivity">
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
+
+        <provider android:name="android.support.v4.content.FileProvider" android:authorities="uk.co.lutraconsulting.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
+
     </application>
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>

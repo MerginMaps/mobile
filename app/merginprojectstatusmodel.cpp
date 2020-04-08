@@ -10,6 +10,7 @@ MerginProjectStatusModel::MerginProjectStatusModel( LocalProjectsManager &localP
 
 int MerginProjectStatusModel::rowCount( const QModelIndex &parent ) const
 {
+  Q_UNUSED(parent)
   return mItems.length();
 }
 

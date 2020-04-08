@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version='1.0' encoding='utf-8'?>
 <manifest package="uk.co.lutraconsulting" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="__BASH_REPLACE_VERSION__" android:versionCode="__BASH_REPLACE_CODE__" android:installLocation="auto">
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@mipmap/ic_input">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="uk.co.lutraconsulting.InputActivity" android:label="Input" android:launchMode="singleTop" android:theme="@style/SplashScreenTheme">
@@ -40,6 +40,16 @@
             <meta-data android:name="android.app.background_running" android:value="false"/>
             <!-- Background running -->
         </activity>
+
+        <!-- Activity Android native camera -->
+        <activity android:name="uk.co.lutraconsulting.CameraActivity" android:label="Input" android:parentActivityName="uk.co.lutraconsulting.InputActivity">
+             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
+
+        <provider android:name="android.support.v4.content.FileProvider" android:authorities="uk.co.lutraconsulting.fileprovider" android:exported="false" android:grantUriPermissions="true">
+             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths">
+             </meta-data>
+        </provider>
     </application>
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>

@@ -14,7 +14,7 @@ It should prompt that "Certificate already exists in keystore under alias. Do yo
 Note: Make sure you have updated `android:versionName="x.y.z"` and `android:versionCode="v"` in `AndroidManifest.xml` before any release update. 
 Also check if you have target SDK set at least to version 26 (Android 8): `android:targetSdkVersion="26"`.
 
-## Internal test release (Google Play Console )
+## Internal test release (Google Play Console)
 To make an internal test release, open the Google Play Console -> Release management -> Internal test track byb clicking on "Manage" button.
 1. Upload the apk you created in release mode with updated `android:versionCode="v"`.
 2. Add release name and fill "What is new" section. 
@@ -23,7 +23,7 @@ To make an internal test release, open the Google Play Console -> Release manage
 The `Opt-in URL` address with published apk can be found on `Manage testers` panel or as a hyperlink on `Dashboard`. 
 The publish process can take from several minutes to even sever hours (see publish status on overall Dashboard).
 
-## Before the first release (Google Play Console )
+## Before the first release (Google Play Console)
 * Fill all info and add all necessary files to `Store listing` in `Store presence` section. Do not forget about privacy policy.
 * Fill form in `Pricing & distribution ` in `Store presence` section.
 
