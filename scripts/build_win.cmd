@@ -87,6 +87,7 @@ xcopy %INPUT_SDK_DIR%\bin\hdf5_hl.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\libeay32.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\ssleay32.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\geodiff.dll %STAGE_PATH%\ /Y 
+xcopy %INPUT_SDK_DIR%\bin\protobuf-lite.dll %STAGE_PATH%\ /Y
 
 rem qgis providers
 xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y 
