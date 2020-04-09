@@ -4,8 +4,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-
-
+#include <algorithm>
+#include <QFile>
 
 MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
 {
@@ -31,7 +31,8 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
     QList<int> versions;
     for ( QString key : history.keys() )
       versions << key.mid( 1 ).toInt();
-    qSort( versions );
+    std::sort( versions.begin(), versions.end() );
+
     if ( versions.count() > 0 )
     {
       merginFile.pullCanUseDiff = true;

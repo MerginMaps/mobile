@@ -3,7 +3,7 @@
 
 #include <QDateTime>
 #include <QList>
-
+#include <QJsonObject>
 
 struct MerginFile
 {

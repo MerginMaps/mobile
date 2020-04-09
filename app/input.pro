@@ -128,7 +128,10 @@ ios {
       $${QGIS_BUILD_DIR}/src/core \
       $${QGIS_BUILD_DIR}/src/quickgui
   }
+}
 
+# Linux only
+!mac:!ios:!win32:!android {
   exists($${QGIS_LIB_DIR}/libqgis_core.so) {
     message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core.so")
   } else {
@@ -138,6 +141,19 @@ ios {
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
   LIBS += -L$${QGIS_LIB_DIR}
   LIBS += -lqgis_core -lqgis_quick
+}
+
+# android only
+android {
+  exists($${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so) {
+    message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
+  } else {
+        error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
+  }
+
+  INCLUDEPATH += $${QGIS_INCLUDE_DIR}
+  LIBS += -L$${QGIS_LIB_DIR}
+  LIBS += -lqgis_core_$${ANDROID_TARGET_ARCH} -lqgis_quick_$${ANDROID_TARGET_ARCH}
 }
 
 # geodiff support
@@ -195,13 +211,12 @@ CONFIG(debug, debug|release) {
 QT += quick qml xml concurrent positioning sensors quickcontrols2
 QT += network svg sql
 QT += opengl
+QT += core
 
-ios {
-  QT += core
-}
 !ios {
   QT += printsupport
 }
+
 android {
   QT += androidextras
 }

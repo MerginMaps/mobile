@@ -9,10 +9,10 @@ else
     BUILD_DIR=${SOURCE_DIR}/${BUILD_FOLDER}
 fi
 if [[ -z ${ARCH+x} ]]; then
-    ARCH=armv7
+    ARCH=armeabi-v7a
 fi
 INSTALL_DIR=${BUILD_DIR}/out
-QT_ANDROID=${QT_ANDROID_BASE}/android_${ARCH}
+QT_ANDROID=${QT_ANDROID_BASE}/android
 
 set -e
 
@@ -38,7 +38,8 @@ ln -s ${BUILD_DIR}/.gradle /root/.gradle
 
 pushd ${BUILD_DIR}
 cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
-${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
+${QT_ANDROID}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
+${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 
@@ -47,19 +48,20 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
 	    --sign ${SOURCE_DIR}/Input_keystore.keystore input \
 	    --storepass ${STOREPASS} \
 	    --keypass ${STOREPASS} \
-        --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
+        --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${ANDROID_NDK_PLATFORM} \
 	    --gradle
 else
     ${QT_ANDROID}/bin/androiddeployqt \
-        --input ${BUILD_DIR}/android-libInput.so-deployment-settings.json \
+        --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${ANDROID_NDK_PLATFORM} \
 	    --gradle
 fi
+
+# 	    --android-platform ${SDK_PLATFORM} \
+
 
 chown -R $(stat -c "%u" .):$(stat -c "%u" .) .
 popd

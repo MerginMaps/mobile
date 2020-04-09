@@ -6,10 +6,12 @@ android {
 
     # this makes the manifest visible from Qt Creator
     DISTFILES += $$OUT_PWD/android_patched/AndroidManifest.xml
+    DISTFILES += $$OUT_PWD/res/xml/file_paths.xml
+    DISTFILES += $$PWD/build.gradle
 
     # packaging
     ANDROID_EXTRA_LIBS += \
-        $${QGIS_LIB_DIR}/libcrypto.so \
+        $${QGIS_LIB_DIR}/libcrypto_1_1.so \
         $${QGIS_LIB_DIR}/libexpat.so \
         $${QGIS_LIB_DIR}/libgeodiff.so \
         $${QGIS_LIB_DIR}/libgeos.so \
@@ -18,37 +20,37 @@ android {
         $${QGIS_LIB_DIR}/libcharset.so \
         $${QGIS_LIB_DIR}/libiconv.so \
         $${QGIS_LIB_DIR}/libfreexl.so \
-        $${QGIS_LIB_DIR}/libtiff.so \
         $${QGIS_LIB_DIR}/libgdal.so \
         $${QGIS_LIB_DIR}/libproj.so \
         $${QGIS_LIB_DIR}/libspatialindex.so \
         $${QGIS_LIB_DIR}/libpq.so \
         $${QGIS_LIB_DIR}/libspatialite.so \
-        $${QGIS_LIB_DIR}/libqca-qt5.so \
-        $${QGIS_LIB_DIR}/libqgis_core.so \
-        $${QGIS_LIB_DIR}/libqgis_quick.so \
-        $${QGIS_LIB_DIR}/libqgis_native.so \
-        $${QGIS_LIB_DIR}/libqt5keychain.so \
+        $${QGIS_LIB_DIR}/libprotobuf-lite.so \
+        $${QGIS_LIB_DIR}/libqca-qt5_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libqgis_native_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libqt5keychain_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libzip.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider.so \
-        $${QGIS_LIB_DIR}/libdelimitedtextprovider.so \
-        $${QGIS_LIB_DIR}/libgpxprovider.so \
-        $${QGIS_LIB_DIR}/libmssqlprovider.so \
-        $${QGIS_LIB_DIR}/libowsprovider.so \
-        $${QGIS_LIB_DIR}/libpostgresprovider.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider.so \
-        $${QGIS_LIB_DIR}/libssl.so \
-        $${QGIS_LIB_DIR}/libwcsprovider.so \
-        $${QGIS_LIB_DIR}/libwfsprovider.so \
-        $${QGIS_LIB_DIR}/libwmsprovider.so \
-        $$QT_LIBS_DIR/libQt5OpenGL.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport.so \
-        $$QT_LIBS_DIR/libQt5Sensors.so \
-        $$QT_LIBS_DIR/libQt5Network.so \
-        $$QT_LIBS_DIR/libQt5Sql.so \
-        $$QT_LIBS_DIR/libQt5Svg.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras.so \
-
+        $${QGIS_LIB_DIR}/libspatialiteprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libdelimitedtextprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libgpxprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libmssqlprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libowsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libpostgresprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libspatialiteprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libssl_1_1.so \
+        $${QGIS_LIB_DIR}/libwcsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libwfsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libwmsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5Sensors_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5Network_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5Sql_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so \
 
     ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
 }

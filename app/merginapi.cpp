@@ -1085,6 +1085,9 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   QString dest = projectDir + "/" + filePath;
   QString basefile = projectDir + "/.mergin/" + filePath;
 
+  // TODO where the conflict file should be located?
+  QString conflictfile = projectDir + "/.mergin/" + filePath + ".conflict";
+
   createPathIfNotExists( dest );
   createPathIfNotExists( basefile );
 
@@ -1114,7 +1117,11 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   // now we are ready for the update of our local file
   //
 
-  int res = GEODIFF_rebase( basefile.toUtf8().constData(), src.toUtf8().constData(), dest.toUtf8().constData() );
+  int res = GEODIFF_rebase( basefile.toUtf8().constData(),
+                            src.toUtf8().constData(),
+                            dest.toUtf8().constData(),
+                            conflictfile.toUtf8().constData()
+                          );
   if ( res == GEODIFF_SUCCESS )
   {
     InputUtils::log( "pull " + projectFullName, "geodiff rebase successful: " + filePath );
