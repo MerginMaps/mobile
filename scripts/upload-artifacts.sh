@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
+ls build-${ARCH}/out/build/outputs/apk/release/
+
 if [ -n "${STOREPASS}" ]; then
     export BUILD_FILE=build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
     export SIGNED="signed"
 else
-    export BUILD_FILE=build-${ARCH}/out/build/outputs/apk/debug/out-debug.apk
+    export BUILD_FILE=build-${ARCH}/out/build/outputs/apk/debug/android-build-debug.apk
     export SIGNED="debug"
 fi
 export GITHUB_REPO=lutraconsulting/input

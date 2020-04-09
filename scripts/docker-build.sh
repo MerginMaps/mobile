@@ -9,10 +9,10 @@ else
     BUILD_DIR=${SOURCE_DIR}/${BUILD_FOLDER}
 fi
 if [[ -z ${ARCH+x} ]]; then
-    ARCH=armv7
+    ARCH=armeabi-v7a
 fi
 INSTALL_DIR=${BUILD_DIR}/out
-QT_ANDROID=${QT_ANDROID_BASE}/android_${ARCH}
+QT_ANDROID=${QT_ANDROID_BASE}/android
 
 set -e
 
@@ -38,7 +38,8 @@ ln -s ${BUILD_DIR}/.gradle /root/.gradle
 
 pushd ${BUILD_DIR}
 cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
-${QT_ANDROID}/bin/qmake ${SOURCE_DIR}/app/input.pro
+${QT_ANDROID}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
+${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
 make
 make install INSTALL_ROOT=${INSTALL_DIR}
 

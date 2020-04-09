@@ -25,6 +25,7 @@ android {
         $${QGIS_LIB_DIR}/libspatialindex.so \
         $${QGIS_LIB_DIR}/libpq.so \
         $${QGIS_LIB_DIR}/libspatialite.so \
+        $${QGIS_LIB_DIR}/libprotobuf-lite.so \
         $${QGIS_LIB_DIR}/libqca-qt5_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
@@ -50,8 +51,6 @@ android {
         $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/../plugins/platforms/libplugins_platforms_qtforandroid_$${ANDROID_TARGET_ARCH}.so
-
 
     ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
 }
