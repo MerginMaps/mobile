@@ -51,14 +51,14 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${ANDROID_NDK_PLATFORM} \
+	    --android-platform ${SDK_PLATFORM} \
 	    --gradle
 else
     ${QT_ANDROID}/bin/androiddeployqt \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${ANDROID_NDK_PLATFORM} \
+	    --android-platform ${SDK_PLATFORM} \
 	    --gradle
 fi
 
