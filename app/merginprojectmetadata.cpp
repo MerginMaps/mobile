@@ -31,7 +31,7 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
     QList<int> versions;
     for ( QString key : history.keys() )
       versions << key.mid( 1 ).toInt();
-    std::sort(versions.begin(), versions.end());
+    std::sort( versions.begin(), versions.end() );
 
     if ( versions.count() > 0 )
     {
