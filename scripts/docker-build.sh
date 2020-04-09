@@ -51,16 +51,17 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${SDK_PLATFORM} \
 	    --gradle
 else
     ${QT_ANDROID}/bin/androiddeployqt \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
-	    --android-platform ${SDK_PLATFORM} \
 	    --gradle
 fi
+
+# 	    --android-platform ${SDK_PLATFORM} \
+
 
 chown -R $(stat -c "%u" .):$(stat -c "%u" .) .
 popd
