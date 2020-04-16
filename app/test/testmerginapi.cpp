@@ -1000,7 +1000,7 @@ void TestMerginApi::testDiffUpdateBasic()
 
   QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl0->isValid() );
-  QCOMPARE( vl0->featureCount(), 3 );
+  QCOMPARE( vl0->featureCount(), static_cast<long>( 3 ) );
   delete vl0;
 
   //
@@ -1022,7 +1022,7 @@ void TestMerginApi::testDiffUpdateBasic()
 
   QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl->isValid() );
-  QCOMPARE( vl->featureCount(), 4 );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 4 ) );
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
@@ -1062,7 +1062,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
 
   QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl0->isValid() );
-  QCOMPARE( vl0->featureCount(), 3 );
+  QCOMPARE( vl0->featureCount(), static_cast<long>( 3 ) );
   vl0->startEditing();
   QgsFeature f( vl0->fields() );
   f.setAttribute( "name", "def" );
@@ -1070,7 +1070,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   f.setGeometry( QgsGeometry::fromPointXY( QgsPointXY( 4, 5 ) ) );
   vl0->addFeature( f );
   vl0->commitChanges();
-  QCOMPARE( vl0->featureCount(), 4 );
+  QCOMPARE( vl0->featureCount(), static_cast<long>( 4 ) );
   delete vl0;
 
   // check that the file is marked as changed
@@ -1096,7 +1096,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
 
   QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl->isValid() );
-  QCOMPARE( vl->featureCount(), 5 );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 5 ) );
   delete vl;
 
   // like before the update - there should be locally modified base.gpkg with the changes we did
@@ -1150,7 +1150,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
 
   // check that geodiff knows there was one added feature
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
-  QCOMPARE( changes, "ERROR" );  // local diff should fail
+  QCOMPARE( changes, QString( "ERROR" ) );  // local diff should fail
 
   // update our local version now
   downloadRemoteProject( mApi, mUsername, projectName );
@@ -1209,7 +1209,7 @@ void TestMerginApi::testUpdateWithDiffs()
 
   QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl->isValid() );
-  QCOMPARE( vl->featureCount(), 5 );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 5 ) );
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );

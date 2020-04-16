@@ -1081,7 +1081,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   // - if they were not modified locally, the server changes will be simply applied
   // - if they were modified locally, local changes will be rebased on top of server changes
 
-  QString src = tempDir + "/" + QUuid::createUuid().toString( QUuid::WithoutBraces );
+  QString src = tempDir + "/" + _uuidWithoutBraces( QUuid::createUuid() );
   QString dest = projectDir + "/" + filePath;
   QString basefile = projectDir + "/.mergin/" + filePath;
 
@@ -2028,7 +2028,7 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
-    QString chunkID = QUuid::createUuid().toString( QUuid::WithoutBraces );
+    QString chunkID = _uuidWithoutBraces( QUuid::createUuid() );
     chunks.append( chunkID );
   }
   return chunks;

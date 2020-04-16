@@ -111,6 +111,7 @@ ios {
       $${QGIS_SRC_DIR}/src/core/composer \
       $${QGIS_SRC_DIR}/src/core/fieldformatter \
       $${QGIS_SRC_DIR}/src/core/geometry \
+      $${QGIS_SRC_DIR}/src/core/labeling \
       $${QGIS_SRC_DIR}/src/core/layertree \
       $${QGIS_SRC_DIR}/src/core/layout \
       $${QGIS_SRC_DIR}/src/core/locator \

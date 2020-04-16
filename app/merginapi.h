@@ -16,6 +16,17 @@
 
 #include <QPointer>
 
+inline QString _uuidWithoutBraces( const QUuid &uuid )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
+  return uuid.toString( QUuid::WithoutBraces );
+#else
+  QString str = uuid.toString();
+  str = str.mid( 1, str.length() - 2 );  // remove braces
+  return str;
+#endif
+}
+
 
 struct ProjectDiff
 {
@@ -84,7 +95,7 @@ struct DownloadQueueItem
   DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false )
     : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
   {
-    tempFileName = QUuid::createUuid().toString( QUuid::WithoutBraces );
+    tempFileName = _uuidWithoutBraces( QUuid::createUuid() );
   }
 
   QString filePath;          //!< path within the project
