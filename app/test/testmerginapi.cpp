@@ -402,7 +402,10 @@ void TestMerginApi::testUploadProject()
   spyY.wait( LONG_REPLY );
   QCOMPARE( spyY.count(), 1 );
 
+  QSignalSpy spyCancel( mApi, &MerginApi::uploadCanceled );
   mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  spyCancel.wait( LONG_REPLY );
+  QCOMPARE( spyCancel.count(), 1 );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spyX.count(), 1 );

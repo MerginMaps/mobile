@@ -1793,6 +1793,8 @@ void MerginApi::uploadCancelReplyFinished()
     InputUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
   }
 
+  emit uploadCanceled( projectFullName, r->error() == QNetworkReply::NoError );
+
   r->deleteLater();
 }
 

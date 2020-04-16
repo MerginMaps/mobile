@@ -246,6 +246,7 @@ class MerginApi: public QObject
      * If upload has not started yet and a client is waiting for transaction UUID, it cancels the procedure just on client side
      * without sending cancel request to the server.
      * \param projectFullName Project's full name to cancel its upload
+     * \note uploadCanceled() signal is emitted when the reply to the cancel request is received
      */
     Q_INVOKABLE void uploadCancel( const QString &projectFullName );
 
@@ -382,6 +383,8 @@ class MerginApi: public QObject
     //! Emitted when started to upload chunks (useful for unit testing)
     void pushFilesStarted();
     void infoProjectFinished( const ProjectDiff &projectDiff, const QString &projectDir );
+    //! Emitted when upload cancellation request has finished
+    void uploadCanceled( const QString &projectFullName, bool result );
 
   private slots:
     void listProjectsReplyFinished();
