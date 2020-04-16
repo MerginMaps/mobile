@@ -180,6 +180,10 @@ struct MerginProjectListEntry
 
 typedef QList<MerginProjectListEntry> MerginProjectList;
 
+typedef QHash<QString,TransactionStatus> Transactions;
+
+Q_DECLARE_METATYPE( Transactions );
+
 
 class MerginApi: public QObject
 {
@@ -349,12 +353,12 @@ class MerginApi: public QObject
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
     //! Returns details about currently active transactions (both download and upload). Useful for tests
-    QHash<QString, TransactionStatus> transactions() const { return mTransactionalStatus; }
+    Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
 
   signals:
-    void listProjectsFinished( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects );
+    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     /**
@@ -506,7 +510,7 @@ class MerginApi: public QObject
       AttrTempFileName    = QNetworkRequest::User + 1,
     };
 
-    QHash<QString, TransactionStatus> mTransactionalStatus; //projectFullname -> transactionStatus
+    Transactions mTransactionalStatus; //projectFullname -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;
     static const QSet<QString> sIgnoreFiles;
     QEventLoop mAuthLoopEvent;

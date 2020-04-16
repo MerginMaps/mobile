@@ -27,6 +27,8 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
 {
+  qRegisterMetaType<Transactions>();
+
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
