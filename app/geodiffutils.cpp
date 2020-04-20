@@ -83,6 +83,12 @@ GeodiffUtils::ChangesetSummary GeodiffUtils::parseChangesetSummary( const QStrin
 
 bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles )
 {
+  if ( diffFiles.isEmpty() )
+  {
+    InputUtils::log( "GEODIFF", "assemble server file fail: no input diff files!" );
+    return false;
+  }
+
   for ( QString diffFile : diffFiles )
   {
     int res = GEODIFF_applyChangeset( src.toUtf8().constData(), diffFile.toUtf8().constData() );
