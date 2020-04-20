@@ -100,6 +100,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebase" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebaseFailed" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithDiffs" );
+  deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithMissedVersion" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -1217,6 +1218,45 @@ void TestMerginApi::testUpdateWithDiffs()
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+}
+
+void TestMerginApi::testUpdateWithMissedVersion()
+{
+  // when updating from v3 to v4, it is expected that we will get references to diffs for v2-v3 and v3-v4.
+  // There was a bug where we always ignored the first one. But it could happen that there is no update in v2-v3,
+  // and we ended up ignoring v3-v4, ending up with broken basefiles.
+
+  // 1. [extra] create project, upload .gpkg (v1)
+  // 3. [extra] upload a new file (v2)
+  // 2. [main]  download project (v2)
+  // 4. [extra] upload updated .gpkg (v3)
+  // 5. [main]  update from v2 to v3
+
+  QString projectName = "testUpdateWithMissedVersion";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  // step 1
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+  // step 2
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  writeFileContent( projectDirExtra + "/file1.txt", QByteArray( "hello" ) );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  // step 3
+  downloadRemoteProject( mApi, mUsername, projectName );
+  // step 4
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  // step 5
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that added row in v3 has been added in our local file too
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 4 ) );
+  delete vl;
 }
 
 //////// HELPER FUNCTIONS ////////

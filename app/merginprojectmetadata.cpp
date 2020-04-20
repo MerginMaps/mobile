@@ -36,8 +36,6 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
     if ( versions.count() > 0 )
     {
       merginFile.pullCanUseDiff = true;
-      // remove the first version (which we already have)
-      versions.removeAt( 0 );
       for ( int key : versions )
       {
         QJsonObject obj = history.value( QString( "v%1" ).arg( key ) ).toObject();

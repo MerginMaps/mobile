@@ -697,7 +697,8 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   if ( projectInfo.isValid() )
   {
     // let's also fetch the recent history of diffable files
-    sinceVersion = projectInfo.localVersion;
+    // (the "since" is inclusive, so if we are on v2, we want to use since=v3 which will include v2->v3, v3->v4, ...)
+    sinceVersion = projectInfo.localVersion + 1;
   }
 
   QUrlQuery query;
@@ -1090,6 +1091,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   // TODO where the conflict file should be located?
   QString conflictfile = projectDir + "/.mergin/" + filePath + ".conflict";
 
+  createPathIfNotExists( src );
   createPathIfNotExists( dest );
   createPathIfNotExists( basefile );
 
@@ -1104,11 +1106,16 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   if ( !QFile::copy( basefile, src ) )
   {
     InputUtils::log( "pull " + projectFullName, "assemble server file fail: copying failed " + basefile + " to " + src );
+
+    // TODO: this is a critical failure - we should abort pull
   }
 
   if ( !GeodiffUtils::applyDiffs( src, diffFiles ) )
   {
     InputUtils::log( "pull " + projectFullName, "server file assembly failed: " + filePath );
+
+    // TODO: this is a critical failure - we should abort pull
+    // TODO: we could try to delete the basefile and re-download it from scratch on next sync
   }
   else
   {
@@ -1152,10 +1159,14 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   if ( !QFile::remove( basefile ) )
   {
     InputUtils::log( "pull " + projectFullName, "failed removal of old basefile: " + filePath );
+
+    // TODO: this is a critical failure - we should abort pull
   }
   if ( !QFile::rename( src, basefile ) )
   {
     InputUtils::log( "pull " + projectFullName, "failed rename of basefile using new server content: " + filePath );
+
+    // TODO: this is a critical failure - we should abort pull
   }
 }
 
