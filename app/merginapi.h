@@ -15,6 +15,7 @@
 
 
 #include <QPointer>
+#include <QSet>
 
 
 struct ProjectDiff
