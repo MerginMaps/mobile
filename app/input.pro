@@ -25,7 +25,7 @@ mac {
   QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/qml
   QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
 
-  QGIS_QUICK_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib/qgis_quick.framework
+  QGIS_QUICK_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_quick.framework
   QGIS_NATIVE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework
   QGIS_CORE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework
 
@@ -72,11 +72,11 @@ ios {
     LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
     LIBS += -lexpat -lcharset -lfreexl
-    LIBS += -ltiff -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
+    LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
     LIBS += -lzip -liconv -lbz2
-    LIBS += -lqgis_quick_plugin
+    LIBS += -lqgis_quick_plugin -lprotobuf-lite
     # static providers
-    LIBS += -lwmsprovider_a
+    LIBS += -lwmsprovider_a -lpostgresprovider_a
 
     RESOURCES += $$QGIS_QML_DIR/QgsQuick/qgsquick.qrc
     RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc
