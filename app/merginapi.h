@@ -15,6 +15,7 @@
 
 
 #include <QPointer>
+#include <QSet>
 
 inline QString _uuidWithoutBraces( const QUuid &uuid )
 {
