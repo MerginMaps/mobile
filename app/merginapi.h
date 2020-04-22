@@ -179,7 +179,7 @@ struct MerginProjectListEntry
 
 typedef QList<MerginProjectListEntry> MerginProjectList;
 
-typedef QHash<QString,TransactionStatus> Transactions;
+typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
