@@ -157,7 +157,7 @@ static void setEnvironmentQgisPrefixPath()
 static void copy_demo_projects( const QString &projectDir )
 {
 #if defined (ANDROID) || defined (Q_OS_IOS)
-  InputUtils::cpDir("assets:/demo-projects", projectDir );
+  InputUtils::cpDir( "assets:/demo-projects", projectDir );
 #elif defined (Q_OS_WIN32)
   InputUtils::cpDir( QCoreApplication::applicationDirPath() + "/demo-projects", projectDir );
 #else
@@ -193,35 +193,38 @@ static void init_qgis( const QString &pkgPath )
 
 static void init_proj( const QString &pkgPath )
 {
-  #ifdef MOBILE_OS
-    #ifdef ANDROID
-      // win and ios resources are already in the bundle
-      InputUtils::cpDir( "assets:/qgis-data", pkgPath );
-      QString prefixPath = pkgPath + "/resources";
-      QString projFilePath = prefixPath + "/proj.db";
-    #endif
+#ifdef MOBILE_OS
+#ifdef ANDROID
+  // win and ios resources are already in the bundle
+  InputUtils::cpDir( "assets:/qgis-data", pkgPath );
+  QString prefixPath = pkgPath + "/resources";
+  QString projFilePath = prefixPath + "/proj.db";
+#endif
 
-    #ifdef Q_OS_IOS
-      QString prefixPath = pkgPath + "/resources";
-      QString projFilePath = prefixPath + "/proj.db";
-    #endif
+#ifdef Q_OS_IOS
+  QString prefixPath = pkgPath + "/resources";
+  QString projFilePath = prefixPath + "/proj.db";
+#endif
 
-    #ifdef Q_OS_WIN32
-      QString prefixPath = pkgPath + "\\resources";
-      QString projFilePath = prefixPath + "\\proj.db";
-    #endif
+#ifdef Q_OS_WIN32
+  QString prefixPath = pkgPath + "\\resources";
+  QString projFilePath = prefixPath + "\\proj.db";
+#endif
 
-    qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
-    qDebug( "PROJ6 resources: %s", prefixPath.toLatin1().data() );
+  qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
+  qDebug( "PROJ6 resources: %s", prefixPath.toLatin1().data() );
 
-    QFile projdb( projFilePath );
-    if ( !projdb.exists() ) {
-      InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
-    }
-  #else
-    // set PROJ_LIB manually in ENV on desktop?
-    Q_UNUSED( pkgPath )
-  #endif
+  QFile projdb( projFilePath );
+  if ( !projdb.exists() )
+  {
+    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
+  }
+
+#else
+  // set PROJ_LIB manually in ENV on desktop?
+  Q_UNUSED( pkgPath )
+#endif
+
 }
 
 void initDeclarative()
@@ -302,8 +305,9 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
 #endif
 #ifdef Q_OS_WIN32
-  appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data"
+  appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
 #endif
+
   init_proj( appBundleDir );
   init_qgis( appBundleDir );
 
