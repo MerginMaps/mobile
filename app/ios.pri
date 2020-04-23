@@ -1,9 +1,14 @@
 ios {
     # https://doc.qt.io/qt-5.9/platform-notes-ios.html
 
-    crsFiles.files = $$files(android/assets/qgis-data/resources/*.db)
+    crsFiles.files = $$files(android/assets/qgis-data/resources/*)
     crsFiles.path = qgis-data/resources
     QMAKE_BUNDLE_DATA += crsFiles
+
+    # proj
+    projFiles.files = $$files(android/assets/qgis-data/proj/*)
+    projFiles.path = qgis-data/proj
+    QMAKE_BUNDLE_DATA += projFiles
 
     # app icon
     QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets

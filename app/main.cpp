@@ -1,4 +1,4 @@
-// Copyright 2017 Lutra Consulting Limited
+// Copyright 2020 Lutra Consulting Limited
 
 #define STR1(x)  #x
 #define STR(x)  STR1(x)
@@ -153,25 +153,11 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
-// Copies resources folder to package folder
-static void expand_pkg_data( const QString &pkgPath )
-{
-
-#if defined (ANDROID)
-  QString assetsBasePath( "assets:" );
-  InputUtils::cpDir( assetsBasePath + "/qgis-data", pkgPath );
-#else
-  Q_UNUSED( pkgPath );
-#endif
-// on IOS and WIN32 the files are already in the bundle
-}
 
 static void copy_demo_projects( const QString &projectDir )
 {
 #if defined (ANDROID) || defined (Q_OS_IOS)
-  QString assetsBasePath( "assets:" );
-  qDebug( "assets base path:  %s", assetsBasePath.toLatin1().data() );
-  InputUtils::cpDir( assetsBasePath + "/demo-projects", projectDir );
+  InputUtils::cpDir( "assets:/demo-projects", projectDir );
 #elif defined (Q_OS_WIN32)
   InputUtils::cpDir( QCoreApplication::applicationDirPath() + "/demo-projects", projectDir );
 #else
@@ -183,12 +169,6 @@ static void init_qgis( const QString &pkgPath )
 {
   QTime t;
   t.start();
-
-#ifdef Q_OS_WIN32
-// PROJ3
-  QString prefixPath = QCoreApplication::applicationDirPath() + "\\share\\proj";
-  qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
-#endif
 
   QgsApplication::init();
 
@@ -208,6 +188,47 @@ static void init_qgis( const QString &pkgPath )
 
   qDebug( "qgis_init %f [s]", t.elapsed() / 1000.0 );
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
+
+}
+
+static void init_proj( const QString &pkgPath )
+{
+#ifdef MOBILE_OS
+#ifdef ANDROID
+  // win and ios resources are already in the bundle
+  InputUtils::cpDir( "assets:/qgis-data", pkgPath );
+  QString prefixPath = pkgPath + "/proj";
+  QString projFilePath = prefixPath + "/proj.db";
+#endif
+
+#ifdef Q_OS_IOS
+  QString prefixPath = pkgPath + "/proj";
+  QString projFilePath = prefixPath + "/proj.db";
+#endif
+
+#ifdef Q_OS_WIN32
+  QString prefixPath = pkgPath + "\\proj";
+  QString projFilePath = prefixPath + "\\proj.db";
+#endif
+
+  qDebug( "PROJ6 resources: %s", prefixPath.toLatin1().data() );
+  QFile projdb( projFilePath );
+  if ( projdb.exists() )
+  {
+    qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
+  }
+  else
+  {
+    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
+  }
+
+#else
+  // proj share lib is set from the proj installation on the desktop,
+  // so it should work without any modifications.
+  // to test check QgsProjUtils.searchPaths() in QGIS Python Console
+  Q_UNUSED( pkgPath )
+#endif
+
 }
 
 void initDeclarative()
@@ -282,13 +303,17 @@ int main( int argc, char *argv[] )
 
   QString appBundleDir;
 #ifdef ANDROID
-  appBundleDir = dataDir;
+  appBundleDir = dataDir + "/qgis-data";
 #endif
 #ifdef Q_OS_IOS
-  appBundleDir = QCoreApplication::applicationDirPath();
+  appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
 #endif
-  init_qgis( QString( "%1/qgis-data" ).arg( appBundleDir ) );
-  expand_pkg_data( QgsApplication::pkgDataPath() );
+#ifdef Q_OS_WIN32
+  appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
+#endif
+
+  init_proj( appBundleDir );
+  init_qgis( appBundleDir );
 
   // Create Input classes
   AndroidUtils au;

@@ -273,7 +273,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
-    qDebug() << "Cannnot make path " << dstPath;
+    qDebug() << "Cannot make path " << dstPath;
     return false;
   }
 
@@ -302,12 +302,11 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
           log( "cpDir", QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
           result =  false;
         }
-        else if ( !QFile::copy( srcItemPath, dstItemPath ) )
+        if ( !QFile::copy( srcItemPath, dstItemPath ) )
         {
           log( "cpDir", QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
           result =  false;
         }
-
       }
       QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
     }
