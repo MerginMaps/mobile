@@ -273,7 +273,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
-    qDebug() << "Cannnot make path " << dstPath;
+    qDebug() << "Cannot make path " << dstPath;
     return false;
   }
 

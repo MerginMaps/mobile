@@ -92,10 +92,6 @@ xcopy %INPUT_SDK_DIR%\bin\protobuf-lite.dll %STAGE_PATH%\ /Y
 rem qgis providers
 xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y 
 
-rem proj3
-if not exist %STAGE_PATH%\share  mkdir %STAGE_PATH%\share
-robocopy %INPUT_SDK_DIR%\share\proj %STAGE_PATH%\share\proj /E
-
 rem qml
 robocopy %INPUT_SDK_DIR%\qml %STAGE_PATH%\qml /E
 robocopy %INPUT_SDK_DIR%\images\QgsQuick %STAGE_PATH%\images\QgsQuick /E
