@@ -197,31 +197,35 @@ static void init_proj( const QString &pkgPath )
 #ifdef ANDROID
   // win and ios resources are already in the bundle
   InputUtils::cpDir( "assets:/qgis-data", pkgPath );
-  QString prefixPath = pkgPath + "/resources";
+  QString prefixPath = pkgPath + "/proj";
   QString projFilePath = prefixPath + "/proj.db";
 #endif
 
 #ifdef Q_OS_IOS
-  QString prefixPath = pkgPath + "/resources";
+  QString prefixPath = pkgPath + "/proj";
   QString projFilePath = prefixPath + "/proj.db";
 #endif
 
 #ifdef Q_OS_WIN32
-  QString prefixPath = pkgPath + "\\resources";
+  QString prefixPath = pkgPath + "\\proj";
   QString projFilePath = prefixPath + "\\proj.db";
 #endif
 
-  qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
   qDebug( "PROJ6 resources: %s", prefixPath.toLatin1().data() );
-
   QFile projdb( projFilePath );
-  if ( !projdb.exists() )
+  if ( projdb.exists() )
+  {
+    qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
+  }
+  else
   {
     InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
   }
 
 #else
-  // set PROJ_LIB manually in ENV on desktop?
+  // proj share lib is set from the proj installation on the desktop,
+  // so it should work without any modifications.
+  // to test check QgsProjUtils.searchPaths() in QGIS Python Console
   Q_UNUSED( pkgPath )
 #endif
 

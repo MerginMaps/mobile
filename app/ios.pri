@@ -5,6 +5,11 @@ ios {
     crsFiles.path = qgis-data/resources
     QMAKE_BUNDLE_DATA += crsFiles
 
+    # proj
+    projFiles.files = $$files(android/assets/qgis-data/proj/*)
+    projFiles.path = qgis-data/proj
+    QMAKE_BUNDLE_DATA += projFiles
+
     # app icon
     QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
