@@ -50,15 +50,15 @@ android {
         $$QT_LIBS_DIR/libQt5Sql_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so
 
     # looks like it works on Mac, but not on Linux (Travis) to add these automatically
     # check https://bugreports.qt.io/browse/QTBUG-81974
     ANDROID_EXTRA_LIBS += \
         $$QT_LIBS_DIR/../plugins/sensors/libplugins_sensors_qtsensors_android_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/../plugins/sensors/plugins/sensors/libplugins_sensors_qtsensors_generic_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/../plugins/sensors/plugins/sensorgestures/libplugins_sensorgestures_qtsensorgestures_plugin_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/../plugins/sensors/plugins/sensorgestures/libplugins_sensorgestures_qtsensorgestures_shakeplugin_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/../plugins/sensors/libplugins_sensors_qtsensors_generic_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/../plugins/sensorgestures/libplugins_sensorgestures_qtsensorgestures_plugin_$${ANDROID_TARGET_ARCH}.so \
+        $$QT_LIBS_DIR/../plugins/sensorgestures/libplugins_sensorgestures_qtsensorgestures_shakeplugin_$${ANDROID_TARGET_ARCH}.so
 
     ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
 }
