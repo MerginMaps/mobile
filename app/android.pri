@@ -46,7 +46,7 @@ android {
         $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Sensors_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/../plugins/sensor/libplugins_sensors_qtsensors_android_$${ANDROID_TARGET_ARCH}.so
+        $$QT_LIBS_DIR/../plugins/sensor/libplugins_sensors_qtsensors_android_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Network_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Sql_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
