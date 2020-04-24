@@ -102,10 +102,8 @@ robocopy %INPUT_SDK_DIR%\qml %STAGE_PATH%\qml /E
 robocopy %INPUT_SDK_DIR%\images\QgsQuick %STAGE_PATH%\images\QgsQuick /E
 
 rem system
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll %STAGE_PATH%\ /Y
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vccorlib140.dll %STAGE_PATH%\ /Y
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll %STAGE_PATH%\ /Y
-xcopy %INPUT_SDK_DIR%\bin\msvcr100.dll %STAGE_PATH%\ /Y
+xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\*.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\bin\ms*.dll %STAGE_PATH%\ /Y
 
 rem Qt5
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Sql.dll %STAGE_PATH%\ /Y
