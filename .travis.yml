@@ -14,7 +14,7 @@ before_install:
 - pip3 install dropbox
 
 script:
-- export SDK_VERSION=android-8
+- export SDK_VERSION=android-9
 - export INPUT_SDK=lutraconsulting/input-sdk:${SDK_VERSION}
 - docker pull ${INPUT_SDK}
 - docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${INPUT_SDK} /usr/src/input/scripts/docker-build.sh
@@ -30,4 +30,3 @@ jobs:
     name: "Build arm64-v8a"
     env:
     - ARCH=arm64-v8a
-
