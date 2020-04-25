@@ -110,6 +110,7 @@ xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\qca-qt5.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\qt5keychain.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Positioning.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Location.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Sensors.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickTemplates2.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickControls2.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickWidgets.dll %STAGE_PATH%\ /Y
