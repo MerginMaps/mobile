@@ -20,6 +20,7 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
+#include <QGeoPositionInfo>
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -255,6 +256,12 @@ void initTestDeclarative()
 int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
+
+// Without this QGeoPositionInfo the application on windows will not
+// request permission for location services and just hangs
+// see https://github.com/lutraconsulting/input/issues/624
+  QGeoPositionInfo info;
+  info.isValid();
 
   QString version;
 #ifdef INPUT_VERSION
