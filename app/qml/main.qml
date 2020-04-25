@@ -8,6 +8,10 @@ import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
 
+// Without this import, the application on windows will not
+// request permission for location services and just hangs
+// see https://github.com/lutraconsulting/input/issues/624
+import QtLocation 5.8
 
 import QtQuick.Dialogs 1.1
 import QgsQuick 0.1 as QgsQuick
