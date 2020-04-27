@@ -441,8 +441,7 @@ Item {
         id: contextMenu
         height: (projectNamespace && projectName) ? menuItemHeight * 2 : menuItemHeight
         width:Math.min( parent.width, 300 * QgsQuick.Utils.dp )
-        modal: true
-        dim: false
+        leftMargin: Math.max(parent.width - (width + projectsPanel.rowHeight), 0)
 
         MenuItem {
           height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
@@ -481,7 +480,7 @@ Item {
         projectsPanel.visible = false
       }
 
-      onMenuClicked:contextMenu.popup()
+      onMenuClicked:contextMenu.open()
     }
   }
 
