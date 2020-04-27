@@ -1,0 +1,40 @@
+# Build Input on MacOS (for development)
+
+Warnings: please change Qt and QGIS-Deps version according to your actual versions
+
+1. Check qgis/QGIS INSTALL for MacOS on QGIS project github
+2. Download and install Qt and QGIS-Mac-Deps from https://qgis.org/downloads/macos/deps
+3. Download geodiff, compile geodiff with SQLITE3 from QGIS-Deps
+```
+ cmake -DSYSTEM_SQLITE3=/opt/QGIS/qgis-deps-0.3.0/stage \
+ -DENABLE_TESTS=FALSE \
+ -DBUILD_TOOLS=OFF \
+ -DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
+ ../geodiff/geodiff/
+ 
+ make -j11
+ make install
+```
+4. Compile QGIS 
+```
+cmake -DWITH_GUI=OFF -DWITH_DESKTOP=OFF \
+-DWITH_BINDINGS=OFF -DENABLE_TESTS=OFF \
+-DWITH_QUICK=ON -DQGIS_MAC_DEPS_DIR:INTERNAL=/opt/QGIS/qgis-deps-0.3.0/stage \
+-DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
+-DCMAKE_PREFIX_PATH=/opt/Qt/5.14.1/clang_64 \
+-DWITH_QGIS_PROCESS=OFF -DQGIS_MACAPP_BUNDLE=-1 \
+../QGIS/
+make -j11 
+make install
+```
+
+5. Patch rpath
+```
+install_name_tool -add_rpath /opt/QGIS/qgis-deps-0.3.0/stage/lib /Users/peter/Projects/quick/build-QGIS-Desktop/output/lib/qgis_quick.framework/Versions/3.13/qgis_quick
+install_name_tool -add_rpath /opt/Qt/5.14.1/clang_64/lib /Users/peter/Projects/quick/build-QGIS-Desktop/output/lib/qgis_quick.framework/Versions/3.13/qgis_quick
+```
+
+6. Change config.pri to point to your `~/Projects/quick/Applications` folder for geodiff/qgis
+7. Open Input in Qt Creator
+8. Compile and run
+ 
