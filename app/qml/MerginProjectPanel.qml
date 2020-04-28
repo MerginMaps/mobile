@@ -441,7 +441,16 @@ Item {
         id: contextMenu
         height: (projectNamespace && projectName) ? menuItemHeight * 2 : menuItemHeight
         width:Math.min( parent.width, 300 * QgsQuick.Utils.dp )
-        leftMargin: Math.max(parent.width - (width + projectsPanel.rowHeight), 0)
+        leftMargin: Math.max(parent.width - width, 0)
+
+        //! sets y-offset either above or below related item according relative position to end of the list
+        onAboutToShow: {
+          var itemRelativeY = parent.y - grid.contentY
+          if (itemRelativeY + contextMenu.height >= grid.height)
+            contextMenu.y = -contextMenu.height
+          else
+            contextMenu.y = parent.height
+        }
 
         MenuItem {
           height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
