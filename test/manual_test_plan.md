@@ -1,0 +1,51 @@
+# Projects
+
+- [ ] Public projects are listed
+- [ ] Logging into Mergin
+- [ ] My Projects shown correctly
+- [ ] Shared with me projects are listed correctly
+- [ ] Download project is successful
+- [ ] Project appears in Home section
+- [ ] Project can be deleted
+
+# Sync
+- [ ] Project state is shown correctly
+- [ ] Changes can be displayed correctly
+- [ ] Changes from the device can be synced
+- [ ] Changes from upstream can be synced
+- [ ] Changes from upstream and device can be synced
+
+# Map canvas
+- [ ] GPS is shown correctly
+- [ ] Holding GPS icon turns on/off map autocentre
+- [ ] Record button lists the correct layer(s)
+- [ ] Zoom to project shows the correct extent
+- [ ] Map themes shows the correct themes
+- [ ] User can switch between map themes
+- [ ] Settings has the correct customisations
+
+# Identify features
+- [ ] All idenifiable features can be selected (points, lines, polygon)
+- [ ] Correct feature will be highlighted
+- [ ] Correct pop-up will appeard
+- [ ] If a layer is editable, user can open the form by pressing the pencil icon
+
+# Recording
+- [ ] User can record points
+- [ ] For points, the default location is the GPS location
+- [ ] User can cancel the recording of geometry
+- [ ] User can recentre the location of the geometry to be captured
+- [ ] User can capture lines/polygons
+- [ ] Pressing and holding GPS will toggle "streaming" mode when capturing geometry for lines/polygons
+- [ ] Correct form will appear
+
+# Forms
+- [ ] Form layout is displayed correctly
+- [ ] Attribute names/aliases are shown correctly
+- [ ] User can add/edit date/time using Date/Time widget
+- [ ] User can add/edit numbers using Slider widget
+- [ ] User can add/edit bolean using Checkbox widget
+- [ ] User can add/edit photos using camera or photo gallery
+- [ ] User can add/edit values using Value relation
+- [ ] User can change geometry (for points only)
+- [ ] User can delete the feature
