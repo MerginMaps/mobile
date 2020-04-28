@@ -6,3 +6,4 @@ app/config.pri
 test/temp_projects/
 test/temp_extra_projects/
 input.pro.user*
+app/android/assets/qgis-data/projects/
