@@ -10,6 +10,7 @@
 #include <QtDebug>
 #include <QQmlError>
 #include <QDesktopWidget>
+#include <QWindow>
 #include <QtGlobal>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -411,11 +412,11 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
 
 #ifdef MOBILE_OS
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", "Maximized" );
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
   engine.rootContext()->setContextProperty( "__appwindowwidth", QVariant( 0 ) );
   engine.rootContext()->setContextProperty( "__appwindowheight", QVariant( 0 ) );
 #else
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", "windowed" );
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Windowed );
   engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
   engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
@@ -452,7 +453,6 @@ int main( int argc, char *argv[] )
     qDebug() << "FATAL ERROR: unable to create main.qml";
     return EXIT_FAILURE;
   }
-
 
 #ifdef Q_OS_IOS
   QString logoUrl = "qrc:logo.png";

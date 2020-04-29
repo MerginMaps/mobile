@@ -64,13 +64,6 @@ macx:!android {
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
 
-    # TESTING stuff (only desktop)
-    # DEFINES += "INPUT_TEST"
-    # QT += testlib
-    # path to test data
-    # DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
-
     QT += printsupport
-
     QMAKE_CXXFLAGS += -std=c++11
 }
