@@ -21,13 +21,15 @@
 #include <QList>
 #include <QSet>
 
+class QgsQuickMapSettings;
 class QgsMapLayer;
 class QgsProject;
 
 class LayersModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersReloaded )
+
+    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( int activeIndex READ activeIndex WRITE setActiveIndex NOTIFY activeIndexChanged )
 
   public:
@@ -57,8 +59,6 @@ class LayersModel : public QAbstractListModel
 
     QHash<int, QByteArray> roleNames() const override;
 
-    QList<QgsMapLayer *> layers() const;
-
     int activeIndex() const;
     /**
      * Sets layer if index is in layers list length range.
@@ -71,14 +71,26 @@ class LayersModel : public QAbstractListModel
      * \param name QString represents layer name
      */
     void updateActiveLayer( const QString &name );
-    void reloadLayers( QgsProject *project ); //when project file changes, reload all layers, etc.
+
+    //! When project file changes, reload all layers, etc.
+    void reloadLayers( QgsProject *project );
+
+    //! Sets map settings and loads the layer list from previously assigned map settings
+    QgsQuickMapSettings *mapSettings() const;
+
+    //! Gets map settings
+    void setMapSettings( QgsQuickMapSettings *mapSettings );
 
   signals:
-    void layersReloaded();
+    void mapSettingsChanged();
     void activeIndexChanged();
 
   private:
-    QList<QgsMapLayer *> mLayers; // all layers
+    void setLayers( QList<QgsMapLayer *> layers );
+
+    QList<QgsMapLayer *> mLayers;
+    QgsQuickMapSettings *mMapSettings = nullptr;
+
     int mActiveIndex = -1;
 };
 

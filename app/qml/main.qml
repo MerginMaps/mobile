@@ -187,9 +187,12 @@ ApplicationWindow {
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
-        console.log("Completed Running!")
+
         __loader.positionKit = positionKit
         __loader.recording = digitizing.recording
+        __layersModel.mapSettings= mapCanvas.mapSettings
+
+        console.log("Completed Running!")
     }
 
     QgsQuick.MapCanvas {
@@ -199,7 +202,6 @@ ApplicationWindow {
       width: parent.width
       z: zMapCanvas
 
-      mapSettings.layers: __layersModel.layers
       mapSettings.project: __loader.project
 
       QgsQuick.IdentifyKit {
