@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "layersmodel.h"
+#include "qgsquickmapsettings.h"
 
 #include <qgslayertreemodel.h>
 #include <qgslayertreenode.h>
@@ -61,10 +62,23 @@ void LayersModel::reloadLayers( QgsProject *project )
   if ( mLayers != allLayers )
   {
     beginResetModel();
-    mLayers = allLayers;
+    setLayers( allLayers );
     endResetModel();
+  }
+}
 
-    emit layersReloaded();
+QgsQuickMapSettings *LayersModel::mapSettings() const
+{
+  return mMapSettings;
+}
+
+void LayersModel::setMapSettings( QgsQuickMapSettings *mapSettings )
+{
+  if ( mapSettings != mMapSettings )
+  {
+    mMapSettings = mapSettings;
+    setLayers( mLayers );
+    emit mapSettingsChanged();
   }
 }
 
@@ -171,8 +185,8 @@ QHash<int, QByteArray> LayersModel::roleNames() const
 
 QModelIndex LayersModel::index( int row, int column, const QModelIndex &parent ) const
 {
-  Q_UNUSED( column );
-  Q_UNUSED( parent );
+  Q_UNUSED( column )
+  Q_UNUSED( parent )
   return createIndex( row, 0, nullptr );
 }
 
@@ -228,11 +242,13 @@ QgsMapLayer *LayersModel::activeLayer()
 
 int LayersModel::rowCount( const QModelIndex &parent ) const
 {
-  Q_UNUSED( parent );
+  Q_UNUSED( parent )
   return mLayers.count();
 }
 
-QList<QgsMapLayer *> LayersModel::layers() const
+void LayersModel::setLayers( QList<QgsMapLayer *> layers )
 {
-  return mLayers;
+  mLayers = layers;
+  if ( mMapSettings )
+    mMapSettings->setLayers( layers );
 }
