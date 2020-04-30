@@ -33,7 +33,7 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 
 # see https://bugreports.qt.io/browse/QTBUG-80756
-export export ANDROID_TARGET_ARCH=${ARCH}
+export ANDROID_TARGET_ARCH=${ARCH}
 
 mkdir -p ${BUILD_DIR}/.gradle
 # androiddeployqt needs gradle and downloads it to /root/.gradle. By linking it to the build folder, this will be cached between builds.
