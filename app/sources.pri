@@ -47,9 +47,10 @@ contains(DEFINES, INPUT_TEST) {
 RESOURCES += \
     img/pics.qrc \
     qml/qml.qrc \
-    fonts/fonts.qrc
+    fonts/fonts.qrc \
+    i18n/input_i18n.qrc
 
-TRANSLATIONS +=
+TRANSLATIONS = $$files(i18n/*.ts)
 
 # this makes the manifest visible from Qt Creator
 DISTFILES += \

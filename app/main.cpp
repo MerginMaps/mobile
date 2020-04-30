@@ -14,6 +14,7 @@
 #include <QtGlobal>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QLocale>
 #ifdef INPUT_TEST
 #include <QTest>
 #endif
@@ -192,6 +193,21 @@ static void init_qgis( const QString &pkgPath )
 
 }
 
+static void init_i18n(QgsApplication& app, const QLocale& locale) {
+  QStringList sources;
+  sources << "qt_" << "qgis_" << "qgsquick_" << "input_";
+  for (const QString& source: sources) {
+    // MEMORY leak!?
+    QTranslator* translator = new QTranslator();
+    bool success = translator->load( source + "fr.qm", "/Users/peter/Projects/quick/input/app/i18n" );
+    if (success)
+      qDebug("Translation loaded");
+    else
+      qDebug("Error in loading %s translation",  source.toLatin1().data());
+    app.installTranslator( translator );
+  }
+}
+
 static void init_proj( const QString &pkgPath )
 {
 #ifdef MOBILE_OS
@@ -267,6 +283,8 @@ int main( int argc, char *argv[] )
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion( version );
+
+  init_i18n(app, QLocale(QLocale::French));
 
 #ifdef INPUT_TEST
   bool IS_TEST = false;
