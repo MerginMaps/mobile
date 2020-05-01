@@ -17,7 +17,7 @@
 
 # Map canvas
 - [ ] GPS is shown correctly
-- [ ] Holding GPS icon turns on/off map autocentre
+- [ ] Holding GPS icon turns on/off map auto-centre
 - [ ] Record button lists the correct layer(s)
 - [ ] Zoom to project shows the correct extent
 - [ ] Map themes shows the correct themes
@@ -25,9 +25,9 @@
 - [ ] Settings has the correct customisations
 
 # Identify features
-- [ ] All idenifiable features can be selected (points, lines, polygon)
+- [ ] All identifiable features can be selected (points, lines, polygon)
 - [ ] Correct feature will be highlighted
-- [ ] Correct pop-up will appeard
+- [ ] Correct pop-up will appears
 - [ ] If a layer is editable, user can open the form by pressing the pencil icon
 
 # Recording
@@ -46,6 +46,16 @@
 - [ ] User can add/edit numbers using Slider widget
 - [ ] User can add/edit bolean using Checkbox widget
 - [ ] User can add/edit photos using camera or photo gallery
+- [ ] User can add/edit values using Value map
 - [ ] User can add/edit values using Value relation
+- [ ] Values are sorted alphabetically
 - [ ] User can change geometry (for points only)
 - [ ] User can delete the feature
+
+# Data providers
+- [ ] Test XYZ tiles
+- [ ] Test vector tiles
+- [ ] Test mbtiles raster (offline)
+- [ ] Test mbtiles vector (offline)
+- [ ] Test WMS/WMST
+- [ ] Test PostGIS
