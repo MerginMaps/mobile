@@ -22,28 +22,13 @@ if [ ! -f "$QT_DIR/translations/qt_fr.qm" ]; then
   exit 1;
 fi
 
-LANGS="en fr es sk"
-
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
-
-# Input APP
-INPUT_TS=
-for i in $LANGS
-do
-    INPUT_TS="$INPUT_TS ./input_$i.ts"
-done
-
+INPUT_TS="$INPUT_TS ./input_en.ts"
 QUICKQUI_DIR=`realpath --relative-to=$I18N_DIR $QGIS_SRC_DIR/src/quickgui`
 INPUT_DIR=../
 
 lupdate $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
-
-# QT
-# for i in $LANGS
-# do
-#    cp -v $QT_DIR/translations/qt_$i.qm $DIR/../app/i18n/
-# done
 
 echo "update i18n done"
 cd $PWD
