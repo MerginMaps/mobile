@@ -242,53 +242,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="463"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="471"/>
         <source>Project status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="475"/>
-        <location filename="../qml/MerginProjectPanel.qml" line="671"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="483"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="679"/>
         <source>Delete project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="539"/>
         <source>No write access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="573"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="581"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="592"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="600"/>
         <source>My projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="611"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="619"/>
         <source>Shared with me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="611"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="619"/>
         <source>Shared</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="630"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="638"/>
         <source>Explore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="672"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="680"/>
         <source>Do you really want to delete project?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="703"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="711"/>
         <source>Try again</source>
         <translation type="unfinished"></translation>
     </message>

@@ -22,7 +22,7 @@ if [ ! -f "$QT_DIR/translations/qt_fr.qm" ]; then
   exit 1;
 fi
 
-LANGS="fr es sk"
+LANGS="en fr es sk"
 
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
