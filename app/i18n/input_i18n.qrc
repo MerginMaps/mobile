@@ -3,8 +3,5 @@
     <file>input_sk.qm</file> 
     <file>input_es.qm</file> 
     <file>input_fr.qm</file> 
-    <file>qt_sk.qm</file> 
-    <file>qt_es.qm</file> 
-    <file>qt_fr.qm</file> 
   </qresource> 
 </RCC>
