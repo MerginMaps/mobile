@@ -40,10 +40,10 @@ INPUT_DIR=../
 lupdate $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
 
 # QT
-for i in $LANGS
-do
-    cp -v $QT_DIR/translations/qt_$i.qm $DIR/../app/i18n/
-done
+# for i in $LANGS
+# do
+#    cp -v $QT_DIR/translations/qt_$i.qm $DIR/../app/i18n/
+# done
 
 echo "update i18n done"
 cd $PWD

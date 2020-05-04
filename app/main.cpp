@@ -278,25 +278,15 @@ int main( int argc, char *argv[] )
 
   // Initialize translations
   QLocale locale;
-  qDebug() << "Trying to load translations for locale: " << locale;
   QTranslator inputTranslator;
-  QTranslator qtTranslator;
   if ( inputTranslator.load( locale, "input", "_", ":/" ) )
   {
     app.installTranslator( &inputTranslator );
+    qDebug() <<  "Loaded input translation for " << locale;
   }
   else
   {
-    qDebug( "Error in loading input translation" );
-  }
-
-  if ( qtTranslator.load( locale, "qt", "_", ":/" ) )
-  {
-    app.installTranslator( &qtTranslator );
-  }
-  else
-  {
-    qDebug( "Error in loading qt translation" );
+    qDebug() <<  "Error in loading input translation for " << locale;
   }
 
 #ifdef INPUT_TEST
