@@ -1,4 +1,11 @@
-// Copyright 2020 Lutra Consulting Limited
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #define STR1(x)  #x
 #define STR(x)  STR1(x)
@@ -193,21 +200,6 @@ static void init_qgis( const QString &pkgPath )
 
 }
 
-static void init_i18n(QgsApplication& app, const QLocale& locale) {
-  QStringList sources;
-  sources << "qt_" << "qgis_" << "qgsquick_" << "input_";
-  for (const QString& source: sources) {
-    // MEMORY leak!?
-    QTranslator* translator = new QTranslator();
-    bool success = translator->load( source + "fr.qm", "/Users/peter/Projects/quick/input/app/i18n" );
-    if (success)
-      qDebug("Translation loaded");
-    else
-      qDebug("Error in loading %s translation",  source.toLatin1().data());
-    app.installTranslator( translator );
-  }
-}
-
 static void init_proj( const QString &pkgPath )
 {
 #ifdef MOBILE_OS
@@ -284,7 +276,28 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationName( "Input" );
   QCoreApplication::setApplicationVersion( version );
 
-  init_i18n(app, QLocale(QLocale::French));
+  // Initialize translations
+  QLocale locale;
+  qDebug() << "Trying to load translations for locale: " << locale;
+  QTranslator inputTranslator;
+  QTranslator qtTranslator;
+  if ( inputTranslator.load( locale, "input", "_", ":/" ) )
+  {
+    app.installTranslator( &inputTranslator );
+  }
+  else
+  {
+    qDebug( "Error in loading input translation" );
+  }
+
+  if ( qtTranslator.load( locale, "qt", "_", ":/" ) )
+  {
+    app.installTranslator( &qtTranslator );
+  }
+  else
+  {
+    qDebug( "Error in loading qt translation" );
+  }
 
 #ifdef INPUT_TEST
   bool IS_TEST = false;

@@ -1,12 +1,9 @@
 <RCC>
   <qresource prefix="/"> 
-    <file>qgsquick_fr.qm</file> 
-    <file>qgsquick_sk.qm</file> 
-    <file>qgsquick_es.qm</file> 
-    <file>qgis_es.qm</file> 
-    <file>qgis_fr.qm</file> 
+    <file>input_sk.qm</file> 
     <file>input_es.qm</file> 
     <file>input_fr.qm</file> 
+    <file>qt_sk.qm</file> 
     <file>qt_es.qm</file> 
     <file>qt_fr.qm</file> 
   </qresource> 

@@ -222,7 +222,6 @@ void Loader::setActiveLayer( int index )
 
 void Loader::appStateChanged( Qt::ApplicationState state )
 {
-#if VERSION_INT >= 30500 // depends on https://github.com/qgis/QGIS/pull/8622
   if ( !mRecording && mPositionKit )
   {
     if ( state == Qt::ApplicationActive )
@@ -234,9 +233,6 @@ void Loader::appStateChanged( Qt::ApplicationState state )
       mPositionKit->source()->stopUpdates();
     }
   }
-#else
-  Q_UNUSED( state );
-#endif
 }
 
 QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer *layer )

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "inpututils.h"
 
 #include "qcoreapplication.h"
@@ -221,7 +230,7 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
     }
     catch ( QgsCsException &e )
     {
-      Q_UNUSED( e );
+      Q_UNUSED( e )
       return QVector<double>();
     }
   }
@@ -324,7 +333,7 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   {
     QFileInfo info( srcPath );
     QString timestamp = ( dateTime.isValid() ) ? dateTime.toString( DATE_TIME_FORMAT ) : QDateTime::currentDateTime().toString( DATE_TIME_FORMAT );
-    QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );;
+    QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );
     QString newPath( info.absolutePath() + "/" + newFilename );
 
     if ( QFile::rename( srcPath, newPath ) ) return newPath;
