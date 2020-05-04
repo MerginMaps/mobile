@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
@@ -180,7 +189,7 @@ Item {
 
     Menu {
         id: rootMenu
-        title: "Menu"
+        title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
         property bool isClosing: false
@@ -332,6 +341,4 @@ Item {
         layer.effect: Shadow {}
         visible: rootMenu.opened
     }
-
-
 }

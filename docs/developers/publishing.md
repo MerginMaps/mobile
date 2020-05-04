@@ -1,3 +1,15 @@
+# Translations
+
+Create and update release translations
+
+# Beta releases
+
+Create beta release on all supported platforms
+
+# Tests
+
+Run manual testing on all supported platforms for beta releases
+
 # Publishing android
 
 ## Release build of apk (QT Creator)

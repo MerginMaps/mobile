@@ -107,14 +107,14 @@ QHash<int, QByteArray> MapThemesModel::roleNames() const
 
 QModelIndex MapThemesModel::index( int row, int column, const QModelIndex &parent ) const
 {
-  Q_UNUSED( column );
-  Q_UNUSED( parent );
+  Q_UNUSED( column )
+  Q_UNUSED( parent )
   return createIndex( row, 0, nullptr );
 }
 
 int MapThemesModel::rowCount( const QModelIndex &parent ) const
 {
-  Q_UNUSED( parent );
+  Q_UNUSED( parent )
   return mMapThemes.count();
 }
 

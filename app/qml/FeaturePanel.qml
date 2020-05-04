@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
@@ -127,7 +136,7 @@ Drawer {
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: "No photos added."
+                text: qsTr("No photos added.")
                 color: InputStyle.clrPanelMain
                 font.pixelSize: InputStyle.fontPixelSizeNormal
             }
@@ -144,7 +153,7 @@ Drawer {
             externalResourceHandler: externalResourceBundle.handler
             toolbarVisible: false
             style: QgsQuick.FeatureFormStyling {
-                property color backgroundColor: "white  "
+                property color backgroundColor: "white"
                 property real backgroundOpacity: 1
 
                 property QtObject group: QtObject {
