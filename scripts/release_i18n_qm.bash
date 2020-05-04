@@ -11,15 +11,14 @@ echo "<RCC>" > $QRC_FILE
 echo "  <qresource prefix=\"/\"> " >> $QRC_FILE
 
 cd $DIR/../app/i18n
-FILES=`find . -type f -name "*.ts"`
+FILES=`find . -type f -name "*.ts" ! -name input_en.ts`
 for i in $FILES
 do
     QMFILE=${i/.ts/.qm}
     lrelease $i -qm ${QMFILE}
-    echo "    <file>${QMFILE/.\//}</file> " >> $QRC_FILE
 done
 
-FILES_QT=`find . -type f -name "qt_*.qm"`
+FILES_QT=`find . -type f -name "*.qm"`
 for i in $FILES_QT
 do
     echo "    <file>${i/.\//}</file> " >> $QRC_FILE
