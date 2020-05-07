@@ -9,12 +9,13 @@ QT += network svg sql
 QT += opengl
 QT += core
 
-include(sources.pri)
 include(android.pri)
 include(ios.pri)
 include(linux.pri)
 include(macx.pri)
 include(win32.pri)
+
+include(sources.pri)
 
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 CONFIG(debug, debug|release) {
