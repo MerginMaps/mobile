@@ -1,5 +1,6 @@
 android {
     message("Building ANDROID")
+    message("ANDROID Platform: $${ANDROID_TARGET_ARCH}")
 
     DEFINES += MOBILE_OS
 
