@@ -1,11 +1,22 @@
 BASE_DIR=</home/folder>/Projects/quick
 
 android {
-  OSGEO4A_DIR = $${BASE_DIR}/input-sdk/build-android
-  OSGEO4A_STAGE_DIR = $${OSGEO4A_DIR}/stage
-  QGIS_INSTALL_PATH = $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH
-  QGIS_QUICK_DATA_PATH = INPUT # should be relative path
-  # we try to use it as /sdcard/path and if not writable, use /storage/emulated/0/path (user home path)
+
+  # If the target architecture is not set in an environment variable, we need to set it here.
+  # Supported values are "armeabi-v7a" (for 32-bit ARM) and "arm64-v8a" (for 64-bit ARM)
+  # ANDROID_TARGET_ARCH = armeabi-v7a
+
+  INPUT_SDK_DIR = $${BASE_DIR}/input-sdk/build-android
+  INPUT_SDK_STAGE_DIR = $${INPUT_SDK_DIR}/stage
+  QGIS_INSTALL_PATH = $${INPUT_SDK_STAGE_DIR}/$$ANDROID_TARGET_ARCH
+
+  # Relative path within Android internal storage which will be used for storage of data
+  # (user's Input projects and also QGIS and PROJ data files). Normally this does not need adjusting.
+  #
+  # Within the device we try to use /sdcard/${QGIS_QUICK_DATA_PATH} and if it is not writable,
+  # we would use /storage/emulated/0/${QGIS_QUICK_DATA_PATH} (user home path)
+  QGIS_QUICK_DATA_PATH = INPUT
+
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
