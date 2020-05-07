@@ -62,3 +62,9 @@ Use public project: saber\test_digitizing
 - [ ] Test mbtiles vector (offline) (use public project: saber\test_mbtiles_vectortile)
 - [ ] Test WMS/WMST use public project: (use public project:saber\test_wms)
 - [ ] Test PostGIS
+
+# Platforms
+- [ ] iOS
+- [ ] Android (armeabi-v7a)
+- [ ] Android (arm64-v8a)
+- [ ] Windows (x86_64)
