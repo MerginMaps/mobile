@@ -50,6 +50,7 @@ cd ..
 ```bash
 sudo apt-get install -y qtpositioning5-dev qml-module-qtmultimedia qml-module-qtpositioning qml-module-qtqml-models2 qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-shapes qml-module-qtquick-controls 
 sudo apt-get install qml-module-qt-labs-*
+sudo apt install sqlite3
 ```
 
 9. Compile and run
