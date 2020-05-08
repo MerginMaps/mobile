@@ -38,6 +38,7 @@
           $${QGIS_SRC_DIR}/src/core/expression \
           $${QGIS_SRC_DIR}/src/quickgui \
           $${QGIS_SRC_DIR}/src/quickgui/attributes \
+          $${QGIS_SRC_DIR}/external/nlohmann \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core \
           $${QGIS_BUILD_DIR}/src/quickgui
