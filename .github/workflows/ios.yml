@@ -1,0 +1,45 @@
+name: Input iOS build
+on: [push, pull_request]
+env:
+  QT_VERSION: 5.14.2
+  INPUT_SDK_VERSION: 4
+
+jobs:
+  mac_os_build:
+    if: github.repository == 'lutraconsulting/input'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: download and install input-sdk
+        run: |
+          DOWNLOAD_DIR=`pwd`
+          wget https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz?dl=0
+          mkdir -p /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz
+
+
+      - name: download and install qt
+        run: |
+          DOWNLOAD_DIR=`pwd`
+          wget https://www.dropbox.com/s/0hfjybth4zxko7f/qt-${QT_VERSION}-ios.tar.gz
+          mkdir -p /opt/Qt/${QT_VERSION}/ios
+          cd /opt/Qt/${QT_VERSION}/ios
+          tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
+
+      - name: create build system
+        run: |
+          INPUT_DIR=`pwd`
+
+          cp scripts/ci/config.pri app/config.pri
+          
+          mkdir -p ../build-INPUT
+          cd ../build-INPUT
+
+          /opt/Qt/${QT_VERSION}/ios/bin/qmake ${INPUT_DIR}/app/input.pro -spec macx-ios-clang CONFIG+=iphoneos CONFIG+=device && /usr/bin/make qmake_all
+
+      - name: build Input
+        run: |
+          cd ../build-INPUT
+          make -j $(sysctl -n hw.ncpu)
