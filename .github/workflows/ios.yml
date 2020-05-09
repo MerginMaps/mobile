@@ -14,7 +14,7 @@ jobs:
       - name: download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          wget https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz?dl=0
+          wget -q https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz?dl=1
           mkdir -p /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
           cd /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz
@@ -23,7 +23,7 @@ jobs:
       - name: download and install qt
         run: |
           DOWNLOAD_DIR=`pwd`
-          wget https://www.dropbox.com/s/0hfjybth4zxko7f/qt-${QT_VERSION}-ios.tar.gz
+          wget -q https://www.dropbox.com/s/whdez6vfckulgxu/qt-${QT_VERSION}-ios.tar.gz?dl=1
           mkdir -p /opt/Qt/${QT_VERSION}/ios
           cd /opt/Qt/${QT_VERSION}/ios
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
@@ -33,7 +33,7 @@ jobs:
           INPUT_DIR=`pwd`
 
           cp scripts/ci/config.pri app/config.pri
-          
+
           mkdir -p ../build-INPUT
           cd ../build-INPUT
 
