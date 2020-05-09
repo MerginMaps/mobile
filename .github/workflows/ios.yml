@@ -15,10 +15,10 @@ jobs:
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz?dl=0"
-          mkdir -p /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
+          mkdir -p /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}
+          cd /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz
-
+          mv /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/arm64 /opt/INPUT/input-sdk-ios-${INPUT_SDK_VERSION}/stage
 
       - name: download and install qt
         run: |
