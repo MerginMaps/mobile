@@ -17,7 +17,7 @@ win32 {
 }
 
 ios {
-  QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-$$(INPUT_SDK_VERSION)/stage
+  QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-$$(SDK_VERSION)/stage
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
