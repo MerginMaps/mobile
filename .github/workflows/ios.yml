@@ -88,7 +88,6 @@ jobs:
             -scheme Input \
             -sdk iphoneos \
             -configuration Release \
-            -alltargets \
             -archivePath \
             $PWD/Input.xcarchive \
             clean archive
