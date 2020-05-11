@@ -47,7 +47,7 @@ jobs:
           cd /opt/Qt/${QT_VERSION}/ios
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
-      - name: create build system
+      - name: create build system with qmake
         run: |
           INPUT_DIR=`pwd`
 
@@ -56,9 +56,43 @@ jobs:
           mkdir -p ../build-INPUT
           cd ../build-INPUT
 
-          /opt/Qt/${QT_VERSION}/ios/bin/qmake ${INPUT_DIR}/app/input.pro -spec macx-ios-clang CONFIG+=iphoneos CONFIG+=device && /usr/bin/make qmake_all
+          /opt/Qt/${QT_VERSION}/ios/bin/qmake \
+            ${INPUT_DIR}/app/input.pro \
+            -spec macx-ios-clang \
+            CONFIG+=release \
+            CONFIG+=iphoneos \
+            CONFIG+=device \
+            CONFIG+=qtquickcompiler
 
-      - name: build Input
+      - name: build archive
         run: |
+          INPUT_DIR=`pwd`
           cd ../build-INPUT
-          make -j $(sysctl -n hw.ncpu)
+
+          xcodebuild \
+            -project Input.xcodeproj/ \
+            -scheme Input \
+            -sdk iphoneos \
+            -archivePath \
+            $PWD/Input.xcarchive \
+            clean archive
+
+      - name: export .ipa
+        run: |
+          INPUT_DIR=`pwd`
+          cd ../build-INPUT
+
+          xcodebuild \
+            -archivePath $PWD/Input.xcarchive \
+            -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
+            -exportPath $PWD \
+            -allowProvisioningUpdates \
+            -exportArchive
+
+      - name: upload .ipa to dropbox
+        run: |
+          INPUT_DIR=`pwd`
+          cd ../build-INPUT
+
+          ls -la *.ipa
+
