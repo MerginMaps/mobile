@@ -3,6 +3,7 @@ on: [push, pull_request]
 env:
   QT_VERSION: 5.14.2
   SDK_VERSION: 4
+  IOS_PROVISIONING_PROFILE_UUID=59aaa8d7-516a-4592-8c58-d7d1c1f81610
 
 jobs:
   mac_os_build:
@@ -74,7 +75,7 @@ jobs:
             qprofile.value="${IOS_PROVISIONING_PROFILE_UUID}" \
             QMAKE_MAC_XCODE_SETTINGS+=qteam \
             qteam.name=DEVELOPMENT_TEAM \
-            qteam.value="${IOS_PROVISIONING_PROFILE_TEAM_ID}"
+            qteam.value=79QMH2QRAH
 
       - name: build Input
         run: |
