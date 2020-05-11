@@ -3,7 +3,7 @@ on: [push, pull_request]
 env:
   QT_VERSION: 5.14.2
   SDK_VERSION: 4
-  IOS_PROVISIONING_PROFILE_UUID=59aaa8d7-516a-4592-8c58-d7d1c1f81610
+  IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
 
 jobs:
   mac_os_build:
