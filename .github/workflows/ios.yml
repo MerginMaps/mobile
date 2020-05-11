@@ -19,7 +19,6 @@ jobs:
         env:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
-          IOS_PROVISIONING_PROFILE_UUID: ${{ secrets.IOS_PROVISIONING_PROFILE_UUID }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
@@ -50,9 +49,6 @@ jobs:
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
       - name: create build system with qmake
-        env:
-          IOS_PROVISIONING_PROFILE_TEAM_ID: ${{ secrets.IOS_PROVISIONING_PROFILE_TEAM_ID }}
-          IOS_PROVISIONING_PROFILE_UUID: ${{ secrets.IOS_PROVISIONING_PROFILE_UUID }}
         run: |
           INPUT_DIR=`pwd`
 
