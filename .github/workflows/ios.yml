@@ -18,11 +18,12 @@ jobs:
         env:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
+          IOS_PROVISIONING_PROFILE_UUID: ${{ secrets.IOS_PROVISIONING_PROFILE_UUID }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/LutraConsultingLtdInputAppStore.mobileprovision
+          cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
           security create-keychain -p "" build.keychain
           security import ./.github/secrets/ios/Certificates_ios_dist.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$IOS_CERT_KEY" -A
           security list-keychains -s ~/Library/Keychains/build.keychain
@@ -48,6 +49,9 @@ jobs:
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
       - name: create build system with qmake
+        env:
+          IOS_PROVISIONING_PROFILE_TEAM_ID: ${{ secrets.IOS_PROVISIONING_PROFILE_TEAM_ID }}
+          IOS_PROVISIONING_PROFILE_UUID: ${{ secrets.IOS_PROVISIONING_PROFILE_UUID }}
         run: |
           INPUT_DIR=`pwd`
 
@@ -56,12 +60,6 @@ jobs:
 
           mkdir -p ../build-INPUT
           cd ../build-INPUT
-
-          # find out provisioning & development ID
-          A=`cd ~/Library/MobileDevice/"Provisioning Profiles"/; ls -1 ./*.mobileprovision | head -1`
-          B=${A/.mobileprovision/}
-          PROVISIONING_PROFILE_SPECIFIER=${B:2}
-          DEVELOPMENT_TEAM=79QMH2QRAH
 
           # run qmake
           /opt/Qt/${QT_VERSION}/ios/bin/qmake \
@@ -73,10 +71,12 @@ jobs:
             CONFIG+=qtquickcompiler \
             QMAKE_MAC_XCODE_SETTINGS+=qprofile \
             qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
-            qprofile.value=$PROVISIONING_PROFILE_SPECIFIER \
+            qprofile.value=${IOS_PROVISIONING_PROFILE_UUID} \
             QMAKE_MAC_XCODE_SETTINGS+=qteam \
             qteam.name=DEVELOPMENT_TEAM \
-            qteam.value=$DEVELOPMENT_TEAM
+            qteam.value=${IOS_PROVISIONING_PROFILE_TEAM_ID}
+
+
 
       - name: build Input
         run: |
