@@ -2,7 +2,7 @@ name: Input iOS build
 on: [push, pull_request]
 env:
   QT_VERSION: 5.14.2
-  INPUT_SDK_VERSION: 4
+  SDK_VERSION: 4
 
 jobs:
   mac_os_build:
@@ -33,11 +33,11 @@ jobs:
       - name: download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${INPUT_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${INPUT_SDK_VERSION}.tar.gz?dl=0"
-          mkdir -p /opt/INPUT/input-sdk-${INPUT_SDK_VERSION}
-          cd /opt/INPUT/input-sdk-${INPUT_SDK_VERSION}
-          tar -xvzf $DOWNLOAD_DIR/input-sdk-${INPUT_SDK_VERSION}.tar.gz
-          mv /opt/INPUT/input-sdk-${INPUT_SDK_VERSION}/arm64 /opt/INPUT/input-sdk-${INPUT_SDK_VERSION}/stage
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
+          mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}
+          cd /opt/INPUT/input-sdk-${SDK_VERSION}
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
+          mv /opt/INPUT/input-sdk-${SDK_VERSION}/arm64 /opt/INPUT/input-sdk-${SDK_VERSION}/stage
 
       - name: download and install qt
         run: |
@@ -51,20 +51,34 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
 
+          # setup config environmen
           cp scripts/ci/config.pri app/config.pri
 
           mkdir -p ../build-INPUT
           cd ../build-INPUT
 
+          # find out provisioning & development ID
+          A=`cd ~/Library/MobileDevice/"Provisioning Profiles"/; ls -1 ./*.mobileprovision | head -1`
+          B=${A/.mobileprovision/}
+          PROVISIONING_PROFILE_SPECIFIER=${B:2}
+          DEVELOPMENT_TEAM=79QMH2QRAH
+
+          # run qmake
           /opt/Qt/${QT_VERSION}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
             CONFIG+=release \
             CONFIG+=iphoneos \
             CONFIG+=device \
-            CONFIG+=qtquickcompiler
+            CONFIG+=qtquickcompiler \
+            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
+            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
+            qprofile.value=$PROVISIONING_PROFILE_SPECIFIER \
+            QMAKE_MAC_XCODE_SETTINGS+=qteam \
+            qteam.name=DEVELOPMENT_TEAM \
+            qteam.value=$DEVELOPMENT_TEAM
 
-      - name: build archive
+      - name: build Input
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
@@ -73,6 +87,8 @@ jobs:
             -project Input.xcodeproj/ \
             -scheme Input \
             -sdk iphoneos \
+            -configuration Release \
+            -alltargets \
             -archivePath \
             $PWD/Input.xcarchive \
             clean archive
@@ -90,6 +106,10 @@ jobs:
             -exportArchive
 
       - name: upload .ipa to dropbox
+        env:
+          INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
+          INPUTAPP_BOT_DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
+        if: success()
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT

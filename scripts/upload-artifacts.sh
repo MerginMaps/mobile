@@ -16,10 +16,12 @@ export GITHUB_REPO=lutraconsulting/input
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
 then
   if [ ${TRAVIS_PULL_REQUEST} != "false" ]; then
-    echo -e "\e[31mDeploying pull request\e[0m"
-    export DROPBOX_FOLDER="pulls"
-    export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
-    export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
+    echo "\e[31mSkip deployment of pull request\e[0m"
+    # echo -e "\e[31mDeploying pull request\e[0m"
+    # export DROPBOX_FOLDER="pulls"
+    # export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
+    # export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
+    exit 0
   elif [[ -n ${TRAVIS_TAG} ]]; then
     echo -e "\e[31mDeploying tagged release\e[0m"
     export DROPBOX_FOLDER="tags"
