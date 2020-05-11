@@ -27,7 +27,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
           security create-keychain -p "" build.keychain
-          security import ./.github/secrets/ios/Certificates_ios_dist.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$IOS_CERT_KEY" -A
+          # security import ./.github/secrets/ios/Certificates_ios_dist.p12 -t agg -k ~/Library/Keychains/build.keychain -P "$IOS_CERT_KEY" -A
           security import ./.github/secrets/ios/ios_distribution.cer -t agg -k ~/Library/Keychains/build.keychain -P "$IOS_CERT_KEY" -A
           security list-keychains -s ~/Library/Keychains/build.keychain
           security default-keychain -s ~/Library/Keychains/build.keychain
