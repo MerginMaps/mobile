@@ -78,8 +78,6 @@ jobs:
           cd ../build-INPUT
 
           # run qmake
-          security unlock-keychain -p "" "$KEYCHAIN"
-
           /opt/Qt/${QT_VERSION}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
@@ -90,12 +88,12 @@ jobs:
             QMAKE_MAC_XCODE_SETTINGS+=qprofile \
             qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
             qprofile.value="${IOS_PROVISIONING_PROFILE_UUID}" \
-            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
-            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
-            qprofile.value=${IOS_PROVISIONING_PROFILE_UUID} \
             QMAKE_MAC_XCODE_SETTINGS+=qteam \
             qteam.name=DEVELOPMENT_TEAM \
             qteam.value=79QMH2QRAH \
+            QMAKE_MAC_XCODE_SETTINGS+=qidentity \
+            qidentity.name=CODE_SIGN_IDENTITY \
+            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"; \
             QMAKE_MAC_XCODE_SETTINGS+=qstyle \
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=manual
@@ -105,7 +103,6 @@ jobs:
           INPUT_DIR=`pwd`
           cd ../build-INPUT
 
-          security unlock-keychain -p "" "$KEYCHAIN"
           xcodebuild \
             -project Input.xcodeproj/ \
             -scheme Input \

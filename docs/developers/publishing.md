@@ -43,7 +43,7 @@ The publish process can take from several minutes to even sever hours (see publi
 
 ## Release build of package (XCode)
 
-1. Click on project, modify version (e.g. 0.4.2) and build (incremental in case more builds for same version)
+1. Click on project, modify version (e.g. 0.4.2) and build (incremental in case more builds for same version). Or modify app/ios/Info.plist
 2. Set generic ios device 
 3. Signing: Set Team: LUTRA CONSULING LIMITED
 4. Signing: Set Profile: LutraConsultingLtd.Input.AppStore
