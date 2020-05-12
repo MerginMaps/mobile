@@ -85,6 +85,8 @@ jobs:
           INPUT_DIR=`pwd`
           cd ../build-INPUT
 
+          security unlock-keychain
+
           xcodebuild \
             -project Input.xcodeproj/ \
             -scheme Input \
@@ -98,6 +100,8 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
+
+          security unlock-keychain
 
           xcodebuild \
             -archivePath $PWD/Input.xcarchive \

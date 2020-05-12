@@ -8,10 +8,5 @@
 	<true/>
 	<key>uploadSymbols</key>
 	<true/>
-	<key>provisioningProfiles</key>
-	<dict>
-		<key>LutraConsultingLtd.Input.AppStore</key>
-		<string>match AppStore LutraConsultingLtd.Input.AppStore</string>
-	</dict>
 </dict>
 </plist>
