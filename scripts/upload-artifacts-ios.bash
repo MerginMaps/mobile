@@ -5,7 +5,7 @@ ls build-INPUT/*.ipa
 export ARCH="arm64"
 export SIGNED="signed"
 export GITHUB_REPO=lutraconsulting/input
-export DROPBOX_FOLDER=$1
+export DROPBOX_FOLDER=ios
 export BUILD_FILE=Input.ipa
 
 if [ -n "${IOS_CERT_KEY}" ]; then

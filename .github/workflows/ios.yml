@@ -1,7 +1,9 @@
 name: Input iOS build
 on: [push]
 env:
+  QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
+  SDK_DROPBOX_HASH: tg018hcj3n13xe8
   SDK_VERSION: 4
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
@@ -45,18 +47,18 @@ jobs:
       - name: Download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
           mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}/stage
           cd /opt/INPUT/input-sdk-${SDK_VERSION}/stage
           tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
-          
+
           ls -la arm64/include/geodiff.h
           ls -la arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
 
       - name: Download and install qt
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/whdez6vfckulgxu/qt-${QT_VERSION}-ios.tar.gz?dl=0"
+          curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
           mkdir -p /opt/Qt/${QT_VERSION}/ios
           cd /opt/Qt/${QT_VERSION}/ios
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
@@ -92,7 +94,7 @@ jobs:
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=Manual
 
-      - name: Build & Archive Input
+      - name: Build Input
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
@@ -102,16 +104,15 @@ jobs:
             -scheme Input \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $PWD/Input.xcarchive \
+            archive -archivePath Input.xcarchive \
             "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
-      - name: Export .ipa
+      - name: Create Input Package
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
-
           xcodebuild \
-            -archivePath $PWD/Input.xcarchive \
+            -archivePath Input.xcarchive \
             -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
             -exportPath $PWD \
             -allowProvisioningUpdates \
@@ -123,8 +124,5 @@ jobs:
           INPUTAPP_BOT_DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
         if: success()
         run: |
-          INPUT_DIR=`pwd`
-          cd ../build-INPUT
-
-          ls -la *.ipa
-
+          ./scripts/upload-artifacts-ios.bash ../build-INPUT/Input.ipa
+DROPBOX_FOLDER
