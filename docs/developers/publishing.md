@@ -1,3 +1,9 @@
+# Bump versions
+
+1. ios: app/ios/Info.plist (CFBundleShortVersionString and CFBundleVersion)
+2. android: app/version.pri
+3. win: scripts/version.cmd
+
 # Translations
 
 Create and update release translations
@@ -39,7 +45,7 @@ The publish process can take from several minutes to even sever hours (see publi
 * Fill all info and add all necessary files to `Store listing` in `Store presence` section. Do not forget about privacy policy.
 * Fill form in `Pricing & distribution ` in `Store presence` section.
 
-# Publishin ios 
+# Publishing ios 
 
 ## Release build of package (XCode)
 
@@ -64,3 +70,8 @@ Note: Make sure you tag the repo and write down build number. also tag input-sdk
 3. rename installer with version from point 1
 4. upload installer to dropbox folder 
 5. update link on webpages?
+
+# TAG ALL
+
+1. input-sdk
+2. input (note which sdk used)
