@@ -20,7 +20,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install brew deps
-        run: brew install gnupg
+        run: |
+          brew install gnupg
+          brew install python3
+          pip3 install dropbox
 
       - name: Configure Keychain
         run: |
