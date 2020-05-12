@@ -1,10 +1,10 @@
 # Bump versions
 
-1. ios: app/ios/Info.plist (CFBundleShortVersionString and CFBundleVersion)
+1. ios: app/ios/Info.plist (JUST CFBundleShortVersionString, CFBundleVersion is calculated automatically)
 2. android: app/version.pri
 3. win: scripts/version.cmd
 
-# Translations
+# Update Translations
 
 Create and update release translations
 
@@ -49,7 +49,7 @@ The publish process can take from several minutes to even sever hours (see publi
 
 ## Release build of package (XCode)
 
-1. Click on project, modify version (e.g. 0.4.2) and build (incremental in case more builds for same version). Or modify app/ios/Info.plist
+1. Click on project, modify app/ios/Info.plist version (e.g. 0.4.2)
 2. Set generic ios device 
 3. Signing: Set Team: LUTRA CONSULING LIMITED
 4. Signing: Set Profile: LutraConsultingLtd.Input.AppStore

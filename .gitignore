@@ -1,3 +1,4 @@
+*.orig
 *.DS_Store
 *.user
 *build*/

@@ -73,6 +73,15 @@ jobs:
           # setup config environmen
           cp scripts/ci/config.pri app/config.pri
 
+          # patch the Info.plist
+          CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
+          TIMESTAMP=`date "+%y%m%d%H%M%S"`
+          GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
+          BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
+          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${SDK_VERSION}.${TIMESTAMP}
+
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
+
           mkdir -p ../build-INPUT
           cd ../build-INPUT
 
@@ -121,10 +130,17 @@ jobs:
             -allowProvisioningUpdates \
             -exportArchive
 
-      - name: Upload .ipa to dropbox
+      - name: Upload .ipa to TestFlight
         env:
+          INPUTAPP_BOT_APPLEID_PASS: ${{ secrets.INPUTAPP_BOT_APPLEID_PASS }}
+          INPUTAPP_BOT_APPLEID_USER: ${{ secrets.INPUTAPP_BOT_APPLEID_USER }}
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-          INPUTAPP_BOT_DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
         if: success()
         run: |
-          ./scripts/upload-artifacts-ios.bash ../build-INPUT/Input.ipa
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
+          echo "Publishing ios ${CF_BUNDLE_VERSION}"
+          xcrun altool --upload-app -t ios -f ../build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+
+          # Add comment to GitHub
+          GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
+          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${SDK_VERSION}'))"}' ${GITHUB_API}
