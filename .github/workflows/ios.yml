@@ -1,5 +1,5 @@
 name: Input iOS build
-on: [push, pull_request]
+on: [push]
 env:
   QT_VERSION: 5.14.2
   SDK_VERSION: 4
@@ -35,7 +35,6 @@ jobs:
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
-          # gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/ios_distribution.cer ./.github/secrets/ios/ios_distribution.cer.gpg
           security import "./.github/secrets/ios/Certificates_ios_dist.p12" -k "$KEYCHAIN" -P "$IOS_CERT_KEY" -A
           security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
 
@@ -79,6 +78,8 @@ jobs:
           cd ../build-INPUT
 
           # run qmake
+          security unlock-keychain -p "" "$KEYCHAIN"
+
           /opt/Qt/${QT_VERSION}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
@@ -94,15 +95,17 @@ jobs:
             qprofile.value=${IOS_PROVISIONING_PROFILE_UUID} \
             QMAKE_MAC_XCODE_SETTINGS+=qteam \
             qteam.name=DEVELOPMENT_TEAM \
-            qteam.value=79QMH2QRAH
+            qteam.value=79QMH2QRAH \
+            QMAKE_MAC_XCODE_SETTINGS+=qstyle \
+            qstyle.name=CODE_SIGN_STYLE \
+            qstyle.value=manual
 
       - name: Build & Archive Input
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
 
-          security unlock-keychain
-
+          security unlock-keychain -p "" "$KEYCHAIN"
           xcodebuild \
             -project Input.xcodeproj/ \
             -scheme Input \
@@ -115,8 +118,6 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
-
-          security unlock-keychain
 
           xcodebuild \
             -archivePath $PWD/Input.xcarchive \

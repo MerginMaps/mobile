@@ -8,5 +8,16 @@
 	<true/>
 	<key>uploadSymbols</key>
 	<true/>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>LutraConsultingLtd.Input.AppStore</key>
+		<string>LutraConsultingLtd InputApp iOS for AppStore</string>
+	</dict>
+	<key>signingCertificate</key>
+    <string>Apple Distribution</string>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>teamID</key>
+    <string>79QMH2QRAH</string>
 </dict>
 </plist>
