@@ -1,0 +1,5799 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+		5E618435888B9D49F8540165 = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Qmake";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/peter/Projects/quick/input/buils1 -f Input.xcodeproj/qt_makeqmake.mak";
+			showEnvVarsInLog = "0";
+		};
+		A595B8E372E752ADA33F0263 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/localprojectsmanager.cpp";
+			name = "localprojectsmanager.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		96D079C2842D475C9B93FA7D = {
+			fileRef = "A595B8E372E752ADA33F0263";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F5BDC8E92A9116DE20BC07EB = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/main.cpp";
+			name = "main.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		A8D5D828F1D52A3B852CBB51 = {
+			fileRef = "F5BDC8E92A9116DE20BC07EB";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		1261DF9EBC6585D1EF8E1D90 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectmetadata.cpp";
+			name = "merginprojectmetadata.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E6B6976F7E0202BC106F846A = {
+			fileRef = "1261DF9EBC6585D1EF8E1D90";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E2F569F50C7697F76A1134A7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/projectsmodel.cpp";
+			name = "projectsmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		48CDD1CCBCD23268D4ABBF65 = {
+			fileRef = "E2F569F50C7697F76A1134A7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		0A1D208186CB5522A2DAE587 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/layersmodel.cpp";
+			name = "layersmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		61FCC76377D785DE169D8310 = {
+			fileRef = "0A1D208186CB5522A2DAE587";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		23F6A2A4D95235A2C56A5EAF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/loader.cpp";
+			name = "loader.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		6784B732AB9123836225A183 = {
+			fileRef = "23F6A2A4D95235A2C56A5EAF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C4F4B800A95220DF013B2C22 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/digitizingcontroller.cpp";
+			name = "digitizingcontroller.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		4355461284BCFFDEF4282A2E = {
+			fileRef = "C4F4B800A95220DF013B2C22";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2F8C126B61A163C24B961593 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/mapthemesmodel.cpp";
+			name = "mapthemesmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		D4F2CD661E42E0C4C324F1A8 = {
+			fileRef = "2F8C126B61A163C24B961593";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		082D96D9369CDD37914CFE08 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/appsettings.cpp";
+			name = "appsettings.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		6A3EF15DACD8B6864E65C24F = {
+			fileRef = "082D96D9369CDD37914CFE08";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		0116BCC158C2C0A8C90D0F4C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginapi.cpp";
+			name = "merginapi.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		860CE316C2A74C043852C6C6 = {
+			fileRef = "0116BCC158C2C0A8C90D0F4C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		56F510E48B4D6D771DBE90D4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginapistatus.cpp";
+			name = "merginapistatus.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B9CD07865B8CFC331FDE6C82 = {
+			fileRef = "56F510E48B4D6D771DBE90D4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7EC580ED461737CC681B5290 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectmodel.cpp";
+			name = "merginprojectmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		CDB7073CCBF475F1807164EB = {
+			fileRef = "7EC580ED461737CC681B5290";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		BF49554E19E06E0DBCD4B8D3 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectstatusmodel.cpp";
+			name = "merginprojectstatusmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		2B51AA6C22F8A070E19F89C2 = {
+			fileRef = "BF49554E19E06E0DBCD4B8D3";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		A5735C367EE57564A44DA2A1 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/androidutils.cpp";
+			name = "androidutils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		D22C27C5842C1D46ADD3E822 = {
+			fileRef = "A5735C367EE57564A44DA2A1";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		476701CAFFE392BAEE39FB1E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/inpututils.cpp";
+			name = "inpututils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		5CE321536B76CE8C6589608D = {
+			fileRef = "476701CAFFE392BAEE39FB1E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7CEE85F46903EA32E9684F94 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/geodiffutils.cpp";
+			name = "geodiffutils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		4ACAFDC4029039EBB53F054C = {
+			fileRef = "7CEE85F46903EA32E9684F94";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4AF97B55EEFCF5A7CC2B9785 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/positiondirection.cpp";
+			name = "positiondirection.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		27D72DE68EAF19615C889F83 = {
+			fileRef = "4AF97B55EEFCF5A7CC2B9785";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2BE3B5824568D105A1303386 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosimagepicker.cpp";
+			name = "iosimagepicker.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		785601771ECD49264A75A718 = {
+			fileRef = "2BE3B5824568D105A1303386";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C8E75F1E24EEBCE8D8EA4145 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosutils.cpp";
+			name = "iosutils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B93651DEAB8640929DA8753A = {
+			fileRef = "C8E75F1E24EEBCE8D8EA4145";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		CB42E0F51A1CB72EAACC2501 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosinterface.mm";
+			name = "iosinterface.mm";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.objcpp";
+		};
+		107308D8DB37B27058FAC35A = {
+			fileRef = "CB42E0F51A1CB72EAACC2501";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		25D6FC581F9755297D88102A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosviewdelegate.mm";
+			name = "iosviewdelegate.mm";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.objcpp";
+		};
+		46BAEA7F2FB41123A440A010 = {
+			fileRef = "25D6FC581F9755297D88102A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		24D639CCC14C88C85A7D59E7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosimagepicker.mm";
+			name = "iosimagepicker.mm";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.objcpp";
+		};
+		641C5F29728BC2B36A79192E = {
+			fileRef = "24D639CCC14C88C85A7D59E7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		0B9B33E2169311C947C30EDB = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/input_plugin_import.cpp";
+			name = "input_plugin_import.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		2220D50358C098367ECD6854 = {
+			fileRef = "0B9B33E2169311C947C30EDB";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7F0AB38B1C5DE55AF3576C98 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/input_qml_plugin_import.cpp";
+			name = "input_qml_plugin_import.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		7937819AEAB956621B3E6525 = {
+			fileRef = "7F0AB38B1C5DE55AF3576C98";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3FAE58556FDF61B651FDCFA2 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_RecordBtn_qml.cpp";
+			name = "qml_RecordBtn_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		ED068483C542DEE77CED4FC8 = {
+			fileRef = "3FAE58556FDF61B651FDCFA2";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C8DACEB8811947DFAA8D4AE5 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_SettingsPanel_qml.cpp";
+			name = "qml_SettingsPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F9C595D3E9C4F88E0C4646CA = {
+			fileRef = "C8DACEB8811947DFAA8D4AE5";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		00880CC1FADDAC25588806C0 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ExtendedMenuItem_qml.cpp";
+			name = "qml_ExtendedMenuItem_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		4ADCA641064AF2B8A2A833E4 = {
+			fileRef = "00880CC1FADDAC25588806C0";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4C6C0BCFA19CD423F5189BD2 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_RecordToolbar_qml.cpp";
+			name = "qml_RecordToolbar_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		2C3F0BCCF5FAE510F7C472E9 = {
+			fileRef = "4C6C0BCFA19CD423F5189BD2";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		6B234862F93D7B999C560F48 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_MainPanel_qml.cpp";
+			name = "qml_MainPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		AC3884EAE3367CB200176882 = {
+			fileRef = "6B234862F93D7B999C560F48";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		501ABDBB51E13B72D9902A6A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_NumberSpin_qml.cpp";
+			name = "qml_NumberSpin_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		5D8E7550DD42226F1B344D8A = {
+			fileRef = "501ABDBB51E13B72D9902A6A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AEDB4BFB3A639FF003100670 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_MerginProjectPanel_qml.cpp";
+			name = "qml_MerginProjectPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		7111EB665D1E7FF43633C83D = {
+			fileRef = "AEDB4BFB3A639FF003100670";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2B7771136E2CA25DA8E4C666 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ProjectLoadingScreen_qml.cpp";
+			name = "qml_ProjectLoadingScreen_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		C124C758CCA6CF2427CD12D0 = {
+			fileRef = "2B7771136E2CA25DA8E4C666";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		16FBDF0FD74B30EDFF41550E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_PositionMarker_qml.cpp";
+			name = "qml_PositionMarker_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		FD587B1889E9D4BCD11D3F2F = {
+			fileRef = "16FBDF0FD74B30EDFF41550E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F4DEB4976D61E86C03019014 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_Highlight_qml.cpp";
+			name = "qml_Highlight_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E6F1DF4EFDAE09717FBAFFD7 = {
+			fileRef = "F4DEB4976D61E86C03019014";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AAB5BC6AE55FF515B755ABA9 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ScaleBar_qml.cpp";
+			name = "qml_ScaleBar_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		0F473CFD9A92DC39D6182DD1 = {
+			fileRef = "AAB5BC6AE55FF515B755ABA9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		6DCA5B44BF9F5B66F3D9D947 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_PanelTabButton_qml.cpp";
+			name = "qml_PanelTabButton_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F168EDA6F64C5EC2C56735D3 = {
+			fileRef = "6DCA5B44BF9F5B66F3D9D947";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		09531F237485D92884F50337 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_Notification_qml.cpp";
+			name = "qml_Notification_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		C28AD78222DD1E0F0F17EFB9 = {
+			fileRef = "09531F237485D92884F50337";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4062B120C2CF99A2CDA108FD = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_MapThemePanel_qml.cpp";
+			name = "qml_MapThemePanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		8F3C0F7191228821357D2A25 = {
+			fileRef = "4062B120C2CF99A2CDA108FD";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		32996C68512295675EBFD780 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_AccountPage_qml.cpp";
+			name = "qml_AccountPage_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		5052D4D08AFC6ED0B083FCF4 = {
+			fileRef = "32996C68512295675EBFD780";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8437CD1464F2ABB6215B1616 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_FeaturePanel_qml.cpp";
+			name = "qml_FeaturePanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		CA94A6FB04941381BA0D0776 = {
+			fileRef = "8437CD1464F2ABB6215B1616";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2769BFDCA03B3E41378AFAFD = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_RoundIndicator_qml.cpp";
+			name = "qml_RoundIndicator_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		BB124D1A1489ACA94037936A = {
+			fileRef = "2769BFDCA03B3E41378AFAFD";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		59485D21241D9DE0B53A49D4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_LoadingIndicator_qml.cpp";
+			name = "qml_LoadingIndicator_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		7559E76D742B8D0845BB6F17 = {
+			fileRef = "59485D21241D9DE0B53A49D4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3B98EAD0CACA47DCB14736AF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ExternalResourceBundle_qml.cpp";
+			name = "qml_ExternalResourceBundle_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		EC83C6BB1069D89C16793133 = {
+			fileRef = "3B98EAD0CACA47DCB14736AF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		93DD82747DB974F92CD27A7D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_Shadow_qml.cpp";
+			name = "qml_Shadow_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		236930F7C7B8B7A841750505 = {
+			fileRef = "93DD82747DB974F92CD27A7D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4A9D4440BE6E4BF791337ED3 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_RecordCrosshair_qml.cpp";
+			name = "qml_RecordCrosshair_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F6CFC3DA98C782715B66636E = {
+			fileRef = "4A9D4440BE6E4BF791337ED3";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3DE83AB7B46C1A016577B3A4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ActiveLayerPanel_qml.cpp";
+			name = "qml_ActiveLayerPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		39FCA270DBD202F121AD95D8 = {
+			fileRef = "3DE83AB7B46C1A016577B3A4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DC08DA432264C061DC1B7A4A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_FeatureToolbar_qml.cpp";
+			name = "qml_FeatureToolbar_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		45EA61B59F5F3D87A46289C3 = {
+			fileRef = "DC08DA432264C061DC1B7A4A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3C9D8386AA7A8D5CB15100BB = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ProjectStatusPanel_qml.cpp";
+			name = "qml_ProjectStatusPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		CE5A729F0F8CCCE9233C6DE0 = {
+			fileRef = "3C9D8386AA7A8D5CB15100BB";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7DF77A5100139A8345CD13D8 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_PanelItem_qml.cpp";
+			name = "qml_PanelItem_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		8A13C872ADE52FAAB587B3A8 = {
+			fileRef = "7DF77A5100139A8345CD13D8";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3F8C5DEEBCA1713657E22F64 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_AuthPanel_qml.cpp";
+			name = "qml_AuthPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B27A76BF1E792AE5EA703710 = {
+			fileRef = "3F8C5DEEBCA1713657E22F64";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		6E174A6995197C2A5E296183 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_MainPanelButton_qml.cpp";
+			name = "qml_MainPanelButton_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		606672B567FBD94D43A9ADB3 = {
+			fileRef = "6E174A6995197C2A5E296183";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		57BD5178BF2928798857D830 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_main_qml.cpp";
+			name = "qml_main_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B7D5ACB59AA70DD99E8BC0FC = {
+			fileRef = "57BD5178BF2928798857D830";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		283FF69853415378F7A74641 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_PanelHeader_qml.cpp";
+			name = "qml_PanelHeader_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B6C68045967B8643485A270B = {
+			fileRef = "283FF69853415378F7A74641";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E0890502E7FCCCD311154FC6 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_InputStyle_qml.cpp";
+			name = "qml_InputStyle_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		9BF7ED710D31BB733AF9E1CA = {
+			fileRef = "E0890502E7FCCCD311154FC6";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		695C172DC9BD057B102F3A47 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ProjectBtn_qml.cpp";
+			name = "qml_ProjectBtn_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		3C51301233A5D7444176B19A = {
+			fileRef = "695C172DC9BD057B102F3A47";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		35097C2CFFB0B9F3803F6717 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_PreviewPanel_qml.cpp";
+			name = "qml_PreviewPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		32BAA733C553C53AB0DAF126 = {
+			fileRef = "35097C2CFFB0B9F3803F6717";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8E12689B23EAAF932B72D331 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_ProjectDelegateItem_qml.cpp";
+			name = "qml_ProjectDelegateItem_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		60A5E5F74571A7368B3F61E8 = {
+			fileRef = "8E12689B23EAAF932B72D331";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F564D2C24CECC143D523D25B = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_AboutPanel_qml.cpp";
+			name = "qml_AboutPanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B36F8C49D3CA7D6BCF5F3214 = {
+			fileRef = "F564D2C24CECC143D523D25B";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8AB45BFD7B34BD36166B66F9 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickrange_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickrange_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E5ACE0E91F39C45F441661A7 = {
+			fileRef = "8AB45BFD7B34BD36166B66F9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F89F8281E5856723BBD6007D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickeditorwidgetcombobox_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickeditorwidgetcombobox_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		46271E812AEF0F3BD091072D = {
+			fileRef = "F89F8281E5856723BBD6007D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		177696D8F644F0CB4687E854 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickcheckbox_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickcheckbox_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		4C07155FEA8A50077F36AD3B = {
+			fileRef = "177696D8F644F0CB4687E854";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		183DAA485D78F97FDE4683C4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickfeatureform_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickfeatureform_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		7F0DEE812E974E954DF19F86 = {
+			fileRef = "183DAA485D78F97FDE4683C4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		19843D5790902FB68A687B13 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickdatetime_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickdatetime_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		01F7F3DC27E55C8640A404C2 = {
+			fileRef = "19843D5790902FB68A687B13";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C527C0F1F446B2BEA4251EE0 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickmessagelog_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickmessagelog_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E0FD43BCBD26AB7795B01EAC = {
+			fileRef = "C527C0F1F446B2BEA4251EE0";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		D294D9CB8D261BED8E0431F0 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickscalebar_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickscalebar_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		1E891F67B0D5007834EAC648 = {
+			fileRef = "D294D9CB8D261BED8E0431F0";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		BF800DF3610893D42F7574D9 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickphotopanel_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickphotopanel_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		6C01E8AF97282B88B50C9BBC = {
+			fileRef = "BF800DF3610893D42F7574D9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		6F3380871FC38D7B402F7572 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquicktextedit_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquicktextedit_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		B31F12F48C77DF5917CE0A28 = {
+			fileRef = "6F3380871FC38D7B402F7572";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AD9E1EBCC1A9BDACF6B22770 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickpositionmarker_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickpositionmarker_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		1654062070D51BDB30C47FED = {
+			fileRef = "AD9E1EBCC1A9BDACF6B22770";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		999557101CA65CF52BF0F91A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickexternalresource_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickexternalresource_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		3C281A94C61EE752D344F922 = {
+			fileRef = "999557101CA65CF52BF0F91A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		952A96EF71695271563CD200 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickvaluerelation_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickvaluerelation_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		C22D7404031861E127E92C16 = {
+			fileRef = "952A96EF71695271563CD200";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		70AF6C1424071FFA3D51E181 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickicontextitem_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickicontextitem_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F5DEB903D71E283E53437DFA = {
+			fileRef = "70AF6C1424071FFA3D51E181";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E51CDE6192C6B1ABAFFCF791 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickfeatureformstyling_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickfeatureformstyling_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		AF21EF4DCF5F9B8C3044E75B = {
+			fileRef = "E51CDE6192C6B1ABAFFCF791";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F5BBA9F548E25855FC84AAB9 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickvaluemap_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickvaluemap_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		04EB16623915122A9A9BF4E1 = {
+			fileRef = "F5BBA9F548E25855FC84AAB9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DE64A23CF9BDCBA09ED9C2A7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickmapcanvas_qml.cpp";
+			name = ".._.._.._.._.._.._opt_INPUT_input-sdk-ios-4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquickmapcanvas_qml.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E482B327065A7AF21EF0E6BD = {
+			fileRef = "DE64A23CF9BDCBA09ED9C2A7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F1ECCBD76A9C9002E5A3E692 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qmlcache_loader.cpp";
+			name = "qmlcache_loader.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		9220CAE899DBF16E085C8FE3 = {
+			fileRef = "F1ECCBD76A9C9002E5A3E692";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AA2508B9BB0E560657979805 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_pics.cpp";
+			name = "qrc_pics.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		92080CD6252A23BB8F27898D = {
+			fileRef = "AA2508B9BB0E560657979805";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		869D359DEA56468D97C6A619 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_qml_qml_qmlcache.cpp";
+			name = "qrc_qml_qml_qmlcache.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		EF4EECCABB46023CECBC344F = {
+			fileRef = "869D359DEA56468D97C6A619";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		925B6A3AC9319D150CD988F7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_fonts.cpp";
+			name = "qrc_fonts.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		14E4EB80481F1CFF51DDC095 = {
+			fileRef = "925B6A3AC9319D150CD988F7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		884EAFEE6BD4E14D6CD30BCE = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_input_i18n.cpp";
+			name = "qrc_input_i18n.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		93CD8A8A47E43D761E46888C = {
+			fileRef = "884EAFEE6BD4E14D6CD30BCE";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AEBB40D25C8A4A66B4A34534 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_______opt_INPUT_input_sdk_ios_4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquick_qmlcache.cpp";
+			name = "qrc_______opt_INPUT_input_sdk_ios_4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquick_qmlcache.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		D173AAF2EDC7F391FAA5345F = {
+			fileRef = "AEBB40D25C8A4A66B4A34534";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		09E9EED02F22A3BA6BAA83C5 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qrc_images.cpp";
+			name = "qrc_images.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		9645A975F5AE55F8D7E88D3B = {
+			fileRef = "09E9EED02F22A3BA6BAA83C5";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B44AC0811483A8B061034AEC = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_localprojectsmanager.cpp";
+			name = "moc_localprojectsmanager.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		14F0FCEE0BB56AE602BAE372 = {
+			fileRef = "B44AC0811483A8B061034AEC";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		849D2C93C22CFD9F01B4BC53 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_projectsmodel.cpp";
+			name = "moc_projectsmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		496DF57F27F3405A5DE8C758 = {
+			fileRef = "849D2C93C22CFD9F01B4BC53";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		1ADDE33A70B99FC86F00C25F = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_layersmodel.cpp";
+			name = "moc_layersmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		2CE49944E23340F869EFC6F9 = {
+			fileRef = "1ADDE33A70B99FC86F00C25F";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		FF9055B3A34E74EE02AD8C19 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_loader.cpp";
+			name = "moc_loader.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		D61B80DAA0D645F38D8A400D = {
+			fileRef = "FF9055B3A34E74EE02AD8C19";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3F9135CC048257253CE80301 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_digitizingcontroller.cpp";
+			name = "moc_digitizingcontroller.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		8D81DBBCE2B4C514BFADAC9F = {
+			fileRef = "3F9135CC048257253CE80301";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		9E9BE1CC0E29F16AC4AF2A5F = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_mapthemesmodel.cpp";
+			name = "moc_mapthemesmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		FD120ACFE845F5B4EBC99FC4 = {
+			fileRef = "9E9BE1CC0E29F16AC4AF2A5F";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		0E20D8C08F2D03FDAA7F5C0F = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_appsettings.cpp";
+			name = "moc_appsettings.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		88DF2B14DF253C356FEFCC50 = {
+			fileRef = "0E20D8C08F2D03FDAA7F5C0F";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		87949543834AF728A9AF4A5D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_merginapi.cpp";
+			name = "moc_merginapi.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		61008EBF8B73FFB140FB9DC8 = {
+			fileRef = "87949543834AF728A9AF4A5D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		98AF24F0CA6C65D5CBA94C7E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_merginapistatus.cpp";
+			name = "moc_merginapistatus.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		6D946BE598631A2EABF71E85 = {
+			fileRef = "98AF24F0CA6C65D5CBA94C7E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		A8AE35F2D6A85D4B04A4768C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_merginprojectmodel.cpp";
+			name = "moc_merginprojectmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		1AF9D8CE1EE54F061A25795C = {
+			fileRef = "A8AE35F2D6A85D4B04A4768C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2F99A0553BEDD62AE36A27BC = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_merginprojectstatusmodel.cpp";
+			name = "moc_merginprojectstatusmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		98D803C18A3807CC7F90D350 = {
+			fileRef = "2F99A0553BEDD62AE36A27BC";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		796F41E3DC7D37191EABFCE5 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_androidutils.cpp";
+			name = "moc_androidutils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		7C63C852683EA239B18FD2FF = {
+			fileRef = "796F41E3DC7D37191EABFCE5";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E57D5A1C201E0037E14618B4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_inpututils.cpp";
+			name = "moc_inpututils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		A0BA92211F7A731D6532D15C = {
+			fileRef = "E57D5A1C201E0037E14618B4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B98F9106D9BC1D84916EE1CF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_positiondirection.cpp";
+			name = "moc_positiondirection.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		20A7C292136DE5C0C037C186 = {
+			fileRef = "B98F9106D9BC1D84916EE1CF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		CF4055941A62A36C2D20995A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_iosimagepicker.cpp";
+			name = "moc_iosimagepicker.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F3DE91B007E405CDCF618883 = {
+			fileRef = "CF4055941A62A36C2D20995A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		BC8886858EBE620D401ADEE4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/moc_iosutils.cpp";
+			name = "moc_iosutils.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		50D469447499CD9956F7AF92 = {
+			fileRef = "BC8886858EBE620D401ADEE4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2A8EDD586C1A59D83041573C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/localprojectsmanager.h";
+			name = "localprojectsmanager.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		838D7D137CC4871E9120DCB5 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectmetadata.h";
+			name = "merginprojectmetadata.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		DBDC34168A4D1343CA949625 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/projectsmodel.h";
+			name = "projectsmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		0AD1147C353DC0495057B30D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/layersmodel.h";
+			name = "layersmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		08C317EA6F73DF4221B0B5AE = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/loader.h";
+			name = "loader.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		F735A7CED4CBFBEA3589847E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/digitizingcontroller.h";
+			name = "digitizingcontroller.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		8F666A55A542CA17E1D8938B = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/mapthemesmodel.h";
+			name = "mapthemesmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		19A0B974943167686D68685A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/appsettings.h";
+			name = "appsettings.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		21403B3B5F7DB1821F88528D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginapi.h";
+			name = "merginapi.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		215CC83E1885617D536EB3BE = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginapistatus.h";
+			name = "merginapistatus.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		C42C001676A94DE307660F6E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectmodel.h";
+			name = "merginprojectmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		DAC0DEE4783F0769D3E4342A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/merginprojectstatusmodel.h";
+			name = "merginprojectstatusmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		FED65A4AC1ECE2829D84A989 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/androidutils.h";
+			name = "androidutils.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		198463FDB8316D692CB83FAF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/inpututils.h";
+			name = "inpututils.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		2C2FE34980125FE56DC6D6FC = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/geodiffutils.h";
+			name = "geodiffutils.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		B6008B8880E96C20A18C41DC = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/positiondirection.h";
+			name = "positiondirection.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		111EE4837DB1020D524D6215 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosimagepicker.h";
+			name = "iosimagepicker.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		0D7AD0AA85AA676A9C6BC7B8 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosutils.h";
+			name = "iosutils.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		6EC01CE5B064D78632C482B3 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosinterface.h";
+			name = "iosinterface.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		45D115AF87977417BEC3C058 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/iosviewdelegate.h";
+			name = "iosviewdelegate.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		41BA5611369D74C8D4B98C4E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/RecordBtn.qml";
+			name = "RecordBtn.qml";
+			sourceTree = "<absolute>";
+		};
+		395F9E16A5EFB9D6697D0AF6 = {
+			fileRef = "41BA5611369D74C8D4B98C4E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8F628886DF5A7B4F2AE273FA = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/SettingsPanel.qml";
+			name = "SettingsPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		6E399E8A6CC940164A9EBABE = {
+			fileRef = "8F628886DF5A7B4F2AE273FA";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		55749B64B1F10F3D46A3C184 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ExtendedMenuItem.qml";
+			name = "ExtendedMenuItem.qml";
+			sourceTree = "<absolute>";
+		};
+		A37F7B3EA6617E92D0B71643 = {
+			fileRef = "55749B64B1F10F3D46A3C184";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		FBCEBE2A90056E947CCEB78F = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/RecordToolbar.qml";
+			name = "RecordToolbar.qml";
+			sourceTree = "<absolute>";
+		};
+		760A6A0430EF0C635A6F44CF = {
+			fileRef = "FBCEBE2A90056E947CCEB78F";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8C7456AF20076EE6F54EA2E1 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/MainPanel.qml";
+			name = "MainPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		7D3015526F7783A20668979F = {
+			fileRef = "8C7456AF20076EE6F54EA2E1";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2A4E8C0DFC311F5139E95CB3 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/NumberSpin.qml";
+			name = "NumberSpin.qml";
+			sourceTree = "<absolute>";
+		};
+		4A249E4A8A3FF973A25C859A = {
+			fileRef = "2A4E8C0DFC311F5139E95CB3";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		5F5B38B75B1AD1A38DB44868 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/MerginProjectPanel.qml";
+			name = "MerginProjectPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		E293B975284DF048F4715DA4 = {
+			fileRef = "5F5B38B75B1AD1A38DB44868";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8CE45BAD82813ADE8B8223F1 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ProjectLoadingScreen.qml";
+			name = "ProjectLoadingScreen.qml";
+			sourceTree = "<absolute>";
+		};
+		68A177BD92D615ACF33D49B2 = {
+			fileRef = "8CE45BAD82813ADE8B8223F1";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		EBD02625B665900B17123F83 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/PositionMarker.qml";
+			name = "PositionMarker.qml";
+			sourceTree = "<absolute>";
+		};
+		6AAA0DC3C26880C18713B7AA = {
+			fileRef = "EBD02625B665900B17123F83";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		13FF1BA08FB2A3A0A64421C9 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/Highlight.qml";
+			name = "Highlight.qml";
+			sourceTree = "<absolute>";
+		};
+		0D1116D010FBA722E1F22F8A = {
+			fileRef = "13FF1BA08FB2A3A0A64421C9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7A02469684F7F3A8577F2B56 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ScaleBar.qml";
+			name = "ScaleBar.qml";
+			sourceTree = "<absolute>";
+		};
+		983B4886E6AE3CB26A60BFCF = {
+			fileRef = "7A02469684F7F3A8577F2B56";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		5A23F62D919D5F921DA574FF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/PanelTabButton.qml";
+			name = "PanelTabButton.qml";
+			sourceTree = "<absolute>";
+		};
+		D9C3A77A9B20A42311B5A759 = {
+			fileRef = "5A23F62D919D5F921DA574FF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E943FABDA5FE438B8E2DCBB5 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/Notification.qml";
+			name = "Notification.qml";
+			sourceTree = "<absolute>";
+		};
+		8668D55665E0D2FF5819D4C2 = {
+			fileRef = "E943FABDA5FE438B8E2DCBB5";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		EF8F074E3E0166415DC80D40 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/MapThemePanel.qml";
+			name = "MapThemePanel.qml";
+			sourceTree = "<absolute>";
+		};
+		78EEEFCA88D757DC9FFA614B = {
+			fileRef = "EF8F074E3E0166415DC80D40";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3C4C88DD36B34AAFD26E7D56 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/AccountPage.qml";
+			name = "AccountPage.qml";
+			sourceTree = "<absolute>";
+		};
+		4354A2AB78C5033EB3EB17A2 = {
+			fileRef = "3C4C88DD36B34AAFD26E7D56";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E88686FAA1E279180512E8A4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/FeaturePanel.qml";
+			name = "FeaturePanel.qml";
+			sourceTree = "<absolute>";
+		};
+		20F493C76E71421F9316E2BB = {
+			fileRef = "E88686FAA1E279180512E8A4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		30993FF3AA856FF424E9EE7C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/RoundIndicator.qml";
+			name = "RoundIndicator.qml";
+			sourceTree = "<absolute>";
+		};
+		7BAC23C3B0ADFF92DBF08BC3 = {
+			fileRef = "30993FF3AA856FF424E9EE7C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		324C1F075C3EAABDA873ACA7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/LoadingIndicator.qml";
+			name = "LoadingIndicator.qml";
+			sourceTree = "<absolute>";
+		};
+		AE868A79C72B1816809A5E35 = {
+			fileRef = "324C1F075C3EAABDA873ACA7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		577BEB1448FBEFD7F3AD1F0C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ExternalResourceBundle.qml";
+			name = "ExternalResourceBundle.qml";
+			sourceTree = "<absolute>";
+		};
+		761C79765E4289248A531A0F = {
+			fileRef = "577BEB1448FBEFD7F3AD1F0C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		CCC8F81F5054BA11A329037E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/Shadow.qml";
+			name = "Shadow.qml";
+			sourceTree = "<absolute>";
+		};
+		DA4D15CF5CB7BA3E70D44EF1 = {
+			fileRef = "CCC8F81F5054BA11A329037E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8E8D7D7A17A53F6EAE9FBCD1 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/RecordCrosshair.qml";
+			name = "RecordCrosshair.qml";
+			sourceTree = "<absolute>";
+		};
+		586934FA864936CF4DACE9FE = {
+			fileRef = "8E8D7D7A17A53F6EAE9FBCD1";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DFE4B0EF5D6FC906BB2C3FD1 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ActiveLayerPanel.qml";
+			name = "ActiveLayerPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		736392B2CC5A4AC14CA5DDC1 = {
+			fileRef = "DFE4B0EF5D6FC906BB2C3FD1";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		64E4980CA42470555D6DB3DF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/FeatureToolbar.qml";
+			name = "FeatureToolbar.qml";
+			sourceTree = "<absolute>";
+		};
+		AEC598070D0C7FDF2E5611D8 = {
+			fileRef = "64E4980CA42470555D6DB3DF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F6E0673B97614C64B85F5F1B = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ProjectStatusPanel.qml";
+			name = "ProjectStatusPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		5D7E89735C9852DA797411EB = {
+			fileRef = "F6E0673B97614C64B85F5F1B";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2C57655149F131DDCDB3D312 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/PanelItem.qml";
+			name = "PanelItem.qml";
+			sourceTree = "<absolute>";
+		};
+		5F8179190080BA61CFEA90F8 = {
+			fileRef = "2C57655149F131DDCDB3D312";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8CD0B492E7A4965A9F62C9B2 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/AuthPanel.qml";
+			name = "AuthPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		EAF8EB04CCE10CCEC9C95AE5 = {
+			fileRef = "8CD0B492E7A4965A9F62C9B2";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2967334315A8BEA1C31E0A53 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/MainPanelButton.qml";
+			name = "MainPanelButton.qml";
+			sourceTree = "<absolute>";
+		};
+		38F527D68AD3389BB2FA6A71 = {
+			fileRef = "2967334315A8BEA1C31E0A53";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		49C870E55005C15AD050D779 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/main.qml";
+			name = "main.qml";
+			sourceTree = "<absolute>";
+		};
+		FB281E3FFAF18AC7A4BADA9F = {
+			fileRef = "49C870E55005C15AD050D779";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		BCBED7CE28E1320555C46F8D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/PanelHeader.qml";
+			name = "PanelHeader.qml";
+			sourceTree = "<absolute>";
+		};
+		87AECD9D436AE3AB2441D323 = {
+			fileRef = "BCBED7CE28E1320555C46F8D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C938567FC4FB2802AE89744A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/InputStyle.qml";
+			name = "InputStyle.qml";
+			sourceTree = "<absolute>";
+		};
+		BAA3C663F6192726B04FB824 = {
+			fileRef = "C938567FC4FB2802AE89744A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		00D39B4635F5D82380E4A7DB = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ProjectBtn.qml";
+			name = "ProjectBtn.qml";
+			sourceTree = "<absolute>";
+		};
+		09A3D2C933559291C3BDC6F9 = {
+			fileRef = "00D39B4635F5D82380E4A7DB";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AA8FEC31F4C4E78B7C4D3749 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/PreviewPanel.qml";
+			name = "PreviewPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		7466E753E3430A07F00D34AE = {
+			fileRef = "AA8FEC31F4C4E78B7C4D3749";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B6E88B145B756E4C52236401 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/ProjectDelegateItem.qml";
+			name = "ProjectDelegateItem.qml";
+			sourceTree = "<absolute>";
+		};
+		3C6B9537CC15FE37F55EEEE6 = {
+			fileRef = "B6E88B145B756E4C52236401";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4D9036C308D0EC33DEC1F175 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/AboutPanel.qml";
+			name = "AboutPanel.qml";
+			sourceTree = "<absolute>";
+		};
+		AB4692073C93B1981C9AFDB0 = {
+			fileRef = "4D9036C308D0EC33DEC1F175";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		EA9221FCED2A6DE4CA529964 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickrange.qml";
+			name = "qgsquickrange.qml";
+			sourceTree = "<absolute>";
+		};
+		9A16CDD77FE7A1F386FF8156 = {
+			fileRef = "EA9221FCED2A6DE4CA529964";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		98D7807DF4F43857E4089050 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickeditorwidgetcombobox.qml";
+			name = "qgsquickeditorwidgetcombobox.qml";
+			sourceTree = "<absolute>";
+		};
+		A78E864FDD6C0DC726DD28A3 = {
+			fileRef = "98D7807DF4F43857E4089050";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B079F3FC12B3D934D9D87A7E = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickcheckbox.qml";
+			name = "qgsquickcheckbox.qml";
+			sourceTree = "<absolute>";
+		};
+		D6B805FDADBEECF49E1BFC94 = {
+			fileRef = "B079F3FC12B3D934D9D87A7E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DD794F9FBE2B450BCC8970DE = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickfeatureform.qml";
+			name = "qgsquickfeatureform.qml";
+			sourceTree = "<absolute>";
+		};
+		090976C6F6EA402E80AF9024 = {
+			fileRef = "DD794F9FBE2B450BCC8970DE";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		44E5F73D0529DF9E04940681 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickdatetime.qml";
+			name = "qgsquickdatetime.qml";
+			sourceTree = "<absolute>";
+		};
+		242504B6FB7C9E8BC96B5EE9 = {
+			fileRef = "44E5F73D0529DF9E04940681";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		79F70764CFF1B185DEFD3316 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickmessagelog.qml";
+			name = "qgsquickmessagelog.qml";
+			sourceTree = "<absolute>";
+		};
+		5353AB441FE239D7A08F2EDD = {
+			fileRef = "79F70764CFF1B185DEFD3316";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7892BAE4AD460A4C833E5B6A = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickscalebar.qml";
+			name = "qgsquickscalebar.qml";
+			sourceTree = "<absolute>";
+		};
+		93646A069E3EF7ACB5C05733 = {
+			fileRef = "7892BAE4AD460A4C833E5B6A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		29F12B4E0FAFD2AB8D80FF5A = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickphotopanel.qml";
+			name = "qgsquickphotopanel.qml";
+			sourceTree = "<absolute>";
+		};
+		5443D6FFDAB5F64BCE18BC7A = {
+			fileRef = "29F12B4E0FAFD2AB8D80FF5A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		57F31508D7A3E1DB4588834A = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquicktextedit.qml";
+			name = "qgsquicktextedit.qml";
+			sourceTree = "<absolute>";
+		};
+		22DD5C698C01034829E1F7AA = {
+			fileRef = "57F31508D7A3E1DB4588834A";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2FD995BC47D8C220AC134933 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickpositionmarker.qml";
+			name = "qgsquickpositionmarker.qml";
+			sourceTree = "<absolute>";
+		};
+		9224926D657C553559432EF8 = {
+			fileRef = "2FD995BC47D8C220AC134933";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F93C25AD3B03517664969341 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickexternalresource.qml";
+			name = "qgsquickexternalresource.qml";
+			sourceTree = "<absolute>";
+		};
+		6D2FFA34358DBFBDA0AC1066 = {
+			fileRef = "F93C25AD3B03517664969341";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7AABF160D005F92A4AF8CBC0 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickvaluerelation.qml";
+			name = "qgsquickvaluerelation.qml";
+			sourceTree = "<absolute>";
+		};
+		45460FB6F6C1F1D4B948B120 = {
+			fileRef = "7AABF160D005F92A4AF8CBC0";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		82C2CF729346844F26B6F3AF = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickicontextitem.qml";
+			name = "qgsquickicontextitem.qml";
+			sourceTree = "<absolute>";
+		};
+		6749F84ED373CD76EB8B2D90 = {
+			fileRef = "82C2CF729346844F26B6F3AF";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		7503CE29F5B9AB7A75D6A196 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickfeatureformstyling.qml";
+			name = "qgsquickfeatureformstyling.qml";
+			sourceTree = "<absolute>";
+		};
+		1EF967640CE8CFB001D87C3F = {
+			fileRef = "7503CE29F5B9AB7A75D6A196";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B52E364A72B267AE7E8AAB89 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickvaluemap.qml";
+			name = "qgsquickvaluemap.qml";
+			sourceTree = "<absolute>";
+		};
+		7FB20D4239FCF82D01917098 = {
+			fileRef = "B52E364A72B267AE7E8AAB89";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		90919D2D73324ADEAA75491C = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquickmapcanvas.qml";
+			name = "qgsquickmapcanvas.qml";
+			sourceTree = "<absolute>";
+		};
+		BC1BFEDA3A2E3BD32B274546 = {
+			fileRef = "90919D2D73324ADEAA75491C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		3003CF4C53352AFA51054EB4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/qml/qml.qrc";
+			name = "qml.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		FF8B9BE2D8840DC5BE4E02A5 = {
+			fileRef = "3003CF4C53352AFA51054EB4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		AD76CAEBD872FB95CB118082 = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qgsquick.qrc";
+			name = "qgsquick.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		2A10B787CC4FC3D71970F81F = {
+			fileRef = "AD76CAEBD872FB95CB118082";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		387F22FEF5DDBE585190F951 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/img/pics.qrc";
+			name = "pics.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		15B37C348DE7CCECEF8D3226 = {
+			fileRef = "387F22FEF5DDBE585190F951";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C7B4F2BDAAC2C0E5B361FF0C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/qml_qml_qmlcache.qrc";
+			name = "qml_qml_qmlcache.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		692C8E8ADDDC8412F2902C69 = {
+			fileRef = "C7B4F2BDAAC2C0E5B361FF0C";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		FF708D273CADAF13F6631EC0 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/fonts/fonts.qrc";
+			name = "fonts.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		ED33975CB1974B7FA8A67926 = {
+			fileRef = "FF708D273CADAF13F6631EC0";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		2B626E93077C20E89DC78C16 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/i18n/input_i18n.qrc";
+			name = "input_i18n.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		354C9C54FA66EA90E7CB039F = {
+			fileRef = "2B626E93077C20E89DC78C16";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DFF30A8257B7CEDF546ED000 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/______opt_INPUT_input_sdk_ios_4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquick_qmlcache.qrc";
+			name = "______opt_INPUT_input_sdk_ios_4_stage_arm64_QGIS.app_Contents_MacOS_qml_QgsQuick_qgsquick_qmlcache.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		DEEA7A0C18F2526D5A0E981B = {
+			fileRef = "DFF30A8257B7CEDF546ED000";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		B48C08947DF1063737C5309F = {
+			isa = PBXFileReference;
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Resources/images/QgsQuick/images.qrc";
+			name = "images.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		5BE8AE529FBA283A82940261 = {
+			fileRef = "B48C08947DF1063737C5309F";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		FDDC62A5B667AC7D072EEC7C = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/input.pro";
+			name = "input.pro";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		29A2C0D23B09EF9792483915 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/.qmake.stash";
+			name = ".qmake.stash";
+			sourceTree = "<absolute>";
+		};
+		CD6BC88A3D17CEBC25524861 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/config.pri";
+			name = "config.pri";
+			sourceTree = "<absolute>";
+		};
+		4FAC167B239E504F2CDAB0BA = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/version.pri";
+			name = "version.pri";
+			sourceTree = "<absolute>";
+		};
+		3891AC32470A666B1EC2165D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/sources.pri";
+			name = "sources.pri";
+			sourceTree = "<absolute>";
+		};
+		66EFBB862A34426E97736F1A = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android.pri";
+			name = "android.pri";
+			sourceTree = "<absolute>";
+		};
+		6B893CAAEC2090947C74BA05 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios.pri";
+			name = "ios.pri";
+			sourceTree = "<absolute>";
+		};
+		DA5D8A957A0471989C9FDCE4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/linux.pri";
+			name = "linux.pri";
+			sourceTree = "<absolute>";
+		};
+		6219595571D5E35541957AAF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/macx.pri";
+			name = "macx.pri";
+			sourceTree = "<absolute>";
+		};
+		FD4260B8FCEFCF261E33F2CC = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/win32.pri";
+			name = "win32.pri";
+			sourceTree = "<absolute>";
+		};
+		47354B5C3D9A8FEA1FD1CA0D = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/input.pro";
+			name = "input.pro";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		25B08E2869634E9BCBA333A2 = {
+			isa = PBXGroup;
+			children = (
+				"0B9B33E2169311C947C30EDB",
+				"7F0AB38B1C5DE55AF3576C98",
+				"3FAE58556FDF61B651FDCFA2",
+				"C8DACEB8811947DFAA8D4AE5",
+				"00880CC1FADDAC25588806C0",
+				"4C6C0BCFA19CD423F5189BD2",
+				"6B234862F93D7B999C560F48",
+				"501ABDBB51E13B72D9902A6A",
+				"AEDB4BFB3A639FF003100670",
+				"2B7771136E2CA25DA8E4C666",
+				"16FBDF0FD74B30EDFF41550E",
+				"F4DEB4976D61E86C03019014",
+				"AAB5BC6AE55FF515B755ABA9",
+				"6DCA5B44BF9F5B66F3D9D947",
+				"09531F237485D92884F50337",
+				"4062B120C2CF99A2CDA108FD",
+				"32996C68512295675EBFD780",
+				"8437CD1464F2ABB6215B1616",
+				"2769BFDCA03B3E41378AFAFD",
+				"59485D21241D9DE0B53A49D4",
+				"3B98EAD0CACA47DCB14736AF",
+				"93DD82747DB974F92CD27A7D",
+				"4A9D4440BE6E4BF791337ED3",
+				"3DE83AB7B46C1A016577B3A4",
+				"DC08DA432264C061DC1B7A4A",
+				"3C9D8386AA7A8D5CB15100BB",
+				"7DF77A5100139A8345CD13D8",
+				"3F8C5DEEBCA1713657E22F64",
+				"6E174A6995197C2A5E296183",
+				"57BD5178BF2928798857D830",
+				"283FF69853415378F7A74641",
+				"E0890502E7FCCCD311154FC6",
+				"695C172DC9BD057B102F3A47",
+				"35097C2CFFB0B9F3803F6717",
+				"8E12689B23EAAF932B72D331",
+				"F564D2C24CECC143D523D25B",
+				"8AB45BFD7B34BD36166B66F9",
+				"F89F8281E5856723BBD6007D",
+				"177696D8F644F0CB4687E854",
+				"183DAA485D78F97FDE4683C4",
+				"19843D5790902FB68A687B13",
+				"C527C0F1F446B2BEA4251EE0",
+				"D294D9CB8D261BED8E0431F0",
+				"BF800DF3610893D42F7574D9",
+				"6F3380871FC38D7B402F7572",
+				"AD9E1EBCC1A9BDACF6B22770",
+				"999557101CA65CF52BF0F91A",
+				"952A96EF71695271563CD200",
+				"70AF6C1424071FFA3D51E181",
+				"E51CDE6192C6B1ABAFFCF791",
+				"F5BBA9F548E25855FC84AAB9",
+				"DE64A23CF9BDCBA09ED9C2A7",
+				"F1ECCBD76A9C9002E5A3E692",
+				"AA2508B9BB0E560657979805",
+				"869D359DEA56468D97C6A619",
+				"925B6A3AC9319D150CD988F7",
+				"884EAFEE6BD4E14D6CD30BCE",
+				"AEBB40D25C8A4A66B4A34534",
+				"09E9EED02F22A3BA6BAA83C5",
+				"B44AC0811483A8B061034AEC",
+				"849D2C93C22CFD9F01B4BC53",
+				"1ADDE33A70B99FC86F00C25F",
+				"FF9055B3A34E74EE02AD8C19",
+				"3F9135CC048257253CE80301",
+				"9E9BE1CC0E29F16AC4AF2A5F",
+				"0E20D8C08F2D03FDAA7F5C0F",
+				"87949543834AF728A9AF4A5D",
+				"98AF24F0CA6C65D5CBA94C7E",
+				"A8AE35F2D6A85D4B04A4768C",
+				"2F99A0553BEDD62AE36A27BC",
+				"796F41E3DC7D37191EABFCE5",
+				"E57D5A1C201E0037E14618B4",
+				"B98F9106D9BC1D84916EE1CF",
+				"CF4055941A62A36C2D20995A",
+				"BC8886858EBE620D401ADEE4");
+			name = "Generated Sources";
+			sourceTree = "<group>";
+		};
+		48667B3E5E87D5BC83D226C3 = {
+			isa = PBXGroup;
+			children = (
+				"FF708D273CADAF13F6631EC0");
+			name = "fonts";
+			sourceTree = "<group>";
+		};
+		2D41A0CDB99F4D1BFF77923B = {
+			isa = PBXGroup;
+			children = (
+				"2B626E93077C20E89DC78C16");
+			name = "i18n";
+			sourceTree = "<group>";
+		};
+		FFCA53B402EEB0AB9378A9A3 = {
+			isa = PBXGroup;
+			children = (
+				"387F22FEF5DDBE585190F951");
+			name = "img";
+			sourceTree = "<group>";
+		};
+		9AFD1DE6B12E16A6A5AE7193 = {
+			isa = PBXGroup;
+			children = (
+				"41BA5611369D74C8D4B98C4E",
+				"8F628886DF5A7B4F2AE273FA",
+				"55749B64B1F10F3D46A3C184",
+				"FBCEBE2A90056E947CCEB78F",
+				"8C7456AF20076EE6F54EA2E1",
+				"2A4E8C0DFC311F5139E95CB3",
+				"5F5B38B75B1AD1A38DB44868",
+				"8CE45BAD82813ADE8B8223F1",
+				"EBD02625B665900B17123F83",
+				"13FF1BA08FB2A3A0A64421C9",
+				"7A02469684F7F3A8577F2B56",
+				"5A23F62D919D5F921DA574FF",
+				"E943FABDA5FE438B8E2DCBB5",
+				"EF8F074E3E0166415DC80D40",
+				"3C4C88DD36B34AAFD26E7D56",
+				"E88686FAA1E279180512E8A4",
+				"30993FF3AA856FF424E9EE7C",
+				"324C1F075C3EAABDA873ACA7",
+				"577BEB1448FBEFD7F3AD1F0C",
+				"CCC8F81F5054BA11A329037E",
+				"8E8D7D7A17A53F6EAE9FBCD1",
+				"DFE4B0EF5D6FC906BB2C3FD1",
+				"64E4980CA42470555D6DB3DF",
+				"F6E0673B97614C64B85F5F1B",
+				"2C57655149F131DDCDB3D312",
+				"8CD0B492E7A4965A9F62C9B2",
+				"2967334315A8BEA1C31E0A53",
+				"49C870E55005C15AD050D779",
+				"BCBED7CE28E1320555C46F8D",
+				"C938567FC4FB2802AE89744A",
+				"00D39B4635F5D82380E4A7DB",
+				"AA8FEC31F4C4E78B7C4D3749",
+				"B6E88B145B756E4C52236401",
+				"4D9036C308D0EC33DEC1F175");
+			name = "qml";
+			sourceTree = "<group>";
+		};
+		1461C65EBFD213772314A0F6 = {
+			isa = PBXGroup;
+			children = (
+				"3003CF4C53352AFA51054EB4");
+			name = "qml";
+			sourceTree = "<group>";
+		};
+		0FF051564C679F373AD93E32 = {
+			isa = PBXGroup;
+			children = (
+				"2BE3B5824568D105A1303386",
+				"C8E75F1E24EEBCE8D8EA4145",
+				"CB42E0F51A1CB72EAACC2501",
+				"25D6FC581F9755297D88102A",
+				"24D639CCC14C88C85A7D59E7",
+				"111EE4837DB1020D524D6215",
+				"0D7AD0AA85AA676A9C6BC7B8",
+				"6EC01CE5B064D78632C482B3",
+				"45D115AF87977417BEC3C058");
+			name = "ios";
+			sourceTree = "<group>";
+		};
+		87DF60DE337FB58864343E39 = {
+			isa = PBXGroup;
+			children = (
+				"FFCA53B402EEB0AB9378A9A3",
+				"C7B4F2BDAAC2C0E5B361FF0C",
+				"48667B3E5E87D5BC83D226C3",
+				"2D41A0CDB99F4D1BFF77923B",
+				"DFF30A8257B7CEDF546ED000",
+				"B48C08947DF1063737C5309F");
+			name = "Resources";
+			sourceTree = "<group>";
+		};
+		2EB56BE3C2D93CDAB0C52E67 = {
+			isa = PBXGroup;
+			children = (
+				"A595B8E372E752ADA33F0263",
+				"F5BDC8E92A9116DE20BC07EB",
+				"1261DF9EBC6585D1EF8E1D90",
+				"E2F569F50C7697F76A1134A7",
+				"0A1D208186CB5522A2DAE587",
+				"23F6A2A4D95235A2C56A5EAF",
+				"C4F4B800A95220DF013B2C22",
+				"2F8C126B61A163C24B961593",
+				"082D96D9369CDD37914CFE08",
+				"0116BCC158C2C0A8C90D0F4C",
+				"56F510E48B4D6D771DBE90D4",
+				"7EC580ED461737CC681B5290",
+				"BF49554E19E06E0DBCD4B8D3",
+				"A5735C367EE57564A44DA2A1",
+				"476701CAFFE392BAEE39FB1E",
+				"7CEE85F46903EA32E9684F94",
+				"4AF97B55EEFCF5A7CC2B9785",
+				"0FF051564C679F373AD93E32",
+				"2A8EDD586C1A59D83041573C",
+				"838D7D137CC4871E9120DCB5",
+				"DBDC34168A4D1343CA949625",
+				"0AD1147C353DC0495057B30D",
+				"08C317EA6F73DF4221B0B5AE",
+				"F735A7CED4CBFBEA3589847E",
+				"8F666A55A542CA17E1D8938B",
+				"19A0B974943167686D68685A",
+				"21403B3B5F7DB1821F88528D",
+				"215CC83E1885617D536EB3BE",
+				"C42C001676A94DE307660F6E",
+				"DAC0DEE4783F0769D3E4342A",
+				"FED65A4AC1ECE2829D84A989",
+				"198463FDB8316D692CB83FAF",
+				"2C2FE34980125FE56DC6D6FC",
+				"B6008B8880E96C20A18C41DC");
+			name = "Sources";
+			sourceTree = "<group>";
+		};
+		08AD81B276B336F8DA029B18 = {
+			isa = PBXGroup;
+			children = (
+				"9AFD1DE6B12E16A6A5AE7193",
+				"EA9221FCED2A6DE4CA529964",
+				"98D7807DF4F43857E4089050",
+				"B079F3FC12B3D934D9D87A7E",
+				"DD794F9FBE2B450BCC8970DE",
+				"44E5F73D0529DF9E04940681",
+				"79F70764CFF1B185DEFD3316",
+				"7892BAE4AD460A4C833E5B6A",
+				"29F12B4E0FAFD2AB8D80FF5A",
+				"57F31508D7A3E1DB4588834A",
+				"2FD995BC47D8C220AC134933",
+				"F93C25AD3B03517664969341",
+				"7AABF160D005F92A4AF8CBC0",
+				"82C2CF729346844F26B6F3AF",
+				"7503CE29F5B9AB7A75D6A196",
+				"B52E364A72B267AE7E8AAB89",
+				"90919D2D73324ADEAA75491C");
+			name = "Sources [qmlcache]";
+			sourceTree = "<group>";
+		};
+		7F6484B6C352F8E8360B7E84 = {
+			isa = PBXGroup;
+			children = (
+				"1461C65EBFD213772314A0F6",
+				"AD76CAEBD872FB95CB118082");
+			name = "Sources [qmlcache_loader]";
+			sourceTree = "<group>";
+		};
+		74B182DB50CB5611B5C1C297 = {
+			isa = PBXGroup;
+			children = (
+				"FDDC62A5B667AC7D072EEC7C",
+				"29A2C0D23B09EF9792483915",
+				"CD6BC88A3D17CEBC25524861",
+				"4FAC167B239E504F2CDAB0BA",
+				"3891AC32470A666B1EC2165D",
+				"66EFBB862A34426E97736F1A",
+				"6B893CAAEC2090947C74BA05",
+				"DA5D8A957A0471989C9FDCE4",
+				"6219595571D5E35541957AAF",
+				"FD4260B8FCEFCF261E33F2CC",
+				"47354B5C3D9A8FEA1FD1CA0D");
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EF0942E79C014DCEC8976BC = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Preprocessors";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/peter/Projects/quick/input/buils1 -f Input.xcodeproj/qt_preprocess.mak";
+			showEnvVarsInLog = "0";
+		};
+		F7E50F631C51CD5B5DC0BC43 = {
+			buildActionMask = 2147483647;
+			files = (
+				"96D079C2842D475C9B93FA7D",
+				"A8D5D828F1D52A3B852CBB51",
+				"E6B6976F7E0202BC106F846A",
+				"48CDD1CCBCD23268D4ABBF65",
+				"61FCC76377D785DE169D8310",
+				"6784B732AB9123836225A183",
+				"4355461284BCFFDEF4282A2E",
+				"D4F2CD661E42E0C4C324F1A8",
+				"6A3EF15DACD8B6864E65C24F",
+				"860CE316C2A74C043852C6C6",
+				"B9CD07865B8CFC331FDE6C82",
+				"CDB7073CCBF475F1807164EB",
+				"2B51AA6C22F8A070E19F89C2",
+				"D22C27C5842C1D46ADD3E822",
+				"5CE321536B76CE8C6589608D",
+				"4ACAFDC4029039EBB53F054C",
+				"27D72DE68EAF19615C889F83",
+				"785601771ECD49264A75A718",
+				"B93651DEAB8640929DA8753A",
+				"107308D8DB37B27058FAC35A",
+				"46BAEA7F2FB41123A440A010",
+				"641C5F29728BC2B36A79192E",
+				"2220D50358C098367ECD6854",
+				"7937819AEAB956621B3E6525",
+				"ED068483C542DEE77CED4FC8",
+				"F9C595D3E9C4F88E0C4646CA",
+				"4ADCA641064AF2B8A2A833E4",
+				"2C3F0BCCF5FAE510F7C472E9",
+				"AC3884EAE3367CB200176882",
+				"5D8E7550DD42226F1B344D8A",
+				"7111EB665D1E7FF43633C83D",
+				"C124C758CCA6CF2427CD12D0",
+				"FD587B1889E9D4BCD11D3F2F",
+				"E6F1DF4EFDAE09717FBAFFD7",
+				"0F473CFD9A92DC39D6182DD1",
+				"F168EDA6F64C5EC2C56735D3",
+				"C28AD78222DD1E0F0F17EFB9",
+				"8F3C0F7191228821357D2A25",
+				"5052D4D08AFC6ED0B083FCF4",
+				"CA94A6FB04941381BA0D0776",
+				"BB124D1A1489ACA94037936A",
+				"7559E76D742B8D0845BB6F17",
+				"EC83C6BB1069D89C16793133",
+				"236930F7C7B8B7A841750505",
+				"F6CFC3DA98C782715B66636E",
+				"39FCA270DBD202F121AD95D8",
+				"45EA61B59F5F3D87A46289C3",
+				"CE5A729F0F8CCCE9233C6DE0",
+				"8A13C872ADE52FAAB587B3A8",
+				"B27A76BF1E792AE5EA703710",
+				"606672B567FBD94D43A9ADB3",
+				"B7D5ACB59AA70DD99E8BC0FC",
+				"B6C68045967B8643485A270B",
+				"9BF7ED710D31BB733AF9E1CA",
+				"3C51301233A5D7444176B19A",
+				"32BAA733C553C53AB0DAF126",
+				"60A5E5F74571A7368B3F61E8",
+				"B36F8C49D3CA7D6BCF5F3214",
+				"E5ACE0E91F39C45F441661A7",
+				"46271E812AEF0F3BD091072D",
+				"4C07155FEA8A50077F36AD3B",
+				"7F0DEE812E974E954DF19F86",
+				"01F7F3DC27E55C8640A404C2",
+				"E0FD43BCBD26AB7795B01EAC",
+				"1E891F67B0D5007834EAC648",
+				"6C01E8AF97282B88B50C9BBC",
+				"B31F12F48C77DF5917CE0A28",
+				"1654062070D51BDB30C47FED",
+				"3C281A94C61EE752D344F922",
+				"C22D7404031861E127E92C16",
+				"F5DEB903D71E283E53437DFA",
+				"AF21EF4DCF5F9B8C3044E75B",
+				"04EB16623915122A9A9BF4E1",
+				"E482B327065A7AF21EF0E6BD",
+				"9220CAE899DBF16E085C8FE3",
+				"92080CD6252A23BB8F27898D",
+				"EF4EECCABB46023CECBC344F",
+				"14E4EB80481F1CFF51DDC095",
+				"93CD8A8A47E43D761E46888C",
+				"D173AAF2EDC7F391FAA5345F",
+				"9645A975F5AE55F8D7E88D3B",
+				"14F0FCEE0BB56AE602BAE372",
+				"496DF57F27F3405A5DE8C758",
+				"2CE49944E23340F869EFC6F9",
+				"D61B80DAA0D645F38D8A400D",
+				"8D81DBBCE2B4C514BFADAC9F",
+				"FD120ACFE845F5B4EBC99FC4",
+				"88DF2B14DF253C356FEFCC50",
+				"61008EBF8B73FFB140FB9DC8",
+				"6D946BE598631A2EABF71E85",
+				"1AF9D8CE1EE54F061A25795C",
+				"98D803C18A3807CC7F90D350",
+				"7C63C852683EA239B18FD2FF",
+				"A0BA92211F7A731D6532D15C",
+				"20A7C292136DE5C0C037C186",
+				"F3DE91B007E405CDCF618883",
+				"50D469447499CD9956F7AF92");
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Compile Sources";
+		};
+		A6D83C6920E7FAB3919231AB = {
+			isa = PBXFileReference;
+			name = "qgis_quick.framework";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_quick.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		4E654E6B902C5523AB589489 = {
+			fileRef = "A6D83C6920E7FAB3919231AB";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		5ADCB72F4688E8D23B7FCF4F = {
+			isa = PBXFileReference;
+			name = "qgis_core.framework";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_core.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		5C755AD9615DBB35B2EC6AF9 = {
+			fileRef = "5ADCB72F4688E8D23B7FCF4F";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		599E04FD2ACEBB9D5DA10416 = {
+			isa = PBXFileReference;
+			name = "geos";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libgeos.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		53B43B9074F26845E45A634C = {
+			fileRef = "599E04FD2ACEBB9D5DA10416";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		7FBEDDBCDD2E941FF35F14D7 = {
+			isa = PBXFileReference;
+			name = "qt5keychain";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libqt5keychain.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		C55A9B84B08E34773A8F66B6 = {
+			fileRef = "7FBEDDBCDD2E941FF35F14D7";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0D0EDD49FE49AC9B6F7663F8 = {
+			isa = PBXFileReference;
+			name = "expat";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libexpat.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		060604218422D4248F59F4D9 = {
+			fileRef = "0D0EDD49FE49AC9B6F7663F8";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C42FCC7B8896E310F1764649 = {
+			isa = PBXFileReference;
+			name = "charset";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libcharset.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		40DAEF45F4A7E9D7782DA0EC = {
+			fileRef = "C42FCC7B8896E310F1764649";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C2F2E34CA9C88E1BB5A5A70C = {
+			isa = PBXFileReference;
+			name = "freexl";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libfreexl.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		8EDEA12CFB876452096879CF = {
+			fileRef = "C2F2E34CA9C88E1BB5A5A70C";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		473712E25F9F46F066A3E099 = {
+			isa = PBXFileReference;
+			name = "gdal";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libgdal.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B60560081FD52AF4DD0C94E8 = {
+			fileRef = "473712E25F9F46F066A3E099";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		03562C798FC7C71E41F77476 = {
+			isa = PBXFileReference;
+			name = "proj";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libproj.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D9701CCC6B7E2E64ED81B745 = {
+			fileRef = "03562C798FC7C71E41F77476";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0545262D38B9D95E9FF8AA9B = {
+			isa = PBXFileReference;
+			name = "spatialindex";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libspatialindex.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		3AD5A9A11B35724F34E10EAD = {
+			fileRef = "0545262D38B9D95E9FF8AA9B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9430C90C0E09E76EEB0C2AE3 = {
+			isa = PBXFileReference;
+			name = "pq";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libpq.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		855E43FD9EA340DC094C6862 = {
+			fileRef = "9430C90C0E09E76EEB0C2AE3";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		18B0FF0AF21D45ACFDD8601D = {
+			isa = PBXFileReference;
+			name = "spatialite";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libspatialite.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		9AFC8ECC0C7BB273032C87B8 = {
+			fileRef = "18B0FF0AF21D45ACFDD8601D";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA7F772695397ED7BBE14769 = {
+			isa = PBXFileReference;
+			name = "qca-qt5";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libqca-qt5.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		7C48D0A048218BC14701F71E = {
+			fileRef = "CA7F772695397ED7BBE14769";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA704EDD1934753631D59D1C = {
+			isa = PBXFileReference;
+			name = "tasn1";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libtasn1.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4A9BBB3F76964055FBD4B558 = {
+			fileRef = "CA704EDD1934753631D59D1C";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E67431189885BE39E560D4A2 = {
+			isa = PBXFileReference;
+			name = "zip";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libzip.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A1D94E0E9432E8C16E05A92B = {
+			fileRef = "E67431189885BE39E560D4A2";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		301F1B4227BBA5C0A9E10C76 = {
+			isa = PBXFileReference;
+			name = "qgis_quick_plugin";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/libqgis_quick_plugin.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		2B3037DDD4DB8F3E97766865 = {
+			fileRef = "301F1B4227BBA5C0A9E10C76";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		35AD7D7DDD60B828759BC227 = {
+			isa = PBXFileReference;
+			name = "protobuf-lite";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/lib/libprotobuf-lite.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		8296BD3BE2E5EF89F26D7DD1 = {
+			fileRef = "35AD7D7DDD60B828759BC227";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A2DEF140340DA818A4ECCB23 = {
+			isa = PBXFileReference;
+			name = "wmsprovider_a";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis/libwmsprovider_a.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		53F5F5C672798EBC422C07EA = {
+			fileRef = "A2DEF140340DA818A4ECCB23";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4818F193A1C2CD089B1F49A2 = {
+			isa = PBXFileReference;
+			name = "postgresprovider_a";
+			path = "/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis/libpostgresprovider_a.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A2080FA6ACD790CF9F25BC87 = {
+			fileRef = "4818F193A1C2CD089B1F49A2";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		47562FC086D7A4387138EDE0 = {
+			isa = PBXFileReference;
+			name = "qios";
+			path = "/opt/Qt/5.14.2/ios/plugins/platforms/libqios$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		FF5910B7F0C21335E4AE19E1 = {
+			fileRef = "47562FC086D7A4387138EDE0";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		31CCB653D805FC9FEC43B916 = {
+			isa = PBXFileReference;
+			name = "Qt5FontDatabaseSupport";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5FontDatabaseSupport$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		0E5753D7AF84E9E007CEAFB1 = {
+			fileRef = "31CCB653D805FC9FEC43B916";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		135FD964DCCCF6247F6136EF = {
+			isa = PBXFileReference;
+			name = "qtfreetype";
+			path = "/opt/Qt/5.14.2/ios/lib/libqtfreetype$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B74DB6D4D4524EDEEE2A8A91 = {
+			fileRef = "135FD964DCCCF6247F6136EF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		88DCC2EC03BAB380B03099D0 = {
+			isa = PBXFileReference;
+			name = "Qt5GraphicsSupport";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5GraphicsSupport$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		5909EED41BE022D35F54FF7C = {
+			fileRef = "88DCC2EC03BAB380B03099D0";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		2CD2FBDACE85299B16C9891B = {
+			isa = PBXFileReference;
+			name = "Qt5ClipboardSupport";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5ClipboardSupport$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		05FBA62B5A959D54D4AD0D61 = {
+			fileRef = "2CD2FBDACE85299B16C9891B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6A0AA51E6C982412FAD7B3AC = {
+			isa = PBXFileReference;
+			name = "qiosnsphotolibrarysupport";
+			path = "/opt/Qt/5.14.2/ios/plugins/platforms/darwin/libqiosnsphotolibrarysupport$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		2628A6A21385DE7543C6AEA9 = {
+			fileRef = "6A0AA51E6C982412FAD7B3AC";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		719EAFC9D6E5BD50B98F78F1 = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_esri";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_esri$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		9CA5D96285AB748B6FC79667 = {
+			fileRef = "719EAFC9D6E5BD50B98F78F1";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		39659E165E262A19FE3F798F = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_itemsoverlay";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_itemsoverlay$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		BDA742D50AEF33AAA71E7EBC = {
+			fileRef = "39659E165E262A19FE3F798F";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		EB1C2EBD11455CE5972771C6 = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_mapbox";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_mapbox$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		AE2386F3916C8236DB399D93 = {
+			fileRef = "EB1C2EBD11455CE5972771C6";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		97C2CCDD82103BB9A613FC86 = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_mapboxgl";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_mapboxgl$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		8E085A2A7B08AC29050237B1 = {
+			fileRef = "97C2CCDD82103BB9A613FC86";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56169C05C9A9A5D6AEDC55ED = {
+			isa = PBXFileReference;
+			name = "qmapboxgl";
+			path = "/opt/Qt/5.14.2/ios/lib/libqmapboxgl$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A6FD0E0EEBD88520878D662C = {
+			fileRef = "56169C05C9A9A5D6AEDC55ED";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6C7307B6F4B2C39DD3748868 = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_nokia";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_nokia$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		2790E20FE9A4EA23ACA6308B = {
+			fileRef = "6C7307B6F4B2C39DD3748868";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		21187DDBA5E27A7181E2C0BD = {
+			isa = PBXFileReference;
+			name = "qtgeoservices_osm";
+			path = "/opt/Qt/5.14.2/ios/plugins/geoservices/libqtgeoservices_osm$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		87FDF6133755676D725E213F = {
+			fileRef = "21187DDBA5E27A7181E2C0BD";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DCE8BB15ADD1757C47B9416 = {
+			isa = PBXFileReference;
+			name = "qavfcamera";
+			path = "/opt/Qt/5.14.2/ios/plugins/mediaservice/libqavfcamera$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		EA64D0AC9C4BCB573CF4DDA8 = {
+			fileRef = "9DCE8BB15ADD1757C47B9416";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9F7E3A6906689B7ECEE2C116 = {
+			isa = PBXFileReference;
+			name = "qavfmediaplayer";
+			path = "/opt/Qt/5.14.2/ios/plugins/mediaservice/libqavfmediaplayer$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		576CBE5DF8CB9029088DA615 = {
+			fileRef = "9F7E3A6906689B7ECEE2C116";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		547CCADBD1CC5050167EF948 = {
+			isa = PBXFileReference;
+			name = "CoreMedia.framework";
+			path = "/System/Library/Frameworks/CoreMedia.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		B78304F135DEF1F7A68393A6 = {
+			fileRef = "547CCADBD1CC5050167EF948";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F923F38E989CF0F61A164DD8 = {
+			isa = PBXFileReference;
+			name = "CoreVideo.framework";
+			path = "/System/Library/Frameworks/CoreVideo.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		6602E41D28CF886E694AD752 = {
+			fileRef = "F923F38E989CF0F61A164DD8";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		7EC00404ACD5AB0E97726B0E = {
+			isa = PBXFileReference;
+			name = "QuartzCore.framework";
+			path = "/System/Library/Frameworks/QuartzCore.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		B460F624007324313696BE86 = {
+			fileRef = "7EC00404ACD5AB0E97726B0E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3240C46F7B0B6B28748B57FE = {
+			isa = PBXFileReference;
+			name = "qtmedia_audioengine";
+			path = "/opt/Qt/5.14.2/ios/plugins/mediaservice/libqtmedia_audioengine$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F1E4B4D5A80C07AB0766829C = {
+			fileRef = "3240C46F7B0B6B28748B57FE";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		45C629AC4C37040502F9F2A9 = {
+			isa = PBXFileReference;
+			name = "qtaudio_coreaudio";
+			path = "/opt/Qt/5.14.2/ios/plugins/audio/libqtaudio_coreaudio$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		7B16F3B20AF4384043252211 = {
+			fileRef = "45C629AC4C37040502F9F2A9";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		21F907AB8D19BD779147A085 = {
+			isa = PBXFileReference;
+			name = "AVFoundation.framework";
+			path = "/System/Library/Frameworks/AVFoundation.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		CCA737EE379CDB10CC9A0F23 = {
+			fileRef = "21F907AB8D19BD779147A085";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BEF9DFDA6822604126A7E233 = {
+			isa = PBXFileReference;
+			name = "CoreAudio.framework";
+			path = "/System/Library/Frameworks/CoreAudio.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		35A1A39F8EAB37889EB3D397 = {
+			fileRef = "BEF9DFDA6822604126A7E233";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3C44131FDCFEF4396B9EA2BA = {
+			isa = PBXFileReference;
+			name = "AudioToolbox.framework";
+			path = "/System/Library/Frameworks/AudioToolbox.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		4EB68D0C8182BCE33529C421 = {
+			fileRef = "3C44131FDCFEF4396B9EA2BA";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		17CAA11EFC10582B8A5674FE = {
+			isa = PBXFileReference;
+			name = "qtmultimedia_m3u";
+			path = "/opt/Qt/5.14.2/ios/plugins/playlistformats/libqtmultimedia_m3u$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DBF26CDF5C3A4A5929793893 = {
+			fileRef = "17CAA11EFC10582B8A5674FE";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		5BCADE3576B09115DFCC6779 = {
+			isa = PBXFileReference;
+			name = "qsvgicon";
+			path = "/opt/Qt/5.14.2/ios/plugins/iconengines/libqsvgicon$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		1AAD6282F9BE0AAB4EC9ED30 = {
+			fileRef = "5BCADE3576B09115DFCC6779";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		ED3B7F718FA01868BD765F24 = {
+			isa = PBXFileReference;
+			name = "qgif";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqgif$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		E078B98D981A951E079442D4 = {
+			fileRef = "ED3B7F718FA01868BD765F24";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		90E69CA3C4D29969E2131115 = {
+			isa = PBXFileReference;
+			name = "qicns";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqicns$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4F61BCE95F488BD0AD0F8033 = {
+			fileRef = "90E69CA3C4D29969E2131115";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9208DE1C4D46B0DFCD07F79F = {
+			isa = PBXFileReference;
+			name = "qico";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqico$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		8248079E01C781A16324E2B0 = {
+			fileRef = "9208DE1C4D46B0DFCD07F79F";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		33AF933F681E6B31160CB43A = {
+			isa = PBXFileReference;
+			name = "qjpeg";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqjpeg$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		58AAEEAC6DC5179AB6A9B9C6 = {
+			fileRef = "33AF933F681E6B31160CB43A";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6C6BF6908470C358EBAAE074 = {
+			isa = PBXFileReference;
+			name = "qmacheif";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqmacheif$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		67524FF850DCBBE5C035A62A = {
+			fileRef = "6C6BF6908470C358EBAAE074";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C69E9272AF3D9FA5A0F5B56A = {
+			isa = PBXFileReference;
+			name = "qmacjp2";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqmacjp2$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		293E03FB612CB66CCCB5D93A = {
+			fileRef = "C69E9272AF3D9FA5A0F5B56A";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3A8EF9C62A8D4790CBB89CEA = {
+			isa = PBXFileReference;
+			name = "ImageIO.framework";
+			path = "/System/Library/Frameworks/ImageIO.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		61EEC397DC8556BF8C4E36A7 = {
+			fileRef = "3A8EF9C62A8D4790CBB89CEA";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		34DA70528A622B432387D9E6 = {
+			isa = PBXFileReference;
+			name = "qsvg";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqsvg$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		58DE8B5C155EDF9E0EDF3309 = {
+			fileRef = "34DA70528A622B432387D9E6";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FF21C12C60AC706467A8A08F = {
+			isa = PBXFileReference;
+			name = "qtga";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqtga$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DD1D37C7349585E0D54BB4C6 = {
+			fileRef = "FF21C12C60AC706467A8A08F";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FB12BA8669FFF9716DAD12FB = {
+			isa = PBXFileReference;
+			name = "qtiff";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqtiff$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		7D17E8701437BBF88665C062 = {
+			fileRef = "FB12BA8669FFF9716DAD12FB";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		345E1CAEDF84F0874972AC7C = {
+			isa = PBXFileReference;
+			name = "qwbmp";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqwbmp$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		985E3E808957BA2E69C2A8B0 = {
+			fileRef = "345E1CAEDF84F0874972AC7C";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3E2BD02988F89B76A0C5080 = {
+			isa = PBXFileReference;
+			name = "qwebp";
+			path = "/opt/Qt/5.14.2/ios/plugins/imageformats/libqwebp$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		26DBDD089F098951FFF91E21 = {
+			fileRef = "D3E2BD02988F89B76A0C5080";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		243291D751CBEE126059B7E9 = {
+			isa = PBXFileReference;
+			name = "qmldbg_debugger";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_debugger$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A69BD8AD912BBC082CEB37B5 = {
+			fileRef = "243291D751CBEE126059B7E9";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3FAD3E44311D5F2C38C1619E = {
+			isa = PBXFileReference;
+			name = "qmldbg_inspector";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_inspector$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		440BAD2E4EF772BE4EF0BCF6 = {
+			fileRef = "3FAD3E44311D5F2C38C1619E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		735A607CC676A32E94254E56 = {
+			isa = PBXFileReference;
+			name = "qmldbg_local";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_local$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		3817BE94D798D4F9A92660B9 = {
+			fileRef = "735A607CC676A32E94254E56";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		03533770636380C4E108E960 = {
+			isa = PBXFileReference;
+			name = "qmldbg_messages";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_messages$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CFA1BAD3D8BF7DE90F46B71A = {
+			fileRef = "03533770636380C4E108E960";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B15A4407DCA1CF8C4F5A7AA = {
+			isa = PBXFileReference;
+			name = "qmldbg_native";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_native$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		7A448A41969831257E5E2E95 = {
+			fileRef = "4B15A4407DCA1CF8C4F5A7AA";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		30C53F9CE75D77806F940F7E = {
+			isa = PBXFileReference;
+			name = "qmldbg_nativedebugger";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_nativedebugger$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4DB38A92B86C96A1A9B3B1A9 = {
+			fileRef = "30C53F9CE75D77806F940F7E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		425C53650324F3488418CE94 = {
+			isa = PBXFileReference;
+			name = "qmldbg_preview";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_preview$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D5F69DA86EFFB6CD30F9BF92 = {
+			fileRef = "425C53650324F3488418CE94";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C36203B9645C2E82D5C5DE9C = {
+			isa = PBXFileReference;
+			name = "qmldbg_profiler";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_profiler$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		10635D8D0195A97E91C409FF = {
+			fileRef = "C36203B9645C2E82D5C5DE9C";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		37F869263A9E130F514B8ECD = {
+			isa = PBXFileReference;
+			name = "qmldbg_quickprofiler";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_quickprofiler$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		3C89244FAB1434B743AD7450 = {
+			fileRef = "37F869263A9E130F514B8ECD";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		023A3208FDF502D090341E55 = {
+			isa = PBXFileReference;
+			name = "qmldbg_server";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_server$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DFF26E821292D3E6CE08DCA8 = {
+			fileRef = "023A3208FDF502D090341E55";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C58F5E807B99362D64B6461B = {
+			isa = PBXFileReference;
+			name = "Qt5PacketProtocol";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5PacketProtocol$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		BF0A944DC0BE42B0DCE5AFD0 = {
+			fileRef = "C58F5E807B99362D64B6461B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D7D2680C032F6173456BA1AF = {
+			isa = PBXFileReference;
+			name = "qmldbg_tcp";
+			path = "/opt/Qt/5.14.2/ios/plugins/qmltooling/libqmldbg_tcp$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		1A83319CE1DB864D6CCB9CE1 = {
+			fileRef = "D7D2680C032F6173456BA1AF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		91391C712AEC8774C17FDA0D = {
+			isa = PBXFileReference;
+			name = "qgenericbearer";
+			path = "/opt/Qt/5.14.2/ios/plugins/bearer/libqgenericbearer$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		36E8797228979263CFE2E700 = {
+			fileRef = "91391C712AEC8774C17FDA0D";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E72795CEC9ACCEE0E4DCECE3 = {
+			isa = PBXFileReference;
+			name = "qtposition_cl";
+			path = "/opt/Qt/5.14.2/ios/plugins/position/libqtposition_cl$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		2127C2A75115928FB33A9B5F = {
+			fileRef = "E72795CEC9ACCEE0E4DCECE3";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		540C8860251C4461C6B42AB9 = {
+			isa = PBXFileReference;
+			name = "qtposition_positionpoll";
+			path = "/opt/Qt/5.14.2/ios/plugins/position/libqtposition_positionpoll$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		36C6E12614356B587C48DCD5 = {
+			fileRef = "540C8860251C4461C6B42AB9";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		11DC3CC4FC15C49663FE9814 = {
+			isa = PBXFileReference;
+			name = "qtsensors_generic";
+			path = "/opt/Qt/5.14.2/ios/plugins/sensors/libqtsensors_generic$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		61B307ED96A74F67D105FCD7 = {
+			fileRef = "11DC3CC4FC15C49663FE9814";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		04D510975480E313B82D4CFF = {
+			isa = PBXFileReference;
+			name = "qtsensors_ios";
+			path = "/opt/Qt/5.14.2/ios/plugins/sensors/libqtsensors_ios$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		FF8754BC8B38D2749D6C6E8E = {
+			fileRef = "04D510975480E313B82D4CFF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8B34F142455293F9490F665 = {
+			isa = PBXFileReference;
+			name = "CoreLocation.framework";
+			path = "/System/Library/Frameworks/CoreLocation.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		CB4712349D96726A75F70643 = {
+			fileRef = "E8B34F142455293F9490F665";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9FBDB11BD59A7DD917707909 = {
+			isa = PBXFileReference;
+			name = "CoreMotion.framework";
+			path = "/System/Library/Frameworks/CoreMotion.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		270074A9CBDA4BB93EDA69E3 = {
+			fileRef = "9FBDB11BD59A7DD917707909";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C3498DE74ACC74604CA4257D = {
+			isa = PBXFileReference;
+			name = "qsqlite";
+			path = "/opt/Qt/5.14.2/ios/plugins/sqldrivers/libqsqlite$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		C23AC1ADF17F7DFEF2F15E01 = {
+			fileRef = "C3498DE74ACC74604CA4257D";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		2ED89E272BFD68633EC1DB9A = {
+			isa = PBXFileReference;
+			name = "Qt5Location";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Location$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4B1648B66AA72E1E417DF1CF = {
+			fileRef = "2ED89E272BFD68633EC1DB9A";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CAD5C15D98EA4BC3357BA379 = {
+			isa = PBXFileReference;
+			name = "Qt5Svg";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Svg$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		01DDFC64831C8D3E7A8AB05D = {
+			fileRef = "CAD5C15D98EA4BC3357BA379";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		EFDB883B457F290F261D58B4 = {
+			isa = PBXFileReference;
+			name = "Qt5MultimediaWidgets";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5MultimediaWidgets$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		226AD2220774A2E8BB892481 = {
+			fileRef = "EFDB883B457F290F261D58B4";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F9CBF722AD346C86ADEA2234 = {
+			isa = PBXFileReference;
+			name = "Qt5OpenGL";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5OpenGL$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		786535A6D03779855722082F = {
+			fileRef = "F9CBF722AD346C86ADEA2234";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8A54059200841A38881237C1 = {
+			isa = PBXFileReference;
+			name = "Qt5Xml";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Xml$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		20D73099B2FA223F1AA820F4 = {
+			fileRef = "8A54059200841A38881237C1";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		96D5B0B166F1D1650E93BEF4 = {
+			isa = PBXFileReference;
+			name = "Qt5Concurrent";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Concurrent$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DEC6FDB0FA6F4ECA136EC7A3 = {
+			fileRef = "96D5B0B166F1D1650E93BEF4";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3F7B5A58B962220B8D11C0B4 = {
+			isa = PBXFileReference;
+			name = "Qt5Sensors";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Sensors$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		9B629AC03FDF23B027DCD4AA = {
+			fileRef = "3F7B5A58B962220B8D11C0B4";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D88E1168DE74EC30B9BDF7AF = {
+			isa = PBXFileReference;
+			name = "Qt5Sql";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Sql$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		AEFBF0247DC602D74D09ACB8 = {
+			fileRef = "D88E1168DE74EC30B9BDF7AF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		07A743764182BD1C4FC294FD = {
+			isa = PBXFileReference;
+			name = "qmlfolderlistmodelplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/Qt/labs/folderlistmodel/libqmlfolderlistmodelplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		E280930948B3EF641F1FA5C6 = {
+			fileRef = "07A743764182BD1C4FC294FD";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		53965EC695B797D721DEEFEE = {
+			isa = PBXFileReference;
+			name = "qmlsettingsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/Qt/labs/settings/libqmlsettingsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		C5D0783E718B6DCC66DCF933 = {
+			fileRef = "53965EC695B797D721DEEFEE";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		90DF123638892A1B8F7AA24A = {
+			isa = PBXFileReference;
+			name = "dialogsprivateplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs/Private/libdialogsprivateplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CE4A2B26FECA0E95235B9E15 = {
+			fileRef = "90DF123638892A1B8F7AA24A";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CFECC30BE20BDD0FDF71A60D = {
+			isa = PBXFileReference;
+			name = "qtquickcontrolsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls/libqtquickcontrolsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		E55F206BA6205485A546D9DA = {
+			fileRef = "CFECC30BE20BDD0FDF71A60D";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8B35168C9575774F3534C21B = {
+			isa = PBXFileReference;
+			name = "widgetsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/PrivateWidgets/libwidgetsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DB1A50049F63BBEF892F8522 = {
+			fileRef = "8B35168C9575774F3534C21B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9A03682A655146F4AD86A511 = {
+			isa = PBXFileReference;
+			name = "Qt5Widgets";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Widgets$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		228C69ABD63DCA1306D59BAC = {
+			fileRef = "9A03682A655146F4AD86A511";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8F66A8C1427CF67414462B44 = {
+			isa = PBXFileReference;
+			name = "qtgraphicaleffectsprivate";
+			path = "/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects/private/libqtgraphicaleffectsprivate$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		ABAB6521AA99BD2A9B4C0173 = {
+			fileRef = "8F66A8C1427CF67414462B44";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FB59A258CC8BF5270CD5402B = {
+			isa = PBXFileReference;
+			name = "qquicklayoutsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Layouts/libqquicklayoutsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		674F49166E8A68FF60A72D08 = {
+			fileRef = "FB59A258CC8BF5270CD5402B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		AB133D67ED85B77A54B46671 = {
+			isa = PBXFileReference;
+			name = "qmlshapesplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Shapes/libqmlshapesplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		FA00446531998A0F293962C9 = {
+			fileRef = "AB133D67ED85B77A54B46671";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B8825EFE412C0BAB1AA95D6 = {
+			isa = PBXFileReference;
+			name = "Qt5QuickShapes";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5QuickShapes$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B8EB63C9D88EB9C63FFBA489 = {
+			fileRef = "4B8825EFE412C0BAB1AA95D6";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0945EA216906FCE1F19E59F8 = {
+			isa = PBXFileReference;
+			name = "declarative_multimedia";
+			path = "/opt/Qt/5.14.2/ios/qml/QtMultimedia/libdeclarative_multimedia$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		BECDB6F8721113890B5D80D6 = {
+			fileRef = "0945EA216906FCE1F19E59F8";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		EA8312688821035F49C7EE9E = {
+			isa = PBXFileReference;
+			name = "Qt5MultimediaQuick";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5MultimediaQuick$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F67A70479174AD47869A18D3 = {
+			fileRef = "EA8312688821035F49C7EE9E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6B893B900025C180F0AB41A2 = {
+			isa = PBXFileReference;
+			name = "Qt5Multimedia";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Multimedia$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D474B8A711A185C3DF8A74F5 = {
+			fileRef = "6B893B900025C180F0AB41A2";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		28083A7EC3152A02405C63BE = {
+			isa = PBXFileReference;
+			name = "modelsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQml/Models.2/libmodelsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B14926E99F043EC396E3BE69 = {
+			fileRef = "28083A7EC3152A02405C63BE";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A2F7650F6B9A3268DF1663CF = {
+			isa = PBXFileReference;
+			name = "declarative_positioning";
+			path = "/opt/Qt/5.14.2/ios/qml/QtPositioning/libdeclarative_positioning$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		9456CF2608D5BCA2A4CCEA5A = {
+			fileRef = "A2F7650F6B9A3268DF1663CF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B87BFFECFFF51058D17EEE9E = {
+			isa = PBXFileReference;
+			name = "Qt5PositioningQuick";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5PositioningQuick$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		0DEAB56FEA5507B7AE979AF3 = {
+			fileRef = "B87BFFECFFF51058D17EEE9E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB230600AA1FB30487D1694A = {
+			isa = PBXFileReference;
+			name = "Qt5Positioning";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Positioning$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6B264CB73972F5D17882AA5B = {
+			fileRef = "CB230600AA1FB30487D1694A";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6B8F09673355F4C3F9A6EDFA = {
+			isa = PBXFileReference;
+			name = "clip2tri";
+			path = "/opt/Qt/5.14.2/ios/lib/libclip2tri$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		739C494D2F28033AC3EF735F = {
+			fileRef = "6B8F09673355F4C3F9A6EDFA";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		84398367711FBAC24F6A66C5 = {
+			isa = PBXFileReference;
+			name = "poly2tri";
+			path = "/opt/Qt/5.14.2/ios/lib/libpoly2tri$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F7FA51DE1D6D3F188E44C6C6 = {
+			fileRef = "84398367711FBAC24F6A66C5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8CA32B1829E8ADF92536D134 = {
+			isa = PBXFileReference;
+			name = "clipper";
+			path = "/opt/Qt/5.14.2/ios/lib/libclipper$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		C22EF415324401DCF297BEA0 = {
+			fileRef = "8CA32B1829E8ADF92536D134";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9E70775C6B236A3C498B51A4 = {
+			isa = PBXFileReference;
+			name = "dialogplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs/libdialogplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		755EF69E6756D1AFD1DAC954 = {
+			fileRef = "9E70775C6B236A3C498B51A4";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4721016929FA0CE87A4070DB = {
+			isa = PBXFileReference;
+			name = "qmlplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQml/libqmlplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		0F6D805A82F758BCC2C58B4D = {
+			fileRef = "4721016929FA0CE87A4070DB";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0710D94A86ACC3517ED77628 = {
+			isa = PBXFileReference;
+			name = "windowplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Window.2/libwindowplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		855568D22C96EA16C8E66B8F = {
+			fileRef = "0710D94A86ACC3517ED77628";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		54A1789FD3E1D305FCDA567B = {
+			isa = PBXFileReference;
+			name = "qtquick2plugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick.2/libqtquick2plugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		8673AB973D5835A2B9D99733 = {
+			fileRef = "54A1789FD3E1D305FCDA567B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		936FB25D4F138457A99FCDE9 = {
+			isa = PBXFileReference;
+			name = "Qt5QmlWorkerScript";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5QmlWorkerScript$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		1EEAC03526A182C427431399 = {
+			fileRef = "936FB25D4F138457A99FCDE9";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C0D8903BDC1952E6626D2DC1 = {
+			isa = PBXFileReference;
+			name = "qtquicktemplates2plugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Templates.2/libqtquicktemplates2plugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		7C3776A83CDE8C56C775BA09 = {
+			fileRef = "C0D8903BDC1952E6626D2DC1";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8AB2123FA8F41130F3A2BAED = {
+			isa = PBXFileReference;
+			name = "qtquickcontrols2plugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/libqtquickcontrols2plugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B9F8BDEA2C11B02DEE3016FC = {
+			fileRef = "8AB2123FA8F41130F3A2BAED";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBD73CFC79BFE8118DA6A2D2 = {
+			isa = PBXFileReference;
+			name = "qtquickcontrols2fusionstyleplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Fusion/libqtquickcontrols2fusionstyleplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		5C0F497897431A220CE3BE38 = {
+			fileRef = "CBD73CFC79BFE8118DA6A2D2";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		1863704F39A8A4B5B15DC205 = {
+			isa = PBXFileReference;
+			name = "qtquickcontrols2universalstyleplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Universal/libqtquickcontrols2universalstyleplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		E01751E2DEEEE607D173EA6F = {
+			fileRef = "1863704F39A8A4B5B15DC205";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		43552F5D9F999FD849FD4C29 = {
+			isa = PBXFileReference;
+			name = "qtquickcontrols2materialstyleplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Material/libqtquickcontrols2materialstyleplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		0CEEE9BB7CA24693291C323A = {
+			fileRef = "43552F5D9F999FD849FD4C29";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F0DBD9AF0C7558A626B01BDF = {
+			isa = PBXFileReference;
+			name = "qtgraphicaleffectsplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects/libqtgraphicaleffectsplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6042B463F1DB9DA1DC4EFCB4 = {
+			fileRef = "F0DBD9AF0C7558A626B01BDF";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A4AB926C8472F2D2B28569AA = {
+			isa = PBXFileReference;
+			name = "qtquickcontrols2imaginestyleplugin";
+			path = "/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Imagine/libqtquickcontrols2imaginestyleplugin$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		852F6842C00E82A3BC656999 = {
+			fileRef = "A4AB926C8472F2D2B28569AA";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56A77830E5D2F1C4592A9692 = {
+			isa = PBXFileReference;
+			name = "Qt5QuickControls2";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5QuickControls2$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		17313B694154601FA39C3361 = {
+			fileRef = "56A77830E5D2F1C4592A9692";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C653DFA21DA7B913B71B5F79 = {
+			isa = PBXFileReference;
+			name = "Qt5QuickTemplates2";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5QuickTemplates2$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		1C91327C08474879B7547E12 = {
+			fileRef = "C653DFA21DA7B913B71B5F79";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FB5D20EACA23EC7C2EB73828 = {
+			isa = PBXFileReference;
+			name = "Qt5Quick";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Quick$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		16CFFC6D3580B2268251A89B = {
+			fileRef = "FB5D20EACA23EC7C2EB73828";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		82350AD5398E385325616A3F = {
+			isa = PBXFileReference;
+			name = "Qt5Gui";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Gui$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		DBEEA264A3D7048DF56602C2 = {
+			fileRef = "82350AD5398E385325616A3F";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B3546A09A286C83CEAC05290 = {
+			isa = PBXFileReference;
+			name = "qtlibpng";
+			path = "/opt/Qt/5.14.2/ios/lib/libqtlibpng$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		659A5A55F11BDEE545656250 = {
+			fileRef = "B3546A09A286C83CEAC05290";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		042958840E626A09CEB50FB5 = {
+			isa = PBXFileReference;
+			name = "qtharfbuzz";
+			path = "/opt/Qt/5.14.2/ios/lib/libqtharfbuzz$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		9718DEA047EDF6252E56E1D1 = {
+			fileRef = "042958840E626A09CEB50FB5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		7D7B02101166B76FD2D4F8B4 = {
+			isa = PBXFileReference;
+			name = "CoreText.framework";
+			path = "/System/Library/Frameworks/CoreText.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		2B02D9DC58A01E45248DDBCE = {
+			fileRef = "7D7B02101166B76FD2D4F8B4";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6AE3EC31EE5BB1FCEE84137C = {
+			isa = PBXFileReference;
+			name = "CoreGraphics.framework";
+			path = "/System/Library/Frameworks/CoreGraphics.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		0CE02722F00CAD43741297B5 = {
+			fileRef = "6AE3EC31EE5BB1FCEE84137C";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3D259466B280A24E7566EEB5 = {
+			isa = PBXFileReference;
+			name = "Qt5QmlModels";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5QmlModels$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		75C161F9543D8CA8C70207A6 = {
+			fileRef = "3D259466B280A24E7566EEB5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		7C1A3D7910C72BA308A83661 = {
+			isa = PBXFileReference;
+			name = "Qt5Qml";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Qml$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F801DB578CE47DEFDF0A9AF9 = {
+			fileRef = "7C1A3D7910C72BA308A83661";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6F57DD07B658D1CCCAFAA14 = {
+			isa = PBXFileReference;
+			name = "Qt5Network";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Network$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		0E55E492644180CD56F2EA77 = {
+			fileRef = "F6F57DD07B658D1CCCAFAA14";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		205259EEEE2BADA5E64741E3 = {
+			isa = PBXFileReference;
+			name = "Security.framework";
+			path = "/System/Library/Frameworks/Security.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		15364689D2AB5A30E87A689F = {
+			fileRef = "205259EEEE2BADA5E64741E3";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FF5BDAB0076F3391B219EA52 = {
+			isa = PBXFileReference;
+			name = "SystemConfiguration.framework";
+			path = "/System/Library/Frameworks/SystemConfiguration.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		D4639595C3BCF2A39D88DF6E = {
+			fileRef = "FF5BDAB0076F3391B219EA52";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		C714C1AF3FA78E2DABBC17E8 = {
+			isa = PBXFileReference;
+			name = "GSS.framework";
+			path = "/System/Library/Frameworks/GSS.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		906D4B242F504925A3CF2DBB = {
+			fileRef = "C714C1AF3FA78E2DABBC17E8";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B47EAADF4F0056DBE097175B = {
+			isa = PBXFileReference;
+			name = "Qt5Core";
+			path = "/opt/Qt/5.14.2/ios/lib/libQt5Core$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6192FA31240003D93CCC83ED = {
+			fileRef = "B47EAADF4F0056DBE097175B";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D765E1B1EA6C757220C63E7 = {
+			isa = PBXFileReference;
+			name = "CoreFoundation.framework";
+			path = "/System/Library/Frameworks/CoreFoundation.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		F8B465CE34D8DF87AAE95913 = {
+			fileRef = "4D765E1B1EA6C757220C63E7";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FCC237CA5AD60B9BA4447615 = {
+			isa = PBXFileReference;
+			name = "Foundation.framework";
+			path = "/System/Library/Frameworks/Foundation.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		F26454630C80841CBDCFE1CA = {
+			fileRef = "FCC237CA5AD60B9BA4447615";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA0444B9F2E40862CE198A22 = {
+			isa = PBXFileReference;
+			name = "qtpcre2";
+			path = "/opt/Qt/5.14.2/ios/lib/libqtpcre2$(QT_LIBRARY_SUFFIX).a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		3F95FE103A876F9031B2B2D4 = {
+			fileRef = "CA0444B9F2E40862CE198A22";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		AF39DD055C3EF8226FBE929D = {
+			children = (
+				"A6D83C6920E7FAB3919231AB",
+				"5ADCB72F4688E8D23B7FCF4F",
+				"599E04FD2ACEBB9D5DA10416",
+				"7FBEDDBCDD2E941FF35F14D7",
+				"0D0EDD49FE49AC9B6F7663F8",
+				"C42FCC7B8896E310F1764649",
+				"C2F2E34CA9C88E1BB5A5A70C",
+				"473712E25F9F46F066A3E099",
+				"03562C798FC7C71E41F77476",
+				"0545262D38B9D95E9FF8AA9B",
+				"9430C90C0E09E76EEB0C2AE3",
+				"18B0FF0AF21D45ACFDD8601D",
+				"CA7F772695397ED7BBE14769",
+				"CA704EDD1934753631D59D1C",
+				"E67431189885BE39E560D4A2",
+				"301F1B4227BBA5C0A9E10C76",
+				"35AD7D7DDD60B828759BC227",
+				"A2DEF140340DA818A4ECCB23",
+				"4818F193A1C2CD089B1F49A2",
+				"47562FC086D7A4387138EDE0",
+				"31CCB653D805FC9FEC43B916",
+				"135FD964DCCCF6247F6136EF",
+				"88DCC2EC03BAB380B03099D0",
+				"2CD2FBDACE85299B16C9891B",
+				"6A0AA51E6C982412FAD7B3AC",
+				"719EAFC9D6E5BD50B98F78F1",
+				"39659E165E262A19FE3F798F",
+				"EB1C2EBD11455CE5972771C6",
+				"97C2CCDD82103BB9A613FC86",
+				"56169C05C9A9A5D6AEDC55ED",
+				"6C7307B6F4B2C39DD3748868",
+				"21187DDBA5E27A7181E2C0BD",
+				"9DCE8BB15ADD1757C47B9416",
+				"9F7E3A6906689B7ECEE2C116",
+				"547CCADBD1CC5050167EF948",
+				"F923F38E989CF0F61A164DD8",
+				"7EC00404ACD5AB0E97726B0E",
+				"3240C46F7B0B6B28748B57FE",
+				"45C629AC4C37040502F9F2A9",
+				"21F907AB8D19BD779147A085",
+				"BEF9DFDA6822604126A7E233",
+				"3C44131FDCFEF4396B9EA2BA",
+				"17CAA11EFC10582B8A5674FE",
+				"5BCADE3576B09115DFCC6779",
+				"ED3B7F718FA01868BD765F24",
+				"90E69CA3C4D29969E2131115",
+				"9208DE1C4D46B0DFCD07F79F",
+				"33AF933F681E6B31160CB43A",
+				"6C6BF6908470C358EBAAE074",
+				"C69E9272AF3D9FA5A0F5B56A",
+				"3A8EF9C62A8D4790CBB89CEA",
+				"34DA70528A622B432387D9E6",
+				"FF21C12C60AC706467A8A08F",
+				"FB12BA8669FFF9716DAD12FB",
+				"345E1CAEDF84F0874972AC7C",
+				"D3E2BD02988F89B76A0C5080",
+				"243291D751CBEE126059B7E9",
+				"3FAD3E44311D5F2C38C1619E",
+				"735A607CC676A32E94254E56",
+				"03533770636380C4E108E960",
+				"4B15A4407DCA1CF8C4F5A7AA",
+				"30C53F9CE75D77806F940F7E",
+				"425C53650324F3488418CE94",
+				"C36203B9645C2E82D5C5DE9C",
+				"37F869263A9E130F514B8ECD",
+				"023A3208FDF502D090341E55",
+				"C58F5E807B99362D64B6461B",
+				"D7D2680C032F6173456BA1AF",
+				"91391C712AEC8774C17FDA0D",
+				"E72795CEC9ACCEE0E4DCECE3",
+				"540C8860251C4461C6B42AB9",
+				"11DC3CC4FC15C49663FE9814",
+				"04D510975480E313B82D4CFF",
+				"E8B34F142455293F9490F665",
+				"9FBDB11BD59A7DD917707909",
+				"C3498DE74ACC74604CA4257D",
+				"2ED89E272BFD68633EC1DB9A",
+				"CAD5C15D98EA4BC3357BA379",
+				"EFDB883B457F290F261D58B4",
+				"F9CBF722AD346C86ADEA2234",
+				"8A54059200841A38881237C1",
+				"96D5B0B166F1D1650E93BEF4",
+				"3F7B5A58B962220B8D11C0B4",
+				"D88E1168DE74EC30B9BDF7AF",
+				"07A743764182BD1C4FC294FD",
+				"53965EC695B797D721DEEFEE",
+				"90DF123638892A1B8F7AA24A",
+				"CFECC30BE20BDD0FDF71A60D",
+				"8B35168C9575774F3534C21B",
+				"9A03682A655146F4AD86A511",
+				"8F66A8C1427CF67414462B44",
+				"FB59A258CC8BF5270CD5402B",
+				"AB133D67ED85B77A54B46671",
+				"4B8825EFE412C0BAB1AA95D6",
+				"0945EA216906FCE1F19E59F8",
+				"EA8312688821035F49C7EE9E",
+				"6B893B900025C180F0AB41A2",
+				"28083A7EC3152A02405C63BE",
+				"A2F7650F6B9A3268DF1663CF",
+				"B87BFFECFFF51058D17EEE9E",
+				"CB230600AA1FB30487D1694A",
+				"6B8F09673355F4C3F9A6EDFA",
+				"84398367711FBAC24F6A66C5",
+				"8CA32B1829E8ADF92536D134",
+				"9E70775C6B236A3C498B51A4",
+				"4721016929FA0CE87A4070DB",
+				"0710D94A86ACC3517ED77628",
+				"54A1789FD3E1D305FCDA567B",
+				"936FB25D4F138457A99FCDE9",
+				"C0D8903BDC1952E6626D2DC1",
+				"8AB2123FA8F41130F3A2BAED",
+				"CBD73CFC79BFE8118DA6A2D2",
+				"1863704F39A8A4B5B15DC205",
+				"43552F5D9F999FD849FD4C29",
+				"F0DBD9AF0C7558A626B01BDF",
+				"A4AB926C8472F2D2B28569AA",
+				"56A77830E5D2F1C4592A9692",
+				"C653DFA21DA7B913B71B5F79",
+				"FB5D20EACA23EC7C2EB73828",
+				"82350AD5398E385325616A3F",
+				"B3546A09A286C83CEAC05290",
+				"042958840E626A09CEB50FB5",
+				"7D7B02101166B76FD2D4F8B4",
+				"6AE3EC31EE5BB1FCEE84137C",
+				"3D259466B280A24E7566EEB5",
+				"7C1A3D7910C72BA308A83661",
+				"F6F57DD07B658D1CCCAFAA14",
+				"205259EEEE2BADA5E64741E3",
+				"FF5BDAB0076F3391B219EA52",
+				"C714C1AF3FA78E2DABBC17E8",
+				"B47EAADF4F0056DBE097175B",
+				"4D765E1B1EA6C757220C63E7",
+				"FCC237CA5AD60B9BA4447615",
+				"CA0444B9F2E40862CE198A22");
+			isa = PBXGroup;
+			name = "Frameworks";
+			sourceTree = "<group>";
+		};
+		D1C883685E82D5676953459A = {
+			buildActionMask = 2147483647;
+			files = (
+				"4E654E6B902C5523AB589489",
+				"5C755AD9615DBB35B2EC6AF9",
+				"53B43B9074F26845E45A634C",
+				"C55A9B84B08E34773A8F66B6",
+				"060604218422D4248F59F4D9",
+				"40DAEF45F4A7E9D7782DA0EC",
+				"8EDEA12CFB876452096879CF",
+				"B60560081FD52AF4DD0C94E8",
+				"D9701CCC6B7E2E64ED81B745",
+				"3AD5A9A11B35724F34E10EAD",
+				"855E43FD9EA340DC094C6862",
+				"9AFC8ECC0C7BB273032C87B8",
+				"7C48D0A048218BC14701F71E",
+				"4A9BBB3F76964055FBD4B558",
+				"A1D94E0E9432E8C16E05A92B",
+				"2B3037DDD4DB8F3E97766865",
+				"8296BD3BE2E5EF89F26D7DD1",
+				"53F5F5C672798EBC422C07EA",
+				"A2080FA6ACD790CF9F25BC87",
+				"FF5910B7F0C21335E4AE19E1",
+				"0E5753D7AF84E9E007CEAFB1",
+				"B74DB6D4D4524EDEEE2A8A91",
+				"5909EED41BE022D35F54FF7C",
+				"05FBA62B5A959D54D4AD0D61",
+				"2628A6A21385DE7543C6AEA9",
+				"9CA5D96285AB748B6FC79667",
+				"BDA742D50AEF33AAA71E7EBC",
+				"AE2386F3916C8236DB399D93",
+				"8E085A2A7B08AC29050237B1",
+				"A6FD0E0EEBD88520878D662C",
+				"2790E20FE9A4EA23ACA6308B",
+				"87FDF6133755676D725E213F",
+				"EA64D0AC9C4BCB573CF4DDA8",
+				"576CBE5DF8CB9029088DA615",
+				"B78304F135DEF1F7A68393A6",
+				"6602E41D28CF886E694AD752",
+				"B460F624007324313696BE86",
+				"F1E4B4D5A80C07AB0766829C",
+				"7B16F3B20AF4384043252211",
+				"CCA737EE379CDB10CC9A0F23",
+				"35A1A39F8EAB37889EB3D397",
+				"4EB68D0C8182BCE33529C421",
+				"DBF26CDF5C3A4A5929793893",
+				"1AAD6282F9BE0AAB4EC9ED30",
+				"E078B98D981A951E079442D4",
+				"4F61BCE95F488BD0AD0F8033",
+				"8248079E01C781A16324E2B0",
+				"58AAEEAC6DC5179AB6A9B9C6",
+				"67524FF850DCBBE5C035A62A",
+				"293E03FB612CB66CCCB5D93A",
+				"61EEC397DC8556BF8C4E36A7",
+				"58DE8B5C155EDF9E0EDF3309",
+				"DD1D37C7349585E0D54BB4C6",
+				"7D17E8701437BBF88665C062",
+				"985E3E808957BA2E69C2A8B0",
+				"26DBDD089F098951FFF91E21",
+				"A69BD8AD912BBC082CEB37B5",
+				"440BAD2E4EF772BE4EF0BCF6",
+				"3817BE94D798D4F9A92660B9",
+				"CFA1BAD3D8BF7DE90F46B71A",
+				"7A448A41969831257E5E2E95",
+				"4DB38A92B86C96A1A9B3B1A9",
+				"D5F69DA86EFFB6CD30F9BF92",
+				"10635D8D0195A97E91C409FF",
+				"3C89244FAB1434B743AD7450",
+				"DFF26E821292D3E6CE08DCA8",
+				"BF0A944DC0BE42B0DCE5AFD0",
+				"1A83319CE1DB864D6CCB9CE1",
+				"36E8797228979263CFE2E700",
+				"2127C2A75115928FB33A9B5F",
+				"36C6E12614356B587C48DCD5",
+				"61B307ED96A74F67D105FCD7",
+				"FF8754BC8B38D2749D6C6E8E",
+				"CB4712349D96726A75F70643",
+				"270074A9CBDA4BB93EDA69E3",
+				"C23AC1ADF17F7DFEF2F15E01",
+				"4B1648B66AA72E1E417DF1CF",
+				"01DDFC64831C8D3E7A8AB05D",
+				"226AD2220774A2E8BB892481",
+				"786535A6D03779855722082F",
+				"20D73099B2FA223F1AA820F4",
+				"DEC6FDB0FA6F4ECA136EC7A3",
+				"9B629AC03FDF23B027DCD4AA",
+				"AEFBF0247DC602D74D09ACB8",
+				"E280930948B3EF641F1FA5C6",
+				"C5D0783E718B6DCC66DCF933",
+				"CE4A2B26FECA0E95235B9E15",
+				"E55F206BA6205485A546D9DA",
+				"DB1A50049F63BBEF892F8522",
+				"228C69ABD63DCA1306D59BAC",
+				"ABAB6521AA99BD2A9B4C0173",
+				"674F49166E8A68FF60A72D08",
+				"FA00446531998A0F293962C9",
+				"B8EB63C9D88EB9C63FFBA489",
+				"BECDB6F8721113890B5D80D6",
+				"F67A70479174AD47869A18D3",
+				"D474B8A711A185C3DF8A74F5",
+				"B14926E99F043EC396E3BE69",
+				"9456CF2608D5BCA2A4CCEA5A",
+				"0DEAB56FEA5507B7AE979AF3",
+				"6B264CB73972F5D17882AA5B",
+				"739C494D2F28033AC3EF735F",
+				"F7FA51DE1D6D3F188E44C6C6",
+				"C22EF415324401DCF297BEA0",
+				"755EF69E6756D1AFD1DAC954",
+				"0F6D805A82F758BCC2C58B4D",
+				"855568D22C96EA16C8E66B8F",
+				"8673AB973D5835A2B9D99733",
+				"1EEAC03526A182C427431399",
+				"7C3776A83CDE8C56C775BA09",
+				"B9F8BDEA2C11B02DEE3016FC",
+				"5C0F497897431A220CE3BE38",
+				"E01751E2DEEEE607D173EA6F",
+				"0CEEE9BB7CA24693291C323A",
+				"6042B463F1DB9DA1DC4EFCB4",
+				"852F6842C00E82A3BC656999",
+				"17313B694154601FA39C3361",
+				"1C91327C08474879B7547E12",
+				"16CFFC6D3580B2268251A89B",
+				"DBEEA264A3D7048DF56602C2",
+				"659A5A55F11BDEE545656250",
+				"9718DEA047EDF6252E56E1D1",
+				"2B02D9DC58A01E45248DDBCE",
+				"0CE02722F00CAD43741297B5",
+				"75C161F9543D8CA8C70207A6",
+				"F801DB578CE47DEFDF0A9AF9",
+				"0E55E492644180CD56F2EA77",
+				"15364689D2AB5A30E87A689F",
+				"D4639595C3BCF2A39D88DF6E",
+				"906D4B242F504925A3CF2DBB",
+				"6192FA31240003D93CCC83ED",
+				"F8B465CE34D8DF87AAE95913",
+				"F26454630C80841CBDCFE1CA",
+				"3F95FE103A876F9031B2B2D4");
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Link Binary With Libraries";
+		};
+		B263BC46F9FB4EC9C3A47821 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/resources/qgis.db";
+			name = "qgis.db";
+			sourceTree = "<absolute>";
+		};
+		75ED5C04046296026C6E9D68 = {
+			fileRef = "B263BC46F9FB4EC9C3A47821";
+			isa = PBXBuildFile;
+		};
+		4C98E30B221ED1A0EE6B7C59 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/resources/srs.db";
+			name = "srs.db";
+			sourceTree = "<absolute>";
+		};
+		C2F74EE8E36AF7EBAC013996 = {
+			fileRef = "4C98E30B221ED1A0EE6B7C59";
+			isa = PBXBuildFile;
+		};
+		A4651BEC3A74942D12AB6922 = {
+			name = "Copy 'crsFiles' Files to Bundle";
+			buildActionMask = 2147483647;
+			dstPath = "qgis-data/resources";
+			dstSubfolderSpec = 1;
+			isa = PBXCopyFilesBuildPhase;
+			files = (
+				"75ED5C04046296026C6E9D68",
+				"C2F74EE8E36AF7EBAC013996");
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5E8673D406F74489D650F61 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/CH";
+			name = "CH";
+			sourceTree = "<absolute>";
+		};
+		97729DD5C4E18B35967344DE = {
+			fileRef = "D5E8673D406F74489D650F61";
+			isa = PBXBuildFile;
+		};
+		DD8EE3F9C79AF46560BD6BBE = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/GL27";
+			name = "GL27";
+			sourceTree = "<absolute>";
+		};
+		B0609F6FCB85D8130BB985BC = {
+			fileRef = "DD8EE3F9C79AF46560BD6BBE";
+			isa = PBXBuildFile;
+		};
+		0984E3416C6367797F0B4B56 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/ITRF2000";
+			name = "ITRF2000";
+			sourceTree = "<absolute>";
+		};
+		7DEB1CE9A8149CADB45B0D5D = {
+			fileRef = "0984E3416C6367797F0B4B56";
+			isa = PBXBuildFile;
+		};
+		18B56BE6D66F3DBBB232EA30 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/ITRF2008";
+			name = "ITRF2008";
+			sourceTree = "<absolute>";
+		};
+		CAEE6024433A72347174162B = {
+			fileRef = "18B56BE6D66F3DBBB232EA30";
+			isa = PBXBuildFile;
+		};
+		C8AFD21B8EF8BB45F1BF2CD6 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/ITRF2014";
+			name = "ITRF2014";
+			sourceTree = "<absolute>";
+		};
+		2228C143AF6E9B39B91412FF = {
+			fileRef = "C8AFD21B8EF8BB45F1BF2CD6";
+			isa = PBXBuildFile;
+		};
+		EB575C6AE18457FF43DB8D4E = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/nad.lst";
+			name = "nad.lst";
+			sourceTree = "<absolute>";
+		};
+		D77374D55E5C3452E8D970D1 = {
+			fileRef = "EB575C6AE18457FF43DB8D4E";
+			isa = PBXBuildFile;
+		};
+		7EBC4EE79D6E08EBAF10C87F = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/nad27";
+			name = "nad27";
+			sourceTree = "<absolute>";
+		};
+		98C736B7278D1A0D2F5806B7 = {
+			fileRef = "7EBC4EE79D6E08EBAF10C87F";
+			isa = PBXBuildFile;
+		};
+		1487F5F859B7EEA1E5BE83B2 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/nad83";
+			name = "nad83";
+			sourceTree = "<absolute>";
+		};
+		3653E5C070F0802EF4B4724F = {
+			fileRef = "1487F5F859B7EEA1E5BE83B2";
+			isa = PBXBuildFile;
+		};
+		9392B8E4CC4579CB0E681394 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/null";
+			name = "null";
+			sourceTree = "<absolute>";
+		};
+		FCB86C1A24FF523BB6EF3B82 = {
+			fileRef = "9392B8E4CC4579CB0E681394";
+			isa = PBXBuildFile;
+		};
+		2B76DC4C805EB2685D508650 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/other.extra";
+			name = "other.extra";
+			sourceTree = "<absolute>";
+		};
+		F5C25C5BE77F16EE27784C8B = {
+			fileRef = "2B76DC4C805EB2685D508650";
+			isa = PBXBuildFile;
+		};
+		946E8C6FC9782DEDF6CDC4D4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/proj.db";
+			name = "proj.db";
+			sourceTree = "<absolute>";
+		};
+		29D1058CE70362DAB2B2C03E = {
+			fileRef = "946E8C6FC9782DEDF6CDC4D4";
+			isa = PBXBuildFile;
+		};
+		D8672CFFFF14873B0F9E2D7B = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/android/assets/qgis-data/proj/world";
+			name = "world";
+			sourceTree = "<absolute>";
+		};
+		16DE800449652CA75DC4A13A = {
+			fileRef = "D8672CFFFF14873B0F9E2D7B";
+			isa = PBXBuildFile;
+		};
+		05D192F35C72E9AE3A93BB4A = {
+			name = "Copy 'projFiles' Files to Bundle";
+			buildActionMask = 2147483647;
+			dstPath = "qgis-data/proj";
+			dstSubfolderSpec = 1;
+			isa = PBXCopyFilesBuildPhase;
+			files = (
+				"97729DD5C4E18B35967344DE",
+				"B0609F6FCB85D8130BB985BC",
+				"7DEB1CE9A8149CADB45B0D5D",
+				"CAEE6024433A72347174162B",
+				"2228C143AF6E9B39B91412FF",
+				"D77374D55E5C3452E8D970D1",
+				"98C736B7278D1A0D2F5806B7",
+				"3653E5C070F0802EF4B4724F",
+				"FCB86C1A24FF523BB6EF3B82",
+				"F5C25C5BE77F16EE27784C8B",
+				"29D1058CE70362DAB2B2C03E",
+				"16DE800449652CA75DC4A13A");
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8C1D57C9D18CFA6B8B9ADE4 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/launchscreen/InputScreen.xib";
+			name = "InputScreen.xib";
+			sourceTree = "<absolute>";
+		};
+		3BF2E7C0FF3B592BA90BA8A0 = {
+			fileRef = "A8C1D57C9D18CFA6B8B9ADE4";
+			isa = PBXBuildFile;
+		};
+		6F581A1515E3A72083283D39 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/launchscreen/input_large.png";
+			name = "input_large.png";
+			sourceTree = "<absolute>";
+		};
+		CE0A945B0772ED204AA43046 = {
+			fileRef = "6F581A1515E3A72083283D39";
+			isa = PBXBuildFile;
+		};
+		AD8CC734A20EB03A294258BF = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/Input.xcodeproj/Default-568h@2x.png";
+			name = "Default-568h@2x.png";
+			sourceTree = "<absolute>";
+		};
+		F7938C18B28A9C3DA415834A = {
+			fileRef = "AD8CC734A20EB03A294258BF";
+			isa = PBXBuildFile;
+		};
+		42F4606A6687A6ECC89F2219 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/buils1/Input.xcodeproj/LaunchScreen.xib";
+			name = "LaunchScreen.xib";
+			sourceTree = "<absolute>";
+		};
+		064A7F497704E730C7D04B81 = {
+			fileRef = "42F4606A6687A6ECC89F2219";
+			isa = PBXBuildFile;
+		};
+		7567E9E71662B030D30E9AC7 = {
+			isa = PBXFileReference;
+			path = "/Users/peter/Projects/quick/input/app/ios/Images.xcassets";
+			name = "Images.xcassets";
+			sourceTree = "<absolute>";
+		};
+		E4C813BC7C1D82F3215E832A = {
+			fileRef = "7567E9E71662B030D30E9AC7";
+			isa = PBXBuildFile;
+		};
+		858FCAB0EB1F29CF8B07677C = {
+			children = (
+				"B263BC46F9FB4EC9C3A47821",
+				"4C98E30B221ED1A0EE6B7C59",
+				"D5E8673D406F74489D650F61",
+				"DD8EE3F9C79AF46560BD6BBE",
+				"0984E3416C6367797F0B4B56",
+				"18B56BE6D66F3DBBB232EA30",
+				"C8AFD21B8EF8BB45F1BF2CD6",
+				"EB575C6AE18457FF43DB8D4E",
+				"7EBC4EE79D6E08EBAF10C87F",
+				"1487F5F859B7EEA1E5BE83B2",
+				"9392B8E4CC4579CB0E681394",
+				"2B76DC4C805EB2685D508650",
+				"946E8C6FC9782DEDF6CDC4D4",
+				"D8672CFFFF14873B0F9E2D7B",
+				"A8C1D57C9D18CFA6B8B9ADE4",
+				"6F581A1515E3A72083283D39",
+				"AD8CC734A20EB03A294258BF",
+				"42F4606A6687A6ECC89F2219",
+				"7567E9E71662B030D30E9AC7");
+			isa = PBXGroup;
+			name = "Bundle Data";
+			sourceTree = "<group>";
+		};
+		30414803F31797EB689AE508 = {
+			buildActionMask = 2147483647;
+			files = (
+				"3BF2E7C0FF3B592BA90BA8A0",
+				"CE0A945B0772ED204AA43046",
+				"F7938C18B28A9C3DA415834A",
+				"064A7F497704E730C7D04B81",
+				"E4C813BC7C1D82F3215E832A");
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Copy Bundle Resources";
+		};
+		99542592E9780B9225F24AA8 = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		41E3FCE5A361727A0D3423CF = {
+			isa = PBXFileReference;
+			includeInIndex = 0;
+			explicitFileType = "wrapper.application";
+			path = "Input.app";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE0A091FDBFB3E9C31B7A1BD = {
+			children = (
+				"41E3FCE5A361727A0D3423CF");
+			isa = PBXGroup;
+			name = "Products";
+			sourceTree = "<group>";
+		};
+		E8C543AB96796ECAA2E65C57 = {
+			children = (
+				"2EB56BE3C2D93CDAB0C52E67",
+				"25B08E2869634E9BCBA333A2",
+				"08AD81B276B336F8DA029B18",
+				"7F6484B6C352F8E8360B7E84",
+				"87DF60DE337FB58864343E39",
+				"74B182DB50CB5611B5C1C297",
+				"AF39DD055C3EF8226FBE929D",
+				"858FCAB0EB1F29CF8B07677C",
+				"FE0A091FDBFB3E9C31B7A1BD");
+			isa = PBXGroup;
+			name = "Input";
+			sourceTree = "<group>";
+		};
+		9AFBD21EF92AE5656F87D17C = {
+			buildPhases = (
+				"5E618435888B9D49F8540165",
+				"7EF0942E79C014DCEC8976BC");
+			dependencies = (
+				);
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXAggregateTarget;
+			buildRules = (
+);
+			productName = "Qt Preprocess";
+			name = "Qt Preprocess";
+		};
+		761131EC33871C7103076DE7 = {
+			isa = PBXTargetDependency;
+			target = "9AFBD21EF92AE5656F87D17C";
+		};
+		49EE14322FA457D3FE99DA0C = {
+			buildPhases = (
+				"F7E50F631C51CD5B5DC0BC43",
+				"D1C883685E82D5676953459A",
+				"A4651BEC3A74942D12AB6922",
+				"05D192F35C72E9AE3A93BB4A",
+				"30414803F31797EB689AE508",
+				"99542592E9780B9225F24AA8");
+			dependencies = (
+				"761131EC33871C7103076DE7");
+			productReference = "41E3FCE5A361727A0D3423CF";
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXNativeTarget;
+			buildRules = (
+);
+			productType = "com.apple.product-type.application";
+			name = "Input";
+			productName = "Input";
+		};
+		3AA6C32AC930069E80220CF1 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=iphoneos*]" = "arm64";
+				"ARCHS[sdk=iphonesimulator*]" = "x86_64";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)";
+				CODE_SIGN_STYLE = "Manual";
+				COPY_PHASE_STRIP = "NO";
+				DEBUG_INFORMATION_FORMAT = "dwarf";
+				DEVELOPMENT_TEAM = "79QMH2QRAH";
+				ENABLE_BITCODE = "NO";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				ONLY_ACTIVE_ARCH = "YES";
+				PRODUCT_BUNDLE_IDENTIFIER = "LutraConsultingLtd.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "Input";
+				PROVISIONING_PROFILE_SPECIFIER = "LutraConsultingLtd.Input.AppStore";
+				QMAKE_FULL_VERSION = "1.0.0";
+				"QMAKE_MAC_SDK_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk";
+				"QMAKE_MAC_SDK_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform";
+				QMAKE_PKGINFO_TYPEINFO = "????";
+				QMAKE_SHORT_VERSION = "1.0";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "../app/ios/Info.plist";
+				SYMROOT = "$(PROJECT_DIR)";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				IPHONEOS_DEPLOYMENT_TARGET = "12.0";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"../app",
+					".",
+					"/opt/Qt/5.14.2/ios/mkspecs/common/uikit",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_quick.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_native.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_core.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/include",
+					"/opt/Qt/5.14.2/ios/include",
+					"/opt/Qt/5.14.2/ios/include/QtQuickControls2",
+					"/opt/Qt/5.14.2/ios/include/QtLocation",
+					"/opt/Qt/5.14.2/ios/include/QtPositioningQuick",
+					"/opt/Qt/5.14.2/ios/include/QtQuick",
+					"/opt/Qt/5.14.2/ios/include/QtSvg",
+					"/opt/Qt/5.14.2/ios/include/QtOpenGL",
+					"/opt/Qt/5.14.2/ios/include/QtMultimediaWidgets",
+					"/opt/Qt/5.14.2/ios/include/QtWidgets",
+					"/opt/Qt/5.14.2/ios/include/QtMultimedia",
+					"/opt/Qt/5.14.2/ios/include/QtGui",
+					"/opt/Qt/5.14.2/ios/include/QtQmlModels",
+					"/opt/Qt/5.14.2/ios/include/QtQml",
+					"/opt/Qt/5.14.2/ios/include/QtNetwork",
+					"/opt/Qt/5.14.2/ios/include/QtXml",
+					"/opt/Qt/5.14.2/ios/include/QtConcurrent",
+					"/opt/Qt/5.14.2/ios/include/QtPositioning",
+					"/opt/Qt/5.14.2/ios/include/QtSensors",
+					"/opt/Qt/5.14.2/ios/include/QtSql",
+					"/opt/Qt/5.14.2/ios/include/QtCore",
+					".",
+					"/opt/Qt/5.14.2/ios/mkspecs/macx-ios-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/lib",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/../lib/",
+					"/opt/Qt/5.14.2/ios/plugins/platforms",
+					"/opt/Qt/5.14.2/ios/lib",
+					"/opt/Qt/5.14.2/ios/plugins/platforms/darwin",
+					"/opt/Qt/5.14.2/ios/plugins/geoservices",
+					"/opt/Qt/5.14.2/ios/lib",
+					"/opt/Qt/5.14.2/ios/plugins/mediaservice",
+					"/System/Library/Frameworks/",
+					"/opt/Qt/5.14.2/ios/plugins/audio",
+					"/opt/Qt/5.14.2/ios/plugins/playlistformats",
+					"/opt/Qt/5.14.2/ios/plugins/iconengines",
+					"/opt/Qt/5.14.2/ios/plugins/imageformats",
+					"/opt/Qt/5.14.2/ios/plugins/qmltooling",
+					"/opt/Qt/5.14.2/ios/plugins/bearer",
+					"/opt/Qt/5.14.2/ios/plugins/position",
+					"/opt/Qt/5.14.2/ios/plugins/sensors",
+					"/opt/Qt/5.14.2/ios/plugins/sqldrivers",
+					"/opt/Qt/5.14.2/ios/qml/Qt/labs/folderlistmodel",
+					"/opt/Qt/5.14.2/ios/qml/Qt/labs/settings",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs/Private",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/PrivateWidgets",
+					"/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects/private",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Layouts",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Shapes",
+					"/opt/Qt/5.14.2/ios/qml/QtMultimedia",
+					"/opt/Qt/5.14.2/ios/qml/QtQml/Models.2",
+					"/opt/Qt/5.14.2/ios/qml/QtPositioning",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs",
+					"/opt/Qt/5.14.2/ios/qml/QtQml",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Window.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Templates.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Fusion",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Universal",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Material",
+					"/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Imagine");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/lib",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-fobjc-nonfragile-abi",
+					"-fobjc-legacy-dispatch",
+					"-Wall",
+					"-Wextra",
+					"-ffunction-sections",
+					"-fdata-sections",
+					"-fPIC",
+					"-DGLES_SILENCE_DEPRECATION",
+					"-DQT_COMPILER_SUPPORTS_SSE2",
+					"-DVERSTR=\\\"0.6.0\\\"",
+					"-DINPUT_VERSION=0.6.0",
+					"-DMOBILE_OS",
+					"-DQT_NO_SSL",
+					"-DQGIS_QUICK_DATA_PATH=INPUT",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICKCONTROLS2_LIB",
+					"-DQT_LOCATION_LIB",
+					"-DQT_POSITIONINGQUICK_LIB",
+					"-DQT_QUICK_LIB",
+					"-DQT_SVG_LIB",
+					"-DQT_OPENGL_LIB",
+					"-DQT_MULTIMEDIAWIDGETS_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_MULTIMEDIA_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QMLMODELS_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_XML_LIB",
+					"-DQT_CONCURRENT_LIB",
+					"-DQT_POSITIONING_LIB",
+					"-DQT_SENSORS_LIB",
+					"-DQT_SQL_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-std=c++11",
+					"-O2",
+					"-std=gnu++11",
+					"-fobjc-nonfragile-abi",
+					"-fobjc-legacy-dispatch",
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-ffunction-sections",
+					"-fdata-sections",
+					"-fPIC",
+					"-DGLES_SILENCE_DEPRECATION",
+					"-DQT_COMPILER_SUPPORTS_SSE2",
+					"-DVERSTR=\\\"0.6.0\\\"",
+					"-DINPUT_VERSION=0.6.0",
+					"-DMOBILE_OS",
+					"-DQT_NO_SSL",
+					"-DQGIS_QUICK_DATA_PATH=INPUT",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICKCONTROLS2_LIB",
+					"-DQT_LOCATION_LIB",
+					"-DQT_POSITIONINGQUICK_LIB",
+					"-DQT_QUICK_LIB",
+					"-DQT_SVG_LIB",
+					"-DQT_OPENGL_LIB",
+					"-DQT_MULTIMEDIAWIDGETS_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_MULTIMEDIA_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QMLMODELS_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_XML_LIB",
+					"-DQT_CONCURRENT_LIB",
+					"-DQT_POSITIONING_LIB",
+					"-DQT_SENSORS_LIB",
+					"-DQT_SQL_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-stdlib=libc++",
+						"-headerpad_max_install_names",
+						"-u",
+						"_qt_registerPlatformPlugin",
+						"-Wl,-e,_qt_main_wrapper",
+						"-Wl,-dead_strip",
+						"-Wl,-rpath,@executable_path/../Frameworks",
+						"-Wl,-rpath,@executable_path/Frameworks",
+						"-F/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/lib",
+						"-F/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/lib",
+						"-lgeodiff",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/../lib/",
+						"-liconv",
+						"-lbz2",
+						"-L/opt/Qt/5.14.2/ios/plugins/platforms",
+						"-framework",
+						"AssetsLibrary",
+						"-L/opt/Qt/5.14.2/ios/lib",
+						"-framework",
+						"MobileCoreServices",
+						"-lm",
+						"-framework",
+						"UIKit",
+						"-lz",
+						"-framework",
+						"OpenGLES");
+				ARCHS = "arm64 x86_64";
+			};
+			name = "Debug";
+		};
+		77418F46922677BB04ED38DD = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=iphoneos*]" = "arm64";
+				"ARCHS[sdk=iphonesimulator*]" = "x86_64";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)";
+				CODE_SIGN_STYLE = "Manual";
+				COPY_PHASE_STRIP = "NO";
+				DEBUG_INFORMATION_FORMAT = "dwarf";
+				DEVELOPMENT_TEAM = "79QMH2QRAH";
+				ENABLE_BITCODE = "NO";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				ONLY_ACTIVE_ARCH = "YES";
+				PRODUCT_BUNDLE_IDENTIFIER = "LutraConsultingLtd.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "Input";
+				PROVISIONING_PROFILE_SPECIFIER = "LutraConsultingLtd.Input.AppStore";
+				QMAKE_FULL_VERSION = "1.0.0";
+				"QMAKE_MAC_SDK_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk";
+				"QMAKE_MAC_SDK_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform";
+				QMAKE_PKGINFO_TYPEINFO = "????";
+				QMAKE_SHORT_VERSION = "1.0";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				PRODUCT_NAME = "Input";
+			};
+			name = "Debug";
+		};
+		339EE1B2CC4FC24589A0EA95 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=iphoneos*]" = "arm64";
+				"ARCHS[sdk=iphonesimulator*]" = "x86_64";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)";
+				CODE_SIGN_STYLE = "Manual";
+				COPY_PHASE_STRIP = "NO";
+				DEVELOPMENT_TEAM = "79QMH2QRAH";
+				ENABLE_BITCODE = "NO";
+				PRODUCT_BUNDLE_IDENTIFIER = "LutraConsultingLtd.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "Input";
+				PROVISIONING_PROFILE_SPECIFIER = "LutraConsultingLtd.Input.AppStore";
+				QMAKE_FULL_VERSION = "1.0.0";
+				"QMAKE_MAC_SDK_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk";
+				"QMAKE_MAC_SDK_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform";
+				QMAKE_PKGINFO_TYPEINFO = "????";
+				QMAKE_SHORT_VERSION = "1.0";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "../app/ios/Info.plist";
+				SYMROOT = "$(PROJECT_DIR)";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				IPHONEOS_DEPLOYMENT_TARGET = "12.0";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"../app",
+					".",
+					"/opt/Qt/5.14.2/ios/mkspecs/common/uikit",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_quick.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_native.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks/qgis_core.framework/Headers",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/include",
+					"/opt/Qt/5.14.2/ios/include",
+					"/opt/Qt/5.14.2/ios/include/QtQuickControls2",
+					"/opt/Qt/5.14.2/ios/include/QtLocation",
+					"/opt/Qt/5.14.2/ios/include/QtPositioningQuick",
+					"/opt/Qt/5.14.2/ios/include/QtQuick",
+					"/opt/Qt/5.14.2/ios/include/QtSvg",
+					"/opt/Qt/5.14.2/ios/include/QtOpenGL",
+					"/opt/Qt/5.14.2/ios/include/QtMultimediaWidgets",
+					"/opt/Qt/5.14.2/ios/include/QtWidgets",
+					"/opt/Qt/5.14.2/ios/include/QtMultimedia",
+					"/opt/Qt/5.14.2/ios/include/QtGui",
+					"/opt/Qt/5.14.2/ios/include/QtQmlModels",
+					"/opt/Qt/5.14.2/ios/include/QtQml",
+					"/opt/Qt/5.14.2/ios/include/QtNetwork",
+					"/opt/Qt/5.14.2/ios/include/QtXml",
+					"/opt/Qt/5.14.2/ios/include/QtConcurrent",
+					"/opt/Qt/5.14.2/ios/include/QtPositioning",
+					"/opt/Qt/5.14.2/ios/include/QtSensors",
+					"/opt/Qt/5.14.2/ios/include/QtSql",
+					"/opt/Qt/5.14.2/ios/include/QtCore",
+					".",
+					"/opt/Qt/5.14.2/ios/mkspecs/macx-ios-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/lib",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/../lib/",
+					"/opt/Qt/5.14.2/ios/plugins/platforms",
+					"/opt/Qt/5.14.2/ios/lib",
+					"/opt/Qt/5.14.2/ios/plugins/platforms/darwin",
+					"/opt/Qt/5.14.2/ios/plugins/geoservices",
+					"/opt/Qt/5.14.2/ios/lib",
+					"/opt/Qt/5.14.2/ios/plugins/mediaservice",
+					"/System/Library/Frameworks/",
+					"/opt/Qt/5.14.2/ios/plugins/audio",
+					"/opt/Qt/5.14.2/ios/plugins/playlistformats",
+					"/opt/Qt/5.14.2/ios/plugins/iconengines",
+					"/opt/Qt/5.14.2/ios/plugins/imageformats",
+					"/opt/Qt/5.14.2/ios/plugins/qmltooling",
+					"/opt/Qt/5.14.2/ios/plugins/bearer",
+					"/opt/Qt/5.14.2/ios/plugins/position",
+					"/opt/Qt/5.14.2/ios/plugins/sensors",
+					"/opt/Qt/5.14.2/ios/plugins/sqldrivers",
+					"/opt/Qt/5.14.2/ios/qml/Qt/labs/folderlistmodel",
+					"/opt/Qt/5.14.2/ios/qml/Qt/labs/settings",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs/Private",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/PrivateWidgets",
+					"/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects/private",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Layouts",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Shapes",
+					"/opt/Qt/5.14.2/ios/qml/QtMultimedia",
+					"/opt/Qt/5.14.2/ios/qml/QtQml/Models.2",
+					"/opt/Qt/5.14.2/ios/qml/QtPositioning",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Dialogs",
+					"/opt/Qt/5.14.2/ios/qml/QtQml",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Window.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Templates.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Fusion",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Universal",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Material",
+					"/opt/Qt/5.14.2/ios/qml/QtGraphicalEffects",
+					"/opt/Qt/5.14.2/ios/qml/QtQuick/Controls.2/Imagine");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/lib",
+					"/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-fobjc-nonfragile-abi",
+					"-fobjc-legacy-dispatch",
+					"-Wall",
+					"-Wextra",
+					"-ffunction-sections",
+					"-fdata-sections",
+					"-fPIC",
+					"-DGLES_SILENCE_DEPRECATION",
+					"-DQT_COMPILER_SUPPORTS_SSE2",
+					"-DVERSTR=\\\"0.6.0\\\"",
+					"-DINPUT_VERSION=0.6.0",
+					"-DMOBILE_OS",
+					"-DQT_NO_SSL",
+					"-DQGIS_QUICK_DATA_PATH=INPUT",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICKCONTROLS2_LIB",
+					"-DQT_LOCATION_LIB",
+					"-DQT_POSITIONINGQUICK_LIB",
+					"-DQT_QUICK_LIB",
+					"-DQT_SVG_LIB",
+					"-DQT_OPENGL_LIB",
+					"-DQT_MULTIMEDIAWIDGETS_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_MULTIMEDIA_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QMLMODELS_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_XML_LIB",
+					"-DQT_CONCURRENT_LIB",
+					"-DQT_POSITIONING_LIB",
+					"-DQT_SENSORS_LIB",
+					"-DQT_SQL_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-std=c++11",
+					"-O2",
+					"-std=gnu++11",
+					"-fobjc-nonfragile-abi",
+					"-fobjc-legacy-dispatch",
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-ffunction-sections",
+					"-fdata-sections",
+					"-fPIC",
+					"-DGLES_SILENCE_DEPRECATION",
+					"-DQT_COMPILER_SUPPORTS_SSE2",
+					"-DVERSTR=\\\"0.6.0\\\"",
+					"-DINPUT_VERSION=0.6.0",
+					"-DMOBILE_OS",
+					"-DQT_NO_SSL",
+					"-DQGIS_QUICK_DATA_PATH=INPUT",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICKCONTROLS2_LIB",
+					"-DQT_LOCATION_LIB",
+					"-DQT_POSITIONINGQUICK_LIB",
+					"-DQT_QUICK_LIB",
+					"-DQT_SVG_LIB",
+					"-DQT_OPENGL_LIB",
+					"-DQT_MULTIMEDIAWIDGETS_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_MULTIMEDIA_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QMLMODELS_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_XML_LIB",
+					"-DQT_CONCURRENT_LIB",
+					"-DQT_POSITIONING_LIB",
+					"-DQT_SENSORS_LIB",
+					"-DQT_SQL_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-stdlib=libc++",
+						"-headerpad_max_install_names",
+						"-u",
+						"_qt_registerPlatformPlugin",
+						"-Wl,-e,_qt_main_wrapper",
+						"-Wl,-dead_strip",
+						"-Wl,-rpath,@executable_path/../Frameworks",
+						"-Wl,-rpath,@executable_path/Frameworks",
+						"-F/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/lib",
+						"-F/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/Frameworks",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/lib",
+						"-lgeodiff",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/PlugIns/qgis",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/",
+						"-L/opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/../lib/",
+						"-liconv",
+						"-lbz2",
+						"-L/opt/Qt/5.14.2/ios/plugins/platforms",
+						"-framework",
+						"AssetsLibrary",
+						"-L/opt/Qt/5.14.2/ios/lib",
+						"-framework",
+						"MobileCoreServices",
+						"-lm",
+						"-framework",
+						"UIKit",
+						"-lz",
+						"-framework",
+						"OpenGLES");
+				ARCHS = "arm64 x86_64";
+			};
+			name = "Release";
+		};
+		6666AA5E688052234F6758D8 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=iphoneos*]" = "arm64";
+				"ARCHS[sdk=iphonesimulator*]" = "x86_64";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)";
+				CODE_SIGN_STYLE = "Manual";
+				COPY_PHASE_STRIP = "NO";
+				DEVELOPMENT_TEAM = "79QMH2QRAH";
+				ENABLE_BITCODE = "NO";
+				PRODUCT_BUNDLE_IDENTIFIER = "LutraConsultingLtd.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "Input";
+				PROVISIONING_PROFILE_SPECIFIER = "LutraConsultingLtd.Input.AppStore";
+				QMAKE_FULL_VERSION = "1.0.0";
+				"QMAKE_MAC_SDK_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.4.sdk";
+				"QMAKE_MAC_SDK_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator13.4.sdk";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphoneos*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform";
+				"QMAKE_MAC_SDK_PLATFORM_PATH[sdk=iphonesimulator*]" = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform";
+				QMAKE_PKGINFO_TYPEINFO = "????";
+				QMAKE_SHORT_VERSION = "1.0";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				PRODUCT_NAME = "Input";
+			};
+			name = "Release";
+		};
+		DAC4C1AA5EDEA1C85E9CA5E6 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"3AA6C32AC930069E80220CF1",
+				"339EE1B2CC4FC24589A0EA95");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6CC3B5D2136C7CD6A5CF5A59 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"77418F46922677BB04ED38DD",
+				"6666AA5E688052234F6758D8");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6DB9C3763D02B1415CD9D565 = {
+			hasScannedForEncodings = 1;
+			compatibilityVersion = "Xcode 3.2";
+			isa = PBXProject;
+			mainGroup = "E8C543AB96796ECAA2E65C57";
+			productRefGroup = "FE0A091FDBFB3E9C31B7A1BD";
+			buildConfigurationList = "DAC4C1AA5EDEA1C85E9CA5E6";
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"49EE14322FA457D3FE99DA0C",
+				"9AFBD21EF92AE5656F87D17C");
+			attributes = {
+				TargetAttributes = {
+				};
+			};
+		};
+	};
+	rootObject = "6DB9C3763D02B1415CD9D565";
+}
