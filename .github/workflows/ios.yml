@@ -4,38 +4,54 @@ env:
   QT_VERSION: 5.14.2
   SDK_VERSION: 4
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
+  KEYCHAIN: ${{ 'inputapp.keychain' }}
+  XC_VERSION: ${{ '11.4' }}
 
 jobs:
   mac_os_build:
     if: github.repository == 'lutraconsulting/input'
     runs-on: macos-latest
     steps:
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+
       - uses: actions/checkout@v2
 
       - name: Install brew deps
         run: brew install gnupg
 
-      - name: Setup provisioning profile
+      - name: Configure Keychain
+        run: |
+          security create-keychain -p "" "$KEYCHAIN"
+          security list-keychains -s "$KEYCHAIN"
+          security default-keychain -s "$KEYCHAIN"
+          security unlock-keychain -p "" "$KEYCHAIN"
+          security set-keychain-settings
+          security list-keychains
+
+      - name: Configure Code Signing
         env:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
           # gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/ios_distribution.cer ./.github/secrets/ios/ios_distribution.cer.gpg
+          security import "./.github/secrets/ios/Certificates_ios_dist.p12" -k "$KEYCHAIN" -P "$IOS_CERT_KEY" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
-          security create-keychain -p "" build.keychain
-          security import ./.github/secrets/ios/Certificates_ios_dist.p12 -t agg -k ~/Library/Keychains/login.keychain -P "$IOS_CERT_KEY" -A
+
+          # security create-keychain -p "" build.keychain
+          # security import ./.github/secrets/ios/Certificates_ios_dist.p12 -t agg -k ~/Library/Keychains/login.keychain -P "$IOS_CERT_KEY" -A
           # security import ./.github/secrets/ios/ios_distribution.cer -t agg -k ~/Library/Keychains/build.keychain -P "" -A
           # security list-keychains -s ~/Library/Keychains/build.keychain
-          #security default-keychain -s ~/Library/Keychains/build.keychain
+          #  security default-keychain -s ~/Library/Keychains/build.keychain
           # security unlock-keychain -p "" ~/Library/Keychains/login.keychain
-
           # security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
 
-      - name: download and install input-sdk
+      - name: Download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
@@ -44,7 +60,7 @@ jobs:
           tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
           mv /opt/INPUT/input-sdk-${SDK_VERSION}/arm64 /opt/INPUT/input-sdk-${SDK_VERSION}/stage
 
-      - name: download and install qt
+      - name: Download and install qt
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/whdez6vfckulgxu/qt-${QT_VERSION}-ios.tar.gz?dl=0"
@@ -52,7 +68,7 @@ jobs:
           cd /opt/Qt/${QT_VERSION}/ios
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
-      - name: create build system with qmake
+      - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
 
@@ -80,7 +96,7 @@ jobs:
             qteam.name=DEVELOPMENT_TEAM \
             qteam.value=79QMH2QRAH
 
-      - name: build Input
+      - name: Build & Archive Input
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
@@ -92,11 +108,10 @@ jobs:
             -scheme Input \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath \
-            $PWD/Input.xcarchive \
-            clean archive
+            -archivePath $PWD/Input.xcarchive \
+            "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
-      - name: export .ipa
+      - name: Export .ipa
         run: |
           INPUT_DIR=`pwd`
           cd ../build-INPUT
@@ -110,7 +125,7 @@ jobs:
             -allowProvisioningUpdates \
             -exportArchive
 
-      - name: upload .ipa to dropbox
+      - name: Upload .ipa to dropbox
         env:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
           INPUTAPP_BOT_DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
