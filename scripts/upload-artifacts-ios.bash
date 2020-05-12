@@ -1,12 +1,11 @@
 #!/bin/bash
 set -e
 
-ls build-INPUT/*.ipa
 export ARCH="arm64"
 export SIGNED="signed"
 export GITHUB_REPO=lutraconsulting/input
 export DROPBOX_FOLDER=ios
-export BUILD_FILE=Input.ipa
+export BUILD_FILE=$1
 
 if [ -n "${IOS_CERT_KEY}" ]; then
     echo "uploading artifacts to dropbox"
@@ -15,8 +14,8 @@ else
     exit 0
 fi
 
-if [ "X${DROPBOX_FOLDER}" == "X" ]; then
-    echo "missing DROPBOX_FOLDER name"
+if [ "X${BUILD_FILE}" == "X" ]; then
+    echo "missing BUILD_FILE name"
     exit 1
 fi
 

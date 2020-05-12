@@ -125,4 +125,3 @@ jobs:
         if: success()
         run: |
           ./scripts/upload-artifacts-ios.bash ../build-INPUT/Input.ipa
-DROPBOX_FOLDER
