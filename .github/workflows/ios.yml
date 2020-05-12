@@ -145,9 +145,10 @@ jobs:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
         if: success()
         run: |
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
+          echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f ../build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
-          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
           GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
           curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: ['${SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${SDK_VERSION}'))"}' ${GITHUB_API}
