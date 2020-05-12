@@ -13,10 +13,9 @@ if not exist %SRC_FILE% (echo missing_result & goto error)
 echo f | xcopy /f /Y %SRC_FILE% %APK_FILE%
 
 if not ["%APPVEYOR_PULL_REQUEST_TITLE%"]==[""] (
-    echo "Skipping deployment of pull request"
+    echo "Deployment of pull request"
     rem set DROPBOX_FOLDER="pulls"
-    rem set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/issues/%APPVEYOR_PULL_REQUEST_NUMBER%/comments
-    exit /b 0
+    set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/issues/%APPVEYOR_PULL_REQUEST_NUMBER%/comments
 ) else if ["%APPVEYOR_REPO_TAG%"]==["true"] (
     echo "Deploying tagged release"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments

@@ -7,13 +7,6 @@ export GITHUB_REPO=lutraconsulting/input
 export DROPBOX_FOLDER=ios
 export BUILD_FILE=$1
 
-if [ -n "${IOS_CERT_KEY}" ]; then
-    echo "uploading artifacts to dropbox"
-else
-    echo "cloned from other fork, nothing to do"
-    exit 0
-fi
-
 if [ "X${BUILD_FILE}" == "X" ]; then
     echo "missing BUILD_FILE name"
     exit 1
