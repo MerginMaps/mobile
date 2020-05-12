@@ -46,10 +46,12 @@ jobs:
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/0hfjybth4zxko7f/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}
-          cd /opt/INPUT/input-sdk-${SDK_VERSION}
+          mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-${SDK_VERSION}/stage
           tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
-          mv /opt/INPUT/input-sdk-${SDK_VERSION}/arm64 /opt/INPUT/input-sdk-${SDK_VERSION}/stage
+          
+          ls -la arm64/include/geodiff.h
+          ls -la arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
 
       - name: Download and install qt
         run: |
