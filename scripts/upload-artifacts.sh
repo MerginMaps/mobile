@@ -2,6 +2,7 @@
 set -e
 
 ls build-${ARCH}/out/build/outputs/apk/release/
+export DROPBOX_FOLDER="android"
 
 if [ -n "${STOREPASS}" ]; then
     export BUILD_FILE=build-${ARCH}/out/build/outputs/apk/release/out-release-signed.apk
@@ -16,23 +17,24 @@ export GITHUB_REPO=lutraconsulting/input
 if [[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]];
 then
   if [ ${TRAVIS_PULL_REQUEST} != "false" ]; then
-    echo -e "\e[31mDeploying pull request\e[0m"
-    export DROPBOX_FOLDER="pulls"
-    export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
-    export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
+    echo "\e[31mSkip deployment of pull request\e[0m"
+    # echo -e "\e[31mDeploying pull request\e[0m"
+    # export DROPBOX_FOLDER="pulls"
+    # export APK_FILE=input-${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
+    # export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/issues/${TRAVIS_PULL_REQUEST}/comments
+    exit 0
   elif [[ -n ${TRAVIS_TAG} ]]; then
     echo -e "\e[31mDeploying tagged release\e[0m"
-    export DROPBOX_FOLDER="tags"
     export APK_FILE=input-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   elif [[ ${TRAVIS_BRANCH} = master ]]; then
     echo -e "\e[31mDeploying master branch\e[0m"
-    export DROPBOX_FOLDER="master"
+    # export DROPBOX_FOLDER="master"
     export APK_FILE=input-${TRAVIS_BRANCH}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   else
     echo -e "\e[31mDeploying other commit\e[0m"
-    export DROPBOX_FOLDER="other"
+    # export DROPBOX_FOLDER="other"
     export APK_FILE=input-${TRAVIS_BRANCH/\//_}-${TRAVIS_COMMIT}-${ARCH}-${SIGNED}.apk
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${TRAVIS_COMMIT}/comments
   fi

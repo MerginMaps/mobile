@@ -1,5 +1,6 @@
 @echo on
 set APPVEYOR_REPO_NAME=lutraconsulting/input
+set DROPBOX_FOLDER="win"
 
 if [%APPVEYOR_REPO_TAG%]==[true] (
     set APK_FILE=inputapp-win-x86_64-%APPVEYOR_REPO_TAG_NAME%.exe
@@ -12,20 +13,19 @@ if not exist %SRC_FILE% (echo missing_result & goto error)
 echo f | xcopy /f /Y %SRC_FILE% %APK_FILE%
 
 if not ["%APPVEYOR_PULL_REQUEST_TITLE%"]==[""] (
-    echo "Deploying pull request
-    set DROPBOX_FOLDER="pulls"
+    echo "Deployment of pull request"
+    rem set DROPBOX_FOLDER="pulls"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/issues/%APPVEYOR_PULL_REQUEST_NUMBER%/comments
 ) else if ["%APPVEYOR_REPO_TAG%"]==["true"] (
     echo "Deploying tagged release"
-    set DROPBOX_FOLDER="tags"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
 ) else if ["%APPVEYOR_REPO_BRANCH%"]==["master"] (
     echo "Deploying master branch"
-    set DROPBOX_FOLDER="master"
+    rem set DROPBOX_FOLDER="master"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
 ) else (
     echo "Deploying other commit"
-    set DROPBOX_FOLDER="other"
+    rem set DROPBOX_FOLDER="other"
     set GITHUB_API=https://api.github.com/repos/%APPVEYOR_REPO_NAME%/commits/%APPVEYOR_REPO_COMMIT%/comments
 )
 
