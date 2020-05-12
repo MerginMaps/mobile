@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<RCC>
-    <qresource prefix="/QgsQuick">
-        <file alias="qmldir">../../../../../../opt/INPUT/input-sdk-ios-4/stage/arm64/QGIS.app/Contents/MacOS/qml/QgsQuick/qmldir</file>
-    </qresource>
-</RCC>
