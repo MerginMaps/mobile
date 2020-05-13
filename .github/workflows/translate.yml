@@ -1,5 +1,5 @@
 name: Translation
-on: [pull_request]
+on: [push]
 jobs:
   update_translation:
     if: (github.repository == 'lutraconsulting/input') && (github.actor == 'transifex-integration[bot]')
@@ -14,9 +14,5 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4.2.0
         with:
           file_pattern: app/i18n/*.qm
-          ref: ${{ github.head_ref }}
           token: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-          commit_user_name: InputApp-Bot
-          commit_user_email: input@lutraconsulting.co.uk
-          commit_author: Author <input@lutraconsulting.co.uk>
           commit_message: Update .qm files
