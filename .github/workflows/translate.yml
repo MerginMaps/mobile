@@ -1,32 +1,20 @@
 name: Translation
 on: [pull_request]
 jobs:
-  code_style:
+  update_translation:
+    if: (github.repository == 'lutraconsulting/input') && (github.actor == 'transifex-integration[bot]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
+      - name: Update qm files
+        run: |
+          ./scripts/release_i18n_qm.bash
+
+      - uses: stefanzweifel/git-auto-commit-action@v4.2.0
+        with:
+          file_pattern: app/i18n/*.qm
+          commit_user_name: InputApp-Bot
+          commit_user_email: input@lutraconsulting.co.uk
+          commit_author: Author <input@lutraconsulting.co.uk>
+          commit_message: Update .qm files
