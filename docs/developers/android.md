@@ -2,7 +2,7 @@ looking for android [publishing](./publishing.md)
 
 # Development
 
-Tested: Linux, MacOs (Desktop only), iOS
+Tested: Linux, MacOs, iOS
 In general you need `qgis_core` and `qgis_quick` libraries build for target platform.
 
 You need to copy and edit config.in with your paths!
