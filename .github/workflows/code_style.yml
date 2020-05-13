@@ -1,0 +1,15 @@
+name: Code Layout
+on: [push]
+jobs:
+  code_style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install astyle
+        run: |
+          apt-get install astyle
+
+      - uses: actions/checkout@v2
+
+      - name: Run astyle check
+        run: |
+          ./scripts/check_all.bash

@@ -1,8 +1,11 @@
 # Input
 
-[![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
-[![CircleCI](https://circleci.com/gh/lutraconsulting/input.svg?style=svg)](https://circleci.com/gh/lutraconsulting/input)
-[![Build status](https://ci.appveyor.com/api/projects/status/05296dh8ml5b11vj?svg=true)](https://ci.appveyor.com/project/PeterPetrik/input)
+[![Android Build](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
+[![Win Build](https://ci.appveyor.com/api/projects/status/05296dh8ml5b11vj?svg=true)](https://ci.appveyor.com/project/PeterPetrik/input)
+![iOS Build](https://github.com/lutraconsulting/input/workflows/iOS%20Build/badge.svg)
+
+![](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)
+
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 

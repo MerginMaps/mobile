@@ -1,4 +1,4 @@
-name: Input iOS build
+name: iOS Build
 on: [push]
 env:
   QT_DROPBOX_HASH: whdez6vfckulgxu
@@ -10,7 +10,7 @@ env:
   XC_VERSION: ${{ '11.4' }}
 
 jobs:
-  mac_os_build:
+  ios_build:
     if: github.repository == 'lutraconsulting/input'
     runs-on: macos-latest
     steps:
