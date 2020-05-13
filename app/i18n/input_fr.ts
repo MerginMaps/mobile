@@ -480,7 +480,7 @@
     <message>
         <location filename="../qml/SettingsPanel.qml" line="173"/>
         <source>Accuracy threshold</source>
-        <translation>Précision du seuil</translation>
+        <translation>Seuil de précision</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="190"/>
@@ -568,27 +568,27 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="525"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Ajouter une caractéristique sur &lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation>Ajouter une entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="527"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Éditer la caractéristique sur &lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation>Éditer l&apos;entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="529"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Voir la caractéristique sur &lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation>Voir l&apos;entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="569"/>
         <source>Delete feature</source>
-        <translation>Effacer la caractéristique</translation>
+        <translation>Effacer l&apos;entité</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="570"/>
         <source>Really delete this feature?</source>
-        <translation>Souhaitez-vous réellement effacer cette caractéristique ?</translation>
+        <translation>Souhaitez-vous réellement effacer cette entité ?</translation>
     </message>
 </context>
 </TS>
