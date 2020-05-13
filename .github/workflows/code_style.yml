@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: Install astyle
         run: |
-          apt-get install astyle
+          sudo apt-get install astyle
 
       - uses: actions/checkout@v2
 
