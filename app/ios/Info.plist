@@ -38,6 +38,12 @@
 	<string>Program requires access to gallery to attach pictures to features on map</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Program requires access to gallery to attach pictures to features on map</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>es</string>
+		<string>fr</string>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

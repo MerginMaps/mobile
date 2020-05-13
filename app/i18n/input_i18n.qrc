@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="/"> 
-    <file>input_sk.qm</file> 
     <file>input_es.qm</file> 
     <file>input_fr.qm</file> 
   </qresource> 

@@ -63,8 +63,5 @@ else
 	    --gradle
 fi
 
-# 	    --android-platform ${SDK_PLATFORM} \
-
-
 chown -R $(stat -c "%u" .):$(stat -c "%u" .) .
 popd
