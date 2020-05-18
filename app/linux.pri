@@ -22,6 +22,8 @@
           $${QGIS_SRC_DIR}/src/core/annotations \
           $${QGIS_SRC_DIR}/src/core/auth \
           $${QGIS_SRC_DIR}/src/core/composer \
+          $${QGIS_SRC_DIR}/src/core/effects \
+          $${QGIS_SRC_DIR}/src/core/expression \
           $${QGIS_SRC_DIR}/src/core/fieldformatter \
           $${QGIS_SRC_DIR}/src/core/geometry \
           $${QGIS_SRC_DIR}/src/core/labeling \
@@ -33,9 +35,7 @@
           $${QGIS_SRC_DIR}/src/core/raster \
           $${QGIS_SRC_DIR}/src/core/scalebar \
           $${QGIS_SRC_DIR}/src/core/symbology \
-          $${QGIS_SRC_DIR}/src/core/effects \
-          $${QGIS_SRC_DIR}/src/core/metadata \
-          $${QGIS_SRC_DIR}/src/core/expression \
+          $${QGIS_SRC_DIR}/src/core/textrenderer \
           $${QGIS_SRC_DIR}/src/quickgui \
           $${QGIS_SRC_DIR}/src/quickgui/attributes \
           $${QGIS_SRC_DIR}/external/nlohmann \
