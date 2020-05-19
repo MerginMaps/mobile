@@ -30,7 +30,7 @@
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="18"/>
         <source>Survey Layer</source>
-        <translation>Capa del mapa</translation>
+        <translation>Capa de la encuesta</translation>
     </message>
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="40"/>
@@ -119,12 +119,12 @@
     <message>
         <location filename="../qml/FeaturePanel.qml" line="258"/>
         <source>Delete feature</source>
-        <translation>Eliminar característica</translation>
+        <translation>Eliminar entidad</translation>
     </message>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="259"/>
         <source>Really delete this feature?</source>
-        <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
+        <translation>¿Está seguro de que quiere eliminar esta entidad?</translation>
     </message>
 </context>
 <context>
@@ -335,17 +335,17 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="170"/>
         <source>Cannot update feature</source>
-        <translation>No se puede actualizar objeto</translation>
+        <translation>No se puede actualizar entidad</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Objeto %1 no se ha podido obtener después de confirmar</translation>
+        <translation>Entidad %1 no se ha podido cargar después de guardar</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="204"/>
         <source>Cannot delete feature</source>
-        <translation>No se puede eliminar el objeto</translation>
+        <translation>No se puede eliminar la entidad</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="249"/>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="286"/>
         <source>Feature could not be added</source>
-        <translation>No se ha podido añadir el objeto</translation>
+        <translation>No se ha podido añadir la entidad</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="297"/>
@@ -500,7 +500,7 @@
     <message>
         <location filename="../qml/main.qml" line="91"/>
         <source>Recording feature is not valid</source>
-        <translation>Registrar objeto no es válido</translation>
+        <translation>Registro de la entidad no es válido</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="387"/>
@@ -515,7 +515,7 @@
     <message>
         <location filename="../qml/main.qml" line="403"/>
         <source>No editable layers!</source>
-        <translation>¡Ho hay capas editables!</translation>
+        <translation>¡No hay capas editables!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="439"/>
@@ -565,27 +565,27 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="525"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Añadir objeto en &lt;i&gt;%1&lt;/i&gt; </translation>
+        <translation>Añadir entidad en &lt;i&gt;%1&lt;/i&gt; </translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="527"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Editar objeto en &lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation>Editar entidad en &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="529"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Ver objeto en &lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation>Ver entidad en &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="569"/>
         <source>Delete feature</source>
-        <translation>Eliminar objeto</translation>
+        <translation>Eliminar entidad </translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/plugin/qgsquickfeatureform.qml" line="570"/>
         <source>Really delete this feature?</source>
-        <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
+        <translation>¿Está seguro de que quiere eliminar esta entidad?</translation>
     </message>
 </context>
 </TS>
