@@ -340,7 +340,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Impossibile recuperare l&apos;elemento %1 dopo il commit</translation>
+        <translation>Impossibile recuperare l&apos;elemento %1 dopo il salvataggio del file</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="204"/>
