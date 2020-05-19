@@ -168,7 +168,7 @@
         <location filename="../qml/MainPanel.qml" line="103"/>
         <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Record</source>
-        <translation>Record</translation>
+        <translation>Aufnahme</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="128"/>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="320"/>
         <source>Explore public Mergin projects!</source>
-        <translation>Entdecke öffentliche Mergin Projekte!</translation>
+        <translation>Durchsuche öffentliche Mergin Projekte!</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="419"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="638"/>
         <source>Explore</source>
-        <translation>Erforschen</translation>
+        <translation>Durchsuchen</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="680"/>
