@@ -30,7 +30,7 @@
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="18"/>
         <source>Survey Layer</source>
-        <translation>Sonder une couche</translation>
+        <translation>Couche de l’enquête</translation>
     </message>
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="40"/>
@@ -86,7 +86,7 @@
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="168"/>
         <source>Image files (*.gif *.png *.jpg)</source>
-        <translation>Fichiers Image (*.gif *.png *.jpg)</translation>
+        <translation>Fichiers image (*.gif *.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="180"/>
@@ -96,7 +96,7 @@
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="181"/>
         <source>Would you like to permanently delete the image file?</source>
-        <translation>Souhaitez-vous définitivement effacer ce fichier Image ?</translation>
+        <translation>Souhaitez-vous définitivement effacer ce fichier image ?</translation>
     </message>
 </context>
 <context>
@@ -340,7 +340,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>L&apos;entité %1 n&apos;a pas pu être trouvée après l’enregistrement !</translation>
+        <translation>L&apos;entité %1 n&apos;a pas pu être chargée après l’enregistrement !</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="204"/>
@@ -350,12 +350,12 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="249"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>La valeur par défaut de l&apos;expression pour %1:%2 a une erreur d&apos;analyse : %3</translation>
+        <translation>L&apos;expression de la valeur par défaut pour %1:%2 a une erreur d&apos;analyse : %3</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="259"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>La valeur par défaut de l&apos;expression pour %1:%2 a une erreur d&apos;évaluation : %3</translation>
+        <translation>L&apos;expression de la valeur par défaut pour %1:%2 a une erreur d&apos;évaluation : %3</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="286"/>
@@ -387,7 +387,7 @@
         <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
         <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>La rotation de la carte n&apos;est pas prise en charge. Réinitialisation de %1 à 0.</translation>
+        <translation>La rotation du canevas de carte n&apos;est pas prise en charge. Réinitialisation de %1 à 0.</translation>
     </message>
 </context>
 <context>
@@ -498,7 +498,7 @@
     <message>
         <location filename="../qml/main.qml" line="31"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="91"/>
@@ -523,7 +523,7 @@
     <message>
         <location filename="../qml/main.qml" line="439"/>
         <source>The GPS is currently not available</source>
-        <translation>Le GPS n&apos;est actuellement pas disponible</translation>
+        <translation>Le GPS n&apos;est pas actuellement disponible</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="570"/>
