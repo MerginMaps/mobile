@@ -65,7 +65,7 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
 
-      section.property: qsTr("section")
+      section.property: "section"
       section.criteria: ViewSection.FullString
       section.delegate: Item {
         height: statusPanel.rowHeight/2
