@@ -165,7 +165,7 @@ Item {
         id: fileDialog
         title: qsTr( "Open Image" )
         visible: false
-        nameFilters: [ qsTr( "Image files" ) + " (*.gif *.png *.jpg)" ]
+        nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
         width: window.width
         height: window.height
         folder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
