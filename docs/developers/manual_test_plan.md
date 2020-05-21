@@ -11,8 +11,8 @@
 # Sync
 - [ ] Project status is shown correctly for local changes (under Home)
 - [ ] Project status is shown correctly for remote changes (under Home)
-- [ ] Sync icon appears for local change (under My projects or Shared wit me)
-- [ ] Sync icon appears for remote change (under My projects or Shared wit me)
+- [ ] Sync icon appears for local change (under My projects or Shared with me)
+- [ ] Sync icon appears for remote change (under My projects or Shared with me)
 - [ ] Changes from the device can be synced
 - [ ] Changes from upstream can be synced
 - [ ] Changes from upstream and device can be synced
