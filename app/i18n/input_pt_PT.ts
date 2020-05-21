@@ -437,7 +437,7 @@
     <message>
         <location filename="../qml/RecordToolbar.qml" line="140"/>
         <source>Undo</source>
-        <translation>Desfazer</translation>
+        <translation>Retroceder</translation>
     </message>
     <message>
         <location filename="../qml/RecordToolbar.qml" line="155"/>
@@ -485,7 +485,7 @@
     <message>
         <location filename="../qml/SettingsPanel.qml" line="190"/>
         <source>Line rec. interval</source>
-        <translation>Intervalo reg. linha</translation>
+        <translation>Intervalo de reg. linha</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="216"/>
