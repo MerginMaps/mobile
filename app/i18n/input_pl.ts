@@ -91,7 +91,7 @@
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="180"/>
         <source>Delete photo</source>
-        <translation>Usuń obraz</translation>
+        <translation>Usuń zdjęcie</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="181"/>
