@@ -9,7 +9,8 @@
 - [ ] Project can be deleted
 
 # Sync
-- [ ] Project state is shown correctly
+- [ ] Project status is shown correctly for local changes
+- [ ] Project status is shown correctly for remote changes
 - [ ] Changes can be displayed correctly
 - [ ] Changes from the device can be synced
 - [ ] Changes from upstream can be synced
