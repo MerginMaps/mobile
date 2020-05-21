@@ -37,6 +37,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 * Support for capturing of new geometries
 * Display and editing of feature forms
 * Built-in service for syncronising data (Mergin)
+* Translated you many [languages](https://www.transifex.com/lutra-consulting/input)
 
 <p float="left">
     <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen1.jpg" width="20%">
