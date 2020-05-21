@@ -69,3 +69,7 @@ Use public project: saber\test_digitizing
 - [ ] Android (armeabi-v7a)
 - [ ] Android (arm64-v8a)
 - [ ] Windows (x86_64)
+
+# Translation
+- [ ] Input changes to the system locale
+- [ ] Correct Translation
