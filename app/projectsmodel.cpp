@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "inpututils.h"
 #include "merginapi.h"
 
 ProjectModel::ProjectModel( LocalProjectsManager &localProjects, QObject *parent )
@@ -54,7 +55,7 @@ void ProjectModel::findProjectFiles()
     }
     else
     {
-      projectFile.info = "invalid project";
+      projectFile.info = tr( "Missing QGIS project file" );
       projectFile.isValid = false;
     }
     mProjectFiles << projectFile;
@@ -122,6 +123,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 
 void ProjectModel::deleteProject( int row )
 {
+  if ( row < 0 || row >= mProjectFiles.length() )
+  {
+    InputUtils::log( "Deleting local project error", QStringLiteral( "Unable to delete local project, index out of bounds" ) );
+    return;
+  }
+
   ProjectFile project = mProjectFiles.at( row );
 
   mLocalProjects.deleteProjectDirectory( mLocalProjects.dataDir() + "/" + project.folderName );

@@ -681,6 +681,9 @@ Item {
     icon: StandardIcon.Warning
     standardButtons: StandardButton.Ok | StandardButton.Cancel
     onAccepted: {
+      if (relatedProjectIndex < 0) {
+          return;
+      }
       __projectsModel.deleteProject(relatedProjectIndex)
       if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
         __loader.load("")
