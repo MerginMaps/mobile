@@ -227,7 +227,7 @@ class MerginApi: public QObject
      * \param withFilter If true, applies "input" tag in request.
      */
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),
-                                   const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral( "input_use" ) );
+                                   const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral() );
 
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
