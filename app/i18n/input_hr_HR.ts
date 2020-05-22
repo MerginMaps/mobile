@@ -40,7 +40,7 @@
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="68"/>
         <source>No editable layers in the project!</source>
-        <translation>U projektu nema slojeva za uređjivanje!</translation>
+        <translation>U projektu nema slojeva za uređivanje!</translation>
     </message>
 </context>
 <context>
@@ -73,7 +73,7 @@
     <message>
         <location filename="../qml/AuthPanel.qml" line="333"/>
         <source>Sign up</source>
-        <translation>Kreiranje računa</translation>
+        <translation>Otvaranje računa</translation>
     </message>
 </context>
 <context>
@@ -273,7 +273,7 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="619"/>
         <source>Shared</source>
-        <translation>Dijeljeno</translation>
+        <translation>Podijeljeno</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="638"/>
@@ -340,7 +340,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Objekt %1 nije moga biti dohvaćen nakon izvršenja</translation>
+        <translation>Objekt %1 nije mogao biti dohvaćen nakon izvršenja</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="204"/>
@@ -355,7 +355,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="259"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>Zadana vrijdnost izraza za %1:%2 ima grešku procjene: %3</translation>
+        <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="286"/>
@@ -395,7 +395,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/qgsquickpositionkit.cpp" line="45"/>
         <source>Unable to create default GPS Position Source</source>
-        <translation>Nije moguće kreirati zadani izvor GPS pozicije </translation>
+        <translation>Nije moguće stvoriti zadani izvor GPS pozicije </translation>
     </message>
 </context>
 <context>
@@ -404,21 +404,21 @@
         <location filename="../../../QGIS/src/quickgui/qgsquickutils.cpp" line="346"/>
         <source>screen resolution: %1x%2 px
 </source>
-        <translation>rezolucija ekrana: %1x%2 px
+        <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/qgsquickutils.cpp" line="347"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>DPI ekrana: %1x%2
+        <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/qgsquickutils.cpp" line="348"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation>veličina ekrana: %1x%2 mm
+        <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
@@ -485,7 +485,7 @@
     <message>
         <location filename="../qml/SettingsPanel.qml" line="190"/>
         <source>Line rec. interval</source>
-        <translation>Inteval linijskog snimanja</translation>
+        <translation>Interval linijskog snimanja</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="216"/>
@@ -518,7 +518,7 @@
     <message>
         <location filename="../qml/main.qml" line="403"/>
         <source>No editable layers!</source>
-        <translation>Nema slojeva za uredjivanje!</translation>
+        <translation>Nema slojeva za uređivanje!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="439"/>
