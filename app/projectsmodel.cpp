@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "inpututils.h"
 #include "merginapi.h"
 
 ProjectModel::ProjectModel( LocalProjectsManager &localProjects, QObject *parent )
@@ -122,6 +123,11 @@ int ProjectModel::rowAccordingPath( QString path ) const
 
 void ProjectModel::deleteProject( int row )
 {
+  if ( row < 0 || row >= mProjectFiles.length() ) {
+      InputUtils::log( "Deleting local project error", QStringLiteral( "Unable to delete local project, index out of bounds" ) );
+      return;
+  }
+
   ProjectFile project = mProjectFiles.at( row );
 
   mLocalProjects.deleteProjectDirectory( mLocalProjects.dataDir() + "/" + project.folderName );
