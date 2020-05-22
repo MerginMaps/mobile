@@ -47,6 +47,8 @@
                 <string>it</string>
                 <string>pl</string>
                 <string>pt_PT</string>
+                <string>hr_HR</string>
+                <string>tr</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

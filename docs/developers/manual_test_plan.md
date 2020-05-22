@@ -9,14 +9,18 @@
 - [ ] Project can be deleted
 
 # Sync
-- [ ] Project state is shown correctly
-- [ ] Changes can be displayed correctly
+- [ ] Project status is shown correctly for local changes (under Home)
+- [ ] Project status is shown correctly for remote changes (under Home)
+- [ ] Sync icon appears for local change (under My projects or Shared with me)
+- [ ] Sync icon appears for remote change (under My projects or Shared with me)
 - [ ] Changes from the device can be synced
 - [ ] Changes from upstream can be synced
 - [ ] Changes from upstream and device can be synced
 
 # Map canvas
 - [ ] GPS is shown correctly
+- [ ] Compass direction is shown correctly - when stationary
+- [ ] Compass direction is shown correctly - when on move
 - [ ] Holding GPS icon turns on/off map auto-centre
 - [ ] Record button lists the correct layer(s)
 - [ ] Zoom to project shows the correct extent
@@ -69,3 +73,7 @@ Use public project: saber\test_digitizing
 - [ ] Android (armeabi-v7a)
 - [ ] Android (arm64-v8a)
 - [ ] Windows (x86_64)
+
+# Translation
+- [ ] Input changes to the system locale
+- [ ] Correct Translation
