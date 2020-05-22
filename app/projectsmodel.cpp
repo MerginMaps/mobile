@@ -54,7 +54,7 @@ void ProjectModel::findProjectFiles()
     }
     else
     {
-      projectFile.info = "invalid project";
+      projectFile.info = tr("Missing QGIS project file");
       projectFile.isValid = false;
     }
     mProjectFiles << projectFile;
