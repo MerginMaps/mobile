@@ -16,6 +16,8 @@ your background map. QGIS can also reads local XYZ tiles.
 
 <img src="images/xyz_settings.png" alt="Connection settings for XYZ" style="width: 100%; height: 100%"/>​
 
+**Note:** you also need to change resampling method for WM(T)S layer to ensure the texts are readable on HiDPi screens.
+
 If you are using a vector layer for background layer:
 
 -   Ensure to use a simplified geometry version of your data. This will help with smooth map navigation.
@@ -32,9 +34,9 @@ documentation.
 The following properties of a layer in QGIS project will be additionally used in Input:
 
 ### Settings for Input preview panel
-Similar to Google map, when a feature is identified on the map a preview panel will appear. To enable a layer being identified, the option should be enabled in QGIS desktop, under **Project properties**. For setting the preview panel, you need to open ** Layer Properties ** and select ** Display ** tab.
+Similar to Google map, when a feature is identified on the map a preview panel will appear. To enable a layer being identified, the option should be enabled in QGIS desktop, under **Project properties**. For setting the preview panel, you need to open **Layer Properties** and select **Display** tab.
 
-- title - this will use "Display Name" (in layer properties > Display tab) which can be a field name or an expression.
+- title - this will use **Display Name** (in layer properties > Display tab) which can be a field name or an expression.
 
 - content - there are three options for what to show in content area: 1. field values, 2. image, 3. HTML. This will use "HTML Map Tip" (in layer properties > Display tab). QGIS always interprets the content of map tip as being HTML, however Input extends the syntax to allow two more modes. If the map tip is not specified, Input will try to use the first three fields and show their attribute values.
 
