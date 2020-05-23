@@ -22,8 +22,20 @@ jobs:
       - name: Install brew deps
         run: |
           brew install gnupg
+          brew install openssl@1.1
           brew install python3
           pip3 install dropbox
+
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd app/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY"
 
       - name: Configure Keychain
         run: |

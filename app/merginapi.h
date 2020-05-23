@@ -26,17 +26,6 @@
 #include <QPointer>
 #include <QSet>
 
-inline QString _uuidWithoutBraces( const QUuid &uuid )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
-  return uuid.toString( QUuid::WithoutBraces );
-#else
-  QString str = uuid.toString();
-  str = str.mid( 1, str.length() - 2 );  // remove braces
-  return str;
-#endif
-}
-
 
 struct ProjectDiff
 {
@@ -102,11 +91,7 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false )
-    : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
-  {
-    tempFileName = _uuidWithoutBraces( QUuid::createUuid() );
-  }
+  DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false );
 
   QString filePath;          //!< path within the project
   int size;                  //!< size of the item in bytes
@@ -278,6 +263,23 @@ class MerginApi: public QObject
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE bool hasAuthData();
+
+    /**
+    * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
+    * \param username Login user name to associate with the new Mergin account
+    * \param email Email to associate with the new Mergin account
+    * \param password Password to associate with the new Mergin account
+    * \param confirmPassword Password to associate with the new Mergin account (should be same as password)
+    * \param acceptedTOC Whether user accepted Terms and Conditions
+    */
+    Q_INVOKABLE void registerUser(
+      const QString &username,
+      const QString &email,
+      const QString &password,
+      const QString &confirmPassword,
+      bool acceptedTOC
+    );
+
     /**
     * Pings Mergin server and checks its version with required version defined in version.pri
     * Accordingly sets mApiVersionStatus variable (reset when mergin url is changed).
@@ -289,8 +291,8 @@ class MerginApi: public QObject
 
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
-    static const int MERGIN_API_VERSION_MAJOR = 2019;
-    static const int MERGIN_API_VERSION_MINOR = 4;
+    static const int MERGIN_API_VERSION_MAJOR = 2020;
+    static const int MERGIN_API_VERSION_MINOR = 5;
     static const QString sMetadataFile;
 
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
@@ -383,6 +385,8 @@ class MerginApi: public QObject
     void authRequested();
     void authChanged();
     void authFailed();
+    void registrationSucceeded();
+    void registrationFailed();
     void apiRootChanged();
     void apiVersionStatusChanged();
     void projectCreated( const QString &projectName, bool result );
@@ -415,12 +419,14 @@ class MerginApi: public QObject
     void createProjectFinished();
     void deleteProjectFinished();
     void authorizeFinished();
+    void registrationFinished();
     void pingMerginReplyFinished();
 
   private:
     MerginProjectList parseListProjectsMetadata( const QByteArray &data );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
+    static QString getApiKey( const QString &serverName );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).

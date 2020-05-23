@@ -44,5 +44,6 @@
         <file>stop.svg</file>
         <file>info.svg</file>
         <file>table.svg</file>
+        <file>envelope-solid.svg</file>
     </qresource>
 </RCC>

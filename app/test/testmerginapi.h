@@ -51,8 +51,10 @@ class TestMerginApi: public QObject
     void testUpdateWithDiffs();
     void testUpdateWithMissedVersion();
 
+    void testRegister();
+
   private:
-    int SHORT_REPLY = 1000;
+    int SHORT_REPLY = 3000;
     int LONG_REPLY = 5000;
 
     MerginApi *mApi;

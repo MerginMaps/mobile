@@ -35,5 +35,8 @@
         <file>LoadingIndicator.qml</file>
         <file>ProjectLoadingScreen.qml</file>
         <file>ProjectStatusPanel.qml</file>
+        <file>RegistrationForm.qml</file>
+        <file>LoginForm.qml</file>
+        <file>LeftCheckBox.qml</file>
     </qresource>
 </RCC>

@@ -76,11 +76,13 @@ Item {
           refreshProjectList()
         }
       } else if (toolbar.highlighted !== homeBtn.text) {
+        authPanel.state = "login"
         authPanel.visible = true
       }
     }
     onAuthRequested: {
       busyIndicator.running = false
+      authPanel.state = "login"
       authPanel.visible = true
     }
     onAuthChanged: {
@@ -93,6 +95,11 @@ Item {
       }
     }
     onAuthFailed: authPanel.pending = false
+    onRegistrationSucceeded: {
+      authPanel.pending = false
+      homeBtn.activated()
+    }
+    onRegistrationFailed: authPanel.pending = false
   }
 
   id: projectsPanel
