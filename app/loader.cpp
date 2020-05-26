@@ -122,10 +122,7 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
 
   if ( hasWMS && ( WMSExtent.length() == 4 ) )
   {
-    extent.setXMinimum(WMSExtent[0].toDouble());
-    extent.setYMinimum(WMSExtent[1].toDouble());
-    extent.setXMaximum(WMSExtent[2].toDouble());
-    extent.setYMaximum(WMSExtent[3].toDouble());
+    extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
   }
   else // set layers extent
   {
