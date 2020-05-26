@@ -111,17 +111,32 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings )
   {
-    qDebug() << "Cannot zoom to layers extent, mapSettings is not defined";
+    qDebug() << "Cannot zoom to extent, mapSettings is not defined";
     return;
   }
-
-  const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
   QgsRectangle extent;
-  for ( const QgsMapLayer *layer : layers )
+
+  // Check if WMSExtent is set in project
+  bool hasWMS;
+  QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
+
+  if ( hasWMS && ( WMSExtent.length() == 4 ) )
   {
-    QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
-    extent.combineExtentWith( layerExtent );
+    extent.setXMinimum(WMSExtent[0].toDouble());
+    extent.setYMinimum(WMSExtent[1].toDouble());
+    extent.setXMaximum(WMSExtent[2].toDouble());
+    extent.setYMaximum(WMSExtent[3].toDouble());
   }
+  else // set layers extent
+  {
+    const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
+    for ( const QgsMapLayer *layer : layers )
+    {
+      QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
+      extent.combineExtentWith( layerExtent );
+    }
+  }
+
   if ( extent.isEmpty() )
   {
     extent.grow( mProject->crs().isGeographic() ? 0.01 : 1000.0 );
