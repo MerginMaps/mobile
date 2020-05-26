@@ -20,11 +20,11 @@ ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
 exists(merginsecrets.cpp) {
+  # Uncomment in debug build to generate new encrypted API_KEYS
+  # DEFINES += MERGIN_SECRET_ENCODE
+
   message("Using production Mergin API_KEYS")
   SOURCES += merginsecrets.cpp
-
-  # Uncomment in debug build to generate new encrypted API_KEYS
-  # DEFINES += MERGIN_API_KEYS_ENCODE
 } else {
   message("Using development (dummy) Mergin API_KEY")
   DEFINES += USE_MERGIN_DUMMY_API_KEY
