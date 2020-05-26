@@ -28,7 +28,10 @@ static QString findQgisProjectFile( const QString &projectDir )
   {
     return foundProjectFiles.first();
   }
-  return QString();
+  else if ( foundProjectFiles.count() > 1 ) // multiple projects
+    return QString( "ERR:-2" );
+  else // no projects
+    return QString( "ERR:-1" );
 }
 
 

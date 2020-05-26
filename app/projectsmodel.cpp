@@ -48,14 +48,18 @@ void ProjectModel::findProjectFiles()
     projectFile.projectName = project.projectName;
     projectFile.projectNamespace = project.projectNamespace;
     QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
-    if ( !project.qgisProjectFilePath.isEmpty() )
+    if ( !project.qgisProjectFilePath.startsWith( "ERR" ) )
     {
       projectFile.info = QString( created.toString() );
       projectFile.isValid = true;
     }
     else
     {
-      projectFile.info = tr( "Missing QGIS project file" );
+      if ( project.qgisProjectFilePath.contains( "-1" ) )
+        projectFile.info = tr( "Missing QGIS project file" );
+      else if ( project.qgisProjectFilePath.contains( "-2" ) )
+        projectFile.info = tr( "Error: Multiple QGIS project files" );
+
       projectFile.isValid = false;
     }
     mProjectFiles << projectFile;
