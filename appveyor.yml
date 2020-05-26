@@ -13,10 +13,9 @@ environment:
 
 install:
   - "choco install wintail"
-  - "choco install openssl"
   - "%PYEXE% -m pip install dropbox"
   - "xcopy scripts\\ci\\config.pri app\\ /Y"
-  - "openssl aes-256-cbc -k %MERGINSECRETS_DECRYPT_KEY% -in app\\merginsecrets.cpp.enc -out app\\merginsecrets.cpp -d"
+  - "C:\\OpenSSL-Win64\\bin\\openssl aes-256-cbc -k %MERGINSECRETS_DECRYPT_KEY% -in app\\merginsecrets.cpp.enc -out app\\merginsecrets.cpp -d -md md5"
   - cmd: ".\\scripts\\download_sdk.cmd"
   - cmd: ".\\scripts\\build_win.cmd"
   - cmd: ".\\upload-artifacts.cmd"

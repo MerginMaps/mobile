@@ -35,7 +35,8 @@ jobs:
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
-              -k "$MERGINSECRETS_DECRYPT_KEY"
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
 
       - name: Configure Keychain
         run: |
