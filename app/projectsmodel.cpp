@@ -55,9 +55,9 @@ void ProjectModel::findProjectFiles()
     }
     else
     {
-      if ( project.qgisProjectFilePath.contains( "-1" ) )
+      if ( project.qgisProjectFilePath.contains( "ERR_NO_PROJECTS" ) )
         projectFile.info = tr( "Error: Missing QGIS project file" );
-      else if ( project.qgisProjectFilePath.contains( "-2" ) )
+      else if ( project.qgisProjectFilePath.contains( "ERR_MULTIPLE_PROJECTS" ) )
         projectFile.info = tr( "Error: Multiple QGIS project files" );
 
       projectFile.isValid = false;
