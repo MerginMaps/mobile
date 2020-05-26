@@ -265,7 +265,7 @@ class MerginApi: public QObject
     Q_INVOKABLE bool hasAuthData();
 
     /**
-    * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
+    * Registers new user to Mergin service.
     * \param username Login user name to associate with the new Mergin account
     * \param email Email to associate with the new Mergin account
     * \param password Password to associate with the new Mergin account

@@ -9,8 +9,11 @@
 
 import QtQuick 2.8
 import QtQuick.Templates 2.1 as T
-// import Theme 1.0
 
+/**
+  * The checkbox where the rectangle area is on left of the text.
+  * When text contains html links, the link is opened in the external browser
+  */
 T.CheckBox {
     id: control
 

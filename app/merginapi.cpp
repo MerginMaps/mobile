@@ -136,7 +136,7 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   return request;
 }
 
-#if not defined(USE_MERGIN_DUMMY_API_KEY)
+#if !defined(USE_MERGIN_DUMMY_API_KEY)
 #include "merginsecrets.cpp"
 #endif
 

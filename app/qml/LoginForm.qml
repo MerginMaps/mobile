@@ -15,9 +15,12 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "."
+import "." // import InputStyle singleton
 
-// import InputStyle singleton
+/**
+  * Body of the AuthPanel with the login form - username and password
+  * Also has a link to switch to register form
+  */
 Rectangle {
   signal registrationRequested()
 
