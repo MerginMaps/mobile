@@ -12,7 +12,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
-import lc 1.0
 
 Item {
 
@@ -23,6 +22,21 @@ Item {
 
         // Has to be set for actions with callbacks
         property var itemWidget
+
+        /**
+         * Called when clicked on the camera icon to capture an image.
+         * \param itemWidget editorWidget for modified field to send valueChanged signal.
+         */
+        property var capturePhoto: function capturePhoto(itemWidget) {
+          externalResourceHandler.itemWidget = itemWidget
+          if (__androidUtils.isAndroid) {
+              __androidUtils.callCamera(itemWidget.targetDir)
+          } else if (__iosUtils.isIos) {
+              __iosUtils.callCamera(itemWidget.targetDir)
+          } else {
+            itemWidget.showDefaultPanel()
+          }
+        }
 
         /**
          * Called when clicked on the gallery icon to choose a file from a gallery.
@@ -40,8 +54,7 @@ Item {
             if (__androidUtils.isAndroid) {
                 __androidUtils.callImagePicker()
             } else if (__iosUtils.isIos) {
-                picker.targetDir = itemWidget.targetDir
-                picker.showImagePicker();
+                __iosUtils.callImagePicker(itemWidget.targetDir)
             } else {
                 fileDialog.open()
             }
@@ -83,9 +96,8 @@ Item {
          * \param value depends on widget's config, see more in qgsquickexternalwidget.qml
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
-          var newPath = __inputUtils.renameWithDateTime(prefixToRelativePath + "/" + value)
-          if (newPath) {
-            var newCurrentValue = QgsQuick.Utils.getRelativePath(newPath, prefixToRelativePath)
+          if (value) {
+            var newCurrentValue = QgsQuick.Utils.getRelativePath(value, prefixToRelativePath)
             itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
@@ -112,10 +124,21 @@ Item {
             }
           }
 
-          var newValue = externalResourceHandler.itemWidget.prefixToRelativePath ?
-                QgsQuick.Utils.getRelativePath(absolutePath, externalResourceHandler.itemWidget.prefixToRelativePath) :
-                absolutePath
-          externalResourceHandler.itemWidget.valueChanged(newValue, false)
+          externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefix, absolutePath)
+        }
+
+        /**
+         * Called when an image is captured by a camera. Method sets proper value according given absolute path of the image
+         * and prefixPath set in thd project settings.
+         * \param imagePath Absolute path to a captured image
+         */
+        property var imageCaptured: function imageCaptured(absoluteImagePath) {
+          if (absoluteImagePath) {
+            var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
+                  externalResourceHandler.itemWidget.targetDir :
+                  externalResourceHandler.itemWidget.targetDir + "/"
+            externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefixPath, absoluteImagePath)
+          }
         }
 
         property var onFormSave: function onFormSave(itemWidget) {
@@ -130,7 +153,14 @@ Item {
 
     Connections {
         target: __androidUtils
-        onImageSelected: externalResourceHandler.imageSelected(imagePath)
+        // used for both gallery and camera
+        onImageSelected:externalResourceHandler.imageSelected(imagePath)
+    }
+
+    Connections {
+        target: __iosUtils
+        // used for both gallery and camera
+        onImageSelected: externalResourceHandler.imageCaptured(imagePath)
     }
 
     Popup {
@@ -193,20 +223,6 @@ Item {
         onRejected: {
            visible = false
         }
-    }
-
-    IOSImagePicker {
-      id: picker
-
-      onImageSaved: {
-        if (absoluteImagePath) {
-          var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
-                externalResourceHandler.itemWidget.targetDir :
-                externalResourceHandler.itemWidget.targetDir + "/"
-          var newCurrentValue = QgsQuick.Utils.getRelativePath(absoluteImagePath, prefixPath)
-          externalResourceHandler.itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
-        }
-      }
     }
 
 }

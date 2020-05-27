@@ -42,7 +42,6 @@
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
-#include "ios/iosimagepicker.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"

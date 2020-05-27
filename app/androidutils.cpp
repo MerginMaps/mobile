@@ -47,9 +47,11 @@ bool AndroidUtils::isAndroid() const
 #endif
 }
 
+//! https://stackoverflow.com/questions/35973235/android-permission-denial-starting-intent-with-revoked-permission-android-perms
 void AndroidUtils::requirePermissions()
 {
   checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" );
+  checkAndAcquirePermissions( "android.permission.CAMERA" );
 }
 
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
@@ -89,11 +91,60 @@ void AndroidUtils::callImagePicker()
 #endif
 }
 
+void AndroidUtils::callCamera( const QString &targetPath )
+{
+#ifdef ANDROID
+  const QString IMAGE_CAPTURE_ACTION = QString( "android.media.action.IMAGE_CAPTURE" );
+
+  QAndroidJniObject activity = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+  QAndroidJniObject intent = QAndroidJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
+
+  QAndroidJniObject packageName = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+  QAndroidJniObject className = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+
+  intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
+
+  QAndroidJniObject extra = QAndroidJniObject::fromString( "targetPath" );
+  QAndroidJniObject my_prefix = QAndroidJniObject::fromString( targetPath );
+
+  intent.callObjectMethod( "putExtra",
+                           "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
+                           extra.object<jstring>(),
+                           my_prefix.object<jstring>() );
+
+  if ( intent.isValid() )
+  {
+    QtAndroid::startActivity( intent.object<jobject>(), CAMERA_CODE, this );
+  }
+#endif
+}
+
 #ifdef ANDROID
 void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data )
 {
 
   jint RESULT_OK = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
+  jint RESULT_CANCELED = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
+
+  if ( resultCode == RESULT_CANCELED )
+  {
+    QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    // User has triggered cancel, result has no data.
+    if ( !data.isValid() )
+    {
+      return;
+    }
+
+    QAndroidJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    // Internal cancelation due to an error
+    if ( !errorJNI.isValid() )
+    {
+      QString errorMsg = errorJNI.toString();
+      showToast( errorMsg );
+    }
+    return;
+  }
+
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
     QAndroidJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
@@ -110,9 +161,20 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QString selectedImagePath = "file://" + result.toString();
     emit imageSelected( selectedImagePath );
   }
+  else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
+  {
+    QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    QAndroidJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    QString absolutePath = absolutePathJNI.toString();
+
+    QString selectedImagePath = "file://" + absolutePath;
+    emit imageSelected( absolutePath );
+  }
   else
   {
-    qDebug() << "Something went wrong with media store activity";
+    QString msg( "Something went wrong with media store activity" );
+    qDebug() << msg;
+    showToast( msg );
   }
 
 }
