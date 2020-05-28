@@ -41,8 +41,9 @@ jobs:
       - name: install qgis-deps
         run: |
           chmod +x ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
+          export ROOT_PATH=.
           sudo ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
-          sudo chown -R $USER /opt/QGIS/
+          ls -la /opt/
 
       - name: build geodiff
         run: |
@@ -73,7 +74,7 @@ jobs:
           PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH \
           cmake -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
                 -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
-                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_BUILD_TYPE=Debug \
                 -DWITH_BINDINGS=FALSE \
                 -DWITH_DESKTOP=OFF \
                 -DWITH_ANALYSIS=OFF \
@@ -117,3 +118,10 @@ jobs:
         run: |
           cd build-Input
           ./input --test
+
+      - name: submit coveralls
+        run: |
+          # lcov --directory . --capture --output-file coverage.info
+          # lcov --remove coverage.info '*/tests/*' '/usr/*' '*googletest/*' --output-file coverage.info
+          # lcov --list coverage.info
+          # coveralls-lcov coverage.info
