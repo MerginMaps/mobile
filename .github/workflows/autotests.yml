@@ -1,0 +1,113 @@
+name: Auto Tests
+on: [push]
+env:
+  TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
+  TEST_API_USERNAME: test_inputapp
+  TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
+  QT_VERSION: 5.14.2
+  QGIS_DEPS_VERSION: 0.4.0
+  QGIS_COMMIT: da042bb61dc7447b41b021838efe42d08b31cdd8
+  GEODIFF_VERSION: release-0.8.2
+  ROOT_DIR: .
+
+jobs:
+  tests:
+    if: github.repository == 'lutraconsulting/input'
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout Input
+        uses: actions/checkout@v2
+        with:
+          path: input
+
+      - name: Checkout QGIS
+        uses: actions/checkout@v2
+        with:
+          repository: qgis/QGIS
+          path: qgis
+
+      - name: Checkout geodiff
+        uses: actions/checkout@v2
+        with:
+          repository: lutraconsulting/geodiff
+          path: geodiff
+
+      - name: Install deps
+        run: |
+          apt-get install -y \
+            bison ca-certificates ccache cmake cmake-curses-gui dh-python \
+            expect flex flip gdal-bin git graphviz grass-dev libexiv2-dev \
+            libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgsl-dev libpq-dev libproj-dev \
+            libprotobuf-dev libqca-qt5-2-dev libqca-qt5-2-plugins libqscintilla2-qt5-dev libqt5opengl5-dev \
+            libqt5serialport5-dev libqt5sql5-sqlite libqt5svg5-dev libqt5webkit5-dev libqt5xmlpatterns5-dev \
+            libqwt-qt5-dev libspatialindex-dev libspatialite-dev libsqlite3-dev libsqlite3-mod-spatialite libyaml-tiny-perl \
+            libzip-dev lighttpd locales ninja-build ocl-icd-opencl-dev opencl-headers pkg-config poppler-utils protobuf-compiler \
+            python3-dev qt5-default qt5keychain-dev qtbase5-dev qtbase5-private-dev qtpositioning5-dev qttools5-dev \
+            qttools5-dev-tools saga spawn-fcgi txt2tags xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb
+
+      - name: build geodiff
+        run: |
+          mkdir -p build-geodiff
+          mkdir -p Applications
+          cd build-geodiff
+
+          PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH \
+          cmake \
+                -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
+                -DWITH_INTERNAL_SQLITE3=False \
+                 ../geodiff/geodiff
+
+          make -j $(sysctl -n hw.ncpu)
+          make install
+
+      - name: build QGIS
+        run: |
+          mkdir -p build-QGIS
+          mkdir -p Applications
+          cd build-QGIS
+
+          cmake \
+                -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
+                -DWITH_BINDINGS=FALSE \
+                -DWITH_DESKTOP=OFF \
+                -DWITH_ANALYSIS=OFF \
+                -DDISABLE_DEPRECATED=ON \
+                -DWITH_QTWEBKIT=OFF \
+                -DWITH_GRASS=OFF \
+                -DWITH_QTMOBILITY=OFF \
+                -DWITH_QUICK=ON \
+                -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
+                -DENABLE_QT5=ON \
+                -DENABLE_TESTS=OFF \
+                -DWITH_INTERNAL_QWTPOLAR=OFF \
+                -DWITH_QWTPOLAR=OFF \
+                -DWITH_GUI=OFF \
+                -DWITH_APIDOC=OFF \
+                -DWITH_ASTYLE=OFF \
+                -DWITH_QT5SERIALPORT=OFF \
+                -DWITH_QSPATIALITE=OFF \
+                -DWITH_3D=FALSE \
+                -DWITH_QGIS_PROCESS=OFF \
+                -DQGIS_MACAPP_BUNDLE=-1 \
+                 ../qgis
+
+          make -j $(sysctl -n hw.ncpu)
+          make install
+
+        - name: build Input
+          run: |
+            cp input/scripts/ci/config.pri input/app/config.pri
+
+            mkdir -p build-Input
+            cd build-Input
+            qmake \
+              ../input/app/input.pro \
+              CONFIG+=release \
+              CONFIG+=qtquickcompiler
+
+            make -j $(sysctl -n hw.ncpu)
+
+        - name: run tests
+          run: |
+            cd build-Input
+            ./input --test
