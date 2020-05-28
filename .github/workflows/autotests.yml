@@ -8,12 +8,12 @@ env:
   QGIS_DEPS_VERSION: 0.4.0
   QGIS_COMMIT: da042bb61dc7447b41b021838efe42d08b31cdd8
   GEODIFF_VERSION: release-0.8.2
-  ROOT_DIR: /home/runner/work/input/input
+  ROOT_DIR: .
 
 jobs:
   tests:
     if: github.repository == 'lutraconsulting/input'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
@@ -32,19 +32,16 @@ jobs:
           repository: lutraconsulting/geodiff
           path: geodiff
 
-      - name: Install deps
+      - name: download qgis-deps
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            bison ca-certificates ccache cmake cmake-curses-gui dh-python \
-            expect flex flip gdal-bin git graphviz grass-dev libexiv2-dev \
-            libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgsl-dev libpq-dev libproj-dev \
-            libprotobuf-dev libqca-qt5-2-dev libqca-qt5-2-plugins libqscintilla2-qt5-dev libqt5opengl5-dev \
-            libqt5serialport5-dev libqt5sql5-sqlite libqt5svg5-dev libqt5webkit5-dev libqt5xmlpatterns5-dev \
-            libqwt-qt5-dev libspatialindex-dev libspatialite-dev libsqlite3-dev libsqlite3-mod-spatialite libyaml-tiny-perl \
-            libzip-dev lighttpd locales ninja-build ocl-icd-opencl-dev opencl-headers pkg-config poppler-utils protobuf-compiler \
-            python3-dev qt5-default qt5keychain-dev qtbase5-dev qtbase5-private-dev qtpositioning5-dev qttools5-dev \
-            qttools5-dev-tools saga spawn-fcgi txt2tags xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb
+          wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
+          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          wget https://qgis.org/downloads/macos/deps/install_qgis_deps-${QGIS_DEPS_VERSION}.bash
+
+      - name: install qgis-deps
+        run: |
+          chmod +x ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
+          sudo ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
 
       - name: build geodiff
         run: |
@@ -55,10 +52,14 @@ jobs:
           PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH \
           cmake \
                 -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
-                -DWITH_INTERNAL_SQLITE3=False \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DWITH_INTERNAL_SQLITE3:BOOL=FALSE \
+                -DSQLite3_ROOT:PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
+                -DENABLE_TESTS=FALSE \
+                -DBUILD_TOOLS=OFF \
                  ../geodiff/geodiff
 
-          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+          make -j $(sysctl -n hw.ncpu)
           make install
 
       - name: build QGIS
@@ -67,8 +68,10 @@ jobs:
           mkdir -p Applications
           cd build-QGIS
 
-          cmake \
+          PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH \
+          cmake -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
                 -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
+                -DCMAKE_BUILD_TYPE=Release \
                 -DWITH_BINDINGS=FALSE \
                 -DWITH_DESKTOP=OFF \
                 -DWITH_ANALYSIS=OFF \
@@ -92,7 +95,7 @@ jobs:
                 -DQGIS_MACAPP_BUNDLE=-1 \
                  ../qgis
 
-          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+          make -j $(sysctl -n hw.ncpu)
           make install
 
       - name: build Input
@@ -101,12 +104,12 @@ jobs:
 
           mkdir -p build-Input
           cd build-Input
-          qmake \
+          /opt/Qt/${QT_VERSION}/clang_64/bin/qmake \
             ../input/app/input.pro \
             CONFIG+=release \
             CONFIG+=qtquickcompiler
 
-          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+          make -j $(sysctl -n hw.ncpu)
         
       - name: run tests
         run: |
