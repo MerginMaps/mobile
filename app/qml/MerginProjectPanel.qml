@@ -100,11 +100,22 @@ Item {
   focus: true
 
   Keys.onReleased: {
-    if (!activeProjectPath) return
+    console.log("Back button signal catched in MerginProjectPanel!");
 
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true;
-      projectsPanel.visible = false
+      if (!projectsPanel.visible) return
+      else if (!activeProjectPath) return
+      else if (statusPanel.visible)
+      {
+        event.accepted = true
+        statusPanel.close()
+      }
+      else if (projectsPanel.visible)
+      {
+        event.accepted = true;
+        projectsPanel.visible = false
+      }
+
     }
   }
 
