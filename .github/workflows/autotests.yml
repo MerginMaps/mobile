@@ -57,7 +57,7 @@ jobs:
                 -DWITH_INTERNAL_SQLITE3=False \
                  ../geodiff/geodiff
 
-          make -j $(sysctl -n hw.ncpu)
+          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
           make install
 
       - name: build QGIS
@@ -91,23 +91,23 @@ jobs:
                 -DQGIS_MACAPP_BUNDLE=-1 \
                  ../qgis
 
-          make -j $(sysctl -n hw.ncpu)
+          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
           make install
 
-        - name: build Input
-          run: |
-            cp input/scripts/ci/config.pri input/app/config.pri
+      - name: build Input
+        run: |
+          cp input/scripts/ci/config.pri input/app/config.pri
 
-            mkdir -p build-Input
-            cd build-Input
-            qmake \
-              ../input/app/input.pro \
-              CONFIG+=release \
-              CONFIG+=qtquickcompiler
+          mkdir -p build-Input
+          cd build-Input
+          qmake \
+            ../input/app/input.pro \
+            CONFIG+=release \
+            CONFIG+=qtquickcompiler
 
-            make -j $(sysctl -n hw.ncpu)
+          make -j $(grep -c ^processor /proc/cpuinfo 2>/dev/null)
         
-        - name: run tests
-          run: |
-            cd build-Input
-            ./input --test
+      - name: run tests
+        run: |
+          cd build-Input
+          ./input --test
