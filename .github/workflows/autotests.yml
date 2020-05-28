@@ -54,7 +54,8 @@ jobs:
                 -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DWITH_INTERNAL_SQLITE3:BOOL=FALSE \
-                -DSQLite3_ROOT:PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
+                -DSQLite3_INCLUDE_DIR:PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/include \
+                -DSQLite3_LIBRARY=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/libsqlite3.dylib
                 -DENABLE_TESTS=FALSE \
                 -DBUILD_TOOLS=OFF \
                  ../geodiff/geodiff
