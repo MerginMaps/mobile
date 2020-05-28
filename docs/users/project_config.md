@@ -24,6 +24,11 @@ If you are using a vector layer for background layer:
 
 -   All vector layers not intended to be used as survey layers, have to be set as read-only. To make a vector layer read-only in QGIS, from the main menu select Project \> Properties. Within the window, select Data Source tab and select the Read-only option for the layers you do not want to be used as survey layer in Input.
 
+## Project extent
+In Input app, there is an option to zoom to the project extent. If not set, Input zooms to all visible layers. This is not particularly convenient when you have a layer with a large/global extent (e.g. Open Street Map).
+
+To set the project extent: from **Project** > **Properties**, select **QGIS Server** (not the most obvious location!). Under **WMS capabilities** select the option for **Advertised extent** and either enter the coordinate extent of your project bounding box or use the canvas extent.
+
 ## Survey layer
 
 Vector layers can be used as survey layer
