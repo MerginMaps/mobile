@@ -28,15 +28,13 @@ struct LocalProjectInfo
 {
   bool isValid() const { return !projectDir.isEmpty(); }
 
-  void setprojectFileError( const QString error ) { projectError = error; }
-
-  bool isShowable() const { return projectError.isEmpty(); }
+  bool isShowable() const { return qgisProjectError.isEmpty(); }
 
   QString projectDir;  //!< full path to the project directory
 
   QString qgisProjectFilePath;  //!< path to the .qgs/.qgz file (or empty if not have exactly one such file)
 
-  QString projectError; //!< If project is invalid, projectError carry more information why
+  QString qgisProjectError; //!< If project is invalid, projectError carry more information why
   // TODO: reset when project is synchronized
 
   //
