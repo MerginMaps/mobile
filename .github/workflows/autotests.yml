@@ -36,14 +36,18 @@ jobs:
         run: |
           wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
           wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
-          wget https://qgis.org/downloads/macos/deps/install_qgis_deps-${QGIS_DEPS_VERSION}.bash
 
       - name: install qgis-deps
         run: |
-          chmod +x ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
-          export ROOT_PATH=.
-          sudo ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
-          ls -la /opt/
+          sudo mkdir -p /opt/Qt/${QT_VERSION}/clang_64
+          chown -R $USER /opt/Qt/
+          cd /opt/Qt/${QT_VERSION}/clang_64
+          tar -xvzf ./qt-${QT_VERSION}.tar.gz
+
+          sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          chown -R $USER /opt/Qt/
+          cd ${QGIS_DEPS_PREFIX}/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          tar -xvzf ./qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
       - name: build geodiff
         run: |
