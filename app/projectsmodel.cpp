@@ -60,7 +60,7 @@ void ProjectModel::findProjectFiles()
       else if ( project.projectError.contains( "ERR_MULTIPLE_PROJECTS" ) )
         projectFile.info = tr( "Error: Multiple QGIS project files" );
       else
-        projectFile.info = tr("Invalid project");
+        projectFile.info = tr( "Invalid project" );
     }
     mProjectFiles << projectFile;
   }
