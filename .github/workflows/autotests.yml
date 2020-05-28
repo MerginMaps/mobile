@@ -40,12 +40,12 @@ jobs:
       - name: install qgis-deps
         run: |
           sudo mkdir -p /opt/Qt/${QT_VERSION}/clang_64
-          chown -R $USER /opt/Qt/
+          sudo chown -R $USER /opt/Qt/
           cd /opt/Qt/${QT_VERSION}/clang_64
           tar -xvzf ./qt-${QT_VERSION}.tar.gz
 
           sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          chown -R $USER /opt/Qt/
+          sudo chown -R $USER /opt/Qt/
           cd ${QGIS_DEPS_PREFIX}/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           tar -xvzf ./qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
