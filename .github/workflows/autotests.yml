@@ -106,7 +106,7 @@ jobs:
               CONFIG+=qtquickcompiler
 
             make -j $(sysctl -n hw.ncpu)
-
+        
         - name: run tests
           run: |
             cd build-Input
