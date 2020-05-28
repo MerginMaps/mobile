@@ -13,7 +13,7 @@ env:
 jobs:
   tests:
     if: github.repository == 'lutraconsulting/input'
-    runs-on: ubuntu-18.04
+    runs-on: macos-latest
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
@@ -32,22 +32,28 @@ jobs:
           repository: lutraconsulting/geodiff
           path: geodiff
 
+      - name: install brew deps
+        run: |
+          brew install lcov
+
       - name: download qgis-deps
         run: |
           wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
           wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          ls .
 
       - name: install qgis-deps
         run: |
+          ROOT=`pwd`
           sudo mkdir -p /opt/Qt/${QT_VERSION}/clang_64
           sudo chown -R $USER /opt/Qt/
           cd /opt/Qt/${QT_VERSION}/clang_64
-          tar -xvzf ./qt-${QT_VERSION}.tar.gz
+          tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
 
           sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           sudo chown -R $USER /opt/Qt/
           cd ${QGIS_DEPS_PREFIX}/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          tar -xvzf ./qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
       - name: build geodiff
         run: |
@@ -125,7 +131,7 @@ jobs:
 
       - name: submit coveralls
         run: |
-          # lcov --directory . --capture --output-file coverage.info
-          # lcov --remove coverage.info '*/tests/*' '/usr/*' '*googletest/*' --output-file coverage.info
-          # lcov --list coverage.info
-          # coveralls-lcov coverage.info
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '*/tests/*' '/usr/*' --output-file coverage.info
+          lcov --list coverage.info
+          coveralls-lcov coverage.info

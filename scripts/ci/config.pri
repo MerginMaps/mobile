@@ -29,11 +29,9 @@ macx:!android {
   QGIS_QUICK_DATA_PATH = $$(ROOT_DIR)/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = $$(ROOT_DIR)/geodiff/geodiff/src
   GEODIFF_LIB_DIR = $$(ROOT_DIR)/build-geodiff
-}
 
-unix:!macx:!android {
-  QGIS_INSTALL_PATH = $$(ROOT_DIR)/Applications
-  QGIS_QUICK_DATA_PATH = $$(ROOT_DIR)/input/app/android/assets/qgis-data
-  GEODIFF_INCLUDE_DIR = $$(ROOT_DIR)/geodiff/geodiff/src
-  GEODIFF_LIB_DIR = $$(ROOT_DIR)/build-geodiff
+  # also setup coverall for macos build
+  # --coverage option is synonym for: -fprofile-arcs -ftest-coverage -lgcov
+  QMAKE_CXXFLAGS += --coverage
+  QMAKE_LFLAGS += --coverage
 }
