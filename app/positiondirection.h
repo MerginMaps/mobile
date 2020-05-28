@@ -19,7 +19,7 @@
 
 
 /**
- * Utility class containing infortmation about the direction. Note that depends on availibility of sensors and their data.
+ * Utility class containing information about the direction. Note that depends on availibility of sensors and their data.
  *
  * Updates direction periodicly according timer while filtering small difference values between old and new direction angle.
  * Uses ground speed (in m/s) to select which direction source will be used - compass for smaller speed whereas positionKit direction
