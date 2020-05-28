@@ -42,6 +42,7 @@ jobs:
         run: |
           chmod +x ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
           sudo ./install_qgis_deps-${QGIS_DEPS_VERSION}.bash
+          sudo chown -R $USER /opt/QGIS
 
       - name: build geodiff
         run: |
