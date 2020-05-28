@@ -8,7 +8,6 @@ env:
   QGIS_DEPS_VERSION: 0.4.0
   QGIS_COMMIT: da042bb61dc7447b41b021838efe42d08b31cdd8
   GEODIFF_VERSION: release-0.8.2
-  ROOT_DIR: .
 
 jobs:
   tests:
@@ -73,7 +72,6 @@ jobs:
                  ../geodiff/geodiff
 
           make -j $(sysctl -n hw.ncpu)
-          make install
 
       - name: build QGIS
         run: |
@@ -113,25 +111,30 @@ jobs:
 
       - name: build Input
         run: |
+          export ROOT_DIR=`pwd`
           cp input/scripts/ci/config.pri input/app/config.pri
 
           mkdir -p build-Input
           cd build-Input
           /opt/Qt/${QT_VERSION}/clang_64/bin/qmake \
             ../input/app/input.pro \
-            CONFIG+=release \
+            CONFIG+=debug \
             CONFIG+=qtquickcompiler
 
           make -j $(sysctl -n hw.ncpu)
         
       - name: run tests
         run: |
-          cd build-Input
-          ./input --test
+          ROOT_DIR=`pwd`
+          cd build-Input/Input.app/Contents/MacOS
+          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/
+          install_name_tool -add_rpath $ROOT_DIR/build-geodiff/
+
+          ./Input --test
 
       - name: submit coveralls
         run: |
-          cd build-Input
+          cd build-Input/Input.app/Contents/MacOS
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '*/tests/*' '/usr/*' --output-file coverage.info
           lcov --list coverage.info
