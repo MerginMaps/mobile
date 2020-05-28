@@ -34,7 +34,9 @@ jobs:
 
       - name: Install deps
         run: |
-          apt-get install -y \
+          pwd
+          ls -la .
+          sudo apt-get install -y \
             bison ca-certificates ccache cmake cmake-curses-gui dh-python \
             expect flex flip gdal-bin git graphviz grass-dev libexiv2-dev \
             libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgsl-dev libpq-dev libproj-dev \
