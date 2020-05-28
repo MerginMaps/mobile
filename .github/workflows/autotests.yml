@@ -34,26 +34,26 @@ jobs:
 
       - name: install brew deps
         run: |
-          brew install lcov
+          brew install lcov ruby
+          sudo gem install coveralls-lcov
 
       - name: download qgis-deps
         run: |
           wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
           wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
           ls .
+          pwd
 
       - name: install qgis-deps
         run: |
           ROOT=`pwd`
           sudo mkdir -p /opt/Qt/${QT_VERSION}/clang_64
-          sudo chown -R $USER /opt/Qt/
           cd /opt/Qt/${QT_VERSION}/clang_64
-          tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
+          sudo tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
 
           sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          sudo chown -R $USER /opt/Qt/
-          cd ${QGIS_DEPS_PREFIX}/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          sudo tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
       - name: build geodiff
         run: |
@@ -131,6 +131,7 @@ jobs:
 
       - name: submit coveralls
         run: |
+          cd build-Input
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '*/tests/*' '/usr/*' --output-file coverage.info
           lcov --list coverage.info
