@@ -8,12 +8,12 @@ env:
   QGIS_DEPS_VERSION: 0.4.0
   QGIS_COMMIT: da042bb61dc7447b41b021838efe42d08b31cdd8
   GEODIFF_VERSION: release-0.8.2
-  ROOT_DIR: .
+  ROOT_DIR: /home/runner/work/input/input
 
 jobs:
   tests:
     if: github.repository == 'lutraconsulting/input'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
@@ -34,8 +34,7 @@ jobs:
 
       - name: Install deps
         run: |
-          pwd
-          ls -la .
+          sudo apt-get update
           sudo apt-get install -y \
             bison ca-certificates ccache cmake cmake-curses-gui dh-python \
             expect flex flip gdal-bin git graphviz grass-dev libexiv2-dev \
