@@ -68,8 +68,7 @@ jobs:
         run: |
           ROOT_DIR=`pwd`
           cd build-Input/Input.app/Contents/MacOS
-          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/
-          install_name_tool -add_rpath $ROOT_DIR/build-geodiff/
+          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input
 
           ./Input --test
 
