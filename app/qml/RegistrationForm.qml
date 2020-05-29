@@ -59,7 +59,6 @@ Rectangle {
       id: row
       width: registerForm.width
       height: fieldHeight
-      visible: !warningMsgContainer.visible
       spacing: 0
 
       Rectangle {
@@ -105,7 +104,6 @@ Rectangle {
 
     Rectangle {
       id: registerNameBorder
-      visible: !warningMsgContainer.visible
       color: root.fontColor
       y: registerName.height - height
       height: 2 * QgsQuick.Utils.dp
@@ -118,7 +116,6 @@ Rectangle {
       width: registerForm.width
       height: fieldHeight
       spacing: 0
-      visible: !warningMsgContainer.visible
 
       Rectangle {
         id: iconContainer4
@@ -161,7 +158,6 @@ Rectangle {
 
     Rectangle {
       id: emailBorder
-      visible: !warningMsgContainer.visible
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
       y: email.height - height
@@ -174,7 +170,6 @@ Rectangle {
       width: registerForm.width
       height: fieldHeight
       spacing: 0
-      visible: !warningMsgContainer.visible
 
       Rectangle {
         id: iconContainer2
@@ -231,7 +226,6 @@ Rectangle {
 
     Rectangle {
       id: passBorder
-      visible: !warningMsgContainer.visible
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
       y: password.height - height
@@ -244,7 +238,6 @@ Rectangle {
       width: registerForm.width
       height: fieldHeight
       spacing: 0
-      visible: !warningMsgContainer.visible
 
       Rectangle {
         id: iconContainer3
@@ -301,7 +294,6 @@ Rectangle {
 
     Rectangle {
       id: confirmPassBorder
-      visible: !warningMsgContainer.visible
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
       y: passwordConfirm.height - height
@@ -314,7 +306,6 @@ Rectangle {
       width: registerForm.width
       height: fieldHeight
       spacing: 0
-      visible: !warningMsgContainer.visible
 
       LeftCheckBox {
         id: acceptTOC
@@ -332,7 +323,6 @@ Rectangle {
 
     Rectangle {
       id: acceptTOCBorder
-      visible: !warningMsgContainer.visible
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
       y: acceptTOC.height - height
@@ -343,7 +333,6 @@ Rectangle {
 
     Button {
       id: registerButton
-      visible: !warningMsgContainer.visible
       enabled: !root.pending
       width: registerForm.width - 2 * root.panelMargin
       height: fieldHeight
@@ -367,72 +356,6 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-      }
-    }
-
-    // Mergin check
-    Row {
-      id: warningMsgContainer
-      visible: __merginApi.apiVersionStatus !== MerginApiStatus.OK
-      width: registerForm.width
-
-      Text {
-        id: pendingText
-        width: parent.width
-        text: {
-          if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
-            qsTr("Mergin server has been updated. Please, update Input app to enable Mergin functionality.")
-          } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
-            ""
-          } else {
-            qsTr("Mergin server unavailable.")
-          }
-        }
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
-        wrapMode: Text.WordWrap
-      }
-    }
-
-    Item {
-      width: parent.width
-      height: fieldHeight / 2
-
-      Button {
-        width: parent.height
-        height: parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: __merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE
-                 || __merginApi.apiVersionStatus === MerginApiStatus.NOT_FOUND
-        background: Rectangle {
-          anchors.fill: parent
-          color: InputStyle.fontColor
-          radius: 2 * QgsQuick.Utils.dp
-        }
-
-        onClicked: __merginApi.pingMergin()
-
-        Image {
-          id: image
-          anchors.horizontalCenter: parent.horizontalCenter
-          anchors.centerIn: parent
-          width: parent.width * 0.75
-          height: width
-          source: "sync.svg"
-          sourceSize.width: width
-          sourceSize.height: height
-          visible: source
-          anchors.topMargin: 0
-          fillMode: Image.PreserveAspectFit
-        }
-
-        ColorOverlay {
-          anchors.fill: image
-          source: image
-          color: "white"
-        }
       }
     }
   }

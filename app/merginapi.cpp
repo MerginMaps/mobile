@@ -784,7 +784,7 @@ void MerginApi::registrationFinished()
     {
       // the self-registration is not allowed on the server
       emit registrationFailed();
-      emit notify( tr( "Registration is disabled on the Mergin server.<bt>Please contact the server administrator." ) );
+      emit notify( tr( "Registration is disabled on the Mergin server.<br>Please contact the server administrator." ) );
     }
     else
     {
@@ -909,9 +909,6 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
   }
-
-  // TODO remove, only for te4eting
-  setApiVersionStatus( MerginApiStatus::OK );
 }
 
 bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )

@@ -68,13 +68,13 @@ Item {
 
   onStateChanged: {
     if (state === "login") {
-      loginForm.visible = !warningMsgContainer.visible
+      loginForm.visible = true
       loginForm.clean()
       registrationForm.visible = false
     } else // if (state === "register")
     {
       loginForm.visible = false
-      registrationForm.visible = !warningMsgContainer.visible
+      registrationForm.visible = true
       registrationForm.clean()
     }
   }

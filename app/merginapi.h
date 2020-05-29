@@ -292,7 +292,7 @@ class MerginApi: public QObject
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
-    static const int MERGIN_API_VERSION_MINOR = 5;
+    static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
 
     static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
