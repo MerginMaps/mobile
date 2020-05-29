@@ -6,8 +6,8 @@ env:
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QGIS_DEPS_VERSION: 0.4.0
-  INPUT_SDK_HASH: ck6e9otrethmbhl
-  INPUT_SDK_VERSION: 2
+  SDK_HASH: ck6e9otrethmbhl
+  SDK_VERSION: 2
 
 jobs:
   tests:
@@ -27,23 +27,15 @@ jobs:
       - name: download input-sdk
         run: |
           ROOT=`pwd`
-          wget https://www.dropbox.com/s/${INPUT_SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0
-          mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
+          wget https://www.dropbox.com/s/${SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${SDK_VERSION}.tar.gz?dl=0
+          mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
           sudo mkdir -p /opt/INPUT
           sudo chown -R $USER /opt/INPUT
           mkdir -p /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
           cd /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
           tar -xvzf $ROOT/input-sdk.tar.gz
-          mkdir -p /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output
-          ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
-
-          ls /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
-          ls /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/
-          ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
-          ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/
-          ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/qgis_quick.framework/
-          ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/qgis_quick.framework/Versions
-          ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/qgis_quick.framework/Versions/3.13/qgis_quick
+          mkdir -p /opt/INPUT/input-sdk-mac-${SDK_VERSION}/build/qgis/build-mac/output
+          ln -s /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${SDK_VERSION}/build/qgis/build-mac/output/lib
 
       - name: download qt
         run: |
@@ -79,7 +71,7 @@ jobs:
 
           make -j $(sysctl -n hw.ncpu)
           install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
-          install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
+          install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
 
       - name: run tests
         run: |
