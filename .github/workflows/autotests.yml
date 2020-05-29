@@ -24,6 +24,16 @@ jobs:
           brew install lcov ruby
           sudo gem install coveralls-lcov
 
+      - name: download input-sdk
+        run: |
+          ROOT=`pwd`
+          wget https://www.dropbox.com/s/${INPUT_SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0
+          mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
+          sudo mkdir -p ${ROOT}/sdk
+          cd ${ROOT}/sdk
+          sudo tar -xvzf $ROOT/input-sdk.tar.gz
+          ls ${ROOT}/sdk
+
       - name: download qt
         run: |
           ROOT=`pwd`
@@ -39,16 +49,6 @@ jobs:
           sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           sudo tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
-
-      - name: download input-sdk
-        run: |
-          ROOT=`pwd`
-          wget https://www.dropbox.com/s/${INPUT_SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0
-          mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz $ROOT/input-sdk.tar.gz
-          sudo mkdir -p ${ROOT}/sdk
-          cd ${ROOT}/sdk
-          sudo tar -xvzf $ROOT/input-sdk.tar.gz
-          ls ${ROOT}/sdk
 
       - name: build Input
         run: |
