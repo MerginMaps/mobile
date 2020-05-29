@@ -63,19 +63,19 @@ jobs:
             CONFIG+=qtquickcompiler
 
           make -j $(sysctl -n hw.ncpu)
-        
+          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
+          install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
+
       - name: run tests
         run: |
           ROOT_DIR=`pwd`
-          cd build-Input/Input.app/Contents/MacOS
-          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input
-
-          ./Input --test
+          cd build-Input/
+          ./Input.app/Contents/MacOS/Input --test
 
       - name: submit coveralls
         run: |
-          cd build-Input/Input.app/Contents/MacOS
+          cd build-Input
           lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '*/tests/*' '/usr/*' --output-file coverage.info
+          lcov --remove coverage.info '*/tests/*' '/usr/*' '/Applications/*' '/opt/*' 'build-*/*' --output-file coverage.info
           lcov --list coverage.info
           coveralls-lcov coverage.info
