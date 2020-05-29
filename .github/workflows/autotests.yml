@@ -22,8 +22,8 @@ jobs:
       - name: install brew deps
         run: |
           brew install lcov ruby
-          export PATH="/usr/local/opt/ruby/bin:$PATH
-          sudo gem install coveralls-lcov
+          export PATH="/usr/local/opt/ruby/bin:$PATH"
+          gem install coveralls-lcov
 
       - name: download input-sdk
         run: |
