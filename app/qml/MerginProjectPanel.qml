@@ -88,9 +88,11 @@ Item {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
         refreshProjectList()
+        projectsPanel.forceActiveFocus()
       } else {
         homeBtn.activated()
       }
+      projectsPanel.forceActiveFocus()
     }
     onAuthFailed: authPanel.pending = false
   }
@@ -103,19 +105,41 @@ Item {
     console.log("Back button signal catched in MerginProjectPanel!");
 
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      if (!projectsPanel.visible) return
-      else if (!activeProjectPath) return
+      if (!projectsPanel.visible)
+      {
+        console.log("A")
+        return
+      }
+      else if (authPanel.visible)
+      {
+        console.log("D")
+        authPanel.visible = false
+        projectsPanel.forceActiveFocus()
+        homeBtn.activated()
+      }
+      else if (accountPanel.visible)
+      {
+        console.log("E")
+        accountPanel.visible = false
+        event.accepted = true;
+      }
+      else if (!activeProjectPath)
+      {
+        console.log("B")
+        return
+      }
       else if (statusPanel.visible)
       {
+        console.log("C")
         event.accepted = true
         statusPanel.close()
       }
       else if (projectsPanel.visible)
       {
+        console.log("F")
         event.accepted = true;
         projectsPanel.visible = false
       }
-
     }
   }
 
@@ -150,6 +174,7 @@ Item {
       if (authPanel.visible) {
         authPanel.visible = false
         homeBtn.activated()
+        projectsPanel.forceActiveFocus()
       } else {
         projectsPanel.visible = false
       }
