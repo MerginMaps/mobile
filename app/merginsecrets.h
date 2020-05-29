@@ -14,16 +14,16 @@
 #include <QString>
 
 #if !defined(USE_MERGIN_DUMMY_API_KEY)
-  QString __getSecretApiKey( const QString& serverName );
+QString __getSecretApiKey( const QString &serverName );
 #endif
 
-QString getSecretApiKey( const QString& serverName )
+QString getSecretApiKey( const QString &serverName )
 {
 #if defined(USE_MERGIN_DUMMY_API_KEY)
   Q_UNUSED( serverName );
 #else
-  QString secretKey = __getSecretApiKey(serverName);
-  if (!secretKey.isEmpty())
+  QString secretKey = __getSecretApiKey( serverName );
+  if ( !secretKey.isEmpty() )
     return secretKey;
 #endif
   return "not-secret-key";
