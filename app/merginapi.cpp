@@ -145,23 +145,9 @@ QString MerginApi::getApiKey( const QString &serverName )
 #if defined(USE_MERGIN_DUMMY_API_KEY)
   Q_UNUSED( serverName );
 #else
-
-#ifdef MERGIN_SECRET_ENCODE
-  __outputEncodedStrings();
-#endif
-
-  if ( serverName.contains( "https://public.cloudmergin.com" ) )
-  {
-    return __getPublicApiKey();
-  }
-  else if ( serverName.contains( "https://dev.dev.cloudmergin.com" ) )
-  {
-    return __getDevDevApiKey();
-  }
-  else if ( serverName.contains( "https://test.dev.cloudmergin.com" ) )
-  {
-    return __getTestDevApiKey();
-  }
+  QString secretKey = getSecretApiKey(serverName);
+  if (!secretKey.isEmpty())
+    return secretKey;
 #endif
   return "not-secret-key";
 }

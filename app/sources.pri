@@ -20,9 +20,6 @@ ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
 exists(merginsecrets.cpp) {
-  # Uncomment in debug build to generate new encrypted API_KEYS
-  # DEFINES += MERGIN_SECRET_ENCODE
-
   message("Using production Mergin API_KEYS")
   SOURCES += merginsecrets.cpp
 } else {
@@ -49,6 +46,7 @@ geodiffutils.h \
 positiondirection.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
+merginsecrets.h \
 
 contains(DEFINES, INPUT_TEST) {
   SOURCES += test/testmerginapi.cpp
