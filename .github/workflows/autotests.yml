@@ -22,6 +22,7 @@ jobs:
       - name: install brew deps
         run: |
           brew install lcov ruby
+          export PATH="/usr/local/opt/ruby/bin:$PATH
           sudo gem install coveralls-lcov
 
       - name: download input-sdk
@@ -85,4 +86,10 @@ jobs:
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '*/tests/*' '/usr/*' '/Applications/*' '/opt/*' 'build-*/*' --output-file coverage.info
           lcov --list coverage.info
-          /usr/local/bin/coveralls-lcov coverage.info
+
+          # upload
+          export PATH="/usr/local/opt/ruby/bin:$PATH
+          cd /usr/local/lib/ruby/gems/
+          RUBY_VER=`ls -1 .`
+          cd $RUBY_VER/bin
+          ./coveralls-lcov coverage.info
