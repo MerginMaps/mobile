@@ -15,7 +15,7 @@
 #include <QDir>
 #include <QDirIterator>
 
-static QString findQgisProjectFile( const QString &projectDir )
+static QString findQgisProjectFile( const QString &projectDir, QString &err )
 {
   QList<QString> foundProjectFiles;
   QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
@@ -27,6 +27,16 @@ static QString findQgisProjectFile( const QString &projectDir )
   if ( foundProjectFiles.count() == 1 )
   {
     return foundProjectFiles.first();
+  }
+  else if ( foundProjectFiles.count() > 1 )
+  {
+    // error: multiple project files found
+    err = QObject::tr( "Error: Multiple QGIS project files" );
+  }
+  else
+  {
+    // no projects
+    err = QObject::tr( "Error: Missing QGIS project file" );
   }
   return QString();
 }
@@ -40,7 +50,7 @@ LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   {
     LocalProjectInfo info;
     info.projectDir = mDataDir + "/" + folderName;
-    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir );
+    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir, info.qgisProjectError );
 
     MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( info.projectDir + "/" + MerginApi::sMetadataFile );
     if ( metadata.isValid() )
@@ -110,7 +120,7 @@ void LocalProjectsManager::addMerginProject( const QString &projectDir, const QS
 {
   LocalProjectInfo project;
   project.projectDir = projectDir;
-  project.qgisProjectFilePath = findQgisProjectFile( projectDir );
+  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.qgisProjectError );
   project.projectNamespace = projectNamespace;
   project.projectName = projectName;
   // version info and status should be updated afterwards

@@ -47,16 +47,15 @@ void ProjectModel::findProjectFiles()
     projectFile.folderName = dir.dirName();
     projectFile.projectName = project.projectName;
     projectFile.projectNamespace = project.projectNamespace;
+    projectFile.isValid = project.isShowable();
     QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
-    if ( !project.qgisProjectFilePath.isEmpty() )
+    if ( projectFile.isValid )
     {
       projectFile.info = QString( created.toString() );
-      projectFile.isValid = true;
     }
     else
     {
-      projectFile.info = tr( "Missing QGIS project file" );
-      projectFile.isValid = false;
+      projectFile.info = project.qgisProjectError;
     }
     mProjectFiles << projectFile;
   }
