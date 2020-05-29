@@ -83,7 +83,7 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
 
-          # setup config environmen
+          # setup config environment
           cp scripts/ci/config.pri app/config.pri
 
           # patch the Info.plist

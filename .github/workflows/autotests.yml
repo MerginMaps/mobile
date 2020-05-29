@@ -23,6 +23,18 @@ jobs:
         run: |
           brew install lcov
 
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd input/app/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
+
       - name: download input-sdk
         run: |
           ROOT=`pwd`
