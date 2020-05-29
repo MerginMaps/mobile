@@ -33,7 +33,7 @@ jobs:
           cd /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
           sudo tar -xvzf $ROOT/input-sdk.tar.gz
           sudo mkdir -p /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output
-          sudo ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
+          sudo ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
           ls /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
 
           ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
