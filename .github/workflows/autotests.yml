@@ -25,11 +25,6 @@ jobs:
           export PATH="/usr/local/opt/ruby/bin:$PATH"
           gem install coveralls-lcov
 
-          cd /usr/local/lib/ruby/gems/
-          RUBY_VER=`ls -1 .`
-          cd $RUBY_VER/bin/
-          ls -la .
-
       - name: download input-sdk
         run: |
           ROOT=`pwd`
@@ -96,5 +91,5 @@ jobs:
           export PATH="/usr/local/opt/ruby/bin:$PATH"
           cd /usr/local/lib/ruby/gems/
           RUBY_VER=`ls -1 .`
-          cd $RUBY_VER/bin
+          cd $RUBY_VER/bin/bin
           ./coveralls-lcov coverage.info
