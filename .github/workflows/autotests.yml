@@ -85,4 +85,4 @@ jobs:
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '*/tests/*' '/usr/*' '/Applications/*' '/opt/*' 'build-*/*' --output-file coverage.info
           lcov --list coverage.info
-          coveralls-lcov coverage.info
+          /usr/local/bin/coveralls-lcov coverage.info
