@@ -29,13 +29,16 @@ jobs:
           ROOT=`pwd`
           wget https://www.dropbox.com/s/${INPUT_SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0
           mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
-          sudo mkdir -p /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          sudo mkdir -p /opt/INPUT
+          sudo chown -R $USER /opt/INPUT
+          mkdir -p /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
           cd /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
-          sudo tar -xvzf $ROOT/input-sdk.tar.gz
-          sudo mkdir -p /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output
-          sudo ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
-          ls /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          tar -xvzf $ROOT/input-sdk.tar.gz
+          mkdir -p /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output
+          ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
 
+          ls /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          ls /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/
           ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
           ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/
           ls -la /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib/qgis_quick.framework/
@@ -46,17 +49,21 @@ jobs:
         run: |
           ROOT=`pwd`
           wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
-          sudo mkdir -p /opt/Qt/${QT_VERSION}/clang_64
+          sudo mkdir -p /opt/Qt
+          sudo chown -R $USER /opt/Qt
+          mkdir -p /opt/Qt/${QT_VERSION}/clang_64
           cd /opt/Qt/${QT_VERSION}/clang_64
-          sudo tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
+          tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
 
       - name: download qgis-deps
         run: |
           ROOT=`pwd`
           wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
-          sudo mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          sudo mkdir -p /opt/QGIS
+          sudo chown -R $USER /opt/QGIS
+          mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          sudo tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
       - name: build Input
         run: |
