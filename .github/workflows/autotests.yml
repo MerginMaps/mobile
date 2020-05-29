@@ -88,7 +88,7 @@ jobs:
           lcov --list coverage.info
 
           # upload
-          export PATH="/usr/local/opt/ruby/bin:$PATH
+          export PATH="/usr/local/opt/ruby/bin:$PATH"
           cd /usr/local/lib/ruby/gems/
           RUBY_VER=`ls -1 .`
           cd $RUBY_VER/bin
