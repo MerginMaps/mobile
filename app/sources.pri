@@ -46,7 +46,6 @@ geodiffutils.h \
 positiondirection.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
-merginsecrets.h \
 
 contains(DEFINES, INPUT_TEST) {
   SOURCES += test/testmerginapi.cpp

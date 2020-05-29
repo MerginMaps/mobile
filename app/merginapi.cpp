@@ -145,7 +145,7 @@ QString MerginApi::getApiKey( const QString &serverName )
 #if defined(USE_MERGIN_DUMMY_API_KEY)
   Q_UNUSED( serverName );
 #else
-  QString secretKey = getSecretApiKey( serverName );
+  QString secretKey = __getSecretApiKey( serverName );
   if ( !secretKey.isEmpty() )
     return secretKey;
 #endif
