@@ -27,10 +27,8 @@ jobs:
 
           cd /usr/local/lib/ruby/gems/
           RUBY_VER=`ls -1 .`
-          cd $RUBY_VER/bin
-          ls -la
-          
-
+          cd $RUBY_VER/bin/
+          ls -la .
 
       - name: download input-sdk
         run: |
