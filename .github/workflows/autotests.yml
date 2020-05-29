@@ -35,6 +35,7 @@ jobs:
           sudo mkdir -p /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output
           sudo ln -s /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks /opt/INPUT/input-sdk-mac-${INPUT_SDK_VERSION}/build/qgis/build-mac/output/lib
           ls /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          ls /opt/INPUT/input-sdk-mac-2/build/qgis/build-mac/output/lib/qgis_quick.framework/Versions/3.13/qgis_quick
 
       - name: download qt
         run: |
