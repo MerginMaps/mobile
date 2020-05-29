@@ -29,10 +29,10 @@ jobs:
           ROOT=`pwd`
           wget https://www.dropbox.com/s/${INPUT_SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0
           mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${INPUT_SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
-          sudo mkdir -p ${ROOT}/sdk
-          cd ${ROOT}/sdk
+          sudo mkdir -p ${ROOT}/input-sdk
+          cd ${ROOT}/input-sdk
           sudo tar -xvzf $ROOT/input-sdk.tar.gz
-          ls ${ROOT}/sdk
+          ls ${ROOT}/input-sdk
 
       - name: download qt
         run: |

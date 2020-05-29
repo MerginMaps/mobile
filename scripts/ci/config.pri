@@ -25,10 +25,10 @@ ios {
 }
 
 macx:!android {
-  QGIS_INSTALL_PATH = $$(ROOT_DIR)/sdk/input-sdk
+  QGIS_INSTALL_PATH = $$(ROOT_DIR)/input-sdk
   QGIS_QUICK_DATA_PATH = $$(ROOT_DIR)/input/app/android/assets/qgis-data
-  GEODIFF_INCLUDE_DIR = $$(ROOT_DIR)/sdk/input-sdk/include
-  GEODIFF_LIB_DIR = $$(ROOT_DIR)/sdk/input-sdk/lib
+  GEODIFF_INCLUDE_DIR = $$(ROOT_DIR)/input-sdk/include
+  GEODIFF_LIB_DIR = $$(ROOT_DIR)/input-sdk/lib
 
   # also setup coverall for macos build
   # --coverage option is synonym for: -fprofile-arcs -ftest-coverage -lgcov
