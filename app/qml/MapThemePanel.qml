@@ -25,6 +25,16 @@ Drawer {
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
+
+    Item {
+      focus: true
+      Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          mapThemePanel.close()
+        }
+      }
+    }
+
     PanelHeader {
           id: header
           height: InputStyle.rowHeightHeader

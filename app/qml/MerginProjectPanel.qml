@@ -94,7 +94,10 @@ Item {
       }
       projectsPanel.forceActiveFocus()
     }
-    onAuthFailed: authPanel.pending = false
+    onAuthFailed: {
+      authPanel.pending = false
+      projectsPanel.forceActiveFocus()
+    }
   }
 
   id: projectsPanel
@@ -697,6 +700,14 @@ Item {
     onAuthFailed: homeBtn.activated()
     toolbarHeight: toolbar.height
     onPendingChanged: busyIndicator.running = authPanel.pending
+
+    onVisibleChanged: {
+      if (!authPanel.visible)
+      {
+        // gain focus if auth panel is closed
+        projectsPanel.forceActiveFocus()
+      }
+    }
   }
 
   AccountPage {

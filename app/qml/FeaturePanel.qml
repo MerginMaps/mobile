@@ -43,6 +43,15 @@ Drawer {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
+    Item {
+      focus: true
+      Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          featurePanel.close()
+        }
+      }
+    }
+
     background: Rectangle {
         id: stateManager
         color: InputStyle.clrPanelMain
