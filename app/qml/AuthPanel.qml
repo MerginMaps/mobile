@@ -43,15 +43,24 @@ Item {
   }
 
   Keys.onReleased: {
+
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+      console.log("Back button signal catched in AuthPanel!");
+
+//      if (!activeProjectPath)
+
+//      if (root.activeFocus)
       event.accepted = true;
       root.close()
       authFailed()
+      password.focus = false;
+      loginName.focus = false;
+      root.focus = false;
     }
   }
 
   id: root
-  focus: true
+//  focus: true
 
 
   Pane {
