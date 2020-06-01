@@ -94,7 +94,7 @@ jobs:
         run: |
           cd build-Input
           lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '*/tests/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input/*' --output-file coverage.info
+          lcov --remove coverage.info '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Coveralls
