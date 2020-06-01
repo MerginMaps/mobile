@@ -574,7 +574,8 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
-            showAsDialog ? showDialog(message) : showMessage(message)
+            var msg = message ? message : qsTr("Unknown network error")
+            showAsDialog ? showDialog(msg) : showMessage(msg)
         }
         onNotify: {
             showMessage(message)

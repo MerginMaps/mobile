@@ -276,6 +276,17 @@ QString InputUtils::appInfo()
          .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
+QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
+  return uuid.toString( QUuid::WithoutBraces );
+#else
+  QString str = uuid.toString();
+  str = str.mid( 1, str.length() - 2 );  // remove braces
+  return str;
+#endif
+}
+
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
 {
   bool result  = true;
