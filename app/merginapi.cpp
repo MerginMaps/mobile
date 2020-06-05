@@ -136,6 +136,21 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   return request;
 }
 
+#if !defined(USE_MERGIN_DUMMY_API_KEY)
+#include "merginsecrets.cpp"
+#endif
+
+QString MerginApi::getApiKey( const QString &serverName )
+{
+#if defined(USE_MERGIN_DUMMY_API_KEY)
+  Q_UNUSED( serverName );
+#else
+  QString secretKey = __getSecretApiKey( serverName );
+  if ( !secretKey.isEmpty() )
+    return secretKey;
+#endif
+  return "not-secret-key";
+}
 
 void MerginApi::downloadItemReplyFinished()
 {
@@ -463,6 +478,68 @@ void MerginApi::authorize( const QString &login, const QString &password )
   InputUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
+void MerginApi::registerUser( const QString &username,
+                              const QString &email,
+                              const QString &password,
+                              const QString &confirmPassword,
+                              bool acceptedTOC )
+{
+  // Some very basic checks, so we do not validate everything
+  if ( username.isEmpty() || username.length() < 4 )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Username must have at least 4 characters" ) );
+    return;
+  }
+
+  if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Please enter valid email" ) );
+    return;
+  }
+
+  if ( password.isEmpty() || password.length() < 4 )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Password in not strong enough" ) );
+    return;
+  }
+
+  if ( confirmPassword != password )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Passwords do not match" ) );
+    return;
+  }
+
+  if ( !acceptedTOC )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Please accept Terms and Privacy Policy" ) );
+    return;
+  }
+
+  // request
+  QNetworkRequest request = getDefaultRequest( false );
+  QString urlString = mApiRoot + QStringLiteral( "v1/auth/register" );
+  QUrl url( urlString );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "username" ), username );
+  jsonObject.insert( QStringLiteral( "email" ), email );
+  jsonObject.insert( QStringLiteral( "password" ), password );
+  jsonObject.insert( QStringLiteral( "api_key" ), getApiKey( mApiRoot ) );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  QNetworkReply *reply = mManager.post( request, json );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::registrationFinished );
+  InputUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
+}
+
 void MerginApi::getUserInfo( const QString &username )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
@@ -667,6 +744,43 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
+void MerginApi::registrationFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    InputUtils::log( "register", QStringLiteral( "Success" ) );
+    emit registrationSucceeded();
+    emit notify( tr( "Registration successful. <br> Please check your inbox and <br> <b> verify your email" ) );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    InputUtils::log( "register", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    int status = statusCode.toInt();
+    if ( status == 401 || status == 400 )
+    {
+      emit registrationFailed();
+      emit notify( serverMsg );
+    }
+    else if ( status == 404 )
+    {
+      // the self-registration is not allowed on the server
+      emit registrationFailed();
+      emit notify( tr( "Registration is disabled on the Mergin server.<br>Please contact the server administrator." ) );
+    }
+    else
+    {
+      emit registrationFailed();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: register" ) );
+    }
+  }
+  r->deleteLater();
+}
+
 void MerginApi::pingMerginReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -781,9 +895,6 @@ void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
   {
     setApiVersionStatus( MerginApiStatus::NOT_FOUND );
   }
-
-  // TODO remove, only for te4eting
-  setApiVersionStatus( MerginApiStatus::OK );
 }
 
 bool MerginApi::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &name )
@@ -1093,7 +1204,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   // - if they were not modified locally, the server changes will be simply applied
   // - if they were modified locally, local changes will be rebased on top of server changes
 
-  QString src = tempDir + "/" + _uuidWithoutBraces( QUuid::createUuid() );
+  QString src = tempDir + "/" + InputUtils::uuidWithoutBraces( QUuid::createUuid() );
   QString dest = projectDir + "/" + filePath;
   QString basefile = projectDir + "/.mergin/" + filePath;
 
@@ -2052,7 +2163,7 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
-    QString chunkID = _uuidWithoutBraces( QUuid::createUuid() );
+    QString chunkID = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
     chunks.append( chunkID );
   }
   return chunks;
@@ -2207,4 +2318,10 @@ QSet<QString> MerginApi::listFiles( const QString &path )
     }
   }
   return files;
+}
+
+DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
+  : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
+{
+  tempFileName = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
 }

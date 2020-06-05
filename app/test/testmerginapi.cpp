@@ -295,7 +295,7 @@ void TestMerginApi::testCreateProjectTwice()
   //Clean created project
   QSignalSpy spy3( mApi, &MerginApi::serverProjectDeleted );
   mApi->deleteProject( projectNamespace, projectName );
-  spy3.wait( SHORT_REPLY );
+  QVERIFY( spy3.wait( SHORT_REPLY ) );
   QCOMPARE( spy3.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
@@ -313,7 +313,7 @@ void TestMerginApi::testDeleteNonExistingProject()
   // Try to delete non-existing project
   QSignalSpy spy( mApi, &MerginApi::networkErrorOccurred );
   mApi->deleteProject( projectNamespace, projectName );
-  spy.wait( SHORT_REPLY );
+  QVERIFY( spy.wait( SHORT_REPLY ) );
 
   QList<QVariant> arguments = spy.takeFirst();
   QVERIFY( arguments.at( 0 ).type() == QVariant::String );
@@ -342,7 +342,7 @@ void TestMerginApi::testCreateDeleteProject()
   // Delete created project
   QSignalSpy spy2( mApi, &MerginApi::serverProjectDeleted );
   mApi->deleteProject( projectNamespace, projectName );
-  spy2.wait( SHORT_REPLY );
+  QVERIFY( spy2.wait( SHORT_REPLY ) );
   QCOMPARE( spy2.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
@@ -400,12 +400,12 @@ void TestMerginApi::testUploadProject()
   QSignalSpy spyX( mApi, &MerginApi::syncProjectFinished );
   QSignalSpy spyY( mApi, &MerginApi::pushFilesStarted );
   mApi->uploadProject( projectNamespace, projectName );
-  spyY.wait( LONG_REPLY );
+  QVERIFY( spyY.wait( LONG_REPLY ) );
   QCOMPARE( spyY.count(), 1 );
 
   QSignalSpy spyCancel( mApi, &MerginApi::uploadCanceled );
   mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  spyCancel.wait( LONG_REPLY );
+  QVERIFY( spyCancel.wait( LONG_REPLY ) );
   QCOMPARE( spyCancel.count(), 1 );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
@@ -1257,6 +1257,25 @@ void TestMerginApi::testUpdateWithMissedVersion()
   QVERIFY( vl->isValid() );
   QCOMPARE( vl->featureCount(), static_cast<long>( 4 ) );
   delete vl;
+}
+
+void TestMerginApi::testRegister()
+{
+  QString password = mApi->mPassword;
+
+  // we do not have a method to delete existing user in the mApi, so for now just make sure
+  // the name does not exists
+  QString quiteRandom = InputUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
+  QString username = "test_" + quiteRandom;
+  QString email = username + "@nonexistant.email.com";
+
+  qDebug() << "username:" << username;
+  // do not want to be authorized
+  mApi->clearAuth();
+
+  QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
+  mApi->registerUser( username, email, password, password, true );
+  QVERIFY( spy.wait( LONG_REPLY ) );
 }
 
 //////// HELPER FUNCTIONS ////////

@@ -6,108 +6,100 @@ env:
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QGIS_DEPS_VERSION: 0.4.0
-  QGIS_COMMIT: da042bb61dc7447b41b021838efe42d08b31cdd8
-  GEODIFF_VERSION: release-0.8.2
-  ROOT_DIR: .
+  SDK_HASH: ck6e9otrethmbhl
+  SDK_VERSION: 2
 
 jobs:
   tests:
     if: github.repository == 'lutraconsulting/input'
-    runs-on: ubuntu-18.04
+    runs-on: macos-latest
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
         with:
           path: input
 
-      - name: Checkout QGIS
-        uses: actions/checkout@v2
-        with:
-          repository: qgis/QGIS
-          path: qgis
-
-      - name: Checkout geodiff
-        uses: actions/checkout@v2
-        with:
-          repository: lutraconsulting/geodiff
-          path: geodiff
-
-      - name: Install deps
+      - name: install brew deps
         run: |
-          apt-get install -y \
-            bison ca-certificates ccache cmake cmake-curses-gui dh-python \
-            expect flex flip gdal-bin git graphviz grass-dev libexiv2-dev \
-            libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgsl-dev libpq-dev libproj-dev \
-            libprotobuf-dev libqca-qt5-2-dev libqca-qt5-2-plugins libqscintilla2-qt5-dev libqt5opengl5-dev \
-            libqt5serialport5-dev libqt5sql5-sqlite libqt5svg5-dev libqt5webkit5-dev libqt5xmlpatterns5-dev \
-            libqwt-qt5-dev libspatialindex-dev libspatialite-dev libsqlite3-dev libsqlite3-mod-spatialite libyaml-tiny-perl \
-            libzip-dev lighttpd locales ninja-build ocl-icd-opencl-dev opencl-headers pkg-config poppler-utils protobuf-compiler \
-            python3-dev qt5-default qt5keychain-dev qtbase5-dev qtbase5-private-dev qtpositioning5-dev qttools5-dev \
-            qttools5-dev-tools saga spawn-fcgi txt2tags xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb
+          brew install lcov
 
-      - name: build geodiff
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          mkdir -p build-geodiff
-          mkdir -p Applications
-          cd build-geodiff
+          cd input/app/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
 
-          PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH \
-          cmake \
-                -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
-                -DWITH_INTERNAL_SQLITE3=False \
-                 ../geodiff/geodiff
+      - name: download input-sdk
+        run: |
+          ROOT=`pwd`
+          wget https://www.dropbox.com/s/${SDK_HASH}/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${SDK_VERSION}.tar.gz?dl=0
+          mv $ROOT/input-sdk-qt-${QT_VERSION}-deps-${QGIS_DEPS_VERSION}-mac-${SDK_VERSION}.tar.gz?dl=0 $ROOT/input-sdk.tar.gz
+          sudo mkdir -p /opt/INPUT
+          sudo chown -R $USER /opt/INPUT
+          mkdir -p /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          cd /opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac
+          tar -xvzf $ROOT/input-sdk.tar.gz
+          mkdir -p /opt/INPUT/input-sdk-mac-${SDK_VERSION}/build/qgis/build-mac/output
+          ln -s /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/QGIS.app/Contents/Frameworks/ /opt/INPUT/input-sdk-mac-${SDK_VERSION}/build/qgis/build-mac/output/lib
+
+      - name: download qt
+        run: |
+          ROOT=`pwd`
+          wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
+          sudo mkdir -p /opt/Qt
+          sudo chown -R $USER /opt/Qt
+          mkdir -p /opt/Qt/${QT_VERSION}/clang_64
+          cd /opt/Qt/${QT_VERSION}/clang_64
+          tar -xvzf $ROOT/qt-${QT_VERSION}.tar.gz
+
+      - name: download qgis-deps
+        run: |
+          ROOT=`pwd`
+          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          sudo mkdir -p /opt/QGIS
+          sudo chown -R $USER /opt/QGIS
+          mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
+          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+
+      - name: build Input
+        run: |
+          export ROOT_DIR=`pwd`
+          cp input/scripts/ci/config.pri input/app/config.pri
+
+          mkdir -p build-Input
+          cd build-Input
+          /opt/Qt/${QT_VERSION}/clang_64/bin/qmake \
+            ../input/app/input.pro \
+            CONFIG+=debug \
+            CONFIG+=qtquickcompiler
 
           make -j $(sysctl -n hw.ncpu)
-          make install
+          install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
+          install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
 
-      - name: build QGIS
+      - name: run tests
         run: |
-          mkdir -p build-QGIS
-          mkdir -p Applications
-          cd build-QGIS
+          ROOT_DIR=`pwd`
+          cd build-Input/
+          ./Input.app/Contents/MacOS/Input --test
 
-          cmake \
-                -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
-                -DWITH_BINDINGS=FALSE \
-                -DWITH_DESKTOP=OFF \
-                -DWITH_ANALYSIS=OFF \
-                -DDISABLE_DEPRECATED=ON \
-                -DWITH_QTWEBKIT=OFF \
-                -DWITH_GRASS=OFF \
-                -DWITH_QTMOBILITY=OFF \
-                -DWITH_QUICK=ON \
-                -DCMAKE_INSTALL_PREFIX:PATH=../Applications \
-                -DENABLE_QT5=ON \
-                -DENABLE_TESTS=OFF \
-                -DWITH_INTERNAL_QWTPOLAR=OFF \
-                -DWITH_QWTPOLAR=OFF \
-                -DWITH_GUI=OFF \
-                -DWITH_APIDOC=OFF \
-                -DWITH_ASTYLE=OFF \
-                -DWITH_QT5SERIALPORT=OFF \
-                -DWITH_QSPATIALITE=OFF \
-                -DWITH_3D=FALSE \
-                -DWITH_QGIS_PROCESS=OFF \
-                -DQGIS_MACAPP_BUNDLE=-1 \
-                 ../qgis
+      - name: build lcov summary
+        run: |
+          cd build-Input
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input/*' --output-file coverage.info
+          lcov --list coverage.info
 
-          make -j $(sysctl -n hw.ncpu)
-          make install
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: build-Input/coverage.info
 
-        - name: build Input
-          run: |
-            cp input/scripts/ci/config.pri input/app/config.pri
-
-            mkdir -p build-Input
-            cd build-Input
-            qmake \
-              ../input/app/input.pro \
-              CONFIG+=release \
-              CONFIG+=qtquickcompiler
-
-            make -j $(sysctl -n hw.ncpu)
-
-        - name: run tests
-          run: |
-            cd build-Input
-            ./input --test

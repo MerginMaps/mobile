@@ -11,6 +11,7 @@
 #define INPUTUTILS_H
 
 #include <QObject>
+#include <QUuid>
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -89,6 +90,8 @@ class InputUtils: public QObject
     static QString filesToString( QList<MerginFile> files );
 
     static QString appInfo();
+
+    static QString uuidWithoutBraces( const QUuid &uuid );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

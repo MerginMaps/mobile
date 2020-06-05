@@ -7,3 +7,4 @@
 [linux](./linux.md)
 [publishing](./publishing.md)
 [testing](./manual_test_plan.md)
+[secrets](./secrets.md)

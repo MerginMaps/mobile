@@ -53,7 +53,7 @@ QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, con
 
 int GeodiffUtils::createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath )
 {
-  QString uuid = _uuidWithoutBraces( QUuid::createUuid() );
+  QString uuid = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
   QString diffName = filePath + "-diff-" + uuid;
   QString modifiedPath = projectDir + "/" + filePath;
   basePath = projectDir + "/.mergin/" + filePath;
