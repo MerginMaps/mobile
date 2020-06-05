@@ -34,6 +34,17 @@ ApplicationWindow {
     property int zPanel: 20
     property int zToolkits: 10
 
+    onActiveFocusItemChanged: {
+        console.log("Active focus changed! -----------------------")
+        var object = activeFocusItem
+        var d = new Date();
+        var n = d.getHours() + ":" + d.getMinutes() + "::" + d.getSeconds();
+        while(object) {
+            console.log(n + "|| " + object.toString() + " AF: " + object.activeFocus + " F: " + object.focus)
+            object = object.parent
+        }
+    }
+
     Item {
         id: stateManager
         states: [
@@ -530,6 +541,13 @@ ApplicationWindow {
         height: window.height
         width: window.width
         z: zPanel
+
+        onVisibleChanged: {
+          if (openProjectPanel.visible)
+            openProjectPanel.focus = true
+          else
+            openProjectPanel.focus = false
+        }
 
         onActiveProjectIndexChanged: {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
