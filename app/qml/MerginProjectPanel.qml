@@ -510,7 +510,6 @@ Item {
       onItemClicked: {
         if (showMergin) return
 
-        console.log("onItemClicked!!!!!", index)
         projectsPanel.activeProjectIndex = index
         projectsPanel.visible = false
       }
