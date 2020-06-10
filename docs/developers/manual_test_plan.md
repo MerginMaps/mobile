@@ -5,6 +5,7 @@
 - [ ] My Projects shown correctly
 - [ ] Shared with me projects are listed correctly
 - [ ] Download project is successful
+- [ ] Download project with non-ascii characters is successful (saber\test_nonascii)
 - [ ] Project appears in Home section
 - [ ] Project can be deleted
 
@@ -77,3 +78,4 @@ Use public project: saber\test_digitizing
 # Translation
 - [ ] Input changes to the system locale
 - [ ] Correct Translation
+- [ ] Correct language is selected if there is/are more than one language available under system
