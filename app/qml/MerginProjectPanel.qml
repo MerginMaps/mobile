@@ -108,35 +108,28 @@ Item {
   focus: true
 
   Keys.onReleased: {
-    console.log("Back button signal catched in MerginProjectPanel!");
-
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      if (!projectsPanel.visible)
+      if (!projectsPanel.visible || !activeProjectPath)
       {
-        console.log("A")
-        return
+        console.log("A");
+        return; // Closes app or returns to map view if any project is opened
       }
       else if (authPanel.visible)
       {
-        console.log("D")
+        console.log("B")
         authPanel.visible = false
         projectsPanel.forceActiveFocus()
         homeBtn.activated()
       }
       else if (accountPanel.visible)
       {
-        console.log("E")
+        console.log("C")
         accountPanel.visible = false
         event.accepted = true;
       }
-      else if (!activeProjectPath)
-      {
-        console.log("B")
-        return
-      }
       else if (statusPanel.visible)
       {
-        console.log("C")
+        console.log("E")
         event.accepted = true
         statusPanel.close()
       }
@@ -180,7 +173,6 @@ Item {
       if (authPanel.visible) {
         authPanel.visible = false
         homeBtn.activated()
-        projectsPanel.forceActiveFocus()
       } else {
         projectsPanel.visible = false
       }
@@ -691,7 +683,6 @@ Item {
       }
     }
   }
-
 
   // Other components
   AuthPanel {

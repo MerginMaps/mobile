@@ -65,9 +65,11 @@ ApplicationWindow {
         onStateChanged: {
             if (stateManager.state === "view") {
                 recordToolbar.visible = false
+                mainPanel.focus = true
             }
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
+                recordToolbar.focus = true
                 recordToolbar.extraPanelVisible = true
                 recordToolbar.gpsSwitchClicked()
             }
@@ -546,7 +548,7 @@ ApplicationWindow {
           if (openProjectPanel.visible)
             openProjectPanel.focus = true
           else
-            openProjectPanel.focus = false
+            mainPanel.focus = true
         }
 
         onActiveProjectIndexChanged: {

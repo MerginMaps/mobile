@@ -28,11 +28,18 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
 
     id: mainPanel
+    focus: true
 
     Rectangle {
         anchors.fill: parent
         color: InputStyle.clrPanelBackground
         opacity: InputStyle.panelOpacity
+    }
+
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        // if main panel has focus - nothing else is opened, back button closes app
+      }
     }
 
     Row {
@@ -181,7 +188,6 @@ Item {
                 } else {
                   rootMenu.open()
                 }
-
               }
             }
         }

@@ -31,6 +31,7 @@ Popup {
 
     onAboutToHide: {
         if (aboutPanel.visible) {
+            console.log("Here is the problem");
             aboutPanel.visible = false
         }
     }
