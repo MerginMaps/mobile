@@ -61,6 +61,16 @@ Item {
   }
 
   Connections {
+    target: __projectsModel
+    onModelReset: {
+       var index = __projectsModel.rowAccordingPath(activeProjectPath)
+       if (index !== activeProjectIndex) {
+        activeProjectIndex = index
+       }
+    }
+  }
+
+  Connections {
     target: __merginApi
     onListProjectsFinished: {
       busyIndicator.running = false
@@ -500,6 +510,7 @@ Item {
       onItemClicked: {
         if (showMergin) return
 
+        console.log("onItemClicked!!!!!", index)
         projectsPanel.activeProjectIndex = index
         projectsPanel.visible = false
       }
