@@ -39,6 +39,11 @@ Item {
     Keys.onReleased: {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         // if main panel has focus - nothing else is opened, back button closes app
+        if (rootMenu.visible)
+        {
+          event.accepted = true;
+          rootMenu.close();
+        }
       }
     }
 
@@ -182,11 +187,13 @@ Item {
               width: mainPanel.itemSize
               text: qsTr("More")
               imageSource: "more_menu.svg"
+
               onActivated: {
                 if (rootMenu.isClosing) {
                   rootMenu.isClosing = false
                 } else {
                   rootMenu.open()
+                  mainPanel.forceActiveFocus();
                 }
               }
             }
