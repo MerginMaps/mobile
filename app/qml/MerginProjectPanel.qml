@@ -81,7 +81,7 @@ Item {
     onApiVersionStatusChanged: {
       busyIndicator.running = false
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
-        if (__merginApi.hasAuthData()) {
+        if (__merginApi.userAuth.hasAuthData()) {
           authPanel.visible = false
           refreshProjectList()
         }
@@ -97,7 +97,7 @@ Item {
     }
     onAuthChanged: {
       authPanel.pending = false
-      if (__merginApi.hasAuthData()) {
+      if (__merginApi.userAuth.hasAuthData()) {
         authPanel.close()
         refreshProjectList()
       } else {
@@ -203,8 +203,8 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
-              __merginApi.getUserInfo(__merginApi.username)
+            if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+              __merginApi.getUserInfo()
               accountPanel.visible = true
               reloadList.visible = false
             }
@@ -568,7 +568,7 @@ Item {
         }
 
         if (status === "noVersion" || status === "outOfDate") {
-          var withoutAuth = !__merginApi.hasAuthData() && toolbar.highlighted === exploreBtn.text
+          var withoutAuth = !__merginApi.userAuth.hasAuthData() && toolbar.highlighted === exploreBtn.text
           __merginApi.updateProject(projectNamespace, projectName, withoutAuth)
         } else if (status === "modified") {
           if (__merginApi.hasWriteAccess(projectFullName)) {
@@ -716,9 +716,47 @@ Item {
 
   AccountPage {
     id: accountPanel
-    height: window.height
+    height: parent.height
     width: parent.width
     visible: false
+    onBackClicked: {
+      accountPanel.visible = false
+      subscribePanel.visible = false
+    }
+    onManagePlansClicked: {
+      if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.userInfo.ownsActiveSubscription )) {
+        subscribePanel.visible = true
+        accountPanel.visible = false
+      } else {
+        Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+      }
+    }
+    onSignOutClicked: {
+      if (__merginApi.userAuth.hasAuthData()) {
+        __merginApi.clearAuth()
+        accountPanel.visible = false
+        subscribePanel.visible = false
+      }
+    }
+    onRestorePurchasesClicked: {
+      __purchasing.restore()
+    }
+  }
+
+  SubscribePage {
+    id: subscribePanel
+    height: parent.height
+    width: parent.width
+    visible: false
+    onBackClicked: {
+      accountPanel.visible = true
+      subscribePanel.visible = false
+    }
+    onSubscribeClicked: {
+      __purchasing.purchase( __purchasing.recommendedPlan.id )
+      accountPanel.visible = true
+      subscribePanel.visible = false
+    }
   }
 
   MessageDialog {

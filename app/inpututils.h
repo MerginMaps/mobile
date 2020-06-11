@@ -75,6 +75,11 @@ class InputUtils: public QObject
     Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
 
     /**
+     * Converts bytes to  human readable size (e.g. 1GB, 500MB)
+     */
+    Q_INVOKABLE static QString bytesToHumanSize( double bytes );
+
+    /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
      * removes it and tries again (overwrite a file). If failes again, skips the file, sets result to false and continue.
      * \param srcPath Source path
@@ -92,6 +97,8 @@ class InputUtils: public QObject
     static QString appInfo();
 
     static QString uuidWithoutBraces( const QUuid &uuid );
+
+    static QString localizedDateFromUTFString( QString timestamp );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

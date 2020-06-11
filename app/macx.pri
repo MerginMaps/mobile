@@ -64,12 +64,26 @@ macx:!android {
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
 
+
+    # PURCHASING stuff (only testing)
+    DEFINES += "PURCHASING"
+    # Uncomment this like to test the real in-app purchases on MacOS
+    DEFINES += "APPLE_PURCHASING"
+
     # TESTING stuff (only desktop)
-    DEFINES += "INPUT_TEST"
-    QT += testlib
-    # path to test data
-    DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
+    contains(DEFINES, APPLE_PURCHASING) {
+       message("Building with native Apple in-app payments on MacOS, disabling INPUT_TEST")
+       LIBS += -framework StoreKit -framework Foundation
+    } else {
+      DEFINES += "INPUT_TEST"
+      QT += testlib
+      # path to test data
+      DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
+    }
 
     QT += printsupport
+    QT += widgets
+    DEFINES += "HAVE_WIDGETS"
+
     QMAKE_CXXFLAGS += -std=c++11
 }

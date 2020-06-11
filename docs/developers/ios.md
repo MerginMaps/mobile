@@ -1,5 +1,30 @@
 looking for ios [publishing](./publishing.md)
 
+# in-app purchases
+
+read https://doc.qt.io/qt-5/qtpurchasing-appstore.html
+
+## add new subscription
+- go to: https://appstoreconnect.apple.com > In-App Purchases Manage
+- click +
+    - Auto-renewable subscription
+    - Reference name: mergin_tier_<x> (where <x> is 1,2,.. representing are 1GB, 10GB... tiers)
+    - Product ID: apple_mergin_tier_<x> (where <x> is same as reference name)
+    - Subscription Group: mergin_1
+    - Add and fill subscription duration and prize
+- create the SAME subscription plan in Mergin via Admin interface
+
+## to do apple in-app purchases test (without actually paying)
+https://itunesconnect.apple.com
+
+- create InputApp test user in https://itunesconnect.apple.com: Users and Access > Sandbox Testers > New Tester (create your user)
+    - You may want to test different location (for QLocale)
+    - Create unique email (group/alias) for the new user 
+- create the Mergin Account for the user on test.dev.cloudmergin.com and/or dev.dev.cloudmergin.com
+- you need to logout your regular MacOs/Ios Apple User from device before trying to purchase something
+- login as test user and you can simulate purchasing
+- note that this works only for test.dev.cloudmergin.com and dev.dev.cloudmergin.com. It will not be possible to use test user on public/production server.
+
 # development certificate
 
 - device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)

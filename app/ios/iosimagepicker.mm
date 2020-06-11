@@ -23,8 +23,8 @@
 #include "iosinterface.h"
 #include "iosimagepicker.h"
 
-void IOSImagePicker::showImagePickerDirect(int sourceType, IOSImagePicker* handler)
+void IOSImagePicker::showImagePickerDirect( int sourceType, IOSImagePicker *handler )
 {
-    IOSInterface *obj=[[IOSInterface alloc]init];
-    [obj showImagePicker:sourceType:handler];
+  IOSInterface *obj = [[IOSInterface alloc]init];
+  [obj showImagePicker:sourceType:handler];
 }

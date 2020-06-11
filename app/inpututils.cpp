@@ -276,6 +276,31 @@ QString InputUtils::appInfo()
          .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
+QString InputUtils::bytesToHumanSize( double bytes )
+{
+  const int precision = 1;
+  if ( bytes < 1e-5 )
+  {
+    return "0.0";
+  }
+  else if ( bytes < 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes, 'f', precision ) + " KB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
+  }
+  else
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
+  }
+}
+
 QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
@@ -285,6 +310,23 @@ QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
   str = str.mid( 1, str.length() - 2 );  // remove braces
   return str;
 #endif
+}
+
+QString InputUtils::localizedDateFromUTFString( QString timestamp )
+{
+  if ( timestamp.isEmpty() )
+    return QString();
+
+  QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
+  if ( dateTime.isValid() )
+  {
+    return dateTime.date().toString( Qt::DefaultLocaleShortDate );
+  }
+  else
+  {
+    qDebug() << "Unable to convert UTF " << timestamp << " to QDateTime";
+    return QString();
+  }
 }
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
