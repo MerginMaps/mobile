@@ -332,6 +332,13 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
+      onVisibleChanged: {
+        if (settingsPanel.visible)
+          settingsPanel.focus = true; // get focus
+        else
+          mainPanel.focus = true; // pass focus back to main panel
+      }
+
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 	
@@ -548,7 +555,9 @@ ApplicationWindow {
           if (openProjectPanel.visible)
             openProjectPanel.focus = true
           else
+          {
             mainPanel.focus = true
+          }
         }
 
         onActiveProjectIndexChanged: {
