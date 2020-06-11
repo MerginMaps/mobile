@@ -39,11 +39,6 @@ Item {
     Keys.onReleased: {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         // if main panel has focus - nothing else is opened, back button closes app
-        if (rootMenu.visible)
-        {
-          event.accepted = true;
-          rootMenu.close();
-        }
       }
     }
 
@@ -71,7 +66,10 @@ Item {
                 text: qsTr("Projects")
                 imageSource: "project.svg"
 
-                onActivated: mainPanel.openProjectClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openProjectClicked()
+                }
             }
         }
 
@@ -90,8 +88,15 @@ Item {
                 imageSource2: "ic_gps_not_fixed_48px.svg"
                 imageSourceCondition: __appSettings.autoCenterMapChecked
 
-                onActivated: mainPanel.myLocationClicked()
-                onActivatedOnHold: mainPanel.myLocationHold()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.myLocationClicked()
+                }
+
+                onActivatedOnHold: {
+                  rootMenu.close()
+                  mainPanel.myLocationHold()
+                }
 
                 RoundIndicator {
                     width: parent.height/4
@@ -123,7 +128,10 @@ Item {
                     enabled: true
                 }
 
-                onActivated: mainPanel.addFeatureClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.addFeatureClicked()
+                }
             }
         }
 
@@ -140,7 +148,10 @@ Item {
                 text: qsTr("Zoom to project")
                 imageSource: "zoom_to_project.svg"
 
-                onActivated:mainPanel.zoomToProject()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.zoomToProject()
+                }
             }
         }
 
@@ -156,7 +167,10 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Map themes")
                 imageSource: "map_styles.svg"
-                onActivated: mainPanel.openMapThemesClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openMapThemesClicked()
+                }
             }
         }
 
@@ -173,7 +187,10 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Settings")
                 imageSource: "settings.svg"
-                onActivated: mainPanel.openSettingsClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openSettingsClicked()
+                }
             }
         }
 
@@ -189,12 +206,8 @@ Item {
               imageSource: "more_menu.svg"
 
               onActivated: {
-                if (rootMenu.isClosing) {
-                  rootMenu.isClosing = false
-                } else {
-                  rootMenu.open()
-                  mainPanel.forceActiveFocus();
-                }
+                if ( !rootMenu.visible ) rootMenu.open()
+                else rootMenu.close()
               }
             }
         }
@@ -205,11 +218,8 @@ Item {
         title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        property bool isClosing: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
-        closePolicy: Popup.CloseOnReleaseOutside
-
-        onAboutToHide: isClosing = true
+        closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
 
         MenuItem {
             width: parent.width
