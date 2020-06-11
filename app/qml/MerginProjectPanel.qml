@@ -112,32 +112,33 @@ Item {
       if (!projectsPanel.visible || !activeProjectPath)
       {
         console.log("A");
-        return; // Closes app or returns to map view if any project is opened
+        return; // Closes app no project is opened or mergin panel has focus in map view
       }
       else if (authPanel.visible)
       {
-        console.log("B")
-        authPanel.visible = false
-        projectsPanel.forceActiveFocus()
-        homeBtn.activated()
+        console.log("B");
+        authPanel.visible = false;
+        projectsPanel.forceActiveFocus();
+        homeBtn.activated();
+        event.accepted = true;
       }
       else if (accountPanel.visible)
       {
-        console.log("C")
-        accountPanel.visible = false
+        console.log("C");
+        accountPanel.visible = false;
         event.accepted = true;
       }
       else if (statusPanel.visible)
       {
-        console.log("E")
-        event.accepted = true
-        statusPanel.close()
+        console.log("E");
+        event.accepted = true;
+        statusPanel.close();
       }
       else if (projectsPanel.visible)
       {
-        console.log("F")
+        console.log("F");
         event.accepted = true;
-        projectsPanel.visible = false
+        projectsPanel.visible = false;
       }
     }
   }
