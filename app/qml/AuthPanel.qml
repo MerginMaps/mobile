@@ -52,7 +52,7 @@ Item {
   Keys.onReleased: {
 
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true;
+      event.accepted = true
       root.close()
       authFailed()
     }

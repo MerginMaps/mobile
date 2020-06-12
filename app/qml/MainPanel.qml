@@ -36,12 +36,6 @@ Item {
         opacity: InputStyle.panelOpacity
     }
 
-    Keys.onReleased: {
-      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-        // if main panel has focus - nothing else is opened, back button closes app
-      }
-    }
-
     Row {
         id: panelRow
         anchors.fill: parent
