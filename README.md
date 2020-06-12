@@ -50,6 +50,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 ## Documentation
 
+- [FAQ](docs/users/faq.md)
 - [Introduction](docs/users/introduction.md)
 - [Project configuration](docs/users/project_config.md)
 - [Moving data between desktop and mobile](docs/users/data_sync.md)
