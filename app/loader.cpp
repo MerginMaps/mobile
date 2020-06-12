@@ -58,6 +58,11 @@ void Loader::setRecording( bool isRecordingOn )
 
 bool Loader::load( const QString &filePath )
 {
+  return forceLoad( filePath, false );
+}
+
+bool Loader::forceLoad( const QString &filePath, bool force )
+{
   qDebug() << "Loading " << filePath;
   // Just clear project if empty
   if ( filePath.isEmpty() )
@@ -80,7 +85,7 @@ bool Loader::load( const QString &filePath )
   loop.exec();
 
   bool res = true;
-  if ( mProject->fileName() != filePath )
+  if ( mProject->fileName() != filePath || force )
   {
     res = mProject->read( filePath );
 
@@ -102,7 +107,7 @@ bool Loader::reloadProject( QString projectDir )
 {
   if ( mProject->homePath() == projectDir )
   {
-    return load( mProject->fileName() );
+    return forceLoad( mProject->fileName(), true );
   }
   return false;
 }

@@ -2246,6 +2246,8 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   else
   {
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
+    if ( syncSuccessful )
+      emit reloadProject( projectDir );
   }
 }
 
