@@ -34,17 +34,6 @@ ApplicationWindow {
     property int zPanel: 20
     property int zToolkits: 10
 
-    onActiveFocusItemChanged: {
-        console.log("Active focus changed! -----------------------")
-        var object = activeFocusItem
-        var d = new Date();
-        var n = d.getHours() + ":" + d.getMinutes() + "::" + d.getSeconds();
-        while(object) {
-            console.log(n + "|| " + object.toString() + " AF: " + object.activeFocus + " F: " + object.focus)
-            object = object.parent
-        }
-    }
-
     Item {
         id: stateManager
         states: [
@@ -632,6 +621,7 @@ ApplicationWindow {
             if (!visible) {
                 digitizingHighlight.visible = false
                 highlight.visible = false
+                mainPanel.focus = true
             }
         }
 

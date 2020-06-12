@@ -47,6 +47,8 @@ Item {
   }
 
   id: root
+  focus: true
+
   Keys.onReleased: {
 
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {

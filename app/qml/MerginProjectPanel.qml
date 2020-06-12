@@ -90,7 +90,6 @@ Item {
       if (__merginApi.hasAuthData()) {
         authPanel.close()
         refreshProjectList()
-        projectsPanel.forceActiveFocus()
       } else {
         homeBtn.activated()
       }
@@ -111,32 +110,27 @@ Item {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       if (!projectsPanel.visible || !activeProjectPath)
       {
-        console.log("A");
-        return; // Closes app no project is opened or mergin panel has focus in map view
+        return; // Closes app - no project is opened or mergin panel has focus in map view
       }
-      else if (authPanel.visible)
+      else if (authPanel.visible) // back to project view
       {
-        console.log("B");
         authPanel.visible = false;
         projectsPanel.forceActiveFocus();
         homeBtn.activated();
         event.accepted = true;
       }
-      else if (accountPanel.visible)
+      else if (accountPanel.visible) // back to project view
       {
-        console.log("C");
         accountPanel.visible = false;
         event.accepted = true;
       }
-      else if (statusPanel.visible)
+      else if (statusPanel.visible) // back to project view
       {
-        console.log("E");
         event.accepted = true;
         statusPanel.close();
       }
-      else if (projectsPanel.visible)
+      else if (projectsPanel.visible) // back to map
       {
-        console.log("F");
         event.accepted = true;
         projectsPanel.visible = false;
       }
