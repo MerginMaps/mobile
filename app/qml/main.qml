@@ -63,6 +63,7 @@ ApplicationWindow {
                 recordToolbar.gpsSwitchClicked()
             }
             else if (stateManager.state === "edit") {
+                recordToolbar.focus = true
                 featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
@@ -621,7 +622,13 @@ ApplicationWindow {
             if (!visible) {
                 digitizingHighlight.visible = false
                 highlight.visible = false
+
+              if (stateManager.state !== "edit") {
                 mainPanel.focus = true
+              }
+            }
+            else {
+              featurePanel.forceActiveFocus()
             }
         }
 

@@ -44,6 +44,7 @@ Drawer {
     }
 
     Item {
+      id: backHandler
       focus: true
       Keys.onReleased: {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -84,6 +85,7 @@ Drawer {
         featurePanel.formState = formState
         featurePanel.visible = true
         featurePanel.isReadOnly = feature.layer.readOnly
+        backHandler.focus = true
 
         if (panelState === "preview") {
             previewPanel.title = __loader.featureTitle(feature)
