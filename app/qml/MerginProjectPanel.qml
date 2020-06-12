@@ -61,6 +61,16 @@ Item {
   }
 
   Connections {
+    target: __projectsModel
+    onModelReset: {
+       var index = __projectsModel.rowAccordingPath(activeProjectPath)
+       if (index !== activeProjectIndex) {
+        activeProjectIndex = index
+       }
+    }
+  }
+
+  Connections {
     target: __merginApi
     onListProjectsFinished: {
       busyIndicator.running = false
