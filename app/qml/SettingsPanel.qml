@@ -14,7 +14,7 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import "."  // import InputStyle singleton
 
-Popup {
+Page {
 
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
@@ -23,16 +23,24 @@ Popup {
     id: settingsPanel
     visible: false
     padding: 0
+    focus: true
 
     background: Rectangle {
         anchors.fill: parent
         color: InputStyle.clrPanelMain
     }
 
-    onAboutToHide: {
-        if (aboutPanel.visible) {
-            aboutPanel.visible = false
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+
+        if (aboutPanel.visible) { // hide about panel
+          aboutPanel.visible = false;
         }
+        else if (settingsPanel.visible) {
+          settingsPanel.visible = false;
+        }
+      }
     }
 
     PanelHeader {
@@ -43,7 +51,7 @@ Popup {
         rowHeight: InputStyle.rowHeightHeader
         titleText: qsTr("Settings")
 
-        onBack: settingsPanel.close()
+        onBack: settingsPanel.visible = false;
     }
 
     Rectangle {

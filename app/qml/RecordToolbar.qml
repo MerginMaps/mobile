@@ -42,6 +42,14 @@ Item {
 
     id: root
     onClose: visible = false
+    focus: true
+
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+        cancelButton.activated()
+      }
+    }
 
     Rectangle {
         anchors.fill: parent

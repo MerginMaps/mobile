@@ -103,11 +103,11 @@ Item {
       } else {
         homeBtn.activated()
       }
+      projectsPanel.forceActiveFocus()
     }
-    onAuthFailed: authPanel.pending = false
-    onRegistrationSucceeded: {
+    onAuthFailed: {
       authPanel.pending = false
-      homeBtn.activated()
+      projectsPanel.forceActiveFocus()
     }
     onRegistrationFailed: authPanel.pending = false
   }
@@ -117,11 +117,33 @@ Item {
   focus: true
 
   Keys.onReleased: {
-    if (!activeProjectPath) return
-
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true;
-      projectsPanel.visible = false
+      if (!projectsPanel.visible || !activeProjectPath)
+      {
+        return; // Closes app - no project is opened or mergin panel has focus in map view
+      }
+      else if (authPanel.visible) // back to project view
+      {
+        authPanel.visible = false;
+        projectsPanel.forceActiveFocus();
+        homeBtn.activated();
+        event.accepted = true;
+      }
+      else if (accountPanel.visible) // back to project view
+      {
+        accountPanel.visible = false;
+        event.accepted = true;
+      }
+      else if (statusPanel.visible) // back to project view
+      {
+        event.accepted = true;
+        statusPanel.close();
+      }
+      else if (projectsPanel.visible) // back to map
+      {
+        event.accepted = true;
+        projectsPanel.visible = false;
+      }
     }
   }
 
@@ -667,7 +689,6 @@ Item {
     }
   }
 
-
   // Other components
   AuthPanel {
     id: authPanel
@@ -678,6 +699,14 @@ Item {
     onAuthFailed: homeBtn.activated()
     toolbarHeight: toolbar.height
     onPendingChanged: busyIndicator.running = authPanel.pending
+
+    onVisibleChanged: {
+      if (!authPanel.visible)
+      {
+        // gain focus if auth panel is closed
+        projectsPanel.forceActiveFocus()
+      }
+    }
   }
 
   AccountPage {

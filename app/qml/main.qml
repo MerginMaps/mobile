@@ -54,13 +54,16 @@ ApplicationWindow {
         onStateChanged: {
             if (stateManager.state === "view") {
                 recordToolbar.visible = false
+                mainPanel.focus = true
             }
             else if (stateManager.state === "record") {
                 recordToolbar.visible = true
+                recordToolbar.focus = true
                 recordToolbar.extraPanelVisible = true
                 recordToolbar.gpsSwitchClicked()
             }
             else if (stateManager.state === "edit") {
+                recordToolbar.focus = true
                 featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
@@ -319,6 +322,13 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
+      onVisibleChanged: {
+        if (settingsPanel.visible)
+          settingsPanel.focus = true; // get focus
+        else
+          mainPanel.focus = true; // pass focus back to main panel
+      }
+
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 	
@@ -531,6 +541,15 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
+        onVisibleChanged: {
+          if (openProjectPanel.visible)
+            openProjectPanel.focus = true
+          else
+          {
+            mainPanel.focus = true
+          }
+        }
+
         onActiveProjectIndexChanged: {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.defaultProject = openProjectPanel.activeProjectPath
@@ -603,6 +622,13 @@ ApplicationWindow {
             if (!visible) {
                 digitizingHighlight.visible = false
                 highlight.visible = false
+
+              if (stateManager.state !== "edit") {
+                mainPanel.focus = true
+              }
+            }
+            else {
+              featurePanel.forceActiveFocus()
             }
         }
 
