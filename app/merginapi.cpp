@@ -22,6 +22,7 @@
 #include "inpututils.h"
 #include "geodiffutils.h"
 #include "qgsquickutils.h"
+#include "localprojectsmanager.h"
 
 #include <geodiff.h>
 
@@ -2246,7 +2247,11 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   else
   {
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
-    if ( syncSuccessful )
+
+    LocalProjectInfo info = mLocalProjects.projectFromDirectory( projectDir );
+    info.qgisProjectFilePath = findQgisProjectFile( projectDir, info.qgisProjectError );
+    qDebug() << info.isValid() << info.isShowable() << "VALIDITY CHECK";
+    if ( syncSuccessful && info.isValid() && info.isShowable() )
       emit reloadProject( projectDir );
   }
 }

@@ -89,7 +89,12 @@ class Loader: public QObject
     LayersModel &mLayersModel;
     AppSettings &mAppSettings;
 
-    //! Reloads project; if force us is true, reloads mProject on given path, otherwise used only for loading a new projects.
+    /**
+    * Reloads project.
+    * \param filePath Path to project file.
+    * \param force If true, reloads mProject on given path withload loading signals - suppose to be called internally,
+    * otherwise used only for loading a new projects (evoked by a user).
+    */
     bool forceLoad( const QString &filePath, bool force );
 
 };

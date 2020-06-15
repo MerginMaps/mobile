@@ -72,7 +72,8 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     return true;
   }
 
-  emit loadingStarted();
+  if ( !force )
+    emit loadingStarted();
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
@@ -99,7 +100,8 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   }
 
   flagFile.remove();
-  emit loadingFinished();
+  if ( !force )
+    emit loadingFinished();
   return res;
 }
 
