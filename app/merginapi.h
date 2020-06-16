@@ -399,6 +399,7 @@ class MerginApi: public QObject
     void infoProjectFinished( const ProjectDiff &projectDiff, const QString &projectDir );
     //! Emitted when upload cancellation request has finished
     void uploadCanceled( const QString &projectFullName, bool result );
+    void projectDataChanged( const QString &projectFullName );
 
   private slots:
     void listProjectsReplyFinished();
@@ -508,6 +509,10 @@ class MerginApi: public QObject
     void downloadNextItem( const QString &projectFullName );
 
     QNetworkRequest getDefaultRequest( bool withAuth = true );
+
+    bool projectFileHasBeenUpdated( const ProjectDiff &diff );
+
+    bool hasProjecFileExtension( const QString filePath );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;

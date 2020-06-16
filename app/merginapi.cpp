@@ -137,6 +137,28 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   return request;
 }
 
+bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
+{
+  for ( QString filePath : diff.remoteAdded )
+  {
+    if ( hasProjecFileExtension( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteUpdated )
+  {
+    if ( hasProjecFileExtension( filePath ) )
+      return true;
+  }
+
+  return false;
+}
+
+bool MerginApi::hasProjecFileExtension( const QString filePath )
+{
+  return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
+}
+
 #if !defined(USE_MERGIN_DUMMY_API_KEY)
 #include "merginsecrets.cpp"
 #endif
@@ -2234,7 +2256,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
   bool updateBeforeUpload = transaction.updateBeforeUpload;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
-  mTransactionalStatus.remove( projectFullName );
+
 
   if ( updateBeforeUpload )
   {
@@ -2248,12 +2270,17 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   {
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
 
-    LocalProjectInfo info = mLocalProjects.projectFromDirectory( projectDir );
-    info.qgisProjectFilePath = findQgisProjectFile( projectDir, info.qgisProjectError );
-    qDebug() << info.isValid() << info.isShowable() << "VALIDITY CHECK";
-    if ( syncSuccessful && info.isValid() && info.isShowable() )
+    if ( projectFileHasBeenUpdated( transaction.diff ) )
+    {
       emit reloadProject( projectDir );
+    }
+    else
+    {
+      emit projectDataChanged( projectFullName );
+    }
   }
+
+  mTransactionalStatus.remove( projectFullName );
 }
 
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
