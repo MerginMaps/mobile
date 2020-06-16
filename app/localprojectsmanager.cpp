@@ -15,33 +15,6 @@
 #include <QDir>
 #include <QDirIterator>
 
-static QString findQgisProjectFile( const QString &projectDir, QString &err )
-{
-  QList<QString> foundProjectFiles;
-  QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    foundProjectFiles << it.filePath();
-  }
-  if ( foundProjectFiles.count() == 1 )
-  {
-    return foundProjectFiles.first();
-  }
-  else if ( foundProjectFiles.count() > 1 )
-  {
-    // error: multiple project files found
-    err = QObject::tr( "Error: Multiple QGIS project files" );
-  }
-  else
-  {
-    // no projects
-    err = QObject::tr( "Error: Missing QGIS project file" );
-  }
-  return QString();
-}
-
-
 LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   : mDataDir( dataDir )
 {
@@ -183,6 +156,46 @@ void LocalProjectsManager::updateMerginServerVersion( const QString &projectDir,
   }
   Q_ASSERT( false );  // should not happen
 }
+
+void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const QString &errMsg )
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].projectDir == projectDir )
+    {
+      // Effects only local project list, no need to send projectMetadataChanged
+      mProjects[i].qgisProjectError = errMsg;
+      return;
+    }
+  }
+}
+
+QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QString &err )
+{
+  QList<QString> foundProjectFiles;
+  QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
+  while ( it.hasNext() )
+  {
+    it.next();
+    foundProjectFiles << it.filePath();
+  }
+  if ( foundProjectFiles.count() == 1 )
+  {
+    return foundProjectFiles.first();
+  }
+  else if ( foundProjectFiles.count() > 1 )
+  {
+    // error: multiple project files found
+    err = QObject::tr( "Error: Multiple QGIS project files" );
+  }
+  else
+  {
+    // no projects
+    err = QObject::tr( "Error: Missing QGIS project file" );
+  }
+  return QString();
+}
+
 
 static QDateTime _getLastModifiedFileDateTime( const QString &path )
 {

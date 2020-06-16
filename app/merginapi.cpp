@@ -2270,13 +2270,16 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   {
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
 
-    if ( projectFileHasBeenUpdated( transaction.diff ) )
+    if ( syncSuccessful )
     {
-      emit reloadProject( projectDir );
-    }
-    else
-    {
-      emit projectDataChanged( projectFullName );
+      if ( projectFileHasBeenUpdated( transaction.diff ) )
+      {
+        emit reloadProject( projectDir );
+      }
+      else
+      {
+        emit projectDataChanged( projectFullName );
+      }
     }
   }
 

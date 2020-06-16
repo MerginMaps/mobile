@@ -169,7 +169,21 @@ bool ProjectModel::containsProject( const QString &projectNamespace, const QStri
   return mLocalProjects.hasMerginProject( projectNamespace, projectName );
 }
 
-void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )
+void ProjectModel::syncedProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully )
+{
+
+  // Do basic validity check
+  if ( successfully )
+  {
+    QString errMsg;
+    mLocalProjects.findQgisProjectFile( projectDir, errMsg );
+    mLocalProjects.updateProjectErrors( projectDir, errMsg );
+  }
+
+  reloadProjectFiles( projectDir, projectFullName, successfully );
+}
+
+void ProjectModel::reloadProjectFiles( QString projectFolder, QString projectName, bool successful )
 {
   if ( !successful ) return;
 
