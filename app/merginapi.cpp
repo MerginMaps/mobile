@@ -2256,7 +2256,8 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
   bool updateBeforeUpload = transaction.updateBeforeUpload;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
-
+  ProjectDiff diff = transaction.diff;
+  mTransactionalStatus.remove( projectFullName );
 
   if ( updateBeforeUpload )
   {
@@ -2272,7 +2273,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
     if ( syncSuccessful )
     {
-      if ( projectFileHasBeenUpdated( transaction.diff ) )
+      if ( projectFileHasBeenUpdated( diff ) )
       {
         emit reloadProject( projectDir );
       }
@@ -2283,7 +2284,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     }
   }
 
-  mTransactionalStatus.remove( projectFullName );
 }
 
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
