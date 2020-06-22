@@ -599,6 +599,17 @@ ApplicationWindow {
         onNotify: {
             showMessage(message)
         }
+
+        onProjectDataChanged: {
+          var projectName = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectName)
+          var projectNamespace = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectNamespace)
+          var currentProjectFullName = __merginApi.getFullProjectName(projectNamespace, projectName)
+
+          //! if current project has been updated, refresh canvas
+          if (projectFullName === currentProjectFullName) {
+            mapCanvas.mapSettings.extentChanged()
+          }
+        }
     }
 
     Connections {

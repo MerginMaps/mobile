@@ -94,6 +94,12 @@ class LocalProjectsManager : public QObject
     //! after receiving project info with server version (local version stays the same
     void updateMerginServerVersion( const QString &projectDir, int version );
 
+    //! Updates qgisProjectError (after successful project synced)
+    void updateProjectErrors( const QString &projectDir, const QString &errMsg );
+
+    //! Finds all QGIS project files and set the err variable if any occured.
+    QString findQgisProjectFile( const QString &projectDir, QString &err );
+
 
     static ProjectStatus currentProjectStatus( const LocalProjectInfo &project );
 

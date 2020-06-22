@@ -69,9 +69,10 @@ class ProjectModel : public QAbstractListModel
     bool containsProject( const QString &projectNamespace, const QString &projectName );
 
   public slots:
-    void addProject( QString projectFolder, QString projectName, bool successful );
+    void syncedProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully );
 
   private:
+    void reloadProjectFiles( QString projectFolder, QString projectName, bool successful );
     void findProjectFiles();
 
     struct ProjectFile

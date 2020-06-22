@@ -58,6 +58,11 @@ void Loader::setRecording( bool isRecordingOn )
 
 bool Loader::load( const QString &filePath )
 {
+  return forceLoad( filePath, false );
+}
+
+bool Loader::forceLoad( const QString &filePath, bool force )
+{
   qDebug() << "Loading " << filePath;
   // Just clear project if empty
   if ( filePath.isEmpty() )
@@ -67,7 +72,8 @@ bool Loader::load( const QString &filePath )
     return true;
   }
 
-  emit loadingStarted();
+  if ( !force )
+    emit loadingStarted();
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
@@ -80,7 +86,7 @@ bool Loader::load( const QString &filePath )
   loop.exec();
 
   bool res = true;
-  if ( mProject->fileName() != filePath )
+  if ( mProject->fileName() != filePath || force )
   {
     res = mProject->read( filePath );
 
@@ -94,7 +100,8 @@ bool Loader::load( const QString &filePath )
   }
 
   flagFile.remove();
-  emit loadingFinished();
+  if ( !force )
+    emit loadingFinished();
   return res;
 }
 
@@ -102,7 +109,7 @@ bool Loader::reloadProject( QString projectDir )
 {
   if ( mProject->homePath() == projectDir )
   {
-    return load( mProject->fileName() );
+    return forceLoad( mProject->fileName(), true );
   }
   return false;
 }

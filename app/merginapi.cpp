@@ -22,6 +22,7 @@
 #include "inpututils.h"
 #include "geodiffutils.h"
 #include "qgsquickutils.h"
+#include "localprojectsmanager.h"
 
 #include <geodiff.h>
 
@@ -134,6 +135,28 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
     request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
 
   return request;
+}
+
+bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
+{
+  for ( QString filePath : diff.remoteAdded )
+  {
+    if ( hasProjecFileExtension( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteUpdated )
+  {
+    if ( hasProjecFileExtension( filePath ) )
+      return true;
+  }
+
+  return false;
+}
+
+bool MerginApi::hasProjecFileExtension( const QString filePath )
+{
+  return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
 }
 
 #if !defined(USE_MERGIN_DUMMY_API_KEY)
@@ -2233,6 +2256,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
   bool updateBeforeUpload = transaction.updateBeforeUpload;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
+  ProjectDiff diff = transaction.diff;
   mTransactionalStatus.remove( projectFullName );
 
   if ( updateBeforeUpload )
@@ -2246,7 +2270,20 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   else
   {
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
+
+    if ( syncSuccessful )
+    {
+      if ( projectFileHasBeenUpdated( diff ) )
+      {
+        emit reloadProject( projectDir );
+      }
+      else
+      {
+        emit projectDataChanged( projectFullName );
+      }
+    }
   }
+
 }
 
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
