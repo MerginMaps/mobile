@@ -43,14 +43,14 @@ make -j<num of cores>
 cd ..
 ```
 
-6. Change config.pri to point to your `~/Projects/quick` folder for geodiff/qgis
-7. Open Input in Qt Creator
-8. Install whole bunch of qt packages
+5. Install whole bunch of qt packages
 
 ```bash
-sudo apt-get install -y qtpositioning5-dev qml-module-qtmultimedia qml-module-qtpositioning qml-module-qtqml-models2 qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-shapes qml-module-qtquick-controls 
+sudo apt-get install -y qtpositioning5-dev qml-module-qtmultimedia qml-module-qtpositioning qml-module-qtqml-models2 qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-shapes qml-module-qtquick-controls qtquickcontrols2-5-dev libqt5sensors5-dev
 sudo apt-get install qml-module-qt-labs-*
 sudo apt install sqlite3
 ```
 
-9. Compile and run
+6. Copy `app/config.pri.default` to `app/config.pri` and edit it so that it points to your `~/Projects/quick` folder for geodiff/qgis
+7. Open `app/input.pro` in Qt Creator
+8. Compile and run
