@@ -11,7 +11,7 @@ echo "<RCC>" > $QRC_FILE
 echo "  <qresource prefix=\"/\"> " >> $QRC_FILE
 
 cd $DIR/../app/i18n
-FILES=`find . -type f -name "*.ts" ! -name input_en.ts`
+FILES=`find . -type f -name "*.ts"`
 for i in $FILES
 do
     QMFILE=${i/.ts/.qm}
