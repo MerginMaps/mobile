@@ -569,6 +569,9 @@ ApplicationWindow {
 
     BrowseDataPanel {
       id: browseDataPanel
+      width: window.width
+      height: window.height
+      z: zPanel   // make sure items from here are on top of the Z-order
     }
 
     MapThemePanel {

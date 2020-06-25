@@ -4,7 +4,6 @@ import QtQuick.Controls 2.12
 Item {
   id: browseDataView
   visible: false
-  anchors.fill:parent
 
   StackView {
     id: browseDataStackView
