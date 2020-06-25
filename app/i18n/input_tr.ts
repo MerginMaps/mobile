@@ -227,6 +227,7 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="320"/>
         <source>Explore public Mergin projects!</source>
+        <translatorcomment>Explore public Mergin projects!</translatorcomment>
         <translation>Genel Mergin projelerini keşfet!</translation>
     </message>
     <message>
