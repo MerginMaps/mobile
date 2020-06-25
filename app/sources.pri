@@ -1,4 +1,5 @@
 SOURCES += \
+  $$PWD/layerfeaturesmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
@@ -28,6 +29,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+  $$PWD/layerfeaturesmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
