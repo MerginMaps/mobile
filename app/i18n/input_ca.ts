@@ -227,6 +227,7 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="320"/>
         <source>Explore public Mergin projects!</source>
+        <translatorcomment>Explore public Mergin projects!</translatorcomment>
         <translation>Explora els projectes públics a Mergin!</translation>
     </message>
     <message>
@@ -395,7 +396,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/qgsquickpositionkit.cpp" line="45"/>
         <source>Unable to create default GPS Position Source</source>
-        <translation>Impossible d&apos;aconseguir la posició inicial per defecte del GPS</translation>
+        <translation>Impossible crear la font de posició GPS per defecte</translation>
     </message>
 </context>
 <context>
