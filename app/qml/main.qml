@@ -404,6 +404,7 @@ ApplicationWindow {
           }
           __loader.zoomToProject(mapCanvas.mapSettings)
         }
+        onOpenBrowseDataClicked: browseDataPanel.visible = true
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
@@ -564,6 +565,10 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
+    }
+
+    BrowseDataPanel {
+      id: browseDataPanel
     }
 
     MapThemePanel {
