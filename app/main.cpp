@@ -42,6 +42,7 @@
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
+#include "layerfeaturesmodel.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -248,6 +249,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
+  qmlRegisterUncreatableType<LayerFeaturesModel>("lc", 1, 0, "LayerFeaturesModel", "");
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
@@ -349,6 +351,13 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
+  LayerFeaturesModel lfm;
+
+  lfm.addFeature(QPair<int, QString> {9, "dd"});
+  lfm.addFeature(QPair<int, QString> {0, "aa"});
+  lfm.addFeature(QPair<int, QString> {3, "cc"});
+
+
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -430,6 +439,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
+  engine.rootContext()->setContextProperty( "__layerFeaturesModel", &lfm );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

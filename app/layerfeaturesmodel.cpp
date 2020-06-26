@@ -1,8 +1,12 @@
 #include "layerfeaturesmodel.h"
+#include <QDebug>
 
 LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   : QAbstractListModel( parent )
 {
+  m_features.append(QPair<int, QString> {1, "feat deat"});
+  m_features.append(QPair<int, QString> {2, "cucoriedky"});
+  m_features.append(QPair<int, QString> {3, "cernice"});
 }
 
 int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
@@ -12,17 +16,43 @@ int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
   if ( parent.isValid() )
     return 0;
 
-  // FIXME: Implement me!
-  return 0;
+  return m_features.count();
 }
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {
+  int row = index.row();
+  if ( row < 0 || row >= m_features.count() )
+    return QVariant( "" );
+
+  if (role < roleNames::id || role > roleNames::displayName )
+    return QVariant();
+
   if ( !index.isValid() )
     return QVariant();
 
-  // FIXME: Implement me!
+  QPair<int, QString> feat = m_features.at(index.row());
+
+  if ( role == roleNames::id )
+    return QVariant(feat.first);
+  else
+    return QVariant(feat.second);
+
   return QVariant();
+}
+
+bool LayerFeaturesModel::addFeature( const QPair<int, QString> &feature )
+{
+  m_features.push_back( feature );
+  return true;
+}
+
+QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
+{
+  QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
+  roleNames[id] = "id";
+  roleNames[displayName] = "displayName";
+  return roleNames;
 }
 
 bool LayerFeaturesModel::setData( const QModelIndex &index, const QVariant &value, int role )

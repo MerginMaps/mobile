@@ -24,9 +24,24 @@ Item {
       withBackButton: true
     }
 
-    Text {
-      anchors.centerIn: parent
-      text: qsTr("List of attributes for layer " + selectedLayer)
+//    Text {
+//      anchors.centerIn: parent
+//      text: qsTr("List of attributes for layer " + selectedLayer)
+//    }
+
+    ListView {
+      model: __layerFeaturesModel
+      anchors.fill: parent
+      delegate: Rectangle {
+        width: 50
+        height: 50
+        border.width: 1
+
+        Text {
+            text: model.id + " " + model.displayName
+            anchors.centerIn: parent
+        }
+      }
     }
   }
 }
