@@ -18,30 +18,15 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Attributes")
+      titleText: qsTr("Layer " + selectedLayer)
       
       onBack: root.backButtonTapped()
       withBackButton: true
     }
 
-//    Text {
-//      anchors.centerIn: parent
-//      text: qsTr("List of attributes for layer " + selectedLayer)
-//    }
-
-    ListView {
-      model: __layerFeaturesModel
-      anchors.fill: parent
-      delegate: Rectangle {
-        width: 50
-        height: 50
-        border.width: 1
-
-        Text {
-            text: model.id + " " + model.displayName
-            anchors.centerIn: parent
-        }
-      }
+    FeatureListComponent {
+      width: parent.width
+      height: parent.height
     }
   }
 }

@@ -4,9 +4,6 @@
 LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   : QAbstractListModel( parent )
 {
-  m_features.append(QPair<int, QString> {1, "feat deat"});
-  m_features.append(QPair<int, QString> {2, "cucoriedky"});
-  m_features.append(QPair<int, QString> {3, "cernice"});
 }
 
 int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
@@ -31,20 +28,31 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   if ( !index.isValid() )
     return QVariant();
 
-  QPair<int, QString> feat = m_features.at(index.row());
+  QgsFeatureMock feat = m_features.at(index.row());
 
   if ( role == roleNames::id )
-    return QVariant(feat.first);
+    return QVariant(feat.id);
   else
-    return QVariant(feat.second);
+    return QVariant(feat.name);
 
   return QVariant();
 }
 
-bool LayerFeaturesModel::addFeature( const QPair<int, QString> &feature )
+bool LayerFeaturesModel::addFeature( const QgsFeatureMock &feature )
 {
   m_features.push_back( feature );
   return true;
+}
+
+void LayerFeaturesModel::reloadDataFromLayer( const QString &layerName )
+{
+  beginResetModel();
+
+  m_features.clear();
+
+  m_features = m_dataStorage->getDataForLayer( layerName );
+
+  endResetModel();
 }
 
 QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
@@ -57,19 +65,18 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
 
 bool LayerFeaturesModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
-  if ( data( index, role ) != value )
-  {
-    // FIXME: Implement me!
-    emit dataChanged( index, index, QVector<int>() << role );
-    return true;
-  }
+  // Mocked method - for future when attributes will be editable (it changes data)
+  Q_UNUSED(index);
+  Q_UNUSED(value);
+  Q_UNUSED(role);
   return false;
 }
 
 Qt::ItemFlags LayerFeaturesModel::flags( const QModelIndex &index ) const
 {
+  // Mocked method - for future when attributes will be editable (it checks if data is editable)
   if ( !index.isValid() )
     return Qt::NoItemFlags;
 
-  return Qt::ItemIsEditable; // FIXME: Implement me!
+  return Qt::ItemIsEditable;
 }

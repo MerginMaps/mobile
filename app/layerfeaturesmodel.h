@@ -2,6 +2,7 @@
 #define LAYERFEATURESMODEL_H
 
 #include <QAbstractListModel>
+#include "qgsfeaturemockup.h"
 
 class LayerFeaturesModel : public QAbstractListModel
 {
@@ -15,6 +16,8 @@ class LayerFeaturesModel : public QAbstractListModel
   public:
     explicit LayerFeaturesModel( QObject *parent = nullptr );
 
+    void setDataStorage( QgsFeatureMockup &dataGenerator ) { m_dataStorage = &dataGenerator; }
+
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
@@ -22,7 +25,7 @@ class LayerFeaturesModel : public QAbstractListModel
 
     QHash<int, QByteArray> roleNames() const override;
 
-    bool addFeature( const QPair<int, QString> &feature );
+    bool addFeature( const QgsFeatureMock &feature );
 
     // Editable:
     bool setData( const QModelIndex &index, const QVariant &value,
@@ -30,8 +33,12 @@ class LayerFeaturesModel : public QAbstractListModel
 
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
+public slots:
+    void reloadDataFromLayer( const QString &layerName );
+
   private:
-    QList<QPair<int, QString>> m_features;
+    QList<QgsFeatureMock> m_features;
+    QgsFeatureMockup *m_dataStorage;
 };
 
 #endif // LAYERFEATURESMODEL_H

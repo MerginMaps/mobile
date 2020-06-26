@@ -17,6 +17,7 @@ Item {
     LayersListPanel {
       onBackButtonTapped: browseDataView.visible = false
       onLayerClicked: {
+        __layerFeaturesModel.reloadDataFromLayer( layerName )
         browseDataStackView.push(layerAttributesPanel, {selectedLayer: layerName})
       }
     }
