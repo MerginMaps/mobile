@@ -30,7 +30,7 @@
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="18"/>
         <source>Survey Layer</source>
-        <translation>Inmeetlaag</translation>
+        <translation>Opnamelaag</translation>
     </message>
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="40"/>
