@@ -168,7 +168,7 @@
         <location filename="../qml/MainPanel.qml" line="103"/>
         <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Record</source>
-        <translation>Openemen</translation>
+        <translation>Opnemen</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="128"/>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/qgsquickpositionkit.cpp" line="45"/>
         <source>Unable to create default GPS Position Source</source>
-        <translation>Unable to create deafult GPS Position Source</translation>
+        <translation>Default GPS-positie kan niet worden aangemaakt</translation>
     </message>
 </context>
 <context>
