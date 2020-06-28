@@ -341,7 +341,7 @@
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Object %1 kan niet gefetched worden na commit</translation>
+        <translation>Object %1 kon niet worden opgehaald na de commit</translation>
     </message>
     <message>
         <location filename="../../../QGIS/src/quickgui/attributes/qgsquickattributemodel.cpp" line="204"/>
