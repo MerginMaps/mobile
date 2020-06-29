@@ -20,6 +20,7 @@ Item {
     signal myLocationHold()
     signal addFeatureClicked()
     signal openMapThemesClicked()
+    signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
     property alias recordButton: recBtnIcon
@@ -150,9 +151,28 @@ Item {
         }
 
         Item {
-            id: mapThemesItem
+            id: browseDataItem
             height: parent.height
             visible: panelRow.itemsToShow > 5
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+                id: browseDataBtn
+                width: mainPanel.itemSize
+                text: qsTr("Browse data")
+                imageSource: "table.svg"
+
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openBrowseDataClicked()
+                }
+            }
+        }
+
+        Item {
+            id: mapThemesItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -172,7 +192,7 @@ Item {
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 5
+            visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -305,6 +325,25 @@ Item {
 
             onClicked: {
                 zoomToProjectBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !mapThemesItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Browse data")
+                imageSource: "table.svg"
+            }
+
+            onClicked: {
+                browseDataBtn.activated()
                 rootMenu.close()
             }
         }
