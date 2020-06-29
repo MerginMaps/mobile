@@ -15,7 +15,7 @@ Item {
     id: layersListPanel
 
     LayersListPanel {
-      onBackButtonTapped: browseDataView.visible = false
+      onBackButtonClicked: browseDataView.visible = false
       onLayerClicked: {
         browseDataStackView.push(layerAttributesPanel, {selectedLayer: layerName})
       }
@@ -26,7 +26,7 @@ Item {
     id: layerAttributesPanel
 
     LayerAttributesPanel {
-      onBackButtonTapped: browseDataStackView.pop()
+      onBackButtonClicked: browseDataStackView.pop()
     }
   }
 }

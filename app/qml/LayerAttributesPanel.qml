@@ -5,7 +5,7 @@ Item {
   id: root
 
   property string selectedLayer: ""
-  signal backButtonTapped()
+  signal backButtonClicked()
 
   
   Page {
@@ -20,7 +20,7 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Attributes")
       
-      onBack: root.backButtonTapped()
+      onBack: root.backButtonClicked()
       withBackButton: true
     }
 
