@@ -1,7 +1,7 @@
 #include "layerfeaturesmodel.h"
 #include <QDebug>
 
-LayerFeaturesModel::LayerFeaturesModel( QObject *parent, LayersModel *lm )
+LayerFeaturesModel::LayerFeaturesModel( LayersModel *lm, QObject *parent )
   : QAbstractListModel( parent ), p_layerModel(lm)
 {
 }

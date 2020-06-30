@@ -19,7 +19,7 @@ class LayerFeaturesModel : public QAbstractListModel
   };
 
   public:
-    explicit LayerFeaturesModel( QObject *parent = nullptr, LayersModel *layersModel = nullptr );
+    explicit LayerFeaturesModel( LayersModel *layersModel, QObject *parent = nullptr );
 
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
