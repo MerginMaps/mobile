@@ -1,8 +1,8 @@
 #include "layerfeaturesmodel.h"
 #include <QDebug>
 
-LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
-  : QAbstractListModel( parent )
+LayerFeaturesModel::LayerFeaturesModel( QObject *parent, QgsFeatureMockup *qfm, LayersModel *lm )
+  : QAbstractListModel( parent ), m_dataStorage(qfm), p_layerModel(lm)
 {
 }
 
@@ -20,7 +20,7 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
   if ( row < 0 || row >= m_features.count() )
-    return QVariant( "" );
+    return QVariant();
 
   if (role < roleNames::id || role > roleNames::displayName )
     return QVariant();
@@ -28,29 +28,52 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   if ( !index.isValid() )
     return QVariant();
 
-  QgsFeatureMock feat = m_features.at(index.row());
+  QgsFeature feat = m_features.at(index.row());
 
-  if ( role == roleNames::id )
-    return QVariant(feat.id);
-  else
-    return QVariant(feat.name);
+  //  if ( role == roleNames::id )
+  //    return QVariant(feat.id);
+  //  else
+  //    return QVariant(feat.name);
 
-  return QVariant();
+  return QVariant( "Test" );
 }
 
 bool LayerFeaturesModel::addFeature( const QgsFeatureMock &feature )
 {
-  m_features.push_back( feature );
+  //  m_features.push_back( feature );
+  Q_UNUSED( feature );
   return true;
 }
 
-void LayerFeaturesModel::reloadDataFromLayer( const QString &layerName )
+void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
+{
+  //  m_features = m_dataStorage->getDataForLayer( layerName );
+  Q_UNUSED( layerName );
+
+  // We mock layerName because it is not yet implemented
+  QgsMapLayer *mockedLayer = p_layerModel->activeLayer();
+
+  if ( mockedLayer->type() == QgsMapLayerType::VectorLayer )
+    this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
+}
+
+void LayerFeaturesModel::reloadDataFromLayer( const QgsVectorLayer *layer )
 {
   beginResetModel();
-
   m_features.clear();
 
-  m_features = m_dataStorage->getDataForLayer( layerName );
+  if ( layer )
+  {
+    QgsFeatureRequest req;
+
+    req.setLimit( FEATURES_LIMIT );
+
+    QgsFeatureIterator it = layer->getFeatures( req );
+    QgsFeature f;
+
+    while( it.nextFeature( f ) )
+      m_features << f;
+  }
 
   endResetModel();
 }

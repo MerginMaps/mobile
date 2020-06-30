@@ -82,6 +82,19 @@ void LayersModel::setMapSettings( QgsQuickMapSettings *mapSettings )
   }
 }
 
+QgsMapLayer* LayersModel::getLayerByName(const QString &layerName) const
+{
+  for ( QgsMapLayer *layer : mLayers )
+  {
+    if (layer->name() == layerName)
+    {
+      return layer;
+    }
+  }
+
+  return nullptr;
+}
+
 void LayersModel::updateActiveLayer( const QString &name )
 {
   int row = rowAccordingName( name, firstWritableLayerIndex() );

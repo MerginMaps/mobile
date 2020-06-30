@@ -3,6 +3,12 @@
 
 #include <QAbstractListModel>
 #include "qgsfeaturemockup.h"
+#include "layersmodel.h"
+
+#include "qgsmaplayer.h"
+#include "qgsvectorlayer.h"
+#include "qgsfeaturerequest.h"
+#include "qgsfeatureiterator.h"
 
 class LayerFeaturesModel : public QAbstractListModel
 {
@@ -14,9 +20,7 @@ class LayerFeaturesModel : public QAbstractListModel
   };
 
   public:
-    explicit LayerFeaturesModel( QObject *parent = nullptr );
-
-    void setDataStorage( QgsFeatureMockup &dataGenerator ) { m_dataStorage = &dataGenerator; }
+    explicit LayerFeaturesModel( QObject *parent = nullptr, QgsFeatureMockup *dataGenerator = nullptr, LayersModel *layersModel = nullptr );
 
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
@@ -34,11 +38,16 @@ class LayerFeaturesModel : public QAbstractListModel
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
 public slots:
-    void reloadDataFromLayer( const QString &layerName );
+    void reloadDataFromLayerName( const QString &layerName ); // mock
+    void reloadDataFromLayer( const QgsVectorLayer *layer );
+
 
   private:
-    QList<QgsFeatureMock> m_features;
+    QList<QgsFeature> m_features;
     QgsFeatureMockup *m_dataStorage;
+    LayersModel *p_layerModel;
+
+    const char FEATURES_LIMIT = 100;
 };
 
 #endif // LAYERFEATURESMODEL_H

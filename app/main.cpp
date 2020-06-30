@@ -353,8 +353,7 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   QgsFeatureMockup qgsMock;
-  LayerFeaturesModel lfm;
-  lfm.setDataStorage( qgsMock );
+  LayerFeaturesModel lfm( nullptr, &qgsMock, &lm );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
