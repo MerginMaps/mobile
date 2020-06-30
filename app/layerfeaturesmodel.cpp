@@ -1,8 +1,8 @@
 #include "layerfeaturesmodel.h"
 #include <QDebug>
 
-LayerFeaturesModel::LayerFeaturesModel( QObject *parent, QgsFeatureMockup *qfm, LayersModel *lm )
-  : QAbstractListModel( parent ), m_dataStorage(qfm), p_layerModel(lm)
+LayerFeaturesModel::LayerFeaturesModel( QObject *parent, LayersModel *lm )
+  : QAbstractListModel( parent ), p_layerModel(lm)
 {
 }
 
@@ -30,24 +30,11 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 
   QgsFeature feat = m_features.at(index.row());
 
-  //  if ( role == roleNames::id )
-  //    return QVariant(feat.id);
-  //  else
-  //    return QVariant(feat.name);
-
   return QVariant( "Test" );
-}
-
-bool LayerFeaturesModel::addFeature( const QgsFeatureMock &feature )
-{
-  //  m_features.push_back( feature );
-  Q_UNUSED( feature );
-  return true;
 }
 
 void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
 {
-  //  m_features = m_dataStorage->getDataForLayer( layerName );
   Q_UNUSED( layerName );
 
   // We mock layerName because it is not yet implemented

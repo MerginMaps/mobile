@@ -43,7 +43,6 @@
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "layerfeaturesmodel.h"
-#include "qgsfeaturemockup.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -352,8 +351,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
-  QgsFeatureMockup qgsMock;
-  LayerFeaturesModel lfm( nullptr, &qgsMock, &lm );
+  LayerFeaturesModel lfm( nullptr, &lm );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

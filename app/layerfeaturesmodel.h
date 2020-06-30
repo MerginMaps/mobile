@@ -2,7 +2,6 @@
 #define LAYERFEATURESMODEL_H
 
 #include <QAbstractListModel>
-#include "qgsfeaturemockup.h"
 #include "layersmodel.h"
 
 #include "qgsmaplayer.h"
@@ -20,7 +19,7 @@ class LayerFeaturesModel : public QAbstractListModel
   };
 
   public:
-    explicit LayerFeaturesModel( QObject *parent = nullptr, QgsFeatureMockup *dataGenerator = nullptr, LayersModel *layersModel = nullptr );
+    explicit LayerFeaturesModel( QObject *parent = nullptr, LayersModel *layersModel = nullptr );
 
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
@@ -28,8 +27,6 @@ class LayerFeaturesModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
     QHash<int, QByteArray> roleNames() const override;
-
-    bool addFeature( const QgsFeatureMock &feature );
 
     // Editable:
     bool setData( const QModelIndex &index, const QVariant &value,
@@ -44,7 +41,6 @@ public slots:
 
   private:
     QList<QgsFeature> m_features;
-    QgsFeatureMockup *m_dataStorage;
     LayersModel *p_layerModel;
 
     const char FEATURES_LIMIT = 100;

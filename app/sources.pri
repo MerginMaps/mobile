@@ -1,6 +1,5 @@
 SOURCES += \
   $$PWD/layerfeaturesmodel.cpp \
-  $$PWD/qgsfeaturemockup.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
@@ -31,7 +30,6 @@ exists(merginsecrets.cpp) {
 
 HEADERS += \
   $$PWD/layerfeaturesmodel.h \
-  $$PWD/qgsfeaturemockup.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
