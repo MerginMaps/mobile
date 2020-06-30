@@ -18,15 +18,15 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Attributes")
+      titleText: qsTr("Features")
       
       onBack: root.backButtonClicked()
       withBackButton: true
     }
 
-    Text {
-      anchors.centerIn: parent
-      text: qsTr("List of attributes for layer " + selectedLayer)
+    FeatureListComponent {
+      width: parent.width
+      height: parent.height
     }
   }
 }
