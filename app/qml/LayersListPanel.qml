@@ -1,10 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   id: root
 
-  signal backButtonTapped()
+  signal backButtonClicked()
   signal layerClicked(string layerName)
 
   Page {
@@ -19,12 +20,12 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Layers")
       
-      onBack: root.backButtonTapped()
+      onBack: root.backButtonClicked()
       withBackButton: true
     }
     
     Column {
-      spacing: 10
+      spacing: 10 * QgsQuick.Utils.dp
       anchors.centerIn: parent
       
       Button {

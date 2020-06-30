@@ -5,7 +5,7 @@ Item {
   id: root
 
   property string selectedLayer: ""
-  signal backButtonTapped()
+  signal backButtonClicked()
 
   
   Page {
@@ -18,15 +18,15 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Layer " + selectedLayer)
+      titleText: qsTr("Attributes")
       
-      onBack: root.backButtonTapped()
+      onBack: root.backButtonClicked()
       withBackButton: true
     }
 
-    FeatureListComponent {
-      width: parent.width
-      height: parent.height
+    Text {
+      anchors.centerIn: parent
+      text: qsTr("List of attributes for layer " + selectedLayer)
     }
   }
 }
