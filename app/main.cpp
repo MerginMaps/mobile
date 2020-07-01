@@ -351,7 +351,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
-  LayerFeaturesModel lfm( &lm, nullptr );
+  LayerFeaturesModel lfm( lm, loader, nullptr );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

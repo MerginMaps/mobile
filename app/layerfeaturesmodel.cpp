@@ -17,8 +17,10 @@
 #include "layerfeaturesmodel.h"
 #include <QDebug>
 
-LayerFeaturesModel::LayerFeaturesModel( LayersModel *lm, QObject *parent )
-  : QAbstractListModel( parent ), p_layerModel(lm)
+LayerFeaturesModel::LayerFeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
+  : QAbstractListModel( parent ),
+    mLayersModel( lm ),
+    mLoader( loader )
 {
 }
 
@@ -29,24 +31,30 @@ int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
   if ( parent.isValid() )
     return 0;
 
-  return m_features.count();
+  return mFeatures.count();
 }
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
-  if ( row < 0 || row >= m_features.count() )
+  if ( row < 0 || row >= mFeatures.count() )
     return QVariant();
 
-  if (role < roleNames::id || role > roleNames::displayName )
+  if ( role < roleNames::featureTitle || role > roleNames::featureTitle )
     return QVariant();
 
   if ( !index.isValid() )
     return QVariant();
 
-  QgsFeature feat = m_features.at(index.row());
+  QgsQuickFeatureLayerPair feat = mFeatures.at( index.row() );
 
-  return QVariant( "Test" );
+  switch ( role )
+  {
+    case featureTitle:
+      return mLoader.featureTitle( feat );
+  }
+
+  return QVariant();
 }
 
 void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
@@ -54,16 +62,16 @@ void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
   Q_UNUSED( layerName );
 
   // We mock layerName because it is not yet implemented
-  QgsMapLayer *mockedLayer = p_layerModel->activeLayer();
+  QgsMapLayer *mockedLayer = mLayersModel.activeLayer();
 
   if ( mockedLayer->type() == QgsMapLayerType::VectorLayer )
     this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
 }
 
-void LayerFeaturesModel::reloadDataFromLayer( const QgsVectorLayer *layer )
+void LayerFeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
   beginResetModel();
-  m_features.clear();
+  mFeatures.clear();
 
   if ( layer )
   {
@@ -74,8 +82,10 @@ void LayerFeaturesModel::reloadDataFromLayer( const QgsVectorLayer *layer )
     QgsFeatureIterator it = layer->getFeatures( req );
     QgsFeature f;
 
-    while( it.nextFeature( f ) )
-      m_features << f;
+    while ( it.nextFeature( f ) )
+    {
+      mFeatures << QgsQuickFeatureLayerPair( f, layer );
+    }
   }
 
   endResetModel();
@@ -84,8 +94,7 @@ void LayerFeaturesModel::reloadDataFromLayer( const QgsVectorLayer *layer )
 QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-  roleNames[id] = "id";
-  roleNames[displayName] = "displayName";
+  roleNames[featureTitle] = "featureTitle";
   return roleNames;
 }
 

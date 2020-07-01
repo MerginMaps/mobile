@@ -14,7 +14,7 @@ Item {
       border.width: 1
 
       Text {
-        text: model.id + " " + model.displayName
+        text: model.featureTitle
         anchors.centerIn: parent
       }
     }

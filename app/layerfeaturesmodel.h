@@ -18,24 +18,26 @@
 #define LAYERFEATURESMODEL_H
 
 #include <QAbstractListModel>
+#include "loader.h"
 #include "layersmodel.h"
 
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
 #include "qgsfeaturerequest.h"
 #include "qgsfeatureiterator.h"
+#include "qgsquickfeaturelayerpair.h"
 
 class LayerFeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
-  enum roleNames {
-    id = Qt::UserRole + 1,
-    displayName
-  };
+    enum roleNames
+    {
+      featureTitle = Qt::UserRole + 1
+    };
 
   public:
-    explicit LayerFeaturesModel( LayersModel *layersModel, QObject *parent = nullptr );
+    explicit LayerFeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
 
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
@@ -52,12 +54,13 @@ class LayerFeaturesModel : public QAbstractListModel
 
 public slots:
     void reloadDataFromLayerName( const QString &layerName ); // mock
-    void reloadDataFromLayer( const QgsVectorLayer *layer );
+    void reloadDataFromLayer( QgsVectorLayer *layer );
 
 
   private:
-    QList<QgsFeature> m_features;
-    LayersModel *p_layerModel;
+    QList<QgsQuickFeatureLayerPair> mFeatures;
+    LayersModel &mLayersModel;
+    Loader &mLoader;
 
     const char FEATURES_LIMIT = 100;
 };
