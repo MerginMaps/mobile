@@ -40,7 +40,7 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   if ( row < 0 || row >= mFeatures.count() )
     return QVariant();
 
-  if ( role < roleNames::featureTitle || role > roleNames::description )
+  if ( role < roleNames::featureTitle || role > roleNames::geometryType )
     return QVariant();
 
   if ( !index.isValid() )
@@ -54,6 +54,8 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
       return mLoader.featureTitle( feat );
     case description:
       return QVariant( QString( "description" ) );
+    case geometryType:
+      return QVariant( feat.feature().geometry().type() );
   }
 
   return QVariant();
@@ -98,6 +100,7 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[featureTitle] = "featureTitle";
   roleNames[description] = "description";
+  roleNames[geometryType] = "geometryType";
   return roleNames;
 }
 

@@ -26,6 +26,8 @@
 #include "qgsfeaturerequest.h"
 #include "qgsfeatureiterator.h"
 #include "qgsquickfeaturelayerpair.h"
+#include "qgsgeometry.h"
+#include "qgswkbtypes.h"
 
 class LayerFeaturesModel : public QAbstractListModel
 {
@@ -34,7 +36,8 @@ class LayerFeaturesModel : public QAbstractListModel
     enum roleNames
     {
       featureTitle = Qt::UserRole + 1,
-      description // secondary text in list view
+      description, // secondary text in list view
+      geometryType // type of geometry (point, line, ..)
     };
 
   public:

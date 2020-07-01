@@ -68,6 +68,10 @@ QtObject {
     property var infoIcon: "qrc:/info.svg"
     property var tableIcon: "qrc:/table.svg"
 
+    property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
+    property var vectorLineIcon: "qrc:/mIconLineLayer.svg"
+    property var vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
+
 
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
