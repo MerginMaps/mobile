@@ -66,7 +66,7 @@ void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
   // We mock layerName because it is not yet implemented
   QgsMapLayer *mockedLayer = mLayersModel.activeLayer();
 
-  if ( mockedLayer->type() == QgsMapLayerType::VectorLayer )
+  if ( mockedLayer && ( mockedLayer->type() == QgsMapLayerType::VectorLayer ) )
     this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
 }
 
