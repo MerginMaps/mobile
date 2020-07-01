@@ -3,6 +3,10 @@ import QtQuick.Controls 2.12
 
 Item {
 
+  signal itemClicked( string itemId )
+
+  id: root
+
   ListView {
     implicitHeight: parent.height
     implicitWidth: parent.width
@@ -16,6 +20,13 @@ Item {
       Text {
         text: model.featureTitle
         anchors.centerIn: parent
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          root.itemClicked( model.featureTitle )
+        }
       }
     }
   }

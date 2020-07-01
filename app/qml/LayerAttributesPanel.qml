@@ -27,6 +27,10 @@ Item {
     FeatureListComponent {
       width: parent.width
       height: parent.height
+
+      onItemClicked: {
+        console.log("Clicked on item: " + itemId)
+      }
     }
   }
 }
