@@ -52,7 +52,7 @@ class LayerFeaturesModel : public QAbstractListModel
 
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
-public slots:
+  public slots:
     void reloadDataFromLayerName( const QString &layerName ); // mock
     void reloadDataFromLayer( QgsVectorLayer *layer );
 

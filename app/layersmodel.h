@@ -82,7 +82,7 @@ class LayersModel : public QAbstractListModel
     void setMapSettings( QgsQuickMapSettings *mapSettings );
 
     //! Get layer by its name
-    QgsMapLayer* getLayerByName( const QString &layerName ) const;
+    QgsMapLayer *getLayerByName( const QString &layerName ) const;
 
   signals:
     void mapSettingsChanged();

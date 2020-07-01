@@ -101,9 +101,9 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
 bool LayerFeaturesModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
   // Mocked method - for future when attributes will be editable (it changes data)
-  Q_UNUSED(index);
-  Q_UNUSED(value);
-  Q_UNUSED(role);
+  Q_UNUSED( index );
+  Q_UNUSED( value );
+  Q_UNUSED( role );
   return false;
 }
 

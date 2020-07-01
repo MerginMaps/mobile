@@ -82,11 +82,11 @@ void LayersModel::setMapSettings( QgsQuickMapSettings *mapSettings )
   }
 }
 
-QgsMapLayer* LayersModel::getLayerByName(const QString &layerName) const
+QgsMapLayer *LayersModel::getLayerByName( const QString &layerName ) const
 {
   for ( QgsMapLayer *layer : mLayers )
   {
-    if (layer->name() == layerName)
+    if ( layer->name() == layerName )
     {
       return layer;
     }
