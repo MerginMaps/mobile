@@ -1,3 +1,19 @@
+/***************************************************************************
+  layerfeaturesmodel.h
+  --------------------------------------
+  Date                 : July 2020
+  Copyright            : (C) 2020 by Tomas Mizera
+  Email                : tomas.mizera2 at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
 #ifndef LAYERFEATURESMODEL_H
 #define LAYERFEATURESMODEL_H
 
