@@ -18,7 +18,7 @@ Item {
       border.width: 1
 
       Text {
-        text: model.featureTitle
+        text: model.featureTitle + " " + model.description
         anchors.centerIn: parent
       }
 

@@ -33,7 +33,8 @@ class LayerFeaturesModel : public QAbstractListModel
 
     enum roleNames
     {
-      featureTitle = Qt::UserRole + 1
+      featureTitle = Qt::UserRole + 1,
+      description // secondary text in list view
     };
 
   public:

@@ -40,7 +40,7 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   if ( row < 0 || row >= mFeatures.count() )
     return QVariant();
 
-  if ( role < roleNames::featureTitle || role > roleNames::featureTitle )
+  if ( role < roleNames::featureTitle || role > roleNames::description )
     return QVariant();
 
   if ( !index.isValid() )
@@ -52,6 +52,8 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   {
     case featureTitle:
       return mLoader.featureTitle( feat );
+    case description:
+      return QVariant( QString( "description" ) );
   }
 
   return QVariant();
@@ -95,6 +97,7 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[featureTitle] = "featureTitle";
+  roleNames[description] = "description";
   return roleNames;
 }
 
