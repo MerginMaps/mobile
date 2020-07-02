@@ -31,7 +31,7 @@ Item {
     delegate: Rectangle {
       id: itemContainer
       width: parent.width
-      height: 50
+      height: 50 * QgsQuick.Utils.dp
 
       MouseArea {
         anchors.fill: parent

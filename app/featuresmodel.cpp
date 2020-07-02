@@ -15,7 +15,6 @@
 
 
 #include "featuresmodel.h"
-#include <QDebug>
 
 FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
@@ -77,6 +76,8 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
   beginResetModel();
   mFeatures.clear();
 
+  const int FEATURES_LIMIT = 100;
+
   if ( layer )
   {
     QgsFeatureRequest req;
@@ -100,7 +101,7 @@ void FeaturesModel::activeProjectChanged()
   emptyData();
 }
 
-void FeaturesModel::activeMapThemeChanged(const QString &mapTheme)
+void FeaturesModel::activeMapThemeChanged( const QString &mapTheme )
 {
   Q_UNUSED( mapTheme )
   emptyData();

@@ -26,8 +26,10 @@
 #include "qgsfeaturerequest.h"
 #include "qgsfeatureiterator.h"
 #include "qgsquickfeaturelayerpair.h"
-#include "qgsgeometry.h"
-#include "qgswkbtypes.h"
+
+/**
+ * FeaturesModel class serves as a model for showing layer's feature data in browse data feature.
+ */
 
 class FeaturesModel : public QAbstractListModel
 {
@@ -43,17 +45,13 @@ class FeaturesModel : public QAbstractListModel
   public:
     explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
 
-    // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
-
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
-
     QHash<int, QByteArray> roleNames() const override;
 
-    // Editable:
+
     bool setData( const QModelIndex &index, const QVariant &value,
                   int role = Qt::EditRole ) override;
-
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
   public slots:
@@ -65,13 +63,12 @@ class FeaturesModel : public QAbstractListModel
 
 
   private:
+    //! Empty data when changing map theme or project
     void emptyData();
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
     LayersModel &mLayersModel;
     Loader &mLoader;
-
-    const char FEATURES_LIMIT = 100;
 };
 
 #endif // LAYERFEATURESMODEL_H

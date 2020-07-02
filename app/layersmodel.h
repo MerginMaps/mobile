@@ -81,9 +81,6 @@ class LayersModel : public QAbstractListModel
     //! Gets map settings
     void setMapSettings( QgsQuickMapSettings *mapSettings );
 
-    //! Get layer by its name
-    QgsMapLayer *getLayerByName( const QString &layerName ) const;
-
   signals:
     void mapSettingsChanged();
     void activeIndexChanged();
