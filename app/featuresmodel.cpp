@@ -23,9 +23,10 @@ FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
 {
 }
 
-QgsQuickFeatureLayerPair FeaturesModel::getFLPairFromFeatureName(const QString &featureName)
+QgsQuickFeatureLayerPair FeaturesModel::getFLPairFromFeatureName( const QString &featureName )
 {
-  for (QgsQuickFeatureLayerPair i : mFeatures) {
+  for ( QgsQuickFeatureLayerPair i : mFeatures )
+  {
     if ( mLoader.featureTitle( i ) == featureName )
       return i;
   }
