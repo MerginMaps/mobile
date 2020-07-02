@@ -179,6 +179,18 @@ ApplicationWindow {
         recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.IconSource)
     }
 
+    function selectFeature( feature, shouldUpdateExtent ) {
+      highlight.featureLayerPair = feature
+
+      if ( shouldUpdateExtent ) { // update extent to fit feature above preview panel
+          var panelOffsetRatio = featurePanel.previewHeight/window.height
+          __inputUtils.setExtentToFeature(feature, mapCanvas.mapSettings, panelOffsetRatio)
+      }
+
+      highlight.visible = true
+      featurePanel.show_panel(feature, "ReadOnly", "preview" )
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -233,20 +245,11 @@ ApplicationWindow {
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
         var res = identifyKit.identifyOne(screenPoint);
+
         if (res.valid) {
-          highlight.featureLayerPair = res
-
-          // update extent to fit feature above preview panel
-          if (mouse.y > window.height - featurePanel.previewHeight) {
-              var panelOffsetRatio = featurePanel.previewHeight/window.height
-              __inputUtils.setExtentToFeature(res, mapCanvas.mapSettings, panelOffsetRatio)
-          }
-
-          highlight.visible = true
-          featurePanel.show_panel(res, "ReadOnly", "preview" )
-        } else if (featurePanel.visible) {
-            // closes feature/preview panel when there is nothing to show
-            featurePanel.visible = false
+          selectFeature(res, ( mouse.y > window.height - featurePanel.previewHeight ) )
+        } else if (featurePanel.visible) { // closes feature/preview panel when there is nothing to show
+          featurePanel.visible = false
         }
       }
     }
