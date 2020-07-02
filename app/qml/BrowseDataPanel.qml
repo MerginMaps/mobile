@@ -2,32 +2,32 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 
 Item {
-  id: browseDataView
+  id: root
   visible: false
 
   StackView {
-    id: browseDataStackView
-    initialItem: layersListPanel
+    id: browseDataLayout
+    initialItem: browseDataLayersPanel
     anchors.fill: parent
   }
 
   Component {
-    id: layersListPanel
+    id: browseDataLayersPanel
 
-    LayersListPanel {
-      onBackButtonClicked: browseDataView.visible = false
+    BrowseDataLayersPanel {
+      onBackButtonClicked: root.visible = false
       onLayerClicked: {
-        __layerFeaturesModel.reloadDataFromLayerName( layerName )
-        browseDataStackView.push(layerAttributesPanel, {selectedLayer: layerName})
+        __featuresModel.reloadDataFromLayerName( layerName )
+        browseDataLayout.push(browseDataFeaturesPanel, {selectedLayer: layerName})
       }
     }
   }
 
   Component {
-    id: layerAttributesPanel
+    id: browseDataFeaturesPanel
 
-    LayerAttributesPanel {
-      onBackButtonClicked: browseDataStackView.pop()
+    BrowseDataFeaturesPanel {
+      onBackButtonClicked: browseDataLayout.pop()
     }
   }
 }

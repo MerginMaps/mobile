@@ -8,11 +8,11 @@ Item {
   signal backButtonClicked()
   
   Page {
-    id: attributesPage
+    id: featuresPage
     anchors.fill: parent
 
     header: PanelHeader {
-      id: attrPageHeader
+      id: featuresPageHeader
       height: InputStyle.rowHeightHeader
       width: parent.width
       color: InputStyle.clrPanelMain
@@ -23,7 +23,7 @@ Item {
       withBackButton: true
     }
 
-    FeatureListComponent {
+    BrowseDataView {
       width: parent.width
       height: parent.height
 

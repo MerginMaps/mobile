@@ -14,17 +14,17 @@
  ***************************************************************************/
 
 
-#include "layerfeaturesmodel.h"
+#include "featuresmodel.h"
 #include <QDebug>
 
-LayerFeaturesModel::LayerFeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
+FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
     mLayersModel( lm ),
     mLoader( loader )
 {
 }
 
-int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
+int FeaturesModel::rowCount( const QModelIndex &parent ) const
 {
   // For list models only the root node (an invalid parent) should return the list's size. For all
   // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
@@ -34,7 +34,7 @@ int LayerFeaturesModel::rowCount( const QModelIndex &parent ) const
   return mFeatures.count();
 }
 
-QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
+QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
   if ( row < 0 || row >= mFeatures.count() )
@@ -61,7 +61,7 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   return QVariant();
 }
 
-void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
+void FeaturesModel::reloadDataFromLayerName( const QString &layerName )
 {
   Q_UNUSED( layerName );
 
@@ -72,7 +72,7 @@ void LayerFeaturesModel::reloadDataFromLayerName( const QString &layerName )
     this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
 }
 
-void LayerFeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
+void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
   beginResetModel();
   mFeatures.clear();
@@ -104,7 +104,7 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
   return roleNames;
 }
 
-bool LayerFeaturesModel::setData( const QModelIndex &index, const QVariant &value, int role )
+bool FeaturesModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
   // Mocked method - for future when attributes will be editable (it changes data)
   Q_UNUSED( index );
@@ -113,7 +113,7 @@ bool LayerFeaturesModel::setData( const QModelIndex &index, const QVariant &valu
   return false;
 }
 
-Qt::ItemFlags LayerFeaturesModel::flags( const QModelIndex &index ) const
+Qt::ItemFlags FeaturesModel::flags( const QModelIndex &index ) const
 {
   // Mocked method - for future when attributes will be editable (it checks if data is editable)
   if ( !index.isValid() )

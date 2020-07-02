@@ -29,7 +29,7 @@
 #include "qgsgeometry.h"
 #include "qgswkbtypes.h"
 
-class LayerFeaturesModel : public QAbstractListModel
+class FeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -41,7 +41,7 @@ class LayerFeaturesModel : public QAbstractListModel
     };
 
   public:
-    explicit LayerFeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
+    explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
 
     // Basic functionality:
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;

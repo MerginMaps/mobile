@@ -6,10 +6,9 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 
 Item {
+  id: root
 
   signal itemClicked( string itemId )
-
-  id: root
 
   function chooseSourceImage(geometryType) {
     switch (geometryType) {
@@ -95,7 +94,6 @@ Item {
                 elide: Text.ElideRight
             }
         }
-
       }
     }
   }
