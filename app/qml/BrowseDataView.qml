@@ -8,7 +8,7 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: root
 
-  signal itemClicked( string itemId )
+  signal featureClicked( string featureName )
 
   function chooseSourceImage(geometryType) {
     switch (geometryType) {
@@ -36,7 +36,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.itemClicked( model.featureTitle )
+          root.featureClicked( model.featureTitle )
         }
       }
 

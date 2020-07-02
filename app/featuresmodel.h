@@ -44,6 +44,9 @@ class FeaturesModel : public QAbstractListModel
 
   public:
     explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
+    ~FeaturesModel() override {};
+
+    Q_INVOKABLE QgsQuickFeatureLayerPair getFLPairFromFeatureName( const QString &featureName );
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;

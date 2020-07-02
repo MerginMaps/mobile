@@ -575,6 +575,12 @@ ApplicationWindow {
       width: window.width
       height: window.height
       z: zPanel   // make sure items from here are on top of the Z-order
+
+      onFeatureSelectRequested: {
+        let pair = __featuresModel.getFLPairFromFeatureName( featureName )
+        if ( pair.valid )
+          selectFeature( pair, true )
+      }
     }
 
     MapThemePanel {

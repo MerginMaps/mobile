@@ -23,6 +23,15 @@ FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
 {
 }
 
+QgsQuickFeatureLayerPair FeaturesModel::getFLPairFromFeatureName(const QString &featureName)
+{
+  for (QgsQuickFeatureLayerPair i : mFeatures) {
+    if ( mLoader.featureTitle( i ) == featureName )
+      return i;
+  }
+  return QgsQuickFeatureLayerPair();
+}
+
 int FeaturesModel::rowCount( const QModelIndex &parent ) const
 {
   // For list models only the root node (an invalid parent) should return the list's size. For all

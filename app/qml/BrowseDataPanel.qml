@@ -5,6 +5,14 @@ Item {
   id: root
   visible: false
 
+  signal featureSelectRequested( string featureName )
+
+  function clearStackAndClose() {
+    if ( browseDataLayout.depth > 1 )
+      browseDataLayout.pop( null ) // pops everything besides an initialItem
+    root.visible = false
+  }
+
   StackView {
     id: browseDataLayout
     initialItem: browseDataLayersPanel
@@ -15,7 +23,7 @@ Item {
     id: browseDataLayersPanel
 
     BrowseDataLayersPanel {
-      onBackButtonClicked: root.visible = false
+      onBackButtonClicked: clearStackAndClose()
       onLayerClicked: {
         __featuresModel.reloadDataFromLayerName( layerName )
         browseDataLayout.push(browseDataFeaturesPanel, {selectedLayer: layerName})
@@ -28,6 +36,10 @@ Item {
 
     BrowseDataFeaturesPanel {
       onBackButtonClicked: browseDataLayout.pop()
+      onFeatureClicked: {
+        clearStackAndClose()
+        root.featureSelectRequested( featureName )
+      }
     }
   }
 }

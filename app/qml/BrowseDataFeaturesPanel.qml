@@ -4,8 +4,10 @@ import QtQuick.Controls 2.12
 Item {
   id: root
 
-  property string selectedLayer: ""
   signal backButtonClicked()
+  signal featureClicked( string featureName )
+
+  property string selectedLayer: ""
   
   Page {
     id: featuresPage
@@ -24,12 +26,11 @@ Item {
     }
 
     BrowseDataView {
+      id: browseDataView
       width: parent.width
       height: parent.height
 
-      onItemClicked: {
-        console.log("Clicked on item: " + itemId)
-      }
+      onFeatureClicked: root.featureClicked( featureName )
     }
   }
 }
