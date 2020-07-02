@@ -359,6 +359,8 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
+  QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )

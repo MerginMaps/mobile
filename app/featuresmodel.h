@@ -60,8 +60,13 @@ class FeaturesModel : public QAbstractListModel
     void reloadDataFromLayerName( const QString &layerName ); // mock
     void reloadDataFromLayer( QgsVectorLayer *layer );
 
+    void activeProjectChanged();
+    void activeMapThemeChanged( const QString &mapTheme );
+
 
   private:
+    void emptyData();
+
     QList<QgsQuickFeatureLayerPair> mFeatures;
     LayersModel &mLayersModel;
     Loader &mLoader;

@@ -95,7 +95,27 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
   endResetModel();
 }
 
-QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
+void FeaturesModel::activeProjectChanged()
+{
+  emptyData();
+}
+
+void FeaturesModel::activeMapThemeChanged(const QString &mapTheme)
+{
+  Q_UNUSED( mapTheme )
+  emptyData();
+}
+
+void FeaturesModel::emptyData()
+{
+  beginResetModel();
+
+  mFeatures.clear();
+
+  endResetModel();
+}
+
+QHash<int, QByteArray> FeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[featureTitle] = "featureTitle";
