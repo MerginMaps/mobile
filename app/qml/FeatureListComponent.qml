@@ -28,7 +28,7 @@ Item {
     implicitHeight: parent.height
     implicitWidth: parent.width
 
-    model: __layerFeaturesModel
+    model: __featuresModel
     delegate: Rectangle {
       id: itemContainer
       width: parent.width

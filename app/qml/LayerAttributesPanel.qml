@@ -6,7 +6,6 @@ Item {
 
   property string selectedLayer: ""
   signal backButtonClicked()
-
   
   Page {
     id: attributesPage
