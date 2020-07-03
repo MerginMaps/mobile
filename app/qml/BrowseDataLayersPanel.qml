@@ -24,19 +24,20 @@ Item {
       withBackButton: true
     }
     
-    Column {
-      spacing: 10 * QgsQuick.Utils.dp
-      anchors.centerIn: parent
-      
-      Button {
-        text: "Layer A"
-        onClicked: root.layerClicked("A")
-      }
-      
-      Button {
-        text: "Layer B"
-        onClicked: root.layerClicked("B")
-      }
+    LayerList {
+        height: layersListPage.height - layersPageHeader.height
+        width: parent.width
+        y: layersPageHeader.height
+        model: __layersModel
+
+        cellWidth: width
+        cellHeight: InputStyle.rowHeight
+        borderWidth: 1
+
+        onListItemClicked: {
+          var layerName = __layersModel.data(__layersModel.index(index, LayersModel.Name))
+          layerClicked(layerName)
+        }
     }
   }
 }

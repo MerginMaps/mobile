@@ -42,5 +42,6 @@
         <file>BrowseDataFeaturesPanel.qml</file>
         <file>BrowseDataLayersPanel.qml</file>
         <file>BrowseDataView.qml</file>
+        <file>LayerList.qml</file>
     </qresource>
 </RCC>
