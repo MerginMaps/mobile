@@ -32,16 +32,17 @@ class FeaturesModel : public QAbstractListModel
     enum roleNames
     {
       FeatureTitle = Qt::UserRole + 1,
+      FeatureId,
       Description, // secondary text in list view
-      GeometryType // type of geometry (point, line, ..)
+      GeometryType, // type of geometry (point, line, ..)
     };
 
   public:
     explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
     ~FeaturesModel() override {};
 
-    //! Function to get QgsQuickFeatureLayerPair by name
-    Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const QString &featureName );
+    //! Function to get QgsQuickFeatureLayerPair by feature id
+    Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const int &featureId );
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;

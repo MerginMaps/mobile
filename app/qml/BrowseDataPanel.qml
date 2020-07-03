@@ -5,7 +5,7 @@ Item {
   id: root
   visible: false
 
-  signal featureSelectRequested( string featureName )
+  signal featureSelectRequested( var featureId )
 
   function clearStackAndClose() {
     if ( browseDataLayout.depth > 1 )
@@ -38,7 +38,7 @@ Item {
       onBackButtonClicked: browseDataLayout.pop()
       onFeatureClicked: {
         clearStackAndClose()
-        root.featureSelectRequested( featureName )
+        root.featureSelectRequested( featureId )
       }
     }
   }

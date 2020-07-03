@@ -577,7 +577,7 @@ ApplicationWindow {
       z: zPanel   // make sure items from here are on top of the Z-order
 
       onFeatureSelectRequested: {
-        let pair = __featuresModel.featureLayerPair( featureName )
+        let pair = __featuresModel.featureLayerPair( featureId )
         if ( pair.valid )
           selectFeature( pair, true )
       }

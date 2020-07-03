@@ -5,7 +5,7 @@ Item {
   id: root
 
   signal backButtonClicked()
-  signal featureClicked( string featureName )
+  signal featureClicked( var featureId )
   
   Page {
     id: featuresPage
@@ -28,7 +28,7 @@ Item {
       width: parent.width
       height: parent.height
 
-      onFeatureClicked: root.featureClicked( featureName )
+      onFeatureClicked: root.featureClicked( featureId )
     }
   }
 }

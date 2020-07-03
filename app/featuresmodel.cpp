@@ -17,11 +17,11 @@ FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
 {
 }
 
-QgsQuickFeatureLayerPair FeaturesModel::featureLayerPair( const QString &featureName )
+QgsQuickFeatureLayerPair FeaturesModel::featureLayerPair( const int &featureId )
 {
   for ( QgsQuickFeatureLayerPair i : mFeatures )
   {
-    if ( mLoader.featureTitle( i ) == featureName )
+    if ( i.feature().id() == featureId )
       return i;
   }
   return QgsQuickFeatureLayerPair();
@@ -51,7 +51,14 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
   switch ( role )
   {
     case FeatureTitle:
-      return mLoader.featureTitle( feat );
+    {
+      const QString title = mLoader.featureTitle( feat );
+      if ( title.isEmpty() )
+        return QVariant( feat.feature().id() );
+      return QVariant( title );
+    }
+    case FeatureId:
+      return QVariant( feat.feature().id() );
     case Description:
       return QVariant( QString( "description" ) );
     case GeometryType:
@@ -121,6 +128,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[FeatureTitle] = QStringLiteral( "FeatureTitle" ).toLatin1();
+  roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[GeometryType] = QStringLiteral( "GeometryType" ).toLatin1();
   return roleNames;
