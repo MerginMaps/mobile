@@ -42,6 +42,7 @@
 #include "merginapistatus.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
+#include "featuresmodel.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -248,6 +249,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
+  qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
@@ -349,6 +351,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
+  FeaturesModel fm( lm, loader, nullptr );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -356,6 +359,8 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
+  QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
@@ -430,6 +435,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
+  engine.rootContext()->setContextProperty( "__featuresModel", &fm );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

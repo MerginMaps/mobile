@@ -39,8 +39,9 @@
         <file>LoginForm.qml</file>
         <file>LeftCheckBox.qml</file>
         <file>BrowseDataPanel.qml</file>
-        <file>LayerAttributesPanel.qml</file>
-        <file>LayersListPanel.qml</file>
+        <file>BrowseDataFeaturesPanel.qml</file>
+        <file>BrowseDataLayersPanel.qml</file>
+        <file>BrowseDataView.qml</file>
         <file>LayerList.qml</file>
     </qresource>
 </RCC>
