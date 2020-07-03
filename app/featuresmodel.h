@@ -1,10 +1,4 @@
 /***************************************************************************
-  layerfeaturesmodel.h
-  --------------------------------------
-  Date                 : July 2020
-  Copyright            : (C) 2020 by Tomas Mizera
-  Email                : tomas.mizera2 at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,8 +8,8 @@
  ***************************************************************************/
 
 
-#ifndef LAYERFEATURESMODEL_H
-#define LAYERFEATURESMODEL_H
+#ifndef FEATURESMODEL_H
+#define FEATURESMODEL_H
 
 #include <QAbstractListModel>
 #include "loader.h"
@@ -26,27 +20,28 @@
 #include "qgsfeaturerequest.h"
 #include "qgsfeatureiterator.h"
 #include "qgsquickfeaturelayerpair.h"
+#include "qstringliteral.h"
 
 /**
- * FeaturesModel class serves as a model for showing layer's feature data in browse data feature.
+ * List model to populate feature list from selected layer
  */
-
 class FeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
     enum roleNames
     {
-      featureTitle = Qt::UserRole + 1,
-      description, // secondary text in list view
-      geometryType // type of geometry (point, line, ..)
+      FeatureTitle = Qt::UserRole + 1,
+      Description, // secondary text in list view
+      GeometryType // type of geometry (point, line, ..)
     };
 
   public:
     explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
     ~FeaturesModel() override {};
 
-    Q_INVOKABLE QgsQuickFeatureLayerPair getFLPairFromFeatureName( const QString &featureName );
+    //! Function to get QgsQuickFeatureLayerPair by name
+    Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const QString &featureName );
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
@@ -74,4 +69,4 @@ class FeaturesModel : public QAbstractListModel
     Loader &mLoader;
 };
 
-#endif // LAYERFEATURESMODEL_H
+#endif // FEATURESMODEL_H

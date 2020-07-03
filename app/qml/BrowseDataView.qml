@@ -36,7 +36,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.featureClicked( model.featureTitle )
+          root.featureClicked( model.FeatureTitle )
         }
       }
 
@@ -47,14 +47,14 @@ Item {
         Item {
             id: iconContainer
             height: itemContainer.height
-            width: 40
+            width: 60 * QgsQuick.Utils.dp
 
             Image {
                 id: icon
                 anchors.centerIn: parent
-                anchors.leftMargin: 10
-                source: chooseSourceImage(model.geometryType)
-                width: 20
+                anchors.leftMargin: 10 * QgsQuick.Utils.dp
+                source: chooseSourceImage(model.GeometryType)
+                width: 30 * QgsQuick.Utils.dp
                 height: width
                 sourceSize.width: width
                 sourceSize.height: height
@@ -69,7 +69,7 @@ Item {
 
             Text {
                 id: featureTitleText
-                text: model.featureTitle
+                text: model.FeatureTitle
                 height: textContainer.height/2
                 width: textContainer.width
                 font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -82,7 +82,7 @@ Item {
             Text {
                 id: descriptionText
                 height: textContainer.height/2
-                text: model.description
+                text: model.Description
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left

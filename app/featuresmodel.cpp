@@ -1,10 +1,4 @@
 /***************************************************************************
-  layerfeaturesmodel.cpp
-  --------------------------------------
-  Date                 : July 2020
-  Copyright            : (C) 2020 by Tomas Mizera
-  Email                : tomas.mizera2 at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +17,7 @@ FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
 {
 }
 
-QgsQuickFeatureLayerPair FeaturesModel::getFLPairFromFeatureName( const QString &featureName )
+QgsQuickFeatureLayerPair FeaturesModel::featureLayerPair( const QString &featureName )
 {
   for ( QgsQuickFeatureLayerPair i : mFeatures )
   {
@@ -49,25 +43,22 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
   if ( row < 0 || row >= mFeatures.count() )
     return QVariant();
 
-  if ( role < roleNames::featureTitle || role > roleNames::geometryType )
-    return QVariant();
-
   if ( !index.isValid() )
     return QVariant();
 
-  QgsQuickFeatureLayerPair feat = mFeatures.at( index.row() );
+  const QgsQuickFeatureLayerPair feat = mFeatures.at( index.row() );
 
   switch ( role )
   {
-    case featureTitle:
+    case FeatureTitle:
       return mLoader.featureTitle( feat );
-    case description:
+    case Description:
       return QVariant( QString( "description" ) );
-    case geometryType:
+    case GeometryType:
       return QVariant( feat.feature().geometry().type() );
+    default:
+      return QVariant();
   }
-
-  return QVariant();
 }
 
 void FeaturesModel::reloadDataFromLayerName( const QString &layerName )
@@ -129,9 +120,9 @@ void FeaturesModel::emptyData()
 QHash<int, QByteArray> FeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-  roleNames[featureTitle] = "featureTitle";
-  roleNames[description] = "description";
-  roleNames[geometryType] = "geometryType";
+  roleNames[FeatureTitle] = QStringLiteral( "FeatureTitle" ).toLatin1();
+  roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
+  roleNames[GeometryType] = QStringLiteral( "GeometryType" ).toLatin1();
   return roleNames;
 }
 

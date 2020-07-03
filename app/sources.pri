@@ -1,5 +1,5 @@
 SOURCES += \
-  $$PWD/featuresmodel.cpp \
+featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
@@ -29,7 +29,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
-  $$PWD/featuresmodel.h \
+featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
