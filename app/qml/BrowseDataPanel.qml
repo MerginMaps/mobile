@@ -25,8 +25,8 @@ Item {
     BrowseDataLayersPanel {
       onBackButtonClicked: clearStackAndClose()
       onLayerClicked: {
-        __featuresModel.reloadDataFromLayerName( layerName )
-        browseDataLayout.push(browseDataFeaturesPanel, {selectedLayer: layerName})
+        __featuresModel.reloadDataFromLayer( layer )
+        browseDataLayout.push( browseDataFeaturesPanel )
       }
     }
   }

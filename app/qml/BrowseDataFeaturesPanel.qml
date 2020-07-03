@@ -6,8 +6,6 @@ Item {
 
   signal backButtonClicked()
   signal featureClicked( string featureName )
-
-  property string selectedLayer: ""
   
   Page {
     id: featuresPage
