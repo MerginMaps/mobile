@@ -2,31 +2,44 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 
 Item {
-  id: browseDataView
+  id: root
   visible: false
 
+  signal featureSelectRequested( var featureId )
+
+  function clearStackAndClose() {
+    if ( browseDataLayout.depth > 1 )
+      browseDataLayout.pop( null ) // pops everything besides an initialItem
+    root.visible = false
+  }
+
   StackView {
-    id: browseDataStackView
-    initialItem: layersListPanel
+    id: browseDataLayout
+    initialItem: browseDataLayersPanel
     anchors.fill: parent
   }
 
   Component {
-    id: layersListPanel
+    id: browseDataLayersPanel
 
-    LayersListPanel {
-      onBackButtonClicked: browseDataView.visible = false
+    BrowseDataLayersPanel {
+      onBackButtonClicked: clearStackAndClose()
       onLayerClicked: {
-        browseDataStackView.push(layerAttributesPanel, {selectedLayer: layerName})
+        __featuresModel.reloadDataFromLayer( layer )
+        browseDataLayout.push( browseDataFeaturesPanel )
       }
     }
   }
 
   Component {
-    id: layerAttributesPanel
+    id: browseDataFeaturesPanel
 
-    LayerAttributesPanel {
-      onBackButtonClicked: browseDataStackView.pop()
+    BrowseDataFeaturesPanel {
+      onBackButtonClicked: browseDataLayout.pop()
+      onFeatureClicked: {
+        clearStackAndClose()
+        root.featureSelectRequested( featureId )
+      }
     }
   }
 }

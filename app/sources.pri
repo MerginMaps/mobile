@@ -1,4 +1,5 @@
 SOURCES += \
+featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
@@ -28,6 +29,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \

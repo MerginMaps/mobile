@@ -1,12 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QgsQuick 0.1 as QgsQuick
+import lc 1.0
 
 Item {
   id: root
 
   signal backButtonClicked()
-  signal layerClicked(string layerName)
+  signal layerClicked(var layer)
 
   Page {
     id: layersListPage
@@ -25,18 +26,18 @@ Item {
     }
     
     LayerList {
-        height: layersListPage.height - layersPageHeader.height
+        implicitHeight: layersListPage.height - layersPageHeader.height
         width: parent.width
-        y: layersPageHeader.height
         model: __layersModel
 
         cellWidth: width
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
+        highlightingAllowed: false
 
         onListItemClicked: {
-          var layerName = __layersModel.data(__layersModel.index(index, LayersModel.Name))
-          layerClicked(layerName)
+          var layer = __layersModel.data(__layersModel.index(index), LayersModel.VectorLayer)
+          layerClicked( layer )
         }
     }
   }

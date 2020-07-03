@@ -8,6 +8,7 @@ import "."  // import InputStyle singleton
     property int cellWidth: width
     property int cellHeight: InputStyle.rowHeight
     property int borderWidth: 1
+    property bool highlightingAllowed: true
 
     signal listItemClicked(var index)
 
@@ -26,7 +27,7 @@ import "."  // import InputStyle singleton
           visible: height ? true : false
           anchors.leftMargin: InputStyle.panelMargin
           anchors.rightMargin: InputStyle.panelMargin
-          color: item.highlight ? secondaryColor : primaryColor
+          color: highlightingAllowed && item.highlight ? secondaryColor : primaryColor
 
           MouseArea {
             anchors.fill: parent
@@ -42,8 +43,8 @@ import "."  // import InputStyle singleton
               contentText: name ? name : ""
               imageSource: iconSource ? iconSource : ""
               overlayImage: false
-              highlight: __layersModel.activeIndex === index
-              showBorder: !__appSettings.defaultLayer || __layersModel.activeIndex - 1 !== index
+              highlight: highlightingAllowed && __layersModel.activeIndex === index
+              showBorder: highlightingAllowed ? !__appSettings.defaultLayer || __layersModel.activeIndex - 1 !== index : true
           }
       }
     }
