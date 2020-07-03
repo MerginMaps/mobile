@@ -33,6 +33,7 @@ Item {
         cellWidth: width
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
+        highlightingAllowed: false
 
         onListItemClicked: {
           var layer = __layersModel.data(__layersModel.index(index), LayersModel.VectorLayer)
