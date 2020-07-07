@@ -58,7 +58,7 @@ Drawer {
         height: layerPanel.height - header.height
         width: parent.width
         y: header.height
-        model: __layersModel
+        model: __recordingLayersModel
 
         cellWidth: width
         cellHeight: InputStyle.rowHeight

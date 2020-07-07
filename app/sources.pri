@@ -1,4 +1,6 @@
 SOURCES += \
+recordinglayersmodel.cpp \
+layersmodelref.cpp \
 featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
@@ -29,6 +31,8 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+recordinglayersmodel.h \
+layersmodelref.h \
 featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
