@@ -10,9 +10,8 @@
 
 #include "featuresmodel.h"
 
-FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
+FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
-    mLayersModel( lm ),
     mLoader( loader )
 {
 }
@@ -66,17 +65,6 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
     default:
       return QVariant();
   }
-}
-
-void FeaturesModel::reloadDataFromLayerName( const QString &layerName )
-{
-  Q_UNUSED( layerName );
-
-  // We mock layerName because it is not yet implemented
-  QgsMapLayer *mockedLayer = mLayersModel.activeLayer();
-
-  if ( mockedLayer && ( mockedLayer->type() == QgsMapLayerType::VectorLayer ) )
-    this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
 }
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
