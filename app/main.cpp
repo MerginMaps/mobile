@@ -43,6 +43,8 @@
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
+#include "recordinglayersmodel.h"
+#include "layersmodelref.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -352,6 +354,8 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   FeaturesModel fm( lm, loader, nullptr );
+  RecordingLayersModel rlm;
+  LayersModelRef lmr;
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -436,6 +440,8 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__featuresModel", &fm );
+  engine.rootContext()->setContextProperty( "__recordingLayersModel", &rlm );
+  engine.rootContext()->setContextProperty( "__layersModelRef", &lmr );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
