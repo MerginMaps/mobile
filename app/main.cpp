@@ -353,7 +353,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
-  FeaturesModel fm( lm, loader, nullptr );
+  FeaturesModel fm( loader, nullptr );
   RecordingLayersModel rlm;
   LayersModelRef lmr;
 
