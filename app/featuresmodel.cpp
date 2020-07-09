@@ -56,14 +56,18 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         return QVariant( feat.feature().id() );
       return QVariant( title );
     }
-    case FeatureId:
-      return QVariant( feat.feature().id() );
-    case Description:
-      return QVariant( QString( "description" ) );
-    case GeometryType:
-      return QVariant( feat.feature().geometry().type() );
-    default:
-      return QVariant();
+    case FeatureId: return QVariant( feat.feature().id() );
+    case Description: return QVariant( QString( "description" ) );
+    case GeometryType: return QVariant( feat.feature().geometry().type() );
+    case IconSource:
+      switch ( feat.feature().geometry().type() )
+      {
+        case QgsWkbTypes::GeometryType::PointGeometry: return QVariant( "mIconPointLayer.svg" );
+        case QgsWkbTypes::GeometryType::LineGeometry: return QVariant( "mIconLineLayer.svg" );
+        case QgsWkbTypes::GeometryType::PolygonGeometry: return QVariant( "mIconPolygonLayer.svg" );
+        default: return QVariant( "" );
+      }
+    default: return QVariant();
   }
 }
 
@@ -119,6 +123,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[GeometryType] = QStringLiteral( "GeometryType" ).toLatin1();
+  roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
   return roleNames;
 }
 
