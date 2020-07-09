@@ -7,7 +7,7 @@ Item {
   id: root
 
   signal backButtonClicked()
-  signal layerClicked(var layer)
+  signal layerClicked( var index )
 
   Page {
     id: layersListPage
@@ -28,16 +28,16 @@ Item {
     LayerList {
         implicitHeight: layersListPage.height - layersPageHeader.height
         width: parent.width
-        model: __layersModel
+        model: __browseDataLayersModel
 
         cellWidth: width
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
         highlightingAllowed: false
+        noLayersText: qsTr("No identifiable layers in the project!")
 
         onListItemClicked: {
-          var layer = __layersModel.data(__layersModel.index(index), LayersModel.VectorLayer)
-          layerClicked( layer )
+          layerClicked( index )
         }
     }
   }

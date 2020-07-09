@@ -29,6 +29,7 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
+#include "qgsmaplayerproxymodel.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -44,7 +45,7 @@
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
 #include "recordinglayersmodel.h"
-#include "layersmodelref.h"
+#include "browsedatalayersmodel.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -252,6 +253,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
+  qmlRegisterUncreatableType<BrowseDataLayersModel>( "lc", 1, 0, "BrowseDataLayersModel", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
@@ -354,8 +356,15 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   FeaturesModel fm( loader, nullptr );
-  RecordingLayersModel rlm;
-  LayersModelRef lmr;
+  BrowseDataLayersModel bdlpm;
+
+  // Set model for active layer selection
+  QgsMapLayerProxyModel rlm;
+  rlm.setFilters(
+    QgsMapLayerProxyModel::Filter::WritableLayer |
+    QgsMapLayerProxyModel::Filter::HasGeometry |
+    QgsMapLayerProxyModel::Filter::VectorLayer
+  );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -441,7 +450,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__featuresModel", &fm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &rlm );
-  engine.rootContext()->setContextProperty( "__layersModelRef", &lmr );
+  engine.rootContext()->setContextProperty( "__browseDataLayersModel", &bdlpm );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
