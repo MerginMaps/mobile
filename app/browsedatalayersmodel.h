@@ -18,20 +18,26 @@
 #include "qgsvectorlayer.h"
 #include "qgsmaplayer.h"
 
+enum ModelTypes
+{
+  ActiveLayerSelection,
+  BrowseDataLayerSelection
+};
+
 class BrowseDataLayersModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
   public:
-    BrowseDataLayersModel();
+    BrowseDataLayersModel( ModelTypes proxyMode );
 
-    enum layerRoles
+    enum LayerRoles
     {
       LayerNameRole = Qt::UserRole + 100, //! Reserve for QgsMapLayerModel roles
       VectorLayerRole,
       IconSourceRole
     };
-    Q_ENUMS( layerRoles )
+    Q_ENUMS( LayerRoles )
 
     //! Methods needed from QgsMapLayerProxyModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
@@ -40,6 +46,7 @@ class BrowseDataLayersModel : public QgsMapLayerProxyModel
 
   private:
     virtual bool layersFilter( int source_row, const QModelIndex &source_parent ) const;
+    ModelTypes mModelType;
 };
 
 #endif // BROWSEDATALAYERSMODEL_H
