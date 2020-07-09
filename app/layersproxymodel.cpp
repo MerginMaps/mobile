@@ -8,14 +8,14 @@
 ***************************************************************************/
 
 
-#include "browsedatalayersmodel.h"
+#include "layersproxymodel.h"
 
-BrowseDataLayersModel::BrowseDataLayersModel( ModelTypes modelType ) :
+LayersProxyModel::LayersProxyModel( ModelTypes modelType ) :
   mModelType( modelType )
 {
 }
 
-QVariant BrowseDataLayersModel::data( const QModelIndex &index, int role ) const
+QVariant LayersProxyModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() )
     return QVariant();
@@ -33,7 +33,7 @@ QVariant BrowseDataLayersModel::data( const QModelIndex &index, int role ) const
 
   switch ( role )
   {
-    case LayerNameRole: return vectorLayer ? vectorLayer->name() : QVariant();
+    case LayerNameRole: return layer->name();
     case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
     case IconSourceRole:
     {
@@ -53,41 +53,10 @@ QVariant BrowseDataLayersModel::data( const QModelIndex &index, int role ) const
       else return "mIconRaster.svg";
     }
   }
-
   return QVariant();
 }
 
-bool BrowseDataLayersModel::layersFilter( int source_row, const QModelIndex &source_parent ) const
-{
-  QModelIndex index = sourceLayerModel()->index( source_row, 0, source_parent );
-  QgsMapLayer *layer = sourceLayerModel()->layerFromIndex( index );
-
-  bool isIdentifiable = layer->flags() & QgsMapLayer::LayerFlag::Identifiable;
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  if ( vectorLayer && isIdentifiable )
-  {
-    bool hasGeometry = vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::Type::Unknown;
-    if ( hasGeometry )
-      return true;
-  }
-  return false;
-}
-
-bool BrowseDataLayersModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
-{
-  if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
-    return false;
-
-  switch ( mModelType )
-  {
-    case ActiveLayerSelection: return true;
-    case BrowseDataLayerSelection: return layersFilter( source_row, source_parent );
-    default: return true;
-  }
-}
-
-QHash<int, QByteArray> BrowseDataLayersModel::roleNames() const
+QHash<int, QByteArray> LayersProxyModel::roleNames() const
 {
   QHash<int, QByteArray> roles = sourceLayerModel()->roleNames();
   roles[LayerNameRole] = QStringLiteral( "layerName" ).toLatin1();
@@ -95,3 +64,50 @@ QHash<int, QByteArray> BrowseDataLayersModel::roleNames() const
   roles[VectorLayerRole] = QStringLiteral( "vectorLayer" ).toLatin1();
   return roles;
 }
+
+bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
+{
+  if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
+    return false;
+
+  // get layer from row and parent index
+  QModelIndex index = sourceLayerModel()->index( source_row, 0, source_parent );
+  QgsMapLayer *layer = sourceLayerModel()->layerFromIndex( index );
+
+  switch ( mModelType )
+  {
+    case ActiveLayerSelection: return recordingAllowed( layer );
+    case BrowseDataLayerSelection: return browsingAllowed( layer );
+    default: return true; // by default accept all layers
+  }
+}
+
+bool layerHasGeometry( const QgsVectorLayer *layer )
+{
+  if ( !layer || !layer->isValid() )
+    return false;
+  return layer->wkbType() != QgsWkbTypes::NoGeometry && layer->wkbType() != QgsWkbTypes::Type::Unknown;
+}
+
+bool LayersProxyModel::recordingAllowed( QgsMapLayer *layer ) const
+{
+  if ( !layer || !layer->isValid() )
+    return false;
+
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  return ( vectorLayer && !vectorLayer->readOnly() && layerHasGeometry( vectorLayer ) );
+}
+
+bool LayersProxyModel::browsingAllowed( QgsMapLayer *layer ) const
+{
+  if ( !layer || !layer->isValid() )
+    return false;
+
+  bool isIdentifiable = layer->flags() & QgsMapLayer::LayerFlag::Identifiable;
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  return ( vectorLayer && isIdentifiable && layerHasGeometry( vectorLayer ) );
+}
+
+

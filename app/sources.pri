@@ -1,5 +1,5 @@
 SOURCES += \
-browsedatalayersmodel.cpp \
+layersproxymodel.cpp \
 featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
@@ -30,7 +30,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
-browsedatalayersmodel.h \
+layersproxymodel.h \
 featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
