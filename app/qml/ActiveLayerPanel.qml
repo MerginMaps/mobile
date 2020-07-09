@@ -65,7 +65,7 @@ Drawer {
         borderWidth: 1
 
         onListItemClicked: {
-          __loader.setActiveLayer(index)
+          __loader.setActiveLayer( index )
           layerPanel.visible = false
         }
     }

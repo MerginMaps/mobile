@@ -10,8 +10,8 @@ Item {
 
   signal featureClicked( var featureId )
 
-  function chooseSourceImage(geometryType) {
-    switch (geometryType) {
+  function chooseSourceImage( geometryType ) {
+    switch ( geometryType ) {
     case 0:
      return InputStyle.vectorPointIcon
     case 1:
@@ -53,7 +53,7 @@ Item {
                 id: icon
                 anchors.centerIn: parent
                 anchors.leftMargin: 10 * QgsQuick.Utils.dp
-                source: chooseSourceImage(model.GeometryType)
+                source: chooseSourceImage( model.GeometryType )
                 width: 30 * QgsQuick.Utils.dp
                 height: width
                 sourceSize.width: width

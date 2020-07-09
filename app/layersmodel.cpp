@@ -174,7 +174,7 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
 QHash<int, QByteArray> LayersModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-  roleNames[Name] = "name";
+  roleNames[Name] = "layerName";
   roleNames[isVector] = "isVector";
   roleNames[isReadOnly] = "isReadOnly";
   roleNames[IconSource] = "iconSource";
