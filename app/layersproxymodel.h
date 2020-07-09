@@ -21,16 +21,18 @@
 enum ModelTypes
 {
   ActiveLayerSelection,
-  BrowseDataLayerSelection
+  BrowseDataLayerSelection,
+  AllLayers
 };
 
-class BrowseDataLayersModel : public QgsMapLayerProxyModel
+class LayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
   public:
-    BrowseDataLayersModel( ModelTypes proxyMode );
+    LayersProxyModel( ModelTypes modelType = ModelTypes::AllLayers );
 
+    //! Additional roles, can be omitted when added to QGIS
     enum LayerRoles
     {
       LayerNameRole = Qt::UserRole + 100, //! Reserve for QgsMapLayerModel roles
@@ -39,13 +41,19 @@ class BrowseDataLayersModel : public QgsMapLayerProxyModel
     };
     Q_ENUMS( LayerRoles )
 
-    //! Methods needed from QgsMapLayerProxyModel
+    //! Methods overridden from QgsMapLayerProxyModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
   private:
-    virtual bool layersFilter( int source_row, const QModelIndex &source_parent ) const;
+
+    //! returns if input layer is capable of recording new features
+    bool recordingAllowed( QgsMapLayer *layer ) const;
+
+    //! filters if input layer should be visible for browsing
+    bool browsingAllowed( QgsMapLayer *layer ) const;
+
     ModelTypes mModelType;
 };
 
