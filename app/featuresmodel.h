@@ -34,6 +34,7 @@ class FeaturesModel : public QAbstractListModel
       FeatureId,
       Description, // secondary text in list view
       GeometryType, // type of geometry (point, line, ..)
+      IconSource
     };
 
   public:

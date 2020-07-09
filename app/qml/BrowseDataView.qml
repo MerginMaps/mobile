@@ -10,19 +10,6 @@ Item {
 
   signal featureClicked( var featureId )
 
-  function chooseSourceImage( geometryType ) {
-    switch ( geometryType ) {
-    case 0:
-     return InputStyle.vectorPointIcon
-    case 1:
-      return InputStyle.vectorLineIcon
-    case 2:
-      return InputStyle.vectorPolygonIcon
-    default:
-      return InputStyle.vectorPolygonIcon
-    }
-  }
-
   ListView {
     implicitHeight: parent.height
     implicitWidth: parent.width
@@ -53,7 +40,7 @@ Item {
                 id: icon
                 anchors.centerIn: parent
                 anchors.leftMargin: 10 * QgsQuick.Utils.dp
-                source: chooseSourceImage( model.GeometryType )
+                source: model.IconSource
                 width: 30 * QgsQuick.Utils.dp
                 height: width
                 sourceSize.width: width
