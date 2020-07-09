@@ -44,7 +44,6 @@
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
-#include "recordinglayersmodel.h"
 #include "browsedatalayersmodel.h"
 
 #ifdef INPUT_TEST
@@ -356,15 +355,8 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   FeaturesModel fm( loader, nullptr );
-  BrowseDataLayersModel bdlpm;
-
-  // Set model for active layer selection
-  QgsMapLayerProxyModel rlm;
-  rlm.setFilters(
-    QgsMapLayerProxyModel::Filter::WritableLayer |
-    QgsMapLayerProxyModel::Filter::HasGeometry |
-    QgsMapLayerProxyModel::Filter::VectorLayer
-  );
+  BrowseDataLayersModel bdlpm( ModelTypes::BrowseDataLayerSelection );
+  BrowseDataLayersModel rlm( ModelTypes::ActiveLayerSelection );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
