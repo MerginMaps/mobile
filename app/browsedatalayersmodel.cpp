@@ -10,7 +10,8 @@
 
 #include "browsedatalayersmodel.h"
 
-BrowseDataLayersModel::BrowseDataLayersModel()
+BrowseDataLayersModel::BrowseDataLayersModel( ModelTypes modelType ) :
+  mModelType( modelType )
 {
 }
 
@@ -78,7 +79,12 @@ bool BrowseDataLayersModel::filterAcceptsRow( int source_row, const QModelIndex 
   if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
     return false;
 
-  return layersFilter( source_row, source_parent );
+  switch ( mModelType )
+  {
+    case ActiveLayerSelection: return true;
+    case BrowseDataLayerSelection: return layersFilter( source_row, source_parent );
+    default: return true;
+  }
 }
 
 QHash<int, QByteArray> BrowseDataLayersModel::roleNames() const
