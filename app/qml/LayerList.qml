@@ -46,8 +46,8 @@ ListView {
             contentText: layerName ? layerName : ""
             imageSource: iconSource ? iconSource : ""
             overlayImage: false
-            highlight: highlightingAllowed && __layersModel.activeIndex === index
-            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || __layersModel.activeIndex - 1 !== index : true
+            highlight: highlightingAllowed && __activeLayer.index === index
+            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || __activeLayer.index - 1 !== index : true
         }
     }
   }
