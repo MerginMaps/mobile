@@ -10,59 +10,27 @@
 
 #include "layersproxymodel.h"
 
-LayersProxyModel::LayersProxyModel( ModelTypes modelType ) :
-  mModelType( modelType )
+LayersProxyModel::LayersProxyModel( ALayersModel *model, ModelTypes modelType ) :
+  mModelType( modelType ),
+  mModel( model )
 {
-}
+  setSourceModel( mModel );
 
-QVariant LayersProxyModel::data( const QModelIndex &index, int role ) const
-{
-  if ( !index.isValid() )
-    return QVariant();
-
-  if ( role < LayerNameRole ) // if requested role from parent
-    return QgsMapLayerProxyModel::data( index, role );
-
-  QgsVectorLayer *vectorLayer;
-  QgsMapLayer *layer;
-
-  layer = sourceLayerModel()->layerFromIndex( index );
-  if ( !layer || !layer->isValid() ) return QVariant();
-
-  vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  switch ( role )
+  switch ( mModelType )
   {
-    case LayerNameRole: return layer->name();
-    case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
-    case IconSourceRole:
-    {
-      if ( vectorLayer )
-      {
-        QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
-        switch ( type )
-        {
-          case QgsWkbTypes::GeometryType::PointGeometry: return "mIconPointLayer.svg";
-          case QgsWkbTypes::GeometryType::LineGeometry: return "mIconLineLayer.svg";
-          case QgsWkbTypes::GeometryType::PolygonGeometry: return "mIconPolygonLayer.svg";
-          case QgsWkbTypes::GeometryType::UnknownGeometry: return "";
-          case QgsWkbTypes::GeometryType::NullGeometry: return "";
-        }
-        return QVariant();
-      }
-      else return "mIconRaster.svg";
-    }
+    case MapSettingsLayers:
+      filterFunction = [this]( QgsMapLayer * layer ) { return layerVisible( layer ); };
+      break;
+    case ActiveLayerSelection:
+      filterFunction = [this]( QgsMapLayer * layer ) { return recordingAllowed( layer ); };
+      break;
+    case BrowseDataLayerSelection:
+      filterFunction = [this]( QgsMapLayer * layer ) { return browsingAllowed( layer ); };
+      break;
+    default:
+      filterFunction = []( QgsMapLayer * ) { return true; };
+      break;
   }
-  return QVariant();
-}
-
-QHash<int, QByteArray> LayersProxyModel::roleNames() const
-{
-  QHash<int, QByteArray> roles = sourceLayerModel()->roleNames();
-  roles[LayerNameRole] = QStringLiteral( "layerName" ).toLatin1();
-  roles[IconSourceRole] = QStringLiteral( "iconSource" ).toLatin1();
-  roles[VectorLayerRole] = QStringLiteral( "vectorLayer" ).toLatin1();
-  return roles;
 }
 
 bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
@@ -71,15 +39,10 @@ bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &sour
     return false;
 
   // get layer from row and parent index
-  QModelIndex index = sourceLayerModel()->index( source_row, 0, source_parent );
-  QgsMapLayer *layer = sourceLayerModel()->layerFromIndex( index );
+  QModelIndex index = mModel->index( source_row, 0, source_parent );
+  QgsMapLayer *layer = mModel->layerFromIndex( index );
 
-  switch ( mModelType )
-  {
-    case ActiveLayerSelection: return recordingAllowed( layer );
-    case BrowseDataLayerSelection: return browsingAllowed( layer );
-    default: return true; // by default accept all layers
-  }
+  return filterFunction( layer );
 }
 
 bool layerHasGeometry( const QgsVectorLayer *layer )
@@ -95,8 +58,7 @@ bool LayersProxyModel::recordingAllowed( QgsMapLayer *layer ) const
     return false;
 
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer && !vectorLayer->readOnly() && layerHasGeometry( vectorLayer ) );
+  return ( vectorLayer && !vectorLayer->readOnly() && layerHasGeometry( vectorLayer ) && layerVisible( layer ) );
 }
 
 bool LayersProxyModel::browsingAllowed( QgsMapLayer *layer ) const
@@ -110,4 +72,33 @@ bool LayersProxyModel::browsingAllowed( QgsMapLayer *layer ) const
   return ( vectorLayer && isIdentifiable && layerHasGeometry( vectorLayer ) );
 }
 
+bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const
+{
+  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
 
+  if ( layerTree )
+    return layerTree->isVisible();
+
+  return false;
+}
+
+QList<QgsMapLayer *> LayersProxyModel::layers() const
+{
+  QList<QgsMapLayer *> layers;
+
+  if ( !mModel )
+    return layers;
+
+  int layersCount = rowCount();
+
+  for ( int i = 0; i < layersCount; i++ )
+  {
+    QModelIndex ix = index( i, 0, QModelIndex() );
+    QgsMapLayer *l = mModel->layerFromIndex( ix );
+
+    if ( filterFunction( l ) )
+      layers << l;
+  }
+  return layers;
+}

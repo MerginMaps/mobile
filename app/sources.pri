@@ -1,4 +1,6 @@
 SOURCES += \
+activelayer.cpp \
+alayersmodel.cpp \
 layersproxymodel.cpp \
 featuresmodel.cpp \
 localprojectsmanager.cpp \
@@ -30,6 +32,8 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+activelayer.h \
+alayersmodel.h \
 layersproxymodel.h \
 featuresmodel.h \
 localprojectsmanager.h \

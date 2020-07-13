@@ -131,14 +131,14 @@ ApplicationWindow {
 
     function recordFeature() {
       var recordedPoint = getRecordedPoint()
-      if (digitizing.hasPointGeometry(__layersModel.activeLayer())) {
-          var pair = digitizing.pointFeatureFromPoint(recordedPoint, digitizing.useGpsPoint)
-          saveRecordedFeature(pair)
+      if ( digitizing.hasPointGeometry( __activeLayer.layer ) ) {
+          var pair = digitizing.pointFeatureFromPoint( recordedPoint, digitizing.useGpsPoint )
+          saveRecordedFeature( pair )
       } else {
-          if (!digitizing.recording) {
+          if ( !digitizing.recording ) {
               digitizing.startRecording()
           }
-          digitizing.addRecordPoint(recordedPoint, digitizing.useGpsPoint)
+          digitizing.addRecordPoint( recordedPoint, digitizing.useGpsPoint )
       }
     }
 
@@ -148,11 +148,11 @@ ApplicationWindow {
     }
 
     function showMessage(message) {
-        if (!__androidUtils.isAndroid) {
+        if ( !__androidUtils.isAndroid ) {
             popup.text = message
             popup.open()
         } else {
-            __androidUtils.showToast(message)
+            __androidUtils.showToast( message )
         }
     }
 
@@ -162,7 +162,7 @@ ApplicationWindow {
     }
 
     function updateRecordToolbar() {
-        recordToolbar.activeVectorLayer = __layersModel.activeLayer()
+        recordToolbar.activeVectorLayer = __activeLayer.layer
         var layer = recordToolbar.activeVectorLayer
         if (!layer)
         {
@@ -170,13 +170,13 @@ ApplicationWindow {
             return
         }
 
-        if (digitizing.hasPointGeometry(layer)) {
+        if ( digitizing.hasPointGeometry( layer ) ) {
             recordToolbar.pointLayerSelected = true
         } else {
             recordToolbar.pointLayerSelected = false
         }
-        recordToolbar.activeLayerName = __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.Name)
-        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.IconSource)
+        recordToolbar.activeLayerName = layer.name
+        recordToolbar.activeLayerIcon = __recordingLayersModel.data( __activeLayer.modelIndex, ALayersModel.IconSourceRole )
     }
 
     function selectFeature( feature, shouldUpdateExtent ) {
@@ -214,7 +214,7 @@ ApplicationWindow {
 
         __loader.positionKit = positionKit
         __loader.recording = digitizing.recording
-        __layersModel.mapSettings= mapCanvas.mapSettings
+        __layersModel.mapSettings = mapCanvas.mapSettings
 
         console.log("Completed Running!")
     }
@@ -411,19 +411,18 @@ ApplicationWindow {
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            if (__layersModel.noOfEditableLayers() > 0) {
+            if ( __recordingLayersModel.rowCount() > 0 ) {
                 stateManager.state = "record"
             } else {
                 popup.text = qsTr("No editable layers!")
                 popup.open()
             }
-
         }
     }
 
     Connections {
-      target: __layersModel
-      onActiveIndexChanged: {
+      target: __activeLayer
+      onActiveLayerChanged: {
         updateRecordToolbar()
       }
     }

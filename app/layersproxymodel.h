@@ -17,11 +17,17 @@
 #include "qgsmaplayermodel.h"
 #include "qgsvectorlayer.h"
 #include "qgsmaplayer.h"
+#include "qgsproject.h"
+#include "qgslayertree.h"
+#include "qgslayertreelayer.h"
+
+#include "alayersmodel.h"
 
 enum ModelTypes
 {
   ActiveLayerSelection,
   BrowseDataLayerSelection,
+  MapSettingsLayers,
   AllLayers
 };
 
@@ -30,21 +36,12 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_OBJECT
 
   public:
-    LayersProxyModel( ModelTypes modelType = ModelTypes::AllLayers );
+    LayersProxyModel( ALayersModel *model, ModelTypes modelType = ModelTypes::AllLayers );
 
-    //! Additional roles, can be omitted when added to QGIS
-    enum LayerRoles
-    {
-      LayerNameRole = Qt::UserRole + 100, //! Reserve for QgsMapLayerModel roles
-      VectorLayerRole,
-      IconSourceRole
-    };
-    Q_ENUMS( LayerRoles )
-
-    //! Methods overridden from QgsMapLayerProxyModel
-    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
-    QHash<int, QByteArray> roleNames() const override;
+
+    //! Returns layers regarding model type
+    Q_INVOKABLE QList<QgsMapLayer *> layers() const;
 
   private:
 
@@ -54,7 +51,13 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     //! filters if input layer should be visible for browsing
     bool browsingAllowed( QgsMapLayer *layer ) const;
 
+    //! filters if input layer should be visible in map settings
+    bool layerVisible( QgsMapLayer *layer ) const;
+
     ModelTypes mModelType;
+    ALayersModel *mModel;
+
+    std::function<bool( QgsMapLayer * )> filterFunction;
 };
 
 #endif // BROWSEDATALAYERSMODEL_H
