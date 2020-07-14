@@ -27,7 +27,7 @@
 - [ ] Zoom to project shows the correct extent
 - [ ] Map themes shows the correct themes (use public project: saber\test_map_theme)
 - [ ] User can switch between map themes (use public project: saber\test_map_theme)
-- [ ] CRS OTF works correctly ((use public project: saber\test_projection)
+- [ ] CRS OTF works correctly (use public project: saber\test_projection)
 - [ ] Settings has the correct customisations
 - [ ] Correct versions is shown
 
