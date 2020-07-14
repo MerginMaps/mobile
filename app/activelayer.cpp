@@ -33,7 +33,7 @@ QModelIndex ActiveLayer::modelIndex() const
 QgsVectorLayer *ActiveLayer::layer() const
 {
   QModelIndex index = modelIndex();
-  QgsMapLayer* layer = nullptr;
+  QgsMapLayer *layer = nullptr;
 
   if ( index.isValid() )
     layer = mModel.data( index, ALayersModel::VectorLayerRole ).value<QgsMapLayer *>();
@@ -43,18 +43,19 @@ QgsVectorLayer *ActiveLayer::layer() const
 
 QString ActiveLayer::layerId() const
 {
-  return mModel.data( modelIndex(), QgsMapLayerModel::LayerIdRole).toString();
+  return mModel.data( modelIndex(), QgsMapLayerModel::LayerIdRole ).toString();
 }
 
 void ActiveLayer::activeMapThemeChanged()
 {
   mModel.invalidate();
-  setActiveLayer( -1 );
 }
 
 void ActiveLayer::setActiveLayer( int index )
 {
-  if ( index < mModel.rowCount() )
+  if ( index < 0 ) // only reset index
+    mIndex = index;
+  else if ( index < mModel.rowCount() )
   {
     if ( mIndex != index )
     {
