@@ -20,7 +20,7 @@ Item {
 
   function loadFeaturesFromLayerIndex( index ) {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
-    let layer = __browseDataLayersModel.data( modelIndex, ALayersModel.VectorLayerRole )
+    let layer = __browseDataLayersModel.data( modelIndex, LayersModel.VectorLayerRole )
 
     __featuresModel.reloadDataFromLayer( layer )
   }

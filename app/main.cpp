@@ -36,7 +36,6 @@
 #include "inpututils.h"
 #include "positiondirection.h"
 #include "projectsmodel.h"
-#include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
@@ -45,7 +44,7 @@
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
 #include "layersproxymodel.h"
-#include "alayersmodel.h"
+#include "layersmodel.h"
 #include "activelayer.h"
 
 #ifdef INPUT_TEST
@@ -247,7 +246,6 @@ static void init_proj( const QString &pkgPath )
 void initDeclarative()
 {
   qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
-  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
@@ -255,7 +253,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "BrowseDataLayersModel", "" );
-  qmlRegisterUncreatableType<ALayersModel>( "lc", 1, 0, "ALayersModel", "" );
+  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
@@ -359,13 +357,13 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjects );
 
   // layer models
-  ALayersModel alm;
-  LayersProxyModel browseLpm( &alm, ModelTypes::BrowseDataLayerSelection );
-  LayersProxyModel recordingLpm( &alm, ModelTypes::ActiveLayerSelection );
+  LayersModel lm;
+  LayersProxyModel browseLpm( &lm, ModelTypes::BrowseDataLayerSelection );
+  LayersProxyModel recordingLpm( &lm, ModelTypes::ActiveLayerSelection );
 
   ActiveLayer al( recordingLpm, as );
   Loader loader( mtm, as, al );
-  FeaturesModel fm( loader, nullptr );
+  FeaturesModel fm( loader );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -453,7 +451,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__featuresModel", &fm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
-  engine.rootContext()->setContextProperty( "__aLayersmodel", &alm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
 
 #ifdef MOBILE_OS

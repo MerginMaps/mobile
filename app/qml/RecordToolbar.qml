@@ -36,7 +36,7 @@ Item {
 
     property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.layer
     property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
-    property string activeLayerIcon: __recordingLayersModel.data( __activeLayer.modelIndex, ALayersModel.IconSourceRole )
+    property string activeLayerIcon: __recordingLayersModel.data( __activeLayer.modelIndex, LayersModel.IconSourceRole )
 
     id: root
     onClose: visible = false

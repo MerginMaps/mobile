@@ -10,7 +10,7 @@
 
 #include "layersproxymodel.h"
 
-LayersProxyModel::LayersProxyModel( ALayersModel *model, ModelTypes modelType ) :
+LayersProxyModel::LayersProxyModel( LayersModel *model, ModelTypes modelType ) :
   mModelType( modelType ),
   mModel( model )
 {

@@ -21,7 +21,7 @@
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 
-#include "alayersmodel.h"
+#include "layersmodel.h"
 
 enum ModelTypes
 {
@@ -35,7 +35,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_OBJECT
 
   public:
-    LayersProxyModel( ALayersModel *model, ModelTypes modelType = ModelTypes::AllLayers );
+    LayersProxyModel( LayersModel *model, ModelTypes modelType = ModelTypes::AllLayers );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
@@ -58,7 +58,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     bool layerVisible( QgsMapLayer *layer ) const;
 
     ModelTypes mModelType;
-    ALayersModel *mModel;
+    LayersModel *mModel;
 
     std::function<bool( QgsMapLayer * )> filterFunction;
 };

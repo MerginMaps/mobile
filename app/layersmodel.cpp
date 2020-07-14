@@ -8,14 +8,13 @@
  ***************************************************************************/
 
 
-#include "alayersmodel.h"
+#include "layersmodel.h"
 
-ALayersModel::ALayersModel()
+LayersModel::LayersModel()
 {
-
 }
 
-QVariant ALayersModel::data( const QModelIndex &index, int role ) const
+QVariant LayersModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() )
     return QVariant();
@@ -56,7 +55,7 @@ QVariant ALayersModel::data( const QModelIndex &index, int role ) const
   return QVariant();
 }
 
-QHash<int, QByteArray> ALayersModel::roleNames() const
+QHash<int, QByteArray> LayersModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QgsMapLayerModel::roleNames();
   roles[LayerNameRole] = QStringLiteral( "layerName" ).toLatin1();
