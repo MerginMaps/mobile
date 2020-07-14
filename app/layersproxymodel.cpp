@@ -18,9 +18,6 @@ LayersProxyModel::LayersProxyModel( ALayersModel *model, ModelTypes modelType ) 
 
   switch ( mModelType )
   {
-    case MapSettingsLayers:
-      filterFunction = [this]( QgsMapLayer * layer ) { return layerVisible( layer ); };
-      break;
     case ActiveLayerSelection:
       filterFunction = [this]( QgsMapLayer * layer ) { return recordingAllowed( layer ); };
       break;
@@ -69,7 +66,7 @@ bool LayersProxyModel::browsingAllowed( QgsMapLayer *layer ) const
   bool isIdentifiable = layer->flags() & QgsMapLayer::LayerFlag::Identifiable;
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
 
-  return ( vectorLayer && isIdentifiable && layerHasGeometry( vectorLayer ) );
+  return ( vectorLayer && isIdentifiable );
 }
 
 bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const

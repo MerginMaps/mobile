@@ -21,8 +21,6 @@
 #include "qgsproject.h"
 #include "qgsquickutils.h"
 #include "qgsquickpositionkit.h"
-#include "layersmodel.h"
-#include "layersproxymodel.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
@@ -37,7 +35,7 @@ class Loader: public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, ActiveLayer &activeLayer, LayersProxyModel &mapLayersModel, QObject *parent = nullptr );
+    explicit Loader( MapThemesModel &mapThemeModel, AppSettings &appSettings, ActiveLayer &activeLayer, QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -96,10 +94,8 @@ class Loader: public QObject
     bool mRecording = false;
 
     MapThemesModel &mMapThemeModel;
-    LayersModel &mLayersModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    LayersProxyModel &mMapLayersModel;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**

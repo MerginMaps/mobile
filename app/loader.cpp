@@ -25,18 +25,14 @@ const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_proje
 
 Loader::Loader(
   MapThemesModel &mapThemeModel
-  , LayersModel &layersModel
   , AppSettings &appSettings
   , ActiveLayer &activeLayer
-  , LayersProxyModel &mapLayersModel
   , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
-  , mLayersModel( layersModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
-  , mMapLayersModel( mapLayersModel )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -136,10 +132,25 @@ void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
 
 void Loader::setMapSettingsLayers() const
 {
-  if ( !mMapSettings )
-    return;
+  if ( !mProject || !mMapSettings ) return;
 
-  mMapSettings->setLayers( mMapLayersModel.layers() );
+  QgsLayerTreeGroup *root = mProject->layerTreeRoot();
+
+  // Get list of all visible and valid layers in the project
+  QList< QgsMapLayer * > allLayers;
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  {
+    if ( nodeLayer->isVisible() )
+    {
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer->isValid() )
+      {
+        allLayers << layer;
+      }
+    }
+  }
+
+  mMapSettings->setLayers( allLayers );
 }
 
 QgsQuickMapSettings *Loader::mapSettings() const

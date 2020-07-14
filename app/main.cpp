@@ -353,7 +353,6 @@ int main( int argc, char *argv[] )
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
   MapThemesModel mtm;
-  LayersModel lm;
   AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
@@ -363,10 +362,9 @@ int main( int argc, char *argv[] )
   ALayersModel alm;
   LayersProxyModel browseLpm( &alm, ModelTypes::BrowseDataLayerSelection );
   LayersProxyModel recordingLpm( &alm, ModelTypes::ActiveLayerSelection );
-  LayersProxyModel mapSettingsLpm( &alm, ModelTypes::MapSettingsLayers );
 
   ActiveLayer al( recordingLpm, as );
-  Loader loader( mtm, lm, as, al, mapSettingsLpm );
+  Loader loader( mtm, as, al );
   FeaturesModel fm( loader, nullptr );
 
   // Connections
@@ -447,7 +445,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
-  engine.rootContext()->setContextProperty( "__layersModel", &lm );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
