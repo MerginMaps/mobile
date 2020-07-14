@@ -173,7 +173,7 @@ void AppSettings::setDefaultMapTheme( const QString &value )
   }
 }
 
-void AppSettings::onActiveLayerChanged(const QString &layerName)
+void AppSettings::onActiveLayerChanged( const QString &layerName )
 {
   setDefaultLayer( layerName );
 }

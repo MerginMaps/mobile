@@ -22,6 +22,7 @@
 #include "qgsquickutils.h"
 #include "qgsquickpositionkit.h"
 #include "layersmodel.h"
+#include "layersproxymodel.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
@@ -33,9 +34,10 @@ class Loader: public QObject
     Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
+    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, ActiveLayer &activeLayer, QObject *parent = nullptr );
+    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, ActiveLayer &activeLayer, LayersProxyModel &mapLayersModel, QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -61,6 +63,15 @@ class Loader: public QObject
 
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
+
+    //! Gets map settings
+    QgsQuickMapSettings *mapSettings() const;
+
+    //! Sets map settings and loads the layer list from previously assigned map settings
+    void setMapSettings( QgsQuickMapSettings *mapSettings );
+
+    void setMapSettingsLayers() const;
+
   signals:
     void projectChanged();
     void projectReloaded();
@@ -71,10 +82,13 @@ class Loader: public QObject
     void loadingStarted();
     void loadingFinished();
 
+    void mapSettingsChanged();
+
   public slots:
     void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
+
   private:
     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
     QgsProject *mProject = nullptr;
@@ -85,6 +99,8 @@ class Loader: public QObject
     LayersModel &mLayersModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
+    LayersProxyModel &mMapLayersModel;
+    QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**
     * Reloads project.
@@ -93,7 +109,6 @@ class Loader: public QObject
     * otherwise used only for loading a new projects (evoked by a user).
     */
     bool forceLoad( const QString &filePath, bool force );
-
 };
 
 #endif // LOADER_H

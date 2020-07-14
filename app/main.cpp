@@ -366,7 +366,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel mapSettingsLpm( &alm, ModelTypes::MapSettingsLayers );
 
   ActiveLayer al( recordingLpm, as );
-  Loader loader( mtm, lm, as, al );
+  Loader loader( mtm, lm, as, al, mapSettingsLpm );
   FeaturesModel fm( loader, nullptr );
 
   // Connections

@@ -214,7 +214,7 @@ ApplicationWindow {
 
         __loader.positionKit = positionKit
         __loader.recording = digitizing.recording
-        __layersModel.mapSettings = mapCanvas.mapSettings
+        __loader.mapSettings = mapCanvas.mapSettings
 
         console.log("Completed Running!")
     }

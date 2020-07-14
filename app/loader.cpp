@@ -23,12 +23,20 @@
 
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-Loader::Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, ActiveLayer &activeLayer, QObject *parent )
-  : QObject( parent )
+Loader::Loader(
+  MapThemesModel &mapThemeModel
+  , LayersModel &layersModel
+  , AppSettings &appSettings
+  , ActiveLayer &activeLayer
+  , LayersProxyModel &mapLayersModel
+  , QObject *parent ) :
+
+  QObject( parent )
   , mMapThemeModel( mapThemeModel )
   , mLayersModel( layersModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
+  , mMapLayersModel( mapLayersModel )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -95,6 +103,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
 
     mActiveLayer.setActiveLayer( mAppSettings.defaultLayer() );
+    setMapSettingsLayers();
 
     emit projectReloaded();
   }
@@ -112,6 +121,30 @@ bool Loader::reloadProject( QString projectDir )
     return forceLoad( mProject->fileName(), true );
   }
   return false;
+}
+
+void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
+{
+  if ( mMapSettings == mapSettings )
+    return;
+
+  mMapSettings = mapSettings;
+  setMapSettingsLayers();
+
+  emit mapSettingsChanged();
+}
+
+void Loader::setMapSettingsLayers() const
+{
+  if ( !mMapSettings )
+    return;
+
+  mMapSettings->setLayers( mMapLayersModel.layers() );
+}
+
+QgsQuickMapSettings *Loader::mapSettings() const
+{
+  return mMapSettings;
 }
 
 void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
@@ -230,6 +263,7 @@ void Loader::setActiveMapTheme( int index )
   mAppSettings.setDefaultMapTheme( name );
 
   mActiveLayer.setActiveLayer( mAppSettings.defaultLayer() );
+  setMapSettingsLayers();
 }
 
 void Loader::appStateChanged( Qt::ApplicationState state )
