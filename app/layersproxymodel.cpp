@@ -1,11 +1,11 @@
 /***************************************************************************
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************/
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 
 #include "layersproxymodel.h"
@@ -101,4 +101,33 @@ QList<QgsMapLayer *> LayersProxyModel::layers() const
       layers << l;
   }
   return layers;
+}
+
+int LayersProxyModel::indexAccordingName( QString layerName ) const
+{
+  QList<QgsMapLayer *> _layers = layers();
+  int index = 0;
+
+  for ( QgsMapLayer *ix : _layers )
+  {
+    if ( ix->name() == layerName )
+    {
+      return index;
+    }
+    index++;
+  }
+
+  return -1;
+}
+
+int LayersProxyModel::firstUsableIndex() const
+{
+  QList<QgsMapLayer *> _layers = layers();
+
+  if ( _layers.size() > 0 )
+  {
+    return 0;
+  }
+
+  return -1;
 }

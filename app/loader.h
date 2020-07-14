@@ -24,6 +24,7 @@
 #include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
+#include "activelayer.h"
 
 
 class Loader: public QObject
@@ -34,7 +35,7 @@ class Loader: public QObject
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
 
   public:
-    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, QObject *parent = nullptr );
+    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, ActiveLayer &activeLayer, QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -57,11 +58,6 @@ class Loader: public QObject
      * \param index Represents row number in the map theme model.
      */
     Q_INVOKABLE void setActiveMapTheme( int index );
-    /**
-     * Updates active layer.
-     * \param index Represents row number in the layer model.
-     */
-    Q_INVOKABLE void setActiveLayer( int index );
 
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
@@ -88,6 +84,7 @@ class Loader: public QObject
     MapThemesModel &mMapThemeModel;
     LayersModel &mLayersModel;
     AppSettings &mAppSettings;
+    ActiveLayer &mActiveLayer;
 
     /**
     * Reloads project.

@@ -172,3 +172,8 @@ void AppSettings::setDefaultMapTheme( const QString &value )
     emit defaultMapThemeChanged();
   }
 }
+
+void AppSettings::onActiveLayerChanged(const QString &layerName)
+{
+  setDefaultLayer( layerName );
+}
