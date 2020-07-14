@@ -176,7 +176,7 @@ ApplicationWindow {
             recordToolbar.pointLayerSelected = false
         }
         recordToolbar.activeLayerName = layer.name
-        recordToolbar.activeLayerIcon = __recordingLayersModel.data( __activeLayer.modelIndex, ALayersModel.IconSourceRole )
+        recordToolbar.activeLayerIcon = __recordingLayersModel.data( __activeLayer.modelIndex, LayersModel.IconSourceRole )
     }
 
     function selectFeature( feature, shouldUpdateExtent ) {
@@ -186,7 +186,6 @@ ApplicationWindow {
           var panelOffsetRatio = featurePanel.previewHeight/window.height
           __inputUtils.setExtentToFeature(feature, mapCanvas.mapSettings, panelOffsetRatio)
       }
-
       highlight.visible = true
       featurePanel.show_panel(feature, "ReadOnly", "preview" )
     }

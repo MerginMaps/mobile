@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 
-#ifndef ALAYERSMODEL_H
-#define ALAYERSMODEL_H
+#ifndef LAYERSMODEL_H
+#define LAYERSMODEL_H
 
 #include <QObject>
 
@@ -17,11 +17,12 @@
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
 
-class ALayersModel : public QgsMapLayerModel
+class LayersModel : public QgsMapLayerModel
 {
     Q_OBJECT
+
   public:
-    ALayersModel();
+    LayersModel();
 
     enum LayerRoles
     {
@@ -36,4 +37,4 @@ class ALayersModel : public QgsMapLayerModel
     QHash<int, QByteArray> roleNames() const override;
 };
 
-#endif // ALAYERSMODEL_H
+#endif // LAYERSMODEL_H

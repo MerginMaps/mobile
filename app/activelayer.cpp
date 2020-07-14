@@ -36,7 +36,7 @@ QgsVectorLayer *ActiveLayer::layer() const
   QgsMapLayer *layer = nullptr;
 
   if ( index.isValid() )
-    layer = mModel.data( index, ALayersModel::VectorLayerRole ).value<QgsMapLayer *>();
+    layer = mModel.data( index, LayersModel::VectorLayerRole ).value<QgsMapLayer *>();
 
   return qobject_cast<QgsVectorLayer *>( layer );
 }
