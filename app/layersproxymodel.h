@@ -41,7 +41,11 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
     //! Returns layers regarding model type
-    Q_INVOKABLE QList<QgsMapLayer *> layers() const;
+    QList<QgsMapLayer *> layers() const;
+
+    int indexAccordingName( QString layerName ) const;
+
+    int firstUsableIndex() const;
 
   private:
 

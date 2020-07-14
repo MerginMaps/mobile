@@ -1,3 +1,13 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
 #include "activelayer.h"
 
 ActiveLayer::ActiveLayer( LayersProxyModel &model, AppSettings &appSettings ) :
@@ -14,20 +24,21 @@ int ActiveLayer::index() const
 
 QModelIndex ActiveLayer::modelIndex() const
 {
+  if ( mIndex < 0 )
+    return QModelIndex();
+
   return mModel.index( mIndex, 0 );
 }
 
-QgsMapLayer *ActiveLayer::layer() const
+QgsVectorLayer *ActiveLayer::layer() const
 {
   QModelIndex index = modelIndex();
-  QgsMapLayer* layer;
+  QgsMapLayer* layer = nullptr;
 
   if ( index.isValid() )
-    layer = mModel.data( index, QgsMapLayerModel::LayerRole ).value<QgsMapLayer *>();
-  else
-    layer = mModel.layers().at( 0 ); // first writable index
+    layer = mModel.data( index, ALayersModel::VectorLayerRole ).value<QgsMapLayer *>();
 
-  return layer;
+  return qobject_cast<QgsVectorLayer *>( layer );
 }
 
 QString ActiveLayer::layerId() const
@@ -37,23 +48,29 @@ QString ActiveLayer::layerId() const
 
 void ActiveLayer::activeMapThemeChanged()
 {
-  // TODO: react on map theme change ~ change active layer to default layer
-
   mModel.invalidate();
-  mIndex = -1;
+  setActiveLayer( -1 );
 }
 
 void ActiveLayer::setActiveLayer( int index )
 {
-  if ( index >= 0 && index < mModel.rowCount() )
+  if ( index < mModel.rowCount() )
   {
     if ( mIndex != index )
     {
       mIndex = index;
 
-//      mAppSettings.setDefaultLayer( name );
-
-      emit activeLayerChanged();
+      emit activeLayerChanged( layer()->name() );
     }
   }
+}
+
+void ActiveLayer::setActiveLayer( QString layerName )
+{
+  int index = mModel.indexAccordingName( layerName );
+
+  if ( index == -1 )
+    index = mModel.firstUsableIndex();
+
+  setActiveLayer( index );
 }

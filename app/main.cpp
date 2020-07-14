@@ -365,8 +365,8 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &alm, ModelTypes::ActiveLayerSelection );
   LayersProxyModel mapSettingsLpm( &alm, ModelTypes::MapSettingsLayers );
 
-  Loader loader( mtm, lm, as );
   ActiveLayer al( recordingLpm, as );
+  Loader loader( mtm, lm, as, al );
   FeaturesModel fm( loader, nullptr );
 
   // Connections
@@ -378,6 +378,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &al, &ActiveLayer::activeMapThemeChanged );
   QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
+  QObject::connect( &al, &ActiveLayer::activeLayerChanged, &as, &AppSettings::onActiveLayerChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
