@@ -27,7 +27,6 @@ enum ModelTypes
 {
   ActiveLayerSelection,
   BrowseDataLayerSelection,
-  MapSettingsLayers,
   AllLayers
 };
 
@@ -55,7 +54,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     //! filters if input layer should be visible for browsing
     bool browsingAllowed( QgsMapLayer *layer ) const;
 
-    //! filters if input layer should be visible in map settings
+    //! filters if input layer is visible in current map theme
     bool layerVisible( QgsMapLayer *layer ) const;
 
     ModelTypes mModelType;

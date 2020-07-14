@@ -7,7 +7,6 @@ localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
 projectsmodel.cpp \
-layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
@@ -39,7 +38,6 @@ featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
-layersmodel.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
