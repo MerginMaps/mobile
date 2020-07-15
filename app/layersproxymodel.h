@@ -8,8 +8,8 @@
 ***************************************************************************/
 
 
-#ifndef BROWSEDATALAYERSMODEL_H
-#define BROWSEDATALAYERSMODEL_H
+#ifndef LAYERSPROXYMODEL_H
+#define LAYERSPROXYMODEL_H
 
 #include <QObject>
 
@@ -75,4 +75,4 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     std::function<bool( QgsMapLayer * )> filterFunction;
 };
 
-#endif // BROWSEDATALAYERSMODEL_H
+#endif // LAYERSPROXYMODEL_H
