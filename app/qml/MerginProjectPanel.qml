@@ -594,6 +594,11 @@ Item {
     anchors.bottom: parent.bottom
     color: InputStyle.clrPanelBackground
 
+    MouseArea {
+      anchors.fill: parent
+      onClicked: {} // dont do anything, just do not let click event propagate
+    }
+
     onHighlightedChanged: {
       searchField.text = ""
       if (toolbar.highlighted === homeBtn.text) {
