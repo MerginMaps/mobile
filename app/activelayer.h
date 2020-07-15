@@ -15,6 +15,13 @@
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
 
+
+/**
+ * @brief The ActiveLayer class holds information about current active layer for recording.
+ * It supports setting active layer by layer and offers information about layer.
+ *
+ * \see LayersProxyModel for methods to convert layer name / index to layer.
+ */
 class ActiveLayer : public QObject
 {
     Q_OBJECT
@@ -27,6 +34,7 @@ class ActiveLayer : public QObject
   public:
     ActiveLayer();
 
+    //! Functions returning information about active layer
     QString layerId() const;
     QString layerName() const;
     QgsMapLayer *layer() const;
@@ -42,6 +50,11 @@ class ActiveLayer : public QObject
     void activeMapThemeChanged();
 
   signals:
+
+    /**
+     * @brief activeLayerChanged signal emitted when layer is changed
+     * @param layerName holds name of the new active layer, empty if active layer is null
+     */
     void activeLayerChanged( const QString &layerName );
 
   private:

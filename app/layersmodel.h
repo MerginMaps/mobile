@@ -24,6 +24,7 @@ class LayersModel : public QgsMapLayerModel
   public:
     LayersModel();
 
+    //! Returns list of all layers
     QList<QgsMapLayer *> layers() const { return mLayers; };
 
     enum LayerRoles

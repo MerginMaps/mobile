@@ -68,14 +68,25 @@ class Loader: public QObject
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
 
-    //! Gets map settings
+    /**
+     * mapSettings method returns mapsettings pointer
+     */
     QgsQuickMapSettings *mapSettings() const;
 
-    //! Sets map settings and loads the layer list from previously assigned map settings
+    /**
+     * setMapSettings method sets mapSettings
+     * Method also reloads the layer list
+     */
     void setMapSettings( QgsQuickMapSettings *mapSettings );
 
+    /**
+     * setMapSettingsLayers reloads layer list from current project
+     */
     void setMapSettingsLayers() const;
 
+    /**
+     * setActiveLayerFromName sets active layer from layer name
+     */
     void setActiveLayerFromName( QString layerName ) const;
 
   signals:

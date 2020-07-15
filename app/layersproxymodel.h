@@ -39,16 +39,18 @@ class LayersProxyModel : public QgsMapLayerProxyModel
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
-    //! Returns layers regarding model type
-    QList<QgsMapLayer *> layers() const;
-
+    //! Helper methods that convert layer to/from index/name
     Q_INVOKABLE QgsMapLayer *layerFromName( QString layerName ) const;
+    Q_INVOKABLE QgsMapLayer *layerFromIndex( int index ) const;
+    Q_INVOKABLE int indexFromLayer( QgsMapLayer *layer ) const;
 
+    //! Returns first layer from proxy model's layers list (filtered with filter function)
     Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
 
-    Q_INVOKABLE QgsMapLayer *layerFromIndex( int index ) const;
-
-    Q_INVOKABLE int indexFromLayer( QgsMapLayer *layer ) const;
+    /**
+     * @brief layers method return layers from source model filtered with filter function
+     */
+    QList<QgsMapLayer *> layers() const;
 
   private:
 
@@ -64,6 +66,12 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     ModelTypes mModelType;
     LayersModel *mModel;
 
+    /**
+     * @brief filterFunction method takes layer and outputs if \bold this model type accepts layer.
+     * Returns true for proxy model built without specific type or AllLayers type.
+     *
+     * In future will allow dependency injection of custom filter functions.
+     */
     std::function<bool( QgsMapLayer * )> filterFunction;
 };
 
