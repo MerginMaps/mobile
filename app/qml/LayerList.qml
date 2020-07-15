@@ -10,6 +10,7 @@ ListView {
   property int borderWidth: 1
   property bool highlightingAllowed: true
   property string noLayersText: qsTr("No editable layers in the project!")
+  property int activeIndex: __recordingLayersModel.indexFromLayer( __activeLayer.layer )
 
   signal listItemClicked( var index )
 
@@ -46,8 +47,8 @@ ListView {
             contentText: layerName ? layerName : ""
             imageSource: iconSource ? iconSource : ""
             overlayImage: false
-            highlight: highlightingAllowed && __activeLayer.index === index
-            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || __activeLayer.index - 1 !== index : true
+            highlight: highlightingAllowed && activeIndex === index
+            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || activeIndex - 1 !== index : true
         }
     }
   }

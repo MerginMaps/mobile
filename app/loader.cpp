@@ -27,12 +27,14 @@ Loader::Loader(
   MapThemesModel &mapThemeModel
   , AppSettings &appSettings
   , ActiveLayer &activeLayer
+  , LayersProxyModel &layersProxyModel
   , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
+  , mLayersProxyModel( layersProxyModel )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -98,7 +100,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     mMapThemeModel.reloadMapThemes( mProject );
     mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
 
-    mActiveLayer.setActiveLayer( mAppSettings.defaultLayer() );
+    setActiveLayerFromName( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
 
     emit projectReloaded();
@@ -273,7 +275,7 @@ void Loader::setActiveMapTheme( int index )
   QString name = mMapThemeModel.setActiveThemeIndex( index );
   mAppSettings.setDefaultMapTheme( name );
 
-  mActiveLayer.setActiveLayer( mAppSettings.defaultLayer() );
+  setActiveLayerFromName( mAppSettings.defaultLayer() );
   setMapSettingsLayers();
 }
 
@@ -300,4 +302,23 @@ QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer
   scopes << QgsExpressionContextUtils::projectScope( mProject );
   scopes << QgsExpressionContextUtils::layerScope( layer );
   return scopes;
+}
+
+void Loader::setActiveLayerFromName( QString layerName ) const
+{
+  mLayersProxyModel.invalidate();
+  mActiveLayer.setActiveLayer(
+    mLayersProxyModel.layerFromName( layerName )
+  );
+}
+
+QString Loader::loadIconFromLayer( QgsMapLayer *layer )
+{
+  if ( !layer )
+    return QString();
+
+  return mLayersProxyModel.data(
+           mLayersProxyModel.index( mLayersProxyModel.indexFromLayer( layer ), 0 ),
+           LayersModel::IconSourceRole
+         ).toString();
 }

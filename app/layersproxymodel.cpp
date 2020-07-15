@@ -82,49 +82,71 @@ bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const
 
 QList<QgsMapLayer *> LayersProxyModel::layers() const
 {
-  QList<QgsMapLayer *> layers;
+  QList<QgsMapLayer *> allLayers = mModel->layers();
+  QList<QgsMapLayer *> filteredLayers;
 
   if ( !mModel )
-    return layers;
+    return filteredLayers;
 
-  int layersCount = rowCount();
+  int layersCount = allLayers.size();
 
   for ( int i = 0; i < layersCount; i++ )
   {
-    QModelIndex ix = index( i, 0, QModelIndex() );
-    QgsMapLayer *l = mModel->layerFromIndex( ix );
-
-    if ( filterFunction( l ) )
-      layers << l;
+    if ( filterFunction( allLayers.at( i ) ) )
+      filteredLayers << allLayers.at( i );
   }
-  return layers;
+  return filteredLayers;
 }
 
-int LayersProxyModel::indexAccordingName( QString layerName ) const
+QgsMapLayer *LayersProxyModel::layerFromName( QString layerName ) const
 {
-  QList<QgsMapLayer *> _layers = layers();
-  int index = 0;
+  QList<QgsMapLayer *> modelLayers = layers();
 
-  for ( QgsMapLayer *ix : _layers )
+  for ( QgsMapLayer *ix : modelLayers )
   {
     if ( ix->name() == layerName )
     {
-      return index;
+      return ix;
     }
-    index++;
+  }
+
+  return firstUsableLayer();
+}
+
+QgsMapLayer *LayersProxyModel::firstUsableLayer() const
+{
+  QList<QgsMapLayer *> filteredLayers = layers();
+
+  if ( filteredLayers.size() > 0 )
+  {
+    return filteredLayers.at( 0 );
+  }
+
+  return nullptr;
+}
+
+int LayersProxyModel::indexFromLayer( QgsMapLayer *layer ) const
+{
+  if ( !layer )
+    return -1;
+
+  QList<QgsMapLayer *> filteredLayers = layers();
+
+  for ( int i = 0; i < filteredLayers.count(); i++ )
+  {
+    if ( filteredLayers.at( i )->id() == layer->id() )
+      return i;
   }
 
   return -1;
 }
 
-int LayersProxyModel::firstUsableIndex() const
+QgsMapLayer *LayersProxyModel::layerFromIndex( int index ) const
 {
-  QList<QgsMapLayer *> _layers = layers();
+  QList<QgsMapLayer *> filteredLayers = layers();
 
-  if ( _layers.size() > 0 )
-  {
-    return 0;
-  }
+  if ( index >= 0 && index < filteredLayers.size() )
+    return filteredLayers.at( index );
 
-  return -1;
+  return nullptr;
 }

@@ -42,9 +42,13 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     //! Returns layers regarding model type
     QList<QgsMapLayer *> layers() const;
 
-    int indexAccordingName( QString layerName ) const;
+    Q_INVOKABLE QgsMapLayer *layerFromName( QString layerName ) const;
 
-    int firstUsableIndex() const;
+    Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
+
+    Q_INVOKABLE QgsMapLayer *layerFromIndex( int index ) const;
+
+    Q_INVOKABLE int indexFromLayer( QgsMapLayer *layer ) const;
 
   private:
 

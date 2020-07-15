@@ -24,6 +24,8 @@ class LayersModel : public QgsMapLayerModel
   public:
     LayersModel();
 
+    QList<QgsMapLayer *> layers() const { return mLayers; };
+
     enum LayerRoles
     {
       LayerNameRole = Qt::UserRole + 100, //! Reserved for QgsMapLayerModel roles

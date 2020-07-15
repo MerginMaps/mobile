@@ -175,5 +175,6 @@ void AppSettings::setDefaultMapTheme( const QString &value )
 
 void AppSettings::onActiveLayerChanged( const QString &layerName )
 {
-  setDefaultLayer( layerName );
+  if ( !layerName.isEmpty() )
+    setDefaultLayer( layerName );
 }

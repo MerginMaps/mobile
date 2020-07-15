@@ -10,68 +10,54 @@
 
 #include "activelayer.h"
 
-ActiveLayer::ActiveLayer( LayersProxyModel &model, AppSettings &appSettings ) :
-  mModel( model ),
-  mAppSettings( appSettings ),
-  mIndex( -1 )
+ActiveLayer::ActiveLayer()
 {
 }
 
-int ActiveLayer::index() const
+QgsMapLayer *ActiveLayer::layer() const
 {
-  return mIndex;
+  return mLayer;
 }
 
-QModelIndex ActiveLayer::modelIndex() const
+QgsVectorLayer *ActiveLayer::vectorLayer() const
 {
-  if ( mIndex < 0 )
-    return QModelIndex();
+  if ( mLayer )
+    return qobject_cast<QgsVectorLayer *>( mLayer );
 
-  return mModel.index( mIndex, 0 );
-}
-
-QgsVectorLayer *ActiveLayer::layer() const
-{
-  QModelIndex index = modelIndex();
-  QgsMapLayer *layer = nullptr;
-
-  if ( index.isValid() )
-    layer = mModel.data( index, LayersModel::VectorLayerRole ).value<QgsMapLayer *>();
-
-  return qobject_cast<QgsVectorLayer *>( layer );
+  return nullptr;
 }
 
 QString ActiveLayer::layerId() const
 {
-  return mModel.data( modelIndex(), QgsMapLayerModel::LayerIdRole ).toString();
+  if ( mLayer )
+    return mLayer->id();
+
+  return QString();
+}
+
+QString ActiveLayer::layerName() const
+{
+  if ( mLayer )
+    return mLayer->name();
+
+  return QString();
 }
 
 void ActiveLayer::activeMapThemeChanged()
 {
-  mModel.invalidate();
+  setActiveLayer( nullptr );
 }
 
-void ActiveLayer::setActiveLayer( int index )
+void ActiveLayer::setActiveLayer( QgsMapLayer *layer )
 {
-  if ( index < 0 ) // only reset index
-    mIndex = index;
-  else if ( index < mModel.rowCount() )
+  if ( !layer ) // reset index
   {
-    if ( mIndex != index )
-    {
-      mIndex = index;
-
-      emit activeLayerChanged( layer()->name() );
-    }
+    mLayer = nullptr;
+    emit activeLayerChanged( layerName() );
   }
-}
-
-void ActiveLayer::setActiveLayer( QString layerName )
-{
-  int index = mModel.indexAccordingName( layerName );
-
-  if ( index == -1 )
-    index = mModel.firstUsableIndex();
-
-  setActiveLayer( index );
+  else if ( !mLayer || layer->id() != mLayer->id() )
+  {
+    mLayer = layer;
+    emit activeLayerChanged( layerName() );
+  }
 }

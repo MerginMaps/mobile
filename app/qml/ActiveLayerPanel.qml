@@ -14,8 +14,9 @@ import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Drawer {
-
     property string title: qsTr("Survey Layer")
+
+    signal activeLayerChangeRequested( var index )
 
     function openPanel() {
         layerPanel.visible = true
@@ -65,7 +66,7 @@ Drawer {
         borderWidth: 1
 
         onListItemClicked: {
-          __activeLayer.index = index
+          activeLayerChangeRequested( index )
           layerPanel.visible = false
         }
     }
