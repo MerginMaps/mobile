@@ -24,7 +24,7 @@
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
-
+#include "layersproxymodel.h"
 
 class Loader: public QObject
 {
@@ -35,7 +35,12 @@ class Loader: public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader( MapThemesModel &mapThemeModel, AppSettings &appSettings, ActiveLayer &activeLayer, QObject *parent = nullptr );
+    explicit Loader(
+      MapThemesModel &mapThemeModel
+      , AppSettings &appSettings
+      , ActiveLayer &activeLayer
+      , LayersProxyModel &layersProxyModel
+      , QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -52,6 +57,7 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
 
     /**
      * Updates active map theme.
@@ -69,6 +75,8 @@ class Loader: public QObject
     void setMapSettings( QgsQuickMapSettings *mapSettings );
 
     void setMapSettingsLayers() const;
+
+    void setActiveLayerFromName( QString layerName ) const;
 
   signals:
     void projectChanged();
@@ -96,6 +104,7 @@ class Loader: public QObject
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
+    LayersProxyModel &mLayersProxyModel;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**

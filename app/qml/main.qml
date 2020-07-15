@@ -68,7 +68,7 @@ ApplicationWindow {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                __activeLayer.layerName = featurePanel.feature.layer.name
+                __activeLayer.layer = __recordingLayersModel.layerFromName( featurePanel.feature.layer.name )
                 updateRecordToolbar()
 
                 var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
@@ -161,33 +161,27 @@ ApplicationWindow {
       alertDialog.open()
     }
 
-    function updateRecordToolbar() {
-        recordToolbar.activeVectorLayer = __activeLayer.layer
-        var layer = recordToolbar.activeVectorLayer
-        if (!layer)
-        {
-            // nothing to do with no active layer
-            return
-        }
+    function updateRecordToolbar()
+    {
+      recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
+      let layer = recordToolbar.activeVectorLayer
 
-        if ( digitizing.hasPointGeometry( layer ) ) {
-            recordToolbar.pointLayerSelected = true
-        } else {
-            recordToolbar.pointLayerSelected = false
-        }
-        recordToolbar.activeLayerName = layer.name
-        recordToolbar.activeLayerIcon = __recordingLayersModel.data( __activeLayer.modelIndex, LayersModel.IconSourceRole )
+      if ( !layer ) // nothing to do with no active layer
+        return
+
+      recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( layer )
     }
 
     function selectFeature( feature, shouldUpdateExtent ) {
       highlight.featureLayerPair = feature
 
-      if ( shouldUpdateExtent ) { // update extent to fit feature above preview panel
-          var panelOffsetRatio = featurePanel.previewHeight/window.height
-          __inputUtils.setExtentToFeature(feature, mapCanvas.mapSettings, panelOffsetRatio)
+      if ( shouldUpdateExtent ) // update extent to fit feature above preview panel
+      {
+          let panelOffsetRatio = featurePanel.previewHeight/window.height
+          __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
       }
       highlight.visible = true
-      featurePanel.show_panel(feature, "ReadOnly", "preview" )
+      featurePanel.show_panel( feature, "ReadOnly", "preview" )
     }
 
     Component.onCompleted: {
@@ -566,6 +560,10 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
         z: zPanel
+
+        onActiveLayerChangeRequested: {
+          __activeLayer.layer = __recordingLayersModel.layerFromIndex( index )
+        }
     }
 
     BrowseDataPanel {

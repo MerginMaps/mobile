@@ -15,39 +15,28 @@
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
 
-#include "layersproxymodel.h"
-#include "appsettings.h"
-
 class ActiveLayer : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( int index WRITE setActiveLayer READ index NOTIFY activeLayerChanged )
     Q_PROPERTY( QString layerId READ layerId )
-    Q_PROPERTY( QString layerName WRITE setActiveLayer )
-    Q_PROPERTY( QModelIndex modelIndex READ modelIndex )
-    Q_PROPERTY( QgsVectorLayer *layer READ layer )
+    Q_PROPERTY( QString layerName READ layerName )
+    Q_PROPERTY( QgsMapLayer *layer WRITE setActiveLayer READ layer NOTIFY activeLayerChanged )
+    Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer )
 
   public:
-    ActiveLayer( LayersProxyModel &model, AppSettings &appSettings );
+    ActiveLayer();
 
-    QModelIndex modelIndex() const;
-    QgsVectorLayer *layer() const;
     QString layerId() const;
-    int index() const;
+    QString layerName() const;
+    QgsMapLayer *layer() const;
+    QgsVectorLayer *vectorLayer() const;
 
     /**
      * Updates active layer.
-     * \param index Represents row number in the layer model.
+     * \param layerName Represents layer to be set as active.
      */
-    void setActiveLayer( int index );
-
-    /**
-     * Updates active layer.
-     * \param layerName Represents name of layer to be set as active.
-     * If no layer is found with such name, first writable layer is set as active.
-     */
-    void setActiveLayer( QString layerName );
+    void setActiveLayer( QgsMapLayer *layer );
 
   public slots:
     void activeMapThemeChanged();
@@ -56,10 +45,7 @@ class ActiveLayer : public QObject
     void activeLayerChanged( const QString &layerName );
 
   private:
-    LayersProxyModel &mModel;
-    AppSettings &mAppSettings;
-
-    int mIndex;
+    QgsMapLayer *mLayer;
 };
 
 #endif // ACTIVELAYER_H

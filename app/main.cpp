@@ -361,8 +361,8 @@ int main( int argc, char *argv[] )
   LayersProxyModel browseLpm( &lm, ModelTypes::BrowseDataLayerSelection );
   LayersProxyModel recordingLpm( &lm, ModelTypes::ActiveLayerSelection );
 
-  ActiveLayer al( recordingLpm, as );
-  Loader loader( mtm, as, al );
+  ActiveLayer al;
+  Loader loader( mtm, as, al, recordingLpm );
   FeaturesModel fm( loader );
 
   // Connections
