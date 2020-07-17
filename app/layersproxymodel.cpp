@@ -10,6 +10,10 @@
 
 #include "layersproxymodel.h"
 
+#include "qgsvectorlayer.h"
+#include "qgsproject.h"
+#include "qgslayertree.h"
+
 LayersProxyModel::LayersProxyModel( LayersModel *model, ModelTypes modelType ) :
   mModelType( modelType ),
   mModel( model )

@@ -14,8 +14,6 @@
 #include <QObject>
 
 #include "qgsmaplayermodel.h"
-#include "qgsmaplayer.h"
-#include "qgsvectorlayer.h"
 
 class LayersModel : public QgsMapLayerModel
 {

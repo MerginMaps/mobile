@@ -13,13 +13,8 @@
 
 #include <QObject>
 
-#include "qgsmaplayerproxymodel.h"
-#include "qgsmaplayermodel.h"
-#include "qgsvectorlayer.h"
 #include "qgsmaplayer.h"
-#include "qgsproject.h"
-#include "qgslayertree.h"
-#include "qgslayertreelayer.h"
+#include "qgsmaplayerproxymodel.h"
 
 #include "layersmodel.h"
 
