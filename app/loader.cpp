@@ -15,6 +15,10 @@
 
 #include "loader.h"
 #include "qgsvectorlayer.h"
+#include "qgslayertree.h"
+#include "qgslayertreelayer.h"
+#include "qgslayertreegroup.h"
+
 #if VERSION_INT >= 30500
 // this header only exists in QGIS >= 3.6
 #include "qgsexpressioncontextutils.h"
@@ -136,7 +140,7 @@ void Loader::setMapSettingsLayers() const
 {
   if ( !mProject || !mMapSettings ) return;
 
-  QgsLayerTreeGroup *root = mProject->layerTreeRoot();
+  QgsLayerTree *root = mProject->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
   QList< QgsMapLayer * > allLayers;

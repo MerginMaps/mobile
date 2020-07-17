@@ -9,6 +9,7 @@
 
 
 #include "layersmodel.h"
+#include "qgsvectorlayer.h"
 
 LayersModel::LayersModel()
 {
@@ -22,13 +23,10 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
   if ( role < LayerNameRole ) // if requested role from parent
     return QgsMapLayerModel::data( index, role );
 
-  QgsVectorLayer *vectorLayer;
-  QgsMapLayer *layer;
-
-  layer = layerFromIndex( index );
+  QgsMapLayer *layer = layerFromIndex( index );
   if ( !layer || !layer->isValid() ) return QVariant();
 
-  vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
 
   switch ( role )
   {
