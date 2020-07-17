@@ -45,6 +45,22 @@ QString ActiveLayer::layerName() const
 
 void ActiveLayer::activeMapThemeChanged()
 {
+  // check if active layer is visible in current map theme too
+  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  {
+    if ( nodeLayer->isVisible() )
+    {
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer->isValid() && layer->id() == layerId() )
+      {
+        emit activeLayerChanged( layerName() ); // needs to be emitted to update indexes
+        return;
+      }
+    }
+  }
+
+  // if it is not, reset active layer
   setActiveLayer( nullptr );
 }
 
