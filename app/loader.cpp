@@ -321,8 +321,20 @@ QString Loader::loadIconFromLayer( QgsMapLayer *layer )
   if ( !layer )
     return QString();
 
-  return mLayersProxyModel.data(
-           mLayersProxyModel.index( mLayersProxyModel.indexFromLayer( layer ), 0 ),
-           LayersModel::IconSourceRole
-         ).toString();
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  if ( vectorLayer )
+  {
+    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
+    switch( geometry )
+    {
+      case QgsWkbTypes::GeometryType::PointGeometry: return QString( "mIconPointLayer.svg" );
+      case QgsWkbTypes::GeometryType::LineGeometry: return QString( "mIconLineLayer.svg" );
+      case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "mIconPolygonLayer.svg" );
+      case QgsWkbTypes::GeometryType::NullGeometry:
+      case QgsWkbTypes::GeometryType::UnknownGeometry: return QString();
+    }
+  }
+  else
+    return QString( "mIconRasterLayer.svg" );
 }
