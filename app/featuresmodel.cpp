@@ -57,7 +57,7 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
       return QVariant( title );
     }
     case FeatureId: return QVariant( feat.feature().id() );
-    case Description: return QVariant( QString( "description" ) );
+    case Description: return QVariant( QString( "Feature ID %1" ).arg( feat.feature().id() ) );
     case GeometryType: return QVariant( feat.feature().geometry().type() );
     case IconSource:
       switch ( feat.feature().geometry().type() )
