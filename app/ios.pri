@@ -81,12 +81,16 @@ ios {
 
     HEADERS += \
         ios/iosinterface.h \
-        ios/iosviewdelegate.h \
+        ios/iosviewdelegate.h
 
     OBJECTIVE_SOURCES += \
         ios/iosinterface.mm \
         ios/iosviewdelegate.mm \
         ios/iosimagepicker.mm
+
+    DEFINES += "PURCHASING"
+    DEFINES += "APPLE_PURCHASING"
+    LIBS += -framework StoreKit -framework Foundation
 
     QMAKE_CXXFLAGS += -std=c++11
 }

@@ -10,22 +10,27 @@
 #ifndef MERGINAPI_H
 #define MERGINAPI_H
 
+#include <memory>
+
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QEventLoop>
-#include <memory>
 #include <QFile>
 #include <QFileInfo>
 #include <QUuid>
+#include <QPointer>
+#include <QSet>
+#include <QByteArray>
+#include <QDateTime>
 
 #include "merginapistatus.h"
+#include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
 
-
-#include <QPointer>
-#include <QSet>
-
+class MerginUserAuth;
+class MerginUserInfo;
+class Purchasing;
 
 struct ProjectDiff
 {
@@ -178,19 +183,22 @@ typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
-
 class MerginApi: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString username READ username NOTIFY authChanged )
-    Q_PROPERTY( int userId READ userId NOTIFY authChanged )
-    Q_PROPERTY( int storageLimit READ storageLimit NOTIFY userInfoChanged )
-    Q_PROPERTY( int diskUsage READ diskUsage NOTIFY userInfoChanged )
+    Q_PROPERTY( MerginUserAuth *userAuth READ userAuth NOTIFY authChanged )
+    Q_PROPERTY( MerginUserInfo *userInfo READ userInfo NOTIFY userInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
-    Q_PROPERTY( int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
+    Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
+    Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
+
   public:
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~MerginApi() = default;
+
+    MerginUserAuth *userAuth() const;
+    MerginUserInfo *userInfo() const;
+
 
     /**
      * Returns path of the local directory in which all projects are stored.
@@ -259,10 +267,9 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
-    Q_INVOKABLE void getUserInfo( const QString &username );
+    Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
-    Q_INVOKABLE bool hasAuthData();
 
     /**
     * Registers new user to Mergin service.
@@ -294,8 +301,9 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
+    static const QString sDefaultApiRoot;
 
-    static QString defaultApiRoot() { return "https://public.cloudmergin.com/"; }
+    static QString defaultApiRoot() { return sDefaultApiRoot; }
 
     static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
 
@@ -325,8 +333,6 @@ class MerginApi: public QObject
     */
     void deleteProject( const QString &projectNamespace, const QString &projectName );
 
-    void clearTokenData();
-
     // Production and Test functions (therefore not private)
 
     /**
@@ -347,8 +353,6 @@ class MerginApi: public QObject
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
-    QString username() const;
-
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
@@ -358,9 +362,6 @@ class MerginApi: public QObject
     //! Total storage limit of current logged in user in Mergin instance in Bytes
     int storageLimit() const;
 
-    int userId() const;
-    void setUserId( int userId );
-
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
@@ -368,8 +369,12 @@ class MerginApi: public QObject
     Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
+    bool apiSupportsSubscriptions() const;
+    void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
 
   signals:
+    void apiSupportsSubscriptionsChanged();
+
     void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
@@ -392,7 +397,7 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
-    void pingMerginFinished( const QString &apiVersion, const QString &msg );
+    void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
     void pushFilesStarted();
@@ -461,8 +466,10 @@ class MerginApi: public QObject
     static QSet<QString> listFiles( const QString &projectPath );
 
     void loadAuthData();
+
     bool validateAuthAndContinute();
-    void checkMerginVersion( QString apiVersion, QString msg = QStringLiteral() );
+    void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
+
     /**
     * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
     * and the previous of last (namespace) substring after splitting sourceString with slash.
@@ -519,13 +526,10 @@ class MerginApi: public QObject
     LocalProjectsManager &mLocalProjects;
     MerginProjectList mRemoteProjects;
     QString mDataDir; // dir with all projects
-    QString mUsername;
-    QString mPassword;
-    int mUserId = -1;
-    QByteArray mAuthToken;
-    QDateTime mTokenExpiration;
-    int mDiskUsage = 0; // in Bytes
-    int mStorageLimit = 0; // in Bytes
+
+    MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
+    MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
+
 
     enum CustomAttribute
     {
@@ -538,6 +542,7 @@ class MerginApi: public QObject
     static const QSet<QString> sIgnoreFiles;
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
+    bool mApiSupportsSubscriptions = false;
 
     static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
@@ -547,6 +552,8 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     friend class TestMerginApi;
+    friend class Purchasing;
+    friend class PurchasingTransaction;
 };
 
 #endif // MERGINAPI_H

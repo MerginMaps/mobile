@@ -16,30 +16,36 @@
 #include <QtCore>
 #import "iosviewdelegate.h"
 
-@interface IOSViewDelegate ()
+@interface IOSViewDelegate()
 
 @end
 
 @implementation IOSViewDelegate
 
--(id) initWithHandler:(IOSImagePicker*)handler {
-    self = [super init];
-    if (self) {
-        self->handler = handler;
-    }
-    return self;
+-( id ) initWithHandler:( IOSImagePicker * )handler
+{
+  self = [super init];
+  if ( self )
+  {
+    self->handler = handler;
+  }
+  return self;
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    if (imagePickerControllerDidFinishPickingMediaWithInfo) {
-        imagePickerControllerDidFinishPickingMediaWithInfo(picker,info);
-    }
+- ( void )imagePickerController:( UIImagePickerController * )picker didFinishPickingMediaWithInfo:( NSDictionary * )info
+{
+  if ( imagePickerControllerDidFinishPickingMediaWithInfo )
+  {
+    imagePickerControllerDidFinishPickingMediaWithInfo( picker, info );
+  }
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    if (imagePickerControllerDidCancel) {
-        imagePickerControllerDidCancel(picker);
-    }
+- ( void )imagePickerControllerDidCancel:( UIImagePickerController * )picker
+{
+  if ( imagePickerControllerDidCancel )
+  {
+    imagePickerControllerDidCancel( picker );
+  }
 }
 
 @end

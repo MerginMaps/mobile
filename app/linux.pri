@@ -64,7 +64,12 @@
     # path to test data
     DEFINES += "INPUT_TEST_DATA_DIR=$$PWD/../test/test_data"
 
+    # PURCHASING stuff (only testing)
+    DEFINES += "PURCHASING"
+
     QT += printsupport
+    QT += widgets
+    DEFINES += "HAVE_WIDGETS"
 
     QMAKE_CXXFLAGS += -std=c++11
 }

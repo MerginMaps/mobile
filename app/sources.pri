@@ -13,12 +13,16 @@ mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
 merginapistatus.cpp \
+merginsubscriptionstatus.cpp \
 merginprojectmodel.cpp \
 merginprojectstatusmodel.cpp \
+merginuserauth.cpp \
+merginuserinfo.cpp \
 androidutils.cpp \
 inpututils.cpp \
 geodiffutils.cpp \
 positiondirection.cpp \
+purchasing.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -44,18 +48,44 @@ mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
 merginapistatus.h \
+merginsubscriptionstatus.h \
 merginprojectmodel.h \
 merginprojectstatusmodel.h \
+merginuserauth.h \
+merginuserinfo.h \
 androidutils.h \
 inpututils.h \
 geodiffutils.h \
 positiondirection.h \
+purchasing.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 
 contains(DEFINES, INPUT_TEST) {
-  SOURCES += test/testmerginapi.cpp
-  HEADERS += test/testmerginapi.h
+
+  contains(DEFINES, APPLE_PURCHASING) {
+    error("invalid combination of flags. INPUT_TEST cannot be defined with APPLE_PURCHASING")
+   }
+
+  SOURCES += \
+      test/testutils.cpp \
+      test/testmerginapi.cpp \
+      test/testingpurchasingbackend.cpp \
+      test/testpurchasing.cpp
+
+  HEADERS += \
+      test/testutils.h \
+      test/testmerginapi.h \
+      test/testingpurchasingbackend.h \
+      test/testpurchasing.h
+}
+
+contains(DEFINES, APPLE_PURCHASING) {
+  HEADERS += \
+      ios/iospurchasing.h
+
+  OBJECTIVE_SOURCES += \
+      ios/iospurchasing.mm
 }
 
 RESOURCES += \

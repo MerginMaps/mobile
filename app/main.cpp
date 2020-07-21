@@ -40,15 +40,22 @@
 #include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
+#include "merginsubscriptionstatus.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
 #include "layersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
+#include "purchasing.h"
+#include "merginuserauth.h"
+#include "merginuserinfo.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
+#if not defined APPLE_PURCHASING
+#include "test/testpurchasing.h"
+#endif
 #endif
 
 #include "qgsquickutils.h"
@@ -245,11 +252,15 @@ static void init_proj( const QString &pkgPath )
 
 void initDeclarative()
 {
+  qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
+  qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
+  qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
+  qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
@@ -257,7 +268,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
-  qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
 }
 
 #ifdef INPUT_TEST
@@ -363,6 +373,7 @@ int main( int argc, char *argv[] )
   ActiveLayer al;
   Loader loader( mtm, as, al );
   FeaturesModel fm( loader );
+  std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -387,7 +398,8 @@ int main( int argc, char *argv[] )
   if ( IS_TEST )
   {
     initTestDeclarative();
-    TestMerginApi test( ma.get(), &mpm, &pm );
+    TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
+
     // use command line args we got, but filter out "--test" that's recognized by us but not by QTest framework
     // (command line args may be used to filter function names that should be executed)
     QVector<char *> args;
@@ -396,7 +408,11 @@ int main( int argc, char *argv[] )
       if ( QString( argv[i] ) != "--test" )
         args << argv[i];
     }
-    QTest::qExec( &test, args.count(), args.data() );
+    QTest::qExec( &merginApiTest, args.count(), args.data() );
+#if not defined APPLE_PURCHASING
+    TestPurchasing purchasingTest( ma.get(), purchasing.get() );
+    QTest::qExec( &purchasingTest, args.count(), args.data() );
+#endif
     return 0;
   }
 #endif
@@ -450,6 +466,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
+  engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
@@ -518,7 +535,6 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
-
   return app.exec();
 }
 

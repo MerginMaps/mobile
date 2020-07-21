@@ -45,5 +45,8 @@
         <file>info.svg</file>
         <file>table.svg</file>
         <file>envelope-solid.svg</file>
+        <file>database-solid.svg</file>
+        <file>ic_today.svg</file>
+        <file>exclamation-triangle-solid.svg</file>
     </qresource>
 </RCC>

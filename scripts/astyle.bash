@@ -45,7 +45,7 @@ fi
 $ASTYLE --version
 
 for FILE in $FILES; do
-    if [[ $FILE =~ \.(c|cpp|h|hpp)$ ]]; then
+    if [[ $FILE =~ \.(c|cpp|h|hpp|mm)$ ]]; then
         $ASTYLE $OPTIONS < $FILE > $FILE.astyle 
         cmp -s $FILE $FILE.astyle
         if [ $? -ne 0 ]; then
