@@ -39,7 +39,6 @@ class Loader: public QObject
       MapThemesModel &mapThemeModel
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
-      , LayersProxyModel &layersProxyModel
       , QObject *parent = nullptr );
 
     QgsProject *project();
@@ -125,7 +124,6 @@ class Loader: public QObject
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    LayersProxyModel &mLayersProxyModel;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**

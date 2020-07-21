@@ -31,14 +31,12 @@ Loader::Loader(
   MapThemesModel &mapThemeModel
   , AppSettings &appSettings
   , ActiveLayer &activeLayer
-  , LayersProxyModel &layersProxyModel
   , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
-  , mLayersProxyModel( layersProxyModel )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
