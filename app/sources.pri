@@ -1,10 +1,12 @@
 SOURCES += \
+activelayer.cpp \
+layersmodel.cpp \
+layersproxymodel.cpp \
 featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
 projectsmodel.cpp \
-layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
@@ -29,11 +31,13 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+activelayer.h \
+layersmodel.h \
+layersproxymodel.h \
 featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
-layersmodel.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \

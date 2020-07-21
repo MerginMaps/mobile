@@ -29,13 +29,13 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
+#include "qgsmaplayerproxymodel.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
 #include "positiondirection.h"
 #include "projectsmodel.h"
-#include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
@@ -43,6 +43,9 @@
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "featuresmodel.h"
+#include "layersproxymodel.h"
+#include "layersmodel.h"
+#include "activelayer.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -243,13 +246,15 @@ static void init_proj( const QString &pkgPath )
 void initDeclarative()
 {
   qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
-  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
+  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
+  qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
+  qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
@@ -345,13 +350,19 @@ int main( int argc, char *argv[] )
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
   MapThemesModel mtm;
-  LayersModel lm;
   AppSettings as;
-  Loader loader( mtm, lm, as );
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
-  FeaturesModel fm( lm, loader, nullptr );
+
+  // layer models
+  LayersModel lm;
+  LayersProxyModel browseLpm( &lm, ModelTypes::BrowseDataLayerSelection );
+  LayersProxyModel recordingLpm( &lm, ModelTypes::ActiveLayerSelection );
+
+  ActiveLayer al;
+  Loader loader( mtm, as, al );
+  FeaturesModel fm( loader );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -361,6 +372,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
   QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
+  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
@@ -429,13 +441,15 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
-  engine.rootContext()->setContextProperty( "__layersModel", &lm );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__featuresModel", &fm );
+  engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
+  engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
+  engine.rootContext()->setContextProperty( "__activeLayer", &al );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

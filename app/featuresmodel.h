@@ -13,7 +13,6 @@
 
 #include <QAbstractListModel>
 #include "loader.h"
-#include "layersmodel.h"
 
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
@@ -35,10 +34,11 @@ class FeaturesModel : public QAbstractListModel
       FeatureId,
       Description, // secondary text in list view
       GeometryType, // type of geometry (point, line, ..)
+      IconSource
     };
 
   public:
-    explicit FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent = nullptr );
+    explicit FeaturesModel( Loader &loader, QObject *parent = nullptr );
     ~FeaturesModel() override {};
 
     //! Function to get QgsQuickFeatureLayerPair by feature id
@@ -54,7 +54,6 @@ class FeaturesModel : public QAbstractListModel
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
   public slots:
-    void reloadDataFromLayerName( const QString &layerName ); // mock
     void reloadDataFromLayer( QgsVectorLayer *layer );
 
     void activeProjectChanged();
@@ -66,7 +65,6 @@ class FeaturesModel : public QAbstractListModel
     void emptyData();
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
-    LayersModel &mLayersModel;
     Loader &mLoader;
 };
 

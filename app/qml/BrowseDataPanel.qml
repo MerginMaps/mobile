@@ -1,5 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
+import lc 1.0
+
+/*
+ * BrowseDataPanel should stay a logic component, please do not combine UI here
+ */
 
 Item {
   id: root
@@ -11,6 +16,13 @@ Item {
     if ( browseDataLayout.depth > 1 )
       browseDataLayout.pop( null ) // pops everything besides an initialItem
     root.visible = false
+  }
+
+  function loadFeaturesFromLayerIndex( index ) {
+    let modelIndex = __browseDataLayersModel.index( index, 0 )
+    let layer = __browseDataLayersModel.data( modelIndex, LayersModel.VectorLayerRole )
+
+    __featuresModel.reloadDataFromLayer( layer )
   }
 
   StackView {
@@ -25,7 +37,7 @@ Item {
     BrowseDataLayersPanel {
       onBackButtonClicked: clearStackAndClose()
       onLayerClicked: {
-        __featuresModel.reloadDataFromLayer( layer )
+        loadFeaturesFromLayerIndex( index )
         browseDataLayout.push( browseDataFeaturesPanel )
       }
     }

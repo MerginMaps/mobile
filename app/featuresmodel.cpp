@@ -10,9 +10,8 @@
 
 #include "featuresmodel.h"
 
-FeaturesModel::FeaturesModel( LayersModel &lm, Loader &loader, QObject *parent )
+FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
-    mLayersModel( lm ),
     mLoader( loader )
 {
 }
@@ -57,26 +56,19 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         return QVariant( feat.feature().id() );
       return QVariant( title );
     }
-    case FeatureId:
-      return QVariant( feat.feature().id() );
-    case Description:
-      return QVariant( QString( "description" ) );
-    case GeometryType:
-      return QVariant( feat.feature().geometry().type() );
-    default:
-      return QVariant();
+    case FeatureId: return QVariant( feat.feature().id() );
+    case Description: return QVariant( QString( "Feature ID %1" ).arg( feat.feature().id() ) );
+    case GeometryType: return QVariant( feat.feature().geometry().type() );
+    case IconSource:
+      switch ( feat.feature().geometry().type() )
+      {
+        case QgsWkbTypes::GeometryType::PointGeometry: return QVariant( "mIconPointLayer.svg" );
+        case QgsWkbTypes::GeometryType::LineGeometry: return QVariant( "mIconLineLayer.svg" );
+        case QgsWkbTypes::GeometryType::PolygonGeometry: return QVariant( "mIconPolygonLayer.svg" );
+        default: return QVariant( "" );
+      }
+    default: return QVariant();
   }
-}
-
-void FeaturesModel::reloadDataFromLayerName( const QString &layerName )
-{
-  Q_UNUSED( layerName );
-
-  // We mock layerName because it is not yet implemented
-  QgsMapLayer *mockedLayer = mLayersModel.activeLayer();
-
-  if ( mockedLayer && ( mockedLayer->type() == QgsMapLayerType::VectorLayer ) )
-    this->reloadDataFromLayer( qobject_cast<QgsVectorLayer *>( mockedLayer ) );
 }
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
@@ -131,6 +123,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[GeometryType] = QStringLiteral( "GeometryType" ).toLatin1();
+  roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
   return roleNames;
 }
 
