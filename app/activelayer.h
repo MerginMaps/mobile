@@ -26,10 +26,10 @@ class ActiveLayer : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QString layerId READ layerId )
-    Q_PROPERTY( QString layerName READ layerName )
+    Q_PROPERTY( QString layerId READ layerId NOTIFY activeLayerChanged )
+    Q_PROPERTY( QString layerName READ layerName NOTIFY activeLayerChanged )
     Q_PROPERTY( QgsMapLayer *layer WRITE setActiveLayer READ layer NOTIFY activeLayerChanged )
-    Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer )
+    Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer NOTIFY activeLayerChanged )
 
   public:
     ActiveLayer();
@@ -46,8 +46,10 @@ class ActiveLayer : public QObject
      */
     void setActiveLayer( QgsMapLayer *layer );
 
-  public slots:
-    void activeMapThemeChanged();
+    /**
+     * Resets active layer to nullptr.
+     */
+    void resetActiveLayer();
 
   signals:
 
