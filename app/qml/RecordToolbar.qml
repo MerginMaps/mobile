@@ -55,6 +55,11 @@ Item {
         anchors.fill: parent
         color: InputStyle.clrPanelBackground
         opacity: InputStyle.panelOpacity
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {} // dont do anything, just do not let click event propagate
+        }
     }
 
     Rectangle {

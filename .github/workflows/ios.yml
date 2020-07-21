@@ -3,8 +3,8 @@ on: [push]
 env:
   QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
-  SDK_DROPBOX_HASH: tg018hcj3n13xe8
-  SDK_VERSION: 4
+  SDK_DROPBOX_HASH: np11rioezu3894c
+  SDK_VERSION: 5
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '11.4' }}
@@ -63,20 +63,22 @@ jobs:
       - name: Download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-${SDK_VERSION}/stage
-          tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          sudo chown -R $USER .
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
 
-          ls -la arm64/include/geodiff.h
-          ls -la arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
+          ls -la ./arm64/include/geodiff.h
+          ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
 
       - name: Download and install qt
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
-          mkdir -p /opt/Qt/${QT_VERSION}/ios
+          sudo mkdir -p /opt/Qt/${QT_VERSION}/ios
           cd /opt/Qt/${QT_VERSION}/ios
+          sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
       - name: Create build system with qmake

@@ -13,7 +13,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
-Rectangle {
+Page {
   property color bgColor: "white"
   property string username: __merginApi.username
   property int storageLimit: __merginApi.storageLimit
@@ -21,7 +21,6 @@ Rectangle {
 
   id: root
   visible: true
-  color:  bgColor
 
   function formatNumber(number) {
     return number / (1024 * 1024)
