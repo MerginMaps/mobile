@@ -60,9 +60,6 @@ class AppSettings: public QObject
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
 
-  public slots:
-    void onActiveLayerChanged( const QString &layerName );
-
   private:
     // Projects path
     QString mDefaultProject;

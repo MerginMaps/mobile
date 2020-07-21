@@ -104,7 +104,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     mMapThemeModel.reloadMapThemes( mProject );
     mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
 
-    setActiveLayerFromName( mAppSettings.defaultLayer() );
+    setActiveLayer( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
 
     emit projectReloaded();
@@ -274,12 +274,35 @@ QStringList Loader::mapTipFields( QgsQuickFeatureLayerPair pair )
   return lst;
 }
 
+bool Loader::layerVisible( QgsMapLayer *layer )
+{
+  if ( !layer ) return false;
+
+  // check if active layer is visible in current map theme too
+  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  {
+    if ( nodeLayer->isVisible() )
+    {
+      QgsMapLayer *nLayer = nodeLayer->layer();
+      if ( nLayer && nLayer->isValid() && nLayer->id() == layer->id() )
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 void Loader::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
   mAppSettings.setDefaultMapTheme( name );
 
-  setActiveLayerFromName( mAppSettings.defaultLayer() );
+  // if active layer is no longer visible, reset it
+  if ( !layerVisible( mActiveLayer.layer() ) )
+    setActiveLayer( nullptr );
+
   setMapSettingsLayers();
 }
 
@@ -308,12 +331,30 @@ QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer
   return scopes;
 }
 
-void Loader::setActiveLayerFromName( QString layerName ) const
+void Loader::setActiveLayer( QString layerName ) const
 {
-  mLayersProxyModel.invalidate();
-  mActiveLayer.setActiveLayer(
-    mLayersProxyModel.layerFromName( layerName )
-  );
+  if ( !layerName.isEmpty() )
+  {
+    QList<QgsMapLayer *> layersByName = QgsProject::instance()->mapLayersByName( layerName );
+
+    if ( !layersByName.isEmpty() )
+    {
+      return setActiveLayer( layersByName.at( 0 ) );
+    }
+  }
+
+  setActiveLayer( nullptr );
+}
+
+void Loader::setActiveLayer( QgsMapLayer *layer ) const
+{
+  if ( !layer || !layer->isValid() )
+    mActiveLayer.resetActiveLayer();
+  else
+  {
+    mActiveLayer.setActiveLayer( layer );
+    mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
+  }
 }
 
 QString Loader::loadIconFromLayer( QgsMapLayer *layer )
@@ -326,7 +367,7 @@ QString Loader::loadIconFromLayer( QgsMapLayer *layer )
   if ( vectorLayer )
   {
     QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
-    switch( geometry )
+    switch ( geometry )
     {
       case QgsWkbTypes::GeometryType::PointGeometry: return QString( "mIconPointLayer.svg" );
       case QgsWkbTypes::GeometryType::LineGeometry: return QString( "mIconLineLayer.svg" );

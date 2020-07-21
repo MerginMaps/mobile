@@ -57,6 +57,7 @@ ApplicationWindow {
                 mainPanel.focus = true
             }
             else if (stateManager.state === "record") {
+                updateRecordToolbar()
                 recordToolbar.visible = true
                 recordToolbar.focus = true
                 recordToolbar.extraPanelVisible = true
@@ -68,10 +69,10 @@ ApplicationWindow {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                __activeLayer.layer = __recordingLayersModel.layerFromName( featurePanel.feature.layer.name )
+                __loader.setActiveLayer( featurePanel.feature.layer.name )
                 updateRecordToolbar()
 
-                var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
+                var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
                 mapCanvas.mapSettings.setCenter(screenPos);
             }
         }
@@ -163,13 +164,16 @@ ApplicationWindow {
 
     function updateRecordToolbar()
     {
-      recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
-      let layer = recordToolbar.activeVectorLayer
+      if ( !__activeLayer.layer )
+        __loader.setActiveLayer( __recordingLayersModel.firstUsableLayer() )
 
-      if ( !layer ) // nothing to do with no active layer
+      activeLayerPanel.activeIndex = __recordingLayersModel.indexFromLayer( __activeLayer.layer )
+      recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
+
+      if ( !recordToolbar.activeVectorLayer ) // nothing to do with no active layer
         return
 
-      recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( layer )
+      recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( recordToolbar.activeVectorLayer )
     }
 
     function selectFeature( feature, shouldUpdateExtent ) {
@@ -562,7 +566,7 @@ ApplicationWindow {
         z: zPanel
 
         onActiveLayerChangeRequested: {
-          __activeLayer.layer = __recordingLayersModel.layerFromIndex( index )
+          __loader.setActiveLayer( __recordingLayersModel.layerFromIndex( index ) )
         }
     }
 

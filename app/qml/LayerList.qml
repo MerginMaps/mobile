@@ -10,7 +10,7 @@ ListView {
   property int borderWidth: 1
   property bool highlightingAllowed: true
   property string noLayersText: qsTr("No editable layers in the project!")
-  property int activeIndex: __recordingLayersModel.indexFromLayer( __activeLayer.layer )
+  property int activeIndex: -1
 
   signal listItemClicked( var index )
 

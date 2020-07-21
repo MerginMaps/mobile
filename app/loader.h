@@ -65,6 +65,16 @@ class Loader: public QObject
      */
     Q_INVOKABLE void setActiveMapTheme( int index );
 
+    /**
+     * setActiveLayer sets active layer from layer name
+     */
+    Q_INVOKABLE void setActiveLayer( QString layerName ) const;
+
+    /**
+     * setActiveLayer sets active layer from layer
+     */
+    Q_INVOKABLE void setActiveLayer( QgsMapLayer *layerName ) const;
+
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
 
@@ -85,9 +95,9 @@ class Loader: public QObject
     void setMapSettingsLayers() const;
 
     /**
-     * setActiveLayerFromName sets active layer from layer name
+     * layerVisible returns boolean if input layer is visible within current project
      */
-    void setActiveLayerFromName( QString layerName ) const;
+    bool layerVisible( QgsMapLayer *layer );
 
   signals:
     void projectChanged();

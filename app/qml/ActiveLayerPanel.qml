@@ -15,6 +15,7 @@ import "."  // import InputStyle singleton
 
 Drawer {
     property string title: qsTr("Survey Layer")
+    property int activeIndex: __recordingLayersModel.indexFromLayer( __activeLayer.layer )
 
     signal activeLayerChangeRequested( var index )
 
@@ -60,6 +61,7 @@ Drawer {
         width: parent.width
         y: header.height
         model: __recordingLayersModel
+        activeIndex: layerPanel.activeIndex
 
         cellWidth: width
         cellHeight: InputStyle.rowHeight

@@ -35,7 +35,6 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
     //! Helper methods that convert layer to/from index/name
-    Q_INVOKABLE QgsMapLayer *layerFromName( QString layerName ) const;
     Q_INVOKABLE QgsMapLayer *layerFromIndex( int index ) const;
     Q_INVOKABLE int indexFromLayer( QgsMapLayer *layer ) const;
 
@@ -46,6 +45,9 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      * @brief layers method return layers from source model filtered with filter function
      */
     QList<QgsMapLayer *> layers() const;
+
+  public slots:
+    void onMapThemeChanged();
 
   private:
 

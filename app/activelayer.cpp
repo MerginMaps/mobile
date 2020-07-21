@@ -14,7 +14,8 @@
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 
-ActiveLayer::ActiveLayer()
+ActiveLayer::ActiveLayer() :
+  mLayer( nullptr )
 {
 }
 
@@ -47,37 +48,19 @@ QString ActiveLayer::layerName() const
   return QString();
 }
 
-void ActiveLayer::activeMapThemeChanged()
-{
-  // check if active layer is visible in current map theme too
-  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
-  {
-    if ( nodeLayer->isVisible() )
-    {
-      QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer->isValid() && layer->id() == layerId() )
-      {
-        emit activeLayerChanged( layerName() ); // needs to be emitted to update indexes
-        return;
-      }
-    }
-  }
-
-  // if it is not, reset active layer
-  setActiveLayer( nullptr );
-}
-
 void ActiveLayer::setActiveLayer( QgsMapLayer *layer )
 {
-  if ( !layer ) // reset index
-  {
-    mLayer = nullptr;
-    emit activeLayerChanged( layerName() );
-  }
-  else if ( !mLayer || layer->id() != mLayer->id() )
+  if ( !layer )
+    return resetActiveLayer();
+
+  if ( !mLayer || !mLayer->isValid() || layer->id() != mLayer->id() )
   {
     mLayer = layer;
     emit activeLayerChanged( layerName() );
   }
+}
+
+void ActiveLayer::resetActiveLayer()
+{
+  mLayer = nullptr;
 }

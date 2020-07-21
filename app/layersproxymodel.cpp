@@ -102,19 +102,9 @@ QList<QgsMapLayer *> LayersProxyModel::layers() const
   return filteredLayers;
 }
 
-QgsMapLayer *LayersProxyModel::layerFromName( QString layerName ) const
+void LayersProxyModel::onMapThemeChanged()
 {
-  QList<QgsMapLayer *> modelLayers = layers();
-
-  for ( QgsMapLayer *ix : modelLayers )
-  {
-    if ( ix->name() == layerName )
-    {
-      return ix;
-    }
-  }
-
-  return firstUsableLayer();
+  invalidate();
 }
 
 QgsMapLayer *LayersProxyModel::firstUsableLayer() const
