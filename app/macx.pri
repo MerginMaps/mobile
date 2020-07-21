@@ -68,7 +68,7 @@ macx:!android {
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
     # Uncomment this like to test the real in-app purchases on MacOS
-    DEFINES += "APPLE_PURCHASING"
+    # DEFINES += "APPLE_PURCHASING"
 
     # TESTING stuff (only desktop)
     contains(DEFINES, APPLE_PURCHASING) {
