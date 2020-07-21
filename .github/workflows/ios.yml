@@ -63,10 +63,11 @@ jobs:
       - name: Download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          mkdir -p /opt/INPUT/input-sdk-${SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-${SDK_VERSION}/stage
-          tar -xvzf $DOWNLOAD_DIR/input-sdk-${SDK_VERSION}.tar.gz
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          sudo chown -R $USER .
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
 
           ls -la arm64/include/geodiff.h
           ls -la arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
@@ -75,8 +76,9 @@ jobs:
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
-          mkdir -p /opt/Qt/${QT_VERSION}/ios
+          sudo mkdir -p /opt/Qt/${QT_VERSION}/ios
           cd /opt/Qt/${QT_VERSION}/ios
+          sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
       - name: Create build system with qmake
