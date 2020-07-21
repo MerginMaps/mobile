@@ -3,7 +3,7 @@ on: [push]
 env:
   QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
-  SDK_DROPBOX_HASH: 9exnonxfsyrj9af
+  SDK_DROPBOX_HASH: np11rioezu3894c
   SDK_VERSION: 5
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
@@ -69,8 +69,8 @@ jobs:
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
 
-          ls -la arm64/include/geodiff.h
-          ls -la arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
+          ls -la ./arm64/include/geodiff.h
+          ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
 
       - name: Download and install qt
         run: |
