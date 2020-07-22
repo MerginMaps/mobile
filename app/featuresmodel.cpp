@@ -67,7 +67,7 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         case QgsWkbTypes::GeometryType::PolygonGeometry: return QVariant( "mIconPolygonLayer.svg" );
 
         case QgsWkbTypes::GeometryType::NullGeometry: // fall through
-        case QgsWkbTypes::GeometryType::UnknownGeometry: return QVariant("mIconTableLayer.svg");
+        case QgsWkbTypes::GeometryType::UnknownGeometry: return QVariant( "mIconTableLayer.svg" );
       }
     default: return QVariant();
   }

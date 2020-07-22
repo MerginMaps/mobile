@@ -53,7 +53,7 @@ class FeaturesModel : public QAbstractListModel
                   int role = Qt::EditRole ) override;
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
-signals:
+  signals:
     void tooManyFeaturesInLayer( int limitCount );
 
   public slots:
