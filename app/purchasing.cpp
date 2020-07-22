@@ -467,6 +467,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
 
 void Purchasing::onTransactionCreationFailed()
 {
+  notify( tr( "Failed to initialize subscribe transaction " ) );
   setTransactionCreationRequested( false );
 }
 

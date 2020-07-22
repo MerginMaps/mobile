@@ -183,7 +183,7 @@ class PurchasingBackend: public QObject
     Purchasing *purchasing() const {return mPurchasing;}
 
   signals:
-    void transactionCreationFailed();
+    void transactionCreationFailed( );
     void transactionCreationSucceeded( QSharedPointer<PurchasingTransaction> transaction );
 
     void planRegistrationFailed( const QString &id );
@@ -271,7 +271,7 @@ class Purchasing : public QObject
     void onPlanRegistrationSucceeded( const QString &id );
 
     void onTransactionCreationSucceeded( QSharedPointer<PurchasingTransaction> transaction );
-    void onTransactionCreationFailed();
+    void onTransactionCreationFailed( );
 
     void onTransactionVerificationSucceeded( PurchasingTransaction *transaction );
     void onTransactionVerificationFailed( PurchasingTransaction *transaction );

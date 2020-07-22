@@ -66,6 +66,13 @@ QByteArray IosPurchasingTransaction::receipt() const
   return QByteArray::fromNSData( dataReceipt );
 }
 
+QString IosPurchasingTransaction::errMsg() const
+{
+  NSString *nativeStr = [ mNativeTransaction.error localizedDescription ];
+  QString err = QString::fromNSString( nativeStr );
+  return err;
+}
+
 void IosPurchasingTransaction::finalizeTransaction()
 {
   [[SKPaymentQueue defaultQueue] finishTransaction:mNativeTransaction];
@@ -287,6 +294,7 @@ void IosPurchasingBackend::processTransaction( QSharedPointer<IosPurchasingTrans
   }
   else if ( transaction->status() == IosPurchasingTransaction::PurchaseFailed )
   {
+    InputUtils::log( "transaction creation", QStringLiteral( "Failed: " ) + transaction->errMsg() );
     emit transactionCreationFailed();
     transaction->finalizeTransaction();
   }

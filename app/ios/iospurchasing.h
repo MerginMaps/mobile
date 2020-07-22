@@ -65,6 +65,12 @@ class IosPurchasingTransaction: public PurchasingTransaction
 
     QByteArray receipt() const override;
 
+    /**
+     * Localized ios error message from the native framework,
+     * populated when TransactionStatus::PurchaseFailed
+     */
+    QString errMsg() const;
+
     void finalizeTransaction() override;
 
   private:

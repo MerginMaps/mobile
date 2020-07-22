@@ -746,7 +746,9 @@ void MerginApi::authorizeFinished()
       mUserAuth->setFromJson( docObj );
       mUserInfo->setFromJson( docObj );
       emit authChanged();
-    } else {
+    }
+    else
+    {
       mUserAuth->setUsername( QString() );
       mUserAuth->setPassword( QString() );
       mUserAuth->clearTokenData();
