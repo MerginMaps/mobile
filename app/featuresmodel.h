@@ -28,12 +28,14 @@ class FeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
+
     enum roleNames
     {
       FeatureTitle = Qt::UserRole + 1,
       FeatureId,
       Description, // secondary text in list view
-      GeometryType, // type of geometry (point, line, ..)
+      GeometryType,
       IconSource
     };
 
@@ -48,10 +50,18 @@ class FeaturesModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-
     bool setData( const QModelIndex &index, const QVariant &value,
                   int role = Qt::EditRole ) override;
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
+
+    //! Features count represents real number of features in layer being browsed
+    int featuresCount() const;
+    void setFeaturesCount( int count );
+
+  signals:
+    void tooManyFeaturesInLayer( int limitCount );
+
+    void featuresCountChanged( int featuresCount );
 
   public slots:
     void reloadDataFromLayer( QgsVectorLayer *layer );
@@ -66,6 +76,9 @@ class FeaturesModel : public QAbstractListModel
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
+    int mFeaturesCount;
+
+    const int FEATURES_LIMIT = 10000;
 };
 
 #endif // FEATURESMODEL_H

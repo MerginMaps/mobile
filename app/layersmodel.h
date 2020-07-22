@@ -29,6 +29,7 @@ class LayersModel : public QgsMapLayerModel
     {
       LayerNameRole = Qt::UserRole + 100, //! Reserved for QgsMapLayerModel roles
       VectorLayerRole,
+      HasGeometryRole,
       IconSourceRole
     };
     Q_ENUMS( LayerRoles )

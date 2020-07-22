@@ -57,6 +57,8 @@ class DigitizingController : public QObject
     Q_INVOKABLE QgsQuickFeatureLayerPair pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint );
     //! Creates a new QgsFeature with line/polygon geometry from the points stored since the start of recording
     Q_INVOKABLE QgsQuickFeatureLayerPair lineOrPolygonFeature();
+    //! Creates a new QgsFeature without geometry
+    Q_INVOKABLE QgsQuickFeatureLayerPair featureWithoutGeometry();
     //! Returns (point geom) featurePair coords in map coordinates.
     Q_INVOKABLE QgsPoint pointFeatureMapCoordinates( QgsQuickFeatureLayerPair pair );
     //! Changes point geometry of given pair according given point.

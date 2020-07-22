@@ -12,7 +12,8 @@
 
 FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
-    mLoader( loader )
+    mLoader( loader ),
+    mFeaturesCount( 0 )
 {
 }
 
@@ -65,7 +66,9 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         case QgsWkbTypes::GeometryType::PointGeometry: return QVariant( "mIconPointLayer.svg" );
         case QgsWkbTypes::GeometryType::LineGeometry: return QVariant( "mIconLineLayer.svg" );
         case QgsWkbTypes::GeometryType::PolygonGeometry: return QVariant( "mIconPolygonLayer.svg" );
-        default: return QVariant( "" );
+
+        case QgsWkbTypes::GeometryType::NullGeometry: // fall through
+        case QgsWkbTypes::GeometryType::UnknownGeometry: return QVariant( "mIconTableLayer.svg" );
       }
     default: return QVariant();
   }
@@ -73,10 +76,9 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
-  beginResetModel();
-  mFeatures.clear();
+  emptyData();
 
-  const int FEATURES_LIMIT = 100;
+  beginResetModel();
 
   if ( layer )
   {
@@ -91,6 +93,8 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
     {
       mFeatures << QgsQuickFeatureLayerPair( f, layer );
     }
+
+    setFeaturesCount( layer->featureCount() );
   }
 
   endResetModel();
@@ -113,6 +117,8 @@ void FeaturesModel::emptyData()
 
   mFeatures.clear();
 
+  setFeaturesCount( 0 );
+
   endResetModel();
 }
 
@@ -122,7 +128,6 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureTitle] = QStringLiteral( "FeatureTitle" ).toLatin1();
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
-  roleNames[GeometryType] = QStringLiteral( "GeometryType" ).toLatin1();
   roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
   return roleNames;
 }
@@ -143,4 +148,19 @@ Qt::ItemFlags FeaturesModel::flags( const QModelIndex &index ) const
     return Qt::NoItemFlags;
 
   return Qt::ItemIsEditable;
+}
+
+int FeaturesModel::featuresCount() const
+{
+  return mFeaturesCount;
+}
+
+void FeaturesModel::setFeaturesCount( int count )
+{
+  mFeaturesCount = count;
+
+  if ( mFeaturesCount > FEATURES_LIMIT )
+    emit tooManyFeaturesInLayer( FEATURES_LIMIT );
+
+  emit featuresCountChanged( mFeaturesCount );
 }

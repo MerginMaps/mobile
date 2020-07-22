@@ -294,6 +294,11 @@ QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
   return createFeatureLayerPair( geom );
 }
 
+QgsQuickFeatureLayerPair DigitizingController::featureWithoutGeometry()
+{
+  return createFeatureLayerPair( QgsGeometry() );
+}
+
 QgsPoint DigitizingController::pointFeatureMapCoordinates( QgsQuickFeatureLayerPair pair )
 {
   if ( !pair.layer() )

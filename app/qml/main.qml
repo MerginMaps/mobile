@@ -62,6 +62,7 @@ ApplicationWindow {
                 recordToolbar.focus = true
                 recordToolbar.extraPanelVisible = true
                 recordToolbar.gpsSwitchClicked()
+                digitizing.layer = recordToolbar.activeVectorLayer
             }
             else if (stateManager.state === "edit") {
                 recordToolbar.focus = true
@@ -74,6 +75,8 @@ ApplicationWindow {
 
                 var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
                 mapCanvas.mapSettings.setCenter(screenPos);
+
+                browseDataPanel.clearStackAndClose()
             }
         }
     }
@@ -86,17 +89,24 @@ ApplicationWindow {
                 )
     }
 
-    function saveRecordedFeature(pair) {
-        if (digitizing.isPairValid(pair)) {
-            digitizingHighlight.featureLayerPair = pair
-            digitizingHighlight.visible = true
-            featurePanel.show_panel(pair, "Add", "form")
-        } else {
-            popup.text = qsTr("Recording feature is not valid")
-            popup.open()
+    function saveRecordedFeature( pair, hasGeometry = true ) {
+
+      if ( !digitizing.isPairValid( pair ) && hasGeometry ||
+            !pair.layer && !hasGeometry ) {
+        popup.text = qsTr( "Recorded feature is not valid" )
+        popup.open()
+      }
+      else {
+        if ( hasGeometry ) {
+          digitizingHighlight.featureLayerPair = pair
+          digitizingHighlight.visible = true
         }
-        stateManager.state = "view"
-        digitizing.useGpsPoint = false
+
+        featurePanel.show_panel( pair, "Add", "form" )
+      }
+
+      stateManager.state = "view"
+      digitizing.useGpsPoint = false
     }
 
 
@@ -130,16 +140,25 @@ ApplicationWindow {
         }
     }
 
-    function recordFeature() {
-      var recordedPoint = getRecordedPoint()
-      if ( digitizing.hasPointGeometry( __activeLayer.layer ) ) {
+    function recordFeature( hasGeometry = true ) {
+      if ( hasGeometry )
+      {
+        var recordedPoint = getRecordedPoint()
+
+        if ( digitizing.hasPointGeometry( __activeLayer.layer ) ) {
           var pair = digitizing.pointFeatureFromPoint( recordedPoint, digitizing.useGpsPoint )
           saveRecordedFeature( pair )
-      } else {
-          if ( !digitizing.recording ) {
-              digitizing.startRecording()
-          }
+        }
+        else {
+          if ( !digitizing.recording )
+            digitizing.startRecording()
+
           digitizing.addRecordPoint( recordedPoint, digitizing.useGpsPoint )
+        }
+      }
+      else
+      {
+        saveRecordedFeature( digitizing.featureWithoutGeometry(), hasGeometry )
       }
     }
 
@@ -169,23 +188,35 @@ ApplicationWindow {
 
       activeLayerPanel.activeIndex = __recordingLayersModel.indexFromLayer( __activeLayer.layer )
       recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
-
+      digitizing.layer = recordToolbar.activeVectorLayer
+      
       if ( !recordToolbar.activeVectorLayer ) // nothing to do with no active layer
         return
 
       recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( recordToolbar.activeVectorLayer )
     }
 
-    function selectFeature( feature, shouldUpdateExtent ) {
-      highlight.featureLayerPair = feature
+    function updateBrowseDataPanel( layer )
+    {
+      if ( browseDataPanel.visible )
+        browseDataPanel.selectedLayer = layer
+    }
 
-      if ( shouldUpdateExtent ) // update extent to fit feature above preview panel
-      {
+    function selectFeature( feature, shouldUpdateExtent, hasGeometry = true ) {
+
+      // update extent to fit feature above preview panel
+      if ( shouldUpdateExtent ) {
           let panelOffsetRatio = featurePanel.previewHeight/window.height
           __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
       }
-      highlight.visible = true
-      featurePanel.show_panel( feature, "ReadOnly", "preview" )
+
+      if ( hasGeometry ) {
+        highlight.featureLayerPair = feature
+        highlight.visible = true
+        featurePanel.show_panel( feature, "ReadOnly", "preview" )
+      }
+      else
+        featurePanel.show_panel( feature, "ReadOnly", "form" )
     }
 
     Component.onCompleted: {
@@ -577,9 +608,15 @@ ApplicationWindow {
       z: zPanel   // make sure items from here are on top of the Z-order
 
       onFeatureSelectRequested: {
-        let pair = __featuresModel.featureLayerPair( featureId )
         if ( pair.valid )
           selectFeature( pair, true )
+        else if ( pair.feature.geometry.isNull )
+          selectFeature( pair, false, false )
+      }
+
+      onCreateFeatureRequested: {
+        digitizing.layer = selectedLayer
+        recordFeature( false )
       }
     }
 
@@ -662,6 +699,10 @@ ApplicationWindow {
 
         onEditGeometryClicked: {
             stateManager.state = "edit"
+        }
+
+        onFeatureSaved: {
+          updateBrowseDataPanel( feature.layer )
         }
     }
 

@@ -48,5 +48,6 @@
         <file>database-solid.svg</file>
         <file>ic_today.svg</file>
         <file>exclamation-triangle-solid.svg</file>
+        <file>mIconTableLayer.svg</file>
     </qresource>
 </RCC>
