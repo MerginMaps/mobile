@@ -19,8 +19,6 @@ Rectangle {
   signal backClicked
   signal subscribeClicked
 
-  property int sp: 10 * InputStyle.dp
-
   // header
   PanelHeader {
     id: header
@@ -124,14 +122,14 @@ Rectangle {
       anchors.bottom: parent.bottom
       textFormat: Text.RichText
       onLinkActivated: Qt.openUrlExternally(link)
-      elide: Text.ElideRight
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
-              "Your Mergin storage plan will automatically renew.<br>You can cancel or change at any time. <a href='%1'>Learn More</a>").arg(__purchasing.subscriptionManageUrl)
+              "Your Mergin storage plan will automatically renew. You can cancel or change at any time.<br> <a href='%1'>Learn More</a>").arg(__purchasing.subscriptionManageUrl)
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: InputStyle.fontColor
       width: parent.width
+      wrapMode: Text.Wrap
     }
 }
