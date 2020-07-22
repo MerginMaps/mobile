@@ -745,8 +745,15 @@ void MerginApi::authorizeFinished()
       QJsonObject docObj = doc.object();
       mUserAuth->setFromJson( docObj );
       mUserInfo->setFromJson( docObj );
+      emit authChanged();
+    } else {
+      mUserAuth->setUsername( QString() );
+      mUserAuth->setPassword( QString() );
+      mUserAuth->clearTokenData();
+      emit authFailed();
+      InputUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      emit notify( "Internal server error during authorization" );
     }
-    emit authChanged();
   }
   else
   {

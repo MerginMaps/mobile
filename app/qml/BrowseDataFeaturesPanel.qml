@@ -6,7 +6,12 @@ Item {
 
   signal backButtonClicked()
   signal featureClicked( var featureId )
-  
+  signal addFeatureClicked()
+
+  property bool layerHasGeometry: true
+  property string layerName: ""
+  property int featuresCount: 0
+
   Page {
     id: featuresPage
     anchors.fill: parent
@@ -17,7 +22,7 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Features")
+      titleText: layerName + " (" + featuresCount + ")"
       
       onBack: root.backButtonClicked()
       withBackButton: true
@@ -29,6 +34,11 @@ Item {
       height: parent.height
 
       onFeatureClicked: root.featureClicked( featureId )
+    }
+
+    footer: BrowseDataToolbar {
+      visible: !layerHasGeometry
+      onAddButtonClicked: addFeatureClicked()
     }
   }
 }

@@ -9,8 +9,10 @@ import lc 1.0
 Item {
   id: root
   visible: false
+  property var selectedLayer: null
 
-  signal featureSelectRequested( var featureId )
+  signal featureSelectRequested( var pair )
+  signal createFeatureRequested()
 
   function clearStackAndClose() {
     if ( browseDataLayout.depth > 1 )
@@ -18,11 +20,32 @@ Item {
     root.visible = false
   }
 
+  onSelectedLayerChanged: {
+    if ( selectedLayer )
+      __featuresModel.reloadDataFromLayer( selectedLayer )
+  }
+
   function loadFeaturesFromLayerIndex( index ) {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
     let layer = __browseDataLayersModel.data( modelIndex, LayersModel.VectorLayerRole )
 
-    __featuresModel.reloadDataFromLayer( layer )
+    selectedLayer = layer
+  }
+
+  function pushFeaturesPanelWithParams( index ) {
+    let modelIndex = __browseDataLayersModel.index( index, 0 )
+    let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
+    let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
+    let featuresCount = __featuresModel.rowCount()
+
+    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName, featuresCount: featuresCount } )
+  }
+
+  function pushFeaturesPanelWithParams( index ) {
+    let modelIndex = __browseDataLayersModel.index( index, 0 )
+    let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
+
+    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry } )
   }
 
   StackView {
@@ -38,7 +61,7 @@ Item {
       onBackButtonClicked: clearStackAndClose()
       onLayerClicked: {
         loadFeaturesFromLayerIndex( index )
-        browseDataLayout.push( browseDataFeaturesPanel )
+        pushFeaturesPanelWithParams( index )
       }
     }
   }
@@ -47,11 +70,24 @@ Item {
     id: browseDataFeaturesPanel
 
     BrowseDataFeaturesPanel {
+      id: dataFeaturesPanel
       onBackButtonClicked: browseDataLayout.pop()
       onFeatureClicked: {
-        clearStackAndClose()
-        root.featureSelectRequested( featureId )
+        let featurePair = __featuresModel.featureLayerPair( featureId )
+
+        if ( !featurePair.feature.geometry.isNull )
+          clearStackAndClose() // close view if feature has geometry
+
+        root.featureSelectRequested( featurePair )
       }
+      onAddFeatureClicked: createFeatureRequested()
+    }
+  }
+
+  Connections {
+    target: __featuresModel
+    onTooManyFeaturesInLayer: {
+      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first " ) + limitCount )
     }
   }
 }

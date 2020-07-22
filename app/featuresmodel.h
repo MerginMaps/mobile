@@ -33,7 +33,7 @@ class FeaturesModel : public QAbstractListModel
       FeatureTitle = Qt::UserRole + 1,
       FeatureId,
       Description, // secondary text in list view
-      GeometryType, // type of geometry (point, line, ..)
+      GeometryType,
       IconSource
     };
 
@@ -52,6 +52,9 @@ class FeaturesModel : public QAbstractListModel
     bool setData( const QModelIndex &index, const QVariant &value,
                   int role = Qt::EditRole ) override;
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
+
+signals:
+    void tooManyFeaturesInLayer( int limitCount );
 
   public slots:
     void reloadDataFromLayer( QgsVectorLayer *layer );

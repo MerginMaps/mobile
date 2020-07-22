@@ -32,6 +32,7 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
   {
     case LayerNameRole: return layer->name();
     case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
+    case HasGeometryRole: return vectorLayer ? vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::Type::Unknown : QVariant();
     case IconSourceRole:
     {
       if ( vectorLayer )
@@ -42,8 +43,9 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
           case QgsWkbTypes::GeometryType::PointGeometry: return "mIconPointLayer.svg";
           case QgsWkbTypes::GeometryType::LineGeometry: return "mIconLineLayer.svg";
           case QgsWkbTypes::GeometryType::PolygonGeometry: return "mIconPolygonLayer.svg";
-          case QgsWkbTypes::GeometryType::UnknownGeometry: return "";
-          case QgsWkbTypes::GeometryType::NullGeometry: return "";
+
+          case QgsWkbTypes::GeometryType::UnknownGeometry: // fall through
+          case QgsWkbTypes::GeometryType::NullGeometry: return "mIconTableLayer.svg";
         }
         return QVariant();
       }
@@ -58,6 +60,7 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   QHash<int, QByteArray> roles = QgsMapLayerModel::roleNames();
   roles[LayerNameRole] = QStringLiteral( "layerName" ).toLatin1();
   roles[IconSourceRole] = QStringLiteral( "iconSource" ).toLatin1();
+  roles[HasGeometryRole] = QStringLiteral( "hasGeometry" ).toLatin1();
   roles[VectorLayerRole] = QStringLiteral( "vectorLayer" ).toLatin1();
   return roles;
 }
