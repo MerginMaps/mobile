@@ -91,8 +91,9 @@ ApplicationWindow {
 
     function saveRecordedFeature( pair, hasGeometry = true ) {
 
-      if ( !digitizing.isPairValid( pair ) && hasGeometry ) { // TODO: add check for no geometry pair validity
-        popup.text = qsTr( "Recording feature is not valid" )
+      if ( !digitizing.isPairValid( pair ) && hasGeometry ||
+            !pair.layer && !hasGeometry ) {
+        popup.text = qsTr( "Recorded feature is not valid" )
         popup.open()
       }
       else {

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import lc 1.0
@@ -38,7 +47,7 @@ Item {
     let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
     let featuresCount = __featuresModel.rowCount()
 
-    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName, featuresCount: featuresCount } )
+    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName } )
   }
 
   StackView {
@@ -80,7 +89,7 @@ Item {
   Connections {
     target: __featuresModel
     onTooManyFeaturesInLayer: {
-      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first " ) + limitCount )
+      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( limitCount ) )
     }
   }
 }

@@ -100,6 +100,7 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
     }
   }
 
+  emit featuresCountChanged( mFeatures.count() );
   endResetModel();
 }
 
@@ -119,6 +120,8 @@ void FeaturesModel::emptyData()
   beginResetModel();
 
   mFeatures.clear();
+
+  emit featuresCountChanged( mFeatures.size() );
 
   endResetModel();
 }
@@ -149,4 +152,9 @@ Qt::ItemFlags FeaturesModel::flags( const QModelIndex &index ) const
     return Qt::NoItemFlags;
 
   return Qt::ItemIsEditable;
+}
+
+int FeaturesModel::featuresCount() const
+{
+  return mFeatures.size();
 }

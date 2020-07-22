@@ -28,6 +28,8 @@ class FeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
+
     enum roleNames
     {
       FeatureTitle = Qt::UserRole + 1,
@@ -44,17 +46,20 @@ class FeaturesModel : public QAbstractListModel
     //! Function to get QgsQuickFeatureLayerPair by feature id
     Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const int &featureId );
 
+    int featuresCount() const;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
-
 
     bool setData( const QModelIndex &index, const QVariant &value,
                   int role = Qt::EditRole ) override;
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
+
   signals:
     void tooManyFeaturesInLayer( int limitCount );
+
+    void featuresCountChanged( int featuresCount );
 
   public slots:
     void reloadDataFromLayer( QgsVectorLayer *layer );
@@ -69,6 +74,7 @@ class FeaturesModel : public QAbstractListModel
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
+    int m_featuresCount;
 };
 
 #endif // FEATURESMODEL_H
