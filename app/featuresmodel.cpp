@@ -121,7 +121,7 @@ void FeaturesModel::emptyData()
 
   mFeatures.clear();
 
-  emit featuresCountChanged( mFeatures.size() );
+  emit featuresCountChanged( 0 );
 
   endResetModel();
 }

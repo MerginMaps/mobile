@@ -74,7 +74,6 @@ class FeaturesModel : public QAbstractListModel
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
-    int m_featuresCount;
 };
 
 #endif // FEATURESMODEL_H
