@@ -41,13 +41,6 @@ Item {
     browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName, featuresCount: featuresCount } )
   }
 
-  function pushFeaturesPanelWithParams( index ) {
-    let modelIndex = __browseDataLayersModel.index( index, 0 )
-    let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
-
-    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry } )
-  }
-
   StackView {
     id: browseDataLayout
     initialItem: browseDataLayersPanel
