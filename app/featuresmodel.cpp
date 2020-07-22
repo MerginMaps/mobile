@@ -12,7 +12,8 @@
 
 FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
-    mLoader( loader )
+    mLoader( loader ),
+    mFeaturesCount( 0 )
 {
 }
 
@@ -75,10 +76,9 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
-  beginResetModel();
-  mFeatures.clear();
+  emptyData();
 
-  const int FEATURES_LIMIT = 10000;
+  beginResetModel();
 
   if ( layer )
   {
@@ -94,13 +94,9 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
       mFeatures << QgsQuickFeatureLayerPair( f, layer );
     }
 
-    if ( layer->featureCount() > FEATURES_LIMIT )
-    {
-      emit tooManyFeaturesInLayer( FEATURES_LIMIT );
-    }
+    setFeaturesCount( layer->featureCount() );
   }
 
-  emit featuresCountChanged( mFeatures.count() );
   endResetModel();
 }
 
@@ -121,7 +117,7 @@ void FeaturesModel::emptyData()
 
   mFeatures.clear();
 
-  emit featuresCountChanged( 0 );
+  setFeaturesCount( 0 );
 
   endResetModel();
 }
@@ -156,5 +152,15 @@ Qt::ItemFlags FeaturesModel::flags( const QModelIndex &index ) const
 
 int FeaturesModel::featuresCount() const
 {
-  return mFeatures.size();
+  return mFeaturesCount;
+}
+
+void FeaturesModel::setFeaturesCount(int count)
+{
+  mFeaturesCount = count;
+
+  if ( mFeaturesCount > FEATURES_LIMIT )
+    emit tooManyFeaturesInLayer( FEATURES_LIMIT );
+
+  emit featuresCountChanged( mFeaturesCount );
 }

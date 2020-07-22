@@ -46,7 +46,6 @@ class FeaturesModel : public QAbstractListModel
     //! Function to get QgsQuickFeatureLayerPair by feature id
     Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const int &featureId );
 
-    int featuresCount() const;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
@@ -55,6 +54,9 @@ class FeaturesModel : public QAbstractListModel
                   int role = Qt::EditRole ) override;
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
 
+    //! Features count represents real number of features in layer being browsed
+    int featuresCount() const;
+    void setFeaturesCount( int count );
 
   signals:
     void tooManyFeaturesInLayer( int limitCount );
@@ -74,6 +76,9 @@ class FeaturesModel : public QAbstractListModel
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
+    int mFeaturesCount;
+
+    const int FEATURES_LIMIT = 10000;
 };
 
 #endif // FEATURESMODEL_H
