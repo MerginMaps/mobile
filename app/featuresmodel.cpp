@@ -155,7 +155,7 @@ int FeaturesModel::featuresCount() const
   return mFeaturesCount;
 }
 
-void FeaturesModel::setFeaturesCount(int count)
+void FeaturesModel::setFeaturesCount( int count )
 {
   mFeaturesCount = count;
 
