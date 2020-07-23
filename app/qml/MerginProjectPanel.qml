@@ -233,103 +233,21 @@ Item {
     }
   }
 
-  // SearchBar
-  Rectangle {
+  SearchBar {
     id: searchBar
-    width: parent.width
-    height: InputStyle.rowHeightHeader
     y: header.height
-    color: InputStyle.panelBackgroundLight
 
-    property color bgColor: InputStyle.panelBackgroundLight
-    property color fontColor: InputStyle.panelBackgroundDarker
-
-    /**
-     * Used for deactivating focus on SearchBar when another component should have focus.
-     * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
-     */
-    function deactivate() {
-      searchField.text = ""
-      searchField.focus = false
-    }
-
-    Item {
-      id: row
-      width: searchBar.width
-      height: searchBar.height
-
-      TextField {
-        id: searchField
-        width: parent.width
-        height: InputStyle.rowHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: searchBar.fontColor
-        placeholderText: qsTr("SEARCH")
-        font.capitalization: Font.MixedCase
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        background: Rectangle {
-          color: searchBar.bgColor
-        }
-        leftPadding: projectsPanel.panelMargin
-        rightPadding: projectsPanel.panelMargin
-
-        onTextChanged: {
-          if (toolbar.highlighted === homeBtn.text) {
-            __projectsModel.searchExpression = searchField.text
-          } else if (toolbar.highlighted === exploreBtn.text) {
-            // Filtered by request
-            exploreBtn.activated()
-          } else if (toolbar.highlighted === sharedProjectsBtn.text) {
-            __merginProjectsModel.searchExpression = searchField.text
-          } else if (toolbar.highlighted === myProjectsBtn.text) {
-            __merginProjectsModel.searchExpression = searchField.text
-          }
-        }
+    onSearchTextChanged: {
+      if (toolbar.highlighted === homeBtn.text) {
+        __projectsModel.searchExpression = text
+      } else if (toolbar.highlighted === exploreBtn.text) {
+        // Filtered by request
+        exploreBtn.activated()
+      } else if (toolbar.highlighted === sharedProjectsBtn.text) {
+        __merginProjectsModel.searchExpression = text
+      } else if (toolbar.highlighted === myProjectsBtn.text) {
+        __merginProjectsModel.searchExpression = text
       }
-
-      Item {
-        id: iconContainer
-        height: searchField.height
-        width: projectsPanel.iconSize
-        anchors.right: parent.right
-        anchors.rightMargin: projectsPanel.panelMargin
-
-        Image {
-          id: cancelSearchBtn
-          source: searchField.text ? "no.svg" : "search.svg"
-          width: projectsPanel.iconSize
-          height: width
-          sourceSize.width: width
-          sourceSize.height: height
-          anchors.centerIn: parent
-          fillMode: Image.PreserveAspectFit
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if (searchField.text) {
-                searchBar.deactivate()
-              }
-            }
-          }
-        }
-
-        ColorOverlay {
-          anchors.fill: cancelSearchBtn
-          source: cancelSearchBtn
-          color: searchBar.fontColor
-        }
-      }
-    }
-
-    Rectangle {
-      id: searchFieldBorder
-      color: searchBar.fontColor
-      y: searchField.height - height * 4
-      height: 2 * QgsQuick.Utils.dp
-      opacity: searchField.focus ? 1 : 0.6
-      width: parent.width - projectsPanel.panelMargin*2
-      anchors.horizontalCenter: parent.horizontalCenter
     }
   }
 
