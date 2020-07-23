@@ -29,6 +29,7 @@ class FeaturesModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
+    Q_PROPERTY( QString filterExpression READ filterExpression WRITE setFilterExpression NOTIFY filterExpressionChanged)
 
     enum roleNames
     {
@@ -58,10 +59,13 @@ class FeaturesModel : public QAbstractListModel
     int featuresCount() const;
     void setFeaturesCount( int count );
 
+    QString filterExpression() const;
+    void setFilterExpression( const QString &filterExpression );
+
   signals:
     void tooManyFeaturesInLayer( int limitCount );
-
     void featuresCountChanged( int featuresCount );
+    void filterExpressionChanged( QString filterExpression );
 
   public slots:
     void reloadDataFromLayer( QgsVectorLayer *layer );
@@ -79,6 +83,7 @@ class FeaturesModel : public QAbstractListModel
     int mFeaturesCount;
 
     const int FEATURES_LIMIT = 10000;
+    QString mFilterExpression;
 };
 
 #endif // FEATURESMODEL_H

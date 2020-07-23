@@ -50,6 +50,10 @@ Item {
     browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName } )
   }
 
+  function searchTextEdited( text ) {
+    __featuresModel.filterExpression = text
+  }
+
   StackView {
     id: browseDataLayout
     initialItem: browseDataLayersPanel
@@ -83,6 +87,7 @@ Item {
         root.featureSelectRequested( featurePair )
       }
       onAddFeatureClicked: createFeatureRequested()
+      onSearchTextChanged: searchTextEdited( text )
     }
   }
 
