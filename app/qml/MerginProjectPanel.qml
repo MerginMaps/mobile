@@ -693,7 +693,6 @@ Item {
       __projectsModel.deleteProject(relatedProjectIndex)
       if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
         __loader.load("")
-        __loader.projectReloaded();
         projectsPanel.activeProjectIndex = -1
       }
       deleteDialog.relatedProjectIndex = -1

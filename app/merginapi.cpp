@@ -1109,6 +1109,11 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   }
 }
 
+QString MerginApi::merginUserName() const
+{
+  return userAuth()->username();
+}
+
 MerginProjectList MerginApi::projects()
 {
   return mRemoteProjects;
@@ -2267,6 +2272,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   }
   else
   {
+    // TODO !@#!@# @vsklencar investigate if reloadProject signal is enough to catch
     emit syncProjectFinished( projectDir, projectFullName, syncSuccessful );
 
     if ( syncSuccessful )

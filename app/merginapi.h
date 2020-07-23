@@ -199,7 +199,6 @@ class MerginApi: public QObject
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
 
-
     /**
      * Returns path of the local directory in which all projects are stored.
      * Each project is one sub-directory.
@@ -355,6 +354,8 @@ class MerginApi: public QObject
 
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
+
+    QString merginUserName() const;
 
     //! Disk usage of current logged in user in Mergin instance in Bytes
     int diskUsage() const;

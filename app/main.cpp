@@ -50,6 +50,7 @@
 #include "purchasing.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "variablesmanager.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -374,6 +375,7 @@ int main( int argc, char *argv[] )
   Loader loader( mtm, as, al );
   FeaturesModel fm( loader );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
+  std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -384,6 +386,11 @@ int main( int argc, char *argv[] )
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
   QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
+
+  // Variables connections
+//  QObject::connect( ma.get(), &MerginApi::apiRootChanged, vm.get(), &VariablesManager::apiRootChanged );
+//  QObject::connect( ma.get(), &MerginApi::authChanged, vm.get(), &VariablesManager::authChanged );
+  QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )

@@ -23,6 +23,7 @@ inpututils.cpp \
 geodiffutils.cpp \
 positiondirection.cpp \
 purchasing.cpp \
+variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -58,6 +59,7 @@ inpututils.h \
 geodiffutils.h \
 positiondirection.h \
 purchasing.h \
+variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 

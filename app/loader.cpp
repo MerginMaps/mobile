@@ -77,7 +77,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   if ( filePath.isEmpty() )
   {
     mProject->clear();
-    emit projectReloaded();
+    emit projectReloaded( mProject );
     return true;
   }
 
@@ -105,7 +105,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     setActiveLayer( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
 
-    emit projectReloaded();
+    emit projectReloaded( mProject );
   }
 
   flagFile.remove();

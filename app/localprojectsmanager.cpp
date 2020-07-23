@@ -51,6 +51,16 @@ LocalProjectInfo LocalProjectsManager::projectFromDirectory( const QString &proj
   return LocalProjectInfo();
 }
 
+LocalProjectInfo LocalProjectsManager::projectByProjectFilePath( const QString &projectFilePath ) const
+{
+  for ( const LocalProjectInfo &info : mProjects )
+  {
+    if ( info.qgisProjectFilePath == projectFilePath )
+      return info;
+  }
+  return LocalProjectInfo();
+}
+
 LocalProjectInfo LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
   for ( const LocalProjectInfo &info : mProjects )
