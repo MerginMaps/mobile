@@ -29,7 +29,7 @@ class FeaturesModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
-    Q_PROPERTY( QString filterExpression READ filterExpression WRITE setFilterExpression NOTIFY filterExpressionChanged)
+    Q_PROPERTY( QString filterExpression READ filterExpression WRITE setFilterExpression NOTIFY filterExpressionChanged )
 
     enum roleNames
     {

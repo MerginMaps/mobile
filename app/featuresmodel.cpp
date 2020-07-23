@@ -170,7 +170,7 @@ QString FeaturesModel::filterExpression() const
   return mFilterExpression;
 }
 
-void FeaturesModel::setFilterExpression(const QString &filterExpression)
+void FeaturesModel::setFilterExpression( const QString &filterExpression )
 {
   mFilterExpression = filterExpression;
   emit filterExpressionChanged( mFilterExpression );
