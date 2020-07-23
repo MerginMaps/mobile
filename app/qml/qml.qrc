@@ -47,5 +47,6 @@
         <file>TextWithIcon.qml</file>
         <file>CircularProgressBar.qml</file>
         <file>BrowseDataToolbar.qml</file>
+        <file>SearchBar.qml</file>
     </qresource>
 </RCC>

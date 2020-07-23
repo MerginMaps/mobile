@@ -164,3 +164,14 @@ void FeaturesModel::setFeaturesCount( int count )
 
   emit featuresCountChanged( mFeaturesCount );
 }
+
+QString FeaturesModel::filterExpression() const
+{
+  return mFilterExpression;
+}
+
+void FeaturesModel::setFilterExpression( const QString &filterExpression )
+{
+  mFilterExpression = filterExpression;
+  emit filterExpressionChanged( mFilterExpression );
+}

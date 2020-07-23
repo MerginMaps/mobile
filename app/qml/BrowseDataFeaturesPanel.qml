@@ -16,6 +16,7 @@ Item {
   signal backButtonClicked()
   signal featureClicked( var featureId )
   signal addFeatureClicked()
+  signal searchTextChanged( string text )
 
   property bool layerHasGeometry: true
   property string layerName: ""
@@ -37,15 +38,27 @@ Item {
       withBackButton: true
     }
 
+    SearchBar {
+      id: searchBar
+
+      allowTimer: true
+      onSearchTextChanged: {
+        root.searchTextChanged( text )
+      }
+    }
+
     BrowseDataView {
       id: browseDataView
       width: parent.width
-      height: parent.height
+      height: parent.height - browseDataToolbar.height
+      y: searchBar.height
+      clip: true
 
       onFeatureClicked: root.featureClicked( featureId )
     }
 
     footer: BrowseDataToolbar {
+      id: browseDataToolbar
       visible: !layerHasGeometry
       onAddButtonClicked: addFeatureClicked()
     }
