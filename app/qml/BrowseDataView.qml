@@ -20,8 +20,10 @@ Item {
   signal featureClicked( var featureId )
 
   ListView {
+    topMargin: 10 * QgsQuick.Utils.dp
     implicitHeight: parent.height
     implicitWidth: parent.width
+    spacing: 8 * QgsQuick.Utils.dp
 
     model: __featuresModel
     delegate: Rectangle {
