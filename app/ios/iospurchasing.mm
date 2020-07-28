@@ -148,7 +148,20 @@ PurchasingTransaction::TransactionType IosPurchasingTransaction::status2type( Io
     if ( plan )
     {
       plan->setNativeProduct( product );
-      QMetaObject::invokeMethod( backend, "planRegistrationSucceeded", Qt::AutoConnection, Q_ARG( QString, plan->id() ) );
+
+      NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+      [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+      [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+      [numberFormatter setLocale:product.priceLocale];
+      NSString *formattedString = [numberFormatter stringFromNumber:product.price];
+      [numberFormatter release];
+
+      QString localizedPrice = QString::fromNSString( formattedString );
+      plan->setPrice( localizedPrice );
+      plan->setAlias( QString::fromNSString( [product localizedTitle] ) );
+
+
+      QMetaObject::invokeMethod( backend, "planRegistrationSucceeded", Qt::AutoConnection, Q_ARG( QSharedPointer<PurchasingPlan>, plan ) );
     }
     else
     {
