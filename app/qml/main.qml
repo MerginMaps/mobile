@@ -659,9 +659,10 @@ ApplicationWindow {
           var projectNamespace = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectNamespace)
           var currentProjectFullName = __merginApi.getFullProjectName(projectNamespace, projectName)
 
-          //! if current project has been updated, refresh canvas
+          //! if current project has been updated, refresh canvas and send projectReloaded signal
           if (projectFullName === currentProjectFullName) {
             mapCanvas.mapSettings.extentChanged()
+            __loader.projectReloaded(__loader.project)
           }
         }
     }

@@ -51,7 +51,7 @@ LocalProjectInfo LocalProjectsManager::projectFromDirectory( const QString &proj
   return LocalProjectInfo();
 }
 
-LocalProjectInfo LocalProjectsManager::projectByProjectFilePath( const QString &projectFilePath ) const
+LocalProjectInfo LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
 {
   for ( const LocalProjectInfo &info : mProjects )
   {

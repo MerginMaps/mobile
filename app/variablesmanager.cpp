@@ -6,10 +6,19 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
   : QObject( parent )
   , mMerginApi( merginApi )
 {
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_url" ),  mMerginApi->apiRoot() );
+  apiRootChanged();
+  authChanged();
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
-  QObject::connect( merginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
+  QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
+}
+
+void VariablesManager::removeMerginProjectVariables( QgsProject *project )
+{
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_full_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_version" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_owner" ) );
 }
 
 void VariablesManager::apiRootChanged()
@@ -25,17 +34,23 @@ void VariablesManager::authChanged()
 void VariablesManager::merginProjectChanged( QgsProject *project )
 {
   QString filePath = project->fileName();
-  LocalProjectInfo info = mMerginApi->localProjectsManager().projectByProjectFilePath( filePath );
+  QString projectDir = mMerginApi->localProjectsManager().projectFromProjectFilePath( filePath ).projectDir;
+  if ( projectDir.isEmpty() )
+  {
+    removeMerginProjectVariables( project );
+    return;
+  }
 
-  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( info.projectDir + "/" + MerginApi::sMetadataFile );
+  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + MerginApi::sMetadataFile );
   if ( metadata.isValid() )
   {
-    info.projectName = metadata.name;
-    info.projectNamespace = metadata.projectNamespace;
-    info.localVersion = metadata.version;
-    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_name" ),  info.projectName );
-    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( info.projectNamespace, info.projectName ) );
+    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_name" ),  metadata.name );
+    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
     QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_version" ), metadata.version );
-    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_owner" ),  info.projectNamespace );
+    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
+  }
+  else
+  {
+    removeMerginProjectVariables( project );
   }
 }
