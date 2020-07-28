@@ -36,9 +36,6 @@ void VariablesManager::merginProjectChanged( QgsProject *project )
     QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_name" ),  info.projectName );
     QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( info.projectNamespace, info.projectName ) );
     QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_version" ), metadata.version );
-
-    // TODO
-    //QgsExpressionContextUtils::setGlobalVariable( QStringLiteral("mergin_project_owner"),  metadata.owners);
-    //QgsExpressionContextUtils::setGlobalVariable( QStringLiteral("mergin_project_last_sync"), metadata.???);
+    QgsExpressionContextUtils::setProjectVariable( project, QStringLiteral( "mergin_project_owner" ),  info.projectNamespace );
   }
 }

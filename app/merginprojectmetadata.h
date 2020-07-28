@@ -44,7 +44,6 @@ struct MerginFile
 
 
 //! Metadata read from project info reply or read from cached local .mergin.json file
-// TODO add last_synced and owners for #776
 struct MerginProjectMetadata
 {
   QString name;
