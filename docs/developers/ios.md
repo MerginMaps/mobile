@@ -41,10 +41,21 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
 - open Keychain Access -> Certificate Assistant -> Request certificate (see https://help.apple.com/developer-account/#/devbfa00fef7)
 - click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
 - Download it and double click to open in Keychain Access
-- Store request and cer file in keepass
+- In Keychain Access, right click and export p12 file, with passport (IOS_CERT_KEY)
+- Store request and cer file, p12 in keepass
 
+2. Create/Update provisioning profile 
+- Go to https://developer.apple.com/account/resources/profiles
+- Edit LutraConsultingLtd.Input.AppStore and assign the certificate generated in 1.
+- Download the LutraConsultingLtdInputAppStore.mobileprovision
+- Store in keepass 
 
-
+3. Encrypt the files for GitHub
+- Create IOS_GPG_KEY
+- Encrypt mobileprovision file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./Certificates_ios_dist.p12.gpg ./Certificates_ios_dist.p12`
+- Encrypt p12 file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./LutraConsultingLtdInputAppStore.mobileprovision.gpg ./LutraConsultingLtdInputAppStore.mobileprovision`
+- Copy both files to `.github/secrets/ios`
+- Update secret (passports) on github
 
 # application icon
 
