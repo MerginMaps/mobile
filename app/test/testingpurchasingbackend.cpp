@@ -16,10 +16,10 @@
 #include <QMessageBox>
 #endif
 
-TestingPurchasingTransaction::TestingPurchasingTransaction( QByteArray receipt, PurchasingTransaction::TransactionType type, QSharedPointer<PurchasingPlan> plan )
+TestingPurchasingTransaction::TestingPurchasingTransaction( QString receipt, PurchasingTransaction::TransactionType type, QSharedPointer<PurchasingPlan> plan )
   : PurchasingTransaction( type, plan ), mReceipt( receipt ) {}
 
-QByteArray TestingPurchasingTransaction::receipt() const {return mReceipt;}
+QString TestingPurchasingTransaction::receipt() const {return mReceipt;}
 
 TestingPurchasingBackend::TestingPurchasingBackend( MerginApi *api )
   : PurchasingBackend()
@@ -131,9 +131,8 @@ QString TestingPurchasingBackend::subscriptionBillingUrl()
 
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )
 {
-  QByteArray recept;
-  recept.append( "TEST-1|" );
-  recept.append( data );
+  QString recept( QStringLiteral( "TEST-1|" ) );
+  recept += data;
 
   PurchasingTransaction::TransactionType type;
   restore ? type = PurchasingTransaction::RestoreTransaction : type = PurchasingTransaction::PuchaseTransaction;

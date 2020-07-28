@@ -38,12 +38,14 @@ class MerginApi;
 class TestingPurchasingTransaction: public PurchasingTransaction
 {
   public:
-    TestingPurchasingTransaction( QByteArray receipt, TransactionType type, QSharedPointer<PurchasingPlan> plan );
-    QByteArray receipt() const override;
+    TestingPurchasingTransaction( QString receipt, TransactionType type, QSharedPointer<PurchasingPlan> plan );
+    QString receipt() const override;
+    QString provider() const override {return QStringLiteral( "test" ); }
+
     void finalizeTransaction() override {}
 
   private:
-    QByteArray mReceipt;
+    QString mReceipt;
 };
 
 /**
