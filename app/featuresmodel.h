@@ -57,7 +57,6 @@ class FeaturesModel : public QAbstractListModel
 
     //! Features count represents real number of features in layer being browsed
     int featuresCount() const;
-    void setFeaturesCount( int count );
 
     QString filterExpression() const;
     void setFilterExpression( const QString &filterExpression );
@@ -78,12 +77,18 @@ class FeaturesModel : public QAbstractListModel
     //! Empty data when changing map theme or project
     void emptyData();
 
+    //! Builds filter qgis expression from mFilterExpression
+    QString buildFilterExpression();
+
+    void setFeaturesCount( int count );
+
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
     int mFeaturesCount;
 
     const int FEATURES_LIMIT = 10000;
     QString mFilterExpression;
+    QgsVectorLayer *mCurrentLayer;
 };
 
 #endif // FEATURESMODEL_H

@@ -34,7 +34,11 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
       titleText: layerName + " (" + featuresCount + ")"
       
-      onBack: root.backButtonClicked()
+      onBack: {
+        searchBar.deactivate()
+        root.backButtonClicked()
+       }
+
       withBackButton: true
     }
 
