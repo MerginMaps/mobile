@@ -35,6 +35,17 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
 - install all on device
 - set in Qt Creator
 
+# production certificate
+
+1. Create new iOS distribution certificate
+- open Keychain Access -> Certificate Assistant -> Request certificate (see https://help.apple.com/developer-account/#/devbfa00fef7)
+- click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
+- Download it and double click to open in Keychain Access
+- Store request and cer file in keepass
+
+
+
+
 # application icon
 
 see: https://appbus.wordpress.com/2017/10/06/ios-11-and-xcode-9-in-qt-5-9-x-projects/
