@@ -154,15 +154,10 @@ PurchasingTransaction::TransactionType IosPurchasingTransaction::status2type( Io
       [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
       [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
       [numberFormatter setLocale:product.priceLocale];
-      NSString *formattedString = [numberFormatter stringFromNumber:product.price];
-      [numberFormatter release];
+      NSString *formattedPrice = [numberFormatter stringFromNumber:product.price];
+      plan->setPrice( QString::fromNSString( formattedPrice ) );
 
-      QString localizedPrice = QString::fromNSString( formattedString );
-      plan->setPrice( localizedPrice );
-      plan->setAlias( QString::fromNSString( [product localizedTitle] ) );
-
-
-      QMetaObject::invokeMethod( backend, "planRegistrationSucceeded", Qt::AutoConnection, Q_ARG( QSharedPointer<PurchasingPlan>, plan ) );
+      QMetaObject::invokeMethod( backend, "planRegistrationSucceeded", Qt::AutoConnection, Q_ARG( QString, plan->id() ) );
     }
     else
     {

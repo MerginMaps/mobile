@@ -192,7 +192,7 @@ class PurchasingBackend: public QObject
     void transactionCreationSucceeded( QSharedPointer<PurchasingTransaction> transaction );
 
     void planRegistrationFailed( const QString &id );
-    void planRegistrationSucceeded( QSharedPointer<PurchasingPlan> plan );
+    void planRegistrationSucceeded( const QString &id );
 
   private:
     Purchasing *mPurchasing = nullptr;
@@ -273,7 +273,7 @@ class Purchasing : public QObject
     void onFetchPurchasingPlansFinished();
 
     void onPlanRegistrationFailed( const QString &id );
-    void onPlanRegistrationSucceeded( QSharedPointer<PurchasingPlan> plan );
+    void onPlanRegistrationSucceeded( const QString &id );
 
     void onTransactionCreationSucceeded( QSharedPointer<PurchasingTransaction> transaction );
     void onTransactionCreationFailed( );
