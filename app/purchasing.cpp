@@ -418,9 +418,8 @@ void Purchasing::onPlanRegistrationFailed( const QString &id )
     mPlansWithPendingRegistration.remove( id );
 }
 
-void Purchasing::onPlanRegistrationSucceeded( QSharedPointer<PurchasingPlan> plan )
+void Purchasing::onPlanRegistrationSucceeded( const QString &id )
 {
-  const QString id = plan->id();
   if ( mPlansWithPendingRegistration.contains( id ) )
   {
     QSharedPointer<PurchasingPlan> plan = mPlansWithPendingRegistration.take( id );

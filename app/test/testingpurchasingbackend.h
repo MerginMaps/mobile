@@ -77,7 +77,7 @@ class TestingPurchasingBackend: public PurchasingBackend
 
     void init() override {}
     QSharedPointer<PurchasingPlan> createPlan( ) override {return QSharedPointer<PurchasingPlan>( new PurchasingPlan ); }
-    void registerPlan( QSharedPointer<PurchasingPlan> plan ) override {mPlan = plan; emit planRegistrationSucceeded( plan );}
+    void registerPlan( QSharedPointer<PurchasingPlan> plan ) override {mPlan = plan; emit planRegistrationSucceeded( plan->id() );}
     void createTransaction( QSharedPointer<PurchasingPlan> plan ) override;
     void restore() override;
     QString subscriptionManageUrl() override;
