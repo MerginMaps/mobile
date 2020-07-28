@@ -459,8 +459,14 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
   QNetworkRequest request = mMerginApi->getDefaultRequest();
   QUrl url( mMerginApi->apiRoot() + QStringLiteral( "v1/subscription/process-transaction" ) );
   request.setUrl( url );
-  request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant( "application/octet-stream" ) );
-  QNetworkReply *reply = mMerginApi->mManager.post( request, transaction->receipt() );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant( "application/json" ) );
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "type" ), transaction->provider() );
+  jsonObject.insert( QStringLiteral( "receipt-data" ), transaction->receipt() );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  QNetworkReply *reply = mMerginApi->mManager.post( request, json );
   connect( reply, &QNetworkReply::finished, transaction.get(), &PurchasingTransaction::verificationFinished );
   InputUtils::log( "process transaction", QStringLiteral( "Requesting processing of in-app transaction: " ) + url.toString() );
 }

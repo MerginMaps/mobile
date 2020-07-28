@@ -99,8 +99,13 @@ class PurchasingTransaction : public QObject
 
     PurchasingTransaction( TransactionType type, QSharedPointer<PurchasingPlan> plan );
 
-    virtual QByteArray receipt() const = 0;
     void virtual finalizeTransaction() = 0;
+
+    //! Transaction receipt, e.g. apple base64 receipt
+    virtual QString receipt() const = 0;
+
+    //! Transaction provider, either apple or test
+    virtual QString provider() const = 0;
 
     PurchasingPlan *plan() const;
     TransactionType type() const;

@@ -60,10 +60,11 @@ IosPurchasingTransaction::TransactionStatus IosPurchasingTransaction::status() c
   return mStatus;
 }
 
-QByteArray IosPurchasingTransaction::receipt() const
+QString IosPurchasingTransaction::receipt() const
 {
   NSData *dataReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
-  return QByteArray::fromNSData( dataReceipt );
+  NSString *receipt = [dataReceipt base64EncodedStringWithOptions:0];
+  return QString::fromNSString( receipt );
 }
 
 QString IosPurchasingTransaction::errMsg() const

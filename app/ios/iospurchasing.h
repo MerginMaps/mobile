@@ -63,7 +63,8 @@ class IosPurchasingTransaction: public PurchasingTransaction
     SKPaymentTransaction *nativeTransaction() const;
     TransactionStatus status() const;
 
-    QByteArray receipt() const override;
+    QString receipt() const override;
+    QString provider() const override {return QStringLiteral( "apple" ); }
 
     /**
      * Localized ios error message from the native framework,
