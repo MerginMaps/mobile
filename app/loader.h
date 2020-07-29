@@ -100,7 +100,7 @@ class Loader: public QObject
 
   signals:
     void projectChanged();
-    void projectReloaded();
+    void projectReloaded( QgsProject *project );
 
     void positionKitChanged();
     void recordingChanged();

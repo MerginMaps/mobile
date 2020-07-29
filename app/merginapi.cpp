@@ -1109,6 +1109,11 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   }
 }
 
+QString MerginApi::merginUserName() const
+{
+  return userAuth()->username();
+}
+
 MerginProjectList MerginApi::projects()
 {
   return mRemoteProjects;
