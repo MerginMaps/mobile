@@ -34,25 +34,20 @@ void VariablesManager::authChanged()
 
 void VariablesManager::setVersionVariable( const QString &projectFullName )
 {
-  Q_UNUSED( projectFullName );
-  setProjectVariables( true );
+  if ( mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString() == projectFullName )
+    setProjectVariables();
 }
 
 void VariablesManager::merginProjectChanged( QgsProject *project )
 {
-  if ( !mCurrentProject )
-    mCurrentProject = project;
-
-
+  mCurrentProject = project;
   setProjectVariables();
 }
 
-void VariablesManager::setProjectVariables( bool updateOnlyVersion )
+void VariablesManager::setProjectVariables()
 {
   if ( !mCurrentProject )
-  {
     return;
-  }
 
 
   QString filePath = mCurrentProject->fileName();
@@ -67,14 +62,11 @@ void VariablesManager::setProjectVariables( bool updateOnlyVersion )
   if ( metadata.isValid() )
   {
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_version" ), metadata.version );
-    if ( !updateOnlyVersion )
-    {
-      QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_name" ),  metadata.name );
-      QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
-      QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
-    }
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_name" ),  metadata.name );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
   }
-  else if ( !updateOnlyVersion )
+  else
   {
     removeMerginProjectVariables( mCurrentProject );
   }
