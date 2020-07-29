@@ -662,7 +662,6 @@ ApplicationWindow {
           //! if current project has been updated, refresh canvas and send projectReloaded signal
           if (projectFullName === currentProjectFullName) {
             mapCanvas.mapSettings.extentChanged()
-            __loader.projectReloaded(__loader.project)
           }
         }
     }

@@ -27,12 +27,19 @@ class VariablesManager : public QObject
     void removeMerginProjectVariables( QgsProject *project );
 
   public slots:
+
+    void merginProjectChanged( QgsProject *project );
+
+  private slots:
     void apiRootChanged();
     void authChanged();
-    void merginProjectChanged( QgsProject *project );
+    void setVersionVariable( const QString &projectFullName );
 
   private:
     MerginApi *mMerginApi = nullptr;
+    QgsProject *mCurrentProject = nullptr;
+
+    void setProjectVariables( bool updateOnlyVersion = false );
 };
 
 #endif // VARIABLESMANAGER_H
