@@ -744,6 +744,7 @@ void MerginApi::authorizeFinished()
     {
       QJsonObject docObj = doc.object();
       mUserAuth->setFromJson( docObj );
+      mUserInfo->setFromJson( docObj );
       emit authChanged();
     }
     else
