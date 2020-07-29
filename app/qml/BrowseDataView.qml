@@ -82,7 +82,7 @@ Item {
           Text {
             id: descriptionText
             height: textContainer.height/2
-            text: model.Description
+            text: showAdditionalInfo ? model.Description + ", " + model.FoundPair : model.Description
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left
@@ -93,11 +93,6 @@ Item {
             verticalAlignment: Text.AlignTop
             elide: Text.ElideRight
 
-            Text {
-              id: name
-              text: model.FoundPair
-              visible: showAdditionalInfo
-            }
           }
         }
       }

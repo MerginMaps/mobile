@@ -74,10 +74,24 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
     {
       if ( mFilterExpression.isEmpty() )
         return QString();
-      return QString("Something will be here");
+      return foundPair( feat );
     }
     default: return QVariant();
   }
+}
+
+QString FeaturesModel::foundPair( const QgsQuickFeatureLayerPair& pair ) const
+{
+  QgsFields fields = pair.feature().fields();
+
+  for ( const QgsField &field : fields )
+  {
+    QString attrValue = pair.feature().attribute( field.name() ).toString();
+
+    if ( attrValue.toLower().indexOf( mFilterExpression.toLower() ) != -1 )
+      return field.name() + ": " + attrValue;
+  }
+  return QString();
 }
 
 QString FeaturesModel::buildFilterExpression()
@@ -97,13 +111,13 @@ QString FeaturesModel::buildFilterExpression()
       expressionParts << QStringLiteral( "%1 ~ '%2.*'" ).arg( QgsExpression::quotedColumnRef( field.name() ), QString::number( mFilterExpression.toInt() ) );
     else if ( field.type() == QVariant::String )
       expressionParts << QStringLiteral( "%1 ILIKE '%%2%'" ).arg( QgsExpression::quotedColumnRef( field.name() ), mFilterExpression );
-    // TODO: Maybe add check for Date?
   }
 
   QString expression = QStringLiteral( "(%1)" ).arg( expressionParts.join( QStringLiteral( " ) OR ( " ) ) );
 
   return expression;
 }
+
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
@@ -170,7 +184,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
-  roleNames[FoundPair] = QStringLiteral("FoundPair").toLatin1();
+  roleNames[FoundPair] = QStringLiteral( "FoundPair" ).toLatin1();
   return roleNames;
 }
 

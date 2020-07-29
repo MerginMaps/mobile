@@ -81,6 +81,9 @@ class FeaturesModel : public QAbstractListModel
     //! Builds filter qgis expression from mFilterExpression
     QString buildFilterExpression();
 
+    //! Returns found attribute and its value from mFilterExpression
+    QString foundPair( const QgsQuickFeatureLayerPair& feat ) const;
+
     void setFeaturesCount( int count );
 
     QList<QgsQuickFeatureLayerPair> mFeatures;
