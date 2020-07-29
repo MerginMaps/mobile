@@ -37,7 +37,8 @@ class FeaturesModel : public QAbstractListModel
       FeatureId,
       Description, // secondary text in list view
       GeometryType,
-      IconSource
+      IconSource,
+      FoundPair // pair of attribute and its value by which the feature was found, empty if mFilterExpression is empty
     };
 
   public:

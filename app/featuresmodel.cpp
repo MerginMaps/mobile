@@ -70,6 +70,12 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         case QgsWkbTypes::GeometryType::NullGeometry: // fall through
         case QgsWkbTypes::GeometryType::UnknownGeometry: return QVariant( "mIconTableLayer.svg" );
       }
+    case FoundPair:
+    {
+      if ( mFilterExpression.isEmpty() )
+        return QString();
+      return QString("Something will be here");
+    }
     default: return QVariant();
   }
 }
@@ -164,6 +170,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
+  roleNames[FoundPair] = QStringLiteral("FoundPair").toLatin1();
   return roleNames;
 }
 

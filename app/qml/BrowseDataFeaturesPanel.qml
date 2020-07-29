@@ -22,6 +22,17 @@ Item {
   property string layerName: ""
   property int featuresCount: __featuresModel.featuresCount
 
+  states: [
+    State {
+      name: "view"
+      when: searchBar.text == ""
+    },
+    State {
+      name: "search"
+      when: searchBar.text != ""
+    }
+  ]
+
   Page {
     id: featuresPage
     anchors.fill: parent
@@ -57,6 +68,7 @@ Item {
       height: parent.height - browseDataToolbar.height
       y: searchBar.height
       clip: true
+      showAdditionalInfo: root.state == "search"
 
       onFeatureClicked: root.featureClicked( featureId )
     }

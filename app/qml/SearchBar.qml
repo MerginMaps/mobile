@@ -45,7 +45,10 @@ Rectangle {
     id: searchTimer
     interval: emitInterval
     running: false
-    onTriggered: searchTextChanged( searchField.text )
+    onTriggered: {
+      root.text = searchField.text
+      searchTextChanged( root.text )
+    }
   }
   
   Item {
@@ -77,7 +80,10 @@ Rectangle {
             searchTimer.start()
         }
         else
+        {
+          root.text = searchField.text
           root.searchTextChanged( text )
+        }
       }
     }
     
