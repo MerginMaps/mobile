@@ -13,7 +13,8 @@
 FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
     mLoader( loader ),
-    mFeaturesCount( 0 )
+    mFeaturesCount( 0 ),
+    mCurrentLayer( nullptr )
 {
 }
 

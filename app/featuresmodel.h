@@ -94,7 +94,7 @@ class FeaturesModel : public QAbstractListModel
 
     const int FEATURES_LIMIT = 10000;
     QString mFilterExpression;
-    QgsVectorLayer *mCurrentLayer;
+    QgsVectorLayer *mCurrentLayer = nullptr;
 };
 
 #endif // FEATURESMODEL_H
