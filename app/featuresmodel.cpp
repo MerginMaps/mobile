@@ -13,7 +13,8 @@
 FeaturesModel::FeaturesModel( Loader &loader, QObject *parent )
   : QAbstractListModel( parent ),
     mLoader( loader ),
-    mFeaturesCount( 0 )
+    mFeaturesCount( 0 ),
+    mCurrentLayer( nullptr )
 {
 }
 
@@ -70,9 +71,54 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
         case QgsWkbTypes::GeometryType::NullGeometry: // fall through
         case QgsWkbTypes::GeometryType::UnknownGeometry: return QVariant( "mIconTableLayer.svg" );
       }
+    case FoundPair:
+    {
+      if ( mFilterExpression.isEmpty() )
+        return QString();
+      return foundPair( feat );
+    }
     default: return QVariant();
   }
 }
+
+QString FeaturesModel::foundPair( const QgsQuickFeatureLayerPair &pair ) const
+{
+  QgsFields fields = pair.feature().fields();
+
+  for ( const QgsField &field : fields )
+  {
+    QString attrValue = pair.feature().attribute( field.name() ).toString();
+
+    if ( attrValue.toLower().indexOf( mFilterExpression.toLower() ) != -1 )
+      return field.name() + ": " + attrValue;
+  }
+  return QString();
+}
+
+QString FeaturesModel::buildFilterExpression()
+{
+  if ( mFilterExpression.isEmpty() || !mCurrentLayer )
+    return QString();
+
+  const QgsFields fields = mCurrentLayer->fields();
+  QStringList expressionParts;
+
+  bool filterExpressionIsNumeric;
+  mFilterExpression.toInt( &filterExpressionIsNumeric );
+
+  for ( const QgsField &field : fields )
+  {
+    if ( field.isNumeric() && filterExpressionIsNumeric )
+      expressionParts << QStringLiteral( "%1 ~ '%2.*'" ).arg( QgsExpression::quotedColumnRef( field.name() ), QString::number( mFilterExpression.toInt() ) );
+    else if ( field.type() == QVariant::String )
+      expressionParts << QStringLiteral( "%1 ILIKE '%%2%'" ).arg( QgsExpression::quotedColumnRef( field.name() ), mFilterExpression );
+  }
+
+  QString expression = QStringLiteral( "(%1)" ).arg( expressionParts.join( QStringLiteral( " ) OR ( " ) ) );
+
+  return expression;
+}
+
 
 void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 {
@@ -82,7 +128,16 @@ void FeaturesModel::reloadDataFromLayer( QgsVectorLayer *layer )
 
   if ( layer )
   {
+    mCurrentLayer = layer;
+
     QgsFeatureRequest req;
+    req.setFlags( QgsFeatureRequest::Flag::NoGeometry );
+
+    if ( !mFilterExpression.isEmpty() )
+    {
+      QgsExpressionContextUtils::layerScope( layer );
+      req.setFilterExpression( buildFilterExpression() );
+    }
 
     req.setLimit( FEATURES_LIMIT );
 
@@ -116,6 +171,7 @@ void FeaturesModel::emptyData()
   beginResetModel();
 
   mFeatures.clear();
+  mCurrentLayer = nullptr;
 
   setFeaturesCount( 0 );
 
@@ -129,6 +185,7 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[IconSource] = QStringLiteral( "IconSource" ).toLatin1();
+  roleNames[FoundPair] = QStringLiteral( "FoundPair" ).toLatin1();
   return roleNames;
 }
 
@@ -159,9 +216,6 @@ void FeaturesModel::setFeaturesCount( int count )
 {
   mFeaturesCount = count;
 
-  if ( mFeaturesCount > FEATURES_LIMIT )
-    emit tooManyFeaturesInLayer( FEATURES_LIMIT );
-
   emit featuresCountChanged( mFeaturesCount );
 }
 
@@ -174,4 +228,10 @@ void FeaturesModel::setFilterExpression( const QString &filterExpression )
 {
   mFilterExpression = filterExpression;
   emit filterExpressionChanged( mFilterExpression );
+  reloadDataFromLayer( mCurrentLayer );
+}
+
+int FeaturesModel::featuresLimit() const
+{
+  return FEATURES_LIMIT;
 }

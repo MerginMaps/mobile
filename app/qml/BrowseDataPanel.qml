@@ -23,15 +23,27 @@ Item {
   signal featureSelectRequested( var pair )
   signal createFeatureRequested()
 
+  onSelectedLayerChanged: {
+    if ( selectedLayer )
+      __featuresModel.reloadDataFromLayer( selectedLayer )
+  }
+
+  onFocusChanged: { // pass focus to stackview
+    browseDataLayout.focus = true
+  }
+
   function clearStackAndClose() {
     if ( browseDataLayout.depth > 1 )
       browseDataLayout.pop( null ) // pops everything besides an initialItem
     root.visible = false
   }
 
-  onSelectedLayerChanged: {
-    if ( selectedLayer )
-      __featuresModel.reloadDataFromLayer( selectedLayer )
+  function popOnePageOrClose() {
+    if ( browseDataLayout.depth > 1 )
+    {
+      browseDataLayout.pop()
+    }
+    else clearStackAndClose()
   }
 
   function loadFeaturesFromLayerIndex( index ) {
@@ -45,9 +57,15 @@ Item {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
     let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
     let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
-    let featuresCount = __featuresModel.rowCount()
+    let featuresCount = __featuresModel.featuresCount
+    let featuresLimit = __featuresModel.featuresLimit
 
-    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName } )
+    browseDataLayout.push( browseDataFeaturesPanel, {
+                            layerHasGeometry: hasGeometry,
+                            layerName: layerName,
+                            featuresCount: featuresCount,
+                            featuresLimit: featuresLimit
+                          } )
   }
 
   function searchTextEdited( text ) {
@@ -58,13 +76,26 @@ Item {
     id: browseDataLayout
     initialItem: browseDataLayersPanel
     anchors.fill: parent
+    focus: true
+
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+        popOnePageOrClose()
+      }
+    }
+
+    onVisibleChanged: {
+      if ( browseDataLayout.visible )
+        browseDataLayout.forceActiveFocus()
+    }
   }
 
   Component {
     id: browseDataLayersPanel
 
     BrowseDataLayersPanel {
-      onBackButtonClicked: clearStackAndClose()
+      onBackButtonClicked: popOnePageOrClose()
       onLayerClicked: {
         loadFeaturesFromLayerIndex( index )
         pushFeaturesPanelWithParams( index )
@@ -77,7 +108,7 @@ Item {
 
     BrowseDataFeaturesPanel {
       id: dataFeaturesPanel
-      onBackButtonClicked: browseDataLayout.pop()
+      onBackButtonClicked: popOnePageOrClose()
       onFeatureClicked: {
         let featurePair = __featuresModel.featureLayerPair( featureId )
 
@@ -88,13 +119,6 @@ Item {
       }
       onAddFeatureClicked: createFeatureRequested()
       onSearchTextChanged: searchTextEdited( text )
-    }
-  }
-
-  Connections {
-    target: __featuresModel
-    onTooManyFeaturesInLayer: {
-      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( limitCount ) )
     }
   }
 }

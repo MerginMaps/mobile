@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.7
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
@@ -20,6 +20,7 @@ Rectangle {
 
   signal searchTextChanged( string text )
 
+  property string text: searchField.text
   property bool allowTimer: false
   property int emitInterval: 200
   
@@ -44,7 +45,10 @@ Rectangle {
     id: searchTimer
     interval: emitInterval
     running: false
-    onTriggered: searchTextChanged( searchField.text )
+    onTriggered: {
+      root.text = searchField.text
+      searchTextChanged( root.text )
+    }
   }
   
   Item {
@@ -76,7 +80,10 @@ Rectangle {
             searchTimer.start()
         }
         else
+        {
+          root.text = searchField.text
           root.searchTextChanged( text )
+        }
       }
     }
     

@@ -518,7 +518,7 @@ Item {
     }
 
     onHighlightedChanged: {
-      searchField.text = ""
+      searchBar.deactivate()
       if (toolbar.highlighted === homeBtn.text) {
         __projectsModel.searchExpression = ""
       } else {
@@ -605,7 +605,7 @@ Item {
             busyIndicator.running = true
             showMergin = true
             authPanel.visible = false
-            __merginApi.listProjects(searchField.text)
+            __merginApi.listProjects( searchBar.text )
           }
         }
       }
@@ -722,7 +722,7 @@ Item {
         onClicked: {
           busyIndicator.running = true
           // filters suppose to not change
-          __merginApi.listProjects(searchField.text)
+          __merginApi.listProjects( searchBar.text )
           reloadList.visible = false
         }
         background: Rectangle {

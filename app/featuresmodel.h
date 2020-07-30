@@ -30,6 +30,7 @@ class FeaturesModel : public QAbstractListModel
 
     Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
     Q_PROPERTY( QString filterExpression READ filterExpression WRITE setFilterExpression NOTIFY filterExpressionChanged )
+    Q_PROPERTY( int featuresLimit READ featuresLimit )
 
     enum roleNames
     {
@@ -37,7 +38,8 @@ class FeaturesModel : public QAbstractListModel
       FeatureId,
       Description, // secondary text in list view
       GeometryType,
-      IconSource
+      IconSource,
+      FoundPair // pair of attribute and its value by which the feature was found, empty if mFilterExpression is empty
     };
 
   public:
@@ -57,13 +59,13 @@ class FeaturesModel : public QAbstractListModel
 
     //! Features count represents real number of features in layer being browsed
     int featuresCount() const;
-    void setFeaturesCount( int count );
 
     QString filterExpression() const;
     void setFilterExpression( const QString &filterExpression );
 
+    int featuresLimit() const;
+
   signals:
-    void tooManyFeaturesInLayer( int limitCount );
     void featuresCountChanged( int featuresCount );
     void filterExpressionChanged( QString filterExpression );
 
@@ -78,12 +80,21 @@ class FeaturesModel : public QAbstractListModel
     //! Empty data when changing map theme or project
     void emptyData();
 
+    //! Builds filter qgis expression from mFilterExpression
+    QString buildFilterExpression();
+
+    //! Returns found attribute and its value from mFilterExpression
+    QString foundPair( const QgsQuickFeatureLayerPair &feat ) const;
+
+    void setFeaturesCount( int count );
+
     QList<QgsQuickFeatureLayerPair> mFeatures;
     Loader &mLoader;
     int mFeaturesCount;
 
     const int FEATURES_LIMIT = 10000;
     QString mFilterExpression;
+    QgsVectorLayer *mCurrentLayer = nullptr;
 };
 
 #endif // FEATURESMODEL_H
