@@ -605,6 +605,7 @@ ApplicationWindow {
       id: browseDataPanel
       width: window.width
       height: window.height
+      focus: true
       z: zPanel   // make sure items from here are on top of the Z-order
 
       onFeatureSelectRequested: {
@@ -617,6 +618,11 @@ ApplicationWindow {
       onCreateFeatureRequested: {
         digitizing.layer = selectedLayer
         recordFeature( false )
+      }
+
+      onVisibleChanged: {
+        if ( !browseDataPanel.visible )
+          mainPanel.forceActiveFocus()
       }
     }
 
@@ -684,17 +690,16 @@ ApplicationWindow {
         z: 0 // to featureform editors be visible
 
         onVisibleChanged: {
-            if (!visible) {
+            if ( !visible ) {
                 digitizingHighlight.visible = false
                 highlight.visible = false
 
               if (stateManager.state !== "edit") {
-                mainPanel.focus = true
+                if ( browseDataPanel.visible ) browseDataPanel.focus = true
+                else mainPanel.focus = true
               }
             }
-            else {
-              featurePanel.forceActiveFocus()
-            }
+            else featurePanel.forceActiveFocus()
         }
 
         onEditGeometryClicked: {
