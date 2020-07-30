@@ -30,6 +30,7 @@ class FeaturesModel : public QAbstractListModel
 
     Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
     Q_PROPERTY( QString filterExpression READ filterExpression WRITE setFilterExpression NOTIFY filterExpressionChanged )
+    Q_PROPERTY( int featuresLimit READ featuresLimit )
 
     enum roleNames
     {
@@ -62,8 +63,9 @@ class FeaturesModel : public QAbstractListModel
     QString filterExpression() const;
     void setFilterExpression( const QString &filterExpression );
 
+    int featuresLimit() const;
+
   signals:
-    void tooManyFeaturesInLayer( int limitCount );
     void featuresCountChanged( int featuresCount );
     void filterExpressionChanged( QString filterExpression );
 
@@ -82,7 +84,7 @@ class FeaturesModel : public QAbstractListModel
     QString buildFilterExpression();
 
     //! Returns found attribute and its value from mFilterExpression
-    QString foundPair( const QgsQuickFeatureLayerPair& feat ) const;
+    QString foundPair( const QgsQuickFeatureLayerPair &feat ) const;
 
     void setFeaturesCount( int count );
 

@@ -20,7 +20,8 @@ Item {
 
   property bool layerHasGeometry: true
   property string layerName: ""
-  property int featuresCount: __featuresModel.featuresCount
+  property int featuresCount: 0
+  property int featuresLimit: 0
 
   states: [
     State {
@@ -32,6 +33,10 @@ Item {
       when: searchBar.text != ""
     }
   ]
+  Component.onCompleted: {
+    if ( featuresCount > featuresLimit )
+      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( featuresLimit ) )
+  }
 
   Page {
     id: featuresPage

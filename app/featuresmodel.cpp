@@ -80,7 +80,7 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
   }
 }
 
-QString FeaturesModel::foundPair( const QgsQuickFeatureLayerPair& pair ) const
+QString FeaturesModel::foundPair( const QgsQuickFeatureLayerPair &pair ) const
 {
   QgsFields fields = pair.feature().fields();
 
@@ -215,9 +215,6 @@ void FeaturesModel::setFeaturesCount( int count )
 {
   mFeaturesCount = count;
 
-  if ( mFeaturesCount > FEATURES_LIMIT )
-    emit tooManyFeaturesInLayer( FEATURES_LIMIT );
-
   emit featuresCountChanged( mFeaturesCount );
 }
 
@@ -231,4 +228,9 @@ void FeaturesModel::setFilterExpression( const QString &filterExpression )
   mFilterExpression = filterExpression;
   emit filterExpressionChanged( mFilterExpression );
   reloadDataFromLayer( mCurrentLayer );
+}
+
+int FeaturesModel::featuresLimit() const
+{
+  return FEATURES_LIMIT;
 }

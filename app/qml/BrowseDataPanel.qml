@@ -45,9 +45,16 @@ Item {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
     let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
     let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
-    let featuresCount = __featuresModel.rowCount()
+    let featuresCount = __featuresModel.featuresCount
+    let featuresLimit = __featuresModel.featuresLimit
 
-    browseDataLayout.push( browseDataFeaturesPanel, { layerHasGeometry: hasGeometry, layerName: layerName } )
+    browseDataLayout.push( browseDataFeaturesPanel,
+                          {
+                            layerHasGeometry: hasGeometry,
+                            layerName: layerName,
+                            featuresCount: featuresCount,
+                            featuresLimit: featuresLimit
+                          } )
   }
 
   function searchTextEdited( text ) {
@@ -88,13 +95,6 @@ Item {
       }
       onAddFeatureClicked: createFeatureRequested()
       onSearchTextChanged: searchTextEdited( text )
-    }
-  }
-
-  Connections {
-    target: __featuresModel
-    onTooManyFeaturesInLayer: {
-      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( limitCount ) )
     }
   }
 }
