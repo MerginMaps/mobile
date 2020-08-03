@@ -101,6 +101,7 @@ Rectangle {
 
       height: InputStyle.rowHeightHeader
       text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Manage") : __purchasing.recommendedPlan.price
+      enabled: text !== ''
       font.pixelSize: subscribeButton.height / 2
 
       background: Rectangle {
