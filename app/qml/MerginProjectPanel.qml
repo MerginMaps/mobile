@@ -112,6 +112,15 @@ Item {
     onRegistrationFailed: authPanel.pending = false
   }
 
+  Connections {
+    target: __purchasing
+    onRecommendedPlanChanged: {
+      if (!subscribePanel.isBusy && subscribePanel.visible) {
+        busyIndicator.running = false
+      }
+    }
+  }
+
   id: projectsPanel
   visible: false
   focus: true
@@ -674,6 +683,10 @@ Item {
       __purchasing.purchase( __purchasing.recommendedPlan.id )
       accountPanel.visible = true
       subscribePanel.visible = false
+    }
+
+    onVisibleChanged: {
+      busyIndicator.running = subscribePanel.visible && subscribePanel.isBusy
     }
   }
 

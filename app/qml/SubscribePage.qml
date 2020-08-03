@@ -19,6 +19,9 @@ Rectangle {
   signal backClicked
   signal subscribeClicked
 
+  //! If true and component is visible, busy indicator suppose to be on. Currently only for pending recommendedPlan
+  property bool isBusy: __purchasing.recommendedPlan.id === ""
+
   // header
   PanelHeader {
     id: header
