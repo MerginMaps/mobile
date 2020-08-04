@@ -192,6 +192,10 @@ Purchasing::Purchasing( MerginApi *merginApi, QObject *parent )
   , mMerginApi( merginApi )
 {
   createBackend();
+
+  connect( mMerginApi, &MerginApi::apiRootChanged, this, &Purchasing::onMerginServerChanged );
+  connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerChanged );
+  connect( mMerginApi, &MerginApi::apiVersionStatusChanged, this, &Purchasing::onMerginServerStatusChanged );
 }
 
 void Purchasing::createBackend()
@@ -215,10 +219,6 @@ void Purchasing::createBackend()
 
     connect( mBackend.get(), &PurchasingBackend::transactionCreationSucceeded, this, &Purchasing::onTransactionCreationSucceeded );
     connect( mBackend.get(), &PurchasingBackend::transactionCreationFailed, this, &Purchasing::onTransactionCreationFailed );
-
-    connect( mMerginApi, &MerginApi::apiRootChanged, this, &Purchasing::onMerginServerChanged );
-    connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerChanged );
-    connect( mMerginApi, &MerginApi::apiVersionStatusChanged, this, &Purchasing::onMerginServerStatusChanged );
   }
 }
 
