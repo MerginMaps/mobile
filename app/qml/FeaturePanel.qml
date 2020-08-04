@@ -272,13 +272,16 @@ Drawer {
           text: qsTr( "Really delete this feature?" )
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Ok | StandardButton.Cancel
-          onAccepted: {
-            featureForm.model.attributeModel.deleteFeature()
-            visible = false
-            featureForm.canceled()
-          }
-          onRejected: {
-            visible = false
+
+          onButtonClicked: {
+              if (clickedButton === StandardButton.Ok) {
+                featureForm.model.attributeModel.deleteFeature()
+                visible = false
+                featureForm.canceled()
+              }
+              else if (clickedButton === StandardButton.Cancel) {
+                visible = false
+              }
           }
         }
     }
