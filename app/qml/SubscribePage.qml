@@ -19,6 +19,33 @@ Rectangle {
   signal backClicked
   signal subscribeClicked
 
+  //! If true and component is visible, busy indicator suppose to be on. Currently used only while fetching a recommendedPlan
+  property bool isBusy: __purchasing.recommendedPlan.id === ""
+
+  onVisibleChanged: {
+    subscribeBusyIndicator.running = root.visible && root.isBusy
+  }
+
+  Connections {
+    target: __purchasing
+    onRecommendedPlanChanged: {
+      if (!root.isBusy && root.visible) {
+        subscribeBusyIndicator.running = false
+      }
+    }
+  }
+
+
+  BusyIndicator {
+    id: subscribeBusyIndicator
+    width: root.width/8
+    height: width
+    running: false
+    visible: running
+    anchors.centerIn: root
+    z: root.z + 1
+  }
+
   // header
   PanelHeader {
     id: header
@@ -98,6 +125,7 @@ Rectangle {
 
       height: InputStyle.rowHeightHeader
       text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Manage") : __purchasing.recommendedPlan.price
+      enabled: text !== ''
       font.pixelSize: subscribeButton.height / 2
 
       background: Rectangle {
