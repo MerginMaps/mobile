@@ -177,7 +177,7 @@ class PurchasingBackend: public QObject
      * Name of the billing service for Mergin API
      * (e.g. stripe, apple, google, ...)
      */
-    virtual QString billingServiceName() = 0;
+    virtual QString provider() const = 0;
 
     /**
      * Whether user can make purchases on the device
@@ -186,6 +186,9 @@ class PurchasingBackend: public QObject
 
     void setPurchasing( Purchasing *purchasing ) {mPurchasing = purchasing;}
     Purchasing *purchasing() const {return mPurchasing;}
+
+    //! Returns localised prize of plan, empty string if cannot be fetched
+    virtual QString getLocalizedPrice( const QString& planId ) const = 0;
 
   signals:
     void transactionCreationFailed( );
@@ -283,6 +286,7 @@ class Purchasing : public QObject
 
     void onMerginServerStatusChanged();
     void onMerginServerChanged();
+    void onMerginPlanProductIdChanged();
 
   private:
     void createBackend();

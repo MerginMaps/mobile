@@ -20,13 +20,15 @@ void MerginUserInfo::clear()
 {
   mEmail = "";
   mPlanAlias = "";
-  mPlanMerginId = "";
+  mOriginalTransactionId = "";
   mPlanProvider = "";
   mPlanProductId = "";
   mNextBillPrice = "";
   mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
   mStorageLimit = 0;
+
+  emit planProductIdChanged();
   emit userInfoChanged();
 }
 
@@ -66,12 +68,17 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   }
 
+  QJsonObject metaObj = docObj.value( QStringLiteral( "meta" ) ).toObject();
+  mOriginalTransactionId = metaObj.value( QStringLiteral( "original_transaction_id" ) ).toString();
+
   QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
-  mPlanMerginId = planObj.value( QStringLiteral( "id" ) ).toString();
   mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
   mPlanProvider = planObj.value( QStringLiteral( "type" ) ).toString();
-  mPlanProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
-
+  QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
+  if (planProductId !=  mPlanProductId) {
+    mPlanProductId = planProductId;
+    emit planProductIdChanged();
+  }
   emit userInfoChanged();
 }
 
@@ -80,30 +87,27 @@ bool MerginUserInfo::ownsActiveSubscription() const
   return mOwnsActiveSubscription;
 }
 
-void MerginUserInfo::setPaidPlan( bool paidPlan )
+void MerginUserInfo::setLocalizedPrice(const QString& price)
 {
-  mOwnsActiveSubscription = paidPlan;
-  emit userInfoChanged();
+  if (price.isEmpty())
+    return;
+
+  if (price != mNextBillPrice) {
+    mNextBillPrice = price;
+    emit userInfoChanged();
+  }
 }
 
-QString MerginUserInfo::planMerginId() const
+
+QString MerginUserInfo::originalTransactionId() const
 {
-  return mPlanMerginId;
+  return mOriginalTransactionId;
 }
 
-void MerginUserInfo::setPlanMerginId( const QString &planMerginId )
-{
-  mPlanMerginId = planMerginId;
-}
 
 QString MerginUserInfo::planProvider() const
 {
   return mPlanProvider;
-}
-
-void MerginUserInfo::setPlanProvider( const QString &planProvider )
-{
-  mPlanProvider = planProvider;
 }
 
 QString MerginUserInfo::planProductId() const
@@ -111,10 +115,6 @@ QString MerginUserInfo::planProductId() const
   return mPlanProductId;
 }
 
-void MerginUserInfo::setPlanProductId( const QString &planProductId )
-{
-  mPlanProductId = planProductId;
-}
 
 QString MerginUserInfo::email() const
 {
@@ -144,48 +144,6 @@ double MerginUserInfo::diskUsage() const
 double MerginUserInfo::storageLimit() const
 {
   return mStorageLimit;
-}
-
-void MerginUserInfo::setEmail( const QString &email )
-{
-  mEmail = email;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setPlanAlias( const QString &plan )
-{
-  mPlanAlias = plan;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setNextBillPrice( const QString &nextBillPrice )
-{
-  mNextBillPrice = nextBillPrice;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setSubscriptionStatus( const MerginSubscriptionStatus::SubscriptionStatus &subscriptionStatus )
-{
-  mSubscriptionStatus = subscriptionStatus;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setDiskUsage( double diskUsage )
-{
-  mDiskUsage = diskUsage;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setStorageLimit( double storageLimit )
-{
-  mStorageLimit = storageLimit;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setSubscriptionTimestamp( const QString &subscriptionTimestamp )
-{
-  mSubscriptionTimestamp = subscriptionTimestamp;
-  emit userInfoChanged();
 }
 
 QString MerginUserInfo::subscriptionTimestamp() const

@@ -13,6 +13,7 @@
 #include "purchasing.h"
 #include "merginapi.h"
 #include "inpututils.h"
+#include "merginuserinfo.h"
 
 #if defined (APPLE_PURCHASING)
 #include "ios/iospurchasing.h"
@@ -196,6 +197,7 @@ Purchasing::Purchasing( MerginApi *merginApi, QObject *parent )
   connect( mMerginApi, &MerginApi::apiRootChanged, this, &Purchasing::onMerginServerChanged );
   connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerChanged );
   connect( mMerginApi, &MerginApi::apiVersionStatusChanged, this, &Purchasing::onMerginServerStatusChanged );
+  connect( mMerginApi->userInfo(), &MerginUserInfo::planProductIdChanged, this, &Purchasing::onMerginPlanProductIdChanged );
 }
 
 void Purchasing::createBackend()
@@ -323,6 +325,22 @@ void Purchasing::onMerginServerChanged()
   emit purchasingChanged();
 }
 
+void Purchasing::onMerginPlanProductIdChanged()
+{
+  if ( !mBackend )
+    return;
+
+  QString planId = mMerginApi->userInfo()->planProductId();
+  if (planId.isEmpty())
+    return;
+
+  if (mBackend->provider() != mMerginApi->userInfo()->planProvider())
+    return;
+
+  QString price = mBackend->getLocalizedPrice( mMerginApi->userInfo()->planProductId() );
+  mMerginApi->userInfo()->setLocalizedPrice(price);
+}
+
 void Purchasing::onMerginServerStatusChanged()
 {
   qDebug() << "Mergin Server status changed, fetching purchasing plan";
@@ -339,12 +357,9 @@ void Purchasing::fetchPurchasingPlans( )
   if ( mMerginApi->apiVersionStatus() != MerginApiStatus::OK ) return;
 
   QUrl url( mMerginApi->apiRoot() + QStringLiteral( "/v1/plan" ) );
-  if ( !mBackend->billingServiceName().isEmpty() )
-  {
-    QUrlQuery query;
-    query.addQueryItem( "billing_service", mBackend->billingServiceName() );
-    url.setQuery( query );
-  }
+  QUrlQuery query;
+  query.addQueryItem( "billing_service", mBackend->provider() );
+  url.setQuery( query );
   QNetworkRequest request = mMerginApi->getDefaultRequest( false );
   request.setUrl( url );
   QNetworkReply *reply = mMerginApi->mManager.get( request );
@@ -464,6 +479,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
   QJsonObject jsonObject;
   jsonObject.insert( QStringLiteral( "type" ), transaction->provider() );
   jsonObject.insert( QStringLiteral( "receipt-data" ), transaction->receipt() );
+  jsonObject.insert( QStringLiteral( "api_key" ), mMerginApi->getApiKey( mMerginApi->apiRoot() ) );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mMerginApi->mManager.post( request, json );

@@ -103,7 +103,7 @@ class IosPurchasingBackend: public PurchasingBackend
 
     QString subscriptionManageUrl() override {return "https://apps.apple.com/account/subscription"; }
     QString subscriptionBillingUrl() override {return "https://apps.apple.com/account/billing"; }
-    QString billingServiceName() override { return "apple"; }
+    QString provider() override { return "apple"; }
     bool userCanMakePayments() const override;
     bool hasManageSubscriptionCapability() const override { return false; }
 
