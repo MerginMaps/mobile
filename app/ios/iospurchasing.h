@@ -64,7 +64,7 @@ class IosPurchasingTransaction: public PurchasingTransaction
     TransactionStatus status() const;
 
     QString receipt() const override;
-    QString provider() const override {return QStringLiteral( "apple" ); }
+    QString provider() const override { return QStringLiteral( "apple" ); }
 
     /**
      * Localized ios error message from the native framework,

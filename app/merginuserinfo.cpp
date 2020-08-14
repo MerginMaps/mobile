@@ -19,7 +19,10 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
 void MerginUserInfo::clear()
 {
   mEmail = "";
-  mPlan = "";
+  mPlanAlias = "";
+  mPlanMerginId = "";
+  mPlanProvider = "";
+  mPlanProductId = "";
   mNextBillPrice = "";
   mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
@@ -30,7 +33,6 @@ void MerginUserInfo::clear()
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
-  mPlan = docObj.value( QStringLiteral( "plan" ) ).toString();
   mNextBillPrice = docObj.value( QStringLiteral( "next_bill_price" ) ).toString();
   QString timestamp = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
   mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
@@ -63,6 +65,13 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     // internal error some new mergin api? what to do?
     mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   }
+
+  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+  mPlanMerginId = planObj.value( QStringLiteral( "id" ) ).toString();
+  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+  mPlanProvider = planObj.value( QStringLiteral( "type" ) ).toString();
+  mPlanProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
+
   emit userInfoChanged();
 }
 
@@ -77,14 +86,44 @@ void MerginUserInfo::setPaidPlan( bool paidPlan )
   emit userInfoChanged();
 }
 
+QString MerginUserInfo::planMerginId() const
+{
+  return mPlanMerginId;
+}
+
+void MerginUserInfo::setPlanMerginId( const QString &planMerginId )
+{
+  mPlanMerginId = planMerginId;
+}
+
+QString MerginUserInfo::planProvider() const
+{
+  return mPlanProvider;
+}
+
+void MerginUserInfo::setPlanProvider( const QString &planProvider )
+{
+  mPlanProvider = planProvider;
+}
+
+QString MerginUserInfo::planProductId() const
+{
+  return mPlanProductId;
+}
+
+void MerginUserInfo::setPlanProductId( const QString &planProductId )
+{
+  mPlanProductId = planProductId;
+}
+
 QString MerginUserInfo::email() const
 {
   return mEmail;
 }
 
-QString MerginUserInfo::plan() const
+QString MerginUserInfo::planAlias() const
 {
-  return mPlan;
+  return mPlanAlias;
 }
 
 QString MerginUserInfo::nextBillPrice() const
@@ -113,9 +152,9 @@ void MerginUserInfo::setEmail( const QString &email )
   emit userInfoChanged();
 }
 
-void MerginUserInfo::setPlan( const QString &plan )
+void MerginUserInfo::setPlanAlias( const QString &plan )
 {
-  mPlan = plan;
+  mPlanAlias = plan;
   emit userInfoChanged();
 }
 

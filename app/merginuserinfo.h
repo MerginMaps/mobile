@@ -21,7 +21,12 @@ class MerginUserInfo: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
-    Q_PROPERTY( QString plan READ plan NOTIFY userInfoChanged )
+
+    Q_PROPERTY( QString planAlias READ planAlias NOTIFY userInfoChanged ) // see PurchasingPlan::alias()
+    Q_PROPERTY( QString planMerginId READ planMerginId NOTIFY userInfoChanged ) // unique identifier of the subscription in the mergin
+    Q_PROPERTY( QString planProvider READ planProvider NOTIFY userInfoChanged ) // see PurchasingTransaction::provider()
+    Q_PROPERTY( QString planProductId READ planProductId NOTIFY userInfoChanged ) // see PurchasingPlan::id()
+
     Q_PROPERTY( /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus READ subscriptionStatus NOTIFY userInfoChanged )
     Q_PROPERTY( double storageLimit READ storageLimit NOTIFY userInfoChanged )
     Q_PROPERTY( QString subscriptionTimestamp READ subscriptionTimestamp NOTIFY userInfoChanged )
@@ -36,15 +41,23 @@ class MerginUserInfo: public QObject
     void clear();
 
     QString email() const;
-    QString plan() const;
+    QString planAlias() const;
+    QString planMerginId() const;
+    QString planProvider() const;
+    QString planProductId() const;
     QString nextBillPrice() const;
     /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus() const;
     double diskUsage() const;
     double storageLimit() const;
     QString subscriptionTimestamp() const;
+    bool ownsActiveSubscription() const;
 
+    void setPaidPlan( bool ownsActiveSubscription );
+    void setPlanMerginId( const QString &planMerginId );
+    void setPlanProvider( const QString &planProvider );
+    void setPlanProductId( const QString &planProductId );
     void setEmail( const QString &email );
-    void setPlan( const QString &plan );
+    void setPlanAlias( const QString &planAlias );
     void setNextBillPrice( const QString &nextBillPrice );
     void setSubscriptionStatus( const MerginSubscriptionStatus::SubscriptionStatus &subscriptionStatus );
     void setDiskUsage( double diskUsage );
@@ -53,15 +66,15 @@ class MerginUserInfo: public QObject
 
     void setFromJson( QJsonObject docObj );
 
-    bool ownsActiveSubscription() const;
-    void setPaidPlan( bool ownsActiveSubscription );
-
   signals:
     void userInfoChanged();
 
   private:
     QString mEmail;
-    QString mPlan;
+    QString mPlanAlias;
+    QString mPlanMerginId;
+    QString mPlanProvider;
+    QString mPlanProductId;
     bool mOwnsActiveSubscription;
     QString mNextBillPrice;
     MerginSubscriptionStatus::SubscriptionStatus mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;

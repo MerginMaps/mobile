@@ -24,7 +24,7 @@ Page {
 
   property string username: __merginApi.userAuth.username
   property string email: __merginApi.userInfo.email
-  property string plan: __merginApi.userInfo.plan
+  property string planAlias: __merginApi.userInfo.planAlias
   property int storageLimit: __merginApi.userInfo.storageLimit
   property int diskUsage: __merginApi.userInfo.diskUsage
   property int subscriptionStatus: __merginApi.userInfo.subscriptionStatus
@@ -111,7 +111,7 @@ Page {
     TextWithIcon {
       width: parent.width
       source: 'edit.svg'
-      text: root.plan
+      text: root.planAlias
     }
 
     TextWithIcon {
