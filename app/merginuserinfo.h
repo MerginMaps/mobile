@@ -53,7 +53,7 @@ class MerginUserInfo: public QObject
     QString subscriptionTimestamp() const;
     bool ownsActiveSubscription() const;
 
-    void setLocalizedPrice( const QString& price );
+    void setLocalizedPrice( const QString &price );
     void setFromJson( QJsonObject docObj );
 
   signals:

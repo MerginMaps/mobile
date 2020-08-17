@@ -136,10 +136,12 @@ QString TestingPurchasingBackend::subscriptionBillingUrl()
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )
 {
   QString planMerginId;
-  if (data != "tier01") {
+  if ( data != "tier01" )
+  {
     // this is new receipt
     planMerginId = mMerginApi->userInfo()->originalTransactionId();
-  } else
+  }
+  else
   {
     planMerginId = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
   }

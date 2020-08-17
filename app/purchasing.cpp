@@ -331,14 +331,14 @@ void Purchasing::onMerginPlanProductIdChanged()
     return;
 
   QString planId = mMerginApi->userInfo()->planProductId();
-  if (planId.isEmpty())
+  if ( planId.isEmpty() )
     return;
 
-  if (mBackend->provider() != mMerginApi->userInfo()->planProvider())
+  if ( mBackend->provider() != mMerginApi->userInfo()->planProvider() )
     return;
 
   QString price = mBackend->getLocalizedPrice( mMerginApi->userInfo()->planProductId() );
-  mMerginApi->userInfo()->setLocalizedPrice(price);
+  mMerginApi->userInfo()->setLocalizedPrice( price );
 }
 
 void Purchasing::onMerginServerStatusChanged()

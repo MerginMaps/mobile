@@ -188,7 +188,7 @@ class PurchasingBackend: public QObject
     Purchasing *purchasing() const {return mPurchasing;}
 
     //! Returns localised prize of plan, empty string if cannot be fetched
-    virtual QString getLocalizedPrice( const QString& planId ) const = 0;
+    virtual QString getLocalizedPrice( const QString &planId ) const = 0;
 
   signals:
     void transactionCreationFailed( );

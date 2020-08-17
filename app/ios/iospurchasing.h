@@ -103,12 +103,13 @@ class IosPurchasingBackend: public PurchasingBackend
 
     QString subscriptionManageUrl() override {return "https://apps.apple.com/account/subscription"; }
     QString subscriptionBillingUrl() override {return "https://apps.apple.com/account/billing"; }
-    QString provider() override { return "apple"; }
+    QString provider() const override { return "apple"; }
     bool userCanMakePayments() const override;
     bool hasManageSubscriptionCapability() const override { return false; }
+    QString getLocalizedPrice( const QString &planId ) const override;
 
-    QSharedPointer<IosPurchasingPlan> findRegisteredPlan( const QString &productId );
-    QSharedPointer<IosPurchasingPlan> findPendingPlan( const QString &productId );
+    QSharedPointer<IosPurchasingPlan> findRegisteredPlan( const QString &productId ) const;
+    QSharedPointer<IosPurchasingPlan> findPendingPlan( const QString &productId ) const;
     void processTransaction( QSharedPointer<IosPurchasingTransaction> transaction );
 
   private:

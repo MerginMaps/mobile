@@ -87,7 +87,7 @@ class TestingPurchasingBackend: public PurchasingBackend
     QString provider() const override { return "test"; }
     bool userCanMakePayments() const override { return true; }
     bool hasManageSubscriptionCapability() const override { return true; }
-    QString getLocalizedPrice( const QString& ) const override { return ""; }
+    QString getLocalizedPrice( const QString & ) const override { return ""; }
 
     void setMerginApi( const QString &url );
 

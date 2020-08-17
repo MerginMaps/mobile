@@ -75,7 +75,8 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
   mPlanProvider = planObj.value( QStringLiteral( "type" ) ).toString();
   QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
-  if (planProductId !=  mPlanProductId) {
+  if ( planProductId !=  mPlanProductId )
+  {
     mPlanProductId = planProductId;
     emit planProductIdChanged();
   }
@@ -87,12 +88,13 @@ bool MerginUserInfo::ownsActiveSubscription() const
   return mOwnsActiveSubscription;
 }
 
-void MerginUserInfo::setLocalizedPrice(const QString& price)
+void MerginUserInfo::setLocalizedPrice( const QString &price )
 {
-  if (price.isEmpty())
+  if ( price.isEmpty() )
     return;
 
-  if (price != mNextBillPrice) {
+  if ( price != mNextBillPrice )
+  {
     mNextBillPrice = price;
     emit userInfoChanged();
   }
