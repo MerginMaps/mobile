@@ -273,6 +273,7 @@ Drawer {
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Ok | StandardButton.Cancel
 
+          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
           onButtonClicked: {
               if (clickedButton === StandardButton.Ok) {
                 featureForm.model.attributeModel.deleteFeature()

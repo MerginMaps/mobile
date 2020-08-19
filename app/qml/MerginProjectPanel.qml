@@ -686,21 +686,25 @@ Item {
     text: qsTr( "Do you really want to delete project?" )
     icon: StandardIcon.Warning
     standardButtons: StandardButton.Ok | StandardButton.Cancel
-    onAccepted: {
-      if (relatedProjectIndex < 0) {
-          return;
-      }
-      __projectsModel.deleteProject(relatedProjectIndex)
-      if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
-        __loader.load("")
-        projectsPanel.activeProjectIndex = -1
-      }
-      deleteDialog.relatedProjectIndex = -1
-      visible = false
-    }
-    onRejected: {
-      deleteDialog.relatedProjectIndex = -1
-      visible = false
+
+    //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+    onButtonClicked: {
+        if (clickedButton === StandardButton.Ok) {
+          if (relatedProjectIndex < 0) {
+              return;
+          }
+          __projectsModel.deleteProject(relatedProjectIndex)
+          if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
+            __loader.load("")
+            projectsPanel.activeProjectIndex = -1
+          }
+          deleteDialog.relatedProjectIndex = -1
+          visible = false
+        }
+        else if (clickedButton === StandardButton.Cancel) {
+          deleteDialog.relatedProjectIndex = -1
+          visible = false
+        }
     }
   }
 
