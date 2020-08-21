@@ -11,7 +11,7 @@ cd build-geodiff-Desktop
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
   -DWITH_INTERNAL_SQLITE3:BOOL=FALSE \
-  -DSQLite3_ROOT:PATH=/opt/QGIS/qgis-deps-0.5.2/stage \
+  -DSQLite3_ROOT:PATH=/opt/QGIS/qgis-deps-0.5.3/stage \
   -DENABLE_TESTS=FALSE \
   -DBUILD_TOOLS=OFF \
   -DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
@@ -39,7 +39,7 @@ cmake \
   -DWITH_APIDOC=OFF \
   -DWITH_ASTYLE=OFF \
   -DWITH_QSPATIALITE=OFF \
-  -DQGIS_MAC_DEPS_DIR:INTERNAL=/opt/QGIS/qgis-deps-0.5.2/stage \
+  -DQGIS_MAC_DEPS_DIR:INTERNAL=/opt/QGIS/qgis-deps-0.5.3/stage \
   -DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
   -DCMAKE_PREFIX_PATH=/opt/Qt/5.14.2/clang_64 \
   -DWITH_QGIS_PROCESS=OFF -DQGIS_MACAPP_BUNDLE=-1 \

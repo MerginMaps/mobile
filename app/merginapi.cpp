@@ -512,7 +512,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
     return;
   }
 
-  mUserAuth->setPassword( password );
+  whileBlocking(mUserAuth)->setPassword( password );
 
   QNetworkRequest request = getDefaultRequest( false );
   QString urlString = mApiRoot + QStringLiteral( "v1/auth/login2" );
