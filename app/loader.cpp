@@ -15,6 +15,9 @@
 
 #include "loader.h"
 #include "qgsvectorlayer.h"
+#include <qgslayertreemodel.h>
+#include <qgslayertree.h>
+#include "qgsmapthemecollection.h"
 #if VERSION_INT >= 30500
 // this header only exists in QGIS >= 3.6
 #include "qgsexpressioncontextutils.h"
@@ -91,7 +94,26 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     res = mProject->read( filePath );
 
     mMapThemeModel.reloadMapThemes( mProject );
-    mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
+    QgsLayerTree *root = mProject->layerTreeRoot();
+    QgsLayerTreeModel model( root );
+    QgsMapThemeCollection::MapThemeRecord rec = mProject->mapThemeCollection()->createThemeFromCurrentState( root, &model );
+
+    QString defaultThemeName = mAppSettings.defaultMapTheme();
+    if ( !defaultThemeName.isEmpty() && rec == QgsProject::instance()->mapThemeCollection()->mapThemeState( defaultThemeName ) )
+    {
+      mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
+    }
+    else
+    {
+      const auto constMapThemes = QgsProject::instance()->mapThemeCollection()->mapThemes();
+      for ( const QString &themeName : constMapThemes )
+      {
+        if ( rec == QgsProject::instance()->mapThemeCollection()->mapThemeState( themeName ) )
+        {
+          mMapThemeModel.updateMapTheme( themeName );
+        }
+      }
+    }
 
     mLayersModel.reloadLayers( mProject );
     mLayersModel.updateActiveLayer( mAppSettings.defaultLayer() );
