@@ -94,26 +94,6 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     res = mProject->read( filePath );
 
     mMapThemeModel.reloadMapThemes( mProject );
-    QgsLayerTree *root = mProject->layerTreeRoot();
-    QgsLayerTreeModel model( root );
-    QgsMapThemeCollection::MapThemeRecord rec = mProject->mapThemeCollection()->createThemeFromCurrentState( root, &model );
-
-    QString defaultThemeName = mAppSettings.defaultMapTheme();
-    if ( !defaultThemeName.isEmpty() && rec == QgsProject::instance()->mapThemeCollection()->mapThemeState( defaultThemeName ) )
-    {
-      mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
-    }
-    else
-    {
-      const auto constMapThemes = QgsProject::instance()->mapThemeCollection()->mapThemes();
-      for ( const QString &themeName : constMapThemes )
-      {
-        if ( rec == QgsProject::instance()->mapThemeCollection()->mapThemeState( themeName ) )
-        {
-          mMapThemeModel.updateMapTheme( themeName );
-        }
-      }
-    }
 
     mLayersModel.reloadLayers( mProject );
     mLayersModel.updateActiveLayer( mAppSettings.defaultLayer() );
@@ -249,8 +229,6 @@ QStringList Loader::mapTipFields( QgsQuickFeatureLayerPair pair )
 void Loader::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
-  mAppSettings.setDefaultMapTheme( name );
-
   mLayersModel.reloadLayers( mProject );
   mLayersModel.updateActiveLayer( mAppSettings.defaultLayer() );
 }

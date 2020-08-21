@@ -53,16 +53,38 @@ void MapThemesModel::reloadMapThemes( QgsProject *project )
     mMapThemes = allThemes;
     endResetModel();
   }
+
+  //! Update active theme even though project has same map theme collections - reloadMapThemes funtion is most likely envoked by reloading a project
+  updateMapThemeByProject();
   emit mapThemesReloaded();
+}
+
+void MapThemesModel::updateMapThemeByProject()
+{
+  if ( !mProject ) return;
+
+  QgsLayerTree *root = mProject->layerTreeRoot();
+  QgsLayerTreeModel model( root );
+  QgsMapThemeCollection::MapThemeRecord rec = mProject->mapThemeCollection()->createThemeFromCurrentState( root, &model );
+
+  const auto constMapThemes = mProject->mapThemeCollection()->mapThemes();
+  for ( const QString &themeName : constMapThemes )
+  {
+    if ( rec == mProject->mapThemeCollection()->mapThemeState( themeName ) )
+    {
+      updateMapTheme( themeName );
+      return;
+    }
+  }
+
+  //! No matching map theme found
+  setActiveThemeIndex( -1 );
 }
 
 void MapThemesModel::updateMapTheme( const QString name )
 {
-  int row = rowAccordingName( name, 0 );
-  if ( row >= 0 )
-  {
-    setActiveThemeIndex( row );
-  }
+  int row = rowAccordingName( name, -1 );
+  setActiveThemeIndex( row );
 }
 
 int MapThemesModel::activeThemeIndex() const
