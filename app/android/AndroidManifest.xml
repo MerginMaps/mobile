@@ -69,7 +69,8 @@
         </activity>
 
         <!-- Activity Android native camera -->
-        <activity android:name="uk.co.lutraconsulting.CameraActivity" android:label="Input" android:parentActivityName="uk.co.lutraconsulting.InputActivity">
+        <activity android:name="uk.co.lutraconsulting.CameraActivity" android:label="Input" android:parentActivityName="uk.co.lutraconsulting.InputActivity"
+        android:configChanges="screenLayout|orientation|screenSize">
              <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
         </activity>
 
@@ -94,3 +95,4 @@
     <!-- %%INSERT_FEATURES -->
 
 </manifest>
+
