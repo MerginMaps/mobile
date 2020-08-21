@@ -64,7 +64,7 @@ class IosPurchasingTransaction: public PurchasingTransaction
     TransactionStatus status() const;
 
     QString receipt() const override;
-    QString provider() const override { return QStringLiteral( "apple" ); }
+    MerginSubscriptionType::SubscriptionType provider() const override { return MerginSubscriptionType::AppleSubscriptionType; }
 
     /**
      * Localized ios error message from the native framework,
@@ -103,7 +103,7 @@ class IosPurchasingBackend: public PurchasingBackend
 
     QString subscriptionManageUrl() override {return "https://apps.apple.com/account/subscription"; }
     QString subscriptionBillingUrl() override {return "https://apps.apple.com/account/billing"; }
-    QString provider() const override { return "apple"; }
+    MerginSubscriptionType::SubscriptionType provider() const override { return MerginSubscriptionType::AppleSubscriptionType; }
     bool userCanMakePayments() const override;
     bool hasManageSubscriptionCapability() const override { return false; }
     QString getLocalizedPrice( const QString &planId ) const override;

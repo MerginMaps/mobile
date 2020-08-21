@@ -14,6 +14,7 @@ appsettings.cpp \
 merginapi.cpp \
 merginapistatus.cpp \
 merginsubscriptionstatus.cpp \
+merginsubscriptiontype.cpp \
 merginprojectmodel.cpp \
 merginprojectstatusmodel.cpp \
 merginuserauth.cpp \
@@ -50,6 +51,7 @@ appsettings.h \
 merginapi.h \
 merginapistatus.h \
 merginsubscriptionstatus.h \
+merginsubscriptiontype.h \
 merginprojectmodel.h \
 merginprojectstatusmodel.h \
 merginuserauth.h \

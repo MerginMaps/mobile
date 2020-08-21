@@ -40,7 +40,7 @@ class TestingPurchasingTransaction: public PurchasingTransaction
   public:
     TestingPurchasingTransaction( QString receipt, TransactionType type, QSharedPointer<PurchasingPlan> plan );
     QString receipt() const override;
-    QString provider() const override {return QStringLiteral( "test" ); }
+    MerginSubscriptionType::SubscriptionType provider() const override {return MerginSubscriptionType::TestSubscriptionType; }
 
     void finalizeTransaction() override {}
 
@@ -84,7 +84,7 @@ class TestingPurchasingBackend: public PurchasingBackend
     void restore() override;
     QString subscriptionManageUrl() override;
     QString subscriptionBillingUrl() override;
-    QString provider() const override { return "test"; }
+    MerginSubscriptionType::SubscriptionType provider() const override { return MerginSubscriptionType::TestSubscriptionType; }
     bool userCanMakePayments() const override { return true; }
     bool hasManageSubscriptionCapability() const override { return true; }
     QString getLocalizedPrice( const QString & ) const override { return ""; }

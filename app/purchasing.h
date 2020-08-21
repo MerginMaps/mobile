@@ -20,6 +20,8 @@
 #include <QJsonObject>
 #include <memory>
 
+#include "merginsubscriptiontype.h"
+
 class MerginApi;
 class Purchasing;
 
@@ -104,8 +106,8 @@ class PurchasingTransaction : public QObject
     //! Transaction receipt, e.g. apple base64 receipt
     virtual QString receipt() const = 0;
 
-    //! Transaction provider, either apple or test
-    virtual QString provider() const = 0;
+    //! Transaction provider, either apple, stripe or test
+    virtual MerginSubscriptionType::SubscriptionType provider() const = 0;
 
     PurchasingPlan *plan() const;
     TransactionType type() const;
@@ -177,7 +179,7 @@ class PurchasingBackend: public QObject
      * Name of the billing service for Mergin API
      * (e.g. stripe, apple, google, ...)
      */
-    virtual QString provider() const = 0;
+    virtual MerginSubscriptionType::SubscriptionType provider() const = 0;
 
     /**
      * Whether user can make purchases on the device

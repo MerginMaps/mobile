@@ -358,7 +358,7 @@ void Purchasing::fetchPurchasingPlans( )
 
   QUrl url( mMerginApi->apiRoot() + QStringLiteral( "/v1/plan" ) );
   QUrlQuery query;
-  query.addQueryItem( "billing_service", mBackend->provider() );
+  query.addQueryItem( "billing_service", MerginSubscriptionType::toString( mBackend->provider() ) );
   url.setQuery( query );
   QNetworkRequest request = mMerginApi->getDefaultRequest( false );
   request.setUrl( url );
