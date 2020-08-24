@@ -20,7 +20,7 @@ Rectangle {
 
   signal searchTextChanged( string text )
 
-  property string text: searchField.text
+  property string text: searchField.displayText
   property bool allowTimer: false
   property int emitInterval: 200
   
@@ -46,7 +46,7 @@ Rectangle {
     interval: emitInterval
     running: false
     onTriggered: {
-      root.text = searchField.text
+      root.text = searchField.displayText
       searchTextChanged( root.text )
     }
   }
@@ -72,7 +72,7 @@ Rectangle {
       leftPadding: root.panelMargin
       rightPadding: root.panelMargin
       
-      onTextChanged: {
+      onDisplayTextChanged: {
         if ( root.allowTimer ) {
           if ( searchTimer.running )
             searchTimer.restart()
@@ -81,8 +81,8 @@ Rectangle {
         }
         else
         {
-          root.text = searchField.text
-          root.searchTextChanged( text )
+          root.text = searchField.displayText
+          root.searchTextChanged( searchField.displayText )
         }
       }
     }
@@ -96,7 +96,7 @@ Rectangle {
       
       Image {
         id: cancelSearchBtn
-        source: searchField.text ? "no.svg" : "search.svg"
+        source: searchField.displayText ? "no.svg" : "search.svg"
         width: root.iconSize
         height: width
         sourceSize.width: width
@@ -107,7 +107,7 @@ Rectangle {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (searchField.text) {
+            if ( searchField.displayText ) {
               root.deactivate()
             }
           }
