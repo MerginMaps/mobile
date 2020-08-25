@@ -125,12 +125,12 @@ void TestingPurchasingBackend::restore()
 
 QString TestingPurchasingBackend::subscriptionManageUrl()
 {
-  return mMerginApi->apiRoot();
+  return mMerginApi->apiRoot() + "subscription";
 }
 
 QString TestingPurchasingBackend::subscriptionBillingUrl()
 {
-  return mMerginApi->apiRoot();
+  return mMerginApi->apiRoot() + "billing";
 }
 
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )

@@ -16,6 +16,7 @@
 #include <QJsonObject>
 
 #include "merginsubscriptionstatus.h"
+#include "merginsubscriptiontype.h"
 
 class MerginUserInfo: public QObject
 {
@@ -24,7 +25,7 @@ class MerginUserInfo: public QObject
 
     Q_PROPERTY( QString planAlias READ planAlias NOTIFY userInfoChanged ) // see PurchasingPlan::alias()
     Q_PROPERTY( QString originalTransactionId READ originalTransactionId NOTIFY userInfoChanged ) // unique identifier of the subscription in the mergin
-    Q_PROPERTY( QString planProvider READ planProvider NOTIFY userInfoChanged ) // see PurchasingTransaction::provider()
+    Q_PROPERTY( /*MerginSubscriptionType::SubscriptionType*/ int planProvider READ planProvider NOTIFY userInfoChanged ) // see PurchasingTransaction::provider()
     Q_PROPERTY( QString planProductId READ planProductId NOTIFY userInfoChanged ) // see PurchasingPlan::id()
 
     Q_PROPERTY( /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus READ subscriptionStatus NOTIFY userInfoChanged )
@@ -32,7 +33,7 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString subscriptionTimestamp READ subscriptionTimestamp NOTIFY userInfoChanged )
     Q_PROPERTY( QString nextBillPrice READ nextBillPrice NOTIFY userInfoChanged ) // in Bytes
     Q_PROPERTY( double diskUsage READ diskUsage NOTIFY userInfoChanged ) // in Bytes
-    Q_PROPERTY( bool ownsActiveSubscription READ ownsActiveSubscription NOTIFY userInfoChanged ) // TODO  rename ownsActiveSubscription
+    Q_PROPERTY( bool ownsActiveSubscription READ ownsActiveSubscription NOTIFY userInfoChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -44,7 +45,7 @@ class MerginUserInfo: public QObject
     QString email() const;
     QString planAlias() const;
     QString originalTransactionId() const;
-    QString planProvider() const;
+    MerginSubscriptionType::SubscriptionType planProvider() const;
     QString planProductId() const;
     QString nextBillPrice() const;
     /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus() const;
@@ -59,12 +60,13 @@ class MerginUserInfo: public QObject
   signals:
     void userInfoChanged();
     void planProductIdChanged();
+    void planProviderChanged();
 
   private:
     QString mEmail;
     QString mPlanAlias;
     QString mOriginalTransactionId;
-    QString mPlanProvider;
+    MerginSubscriptionType::SubscriptionType mPlanProvider;
     QString mPlanProductId;
     bool mOwnsActiveSubscription;
     QString mNextBillPrice;

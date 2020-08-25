@@ -21,13 +21,14 @@ void MerginUserInfo::clear()
   mEmail = "";
   mPlanAlias = "";
   mOriginalTransactionId = "";
-  mPlanProvider = "";
+  mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
   mPlanProductId = "";
   mNextBillPrice = "";
   mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
   mStorageLimit = 0;
 
+  emit planProviderChanged();
   emit planProductIdChanged();
   emit userInfoChanged();
 }
@@ -47,17 +48,21 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   {
     if ( mOwnsActiveSubscription )
     {
-      mSubscriptionStatus = MerginSubscriptionStatus::ValidSubscription;
+      if ( mSubscriptionTimestamp.isEmpty() )
+      {
+        mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionUnsubscribed;
+      }
+      else
+      {
+        mSubscriptionStatus = MerginSubscriptionStatus::ValidSubscription;
+      }
     }
     else
     {
       mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
     }
   }
-  else if ( status == "unsubscribed" )
-  {
-    mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionUnsubscribed;
-  }
+
   else if ( status == "past_due" )
   {
     mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionInGracePeriod;
@@ -68,12 +73,23 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   }
 
+  // These meta values doesn't need to be present for all types of providers
   QJsonObject metaObj = docObj.value( QStringLiteral( "meta" ) ).toObject();
   mOriginalTransactionId = metaObj.value( QStringLiteral( "original_transaction_id" ) ).toString();
+  if ( mSubscriptionTimestamp.isEmpty() )
+  {
+    QString timestamp = metaObj.value( QStringLiteral( "expires_date" ) ).toString();
+    mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
+  }
 
   QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
   mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
-  mPlanProvider = planObj.value( QStringLiteral( "type" ) ).toString();
+  MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
+  if ( planProvider != mPlanProvider )
+  {
+    mPlanProvider = planProvider;
+    emit planProviderChanged();
+  }
   QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
   if ( planProductId !=  mPlanProductId )
   {
@@ -107,7 +123,7 @@ QString MerginUserInfo::originalTransactionId() const
 }
 
 
-QString MerginUserInfo::planProvider() const
+MerginSubscriptionType::SubscriptionType MerginUserInfo::planProvider() const
 {
   return mPlanProvider;
 }

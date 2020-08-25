@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -192,12 +192,16 @@ Purchasing::Purchasing( MerginApi *merginApi, QObject *parent )
   : QObject( parent )
   , mMerginApi( merginApi )
 {
+  setDefaultUrls();
   createBackend();
 
   connect( mMerginApi, &MerginApi::apiRootChanged, this, &Purchasing::onMerginServerChanged );
-  connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerChanged );
+  connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerStatusChanged );
   connect( mMerginApi, &MerginApi::apiVersionStatusChanged, this, &Purchasing::onMerginServerStatusChanged );
+  connect( mMerginApi->userInfo(), &MerginUserInfo::planProviderChanged, this, &Purchasing::evaluateHasInAppPurchases );
   connect( mMerginApi->userInfo(), &MerginUserInfo::planProductIdChanged, this, &Purchasing::onMerginPlanProductIdChanged );
+
+  connect( this, &Purchasing::hasInAppPurchasesChanged, this, &Purchasing::onHasInAppPurchasesChanged );
 }
 
 void Purchasing::createBackend()
@@ -224,25 +228,66 @@ void Purchasing::createBackend()
   }
 }
 
-bool Purchasing::hasInAppPurchases() const
+void Purchasing::evaluateHasInAppPurchases()
 {
-  return
+  bool hasInApp =
     mMerginApi->apiSupportsSubscriptions() &&
     mMerginApi->apiVersionStatus() == MerginApiStatus::OK &&
     bool( mBackend ) &&
     mBackend->userCanMakePayments();
+
+  bool hasCompatiblePlanType = true;
+  if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+  {
+    hasCompatiblePlanType =
+      bool( mBackend ) &&
+      mBackend->provider() == mMerginApi->userInfo()->planProvider();
+  }
+  setHasInAppPurchases( hasInApp && hasCompatiblePlanType );
+}
+
+void Purchasing::onHasInAppPurchasesChanged()
+{
+  bool hasManageCapability = false;
+  QString subscriptionManageUrl = mMerginApi->apiRoot() + "subscriptions";
+  QString subscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
+
+  if ( hasInAppPurchases() )
+  {
+    hasManageCapability = mBackend->hasManageSubscriptionCapability();
+    subscriptionManageUrl = mBackend->subscriptionManageUrl();
+    subscriptionBillingUrl = mBackend->subscriptionBillingUrl();
+  }
+
+  setHasManageSubscriptionCapability( hasManageCapability );
+  setSubscriptionManageUrl( subscriptionManageUrl );
+  setSubscriptionBillingUrl( subscriptionBillingUrl );
+}
+
+bool Purchasing::hasInAppPurchases() const
+{
+  return mHasInAppPurchases;
 }
 
 bool Purchasing::hasManageSubscriptionCapability() const
 {
-  if ( hasInAppPurchases() )
-  {
-    return mBackend->hasManageSubscriptionCapability();
-  }
-  else
-  {
-    return false;
-  }
+  return mHasManageSubscriptionCapability;
+}
+
+QString Purchasing::subscriptionManageUrl()
+{
+  return mSubscriptionManageUrl;
+}
+
+QString Purchasing::subscriptionBillingUrl()
+{
+  return mSubscriptionBillingUrl;
+}
+
+void Purchasing::onMerginServerChanged()
+{
+  qDebug() << "Mergin Server Url changed reseting purchasing";
+  clean();
 }
 
 void Purchasing::purchase( const QString &planId )
@@ -293,38 +338,6 @@ void Purchasing::restore()
   }
 }
 
-
-QString Purchasing::subscriptionManageUrl()
-{
-  if ( hasInAppPurchases() )
-  {
-    return mBackend->subscriptionManageUrl();
-  }
-  else
-  {
-    return mMerginApi->apiRoot();
-  }
-}
-
-QString Purchasing::subscriptionBillingUrl()
-{
-  if ( hasInAppPurchases() )
-  {
-    return mBackend->subscriptionBillingUrl();
-  }
-  else
-  {
-    return mMerginApi->apiRoot();
-  }
-}
-
-void Purchasing::onMerginServerChanged()
-{
-  qDebug() << "Mergin Server Url changed reseting purchasing";
-  clean();
-  emit purchasingChanged();
-}
-
 void Purchasing::onMerginPlanProductIdChanged()
 {
   if ( !mBackend )
@@ -344,11 +357,11 @@ void Purchasing::onMerginPlanProductIdChanged()
 void Purchasing::onMerginServerStatusChanged()
 {
   qDebug() << "Mergin Server status changed, fetching purchasing plan";
-  if ( mBackend )
+  if ( mBackend && mPlansWithPendingRegistration.empty() && mRegisteredPlans.empty() )
   {
     fetchPurchasingPlans();
   }
-  emit purchasingChanged();
+  evaluateHasInAppPurchases();
 }
 
 void Purchasing::fetchPurchasingPlans( )
@@ -419,11 +432,11 @@ void Purchasing::clean()
   mTransactionsWithPendingVerification.clear();
   mTransactionCreationRequested = false;
   mRecommendedPlanId.clear();
+  setDefaultUrls();
+  setHasInAppPurchases( false );
 
-  emit hasInAppPurchasesChanged();
   emit recommendedPlanChanged();
   emit transactionPendingChanged();
-  emit purchasingChanged();
 }
 
 void Purchasing::onPlanRegistrationFailed( const QString &id )
@@ -477,7 +490,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
   request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant( "application/json" ) );
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "type" ), transaction->provider() );
+  jsonObject.insert( QStringLiteral( "type" ), MerginSubscriptionType::toString( transaction->provider() ) );
   jsonObject.insert( QStringLiteral( "receipt-data" ), transaction->receipt() );
   jsonObject.insert( QStringLiteral( "api_key" ), mMerginApi->getApiKey( mMerginApi->apiRoot() ) );
   jsonDoc.setObject( jsonObject );
@@ -521,15 +534,10 @@ void Purchasing::notify( const QString &msg )
   mMerginApi->notify( msg );
 }
 
+
 MerginApi *Purchasing::merginApi() const
 {
   return mMerginApi;
-}
-
-void Purchasing::setRecommendedPlanId( const QString &recommendedPlanId )
-{
-  mRecommendedPlanId = recommendedPlanId;
-  emit recommendedPlanChanged();
 }
 
 void Purchasing::removePendingTransaction( PurchasingTransaction *transaction )
@@ -553,11 +561,6 @@ void Purchasing::removePendingTransaction( PurchasingTransaction *transaction )
   emit transactionPendingChanged();
 }
 
-void Purchasing::setTransactionCreationRequested( bool transactionCreationRequested )
-{
-  mTransactionCreationRequested = transactionCreationRequested;
-  emit transactionPendingChanged();
-}
 
 bool Purchasing::transactionPending() const
 {
@@ -601,3 +604,64 @@ QSharedPointer<PurchasingPlan> Purchasing::pendingPlan( const QString &id ) cons
   return nullptr;
 }
 
+void Purchasing::setSubscriptionBillingUrl( const QString &subscriptionBillingUrl )
+{
+  if ( mSubscriptionBillingUrl != subscriptionBillingUrl )
+  {
+    mSubscriptionBillingUrl = subscriptionBillingUrl;
+    emit subscriptionBillingUrlChanged();
+  }
+}
+
+void Purchasing::setDefaultUrls()
+{
+  mSubscriptionManageUrl = mMerginApi->apiRoot() + "subscriptions";
+  emit subscriptionManageUrlChanged();
+  mSubscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
+  emit subscriptionBillingUrlChanged();
+}
+
+void Purchasing::setSubscriptionManageUrl( const QString &subscriptionManageUrl )
+{
+  if ( mSubscriptionManageUrl != subscriptionManageUrl )
+  {
+    mSubscriptionManageUrl = subscriptionManageUrl;
+    emit subscriptionManageUrlChanged();
+  }
+}
+
+void Purchasing::setHasManageSubscriptionCapability( bool hasManageSubscriptionCapability )
+{
+  if ( mHasManageSubscriptionCapability != hasManageSubscriptionCapability )
+  {
+    mHasManageSubscriptionCapability = hasManageSubscriptionCapability;
+    emit hasManageSubscriptionCapabilityChanged();
+  }
+}
+
+void Purchasing::setHasInAppPurchases( bool hasInAppPurchases )
+{
+  if ( mHasInAppPurchases != hasInAppPurchases )
+  {
+    mHasInAppPurchases = hasInAppPurchases;
+    emit hasInAppPurchasesChanged();
+  }
+}
+
+void Purchasing::setTransactionCreationRequested( bool transactionCreationRequested )
+{
+  if ( mTransactionCreationRequested != transactionCreationRequested )
+  {
+    mTransactionCreationRequested = transactionCreationRequested;
+    emit transactionPendingChanged();
+  }
+}
+
+void Purchasing::setRecommendedPlanId( const QString &recommendedPlanId )
+{
+  if ( mRecommendedPlanId != recommendedPlanId )
+  {
+    mRecommendedPlanId = recommendedPlanId;
+    emit recommendedPlanChanged();
+  }
+}
