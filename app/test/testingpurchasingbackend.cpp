@@ -137,7 +137,7 @@ QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTes
   if ( data != "tier01" )
   {
     // this is an existing subscription
-    planMerginId = QString::number(mMerginApi->userInfo()->subscriptionId());
+    planMerginId = QString::number( mMerginApi->userInfo()->subscriptionId() );
   }
 
   QString recept = planMerginId + "|" + data;
