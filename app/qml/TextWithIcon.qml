@@ -22,6 +22,8 @@ Row {
   property color fontColor: InputStyle.fontColor
   property color iconColor: InputStyle.fontColor
 
+  signal linkActivated(string link)
+
   Rectangle {
     id: iconContainer
     height: fieldHeight
@@ -53,8 +55,10 @@ Row {
     height: fieldHeight
     verticalAlignment: Text.AlignVCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
+    onLinkActivated: root.linkActivated(link)
     color: root.fontColor
     text: root.text
     textFormat: Text.RichText
+    wrapMode: Text.WordWrap
   }
 }

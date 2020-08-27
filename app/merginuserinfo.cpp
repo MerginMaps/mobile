@@ -20,12 +20,13 @@ void MerginUserInfo::clear()
 {
   mEmail = "";
   mPlanAlias = "";
-  mOriginalTransactionId = "";
+  mSubscriptionId = -1;
   mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
   mPlanProductId = "";
   mNextBillPrice = "";
   mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
+  mOwnsActiveSubscription = false;
   mStorageLimit = 0;
 
   emit planProviderChanged();
@@ -37,18 +38,20 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mNextBillPrice = docObj.value( QStringLiteral( "next_bill_price" ) ).toString();
-  QString timestamp = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
+  QString nextPaymentDate = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
+  QString timestamp = docObj.value( QStringLiteral( "valid_until" ) ).toString(); // if next_payment_date is not null, it is same as valid_until
   mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
   mOwnsActiveSubscription = docObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
+  mSubscriptionId = docObj.value( QStringLiteral( "subscription_id" ) ).toInt();
 
   QString status = docObj.value( QStringLiteral( "status" ) ).toString();
   if ( status == "active" )
   {
     if ( mOwnsActiveSubscription )
     {
-      if ( mSubscriptionTimestamp.isEmpty() )
+      if ( nextPaymentDate.isEmpty() )
       {
         mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionUnsubscribed;
       }
@@ -71,15 +74,6 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   {
     // internal error some new mergin api? what to do?
     mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
-  }
-
-  // These meta values doesn't need to be present for all types of providers
-  QJsonObject metaObj = docObj.value( QStringLiteral( "meta" ) ).toObject();
-  mOriginalTransactionId = metaObj.value( QStringLiteral( "original_transaction_id" ) ).toString();
-  if ( mSubscriptionTimestamp.isEmpty() )
-  {
-    QString timestamp = metaObj.value( QStringLiteral( "expires_date" ) ).toString();
-    mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
   }
 
   QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
@@ -117,9 +111,9 @@ void MerginUserInfo::setLocalizedPrice( const QString &price )
 }
 
 
-QString MerginUserInfo::originalTransactionId() const
+int MerginUserInfo::subscriptionId() const
 {
-  return mOriginalTransactionId;
+  return mSubscriptionId;
 }
 
 

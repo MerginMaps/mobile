@@ -24,7 +24,6 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
 
     Q_PROPERTY( QString planAlias READ planAlias NOTIFY userInfoChanged ) // see PurchasingPlan::alias()
-    Q_PROPERTY( QString originalTransactionId READ originalTransactionId NOTIFY userInfoChanged ) // unique identifier of the subscription in the mergin
     Q_PROPERTY( /*MerginSubscriptionType::SubscriptionType*/ int planProvider READ planProvider NOTIFY userInfoChanged ) // see PurchasingTransaction::provider()
     Q_PROPERTY( QString planProductId READ planProductId NOTIFY userInfoChanged ) // see PurchasingPlan::id()
 
@@ -44,7 +43,7 @@ class MerginUserInfo: public QObject
 
     QString email() const;
     QString planAlias() const;
-    QString originalTransactionId() const;
+    int subscriptionId() const;
     MerginSubscriptionType::SubscriptionType planProvider() const;
     QString planProductId() const;
     QString nextBillPrice() const;
@@ -65,10 +64,10 @@ class MerginUserInfo: public QObject
   private:
     QString mEmail;
     QString mPlanAlias;
-    QString mOriginalTransactionId;
-    MerginSubscriptionType::SubscriptionType mPlanProvider;
+    int mSubscriptionId = -1;
+    MerginSubscriptionType::SubscriptionType mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
     QString mPlanProductId;
-    bool mOwnsActiveSubscription;
+    bool mOwnsActiveSubscription = false;
     QString mNextBillPrice;
     MerginSubscriptionStatus::SubscriptionStatus mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
     double mDiskUsage = 0.0; // in Bytes

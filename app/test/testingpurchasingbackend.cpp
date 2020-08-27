@@ -9,8 +9,6 @@
 
 #include "testingpurchasingbackend.h"
 
-#include <QUuid>
-
 #include "merginapi.h"
 #include "merginuserinfo.h"
 #include "inpututils.h"
@@ -138,12 +136,8 @@ QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTes
   QString planMerginId;
   if ( data != "tier01" )
   {
-    // this is new receipt
-    planMerginId = mMerginApi->userInfo()->originalTransactionId();
-  }
-  else
-  {
-    planMerginId = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
+    // this is an existing subscription
+    planMerginId = QString::number(mMerginApi->userInfo()->subscriptionId());
   }
 
   QString recept = planMerginId + "|" + data;

@@ -118,6 +118,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
       width: parent.width
       source: 'info.svg'
+      onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
               "Your subscription will not be extended after %1 <a href='%2'>Change</a>")
@@ -129,6 +130,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
       width: parent.width
       source: 'exclamation-triangle-solid.svg'
+      onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
               "Plese fix your <a href='%1'>billing details</a> as soon as possible")
