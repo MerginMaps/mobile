@@ -295,7 +295,6 @@ bool Loader::layerVisible( QgsMapLayer *layer )
 void Loader::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
-  mAppSettings.setDefaultMapTheme( name );
 
   // if active layer is no longer visible, reset it
   if ( !layerVisible( mActiveLayer.layer() ) )
