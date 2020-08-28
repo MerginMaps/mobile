@@ -77,6 +77,12 @@ class MapThemesModel : public QAbstractListModel
     QgsProject *mProject = nullptr;
     QList<QString> mMapThemes;
     int mActiveThemeIndex = -1;
+
+    /**
+    * Updates map theme (sets active index in the model) with the first match from project's theme collection.
+    * Precondition is to have model up-to-date with Project's theme collection.
+    */
+    void updateMapThemeByProject();
 };
 
 #endif // MapThemesModel_H
