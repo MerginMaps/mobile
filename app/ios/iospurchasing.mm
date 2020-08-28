@@ -316,7 +316,16 @@ bool IosPurchasingBackend::userCanMakePayments() const
   return [SKPaymentQueue canMakePayments];
 }
 
-QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findRegisteredPlan( const QString &productId )
+QString IosPurchasingBackend::getLocalizedPrice( const QString &planId ) const
+{
+  QSharedPointer<IosPurchasingPlan> plan = findPendingPlan( planId );
+  if ( plan )
+  {
+    return plan->price();
+  }
+}
+
+QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findRegisteredPlan( const QString &productId ) const
 {
   Purchasing *p = purchasing();
   Q_ASSERT( p );
@@ -328,7 +337,7 @@ QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findRegisteredPlan( cons
   return qSharedPointerObjectCast<IosPurchasingPlan>( plan );
 }
 
-QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findPendingPlan( const QString &productId )
+QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findPendingPlan( const QString &productId ) const
 {
   Purchasing *p = purchasing();
   Q_ASSERT( p );

@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 #include "testingpurchasingbackend.h"
+
 #include "merginapi.h"
 #include "merginuserinfo.h"
+#include "inpututils.h"
 
 #if defined (HAVE_WIDGETS)
 #include <QInputDialog>
@@ -121,18 +123,24 @@ void TestingPurchasingBackend::restore()
 
 QString TestingPurchasingBackend::subscriptionManageUrl()
 {
-  return mMerginApi->apiRoot();
+  return mMerginApi->apiRoot() + "subscription";
 }
 
 QString TestingPurchasingBackend::subscriptionBillingUrl()
 {
-  return mMerginApi->apiRoot();
+  return mMerginApi->apiRoot() + "billing";
 }
 
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )
 {
-  QString recept( QStringLiteral( "TEST-1|" ) );
-  recept += data;
+  QString planMerginId;
+  if ( data != "tier01" )
+  {
+    // this is an existing subscription
+    planMerginId = QString::number( mMerginApi->userInfo()->subscriptionId() );
+  }
+
+  QString recept = planMerginId + "|" + data;
 
   PurchasingTransaction::TransactionType type;
   restore ? type = PurchasingTransaction::RestoreTransaction : type = PurchasingTransaction::PuchaseTransaction;

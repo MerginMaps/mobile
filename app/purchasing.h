@@ -20,6 +20,8 @@
 #include <QJsonObject>
 #include <memory>
 
+#include "merginsubscriptiontype.h"
+
 class MerginApi;
 class Purchasing;
 
@@ -104,8 +106,8 @@ class PurchasingTransaction : public QObject
     //! Transaction receipt, e.g. apple base64 receipt
     virtual QString receipt() const = 0;
 
-    //! Transaction provider, either apple or test
-    virtual QString provider() const = 0;
+    //! Transaction provider, either apple, stripe or test
+    virtual MerginSubscriptionType::SubscriptionType provider() const = 0;
 
     PurchasingPlan *plan() const;
     TransactionType type() const;
@@ -177,7 +179,7 @@ class PurchasingBackend: public QObject
      * Name of the billing service for Mergin API
      * (e.g. stripe, apple, google, ...)
      */
-    virtual QString billingServiceName() = 0;
+    virtual MerginSubscriptionType::SubscriptionType provider() const = 0;
 
     /**
      * Whether user can make purchases on the device
@@ -186,6 +188,9 @@ class PurchasingBackend: public QObject
 
     void setPurchasing( Purchasing *purchasing ) {mPurchasing = purchasing;}
     Purchasing *purchasing() const {return mPurchasing;}
+
+    //! Returns localised prize of plan, empty string if cannot be fetched
+    virtual QString getLocalizedPrice( const QString &planId ) const = 0;
 
   signals:
     void transactionCreationFailed( );
@@ -205,6 +210,7 @@ class PurchasingBackend: public QObject
  * 1. Mergin Server can be deployed with the flag that subscriptions are disabled
  * 2. Device (e.g. iPhone) can be in mode where purchases are not allowed
  * 3. The plans in the 3rd party store (e.g. AppStore) does not match the plans in Mergin Server
+ * 4. The InputApp does not have backed to manage user plan on Mergin Server (e.g. stripe plans)
  *
  * When purchasing is enabled the workflow is as follows
  * 1. Fetches the plan details from Mergin to check which plans are available for user. One of the plan
@@ -237,10 +243,9 @@ class Purchasing : public QObject
     Q_PROPERTY( PurchasingPlan *recommendedPlan READ recommendedPlan NOTIFY recommendedPlanChanged )
     Q_PROPERTY( bool transactionPending READ transactionPending NOTIFY transactionPendingChanged )
     Q_PROPERTY( bool hasInAppPurchases READ hasInAppPurchases NOTIFY hasInAppPurchasesChanged )
-
-    Q_PROPERTY( bool hasManageSubscriptionCapability READ hasManageSubscriptionCapability NOTIFY purchasingChanged ) //should never change
-    Q_PROPERTY( QString subscriptionManageUrl READ subscriptionManageUrl NOTIFY purchasingChanged ) //should never change
-    Q_PROPERTY( QString subscriptionBillingUrl READ subscriptionBillingUrl NOTIFY purchasingChanged ) //should never change
+    Q_PROPERTY( bool hasManageSubscriptionCapability READ hasManageSubscriptionCapability NOTIFY hasManageSubscriptionCapabilityChanged )
+    Q_PROPERTY( QString subscriptionManageUrl READ subscriptionManageUrl NOTIFY subscriptionManageUrlChanged )
+    Q_PROPERTY( QString subscriptionBillingUrl READ subscriptionBillingUrl NOTIFY subscriptionBillingUrlChanged )
 
   public:
     explicit Purchasing( MerginApi *merginApi, QObject *parent = nullptr );
@@ -251,7 +256,6 @@ class Purchasing : public QObject
     bool hasManageSubscriptionCapability() const;
     bool transactionPending() const;
     bool hasInAppPurchases() const;
-
     QString subscriptionManageUrl();
     QString subscriptionBillingUrl();
     PurchasingPlan *recommendedPlan() const;
@@ -267,7 +271,9 @@ class Purchasing : public QObject
     void transactionPendingChanged();
     void recommendedPlanChanged();
     void hasInAppPurchasesChanged();
-    void purchasingChanged();
+    void hasManageSubscriptionCapabilityChanged();
+    void subscriptionManageUrlChanged();
+    void subscriptionBillingUrlChanged();
 
   private slots:
     void onFetchPurchasingPlansFinished();
@@ -283,6 +289,9 @@ class Purchasing : public QObject
 
     void onMerginServerStatusChanged();
     void onMerginServerChanged();
+    void onMerginPlanProductIdChanged();
+    void evaluateHasInAppPurchases();
+    void onHasInAppPurchasesChanged();
 
   private:
     void createBackend();
@@ -292,6 +301,13 @@ class Purchasing : public QObject
     void setTransactionCreationRequested( bool transactionCreationRequested );
     void setRecommendedPlanId( const QString &recommendedPlanId );
     void removePendingTransaction( PurchasingTransaction *transaction );
+
+    void setHasInAppPurchases( bool hasInAppPurchases );
+    void setHasManageSubscriptionCapability( bool hasManageSubscriptionCapability );
+    void setSubscriptionManageUrl( const QString &subscriptionManageUrl );
+    void setSubscriptionBillingUrl( const QString &subscriptionBillingUrl );
+
+    void setDefaultUrls();
 
     void notify( const QString &msg );
 
@@ -304,6 +320,11 @@ class Purchasing : public QObject
 
     std::unique_ptr<PurchasingBackend> mBackend = nullptr;
     MerginApi *mMerginApi = nullptr;
+
+    bool mHasInAppPurchases = false;
+    bool mHasManageSubscriptionCapability;
+    QString mSubscriptionManageUrl;
+    QString mSubscriptionBillingUrl;
 
     friend class PurchasingTransaction;
 };

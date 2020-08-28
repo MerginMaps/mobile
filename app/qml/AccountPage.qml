@@ -24,7 +24,7 @@ Page {
 
   property string username: __merginApi.userAuth.username
   property string email: __merginApi.userInfo.email
-  property string plan: __merginApi.userInfo.plan
+  property string planAlias: __merginApi.userInfo.planAlias
   property int storageLimit: __merginApi.userInfo.storageLimit
   property int diskUsage: __merginApi.userInfo.diskUsage
   property int subscriptionStatus: __merginApi.userInfo.subscriptionStatus
@@ -111,13 +111,14 @@ Page {
     TextWithIcon {
       width: parent.width
       source: 'edit.svg'
-      text: root.plan
+      text: root.planAlias
     }
 
     TextWithIcon {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
       width: parent.width
       source: 'info.svg'
+      onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
               "Your subscription will not be extended after %1 <a href='%2'>Change</a>")
@@ -129,6 +130,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
       width: parent.width
       source: 'exclamation-triangle-solid.svg'
+      onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
               "Plese fix your <a href='%1'>billing details</a> as soon as possible")

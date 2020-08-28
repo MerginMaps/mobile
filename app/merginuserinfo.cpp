@@ -19,41 +19,53 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
 void MerginUserInfo::clear()
 {
   mEmail = "";
-  mPlan = "";
+  mPlanAlias = "";
+  mSubscriptionId = -1;
+  mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
+  mPlanProductId = "";
   mNextBillPrice = "";
   mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
+  mOwnsActiveSubscription = false;
   mStorageLimit = 0;
+
+  emit planProviderChanged();
+  emit planProductIdChanged();
   emit userInfoChanged();
 }
 
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
-  mPlan = docObj.value( QStringLiteral( "plan" ) ).toString();
   mNextBillPrice = docObj.value( QStringLiteral( "next_bill_price" ) ).toString();
-  QString timestamp = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
+  QString nextPaymentDate = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
+  QString timestamp = docObj.value( QStringLiteral( "valid_until" ) ).toString(); // if next_payment_date is not null, it is same as valid_until
   mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
   mOwnsActiveSubscription = docObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
+  mSubscriptionId = docObj.value( QStringLiteral( "subscription_id" ) ).toInt();
 
   QString status = docObj.value( QStringLiteral( "status" ) ).toString();
   if ( status == "active" )
   {
     if ( mOwnsActiveSubscription )
     {
-      mSubscriptionStatus = MerginSubscriptionStatus::ValidSubscription;
+      if ( nextPaymentDate.isEmpty() )
+      {
+        mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionUnsubscribed;
+      }
+      else
+      {
+        mSubscriptionStatus = MerginSubscriptionStatus::ValidSubscription;
+      }
     }
     else
     {
       mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
     }
   }
-  else if ( status == "unsubscribed" )
-  {
-    mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionUnsubscribed;
-  }
+
   else if ( status == "past_due" )
   {
     mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionInGracePeriod;
@@ -63,6 +75,21 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     // internal error some new mergin api? what to do?
     mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   }
+
+  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+  MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
+  if ( planProvider != mPlanProvider )
+  {
+    mPlanProvider = planProvider;
+    emit planProviderChanged();
+  }
+  QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
+  if ( planProductId !=  mPlanProductId )
+  {
+    mPlanProductId = planProductId;
+    emit planProductIdChanged();
+  }
   emit userInfoChanged();
 }
 
@@ -71,20 +98,44 @@ bool MerginUserInfo::ownsActiveSubscription() const
   return mOwnsActiveSubscription;
 }
 
-void MerginUserInfo::setPaidPlan( bool paidPlan )
+void MerginUserInfo::setLocalizedPrice( const QString &price )
 {
-  mOwnsActiveSubscription = paidPlan;
-  emit userInfoChanged();
+  if ( price.isEmpty() )
+    return;
+
+  if ( price != mNextBillPrice )
+  {
+    mNextBillPrice = price;
+    emit userInfoChanged();
+  }
 }
+
+
+int MerginUserInfo::subscriptionId() const
+{
+  return mSubscriptionId;
+}
+
+
+MerginSubscriptionType::SubscriptionType MerginUserInfo::planProvider() const
+{
+  return mPlanProvider;
+}
+
+QString MerginUserInfo::planProductId() const
+{
+  return mPlanProductId;
+}
+
 
 QString MerginUserInfo::email() const
 {
   return mEmail;
 }
 
-QString MerginUserInfo::plan() const
+QString MerginUserInfo::planAlias() const
 {
-  return mPlan;
+  return mPlanAlias;
 }
 
 QString MerginUserInfo::nextBillPrice() const
@@ -105,48 +156,6 @@ double MerginUserInfo::diskUsage() const
 double MerginUserInfo::storageLimit() const
 {
   return mStorageLimit;
-}
-
-void MerginUserInfo::setEmail( const QString &email )
-{
-  mEmail = email;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setPlan( const QString &plan )
-{
-  mPlan = plan;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setNextBillPrice( const QString &nextBillPrice )
-{
-  mNextBillPrice = nextBillPrice;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setSubscriptionStatus( const MerginSubscriptionStatus::SubscriptionStatus &subscriptionStatus )
-{
-  mSubscriptionStatus = subscriptionStatus;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setDiskUsage( double diskUsage )
-{
-  mDiskUsage = diskUsage;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setStorageLimit( double storageLimit )
-{
-  mStorageLimit = storageLimit;
-  emit userInfoChanged();
-}
-
-void MerginUserInfo::setSubscriptionTimestamp( const QString &subscriptionTimestamp )
-{
-  mSubscriptionTimestamp = subscriptionTimestamp;
-  emit userInfoChanged();
 }
 
 QString MerginUserInfo::subscriptionTimestamp() const

@@ -40,7 +40,7 @@ class TestingPurchasingTransaction: public PurchasingTransaction
   public:
     TestingPurchasingTransaction( QString receipt, TransactionType type, QSharedPointer<PurchasingPlan> plan );
     QString receipt() const override;
-    QString provider() const override {return QStringLiteral( "test" ); }
+    MerginSubscriptionType::SubscriptionType provider() const override {return MerginSubscriptionType::TestSubscriptionType; }
 
     void finalizeTransaction() override {}
 
@@ -79,14 +79,15 @@ class TestingPurchasingBackend: public PurchasingBackend
 
     void init() override {}
     QSharedPointer<PurchasingPlan> createPlan( ) override {return QSharedPointer<PurchasingPlan>( new PurchasingPlan ); }
-    void registerPlan( QSharedPointer<PurchasingPlan> plan ) override {mPlan = plan; emit planRegistrationSucceeded( plan->id() );}
+    void registerPlan( QSharedPointer<PurchasingPlan> plan ) override { mPlan = plan; emit planRegistrationSucceeded( plan->id() );}
     void createTransaction( QSharedPointer<PurchasingPlan> plan ) override;
     void restore() override;
     QString subscriptionManageUrl() override;
     QString subscriptionBillingUrl() override;
-    QString billingServiceName() override { return QString(); }
+    MerginSubscriptionType::SubscriptionType provider() const override { return MerginSubscriptionType::TestSubscriptionType; }
     bool userCanMakePayments() const override { return true; }
     bool hasManageSubscriptionCapability() const override { return true; }
+    QString getLocalizedPrice( const QString & ) const override { return ""; }
 
     void setMerginApi( const QString &url );
 
