@@ -18,6 +18,7 @@
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
+#include "qgsmapthemecollection.h"
 
 #if VERSION_INT >= 30500
 // this header only exists in QGIS >= 3.6
@@ -100,7 +101,6 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     res = mProject->read( filePath );
 
     mMapThemeModel.reloadMapThemes( mProject );
-    mMapThemeModel.updateMapTheme( mAppSettings.defaultMapTheme() );
 
     setActiveLayer( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
@@ -295,7 +295,6 @@ bool Loader::layerVisible( QgsMapLayer *layer )
 void Loader::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
-  mAppSettings.setDefaultMapTheme( name );
 
   // if active layer is no longer visible, reset it
   if ( !layerVisible( mActiveLayer.layer() ) )
