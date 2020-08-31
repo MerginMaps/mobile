@@ -42,7 +42,7 @@ void TestMerginApi::initTestCase()
   mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
-  Q_ASSERT( spy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
 
   mUsername = username;  // keep for later
@@ -63,8 +63,8 @@ void TestMerginApi::initTestCase()
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
   mApiExtra->setApiRoot( mApi->apiRoot() );
   QSignalSpy spyExtra( mApiExtra, &MerginApi::authChanged );
-  mApiExtra->authorize( mApi->userAuth()->username(), mApi->userAuth()->password() );
-  Q_ASSERT( spyExtra.wait( TestUtils::LONG_REPLY ) );
+  mApiExtra->authorize( username, password );
+  QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyExtra.count(), 1 );
 
   // remove any projects on the server that may prevent us from creating them
@@ -1311,7 +1311,7 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 10 ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 30 ) );
   QCOMPARE( spy.count(), 1 );
 }
 

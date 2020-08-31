@@ -14,8 +14,8 @@
 
 namespace TestUtils
 {
-  const int SHORT_REPLY = 3000;
-  const int LONG_REPLY = 5000;
+  const int SHORT_REPLY = 5000;
+  const int LONG_REPLY = 10000;
 
   void mergin_auth( QString &apiRoot, QString &username, QString &password );
 }
