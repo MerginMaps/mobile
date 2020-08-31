@@ -413,6 +413,7 @@ int main( int argc, char *argv[] )
       if ( QString( argv[i] ) != "--test" )
         args << argv[i];
     }
+
     QTest::qExec( &merginApiTest, args.count(), args.data() );
 #if not defined APPLE_PURCHASING
     TestPurchasing purchasingTest( ma.get(), purchasing.get() );

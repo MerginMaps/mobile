@@ -752,6 +752,7 @@ void MerginApi::authorizeFinished()
       mUserAuth->clearTokenData();
       emit authFailed();
       InputUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      qDebug() << data;
       emit notify( "Internal server error during authorization" );
     }
   }
@@ -1975,11 +1976,11 @@ void MerginApi::getUserInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     InputUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    mUserInfo->clear();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
   r->deleteLater();
-  emit userInfoChanged();
 }
 
 ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir )

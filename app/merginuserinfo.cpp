@@ -36,20 +36,44 @@ void MerginUserInfo::clear()
 
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
-  mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
-  mNextBillPrice = docObj.value( QStringLiteral( "next_bill_price" ) ).toString();
-  QString nextPaymentDate = docObj.value( QStringLiteral( "next_payment_date" ) ).toString();
-  QString timestamp = docObj.value( QStringLiteral( "valid_until" ) ).toString(); // if next_payment_date is not null, it is same as valid_until
-  mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( timestamp );
-  mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
-  mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
-  mOwnsActiveSubscription = docObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
-  mSubscriptionId = docObj.value( QStringLiteral( "subscription_id" ) ).toInt();
+  // parse profile data
+  QJsonObject profileObj = docObj.value( QStringLiteral( "profile" ) ).toObject();
+  mEmail = profileObj.value( QStringLiteral( "email" ) ).toString();
+  mDiskUsage = profileObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
+  mStorageLimit = profileObj.value( QStringLiteral( "storage" ) ).toDouble();
 
-  QString status = docObj.value( QStringLiteral( "status" ) ).toString();
-  if ( status == "active" )
+  // parse service data
+  QJsonObject serviceObj = docObj.value( QStringLiteral( "service" ) ).toObject();
+
+  // parse service.subscription data
+  QJsonObject subscriptionObj = serviceObj.value( QStringLiteral( "subscription" ) ).toObject();
+  if ( subscriptionObj.isEmpty() )
   {
-    if ( mOwnsActiveSubscription )
+    // only free plan is assigned, subscription data is not present in JSON
+    mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
+    mSubscriptionTimestamp = "";
+    mNextBillPrice = "";
+    mSubscriptionId = -1;
+    mOwnsActiveSubscription = false;
+  }
+  else
+  {
+    // user has active subscription
+    mNextBillPrice = subscriptionObj.value( QStringLiteral( "next_bill_price" ) ).toString();
+    QString nextPaymentDate = subscriptionObj.value( QStringLiteral( "next_payment" ) ).toString();
+    QString validUntil = subscriptionObj.value( QStringLiteral( "valid_until" ) ).toString();
+    if ( nextPaymentDate.isEmpty() )
+    {
+      mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( validUntil );
+    }
+    else
+    {
+      mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( nextPaymentDate );
+    }
+
+    mSubscriptionId = subscriptionObj.value( QStringLiteral( "id" ) ).toInt();
+    QString status = subscriptionObj.value( QStringLiteral( "status" ) ).toString();
+    if ( status == "active" )
     {
       if ( nextPaymentDate.isEmpty() )
       {
@@ -60,23 +84,20 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
         mSubscriptionStatus = MerginSubscriptionStatus::ValidSubscription;
       }
     }
-    else
+
+    else if ( status == "past_due" )
+    {
+      mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionInGracePeriod;
+    }
+    else // cancelled
     {
       mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
     }
   }
 
-  else if ( status == "past_due" )
-  {
-    mSubscriptionStatus = MerginSubscriptionStatus::SubscriptionInGracePeriod;
-  }
-  else
-  {
-    // internal error some new mergin api? what to do?
-    mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
-  }
-
-  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+  // parse service.plan data
+  QJsonObject planObj = serviceObj.value( QStringLiteral( "plan" ) ).toObject();
+  mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
   mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
   MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
   if ( planProvider != mPlanProvider )
@@ -90,6 +111,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     mPlanProductId = planProductId;
     emit planProductIdChanged();
   }
+
   emit userInfoChanged();
 }
 

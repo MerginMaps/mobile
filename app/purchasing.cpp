@@ -444,6 +444,11 @@ void Purchasing::onPlanRegistrationFailed( const QString &id )
   qDebug() << "Failed to register plan " + id;
   if ( mPlansWithPendingRegistration.contains( id ) )
     mPlansWithPendingRegistration.remove( id );
+
+  if ( mPlansWithPendingRegistration.empty() && mRegisteredPlans.empty() )
+  {
+    InputUtils::log( "Plan Registation", QStringLiteral( "Failed to register any plans" ) );
+  }
 }
 
 void Purchasing::onPlanRegistrationSucceeded( const QString &id )
