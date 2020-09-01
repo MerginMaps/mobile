@@ -39,6 +39,7 @@ class MerginUserInfo: public QObject
     ~MerginUserInfo() = default;
 
   public:
+    void clearSubscriptionData();
     void clear();
 
     QString email() const;
@@ -65,7 +66,7 @@ class MerginUserInfo: public QObject
     QString mEmail;
     QString mPlanAlias;
     int mSubscriptionId = -1;
-    MerginSubscriptionType::SubscriptionType mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
+    MerginSubscriptionType::SubscriptionType mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
     QString mPlanProductId;
     bool mOwnsActiveSubscription = false;
     QString mNextBillPrice;

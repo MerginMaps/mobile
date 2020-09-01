@@ -134,7 +134,8 @@ QString TestingPurchasingBackend::subscriptionBillingUrl()
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )
 {
   QString planMerginId;
-  if ( data != "tier01" )
+  const int id = mMerginApi->userInfo()->subscriptionId();
+  if ( id > 0 )
   {
     // this is an existing subscription
     planMerginId = QString::number( mMerginApi->userInfo()->subscriptionId() );

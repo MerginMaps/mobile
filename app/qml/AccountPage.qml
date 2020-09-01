@@ -30,6 +30,7 @@ Page {
   property int subscriptionStatus: __merginApi.userInfo.subscriptionStatus
   property string subscriptionsTimestamp: __merginApi.userInfo.subscriptionTimestamp
   property string nextBillPrice: __merginApi.userInfo.nextBillPrice
+  property bool ownsActiveSubscription: __merginApi.userInfo.ownsActiveSubscription
 
   id: root
   visible: true
@@ -118,12 +119,10 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
       width: parent.width
       source: 'info.svg'
-      onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
-              "Your subscription will not be extended after %1 <a href='%2'>Change</a>")
-      .arg(root.subscriptionsTimestamp)
-      .arg(__purchasing.subscriptionManageUrl)
+              "Your subscription will not be extended after %1")
+            .arg(root.subscriptionsTimestamp)
     }
 
     TextWithIcon {
@@ -149,7 +148,15 @@ Page {
       .arg(root.subscriptionsTimestamp)
     }
 
-
+    TextWithIcon {
+      visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
+      width: parent.width
+      source: 'ic_today.svg'
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+              + "; text-decoration: underline; }</style>" + qsTr(
+                "Your subscription was cancelled on %1")
+            .arg(root.subscriptionsTimestamp)
+    }
 
     Row {
       width: parent.width
@@ -190,7 +197,7 @@ Page {
       visible: __merginApi.apiSupportsSubscriptions
 
       height: InputStyle.rowHeightHeader
-      text: __purchasing.transactionPending ? qsTr("Transaction Pending...") : qsTr("Upgrade Plan")
+      text: __purchasing.transactionPending ? qsTr("Transaction Pending...") : root.ownsActiveSubscription ? qsTr("Buy Subscription") : qsTr("Manage Subscription")
       font.pixelSize: subscribeButton.height / 2
 
       background: Rectangle {

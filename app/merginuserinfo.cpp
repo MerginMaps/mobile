@@ -16,17 +16,23 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
   clear();
 }
 
+void MerginUserInfo::clearSubscriptionData()
+{
+  mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
+  mSubscriptionTimestamp = "";
+  mNextBillPrice = "";
+  mSubscriptionId = -1;
+  mOwnsActiveSubscription = false;
+}
+
 void MerginUserInfo::clear()
 {
+  clearSubscriptionData();
   mEmail = "";
   mPlanAlias = "";
-  mSubscriptionId = -1;
-  mPlanProvider = MerginSubscriptionType::UnknownSubscriptionType;
+  mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
   mPlanProductId = "";
-  mNextBillPrice = "";
-  mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
   mDiskUsage = 0;
-  mOwnsActiveSubscription = false;
   mStorageLimit = 0;
 
   emit planProviderChanged();
@@ -50,15 +56,12 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   if ( subscriptionObj.isEmpty() )
   {
     // only free plan is assigned, subscription data is not present in JSON
-    mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
-    mSubscriptionTimestamp = "";
-    mNextBillPrice = "";
-    mSubscriptionId = -1;
-    mOwnsActiveSubscription = false;
+    clearSubscriptionData();
   }
   else
   {
-    // user has active subscription
+    // user has subscription
+
     mNextBillPrice = subscriptionObj.value( QStringLiteral( "next_bill_price" ) ).toString();
     QString nextPaymentDate = subscriptionObj.value( QStringLiteral( "next_payment" ) ).toString();
     QString validUntil = subscriptionObj.value( QStringLiteral( "valid_until" ) ).toString();
@@ -73,6 +76,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 
     mSubscriptionId = subscriptionObj.value( QStringLiteral( "id" ) ).toInt();
     QString status = subscriptionObj.value( QStringLiteral( "status" ) ).toString();
+
     if ( status == "active" )
     {
       if ( nextPaymentDate.isEmpty() )
@@ -91,7 +95,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     }
     else // cancelled
     {
-      mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
+      mSubscriptionStatus = MerginSubscriptionStatus::CanceledSubscription;
     }
   }
 

@@ -24,7 +24,8 @@ class MerginSubscriptionStatus
       FreeSubscription,
       ValidSubscription,
       SubscriptionInGracePeriod,
-      SubscriptionUnsubscribed
+      SubscriptionUnsubscribed,
+      CanceledSubscription
     };
     Q_ENUMS( SubscriptionStatus )
 };

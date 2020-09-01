@@ -13,10 +13,10 @@
 
 static const double FREE_STORAGE =  122312.0;
 
-static const char *TIER01_PLAN_ID = "test_mergin_tier_1";
+static const char *TIER01_PLAN_ID = "test_mergin_tier_1_1";
 static const double TIER01_STORAGE =  104857600.0;
 
-static const char *TIER02_PLAN_ID = "test_mergin_tier_2";
+static const char *TIER02_PLAN_ID = "test_mergin_tier_1_2";
 static const double TIER02_STORAGE =  10737418240.0;
 
 TestPurchasing::TestPurchasing( MerginApi *api, Purchasing *purchasing )
@@ -59,13 +59,13 @@ void TestPurchasing::initTestCase()
     // unsubscribe to have always the same start position
     runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->userInfo()->planProductId() );
     QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), false );
-    QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::FreeSubscription );
+    QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
   }
   else
   {
     // if there is other type, it means that the test user on test.dev
     // was manually modified outside the automatic testing
-    Q_ASSERT( subscriptionType == MerginSubscriptionType::UnknownSubscriptionType );
+    Q_ASSERT( subscriptionType == MerginSubscriptionType::NoneSubscriptionType );
   }
 }
 
@@ -80,6 +80,7 @@ void TestPurchasing::testUserBuyTier01()
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
 
 void TestPurchasing::testUserBuyTier12()
@@ -90,15 +91,17 @@ void TestPurchasing::testUserBuyTier12()
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER02_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
 
 void TestPurchasing::testUserCancelledTransaction()
 {
+  int oldStatus = mApi->userInfo()->subscriptionStatus();
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveUserCancelled, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), "" );
   QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), false );
-  QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::FreeSubscription );
+  QCOMPARE( mApi->userInfo()->subscriptionStatus(), oldStatus );
 }
 void TestPurchasing::testUserUnsubscribed()
 {
@@ -108,6 +111,7 @@ void TestPurchasing::testUserUnsubscribed()
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionUnsubscribed );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
 
 void TestPurchasing::testUserInGracePeriod()
@@ -118,6 +122,7 @@ void TestPurchasing::testUserInGracePeriod()
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionInGracePeriod );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
 
 void TestPurchasing::testUserCancelledSubscription()
@@ -125,13 +130,15 @@ void TestPurchasing::testUserCancelledSubscription()
   QCOMPARE( mApi->userInfo()->planProductId(), "" );
   QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), false );
-  QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::FreeSubscription );
+  QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::NoneSubscriptionType );
 }
 
 void TestPurchasing::testUserSendsBadReceipt()
 {
+  int oldStatus = mApi->userInfo()->subscriptionStatus();
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBadReceipt, TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::FreeSubscription );
+  QCOMPARE( mApi->userInfo()->subscriptionStatus(), oldStatus );
 }
 
 void TestPurchasing::testUserRestore()
@@ -140,4 +147,5 @@ void TestPurchasing::testUserRestore()
   QCOMPARE( mApi->userInfo()->planProductId(), TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
+  QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
