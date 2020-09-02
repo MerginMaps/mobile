@@ -414,12 +414,12 @@ int main( int argc, char *argv[] )
         args << argv[i];
     }
 
-    QTest::qExec( &merginApiTest, args.count(), args.data() );
+    int nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
 #if not defined APPLE_PURCHASING
     TestPurchasing purchasingTest( ma.get(), purchasing.get() );
-    QTest::qExec( &purchasingTest, args.count(), args.data() );
+    nFailed += QTest::qExec( &purchasingTest, args.count(), args.data() );
 #endif
-    return 0;
+    return nFailed;
   }
 #endif
 
