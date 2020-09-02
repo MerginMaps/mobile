@@ -38,9 +38,12 @@ bool MerginUserAuth::hasAuthData()
 
 void MerginUserAuth::setFromJson( QJsonObject docObj )
 {
-  mUserId = docObj.value( QStringLiteral( "user" ) ).toInt();
-  mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
+  // parse profile data
+  QJsonObject profileObj = docObj.value( QStringLiteral( "profile" ) ).toObject();
+  mUserId = profileObj.value( QStringLiteral( "user" ) ).toInt();
+  mUsername = profileObj.value( QStringLiteral( "username" ) ).toString();
 
+  // parse session data
   QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
   mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
   mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();

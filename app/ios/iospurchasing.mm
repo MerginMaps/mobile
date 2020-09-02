@@ -344,7 +344,7 @@ QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findPendingPlan( const Q
 
   QSharedPointer<PurchasingPlan> plan = p->pendingPlan( productId );
   if ( !plan )
-    return nullptr;
+    return QSharedPointer<IosPurchasingPlan>();
 
   return qSharedPointerObjectCast<IosPurchasingPlan>( plan );
 }

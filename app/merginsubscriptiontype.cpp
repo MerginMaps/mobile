@@ -24,7 +24,7 @@ MerginSubscriptionType::SubscriptionType MerginSubscriptionType::fromString( con
   if ( name == "test" )
     return MerginSubscriptionType::TestSubscriptionType;
 
-  return MerginSubscriptionType::UnknownSubscriptionType;
+  return MerginSubscriptionType::NoneSubscriptionType;
 }
 
 QString MerginSubscriptionType::toString( const MerginSubscriptionType::SubscriptionType &type )

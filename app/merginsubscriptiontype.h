@@ -22,7 +22,7 @@ class MerginSubscriptionType
 
     enum SubscriptionType
     {
-      UnknownSubscriptionType,
+      NoneSubscriptionType,
       AppleSubscriptionType, // in-app purchases (apple provider)
       StripeSubscriptionType, // stripe provider
       TestSubscriptionType, // testing (mock) provider

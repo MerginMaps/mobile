@@ -615,8 +615,6 @@ void MerginApi::clearAuth()
 {
   mUserAuth->clear();
   mUserInfo->clear();
-
-  emit authChanged();
 }
 
 void MerginApi::resetApiRoot()
@@ -739,21 +737,22 @@ void MerginApi::authorizeFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( "auth", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QByteArray data = r->readAll();
+    QJsonDocument doc = QJsonDocument::fromJson( data );
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
       mUserAuth->setFromJson( docObj );
       mUserInfo->setFromJson( docObj );
-      emit authChanged();
     }
     else
     {
-      mUserAuth->setUsername( QString() );
-      mUserAuth->setPassword( QString() );
+      whileBlocking( mUserAuth )->setUsername( QString() ); //clearTokenData emits the authChanged
+      whileBlocking( mUserAuth )->setPassword( QString() ); //clearTokenData emits the authChanged
       mUserAuth->clearTokenData();
       emit authFailed();
       InputUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      qDebug() << data;
       emit notify( "Internal server error during authorization" );
     }
   }
@@ -1977,11 +1976,11 @@ void MerginApi::getUserInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     InputUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    mUserInfo->clear();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
   r->deleteLater();
-  emit userInfoChanged();
 }
 
 ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir )

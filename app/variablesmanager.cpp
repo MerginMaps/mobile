@@ -43,6 +43,9 @@ void VariablesManager::authChanged()
 
 void VariablesManager::setVersionVariable( const QString &projectFullName )
 {
+  if ( !mCurrentProject )
+    return;
+
   if ( mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString() == projectFullName )
     setProjectVariables();
 }

@@ -11,6 +11,7 @@
 #define TESTPURCHASING_H
 
 #include <QObject>
+#include "testingpurchasingbackend.h"
 
 class MerginApi;
 class TestingPurchasingBackend;
@@ -27,9 +28,18 @@ class TestPurchasing: public QObject
     void initTestCase();
     void cleanupTestCase();
 
+    void testUserBuyTier01();
+    void testUserBuyTier12();
     void testUserCancelledTransaction();
+    void testUserUnsubscribed();
+    void testUserInGracePeriod();
+    void testUserCancelledSubscription();
+    void testUserSendsBadReceipt();
+    void testUserRestore();
 
   private:
+    void runPurchasingCommand( TestingPurchasingBackend::NextPurchaseResult result, const QString &planId );
+
     MerginApi *mApi = nullptr;
     Purchasing *mPurchasing = nullptr;
     TestingPurchasingBackend *mPurchasingBackend = nullptr;
