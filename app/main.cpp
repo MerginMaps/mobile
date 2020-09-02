@@ -309,11 +309,15 @@ int main( int argc, char *argv[] )
   }
 
 #ifdef INPUT_TEST
-  bool IS_TEST = false;
+  bool IS_MERGIN_API_TEST = false;
+  bool IS_PURCHASING_TEST = false;
   for ( int i = 0; i < argc; ++i )
   {
-    if ( std::string( argv[i] ) == "--test" ) IS_TEST = true;
+    if ( std::string( argv[i] ) == "--testMerginApi" ) IS_MERGIN_API_TEST = true;
+    if ( std::string( argv[i] ) == "--testPurchasing" ) IS_PURCHASING_TEST = true;
   }
+  Q_ASSERT( !( IS_MERGIN_API_TEST && IS_PURCHASING_TEST ) );
+  bool IS_TEST = IS_PURCHASING_TEST || IS_MERGIN_API_TEST;
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -403,21 +407,27 @@ int main( int argc, char *argv[] )
   if ( IS_TEST )
   {
     initTestDeclarative();
-    TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
-
-    // use command line args we got, but filter out "--test" that's recognized by us but not by QTest framework
+    // use command line args we got, but filter out "--test*" that's recognized by us but not by QTest framework
     // (command line args may be used to filter function names that should be executed)
     QVector<char *> args;
     for ( int i = 0; i < argc; ++i )
     {
-      if ( QString( argv[i] ) != "--test" )
+      if ( !QString( argv[i] ).startsWith( "--test" ) )
         args << argv[i];
     }
 
-    int nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
+    int nFailed = 0;
+    if ( IS_MERGIN_API_TEST )
+    {
+      TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
+      nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
+    }
 #if not defined APPLE_PURCHASING
-    TestPurchasing purchasingTest( ma.get(), purchasing.get() );
-    nFailed += QTest::qExec( &purchasingTest, args.count(), args.data() );
+    else if ( IS_PURCHASING_TEST )
+    {
+      TestPurchasing purchasingTest( ma.get(), purchasing.get() );
+      nFailed += QTest::qExec( &purchasingTest, args.count(), args.data() );
+    }
 #endif
     return nFailed;
   }

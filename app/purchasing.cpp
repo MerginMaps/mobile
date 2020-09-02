@@ -377,7 +377,7 @@ void Purchasing::fetchPurchasingPlans( )
   request.setUrl( url );
   QNetworkReply *reply = mMerginApi->mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &Purchasing::onFetchPurchasingPlansFinished );
-  InputUtils::log( "request plan", QStringLiteral( "Requesting purchasing plans for in-app product" ) );
+  InputUtils::log( "request plan", QStringLiteral( "Requesting purchasing plans for provider %1" ).arg( MerginSubscriptionType::toString( mBackend->provider() ) ) );
 }
 
 void Purchasing::onFetchPurchasingPlansFinished()
