@@ -11,13 +11,13 @@
 #include "testutils.h"
 #include "test/testingpurchasingbackend.h"
 
-static const double FREE_STORAGE =  122312.0;
+static const double FREE_STORAGE =  104857600.0; // 100 MB
 
 static const char *TIER01_PLAN_ID = "test_mergin_tier_1_1";
-static const double TIER01_STORAGE =  104857600.0;
+static const double TIER01_STORAGE =  1073741824.0; // 1GB
 
 static const char *TIER02_PLAN_ID = "test_mergin_tier_1_2";
-static const double TIER02_STORAGE =  10737418240.0;
+static const double TIER02_STORAGE =  10737418240.0; // 10 GB
 
 TestPurchasing::TestPurchasing( MerginApi *api, Purchasing *purchasing )
 {
@@ -94,15 +94,6 @@ void TestPurchasing::testUserBuyTier12()
   QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }
 
-void TestPurchasing::testUserCancelledTransaction()
-{
-  int oldStatus = mApi->userInfo()->subscriptionStatus();
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveUserCancelled, TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->planProductId(), "" );
-  QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );
-  QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), false );
-  QCOMPARE( mApi->userInfo()->subscriptionStatus(), oldStatus );
-}
 void TestPurchasing::testUserUnsubscribed()
 {
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
@@ -127,6 +118,8 @@ void TestPurchasing::testUserInGracePeriod()
 
 void TestPurchasing::testUserCancelledSubscription()
 {
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), "" );
   QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), false );
@@ -134,16 +127,39 @@ void TestPurchasing::testUserCancelledSubscription()
   QCOMPARE( mApi->userInfo()->planProvider(), MerginSubscriptionType::NoneSubscriptionType );
 }
 
+void TestPurchasing::testUserCancelledTransaction()
+{
+  int oldStatus = mApi->userInfo()->subscriptionStatus();
+  mPurchasingBackend->setNextPurchaseResult( TestingPurchasingBackend::NonInteractiveUserCancelled );
+
+  QSignalSpy spy0( mPurchasingBackend, &PurchasingBackend::transactionCreationFailed );
+  mPurchasing->purchase( TIER01_PLAN_ID );
+  // immediate action without server for testbackend
+  QCOMPARE( spy0.count(), 1 );
+
+  QCOMPARE( mApi->userInfo()->subscriptionStatus(), oldStatus );
+}
+
 void TestPurchasing::testUserSendsBadReceipt()
 {
   int oldStatus = mApi->userInfo()->subscriptionStatus();
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBadReceipt, TIER01_PLAN_ID );
+  mPurchasingBackend->setNextPurchaseResult( TestingPurchasingBackend::NonInteractiveBadReceipt );
+
+  QSignalSpy spy0( mApi, &MerginApi::networkErrorOccurred );
+  mPurchasing->purchase( TIER01_PLAN_ID );
+  QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy0.count(), 1 );
+
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), oldStatus );
 }
 
 void TestPurchasing::testUserRestore()
 {
+  QSignalSpy spy0( mApi, &MerginApi::userInfoChanged );
   mPurchasing->restore();
+  QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy0.count(), 1 );
+
   QCOMPARE( mApi->userInfo()->planProductId(), TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );

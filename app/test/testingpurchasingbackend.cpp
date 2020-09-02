@@ -34,6 +34,14 @@ void TestingPurchasingBackend::setNextPurchaseResult( const TestingPurchasingBac
   mNextResult = expected;
 }
 
+void TestingPurchasingBackend::registerPlan( QSharedPointer<PurchasingPlan> plan )
+{
+  if ( !mPlan || plan->isReccomended() )
+    mPlan = plan;
+
+  emit planRegistrationSucceeded( plan->id() );
+}
+
 
 void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan> plan )
 {
@@ -104,21 +112,21 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
 
 void TestingPurchasingBackend::restore()
 {
-  QString tier = "tier01";
   if ( mMerginApi->userInfo()->ownsActiveSubscription() )
   {
-    tier = "tier12";
+    // we can try to "restore" only recommended plan in test backend
+    return;
   }
 
   if ( mNextResult == Interactive )
   {
 #if defined (HAVE_WIDGETS)
-    QMessageBox::information( nullptr, "TEST RESTORE", "Test restore " + tier );
-    emit transactionCreationSucceeded( createTestingTransaction( mPlan, tier, true ) );
+    QMessageBox::information( nullptr, "TEST RESTORE", "Test restore tier01" );
+    emit transactionCreationSucceeded( createTestingTransaction( mPlan, "tier01", true ) );
     return;
 #endif
   }
-  emit transactionCreationSucceeded( createTestingTransaction( mPlan, tier, true ) );
+  emit transactionCreationSucceeded( createTestingTransaction( mPlan, "tier01", true ) );
 }
 
 QString TestingPurchasingBackend::subscriptionManageUrl()
