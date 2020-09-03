@@ -19,9 +19,10 @@ Item {
   signal searchTextChanged( string text )
 
   property bool layerHasGeometry: true
-  property string layerName: ""
+  property string pageTitle: ""
   property int featuresCount: 0
   property int featuresLimit: 0
+  property var featuresModel: null
 
   states: [
     State {
@@ -48,7 +49,7 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: layerName + " (" + featuresCount + ")"
+      titleText: pageTitle
       
       onBack: {
         searchBar.deactivate()
@@ -74,6 +75,7 @@ Item {
       y: searchBar.height
       clip: true
       showAdditionalInfo: root.state == "search"
+      featuresModel: root.featuresModel
 
       onFeatureClicked: root.featureClicked( featureId )
     }

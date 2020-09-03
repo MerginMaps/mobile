@@ -245,6 +245,8 @@ Drawer {
             onStateChanged: {
                 toolbar.state = featureForm.state
             }
+
+            customWidgetCallback: valueRelationWidget.handler
         }
 
         FeatureToolbar {
@@ -291,4 +293,7 @@ Drawer {
       id: externalResourceBundle
     }
 
+    ValueRelationWidget {
+      id: valueRelationWidget
+    }
 }

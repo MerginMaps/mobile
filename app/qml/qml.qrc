@@ -49,5 +49,6 @@
         <file>BrowseDataToolbar.qml</file>
         <file>SearchBar.qml</file>
         <file>SubscribePlanItem.qml</file>
+        <file>ValueRelationWidget.qml</file>
     </qresource>
 </RCC>

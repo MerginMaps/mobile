@@ -11,6 +11,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import lc 1.0
 
+import QgsQuick 0.1 as QgsQuick
 /*
  * BrowseDataPanel should stay a logic component, please do not combine UI here
  */
@@ -25,7 +26,7 @@ Item {
 
   onSelectedLayerChanged: {
     if ( selectedLayer )
-      __featuresModel.reloadDataFromLayer( selectedLayer )
+      featuresListModel.reloadDataFromLayer( selectedLayer )
   }
 
   onFocusChanged: { // pass focus to stackview
@@ -57,19 +58,20 @@ Item {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
     let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
     let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
-    let featuresCount = __featuresModel.featuresCount
-    let featuresLimit = __featuresModel.featuresLimit
+    let featuresCount = featuresListModel.featuresCount
+    let featuresLimit = featuresListModel.featuresLimit
 
     browseDataLayout.push( browseDataFeaturesPanel, {
                             layerHasGeometry: hasGeometry,
-                            layerName: layerName,
+                            pageTitle: layerName + " (" + featuresCount + ")",
                             featuresCount: featuresCount,
-                            featuresLimit: featuresLimit
+                            featuresLimit: featuresLimit,
+                            featuresModel: featuresListModel
                           } )
   }
 
   function searchTextEdited( text ) {
-    __featuresModel.filterExpression = text
+    featuresListModel.filterExpression = text
   }
 
   StackView {
@@ -110,7 +112,7 @@ Item {
       id: dataFeaturesPanel
       onBackButtonClicked: popOnePageOrClose()
       onFeatureClicked: {
-        let featurePair = __featuresModel.featureLayerPair( featureId )
+        let featurePair = featuresListModel.featureLayerPair( featureId )
 
         if ( !featurePair.feature.geometry.isNull )
           clearStackAndClose() // close view if feature has geometry
@@ -120,5 +122,9 @@ Item {
       onAddFeatureClicked: createFeatureRequested()
       onSearchTextChanged: searchTextEdited( text )
     }
+  }
+
+  QgsQuick.FeaturesListModel {
+    id: featuresListModel
   }
 }

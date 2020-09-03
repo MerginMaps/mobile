@@ -20,6 +20,7 @@ Item {
   signal featureClicked( var featureId )
 
   property bool showAdditionalInfo: false
+  property var featuresModel: null
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -27,7 +28,8 @@ Item {
     implicitWidth: parent.width
     spacing: 8 * QgsQuick.Utils.dp
 
-    model: __featuresModel
+    model: featuresModel
+
     delegate: Rectangle {
       id: itemContainer
       width: parent.width
@@ -36,7 +38,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.featureClicked( model.FeatureId )
+          root.featureClicked( model.FeatureId ? model.FeatureId : index )
         }
       }
 
@@ -53,7 +55,7 @@ Item {
             id: icon
             anchors.centerIn: parent
             anchors.leftMargin: 10 * QgsQuick.Utils.dp
-            source: model.IconSource
+            source: model.IconSource ? model.IconSource : "mIconTableLayer.svg"
             width: 30 * QgsQuick.Utils.dp
             height: width
             sourceSize.width: width
@@ -69,7 +71,7 @@ Item {
 
           Text {
             id: featureTitleText
-            text: model.FeatureTitle
+            text: model.FeatureTitle ? model.FeatureTitle : model.display
             height: textContainer.height/2
             width: textContainer.width
             font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -82,7 +84,14 @@ Item {
           Text {
             id: descriptionText
             height: textContainer.height/2
-            text: showAdditionalInfo ? model.Description + ", " + model.FoundPair : model.Description
+            text: {
+              if ( showAdditionalInfo )
+                return model.Description + ", " + model.FoundPair
+              else if ( model.Description )
+                return model.Description
+              else return "No further information"
+            }
+
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left
