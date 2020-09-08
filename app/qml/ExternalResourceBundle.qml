@@ -103,18 +103,14 @@ Item {
         }
 
         /**
-         * Called when an image is selected from a gallery. If the image doesn't exist in a folder
-         * set in widget's config, it is copied to the destination and value is set according a new copy.
+         * Called when an image is either selected from a gallery or captured by native camera. If the image doesn't exist in a folder
+         * set in widget's config, it is copied to the destination and value is set according a new copy (only when chosen from gallery).
          * \param imagePath Absolute path to a selected image
          */
         property var imageSelected: function imageSelected(imagePath) {
-          // if prefixToRelativePath is empty (widget is using absolute path), then use targetDir
-          var prefix = (externalResourceHandler.itemWidget.prefixToRelativePath) ?
-                externalResourceHandler.itemWidget.prefixToRelativePath:
-                externalResourceHandler.itemWidget.targetDir
-
           var filename = __inputUtils.getFileName(imagePath)
-          var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(prefix, filename)
+          //! final absolute location of an image.
+          var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(externalResourceHandler.itemWidget.targetDir, filename)
 
           if (!QgsQuick.Utils.fileExists(absolutePath)) {
             var success = __inputUtils.copyFile(imagePath, absolutePath)
@@ -123,8 +119,7 @@ Item {
                 console.log("error: Unable to copy file " + imagePath + " to the project directory")
             }
           }
-
-          externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefix, absolutePath)
+          externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, externalResourceHandler.itemWidget.prefixToRelativePath, absolutePath)
         }
 
         /**
