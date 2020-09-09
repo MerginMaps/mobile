@@ -2,7 +2,6 @@ SOURCES += \
 activelayer.cpp \
 layersmodel.cpp \
 layersproxymodel.cpp \
-featuresmodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
@@ -40,7 +39,6 @@ HEADERS += \
 activelayer.h \
 layersmodel.h \
 layersproxymodel.h \
-featuresmodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
