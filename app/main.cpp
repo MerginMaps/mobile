@@ -44,7 +44,6 @@
 #include "merginsubscriptiontype.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
-#include "featuresmodel.h"
 #include "layersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
@@ -265,7 +264,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionType>( "lc", 1, 0, "MerginSubscriptionType", "MerginSubscriptionType Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
-  qmlRegisterUncreatableType<FeaturesModel>( "lc", 1, 0, "FeaturesModel", "" );
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
@@ -379,7 +377,6 @@ int main( int argc, char *argv[] )
 
   ActiveLayer al;
   Loader loader( mtm, as, al );
-  FeaturesModel fm( loader );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
 
@@ -389,8 +386,6 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
-  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &fm, &FeaturesModel::activeMapThemeChanged );
-  QObject::connect( &as, &AppSettings::activeProjectChanged, &fm, &FeaturesModel::activeProjectChanged );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
 
@@ -478,7 +473,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
-  engine.rootContext()->setContextProperty( "__featuresModel", &fm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
