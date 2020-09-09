@@ -364,15 +364,24 @@ QString Loader::loadIconFromLayer( QgsMapLayer *layer )
   if ( vectorLayer )
   {
     QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
-    switch ( geometry )
-    {
-      case QgsWkbTypes::GeometryType::PointGeometry: return QString( "mIconPointLayer.svg" );
-      case QgsWkbTypes::GeometryType::LineGeometry: return QString( "mIconLineLayer.svg" );
-      case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "mIconPolygonLayer.svg" );
-      case QgsWkbTypes::GeometryType::NullGeometry:
-      case QgsWkbTypes::GeometryType::UnknownGeometry: return QString();
-    }
+    return iconFromGeometry( geometry );
   }
   else
     return QString( "mIconRasterLayer.svg" );
+}
+
+QString Loader::loadIconFromFeature( QgsFeature feature )
+{
+  return iconFromGeometry( feature.geometry().type() );
+}
+
+QString Loader::iconFromGeometry(const QgsWkbTypes::GeometryType &geometry)
+{
+  switch ( geometry )
+  {
+    case QgsWkbTypes::GeometryType::PointGeometry: return QString( "mIconPointLayer.svg" );
+    case QgsWkbTypes::GeometryType::LineGeometry: return QString( "mIconLineLayer.svg" );
+    case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "mIconPolygonLayer.svg" );
+    default: return QString( "mIconTableLayer.svg" );
+  }
 }

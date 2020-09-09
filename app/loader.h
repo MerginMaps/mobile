@@ -57,6 +57,7 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
+    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
     /**
      * Updates active map theme.
@@ -116,6 +117,8 @@ class Loader: public QObject
     bool reloadProject( QString projectDir );
 
   private:
+    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
+
     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
