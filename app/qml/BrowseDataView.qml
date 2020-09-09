@@ -55,7 +55,7 @@ Item {
             id: icon
             anchors.centerIn: parent
             anchors.leftMargin: 10 * QgsQuick.Utils.dp
-            source: model.IconSource ? model.IconSource : "mIconTableLayer.svg"
+            source: __loader.loadIconFromFeature( model.Feature )
             width: 30 * QgsQuick.Utils.dp
             height: width
             sourceSize.width: width
