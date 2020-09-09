@@ -196,10 +196,10 @@ ApplicationWindow {
       recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( recordToolbar.activeVectorLayer )
     }
 
-    function updateBrowseDataPanel( layer )
+    function updateBrowseDataPanel()
     {
       if ( browseDataPanel.visible )
-        browseDataPanel.selectedLayer = layer
+        browseDataPanel.refreshFeaturesData()
     }
 
     function selectFeature( feature, shouldUpdateExtent, hasGeometry = true ) {
@@ -706,8 +706,8 @@ ApplicationWindow {
             stateManager.state = "edit"
         }
 
-        onFeatureSaved: {
-          updateBrowseDataPanel( feature.layer )
+        onPanelClosed: {
+          updateBrowseDataPanel()
         }
     }
 
