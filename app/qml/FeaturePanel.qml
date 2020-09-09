@@ -22,7 +22,7 @@ Drawer {
     property bool isReadOnly
 
     signal editGeometryClicked()
-    signal featureSaved( var feature )
+    signal panelClosed()
 
     property alias formState: featureForm.state
     property alias feature: attributeModel.featureLayerPair
@@ -237,10 +237,13 @@ Drawer {
 
             project: featurePanel.project
             onSaved: {
-                featurePanel.featureSaved( featurePanel.feature )
+                featurePanel.panelClosed()
                 featurePanel.visible = false
             }
-            onCanceled: featurePanel.visible = false
+            onCanceled: {
+              featurePanel.panelClosed()
+              featurePanel.visible = false
+            }
 
             onStateChanged: {
                 toolbar.state = featureForm.state

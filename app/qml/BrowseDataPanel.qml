@@ -26,11 +26,15 @@ Item {
 
   onSelectedLayerChanged: {
     if ( selectedLayer )
-      featuresListModel.reloadDataFromLayer( selectedLayer )
+      featuresListModel.populateFromLayer( selectedLayer )
   }
 
   onFocusChanged: { // pass focus to stackview
     browseDataLayout.focus = true
+  }
+
+  function refreshFeaturesData() {
+    featuresListModel.loadFeaturesFromLayer()
   }
 
   function clearStackAndClose() {
@@ -58,14 +62,10 @@ Item {
     let modelIndex = __browseDataLayersModel.index( index, 0 )
     let hasGeometry = __browseDataLayersModel.data( modelIndex, LayersModel.HasGeometryRole )
     let layerName = __browseDataLayersModel.data( modelIndex, LayersModel.LayerNameRole )
-    let featuresCount = featuresListModel.featuresCount
-    let featuresLimit = featuresListModel.featuresLimit
 
     browseDataLayout.push( browseDataFeaturesPanel, {
                             layerHasGeometry: hasGeometry,
-                            pageTitle: layerName + " (" + featuresCount + ")",
-                            featuresCount: featuresCount,
-                            featuresLimit: featuresLimit,
+                            layerName: layerName,
                             featuresModel: featuresListModel
                           } )
   }
@@ -112,10 +112,12 @@ Item {
       id: dataFeaturesPanel
       onBackButtonClicked: popOnePageOrClose()
       onFeatureClicked: {
-        let featurePair = featuresListModel.featureLayerPair( featureId )
+        let featurePair = featuresListModel.featureLayerPair( featureIdx )
 
-        if ( !featurePair.feature.geometry.isNull )
+        if ( !featurePair.feature.geometry.isNull ) {
           clearStackAndClose() // close view if feature has geometry
+          deactivateSearch()
+        }
 
         root.featureSelectRequested( featurePair )
       }
@@ -126,5 +128,6 @@ Item {
 
   QgsQuick.FeaturesListModel {
     id: featuresListModel
+    modelType: featuresListModel.FeatureListing
   }
 }

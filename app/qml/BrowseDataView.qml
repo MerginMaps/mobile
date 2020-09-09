@@ -17,10 +17,22 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: root
 
-  signal featureClicked( var featureId )
+  signal featureClicked( var featureIdx )
 
   property bool showAdditionalInfo: false
   property var featuresModel: null
+  property string viewMode: "browseData"
+
+  states: [
+    State {
+      name: "browseData"
+      when: viewMode === "browseData"
+    },
+    State {
+      name: "valueRelation"
+      when: viewMode === "valueRelation"
+    }
+  ]
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -38,7 +50,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.featureClicked( model.FeatureId ? model.FeatureId : index )
+          root.featureClicked( model.EmitableIndex ? model.EmitableIndex : index )
         }
       }
 
@@ -71,7 +83,11 @@ Item {
 
           Text {
             id: featureTitleText
-            text: model.FeatureTitle ? model.FeatureTitle : model.display
+            text: {
+              if ( root.state === "browseData" )
+                return model.FeatureTitle
+              return model.display
+            }
             height: textContainer.height/2
             width: textContainer.width
             font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -87,11 +103,8 @@ Item {
             text: {
               if ( showAdditionalInfo )
                 return model.Description + ", " + model.FoundPair
-              else if ( model.Description )
-                return model.Description
-              else return "No further information"
+              return model.Description
             }
-
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left

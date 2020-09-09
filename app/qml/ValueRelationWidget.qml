@@ -13,15 +13,18 @@ Item {
 
     property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
       itemWidget = widget
-      valueRelationPage.visible = true
-      valueRelationPage.featuresModel = valueRelationModel
+      if ( valueRelationModel.featuresCount > 4 ) {
+        valueRelationPage.visible = true
+        valueRelationPage.featuresModel = valueRelationModel
+      }
+      else {
+        itemWidget.openCombobox()
+      }
     }
 
     function featureSelected( index ) {
-      console.log(index)
       itemWidget.itemSelected( index )
     }
-
   }
 
   id: valueRelationWidget
@@ -31,15 +34,24 @@ Item {
     id: valueRelationPage
     visible: false
     anchors.fill: parent
+    listViewMode: "valueRelation"
+    layerHasGeometry: false
 
-    pageTitle: "Choose a type"
+    pageTitle: "Choose Type"
     onBackButtonClicked: {
       valueRelationPage.visible = false
+      valueRelationPage.deactivateSearch()
     }
 
     onFeatureClicked: {
-      valueRelationHandler.featureSelected( featureId )
+      valueRelationHandler.featureSelected( featureIdx )
       valueRelationPage.visible = false
+      valueRelationPage.deactivateSearch()
+    }
+
+    onSearchTextChanged: {
+      console.log("emited search text change: " + text)
+      featuresModel.filterExpression = text
     }
   }
 }

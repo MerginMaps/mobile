@@ -14,15 +14,21 @@ Item {
   id: root
 
   signal backButtonClicked()
-  signal featureClicked( var featureId )
+  signal featureClicked( var featureIdx )
   signal addFeatureClicked()
   signal searchTextChanged( string text )
 
   property bool layerHasGeometry: true
-  property string pageTitle: ""
-  property int featuresCount: 0
-  property int featuresLimit: 0
+  property string layerName: ""
   property var featuresModel: null
+  property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
+  property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
+  property string pageTitle: layerName + " (" + featuresCount + ")"
+  property string listViewMode: "browseData"
+
+  property var deactivateSearch: function deactivateSearch() {
+    searchBar.deactivate()
+  }
 
   states: [
     State {
@@ -34,6 +40,7 @@ Item {
       when: searchBar.text != ""
     }
   ]
+
   Component.onCompleted: {
     if ( featuresCount > featuresLimit )
       __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( featuresLimit ) )
@@ -76,8 +83,9 @@ Item {
       clip: true
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
+      viewMode: listViewMode
 
-      onFeatureClicked: root.featureClicked( featureId )
+      onFeatureClicked: root.featureClicked( featureIdx )
     }
 
     footer: BrowseDataToolbar {
