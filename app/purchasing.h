@@ -39,7 +39,6 @@ class PurchasingPlan: public QObject
     Q_PROPERTY( QString period READ period NOTIFY planChanged )
     Q_PROPERTY( QString price READ price NOTIFY planChanged )
     Q_PROPERTY( QString storage READ storage NOTIFY planChanged )
-    Q_PROPERTY( bool isReccomended READ isReccomended NOTIFY planChanged )
 
   public:
     void clear();
@@ -56,8 +55,8 @@ class PurchasingPlan: public QObject
     QString price() const;
     void setPrice( const QString &price );
 
-    bool isReccomended() const;
-    void setReccomended( bool isReccomended );
+    bool isIndividualPlan() const;
+    bool isProfessionalPlan() const;
 
     void setFromJson( QJsonObject docObj );
 
@@ -77,9 +76,9 @@ class PurchasingPlan: public QObject
     QString mPeriod;
     QString mPrice;
     QString mStorage;
-    bool mReccomended = false;
 
     Purchasing *mPurchasing = nullptr;
+    bool mIsProfessional = false;
 };
 
 /**
@@ -240,7 +239,8 @@ class Purchasing : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( PurchasingPlan *recommendedPlan READ recommendedPlan NOTIFY recommendedPlanChanged )
+    Q_PROPERTY( PurchasingPlan *individualPlan READ individualPlan NOTIFY individualPlanChanged )
+    Q_PROPERTY( PurchasingPlan *professionalPlan READ professionalPlan NOTIFY professionalPlanChanged )
     Q_PROPERTY( bool transactionPending READ transactionPending NOTIFY transactionPendingChanged )
     Q_PROPERTY( bool hasInAppPurchases READ hasInAppPurchases NOTIFY hasInAppPurchasesChanged )
     Q_PROPERTY( bool hasManageSubscriptionCapability READ hasManageSubscriptionCapability NOTIFY hasManageSubscriptionCapabilityChanged )
@@ -258,7 +258,8 @@ class Purchasing : public QObject
     bool hasInAppPurchases() const;
     QString subscriptionManageUrl();
     QString subscriptionBillingUrl();
-    PurchasingPlan *recommendedPlan() const;
+    PurchasingPlan *individualPlan() const;
+    PurchasingPlan *professionalPlan() const;
 
     // Public function required only internally within the purchasing classes
   public:
@@ -266,10 +267,12 @@ class Purchasing : public QObject
     QSharedPointer<PurchasingPlan> registeredPlan( const QString &id ) const;
     QSharedPointer<PurchasingPlan> pendingPlan( const QString &id ) const;
     MerginApi *merginApi() const;
+    int registeredPlansCount() const;
 
   signals:
     void transactionPendingChanged();
-    void recommendedPlanChanged();
+    void individualPlanChanged();
+    void professionalPlanChanged();
     void hasInAppPurchasesChanged();
     void hasManageSubscriptionCapabilityChanged();
     void subscriptionManageUrlChanged();
@@ -299,7 +302,8 @@ class Purchasing : public QObject
     void clean();
     void fetchPurchasingPlans();
     void setTransactionCreationRequested( bool transactionCreationRequested );
-    void setRecommendedPlanId( const QString &recommendedPlanId );
+    void setIndividualPlanId( const QString &PlanId );
+    void setProfessionalPlanId( const QString &PlanId );
     void removePendingTransaction( PurchasingTransaction *transaction );
 
     void setHasInAppPurchases( bool hasInAppPurchases );
@@ -313,7 +317,8 @@ class Purchasing : public QObject
 
     QMap<QString, QSharedPointer<PurchasingPlan> > mPlansWithPendingRegistration;
     QMap<QString, QSharedPointer<PurchasingPlan> > mRegisteredPlans;
-    QString mRecommendedPlanId;
+    QString mIndividualPlanId;
+    QString mProfessionalPlanId;
 
     bool mTransactionCreationRequested = false;
     QList<QSharedPointer<PurchasingTransaction>> mTransactionsWithPendingVerification;

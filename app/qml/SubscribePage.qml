@@ -20,7 +20,7 @@ Rectangle {
   signal subscribeClicked
 
   //! If true and component is visible, busy indicator suppose to be on. Currently used only while fetching a recommendedPlan
-  property bool isBusy: __purchasing.recommendedPlan.id === ""
+  property bool isBusy: __purchasing.individualPlan.id === "" || __purchasing.professionalPlan.id === ""
 
   onVisibleChanged: {
     subscribeBusyIndicator.running = root.visible && root.isBusy
@@ -28,13 +28,17 @@ Rectangle {
 
   Connections {
     target: __purchasing
-    onRecommendedPlanChanged: {
+    onIndividualPlanChanged: {
+      if (!root.isBusy && root.visible) {
+        subscribeBusyIndicator.running = false
+      }
+    }
+    onProfessionalPlanChanged: {
       if (!root.isBusy && root.visible) {
         subscribeBusyIndicator.running = false
       }
     }
   }
-
 
   BusyIndicator {
     id: subscribeBusyIndicator
@@ -59,105 +63,109 @@ Rectangle {
     withBackButton: true
   }
 
-  Column {
-    id: subscribeBodyContainer
+  Image {
+    id: merginLogo
     anchors.top: header.bottom
-    width: subscribeButton.width
+    antialiasing: true
+    source: 'mergin_color.svg'
+    height: InputStyle.rowHeightHeader
+    width: parent.width
+    sourceSize.width: width
+    sourceSize.height: height
+    fillMode: Image.PreserveAspectFit
+    verticalAlignment: Text.AlignVCenter
+    horizontalAlignment: Text.AlignHCenter
+  }
+
+  Column {
+    anchors.top: merginLogo.bottom
+    width: parent.width
     anchors.horizontalCenter: parent.horizontalCenter
-    spacing: 5
+    TabBar {
+        id: bar
+        width: root.width - 2 * InputStyle.rowHeightHeader
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 5
 
-    Image {
-      id: merginLogo
-      antialiasing: true
-      source: 'mergin_color.svg'
-      height: InputStyle.rowHeightHeader
-      width: parent.width
-      sourceSize.width: width
-      sourceSize.height: height
-      fillMode: Image.PreserveAspectFit
-      verticalAlignment: Text.AlignVCenter
-      horizontalAlignment: Text.AlignHCenter
+        TabButton {
+            id: individualTabButton
+
+            contentItem: Text {
+              color: bar.currentIndex == 0 ? "white" : InputStyle.highlightColor
+              text: qsTr("Individual")
+              horizontalAlignment: Text.AlignHCenter
+              verticalAlignment: Text.AlignVCenter
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+            }
+
+            background: Rectangle {
+              color: bar.currentIndex == 0 ? InputStyle.highlightColor: "white"
+              border.color: InputStyle.highlightColor
+              border.width: 1
+            }
+        }
+        TabButton {
+            id: professionalTabButton
+
+            contentItem: Text {
+              color: bar.currentIndex == 1 ? "white" : InputStyle.highlightColor
+              text: qsTr("Professional")
+              horizontalAlignment: Text.AlignHCenter
+              verticalAlignment: Text.AlignVCenter
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+            }
+
+            background: Rectangle {
+              color: bar.currentIndex == 1 ? InputStyle.highlightColor: "white"
+              border.color: InputStyle.highlightColor
+              border.width: 1
+            }
+        }
     }
 
-    Text {
-      id: textCurrent
-      text: ""
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: InputStyle.fontColor
-      textFormat: Text.RichText
+    SwipeView {
+        id: view
+
+        currentIndex: bar.currentIndex
+        anchors.top: bar.bottom
+        width: parent.width
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        SubscribePlanItem {
+            id: individualTab
+            plan: __purchasing.individualPlan
+            name: qsTr("Individual")
+            onSubscribeClicked: {
+               __purchasing.purchase( __purchasing.individualPlan.id )
+              root.subscribeClicked()
+            }
+        }
+        SubscribePlanItem {
+            id: professionalTab
+            plan: __purchasing.professionalPlan
+            name: qsTr("Professional")
+            onSubscribeClicked: {
+               __purchasing.purchase( __purchasing.professionalPlan.id )
+              root.subscribeClicked()
+            }
+        }
+
     }
+  }
 
-
-    TextWithIcon {
-      width: parent.width
-      source: 'ic_today.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Custom billing period") : __purchasing.recommendedPlan.period
-    }
-
-    TextWithIcon {
-      width: parent.width
-      source: 'database-solid.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Custom storage") : __purchasing.recommendedPlan.storage
-    }
-
-    TextWithIcon {
-      width: parent.width
-      source: 'account-multi.svg'
-      text: "Unlimited collaborators"
-    }
-
-    TextWithIcon {
-      width: parent.width
-      source: 'project.svg'
-      text: "Unlimited projects"
-    }
-
-    TextWithIcon {
-      width: parent.width
-      source: 'envelope-solid.svg'
-      text: "Email support"
-    }
-
-    Button {
-      id: subscribeButton
-      width: root.width - 2 * InputStyle.rowHeightHeader
-      anchors.horizontalCenter: parent.horizontalCenter
-
-      height: InputStyle.rowHeightHeader
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Manage") : __purchasing.recommendedPlan.price
-      enabled: text !== ''
-      font.pixelSize: subscribeButton.height / 2
-
-      background: Rectangle {
-        color: InputStyle.highlightColor
-      }
-
-      onClicked: subscribeClicked()
-
-      contentItem: Text {
-        text: subscribeButton.text
-        font: subscribeButton.font
-        opacity: enabled ? 1.0 : 0.3
-        color: "white"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
-    }
-}
-    Text {
-      id: textNotice
-      anchors.bottom: parent.bottom
-      textFormat: Text.RichText
-      onLinkActivated: Qt.openUrlExternally(link)
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      text: "<style>a:link { color: " + InputStyle.highlightColor
-            + "; text-decoration: underline; }</style>" + qsTr(
-              "Your Mergin storage plan will automatically renew. You can cancel or change at any time.<br> <a href='%1'>Learn More</a>").arg(__purchasing.subscriptionManageUrl)
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: InputStyle.fontColor
-      width: parent.width
-      wrapMode: Text.Wrap
-    }
+  Text {
+    id: textNotice
+    anchors.bottom: parent.bottom
+    textFormat: Text.RichText
+    onLinkActivated: Qt.openUrlExternally(link)
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    text: "<style>a:link { color: " + InputStyle.highlightColor
+          + "; text-decoration: underline; }</style>" + qsTr(
+            "Your Mergin storage plan will automatically renew. You can cancel or change at any time.<br> <a href='%1'>Learn More</a>").arg(__purchasing.subscriptionManageUrl)
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    color: InputStyle.fontColor
+    width: parent.width
+    wrapMode: Text.Wrap
+  }
 }

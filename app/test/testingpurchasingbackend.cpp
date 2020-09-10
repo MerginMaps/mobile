@@ -36,8 +36,8 @@ void TestingPurchasingBackend::setNextPurchaseResult( const TestingPurchasingBac
 
 void TestingPurchasingBackend::registerPlan( QSharedPointer<PurchasingPlan> plan )
 {
-  if ( !mPlan || plan->isReccomended() )
-    mPlan = plan;
+  if ( plan->isIndividualPlan() )
+    mIndividualPlan = plan;
 
   emit planRegistrationSucceeded( plan->id() );
 }
@@ -49,16 +49,20 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
   {
 #if defined (HAVE_WIDGETS)
     QStringList items;
-    if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+    if ( plan->isIndividualPlan() )
     {
-      items << tr( "Buy tier recommeneded->2 | tier12" )
-            << tr( "Immediately refund the subscription (got refund) | cancel" )
-            << tr( "Set grace period | grace" )
-            << tr( "Set unsubscribed | unsubscribe" );
+      items << tr( "Buy individual plan | tier01" );
     }
     else
     {
-      items << tr( "Buy tier free->recommeneded | tier01" );
+      items << tr( "Buy professional plan | tier12" );
+    }
+
+    if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+    {
+      items << tr( "Immediately refund the subscription (got refund) | cancel" )
+            << tr( "Set grace period | grace" )
+            << tr( "Set unsubscribed | unsubscribe" );
     }
     items << tr( "Cancel Payment | cancelPayment" )
           << tr( "Send invalid receipt | invalidreceipt" );
@@ -80,11 +84,11 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
     emit transactionCreationFailed();
 #endif
   }
-  else if ( mNextResult == NonInteractiveBuyTier01 )
+  else if ( mNextResult == NonInteractiveBuyIndividualPlan )
   {
     emit transactionCreationSucceeded( createTestingTransaction( plan, "tier01" ) );
   }
-  else if ( mNextResult == NonInteractiveBuyTier12 )
+  else if ( mNextResult == NonInteractiveBuyProfessionalPlan )
   {
     emit transactionCreationSucceeded( createTestingTransaction( plan, "tier12" ) );
   }
@@ -121,12 +125,12 @@ void TestingPurchasingBackend::restore()
   if ( mNextResult == Interactive )
   {
 #if defined (HAVE_WIDGETS)
-    QMessageBox::information( nullptr, "TEST RESTORE", "Test restore tier01" );
-    emit transactionCreationSucceeded( createTestingTransaction( mPlan, "tier01", true ) );
+    QMessageBox::information( nullptr, "TEST RESTORE", "Test restore individual plan" );
+    emit transactionCreationSucceeded( createTestingTransaction( mIndividualPlan, "tier01", true ) );
     return;
 #endif
   }
-  emit transactionCreationSucceeded( createTestingTransaction( mPlan, "tier01", true ) );
+  emit transactionCreationSucceeded( createTestingTransaction( mIndividualPlan, "tier01", true ) );
 }
 
 QString TestingPurchasingBackend::subscriptionManageUrl()

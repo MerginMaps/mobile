@@ -48,5 +48,6 @@
         <file>CircularProgressBar.qml</file>
         <file>BrowseDataToolbar.qml</file>
         <file>SearchBar.qml</file>
+        <file>SubscribePlanItem.qml</file>
     </qresource>
 </RCC>

@@ -67,8 +67,8 @@ class TestingPurchasingBackend: public PurchasingBackend
     enum NextPurchaseResult
     {
       Interactive,
-      NonInteractiveBuyTier01,
-      NonInteractiveBuyTier12,
+      NonInteractiveBuyIndividualPlan,
+      NonInteractiveBuyProfessionalPlan,
       NonInteractiveSimulateImmediatelyCancelSubscription,
       NonInteractiveSimulateGracePeriod,
       NonInteractiveSimulateUnsubscribed,
@@ -96,7 +96,7 @@ class TestingPurchasingBackend: public PurchasingBackend
     NextPurchaseResult mNextResult = NextPurchaseResult::Interactive;
 
     MerginApi *mMerginApi = nullptr;
-    QSharedPointer<PurchasingPlan> mPlan;
+    QSharedPointer<PurchasingPlan> mIndividualPlan;
 };
 
 #endif // TESTINGPURCHASINGBACKEND_H
