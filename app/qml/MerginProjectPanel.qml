@@ -671,7 +671,6 @@ Item {
       subscribePanel.visible = false
     }
     onSubscribeClicked: {
-      __purchasing.purchase( __purchasing.recommendedPlan.id )
       accountPanel.visible = true
       subscribePanel.visible = false
     }

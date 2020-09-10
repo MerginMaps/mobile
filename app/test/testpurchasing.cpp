@@ -75,7 +75,7 @@ void TestPurchasing::cleanupTestCase()
 
 void TestPurchasing::testUserBuyTier01()
 {
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
@@ -85,8 +85,8 @@ void TestPurchasing::testUserBuyTier01()
 
 void TestPurchasing::testUserBuyTier12()
 {
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier12, TIER02_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), TIER02_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER02_STORAGE );
   QCOMPARE( mApi->userInfo()->ownsActiveSubscription(), true );
@@ -96,7 +96,7 @@ void TestPurchasing::testUserBuyTier12()
 
 void TestPurchasing::testUserUnsubscribed()
 {
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateUnsubscribed, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
@@ -107,7 +107,7 @@ void TestPurchasing::testUserUnsubscribed()
 
 void TestPurchasing::testUserInGracePeriod()
 {
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateGracePeriod, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
@@ -118,7 +118,7 @@ void TestPurchasing::testUserInGracePeriod()
 
 void TestPurchasing::testUserCancelledSubscription()
 {
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyTier01, TIER01_PLAN_ID );
+  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, TIER01_PLAN_ID );
   QCOMPARE( mApi->userInfo()->planProductId(), "" );
   QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );

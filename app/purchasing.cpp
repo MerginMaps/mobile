@@ -28,7 +28,6 @@ void PurchasingPlan::clear()
   mId = QString();
   mPeriod = QString();
   mPrice = QString();
-  mReccomended = false;
   mStorage = QString();
 }
 
@@ -76,15 +75,14 @@ void PurchasingPlan::setPrice( const QString &billingPrice )
   emit planChanged();
 }
 
-bool PurchasingPlan::isReccomended() const
+bool PurchasingPlan::isIndividualPlan() const
 {
-  return mReccomended;
+  return !mIsProfessional;
 }
 
-void PurchasingPlan::setReccomended( bool reccomended )
+bool PurchasingPlan::isProfessionalPlan() const
 {
-  mReccomended = reccomended;
-  emit planChanged();
+  return mIsProfessional;
 }
 
 QString PurchasingPlan::storage() const
@@ -132,9 +130,11 @@ void PurchasingPlan::setFromJson( QJsonObject docObj )
     mPrice = billingPrice + "/" + tr( "year" );
   }
 
-  mReccomended = docObj.value( QStringLiteral( "recommended" ) ).toBool();
   double bytes = docObj.value( QStringLiteral( "storage" ) ).toDouble();
   mStorage = InputUtils::bytesToHumanSize( bytes );
+
+  mIsProfessional = ( bytes > 1024.0 * 1024.0 * 1024.0 * 5 ); // storage > 5GB
+
   emit planChanged();
 }
 
@@ -431,11 +431,13 @@ void Purchasing::clean()
   mPlansWithPendingRegistration.clear();
   mTransactionsWithPendingVerification.clear();
   mTransactionCreationRequested = false;
-  mRecommendedPlanId.clear();
+  mIndividualPlanId.clear();
+  mProfessionalPlanId.clear();
   setDefaultUrls();
   setHasInAppPurchases( false );
 
-  emit recommendedPlanChanged();
+  emit individualPlanChanged();
+  emit professionalPlanChanged();
   emit transactionPendingChanged();
 }
 
@@ -464,10 +466,15 @@ void Purchasing::onPlanRegistrationSucceeded( const QString &id )
     {
       qDebug() << "Plan " + id + " registered";
       mRegisteredPlans.insert( id, plan );
-      if ( plan->isReccomended() )
+      if ( plan->isProfessionalPlan() )
       {
-        qDebug() << "Plan " + id + " is recommended";
-        setRecommendedPlanId( plan->id() );
+        qDebug() << "Plan " + id + " is professional plan";
+        setProfessionalPlanId( plan->id() );
+      }
+      if ( plan->isIndividualPlan() )
+      {
+        qDebug() << "Plan " + id + " is individual plan";
+        setIndividualPlanId( plan->id() );
       }
     }
   }
@@ -545,6 +552,11 @@ MerginApi *Purchasing::merginApi() const
   return mMerginApi;
 }
 
+int Purchasing::registeredPlansCount() const
+{
+  return mRegisteredPlans.count();
+}
+
 void Purchasing::removePendingTransaction( PurchasingTransaction *transaction )
 {
   transaction->finalizeTransaction();
@@ -572,11 +584,26 @@ bool Purchasing::transactionPending() const
   return !mTransactionsWithPendingVerification.empty() || mTransactionCreationRequested;
 }
 
-PurchasingPlan *Purchasing::recommendedPlan() const
+PurchasingPlan *Purchasing::individualPlan() const
 {
   static PurchasingPlan sEmptyPlan;
 
-  QSharedPointer<PurchasingPlan> plan = registeredPlan( mRecommendedPlanId );
+  QSharedPointer<PurchasingPlan> plan = registeredPlan( mIndividualPlanId );
+  if ( plan )
+  {
+    return plan.get();
+  }
+  else
+  {
+    return &sEmptyPlan;
+  }
+}
+
+PurchasingPlan *Purchasing::professionalPlan() const
+{
+  static PurchasingPlan sEmptyPlan;
+
+  QSharedPointer<PurchasingPlan> plan = registeredPlan( mProfessionalPlanId );
   if ( plan )
   {
     return plan.get();
@@ -662,11 +689,20 @@ void Purchasing::setTransactionCreationRequested( bool transactionCreationReques
   }
 }
 
-void Purchasing::setRecommendedPlanId( const QString &recommendedPlanId )
+void Purchasing::setIndividualPlanId( const QString &planId )
 {
-  if ( mRecommendedPlanId != recommendedPlanId )
+  if ( mIndividualPlanId != planId )
   {
-    mRecommendedPlanId = recommendedPlanId;
-    emit recommendedPlanChanged();
+    mIndividualPlanId = planId;
+    emit individualPlanChanged();
+  }
+}
+
+void Purchasing::setProfessionalPlanId( const QString &planId )
+{
+  if ( mProfessionalPlanId != planId )
+  {
+    mProfessionalPlanId = planId;
+    emit professionalPlanChanged();
   }
 }
