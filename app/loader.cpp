@@ -375,7 +375,7 @@ QString Loader::loadIconFromFeature( QgsFeature feature )
   return iconFromGeometry( feature.geometry().type() );
 }
 
-QString Loader::iconFromGeometry(const QgsWkbTypes::GeometryType &geometry)
+QString Loader::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
 {
   switch ( geometry )
   {

@@ -35,7 +35,6 @@ Item {
     visible: false
     anchors.fill: parent
     listViewMode: "valueRelation"
-    layerHasGeometry: false
 
     pageTitle: "Choose Type"
     onBackButtonClicked: {
@@ -50,7 +49,6 @@ Item {
     }
 
     onSearchTextChanged: {
-      console.log("emited search text change: " + text)
       featuresModel.filterExpression = text
     }
   }

@@ -34,7 +34,7 @@ Item {
   }
 
   function refreshFeaturesData() {
-    featuresListModel.loadFeaturesFromLayer()
+    featuresListModel.reloadFeatures()
   }
 
   function clearStackAndClose() {
