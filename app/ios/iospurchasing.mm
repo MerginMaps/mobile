@@ -318,7 +318,7 @@ bool IosPurchasingBackend::userCanMakePayments() const
 
 QString IosPurchasingBackend::getLocalizedPrice( const QString &planId ) const
 {
-  QSharedPointer<IosPurchasingPlan> plan = findPendingPlan( planId );
+  QSharedPointer<IosPurchasingPlan> plan = findRegisteredPlan( planId );
   if ( plan )
   {
     return plan->price();
