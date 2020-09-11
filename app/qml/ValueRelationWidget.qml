@@ -34,7 +34,6 @@ Item {
     id: valueRelationPage
     visible: false
     anchors.fill: parent
-    listViewMode: "valueRelation"
 
     pageTitle: "Choose Type"
     onBackButtonClicked: {

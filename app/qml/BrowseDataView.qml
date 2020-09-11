@@ -21,18 +21,6 @@ Item {
 
   property bool showAdditionalInfo: false
   property var featuresModel: null
-  property string viewMode: "browseData"
-
-  states: [
-    State {
-      name: "browseData"
-      when: viewMode === "browseData"
-    },
-    State {
-      name: "valueRelation"
-      when: viewMode === "valueRelation"
-    }
-  ]
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -50,7 +38,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.featureClicked( model.EmitableIndex ? model.EmitableIndex : index )
+          root.featureClicked( model.FeatureId )
         }
       }
 
@@ -83,11 +71,7 @@ Item {
 
           Text {
             id: featureTitleText
-            text: {
-              if ( root.state === "browseData" )
-                return model.FeatureTitle
-              return model.display
-            }
+            text: model.FeatureTitle
             height: textContainer.height/2
             width: textContainer.width
             font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -100,11 +84,7 @@ Item {
           Text {
             id: descriptionText
             height: textContainer.height/2
-            text: {
-              if ( showAdditionalInfo )
-                return model.Description + ", " + model.FoundPair
-              return model.Description
-            }
+            text: showAdditionalInfo ? model.Description + ", " + model.FoundPair : model.Description
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left
@@ -114,7 +94,6 @@ Item {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignTop
             elide: Text.ElideRight
-
           }
         }
       }
