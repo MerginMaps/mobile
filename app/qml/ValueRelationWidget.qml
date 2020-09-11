@@ -16,6 +16,7 @@ Item {
       if ( valueRelationModel.featuresCount > 4 ) {
         valueRelationPage.visible = true
         valueRelationPage.featuresModel = valueRelationModel
+        valueRelationPage.pageTitle = itemWidget.fieldName
       }
       else {
         itemWidget.openCombobox()
@@ -35,7 +36,6 @@ Item {
     visible: false
     anchors.fill: parent
 
-    pageTitle: "Choose Type"
     onBackButtonClicked: {
       valueRelationPage.visible = false
       valueRelationPage.deactivateSearch()
