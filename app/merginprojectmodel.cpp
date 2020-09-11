@@ -39,11 +39,11 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       // TODO: clientUpdated currently not being set
       if ( !project->clientUpdated.isValid() )
       {
-        return project->serverUpdated.toString();
+        return project->serverUpdated.toLocalTime().toString();
       }
       else
       {
-        return project->clientUpdated.toString();
+        return project->clientUpdated.toLocalTime().toString();
       }
     }
 
