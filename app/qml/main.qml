@@ -370,7 +370,7 @@ ApplicationWindow {
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
       onScreenPositionChanged: {
-        if ((digitizing.useGpsPoint && stateManager.state === "record")|| (__appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+        if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
             var useGpsPoint = digitizing.useGpsPoint
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
             // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
