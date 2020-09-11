@@ -56,7 +56,6 @@ Rectangle {
         RowLayout {
             id: row
             anchors.fill: parent
-            anchors.rightMargin: itemContainer.itemMargin
             anchors.leftMargin: itemContainer.itemMargin
             spacing: InputStyle.panelMargin
 
@@ -159,7 +158,7 @@ Rectangle {
             Item {
                 id: statusContainer
                 height: itemContainer.cellHeight
-                width: itemContainer.iconSize
+                width: height
                 y: 0
 
                 MouseArea {
