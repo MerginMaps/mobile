@@ -11,21 +11,32 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
+import lc 1.0
 import "."  // import InputStyle singleton
 
 Page {
+  signal backClicked
+  signal managePlansClicked
+  signal signOutClicked
+  signal restorePurchasesClicked
   property color bgColor: "white"
-  property string username: __merginApi.username
-  property int storageLimit: __merginApi.storageLimit
-  property int diskUsage: __merginApi.diskUsage
+  property real fieldHeight: InputStyle.rowHeight
+
+  property string username: __merginApi.userAuth.username
+  property string email: __merginApi.userInfo.email
+  property string planAlias: __merginApi.userInfo.planAlias
+  property int storageLimit: __merginApi.userInfo.storageLimit
+  property int diskUsage: __merginApi.userInfo.diskUsage
+  property int subscriptionStatus: __merginApi.userInfo.subscriptionStatus
+  property string subscriptionsTimestamp: __merginApi.userInfo.subscriptionTimestamp
+  property string nextBillPrice: __merginApi.userInfo.nextBillPrice
+  property bool ownsActiveSubscription: __merginApi.userInfo.ownsActiveSubscription
 
   id: root
   visible: true
 
-  function formatNumber(number) {
-    return number / (1024 * 1024)
-  }
 
+  // /////////////////
   // header
   PanelHeader {
     id: header
@@ -34,146 +45,236 @@ Page {
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Account")
-
-    onBack: root.visible = false
+    onBack: backClicked()
     withBackButton: true
   }
 
-  // avatar
-  Item {
-    id: avatarContainer
-    width: parent.width
-    height: InputStyle.rowHeightHeader * 4
+  // /////////////////
+  // Body
+  Column {
+    id: accountBodyContainer
     anchors.top: header.bottom
+    width: subscribeButton.width
+    anchors.horizontalCenter: parent.horizontalCenter
 
-    Item {
-      id: avatar
-      width: avatarContainer.height
-      height: width
-      anchors.centerIn: parent
-      anchors.horizontalCenter: parent.horizontalCenter
+    // avatar
+    Row {
+        id: avatarContainer
+        height: InputStyle.rowHeightHeader * 2
+        anchors.horizontalCenter: parent.horizontalCenter
 
-      Rectangle {
-        id: avatarImage
-        anchors.centerIn: parent
-        width: avatar.width * 0.8
-        height: width
-        color: InputStyle.fontColor
-        radius: width*0.5
-        antialiasing: true
+        Item {
+          id: avatar
+          width: avatarContainer.height
+          height: width
 
-        Image {
-          id: userIcon
-          anchors.centerIn: parent
-          source: 'account.svg'
-          height: parent.height * 0.8
-          width: height
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
+          Rectangle {
+            id: avatarImage
+            anchors.centerIn: parent
+            width: avatar.width * 0.8
+            height: width
+            color: InputStyle.fontColor
+            radius: width*0.5
+            antialiasing: true
+
+            Image {
+              id: userIcon
+              anchors.centerIn: parent
+              source: 'account.svg'
+              height: parent.height * 0.8
+              width: height
+              sourceSize.width: width
+              sourceSize.height: height
+              fillMode: Image.PreserveAspectFit
+            }
+
+            ColorOverlay {
+              anchors.fill: userIcon
+              source: userIcon
+              color: "#FFFFFF"
+            }
+          }
         }
+    }
 
-        ColorOverlay {
-          anchors.fill: userIcon
-          source: userIcon
-          color: "#FFFFFF"
+    TextWithIcon {
+      width: parent.width
+      source: 'account.svg'
+      text: root.username
+    }
+
+    TextWithIcon {
+      width: parent.width
+      source: 'envelope-solid.svg'
+      text: root.email
+    }
+
+    TextWithIcon {
+      width: parent.width
+      source: 'edit.svg'
+      text: root.planAlias
+    }
+
+    TextWithIcon {
+      visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
+      width: parent.width
+      source: 'info.svg'
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+            + "; text-decoration: underline; }</style>" + qsTr(
+              "Your subscription will not be extended after %1")
+            .arg(root.subscriptionsTimestamp)
+    }
+
+    TextWithIcon {
+      visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
+      width: parent.width
+      source: 'exclamation-triangle-solid.svg'
+      onLinkActivated: Qt.openUrlExternally(link)
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+            + "; text-decoration: underline; }</style>" + qsTr(
+              "Plese fix your <a href='%1'>billing details</a> as soon as possible")
+              .arg(__purchasing.subscriptionBillingUrl)
+      iconColor: InputStyle.highlightColor
+    }
+
+    TextWithIcon {
+      visible: root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
+      width: parent.width
+      source: 'ic_today.svg'
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+            + "; text-decoration: underline; }</style>" + qsTr(
+              "Your next bill is for %1 on %2")
+      .arg(root.nextBillPrice)
+      .arg(root.subscriptionsTimestamp)
+    }
+
+    TextWithIcon {
+      visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
+      width: parent.width
+      source: 'ic_today.svg'
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+              + "; text-decoration: underline; }</style>" + qsTr(
+                "Your subscription was cancelled on %1")
+            .arg(root.subscriptionsTimestamp)
+    }
+
+    Row {
+      width: parent.width
+      Item {
+        width: root.fieldHeight
+        height: root.fieldHeight
+
+        CircularProgressBar {
+          id: storageIcon
+          width: parent.width*0.6
+          anchors.centerIn: parent
+          height: width
+          value: root.diskUsage/root.storageLimit
         }
       }
+
+      Text {
+        id: textItem
+        height: root.fieldHeight
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+        text: qsTr("Using %1/%2").arg(__inputUtils.bytesToHumanSize(root.diskUsage)).arg(__inputUtils.bytesToHumanSize(root.storageLimit))
+      }
+    }
+
+    Item {
+      //spacer
+      height: 10 * InputStyle.dp
+      width: parent.width
+    }
+
+    Button {
+      id: subscribeButton
+      enabled: !__purchasing.transactionPending
+      width: root.width - 2 * InputStyle.rowHeightHeader
+      anchors.horizontalCenter: parent.horizontalCenter
+      visible: __merginApi.apiSupportsSubscriptions
+
+      height: InputStyle.rowHeightHeader
+      text: __purchasing.transactionPending ? qsTr("Transaction Pending...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Buy Subscription")
+      font.pixelSize: subscribeButton.height / 2
+
+      background: Rectangle {
+        color: InputStyle.highlightColor
+      }
+
+      onClicked: managePlansClicked()
+
+      contentItem: Text {
+        text: subscribeButton.text
+        font: subscribeButton.font
+        opacity: enabled ? 1.0 : 0.3
+        color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+      }
+    }
+
+    Item {
+      id: spacer
+      visible: textRestore.visible
+      height: InputStyle.fontPixelSizeTitle
+      width:parent.width
     }
 
     Text {
-      text: root.username
-      anchors.horizontalCenter: parent.horizontalCenter
-      horizontalAlignment: Text.AlignHCenter
-      color: InputStyle.panelBackgroundDarker
-      font.pixelSize: InputStyle.fontPixelSizeTitle * 2
-      anchors.top: avatar.bottom
-    }
-  }
-
-  // Stats
-  Rectangle {
-    anchors.top: avatarContainer.bottom
-    width: parent.width
-    height: InputStyle.rowHeightHeader * 4
-    anchors.margins: InputStyle.panelMargin * 3
-    color: root.bgColor
-
-    Column {
-      width: parent.width
-      height: parent.height
-      padding: InputStyle.panelMargin
-      spacing: 10 * QgsQuick.Utils.dp
-
-      Text  {
-        text:  qsTr("Used Data")
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.panelBackgroundDarker
-      }
-
-      ProgressBar {
-        property real itemHeight: InputStyle.fontPixelSizeNormal
-
-        id: progressBar
-        width: parent.width - parent.padding*2
-        height: itemHeight
-        value: root.diskUsage/root.storageLimit
-
-        background: Rectangle {
-          implicitWidth: parent.width
-          implicitHeight: progressBar.itemHeight
-          color: InputStyle.panelBackgroundLight
-        }
-
-        contentItem: Item {
-          implicitWidth: parent.width
-          implicitHeight: progressBar.itemHeight
-
-          Rectangle {
-            width: progressBar.visualPosition * parent.width
-            height: parent.height
-            color: InputStyle.fontColor
-          }
-        }
-      }
-
-      Text  {
-        text:  formatNumber(root.diskUsage).toFixed(2) + "/" +  formatNumber(root.storageLimit) + "   MB"
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
-      }
-    }
-  }
-
-  Button {
-    id: signOutButton
-    height: InputStyle.fontPixelSizeTitle
-    text: qsTr("Sign out")
-    font.pixelSize: signOutButton.height
-    font.bold: true
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: signOutButton.height * 3
-    background: Rectangle {
-      color: root.bgColor
-    }
-
-    onClicked: {
-      if (__merginApi.hasAuthData()) {
-          __merginApi.clearAuth()
-          root.visible = false
-      }
-    }
-
-    contentItem: Text {
-      text: signOutButton.text
-      font: signOutButton.font
-      color: InputStyle.highlightColor
+      id: textRestore
+      visible: __merginApi.apiSupportsSubscriptions && __purchasing.hasInAppPurchases && !__purchasing.transactionPending
+      textFormat: Text.RichText
+      onLinkActivated: restorePurchasesClicked()
+      elide: Text.ElideRight
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
+      text: "<style>a:link { color: " + InputStyle.highlightColor
+            + "; text-decoration: underline; }</style>" + qsTr(
+              "You can also <a href='http://restore-purchases'>restore</a> your purchases")
+      font.pixelSize: InputStyle.fontPixelSizeNormal
+      color: InputStyle.fontColor
+      width: root.width - 2 * InputStyle.rowHeightHeader
     }
   }
 
+  // /////////////////
+  // Footer
+  Column {
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
 
+    Button {
+      id: signOutButton
+      height: InputStyle.fontPixelSizeTitle
+      text: qsTr("Sign out")
+      font.pixelSize: signOutButton.height
+      font.bold: true
+      anchors.horizontalCenter: parent.horizontalCenter
+      background: Rectangle {
+        color: root.bgColor
+      }
+
+      onClicked: signOutClicked()
+
+      contentItem: Text {
+        text: signOutButton.text
+        font: signOutButton.font
+        color: InputStyle.highlightColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+      }
+    }
+
+    Item {
+      id: spacer2
+      height: InputStyle.fontPixelSizeTitle
+      width:parent.width
+    }
+  }
 }
+

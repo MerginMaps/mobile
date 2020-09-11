@@ -21,10 +21,10 @@
 #include "qgsproject.h"
 #include "qgsquickutils.h"
 #include "qgsquickpositionkit.h"
-#include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
-
+#include "activelayer.h"
+#include "layersproxymodel.h"
 
 class Loader: public QObject
 {
@@ -32,9 +32,14 @@ class Loader: public QObject
     Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
+    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader( MapThemesModel &mapThemeModel, LayersModel &layersModel, AppSettings &appSettings, QObject *parent = nullptr );
+    explicit Loader(
+      MapThemesModel &mapThemeModel
+      , AppSettings &appSettings
+      , ActiveLayer &activeLayer
+      , QObject *parent = nullptr );
 
     QgsProject *project();
 
@@ -51,23 +56,52 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
+    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
+    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
     /**
      * Updates active map theme.
      * \param index Represents row number in the map theme model.
      */
     Q_INVOKABLE void setActiveMapTheme( int index );
+
     /**
-     * Updates active layer.
-     * \param index Represents row number in the layer model.
+     * setActiveLayer sets active layer from layer name
      */
-    Q_INVOKABLE void setActiveLayer( int index );
+    Q_INVOKABLE void setActiveLayer( QString layerName ) const;
+
+    /**
+     * setActiveLayer sets active layer from layer
+     */
+    Q_INVOKABLE void setActiveLayer( QgsMapLayer *layerName ) const;
 
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
+
+    /**
+     * mapSettings method returns mapsettings pointer
+     */
+    QgsQuickMapSettings *mapSettings() const;
+
+    /**
+     * setMapSettings method sets mapSettings
+     * Method also reloads the layer list
+     */
+    void setMapSettings( QgsQuickMapSettings *mapSettings );
+
+    /**
+     * setMapSettingsLayers reloads layer list from current project
+     */
+    void setMapSettingsLayers() const;
+
+    /**
+     * layerVisible returns boolean if input layer is visible within current project
+     */
+    bool layerVisible( QgsMapLayer *layer );
+
   signals:
     void projectChanged();
-    void projectReloaded();
+    void projectReloaded( QgsProject *project );
 
     void positionKitChanged();
     void recordingChanged();
@@ -75,19 +109,25 @@ class Loader: public QObject
     void loadingStarted();
     void loadingFinished();
 
+    void mapSettingsChanged();
+
   public slots:
     void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
+
   private:
+    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
+
     QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;
 
     MapThemesModel &mMapThemeModel;
-    LayersModel &mLayersModel;
     AppSettings &mAppSettings;
+    ActiveLayer &mActiveLayer;
+    QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**
     * Reloads project.
@@ -96,7 +136,6 @@ class Loader: public QObject
     * otherwise used only for loading a new projects (evoked by a user).
     */
     bool forceLoad( const QString &filePath, bool force );
-
 };
 
 #endif // LOADER_H

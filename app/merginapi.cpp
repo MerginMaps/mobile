@@ -23,10 +23,14 @@
 #include "geodiffutils.h"
 #include "qgsquickutils.h"
 #include "localprojectsmanager.h"
+#include "merginuserauth.h"
+#include "merginuserinfo.h"
+#include "purchasing.h"
 
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
@@ -36,16 +40,29 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
+  , mUserInfo( new MerginUserInfo )
+  , mUserAuth( new MerginUserAuth )
 {
   qRegisterMetaType<Transactions>();
 
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
+  QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
+  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
 
   loadAuthData();
-
   GEODIFF_init();
+}
+
+MerginUserAuth *MerginApi::userAuth() const
+{
+  return mUserAuth;
+}
+
+MerginUserInfo *MerginApi::userInfo() const
+{
+  return mUserInfo;
 }
 
 void MerginApi::listProjects( const QString &searchExpression,
@@ -75,7 +92,7 @@ void MerginApi::listProjects( const QString &searchExpression,
   url.setQuery( query );
 
   // Even if the authorization is not required, it can be include to fetch more results
-  QNetworkRequest request = getDefaultRequest( hasAuthData() );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
@@ -132,7 +149,7 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   QString info = InputUtils::appInfo();
   request.setRawHeader( "User-Agent", QByteArray( info.toUtf8() ) );
   if ( withAuth )
-    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mAuthToken ) );
+    request.setRawHeader( "Authorization", QByteArray( "Bearer " + mUserAuth->authToken() ) );
 
   return request;
 }
@@ -157,6 +174,20 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
 bool MerginApi::hasProjecFileExtension( const QString filePath )
 {
   return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
+}
+
+bool MerginApi::apiSupportsSubscriptions() const
+{
+  return mApiSupportsSubscriptions;
+}
+
+void MerginApi::setApiSupportsSubscriptions( bool apiSupportsSubscriptions )
+{
+  if ( mApiSupportsSubscriptions != apiSupportsSubscriptions )
+  {
+    mApiSupportsSubscriptions = apiSupportsSubscriptions;
+    emit apiSupportsSubscriptionsChanged();
+  }
 }
 
 #if !defined(USE_MERGIN_DUMMY_API_KEY)
@@ -481,10 +512,10 @@ void MerginApi::authorize( const QString &login, const QString &password )
     return;
   }
 
-  mPassword = password;
+  whileBlocking( mUserAuth )->setPassword( password );
 
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
+  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login2" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -492,7 +523,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
   jsonObject.insert( QStringLiteral( "login" ), login );
-  jsonObject.insert( QStringLiteral( "password" ), mPassword );
+  jsonObject.insert( QStringLiteral( "password" ), mUserAuth->password() );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
@@ -563,7 +594,7 @@ void MerginApi::registerUser( const QString &username,
   InputUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
-void MerginApi::getUserInfo( const QString &username )
+void MerginApi::getUserInfo( )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -571,7 +602,7 @@ void MerginApi::getUserInfo( const QString &username )
   }
 
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "v1/user/" ) + username;
+  QString urlString = mApiRoot + QStringLiteral( "v1/user/" );
   QUrl url( urlString );
   request.setUrl( url );
 
@@ -582,14 +613,8 @@ void MerginApi::getUserInfo( const QString &username )
 
 void MerginApi::clearAuth()
 {
-  mUsername = "";
-  mPassword = "";
-  mAuthToken.clear();
-  mTokenExpiration.setTime( QTime() );
-  mUserId = -1;
-  mDiskUsage = 0;
-  mStorageLimit = 0;
-  emit authChanged();
+  mUserAuth->clear();
+  mUserInfo->clear();
 }
 
 void MerginApi::resetApiRoot()
@@ -598,11 +623,6 @@ void MerginApi::resetApiRoot()
   settings.beginGroup( QStringLiteral( "Input/" ) );
   setApiRoot( defaultApiRoot() );
   settings.endGroup();
-}
-
-bool MerginApi::hasAuthData()
-{
-  return !mUsername.isEmpty() && !mPassword.isEmpty();
 }
 
 void MerginApi::createProject( const QString &projectNamespace, const QString &projectName )
@@ -651,24 +671,14 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   InputUtils::log( "delete " + projectFullName, QStringLiteral( "Requesting project deletion: " ) + url.toString() );
 }
 
-void MerginApi::clearTokenData()
-{
-  mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
-  mAuthToken.clear();
-}
-
-
 void MerginApi::saveAuthData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  settings.setValue( "username", mUsername );
-  settings.setValue( "password", mPassword );
-  settings.setValue( "userId", mUserId );
-  settings.setValue( "token", mAuthToken );
-  settings.setValue( "expire", mTokenExpiration );
   settings.setValue( "apiRoot", mApiRoot );
   settings.endGroup();
+
+  mUserAuth->saveAuthData();
 }
 
 void MerginApi::createProjectFinished()
@@ -727,19 +737,24 @@ void MerginApi::authorizeFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     InputUtils::log( "auth", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QByteArray data = r->readAll();
+    QJsonDocument doc = QJsonDocument::fromJson( data );
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
-      mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
-      mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-      mUserId = docObj.value( QStringLiteral( "id" ) ).toInt();
-      mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
-      mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
-      mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
+      mUserAuth->setFromJson( docObj );
+      mUserInfo->setFromJson( docObj );
     }
-    emit authChanged();
+    else
+    {
+      whileBlocking( mUserAuth )->setUsername( QString() ); //clearTokenData emits the authChanged
+      whileBlocking( mUserAuth )->setPassword( QString() ); //clearTokenData emits the authChanged
+      mUserAuth->clearTokenData();
+      emit authFailed();
+      InputUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      qDebug() << data;
+      emit notify( "Internal server error during authorization" );
+    }
   }
   else
   {
@@ -756,9 +771,9 @@ void MerginApi::authorizeFinished()
     {
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
-    mUsername.clear();
-    mPassword.clear();
-    clearTokenData();
+    mUserAuth->setUsername( QString() );
+    mUserAuth->setPassword( QString() );
+    mUserAuth->clearTokenData();
   }
   if ( mAuthLoopEvent.isRunning() )
   {
@@ -810,6 +825,7 @@ void MerginApi::pingMerginReplyFinished()
   Q_ASSERT( r );
   QString apiVersion;
   QString serverMsg;
+  bool serverSupportsSubscriptions = false;
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -819,6 +835,7 @@ void MerginApi::pingMerginReplyFinished()
     {
       QJsonObject obj = doc.object();
       apiVersion = obj.value( QStringLiteral( "version" ) ).toString();
+      serverSupportsSubscriptions = obj.value( QStringLiteral( "subscriptions_enabled" ) ).toBool();
     }
   }
   else
@@ -827,7 +844,7 @@ void MerginApi::pingMerginReplyFinished()
     InputUtils::log( "ping", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
   }
   r->deleteLater();
-  emit pingMerginFinished( apiVersion, serverMsg );
+  emit pingMerginFinished( apiVersion, serverSupportsSubscriptions, serverMsg );
 }
 
 
@@ -866,32 +883,30 @@ void MerginApi::loadAuthData()
   QSettings settings;
   settings.beginGroup( QStringLiteral( "Input/" ) );
   setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
-  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
-  mPassword = settings.value( QStringLiteral( "password" ) ).toString();
-  mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
-  mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
-  mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+  mUserAuth->loadAuthData();
 }
 
 bool MerginApi::validateAuthAndContinute()
 {
-  if ( !hasAuthData() )
+  if ( !mUserAuth->hasAuthData() )
   {
     emit authRequested();
     return false;
   }
 
-  if ( mAuthToken.isEmpty() || mTokenExpiration < QDateTime().currentDateTime().toUTC() )
+  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTime().toUTC() )
   {
-    authorize( mUsername, mPassword );
+    authorize( mUserAuth->username(), mUserAuth->password() );
 
     mAuthLoopEvent.exec();
   }
   return true;
 }
 
-void MerginApi::checkMerginVersion( QString apiVersion, QString msg )
+void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg )
 {
+  setApiSupportsSubscriptions( serverSupportsSubscriptions );
+
   if ( msg.isEmpty() )
   {
     int major = -1;
@@ -1029,28 +1044,11 @@ MerginApiStatus::VersionStatus MerginApi::apiVersionStatus() const
 
 void MerginApi::setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus )
 {
-  mApiVersionStatus = apiVersionStatus;
-  emit apiVersionStatusChanged();
-}
-
-int MerginApi::userId() const
-{
-  return mUserId;
-}
-
-void MerginApi::setUserId( int userId )
-{
-  mUserId = userId;
-}
-
-int MerginApi::storageLimit() const
-{
-  return mStorageLimit;
-}
-
-int MerginApi::diskUsage() const
-{
-  return mDiskUsage;
+  if ( mApiVersionStatus != apiVersionStatus )
+  {
+    mApiVersionStatus = apiVersionStatus;
+    emit apiVersionStatusChanged();
+  }
 }
 
 void MerginApi::pingMergin()
@@ -1070,7 +1068,7 @@ void MerginApi::pingMergin()
 
 bool MerginApi::hasWriteAccess( const QString &projectFullName )
 {
-  if ( !hasAuthData() )
+  if ( !mUserAuth->hasAuthData() )
   {
     return false;
   }
@@ -1078,7 +1076,7 @@ bool MerginApi::hasWriteAccess( const QString &projectFullName )
   LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   QString projectDir = projectInfo.projectDir;
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  return projectMetadata.writers.contains( mUserId );
+  return projectMetadata.writers.contains( mUserAuth->userId() );
 }
 
 QString MerginApi::apiRoot() const
@@ -1088,25 +1086,31 @@ QString MerginApi::apiRoot() const
 
 void MerginApi::setApiRoot( const QString &apiRoot )
 {
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
+  QString newApiRoot;
   if ( apiRoot.isEmpty() )
   {
-    mApiRoot = defaultApiRoot();
+    newApiRoot = defaultApiRoot();
   }
   else
   {
-    mApiRoot = apiRoot;
+    newApiRoot = apiRoot;
   }
-  settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
-  settings.endGroup();
-  setApiVersionStatus( MerginApiStatus::UNKNOWN );
-  emit apiRootChanged();
+
+  if ( newApiRoot  != mApiRoot )
+  {
+    mApiRoot = newApiRoot;
+    QSettings settings;
+    settings.beginGroup( QStringLiteral( "Input/" ) );
+    settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
+    settings.endGroup();
+    setApiVersionStatus( MerginApiStatus::UNKNOWN );
+    emit apiRootChanged();
+  }
 }
 
-QString MerginApi::username() const
+QString MerginApi::merginUserName() const
 {
-  return mUsername;
+  return userAuth()->username();
 }
 
 MerginProjectList MerginApi::projects()
@@ -1964,8 +1968,7 @@ void MerginApi::getUserInfoFinished()
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toInt();
-      mStorageLimit = docObj.value( QStringLiteral( "storage_limit" ) ).toInt();
+      mUserInfo->setFromJson( docObj );
     }
   }
   else
@@ -1973,13 +1976,12 @@ void MerginApi::getUserInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     InputUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    mUserInfo->clear();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
   r->deleteLater();
-  emit userInfoChanged();
 }
-
 
 ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir )
 {

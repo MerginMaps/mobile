@@ -81,7 +81,7 @@ Item {
     onApiVersionStatusChanged: {
       busyIndicator.running = false
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK && authPanel.visible) {
-        if (__merginApi.hasAuthData()) {
+        if (__merginApi.userAuth.hasAuthData()) {
           authPanel.visible = false
           refreshProjectList()
         }
@@ -97,7 +97,7 @@ Item {
     }
     onAuthChanged: {
       authPanel.pending = false
-      if (__merginApi.hasAuthData()) {
+      if (__merginApi.userAuth.hasAuthData()) {
         authPanel.close()
         refreshProjectList()
       } else {
@@ -203,8 +203,8 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (__merginApi.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
-              __merginApi.getUserInfo(__merginApi.username)
+            if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+              __merginApi.getUserInfo()
               accountPanel.visible = true
               reloadList.visible = false
             }
@@ -233,103 +233,21 @@ Item {
     }
   }
 
-  // SearchBar
-  Rectangle {
+  SearchBar {
     id: searchBar
-    width: parent.width
-    height: InputStyle.rowHeightHeader
     y: header.height
-    color: InputStyle.panelBackgroundLight
 
-    property color bgColor: InputStyle.panelBackgroundLight
-    property color fontColor: InputStyle.panelBackgroundDarker
-
-    /**
-     * Used for deactivating focus on SearchBar when another component should have focus.
-     * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
-     */
-    function deactivate() {
-      searchField.text = ""
-      searchField.focus = false
-    }
-
-    Item {
-      id: row
-      width: searchBar.width
-      height: searchBar.height
-
-      TextField {
-        id: searchField
-        width: parent.width
-        height: InputStyle.rowHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: searchBar.fontColor
-        placeholderText: qsTr("SEARCH")
-        font.capitalization: Font.MixedCase
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        background: Rectangle {
-          color: searchBar.bgColor
-        }
-        leftPadding: projectsPanel.panelMargin
-        rightPadding: projectsPanel.panelMargin
-
-        onTextChanged: {
-          if (toolbar.highlighted === homeBtn.text) {
-            __projectsModel.searchExpression = searchField.text
-          } else if (toolbar.highlighted === exploreBtn.text) {
-            // Filtered by request
-            exploreBtn.activated()
-          } else if (toolbar.highlighted === sharedProjectsBtn.text) {
-            __merginProjectsModel.searchExpression = searchField.text
-          } else if (toolbar.highlighted === myProjectsBtn.text) {
-            __merginProjectsModel.searchExpression = searchField.text
-          }
-        }
+    onSearchTextChanged: {
+      if (toolbar.highlighted === homeBtn.text) {
+        __projectsModel.searchExpression = text
+      } else if (toolbar.highlighted === exploreBtn.text) {
+        // Filtered by request
+        exploreBtn.activated()
+      } else if (toolbar.highlighted === sharedProjectsBtn.text) {
+        __merginProjectsModel.searchExpression = text
+      } else if (toolbar.highlighted === myProjectsBtn.text) {
+        __merginProjectsModel.searchExpression = text
       }
-
-      Item {
-        id: iconContainer
-        height: searchField.height
-        width: projectsPanel.iconSize
-        anchors.right: parent.right
-        anchors.rightMargin: projectsPanel.panelMargin
-
-        Image {
-          id: cancelSearchBtn
-          source: searchField.text ? "no.svg" : "search.svg"
-          width: projectsPanel.iconSize
-          height: width
-          sourceSize.width: width
-          sourceSize.height: height
-          anchors.centerIn: parent
-          fillMode: Image.PreserveAspectFit
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if (searchField.text) {
-                searchBar.deactivate()
-              }
-            }
-          }
-        }
-
-        ColorOverlay {
-          anchors.fill: cancelSearchBtn
-          source: cancelSearchBtn
-          color: searchBar.fontColor
-        }
-      }
-    }
-
-    Rectangle {
-      id: searchFieldBorder
-      color: searchBar.fontColor
-      y: searchField.height - height * 4
-      height: 2 * QgsQuick.Utils.dp
-      opacity: searchField.focus ? 1 : 0.6
-      width: parent.width - projectsPanel.panelMargin*2
-      anchors.horizontalCenter: parent.horizontalCenter
     }
   }
 
@@ -568,7 +486,7 @@ Item {
         }
 
         if (status === "noVersion" || status === "outOfDate") {
-          var withoutAuth = !__merginApi.hasAuthData() && toolbar.highlighted === exploreBtn.text
+          var withoutAuth = !__merginApi.userAuth.hasAuthData() && toolbar.highlighted === exploreBtn.text
           __merginApi.updateProject(projectNamespace, projectName, withoutAuth)
         } else if (status === "modified") {
           if (__merginApi.hasWriteAccess(projectFullName)) {
@@ -600,7 +518,7 @@ Item {
     }
 
     onHighlightedChanged: {
-      searchField.text = ""
+      searchBar.deactivate()
       if (toolbar.highlighted === homeBtn.text) {
         __projectsModel.searchExpression = ""
       } else {
@@ -687,7 +605,7 @@ Item {
             busyIndicator.running = true
             showMergin = true
             authPanel.visible = false
-            __merginApi.listProjects(searchField.text)
+            __merginApi.listProjects( searchBar.text )
           }
         }
       }
@@ -716,9 +634,46 @@ Item {
 
   AccountPage {
     id: accountPanel
-    height: window.height
+    height: parent.height
     width: parent.width
     visible: false
+    onBackClicked: {
+      accountPanel.visible = false
+      subscribePanel.visible = false
+    }
+    onManagePlansClicked: {
+      if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.userInfo.ownsActiveSubscription )) {
+        subscribePanel.visible = true
+        accountPanel.visible = false
+      } else {
+        Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+      }
+    }
+    onSignOutClicked: {
+      if (__merginApi.userAuth.hasAuthData()) {
+        __merginApi.clearAuth()
+        accountPanel.visible = false
+        subscribePanel.visible = false
+      }
+    }
+    onRestorePurchasesClicked: {
+      __purchasing.restore()
+    }
+  }
+
+  SubscribePage {
+    id: subscribePanel
+    height: parent.height
+    width: parent.width
+    visible: false
+    onBackClicked: {
+      accountPanel.visible = true
+      subscribePanel.visible = false
+    }
+    onSubscribeClicked: {
+      accountPanel.visible = true
+      subscribePanel.visible = false
+    }
   }
 
   MessageDialog {
@@ -730,22 +685,25 @@ Item {
     text: qsTr( "Do you really want to delete project?" )
     icon: StandardIcon.Warning
     standardButtons: StandardButton.Ok | StandardButton.Cancel
-    onAccepted: {
-      if (relatedProjectIndex < 0) {
-          return;
-      }
-      __projectsModel.deleteProject(relatedProjectIndex)
-      if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
-        __loader.load("")
-        __loader.projectReloaded();
-        projectsPanel.activeProjectIndex = -1
-      }
-      deleteDialog.relatedProjectIndex = -1
-      visible = false
-    }
-    onRejected: {
-      deleteDialog.relatedProjectIndex = -1
-      visible = false
+
+    //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+    onButtonClicked: {
+        if (clickedButton === StandardButton.Ok) {
+          if (relatedProjectIndex < 0) {
+              return;
+          }
+          __projectsModel.deleteProject(relatedProjectIndex)
+          if (projectsPanel.activeProjectIndex === relatedProjectIndex) {
+            __loader.load("")
+            projectsPanel.activeProjectIndex = -1
+          }
+          deleteDialog.relatedProjectIndex = -1
+          visible = false
+        }
+        else if (clickedButton === StandardButton.Cancel) {
+          deleteDialog.relatedProjectIndex = -1
+          visible = false
+        }
     }
   }
 
@@ -767,7 +725,7 @@ Item {
         onClicked: {
           busyIndicator.running = true
           // filters suppose to not change
-          __merginApi.listProjects(searchField.text)
+          __merginApi.listProjects( searchBar.text )
           reloadList.visible = false
         }
         background: Rectangle {

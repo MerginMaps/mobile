@@ -1,5 +1,30 @@
 looking for ios [publishing](./publishing.md)
 
+# in-app purchases
+
+read https://doc.qt.io/qt-5/qtpurchasing-appstore.html
+
+## add new subscription
+- go to: https://appstoreconnect.apple.com > In-App Purchases Manage
+- click +
+    - Auto-renewable subscription
+    - Reference name: mergin_tier_<x> (where <x> is 1,2,.. representing are 1GB, 10GB... tiers)
+    - Product ID: apple_mergin_tier_<x> (where <x> is same as reference name)
+    - Subscription Group: mergin_1
+    - Add and fill subscription duration and prize
+- create the SAME subscription plan in Mergin via Admin interface
+
+## to do apple in-app purchases test (without actually paying)
+https://itunesconnect.apple.com
+
+- create InputApp test user in https://itunesconnect.apple.com: Users and Access > Sandbox Testers > New Tester (create your user)
+    - You may want to test different location (for QLocale)
+    - Create unique email (group/alias) for the new user 
+- create the Mergin Account for the user on test.dev.cloudmergin.com and/or dev.dev.cloudmergin.com
+- you need to logout your regular MacOs/Ios Apple User from device before trying to purchase something
+- login as test user and you can simulate purchasing
+- note that this works only for test.dev.cloudmergin.com and dev.dev.cloudmergin.com. It will not be possible to use test user on public/production server.
+
 # development certificate
 
 - device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
@@ -9,6 +34,28 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
 - generate profile
 - install all on device
 - set in Qt Creator
+
+# production certificate
+
+1. Create new iOS distribution certificate
+- open Keychain Access -> Certificate Assistant -> Request certificate (see https://help.apple.com/developer-account/#/devbfa00fef7)
+- click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
+- Download it and double click to open in Keychain Access
+- In Keychain Access, right click and export p12 file, with passport (IOS_CERT_KEY)
+- Store request and cer file, p12 in keepass
+
+2. Create/Update provisioning profile 
+- Go to https://developer.apple.com/account/resources/profiles
+- Edit LutraConsultingLtd.Input.AppStore and assign the certificate generated in 1.
+- Download the LutraConsultingLtdInputAppStore.mobileprovision
+- Store in keepass 
+
+3. Encrypt the files for GitHub
+- Create IOS_GPG_KEY
+- Encrypt mobileprovision file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./Certificates_ios_dist.p12.gpg ./Certificates_ios_dist.p12`
+- Encrypt p12 file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./LutraConsultingLtdInputAppStore.mobileprovision.gpg ./LutraConsultingLtdInputAppStore.mobileprovision`
+- Copy both files to `.github/secrets/ios`
+- Update secret (passports) on github
 
 # application icon
 

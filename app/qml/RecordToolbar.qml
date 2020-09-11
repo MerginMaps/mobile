@@ -34,11 +34,9 @@ Item {
     property bool manualRecordig: false
     property bool extraPanelVisible: true
 
-    property QgsQuick.VectorLayer activeVectorLayer: (__layersModel.activeIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.VectorLayer) :
-                                                         null
-    property string activeLayerName: __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.Name)
-    property string activeLayerIcon: __layersModel.data(__layersModel.index(__layersModel.activeIndex), LayersModel.IconSource)
+    property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.vectorLayer
+    property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
+    property string activeLayerIcon: __loader.loadIconFromLayer( activeVectorLayer )
 
     id: root
     onClose: visible = false

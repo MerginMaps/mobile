@@ -66,6 +66,7 @@ class LocalProjectsManager : public QObject
     QList<LocalProjectInfo> projects() const { return mProjects; }
 
     LocalProjectInfo projectFromDirectory( const QString &projectDir ) const;
+    LocalProjectInfo projectFromProjectFilePath( const QString &projectDir ) const;
 
     LocalProjectInfo projectFromMerginName( const QString &projectFullName ) const;
     LocalProjectInfo projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;

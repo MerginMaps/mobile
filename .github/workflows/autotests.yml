@@ -70,7 +70,6 @@ jobs:
 
       - name: build Input
         run: |
-          export ROOT_DIR=`pwd`
           cp input/scripts/ci/config.pri input/app/config.pri
 
           mkdir -p build-Input
@@ -84,11 +83,15 @@ jobs:
           install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
           install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
 
-      - name: run tests
+      - name: run mergin api tests
         run: |
-          ROOT_DIR=`pwd`
           cd build-Input/
-          ./Input.app/Contents/MacOS/Input --test
+          ./Input.app/Contents/MacOS/Input --testMerginApi
+
+      - name: run purchasing tests
+        run: |
+          cd build-Input/
+          ./Input.app/Contents/MacOS/Input --testPurchasing
 
       - name: build lcov summary
         run: |

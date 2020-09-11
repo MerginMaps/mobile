@@ -22,6 +22,7 @@ Drawer {
     property bool isReadOnly
 
     signal editGeometryClicked()
+    signal panelClosed()
 
     property alias formState: featureForm.state
     property alias feature: attributeModel.featureLayerPair
@@ -236,13 +237,19 @@ Drawer {
 
             project: featurePanel.project
             onSaved: {
+                featurePanel.panelClosed()
                 featurePanel.visible = false
             }
-            onCanceled: featurePanel.visible = false
+            onCanceled: {
+              featurePanel.panelClosed()
+              featurePanel.visible = false
+            }
 
             onStateChanged: {
                 toolbar.state = featureForm.state
             }
+
+            customWidgetCallback: valueRelationWidget.handler
         }
 
         FeatureToolbar {
@@ -270,13 +277,17 @@ Drawer {
           text: qsTr( "Really delete this feature?" )
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Ok | StandardButton.Cancel
-          onAccepted: {
-            featureForm.model.attributeModel.deleteFeature()
-            visible = false
-            featureForm.canceled()
-          }
-          onRejected: {
-            visible = false
+
+          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+          onButtonClicked: {
+              if (clickedButton === StandardButton.Ok) {
+                featureForm.model.attributeModel.deleteFeature()
+                visible = false
+                featureForm.canceled()
+              }
+              else if (clickedButton === StandardButton.Cancel) {
+                visible = false
+              }
           }
         }
     }
@@ -285,4 +296,7 @@ Drawer {
       id: externalResourceBundle
     }
 
+    ValueRelationWidget {
+      id: valueRelationWidget
+    }
 }

@@ -29,22 +29,34 @@
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
+#include "qgsmaplayerproxymodel.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
 #include "positiondirection.h"
 #include "projectsmodel.h"
-#include "layersmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
+#include "merginsubscriptionstatus.h"
+#include "merginsubscriptiontype.h"
 #include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
+#include "layersproxymodel.h"
+#include "layersmodel.h"
+#include "activelayer.h"
+#include "purchasing.h"
+#include "merginuserauth.h"
+#include "merginuserinfo.h"
+#include "variablesmanager.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
+#if not defined APPLE_PURCHASING
+#include "test/testpurchasing.h"
+#endif
 #endif
 
 #include "qgsquickutils.h"
@@ -241,16 +253,22 @@ static void init_proj( const QString &pkgPath )
 
 void initDeclarative()
 {
+  qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
+  qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
+  qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
-  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
+  qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
+  qmlRegisterUncreatableType<MerginSubscriptionType>( "lc", 1, 0, "MerginSubscriptionType", "MerginSubscriptionType Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
+  qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
+  qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
+  qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
-  qmlRegisterType<IOSImagePicker>( "lc", 1, 0, "IOSImagePicker" );
 }
 
 #ifdef INPUT_TEST
@@ -289,11 +307,15 @@ int main( int argc, char *argv[] )
   }
 
 #ifdef INPUT_TEST
-  bool IS_TEST = false;
+  bool IS_MERGIN_API_TEST = false;
+  bool IS_PURCHASING_TEST = false;
   for ( int i = 0; i < argc; ++i )
   {
-    if ( std::string( argv[i] ) == "--test" ) IS_TEST = true;
+    if ( std::string( argv[i] ) == "--testMerginApi" ) IS_MERGIN_API_TEST = true;
+    if ( std::string( argv[i] ) == "--testPurchasing" ) IS_PURCHASING_TEST = true;
   }
+  Q_ASSERT( !( IS_MERGIN_API_TEST && IS_PURCHASING_TEST ) );
+  bool IS_TEST = IS_PURCHASING_TEST || IS_MERGIN_API_TEST;
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -343,12 +365,20 @@ int main( int argc, char *argv[] )
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
   MapThemesModel mtm;
-  LayersModel lm;
   AppSettings as;
-  Loader loader( mtm, lm, as );
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
+
+  // layer models
+  LayersModel lm;
+  LayersProxyModel browseLpm( &lm, ModelTypes::BrowseDataLayerSelection );
+  LayersProxyModel recordingLpm( &lm, ModelTypes::ActiveLayerSelection );
+
+  ActiveLayer al;
+  Loader loader( mtm, as, al );
+  std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
+  std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -356,6 +386,8 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::resetProjects );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
+  QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
@@ -370,17 +402,29 @@ int main( int argc, char *argv[] )
   if ( IS_TEST )
   {
     initTestDeclarative();
-    TestMerginApi test( ma.get(), &mpm, &pm );
-    // use command line args we got, but filter out "--test" that's recognized by us but not by QTest framework
+    // use command line args we got, but filter out "--test*" that's recognized by us but not by QTest framework
     // (command line args may be used to filter function names that should be executed)
     QVector<char *> args;
     for ( int i = 0; i < argc; ++i )
     {
-      if ( QString( argv[i] ) != "--test" )
+      if ( !QString( argv[i] ).startsWith( "--test" ) )
         args << argv[i];
     }
-    QTest::qExec( &test, args.count(), args.data() );
-    return 0;
+
+    int nFailed = 0;
+    if ( IS_MERGIN_API_TEST )
+    {
+      TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
+      nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
+    }
+#if not defined APPLE_PURCHASING
+    else if ( IS_PURCHASING_TEST )
+    {
+      TestPurchasing purchasingTest( ma.get(), purchasing.get() );
+      nFailed += QTest::qExec( &purchasingTest, args.count(), args.data() );
+    }
+#endif
+    return nFailed;
   }
 #endif
 
@@ -424,12 +468,15 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
-  engine.rootContext()->setContextProperty( "__layersModel", &lm );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
+  engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
+  engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
+  engine.rootContext()->setContextProperty( "__activeLayer", &al );
+  engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
@@ -498,7 +545,6 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
-
   return app.exec();
 }
 

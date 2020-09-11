@@ -38,5 +38,17 @@
         <file>RegistrationForm.qml</file>
         <file>LoginForm.qml</file>
         <file>LeftCheckBox.qml</file>
+        <file>BrowseDataPanel.qml</file>
+        <file>BrowseDataFeaturesPanel.qml</file>
+        <file>BrowseDataLayersPanel.qml</file>
+        <file>BrowseDataView.qml</file>
+        <file>LayerList.qml</file>
+        <file>SubscribePage.qml</file>
+        <file>TextWithIcon.qml</file>
+        <file>CircularProgressBar.qml</file>
+        <file>BrowseDataToolbar.qml</file>
+        <file>SearchBar.qml</file>
+        <file>SubscribePlanItem.qml</file>
+        <file>ValueRelationWidget.qml</file>
     </qresource>
 </RCC>

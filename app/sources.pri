@@ -1,21 +1,29 @@
 SOURCES += \
+activelayer.cpp \
+layersmodel.cpp \
+layersproxymodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
 projectsmodel.cpp \
-layersmodel.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 merginapi.cpp \
 merginapistatus.cpp \
+merginsubscriptionstatus.cpp \
+merginsubscriptiontype.cpp \
 merginprojectmodel.cpp \
 merginprojectstatusmodel.cpp \
+merginuserauth.cpp \
+merginuserinfo.cpp \
 androidutils.cpp \
 inpututils.cpp \
 geodiffutils.cpp \
 positiondirection.cpp \
+purchasing.cpp \
+variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 
@@ -28,28 +36,58 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+activelayer.h \
+layersmodel.h \
+layersproxymodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
-layersmodel.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 merginapi.h \
 merginapistatus.h \
+merginsubscriptionstatus.h \
+merginsubscriptiontype.h \
 merginprojectmodel.h \
 merginprojectstatusmodel.h \
+merginuserauth.h \
+merginuserinfo.h \
 androidutils.h \
 inpututils.h \
 geodiffutils.h \
 positiondirection.h \
+purchasing.h \
+variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 
 contains(DEFINES, INPUT_TEST) {
-  SOURCES += test/testmerginapi.cpp
-  HEADERS += test/testmerginapi.h
+
+  contains(DEFINES, APPLE_PURCHASING) {
+    error("invalid combination of flags. INPUT_TEST cannot be defined with APPLE_PURCHASING")
+   }
+
+  SOURCES += \
+      test/testutils.cpp \
+      test/testmerginapi.cpp \
+      test/testingpurchasingbackend.cpp \
+      test/testpurchasing.cpp
+
+  HEADERS += \
+      test/testutils.h \
+      test/testmerginapi.h \
+      test/testingpurchasingbackend.h \
+      test/testpurchasing.h
+}
+
+contains(DEFINES, APPLE_PURCHASING) {
+  HEADERS += \
+      ios/iospurchasing.h
+
+  OBJECTIVE_SOURCES += \
+      ios/iospurchasing.mm
 }
 
 RESOURCES += \

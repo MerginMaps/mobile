@@ -8,6 +8,9 @@
 #include "testmerginapi.h"
 #include "inpututils.h"
 #include "geodiffutils.h"
+#include "testutils.h"
+#include "merginuserauth.h"
+#include "merginuserinfo.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 
@@ -33,25 +36,13 @@ TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectMo
 
 void TestMerginApi::initTestCase()
 {
-  // these env variables really need to be set!
-  QVERIFY( ::getenv( "TEST_MERGIN_URL" ) );
-  QVERIFY( ::getenv( "TEST_API_USERNAME" ) );
-  QVERIFY( ::getenv( "TEST_API_PASSWORD" ) );
-
-  QString apiRoot = ::getenv( "TEST_MERGIN_URL" );
-  QString username = ::getenv( "TEST_API_USERNAME" );
-  QString password = ::getenv( "TEST_API_PASSWORD" );
-
-  qDebug() << "MERGIN API ROOT:" << apiRoot;
-  qDebug() << "MERGIN USERNAME:" << username;
-
-  // let's make sure we do not mess with the public instance
-  QVERIFY( apiRoot != MerginApi::defaultApiRoot() );
+  QString apiRoot, username, password;
+  TestUtils::mergin_auth( apiRoot, username, password );
 
   mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
-  Q_ASSERT( spy.wait( LONG_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
 
   mUsername = username;  // keep for later
@@ -72,8 +63,8 @@ void TestMerginApi::initTestCase()
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
   mApiExtra->setApiRoot( mApi->apiRoot() );
   QSignalSpy spyExtra( mApiExtra, &MerginApi::authChanged );
-  mApiExtra->authorize( mApi->mUsername, mApi->mPassword );
-  Q_ASSERT( spyExtra.wait( LONG_REPLY ) );
+  mApiExtra->authorize( username, password );
+  QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyExtra.count(), 1 );
 
   // remove any projects on the server that may prevent us from creating them
@@ -120,7 +111,7 @@ void TestMerginApi::testListProject()
   // check that there's no hello world project
   QSignalSpy spy0( mApi, &MerginApi::listProjectsFinished );
   mApi->listProjects( QString() );
-  QVERIFY( spy0.wait( SHORT_REPLY ) );
+  QVERIFY( spy0.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
   QVERIFY( !_findProjectByName( mUsername, projectName, mApi->projects() ).isValid() );
   QVERIFY( !mApi->localProjectsManager().hasMerginProject( mUsername, projectName ) );
@@ -131,7 +122,7 @@ void TestMerginApi::testListProject()
   // check the project exists on the server
   QSignalSpy spy( mApi, &MerginApi::listProjectsFinished );
   mApi->listProjects( QString() );
-  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QVERIFY( _findProjectByName( mUsername, projectName, mApi->projects() ).isValid() );
 
@@ -156,7 +147,7 @@ void TestMerginApi::testDownloadProject()
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
   mApi->updateProject( projectNamespace, projectName );
   QCOMPARE( mApi->transactions().count(), 1 );
-  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
 
   QCOMPARE( mApi->transactions().count(), 0 );
@@ -183,7 +174,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
   api->createProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
@@ -197,7 +188,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   // Upload data
   QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
   api->uploadProject( projectNamespace, projectName );
-  QVERIFY( spy3.wait( LONG_REPLY ) );
+  QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy3.count(), 1 );
   QList<QVariant> arguments = spy3.takeFirst();
   QVERIFY( arguments.at( 2 ).toBool() );
@@ -245,7 +236,7 @@ void TestMerginApi::testCancelDownloadProject()
   // Test download and cancel after transcation starts
   QSignalSpy spy6( mApi, &MerginApi::pullFilesStarted );
   mApi->updateProject( mUsername, projectName );
-  QVERIFY( spy6.wait( LONG_REPLY ) );
+  QVERIFY( spy6.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy6.count(), 1 );
 
   QSignalSpy spy7( mApi, &MerginApi::syncProjectFinished );
@@ -272,7 +263,7 @@ void TestMerginApi::testCreateProjectTwice()
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   mApi->createProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
@@ -283,7 +274,7 @@ void TestMerginApi::testCreateProjectTwice()
   // Create again, expecting error
   QSignalSpy spy2( mApi, &MerginApi::networkErrorOccurred );
   mApi->createProject( projectNamespace, projectName );
-  QVERIFY( spy2.wait( SHORT_REPLY ) );
+  QVERIFY( spy2.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
   QList<QVariant> arguments = spy2.takeFirst();
@@ -295,7 +286,7 @@ void TestMerginApi::testCreateProjectTwice()
   //Clean created project
   QSignalSpy spy3( mApi, &MerginApi::serverProjectDeleted );
   mApi->deleteProject( projectNamespace, projectName );
-  QVERIFY( spy3.wait( SHORT_REPLY ) );
+  QVERIFY( spy3.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy3.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
@@ -313,7 +304,7 @@ void TestMerginApi::testDeleteNonExistingProject()
   // Try to delete non-existing project
   QSignalSpy spy( mApi, &MerginApi::networkErrorOccurred );
   mApi->deleteProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
 
   QList<QVariant> arguments = spy.takeFirst();
   QVERIFY( arguments.at( 0 ).type() == QVariant::String );
@@ -331,7 +322,7 @@ void TestMerginApi::testCreateDeleteProject()
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   mApi->createProject( projectNamespace, projectName );
-  QVERIFY( spy.wait( SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
@@ -342,7 +333,7 @@ void TestMerginApi::testCreateDeleteProject()
   // Delete created project
   QSignalSpy spy2( mApi, &MerginApi::serverProjectDeleted );
   mApi->deleteProject( projectNamespace, projectName );
-  QVERIFY( spy2.wait( SHORT_REPLY ) );
+  QVERIFY( spy2.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy2.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
@@ -357,7 +348,7 @@ void TestMerginApi::testUploadProject()
 
   QSignalSpy spy0( mApiExtra, &MerginApi::projectCreated );
   mApiExtra->createProject( projectNamespace, projectName );
-  QVERIFY( spy0.wait( LONG_REPLY ) );
+  QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
   QCOMPARE( spy0.takeFirst().at( 1 ).toBool(), true );
 
@@ -400,12 +391,12 @@ void TestMerginApi::testUploadProject()
   QSignalSpy spyX( mApi, &MerginApi::syncProjectFinished );
   QSignalSpy spyY( mApi, &MerginApi::pushFilesStarted );
   mApi->uploadProject( projectNamespace, projectName );
-  QVERIFY( spyY.wait( LONG_REPLY ) );
+  QVERIFY( spyY.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyY.count(), 1 );
 
   QSignalSpy spyCancel( mApi, &MerginApi::uploadCanceled );
   mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QVERIFY( spyCancel.wait( LONG_REPLY ) );
+  QVERIFY( spyCancel.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyCancel.count(), 1 );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
@@ -425,7 +416,7 @@ void TestMerginApi::testUploadProject()
   mApi->uploadProject( projectNamespace, projectName );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
-  QVERIFY( spy2.wait( LONG_REPLY ) );
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
   LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
@@ -1261,7 +1252,7 @@ void TestMerginApi::testUpdateWithMissedVersion()
 
 void TestMerginApi::testRegister()
 {
-  QString password = mApi->mPassword;
+  QString password = mApi->userAuth()->password();
 
   // we do not have a method to delete existing user in the mApi, so for now just make sure
   // the name does not exists
@@ -1275,7 +1266,7 @@ void TestMerginApi::testRegister()
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   mApi->registerUser( username, email, password, password, true );
-  QVERIFY( spy.wait( LONG_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
 }
 
 //////// HELPER FUNCTIONS ////////
@@ -1284,7 +1275,7 @@ MerginProjectList TestMerginApi::getProjectList()
 {
   QSignalSpy spy( mApi,  &MerginApi::listProjectsFinished );
   mApi->listProjects( QString(), "created", QString() );
-  spy.wait( SHORT_REPLY );
+  spy.wait( TestUtils::SHORT_REPLY );
 
   return mApi->projects();
 }
@@ -1294,7 +1285,7 @@ void TestMerginApi::deleteRemoteProject( MerginApi *api, const QString &projectN
 {
   QSignalSpy spy( api, &MerginApi::serverProjectDeleted );
   api->deleteProject( projectNamespace, projectName );
-  spy.wait( SHORT_REPLY );
+  spy.wait( TestUtils::SHORT_REPLY );
 }
 
 void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
@@ -1313,14 +1304,14 @@ void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projec
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   api->updateProject( projectNamespace, projectName );
   QCOMPARE( api->transactions().count(), 1 );
-  QVERIFY( spy.wait( LONG_REPLY * 5 ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
 }
 
 void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  QVERIFY( spy.wait( LONG_REPLY * 10 ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 30 ) );
   QCOMPARE( spy.count(), 1 );
 }
 

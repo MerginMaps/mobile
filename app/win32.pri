@@ -15,9 +15,9 @@ win32 {
   }
 
   exists($${QGIS_LIB_DIR}/qgis_core.lib) {
-	  message("Building from QGIS: $${QGIS_INSTALL_PATH}")
+    message("Building from QGIS: $${QGIS_INSTALL_PATH}")
   } else {
-	  error("Missing QGIS Core library in $${QGIS_LIB_DIR}/qgis_core.lib")
+    error("Missing QGIS Core library in $${QGIS_LIB_DIR}/qgis_core.lib")
   }
 
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
@@ -32,4 +32,7 @@ win32 {
 
   CONFIG += c++11
   DEFINES += "_USE_MATH_DEFINES"
+
+  # Disable: warning C4003: not enough actual parameters for macro 'QStringLiteral'
+  QMAKE_CXXFLAGS += /wd4003
 }

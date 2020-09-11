@@ -33,6 +33,7 @@ Popup {
         color: InputStyle.fontColor
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.Wrap
     }
 
     Timer {
