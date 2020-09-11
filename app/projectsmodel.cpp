@@ -48,7 +48,7 @@ void ProjectModel::findProjectFiles()
     projectFile.projectName = project.projectName;
     projectFile.projectNamespace = project.projectNamespace;
     projectFile.isValid = project.isShowable();
-    QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
+    QDateTime created = fi.created().toLocalTime();
     if ( projectFile.isValid )
     {
       projectFile.info = QString( created.toString() );
