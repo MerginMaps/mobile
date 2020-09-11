@@ -24,7 +24,6 @@ Item {
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
   property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
   property string pageTitle: layerName + " (" + featuresCount + ")"
-  property string listViewMode: "browseData"
 
   property var deactivateSearch: function deactivateSearch() {
     searchBar.deactivate()
@@ -83,7 +82,6 @@ Item {
       clip: true
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
-      viewMode: listViewMode
 
       onFeatureClicked: root.featureClicked( featureIdx )
     }

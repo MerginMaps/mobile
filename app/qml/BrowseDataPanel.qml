@@ -128,6 +128,5 @@ Item {
 
   QgsQuick.FeaturesListModel {
     id: featuresListModel
-    modelType: featuresListModel.FeatureListing
   }
 }
