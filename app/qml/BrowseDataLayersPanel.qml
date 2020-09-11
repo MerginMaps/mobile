@@ -16,7 +16,7 @@ Item {
   id: root
 
   signal backButtonClicked()
-  signal layerClicked( var index )
+  signal layerClicked( var layerId )
 
   Page {
     id: layersListPage
@@ -46,7 +46,7 @@ Item {
         noLayersText: qsTr("No identifiable layers in the project!")
 
         onListItemClicked: {
-          layerClicked( index )
+          layerClicked( layerId )
         }
     }
   }

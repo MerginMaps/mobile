@@ -186,7 +186,6 @@ ApplicationWindow {
       if ( !__activeLayer.layer )
         __loader.setActiveLayer( __recordingLayersModel.firstUsableLayer() )
 
-      activeLayerPanel.activeIndex = __recordingLayersModel.indexFromLayer( __activeLayer.layer )
       recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
       digitizing.layer = recordToolbar.activeVectorLayer
       
@@ -597,7 +596,7 @@ ApplicationWindow {
         z: zPanel
 
         onActiveLayerChangeRequested: {
-          __loader.setActiveLayer( __recordingLayersModel.layerFromIndex( index ) )
+          __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
         }
     }
 

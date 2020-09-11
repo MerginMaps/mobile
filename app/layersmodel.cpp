@@ -51,6 +51,7 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
       }
       else return "mIconRaster.svg";
     }
+    case LayerIdRole: return layer->id();
   }
   return QVariant();
 }
@@ -62,5 +63,6 @@ QHash<int, QByteArray> LayersModel::roleNames() const
   roles[IconSourceRole] = QStringLiteral( "iconSource" ).toLatin1();
   roles[HasGeometryRole] = QStringLiteral( "hasGeometry" ).toLatin1();
   roles[VectorLayerRole] = QStringLiteral( "vectorLayer" ).toLatin1();
+  roles[LayerIdRole] = QStringLiteral( "layerId" ).toLatin1();
   return roles;
 }
