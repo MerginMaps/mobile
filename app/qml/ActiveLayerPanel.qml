@@ -15,9 +15,9 @@ import "."  // import InputStyle singleton
 
 Drawer {
     property string title: qsTr("Survey Layer")
-    property int activeIndex: __recordingLayersModel.indexFromLayer( __activeLayer.layer )
+    property string activeLayerId: __activeLayer.layerId
 
-    signal activeLayerChangeRequested( var index )
+    signal activeLayerChangeRequested( var layerId )
 
     function openPanel() {
         layerPanel.visible = true
@@ -61,14 +61,14 @@ Drawer {
         width: parent.width
         y: header.height
         model: __recordingLayersModel
-        activeIndex: layerPanel.activeIndex
+        activeLayerId: layerPanel.activeLayerId
 
         cellWidth: width
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
 
         onListItemClicked: {
-          activeLayerChangeRequested( index )
+          activeLayerChangeRequested( layerId )
           layerPanel.visible = false
         }
     }

@@ -86,12 +86,12 @@ bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const
 
 QList<QgsMapLayer *> LayersProxyModel::layers() const
 {
-  QList<QgsMapLayer *> allLayers = mModel->layers();
   QList<QgsMapLayer *> filteredLayers;
 
   if ( !mModel )
     return filteredLayers;
 
+  QList<QgsMapLayer *> allLayers = mModel->layers();
   int layersCount = allLayers.size();
 
   for ( int i = 0; i < layersCount; i++ )
@@ -119,28 +119,33 @@ QgsMapLayer *LayersProxyModel::firstUsableLayer() const
   return nullptr;
 }
 
-int LayersProxyModel::indexFromLayer( QgsMapLayer *layer ) const
+QModelIndex LayersProxyModel::indexFromLayerId( QString layerId ) const
 {
-  if ( !layer )
-    return -1;
+  if ( layerId.isEmpty() )
+    return QModelIndex();
 
+  QgsVectorLayer *layer = layerFromLayerId( layerId );
+
+  return mModel->indexFromLayer( layer ); // return source model index to skip converting indexes in proxy model
+}
+
+QgsVectorLayer *LayersProxyModel::layerFromLayerId( QString layerId ) const
+{
   QList<QgsMapLayer *> filteredLayers = layers();
 
   for ( int i = 0; i < filteredLayers.count(); i++ )
   {
-    if ( filteredLayers.at( i )->id() == layer->id() )
-      return i;
+    if ( filteredLayers.at( i )->id() == layerId )
+    {
+      QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( filteredLayers.at( i ) );
+      if ( layer )
+        return layer;
+    }
   }
-
-  return -1;
+  return nullptr;
 }
 
-QgsMapLayer *LayersProxyModel::layerFromIndex( int index ) const
+QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
 {
-  QList<QgsMapLayer *> filteredLayers = layers();
-
-  if ( index >= 0 && index < filteredLayers.size() )
-    return filteredLayers.at( index );
-
-  return nullptr;
+  return sourceModel()->data( index, role );
 }

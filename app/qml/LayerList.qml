@@ -10,9 +10,10 @@ ListView {
   property int borderWidth: 1
   property bool highlightingAllowed: true
   property string noLayersText: qsTr("No editable layers in the project!")
+  property string activeLayerId: ""
   property int activeIndex: -1
 
-  signal listItemClicked( var index )
+  signal listItemClicked( var layerId )
 
     id: listView
     implicitWidth: parent.width
@@ -36,7 +37,7 @@ ListView {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            listItemClicked( index )
+            listItemClicked( model.layerId )
           }
         }
 
@@ -47,7 +48,7 @@ ListView {
             contentText: layerName ? layerName : ""
             imageSource: iconSource ? iconSource : ""
             overlayImage: false
-            highlight: highlightingAllowed && activeIndex === index
+            highlight: highlightingAllowed && layerId === activeLayerId
             showBorder: highlightingAllowed ? !__appSettings.defaultLayer || activeIndex - 1 !== index : true
         }
     }
