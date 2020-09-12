@@ -315,9 +315,10 @@ Rectangle {
         width: registerForm.width
         text: "<style>a:link { color: " + root.fontColor
               + "; text-decoration: underline; }</style>" + qsTr(
-                "Accept <a href='%1'>Terms</a> and <a href='%2'>Privacy Policy</a>").arg(
-                __merginApi.apiRoot + "assets/EULA.pdf").arg(
-                "https://github.com/lutraconsulting/input/blob/master/privacy_policy.md")
+                "Accept %1Terms%3 and %2Privacy Policy%3")
+            .arg("<a href='"+__merginApi.apiRoot + "assets/EULA.pdf'>")
+            .arg("<a href='https://github.com/lutraconsulting/input/blob/master/privacy_policy.md'>")
+            .arg("</a>")
       }
     }
 

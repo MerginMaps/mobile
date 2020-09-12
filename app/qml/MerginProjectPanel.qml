@@ -342,7 +342,12 @@ Item {
         anchors.fill: parent
         textFormat: Text.RichText
         text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
-              qsTr("No projects found.<br> See <a href='%1'>how to create a project</a> and <a href='%2'>how to download it</a> to your device.").arg("https://github.com/lutraconsulting/input/blob/master/docs/users/project_config.md").arg("https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md")
+              qsTr("No projects found.%1See %2how to create a project%3 and %4how to download it%3 to your device.")
+              .arg("<br/")
+              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/project_config.md'>")
+              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md'>")
+              .arg("</a>")
+
         onLinkActivated: Qt.openUrlExternally(link)
         visible: grid.count === 0
         color: InputStyle.fontColor
