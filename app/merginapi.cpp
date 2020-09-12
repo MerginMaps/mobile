@@ -561,7 +561,7 @@ void MerginApi::registerUser( const QString &username,
                       "%1 contain lowercase characters"
                       "%1 contain uppercase characters"
                       "%1 contain digits or special characters" )
-        .arg("<br />  -");
+                  .arg( "<br />  -" );
     emit notify( msg );
     return;
   }
@@ -797,7 +797,7 @@ void MerginApi::registrationFinished()
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.%1 You may now sign in." ).arg("<br>");
+    QString msg = tr( "Registration successful.%1 You may now sign in." ).arg( "<br>" );
     emit notify( msg );
   }
   else
