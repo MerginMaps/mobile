@@ -62,10 +62,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Used Data</source>
-        <translation type="vanished">Used Data</translation>
-    </message>
-    <message>
         <location filename="../qml/AccountPage.qml" line="256"/>
         <source>Sign out</source>
         <translation>Sign out</translation>
@@ -83,25 +79,9 @@
         <source>Select Active Layer</source>
         <translation>Select Active Layer</translation>
     </message>
-    <message>
-        <source>No editable layers in the project!</source>
-        <translation type="vanished">No editable layers in the project!</translation>
-    </message>
 </context>
 <context>
     <name>AuthPanel</name>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">Username</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">Password</translation>
-    </message>
-    <message>
-        <source>Sign in</source>
-        <translation type="vanished">Sign in</translation>
-    </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="139"/>
         <source>Mergin server has been updated. Please, update Input app to enable Mergin functionality.</source>
@@ -111,10 +91,6 @@
         <location filename="../qml/AuthPanel.qml" line="143"/>
         <source>Mergin server unavailable.</source>
         <translation>Mergin server unavailable.</translation>
-    </message>
-    <message>
-        <source>Sign up</source>
-        <translation type="vanished">Sign up</translation>
     </message>
 </context>
 <context>
@@ -378,10 +354,6 @@
         <translation>Projects</translation>
     </message>
     <message>
-        <source>SEARCH</source>
-        <translation type="vanished">SEARCH</translation>
-    </message>
-    <message>
         <location filename="../qml/MerginProjectPanel.qml" line="277"/>
         <source>Explore public Mergin projects!</source>
         <translatorcomment>Explore public Mergin projects!</translatorcomment>
@@ -481,10 +453,6 @@
         <location filename="../qml/ProjectStatusPanel.qml" line="44"/>
         <source>Status</source>
         <translation>Status</translation>
-    </message>
-    <message>
-        <source>section</source>
-        <translation type="vanished">section</translation>
     </message>
 </context>
 <context>
@@ -803,10 +771,6 @@
         <translation>Input</translation>
     </message>
     <message>
-        <source>Recording feature is not valid</source>
-        <translation type="vanished">Recording feature is not valid</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="96"/>
         <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
@@ -869,10 +833,6 @@
         <location filename="../../../QGIS/src/quickgui/plugin/editor/qgsquickdatetime.qml" line="298"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ok</source>
-        <translation type="vanished">Ok</translation>
     </message>
 </context>
 <context>

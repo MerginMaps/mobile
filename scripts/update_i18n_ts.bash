@@ -21,6 +21,8 @@ if [ ! -f "$QT_DIR/translations/qt_fr.qm" ]; then
   echo "Wrong QT_DIR, missing $QT_DIR/translations/qt_fr.qm !"
   exit 1;
 fi
+export OLD_PATH=$PATH
+export PATH=$QT_DIR/bin:$PATH
 
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
@@ -28,7 +30,8 @@ INPUT_TS="$INPUT_TS ./input_en.ts"
 QUICKQUI_DIR=`realpath --relative-to=$I18N_DIR $QGIS_SRC_DIR/src/quickgui`
 INPUT_DIR=../
 
-lupdate $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
+lupdate -noobsolete $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
 
+export PATH=$OLD_PATH
 echo "update i18n done"
 cd $PWD
