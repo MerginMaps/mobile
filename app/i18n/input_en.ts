@@ -23,7 +23,7 @@
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="134"/>
-        <source>Plese fix your %1billing details%2 as soon as possible</source>
+        <source>Please fix your %1billing details%2 as soon as possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

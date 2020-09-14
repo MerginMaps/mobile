@@ -132,7 +132,7 @@ Page {
       onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
-              "Plese fix your %1billing details%2 as soon as possible")
+              "Please fix your %1billing details%2 as soon as possible")
               .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
               .arg("</a>")
       iconColor: InputStyle.highlightColor
