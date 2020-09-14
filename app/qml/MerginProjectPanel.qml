@@ -345,8 +345,8 @@ Item {
               qsTr("No projects found.%1See %2how to create a project%3 and %4how to download it%3 to your device.")
               .arg("<br/")
               .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/project_config.md'>")
-              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md'>")
               .arg("</a>")
+              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md'>")      
 
         onLinkActivated: Qt.openUrlExternally(link)
         visible: grid.count === 0
