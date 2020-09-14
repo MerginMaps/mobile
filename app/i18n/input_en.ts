@@ -744,22 +744,22 @@
     <name>SubscribePlanItem</name>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="34"/>
-        <source> subscription plan</source>
+        <source> Subscription Plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="40"/>
-        <source>Custom billing period</source>
+        <location filename="../qml/SubscribePlanItem.qml" line="52"/>
+        <source>Unlimited collaborators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="46"/>
-        <source>Custom storage</source>
+        <location filename="../qml/SubscribePlanItem.qml" line="58"/>
+        <source>Unlimited projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="73"/>
-        <source>Manage</source>
+        <location filename="../qml/SubscribePlanItem.qml" line="64"/>
+        <source>Email support</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

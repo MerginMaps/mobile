@@ -31,37 +31,37 @@ Item {
     TextWithIcon {
       width: parent.width
       source: 'info.svg'
-      text: root.name + qsTr(" subscription plan")
+      text: root.name + qsTr(" Subscription Plan")
     }
 
     TextWithIcon {
       width: parent.width
       source: 'ic_today.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Custom billing period") : root.plan.period
+      text: __merginApi.userInfo.ownsActiveSubscription ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
       source: 'database-solid.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Custom storage") : root.plan.storage
+      text: __merginApi.userInfo.ownsActiveSubscription ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
       source: 'account-multi.svg'
-      text: "Unlimited collaborators"
+      text: qsTr("Unlimited collaborators")
     }
 
     TextWithIcon {
       width: parent.width
       source: 'project.svg'
-      text: "Unlimited projects"
+      text: qsTr("Unlimited projects")
     }
 
     TextWithIcon {
       width: parent.width
       source: 'envelope-solid.svg'
-      text: "Email support"
+      text: qsTr("Email support")
     }
 
     Button {
@@ -70,7 +70,7 @@ Item {
       anchors.horizontalCenter: parent.horizontalCenter
 
       height: InputStyle.rowHeightHeader
-      text: __merginApi.userInfo.ownsActiveSubscription ? qsTr("Manage") : root.plan.price
+      text: __merginApi.userInfo.ownsActiveSubscription ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
       enabled: text !== ''
       font.pixelSize: subscribeButton.height / 2
 
