@@ -91,7 +91,7 @@ Rectangle {
             id: individualTabButton
 
             contentItem: Text {
-              color: bar.currentIndex == 0 ? "white" : InputStyle.highlightColor
+              color: bar.currentIndex === 0 ? "white" : InputStyle.highlightColor
               text: qsTr("Individual")
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -99,7 +99,7 @@ Rectangle {
             }
 
             background: Rectangle {
-              color: bar.currentIndex == 0 ? InputStyle.highlightColor: "white"
+              color: bar.currentIndex === 0 ? InputStyle.highlightColor: "white"
               border.color: InputStyle.highlightColor
               border.width: 1
             }
@@ -108,7 +108,7 @@ Rectangle {
             id: professionalTabButton
 
             contentItem: Text {
-              color: bar.currentIndex == 1 ? "white" : InputStyle.highlightColor
+              color: bar.currentIndex === 1 ? "white" : InputStyle.highlightColor
               text: qsTr("Professional")
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -116,7 +116,7 @@ Rectangle {
             }
 
             background: Rectangle {
-              color: bar.currentIndex == 1 ? InputStyle.highlightColor: "white"
+              color: bar.currentIndex === 1 ? InputStyle.highlightColor: "white"
               border.color: InputStyle.highlightColor
               border.width: 1
             }
@@ -162,7 +162,9 @@ Rectangle {
     verticalAlignment: Text.AlignVCenter
     text: "<style>a:link { color: " + InputStyle.highlightColor
           + "; text-decoration: underline; }</style>" + qsTr(
-            "Your Mergin storage plan will automatically renew. You can cancel or change at any time.<br> <a href='%1'>Learn More</a>").arg(__purchasing.subscriptionManageUrl)
+            "Your Mergin storage plan will automatically renew. You can cancel or change at any time. %1Learn More%2")
+          .arg("<a href='" + __purchasing.subscriptionManageUrl + "'>")
+          .arg("</a>")
     font.pixelSize: InputStyle.fontPixelSizeNormal
     color: InputStyle.fontColor
     width: parent.width

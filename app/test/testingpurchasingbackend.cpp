@@ -51,24 +51,24 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
     QStringList items;
     if ( plan->isIndividualPlan() )
     {
-      items << tr( "Buy individual plan | tier01" );
+      items << "Buy individual plan | tier01";
     }
     else
     {
-      items << tr( "Buy professional plan | tier12" );
+      items << "Buy professional plan | tier12";
     }
 
     if ( mMerginApi->userInfo()->ownsActiveSubscription() )
     {
-      items << tr( "Immediately refund the subscription (got refund) | cancel" )
-            << tr( "Set grace period | grace" )
-            << tr( "Set unsubscribed | unsubscribe" );
+      items << "Immediately refund the subscription (got refund) | cancel"
+            << "Set grace period | grace"
+            << "Set unsubscribed | unsubscribe";
     }
-    items << tr( "Cancel Payment | cancelPayment" )
-          << tr( "Send invalid receipt | invalidreceipt" );
+    items << "Cancel Payment | cancelPayment"
+          << "Send invalid receipt | invalidreceipt";
 
     bool ok;
-    QString item = QInputDialog::getItem( nullptr, tr( "QInputDialog::getItem()" ),
+    QString item = QInputDialog::getItem( nullptr, "QInputDialog::getItem()",
                                           "PURCHASING TEST", items, 0, false, &ok );
     if ( ok && !item.isEmpty() )
     {

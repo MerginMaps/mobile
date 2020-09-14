@@ -132,8 +132,9 @@ Page {
       onLinkActivated: Qt.openUrlExternally(link)
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
-              "Plese fix your <a href='%1'>billing details</a> as soon as possible")
-              .arg(__purchasing.subscriptionBillingUrl)
+              "Plese fix your %1billing details%2 as soon as possible")
+              .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
+              .arg("</a>")
       iconColor: InputStyle.highlightColor
     }
 
@@ -234,7 +235,9 @@ Page {
       verticalAlignment: Text.AlignVCenter
       text: "<style>a:link { color: " + InputStyle.highlightColor
             + "; text-decoration: underline; }</style>" + qsTr(
-              "You can also <a href='http://restore-purchases'>restore</a> your purchases")
+              "You can also %1restore%2 your purchases")
+            .arg("<a href='http://restore-purchases'>")
+            .arg("</a>")
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: InputStyle.fontColor
       width: root.width - 2 * InputStyle.rowHeightHeader

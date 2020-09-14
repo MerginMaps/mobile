@@ -196,12 +196,12 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
   else if ( foundProjectFiles.count() > 1 )
   {
     // error: multiple project files found
-    err = QObject::tr( "Error: Multiple QGIS project files" );
+    err = tr( "Multiple QGIS project files" );
   }
   else
   {
     // no projects
-    err = QObject::tr( "Error: Missing QGIS project file" );
+    err = tr( "Missing QGIS project file" );
   }
   return QString();
 }
