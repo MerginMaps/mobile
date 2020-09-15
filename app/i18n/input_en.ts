@@ -427,6 +427,19 @@
     </message>
 </context>
 <context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../merginprojectstatusmodel.cpp" line="70"/>
+        <source>Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../merginprojectstatusmodel.cpp" line="96"/>
+        <source>Unable to determine changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/PanelHeader.qml" line="56"/>

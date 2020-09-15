@@ -67,7 +67,7 @@ void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, cons
       ProjectStatusItem item;
       item.status = status;
       item.text = file;
-      item.section = "Changes";
+      item.section = tr("Changes");
       mItems.append( item );
     }
   }
@@ -93,7 +93,7 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
 
         ProjectStatusItem item;
         item.status = ProjectChangelogStatus::Message;
-        item.text =  QStringLiteral( "Unable to determine changes" );
+        item.text =  tr( "Unable to determine changes" );
         item.filename = file;
         item.section = file;
 
