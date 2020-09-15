@@ -67,7 +67,7 @@ void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, cons
       ProjectStatusItem item;
       item.status = status;
       item.text = file;
-      item.section = tr("Changes");
+      item.section = tr( "Changes" );
       mItems.append( item );
     }
   }
