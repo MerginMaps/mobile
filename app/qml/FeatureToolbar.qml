@@ -14,6 +14,7 @@ import "."  // import InputStyle singleton
 Item {
     property int itemSize: toolbar.height * 0.8
     property bool isFeaturePoint: false
+    property bool saveBtnEnabled: true
 
     signal editClicked()
     signal saveClicked()
@@ -100,6 +101,7 @@ Item {
                 width: toolbar.itemSize
                 text: qsTr("Save")
                 imageSource: "yes.svg"
+                enabled: toolbar.saveBtnEnabled
 
                 onActivated: toolbar.saveClicked()
             }

@@ -260,6 +260,7 @@ Drawer {
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
             isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
+            saveBtnEnabled: featureForm.model.constraintsHardValid
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()
