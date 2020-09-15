@@ -47,6 +47,7 @@ android {
     # packaging
     ANDROID_EXTRA_LIBS += \
         $${QGIS_LIB_DIR}/libcrypto_1_1.so \
+        $${QGIS_LIB_DIR}/libpng16.so \
         $${QGIS_LIB_DIR}/libexpat.so \
         $${QGIS_LIB_DIR}/libgeodiff.so \
         $${QGIS_LIB_DIR}/libgeos.so \
