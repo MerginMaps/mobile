@@ -48,7 +48,7 @@ ios {
 
     LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
-    LIBS += -lexpat -lcharset -lfreexl
+    LIBS += -lexpat -lcharset -lfreexl -lxml2
     LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
     LIBS += -lzip -liconv -lbz2
     LIBS += -lqgis_quick_plugin -lprotobuf-lite
