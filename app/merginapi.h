@@ -490,6 +490,13 @@ class MerginApi: public QObject
     */
     QString getTempProjectDir( const QString &projectFullName );
     /**
+    * Returns modified path for a conflict file in following form: <path>_conflict_<username>_<version>
+    * where username is taken from currently logged in user in mergin.
+    * \param QString path
+    * \param int version
+    */
+    QString generateConflictFileName( const QString &path, int version );
+    /**
     * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
     * \param QString path
     * \param QString isPathDir True if the result path suppose to be a folder

@@ -1041,6 +1041,11 @@ QString MerginApi::getTempProjectDir( const QString &projectFullName )
   return mDataDir + "/" + TEMP_FOLDER + projectFullName;
 }
 
+QString MerginApi::generateConflictFileName( const QString &path, int version )
+{
+  return QString( "%1_conflict_%2_v%3" ).arg( path, mUsername, QString::number( version ) );
+}
+
 QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName )
 {
   return QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
@@ -1297,7 +1302,8 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
-    QString newDest = findUniquePath( QString( "%1_conflict" ).arg( dest ), false );
+    LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
+    QString newDest = findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
     if ( !QFile::rename( dest, newDest ) )
     {
       InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
@@ -1350,7 +1356,8 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
       {
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
-        QString newPath = findUniquePath( QString( "%1_conflict" ).arg( origPath ), false );
+        LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
+        QString newPath = findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
         if ( !QFile::rename( origPath, newPath ) )
         {
           InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
