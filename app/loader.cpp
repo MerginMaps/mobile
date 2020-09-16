@@ -156,6 +156,16 @@ void Loader::setMapSettingsLayers() const
   }
 
   mMapSettings->setLayers( allLayers );
+  mMapSettings->setTransformContext( mProject->transformContext() );
+}
+
+// Huh, it looks like we have forgotten to add implementation of QgsQuickMapSettings::setTransformContext()
+// inside QGIS Quick... fortunately, it's very simple so we have the body here and the compiler thinks
+// it's just another inline function. But it should go to QGIS Quick library and once it is there,
+// this implementation should go away.
+void QgsQuickMapSettings::setTransformContext( const QgsCoordinateTransformContext &ctx )
+{
+  mMapSettings.setTransformContext( ctx );
 }
 
 QgsQuickMapSettings *Loader::mapSettings() const
