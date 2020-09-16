@@ -102,3 +102,18 @@ Input does not include all the SVGs within QGIS. Therefore, if you are using SVG
 An example of Project Properties in QGIS for survey layers and identifiable layers can be seen below:
 
 <img src="images/qgis_project_properties.png" alt="Preview panel in Input based on Display settings in QGIS" style="width: 50%; height: 50%"/>​
+
+## QGIS variables
+
+Input recognizes several variables that can be used in QGIS expressions (they are also supported by Mergin plugin for QGIS):
+
+| Variable name               | Sample value                     | Scope   | Description |
+|-----------------------------|----------------------------------|---------|-------------|
+| `@mergin_username`          | `martin`                         | global  | Name of the user currently logged in to Mergin |
+| `@mergin_url`               | `https://public.cloudmergin.com` | global  | URL of the Mergin service |
+| `@mergin_project_name`      | `Tree survey`                    | project | Name of the active Mergin project  |
+| `@mergin_project_owner`     | `martin`                         | project | Name of the owner of the active Mergin project |
+| `@mergin_project_full_name` | `martin/Tree survey`             | project | Owner and project name joined with a forward slash |
+| `@mergin_project_version`   | `42`                             | project | Current version of the active Mergin project |
+
+A common use case is to use `@mergin_username` as the default value for one of the fields in a survey layer to automatically track who has added (and/or modified) a particular record.
