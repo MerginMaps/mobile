@@ -25,16 +25,7 @@ Rectangle {
   signal registrationRequested()
 
   id: loginForm
-  width: parent.width
-  height: parent.height - staticPane.height
   color: root.bgColor
-  anchors.bottom: staticPane.top
-  anchors.bottomMargin: {
-    Math.max(
-          Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height
-                                                    - (staticPane.height + toolbarHeight
-                                                       + panelMargin) : 0, 0)
-  }
 
   function clean() {
     password.text = ""
