@@ -10,7 +10,7 @@
  ***************************************************************************/
 import QtQuick.Templates 2.1 as T
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
@@ -23,16 +23,7 @@ import "." // import InputStyle singleton
   */
 Rectangle {
   id: registerForm
-  width: parent.width
-  height: parent.height - staticPane.height
   color: root.bgColor
-  anchors.bottom: staticPane.top
-  anchors.bottomMargin: {
-    Math.max(
-          Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height
-                                                    - (staticPane.height + toolbarHeight
-                                                       + panelMargin) : 0, 0)
-  }
 
   function clean() {
     registerName.text = ""
@@ -41,6 +32,10 @@ Rectangle {
     passwordConfirm.text = ""
     acceptTOC.checked = false
   }
+
+  ScrollView {
+    width: registerForm.width
+    height: registerForm.height
 
   Column {
     id: columnLayout
@@ -358,6 +353,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
       }
+    }
     }
   }
 }
