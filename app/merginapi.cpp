@@ -54,7 +54,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   loadAuthData();
   GEODIFF_init();
   GEODIFF_setLoggerCallback( &GeodiffUtils::log );
-  GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelInfo );
+  GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
 }
 
 MerginUserAuth *MerginApi::userAuth() const
