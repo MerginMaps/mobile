@@ -202,8 +202,8 @@ Item {
 
         id: imageDeleteDialog
         visible: false
-        title: qsTr( "Delete photo" )
-        text: qsTr( "Would you like to permanently delete the image file?" )
+        title: qsTr( "Remove photo reference" )
+        text: qsTr( "Also permanently delete photo from device?" )
         icon: StandardIcon.Warning
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {

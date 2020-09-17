@@ -1,4 +1,5 @@
 SOURCES += \
+inputhelp.cpp \
 activelayer.cpp \
 layersmodel.cpp \
 layersproxymodel.cpp \
@@ -36,6 +37,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+inputhelp.h \
 activelayer.h \
 layersmodel.h \
 layersproxymodel.h \
@@ -73,13 +75,15 @@ contains(DEFINES, INPUT_TEST) {
       test/testutils.cpp \
       test/testmerginapi.cpp \
       test/testingpurchasingbackend.cpp \
-      test/testpurchasing.cpp
+      test/testpurchasing.cpp \
+      test/testlinks.cpp
 
   HEADERS += \
       test/testutils.h \
       test/testmerginapi.h \
       test/testingpurchasingbackend.h \
-      test/testpurchasing.h
+      test/testpurchasing.h \
+      test/testlinks.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

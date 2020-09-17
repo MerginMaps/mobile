@@ -153,21 +153,12 @@ Rectangle {
     }
   }
 
-  Text {
+  TextHyperlink {
     id: textNotice
-    anchors.bottom: parent.bottom
-    textFormat: Text.RichText
-    onLinkActivated: Qt.openUrlExternally(link)
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-    text: "<style>a:link { color: " + InputStyle.highlightColor
-          + "; text-decoration: underline; }</style>" + qsTr(
-            "Your Mergin storage plan will automatically renew. You can cancel or change at any time. %1Learn More%2")
-          .arg("<a href='" + __purchasing.subscriptionManageUrl + "'>")
-          .arg("</a>")
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    color: InputStyle.fontColor
     width: parent.width
-    wrapMode: Text.Wrap
+    anchors.bottom: parent.bottom
+    text: qsTr("Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2")
+              .arg("<a href='" + __purchasing.subscriptionManageUrl + "'>")
+              .arg("</a>")
   }
 }

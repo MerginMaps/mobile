@@ -9,7 +9,7 @@ ListView {
   property int cellHeight: InputStyle.rowHeight
   property int borderWidth: 1
   property bool highlightingAllowed: true
-  property string noLayersText: qsTr("No editable layers in the project!")
+  property string noLayersText: "(no-layers)" // should be set by parent
   property string activeLayerId: ""
   property int activeIndex: -1
 
@@ -54,14 +54,9 @@ ListView {
     }
   }
 
-  Label {
+  TextHyperlink {
       anchors.fill: parent
-      horizontalAlignment: Qt.AlignHCenter
-      verticalAlignment: Qt.AlignVCenter
       visible: parent.count == 0
       text: noLayersText
-      color: InputStyle.fontColor
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      font.bold: true
   }
 }

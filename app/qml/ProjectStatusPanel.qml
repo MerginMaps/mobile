@@ -41,7 +41,7 @@ Item {
     width: parent.width
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Status")
+    titleText: qsTr("Project Status")
     z: contentLayout.z + 1
 
     onBack: {

@@ -64,15 +64,12 @@ Drawer {
         property int cellHeight: InputStyle.rowHeight
         property int borderWidth: 1
 
-        Label {
+        TextHyperlink {
             anchors.fill: parent
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
             visible: parent.count == 0
-            text: qsTr("No themes in the project!")
-            color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            font.bold: true
+            text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
+                  .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
+                  .arg("</a>")
         }
 
     }

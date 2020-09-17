@@ -7,33 +7,21 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.9
+import QtQuick 2.7
 import QtQuick.Controls 2.2
+import "."  // import InputStyle singleton
 
-Item {
-
-  Rectangle {
-    anchors.fill: parent
+Text {
+    width: parent.width
+    height: paren.height
     color: InputStyle.fontColor
-  }
-
-  Image {
-    id: logo
-    anchors.centerIn: parent
-    source: "input.svg"
-    width: parent.width/2
-    sourceSize.height: 0
-    fillMode: Image.PreserveAspectFit
-    sourceSize.width: width
-  }
-
-  Text {
-    text: qsTr("Opening project ...")
-    anchors.verticalCenterOffset: parent.height/6
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
+    onLinkActivated: Qt.openUrlExternally(link)
+    textFormat: Text.StyledText
+    wrapMode: Text.WordWrap
     font.pixelSize: InputStyle.fontPixelSizeNormal
-    color: "white"
-  }
-
+    font.bold: true
+    horizontalAlignment: Qt.AlignHCenter
+    verticalAlignment: Qt.AlignVCenter
+    text: "(no-text)"
+    linkColor: InputStyle.highlightColor
 }

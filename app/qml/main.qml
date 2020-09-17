@@ -28,7 +28,7 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
-    title: qsTr("Input")
+    title: "Input" // Do not translate
 
     property int zMapCanvas: 0
     property int zPanel: 20
@@ -424,8 +424,7 @@ ApplicationWindow {
         }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
-            popup.text = __appSettings.autoCenterMapChecked ?  qsTr("Autocenter mode on") : qsTr("Autocenter mode off")
-            popup.open()
+            showMessage(__appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off"))
         }
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
@@ -441,8 +440,7 @@ ApplicationWindow {
             if ( __recordingLayersModel.rowCount() > 0 ) {
                 stateManager.state = "record"
             } else {
-                popup.text = qsTr("No editable layers!")
-                popup.open()
+                showMessage(qsTr("No editable layers found."))
             }
         }
     }
@@ -476,8 +474,7 @@ ApplicationWindow {
 
         onGpsSwitchClicked: {
             if (!positionKit.hasPosition) {
-                popup.text = qsTr("The GPS is currently not available")
-                popup.open()
+                showMessage(qsTr("GPS currently unavailable.%1Try to allow GPS Location in your device settings.").arg("<br/>"))
                 return // leaving when no gps is available
             }
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
@@ -645,14 +642,14 @@ ApplicationWindow {
 
     MessageDialog {
         id: alertDialog
-        title: qsTr("Synchronization error")
+        title: qsTr("Communication error")
         onAccepted: alertDialog.close()
     }
 
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
-            var msg = message ? message : qsTr("Unknown network error")
+            var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
             showAsDialog ? showDialog(msg) : showMessage(msg)
         }
         onNotify: {

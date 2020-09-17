@@ -118,7 +118,7 @@ void PurchasingPlan::setFromJson( QJsonObject docObj )
   }
   else
   {
-    mPeriod = tr( "Yearly subscription" );
+    mPeriod = tr( "Annual subscription" );
   }
   const QString billingPrice = docObj.value( QStringLiteral( "billing_price" ) ).toString();
   if ( isMonthly )
@@ -514,7 +514,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
 
 void Purchasing::onTransactionCreationFailed()
 {
-  notify( tr( "Failed to initialize subscribe transaction " ) );
+  notify( tr( "Failed to process payment details.%1Subscription is not purchased." ).arg( "<br/>" ) );
   setTransactionCreationRequested( false );
 }
 
@@ -524,7 +524,7 @@ void Purchasing::onTransactionVerificationSucceeded( PurchasingTransaction *tran
   if ( transaction->type() == PurchasingTransaction::RestoreTransaction )
     notify( tr( "Successfully restored your subscription" ) );
   else
-    notify( tr( "Successfully purchased the subscription" ) );
+    notify( tr( "Successfully purchased subscription" ) );
 
   removePendingTransaction( transaction );
   mMerginApi->getUserInfo();
@@ -536,7 +536,7 @@ void Purchasing::onTransactionVerificationFailed( PurchasingTransaction *transac
   if ( transaction->type() == PurchasingTransaction::RestoreTransaction )
     notify( tr( "Unable to restore your subscription" ) );
   else
-    notify( tr( "Failed to create your subscription" ) );
+    notify( tr( "Failed to purchase subscription" ) );
 
   removePendingTransaction( transaction );
 }

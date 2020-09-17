@@ -120,11 +120,11 @@ Item {
         width: parent.width
         text: {
           if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
-            qsTr("Mergin server has been updated. Please, update Input app to enable Mergin functionality.")
+            qsTr("Please update Input to use the latest Mergin features.")
           } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
             ""
           } else {
-            qsTr("Mergin server unavailable.")
+            qsTr("Mergin is currently unavailable - please try again later.")
           }
         }
         verticalAlignment: Text.AlignVCenter
