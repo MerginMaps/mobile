@@ -13,6 +13,7 @@
 #include <QMap>
 #include <QString>
 
+#include <geodiff.h>
 
 /**
  * Utility functions for working with geodiff library
@@ -53,6 +54,9 @@ class GeodiffUtils
 
     //! Takes "src" file and applies a sequence of changesets for the list in "diffFiles"
     static bool applyDiffs( const QString &src, const QStringList &diffFiles );
+
+    //! Geodiff logger callback function used to forward logs to Input.
+    static void log( GEODIFF_LoggerLevel level, const char *msg );
 };
 
 #endif // GEODIFFUTILS_H
