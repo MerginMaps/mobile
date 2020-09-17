@@ -109,3 +109,17 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
   }
   return true;
 }
+
+void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
+{
+  QString prefix;
+  switch ( level )
+  {
+    case LevelError: prefix = "GEODIFF error: "; break;
+    case LevelWarning: prefix = "GEODIFF warning: "; break;
+    case LevelInfo: prefix = "GEODIFF info: "; break;
+    case LevelDebug: prefix = "GEODIFF debug: "; break;
+    default: break;
+  }
+  InputUtils::log( prefix, msg );
+}
