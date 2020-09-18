@@ -1043,7 +1043,7 @@ QString MerginApi::getTempProjectDir( const QString &projectFullName )
 
 QString MerginApi::generateConflictFileName( const QString &path, int version )
 {
-  return QString( "%1_conflict_%2_v%3" ).arg( path, mUsername, QString::number( version ) );
+  return QString( "%1_conflict_%2_v%3" ).arg( path, mUserAuth->username(), QString::number( version ) );
 }
 
 QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName )

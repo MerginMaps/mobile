@@ -797,8 +797,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to test1.txt_conflict_<username>_<version>
-  LocalProjectInfo info = mApi->localProjectsManager().projectFromDirectory( projectDir );
-  QString conflictFilename = filename + "_conflict_" + mUsername + "_v" + info.localVersion;
+  QString conflictFilename = filename + "_conflict_" + mUsername + "_v1";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
 
@@ -822,9 +821,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   // verify the result: the server version should be in test1.txt
   // and the local version should go to test1.txt_conflict0
   // Note: test1.txt_conflict_<username>_<version> should be still same
-
-  LocalProjectInfo info2 = mApi->localProjectsManager().projectFromDirectory( projectDir );
-  QString conflictFilename2 = filename + "_conflict_" + mUsername + "_v" + info2.localVersion;
+  QString conflictFilename2 = filename + "_conflict_" + mUsername + "_v3";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content 2" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
   QCOMPARE( readFileContent( conflictFilename2 ), QByteArray( "local content 2" ) );
@@ -866,8 +863,7 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to test1.txt_conflict_<username>_<version>
-  LocalProjectInfo info = mApi->localProjectsManager().projectFromDirectory( projectDir );
-  QString conflictFilename = filename + "_conflict_" + mUsername + "_v" + info.localVersion;
+  QString conflictFilename = filename + "_conflict_" + mUsername + "_v1";
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "new local content" ) );
 }
@@ -1160,9 +1156,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   //
   // check the result
   //
-
-  LocalProjectInfo info = mApi->localProjectsManager().projectFromDirectory( projectDir );
-  QString conflictFilename = "base.gpkg_conflict_" + mUsername + "_v" + info.localVersion;
+  QString conflictFilename = "base.gpkg_conflict_" + mUsername + "_v1";
   QVERIFY( QFile::exists( projectDir + "/base.gpkg" ) );
   QVERIFY( QFile::exists( projectDir + "/" + conflictFilename ) );
 
@@ -1335,6 +1329,8 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
 QByteArray TestMerginApi::readFileContent( const QString &filename )
 {
   QFile f( filename );
+  qDebug() << "!!!Opening file " << filename;
+  Q_ASSERT( f.exists() );
   Q_ASSERT( f.open( QIODevice::ReadOnly ) );
   QByteArray data = f.readAll();
   f.close();
