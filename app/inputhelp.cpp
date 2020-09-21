@@ -39,7 +39,7 @@ QString InputHelp::howToSetupThemesLink() const
 
 QString InputHelp::howToCreateNewProjectLink() const
 {
-  return inputHelpRoot + "/howto/create_project";
+  return inputHelpRoot + "/howto/project_config";
 }
 
 QString InputHelp::howToDownloadProjectLink() const

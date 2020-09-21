@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QTextStream>
+#include <QDebug>
 #include <QSignalSpy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -23,12 +23,12 @@ void UrlTester::processFinished()
   Q_ASSERT( r );
   if ( r->error() == QNetworkReply::NoError )
   {
-    QTextStream( stdout ) << "URL " << mUrl << " ...OK" << endl;
+    qDebug() << "  URL " << mUrl << " ...OK" << endl;
     mResult = 0;
   }
   else
   {
-    QTextStream( stdout ) << "URL " << mUrl << " ...ERROR" << endl;
+    qDebug() << "  URL " << mUrl << " ...ERROR" << endl;
     mResult = 1;
   }
   r->deleteLater();
@@ -40,6 +40,7 @@ void UrlTester::open()
   QNetworkRequest req( mUrl );
   req.setRawHeader( "User-Agent", "InputApp tests" );
   QNetworkReply *reply = mManager.get( req );
+  qDebug() << "Requesting " << mUrl << endl;
   connect( reply, &QNetworkReply::finished, this, &UrlTester::processFinished );
 }
 
@@ -47,6 +48,7 @@ void TestLinks::_run( const QString &url )
 {
   UrlTester tester( url );
   QSignalSpy spy( &tester, &UrlTester::finished );
+  tester.open();
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( tester.result(), 0 );
