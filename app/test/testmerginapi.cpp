@@ -1329,7 +1329,6 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
 QByteArray TestMerginApi::readFileContent( const QString &filename )
 {
   QFile f( filename );
-  qDebug() << "!!!Opening file " << filename;
   Q_ASSERT( f.exists() );
   Q_ASSERT( f.open( QIODevice::ReadOnly ) );
   QByteArray data = f.readAll();
