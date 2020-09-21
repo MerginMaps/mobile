@@ -86,10 +86,84 @@ Example of the preview panel in Input and QGIS tooltip set up can be seen below:
 <img src="images/input_preview_panel.png" alt="Preview panel in Input based on Display settings in QGIS" style="width: 25%; height: 25%"/>​
 
 ### Forms
-
-To be able to attach photos to a survey feature, you will need to have an attribute column in your survey layer. Within the form setting, ensure to set Widget type to Attachment.
-
+This section briefly describes behaviour of some types of widgets with several configurations.  
 Make use of Value Map widget in your forms to simplify filling the forms during survey.
+
+#### Attachement (External resource) widget
+To be able to attach photos to a survey feature, you will need to have an attribute column in your survey layer. Within the form setting, ensure to set Widget type to Attachment.
+The widget is compatible with field of type QString. It suppose to store absolute/relative path to an image.
+
+##### Field configuration:
+* **Widget type** - **Attachment** as the only option to work with images
+* **Default path** - Defines where an image will be saved. Evaluation of `default path` configuration is in following order:
+    * evaluate default path expression if defined,
+    * use default path value if not empty,
+    * use project home folder.
+    
+* **Relative path**
+    * **unchecked** -  the final value of a attachment field has absolute path,
+    * **relative to project path** - relative to project home folder path (where project file is located),
+    * **relative to default path** - relative to defined default path. See section above if it is not defined. 
+
+
+##### Examples
+Lets define project home folder as 'path/to/project', where a project file is located.
+
+|        default path       	|  relative to 	|                value               	|
+|:-------------------------:	|:------------:	|:----------------------------------:	|
+|             -             	|       -      	|     `<path/to/project>/image.jpg`    	|
+|             -             	| project home 	|              `image.jpg`             	|
+|             -             	| default path 	|              `image.jpg`             	|
+|      `@project_folder`      	|       -      	|     `<path/to/project>/image.jpg`    	|
+|      `@project_folder`      	| project home 	|              `image.jpg`             	|
+|      `@project_folder`      	| default path 	|              `image.jpg`             	|
+| `@project_home + '/photos'` 	|       -      	| `<path/to/project>/photos/image.jpg` 	|
+| `@project_home + '/photos'` 	| project home 	|          `/photos/image.jpg`         	|
+| `@project_home + '/photos'` 	| default path 	|              `image.jpg`             	|
+
+
+#### Date/Time widget
+
+##### Field configuration:
+* **Widget type** - **Date/Time** as the only option to use a date time widget
+* **Field format** - currently supported Date, DateTime, Time, Custom
+* **Widget display** - supported both Default or Custom
+* **Calendar popup** - currently ignored, Input datetime widget **always** acts like it is **checked**
+* **Default value** - has to return a type matching QgsField type
+
+Note that while working with QString fields with a date/time value and format function (used in a default value), 
+it is important to match field format with a given format there.
+
+###QgsField type
+How the result value is saved depends on how a QgsField is defined. Following types are supported:
+
+Default values are marked as "**-**"
+####Type: QString
+|         field format         	|    widget display   	|               default value               	|        value       	|
+|:----------------------------:	|:-------------------:	|:-----------------------------------------:	|:-------------------:	|
+|             Date             	|          -          	|      `format_date(now(), 'yyyy-MM-dd')`     	|      `''2020-09-09'`     	|
+|      Custom (dd/MM/yyyy)     	|      dd/MM/yyyy     	|      `format_date(now(), 'dd/MM/yyyy')`     	|      `'09/09/2020'`     	|
+|             Time             	|          -          	|       `format_date(now(), 'HH:mm:ss')`      	|       `'12:34:56'`      	|
+|       Custom (HH-mm-ss)      	|       HH-mm-ss      	|       `format_date(now(), 'HH-mm-ss')`      	|       `'12-34-56'`      	|
+|           Date Time          	|          -          	| `format_date(now(), 'yyyy-MM-dd HH:mm:ss')` 	| `'2020-09-09 12:34:56'` 	|
+| Custom (dd/MM/yyyy HH-mm-ss) 	| dd/MM/yyyy HH-mm-ss 	| `format_date(now(), 'dd/MM/yyyy HH-mm-ss')` 	| `'09/09/2020 12-34-56'` 	|
+####Type: QDate
+| field format 	| widget display 	| default value 	|   value   	|
+|:------------:	|:--------------:	|:-------------:	|:----------:	|
+|     Date     	|        -       	|       -       	| `0000-00-00` 	|
+|     Date     	|        -       	|     `now()`     	| `2020-09-09` 	|
+|     Date     	|   dd/MM/yyyy   	|     `now()`     	| `09/09/2020` 	|
+
+
+####Type: QDateTime
+| field format 	|    widget display   	| default value 	|        value       	|
+|:------------:	|:-------------------:	|:-------------:	|:-------------------:	|
+|     Time     	|          -          	|       -       	|       `00:00:00`      	|
+|     Time     	|          -          	|     `now()`     	|       `12:34:56`      	|
+|     Time     	|       HH/mm/ss      	|     `now()`     	|       `12/34/56`      	|
+|   Date Time  	|          -          	|       -       	| `0000-00-00 00:00:00` 	|
+|   Date Time  	|          -          	|     `now()`     	| `2020-09-09 12:34:56` 	|
+|   Date Time  	| dd/MM/yyyy hh-mm-ss 	|     `now()`     	| `09/09/2020 12-34-56` 	|
 
 ## Project settings
 
