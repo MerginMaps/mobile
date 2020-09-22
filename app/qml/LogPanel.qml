@@ -23,8 +23,6 @@ Item {
         visible = false
     }
 
-
-
     Pane {
         id: pane
 
@@ -51,8 +49,6 @@ Item {
         }
 
         Flickable {
-          // height: parent.height - InputStyle.rowHeightHeader
-
           anchors.top: header.bottom
           clip: true
           anchors.horizontalCenter: parent.horizontalCenter
@@ -73,43 +69,5 @@ Item {
 
             ScrollBar.vertical: ScrollBar { id: vbar; active: hbar.active }
         }
-/*
-        Rectangle {
-          id: frame
-          clip: true
-          width: root.width - 2 * InputStyle.rowHeightHeader
-          height: parent.height - InputStyle.rowHeightHeader
-          anchors.horizontalCenter: parent.horizontalCenter
-          anchors.top: header.bottom
-
-          Text {
-            id: txt
-            text: root.text
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: InputStyle.fontColor
-            x: -hbar.position * width
-            y: -vbar.position * height
-            textFormat: Text.StyledText
-          }
-
-          ScrollBar {
-            id: vbar
-            orientation: Qt.Vertical
-            size: frame.height / txt.height
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-          }
-
-          ScrollBar {
-            id: hbar
-            orientation: Qt.Horizontal
-            size: frame.width / txt.width
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-          }
-        }
-*/
     }
 }
