@@ -158,7 +158,7 @@ Rectangle {
     width: parent.width
     anchors.bottom: parent.bottom
     text: qsTr("Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2")
-              .arg("<a href='" + __purchasing.subscriptionManageUrl + "'>")
+              .arg("<a href='" + __inputHelp.merginSubscriptionDetailsLink + "'>")
               .arg("</a>")
   }
 }

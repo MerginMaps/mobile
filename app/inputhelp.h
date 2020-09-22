@@ -18,6 +18,8 @@ class InputHelp: public QObject
     Q_OBJECT
 
     Q_PROPERTY( QString privacyPolicyLink READ privacyPolicyLink NOTIFY linkChanged )
+    Q_PROPERTY( QString merginSubscriptionDetailsLink READ merginSubscriptionDetailsLink NOTIFY linkChanged )
+    Q_PROPERTY( QString privacyPolicyLink READ privacyPolicyLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableDigitizingLink READ howToEnableDigitizingLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableBrowsingDataLink READ howToEnableBrowsingDataLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToSetupThemesLink READ howToSetupThemesLink NOTIFY linkChanged )
@@ -31,6 +33,7 @@ class InputHelp: public QObject
     explicit InputHelp();
 
     QString privacyPolicyLink() const;
+    QString merginSubscriptionDetailsLink() const;
     QString howToEnableDigitizingLink() const;
     QString howToEnableBrowsingDataLink() const;
     QString howToSetupThemesLink() const;

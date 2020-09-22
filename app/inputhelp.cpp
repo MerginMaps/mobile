@@ -10,7 +10,7 @@
 #include "inputhelp.h"
 
 const QString inputHelpRoot = "https://help.inputapp.io";
-// const QString merginHelpRoot = "https://help.cloudmergin.com";
+const QString merginHelpRoot = "https://help.cloudmergin.com";
 
 InputHelp::InputHelp()
 {
@@ -20,6 +20,11 @@ InputHelp::InputHelp()
 QString InputHelp::privacyPolicyLink() const
 {
   return inputHelpRoot + "/privacy";
+}
+
+QString InputHelp::merginSubscriptionDetailsLink() const
+{
+  return merginHelpRoot + "/subscription";
 }
 
 QString InputHelp::howToEnableDigitizingLink() const

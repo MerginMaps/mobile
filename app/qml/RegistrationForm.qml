@@ -310,7 +310,7 @@ Rectangle {
         width: registerForm.width
         text: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
               .arg("<a href='"+__merginApi.apiRoot + "assets/EULA.pdf'>")
-              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/privacy_policy.md'>")
+              .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
               .arg("</a>")
       }
     }
