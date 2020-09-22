@@ -20,6 +20,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <algorithm>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
@@ -329,6 +330,24 @@ QString InputUtils::localizedDateFromUTFString( QString timestamp )
   }
 }
 
+void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
+{
+  QString levelStr;
+  switch ( level )
+  {
+    case Qgis::MessageLevel::Warning:
+      levelStr = "Warning";
+      break;
+    case Qgis::MessageLevel::Critical:
+      levelStr = "Error";
+      break;
+    default:
+      break;
+  }
+
+  log( "QGIS " + tag, levelStr + ": " + message );
+}
+
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
 {
   bool result  = true;
@@ -378,6 +397,51 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
   }
   return result;
+}
+
+QString InputUtils::fullLog()
+{
+  QVector<QString> retLines;
+  QString ret;
+
+  QFile file( sLogFile );
+  if ( file.open( QIODevice::ReadOnly ) )
+  {
+    file.seek( file.size() - 1 );
+    int count = 0;
+    int lines = 1000;
+    while ( ( count < lines ) && ( file.pos() > 0 ) )
+    {
+      QString ch = file.read( 1 );
+      file.seek( file.pos() - 2 );
+      if ( ch == "\n" )
+        count++;
+    }
+
+    QString line = file.readLine();
+    while ( !line.isNull() )
+    {
+      retLines.push_back( line );
+      line = file.readLine();
+    }
+
+    std::reverse( std::begin( retLines ), std::end( retLines ) );
+
+    QString ret;
+    for ( const QString &str : retLines )
+    {
+      ret += str.trimmed() + "<br/>" + "<br/>";
+    }
+
+    file.close();
+    return ret;
+  }
+  else
+  {
+    ret = QString( "Unable to open log file %1" ).arg( sLogFile );
+  }
+
+  return ret;
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )

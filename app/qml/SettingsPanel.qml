@@ -227,12 +227,30 @@ Page {
                    onClicked: aboutPanel.visible = true
                }
            }
+
+           // Debug/Logging
+          PanelItem {
+              text: qsTr("Reports")
+              MouseArea {
+                  anchors.fill: parent
+                  onClicked: {
+                    logPanel.text = __inputUtils.fullLog()
+                    logPanel.visible = true
+                  }
+              }
+          }
         }
 
     }
 
     AboutPanel {
         id: aboutPanel
+        anchors.fill: parent
+        visible: false
+    }
+
+    LogPanel {
+        id: logPanel
         anchors.fill: parent
         visible: false
     }
