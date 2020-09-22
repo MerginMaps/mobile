@@ -17,7 +17,7 @@
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
 #include "qgsquickpositionkit.h"
-
+#include "qgis.h"
 
 class InputUtils: public QObject
 {
@@ -89,8 +89,25 @@ class InputUtils: public QObject
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
+    /**
+     * Reads and returns the internal text log file content
+     *
+     * The latest messages in the log come at the beginning. Only last 1000 lines are read.
+     *
+     * \see log()
+     */
+    Q_INVOKABLE static QString fullLog();
+
+    /**
+     * Add a log entry to internal log text file
+     *
+     * \see setLogFilename()
+     */
     static void log( const QString &topic, const QString &info );
 
+    /**
+     * Sets the filename of the internal text log file
+     */
     static void setLogFilename( const QString &value );
 
     static QString filesToString( QList<MerginFile> files );
@@ -103,6 +120,9 @@ class InputUtils: public QObject
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
+
+  public slots:
+    void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
   private:
 

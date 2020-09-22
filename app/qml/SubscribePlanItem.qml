@@ -22,6 +22,8 @@ Item {
   property var plan
   property string name
 
+  property bool hasPlan: __merginApi.userInfo.ownsActiveSubscription || !root.plan
+
   Column {
     width: parent.width
     spacing: 5
@@ -37,13 +39,13 @@ Item {
     TextWithIcon {
       width: parent.width
       source: 'ic_today.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
+      text: hasPlan ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
       source: 'database-solid.svg'
-      text: __merginApi.userInfo.ownsActiveSubscription ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
+      text: hasPlan ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
@@ -70,7 +72,7 @@ Item {
       anchors.horizontalCenter: parent.horizontalCenter
 
       height: InputStyle.rowHeightHeader
-      text: __merginApi.userInfo.ownsActiveSubscription ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
+      text: hasPlan ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
       enabled: text !== ''
       font.pixelSize: subscribeButton.height / 2
 

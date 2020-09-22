@@ -393,6 +393,10 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( QgsApplication::messageLog(),
+                    static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
+                    &iu,
+                    &InputUtils::onQgsLogMessageReceived );
 
   QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
