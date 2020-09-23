@@ -59,6 +59,7 @@ class TestMerginApi: public QObject
     void testDiffUpdateWithRebaseFailed();
     void testUpdateWithDiffs();
     void testUpdateWithMissedVersion();
+    void testHasWriteAccess();
 
     void testRegister();
 
