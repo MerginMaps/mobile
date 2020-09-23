@@ -26,8 +26,8 @@ only allows you to delete or copy data folder to another location. Instructions 
 * Plug iOS device to a computer
 * Open `Finder` file browser
 * Go to Locations -> <device_name> 
-<img src="images/itunes.png" alt="iTunes" style="width: 50%; height: 50%"/>​
+<img src="images/itunes.png" alt="iTunes" style="width: 25%; height: 25%"/>​
 * Click on the tab named `files`  
-<img src="images/itunes2.png" alt="iTunes apps data" style="width: 50%; height: 50%"/>​
+<img src="images/itunes2.png" alt="iTunes apps data" style="width: 25%; height: 25%"/>​
 * Select `Input` app from a list to see a data folder
 * Drag-and-drop the INPUT` folder to another location to see the content
