@@ -17,6 +17,7 @@
 
 #include "qgsquickmaptransform.h"
 
+#include <Qt>
 #include <QFile>
 #include <QFileInfo>
 #include <QRegularExpression>
@@ -399,7 +400,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   return result;
 }
 
-QString InputUtils::fullLog()
+QString InputUtils::fullLog( int limit )
 {
   QVector<QString> retLines;
   QString ret;
@@ -409,8 +410,7 @@ QString InputUtils::fullLog()
   {
     file.seek( file.size() - 1 );
     int count = 0;
-    int lines = 1000;
-    while ( ( count < lines ) && ( file.pos() > 0 ) )
+    while ( ( count < limit ) && ( file.pos() > 0 ) )
     {
       QString ch = file.read( 1 );
       file.seek( file.pos() - 2 );
@@ -442,6 +442,11 @@ QString InputUtils::fullLog()
   }
 
   return ret;
+}
+
+void InputUtils::submitReport()
+{
+  // TODO
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )
