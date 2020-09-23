@@ -1085,7 +1085,7 @@ bool MerginApi::hasWriteAccess( const QString &projectFullName )
   LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   QString projectDir = projectInfo.projectDir;
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  return projectMetadata.writers.contains( mUserAuth->userId() );
+  return projectMetadata.writersnames.contains( mUserAuth->username() );
 }
 
 QString MerginApi::apiRoot() const

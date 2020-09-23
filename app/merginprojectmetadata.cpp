@@ -101,10 +101,10 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
   QJsonValue access = docObj.value( QStringLiteral( "access" ) );
   if ( access.isObject() )
   {
-    QJsonArray writers = access.toObject().value( "writers" ).toArray();
-    for ( QJsonValueRef tag : writers )
+    QJsonArray writersnames = access.toObject().value( "writersnames" ).toArray();
+    for ( QJsonValueRef tag : writersnames )
     {
-      project.writers.append( tag.toInt() );
+      project.writersnames.append( tag.toString() );
     }
   }
 
