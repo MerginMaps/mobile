@@ -249,7 +249,7 @@ void Purchasing::evaluateHasInAppPurchases()
 void Purchasing::onHasInAppPurchasesChanged()
 {
   bool hasManageCapability = false;
-  QString subscriptionManageUrl = mMerginApi->apiRoot() + "subscriptions";
+  QString subscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
   QString subscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
 
   if ( hasInAppPurchases() )
@@ -647,7 +647,7 @@ void Purchasing::setSubscriptionBillingUrl( const QString &subscriptionBillingUr
 
 void Purchasing::setDefaultUrls()
 {
-  mSubscriptionManageUrl = mMerginApi->apiRoot() + "subscriptions";
+  mSubscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
   emit subscriptionManageUrlChanged();
   mSubscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
   emit subscriptionBillingUrlChanged();
