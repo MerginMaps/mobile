@@ -92,11 +92,14 @@ class InputUtils: public QObject
     /**
      * Reads and returns the internal text log file content
      *
-     * The latest messages in the log come at the beginning. Only last 1000 lines are read.
+     * The latest messages in the log come at the beginning. Only last \p limit lines are read.
      *
      * \see log()
      */
-    Q_INVOKABLE static QString fullLog();
+    Q_INVOKABLE static QString fullLog( int limit = 1000 );
+
+    /** Submit user log */
+    Q_INVOKABLE static void submitReport();
 
     /**
      * Add a log entry to internal log text file

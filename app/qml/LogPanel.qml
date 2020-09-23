@@ -49,11 +49,12 @@ Item {
         }
 
         Flickable {
+          id: flickableItem
           anchors.top: header.bottom
           clip: true
           anchors.horizontalCenter: parent.horizontalCenter
           width: root.width - 2 * InputStyle.rowHeightHeader
-          height: parent.height - InputStyle.rowHeightHeader
+          height: parent.height - 2 * InputStyle.rowHeightHeader
           contentHeight: txt.height
           contentWidth: width
 
@@ -67,7 +68,37 @@ Item {
               width: parent.width
             }
 
-            ScrollBar.vertical: ScrollBar { id: vbar; active: hbar.active }
+            ScrollBar.vertical: ScrollBar { id: vbar }
+        }
+
+        Button {
+          anchors.top: flickableItem.bottom
+          id: sendButton
+          width: root.width - 2 * InputStyle.rowHeightHeader
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          height: InputStyle.rowHeightHeader
+          text: qsTr("Submit Report")
+          font.pixelSize: sendButton.height / 2
+
+          background: Rectangle {
+            color: InputStyle.fontColor
+          }
+
+          onClicked: {
+            __inputUtils.submitReport();
+          }
+
+          contentItem: Text {
+            text: sendButton.text
+            font: sendButton.font
+            opacity: enabled ? 1.0 : 0.3
+            color: "white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
+
         }
     }
 }
