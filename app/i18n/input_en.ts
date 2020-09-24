@@ -12,57 +12,57 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="47"/>
-        <source>Account</source>
-        <translation>Account</translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="123"/>
-        <source>Your subscription will not be extended after %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="134"/>
-        <source>Please fix your %1billing details%2 as soon as possible</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="146"/>
-        <source>Your next bill is for %1 on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="157"/>
+        <location filename="../qml/AccountPage.qml" line="150"/>
         <source>Your subscription was cancelled on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="183"/>
-        <source>Using %1/%2</source>
+        <location filename="../qml/AccountPage.qml" line="47"/>
+        <source>My Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="201"/>
-        <source>Transaction Pending...</source>
+        <location filename="../qml/AccountPage.qml" line="122"/>
+        <source>Your subscription will not auto-renew after %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="201"/>
+        <location filename="../qml/AccountPage.qml" line="131"/>
+        <source>Please update your %1billing details%2 as soon as possible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="141"/>
+        <source>Your next bill will be for %1 on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="175"/>
+        <source>Using %1 / %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="193"/>
         <source>Manage Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="201"/>
+        <location filename="../qml/AccountPage.qml" line="193"/>
         <source>Buy Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="237"/>
+        <location filename="../qml/AccountPage.qml" line="193"/>
+        <source>Working...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="229"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="256"/>
+        <location filename="../qml/AccountPage.qml" line="248"/>
         <source>Sign out</source>
         <translation>Sign out</translation>
     </message>
@@ -70,34 +70,34 @@
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/ActiveLayerPanel.qml" line="17"/>
-        <source>Survey Layer</source>
-        <translation>Survey Layer</translation>
+        <location filename="../qml/ActiveLayerPanel.qml" line="50"/>
+        <source>Choose Active Layer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ActiveLayerPanel.qml" line="51"/>
-        <source>Select Active Layer</source>
-        <translation>Select Active Layer</translation>
+        <location filename="../qml/ActiveLayerPanel.qml" line="63"/>
+        <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AuthPanel</name>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="139"/>
-        <source>Mergin server has been updated. Please, update Input app to enable Mergin functionality.</source>
-        <translation>Mergin server has been updated. Please, update Input app to enable Mergin functionality.</translation>
+        <location filename="../qml/AuthPanel.qml" line="123"/>
+        <source>Please update Input to use the latest Mergin features.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="143"/>
-        <source>Mergin server unavailable.</source>
-        <translation>Mergin server unavailable.</translation>
+        <location filename="../qml/AuthPanel.qml" line="127"/>
+        <source>Mergin is currently unavailable - please try again later.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BrowseDataFeaturesPanel</name>
     <message>
         <location filename="../qml/BrowseDataFeaturesPanel.qml" line="45"/>
-        <source>Too many features in layer, showing first %1</source>
+        <source>Showing only the first %1 features</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -110,7 +110,7 @@
     </message>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="46"/>
-        <source>No identifiable layers in the project!</source>
+        <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -136,26 +136,26 @@
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
-        <source>Delete photo</source>
-        <translation>Delete photo</translation>
+        <source>Remove photo reference</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
-        <source>Would you like to permanently delete the image file?</source>
-        <translation>Would you like to permanently delete the image file?</translation>
+        <source>Also permanently delete photo from device?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FeaturePanel</name>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="132"/>
-        <source>Edit Object</source>
-        <translation>Edit Object</translation>
+        <source>Edit Feature</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="132"/>
-        <source>Object</source>
-        <translation>Object</translation>
+        <source>Feature</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="151"/>
@@ -169,8 +169,8 @@
     </message>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="277"/>
-        <source>Really delete this feature?</source>
-        <translation>Really delete this feature?</translation>
+        <source>Are you sure you want to delete this feature?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -197,45 +197,37 @@
     </message>
 </context>
 <context>
-    <name>LayerList</name>
-    <message>
-        <location filename="../qml/LayerList.qml" line="12"/>
-        <source>No editable layers in the project!</source>
-        <translation type="unfinished">No editable layers in the project!</translation>
-    </message>
-</context>
-<context>
     <name>LocalProjectsManager</name>
     <message>
         <location filename="../localprojectsmanager.cpp" line="199"/>
-        <source>Multiple QGIS project files</source>
+        <source>Found multiple QGIS project files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../localprojectsmanager.cpp" line="204"/>
-        <source>Missing QGIS project file</source>
+        <source>Failed to find a QGIS project file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="95"/>
+        <location filename="../qml/LoginForm.qml" line="86"/>
         <source>Username</source>
         <translation type="unfinished">Username</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="161"/>
+        <location filename="../qml/LoginForm.qml" line="152"/>
         <source>Password</source>
         <translation type="unfinished">Password</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="187"/>
+        <location filename="../qml/LoginForm.qml" line="178"/>
         <source>Sign in</source>
         <translation type="unfinished">Sign in</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="257"/>
+        <location filename="../qml/LoginForm.qml" line="248"/>
         <source>Sign up</source>
         <translation type="unfinished">Sign up</translation>
     </message>
@@ -262,13 +254,11 @@
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="143"/>
-        <location filename="../qml/MainPanel.qml" line="322"/>
         <source>Zoom to project</source>
         <translation>Zoom to project</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="162"/>
-        <location filename="../qml/MainPanel.qml" line="341"/>
         <source>Browse data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,6 +284,16 @@
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="322"/>
+        <source>Zoom full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="341"/>
+        <source>Browse features</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MapThemePanel</name>
@@ -303,46 +303,46 @@
         <translation>Map Themes</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="72"/>
-        <source>No themes in the project!</source>
-        <translation>No themes in the project!</translation>
+        <location filename="../qml/MapThemePanel.qml" line="70"/>
+        <source>Project has no themes defined. See %1how to setup themes%2.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="545"/>
+        <location filename="../merginapi.cpp" line="547"/>
         <source>Username must have at least 4 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="552"/>
-        <source>Please enter valid email</source>
+        <location filename="../merginapi.cpp" line="554"/>
+        <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="559"/>
-        <source>Password in not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <location filename="../merginapi.cpp" line="561"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="572"/>
+        <location filename="../merginapi.cpp" line="574"/>
         <source>Passwords do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="579"/>
+        <location filename="../merginapi.cpp" line="581"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="800"/>
-        <source>Registration successful.%1 You may now sign in.</source>
+        <location filename="../merginapi.cpp" line="802"/>
+        <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="818"/>
-        <source>Registration is disabled on the Mergin server.</source>
+        <location filename="../merginapi.cpp" line="820"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -352,17 +352,6 @@
         <location filename="../qml/MerginProjectPanel.qml" line="175"/>
         <source>Projects</source>
         <translation>Projects</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
-        <source>Explore public Mergin projects!</source>
-        <translatorcomment>Explore public Mergin projects!</translatorcomment>
-        <translation>Explore public Mergin projects!</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
-        <source>No projects found.%1See %2how to create a project%3 and %4how to download it%3 to your device.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="380"/>
@@ -375,20 +364,29 @@
         <translation>No projects found!</translation>
     </message>
     <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
+        <source>Explore public projects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
+        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/MerginProjectPanel.qml" line="432"/>
-        <source>Project status</source>
-        <translation>Project status</translation>
+        <source>Status</source>
+        <translation type="unfinished">Status</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="444"/>
-        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
-        <source>Delete project</source>
-        <translation>Delete project</translation>
+        <source>Remove from device</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="500"/>
-        <source>No write access</source>
-        <translation>No write access</translation>
+        <source>You&apos;ve not been granted write access by the project owner</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="547"/>
@@ -416,26 +414,31 @@
         <translation>Explore</translation>
     </message>
     <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
+        <source>Remove project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/MerginProjectPanel.qml" line="690"/>
-        <source>Do you really want to delete project?</source>
-        <translation>Do you really want to delete project?</translation>
+        <source>Any unsynchronized changes will be lost.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="727"/>
-        <source>Try again</source>
-        <translation>Try again</translation>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MerginProjectStatusModel</name>
     <message>
         <location filename="../merginprojectstatusmodel.cpp" line="70"/>
-        <source>Changes</source>
+        <source>Pending Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../merginprojectstatusmodel.cpp" line="96"/>
-        <source>Unable to determine changes</source>
+        <source>Failed to determine changes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -451,8 +454,8 @@
     <name>ProjectLoadingScreen</name>
     <message>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
-        <source>Project loading ...</source>
-        <translation>Project loading ...</translation>
+        <source>Opening project ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -464,15 +467,15 @@
     </message>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="44"/>
-        <source>Status</source>
-        <translation>Status</translation>
+        <source>Project Status</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Purchasing</name>
     <message>
         <location filename="../purchasing.cpp" line="517"/>
-        <source>Failed to initialize subscribe transaction </source>
+        <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -482,17 +485,17 @@
     </message>
     <message>
         <location filename="../purchasing.cpp" line="527"/>
-        <source>Successfully purchased the subscription</source>
+        <source>Successfully purchased subscription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../purchasing.cpp" line="539"/>
+        <source>Failed to purchase subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="537"/>
         <source>Unable to restore your subscription</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="539"/>
-        <source>Failed to create your subscription</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -505,7 +508,7 @@
     </message>
     <message>
         <location filename="../purchasing.cpp" line="121"/>
-        <source>Yearly subscription</source>
+        <source>Annual subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -652,32 +655,32 @@
 <context>
     <name>RegistrationForm</name>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="96"/>
+        <location filename="../qml/RegistrationForm.qml" line="91"/>
         <source>Username</source>
         <translation type="unfinished">Username</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="151"/>
+        <location filename="../qml/RegistrationForm.qml" line="146"/>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="216"/>
+        <location filename="../qml/RegistrationForm.qml" line="211"/>
         <source>Password</source>
         <translation type="unfinished">Password</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="284"/>
+        <location filename="../qml/RegistrationForm.qml" line="279"/>
         <source>Confirm Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="317"/>
-        <source>Accept %1Terms%3 and %2Privacy Policy%3</source>
+        <location filename="../qml/RegistrationForm.qml" line="311"/>
+        <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="340"/>
+        <location filename="../qml/RegistrationForm.qml" line="333"/>
         <source>Sign up</source>
         <translation type="unfinished">Sign up</translation>
     </message>
@@ -748,8 +751,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="164"/>
-        <source>Your Mergin storage plan will automatically renew. You can cancel or change at any time. %1Learn More%2</source>
+        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -779,43 +782,33 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="31"/>
-        <source>Input</source>
-        <translation>Input</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="96"/>
         <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="427"/>
-        <source>Autocenter mode on</source>
-        <translation>Autocenter mode on</translation>
+        <source>GPS auto-center mode on</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="427"/>
-        <source>Autocenter mode off</source>
-        <translation>Autocenter mode off</translation>
+        <source>GPS auto-center mode off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="444"/>
-        <source>No editable layers!</source>
-        <translation>No editable layers!</translation>
+        <location filename="../qml/main.qml" line="443"/>
+        <source>No editable layers found.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="479"/>
-        <source>The GPS is currently not available</source>
-        <translation>The GPS is currently not available</translation>
+        <location filename="../qml/main.qml" line="477"/>
+        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="648"/>
-        <source>Synchronization error</source>
-        <translation>Synchronization error</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="655"/>
-        <source>Unknown network error</source>
+        <location filename="../qml/main.qml" line="645"/>
+        <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
