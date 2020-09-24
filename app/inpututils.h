@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <QUuid>
+#include "inputhelp.h"
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"

@@ -57,7 +57,8 @@ Row {
     font.pixelSize: InputStyle.fontPixelSizeNormal
     onLinkActivated: root.linkActivated(link)
     color: root.fontColor
-    text: root.text
+    text: "<style>a:link { color: " + InputStyle.highlightColor
+          + "; text-decoration: underline; }</style>" + root.text
     textFormat: Text.RichText
     wrapMode: Text.WordWrap
   }

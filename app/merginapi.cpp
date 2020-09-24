@@ -551,14 +551,14 @@ void MerginApi::registerUser( const QString &username,
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
     emit registrationFailed();
-    emit notify( tr( "Please enter valid email" ) );
+    emit notify( tr( "Please enter a valid email" ) );
     return;
   }
 
   if ( password.isEmpty() || password.length() < 8 )
   {
     emit registrationFailed();
-    QString msg = tr( "Password in not strong enough. It must"
+    QString msg = tr( "Password not strong enough. It must"
                       "%1 be at least 8 characters long"
                       "%1 contain lowercase characters"
                       "%1 contain uppercase characters"
@@ -799,7 +799,7 @@ void MerginApi::registrationFinished()
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.%1 You may now sign in." ).arg( "<br>" );
+    QString msg = tr( "Registration successful.%1 You should now be able to sign in." ).arg( "<br>" );
     emit notify( msg );
   }
   else
@@ -817,7 +817,7 @@ void MerginApi::registrationFinished()
     {
       // the self-registration is not allowed on the server
       emit registrationFailed();
-      emit notify( tr( "Registration is disabled on the Mergin server." ) );
+      emit notify( tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "<br/>" ) );
     }
     else
     {

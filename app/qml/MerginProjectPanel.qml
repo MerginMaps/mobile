@@ -274,7 +274,7 @@ Item {
         wrapMode: Text.WordWrap
         color: InputStyle.panelBackgroundDarker
         font.pixelSize: InputStyle.fontPixelSizeNormal
-        text: qsTr("Explore public Mergin projects!")
+        text: qsTr("Explore public projects.")
         visible: parent.height
       }
 
@@ -342,11 +342,11 @@ Item {
         anchors.fill: parent
         textFormat: Text.RichText
         text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
-              qsTr("No projects found.%1See %2how to create a project%3 and %4how to download it%3 to your device.")
-              .arg("<br/")
-              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/project_config.md'>")
+              qsTr("No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.")
+              .arg("<br/>")
+              .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
               .arg("</a>")
-              .arg("<a href='https://github.com/lutraconsulting/input/blob/master/docs/users/data_sync.md'>")      
+              .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
         onLinkActivated: Qt.openUrlExternally(link)
         visible: grid.count === 0
@@ -429,7 +429,7 @@ Item {
               height: parent.height
               rowHeight: parent.height
               width: parent.width
-              contentText: qsTr("Project status")
+              contentText: qsTr("Status")
               imageSource: InputStyle.infoIcon
               overlayImage: true
           }
@@ -441,7 +441,7 @@ Item {
               height: parent.height
               rowHeight: parent.height
               width: parent.width
-              contentText: qsTr("Delete project")
+              contentText: qsTr("Remove from device")
               imageSource: InputStyle.removeIcon
               overlayImage: true
           }
@@ -497,7 +497,7 @@ Item {
           if (__merginApi.hasWriteAccess(projectFullName)) {
             __merginApi.uploadProject(projectNamespace, projectName)
           } else {
-            __inputUtils.showNotification(qsTr("No write access"))
+            __inputUtils.showNotification(qsTr("You've not been granted write access by the project owner"))
           }
         }
       }
@@ -686,8 +686,8 @@ Item {
     visible: false
     property int relatedProjectIndex
 
-    title: qsTr( "Delete project" )
-    text: qsTr( "Do you really want to delete project?" )
+    title: qsTr( "Remove project" )
+    text: qsTr( "Any unsynchronized changes will be lost." )
     icon: StandardIcon.Warning
     standardButtons: StandardButton.Ok | StandardButton.Cancel
 
@@ -724,7 +724,7 @@ Item {
         id: reloadBtn
         width: reloadList.width - 2* InputStyle.panelMargin
         height: reloadList.height
-        text: qsTr("Try again")
+        text: qsTr("Retry")
         font.pixelSize: reloadBtn.height/2
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {

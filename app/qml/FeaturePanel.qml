@@ -129,7 +129,7 @@ Drawer {
             width: parent.width
             color: InputStyle.clrPanelMain
             rowHeight: InputStyle.rowHeightHeader
-            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Object") : qsTr("Object")
+            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
 
             onBack: featurePanel.visible = false
         }
@@ -274,7 +274,7 @@ Drawer {
           id: deleteDialog
           visible: false
           title: qsTr( "Delete feature" )
-          text: qsTr( "Really delete this feature?" )
+          text: qsTr( "Are you sure you want to delete this feature?" )
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Ok | StandardButton.Cancel
 

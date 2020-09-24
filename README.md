@@ -29,7 +29,7 @@ Click here to download the app on your mobile device:
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
 </p>
 
-For more information on how to use the app, see [Documentation](#documentation)
+For more information on how to use the app, see [Documentation](https://help.inputapp.io)
 
 ## Features
 
@@ -50,17 +50,11 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 ## Documentation
 
-- [FAQ](docs/users/faq.md)
-- [Introduction](docs/users/introduction.md)
-- [Project configuration](docs/users/project_config.md)
-- [Moving data between desktop and mobile](docs/users/data_sync.md)
-- [Capturing data and editing forms using Input](docs/users/using_input.md)
-- [Input user interface](docs/users/input_ui.md)
-- [License](docs/users/licensing.md)
+Read more about the app [help.inputapp.io](https://help.inputapp.io)
 
 ## Developers
 
 For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
 
 ## Privacy policy
-Read more about the app privacy policy [here](privacy_policy.md)
+Read more about the app privacy policy [here](https://help.inputapp.io/privacy)

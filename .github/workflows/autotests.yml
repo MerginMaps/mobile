@@ -83,6 +83,11 @@ jobs:
           install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
           install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
 
+      - name: run help links tests
+        run: |
+          cd build-Input/
+          ./Input.app/Contents/MacOS/Input --testLinks
+
       - name: run mergin api tests
         run: |
           cd build-Input/

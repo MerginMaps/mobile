@@ -42,7 +42,7 @@ Item {
 
   Component.onCompleted: {
     if ( featuresCount > featuresLimit )
-      __inputUtils.showNotification( qsTr( "Too many features in layer, showing first %1" ).arg( featuresLimit ) )
+      __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresLimit ) )
   }
 
   Page {

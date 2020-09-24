@@ -90,15 +90,11 @@ T.CheckBox {
         ]
     }
 
-    contentItem: Text {
+    contentItem: TextHyperlink {
         leftPadding: control.indicator.width + 2 * spaceWidth
-        textFormat: Text.RichText
-        onLinkActivated: Qt.openUrlExternally(link)
         color: baseColor
-        font.pixelSize: InputStyle.fontPixelSizeNormal
         text: control.text
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
     }
 }

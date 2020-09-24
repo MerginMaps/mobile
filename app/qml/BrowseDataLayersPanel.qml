@@ -43,7 +43,9 @@ Item {
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
         highlightingAllowed: false
-        noLayersText: qsTr("No identifiable layers in the project!")
+        noLayersText: qsTr("No layers have been configured to allow browsing their features. See %1how to modify your project%2.")
+                      .arg("<a href='"+ __inputHelp.howToEnableBrowsingDataLink +"'>")
+                      .arg("</a>")
 
         onListItemClicked: {
           layerClicked( layerId )

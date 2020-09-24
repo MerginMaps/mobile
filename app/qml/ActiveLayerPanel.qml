@@ -14,7 +14,6 @@ import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Drawer {
-    property string title: qsTr("Survey Layer")
     property string activeLayerId: __activeLayer.layerId
 
     signal activeLayerChangeRequested( var layerId )
@@ -48,7 +47,7 @@ Drawer {
       width: parent.width
       color: InputStyle.panelBackgroundLight
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Select Active Layer")
+      titleText: qsTr("Choose Active Layer")
       backTextVisible: false
       onBack: layerPanel.close()
       withBackButton: true
@@ -61,6 +60,10 @@ Drawer {
         width: parent.width
         y: header.height
         model: __recordingLayersModel
+        noLayersText: qsTr("Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.")
+                      .arg("<a href='"+ __inputHelp.howToEnableDigitizingLink +"'>")
+                      .arg("</a>")
+
         activeLayerId: layerPanel.activeLayerId
 
         cellWidth: width

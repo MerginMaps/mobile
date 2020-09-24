@@ -44,7 +44,7 @@ Page {
     width: parent.width
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Account")
+    titleText: qsTr("My Account")
     onBack: backClicked()
     withBackButton: true
   }
@@ -119,9 +119,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
       width: parent.width
       source: 'info.svg'
-      text: "<style>a:link { color: " + InputStyle.highlightColor
-            + "; text-decoration: underline; }</style>" + qsTr(
-              "Your subscription will not be extended after %1")
+      text: qsTr("Your subscription will not auto-renew after %1")
             .arg(root.subscriptionsTimestamp)
     }
 
@@ -130,9 +128,7 @@ Page {
       width: parent.width
       source: 'exclamation-triangle-solid.svg'
       onLinkActivated: Qt.openUrlExternally(link)
-      text: "<style>a:link { color: " + InputStyle.highlightColor
-            + "; text-decoration: underline; }</style>" + qsTr(
-              "Please fix your %1billing details%2 as soon as possible")
+      text: qsTr("Please update your %1billing details%2 as soon as possible")
               .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
               .arg("</a>")
       iconColor: InputStyle.highlightColor
@@ -142,9 +138,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
       width: parent.width
       source: 'ic_today.svg'
-      text: "<style>a:link { color: " + InputStyle.highlightColor
-            + "; text-decoration: underline; }</style>" + qsTr(
-              "Your next bill is for %1 on %2")
+      text: qsTr("Your next bill will be for %1 on %2")
       .arg(root.nextBillPrice)
       .arg(root.subscriptionsTimestamp)
     }
@@ -153,9 +147,7 @@ Page {
       visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
       width: parent.width
       source: 'ic_today.svg'
-      text: "<style>a:link { color: " + InputStyle.highlightColor
-              + "; text-decoration: underline; }</style>" + qsTr(
-                "Your subscription was cancelled on %1")
+      text: qsTr("Your subscription was cancelled on %1")
             .arg(root.subscriptionsTimestamp)
     }
 
@@ -180,7 +172,7 @@ Page {
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
-        text: qsTr("Using %1/%2").arg(__inputUtils.bytesToHumanSize(root.diskUsage)).arg(__inputUtils.bytesToHumanSize(root.storageLimit))
+        text: qsTr("Using %1 / %2").arg(__inputUtils.bytesToHumanSize(root.diskUsage)).arg(__inputUtils.bytesToHumanSize(root.storageLimit))
       }
     }
 
@@ -198,7 +190,7 @@ Page {
       visible: __merginApi.apiSupportsSubscriptions
 
       height: InputStyle.rowHeightHeader
-      text: __purchasing.transactionPending ? qsTr("Transaction Pending...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Buy Subscription")
+      text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Buy Subscription")
       font.pixelSize: subscribeButton.height / 2
 
       background: Rectangle {

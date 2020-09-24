@@ -50,5 +50,6 @@
         <file>SearchBar.qml</file>
         <file>SubscribePlanItem.qml</file>
         <file>ValueRelationWidget.qml</file>
+        <file>TextHyperlink.qml</file>
     </qresource>
 </RCC>

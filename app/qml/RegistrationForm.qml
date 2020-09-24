@@ -308,12 +308,10 @@ Rectangle {
         baseColor: root.fontColor
         height: fieldHeight
         width: registerForm.width
-        text: "<style>a:link { color: " + root.fontColor
-              + "; text-decoration: underline; }</style>" + qsTr(
-                "Accept %1Terms%3 and %2Privacy Policy%3")
-            .arg("<a href='"+__merginApi.apiRoot + "assets/EULA.pdf'>")
-            .arg("<a href='https://github.com/lutraconsulting/input/blob/master/privacy_policy.md'>")
-            .arg("</a>")
+        text: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
+              .arg("<a href='"+__merginApi.apiRoot + "assets/EULA.pdf'>")
+              .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
+              .arg("</a>")
       }
     }
 
