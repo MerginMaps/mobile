@@ -55,6 +55,7 @@ ApplicationWindow {
             if (stateManager.state === "view") {
                 recordToolbar.visible = false
                 mainPanel.focus = true
+                digitizing.stopRecording();
             }
             else if (stateManager.state === "record") {
                 updateRecordToolbar()
@@ -497,7 +498,6 @@ ApplicationWindow {
                 featurePanel.show_panel(featurePanel.feature, "Edit", "form")
             }
             stateManager.state = "view"
-            digitizing.stopRecording();
             digitizingHighlight.visible = false
         }
 
@@ -506,7 +506,6 @@ ApplicationWindow {
         }
 
          onStopRecordingClicked: {
-             digitizing.stopRecording()
              var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
