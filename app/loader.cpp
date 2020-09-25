@@ -147,7 +147,7 @@ void Loader::setMapSettingsLayers() const
     if ( nodeLayer->isVisible() )
     {
       QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer->isValid() )
+      if ( layer && layer->isValid() )
       {
         allLayers << layer;
       }
