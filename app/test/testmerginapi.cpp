@@ -13,6 +13,7 @@
 #include "merginuserinfo.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
+const QString TestMerginApi::TEST_EMPTY_FILE_NAME = "test_empty_file.md";
 
 
 static MerginProjectListEntry _findProjectByName( const QString &projectNamespace, const QString &projectName, const MerginProjectList &projects )
@@ -84,6 +85,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testCreateProjectTwice" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
+  deleteRemoteProject( mApiExtra, mUsername, "testEmptyFileUploadDownload" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpload" );
   deleteRemoteProject( mApiExtra, mUsername, "testDiffSubdirsUpload" );
@@ -459,6 +461,39 @@ void TestMerginApi::testMultiChunkUploadDownload()
   // verify it's there and with correct content
   QByteArray checksum2 = MerginApi::getChecksum( bigFilePath );
   QVERIFY( QFileInfo::exists( bigFilePath ) );
+  QCOMPARE( checksum, checksum2 );
+}
+
+void TestMerginApi::testEmptyFileUploadDownload()
+{
+  // test will try to upload a project with empty file
+
+  QString projectName = QStringLiteral( "testEmptyFileUploadDownload" );
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QString emptyFileDestinationPath = mApi->projectsPath() + "/" + projectName + "/" + TEST_EMPTY_FILE_NAME;
+
+  // copy empty file to project
+  QFile::copy( mTestDataPath + "/" + TEST_EMPTY_FILE_NAME, emptyFileDestinationPath );
+  QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
+
+  QByteArray checksum = MerginApi::getChecksum( emptyFileDestinationPath );
+  QVERIFY( !checksum.isEmpty() );
+
+  //upload
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  //download again
+  deleteLocalProject( mApi, mUsername, projectName );
+  QVERIFY( !QFileInfo::exists( emptyFileDestinationPath ) );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // verify it's there and with correct content
+  QByteArray checksum2 = MerginApi::getChecksum( emptyFileDestinationPath );
+  QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
   QCOMPARE( checksum, checksum2 );
 }
 

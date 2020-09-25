@@ -27,6 +27,7 @@ class TestMerginApi: public QObject
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
+    static const QString TEST_EMPTY_FILE_NAME;
 
   private slots:
 
@@ -42,6 +43,7 @@ class TestMerginApi: public QObject
     void testCreateDeleteProject();
     void testUploadProject();
     void testMultiChunkUploadDownload();
+    void testEmptyFileUploadDownload();
     void testPushAddedFile();
     void testPushRemovedFile();
     void testPushModifiedFile();
