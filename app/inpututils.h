@@ -98,8 +98,8 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString fullLog( int limit = 1000 );
 
-    /** Submit user log */
-    Q_INVOKABLE static void submitReport();
+    /** Submit user log*/
+    Q_INVOKABLE void submitReport();
 
     /**
      * Add a log entry to internal log text file
@@ -126,6 +126,7 @@ class InputUtils: public QObject
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
+    void onSubmitReportReplyFinished();
 
   private:
 

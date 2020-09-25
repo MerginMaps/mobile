@@ -22,9 +22,12 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <algorithm>
+#include <QNetworkReply>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
+static const QString reportLogUrl = QStringLiteral("https://opl1bkwxhg.execute-api.us-east-1.amazonaws.com/default/md_test_function");
+static const QString helpDeskMail = QStringLiteral("info@lutraconsulting.co.uk");
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -446,7 +449,25 @@ QString InputUtils::fullLog( int limit )
 
 void InputUtils::submitReport()
 {
-  // TODO
+  reportLogUrl
+}
+
+void InputUtils::onSubmitReportReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QString remoteLogName = "TODO";
+    InputUtils::log( "submit report", "Report submitted " + remoteLogName );
+    emit showNotification( tr("Report submitted.%1Please contact out help-desk on email %1%2%1 with the details of your problem.").arg(helpDeskMail) );
+  }
+  else
+  {
+    InputUtils::log("submit report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    emit showNotification( tr("Failed to submit report, please check your internet connection.") );
+  }
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )
