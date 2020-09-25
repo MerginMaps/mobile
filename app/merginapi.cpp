@@ -2194,6 +2194,12 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
 {
   qreal rawNoOfChunks = qreal( fileSize ) / UPLOAD_CHUNK_SIZE;
   int noOfChunks = qCeil( rawNoOfChunks );
+
+  // edge case when file is empty, filesize equals zero
+  // manually set one chunk so that file will be synced
+  if ( fileSize <= 0 )
+    noOfChunks = 1;
+
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
