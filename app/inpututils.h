@@ -10,7 +10,11 @@
 #ifndef INPUTUTILS_H
 #define INPUTUTILS_H
 
+#define STR1(x)  #x
+#define STR(x)  STR1(x)
+
 #include <QObject>
+#include <QtGlobal>
 #include <QUuid>
 #include "inputhelp.h"
 #include "merginapi.h"
@@ -90,18 +94,6 @@ class InputUtils: public QObject
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
     /**
-     * Reads and returns the internal text log file content
-     *
-     * The latest messages in the log come at the beginning. Only last \p limit lines are read.
-     *
-     * \see log()
-     */
-    Q_INVOKABLE static QString fullLog( int limit = 1000 );
-
-    /** Submit user log*/
-    Q_INVOKABLE void submitReport();
-
-    /**
      * Add a log entry to internal log text file
      *
      * \see setLogFilename()
@@ -113,6 +105,8 @@ class InputUtils: public QObject
      */
     static void setLogFilename( const QString &value );
 
+    static QString logFilename();
+
     static QString filesToString( QList<MerginFile> files );
 
     static QString appInfo();
@@ -121,12 +115,17 @@ class InputUtils: public QObject
 
     static QString localizedDateFromUTFString( QString timestamp );
 
+    /** InputApp version */
+    static QString appVersion();
+
+    /** InputApp platform */
+    static QString appPlatform();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
-    void onSubmitReportReplyFinished();
 
   private:
 
@@ -134,9 +133,7 @@ class InputUtils: public QObject
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
     QString sanitizeName( const QString &path );
-
     static QString sLogFile;
-
     static void appendLog( const QByteArray &data, const QString &path );
 };
 

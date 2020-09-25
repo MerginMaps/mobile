@@ -44,6 +44,11 @@ void UrlTester::open()
   connect( reply, &QNetworkReply::finished, this, &UrlTester::processFinished );
 }
 
+TestLinks::TestLinks( MerginApi *api, InputUtils *utils ):
+  mHelp( api, utils )
+{
+}
+
 void TestLinks::_run( const QString &url )
 {
   UrlTester tester( url );
