@@ -14,6 +14,7 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
+#include "qgsquickutils.h"
 
 #include "qgsquickmaptransform.h"
 
@@ -22,12 +23,9 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <algorithm>
-#include <QNetworkReply>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
-static const QString reportLogUrl = QStringLiteral("https://opl1bkwxhg.execute-api.us-east-1.amazonaws.com/default/md_test_function");
-static const QString helpDeskMail = QStringLiteral("info@lutraconsulting.co.uk");
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -265,6 +263,11 @@ void InputUtils::setLogFilename( const QString &value )
   sLogFile = value;
 }
 
+QString InputUtils::logFilename()
+{
+  return sLogFile;
+}
+
 QString InputUtils::filesToString( QList<MerginFile> files )
 {
   QStringList resultList;
@@ -334,6 +337,33 @@ QString InputUtils::localizedDateFromUTFString( QString timestamp )
   }
 }
 
+QString InputUtils::appVersion()
+{
+  QString version;
+#ifdef INPUT_VERSION
+  version = STR( INPUT_VERSION );
+#endif
+  return version;
+}
+
+QString InputUtils::appPlatform()
+{
+#if defined( ANDROID )
+  const QString platform = "android";
+#elif defined( Q_OS_IOS )
+  const QString platform = "ios";
+#elif defined( Q_OS_WIN32 )
+  const QString platform = "win";
+#elif defined( Q_OS_LINUX )
+  const QString platform = "linux";
+#elif defined( Q_OS_MAC )
+  const QString platform = "macos";
+#else
+  const QString platform = "unknown";
+#endif
+  return platform;
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;
@@ -401,73 +431,6 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
   }
   return result;
-}
-
-QString InputUtils::fullLog( int limit )
-{
-  QVector<QString> retLines;
-  QString ret;
-
-  QFile file( sLogFile );
-  if ( file.open( QIODevice::ReadOnly ) )
-  {
-    file.seek( file.size() - 1 );
-    int count = 0;
-    while ( ( count < limit ) && ( file.pos() > 0 ) )
-    {
-      QString ch = file.read( 1 );
-      file.seek( file.pos() - 2 );
-      if ( ch == "\n" )
-        count++;
-    }
-
-    QString line = file.readLine();
-    while ( !line.isNull() )
-    {
-      retLines.push_back( line );
-      line = file.readLine();
-    }
-
-    std::reverse( std::begin( retLines ), std::end( retLines ) );
-
-    QString ret;
-    for ( const QString &str : retLines )
-    {
-      ret += str.trimmed() + "<br/>" + "<br/>";
-    }
-
-    file.close();
-    return ret;
-  }
-  else
-  {
-    ret = QString( "Unable to open log file %1" ).arg( sLogFile );
-  }
-
-  return ret;
-}
-
-void InputUtils::submitReport()
-{
-  reportLogUrl
-}
-
-void InputUtils::onSubmitReportReplyFinished()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    QString remoteLogName = "TODO";
-    InputUtils::log( "submit report", "Report submitted " + remoteLogName );
-    emit showNotification( tr("Report submitted.%1Please contact out help-desk on email %1%2%1 with the details of your problem.").arg(helpDeskMail) );
-  }
-  else
-  {
-    InputUtils::log("submit report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    emit showNotification( tr("Failed to submit report, please check your internet connection.") );
-  }
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )

@@ -12,6 +12,10 @@
 
 #include <QObject>
 #include <QString>
+#include <QNetworkAccessManager>
+
+class MerginApi;
+class InputUtils;
 
 class InputHelp: public QObject
 {
@@ -26,11 +30,17 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToCreateNewProjectLink READ howToCreateNewProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToDownloadProjectLink READ howToDownloadProjectLink NOTIFY linkChanged )
 
+    Q_PROPERTY( bool submitReportPending READ submitReportPending NOTIFY submitReportPendingChanged )
+
   signals:
     void linkChanged();
+    void submitReportPendingChanged();
+
+  public slots:
+    void onSubmitReportReplyFinished();
 
   public:
-    explicit InputHelp();
+    explicit InputHelp( MerginApi *merginApi, InputUtils *utils );
 
     QString privacyPolicyLink() const;
     QString merginSubscriptionDetailsLink() const;
@@ -39,6 +49,27 @@ class InputHelp: public QObject
     QString howToSetupThemesLink() const;
     QString howToCreateNewProjectLink() const;
     QString howToDownloadProjectLink() const;
+
+    bool submitReportPending() const;
+    /**
+     * Reads and returns the internal text log file content.
+     *
+     * The latest messages in the log come at the beginning. Only last 0.5MB are read.
+     * Prepends the information about screen, device, logged user and application
+     *
+     * \see log()
+     */
+    Q_INVOKABLE QString fullLog( bool isHtml );
+
+    /** Submit user log*/
+    Q_INVOKABLE void submitReport( );
+
+
+  private:
+    MerginApi *mMerginApi = nullptr;
+    InputUtils *mInputUtils = nullptr;
+    QNetworkAccessManager mManager;
+    bool mSubmitReportPending = false;
 };
 
 #endif // INPUTHELP_H

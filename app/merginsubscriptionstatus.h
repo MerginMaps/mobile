@@ -28,6 +28,8 @@ class MerginSubscriptionStatus
       CanceledSubscription
     };
     Q_ENUMS( SubscriptionStatus )
+
+    static QString toString( const SubscriptionStatus &type );
 };
 
 #endif // MERGINSUBSCRIPTIONSTATUS_H

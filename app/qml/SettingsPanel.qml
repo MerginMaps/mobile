@@ -234,7 +234,7 @@ Page {
               MouseArea {
                   anchors.fill: parent
                   onClicked: {
-                    logPanel.text = __inputUtils.fullLog()
+                    logPanel.text = __inputHelp.fullLog(true, 200000) //0.2MB
                     logPanel.visible = true
                   }
               }

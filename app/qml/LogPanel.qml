@@ -33,7 +33,7 @@ Item {
         clip: true
 
         background: Rectangle {
-            color: InputStyle.bgColor
+            color: "white"
         }
 
         PanelHeader {
@@ -54,13 +54,18 @@ Item {
           clip: true
           anchors.horizontalCenter: parent.horizontalCenter
           width: root.width - 2 * InputStyle.rowHeightHeader
-          height: parent.height - 2 * InputStyle.rowHeightHeader
+          height: parent.height - 2 * InputStyle.rowHeightHeader - InputStyle.panelSpacing
           contentHeight: txt.height
           contentWidth: width
 
             Text {
               id: txt
-              text: root.text
+              text: "<style>" +
+                      "a:link { color: " + InputStyle.highlightColor + "; text-decoration: underline; }" +
+                      "p.odd { color: " + InputStyle.fontColorBright + "; }" +
+                    "</style>"
+
+                    + root.text
               font.pixelSize: InputStyle.fontPixelSizeNormal
               color: InputStyle.fontColor
               textFormat: Text.RichText
@@ -72,13 +77,13 @@ Item {
         }
 
         Button {
-          anchors.top: flickableItem.bottom
+          anchors.bottom: parent.bottom
           id: sendButton
           width: root.width - 2 * InputStyle.rowHeightHeader
           anchors.horizontalCenter: parent.horizontalCenter
 
           height: InputStyle.rowHeightHeader
-          text: qsTr("Submit Report")
+          text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Submit Report")
           font.pixelSize: sendButton.height / 2
 
           background: Rectangle {
@@ -86,7 +91,8 @@ Item {
           }
 
           onClicked: {
-            __inputUtils.submitReport();
+            if (!__inputHelp.submitReportPending)
+              __inputHelp.submitReport();
           }
 
           contentItem: Text {
@@ -98,7 +104,6 @@ Item {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
           }
-
         }
     }
 }

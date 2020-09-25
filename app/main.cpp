@@ -7,9 +7,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#define STR1(x)  #x
-#define STR(x)  STR1(x)
-
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -284,10 +281,7 @@ int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
 
-  QString version;
-#ifdef INPUT_VERSION
-  version = STR( INPUT_VERSION );
-#endif
+  const QString version = InputUtils::appVersion();
 
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
@@ -365,15 +359,15 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   IosUtils iosUtils;
-  InputUtils iu;
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
   MapThemesModel mtm;
   AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
+  InputUtils iu;
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
-  InputHelp help;
+  InputHelp help( ma.get(), &iu );
 
   // layer models
   LayersModel lm;
@@ -428,7 +422,7 @@ int main( int argc, char *argv[] )
     }
     else if ( IS_LINKS_TEST )
     {
-      TestLinks linksTest;
+      TestLinks linksTest( ma.get(), &iu );
       nFailed = QTest::qExec( &linksTest, args.count(), args.data() );
     }
 #if not defined APPLE_PURCHASING
@@ -552,10 +546,10 @@ int main( int argc, char *argv[] )
   parser.process( app );
 #endif
 
-  // Add some data for debugging if needed (visible in the final customer app)
-  QgsApplication::messageLog()->logMessage( QgsQuickUtils().dumpScreenInfo() );
-  QgsApplication::messageLog()->logMessage( "data directory: " + dataDir );
-  QgsApplication::messageLog()->logMessage( "All up and running" );
+  // Add some data for debugging
+  qDebug() << QgsQuickUtils().dumpScreenInfo();
+  qDebug() << "data directory: " << dataDir;
+  qDebug() <<  "All up and running";
 
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();

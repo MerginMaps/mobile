@@ -36,6 +36,10 @@ class UrlTester: public QObject
 class TestLinks: public QObject
 {
     Q_OBJECT
+
+  public:
+    TestLinks( MerginApi *api, InputUtils *utils );
+
   private slots:
 
     void _run( const QString &url );
