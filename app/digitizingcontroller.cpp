@@ -233,6 +233,7 @@ void DigitizingController::startRecording()
 void DigitizingController::stopRecording()
 {
   mRecording = false;
+  mRecordedPoints.clear();
   emit recordingChanged();
 }
 
