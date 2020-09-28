@@ -115,6 +115,7 @@ class Loader: public QObject
     void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
+    void appAboutToQuit();
 
   private:
     QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
