@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "loader.h"
+#include "inpututils.h"
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
@@ -305,6 +306,15 @@ void Loader::setActiveMapTheme( int index )
 
 void Loader::appStateChanged( Qt::ApplicationState state )
 {
+  QString msg;
+
+  // Instatiate QDebug with QString to redirect output to string
+  // It is used to convert enum to string
+  QDebug logHelper( &msg );
+
+  logHelper << "Application changed state to: " << state;
+  InputUtils::log( "Input", msg );
+
   if ( !mRecording && mPositionKit )
   {
     if ( state == Qt::ApplicationActive )
@@ -316,6 +326,11 @@ void Loader::appStateChanged( Qt::ApplicationState state )
       mPositionKit->source()->stopUpdates();
     }
   }
+}
+
+void Loader::appAboutToQuit()
+{
+  InputUtils::log( "Input", "Application has quit" );
 }
 
 QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer *layer )
