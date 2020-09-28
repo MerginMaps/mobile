@@ -243,6 +243,7 @@ ApplicationWindow {
         __loader.recording = digitizing.recording
         __loader.mapSettings = mapCanvas.mapSettings
 
+        mainPanel.forceActiveFocus()
         console.log("Completed Running!")
     }
 
