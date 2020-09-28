@@ -13,7 +13,7 @@ import "."  // import InputStyle singleton
 
 Text {
     width: parent.width
-    height: paren.height
+    height: parent.height
     color: InputStyle.fontColor
     onLinkActivated: Qt.openUrlExternally(link)
     textFormat: Text.StyledText
