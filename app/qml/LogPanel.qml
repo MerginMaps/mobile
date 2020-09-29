@@ -42,7 +42,7 @@ Item {
           width: parent.width
           color: "white"
           rowHeight: InputStyle.rowHeightHeader
-          titleText: qsTr("Detailed Log")
+          titleText: qsTr("Diagnostic Log")
 
           onBack: root.close()
           withBackButton: true
@@ -83,8 +83,8 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
 
           height: InputStyle.rowHeightHeader
-          text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Submit Report")
-          font.pixelSize: sendButton.height / 2
+          text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send Log to Developers")
+          font.pixelSize: sendButton.height / 3
 
           background: Rectangle {
             color: InputStyle.fontColor
