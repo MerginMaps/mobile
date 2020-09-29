@@ -285,6 +285,7 @@
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="143"/>
+        <location filename="../qml/MainPanel.qml" line="322"/>
         <source>Zoom to project</source>
         <translation>Zoom to project</translation>
     </message>
@@ -314,11 +315,6 @@
         <location filename="../qml/MainPanel.qml" line="232"/>
         <source>Menu</source>
         <translation>Menu</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainPanel.qml" line="322"/>
-        <source>Zoom full</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="341"/>

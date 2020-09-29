@@ -319,7 +319,7 @@ Item {
                 height: mainPanel.itemSize
                 rowHeight: height
                 width: parent.width
-                contentText: qsTr("Zoom full")
+                contentText: qsTr("Zoom to project")
                 imageSource: "zoom_to_project.svg"
             }
 
