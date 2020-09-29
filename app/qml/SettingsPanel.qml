@@ -230,7 +230,7 @@ Page {
 
            // Debug/Logging
           PanelItem {
-              text: qsTr("Reports")
+              text: qsTr("Diagnostic Log")
               MouseArea {
                   anchors.fill: parent
                   onClicked: {

@@ -64,6 +64,8 @@ class InputHelp: public QObject
     /** Submit user log*/
     Q_INVOKABLE void submitReport( );
 
+  private:
+    QVector<QString> logHeader( bool isHtml );
 
   private:
     MerginApi *mMerginApi = nullptr;

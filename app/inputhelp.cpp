@@ -74,7 +74,8 @@ bool InputHelp::submitReportPending() const
 QString InputHelp::fullLog( bool isHtml )
 {
   qint64 limit = 500000;
-  QVector<QString> retLines;
+  QVector<QString> retLines = logHeader( isHtml );
+
   QFile file( InputUtils::logFilename() );
   if ( file.open( QIODevice::ReadOnly ) )
   {
@@ -93,14 +94,30 @@ QString InputHelp::fullLog( bool isHtml )
   }
   else
   {
-    return QString( "Unable to open log file %1" ).arg( InputUtils::logFilename() );
+    retLines.push_back( QString( "Unable to open log file %1" ).arg( InputUtils::logFilename() ) );
   }
 
   QString ret;
-  // now add some extra info
-  retLines.push_back( QStringLiteral( "------------------------------------------" ) );
-  retLines.append( QgsQuickUtils().dumpScreenInfo().split( "\n" ).toVector() );
-  retLines.push_back( QStringLiteral( "Screen Info:" ) );
+  int i = 0;
+  for ( const QString &str : retLines )
+  {
+    ++i;
+    if ( isHtml )
+      ret += QStringLiteral( "<p class=\"%1\">" ).arg( i % 2 == 0 ? "odd" : "even" ) + str.trimmed() + "</p>";
+    else
+      ret += str.trimmed() + "\n";
+  }
+
+  return ret;
+}
+
+QVector<QString> InputHelp::logHeader( bool isHtml )
+{
+  QVector<QString> retLines;
+  retLines.push_back( QStringLiteral( "Input App: %1 - %2" ).arg( InputUtils::appVersion() ).arg( InputUtils::appPlatform() ) );
+  retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
+  retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
+  retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
@@ -113,25 +130,12 @@ QString InputHelp::fullLog( bool isHtml )
   {
     retLines.push_back( QStringLiteral( "%1Mergin User Profile not available. To include it, open you Profile Page in InputApp%2" ).arg( isHtml ? "<b>" : "" ).arg( isHtml ? "</b>" : "" ) );
   }
-  retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
-  retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
-  retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
-  retLines.push_back( QStringLiteral( "InputApp: %1 - %2" ).arg( InputUtils::appVersion() ).arg( InputUtils::appPlatform() ) );
-
-  // now reverse so the most recent messages are on top and add separators
-  std::reverse( std::begin( retLines ), std::end( retLines ) );
-  int i = 0;
-  for ( const QString &str : retLines )
-  {
-    ++i;
-    if ( isHtml )
-      ret += QStringLiteral( "<p class=\"%1\">" ).arg( i % 2 == 0 ? "odd" : "even" ) + str.trimmed() + "</p>";
-    else
-      ret += QString( i ) + str.trimmed() + "\n";
-  }
-
-  return ret;
+  retLines.push_back( QStringLiteral( "Screen Info:" ) );
+  retLines.append( QgsQuickUtils().dumpScreenInfo().split( "\n" ).toVector() );
+  retLines.push_back( QStringLiteral( "------------------------------------------" ) );
+  return retLines;
 }
+
 
 void InputHelp::submitReport()
 {
