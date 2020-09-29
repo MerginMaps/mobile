@@ -156,7 +156,9 @@ Rectangle {
   TextHyperlink {
     id: textNotice
     width: parent.width
+    height: InputStyle.rowHeightHeader
     anchors.bottom: parent.bottom
+    anchors.bottomMargin: InputStyle.rowHeightHeader/2
     text: qsTr("Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2")
               .arg("<a href='" + __inputHelp.merginSubscriptionDetailsLink + "'>")
               .arg("</a>")
