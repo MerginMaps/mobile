@@ -52,7 +52,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
         <source>Working...</source>
-        <translation>Trabalhando..</translation>
+        <translation>Trabalhando...</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
@@ -195,6 +195,19 @@
     </message>
 </context>
 <context>
+    <name>InputHelp</name>
+    <message>
+        <location filename="../inputhelp.cpp" line="172"/>
+        <source>Report submitted.%1Please contact us on%1%2</source>
+        <translation>Relatório submetido.%1Por favor contacte-nos em%1%2</translation>
+    </message>
+    <message>
+        <location filename="../inputhelp.cpp" line="177"/>
+        <source>Failed to submit report.%1Please check your internet connection.</source>
+        <translation>Erro na submissão do relatório.%1Por favor verifique a sua ligação de internet.</translation>
+    </message>
+</context>
+<context>
     <name>LocalProjectsManager</name>
     <message>
         <location filename="../localprojectsmanager.cpp" line="199"/>
@@ -205,6 +218,24 @@
         <location filename="../localprojectsmanager.cpp" line="204"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Falha ao tentar encontrar o ficheiro do projecto QGIS</translation>
+    </message>
+</context>
+<context>
+    <name>LogPanel</name>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="45"/>
+        <source>Diagnostic Log</source>
+        <translation>Registo para Diagnóstico</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="86"/>
+        <source>Sending...</source>
+        <translation>Enviando...</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="86"/>
+        <source>Send Log to Developers</source>
+        <translation>Enviar Registo para os Programadores</translation>
     </message>
 </context>
 <context>
@@ -252,6 +283,7 @@
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="143"/>
+        <location filename="../qml/MainPanel.qml" line="322"/>
         <source>Zoom to project</source>
         <translation>Aproximar ao projeto</translation>
     </message>
@@ -283,11 +315,6 @@
         <translation>Menu</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="322"/>
-        <source>Zoom full</source>
-        <translation>Ampliação total</translation>
-    </message>
-    <message>
         <location filename="../qml/MainPanel.qml" line="341"/>
         <source>Browse features</source>
         <translation>Pesquisar elementos</translation>
@@ -303,7 +330,7 @@
     <message>
         <location filename="../qml/MapThemePanel.qml" line="70"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
-        <translation>O projeto não tem camadas definidas. Veja %1como configurar os temas%2.</translation>
+        <translation>O projeto não tem temas definidos. Veja %1como configurar os temas%2.</translation>
     </message>
 </context>
 <context>
@@ -316,7 +343,7 @@
     <message>
         <location filename="../merginapi.cpp" line="554"/>
         <source>Please enter a valid email</source>
-        <translation>Por favor, digite um email válido</translation>
+        <translation>Por favor, introduza um email válido</translation>
     </message>
     <message>
         <location filename="../merginapi.cpp" line="561"/>
@@ -336,7 +363,7 @@
     <message>
         <location filename="../merginapi.cpp" line="802"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
-        <translation>Registro com sucesso.%1 Agora já deve conseguir entrar.</translation>
+        <translation>Registo com sucesso.%1 Agora já será possível entrar.</translation>
     </message>
     <message>
         <location filename="../merginapi.cpp" line="820"/>
@@ -364,12 +391,12 @@
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="277"/>
         <source>Explore public projects.</source>
-        <translation>Explorar projetos publicos.</translation>
+        <translation>Explorar projetos públicos.</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="345"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>Nenhum projeto descarregado foi encontrado.%1Aprenda %2como criar projetos%3 e %4descarregá-los%3 para o seu dispositivo.</translation>
+        <translation>Não foi encontrado nenhum projeto descarregado.%1Aprenda %2como criar projetos%3 e %4descarregá-los%3 para o seu dispositivo.</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="432"/>
@@ -437,7 +464,7 @@
     <message>
         <location filename="../merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation>Falha ao determinar alterações</translation>
+        <translation>Falha ao determinar as alterações</translation>
     </message>
 </context>
 <context>
@@ -474,7 +501,7 @@
     <message>
         <location filename="../purchasing.cpp" line="517"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
-        <translation>Falha ao processar os detalhes do pagamento.%1Subscrição não foi adquirida.</translation>
+        <translation>Falha ao processar os detalhes do pagamento.%1A subscrição não foi adquirida.</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="525"/>
@@ -489,7 +516,7 @@
     <message>
         <location filename="../purchasing.cpp" line="539"/>
         <source>Failed to purchase subscription</source>
-        <translation>Falha ao comprar subscrição</translation>
+        <translation>Falha na comprar da subscrição</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="537"/>
@@ -579,8 +606,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Rotação do mapa não suportado. Removendo de %1 para 0.</translation>
     </message>
@@ -728,6 +755,11 @@
         <source>About</source>
         <translation>Sobre</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <source>Diagnostic Log</source>
+        <translation>Registo para Diagnóstico</translation>
+    </message>
 </context>
 <context>
     <name>SubscribePage</name>
@@ -757,22 +789,22 @@
 <context>
     <name>SubscribePlanItem</name>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="34"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="36"/>
         <source> Subscription Plan</source>
         <translation>Plano de subscrição</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="52"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="54"/>
         <source>Unlimited collaborators</source>
         <translation>Colaboradores ilimitados</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="58"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="60"/>
         <source>Unlimited projects</source>
         <translation>Projetos ilimitados</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="64"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="66"/>
         <source>Email support</source>
         <translation>Email para suporte</translation>
     </message>
@@ -780,29 +812,29 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="96"/>
+        <location filename="../qml/main.qml" line="97"/>
         <source>Recorded feature is not valid</source>
         <translation>Elemento registado é inválido</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="427"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>GPS auto-center mode on</source>
-        <translation>GPS modo de centrar ligado</translation>
+        <translation>Modo GPS de auto-centrar ligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="427"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>GPS auto-center mode off</source>
-        <translation>GPS modo de centrar desligado</translation>
+        <translation>Modo GPS de auto-centrar ligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="443"/>
+        <location filename="../qml/main.qml" line="445"/>
         <source>No editable layers found.</source>
-        <translation>Não foi encontrada nenhuma camada editável.</translation>
+        <translation>Não foram encontradas camadas editáveis.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="477"/>
+        <location filename="../qml/main.qml" line="479"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPS atualmente indisponível.%1Tente permitir a localização GPS nas configurações do seu dispositivo.</translation>
+        <translation>O GPS atualmente está indisponível.%1Tente permitir a localização GPS nas configurações do seu dispositivo.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="645"/>
