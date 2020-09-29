@@ -197,6 +197,19 @@
     </message>
 </context>
 <context>
+    <name>InputHelp</name>
+    <message>
+        <location filename="../inputhelp.cpp" line="172"/>
+        <source>Report submitted.%1Please contact us on%1%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inputhelp.cpp" line="177"/>
+        <source>Failed to submit report.%1Please check your internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LocalProjectsManager</name>
     <message>
         <location filename="../localprojectsmanager.cpp" line="199"/>
@@ -206,6 +219,24 @@
     <message>
         <location filename="../localprojectsmanager.cpp" line="204"/>
         <source>Failed to find a QGIS project file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LogPanel</name>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="45"/>
+        <source>Diagnostic Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="86"/>
+        <source>Sending...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogPanel.qml" line="86"/>
+        <source>Send Log to Developers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -581,8 +612,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Map Canvas rotation is not supported. Resetting from %1 to 0.</translation>
     </message>
@@ -730,6 +761,11 @@
         <source>About</source>
         <translation>About</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <source>Diagnostic Log</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SubscribePage</name>
@@ -759,22 +795,22 @@
 <context>
     <name>SubscribePlanItem</name>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="34"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="36"/>
         <source> Subscription Plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="52"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="54"/>
         <source>Unlimited collaborators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="58"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="60"/>
         <source>Unlimited projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="64"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="66"/>
         <source>Email support</source>
         <translation type="unfinished"></translation>
     </message>
@@ -782,27 +818,27 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="96"/>
+        <location filename="../qml/main.qml" line="97"/>
         <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="427"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="427"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="443"/>
+        <location filename="../qml/main.qml" line="445"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="477"/>
+        <location filename="../qml/main.qml" line="479"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation type="unfinished"></translation>
     </message>
