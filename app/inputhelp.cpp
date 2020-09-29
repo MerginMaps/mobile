@@ -21,7 +21,7 @@
 
 const QString inputHelpRoot = "https://help.inputapp.io";
 const QString merginHelpRoot = "https://help.cloudmergin.com";
-const QString reportLogUrl = QStringLiteral( "https://opl1bkwxhg.execute-api.us-east-1.amazonaws.com/md_test_function" );
+const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QString helpDeskMail = QStringLiteral( "info@lutraconsulting.co.uk" );
 
 InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
