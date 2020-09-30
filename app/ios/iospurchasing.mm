@@ -323,6 +323,7 @@ QString IosPurchasingBackend::getLocalizedPrice( const QString &planId ) const
   {
     return plan->price();
   }
+  return QString();
 }
 
 QSharedPointer<IosPurchasingPlan> IosPurchasingBackend::findRegisteredPlan( const QString &productId ) const
