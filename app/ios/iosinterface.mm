@@ -23,11 +23,6 @@
 static UIImagePickerController *imagePickerController = nullptr;
 static UIActivityIndicatorView *imagePickerIndicatorView = nullptr;
 
-static QString fromNSUrl( NSURL *url )
-{
-  return QString::fromNSString( [url absoluteString] );
-}
-
 static QImage fromUIImage( UIImage *image )
 {
   QImage::Format format = QImage::Format_RGB32;
@@ -85,7 +80,7 @@ static QImage fromUIImage( UIImage *image )
   return result;
 }
 
--( void )showImagePicker:( int )sourceType:( IOSImagePicker * )handler
+-( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
 {
   UIApplication *app = [UIApplication sharedApplication];
 

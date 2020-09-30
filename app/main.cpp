@@ -186,9 +186,6 @@ static void copy_demo_projects( const QString &projectDir )
 
 static void init_qgis( const QString &pkgPath )
 {
-  QTime t;
-  t.start();
-
   QgsApplication::init();
 
 #ifdef MOBILE_OS
@@ -205,9 +202,7 @@ static void init_qgis( const QString &pkgPath )
   if ( !QgsApplication::createDatabase() )
     qDebug( "Can't create qgis user DB!!!" );
 
-  qDebug( "qgis_init %f [s]", t.elapsed() / 1000.0 );
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
-
 }
 
 static void init_proj( const QString &pkgPath )
