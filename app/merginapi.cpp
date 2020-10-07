@@ -1594,6 +1594,11 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     transaction.projectDir = createUniqueProjectDirectory( projectName );
     transaction.firstTimeDownload = true;
 
+    // create file indicating first time download in progress
+    QString downloadInProgressFilePath = InputUtils::downloadInProgressFilePath( transaction.projectDir );
+    createPathIfNotExists( downloadInProgressFilePath );
+    InputUtils::createFile( downloadInProgressFilePath );
+
     InputUtils::log( "pull " + projectFullName, QStringLiteral( "First time download - new directory: " ) + transaction.projectDir );
   }
 
@@ -2270,6 +2275,13 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     // update info of local projects
     mLocalProjects.updateMerginLocalVersion( transaction.projectDir, transaction.version );
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
+
+    QString projectName, projectNamespace;
+    extractProjectName( projectFullName, projectNamespace, projectName );
+
+    // remove download in progress file
+    if ( !QFile::remove( InputUtils::downloadInProgressFilePath( transaction.projectDir ) ) )
+      InputUtils::log( "sync " + projectFullName, QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
 
     InputUtils::log( "sync " + projectFullName, QStringLiteral( "### Finished ###  New project version: %1\n" ).arg( transaction.version ) );
   }
