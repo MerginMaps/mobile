@@ -170,6 +170,9 @@ void TestMerginApi::testDownloadProject()
   // there should be something in the directory
   QStringList projectDirEntries = QDir( project.projectDir ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
   QCOMPARE( projectDirEntries.count(), 2 );
+
+  // verify that download in progress file is erased
+  QVERIFY( !QFile::exists( InputUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
 }
 
 void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath )

@@ -1598,6 +1598,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     QString downloadInProgressFilePath = InputUtils::downloadInProgressFilePath( transaction.projectDir );
     createPathIfNotExists( downloadInProgressFilePath );
     InputUtils::createFile( downloadInProgressFilePath );
+    Q_ASSERT( QFile::exists( downloadInProgressFilePath ) );
 
     InputUtils::log( "pull " + projectFullName, QStringLiteral( "First time download - new directory: " ) + transaction.projectDir );
   }
