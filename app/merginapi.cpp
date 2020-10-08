@@ -145,6 +145,15 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
                    ( !range.isEmpty() ? " Range: " + range : QString() ) );
 }
 
+void MerginApi::removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName )
+{
+  if ( projectNamespace.isEmpty() || projectName.isEmpty() )
+    return; // otherwise we could remove enitre users temp or entire .temp
+
+  QString path = getTempProjectDir( getFullProjectName( projectNamespace, projectName ) );
+  QDir( path ).removeRecursively();
+}
+
 QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
 {
   QNetworkRequest request;
@@ -855,7 +864,6 @@ void MerginApi::pingMerginReplyFinished()
   r->deleteLater();
   emit pingMerginFinished( apiVersion, serverSupportsSubscriptions, serverMsg );
 }
-
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )
 {
@@ -1594,6 +1602,9 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     QString projectNamespace;
     QString projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
+
+    // remove any leftover temp files that could be created from previous unsuccessful download
+    removeProjectsTempFolder( projectNamespace, projectName );
 
     // project has not been downloaded yet - we need to create a directory for it
     transaction.projectDir = createUniqueProjectDirectory( projectName );
