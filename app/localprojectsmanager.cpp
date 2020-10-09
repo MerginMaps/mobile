@@ -188,7 +188,7 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
     // if this is a mergin project and file indicating download in progress is still there
     // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
 
-    err = tr( "Download failed, remove and download project again" );
+    err = tr( "Download failed, remove and retry" );
     return QString();
   }
 
