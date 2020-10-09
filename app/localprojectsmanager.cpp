@@ -183,6 +183,15 @@ void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const
 
 QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QString &err )
 {
+  if ( QFile::exists( InputUtils::downloadInProgressFilePath( projectDir ) ) )
+  {
+    // if this is a mergin project and file indicating download in progress is still there
+    // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
+
+    err = tr( "Download failed, remove and download project again" );
+    return QString();
+  }
+
   QList<QString> foundProjectFiles;
   QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
 
@@ -192,14 +201,7 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
     foundProjectFiles << it.filePath();
   }
 
-  if ( QFile::exists( InputUtils::downloadInProgressFilePath( projectDir ) ) )
-  {
-    // if this is a mergin project and file indicating download in progress is still there
-    // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
-
-    err = tr( "Download failed, remove and download project again" );
-  }
-  else if ( foundProjectFiles.count() == 1 )
+  if ( foundProjectFiles.count() == 1 )
   {
     return foundProjectFiles.first();
   }
