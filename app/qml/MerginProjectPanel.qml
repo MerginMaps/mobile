@@ -180,6 +180,7 @@ Item {
           projectsPanel.forceActiveFocus()
         }
         onRegistrationFailed: stackView.pending = false
+        onRegistrationSucceeded: stackView.pending = false
       }
 
 
