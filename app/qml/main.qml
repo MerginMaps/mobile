@@ -244,7 +244,10 @@ ApplicationWindow {
         __loader.recording = digitizing.recording
         __loader.mapSettings = mapCanvas.mapSettings
 
-        mainPanel.forceActiveFocus()
+        // get focus when any project is active, otherwise let focus to merginprojectpanel
+        if ( __appSettings.activeProject )
+          mainPanel.forceActiveFocus()
+
         console.log("Completed Running!")
     }
 
@@ -570,10 +573,10 @@ ApplicationWindow {
 
         onVisibleChanged: {
           if (openProjectPanel.visible)
-            openProjectPanel.focus = true
+            openProjectPanel.forceActiveFocus()
           else
           {
-            mainPanel.focus = true
+            mainPanel.forceActiveFocus()
           }
         }
 
