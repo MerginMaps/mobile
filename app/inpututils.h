@@ -113,7 +113,7 @@ class InputUtils: public QObject
 
     static QString logFilename();
 
-    static bool createFile( const QString &filePath );
+    static bool createEmptyFile( const QString &filePath );
 
     static QString filesToString( QList<MerginFile> files );
 

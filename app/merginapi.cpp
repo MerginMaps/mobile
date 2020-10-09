@@ -1418,7 +1418,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
 
     // remove download in progress file
     if ( !QFile::remove( InputUtils::downloadInProgressFilePath( transaction.projectDir ) ) )
-      InputUtils::log( "sync " + projectFullName, QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
+      InputUtils::log( QStringLiteral( "sync %1" ).arg( projectFullName ), QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
 
     mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
@@ -1613,8 +1613,8 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     // create file indicating first time download in progress
     QString downloadInProgressFilePath = InputUtils::downloadInProgressFilePath( transaction.projectDir );
     createPathIfNotExists( downloadInProgressFilePath );
-    InputUtils::createFile( downloadInProgressFilePath );
-    Q_ASSERT( QFile::exists( downloadInProgressFilePath ) );
+    if ( !InputUtils::createEmptyFile( downloadInProgressFilePath ) )
+      InputUtils::log( QStringLiteral( "pull %1" ).arg( projectFullName ), "Unable to create temporary download in progress file" );
 
     InputUtils::log( "pull " + projectFullName, QStringLiteral( "First time download - new directory: " ) + transaction.projectDir );
   }
