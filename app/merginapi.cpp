@@ -145,6 +145,15 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
                    ( !range.isEmpty() ? " Range: " + range : QString() ) );
 }
 
+void MerginApi::removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName )
+{
+  if ( projectNamespace.isEmpty() || projectName.isEmpty() )
+    return; // otherwise we could remove enitre users temp or entire .temp
+
+  QString path = getTempProjectDir( getFullProjectName( projectNamespace, projectName ) );
+  QDir( path ).removeRecursively();
+}
+
 QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
 {
   QNetworkRequest request;
@@ -856,7 +865,6 @@ void MerginApi::pingMerginReplyFinished()
   emit pingMerginFinished( apiVersion, serverSupportsSubscriptions, serverMsg );
 }
 
-
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )
 {
   if ( ( !withoutAuth && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
@@ -1407,6 +1415,11 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   {
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
+
+    // remove download in progress file
+    if ( !QFile::remove( InputUtils::downloadInProgressFilePath( transaction.projectDir ) ) )
+      InputUtils::log( QStringLiteral( "sync %1" ).arg( projectFullName ), QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
+
     mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
 
@@ -1590,9 +1603,18 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     QString projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
 
+    // remove any leftover temp files that could be created from previous unsuccessful download
+    removeProjectsTempFolder( projectNamespace, projectName );
+
     // project has not been downloaded yet - we need to create a directory for it
     transaction.projectDir = createUniqueProjectDirectory( projectName );
     transaction.firstTimeDownload = true;
+
+    // create file indicating first time download in progress
+    QString downloadInProgressFilePath = InputUtils::downloadInProgressFilePath( transaction.projectDir );
+    createPathIfNotExists( downloadInProgressFilePath );
+    if ( !InputUtils::createEmptyFile( downloadInProgressFilePath ) )
+      InputUtils::log( QStringLiteral( "pull %1" ).arg( projectFullName ), "Unable to create temporary download in progress file" );
 
     InputUtils::log( "pull " + projectFullName, QStringLiteral( "First time download - new directory: " ) + transaction.projectDir );
   }

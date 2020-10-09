@@ -11,6 +11,7 @@
 
 #include "merginapi.h"
 #include "merginprojectmetadata.h"
+#include "inpututils.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -182,13 +183,24 @@ void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const
 
 QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QString &err )
 {
+  if ( QFile::exists( InputUtils::downloadInProgressFilePath( projectDir ) ) )
+  {
+    // if this is a mergin project and file indicating download in progress is still there
+    // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
+
+    err = tr( "Download failed, remove and retry" );
+    return QString();
+  }
+
   QList<QString> foundProjectFiles;
   QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
+
   while ( it.hasNext() )
   {
     it.next();
     foundProjectFiles << it.filePath();
   }
+
   if ( foundProjectFiles.count() == 1 )
   {
     return foundProjectFiles.first();
@@ -198,11 +210,12 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
     // error: multiple project files found
     err = tr( "Found multiple QGIS project files" );
   }
-  else
+  else if ( foundProjectFiles.count() < 1 )
   {
     // no projects
     err = tr( "Failed to find a QGIS project file" );
   }
+
   return QString();
 }
 

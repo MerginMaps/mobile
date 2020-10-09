@@ -70,6 +70,12 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
+    /**
+     * Returns name of temporary file indicating first time download of project is in progress
+     * \param projectName
+     */
+    static QString downloadInProgressFilePath( const QString &projectDir );
+
     Q_INVOKABLE void showNotification( const QString &message );
 
     /**
@@ -106,6 +112,8 @@ class InputUtils: public QObject
     static void setLogFilename( const QString &value );
 
     static QString logFilename();
+
+    static bool createEmptyFile( const QString &filePath );
 
     static QString filesToString( QList<MerginFile> files );
 

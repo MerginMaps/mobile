@@ -268,6 +268,16 @@ QString InputUtils::logFilename()
   return sLogFile;
 }
 
+bool InputUtils::createEmptyFile( const QString &filePath )
+{
+  QFile newFile( filePath );
+  if ( !newFile.open( QIODevice::WriteOnly ) )
+    return false;
+
+  newFile.close();
+  return true;
+}
+
 QString InputUtils::filesToString( QList<MerginFile> files )
 {
   QStringList resultList;
@@ -446,6 +456,11 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   }
 
   return QString();
+}
+
+QString InputUtils::downloadInProgressFilePath( const QString &projectDir )
+{
+  return projectDir + "/.mergin/.project.downloading";
 }
 
 void InputUtils::showNotification( const QString &message )

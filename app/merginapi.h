@@ -523,6 +523,9 @@ class MerginApi: public QObject
     //! Starts download request of another item
     void downloadNextItem( const QString &projectFullName );
 
+    //! Removes temp folder for project
+    void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName );
+
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
