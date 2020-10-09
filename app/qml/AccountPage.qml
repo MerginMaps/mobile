@@ -15,7 +15,7 @@ import lc 1.0
 import "."  // import InputStyle singleton
 
 Page {
-  signal backClicked
+  signal back
   signal managePlansClicked
   signal signOutClicked
   signal restorePurchasesClicked
@@ -45,7 +45,7 @@ Page {
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("My Account")
-    onBack: backClicked()
+    onBack: root.back()
     withBackButton: true
   }
 
