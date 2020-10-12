@@ -96,7 +96,7 @@
     <message>
         <location filename="../qml/BrowseDataFeaturesPanel.qml" line="45"/>
         <source>Showing only the first %1 features</source>
-        <translation>Mostrando solo las primeras %1 entidades</translation>
+        <translation>Se muestran solo las primeras %1 entidades</translation>
     </message>
 </context>
 <context>
@@ -210,12 +210,17 @@
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="199"/>
+        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <source>Download failed, remove and retry</source>
+        <translation>No se ha podido descargar, eliminar y reintentar más tarde</translation>
+    </message>
+    <message>
+        <location filename="../localprojectsmanager.cpp" line="211"/>
         <source>Found multiple QGIS project files</source>
         <translation>Encontrados varios archivos de proyecto QGIS</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="204"/>
+        <location filename="../localprojectsmanager.cpp" line="216"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Archivo de proyecto QGIS no encontrado</translation>
     </message>
@@ -336,39 +341,39 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="547"/>
+        <location filename="../merginapi.cpp" line="556"/>
         <source>Username must have at least 4 characters</source>
         <translation>Nombre de usuario debe contener por lo menos 4 caracteres</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="554"/>
+        <location filename="../merginapi.cpp" line="563"/>
         <source>Please enter a valid email</source>
         <translation>Por favor, introduce un e-mail válido</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="561"/>
+        <location filename="../merginapi.cpp" line="570"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>La contraseña no es lo suficientemente fuerte. Debe contener %1 como mínimo 8 caracteres%1 letras minúsculas%1 letras mayúsculas%1 números o caracteres especiales</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="574"/>
+        <location filename="../merginapi.cpp" line="583"/>
         <source>Passwords do not match</source>
         <translation>Contraseñas no corresponden</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="581"/>
+        <location filename="../merginapi.cpp" line="590"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Por favor, acepta las condiciones de uso y la política de privacidad</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="802"/>
+        <location filename="../merginapi.cpp" line="811"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation>Registro correcto.%1 Ya puedes iniciar la sesión.</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="820"/>
+        <location filename="../merginapi.cpp" line="829"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
-        <translation>Nuevos registros no están autorizados en el servido Mergin seleccionado.%1Por favor, contacta tu administrador</translation>
+        <translation>Nuevos registros no están autorizados en el servidor Mergin seleccionado.%1Por favor, contacta tu administrador</translation>
     </message>
 </context>
 <context>
@@ -501,7 +506,7 @@
     <message>
         <location filename="../purchasing.cpp" line="517"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
-        <translation>No se ha podido tramitar el pago.%1Susripción no comprada.</translation>
+        <translation>No se ha podido tramitar el pago.%1Suscripción no comprada.</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="525"/>
@@ -606,10 +611,10 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Rotación del lienzo del mapa no soportada. Restablecienndo de 1% a 0.</translation>
+        <translation>Rotación del lienzo del mapa no soportada. Restableciendo de 1% a 0.</translation>
     </message>
 </context>
 <context>
@@ -778,7 +783,7 @@
         <translation>Profesional</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Tu fórmula de suscripción de Mergin se renovará automáticamente. Puedes cancelarla o cambiarla en cualquier momento. %1Descubre más%2</translation>
     </message>
@@ -816,7 +821,7 @@
     <message>
         <location filename="../qml/main.qml" line="429"/>
         <source>GPS auto-center mode on</source>
-        <translation>Modo centrado automático GPS encedido</translation>
+        <translation>Modo centrado automático GPS encendido</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="429"/>
