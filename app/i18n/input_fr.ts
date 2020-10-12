@@ -12,7 +12,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="150"/>
         <source>Your subscription was cancelled on %1</source>
-        <translation>Votre abonnement a été annulé au %1</translation>
+        <translation>Votre abonnement a été annulé le %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="47"/>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="122"/>
         <source>Your subscription will not auto-renew after %1</source>
-        <translation>Votre abonnement ne sera pas renouvelé après le %1</translation>
+        <translation>Votre abonnement ne sera pas renouvelé automatiquement après le %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="131"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>Vous pouvez également %1restaurer%2 vos achats</translation>
+        <translation>Vous pouvez également %1renouveler%2 vos achats</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="248"/>
@@ -83,7 +83,7 @@
     <message>
         <location filename="../qml/AuthPanel.qml" line="123"/>
         <source>Please update Input to use the latest Mergin features.</source>
-        <translation>Veuillez mettre l&apos;application Input à jour pour pouvoir utiliser les dernières entités Mergin.</translation>
+        <translation>Veuillez mettre l&apos;application Input à jour pour pouvoir utiliser les derniers outils Mergin.</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="127"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../inputhelp.cpp" line="172"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
-        <translation>Rapport transmis.%1Veuillez nous contacter à l&apos;adresse%1%2</translation>
+        <translation>Rapport transmis.%1Veuillez nous contacter par courriel à l&apos;adresse%1%2</translation>
     </message>
     <message>
         <location filename="../inputhelp.cpp" line="177"/>
@@ -210,12 +210,17 @@
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="199"/>
+        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Téléchargement échoué, supprimer et réessayer</translation>
+    </message>
+    <message>
+        <location filename="../localprojectsmanager.cpp" line="211"/>
         <source>Found multiple QGIS project files</source>
         <translation>Des fichiers de projet QGIS multiples ont été trouvés</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="204"/>
+        <location filename="../localprojectsmanager.cpp" line="216"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Impossible de trouver un fichier de projet QGIS</translation>
     </message>
@@ -336,37 +341,37 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="547"/>
+        <location filename="../merginapi.cpp" line="556"/>
         <source>Username must have at least 4 characters</source>
         <translation>Le nom d&apos;utilisateur doit comporter au moins 4 caractères</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="554"/>
+        <location filename="../merginapi.cpp" line="563"/>
         <source>Please enter a valid email</source>
         <translation>Veuillez saisir une adresse e-mail valide</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="561"/>
+        <location filename="../merginapi.cpp" line="570"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Ce mot de passe n&apos;est pas assez sécurisé. Il doit%1 comporter au moins 8 caractères%1 contenir des caractères minuscules%1 contenir des caractères majuscules%1 contenir des chiffres ou des caractères spéciaux</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="574"/>
+        <location filename="../merginapi.cpp" line="583"/>
         <source>Passwords do not match</source>
         <translation>Les mots de passe ne correspondent pas</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="581"/>
+        <location filename="../merginapi.cpp" line="590"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Veuillez accepter les termes et la politique de confidentialité</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="802"/>
+        <location filename="../merginapi.cpp" line="811"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation>Inscription réussie.%1Vous devriez maintenant pouvoir vous connecter.</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="820"/>
+        <location filename="../merginapi.cpp" line="829"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Le serveur Mergin sélectionné n&apos;accepte pas de nouvelles inscriptions.%1Veuillez prendre contact avec votre administrateur.</translation>
     </message>
@@ -606,8 +611,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>La rotation du canevas de carte n&apos;est pas prise en charge. Réinitialisation de %1 à 0.</translation>
     </message>
@@ -702,7 +707,7 @@
     <message>
         <location filename="../qml/RegistrationForm.qml" line="311"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>J&apos;accepte les %1Termes et conditions%3 Mergi et la %2Politique de confidentialité%3</translation>
+        <translation>J&apos;accepte les %1Termes et conditions%3 de Mergin et la %2Politique de confidentialité%3</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="333"/>
@@ -781,7 +786,7 @@
         <translation>Professionnel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Votre plan d&apos;abonnement à Mergin se renouvellera automatiquement. Vous pouvez l&apos;annuler ou le modifier à tout moment. %1En savoir plus%2</translation>
     </message>
