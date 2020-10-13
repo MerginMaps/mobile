@@ -118,28 +118,28 @@ Item {
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      if (!projectsPanel.visible || !activeProjectPath)
-      {
-        return; // Closes app - no project is opened or mergin panel has focus in map view
-      }
-      else if (authPanel.visible) // back to project view
+      if ( authPanel.visible ) // back to project view
       {
         authPanel.visible = false;
         projectsPanel.forceActiveFocus();
         homeBtn.activated();
         event.accepted = true;
       }
-      else if (accountPanel.visible) // back to project view
+      else if ( accountPanel.visible ) // back to project view
       {
         accountPanel.visible = false;
         event.accepted = true;
       }
-      else if (statusPanel.visible) // back to project view
+      else if ( statusPanel.visible ) // back to project view
       {
         event.accepted = true;
         statusPanel.close();
       }
-      else if (projectsPanel.visible) // back to map
+      else if ( projectsPanel.visible && !activeProjectPath ) // Closes app - no active project
+      {
+        return;
+      }
+      else if ( projectsPanel.visible ) // back to map
       {
         event.accepted = true;
         projectsPanel.visible = false;

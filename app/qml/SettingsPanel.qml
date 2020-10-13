@@ -37,6 +37,9 @@ Page {
         if (aboutPanel.visible) { // hide about panel
           aboutPanel.visible = false;
         }
+        else if (logPanel.visible) {
+          logPanel.visible = false
+        }
         else if (settingsPanel.visible) {
           settingsPanel.visible = false;
         }
