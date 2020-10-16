@@ -449,7 +449,7 @@ void Purchasing::onPlanRegistrationFailed( const QString &id )
 
   if ( mPlansWithPendingRegistration.empty() && mRegisteredPlans.empty() )
   {
-    InputUtils::log( "Plan Registation", QStringLiteral( "Failed to register any plans" ) );
+    InputUtils::log( "Plan Registration", QStringLiteral( "Failed to register any plans" ) );
   }
 }
 
