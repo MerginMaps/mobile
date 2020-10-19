@@ -808,7 +808,7 @@ void MerginApi::registrationFinished()
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.\n You should now be able to sign in.");
+    QString msg = tr( "Registration successful.\n You should now be able to sign in." );
     emit notify( msg );
   }
   else
