@@ -219,7 +219,7 @@ Page {
 
     Text {
       id: textRestore
-      visible: __merginApi.apiSupportsSubscriptions && __purchasing.hasInAppPurchases && !__purchasing.transactionPending
+      visible: __iosUtils.isIos && __merginApi.apiSupportsSubscriptions && __purchasing.hasInAppPurchases && !__purchasing.transactionPending && root.ownsActiveSubscription
       textFormat: Text.RichText
       onLinkActivated: restorePurchasesClicked()
       elide: Text.ElideRight
