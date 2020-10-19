@@ -36,6 +36,7 @@ ApplicationWindow {
 
     Item {
         id: stateManager
+        state: "view"
         states: [
             // Default state - when none of state below
             State {
