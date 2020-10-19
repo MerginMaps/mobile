@@ -808,7 +808,7 @@ void MerginApi::registrationFinished()
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.\n You should now be able to sign in." );
+    QString msg = tr( "Registration successful.%1 You should now be able to sign in." ).arg( "\n" );
     emit notify( msg );
   }
   else
@@ -826,7 +826,7 @@ void MerginApi::registrationFinished()
     {
       // the self-registration is not allowed on the server
       emit registrationFailed();
-      emit notify( tr( "New registrations are not allowed on the selected Mergin server.\n Please check with your administrator." ).arg( "<br/>" ) );
+      emit notify( tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" ) );
     }
     else
     {
