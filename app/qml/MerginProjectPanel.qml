@@ -110,6 +110,10 @@ Item {
       projectsPanel.forceActiveFocus()
     }
     onRegistrationFailed: authPanel.pending = false
+    onRegistrationSucceeded: {
+      authPanel.pending = false
+      authPanel.state = "login"
+    }
   }
 
   id: projectsPanel
