@@ -379,82 +379,82 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="175"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="179"/>
         <source>Projects</source>
         <translation>Projekte</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>Unable to get the list of projects.</source>
         <translation>Aufrufen der Projektliste nicht möglich.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>No projects found!</source>
         <translation>Keine Projekte gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="281"/>
         <source>Explore public projects.</source>
         <translation>Öffentliche Projekte entdecken</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="349"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Keine heruntergeladenen Projekte gefunden.%1Wir zeigen dir %2wie du Projekte erstellen%3 und sie auf dein Gerät %4herunterladen kannst%3.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="432"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="444"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="448"/>
         <source>Remove from device</source>
         <translation>Vom Gerät entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="500"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="504"/>
         <source>You&apos;ve not been granted write access by the project owner</source>
         <translation>Dir fehlt die Bearbeitungsberechtigung des Projekteigentümers</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="547"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="551"/>
         <source>Home</source>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="566"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="570"/>
         <source>My projects</source>
         <translation>Meine Projekte</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared with me</source>
         <translation>Mit mir geteilt</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared</source>
         <translation>Geteilt</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="604"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="608"/>
         <source>Explore</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="693"/>
         <source>Remove project</source>
         <translation>Projekt entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="690"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="694"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Alle nicht synchronisierten Änderungen gehen verloren.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="727"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="731"/>
         <source>Retry</source>
         <translation>Erneut versuchen</translation>
     </message>
@@ -611,8 +611,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Drehung des Kartenausschnitts wird nicht unterstützt. Reset von %1 zu 0.</translation>
     </message>
@@ -726,42 +726,42 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="52"/>
+        <location filename="../qml/SettingsPanel.qml" line="55"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="76"/>
+        <location filename="../qml/SettingsPanel.qml" line="79"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="84"/>
+        <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>Follow GPS with map</source>
         <translation>GPS mit Karte folgen</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="126"/>
+        <location filename="../qml/SettingsPanel.qml" line="129"/>
         <source>GPS accuracy</source>
         <translation>GPS-Genauigkeit</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="181"/>
+        <location filename="../qml/SettingsPanel.qml" line="184"/>
         <source>Accuracy threshold</source>
         <translation>Genauigkeitsschwelle</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="198"/>
+        <location filename="../qml/SettingsPanel.qml" line="201"/>
         <source>Line rec. interval</source>
         <translation>Linien-Aufzeichnungsintervall</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="224"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <location filename="../qml/SettingsPanel.qml" line="236"/>
         <source>Diagnostic Log</source>
         <translation>Diagnoseprotokoll</translation>
     </message>
@@ -817,32 +817,32 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="97"/>
+        <location filename="../qml/main.qml" line="98"/>
         <source>Recorded feature is not valid</source>
         <translation>Aufgenommenes Feature ungültig</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS-Autocenter-Modus an</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS-Autocenter-Modus aus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="445"/>
+        <location filename="../qml/main.qml" line="449"/>
         <source>No editable layers found.</source>
         <translation>Keine zu bearbeitenden Layer gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="479"/>
+        <location filename="../qml/main.qml" line="483"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS momentan nicht verfügbar.%1Prüfe in den Einstellungen deines Geräts, ob die GPS-Lokalisierung aktiviert ist.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="645"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Communication error</source>
         <translation>Kommunikationsfehler</translation>
     </message>
