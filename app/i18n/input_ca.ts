@@ -210,12 +210,17 @@
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="199"/>
+        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <source>Download failed, remove and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../localprojectsmanager.cpp" line="211"/>
         <source>Found multiple QGIS project files</source>
         <translation>Hem trobat diversos projectes de QGIS</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="204"/>
+        <location filename="../localprojectsmanager.cpp" line="216"/>
         <source>Failed to find a QGIS project file</source>
         <translation>No hem trobat cap projecte de QGIS</translation>
     </message>
@@ -336,37 +341,37 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="547"/>
+        <location filename="../merginapi.cpp" line="556"/>
         <source>Username must have at least 4 characters</source>
         <translation>El nom d&apos;usuari ha de tenir 4 caracters com a mínim</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="554"/>
+        <location filename="../merginapi.cpp" line="563"/>
         <source>Please enter a valid email</source>
         <translation>Si us plau afegiu una adreça de correu vàlida</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="561"/>
+        <location filename="../merginapi.cpp" line="570"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Contrasenya fluixa. Ha de %1tenir com a mínim 8 caracters%1 minúscules%1majúscules%1 nombres o caracters especials</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="574"/>
+        <location filename="../merginapi.cpp" line="583"/>
         <source>Passwords do not match</source>
         <translation>Les contrasenyes no coincideixen</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="581"/>
+        <location filename="../merginapi.cpp" line="590"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si us plau accepteu els Termes i la Política de Privacitat</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="802"/>
+        <location filename="../merginapi.cpp" line="811"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation>Registre correcte.% 1 Ara hauríeu de poder iniciar la sessió.</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="820"/>
+        <location filename="../merginapi.cpp" line="829"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>No es permeten registres nous al servidor Mergin escollit.% 1 Si us plau consulteu-ho amb el vostre administrador.</translation>
     </message>
@@ -374,82 +379,82 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="175"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="179"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>Unable to get the list of projects.</source>
         <translation>Impossible obtenir la llista de projectes.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>No projects found!</source>
         <translation>No s&apos;ha trobat cap projecte!</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="281"/>
         <source>Explore public projects.</source>
         <translation>Explorar projectes públics</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="349"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>No s&apos;ha trobat cap projecte descarregat. %1Apreneu %2a crear projectes%  i %4 descarregar-los% 3 al vostre dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="432"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="444"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="448"/>
         <source>Remove from device</source>
         <translation>Esborrar del dispositiu</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="500"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="504"/>
         <source>You&apos;ve not been granted write access by the project owner</source>
         <translation>El propietari del projecte no us ha donat permisos per escriure</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="547"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="551"/>
         <source>Home</source>
         <translation>Inici</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="566"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="570"/>
         <source>My projects</source>
         <translation>Els meus projectes</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared with me</source>
         <translation>Compartit amb mi</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared</source>
         <translation>Compartit</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="604"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="608"/>
         <source>Explore</source>
         <translation>Explora</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="693"/>
         <source>Remove project</source>
         <translation>Esborrar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="690"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="694"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Es perdrà els canvis que no s&apos;han sincronitzat</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="727"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="731"/>
         <source>Retry</source>
         <translation>Reintentar</translation>
     </message>
@@ -721,42 +726,42 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="52"/>
+        <location filename="../qml/SettingsPanel.qml" line="55"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="76"/>
+        <location filename="../qml/SettingsPanel.qml" line="79"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="84"/>
+        <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>Follow GPS with map</source>
         <translation>Seguir el GPS amb el mapa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="126"/>
+        <location filename="../qml/SettingsPanel.qml" line="129"/>
         <source>GPS accuracy</source>
         <translation>Precisió GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="181"/>
+        <location filename="../qml/SettingsPanel.qml" line="184"/>
         <source>Accuracy threshold</source>
         <translation>Llindar de precisió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="198"/>
+        <location filename="../qml/SettingsPanel.qml" line="201"/>
         <source>Line rec. interval</source>
         <translation>Interval desat línia</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="224"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <location filename="../qml/SettingsPanel.qml" line="236"/>
         <source>Diagnostic Log</source>
         <translation>Registre de diagnòstic</translation>
     </message>
@@ -781,7 +786,7 @@
         <translation>Professional</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>La vostra subscripció a Mergin es renovarà automàticament. La podeu canviar o cancel·lar en qualsevol moment. %1Més detalls%2</translation>
     </message>
@@ -812,32 +817,32 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="97"/>
+        <location filename="../qml/main.qml" line="98"/>
         <source>Recorded feature is not valid</source>
         <translation>La característica enregistrada no és vàlida</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="445"/>
+        <location filename="../qml/main.qml" line="449"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="479"/>
+        <location filename="../qml/main.qml" line="483"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS no disponible. %1 Proveu de permetre la ubicació del GPS a la configuració del dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="645"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Communication error</source>
         <translation>Error de comunicació</translation>
     </message>
