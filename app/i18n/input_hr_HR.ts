@@ -379,82 +379,82 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="175"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="179"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nije bilo moguće učitati listu projekata.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>No projects found!</source>
         <translation>Nema pronađenih projekata!</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="281"/>
         <source>Explore public projects.</source>
         <translation>Istraži javne projekte!</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="349"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Nije pronađen niti jedan projekt.%1Pogledajte %2kako kreirati projekt%3 i %4kako ga preuzeti%3 na Vaš uređaj.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="432"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="444"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="448"/>
         <source>Remove from device</source>
         <translation>Ukloni sa uređaja</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="500"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="504"/>
         <source>You&apos;ve not been granted write access by the project owner</source>
         <translation>Nemate dozvolu za pisanje od vlasnika projekta</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="547"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="551"/>
         <source>Home</source>
         <translation>Početna stranica</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="566"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="570"/>
         <source>My projects</source>
         <translation>Moji projekti</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared with me</source>
         <translation>Podijeljeno samnom</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="604"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="608"/>
         <source>Explore</source>
         <translation>Istraži</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="693"/>
         <source>Remove project</source>
         <translation>Izbriši projekt</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="690"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="694"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Sve nesinkronizirane promjene će biti izgubljene.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="727"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="731"/>
         <source>Retry</source>
         <translation>Pokušaj ponovno</translation>
     </message>
@@ -726,42 +726,42 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="52"/>
+        <location filename="../qml/SettingsPanel.qml" line="55"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="76"/>
+        <location filename="../qml/SettingsPanel.qml" line="79"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="84"/>
+        <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>Follow GPS with map</source>
         <translation>Prati GPS na karti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="126"/>
+        <location filename="../qml/SettingsPanel.qml" line="129"/>
         <source>GPS accuracy</source>
         <translation>GPS točnost</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="181"/>
+        <location filename="../qml/SettingsPanel.qml" line="184"/>
         <source>Accuracy threshold</source>
         <translation>Prag točnosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="198"/>
+        <location filename="../qml/SettingsPanel.qml" line="201"/>
         <source>Line rec. interval</source>
         <translation>Interval linijskog snimanja</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="224"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <location filename="../qml/SettingsPanel.qml" line="236"/>
         <source>Diagnostic Log</source>
         <translation>Dijagnostički zapis</translation>
     </message>
@@ -817,32 +817,32 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="97"/>
+        <location filename="../qml/main.qml" line="98"/>
         <source>Recorded feature is not valid</source>
         <translation>Snimljeni objekt nije ispravan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode on</source>
         <translation>Način GPS autocentriranja uključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode off</source>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="445"/>
+        <location filename="../qml/main.qml" line="449"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="479"/>
+        <location filename="../qml/main.qml" line="483"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS trenutno nije dostupan.%1Pokušajte omogućiti GPS lokaciju u postavkama Vašeg uređaja.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="645"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Communication error</source>
         <translation>Greška u komunikaciji</translation>
     </message>
