@@ -57,7 +57,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>Du kannst deine Käufe auch %wiederherstellen%2</translation>
+        <translation>Du kannst deine Käufe auch 1%wiederherstellen%2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="248"/>
@@ -75,7 +75,7 @@
     <message>
         <location filename="../qml/ActiveLayerPanel.qml" line="63"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
-        <translation>Es konnten keine editierbaren Layer im Projekt gefunden werden. Siehe %1Wie Digitalisierungen in deinem Projekt ermöglicht werden%2.</translation>
+        <translation>Es konnten keine zu bearbeitenden Layer im Projekt gefunden werden. Siehe %1Wie Digitalisierungen in deinem Projekt ermöglicht werden%2.</translation>
     </message>
 </context>
 <context>
@@ -210,12 +210,17 @@
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="199"/>
+        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Download fehlgeschlagen, Datei entfernen und erneut versuchen</translation>
+    </message>
+    <message>
+        <location filename="../localprojectsmanager.cpp" line="211"/>
         <source>Found multiple QGIS project files</source>
         <translation>Mehrere QGIS Projektdateien gefunden</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="204"/>
+        <location filename="../localprojectsmanager.cpp" line="216"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Es konnte keine QGIS Projektdatei gefunden werden.</translation>
     </message>
@@ -336,37 +341,37 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="547"/>
+        <location filename="../merginapi.cpp" line="556"/>
         <source>Username must have at least 4 characters</source>
         <translation>Der Benutzername muss mindestens 4 Zeichen haben</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="554"/>
+        <location filename="../merginapi.cpp" line="563"/>
         <source>Please enter a valid email</source>
         <translation>Bitte eine gültige E-Mail-Adresse eingeben</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="561"/>
+        <location filename="../merginapi.cpp" line="570"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Passwort nicht sicher genug. Es muss%1 mindestens 8 Zeichen haben%1 Kleinbuchstaben enthalten%1 Großbuchstaben enthalten%1 Zahlen oder Sonderzeichen enthalten</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="574"/>
+        <location filename="../merginapi.cpp" line="583"/>
         <source>Passwords do not match</source>
         <translation>Passwörter nicht identisch</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="581"/>
+        <location filename="../merginapi.cpp" line="590"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="802"/>
+        <location filename="../merginapi.cpp" line="811"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation>Registrierung erfolgreich.%1 Du kannst dich nun einloggen.</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="820"/>
+        <location filename="../merginapi.cpp" line="829"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Neue Registrierungen sind auf dem ausgewählten Mergin Server nicht zulässig.%1Bitte wende dich an deinen Administrator.</translation>
     </message>
@@ -459,7 +464,7 @@
     <message>
         <location filename="../merginprojectstatusmodel.cpp" line="70"/>
         <source>Pending Changes</source>
-        <translation>offene Änderungen</translation>
+        <translation>Offene Änderungen</translation>
     </message>
     <message>
         <location filename="../merginprojectstatusmodel.cpp" line="96"/>
@@ -606,8 +611,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Drehung des Kartenausschnitts wird nicht unterstützt. Reset von %1 zu 0.</translation>
     </message>
@@ -781,7 +786,7 @@
         <translation>Professionell</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Dein Mergin Mitgliedschaftsplan wird automatisch verlängert. Du kannst ihn jederzeit kündigen oder ändern. %1Erfahre mehr%2</translation>
     </message>
