@@ -12,7 +12,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="150"/>
         <source>Your subscription was cancelled on %1</source>
-        <translation>Votre abonnement a été annulé au %1</translation>
+        <translation>Votre abonnement a été annulé le %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="47"/>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="122"/>
         <source>Your subscription will not auto-renew after %1</source>
-        <translation>Votre abonnement ne sera pas renouvelé après le %1</translation>
+        <translation>Votre abonnement ne sera pas renouvelé automatiquement après le %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="131"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>Vous pouvez également %1restaurer%2 vos achats</translation>
+        <translation>Vous pouvez également %1renouveler%2 vos achats</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="248"/>
@@ -83,7 +83,7 @@
     <message>
         <location filename="../qml/AuthPanel.qml" line="123"/>
         <source>Please update Input to use the latest Mergin features.</source>
-        <translation>Veuillez mettre l&apos;application Input à jour pour pouvoir utiliser les dernières entités Mergin.</translation>
+        <translation>Veuillez mettre l&apos;application Input à jour pour pouvoir utiliser les derniers outils Mergin.</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="127"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../inputhelp.cpp" line="172"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
-        <translation>Rapport transmis.%1Veuillez nous contacter à l&apos;adresse%1%2</translation>
+        <translation>Rapport transmis.%1Veuillez nous contacter par courriel à l&apos;adresse%1%2</translation>
     </message>
     <message>
         <location filename="../inputhelp.cpp" line="177"/>
@@ -210,12 +210,17 @@
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="199"/>
+        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Téléchargement échoué, supprimer et réessayer</translation>
+    </message>
+    <message>
+        <location filename="../localprojectsmanager.cpp" line="211"/>
         <source>Found multiple QGIS project files</source>
         <translation>Des fichiers de projet QGIS multiples ont été trouvés</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="204"/>
+        <location filename="../localprojectsmanager.cpp" line="216"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Impossible de trouver un fichier de projet QGIS</translation>
     </message>
@@ -336,37 +341,37 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="547"/>
+        <location filename="../merginapi.cpp" line="556"/>
         <source>Username must have at least 4 characters</source>
         <translation>Le nom d&apos;utilisateur doit comporter au moins 4 caractères</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="554"/>
+        <location filename="../merginapi.cpp" line="563"/>
         <source>Please enter a valid email</source>
         <translation>Veuillez saisir une adresse e-mail valide</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="561"/>
+        <location filename="../merginapi.cpp" line="570"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Ce mot de passe n&apos;est pas assez sécurisé. Il doit%1 comporter au moins 8 caractères%1 contenir des caractères minuscules%1 contenir des caractères majuscules%1 contenir des chiffres ou des caractères spéciaux</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="574"/>
+        <location filename="../merginapi.cpp" line="583"/>
         <source>Passwords do not match</source>
         <translation>Les mots de passe ne correspondent pas</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="581"/>
+        <location filename="../merginapi.cpp" line="590"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Veuillez accepter les termes et la politique de confidentialité</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="802"/>
+        <location filename="../merginapi.cpp" line="811"/>
         <source>Registration successful.%1 You should now be able to sign in.</source>
         <translation>Inscription réussie.%1Vous devriez maintenant pouvoir vous connecter.</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="820"/>
+        <location filename="../merginapi.cpp" line="829"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Le serveur Mergin sélectionné n&apos;accepte pas de nouvelles inscriptions.%1Veuillez prendre contact avec votre administrateur.</translation>
     </message>
@@ -374,82 +379,82 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="175"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="179"/>
         <source>Projects</source>
         <translation>Projets</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>Unable to get the list of projects.</source>
         <translation>Impossible de récupérer la liste des projets.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="384"/>
         <source>No projects found!</source>
         <translation>Aucun projet n&apos;a été trouvé !</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="277"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="281"/>
         <source>Explore public projects.</source>
         <translation>Explorer les projets publics.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="345"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="349"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Aucun projet téléchargé n&apos;a été trouvé.%1Apprenez %2comment créer des projets%3 et %4les télécharger%3 sur votre appareil.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="432"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="444"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="448"/>
         <source>Remove from device</source>
         <translation>Supprimer de l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="500"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="504"/>
         <source>You&apos;ve not been granted write access by the project owner</source>
         <translation>Le titulaire du projet ne vous a pas autorisé à écrire dans ce projet</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="547"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="551"/>
         <source>Home</source>
         <translation>Accueil</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="566"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="570"/>
         <source>My projects</source>
         <translation>Mes projets</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared with me</source>
         <translation>Partagé avec moi</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="585"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="589"/>
         <source>Shared</source>
         <translation>Partagé</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="604"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="608"/>
         <source>Explore</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="689"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="693"/>
         <source>Remove project</source>
         <translation>Supprimer le projet</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="690"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="694"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Toutes les modifications non-synchronisées seront perdues.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="727"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="731"/>
         <source>Retry</source>
         <translation>Réessayer</translation>
     </message>
@@ -702,7 +707,7 @@
     <message>
         <location filename="../qml/RegistrationForm.qml" line="311"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>J&apos;accepte les %1Termes et conditions%3 Mergi et la %2Politique de confidentialité%3</translation>
+        <translation>J&apos;accepte les %1Termes et conditions%3 de Mergin et la %2Politique de confidentialité%3</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="333"/>
@@ -721,42 +726,42 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="52"/>
+        <location filename="../qml/SettingsPanel.qml" line="55"/>
         <source>Settings</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="76"/>
+        <location filename="../qml/SettingsPanel.qml" line="79"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="84"/>
+        <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>Follow GPS with map</source>
         <translation>Suivre le GPS avec la carte</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="126"/>
+        <location filename="../qml/SettingsPanel.qml" line="129"/>
         <source>GPS accuracy</source>
         <translation>Précision du GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="181"/>
+        <location filename="../qml/SettingsPanel.qml" line="184"/>
         <source>Accuracy threshold</source>
         <translation>Seuil de précision</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="198"/>
+        <location filename="../qml/SettingsPanel.qml" line="201"/>
         <source>Line rec. interval</source>
         <translation>Intervalle d&apos;enregistrement de la ligne</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="224"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="233"/>
+        <location filename="../qml/SettingsPanel.qml" line="236"/>
         <source>Diagnostic Log</source>
         <translation>Journal de diagnostic</translation>
     </message>
@@ -781,7 +786,7 @@
         <translation>Professionnel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="160"/>
+        <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Votre plan d&apos;abonnement à Mergin se renouvellera automatiquement. Vous pouvez l&apos;annuler ou le modifier à tout moment. %1En savoir plus%2</translation>
     </message>
@@ -812,32 +817,32 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="97"/>
+        <location filename="../qml/main.qml" line="98"/>
         <source>Recorded feature is not valid</source>
         <translation>L&apos;entité enregistrée n&apos;est pas valide</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode d&apos;auto-centrage GPS activé</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="429"/>
+        <location filename="../qml/main.qml" line="433"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode d&apos;auto-centrage GPS désactivé</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="445"/>
+        <location filename="../qml/main.qml" line="449"/>
         <source>No editable layers found.</source>
         <translation>Aucune couche éditable n&apos;a pu être trouvée.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="479"/>
+        <location filename="../qml/main.qml" line="483"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>Le GPS n&apos;est actuellement pas disponible.%1Essayez d&apos;autoriser la Localisation par GPS dans les options de votre appareil.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="645"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Communication error</source>
         <translation>Erreur de communication</translation>
     </message>
