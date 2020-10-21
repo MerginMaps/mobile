@@ -29,7 +29,7 @@ It should prompt that "Certificate already exists in keystore under alias. Do yo
 6. Type 'y' and press enter. You will receive a confirmation message.
 7. For subsequent builds sign the app using the same process as in (2).
 
-Note: Make sure you have updated `android:versionName="x.y.z"` and `android:versionCode="v"` in `AndroidManifest.xml` before any release update. 
+Note: Make sure you have updated `app\version.pri`.
 Also check if you have target SDK set at least to version 26 (Android 8): `android:targetSdkVersion="26"`.
 
 ## Internal test release (Google Play Console)
