@@ -7,6 +7,7 @@
     <file>input_ca.qm</file> 
     <file>input_it.qm</file> 
     <file>input_es.qm</file> 
+    <file>input_tr.qm</file> 
     <file>input_en.qm</file> 
     <file>input_fr.qm</file> 
   </qresource> 
