@@ -1088,19 +1088,6 @@ void MerginApi::pingMergin()
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
 
-bool MerginApi::hasWriteAccess( const QString &projectFullName )
-{
-  if ( !mUserAuth->hasAuthData() )
-  {
-    return false;
-  }
-
-  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-  QString projectDir = projectInfo.projectDir;
-  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  return projectMetadata.writersnames.contains( mUserAuth->username() );
-}
-
 QString MerginApi::apiRoot() const
 {
   return mApiRoot;
