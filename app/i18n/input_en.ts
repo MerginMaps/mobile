@@ -48,12 +48,12 @@
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Buy Subscription</source>
+        <source>Working...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Working...</source>
+        <source>Subscription plans</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -797,7 +797,7 @@
     <name>SubscribePlanItem</name>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="36"/>
-        <source> Subscription Plan</source>
+        <source>Plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
