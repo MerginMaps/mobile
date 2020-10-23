@@ -33,7 +33,7 @@ Item {
     TextWithIcon {
       width: parent.width
       source: 'info.svg'
-      text: "Mergin" + root.name + qsTr("Plan")
+      text: "Mergin " + root.name + " " + qsTr("Plan")
     }
 
     TextWithIcon {
