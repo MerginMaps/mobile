@@ -190,7 +190,7 @@ Page {
       visible: __merginApi.apiSupportsSubscriptions
 
       height: InputStyle.rowHeightHeader
-      text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Buy Subscription")
+      text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
       font.pixelSize: subscribeButton.height / 2
 
       background: Rectangle {
