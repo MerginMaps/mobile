@@ -498,11 +498,7 @@ Item {
           var withoutAuth = !__merginApi.userAuth.hasAuthData() && toolbar.highlighted === exploreBtn.text
           __merginApi.updateProject(projectNamespace, projectName, withoutAuth)
         } else if (status === "modified") {
-          if (__merginApi.hasWriteAccess(projectFullName)) {
-            __merginApi.uploadProject(projectNamespace, projectName)
-          } else {
-            __inputUtils.showNotification(qsTr("You've not been granted write access by the project owner"))
-          }
+          __merginApi.uploadProject(projectNamespace, projectName)
         }
       }
 

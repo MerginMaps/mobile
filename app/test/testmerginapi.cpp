@@ -94,7 +94,6 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebaseFailed" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithDiffs" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithMissedVersion" );
-  deleteRemoteProject( mApiExtra, mUsername, "testHasWriteAccess" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -1290,30 +1289,6 @@ void TestMerginApi::testUpdateWithMissedVersion()
   QVERIFY( vl->isValid() );
   QCOMPARE( vl->featureCount(), static_cast<long>( 4 ) );
   delete vl;
-}
-
-void TestMerginApi::testHasWriteAccess()
-{
-  // Test of hasWriteAccess method used in QML - the permission to write depends on access->writersnames in mergin.json
-  QString projectName = "testHasWriteAccess";
-  QString projectNamespace = mUsername;
-
-  createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
-  downloadRemoteProject( mApi, projectNamespace, projectName );
-  QString fullProjectName = MerginApi::getFullProjectName( projectNamespace, projectName );
-
-  // test with not auth
-  mApi->clearAuth();
-  QVERIFY( !mApi->hasWriteAccess( fullProjectName ) );
-
-  // test with valid auth
-  QSignalSpy spyExtra( mApi, &MerginApi::authChanged );
-  mApi->authorize( mApiExtra->userAuth()->username(), mApiExtra->userAuth()->password() );
-  QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spyExtra.count(), 1 );
-
-  QVERIFY( mApi->userAuth()->hasAuthData() );
-  QVERIFY( mApi->hasWriteAccess( fullProjectName ) );
 }
 
 void TestMerginApi::testRegister()

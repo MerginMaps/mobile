@@ -293,8 +293,6 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void pingMergin();
 
-    Q_INVOKABLE bool hasWriteAccess( const QString &projectFullName );
-
     LocalProjectInfo getLocalProject( const QString &projectFullName );
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
