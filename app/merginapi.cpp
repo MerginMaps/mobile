@@ -1155,7 +1155,6 @@ void MerginApi::listProjectsReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     QByteArray data = r->readAll();
-    qDebug() << "RAW DATA:" << data;
     mRemoteProjects = parseListProjectsMetadata( data );
 
     // for any local projects we can update the latest server version
