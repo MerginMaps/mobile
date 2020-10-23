@@ -37,6 +37,10 @@ class IosUtils: public QObject
   private:
 
     IOSImagePicker *mImagePicker;
+    /**
+     * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
+     */
+    void setIdleTimerDisabled();
 };
 
 #endif // IOSUTILS_H
