@@ -66,54 +66,61 @@ Item {
       }
   }
 
-  onFeatureLayerPairChanged: {
-      var data = __inputUtils.extractGeometryCoordinates(featureLayerPair, mapSettings)
+  onFeatureLayerPairChanged: { // highlighting features
+    let data = __inputUtils.extractGeometryCoordinates( featureLayerPair, mapSettings )
 
-      var newMarkerItems = []
-      var newLineElements = []
-      var newPolygonElements = []
+    let newMarkerItems = []
+    let newLineElements = []
+    let newPolygonElements = []
 
-      var i = 0
-      while (i < data.length)
+    let typeIdx = 0
+    let pointDataStartIdx = 1
+    let lpDataStartIdx = 2 // for lines and polygons
+
+    console.log( "DATA: ", data )
+
+    if ( data.length > lpDataStartIdx )
+    {
+      if ( data[ typeIdx ] === 0 ) // point (0)
       {
-          var type = data[i]
-          ++i
-          if ( type === 0 )
-          {
-              // point
-              newMarkerItems.push(componentMarker.createObject(highlight, {"posX":data[i],"posY":data[i+1]}))
-              i += 2
-          }
-          else
-          {
-              // linestring (1) or polygon (2)
-              var objOwner = (type === 1 ? lineShapePath : polygonShapePath)
-              var elems = (type === 1 ? newLineElements : newPolygonElements)
-              var len = data[i]
-              ++i
-              elems.push(componentMoveTo.createObject(objOwner, {"x": data[i],"y":data[i+1]}))
-              i+=2
-              for (var j = 1; j < len; ++j)
-              {
-                  elems.push(componentLineTo.createObject(objOwner, {"x": data[i],"y":data[i+1]}))
-                  i+=2
-              }
-          }
-
+        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ pointDataStartIdx ], "posY": data[ pointDataStartIdx + 1 ] } ) )
       }
+      else // line (1) or polygon (2)
+      {
+        if ( data.length < lpDataStartIdx + 3 ) // if this is the first point in line / polygon
+        {
+          // place temporary point marker
+          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ lpDataStartIdx ], "posY": data[ lpDataStartIdx + 1 ] } ) )
+        }
+        else // iterate over points
+        {
+          let objOwner = ( data[ typeIdx ] === 1 ? lineShapePath : polygonShapePath )
+          let elems = ( data[ typeIdx ] === 1 ? newLineElements : newPolygonElements )
+          let dataLength = data[ 1 ] * 2
 
-      for (var k = 0; k < markerItems.length; ++k)
-        markerItems[k].destroy()
-      markerItems = newMarkerItems
+          // move brush to the first point
+          elems.push( componentMoveTo.createObject( objOwner, {"x": data[ lpDataStartIdx ], "y": data[ lpDataStartIdx + 1 ] } ) )
+          for ( let i = lpDataStartIdx + 2; i <= dataLength; i += 2 )
+          {
+            elems.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          }
+        }
+        // TODO: place temporary line marker from last point to current crosshair
+      }
+    }
 
-      if (newLineElements.length === 0)
-          newLineElements.push(componentMoveTo.createObject(lineShapePath))
-      lineShapePath.pathElements = newLineElements
-      lineOutlineShapePath.pathElements = newLineElements
+    for (var k = 0; k < markerItems.length; ++k)
+      markerItems[k].destroy()
+    markerItems = newMarkerItems
 
-      if (newPolygonElements.length === 0)
-          newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
-      polygonShapePath.pathElements = newPolygonElements
+    if (newLineElements.length === 0)
+      newLineElements.push(componentMoveTo.createObject(lineShapePath))
+    lineShapePath.pathElements = newLineElements
+    lineOutlineShapePath.pathElements = newLineElements
+
+    if (newPolygonElements.length === 0)
+      newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
+    polygonShapePath.pathElements = newPolygonElements
   }
 
   // keeps list of currently displayed marker items (an internal property)
