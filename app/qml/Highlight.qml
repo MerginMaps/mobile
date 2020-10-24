@@ -15,6 +15,8 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: highlight
 
+  signal positionChanged()
+
   // color for line geometries
   property color lineColor: "black"
   // width for line geometries
@@ -41,6 +43,8 @@ Item {
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
+
+  property bool isRecording: false
 
   //
   // internal properties not meant to be modified from outside
@@ -87,10 +91,15 @@ Item {
       }
       else // line (1) or polygon (2)
       {
-        if ( data.length < lpDataStartIdx + 3 ) // if this is the first point in line / polygon
+        if ( data.length < lpDataStartIdx + 3 && isRecording ) // if this is the first point in line / polygon
         {
           // place temporary point marker
-          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ lpDataStartIdx ], "posY": data[ lpDataStartIdx + 1 ] } ) )
+          newMarkerItems.push( componentMarker.createObject( highlight,
+                                                            {
+                                                              "posX": data[ lpDataStartIdx ],
+                                                              "posY": data[ lpDataStartIdx + 1 ],
+                                                              "markerType": "circle"
+                                                            } ) )
         }
         else // iterate over points
         {
@@ -104,13 +113,20 @@ Item {
           {
             elems.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
           }
+
+          // place temp line to center of screen for visual feedback
+          if ( isRecording ) {
+            let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+            crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+            elems.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
+          }
         }
-        // TODO: place temporary line marker from last point to current crosshair
       }
     }
 
-    for (var k = 0; k < markerItems.length; ++k)
-      markerItems[k].destroy()
+//    for (var k = 0; k < markerItems.length; ++k)
+//      markerItems[k].destroy()
+    markerItems = markerItems.map( marker => marker.destroy() )
     markerItems = newMarkerItems
 
     if (newLineElements.length === 0)
@@ -121,28 +137,46 @@ Item {
     if (newPolygonElements.length === 0)
       newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
     polygonShapePath.pathElements = newPolygonElements
+
+    // TODO: change
+    updateTempLine = true
+  }
+
+  onPositionChanged: {
+    if ( !isRecording || !updateTempLine)
+      return
+
+    // TODO: check if recording line or polygon (by actual featureLayerPair)
+    let elements = Object.values(lineOutlineShapePath.pathElements)
+    elements.pop()
+    let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+    crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+    elements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
+    lineOutlineShapePath.pathElements = elements
   }
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
+  property bool updateTempLine: false
 
   Component {
     id: componentMarker
     Item {
       property real posX: 0
       property real posY: 0
+      property string markerType: highlight.markerType
       x: posX* highlight.mapTransformScale + highlight.mapTransformOffsetX* highlight.mapTransformScale - highlight.markerAnchorX
       y: posY*-highlight.mapTransformScale + highlight.mapTransformOffsetY*-highlight.mapTransformScale - highlight.markerAnchorY
       width: highlight.markerWidth
       height: highlight.markerHeight
       Rectangle {
-          visible: highlight.markerType == "circle"
+          visible: markerType == "circle"
           anchors.fill: parent
           color: highlight.markerColor
           radius: width/2
       }
       Image {
-          visible: highlight.markerType == "image"
+          visible: markerType == "image"
           anchors.fill: parent
           source: highlight.markerImageSource
           sourceSize.width: width
@@ -180,6 +214,13 @@ Item {
     }
 
     ShapePath {
+      id: tempLinePath
+//      fillColor: "transparent"
+      capStyle: ShapePath.RoundCap
+      strokeStyle: ShapePath.DashLine
+    }
+
+    ShapePath {
       id: polygonShapePath
       strokeColor: highlight.outlineColor
       strokeWidth: highlight.outlinePenWidth / highlight.mapTransformScale  // negate scaling from the transform
@@ -188,5 +229,4 @@ Item {
       joinStyle: ShapePath.BevelJoin
     }
   }
-
 }

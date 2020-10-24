@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -249,6 +249,11 @@ ApplicationWindow {
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
+        window.width = 423
+        window.height = 601
+        window.x = 1100
+        window.y = 266
+
         console.log("Completed Running!")
     }
 
@@ -336,6 +341,7 @@ ApplicationWindow {
       markerWidth: highlight.markerWidth
       markerHeight: highlight.markerHeight
       markerAnchorY: highlight.markerAnchorY
+      isRecording: digitizing.recording
 
       // enable anti-aliasing to make the higlight look nicer
       // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
@@ -381,6 +387,7 @@ ApplicationWindow {
             // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
             digitizing.useGpsPoint = useGpsPoint
         }
+        digitizingHighlight.positionChanged()
       }
     }
 
