@@ -46,13 +46,13 @@
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Buy Subscription</source>
-        <translation>Abonelik Satın Al</translation>
+        <source>Working...</source>
+        <translation>Üzerinde Çalışılıyor...</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Working...</source>
-        <translation>Üzerinde Çalışılıyor...</translation>
+        <source>Subscription plans</source>
+        <translation>Abonelik planları</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
@@ -795,8 +795,8 @@
     <name>SubscribePlanItem</name>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="36"/>
-        <source> Subscription Plan</source>
-        <translation>Abonelik Planı</translation>
+        <source>Plan</source>
+        <translation>Plan</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="54"/>
