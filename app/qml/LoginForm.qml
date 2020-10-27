@@ -176,7 +176,7 @@ Rectangle {
       width: loginForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign in")
-      font.pixelSize: loginButton.height / 2
+      font.pixelSize: InputStyle.fontPixelSizeTitle
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         root.pending = true
@@ -246,7 +246,7 @@ Rectangle {
         width: loginForm.width - 2 * root.panelMargin
         height: fieldHeight * 0.7
         text: qsTr("Sign up")
-        font.pixelSize: signUpButton.height / 2
+        font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: loginForm.registrationRequested()
         background: Rectangle {

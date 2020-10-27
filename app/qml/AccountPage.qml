@@ -191,7 +191,7 @@ Page {
 
       height: InputStyle.rowHeightHeader
       text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
-      font.pixelSize: subscribeButton.height / 2
+      font.pixelSize: InputStyle.fontPixelSizeTitle
 
       background: Rectangle {
         color: InputStyle.highlightColor

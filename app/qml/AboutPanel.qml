@@ -75,7 +75,7 @@ Item {
 
                 Text {
                     text: "v" + __version
-                    font.pixelSize: inputLinkBtn.height/2
+                    font.pixelSize: InputStyle.fontPixelSizeSmall
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: fontColor
                 }
@@ -84,8 +84,6 @@ Item {
                     id: inputLinkBtn
                     width: content.width - 2* root.panelMargin
                     height: fieldHeight * 0.7
-                    text: root.inputLink
-                    font.pixelSize: inputLinkBtn.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked:Qt.openUrlExternally(root.inputLink);
                     background: Rectangle {
@@ -93,8 +91,8 @@ Item {
                     }
 
                     contentItem: Text {
-                        text: inputLinkBtn.text
-                        font: inputLinkBtn.font
+                        text: root.inputLink
+                        font.pixelSize: InputStyle.fontPixelSizeNormal
                         color: InputStyle.highlightColor
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -106,7 +104,7 @@ Item {
             Text {
                 id: developedText
                 text: qsTr("Developed by")
-                font.pixelSize: inputLinkBtn.height/2
+                font.pixelSize: InputStyle.fontPixelSizeSmall
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: lutraLogo.top
                 color: fontColor

@@ -84,7 +84,7 @@ Item {
 
           height: InputStyle.rowHeightHeader
           text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send Log to Developers")
-          font.pixelSize: sendButton.height / 3
+          font.pixelSize: InputStyle.fontPixelSizeTitle
 
           background: Rectangle {
             color: InputStyle.fontColor

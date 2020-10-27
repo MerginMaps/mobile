@@ -331,7 +331,7 @@ Rectangle {
       width: registerForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign up")
-      font.pixelSize: registerButton.height / 2
+      font.pixelSize: InputStyle.fontPixelSizeTitle
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         root.pending = true
