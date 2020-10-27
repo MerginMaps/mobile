@@ -60,39 +60,6 @@ Rectangle {
             spacing: InputStyle.panelMargin
 
             Item {
-                id: iconContainer
-                height: itemContainer.cellHeight
-                width: itemContainer.iconSize
-
-                Image {
-                    id: icon
-                    visible: !pending
-                    anchors.centerIn: parent
-                    source: 'project.svg'
-                    width: itemContainer.iconSize
-                    height: width
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                ColorOverlay {
-                    anchors.fill: icon
-                    source: icon
-                    visible: !pending
-                    color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                }
-
-                BusyIndicator {
-                    id: busyIndicator
-                    implicitHeight: itemContainer.cellHeight/2
-                    implicitWidth: implicitHeight
-                    running: pending
-                    anchors.centerIn: parent
-                }
-            }
-
-            Item {
                 id: textContainer
                 height: itemContainer.cellHeight
                 Layout.fillWidth: true
