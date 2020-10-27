@@ -74,7 +74,7 @@ Item {
       height: InputStyle.rowHeightHeader
       text: hasPlan ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
       enabled: text !== ''
-      font.pixelSize: subscribeButton.height / 2
+      font.pixelSize: InputStyle.fontPixelSizeTitle
 
       background: Rectangle {
         color: InputStyle.highlightColor
