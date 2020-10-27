@@ -546,26 +546,6 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-        id: gpsAccuracy
-        width: scaleBar.textWidth
-        height: 35 * QgsQuick.Utils.dp
-        x: 0
-        y: window.height - 2 * (35 * QgsQuick.Utils.dp)
-        z: zToolkits
-        color: InputStyle.clrPanelBackground
-        opacity: InputStyle.panelOpacity
-        visible: false
-        Text  {
-            anchors.fill: parent
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            color: scaleBar.barColor
-            font.pixelSize: scaleBar.height - 2 * scaleBar.lineWidth
-            text: QgsQuick.Utils.formatDistance( positionKit.accuracy, positionKit.accuracyUnits, 0 )
-        }
-    }
-
     MerginProjectPanel {
         id: openProjectPanel
         height: window.height
