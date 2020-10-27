@@ -34,8 +34,8 @@ QtObject {
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 
     property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20 * rado2Lutra
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 * rado2Lutra
-    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 32 * rado2Lutra
+    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 24 * rado2Lutra
+    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 28 * rado2Lutra
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
