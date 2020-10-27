@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick 2.11
-import QtQuick.Shapes 1.11
+import QtQuick.Shapes 1.12
 
 import QgsQuick 0.1 as QgsQuick
 
@@ -31,7 +31,7 @@ Item {
   property color outlineColor: "black"
 
   property string markerType: "circle"   // "circle" or "image"
-  property color markerColor: "yellow"
+  property color markerColor: "red"
   property real markerWidth: 30 * QgsQuick.Utils.dp
   property real markerHeight: 30 * QgsQuick.Utils.dp
   property real markerAnchorX: markerWidth/2
@@ -49,6 +49,8 @@ Item {
   //
   // internal properties not meant to be modified from outside
   //
+  property real markerOffsetY: 14 * QgsQuick.Utils.dp // for circle marker type to be aligned with crosshair
+  property real markerCircleSize: 20 * QgsQuick.Utils.dp
 
   // transform used by line/path
   property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
@@ -78,54 +80,50 @@ Item {
     let newPolygonElements = []
 
     let typeIdx = 0
-    let pointDataStartIdx = 1
-    let lpDataStartIdx = 2 // for lines and polygons
+    let dataStartIndex = ( data[ typeIdx ] === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
 
     console.log( "DATA: ", data )
 
-    if ( data.length > lpDataStartIdx )
+    if ( data.length > dataStartIndex )
     {
       if ( data[ typeIdx ] === 0 ) // point (0)
       {
-        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ pointDataStartIdx ], "posY": data[ pointDataStartIdx + 1 ] } ) )
+        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ dataStartIndex ], "posY": data[ dataStartIndex + 1 ] } ) )
       }
       else // line (1) or polygon (2)
       {
-        if ( data.length < lpDataStartIdx + 3 && isRecording ) // if this is the first point in line / polygon
+        if ( data.length < dataStartIndex + 3 && isRecording ) // if this is the first point in line / polygon
         {
           // place temporary point marker
           newMarkerItems.push( componentMarker.createObject( highlight,
                                                             {
-                                                              "posX": data[ lpDataStartIdx ],
-                                                              "posY": data[ lpDataStartIdx + 1 ],
+                                                              "posX": data[ dataStartIndex ],
+                                                              "posY": data[ dataStartIndex + 1 ],
                                                               "markerType": "circle"
                                                             } ) )
         }
-        else // iterate over points
+        // iterate over points
+        let objOwner = ( data[ typeIdx ] === 1 ? lineShapePath : polygonShapePath )
+        let elems = ( data[ typeIdx ] === 1 ? newLineElements : newPolygonElements )
+        let dataLength = data[ 1 ] * 2
+
+        // move brush to the first point
+        elems.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
+        for ( let i = dataStartIndex + 2; i <= dataLength; i += 2 )
         {
-          let objOwner = ( data[ typeIdx ] === 1 ? lineShapePath : polygonShapePath )
-          let elems = ( data[ typeIdx ] === 1 ? newLineElements : newPolygonElements )
-          let dataLength = data[ 1 ] * 2
+          elems.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+        }
 
-          // move brush to the first point
-          elems.push( componentMoveTo.createObject( objOwner, {"x": data[ lpDataStartIdx ], "y": data[ lpDataStartIdx + 1 ] } ) )
-          for ( let i = lpDataStartIdx + 2; i <= dataLength; i += 2 )
-          {
-            elems.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
-          }
+        // place temp line to center of screen for visual feedback
+        if ( isRecording ) {
 
-          // place temp line to center of screen for visual feedback
-          if ( isRecording ) {
-            let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-            elems.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
-          }
+          let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+          crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+          elems.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
         }
       }
     }
 
-//    for (var k = 0; k < markerItems.length; ++k)
-//      markerItems[k].destroy()
     markerItems = markerItems.map( marker => marker.destroy() )
     markerItems = newMarkerItems
 
@@ -138,21 +136,32 @@ Item {
       newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
     polygonShapePath.pathElements = newPolygonElements
 
+//    tempLinePath.pathElements = newLineElements
     // TODO: change
     updateTempLine = true
   }
 
   onPositionChanged: {
-    if ( !isRecording || !updateTempLine)
+    if ( !isRecording )
       return
 
     // TODO: check if recording line or polygon (by actual featureLayerPair)
     let elements = Object.values(lineOutlineShapePath.pathElements)
-    elements.pop()
+
+    // if we have not yet added any point, do not draw a line
+    if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
+      return
+
+    let tmp = elements.pop()
+
+    if (elements.length === 0)
+      elements.push( componentMoveTo.createObject( lineShapePath, { "x": tmp.x, "y": tmp.y } ) )
+
     let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
     crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
     elements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
     lineOutlineShapePath.pathElements = elements
+//    tempLinePath.pathElements = elements
   }
 
   // keeps list of currently displayed marker items (an internal property)
@@ -171,7 +180,12 @@ Item {
       height: highlight.markerHeight
       Rectangle {
           visible: markerType == "circle"
-          anchors.fill: parent
+          anchors {
+            centerIn: parent
+            verticalCenterOffset: highlight.markerOffsetY
+          }
+          width: markerCircleSize
+          height: markerCircleSize
           color: highlight.markerColor
           radius: width/2
       }
@@ -214,19 +228,19 @@ Item {
     }
 
     ShapePath {
-      id: tempLinePath
-//      fillColor: "transparent"
-      capStyle: ShapePath.RoundCap
-      strokeStyle: ShapePath.DashLine
-    }
-
-    ShapePath {
       id: polygonShapePath
       strokeColor: highlight.outlineColor
       strokeWidth: highlight.outlinePenWidth / highlight.mapTransformScale  // negate scaling from the transform
       fillColor: highlight.fillColor
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
+    }
+
+    ShapePath {
+      id: tempLinePath
+      fillColor: "transparent"
+      strokeColor: "blue"
+      capStyle: ShapePath.RoundCap
     }
   }
 }

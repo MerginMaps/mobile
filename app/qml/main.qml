@@ -387,6 +387,7 @@ ApplicationWindow {
             // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
             digitizing.useGpsPoint = useGpsPoint
         }
+
         digitizingHighlight.positionChanged()
       }
     }
