@@ -46,13 +46,13 @@
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Buy Subscription</source>
-        <translation>Kupnja pretplate</translation>
+        <source>Working...</source>
+        <translation>Radim...</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
-        <source>Working...</source>
-        <translation>Radim...</translation>
+        <source>Subscription plans</source>
+        <translation>Plan pretplate</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="229"/>
@@ -611,8 +611,8 @@
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="201"/>
-        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="221"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../../QGIS/src/quickgui/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Nije podržana rotacija karte. Povratak sa %1 na 0.</translation>
     </message>
@@ -795,8 +795,8 @@
     <name>SubscribePlanItem</name>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="36"/>
-        <source> Subscription Plan</source>
-        <translation>Plan pretplate</translation>
+        <source>Plan</source>
+        <translation>Plan</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="54"/>
