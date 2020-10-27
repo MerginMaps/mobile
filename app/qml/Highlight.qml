@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@ Item {
   property color outlineColor: "black"
 
   property string markerType: "circle"   // "circle" or "image"
-  property color markerColor: "red"
+  property color markerColor: "grey"
   property real markerWidth: 30 * QgsQuick.Utils.dp
   property real markerHeight: 30 * QgsQuick.Utils.dp
   property real markerAnchorX: markerWidth/2
@@ -50,7 +50,7 @@ Item {
   // internal properties not meant to be modified from outside
   //
   property real markerOffsetY: 14 * QgsQuick.Utils.dp // for circle marker type to be aligned with crosshair
-  property real markerCircleSize: 20 * QgsQuick.Utils.dp
+  property real markerCircleSize: 15 * QgsQuick.Utils.dp
 
   // transform used by line/path
   property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
@@ -78,6 +78,7 @@ Item {
     let newMarkerItems = []
     let newLineElements = []
     let newPolygonElements = []
+    let newHelperLineElements = []
 
     let typeIdx = 0
     let dataStartIndex = ( data[ typeIdx ] === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
@@ -116,10 +117,11 @@ Item {
 
         // place temp line to center of screen for visual feedback
         if ( isRecording ) {
+          newHelperLineElements.push( componentMoveTo.createObject( tempLinePath, { "x": elems[ elems.length - 1 ].x, "y": elems[ elems.length - 1 ].y } ) )
 
           let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
           crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-          elems.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
+          newHelperLineElements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
         }
       }
     }
@@ -136,7 +138,8 @@ Item {
       newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
     polygonShapePath.pathElements = newPolygonElements
 
-//    tempLinePath.pathElements = newLineElements
+    tempLinePath.pathElements = newHelperLineElements
+
     // TODO: change
     updateTempLine = true
   }
@@ -146,7 +149,7 @@ Item {
       return
 
     // TODO: check if recording line or polygon (by actual featureLayerPair)
-    let elements = Object.values(lineOutlineShapePath.pathElements)
+    let elements = Object.values( tempLinePath.pathElements )
 
     // if we have not yet added any point, do not draw a line
     if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
@@ -154,14 +157,15 @@ Item {
 
     let tmp = elements.pop()
 
-    if (elements.length === 0)
-      elements.push( componentMoveTo.createObject( lineShapePath, { "x": tmp.x, "y": tmp.y } ) )
+//    if (elements.length === 0)
+//      elements.push( componentMoveTo.createObject( tempLinePath, { "x": tmp.x, "y": tmp.y } ) )
 
     let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
     crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+
     elements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
-    lineOutlineShapePath.pathElements = elements
-//    tempLinePath.pathElements = elements
+//    lineOutlineShapePath.pathElements = elements
+    tempLinePath.pathElements = elements
   }
 
   // keeps list of currently displayed marker items (an internal property)
@@ -239,7 +243,7 @@ Item {
     ShapePath {
       id: tempLinePath
       fillColor: "transparent"
-      strokeColor: "blue"
+      strokeColor: "grey"
       capStyle: ShapePath.RoundCap
     }
   }
