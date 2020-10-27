@@ -86,7 +86,8 @@ ios {
     OBJECTIVE_SOURCES += \
         ios/iosinterface.mm \
         ios/iosviewdelegate.mm \
-        ios/iosimagepicker.mm
+        ios/iosimagepicker.mm \
+        ios/iosutils.mm
 
     DEFINES += "PURCHASING"
     DEFINES += "APPLE_PURCHASING"

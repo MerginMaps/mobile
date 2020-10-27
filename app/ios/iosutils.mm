@@ -1,4 +1,10 @@
 /***************************************************************************
+  iosutils.mm
+  --------------------------------------
+  Date                 : Oct 2020
+  Copyright            : (C) 2019 by Viktor Sklencar
+  Email                : viktor.sklencar@lutraconsulting.co.uk
+ ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -7,37 +13,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <UIKit/UIKit.h>
 #include "iosutils.h"
 
-IosUtils::IosUtils( QObject *parent ): QObject( parent )
+void IosUtils::setIdleTimerDisabled()
 {
-#ifdef Q_OS_IOS
-  setIdleTimerDisabled();
-#endif
-  mImagePicker = new IOSImagePicker();
-  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, &IosUtils::imageSelected );
-}
-
-bool IosUtils::isIos() const
-{
-#ifdef Q_OS_IOS
-  return true;
-#else
-  return false;
-#endif
-}
-
-void IosUtils::callImagePicker( const QString &targetPath )
-{
-  mImagePicker->showImagePicker( 0, targetPath );
-}
-
-void IosUtils::callCamera( const QString &targetPath )
-{
-  mImagePicker->showImagePicker( 1, targetPath );
-}
-
-IOSImagePicker *IosUtils::imagePicker() const
-{
-  return mImagePicker;
+  [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
