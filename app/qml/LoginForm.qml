@@ -119,7 +119,7 @@ Rectangle {
           height: fieldHeight
           width: fieldHeight
           anchors.fill: parent
-          source: 'lock.svg'
+          source: password.echoMode === TextInput.Normal ? 'eye-slash.svg' : 'eye.svg'
           sourceSize.width: width
           sourceSize.height: height
           fillMode: Image.PreserveAspectFit
@@ -157,6 +157,8 @@ Rectangle {
         background: Rectangle {
           color: root.bgColor
         }
+
+        onVisibleChanged: if (!password.visible) password.echoMode = TextInput.Password
       }
     }
 
