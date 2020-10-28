@@ -16,6 +16,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
+import "./components"
 
 /**
   * Body of the AuthPanel with the login form - username and password
@@ -28,7 +29,7 @@ Rectangle {
   color: root.bgColor
 
   function clean() {
-    password.text = ""
+    passwordField.password.text = ""
     loginName.text = ""
   }
 
@@ -102,72 +103,21 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    Row {
+
+    PasswordField {
+      id: passwordField
       width: loginForm.width
       height: fieldHeight
-      spacing: 0
-
-      Rectangle {
-        id: iconContainer2
-        height: fieldHeight
-        width: fieldHeight
-        color: root.bgColor
-
-        Image {
-          anchors.margins: (fieldHeight / 4)
-          id: icon2
-          height: fieldHeight
-          width: fieldHeight
-          anchors.fill: parent
-          source: password.echoMode === TextInput.Normal ? 'eye-slash.svg' : 'eye.svg'
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if (password.echoMode === TextInput.Normal) {
-                password.echoMode = TextInput.Password
-              } else {
-                password.echoMode = TextInput.Normal
-              }
-            }
-          }
-        }
-
-        ColorOverlay {
-          anchors.fill: icon2
-          source: icon2
-          color: root.fontColor
-        }
-      }
-
-      TextField {
-        id: password
-        width: parent.width - iconContainer.width
-        height: fieldHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.fontColor
-        placeholderText: qsTr("Password")
-        echoMode: TextInput.Password
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        font.capitalization: Font.MixedCase
-
-        background: Rectangle {
-          color: root.bgColor
-        }
-
-        onVisibleChanged: if (!password.visible) password.echoMode = TextInput.Password
-      }
+      fontColor: root.fontColor
+      bgColor: root.bgColor
     }
 
     Rectangle {
       id: passBorder
-      color: InputStyle.panelBackgroundDark
+      color: root.fontColor
       height: 2 * QgsQuick.Utils.dp
-      y: password.height - height
-      opacity: password.focus ? 1 : 0.6
+      y: fieldHeight - height
+      opacity: passwordField.password.focus ? 1 : 0.6
       width: loginForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -182,7 +132,7 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         stackView.pending = true
-        __merginApi.authorize(loginName.text, password.text)
+        __merginApi.authorize(loginName.text, passwordField.password.text)
       }
       background: Rectangle {
         color: InputStyle.highlightColor
