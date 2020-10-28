@@ -101,7 +101,7 @@ class IosPurchasingBackend: public PurchasingBackend
     void createTransaction( QSharedPointer<PurchasingPlan> plan ) override;
     void restore() override;
 
-    QString subscriptionManageUrl() override {return "https://apps.apple.com/account/subscription"; }
+    QString subscriptionManageUrl() override {return "https://apps.apple.com/account/subscriptions"; }
     QString subscriptionBillingUrl() override {return "https://apps.apple.com/account/billing"; }
     MerginSubscriptionType::SubscriptionType provider() const override { return MerginSubscriptionType::AppleSubscriptionType; }
     bool userCanMakePayments() const override;
