@@ -51,5 +51,6 @@
         <file>ValueRelationWidget.qml</file>
         <file>TextHyperlink.qml</file>
         <file>LogPanel.qml</file>
+        <file>components/PasswordField.qml</file>
     </qresource>
 </RCC>

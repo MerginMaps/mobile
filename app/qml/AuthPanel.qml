@@ -24,8 +24,6 @@ Item {
   signal back()
 
   property alias merginLink: merginLink
-  // property alias loginName: loginName
-  // property alias password: loginForm.password
 
 
   /**

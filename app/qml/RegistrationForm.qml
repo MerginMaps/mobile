@@ -17,6 +17,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
+import "./components"
 
 /**
   * Body of the AuthPanel with the registration form - username, email, password, ...
@@ -28,8 +29,8 @@ Rectangle {
   function clean() {
     registerName.text = ""
     email.text = ""
-    password.text = ""
-    passwordConfirm.text = ""
+    passwordField.password.text = ""
+    passwordConfirmField.password.text = ""
     acceptTOC.checked = false
   }
 
@@ -161,142 +162,39 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    Row {
+    PasswordField {
+      id: passwordField
       width: registerForm.width
       height: fieldHeight
-      spacing: 0
-
-      Rectangle {
-        id: iconContainer2
-        height: fieldHeight
-        width: fieldHeight
-        color: root.bgColor
-
-        Image {
-          anchors.margins: (fieldHeight / 4)
-          id: icon2
-          height: fieldHeight
-          width: fieldHeight
-          anchors.fill: parent
-          source: password.echoMode === TextInput.Normal ? 'eye-slash.svg' : 'eye.svg'
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if (password.echoMode === TextInput.Normal) {
-                password.echoMode = TextInput.Password
-              } else {
-                password.echoMode = TextInput.Normal
-              }
-            }
-          }
-        }
-
-        ColorOverlay {
-          anchors.fill: icon2
-          source: icon2
-          color: root.fontColor
-        }
-      }
-
-      TextField {
-        id: password
-        width: parent.width - iconContainer.width
-        height: fieldHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.fontColor
-        placeholderText: qsTr("Password")
-        echoMode: TextInput.Password
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        font.capitalization: Font.MixedCase
-
-        background: Rectangle {
-          color: root.bgColor
-        }
-
-         onVisibleChanged: if (!password.visible) password.echoMode = TextInput.Password
-      }
+      fontColor: root.fontColor
+      bgColor: root.bgColor
     }
 
     Rectangle {
       id: passBorder
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
-      y: password.height - height
-      opacity: password.focus ? 1 : 0.6
+      y: fieldHeight - height
+      opacity: passwordField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    Row {
+    PasswordField {
+      id: passwordConfirmField
       width: registerForm.width
       height: fieldHeight
-      spacing: 0
-
-      Rectangle {
-        id: iconContainer3
-        height: fieldHeight
-        width: fieldHeight
-        color: root.bgColor
-
-        Image {
-          anchors.margins: (fieldHeight / 4)
-          id: icon3
-          height: fieldHeight
-          width: fieldHeight
-          anchors.fill: parent
-          source: passwordConfirm.echoMode === TextInput.Normal ? 'eye-slash.svg' : 'eye.svg'
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if (passwordConfirm.echoMode === TextInput.Normal) {
-                passwordConfirm.echoMode = TextInput.Password
-              } else {
-                passwordConfirm.echoMode = TextInput.Normal
-              }
-            }
-          }
-        }
-
-        ColorOverlay {
-          anchors.fill: icon3
-          source: icon3
-          color: root.fontColor
-        }
-      }
-
-      TextField {
-        id: passwordConfirm
-        width: parent.width - iconContainer.width
-        height: fieldHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.fontColor
-        placeholderText: qsTr("Confirm Password")
-        echoMode: TextInput.Password
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        font.capitalization: Font.MixedCase
-
-        background: Rectangle {
-          color: root.bgColor
-        }
-
-        onVisibleChanged: if (!passwordConfirm.visible) passwordConfirm.echoMode = TextInput.Password
-      }
+      fontColor: root.fontColor
+      bgColor: root.bgColor
     }
+
 
     Rectangle {
       id: confirmPassBorder
       color: InputStyle.panelBackgroundDark
       height: 2 * QgsQuick.Utils.dp
-      y: passwordConfirm.height - height
-      opacity: passwordConfirm.focus ? 1 : 0.6
+      y: fieldHeight - height
+      opacity: passwordConfirmField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -339,8 +237,8 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         stackView.pending = true
-        __merginApi.registerUser(registerName.text, email.text, password.text,
-                                 passwordConfirm.text, acceptTOC.checked)
+        __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
+                                 passwordConfirmField.password.text, acceptTOC.checked)
       }
       background: Rectangle {
         color: InputStyle.highlightColor
