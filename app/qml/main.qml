@@ -337,6 +337,7 @@ ApplicationWindow {
       markerHeight: highlight.markerHeight
       markerAnchorY: highlight.markerAnchorY
       recordingInProgress: digitizing.recording
+      guideLineAllowed: digitizing.manualRecording && stateManager.state === "record"
 
       // enable anti-aliasing to make the higlight look nicer
       // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
