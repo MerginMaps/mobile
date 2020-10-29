@@ -7,7 +7,7 @@ env:
   SDK_VERSION: 7
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
-  XC_VERSION: ${{ '11.4' }}
+  XC_VERSION: ${{ '12.0.1' }}
 jobs:
   ios_build:
     if: github.repository == 'lutraconsulting/input'
