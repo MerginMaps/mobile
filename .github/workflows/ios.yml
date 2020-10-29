@@ -80,6 +80,9 @@ jobs:
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
 
+          echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
+          cp scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
+
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
