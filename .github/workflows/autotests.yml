@@ -5,9 +5,9 @@ env:
   TEST_API_USERNAME: test_inputapp
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
-  QGIS_DEPS_VERSION: 0.5.4
-  SDK_HASH: 2c855s4g55zmorx
-  SDK_VERSION: 4
+  QGIS_DEPS_VERSION: 0.5.5
+  SDK_HASH: s1apy3lbsxf6v12
+  SDK_VERSION: 5
 
 jobs:
   tests:
