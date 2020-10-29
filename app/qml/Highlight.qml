@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick 2.11
-import QtQuick.Shapes 1.12
+import QtQuick.Shapes 1.11
 
 import QgsQuick 0.1 as QgsQuick
 
@@ -40,11 +40,13 @@ Item {
 
   // feature+layer pair which determines what geometry is highlighted
   property var featureLayerPair: null
+  property bool hasPolygon: false
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
 
-  property bool isRecording: false
+  property bool recordingInProgress: false
+  property color helperLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
 
   //
   // internal properties not meant to be modified from outside
@@ -72,6 +74,35 @@ Item {
       }
   }
 
+  function crosshairPoint() {
+    let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+    crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+
+    return crosshairCoord
+  }
+
+  function updateHelperLine() {
+    let elements = Object.values( helperPath.pathElements )
+
+    if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
+      return // if we have not yet added any point, do not draw a line
+
+    if ( hasPolygon && elements.length > 2 ) {
+      let firstPoint = elements.pop()
+      elements.pop() // last center point
+      let centerPoint = crosshairPoint()
+      elements.push( componentLineTo.createObject( helperPath, { "x": centerPoint.x, "y": centerPoint.y } ) )
+      elements.push( firstPoint )
+    }
+    else {
+      elements.pop() // remove point leading to old crosshair
+      let centerPoint = crosshairPoint()
+      elements.push( componentLineTo.createObject( helperPath, { "x": centerPoint.x, "y": centerPoint.y } ) )
+    }
+
+    helperPath.pathElements = elements
+  }
+
   onFeatureLayerPairChanged: { // highlighting features
     let data = __inputUtils.extractGeometryCoordinates( featureLayerPair, mapSettings )
 
@@ -80,97 +111,81 @@ Item {
     let newPolygonElements = []
     let newHelperLineElements = []
 
-    let typeIdx = 0
-    let dataStartIndex = ( data[ typeIdx ] === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
-
-    console.log( "DATA: ", data )
+    let geometryType = data[0] // type of geometry - 0: point, 1: linestring, 2: polygon
+    let dataStartIndex = ( geometryType === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
 
     if ( data.length > dataStartIndex )
     {
-      if ( data[ typeIdx ] === 0 ) // point (0)
+      if ( geometryType === 0 ) // point
       {
-        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[ dataStartIndex ], "posY": data[ dataStartIndex + 1 ] } ) )
+        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
       }
-      else // line (1) or polygon (2)
+      else // line or polygon
       {
-        if ( data.length < dataStartIndex + 3 && isRecording ) // if this is the first point in line / polygon
+        // place temporary point marker if this is the first point in line / polygon
+        if ( recordingInProgress && data.length < dataStartIndex + 3 )
         {
-          // place temporary point marker
-          newMarkerItems.push( componentMarker.createObject( highlight,
-                                                            {
+          newMarkerItems.push( componentMarker.createObject( highlight, {
                                                               "posX": data[ dataStartIndex ],
                                                               "posY": data[ dataStartIndex + 1 ],
                                                               "markerType": "circle"
                                                             } ) )
         }
-        // iterate over points
-        let objOwner = ( data[ typeIdx ] === 1 ? lineShapePath : polygonShapePath )
-        let elems = ( data[ typeIdx ] === 1 ? newLineElements : newPolygonElements )
-        let dataLength = data[ 1 ] * 2
 
-        // move brush to the first point
-        elems.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
-        for ( let i = dataStartIndex + 2; i <= dataLength; i += 2 )
+        let objOwner = ( geometryType === 1 ? lineShapePath : polygonShapePath )
+        let elements = ( geometryType === 1 ? newLineElements : newPolygonElements )
+        let dataLength = data[1] * 2
+
+        // move brush to the first point and start drawing from next point
+        elements.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
+        for ( let i = dataStartIndex + 2; i < data.length; i += 2 )
         {
-          elems.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          elements.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
         }
 
-        // place temp line to center of screen for visual feedback
-        if ( isRecording ) {
-          newHelperLineElements.push( componentMoveTo.createObject( tempLinePath, { "x": elems[ elems.length - 1 ].x, "y": elems[ elems.length - 1 ].y } ) )
-
-          let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-          crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-          newHelperLineElements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
+        if ( recordingInProgress ) { // construct a helper line / polygon
+          if ( geometryType === 2 && elements.length > 2 )
+          {
+            newHelperLineElements = Array.from( elements ) // shallow copy
+            let firstPoint = newHelperLineElements.pop()
+            let centerPoint = crosshairPoint()
+            newHelperLineElements.push( componentLineTo.createObject( helperPath, { "x": centerPoint.x, "y": centerPoint.y } ) )
+            newHelperLineElements.push( firstPoint )
+          }
+          else
+          {
+            newHelperLineElements.push( componentMoveTo.createObject( helperPath, { "x": elements[ elements.length - 1 ].x, "y": elements[ elements.length - 1 ].y } ) )
+            let centerPoint = crosshairPoint()
+            newHelperLineElements.push( componentLineTo.createObject( helperPath, { "x": centerPoint.x, "y": centerPoint.y } ) )
+          }
         }
       }
     }
 
+    // reset shapes
     markerItems = markerItems.map( marker => marker.destroy() )
-    markerItems = newMarkerItems
+    if ( newLineElements.length === 0 )
+      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
+    if ( newPolygonElements.length === 0 )
+      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
 
-    if (newLineElements.length === 0)
-      newLineElements.push(componentMoveTo.createObject(lineShapePath))
+    markerItems = newMarkerItems
+    polygonShapePath.pathElements = newPolygonElements
     lineShapePath.pathElements = newLineElements
     lineOutlineShapePath.pathElements = newLineElements
-
-    if (newPolygonElements.length === 0)
-      newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
-    polygonShapePath.pathElements = newPolygonElements
-
-    tempLinePath.pathElements = newHelperLineElements
-
-    // TODO: change
-    updateTempLine = true
+    helperPath.pathElements = newHelperLineElements
   }
 
   onPositionChanged: {
-    if ( !isRecording )
+    if ( !recordingInProgress )
       return
 
-    // TODO: check if recording line or polygon (by actual featureLayerPair)
-    let elements = Object.values( tempLinePath.pathElements )
-
-    // if we have not yet added any point, do not draw a line
-    if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
-      return
-
-    let tmp = elements.pop()
-
-//    if (elements.length === 0)
-//      elements.push( componentMoveTo.createObject( tempLinePath, { "x": tmp.x, "y": tmp.y } ) )
-
-    let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-    crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-
-    elements.push( componentLineTo.createObject( tempLinePath, { "x": crosshairCoord.x, "y": crosshairCoord.y } ) )
-//    lineOutlineShapePath.pathElements = elements
-    tempLinePath.pathElements = elements
+    updateHelperLine()
   }
+
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
-  property bool updateTempLine: false
 
   Component {
     id: componentMarker
@@ -241,10 +256,12 @@ Item {
     }
 
     ShapePath {
-      id: tempLinePath
-      fillColor: "transparent"
-      strokeColor: "grey"
+      id: helperPath
+      fillColor: hasPolygon ? helperLineColor : "transparent"
+      strokeColor: helperLineColor
+      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / highlight.mapTransformScale  // negate scaling from the transform
       capStyle: ShapePath.RoundCap
+      joinStyle: ShapePath.BevelJoin
     }
   }
 }

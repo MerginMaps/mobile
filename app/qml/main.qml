@@ -249,11 +249,6 @@ ApplicationWindow {
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
-        window.width = 423
-        window.height = 601
-        window.x = 1100
-        window.y = 266
-
         console.log("Completed Running!")
     }
 
@@ -324,7 +319,7 @@ ApplicationWindow {
       id: digitizingHighlight
       anchors.fill: mapCanvas
 
-      property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
+      hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
 
       mapSettings: mapCanvas.mapSettings
 
@@ -341,7 +336,7 @@ ApplicationWindow {
       markerWidth: highlight.markerWidth
       markerHeight: highlight.markerHeight
       markerAnchorY: highlight.markerAnchorY
-      isRecording: digitizing.recording
+      recordingInProgress: digitizing.recording
 
       // enable anti-aliasing to make the higlight look nicer
       // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
