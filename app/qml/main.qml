@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -220,6 +220,17 @@ ApplicationWindow {
         featurePanel.show_panel( feature, "ReadOnly", "form" )
     }
 
+    function updatePosition() {
+      if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+        var useGpsPoint = digitizing.useGpsPoint
+        mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+        // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
+        digitizing.useGpsPoint = useGpsPoint
+      }
+
+      digitizingHighlight.positionChanged()
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -376,16 +387,7 @@ ApplicationWindow {
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
-      onScreenPositionChanged: {
-        if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
-            var useGpsPoint = digitizing.useGpsPoint
-            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
-            // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
-            digitizing.useGpsPoint = useGpsPoint
-        }
-
-        digitizingHighlight.positionChanged()
-      }
+      onScreenPositionChanged: updatePosition()
     }
 
     PositionMarker {
@@ -492,11 +494,13 @@ ApplicationWindow {
         }
 
         onManualRecordingClicked: {
-            digitizing.manualRecording = !digitizing.manualRecording
-            if (!digitizing.manualRecording && stateManager.state === "record") {
-                digitizing.startRecording()
-                digitizing.useGpsPoint = true
-            }
+          digitizing.manualRecording = !digitizing.manualRecording
+          if (!digitizing.manualRecording && stateManager.state === "record") {
+            digitizing.startRecording()
+            digitizing.useGpsPoint = true
+            updatePosition()
+            recordFeature() // record point immediately after turning on the streaming mode
+          }
         }
 
         onCancelClicked: {
