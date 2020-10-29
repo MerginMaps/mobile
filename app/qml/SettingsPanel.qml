@@ -231,6 +231,15 @@ Page {
                }
            }
 
+           // Help
+          PanelItem {
+              text: qsTr("Help")
+              MouseArea {
+                  anchors.fill: parent
+                  onClicked: Qt.openUrlExternally("https://help.inputapp.io/");
+              }
+          }
+
            // Debug/Logging
           PanelItem {
               text: qsTr("Diagnostic Log")
