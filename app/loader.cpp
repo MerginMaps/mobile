@@ -156,6 +156,7 @@ void Loader::setMapSettingsLayers() const
   }
 
   mMapSettings->setLayers( allLayers );
+  mMapSettings->setTransformContext( mProject->transformContext() );
 }
 
 QgsQuickMapSettings *Loader::mapSettings() const
