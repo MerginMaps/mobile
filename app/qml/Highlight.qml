@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,6 +15,8 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: highlight
 
+  signal positionChanged()
+
   // color for line geometries
   property color lineColor: "black"
   // width for line geometries
@@ -29,7 +31,7 @@ Item {
   property color outlineColor: "black"
 
   property string markerType: "circle"   // "circle" or "image"
-  property color markerColor: "yellow"
+  property color markerColor: "grey"
   property real markerWidth: 30 * QgsQuick.Utils.dp
   property real markerHeight: 30 * QgsQuick.Utils.dp
   property real markerAnchorX: markerWidth/2
@@ -38,13 +40,21 @@ Item {
 
   // feature+layer pair which determines what geometry is highlighted
   property var featureLayerPair: null
+  property bool hasPolygon: false
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
 
+  property bool recordingInProgress: false
+  property color guideLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
+
+  property bool guideLineAllowed: false
+
   //
   // internal properties not meant to be modified from outside
   //
+  property real markerOffsetY: 14 * QgsQuick.Utils.dp // for circle marker type to be aligned with crosshair
+  property real markerCircleSize: 15 * QgsQuick.Utils.dp
 
   // transform used by line/path
   property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
@@ -66,55 +76,135 @@ Item {
       }
   }
 
-  onFeatureLayerPairChanged: {
-      var data = __inputUtils.extractGeometryCoordinates(featureLayerPair, mapSettings)
+  function crosshairPoint() {
+    let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+    crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
 
-      var newMarkerItems = []
-      var newLineElements = []
-      var newPolygonElements = []
+    return crosshairCoord
+  }
 
-      var i = 0
-      while (i < data.length)
+  function updateGuideLine() {
+
+    if ( !guideLineAllowed ) { // remove any elements
+      let resetElems = []
+      resetElems.push ( componentMoveTo.createObject( guideLine ) )
+      guideLine.pathElements = resetElems
+    }
+
+    let elements = Object.values( guideLine.pathElements )
+
+    if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
+      return // if we have not yet added any point, do not draw a line
+
+    if ( hasPolygon && elements.length > 2 ) {
+      let firstPoint = elements.pop()
+      elements.pop() // last center point
+
+      let centerPoint = crosshairPoint()
+      elements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
+      elements.push( firstPoint )
+    }
+    else {
+      elements.pop() // remove point leading to old crosshair
+      let centerPoint = crosshairPoint()
+      elements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
+    }
+
+    guideLine.pathElements = elements
+  }
+
+  function constructHighlights()
+  {
+    if ( !featureLayerPair || !mapSettings ) return
+
+    let data = __inputUtils.extractGeometryCoordinates( featureLayerPair, mapSettings )
+
+    let newMarkerItems = []
+    let newLineElements = []
+    let newPolygonElements = []
+    let newGuideLineElements = []
+
+    let geometryType = data[0] // type of geometry - 0: point, 1: linestring, 2: polygon
+    let dataStartIndex = ( geometryType === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
+
+    if ( data.length > dataStartIndex )
+    {
+      if ( geometryType === 0 ) // point
       {
-          var type = data[i]
-          ++i
-          if ( type === 0 )
+        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+      }
+      else // line or polygon
+      {
+        // place temporary point marker if this is the first point in line / polygon
+        if ( recordingInProgress && data.length < dataStartIndex + 3 )
+        {
+          newMarkerItems.push( componentMarker.createObject( highlight, {
+                                                              "posX": data[ dataStartIndex ],
+                                                              "posY": data[ dataStartIndex + 1 ],
+                                                              "markerType": "circle"
+                                                            } ) )
+        }
+
+        let objOwner = ( geometryType === 1 ? lineShapePath : polygonShapePath )
+        let elements = ( geometryType === 1 ? newLineElements : newPolygonElements )
+
+        // move brush to the first point and start drawing from next point
+        elements.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
+        for ( let i = dataStartIndex + 2; i < data.length; i += 2 )
+        {
+          elements.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+        }
+
+        if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
+          if ( geometryType === 2 && elements.length > 2 )
           {
-              // point
-              newMarkerItems.push(componentMarker.createObject(highlight, {"posX":data[i],"posY":data[i+1]}))
-              i += 2
+            newGuideLineElements = Array.from( elements ) // shallow copy
+            let firstPoint = newGuideLineElements.pop()
+            let centerPoint = crosshairPoint()
+            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
+            newGuideLineElements.push( firstPoint )
           }
           else
           {
-              // linestring (1) or polygon (2)
-              var objOwner = (type === 1 ? lineShapePath : polygonShapePath)
-              var elems = (type === 1 ? newLineElements : newPolygonElements)
-              var len = data[i]
-              ++i
-              elems.push(componentMoveTo.createObject(objOwner, {"x": data[i],"y":data[i+1]}))
-              i+=2
-              for (var j = 1; j < len; ++j)
-              {
-                  elems.push(componentLineTo.createObject(objOwner, {"x": data[i],"y":data[i+1]}))
-                  i+=2
-              }
+            newGuideLineElements.push( componentMoveTo.createObject( guideLine, { "x": elements[ elements.length - 1 ].x, "y": elements[ elements.length - 1 ].y } ) )
+            let centerPoint = crosshairPoint()
+            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
           }
-
+        }
       }
+    }
 
-      for (var k = 0; k < markerItems.length; ++k)
-        markerItems[k].destroy()
-      markerItems = newMarkerItems
+    // reset shapes
+    markerItems = markerItems.map( marker => marker.destroy() )
+    if ( newLineElements.length === 0 )
+      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
+    if ( newPolygonElements.length === 0 )
+      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
 
-      if (newLineElements.length === 0)
-          newLineElements.push(componentMoveTo.createObject(lineShapePath))
-      lineShapePath.pathElements = newLineElements
-      lineOutlineShapePath.pathElements = newLineElements
-
-      if (newPolygonElements.length === 0)
-          newPolygonElements.push(componentMoveTo.createObject(polygonShapePath))
-      polygonShapePath.pathElements = newPolygonElements
+    markerItems = newMarkerItems
+    polygonShapePath.pathElements = newPolygonElements
+    lineShapePath.pathElements = newLineElements
+    lineOutlineShapePath.pathElements = newLineElements
+    guideLine.pathElements = newGuideLineElements
   }
+
+  onFeatureLayerPairChanged: { // highlighting features
+    constructHighlights()
+  }
+
+  onGuideLineAllowedChanged: {
+    if ( guideLineAllowed )
+      constructHighlights()
+    else updateGuideLine()
+  }
+
+  onPositionChanged: {
+    if ( !recordingInProgress )
+      return
+
+    updateGuideLine()
+  }
+
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
@@ -124,18 +214,24 @@ Item {
     Item {
       property real posX: 0
       property real posY: 0
+      property string markerType: highlight.markerType
       x: posX* highlight.mapTransformScale + highlight.mapTransformOffsetX* highlight.mapTransformScale - highlight.markerAnchorX
       y: posY*-highlight.mapTransformScale + highlight.mapTransformOffsetY*-highlight.mapTransformScale - highlight.markerAnchorY
       width: highlight.markerWidth
       height: highlight.markerHeight
       Rectangle {
-          visible: highlight.markerType == "circle"
-          anchors.fill: parent
+          visible: markerType == "circle"
+          anchors {
+            centerIn: parent
+            verticalCenterOffset: highlight.markerOffsetY
+          }
+          width: markerCircleSize
+          height: markerCircleSize
           color: highlight.markerColor
           radius: width/2
       }
       Image {
-          visible: highlight.markerType == "image"
+          visible: markerType == "image"
           anchors.fill: parent
           source: highlight.markerImageSource
           sourceSize.width: width
@@ -180,6 +276,14 @@ Item {
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
     }
-  }
 
+    ShapePath {
+      id: guideLine // also used for guide polygon
+      fillColor: hasPolygon ? guideLineColor : "transparent"
+      strokeColor: guideLineColor
+      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / highlight.mapTransformScale  // negate scaling from the transform
+      capStyle: ShapePath.RoundCap
+      joinStyle: ShapePath.BevelJoin
+    }
+  }
 }

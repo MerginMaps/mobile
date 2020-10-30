@@ -220,6 +220,17 @@ ApplicationWindow {
         featurePanel.show_panel( feature, "ReadOnly", "form" )
     }
 
+    function updatePosition() {
+      if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+        var useGpsPoint = digitizing.useGpsPoint
+        mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+        // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
+        digitizing.useGpsPoint = useGpsPoint
+      }
+
+      digitizingHighlight.positionChanged()
+    }
+
     Component.onCompleted: {
         if (__appSettings.defaultProject) {
             var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
@@ -319,7 +330,7 @@ ApplicationWindow {
       id: digitizingHighlight
       anchors.fill: mapCanvas
 
-      property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
+      hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
 
       mapSettings: mapCanvas.mapSettings
 
@@ -336,6 +347,8 @@ ApplicationWindow {
       markerWidth: highlight.markerWidth
       markerHeight: highlight.markerHeight
       markerAnchorY: highlight.markerAnchorY
+      recordingInProgress: digitizing.recording
+      guideLineAllowed: digitizing.manualRecording && stateManager.state === "record"
 
       // enable anti-aliasing to make the higlight look nicer
       // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
@@ -374,14 +387,7 @@ ApplicationWindow {
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
-      onScreenPositionChanged: {
-        if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
-            var useGpsPoint = digitizing.useGpsPoint
-            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
-            // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
-            digitizing.useGpsPoint = useGpsPoint
-        }
-      }
+      onScreenPositionChanged: updatePosition()
     }
 
     PositionMarker {
@@ -488,11 +494,13 @@ ApplicationWindow {
         }
 
         onManualRecordingClicked: {
-            digitizing.manualRecording = !digitizing.manualRecording
-            if (!digitizing.manualRecording && stateManager.state === "record") {
-                digitizing.startRecording()
-                digitizing.useGpsPoint = true
-            }
+          digitizing.manualRecording = !digitizing.manualRecording
+          if (!digitizing.manualRecording && stateManager.state === "record") {
+            digitizing.startRecording()
+            digitizing.useGpsPoint = true
+            updatePosition()
+            recordFeature() // record point immediately after turning on the streaming mode
+          }
         }
 
         onCancelClicked: {
