@@ -7,8 +7,8 @@ environment:
       secure: SbA10ZSj12UGtUP6o9r0gEATY+S3ZO6h0KhRZfZ3L2iM6Kx1T0gd+KgTD1D4C8ye0qKHbkRdCHxKwt5ETyo0iAK59b6UgRTbIUhmrvnWXIU=
     MERGINSECRETS_DECRYPT_KEY:
       secure: BHS6RRyzJOyfjZV6ADhpdG9IvxpBF57fMNtloAzSmoB6VeSRuA4T7evxRFZy1oDL3X9k8XEpiD7IAltvaPTCcCEffwLwX1JFF/YhQaopAzJLq9X7t3HkMMOTRv2lntDu
-    WINSDKTAG: win-8
-    WINSDK: "https://www.dropbox.com/s/mkorz1oxyghwftl/input-sdk-win-x86_64-8.zip?dl=0"
+    WINSDKTAG: win-9
+    WINSDK: "https://www.dropbox.com/s/gj7qgl5va5or42k/input-sdk-win-x86_64-9.zip?dl=0"
     PYEXE: "C:\\Python36-x64\\python"
 
 install:
