@@ -46,6 +46,7 @@ Item {
   }
 
   onVisibleChanged: {
+    // On Android, due to a Qt bug, we need to call deactivate again on page close to clear text search
     if ( !visible && __androidUtils.isAndroid )
       searchBar.deactivate()
   }

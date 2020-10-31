@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 
 Item {
+  signal widgetClosed()
 
   property alias handler: valueRelationHandler
 
@@ -17,6 +18,7 @@ Item {
         valueRelationPage.visible = true
         valueRelationPage.featuresModel = valueRelationModel
         valueRelationPage.pageTitle = itemWidget.fieldName
+        valueRelationPage.forceActiveFocus()
       }
       else {
         itemWidget.openCombobox()
@@ -28,6 +30,12 @@ Item {
     }
   }
 
+  function closeValueRelationPage() {
+    valueRelationPage.visible = false
+    valueRelationPage.deactivateSearch()
+    valueRelationWidget.widgetClosed()
+  }
+
   id: valueRelationWidget
   anchors.fill: parent
 
@@ -37,18 +45,23 @@ Item {
     anchors.fill: parent
 
     onBackButtonClicked: {
-      valueRelationPage.visible = false
-      valueRelationPage.deactivateSearch()
+      closeValueRelationPage()
     }
 
     onFeatureClicked: {
       valueRelationHandler.featureSelected( featureIdx )
-      valueRelationPage.visible = false
-      valueRelationPage.deactivateSearch()
+      closeValueRelationPage()
     }
 
     onSearchTextChanged: {
       featuresModel.filterExpression = text
+    }
+
+    Keys.onReleased: {
+      if ( valueRelationPage.visible && ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) ) {
+        event.accepted = true;
+        closeValueRelationPage()
+      }
     }
   }
 }
