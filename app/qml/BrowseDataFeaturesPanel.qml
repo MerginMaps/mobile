@@ -45,6 +45,11 @@ Item {
       __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresLimit ) )
   }
 
+  onVisibleChanged: {
+    if ( !visible && __androidUtils.isAndroid )
+      searchBar.deactivate()
+  }
+
   Page {
     id: featuresPage
     anchors.fill: parent
