@@ -327,14 +327,14 @@ Rectangle {
 
     Button {
       id: registerButton
-      enabled: !root.pending
+      enabled: !stackView.pending
       width: registerForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign up")
       font.pixelSize: InputStyle.fontPixelSizeTitle
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
-        root.pending = true
+        stackView.pending = true
         __merginApi.registerUser(registerName.text, email.text, password.text,
                                  passwordConfirm.text, acceptTOC.checked)
       }

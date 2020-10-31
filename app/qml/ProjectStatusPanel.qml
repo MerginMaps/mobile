@@ -17,15 +17,12 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: statusPanel
   property real rowHeight: InputStyle.rowHeight * 1.2
+  signal back()
 
   function open(projectFullName) {
     if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
       statusPanel.visible = true;
     } else __inputUtils.showNotification(qsTr("No Changes"))
-  }
-
-  function close() {
-    statusPanel.visible = false
   }
 
   // background
@@ -45,7 +42,7 @@ Item {
     z: contentLayout.z + 1
 
     onBack: {
-      statusPanel.visible = false
+      statusPanel.back()
     }
     withBackButton: true
 

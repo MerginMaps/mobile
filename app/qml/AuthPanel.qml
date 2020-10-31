@@ -21,6 +21,7 @@ import "."
 Item {
 
   signal authFailed
+  signal back()
 
   property alias merginLink: merginLink
   // property alias loginName: loginName
@@ -47,17 +48,6 @@ Item {
   }
 
   id: root
-  focus: true
-
-  Keys.onReleased: {
-
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.close()
-      authFailed()
-    }
-  }
-
   states: [
     State {
       name: "login"
@@ -82,9 +72,22 @@ Item {
 
   state: "login"
 
+  PanelHeader {
+    id: header
+    height: InputStyle.rowHeightHeader
+    width: root.width
+    color: InputStyle.clrPanelMain
+    rowHeight: InputStyle.rowHeightHeader
+    titleText: root.state === "login" ? qsTr("Login") : qsTr("Register")
+
+    onBack: root.back()
+  }
+
   Pane {
     id: pane
-    anchors.fill: parent
+    height: root.height - header.height
+    width: root.width
+    y: header.height
     background: Rectangle {
       color: root.bgColor
     }

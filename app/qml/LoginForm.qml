@@ -172,14 +172,14 @@ Rectangle {
 
     Button {
       id: loginButton
-      enabled: !root.pending
+      enabled: !stackView.pending
       width: loginForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign in")
       font.pixelSize: InputStyle.fontPixelSizeTitle
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
-        root.pending = true
+        stackView.pending = true
         __merginApi.authorize(loginName.text, password.text)
       }
       background: Rectangle {
