@@ -1,9 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "../" // import InputStyle singleton
 
@@ -14,8 +12,7 @@ Row {
   property var fontColor
   property var bgColor
   property var password: password
-
-  //property function clear: function() {password.text = ""}
+  property string placeholder: 'Password'
 
   Rectangle {
     id: iconContainer2
@@ -48,11 +45,10 @@ Row {
     height: fieldHeight
     font.pixelSize: InputStyle.fontPixelSizeNormal
     color: root.fontColor
-    placeholderText: qsTr("Password")
+    placeholderText: qsTr(root.placeholder)
     echoMode: TextInput.Password
     inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
     font.capitalization: Font.MixedCase
-    //text: root.text
 
     background: Rectangle {
       color: root.bgColor
