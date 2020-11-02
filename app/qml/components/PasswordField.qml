@@ -12,7 +12,7 @@ Row {
   property var fontColor
   property var bgColor
   property var password: password
-  property string placeholder: 'Password'
+  property string placeholderText: qsTr('Password')
 
   Rectangle {
     id: iconContainer2
@@ -45,7 +45,7 @@ Row {
     height: fieldHeight
     font.pixelSize: InputStyle.fontPixelSizeNormal
     color: root.fontColor
-    placeholderText: qsTr(root.placeholder)
+    placeholderText: root.placeholderText
     echoMode: TextInput.Password
     inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
     font.capitalization: Font.MixedCase
