@@ -186,6 +186,7 @@ Rectangle {
       height: fieldHeight
       fontColor: root.fontColor
       bgColor: root.bgColor
+      placeholder: 'Confirm password'
     }
 
 
