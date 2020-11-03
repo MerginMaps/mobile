@@ -299,5 +299,7 @@ Drawer {
 
     ValueRelationWidget {
       id: valueRelationWidget
+
+      onWidgetClosed: backHandler.forceActiveFocus()
     }
 }
