@@ -17,10 +17,18 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: root
 
-  signal featureClicked( var featureIdx )
+  signal featureClicked( var featureId )
 
   property bool showAdditionalInfo: false
+  property bool allowMultiselect: false
   property var featuresModel: null
+  property var selectedIds: []
+
+  onVisibleChanged: {
+    if ( visible ) {
+      selectedIds.length = 0 // clear the array without copying it
+    }
+  }
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -38,7 +46,17 @@ Item {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.featureClicked( model.FeatureId )
+          if ( allowMultiselect ) {
+            checkboxItem.toggle()
+
+            if ( checkboxItem.checkState === Qt.Checked )
+              selectedIds.push(model.FeatureId)
+            else if ( checkboxItem.checkState === Qt.Unchecked )
+              selectedIds = selectedIds.filter( _id => _id !== model.FeatureId )
+          }
+          else {
+            root.featureClicked( model.FeatureId )
+          }
         }
       }
 
@@ -94,6 +112,24 @@ Item {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignTop
             elide: Text.ElideRight
+          }
+        }
+
+        Item {
+          id: checkboxContainer
+          visible: allowMultiselect
+          height: itemContainer.height
+          Layout.fillWidth: true
+          Layout.minimumWidth: 60 * QgsQuick.Utils.dp
+          Layout.maximumWidth: 40 * QgsQuick.Utils.dp
+
+          LeftCheckBox {
+            id: checkboxItem
+            anchors.margins: (parent.height / 4)
+            anchors.centerIn: parent
+            baseColor: InputStyle.panelBackgroundDarker
+            height: 40 * QgsQuick.Utils.dp
+            width: 40 * QgsQuick.Utils.dp
           }
         }
       }

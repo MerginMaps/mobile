@@ -14,11 +14,12 @@ Item {
   id: root
 
   signal backButtonClicked()
-  signal featureClicked( var featureIdx )
+  signal featureClicked( var featureIds )
   signal addFeatureClicked()
   signal searchTextChanged( string text )
 
   property bool layerHasGeometry: true
+  property bool allowMultiselect: false
   property string layerName: ""
   property var featuresModel: null
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
@@ -88,14 +89,19 @@ Item {
       clip: true
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
+      allowMultiselect: root.allowMultiselect
 
-      onFeatureClicked: root.featureClicked( featureIdx )
+      onFeatureClicked: root.featureClicked( featureId )
     }
 
     footer: BrowseDataToolbar {
       id: browseDataToolbar
-      visible: !layerHasGeometry
+      visible: !layerHasGeometry || allowMultiselect
+      addButtonVisible: !layerHasGeometry
+      doneButtonVisible: allowMultiselect
+
       onAddButtonClicked: addFeatureClicked()
+      onDoneButtonClicked: root.featureClicked( browseDataView.selectedIds )
     }
   }
 }

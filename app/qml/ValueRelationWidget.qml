@@ -14,11 +14,13 @@ Item {
 
     property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
       itemWidget = widget
-      if ( valueRelationModel.featuresCount > 4 ) {
+
+      if ( valueRelationModel.featuresCount > 4 || itemWidget.allowMultipleValues ) {
         valueRelationPage.visible = true
         valueRelationPage.featuresModel = valueRelationModel
         valueRelationPage.pageTitle = itemWidget.fieldName
         valueRelationPage.forceActiveFocus()
+        valueRelationPage.allowMultiselect = itemWidget.allowMultipleValues
       }
       else {
         itemWidget.openCombobox()
@@ -49,7 +51,11 @@ Item {
     }
 
     onFeatureClicked: {
-      valueRelationHandler.featureSelected( featureIdx )
+      if ( typeof featureIds === "object" )
+        featureIds = Object.values( featureIds )
+
+      console.log( featureIds )
+//      valueRelationHandler.featureSelected( featureIds )
       closeValueRelationPage()
     }
 
