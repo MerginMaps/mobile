@@ -54,7 +54,7 @@ Item {
     }
 
     onSearchTextChanged: {
-      featuresModel.filterExpression = text
+      featuresModel.searchExpression = text
     }
 
     Keys.onReleased: {
