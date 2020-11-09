@@ -223,10 +223,10 @@ Rectangle {
         id: resetPasswordButton
         width: loginForm.width - 2 * root.panelMargin
         height: fieldHeight * 0.7
-        text: qsTr("Reset password")
+        text: qsTr("Forgot password?")
         font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordURl());
+        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl());
         background: Rectangle {
           color: root.bgColor
         }
