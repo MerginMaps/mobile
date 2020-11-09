@@ -269,6 +269,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
+    Q_INVOKABLE QString resetPasswordURl();
 
     /**
     * Registers new user to Mergin service.

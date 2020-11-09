@@ -215,5 +215,31 @@ Rectangle {
         }
       }
     }
+
+    Column {
+      spacing: root.panelMargin / 2
+
+      Button {
+        id: resetPasswordButton
+        width: loginForm.width - 2 * root.panelMargin
+        height: fieldHeight * 0.7
+        text: qsTr("Reset password")
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordURl());
+        background: Rectangle {
+          color: root.bgColor
+        }
+
+        contentItem: Text {
+          text: resetPasswordButton.text
+          font: resetPasswordButton.font
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
+        }
+      }
+    }
   }
 }
