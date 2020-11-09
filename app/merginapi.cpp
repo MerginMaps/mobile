@@ -642,6 +642,16 @@ void MerginApi::resetApiRoot()
   settings.endGroup();
 }
 
+QString MerginApi::resetPasswordURl()
+{
+  if ( !mApiRoot.isEmpty() )
+  {
+    QUrl base( mApiRoot );
+    return base.resolved( QUrl( "login/reset" ) ).toString();
+  }
+  return QString( "" );
+}
+
 void MerginApi::createProject( const QString &projectNamespace, const QString &projectName )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
