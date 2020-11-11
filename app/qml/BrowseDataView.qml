@@ -23,6 +23,7 @@ Item {
   property bool allowMultiselect: false
   property var featuresModel: null
   property var selectedIds: []
+  property var preSelectedIds: []
 
   onVisibleChanged: {
     if ( visible ) {
@@ -60,14 +61,41 @@ Item {
         }
       }
 
+      Component.onCompleted: { // mark all preselected features
+        if ( Array.isArray(preSelectedIds) ) {
+          preSelectedIds = preSelectedIds.map( id => Number(id) ) // ids can be of string type, convert them to number
+
+          if ( preSelectedIds.includes( model.FeatureId ) ) {
+            checkboxItem.toggle()
+            selectedIds.push(model.FeatureId)
+          }
+        }
+      }
+
       RowLayout {
         id: layout
         anchors.fill: parent
 
         Item {
+          id: checkboxContainer
+          visible: allowMultiselect
+          height: itemContainer.height
+          width: 40 * QgsQuick.Utils.dp
+
+          LeftCheckBox {
+            id: checkboxItem
+            anchors.margins: (parent.height / 4)
+            anchors.centerIn: parent
+            baseColor: InputStyle.panelBackgroundDarker
+            height: 40 * QgsQuick.Utils.dp
+            width: 40 * QgsQuick.Utils.dp
+          }
+        }
+
+        Item {
           id: iconContainer
           height: itemContainer.height
-          width: 60 * QgsQuick.Utils.dp
+          width: checkboxContainer.visible ? 30 * QgsQuick.Utils.dp : 60 * QgsQuick.Utils.dp
 
           Image {
             id: icon
@@ -112,24 +140,6 @@ Item {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignTop
             elide: Text.ElideRight
-          }
-        }
-
-        Item {
-          id: checkboxContainer
-          visible: allowMultiselect
-          height: itemContainer.height
-          Layout.fillWidth: true
-          Layout.minimumWidth: 60 * QgsQuick.Utils.dp
-          Layout.maximumWidth: 40 * QgsQuick.Utils.dp
-
-          LeftCheckBox {
-            id: checkboxItem
-            anchors.margins: (parent.height / 4)
-            anchors.centerIn: parent
-            baseColor: InputStyle.panelBackgroundDarker
-            height: 40 * QgsQuick.Utils.dp
-            width: 40 * QgsQuick.Utils.dp
           }
         }
       }

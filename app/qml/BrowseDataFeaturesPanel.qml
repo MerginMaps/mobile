@@ -25,6 +25,7 @@ Item {
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
   property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
   property string pageTitle: layerName + " (" + featuresCount + ")"
+  property var preSelectedFeatures: []
 
   property var deactivateSearch: function deactivateSearch() {
     searchBar.deactivate()
@@ -90,6 +91,7 @@ Item {
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
       allowMultiselect: root.allowMultiselect
+      preSelectedIds: preSelectedFeatures
 
       onFeatureClicked: root.featureClicked( featureId )
     }
