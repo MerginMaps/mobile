@@ -12,7 +12,6 @@ android {
     QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
     QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
     QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include/qgis
-    QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/qml
 
     exists($${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so) {
       message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
@@ -20,10 +19,30 @@ android {
       error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
     }
 
+    isEmpty(QGSQUICK_INSTALL_PATH) {
+      error("Missing QGSQUICK_INSTALL_PATH")
+    }
+
     INCLUDEPATH += $${QGIS_INCLUDE_DIR}
     LIBS += -L$${QGIS_LIB_DIR}
-    LIBS += -lqgis_core_$${ANDROID_TARGET_ARCH} -lqgis_quick_$${ANDROID_TARGET_ARCH}
+    LIBS += -lqgis_core_$${ANDROID_TARGET_ARCH}
 
+    # using installed QGSQUICK
+    QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
+    QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
+    QGSQUICK_QML_DIR = $${QGIS_INSTALL_PATH}/qml
+
+    exists($${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so) {
+      message("Building from QGIS: $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
+    } else {
+      error("Missing QGIS Quick library in $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
+    }
+
+    INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
+    LIBS += -L$${QGSQUICK_LIB_DIR}
+    LIBS += -lqgis_quick_$${ANDROID_TARGET_ARCH}
+
+    # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
@@ -64,7 +83,6 @@ android {
         $${QGIS_LIB_DIR}/libprotobuf-lite.so \
         $${QGIS_LIB_DIR}/libqca-qt5_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libqgis_native_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libqt5keychain_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libzip.so \
@@ -79,6 +97,7 @@ android {
         $${QGIS_LIB_DIR}/libwcsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libwfsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libwmsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Sensors_$${ANDROID_TARGET_ARCH}.so \
@@ -88,5 +107,5 @@ android {
         $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so
 
-    ANDROID_EXTRA_PLUGINS += $${QGIS_QML_DIR}
+    ANDROID_EXTRA_PLUGINS += $${QGSQUICK_QML_DIR}
 }

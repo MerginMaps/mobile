@@ -3,10 +3,8 @@ ios {
 
     DEFINES += MOBILE_OS
 
-    QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/qml
+    # QGIS
     QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
-
-    QGIS_QUICK_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_quick.framework
     QGIS_NATIVE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework
     QGIS_CORE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework
 
@@ -17,16 +15,27 @@ ios {
     }
 
     INCLUDEPATH += \
-      $${QGIS_QUICK_FRAMEWORK}/Headers \
       $${QGIS_NATIVE_FRAMEWORK}/Headers \
       $${QGIS_CORE_FRAMEWORK}/Headers
 
     LIBS += -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib  \
             -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
+    LIBS += -framework qgis_core
 
-    LIBS += -framework qgis_quick \
-            -framework qgis_core
+    # QgsQuick
+    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
+    QGSQUICK_QUICK_FRAMEWORK = $${QGSQUICK_INSTALL_PATH}/frameworks/qgis_quick.framework
 
+    exists($${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick) {
+      message("Building from QGSQUICK: $${QGSQUICK_INSTALL_PATH}")
+    } else {
+      error("Missing qgis_quick Framework in $${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick")
+    }
+    INCLUDEPATH += $${QGSQUICK_QUICK_FRAMEWORK}/Headers
+    LIBS += -F$${QGSQUICK_INSTALL_PATH}/frameworks
+    LIBS += -framework qgis_quick
+
+    # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
@@ -34,10 +43,8 @@ ios {
     # Disabling warnings in qgis qgswkbptr.h
     QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-shorten-64-to-32
 
-    QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
-    QGIS_PROVIDER_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
     QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
-    QGSQUICK_IMAGE_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Resources/images/QgsQuick
+    QGSQUICK_IMAGE_DIR = $${QGSQUICK_INSTALL_PATH}/images/QgsQuick
 
     CONFIG -= bitcode
     CONFIG += static
@@ -46,7 +53,8 @@ ios {
     QT += multimedia multimediawidgets location
     QTPLUGIN += qios
 
-    LIBS += -L$${QGIS_LIB_DIR} -L$${QGIS_PROVIDER_DIR} -L$${QGIS_QML_DIR}/QgsQuick/ -L$${QGIS_QML_DIR}/../lib/
+    LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib
+    LIBS += -L$${QGSQUICK_INSTALL_PATH}/lib -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
     LIBS += -lexpat -lcharset -lfreexl -lxml2
     LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
@@ -55,7 +63,7 @@ ios {
     # static providers
     LIBS += -lwmsprovider_a -lpostgresprovider_a
 
-    RESOURCES += $$QGIS_QML_DIR/QgsQuick/qgsquick.qrc
+    RESOURCES += $$QGSQUICK_QML_DIR/QgsQuick/qgsquick.qrc
     RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc
 
     QMAKE_RPATHDIR += @executable_path/../Frameworks

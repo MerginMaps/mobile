@@ -6,8 +6,8 @@ env:
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QGIS_DEPS_VERSION: 0.5.5
-  SDK_HASH: s1apy3lbsxf6v12
-  SDK_VERSION: 5
+  SDK_HASH: ljytmuxbvdrmboa
+  SDK_VERSION: 6
 
 jobs:
   tests:
@@ -68,8 +68,40 @@ jobs:
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
+      - name: build QgsQuick
+        run: |
+          QGSQUICK_DIR=`pwd`/input/qgsquick
+          mkdir -p build-QgsQuick
+          mkdir -p install-QgsQuick
+          mkdir -p install-QgsQuick/images/QgsQuick
+
+          cd build-QgsQuick
+          export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
+
+          cmake \
+            -DQGIS_VERSION_MAJOR=3 \
+            -DQGIS_VERSION_MINOR=17 \
+            -DQGIS_VERSION_PATCH=0 \
+            -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
+            -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
+            -DENABLE_TESTS=FALSE \
+            -DFORCE_STATIC_LIBS=FALSE \
+            -DUSE_QGIS_BUILD_DIR=FALSE \
+            -DQGIS_INSTALL_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac \
+            -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac/cmake \
+            ${QGSQUICK_DIR}
+
+          make -j $(sysctl -n hw.ncpu)
+          make install
+
+          cp ${QGSQUICK_DIR}/from_qgis/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R ${QGSQUICK_DIR}/from_qgis/images ../install-QgsQuick/images/QgsQuick
+
       - name: build Input
         run: |
+          QGSQUICK_INSTALL=`pwd`/install-QgsQuick
           cp input/scripts/ci/config.pri input/app/config.pri
 
           mkdir -p build-Input
@@ -82,6 +114,7 @@ jobs:
           make -j $(sysctl -n hw.ncpu)
           install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
           install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
+          install_name_tool -add_rpath ${QGSQUICK_INSTALL}/frameworks Input.app/Contents/MacOS/Input
 
       - name: run help links tests
         run: |

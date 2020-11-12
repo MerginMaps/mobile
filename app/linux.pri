@@ -3,6 +3,7 @@
 
     DEFINES += DESKTOP_OS
 
+    # QGIS
     !isEmpty(QGIS_INSTALL_PATH) {
       # using installed QGIS
       QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
@@ -16,7 +17,6 @@
       # expecting QGIS_SRC_DIR and QGIS_BUILD_DIR defined
       QGIS_PREFIX_PATH = $${QGIS_BUILD_DIR}/output
       QGIS_LIB_DIR = $${QGIS_BUILD_DIR}/output/lib
-      QGIS_QML_DIR = $${QGIS_BUILD_DIR}/output/qml
       QGIS_INCLUDE_DIR = \
           $${QGIS_SRC_DIR}/src/core \
           $${QGIS_SRC_DIR}/src/core/annotations \
@@ -40,8 +40,7 @@
           $${QGIS_SRC_DIR}/src/quickgui/attributes \
           $${QGIS_SRC_DIR}/external/nlohmann \
           $${QGIS_BUILD_DIR} \
-          $${QGIS_BUILD_DIR}/src/core \
-          $${QGIS_BUILD_DIR}/src/quickgui
+          $${QGIS_BUILD_DIR}/src/core
     }
 
     exists($${QGIS_LIB_DIR}/libqgis_core.so) {
@@ -52,8 +51,35 @@
 
     INCLUDEPATH += $${QGIS_INCLUDE_DIR}
     LIBS += -L$${QGIS_LIB_DIR}
-    LIBS += -lqgis_core -lqgis_quick
+    LIBS += -lqgis_core
 
+    # QgsQuick
+    !isEmpty(QGSQUICK_INSTALL_PATH) {
+      # using installed QGSQUICK
+      QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
+      QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
+      QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
+    }
+
+    isEmpty(QGSQUICK_INSTALL_PATH) {
+      # using QGSQUICK from build directory (has different layout of directories)
+      # expecting QGIS_SRC_DIR and QGSQUICK_BUILD_DIR defined
+      QGSQUICK_LIB_DIR = $${QGSQUICK_BUILD_DIR}/output/lib
+      QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output/qml
+      QGIS_INCLUDE_DIR = $${QGIS_BUILD_DIR}/src/quickgui
+    }
+
+    exists($${QGSQUICK_LIB_DIR}/libqgis_quick.so) {
+      message("Building from QGSQUICK: $${QGSQUICK_LIB_DIR}/libqgis_quick.so")
+    } else {
+	  error("Missing QGSQUICK library in $${QGSQUICK_LIB_DIR}/libqgis_quick.so")
+    }
+
+    INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
+    LIBS += -L$${QGSQUICK_LIB_DIR}
+    LIBS += -lqgis_quick
+
+    # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
