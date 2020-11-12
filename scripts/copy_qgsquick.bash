@@ -28,7 +28,7 @@ echo "The QGIS and INPUT copy differs? $DIFFERS"
 # now force copy the files to local file
 echo "update qgsquick"
 rm -rf $QGSQUICK_INPUT_DIR/*
-rsync -zavh --exclude="*.prepare" --exclude="*.sortinc" $QGSQUICK_QGIS_DIR $QGSQUICK_INPUT_DIR
+rsync -zavh --exclude="*.prepare" --exclude="*.sortinc" $QGSQUICK_QGIS_DIR/ $QGSQUICK_INPUT_DIR
 
 cd $PWD
 echo "The QGIS and INPUT copy differs? $DIFFERS"
