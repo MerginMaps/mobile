@@ -20,11 +20,16 @@ if [ ! -d "$QGSQUICK_INPUT_DIR" ]; then
 fi
 
 # first see how many files differs
-# TODO
+echo "differs??"
+diff qgsquick/ ../QGIS/src/quickgui/
+DIFFERS=$?
+echo "The QGIS and INPUT copy differs? $DIFFERS"
 
 # now force copy the files to local file
-rm -rf $QGSQUICK_INPUT_DIR/*
-cp -rf $QGSQUICK_QGIS_DIR/* $QGSQUICK_INPUT_DIR/
-
 echo "update qgsquick"
+rm -rf $QGSQUICK_INPUT_DIR/*
+rsync -zavh --exclude="*.prepare" --exclude="*.sortinc" ../QGIS/src/quickgui/ qgsquick/
+
 cd $PWD
+echo "The QGIS and INPUT copy differs? $DIFFERS"
+exit $DIFFERS
