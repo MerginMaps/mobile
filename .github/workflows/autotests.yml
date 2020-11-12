@@ -7,7 +7,7 @@ env:
   QT_VERSION: 5.14.2
   QGIS_DEPS_VERSION: 0.5.5
   SDK_HASH: s1apy3lbsxf6v12
-  SDK_VERSION: 5
+  SDK_VERSION: 6
 
 jobs:
   tests:
@@ -67,6 +67,40 @@ jobs:
           mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+
+      - name: download qgis
+        run: |
+          ROOT=`pwd`
+          cd /opt/QGIS
+          git clone https://github.com/qgis/QGIS.git --depth 1
+
+      - name: build QgsQuick
+          mkdir -p build-QgsQuick
+          mkdir -p install-QgsQuick
+          mkdir -p install-QgsQuick/images/QgsQuick
+
+          cd build-QgsQuick
+          export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
+
+          cmake \
+            -GNinja \
+            -DQGIS_VERSION_MAJOR=3 \
+            -DQGIS_VERSION_MINOR=17 \
+            -DQGIS_VERSION_PATCH=0 \
+            -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
+            -DCMAKE_BUILD_TYPE=Releaes \
+            -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
+            -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
+            -DENABLE_TESTS=FALSE \
+            -DFORCE_STATIC_LIBS=FALSE \
+            -DUSE_QGIS_BUILD_DIR=FALSE \
+            -DQGIS_SRC_DIR=/opt/QGIS/qgis \
+            ../input/qgsquick
+
+          ninja install
+
+          cp src/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R src/quickgui/images ../install-QgsQuick/images/QgsQuick
 
       - name: build Input
         run: |
