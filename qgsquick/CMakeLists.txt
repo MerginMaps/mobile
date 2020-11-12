@@ -15,6 +15,9 @@ SET (USE_QGIS_BUILD_DIR FALSE CACHE BOOL "Use QGIS from build directory")
 SET (QGIS_INSTALL_PATH "" CACHE PATH "QGIS install directory, only used when USE_QGIS_BUILD_DIR=FALSE")
 SET (QGIS_BUILD_DIR "" CACHE PATH "QGIS build directory, only used when USE_QGIS_BUILD_DIR=TRUE")
 set (FORCE_STATIC_LIBS ${DEFAULT_FORCE_STATIC_LIBS} CACHE BOOL "Determines whether libraries should be static only")
+SET (QGIS_VERSION_MAJOR "" CACHE STRING "QGIS VERSION STRING")
+SET (QGIS_VERSION_MINOR "" CACHE STRING "QGIS VERSION STRING")
+SET (QGIS_VERSION_PATCH "" CACHE STRING "QGIS VERSION STRING")
 
 if (APPLE)
   set (QGIS_MAC_DEPS_DIR "" CACHE PATH "Path to QGIS Mac custom dependencies directory")
@@ -31,6 +34,7 @@ set(CMAKE_MODULE_PATH ${QGIS_SRC_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 #############################################################
 # Find Packages
+include(GenerateExportHeader)
 SET(CMAKE_SOURCE_DIR_MINE ${CMAKE_SOURCE_DIR})
 SET(CMAKE_SOURCE_DIR ${QGIS_SRC_DIR})
   find_package(Proj)
@@ -106,16 +110,21 @@ IF (USE_QGIS_BUILD_DIR)
       ${QGIS_SRC_DIR}/external/nlohmann
       ${QGIS_BUILD_DIR}/src/core
     )
-    SET(QGIS_CORE ${QGIS_BUILD_DIR}/output/QGIS.app/Contents/Frameworks/qgis_core.framework/qgis_core)
+    SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework)
 ELSE(USE_QGIS_BUILD_DIR)
     include_directories( ${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/include/ )
-    SET(QGIS_CORE ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/qgis_core)
+    SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework)
 ENDIF(USE_QGIS_BUILD_DIR)
-
-SET(qgis_core $QGIS_CORE)
 
 #############################################################
 # setup some vars required in qgsquick CMakeLists
+set(CPACK_PACKAGE_VERSION_MAJOR ${QGIS_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${QGIS_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${QGIS_VERSION_PATCH})
+set(COMPLETE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
+set(RELEASE_NAME "Master")
+math(EXPR QGIS_VERSION_INT "${CPACK_PACKAGE_VERSION_MAJOR}*10000+${CPACK_PACKAGE_VERSION_MINOR}*100+${CPACK_PACKAGE_VERSION_PATCH}")
+
 if (FORCE_STATIC_LIBS)
   set (LIBRARY_TYPE STATIC)
 else()
@@ -126,9 +135,11 @@ set (HAVE_QUICK TRUE)
 
 set (QGIS_LIB_SUBDIR  lib)
 set (QGIS_BIN_DIR     bin)
+set (QGIS_BIN_SUBDIR  bin)
 set (QGIS_CGIBIN_DIR  bin)
 set (QGIS_LIB_DIR     lib)
 set (QGIS_LIBEXEC_DIR .)
+set (QGIS_LIBEXEC_SUBDIR .)
 set (QGIS_DATA_DIR    .)
 set (QGIS_PLUGIN_DIR  plugins)
 set (QT_PLUGINS_DIR   ${QGIS_OUTPUT_DIRECTORY}/plugins)
@@ -138,6 +149,16 @@ set (QGIS_FW_SUBDIR   frameworks)
 set (QGIS_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${QGIS_OUTPUT_DIRECTORY}/bin)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${QGIS_OUTPUT_DIRECTORY}/lib)
+
+configure_file(${QGIS_SRC_DIR}/cmake_templates/qgsconfig.h.in ${CMAKE_BINARY_DIR}/qgsconfig.h)
+include_directories(${CMAKE_BINARY_DIR})
+
+# include_directories(${Qt5Widgets_INCLUDE_DIRS})
+add_library(qgis_core ${LIBRARY_TYPE} IMPORTED GLOBAL)
+set_target_properties(qgis_core PROPERTIES
+    IMPORTED_LOCATION ${QGIS_CORE_DIR}/qgis_core
+    INTERFACE_LINK_LIBRARIES Qt5::Widgets
+)
 
 #############################################################
 # add original CMakeLists
