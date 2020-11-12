@@ -160,6 +160,7 @@ set_target_properties(qgis_core PROPERTIES
     INTERFACE_LINK_LIBRARIES Qt5::Widgets
 )
 
+SET(QMLPLUGINDUMP_FOUND FALSE)
 #############################################################
 # add original CMakeLists
 ADD_SUBDIRECTORY(from_qgis)
