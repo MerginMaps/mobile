@@ -12,4 +12,4 @@ jobs:
 
       - name: run check the qgsquick is up-to-date
         run: |
-          ./scripts/copy_qgsquick.bash qgis/
+          ./scripts/copy_qgsquick.bash QGIS/
