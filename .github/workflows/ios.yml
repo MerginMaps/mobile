@@ -98,7 +98,7 @@ jobs:
             -DENABLE_VISIBILITY=1 \
             -DARCHS=aarch64-apple-darwin \
             -DPLATFORM=OS \
-            -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake
+            -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake \
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION}
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
             -DQGIS_VERSION_MAJOR=1 \
@@ -160,7 +160,7 @@ jobs:
             -DFREEXL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libfreexl.a \
             -DCHARSET_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libcharset.a \
             -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
-            ../qgsquick
+            ../input/qgsquick
 
           make install
 
