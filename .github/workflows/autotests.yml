@@ -70,11 +70,12 @@ jobs:
 
       - name: build QgsQuick
         run: |
-          mkdir -p ../build-QgsQuick
-          mkdir -p ../install-QgsQuick
-          mkdir -p ../install-QgsQuick/images/QgsQuick
+          INPUT_DIR=`pwd`
+          mkdir -p build-QgsQuick
+          mkdir -p install-QgsQuick
+          mkdir -p install-QgsQuick/images/QgsQuick
 
-          cd ../build-QgsQuick
+          cd build-QgsQuick
           export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
 
           cmake \
@@ -89,13 +90,13 @@ jobs:
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
             -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac/cmake \
-            ../input/qgsquick
+            ${INPUT_DIR}/qgsquick
 
           make -j $(sysctl -n hw.ncpu)
           make install
 
-          cp ../input/qgsquick/from_quick/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
-          cp -R ../input/qgsquick/from_quick/images ../install-QgsQuick/images/QgsQuick
+          cp ${INPUT_DIR}/qgsquick/from_quick/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R ${INPUT_DIR}/qgsquick/from_quick/images ../install-QgsQuick/images/QgsQuick
 
       - name: build Input
         run: |

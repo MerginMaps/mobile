@@ -87,6 +87,7 @@ jobs:
 
       - name: build QgsQuick
         run: |
+          INPUT_DIR=`pwd`
           mkdir -p ../build-QgsQuick
           mkdir -p ../install-QgsQuick
           mkdir -p ../install-QgsQuick/images/QgsQuick
@@ -160,13 +161,13 @@ jobs:
             -DFREEXL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libfreexl.a \
             -DCHARSET_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libcharset.a \
             -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
-            ../input/qgsquick
+            ${INPUT_DIR}/qgsquick
 
           make -j $(sysctl -n hw.ncpu)
           make install
 
-          cp ../input/qgsquick/from_quick/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
-          cp -R ../input/qgsquick/from_quick/images ../install-QgsQuick/images/QgsQuick
+          cp ${INPUT_DIR}/qgsquick/from_quick/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R ${INPUT_DIR}/qgsquick/from_quick/images ../install-QgsQuick/images/QgsQuick
 
       - name: Create build system with qmake
         run: |
