@@ -87,11 +87,11 @@ jobs:
 
       - name: build QgsQuick
         run: |
-          mkdir -p build-QgsQuick
-          mkdir -p install-QgsQuick
-          mkdir -p install-QgsQuick/images/QgsQuick
+          mkdir -p ../build-QgsQuick
+          mkdir -p ../install-QgsQuick
+          mkdir -p ../install-QgsQuick/images/QgsQuick
 
-          cd build-QgsQuick
+          cd ../build-QgsQuick
           export PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64/bin:$PATH
 
           cmake \
@@ -99,7 +99,7 @@ jobs:
             -DARCHS=aarch64-apple-darwin \
             -DPLATFORM=OS \
             -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake \
-            -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION}
+            -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
             -DQGIS_VERSION_MAJOR=1 \
             -DQGIS_VERSION_MINOR=0 \
@@ -162,10 +162,11 @@ jobs:
             -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
             ../input/qgsquick
 
+          make -j $(sysctl -n hw.ncpu)
           make install
 
-          cp src/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
-          cp -R src/quickgui/images ../install-QgsQuick/images/QgsQuick
+          cp ../input/qgsquick/from_quick/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R ../input/qgsquick/from_quick/images ../install-QgsQuick/images/QgsQuick
 
       - name: Create build system with qmake
         run: |
