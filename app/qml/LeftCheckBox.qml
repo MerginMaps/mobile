@@ -17,6 +17,8 @@ import QtQuick.Templates 2.1 as T
 T.CheckBox {
     id: control
 
+    signal checkboxClicked( var buttonState )
+
     property var spaceWidth: height / 4.0
     property var baseSize: height / 5.5
     property var baseColor: InputStyle.panelBackgroundDarker
@@ -28,6 +30,8 @@ T.CheckBox {
                                                    indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
 
     leftPadding: spaceWidth
+
+    onClicked: control.checkboxClicked( control.checkState )
 
     indicator: Rectangle {
         id: checkboxHandle

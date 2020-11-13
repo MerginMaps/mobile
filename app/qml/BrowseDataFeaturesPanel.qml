@@ -25,10 +25,24 @@ Item {
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
   property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
   property string pageTitle: layerName + " (" + featuresCount + ")"
-  property var preSelectedFeatures: []
+  property var selectedFeatures: []
 
   property var deactivateSearch: function deactivateSearch() {
     searchBar.deactivate()
+  }
+
+  function featureToggled( featureId, toggleState ) {
+    if ( !Array.isArray( selectedFeatures ) )
+      selectedFeatures = []
+    if ( toggleState === Qt.Checked )
+    {
+      selectedFeatures.push( featureId )
+    }
+    else if ( toggleState === Qt.Unchecked )
+    {
+      selectedFeatures = selectedFeatures.filter( _id => _id !== featureId )
+    }
+    browseDataView.preSelectedIds = selectedFeatures // update checkboxes when search changes
   }
 
   states: [
@@ -91,9 +105,10 @@ Item {
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
       allowMultiselect: root.allowMultiselect
-      preSelectedIds: preSelectedFeatures
+      preSelectedIds: selectedFeatures
 
       onFeatureClicked: root.featureClicked( featureId )
+      onFeatureToggled: root.featureToggled( featureId, toggleState )
     }
 
     footer: BrowseDataToolbar {
@@ -103,7 +118,7 @@ Item {
       doneButtonVisible: allowMultiselect
 
       onAddButtonClicked: addFeatureClicked()
-      onDoneButtonClicked: root.featureClicked( browseDataView.selectedIds )
+      onDoneButtonClicked: root.featureClicked( root.selectedFeatures )
     }
   }
 }

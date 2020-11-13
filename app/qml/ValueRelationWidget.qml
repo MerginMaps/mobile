@@ -21,11 +21,16 @@ Item {
     property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
       itemWidget = widget
 
+      let selectedFeatures = itemWidget.getCurrentValueAsFeatureId()
+      if ( Array.isArray( selectedFeatures ) ) {
+        selectedFeatures = selectedFeatures.map( id => Number(id) ) // ids can be of string type, convert them to number
+      }
+
       valueRelationLayoutStack.push(componentValueRelationPage, {
                                       featuresModel: valueRelationModel,
                                       pageTitle: itemWidget.fieldName,
                                       allowMultiselect: itemWidget.allowMultipleValues,
-                                      preSelectedFeatures: itemWidget.getCurrentValueAsFeatureId()
+                                      selectedFeatures: selectedFeatures
                                     })
     }
 

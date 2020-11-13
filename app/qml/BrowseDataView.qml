@@ -18,18 +18,12 @@ Item {
   id: root
 
   signal featureClicked( var featureId )
+  signal featureToggled( var featureId, var toggleState )
 
   property bool showAdditionalInfo: false
   property bool allowMultiselect: false
   property var featuresModel: null
-  property var selectedIds: []
   property var preSelectedIds: []
-
-  onVisibleChanged: {
-    if ( visible ) {
-      selectedIds.length = 0 // clear the array without copying it
-    }
-  }
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -46,28 +40,22 @@ Item {
 
       MouseArea {
         anchors.fill: parent
+        propagateComposedEvents: false
         onClicked: {
+
           if ( allowMultiselect ) {
             checkboxItem.toggle()
+            root.featureToggled( model.FeatureId, checkboxItem.checkState )
+          }
+          else root.featureClicked( model.FeatureId )
 
-            if ( checkboxItem.checkState === Qt.Checked )
-              selectedIds.push(model.FeatureId)
-            else if ( checkboxItem.checkState === Qt.Unchecked )
-              selectedIds = selectedIds.filter( _id => _id !== model.FeatureId )
-          }
-          else {
-            root.featureClicked( model.FeatureId )
-          }
         }
       }
 
       Component.onCompleted: { // mark all preselected features
-        if ( Array.isArray(preSelectedIds) ) {
-          preSelectedIds = preSelectedIds.map( id => Number(id) ) // ids can be of string type, convert them to number
-
+        if ( Array.isArray( preSelectedIds ) ) {
           if ( preSelectedIds.includes( model.FeatureId ) ) {
-            checkboxItem.toggle()
-            selectedIds.push(model.FeatureId)
+            checkboxItem.checkState = Qt.Checked
           }
         }
       }
@@ -89,6 +77,8 @@ Item {
             baseColor: InputStyle.panelBackgroundDarker
             height: 40 * QgsQuick.Utils.dp
             width: 40 * QgsQuick.Utils.dp
+
+            onCheckboxClicked: root.featureToggled( model.FeatureId, buttonState )
           }
         }
 
