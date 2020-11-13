@@ -3,8 +3,8 @@ on: [push]
 env:
   QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
-  SDK_DROPBOX_HASH: dz503g40vq3b11y
-  SDK_VERSION: 7
+  SDK_DROPBOX_HASH: gj3trt6mux31htz
+  SDK_VERSION: 8
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '12.0.1' }}
