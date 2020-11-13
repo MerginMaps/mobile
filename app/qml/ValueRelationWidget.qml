@@ -12,6 +12,12 @@ Item {
     // pointer to widget from qgis feature form
     property var itemWidget: null
 
+    property var getTypeOfWidget: function getTypeOfWidget( widget, valueRelationModel ) {
+      if ( widget.allowMultipleValues || valueRelationModel.featuresCount > 4 )
+        return "textfield"
+      return "combobox"
+    }
+
     property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
       itemWidget = widget
 
