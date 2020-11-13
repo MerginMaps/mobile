@@ -78,7 +78,6 @@ jobs:
           export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
 
           cmake \
-            -GNinja \
             -DQGIS_VERSION_MAJOR=1 \
             -DQGIS_VERSION_MINOR=0 \
             -DQGIS_VERSION_PATCH=0 \
@@ -92,7 +91,8 @@ jobs:
             -DQGIS_CMAKE_PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/mac/cmake \
             ../input/qgsquick
 
-          ninja install
+          make -j $(sysctl -n hw.ncpu)
+          make install
 
           cp src/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
           cp -R src/quickgui/images ../install-QgsQuick/images/QgsQuick
