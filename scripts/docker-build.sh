@@ -5,13 +5,16 @@
 SOURCE_DIR=/usr/src/input
 if [[ -z ${BUILD_FOLDER+x} ]]; then
     BUILD_DIR=${SOURCE_DIR}/build-docker
+    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/build-docker-quick
 else
     BUILD_DIR=${SOURCE_DIR}/${BUILD_FOLDER}
+    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/${BUILD_FOLDER}-quick
 fi
 if [[ -z ${ARCH+x} ]]; then
     ARCH=armeabi-v7a
 fi
 INSTALL_DIR=${BUILD_DIR}/out
+INSTALL_DIR_QGSQUICK=${BUILD_DIR}/out-quick
 QT_ANDROID=${QT_ANDROID_BASE}/android
 
 set -e
@@ -29,8 +32,35 @@ then
 fi
 
 echo "INSTALL_DIR: ${INSTALL_DIR}"
+echo "INSTALL_DIR_QGSQUICK: ${INSTALL_DIR_QGSQUICK}"
 echo "BUILD_DIR: ${BUILD_DIR}"
+echo "BUILD_DIR_QGSQUICK: ${BUILD_DIR_QGSQUICK}"
 echo "ARCH: ${ARCH}"
+echo "API: $ANDROIDAPI"
+
+######################
+# QGS QUICK
+pushd ${BUILD_DIR_QGSQUICK}
+
+######################
+# QGS QUICK
+pushd ${BUILD_DIR_QGSQUICK}
+
+# -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS \
+cmake \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
+  -DCMAKE_CXX_FLAGS_RELEASE=-g0 \
+  -DCMAKE_FIND_ROOT_PATH:PATH=${ANDROID_NDK_ROOT};${QT_ANDROID};/home/input-sdk/${ARCH} \
+  -DANDROID_ABI=${ARCH} -DANDROID_NDK=${ANDROID_NDK_ROOT} \
+  -DANDROID_NATIVE_API_LEVEL=$ANDROIDAPI \
+  -DANDROID=ON \
+  -DANDROID_STL=c++_shared \
+
+  ${SOURCE_DIR}/qgsquick
+
+make
+make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
 
 # see https://bugreports.qt.io/browse/QTBUG-80756
 export ANDROID_TARGET_ARCH=${ARCH}

@@ -9,6 +9,8 @@ if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
+set BUILD_PATH_QGSQUICK=%ROOT_DIR%\build-quick
+
 set RESULT_FILE=%ROOT_DIR%\inputapp-win-x86_64.exe
 set REPO_PATH=%ROOT_DIR%\repo\input
 IF EXIST "C:\projects\input\app\input.pro" (
