@@ -76,7 +76,6 @@ jobs:
 
           cd build-QgsQuick
           export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
-          ls /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/mac/cmake
 
           cmake \
             -DQGIS_VERSION_MAJOR=1 \
@@ -89,7 +88,7 @@ jobs:
             -DENABLE_TESTS=FALSE \
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
-            -DQGIS_CMAKE_PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/mac/cmake \
+            -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac/cmake \
             ../input/qgsquick
 
           make -j $(sysctl -n hw.ncpu)

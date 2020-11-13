@@ -101,7 +101,6 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION}
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
-            -GNinja \
             -DQGIS_VERSION_MAJOR=1 \
             -DQGIS_VERSION_MINOR=0 \
             -DQGIS_VERSION_PATCH=0 \
@@ -161,9 +160,9 @@ jobs:
             -DFREEXL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libfreexl.a \
             -DCHARSET_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libcharset.a \
             -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
-            ../input/qgsquick
+            ../qgsquick
 
-          ninja install
+          make install
 
           cp src/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
           cp -R src/quickgui/images ../install-QgsQuick/images/QgsQuick
