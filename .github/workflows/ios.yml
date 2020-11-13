@@ -105,7 +105,7 @@ jobs:
             -DQGIS_VERSION_MAJOR=1 \
             -DQGIS_VERSION_MINOR=0 \
             -DQGIS_VERSION_PATCH=0 \
-            -FORCE_STATIC_LIBS=TRUE \
+            -DFORCE_STATIC_LIBS=TRUE \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
             -DCMAKE_BUILD_TYPE=Releaes \
             -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/ios;/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64 \
@@ -135,7 +135,7 @@ jobs:
             -DLIBZIP_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
             -DLIBZIP_CONF_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
             -DLIBZIP_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libzip.a \
-            -DICONV_INCLUDE_DIR=$SYSROOT\
+            -DICONV_INCLUDE_DIR=$SYSROOT \
             -DICONV_LIBRARY=$SYSROOT/usr/lib/libiconv.tbd \
             -DSQLITE3_INCLUDE_DIR=$SYSROOT \
             -DSQLITE3_LIBRARY=$SYSROOT/usr/lib/libsqlite3.tbd \

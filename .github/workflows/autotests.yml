@@ -78,6 +78,9 @@ jobs:
           cd build-QgsQuick
           export PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/bin:$PATH
 
+          ls ${INPUT_DIR}
+          ls ${INPUT_DIR}/..
+          
           cmake \
             -DQGIS_VERSION_MAJOR=1 \
             -DQGIS_VERSION_MINOR=0 \

@@ -40,10 +40,7 @@ echo "API: $ANDROIDAPI"
 
 ######################
 # QGS QUICK
-pushd ${BUILD_DIR_QGSQUICK}
-
-######################
-# QGS QUICK
+mkdir -p ${BUILD_DIR_QGSQUICK}
 pushd ${BUILD_DIR_QGSQUICK}
 
 # -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS \
@@ -61,6 +58,9 @@ cmake \
 
 make
 make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
+
+######################
+# Input
 
 # see https://bugreports.qt.io/browse/QTBUG-80756
 export ANDROID_TARGET_ARCH=${ARCH}
