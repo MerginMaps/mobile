@@ -8,6 +8,8 @@ env:
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '12.0.1' }}
+  IOS_MIN_SDK_VERSION: ${{ '12.0' }}
+
 jobs:
   ios_build:
     if: github.repository == 'lutraconsulting/input'
@@ -82,6 +84,89 @@ jobs:
 
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
           cp $DOWNLOAD_DIR/scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
+
+      - name: build QgsQuick
+        run: |
+          mkdir -p build-QgsQuick
+          mkdir -p install-QgsQuick
+          mkdir -p install-QgsQuick/images/QgsQuick
+
+          cd build-QgsQuick
+          export PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64/bin:$PATH
+
+          cmake \
+            -DENABLE_VISIBILITY=1 \
+            -DARCHS=aarch64-apple-darwin \
+            -DPLATFORM=OS \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake
+            -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION}
+            -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
+            -GNinja \
+            -DQGIS_VERSION_MAJOR=1 \
+            -DQGIS_VERSION_MINOR=0 \
+            -DQGIS_VERSION_PATCH=0 \
+            -FORCE_STATIC_LIBS=TRUE \
+            -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
+            -DCMAKE_BUILD_TYPE=Releaes \
+            -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/ios;/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64 \
+            -DFORCE_STATIC_LIBS=FALSE \
+            -DUSE_QGIS_BUILD_DIR=FALSE \
+            -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/cmake \
+            -DQT_LRELEASE_EXECUTABLE=`which lrelease` \
+            -DGDAL_CONFIG=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin/gdal-config \
+            -DGDAL_CONFIG_PREFER_FWTOOLS_PAT=/bin_safe \
+            -DGDAL_CONFIG_PREFER_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin \
+            -DGDAL_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DGDAL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgdal.a \
+            -DGDAL_VERSION=3.0.4 \
+            -DGEOS_CONFIG=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin/geos-config \
+            -DGEOS_CONFIG_PREFER_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin \
+            -DGEOS_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DGEOS_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos_c.a \
+            -DGEOS_LIB_NAME_WITH_PREFIX=-lgeos_c \
+            -DGEOS_VERSION=3.7.2 \
+            -DQCA_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/QtCrypto \
+            -DQCA_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libqca-qt5.a \
+            -DQCA_VERSION_STR=2.1.0 \
+            -DPROJ_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DPROJ_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libproj.a \
+            -DLIBTASN1_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DLIBTASN1_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtasn1.a \
+            -DLIBZIP_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DLIBZIP_CONF_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DLIBZIP_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libzip.a \
+            -DICONV_INCLUDE_DIR=$SYSROOT\
+            -DICONV_LIBRARY=$SYSROOT/usr/lib/libiconv.tbd \
+            -DSQLITE3_INCLUDE_DIR=$SYSROOT \
+            -DSQLITE3_LIBRARY=$SYSROOT/usr/lib/libsqlite3.tbd \
+            -DPOSTGRES_CONFIG= \
+            -DPOSTGRES_CONFIG_PREFER_PATH= \
+            -DPOSTGRES_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DPOSTGRES_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libpq.a \
+            -DQTKEYCHAIN_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/qt5keychain \
+            -DQTKEYCHAIN_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libqt5keychain.a \
+            -DSPATIALINDEX_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/spatialindex \
+            -DSPATIALINDEX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialindex.a \
+            -DSPATIALITE_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DSPATIALITE_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialite.a \
+            -DPYTHON_EXECUTABLE=`which python3` \
+            -DENABLE_QT5=ON \
+            -DENABLE_TESTS=OFF \
+            -DEXPAT_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
+            -DEXPAT_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libexpat.a \
+            -DCMAKE_DISABLE_FIND_PACKAGE_QtQmlTools=TRUE \
+            -DIOS=TRUE \
+            -DLIBTIFF_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtiff.a \
+            -DLIBTIFFXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtiffxx.a \
+            -DFREEXL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libfreexl.a \
+            -DCHARSET_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libcharset.a \
+            -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
+            ../input/qgsquick
+
+          ninja install
+
+          cp src/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -R src/quickgui/images ../install-QgsQuick/images/QgsQuick
 
       - name: Create build system with qmake
         run: |

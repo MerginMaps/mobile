@@ -69,6 +69,7 @@ jobs:
           tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
       - name: build QgsQuick
+        run: |
           mkdir -p build-QgsQuick
           mkdir -p install-QgsQuick
           mkdir -p install-QgsQuick/images/QgsQuick
@@ -78,8 +79,8 @@ jobs:
 
           cmake \
             -GNinja \
-            -DQGIS_VERSION_MAJOR=3 \
-            -DQGIS_VERSION_MINOR=17 \
+            -DQGIS_VERSION_MAJOR=1 \
+            -DQGIS_VERSION_MINOR=0 \
             -DQGIS_VERSION_PATCH=0 \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
             -DCMAKE_BUILD_TYPE=Releaes \
