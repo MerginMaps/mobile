@@ -26,6 +26,7 @@ ios {
 
 macx:!android {
   QGIS_INSTALL_PATH = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac
+  QGSQUICK_INSTALL_PATH = $$(ROOT_DIR)/install-QgsQuick
   QGIS_QUICK_DATA_PATH = $$(ROOT_DIR)/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/include
   GEODIFF_LIB_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/lib

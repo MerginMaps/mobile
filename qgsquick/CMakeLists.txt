@@ -8,10 +8,12 @@ SET (CMAKE_CXX_STANDARD 11)
 
 #############################################################
 # global vars
-SET (QGIS_SRC_DIR "" CACHE PATH "QGIS source directory, for find packages and for includes if USE_QGIS_BUILD_DIR=TRUE")
+
 SET (USE_QGIS_BUILD_DIR FALSE CACHE BOOL "Use QGIS from build directory")
+SET (QGIS_CMAKE_PATH "" CACHE PATH "Path to QGIS cmake directory")
 SET (QGIS_INSTALL_PATH "" CACHE PATH "QGIS install directory, only used when USE_QGIS_BUILD_DIR=FALSE")
 SET (QGIS_BUILD_DIR "" CACHE PATH "QGIS build directory, only used when USE_QGIS_BUILD_DIR=TRUE")
+SET (QGIS_SRC_DIR "" CACHE PATH "QGIS source directory, only used when USE_QGIS_BUILD_DIR=TRUE")
 SET (FORCE_STATIC_LIBS ${DEFAULT_FORCE_STATIC_LIBS} CACHE BOOL "Determines whether libraries should be static only")
 SET (QGIS_VERSION_MAJOR "" CACHE STRING "QGIS VERSION STRING")
 SET (QGIS_VERSION_MINOR "" CACHE STRING "QGIS VERSION STRING")
@@ -25,7 +27,7 @@ IF (APPLE)
   ENDIF()
 ENDIF()
 
-SET(CMAKE_MODULE_PATH ${QGIS_SRC_DIR}/cmake ${CMAKE_MODULE_PATH})
+SET(CMAKE_MODULE_PATH ${QGIS_CMAKE_PATH} ${CMAKE_MODULE_PATH})
 
 #############################################################
 # Find Packages

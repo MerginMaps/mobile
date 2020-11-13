@@ -6,7 +6,7 @@ env:
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QGIS_DEPS_VERSION: 0.5.5
-  SDK_HASH: s1apy3lbsxf6v12
+  SDK_HASH: ljytmuxbvdrmboa
   SDK_VERSION: 6
 
 jobs:
@@ -68,12 +68,6 @@ jobs:
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
 
-      - name: download qgis
-        run: |
-          ROOT=`pwd`
-          cd /opt/QGIS
-          git clone https://github.com/qgis/QGIS.git --depth 1
-
       - name: build QgsQuick
           mkdir -p build-QgsQuick
           mkdir -p install-QgsQuick
@@ -94,7 +88,7 @@ jobs:
             -DENABLE_TESTS=FALSE \
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
-            -DQGIS_SRC_DIR=/opt/QGIS/qgis \
+            -DQGIS_CMAKE_PATH=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/mac/cmake \
             ../input/qgsquick
 
           ninja install
