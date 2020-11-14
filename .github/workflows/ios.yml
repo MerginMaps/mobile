@@ -104,8 +104,8 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake \
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
-            -DQGIS_VERSION_MAJOR=1 \
-            -DQGIS_VERSION_MINOR=0 \
+            -DQGIS_VERSION_MAJOR=3 \
+            -DQGIS_VERSION_MINOR=17 \
             -DQGIS_VERSION_PATCH=0 \
             -DFORCE_STATIC_LIBS=TRUE \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
@@ -114,7 +114,6 @@ jobs:
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
             -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/cmake \
-            -DQT_LRELEASE_EXECUTABLE=`which lrelease` \
             -DGDAL_CONFIG=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin/gdal-config \
             -DGDAL_CONFIG_PREFER_FWTOOLS_PAT=/bin_safe \
             -DGDAL_CONFIG_PREFER_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin \

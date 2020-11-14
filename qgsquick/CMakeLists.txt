@@ -92,10 +92,29 @@ IF (USE_QGIS_BUILD_DIR)
       ${QGIS_SRC_DIR}/external/nlohmann
       ${QGIS_BUILD_DIR}/src/core
     )
-    SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework)
+    IF (APPLE)
+        SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework)
+    ELSE (APPLE)
+        # TODO windows?
+        SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib)
+    ENDIF (APPLE)
+
 ELSE(USE_QGIS_BUILD_DIR)
-    INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/include/ )
-    SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework)
+    IF (APPLE)
+        INCLUDE_DIRECTORIES(
+            ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/Versions/Current/Headers/
+            ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework/Headers
+        )
+        SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework)
+    ELSE (APPLE)
+        # TODO windows?
+        INCLUDE_DIRECTORIES(
+            ${QGIS_INSTALL_PATH}/include
+        )
+        SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/lib)
+    ENDIF (APPLE)
+
+
 ENDIF(USE_QGIS_BUILD_DIR)
 
 #############################################################
