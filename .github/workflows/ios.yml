@@ -87,8 +87,7 @@ jobs:
 
       - name: build QgsQuick
         run: |
-          QGSQUICK_DIR=`pwd`/input/qgsquick
-          ls ${QGSQUICK_DIR}
+          QGSQUICK_DIR=`pwd`/qgsquick
           mkdir -p ../build-QgsQuick
           mkdir -p ../install-QgsQuick
           mkdir -p ../install-QgsQuick/images/QgsQuick
