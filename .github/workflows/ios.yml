@@ -88,9 +88,12 @@ jobs:
       - name: build QgsQuick
         run: |
           QGSQUICK_DIR=`pwd`/input/qgsquick
+          ls ${QGSQUICK_DIR}
           mkdir -p ../build-QgsQuick
           mkdir -p ../install-QgsQuick
           mkdir -p ../install-QgsQuick/images/QgsQuick
+
+          SYSROOT="$(xcrun --sdk iphoneos --show-sdk-path)"
 
           cd ../build-QgsQuick
           export PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64/bin:$PATH
@@ -107,7 +110,7 @@ jobs:
             -DQGIS_VERSION_PATCH=0 \
             -DFORCE_STATIC_LIBS=TRUE \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
-            -DCMAKE_BUILD_TYPE=Releaes \
+            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/ios;/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64 \
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
@@ -149,7 +152,6 @@ jobs:
             -DSPATIALINDEX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialindex.a \
             -DSPATIALITE_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
             -DSPATIALITE_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialite.a \
-            -DPYTHON_EXECUTABLE=`which python3` \
             -DENABLE_QT5=ON \
             -DENABLE_TESTS=OFF \
             -DEXPAT_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \

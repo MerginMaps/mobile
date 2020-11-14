@@ -16,6 +16,7 @@ fi
 INSTALL_DIR=${BUILD_DIR}/out
 INSTALL_DIR_QGSQUICK=${BUILD_DIR}/out-quick
 QT_ANDROID=${QT_ANDROID_BASE}/android
+CORES=$(cat /proc/cpuinfo | grep processor | wc -l)
 
 set -e
 
@@ -36,6 +37,10 @@ echo "INSTALL_DIR_QGSQUICK: ${INSTALL_DIR_QGSQUICK}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "BUILD_DIR_QGSQUICK: ${BUILD_DIR_QGSQUICK}"
 echo "ARCH: ${ARCH}"
+echo "CORES ${CORES}"
+
+# TODO take from input-sdk?
+export ANDROIDAPI=23
 echo "API: $ANDROIDAPI"
 
 ######################
@@ -49,14 +54,14 @@ cmake \
   -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
   -DCMAKE_CXX_FLAGS_RELEASE=-g0 \
   -DCMAKE_FIND_ROOT_PATH:PATH=${ANDROID_NDK_ROOT};${QT_ANDROID};/home/input-sdk/${ARCH} \
-  -DANDROID_ABI=${ARCH} -DANDROID_NDK=${ANDROID_NDK_ROOT} \
+  -DANDROID_ABI=${ARCH} \
+  -DANDROID_NDK=${ANDROID_NDK_ROOT} \
   -DANDROID_NATIVE_API_LEVEL=$ANDROIDAPI \
   -DANDROID=ON \
   -DANDROID_STL=c++_shared \
-
   ${SOURCE_DIR}/qgsquick
 
-make
+make -j ${CORES}
 make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
 
 mkdir -p ${INSTALL_DIR_QGSQUICK}/images
@@ -76,7 +81,7 @@ pushd ${BUILD_DIR}
 cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
 ${QT_ANDROID}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
 ${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
-make
+make -j ${CORES}
 make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
