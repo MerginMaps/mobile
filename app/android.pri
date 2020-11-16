@@ -22,7 +22,6 @@ android {
     isEmpty(QGSQUICK_INSTALL_PATH) {
       error("Missing QGSQUICK_INSTALL_PATH")
     }
-    }
 
     INCLUDEPATH += $${QGIS_INCLUDE_DIR}
     LIBS += -L$${QGIS_LIB_DIR}
