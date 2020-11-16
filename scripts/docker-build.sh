@@ -68,6 +68,7 @@ cmake \
   -DENABLE_TESTS=FALSE \
   -DFORCE_STATIC_LIBS=FALSE \
   -DUSE_QGIS_BUILD_DIR=FALSE \
+  -DQGIS_INSTALL_PATH=/home/input-sdk/${ARCH} \
   -DQGIS_CMAKE_PATH=/home/input-sdk/${ARCH}/cmake \
   ${SOURCE_DIR}/qgsquick
 

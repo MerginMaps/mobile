@@ -6,6 +6,7 @@ win32 {
 
   QT_LIBS_DIR = $$dirname(QMAKE_QMAKE)/../lib
 
+  # QGIS
   !isEmpty(QGIS_INSTALL_PATH) {
       # using installed QGIS
       QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
@@ -22,8 +23,27 @@ win32 {
 
   INCLUDEPATH += $${QGIS_INCLUDE_DIR}
   LIBS += -L$${QGIS_LIB_DIR}
-  LIBS += -lqgis_core -lqgis_quick
+  LIBS += -lqgis_core
 
+  # QGSQUICK
+  !isEmpty(QGSQUICK_INSTALL_PATH) {
+      # using installed QGSQUICK
+      QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
+      QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include
+      QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
+  }
+
+  exists($${QGSQUICK_LIB_DIR}/qgis_quick.lib) {
+    message("Building from QGSQUICK: $${QGSQUICK_INSTALL_PATH}")
+  } else {
+    error("Missing QGSQUICK library in $${QGSQUICK_LIB_DIR}/qgis_quick.lib")
+  }
+
+  INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
+  LIBS += -L$${QGSQUICK_LIB_DIR}
+  LIBS += -lqgis_quick
+
+  # Geodiff
   INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
   LIBS += -L$${GEODIFF_LIB_DIR}
   LIBS += -lgeodiff

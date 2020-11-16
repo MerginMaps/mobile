@@ -92,29 +92,46 @@ IF (USE_QGIS_BUILD_DIR)
       ${QGIS_SRC_DIR}/external/nlohmann
       ${QGIS_BUILD_DIR}/src/core
     )
-    IF (APPLE)
-        SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework)
-    ELSE (APPLE)
-        # TODO windows?
-        SET(QGIS_CORE_DIR ${QGIS_BUILD_DIR}/output/lib)
-    ENDIF (APPLE)
 
+    IF (APPLE OR IOS)
+        # macos and ios
+        SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework/qgis_core)
+    ELSE (APPLE OR IOS)
+        IF (ANDROID)
+            MESSAGE(ERROR "android from build dir not supported")
+        ELSE (ANDROID)
+            IF (WIN32)
+                MESSAGE(ERROR "windows from build dir not supported")
+            ELSE (WIN32)
+                SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/output/lib/libqgis_core.so)
+            ENDIF (WIN32)
+
+        ENDIF (ANDROID)
+
+        SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib)
+    ENDIF (APPLE OR IOS)
 ELSE(USE_QGIS_BUILD_DIR)
-    IF (APPLE)
+    IF (APPLE OR IOS)
         INCLUDE_DIRECTORIES(
             ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/Versions/Current/Headers/
             ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework/Headers
         )
-        SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework)
-    ELSE (APPLE)
-        # TODO windows?
-        INCLUDE_DIRECTORIES(
-            ${QGIS_INSTALL_PATH}/include
-        )
-        SET(QGIS_CORE_DIR ${QGIS_INSTALL_PATH}/lib)
-    ENDIF (APPLE)
-
-
+        SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/qgis_core)
+    ELSE (APPLE OR IOS)
+        IF (ANDROID)
+            # android
+            INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/include/qgis)
+            SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/lib/libqgis_core_${ANDROID_TARGET_ARCH}.so)
+        ELSE (ANDROID)
+            IF (WIN32)
+                INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/include)
+                SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/lib/libqgis_core.lib)
+            ELSE (WIN32)
+                INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/include/qgis)
+                SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/lib/libqgis_core.so)
+            ENDIF (WIN32)
+        ENDIF (ANDROID)
+    ENDIF (APPLE OR IOS)
 ENDIF(USE_QGIS_BUILD_DIR)
 
 #############################################################
@@ -157,7 +174,7 @@ INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 # include_directories(${Qt5Widgets_INCLUDE_DIRS})
 ADD_LIBRARY(qgis_core ${LIBRARY_TYPE} IMPORTED GLOBAL)
 SET_TARGET_PROPERTIES(qgis_core PROPERTIES
-    IMPORTED_LOCATION ${QGIS_CORE_DIR}/qgis_core
+    IMPORTED_LOCATION ${QGIS_CORE_LIB}
     INTERFACE_LINK_LIBRARIES Qt5::Widgets
 )
 

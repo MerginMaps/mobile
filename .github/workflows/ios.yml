@@ -65,8 +65,8 @@ jobs:
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          sudo mkdir -p /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          sudo mkdir -p ${STAGE_PATH}
+          cd ${STAGE_PATH}
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
 
@@ -95,13 +95,14 @@ jobs:
           SYSROOT="$(xcrun --sdk iphoneos --show-sdk-path)"
 
           cd ../build-QgsQuick
-          export PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64/bin:$PATH
-
+          export STAGE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64
+          export PATH=${STAGE_PATH}/bin:$PATH
+          
           cmake \
             -DENABLE_VISIBILITY=1 \
             -DARCHS=aarch64-apple-darwin \
             -DPLATFORM=OS \
-            -DCMAKE_TOOLCHAIN_FILE=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/tools/ios.toolchain.cmake \
+            -DCMAKE_TOOLCHAIN_FILE=${STAGE_PATH}/tools/ios.toolchain.cmake \
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
             -DQGIS_VERSION_MAJOR=3 \
@@ -110,57 +111,58 @@ jobs:
             -DFORCE_STATIC_LIBS=TRUE \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/ios;/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64 \
+            -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/ios;${STAGE_PATH} \
             -DFORCE_STATIC_LIBS=FALSE \
+            -DQGIS_INSTALL_PATH=${STAGE_PATH} \
             -DUSE_QGIS_BUILD_DIR=FALSE \
-            -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/cmake \
-            -DGDAL_CONFIG=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin/gdal-config \
+            -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
+            -DGDAL_CONFIG=${STAGE_PATH}/bin/gdal-config \
             -DGDAL_CONFIG_PREFER_FWTOOLS_PAT=/bin_safe \
-            -DGDAL_CONFIG_PREFER_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin \
-            -DGDAL_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DGDAL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgdal.a \
+            -DGDAL_CONFIG_PREFER_PATH=${STAGE_PATH}/bin \
+            -DGDAL_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DGDAL_LIBRARY=${STAGE_PATH}/lib/libgdal.a \
             -DGDAL_VERSION=3.0.4 \
-            -DGEOS_CONFIG=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin/geos-config \
-            -DGEOS_CONFIG_PREFER_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/bin \
-            -DGEOS_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DGEOS_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos_c.a \
+            -DGEOS_CONFIG=${STAGE_PATH}/bin/geos-config \
+            -DGEOS_CONFIG_PREFER_PATH=${STAGE_PATH}/bin \
+            -DGEOS_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DGEOS_LIBRARY=${STAGE_PATH}/lib/libgeos_c.a \
             -DGEOS_LIB_NAME_WITH_PREFIX=-lgeos_c \
             -DGEOS_VERSION=3.7.2 \
-            -DQCA_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/QtCrypto \
-            -DQCA_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libqca-qt5.a \
+            -DQCA_INCLUDE_DIR=${STAGE_PATH}/include/QtCrypto \
+            -DQCA_LIBRARY=${STAGE_PATH}/lib/libqca-qt5.a \
             -DQCA_VERSION_STR=2.1.0 \
-            -DPROJ_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DPROJ_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libproj.a \
-            -DLIBTASN1_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DLIBTASN1_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtasn1.a \
-            -DLIBZIP_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DLIBZIP_CONF_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DLIBZIP_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libzip.a \
+            -DPROJ_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DPROJ_LIBRARY=${STAGE_PATH}/lib/libproj.a \
+            -DLIBTASN1_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DLIBTASN1_LIBRARY=${STAGE_PATH}/lib/libtasn1.a \
+            -DLIBZIP_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DLIBZIP_CONF_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DLIBZIP_LIBRARY=${STAGE_PATH}/lib/libzip.a \
             -DICONV_INCLUDE_DIR=$SYSROOT \
             -DICONV_LIBRARY=$SYSROOT/usr/lib/libiconv.tbd \
             -DSQLITE3_INCLUDE_DIR=$SYSROOT \
             -DSQLITE3_LIBRARY=$SYSROOT/usr/lib/libsqlite3.tbd \
             -DPOSTGRES_CONFIG= \
             -DPOSTGRES_CONFIG_PREFER_PATH= \
-            -DPOSTGRES_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DPOSTGRES_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libpq.a \
-            -DQTKEYCHAIN_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/qt5keychain \
-            -DQTKEYCHAIN_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libqt5keychain.a \
-            -DSPATIALINDEX_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include/spatialindex \
-            -DSPATIALINDEX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialindex.a \
-            -DSPATIALITE_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DSPATIALITE_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libspatialite.a \
+            -DPOSTGRES_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DPOSTGRES_LIBRARY=${STAGE_PATH}/lib/libpq.a \
+            -DQTKEYCHAIN_INCLUDE_DIR=${STAGE_PATH}/include/qt5keychain \
+            -DQTKEYCHAIN_LIBRARY=${STAGE_PATH}/lib/libqt5keychain.a \
+            -DSPATIALINDEX_INCLUDE_DIR=${STAGE_PATH}/include/spatialindex \
+            -DSPATIALINDEX_LIBRARY=${STAGE_PATH}/lib/libspatialindex.a \
+            -DSPATIALITE_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DSPATIALITE_LIBRARY=${STAGE_PATH}/lib/libspatialite.a \
             -DENABLE_QT5=ON \
             -DENABLE_TESTS=OFF \
-            -DEXPAT_INCLUDE_DIR=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/include \
-            -DEXPAT_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libexpat.a \
+            -DEXPAT_INCLUDE_DIR=${STAGE_PATH}/include \
+            -DEXPAT_LIBRARY=${STAGE_PATH}/lib/libexpat.a \
             -DCMAKE_DISABLE_FIND_PACKAGE_QtQmlTools=TRUE \
             -DIOS=TRUE \
-            -DLIBTIFF_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtiff.a \
-            -DLIBTIFFXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libtiffxx.a \
-            -DFREEXL_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libfreexl.a \
-            -DCHARSET_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libcharset.a \
-            -DGEOSCXX_LIBRARY=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/lib/libgeos.a \
+            -DLIBTIFF_LIBRARY=${STAGE_PATH}/lib/libtiff.a \
+            -DLIBTIFFXX_LIBRARY=${STAGE_PATH}/lib/libtiffxx.a \
+            -DFREEXL_LIBRARY=${STAGE_PATH}/lib/libfreexl.a \
+            -DCHARSET_LIBRARY=${STAGE_PATH}/lib/libcharset.a \
+            -DGEOSCXX_LIBRARY=${STAGE_PATH}/lib/libgeos.a \
             ${QGSQUICK_DIR}
 
           make -j $(sysctl -n hw.ncpu)

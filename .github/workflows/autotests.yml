@@ -89,6 +89,7 @@ jobs:
             -DENABLE_TESTS=FALSE \
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
+            -DQGIS_INSTALL_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac \
             -DQGIS_CMAKE_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac/cmake \
             ${QGSQUICK_DIR}
 
