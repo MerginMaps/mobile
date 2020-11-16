@@ -46,7 +46,7 @@ path %path%;%CMAKE%
 set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
 set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
 set LIB=%LIB%;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64\
-set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
+set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include;%VS14ROOT%\VC\include
 
 rem QGSQUICK
 cd %BUILD_PATH_QGSQUICK%
@@ -71,7 +71,7 @@ IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
 IF NOT EXIST "%STAGE_PATH_QGSQUICK%\lib\qgis_quick.lib" goto error
 
 cd %BUILD_PATH%
-qmake CONFIG+=force_debug_info %REPO_PATH%\app
+qmake CONFIG+=release %REPO_PATH%\app
 nmake release VERBOSE=1
 IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
 rem for debugging use %BUILD_PATH%\release\*.pdb
