@@ -14,7 +14,7 @@ if [[ -z ${ARCH+x} ]]; then
     ARCH=armeabi-v7a
 fi
 INSTALL_DIR=${BUILD_DIR}/out
-INSTALL_DIR_QGSQUICK=${BUILD_DIR}/out-quick
+INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
 QT_ANDROID=${QT_ANDROID_BASE}/android
 CORES=$(cat /proc/cpuinfo | grep processor | wc -l)
 
@@ -112,7 +112,6 @@ cmake \
     -DQCA_LIBRARY=$STAGE_PATH/lib/libqca-qt5_$ARCH.so \
     -DQTKEYCHAIN_INCLUDE_DIR=$STAGE_PATH/include/qt5keychain \
     -DQTKEYCHAIN_LIBRARY=$STAGE_PATH/lib/libqt5keychain_$ARCH.so \
-    -DCMAKE_INSTALL_PREFIX:PATH=$STAGE_PATH \
     -DENABLE_QT5=ON \
     -DENABLE_TESTS=OFF \
     -DEXPAT_INCLUDE_DIR=$STAGE_PATH/include \

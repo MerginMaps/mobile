@@ -105,6 +105,8 @@ jobs:
             -DENABLE_VISIBILITY=1 \
             -DARCHS=arm64 \
             -DPLATFORM=OS \
+            -DENABLE_ARC=0 \
+            -DENABLE_BITCODE=0 \
             -DCMAKE_TOOLCHAIN_FILE=${STAGE_PATH}/tools/ios.toolchain.cmake \
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
             -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
