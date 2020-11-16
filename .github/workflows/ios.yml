@@ -65,8 +65,8 @@ jobs:
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          sudo mkdir -p ${STAGE_PATH}
-          cd ${STAGE_PATH}
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
 

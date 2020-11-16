@@ -12,7 +12,7 @@ android {
 
 win32 {
   QGIS_INSTALL_PATH =  C:/projects/input-sdk/x86_64/stage
-  QGSQUICK_INSTALL_PATH = $$(ROOT_DIR)/install-QgsQuick
+  QGSQUICK_INSTALL_PATH = C:/projects/input-sdk/x86_64/stage-qgsquick
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
@@ -20,7 +20,7 @@ win32 {
 
 ios {
   QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-ios-$$(SDK_VERSION)/stage/arm64
-  QGSQUICK_INSTALL_PATH = $$(ROOT_DIR)/install-QgsQuick
+  QGSQUICK_INSTALL_PATH = /Users/runner/work/input/input/install-QgsQuick
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
@@ -29,8 +29,8 @@ ios {
 
 macx:!android {
   QGIS_INSTALL_PATH = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac
-  QGSQUICK_INSTALL_PATH = $$(ROOT_DIR)/install-QgsQuick
-  QGIS_QUICK_DATA_PATH = $$(ROOT_DIR)/input/app/android/assets/qgis-data
+  QGSQUICK_INSTALL_PATH = /Users/runner/work/input/input/install-QgsQuick
+  QGIS_QUICK_DATA_PATH = /Users/runner/work/input/input/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/include
   GEODIFF_LIB_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/lib
 
