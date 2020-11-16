@@ -30,6 +30,9 @@ IF NOT EXIST %REPO_PATH% (echo INPUT REPO not cloned & goto error)
 if not exist %BUILD_PATH_QGSQUICK% mkdir %BUILD_PATH_QGSQUICK%
 if not exist %STAGE_PATH_QGSQUICK%  mkdir %STAGE_PATH_QGSQUICK%
 
+set CMAKE=C:\Program Files\CMake\bin
+set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
+
 if not "%PROGRAMFILES(X86)%"=="" set PF86=%PROGRAMFILES(X86)%
 if "%PF86%"=="" set PF86=%PROGRAMFILES%
 if "%PF86%"=="" (echo PROGRAMFILES not set & goto error)
@@ -38,10 +41,12 @@ set VS14ROOT=%PF86%\Microsoft Visual Studio 14.0
 call "%VS14ROOT%\VC\vcvarsall.bat" amd64
 path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
+path %path%;%CMAKE%
+
+set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
 set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
 set LIB=%LIB%;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64\
 set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
-set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
 
 rem QGSQUICK
 cd %BUILD_PATH_QGSQUICK%
