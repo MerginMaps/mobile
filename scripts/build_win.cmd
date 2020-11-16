@@ -4,6 +4,8 @@ call %~dp0\version.cmd
 echo Building InputApp: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
 
 set OLD_PATH=%PATH%
+
+rem TODO: maybe input-sdk-win-x86_64-%WINSDK_VER% can be dropped for next SDK
 set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage\input-sdk-win-x86_64-%WINSDK_VER%
 if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
 rem TODO: rename cmake/qgis to qgis/cmake so we do not need this workaround
@@ -36,7 +38,11 @@ set VS14ROOT=%PF86%\Microsoft Visual Studio 14.0
 call "%VS14ROOT%\VC\vcvarsall.bat" amd64
 path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
+set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
+set LIB=%LIB%;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64\
+set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
 
+rem QGSQUICK
 cd %BUILD_PATH_QGSQUICK%
 cmake ^
  -DQGIS_VERSION_MAJOR=3 ^
@@ -50,12 +56,13 @@ cmake ^
  -DUSE_QGIS_BUILD_DIR=FALSE ^
  -DQGIS_INSTALL_PATH=%INPUT_SDK_DIR% ^
  -DQGIS_CMAKE_PATH=%INPUT_SDK_DIR%\cmake\qgis ^
+ -DCMAKE_DISABLE_FIND_PACKAGE_QtQmlTools=TRUE ^
  %REPO_PATH%\qgsquick
 
-nmake install VERBOSE=1
+cmake --build . --config Release --target install
+
 IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
-rem for debugging use %BUILD_PATH%\release\*.pdb
-IF NOT EXIST "%BUILD_PATH%\release\Input.exe" goto error
+IF NOT EXIST "%STAGE_PATH_QGSQUICK%\lib\qgis_quick.lib" goto error
 
 cd %BUILD_PATH%
 qmake CONFIG+=force_debug_info %REPO_PATH%\app
