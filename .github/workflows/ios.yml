@@ -103,7 +103,7 @@ jobs:
 
           cmake \
             -DENABLE_VISIBILITY=1 \
-            -DARCHS=aarch64-apple-darwin \
+            -DARCHS=arm64 \
             -DPLATFORM=OS \
             -DCMAKE_TOOLCHAIN_FILE=${STAGE_PATH}/tools/ios.toolchain.cmake \
             -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \

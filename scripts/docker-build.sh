@@ -48,11 +48,26 @@ echo "API: $ANDROIDAPI"
 mkdir -p ${BUILD_DIR_QGSQUICK}
 pushd ${BUILD_DIR_QGSQUICK}
 
-# -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS
+
+if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
+  export QT_ARCH_PREFIX=armv7
+elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
+  export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
+else
+  echo "Error: Please report issue to enable support for arch (${ARCH})."
+  exit 1
+fi
+export ANDROID_CMAKE_LINKER_FLAGS=""
+ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/platforms/android-$ANDROIDAPI/arch-$QT_ARCH_PREFIX/usr/lib"
+ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH"
+ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$STAGE_PATH/lib"
+ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-llog"
+ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$QT_ANDROID/lib"
 export STAGE_PATH=/home/input-sdk/${ARCH}
 
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
+    -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS \
     -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
     -DCMAKE_CXX_FLAGS_RELEASE=-g0 \
     -DCMAKE_FIND_ROOT_PATH:PATH="${ANDROID_NDK_ROOT};${QT_ANDROID};$STAGE_PATH" \
