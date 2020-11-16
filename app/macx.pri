@@ -59,14 +59,14 @@ macx:!android {
     !isEmpty(QGSQUICK_INSTALL_PATH) {
       # using installed QGSQUICK
       QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
-      QGSQUICK_FRAMEWORK_DIR = $${QGSQUICK_INSTALL_PATH}/frameworks/qgis_quick.framework
+      QGSQUICK_FRAMEWORK_DIR = $${QGSQUICK_INSTALL_PATH}/frameworks
     }
 
     isEmpty(QGSQUICK_INSTALL_PATH) {
       # using QGIS from build directory (has different layout of directories)
       # expecting QGIS_SRC_DIR and QGSQUICK_BUILD_DIR defined
       QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output/qml
-      QGSQUICK_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib/qgis_quick.framework
+      QGSQUICK_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib
 
       INCLUDEPATH += \
           $${QGSQUICK_SRC_DIR}/src/quickgui \
@@ -76,12 +76,12 @@ macx:!android {
     }
 
     exists($${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick) {
-      message("Building from QGSQUICK: $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick")
+      message("Building from QGSQUICK: $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
     } else {
-       error("Missing QGSQUICK library in $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick")
+       error("Missing QGSQUICK library in $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
     }
 
-    INCLUDEPATH += $${QGSQUICK_FRAMEWORK_DIR}/Headers
+    INCLUDEPATH += $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/Headers
     LIBS += -F$${QGSQUICK_FRAMEWORK_DIR}
     LIBS += -framework qgis_quick
 

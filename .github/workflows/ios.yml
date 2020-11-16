@@ -87,7 +87,10 @@ jobs:
 
       - name: build QgsQuick
         run: |
-          QGSQUICK_DIR=`pwd`/qgsquick
+          export QGSQUICK_DIR=`pwd`/input/qgsquick
+          ls `pwd`
+          ls `pwd`/input
+
           mkdir -p ../build-QgsQuick
           mkdir -p ../install-QgsQuick
           mkdir -p ../install-QgsQuick/images/QgsQuick
@@ -97,7 +100,9 @@ jobs:
           cd ../build-QgsQuick
           export STAGE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64
           export PATH=${STAGE_PATH}/bin:$PATH
-          
+
+          ls ${QGSQUICK_DIR}
+
           cmake \
             -DENABLE_VISIBILITY=1 \
             -DARCHS=aarch64-apple-darwin \
