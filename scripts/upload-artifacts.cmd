@@ -42,7 +42,7 @@ echo "Dropbox URL: %APK_URL%"
 
 rem do not leak GITHUB_TOKEN
 echo "push to github comment"
-echo { "body": "win-apk: [x86_64](%APK_URL%) (SDK: [%WINSDKTAG%](https://github.com/lutraconsulting/input-sdk/releases/tag/%WINSDKTAG%))"} > github.json
+echo { "body": "win-apk: [x86_64](%APK_URL%) (SDK: [win-%WINSDK_VER%](https://github.com/lutraconsulting/input-sdk/releases/tag/win-%WINSDK_VER%))"} > github.json
 type github.json
 @echo off
 curl -u inputapp-bot:%GITHUB_TOKEN% -X POST -d @github.json %GITHUB_API% --header "Content-Type: application/json"
