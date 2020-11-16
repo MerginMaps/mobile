@@ -172,7 +172,7 @@ jobs:
           make -j $(sysctl -n hw.ncpu)
           make install
 
-          cp -v qgis_quick.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -v from_qgis/qgis_quick.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
           cp -v ${QGSQUICK_DIR}/from_qgis/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
           cp -v ${QGSQUICK_DIR}/from_qgis/images/* ../install-QgsQuick/images/QgsQuick/
 
