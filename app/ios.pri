@@ -23,8 +23,8 @@ ios {
     LIBS += -framework qgis_core
 
     # QgsQuick
-    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/QGIS.app/Contents/MacOS/qml
-    QGSQUICK_QUICK_FRAMEWORK = $${QGSQUICK_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_quick.framework
+    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
+    QGSQUICK_QUICK_FRAMEWORK = $${QGSQUICK_INSTALL_PATH}/frameworks/qgis_quick.framework
 
     exists($${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick) {
       message("Building from QGSQUICK: $${QGSQUICK_INSTALL_PATH}")
@@ -32,7 +32,7 @@ ios {
       error("Missing qgis_quick Framework in $${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick")
     }
     INCLUDEPATH += $${QGIS_QUICK_FRAMEWORK}/Headers
-    LIBS += -F$${QGSQUICK_INSTALL_PATH}/QGIS.app/Contents/Frameworks
+    LIBS += -F$${QGSQUICK_INSTALL_PATH}/frameworks
     LIBS += -framework qgis_quick
 
     # Geodiff
@@ -44,7 +44,7 @@ ios {
     QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-shorten-64-to-32
 
     QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
-    QGSQUICK_IMAGE_DIR = $${QGSQUICK_INSTALL_PATH}/QGIS.app/Contents/Resources/images/QgsQuick
+    QGSQUICK_IMAGE_DIR = $${QGSQUICK_INSTALL_PATH}/images/QgsQuick
 
     CONFIG -= bitcode
     CONFIG += static
@@ -54,7 +54,7 @@ ios {
     QTPLUGIN += qios
 
     LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib
-    LIBS += -L$${QGSQUICK_INSTALL_PATH}/lib -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib
+    LIBS += -L$${QGSQUICK_INSTALL_PATH}/lib -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
     LIBS += -lexpat -lcharset -lfreexl -lxml2
     LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
