@@ -49,7 +49,8 @@ mkdir -p ${BUILD_DIR_QGSQUICK}
 pushd ${BUILD_DIR_QGSQUICK}
 
 # -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS
-export $STAGE_PATH=/home/input-sdk/${ARCH}
+export STAGE_PATH=/home/input-sdk/${ARCH}
+
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
