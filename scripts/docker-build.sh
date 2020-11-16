@@ -117,6 +117,7 @@ cmake \
     -DProtobuf_LIBRARY=$STAGE_PATH/lib/libprotobuf.so \
     -DProtobuf_LITE_LIBRARY=$STAGE_PATH/lib/libprotobuf-lite.so \
     -DProtobuf_PROTOC_LIBRARY=$STAGE_PATH/lib/libprotoc.so \
+    -DANDROID_TARGET_ARCH=$ARCH \
   ${SOURCE_DIR}/qgsquick
 
 make -j ${CORES}

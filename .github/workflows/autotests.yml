@@ -114,9 +114,6 @@ jobs:
           make -j $(sysctl -n hw.ncpu)
           install_name_tool -add_rpath /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/ Input.app/Contents/MacOS/Input
           install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
-
-          ls ${QGSQUICK_INSTALL}
-          ls ${QGSQUICK_INSTALL}/frameworks
           install_name_tool -add_rpath ${QGSQUICK_INSTALL}/frameworks Input.app/Contents/MacOS/Input
 
       - name: run help links tests

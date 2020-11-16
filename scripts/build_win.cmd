@@ -6,6 +6,8 @@ echo Building InputApp: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
 set OLD_PATH=%PATH%
 set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage\input-sdk-win-x86_64-%WINSDK_VER%
 if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
+rem TODO: rename cmake/qgis to qgis/cmake so we do not need this workaround
+robocopy %INPUT_SDK_DIR%\cmake\qgis %INPUT_SDK_DIR%\cmake\cmake /E /NFL
 
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
