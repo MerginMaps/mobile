@@ -117,7 +117,6 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH="/opt/Qt/${QT_VERSION}/ios\;${STAGE_PATH}" \
-            -DFORCE_STATIC_LIBS=FALSE \
             -DQGIS_INSTALL_PATH=${STAGE_PATH} \
             -DUSE_QGIS_BUILD_DIR=FALSE \
             -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
