@@ -36,6 +36,12 @@ set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
 if not "%PROGRAMFILES(X86)%"=="" set PF86=%PROGRAMFILES(X86)%
 if "%PF86%"=="" set PF86=%PROGRAMFILES%
 if "%PF86%"=="" (echo PROGRAMFILES not set & goto error)
+
+dir %PF86%\Microsoft Visual Studio 14.0\
+dir %PF86%\Microsoft Visual Studio 14.0\VC
+dir %PF86%\Microsoft Visual Studio 14.0\bin
+dir %PF86%\Microsoft Visual Studio 14.0\VC\bin
+
 set VS140COMNTOOLS=%PF86%\Microsoft Visual Studio 14.0\Common7\Tools
 set VS14ROOT=%PF86%\Microsoft Visual Studio 14.0
 call "%VS14ROOT%\VC\vcvarsall.bat" amd64
@@ -43,15 +49,9 @@ path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
 path %path%;%CMAKE%
 
-dir C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\
-
-dir C:\Program Files (x86)\Microsoft Visual Studio 14.0\
-
-dir C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin
-
 set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
 set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
-set LIB=%LIB%;%PF86%\Windows Kits\8.1\Lib\winv6.3\um\x64\
+set LIB=%LIB%;%VS14ROOT%\VC\lib;%PF86%\Windows Kits\8.1\Lib\winv6.3\um\x64\
 set INCLUDE=%INCLUDE%;%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include;
 set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include;%PF86%\Windows Kits\10\Include\10.0.18362.0\ucrt
 
