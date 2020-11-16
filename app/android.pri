@@ -22,6 +22,7 @@ android {
     isEmpty(QGSQUICK_INSTALL_PATH) {
       error("Missing QGSQUICK_INSTALL_PATH")
     }
+    }
 
     INCLUDEPATH += $${QGIS_INCLUDE_DIR}
     LIBS += -L$${QGIS_LIB_DIR}
@@ -30,7 +31,7 @@ android {
     # using installed QGSQUICK
     QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
     QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
-    QGSQUICK_QML_DIR = $${QGIS_INSTALL_PATH}/qml
+    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
 
     exists($${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so) {
       message("Building from QGIS: $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
