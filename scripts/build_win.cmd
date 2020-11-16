@@ -41,6 +41,7 @@ path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
 set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
 set LIB=%LIB%;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x64\
 set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
+set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
 
 rem QGSQUICK
 cd %BUILD_PATH_QGSQUICK%

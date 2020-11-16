@@ -31,7 +31,7 @@ ios {
     } else {
       error("Missing qgis_quick Framework in $${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick")
     }
-    INCLUDEPATH += $${QGIS_QUICK_FRAMEWORK}/Headers
+    INCLUDEPATH += $${QGSQUICK_QUICK_FRAMEWORK}/Headers
     LIBS += -F$${QGSQUICK_INSTALL_PATH}/frameworks
     LIBS += -framework qgis_quick
 
