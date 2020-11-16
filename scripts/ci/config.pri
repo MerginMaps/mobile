@@ -19,7 +19,7 @@ win32 {
 }
 
 ios {
-  QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-ios-$$(SDK_VERSION)/stage/arm64
+  QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-ios-$$(IOS_SDK_VERSION)/stage/arm64
   QGSQUICK_INSTALL_PATH = /Users/runner/work/input/install-QgsQuick
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0

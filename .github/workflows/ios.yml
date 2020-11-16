@@ -4,7 +4,7 @@ env:
   QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
   SDK_DROPBOX_HASH: gj3trt6mux31htz
-  SDK_VERSION: 8
+  IOS_SDK_VERSION: 8
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '12.0.1' }}
@@ -64,11 +64,11 @@ jobs:
       - name: Download and install input-sdk
         run: |
           DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${SDK_VERSION}.tar.gz?dl=0"
-          sudo mkdir -p /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz?dl=0"
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
           sudo chown -R $USER .
-          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${SDK_VERSION}.tar.gz
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz
 
           ls -la ./arm64/include/geodiff.h
           ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
@@ -98,7 +98,7 @@ jobs:
           echo "$SYSROOT"
 
           cd ../build-QgsQuick
-          export STAGE_PATH=/opt/INPUT/input-sdk-ios-${SDK_VERSION}/stage/arm64
+          export STAGE_PATH=/opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage/arm64
           export PATH=${STAGE_PATH}/bin:$PATH
 
           cmake \
@@ -187,7 +187,7 @@ jobs:
           TIMESTAMP=`date "+%y%m%d%H%M%S"`
           GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
           BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
-          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${SDK_VERSION}.${TIMESTAMP}
+          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${IOS_SDK_VERSION}.${TIMESTAMP}
 
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
@@ -252,4 +252,4 @@ jobs:
 
           # Add comment to GitHub
           GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
-          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${SDK_VERSION}'))"}' ${GITHUB_API}
+          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}
