@@ -30,6 +30,12 @@ ENDIF()
 
 SET(CMAKE_MODULE_PATH ${QGIS_CMAKE_PATH} ${CMAKE_MODULE_PATH})
 
+IF (WIN32)
+  IF (MSVC)
+    ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
+  ENDIF (MSVC)
+ENDIF (WIN32)
+
 #############################################################
 # Find Packages
 INCLUDE(GenerateExportHeader)
@@ -114,7 +120,7 @@ IF (USE_QGIS_BUILD_DIR)
 ELSE(USE_QGIS_BUILD_DIR)
     IF (APPLE OR IOS)
         INCLUDE_DIRECTORIES(
-            ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/Versions/Current/Headers/
+            ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/Headers
             ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework/Headers
         )
         SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/qgis_core)
