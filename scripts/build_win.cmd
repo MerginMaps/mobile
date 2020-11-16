@@ -44,15 +44,20 @@ path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
 path %path%;%CMAKE%
 
+dir "%PF86%\Windows Kits"
+
 set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
 set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
 set LIB=%LIB%;%VS14ROOT%\VC\lib\amd64;%PF86%\Windows Kits\8.1\Lib\winv6.3\um\x64\
+rem set LIB=%LIB;%PF86%\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64
 set INCLUDE=%INCLUDE%;%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include;
-set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include;%PF86%\Windows Kits\10\Include\10.0.18362.0\ucrt
+set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include
+rem set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include;%PF86%\Windows Kits\10\Include\10.0.18362.0\ucrt
 
 rem QGSQUICK
 cd %BUILD_PATH_QGSQUICK%
 cmake -G %CMAKE_GENERATOR% ^
+ -DCMAKE_SYSTEM_VERSION=8.1 ^
  -DQGIS_VERSION_MAJOR=3 ^
  -DQGIS_VERSION_MINOR=17 ^
  -DQGIS_VERSION_PATCH=0 ^

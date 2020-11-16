@@ -17,6 +17,7 @@ INSTALL_DIR=${BUILD_DIR}/out
 INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
 QT_ANDROID=${QT_ANDROID_BASE}/android
 CORES=$(cat /proc/cpuinfo | grep processor | wc -l)
+STAGE_PATH=/home/input-sdk/${ARCH}
 
 set -e
 
@@ -57,13 +58,41 @@ else
   echo "Error: Please report issue to enable support for arch (${ARCH})."
   exit 1
 fi
+
+  export CFLAGS="-DANDROID -fomit-frame-pointer "
+  # --sysroot $NDKPLATFORM -I$STAGE_PATH/include"
+  # export CFLAGS="$CFLAGS -Wno-unused-command-line-argument"
+  export CFLAGS="$CFLAGS -L$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH -isystem $ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/include"
+  export CFLAGS="$CFLAGS -isystem $ANDROID_NDK_ROOT/sysroot/usr/include -isystem $ANDROID_NDK_ROOT/sysroot/usr/include/$TOOLCHAIN_SHORT_PREFIX "
+  export CFLAGS="$CFLAGS -D__ANDROID_API__=$ANDROIDAPI"
+
+  export CXXFLAGS="$CFLAGS"
+  export CPPFLAGS="$CFLAGS"
+
+  # export LDFLAGS="-lm -L$STAGE_PATH/lib"
+  export LDFLAGS="$LDFLAGS -L$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH"
+  # export LDFLAGS="$LDFLAGS -L$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$PYPLATFORM-x86_64/sysroot/usr/lib/$TOOLCHAIN_PREFIX/$ANDROIDAPI"
+
+  if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
+      # make sure that symbols from the following system libs are not exported - on 32-bit ARM this was causing crashes when unwinding
+      # stack when handling c++ exceptions. In our case, sqlite3.so exported some unwinding-related symbols which were being picked up
+      # by libproj.so and causing havoc.
+      # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
+      # https://github.com/android/ndk/issues/785
+      # https://github.com/android/ndk/issues/379
+      # https://github.com/lutraconsulting/input/issues/641
+      export LDFLAGS="$LDFLAGS -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libgcc_real.a -Wl,--exclude-libs,libunwind.a"
+  fi
+
 export ANDROID_CMAKE_LINKER_FLAGS=""
 ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/platforms/android-$ANDROIDAPI/arch-$QT_ARCH_PREFIX/usr/lib"
 ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH"
+export LDFLAGS="$LDFLAGS -Wl,-lc++_shared"
 ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$STAGE_PATH/lib"
 ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-llog"
 ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$QT_ANDROID/lib"
-export STAGE_PATH=/home/input-sdk/${ARCH}
+
+export ANDROID_NDK=$ANDROID_NDK_ROOT
 
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
