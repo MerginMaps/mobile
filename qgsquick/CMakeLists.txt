@@ -133,6 +133,7 @@ ELSE(USE_QGIS_BUILD_DIR)
             IF (WIN32)
                 INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/include)
                 SET(QGIS_CORE_LIB ${QGIS_INSTALL_PATH}/bin/qgis_core.dll)
+                SET(QGIS_CORE_IMPLIB ${QGIS_INSTALL_PATH}/lib/qgis_core.lib)
             ELSE (WIN32)
                 # linux
                 INCLUDE_DIRECTORIES( ${QGIS_INSTALL_PATH}/include/qgis)
@@ -185,6 +186,12 @@ SET_TARGET_PROPERTIES(qgis_core PROPERTIES
     IMPORTED_LOCATION ${QGIS_CORE_LIB}
     INTERFACE_LINK_LIBRARIES Qt5::Widgets
 )
+IF (WIN32)
+    SET_TARGET_PROPERTIES(qgis_core PROPERTIES
+        IMPORTED_IMPLIB ${QGIS_CORE_IMPLIB}
+        IMPORTED_CONFIGURATIONS "RELEASE"
+    )
+ENDIF (WIN32)
 
 SET(QMLPLUGINDUMP_FOUND FALSE)
 #############################################################
