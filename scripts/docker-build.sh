@@ -33,15 +33,31 @@ then
   grep 'VERSION_FIX' ${SOURCE_DIR}/app/version.pri
 fi
 
+# TODO take from input-sdk?
+export ANDROIDAPI=23
+if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
+  export TOOLCHAIN_SHORT_PREFIX=arm-linux-androideabi
+  export TOOLCHAIN_PREFIX=arm-linux-androideabi
+  export QT_ARCH_PREFIX=armv7
+elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
+  export TOOLCHAIN_SHORT_PREFIX=aarch64-linux-android
+  export TOOLCHAIN_PREFIX=aarch64-linux-android
+  export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
+else
+  echo "Error: Please report issue to enable support for arch (${ARCH})."
+  exit 1
+fi
+
+#####
+# PRINT ENV
+
 echo "INSTALL_DIR: ${INSTALL_DIR}"
 echo "INSTALL_DIR_QGSQUICK: ${INSTALL_DIR_QGSQUICK}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "BUILD_DIR_QGSQUICK: ${BUILD_DIR_QGSQUICK}"
 echo "ARCH: ${ARCH}"
 echo "CORES ${CORES}"
-
-# TODO take from input-sdk?
-export ANDROIDAPI=23
+echo "NDK: ${ANDROID_NDK_ROOT}"
 echo "API: $ANDROIDAPI"
 
 ######################
@@ -50,14 +66,6 @@ mkdir -p ${BUILD_DIR_QGSQUICK}
 pushd ${BUILD_DIR_QGSQUICK}
 
 
-if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
-  export QT_ARCH_PREFIX=armv7
-elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
-  export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
-else
-  echo "Error: Please report issue to enable support for arch (${ARCH})."
-  exit 1
-fi
 
   export CFLAGS="-DANDROID -fomit-frame-pointer "
   # --sysroot $NDKPLATFORM -I$STAGE_PATH/include"
@@ -136,7 +144,7 @@ cmake \
     -DANDROID_TARGET_ARCH=$ARCH \
   ${SOURCE_DIR}/qgsquick
 
-make -j ${CORES}
+make -j ${CORES} VERBOSE=1
 make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
 
 mkdir -p ${INSTALL_DIR_QGSQUICK}/images
