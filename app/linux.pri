@@ -75,11 +75,12 @@
 	  error("Missing QGSQUICK library in $${QGSQUICK_LIB_DIR}/libqgis_quick.so")
     }
 
+    # path to runtime loading of QML plugin
+    DEFINES += "QML_BUILD_IMPORT_DIR=$${QGSQUICK_QML_DIR}"
+
     INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
     LIBS += -L$${QGSQUICK_LIB_DIR}
     LIBS += -lqgis_quick
-    # path to runtime loading of QML plugin
-    DEFINES += "QML_BUILD_IMPORT_DIR=$${QGSQUICK_QML_DIR}"
 
     # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}

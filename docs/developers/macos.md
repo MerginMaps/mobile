@@ -80,3 +80,8 @@ cd ..
 6. Change config.pri to point to your `~/Projects/quick` folder for geodiff/qgis
 7. Open Input in Qt Creator
 8. Compile and run
+9. in Run environment, you may need to:
+```
+DYLD_FRAMEWORK_PATH=/Users/peter/Projects/quick/build-Desktop/build-geodiff:/opt/Qt/5.14.2/clang_64/lib:/Users/peter/Projects/quick/build-Desktop/build-qgsquick/output/lib
+DYLD_INSERT_LIBRARIES=/opt/QGIS/qgis-deps-0.6.0/stage/lib/libsqlite3.dylib
+```
