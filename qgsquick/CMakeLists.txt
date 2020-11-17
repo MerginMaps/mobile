@@ -72,6 +72,46 @@ ELSE()
     FIND_PACKAGE(QtQmlTools)
 ENDIF()
 
+ADD_DEFINITIONS(-DQT_NO_CAST_TO_ASCII)
+
+SET(CMAKE_AUTOMOC ON)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(powerpc|ppc)")
+  # spatialite crashes on ppc - see bugs.debian.org/603986
+  add_definitions( -fno-strict-aliasing )
+endif()
+if (CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+  message (STATUS "Debug output enabled")
+  set(QGISDEBUG TRUE)
+else()
+  set(QGISDEBUG FALSE)
+endif()
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /utf-8")
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+  # disable macros that offend std::numeric_limits<T>::min()/max()
+  add_definitions(-DNOMINMAX)
+endif()
+
+# Prevent build when Qt api deprecated before this Qt version is used:
+add_definitions(-DQT_DEPRECATED_WARNINGS)
+# Unfortunately Qwt uses deprecated QString::null in headers, preventing this being raised above 5.8
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050800)
+
+# For fast string concatenation
+add_definitions(-DQT_USE_QSTRINGBUILDER)
+if (ANDROID)
+  string(REPLACE "<CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME>" "" CMAKE_CXX_CREATE_SHARED_MODULE "${CMAKE_CXX_CREATE_SHARED_MODULE}")
+endif()
+if("${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
+endif() #"${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
 #############################################################
 # find QGIS
 IF (USE_QGIS_BUILD_DIR)
