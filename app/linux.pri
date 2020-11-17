@@ -9,7 +9,6 @@
       QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
       QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
       QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include/qgis
-      QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/qml
     }
 
     isEmpty(QGIS_INSTALL_PATH) {
@@ -79,6 +78,8 @@
     INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
     LIBS += -L$${QGSQUICK_LIB_DIR}
     LIBS += -lqgis_quick
+    # path to runtime loading of QML plugin
+    DEFINES += "QML_BUILD_IMPORT_DIR=$${{QGSQUICK_QML_DIR}}"
 
     # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}

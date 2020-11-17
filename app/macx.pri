@@ -45,6 +45,9 @@ macx:!android {
       error("Missing QGIS Core library in $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
     }
 
+    # path to runtime loading of QML plugin
+    DEFINES += "QML_BUILD_IMPORT_DIR=$${{QGSQUICK_QML_DIR}}"
+
     INCLUDEPATH += \
         $${QGIS_FRAMEWORK_DIR}/qgis_native.framework/Headers \
         $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/Headers

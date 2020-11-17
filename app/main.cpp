@@ -272,6 +272,26 @@ void initTestDeclarative()
 }
 #endif
 
+void addQmlImportPath(QQmlEngine& engine)
+{
+  // This adds a runtime qml directory containing QgsQuick plugin
+  // when Input is installed (e.g. Android/Win32)
+  engine.addImportPath( QgsApplication::qmlImportPath() );
+#ifdef QML_BUILD_IMPORT_DIR
+  // Adds a runtime qml directory containing QgsQuick plugin
+  // if we are using the developer mode (not installed Input)
+  // e.g. Linux/MacOS
+  QString qmlBuildImportPath( STR( QML_BUILD_IMPORT_DIR ) );
+  engine.addImportPath( qmlBuildImportPath );
+#endif
+
+#ifdef Q_OS_IOS
+  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
+  engine.addImportPath( "qrc:///" );
+#endif
+
+}
+
 int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
@@ -454,13 +474,8 @@ int main( int argc, char *argv[] )
 #endif
 
   QQmlEngine engine;
-  engine.addImportPath( QgsApplication::qmlImportPath() );
-#ifdef Q_OS_IOS
-  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
-  engine.addImportPath( "qrc:///" );
-#endif
+  addQmlImportPath(engine);
   initDeclarative();
-
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
   // and properly close connection after writting changes to gpkg.

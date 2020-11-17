@@ -30,12 +30,17 @@ android {
     # using installed QGSQUICK
     QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
     QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
-    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
-
     exists($${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so) {
       message("Building from QGIS: $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
     } else {
       error("Missing QGIS Quick library in $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
+    }
+
+    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
+    exists($${QGSQUICK_QML_DIR}/QgsQuick/qmldir) {
+      message("Building from QgsQuick plugin: $${QGSQUICK_QML_DIR}/QgsQuick")
+    } else {
+      error("Missing QgsQuick plugin in $${QGSQUICK_QML_DIR}/QgsQuick")
     }
 
     INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}

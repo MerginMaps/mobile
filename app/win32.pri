@@ -12,7 +12,6 @@ win32 {
       QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
       QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
       QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
-      QGIS_QML_DIR = $${QGIS_INSTALL_PATH}/qml
   }
 
   exists($${QGIS_LIB_DIR}/qgis_core.lib) {
