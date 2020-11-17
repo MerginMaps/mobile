@@ -11,6 +11,7 @@ Other Checks:
 [![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
 [![InputApp Tests](https://github.com/lutraconsulting/input/workflows/Auto%20Tests/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Auto+Tests%22)
 [![Coverage Status](https://img.shields.io/coveralls/lutraconsulting/input.svg)](https://coveralls.io/github/lutraconsulting/input?branch=master)
+[![QgsQuick](https://github.com/lutraconsulting/input/workflows/QgsQuick/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22QgsQuick%22)
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
