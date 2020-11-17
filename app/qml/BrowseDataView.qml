@@ -17,10 +17,13 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: root
 
-  signal featureClicked( var featureIdx )
+  signal featureClicked( var featureId )
+  signal featureToggled( var featureId, var toggleState )
 
   property bool showAdditionalInfo: false
+  property bool allowMultiselect: false
   property var featuresModel: null
+  property var preSelectedIds: []
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -37,8 +40,23 @@ Item {
 
       MouseArea {
         anchors.fill: parent
+        propagateComposedEvents: false
         onClicked: {
-          root.featureClicked( model.FeatureId )
+
+          if ( allowMultiselect ) {
+            checkboxItem.toggle()
+            root.featureToggled( model.FeatureId, checkboxItem.checkState )
+          }
+          else root.featureClicked( model.FeatureId )
+
+        }
+      }
+
+      Component.onCompleted: { // mark all preselected features
+        if ( Array.isArray( preSelectedIds ) ) {
+          if ( preSelectedIds.includes( model.FeatureId ) ) {
+            checkboxItem.checkState = Qt.Checked
+          }
         }
       }
 
@@ -47,9 +65,27 @@ Item {
         anchors.fill: parent
 
         Item {
+          id: checkboxContainer
+          visible: allowMultiselect
+          height: itemContainer.height
+          width: 40 * QgsQuick.Utils.dp
+
+          LeftCheckBox {
+            id: checkboxItem
+            anchors.margins: (parent.height / 4)
+            anchors.centerIn: parent
+            baseColor: InputStyle.panelBackgroundDarker
+            height: 40 * QgsQuick.Utils.dp
+            width: 40 * QgsQuick.Utils.dp
+
+            onCheckboxClicked: root.featureToggled( model.FeatureId, buttonState )
+          }
+        }
+
+        Item {
           id: iconContainer
           height: itemContainer.height
-          width: 60 * QgsQuick.Utils.dp
+          width: checkboxContainer.visible ? 30 * QgsQuick.Utils.dp : 60 * QgsQuick.Utils.dp
 
           Image {
             id: icon

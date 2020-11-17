@@ -39,6 +39,7 @@ Rectangle {
   function deactivate() {
     searchField.text = ""
     searchField.focus = false
+    searchTextChanged("")
   }
 
   Timer {

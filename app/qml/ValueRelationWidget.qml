@@ -12,55 +12,83 @@ Item {
     // pointer to widget from qgis feature form
     property var itemWidget: null
 
-    property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
-      itemWidget = widget
-      if ( valueRelationModel.featuresCount > 4 ) {
-        valueRelationPage.visible = true
-        valueRelationPage.featuresModel = valueRelationModel
-        valueRelationPage.pageTitle = itemWidget.fieldName
-        valueRelationPage.forceActiveFocus()
-      }
-      else {
-        itemWidget.openCombobox()
-      }
+    property var getTypeOfWidget: function getTypeOfWidget( widget, valueRelationModel ) {
+      if ( widget.allowMultipleValues || valueRelationModel.featuresCount > 4 )
+        return "textfield"
+      return "combobox"
     }
 
-    function featureSelected( index ) {
-      itemWidget.itemSelected( index )
+    property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {
+      itemWidget = widget
+
+      let selectedFeatures = itemWidget.getCurrentValueAsFeatureId()
+      if ( Array.isArray( selectedFeatures ) ) {
+        selectedFeatures = selectedFeatures.map( id => Number(id) ) // ids can be of string type, convert them to number
+      }
+
+      valueRelationLayoutStack.push(componentValueRelationPage, {
+                                      featuresModel: valueRelationModel,
+                                      pageTitle: itemWidget.fieldName,
+                                      allowMultiselect: itemWidget.allowMultipleValues,
+                                      selectedFeatures: selectedFeatures
+                                    })
+    }
+
+    function featureSelected( featureIds ) {
+      itemWidget.setValue( featureIds )
+    }
+  }
+
+  StackView {
+    // this stackview can be moved to FeatureForm when we will create multiple instances of feature form
+    id: valueRelationLayoutStack
+    anchors.fill: parent
+    focus: true
+
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+        closeValueRelationPage()
+      }
     }
   }
 
   function closeValueRelationPage() {
-    valueRelationPage.visible = false
-    valueRelationPage.deactivateSearch()
     valueRelationWidget.widgetClosed()
+    valueRelationLayoutStack.clear()
   }
 
   id: valueRelationWidget
   anchors.fill: parent
 
-  BrowseDataFeaturesPanel {
-    id: valueRelationPage
-    visible: false
-    anchors.fill: parent
+  Component {
+    id: componentValueRelationPage
 
-    onBackButtonClicked: {
-      closeValueRelationPage()
-    }
+    BrowseDataFeaturesPanel {
+      id: valueRelationPage
+      anchors.fill: parent
 
-    onFeatureClicked: {
-      valueRelationHandler.featureSelected( featureIdx )
-      closeValueRelationPage()
-    }
-
-    onSearchTextChanged: {
-      featuresModel.filterExpression = text
-    }
-
-    Keys.onReleased: {
-      if ( valueRelationPage.visible && ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) ) {
-        event.accepted = true;
+      onBackButtonClicked: {
+        deactivateSearch()
         closeValueRelationPage()
+      }
+
+      onFeatureClicked: {
+        valueRelationHandler.featureSelected( featureIds )
+        deactivateSearch()
+        closeValueRelationPage()
+      }
+
+      onSearchTextChanged: {
+        featuresModel.searchExpression = text
+      }
+
+      Keys.onReleased: {
+        if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+          event.accepted = true;
+          deactivateSearch()
+          closeValueRelationPage()
+        }
       }
     }
   }

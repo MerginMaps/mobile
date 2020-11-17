@@ -70,7 +70,7 @@ Item {
   }
 
   function searchTextEdited( text ) {
-    featuresListModel.filterExpression = text
+    featuresListModel.searchExpression = text
   }
 
   StackView {
@@ -111,7 +111,7 @@ Item {
       id: dataFeaturesPanel
       onBackButtonClicked: popOnePageOrClose()
       onFeatureClicked: {
-        let featurePair = featuresListModel.featureLayerPair( featureIdx )
+        let featurePair = featuresListModel.featureLayerPair( featureIds )
 
         if ( !featurePair.feature.geometry.isNull ) {
           clearStackAndClose() // close view if feature has geometry

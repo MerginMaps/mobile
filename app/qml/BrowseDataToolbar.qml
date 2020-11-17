@@ -14,6 +14,11 @@ import QtQuick.Layouts 1.3
 Item {
 
   signal addButtonClicked()
+  signal doneButtonClicked()
+
+  property bool addButtonVisible: false
+  property bool doneButtonVisible: false
+
   id: root
 
   height: InputStyle.rowHeightHeader
@@ -38,6 +43,7 @@ Item {
       Item {
         height: parent.height
         Layout.fillWidth: true
+        visible: addButtonVisible
 
         MainPanelButton {
           id: addButton
@@ -46,6 +52,22 @@ Item {
           imageSource: "plus.svg"
           onActivated: {
             addButtonClicked()
+          }
+        }
+      }
+
+      Item {
+        height: parent.height
+        Layout.fillWidth: true
+        visible: doneButtonVisible
+
+        MainPanelButton {
+          id: doneButton
+          width: root.height * 0.8
+          text: qsTr("Done")
+          imageSource: "check.svg"
+          onActivated: {
+            doneButtonClicked()
           }
         }
       }
