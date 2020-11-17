@@ -349,7 +349,7 @@ Item {
             model: QgsQuick.SubModel {
               id: contentModel
               model: form.model
-              rootIndex: form.model.hasTabs ? form.model.index(currentIndex, 0) : null
+              rootIndex: form.model.hasTabs ? form.model.index(currentIndex, 0) : undefined
             }
 
             delegate: fieldItem
@@ -379,7 +379,7 @@ Item {
       Label {
         id: fieldLabel
 
-        text: Name ? qsTr(Name) : ''
+        text: qsTr(Name) || ''
         font.bold: true
         color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
       }
@@ -392,7 +392,7 @@ Item {
           top: fieldLabel.bottom
         }
 
-        text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
+        text: qsTr(ConstraintDescription)
         visible: !ConstraintHardValid || !ConstraintSoftValid
         height: visible ? undefined : 0
         wrapMode: Text.WordWrap
@@ -428,11 +428,7 @@ Item {
 
           active: widget !== 'Hidden'
 
-          source: {
-            if ( widget )
-               return form.loadWidgetFn(widget.toLowerCase())
-            else return ''
-          }
+          source: form.loadWidgetFn(widget.toLowerCase())
         }
 
         Connections {
@@ -446,7 +442,7 @@ Item {
           target: form
           ignoreUnknownSignals: true
           onSaved: {
-            if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnSave === "function") {
+            if (typeof attributeEditorLoader.item.callbackOnSave === "function") {
               attributeEditorLoader.item.callbackOnSave()
             }
           }

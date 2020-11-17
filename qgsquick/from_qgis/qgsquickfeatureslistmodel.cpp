@@ -207,7 +207,7 @@ QHash<int, QByteArray> QgsQuickFeaturesListModel::roleNames() const
 
 int QgsQuickFeaturesListModel::featuresCount() const
 {
-  if ( mCurrentLayer && mCurrentLayer->isValid() )
+  if ( mCurrentLayer )
     return mCurrentLayer->featureCount();
   return 0;
 }
@@ -253,7 +253,7 @@ int QgsQuickFeaturesListModel::rowFromAttribute( const int role, const QVariant 
   return -1;
 }
 
-QVariant QgsQuickFeaturesListModel::keyFromAttribute( const int role, const QVariant &value ) const
+int QgsQuickFeaturesListModel::keyFromAttribute( const int role, const QVariant &value ) const
 {
   for ( int i = 0; i < mFeatures.count(); ++i )
   {
@@ -261,10 +261,10 @@ QVariant QgsQuickFeaturesListModel::keyFromAttribute( const int role, const QVar
     if ( d == value )
     {
       QVariant key = data( index( i, 0 ), KeyColumn );
-      return key;
+      return key.toInt();
     }
   }
-  return QVariant();
+  return -1;
 }
 
 QgsQuickFeatureLayerPair QgsQuickFeaturesListModel::featureLayerPair( const int &featureId )

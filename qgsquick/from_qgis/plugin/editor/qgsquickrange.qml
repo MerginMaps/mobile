@@ -151,7 +151,7 @@ Item {
     Slider {
       id: slider
       visible: fieldItem.widgetStyle === "Slider"
-      value: fieldItem.parent.value ? fieldItem.parent.value : 0
+      value: fieldItem.parent.value
       width: parent.width - valueLabel.width
       height: fieldItem.height
       implicitWidth: width

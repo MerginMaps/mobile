@@ -1,15 +1,15 @@
 ############################################################
 # sources
 
-set(QGIS_QUICK_PLUGIN_MOC_HDRS
+SET(QGIS_QUICK_PLUGIN_MOC_HDRS
   qgsquickplugin.h
 )
 
-set(QGIS_QUICK_PLUGIN_SRC
+SET(QGIS_QUICK_PLUGIN_SRC
   qgsquickplugin.cpp
 )
 
-set(QGIS_QUICK_PLUGIN_RESOURCES
+SET(QGIS_QUICK_PLUGIN_RESOURCES
   components/qgsquickicontextitem.qml
   editor/qgsquickeditorwidgetcombobox.qml
   editor/qgsquickcheckbox.qml
@@ -28,14 +28,14 @@ set(QGIS_QUICK_PLUGIN_RESOURCES
   qgsquickscalebar.qml
 )
 
-if (IOS)
-  set(QGIS_QUICK_PLUGIN_RESOURCES ${QGIS_QUICK_PLUGIN_RESOURCES} ios/qmldir )
-  set(QGIS_QUICK_PLUGIN_QRC ios/qgsquick.qrc)
-else()
-  set(QGIS_QUICK_PLUGIN_RESOURCES ${QGIS_QUICK_PLUGIN_RESOURCES} qmldir)
-endif()
+IF (IOS)
+  SET(QGIS_QUICK_PLUGIN_RESOURCES ${QGIS_QUICK_PLUGIN_RESOURCES} ios/qmldir )
+  SET(QGIS_QUICK_PLUGIN_QRC ios/qgsquick.qrc)
+ELSE (IOS)
+  SET(QGIS_QUICK_PLUGIN_RESOURCES ${QGIS_QUICK_PLUGIN_RESOURCES} qmldir)
+ENDIF (IOS)
 
-include_directories(
+INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 
@@ -62,7 +62,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/quickgui
 )
 
-include_directories(SYSTEM
+INCLUDE_DIRECTORIES(SYSTEM
   ${GDAL_INCLUDE_DIR}
   ${PROJ_INCLUDE_DIR}
   ${LIBZIP_INCLUDE_DIRS}
@@ -79,46 +79,46 @@ include_directories(SYSTEM
 # qgis_quick_plugin module (QML) library
 
 QT5_WRAP_CPP(QGIS_QUICK_PLUGIN_MOC_SRCS ${QGIS_QUICK_PLUGIN_MOC_HDRS})
-if(MSVC)
-  set_source_files_properties(${QGIS_QUICK_PLUGIN_MOC_SRCS} PROPERTIES COMPILE_FLAGS "/wd4512 /wd4996" )
-else()
-  set_source_files_properties(${QGIS_QUICK_PLUGIN_MOC_SRCS} PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations" )
-endif()
+IF(MSVC)
+  SET_SOURCE_FILES_PROPERTIES(${QGIS_QUICK_PLUGIN_MOC_SRCS} PROPERTIES COMPILE_FLAGS "/wd4512 /wd4996" )
+ELSE(MSVC)
+  SET_SOURCE_FILES_PROPERTIES(${QGIS_QUICK_PLUGIN_MOC_SRCS} PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations" )
+ENDIF(MSVC)
 
-set(QGIS_QUICK_PLUGIN_RUNTIME_DIR ${QGIS_OUTPUT_DIRECTORY}/${QGIS_QML_SUBDIR}/QgsQuick)
+SET(QGIS_QUICK_PLUGIN_RUNTIME_DIR ${QGIS_OUTPUT_DIRECTORY}/${QGIS_QML_SUBDIR}/QgsQuick)
 
-add_library(qgis_quick_plugin ${LIBRARY_TYPE}
+ADD_LIBRARY(qgis_quick_plugin ${LIBRARY_TYPE}
     ${QGIS_QUICK_PLUGIN_SRC}
     ${QGIS_QUICK_PLUGIN_MOC_HDRS}
     ${QGIS_QUICK_PLUGIN_MOC_SRCS}
     ${QGIS_QUICK_PLUGIN_RESOURCES}
 )
-target_link_libraries(qgis_quick_plugin qgis_quick)
-set_target_properties(qgis_quick_plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${QGIS_QUICK_PLUGIN_RUNTIME_DIR})
-target_compile_definitions(qgis_quick_plugin PRIVATE "-DQT_NO_FOREACH")
+TARGET_LINK_LIBRARIES(qgis_quick_plugin qgis_quick)
+SET_TARGET_PROPERTIES(qgis_quick_plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${QGIS_QUICK_PLUGIN_RUNTIME_DIR})
+TARGET_COMPILE_DEFINITIONS(qgis_quick_plugin PRIVATE "-DQT_NO_FOREACH")
 
 # Copy qml files to output directory, we need qml files in the same directory as the plugin shared library
-foreach(qmlfile ${QGIS_QUICK_PLUGIN_RESOURCES} ${QGIS_QUICK_PLUGIN_QRC})
-  add_custom_command(TARGET qgis_quick_plugin
+FOREACH(qmlfile ${QGIS_QUICK_PLUGIN_RESOURCES} ${QGIS_QUICK_PLUGIN_QRC})
+  ADD_CUSTOM_COMMAND(TARGET qgis_quick_plugin
     PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${qmlfile} ${QGIS_QUICK_PLUGIN_RUNTIME_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${qmlfile}
   )
-endforeach(qmlfile)
+ENDFOREACH(qmlfile)
 
-if(QMLPLUGINDUMP_FOUND)
+IF(QMLPLUGINDUMP_FOUND)
   # To create typeinfo file, no qml files must be in the directory, otherwise
   # bunch of "QObject: Cannot create children for a parent that is in a different thread." errors
   # appear and typeinfo file is not generated
-  set(QGIS_QUICK_TYPEINFO_GENERATE_DIR ${CMAKE_CURRENT_BINARY_DIR}/QgsQuick)
+  SET(QGIS_QUICK_TYPEINFO_GENERATE_DIR ${CMAKE_CURRENT_BINARY_DIR}/QgsQuick)
 
   # Extract QML Types Info from our QML plugin. This is useful for development with Qt Creator as it allows
   # Qt Creator understand also the C++ classes registered in the plugin and thus available in QML code
   # If the qmlplugindumpcommand fails, add -v argument to see detailed output for debugging
-  set(QGIS_QUICK_PLUGIN_TYPEINFO ${QGIS_QUICK_PLUGIN_RUNTIME_DIR}/qgsquick.qmltypes)
-  set(QGIS_QUICK_VERSION 0.1)
-  add_custom_command(
+  SET(QGIS_QUICK_PLUGIN_TYPEINFO ${QGIS_QUICK_PLUGIN_RUNTIME_DIR}/qgsquick.qmltypes)
+  SET(QGIS_QUICK_VERSION 0.1)
+  ADD_CUSTOM_COMMAND(
       TARGET qgis_quick_plugin
       COMMAND ${CMAKE_COMMAND} -E make_directory ${QGIS_QUICK_TYPEINFO_GENERATE_DIR}
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/qmldir ${QGIS_QUICK_TYPEINFO_GENERATE_DIR}
@@ -129,15 +129,15 @@ if(QMLPLUGINDUMP_FOUND)
       COMMENT "Generating qgsquick.qmltypes with qmlplugindump"
       POST_BUILD
   )
-endif()
+ENDIF()
 
 # Installation
-set(QUICK_PLUGIN_INSTALL_DIR ${QGIS_QML_DIR}/QgsQuick)
-install(TARGETS qgis_quick_plugin
+SET(QUICK_PLUGIN_INSTALL_DIR ${QGIS_QML_DIR}/QgsQuick)
+INSTALL(TARGETS qgis_quick_plugin
   RUNTIME DESTINATION ${QUICK_PLUGIN_INSTALL_DIR}
   LIBRARY DESTINATION ${QUICK_PLUGIN_INSTALL_DIR}
   ARCHIVE DESTINATION ${QUICK_PLUGIN_INSTALL_DIR}
 )
-install(FILES ${QGIS_QUICK_PLUGIN_RESOURCES} ${QGIS_QUICK_PLUGIN_TYPEINFO} ${QGIS_QUICK_PLUGIN_QRC}
+INSTALL(FILES ${QGIS_QUICK_PLUGIN_RESOURCES} ${QGIS_QUICK_PLUGIN_TYPEINFO} ${QGIS_QUICK_PLUGIN_QRC}
   DESTINATION ${QUICK_PLUGIN_INSTALL_DIR}
 )

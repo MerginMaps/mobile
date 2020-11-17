@@ -1,6 +1,6 @@
 ############################################################
 # sources
-set(QGIS_QUICK_GUI_MOC_HDRS
+SET(QGIS_QUICK_GUI_MOC_HDRS
   attributes/qgsquickattributeformmodel.h
   attributes/qgsquickattributeformmodelbase.h
   attributes/qgsquickattributemodel.h
@@ -21,11 +21,11 @@ set(QGIS_QUICK_GUI_MOC_HDRS
   qgsquickfeatureslistmodel.h
 )
 
-set(QGIS_QUICK_GUI_HDRS
+SET(QGIS_QUICK_GUI_HDRS
   qgsquickhighlightsgnode.h
 )
 
-set(QGIS_QUICK_GUI_SRC
+SET(QGIS_QUICK_GUI_SRC
   attributes/qgsquickattributeformmodel.cpp
   attributes/qgsquickattributeformmodelbase.cpp
   attributes/qgsquickattributemodel.cpp
@@ -47,7 +47,7 @@ set(QGIS_QUICK_GUI_SRC
   qgsquickfeatureslistmodel.cpp
 )
 
-include_directories(
+INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/attributes
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -77,7 +77,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/core
 )
 
-include_directories(SYSTEM
+INCLUDE_DIRECTORIES(SYSTEM
   ${GDAL_INCLUDE_DIR}
   ${PROJ_INCLUDE_DIR}
   ${LIBZIP_INCLUDE_DIRS}
@@ -90,28 +90,28 @@ include_directories(SYSTEM
   ${QTKEYCHAIN_INCLUDE_DIR}
 )
 
-set(QGIS_QUICK_GUI_IMAGE_RCCS ./images/images.qrc)
+SET(QGIS_QUICK_GUI_IMAGE_RCCS ./images/images.qrc)
 
 ############################################################
 # qgis_quick shared library
 QT5_WRAP_CPP(QGIS_QUICK_GUI_MOC_SRCS ${QGIS_QUICK_GUI_MOC_HDRS})
-if(MSVC)
-  set_source_files_properties(${QGIS_QUICK_GUI_MOC_SRCS} PROPERTIES COMPILE_FLAGS "/wd4512 /wd4996" )
-else()
-  set_source_files_properties(${QGIS_QUICK_GUI_MOC_SRCS} PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations" )
-endif()
+IF(MSVC)
+  SET_SOURCE_FILES_PROPERTIES(${QGIS_QUICK_GUI_MOC_SRCS} PROPERTIES COMPILE_FLAGS "/wd4512 /wd4996" )
+ELSE(MSVC)
+  SET_SOURCE_FILES_PROPERTIES(${QGIS_QUICK_GUI_MOC_SRCS} PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations" )
+ENDIF(MSVC)
 
-add_library(qgis_quick ${LIBRARY_TYPE}
+ADD_LIBRARY(qgis_quick ${LIBRARY_TYPE}
     ${QGIS_QUICK_GUI_IMAGE_RCCS}
     ${QGIS_QUICK_GUI_SRC}
     ${QGIS_QUICK_GUI_MOC_HDRS}
     ${QGIS_QUICK_GUI_MOC_SRCS}
     ${QGIS_QUICK_GUI_HDRS})
-target_link_libraries(qgis_quick Qt5::Quick Qt5::Qml Qt5::Xml Qt5::Concurrent Qt5::Positioning qgis_core)
-if(CMAKE_SYSTEM_NAME STREQUAL "Android")
-  target_link_libraries(qgis_quick Qt5::AndroidExtras)
-endif()
-target_compile_definitions(qgis_quick PRIVATE "-DQT_NO_FOREACH")
+TARGET_LINK_LIBRARIES(qgis_quick Qt5::Quick Qt5::Qml Qt5::Xml Qt5::Concurrent Qt5::Positioning qgis_core)
+IF(CMAKE_SYSTEM_NAME STREQUAL "Android")
+  TARGET_LINK_LIBRARIES(qgis_quick Qt5::AndroidExtras)
+ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Android")
+TARGET_COMPILE_DEFINITIONS(qgis_quick PRIVATE "-DQT_NO_FOREACH")
 
 GENERATE_EXPORT_HEADER(
   qgis_quick
@@ -120,10 +120,10 @@ GENERATE_EXPORT_HEADER(
 )
 
 # Installation
-if(NOT APPLE)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qgis_quick.h ${QGIS_QUICK_GUI_HDRS} ${QGIS_QUICK_GUI_MOC_HDRS} DESTINATION ${QGIS_INCLUDE_DIR})
-else()
-  set_target_properties(qgis_quick PROPERTIES
+IF(NOT APPLE)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/qgis_quick.h ${QGIS_QUICK_GUI_HDRS} ${QGIS_QUICK_GUI_MOC_HDRS} DESTINATION ${QGIS_INCLUDE_DIR})
+ELSE(NOT APPLE)
+  SET_TARGET_PROPERTIES(qgis_quick PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
     FRAMEWORK 1
     FRAMEWORK_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}"
@@ -135,16 +135,16 @@ else()
     LINK_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}"
   )
   # generated export header does not get copied with PUBLIC_HEADER files
-  add_custom_command(TARGET qgis_quick
+  ADD_CUSTOM_COMMAND(TARGET qgis_quick
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy qgis_quick.h
-            "${QGIS_OUTPUT_DIRECTORY}/${QGIS_LIB_SUBDIR}/qgis_quick.framework/Headers"
+            "${QGIS_OUTPUT_DIRECTORY}/${QGIS_LIB_SUBDIR}/qgis_core.framework/Headers"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS qgis_quick.h
   )
-endif()
+ENDIF(NOT APPLE)
 
-install(TARGETS qgis_quick
+INSTALL(TARGETS qgis_quick
   RUNTIME DESTINATION ${QGIS_BIN_DIR}
   LIBRARY DESTINATION ${QGIS_LIB_DIR}
   ARCHIVE DESTINATION ${QGIS_LIB_DIR}
@@ -153,5 +153,5 @@ install(TARGETS qgis_quick
 
 ############################################################
 # qgis_quick_plugin module (QML) library
-add_subdirectory(plugin)
+ADD_SUBDIRECTORY(plugin)
 
