@@ -46,7 +46,7 @@ macx:!android {
     }
 
     # path to runtime loading of QML plugin
-    DEFINES += "QML_BUILD_IMPORT_DIR=$${{QGSQUICK_QML_DIR}}"
+    DEFINES += "QML_BUILD_IMPORT_DIR=$${QGSQUICK_QML_DIR}"
 
     INCLUDEPATH += \
         $${QGIS_FRAMEWORK_DIR}/qgis_native.framework/Headers \
@@ -68,7 +68,7 @@ macx:!android {
       # using QGIS from build directory (has different layout of directories)
       # expecting QGIS_SRC_DIR and QGSQUICK_BUILD_DIR defined
       QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output
-      QGSQUICK_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib
+      QGSQUICK_FRAMEWORK_DIR = $${QGSQUICK_BUILD_DIR}/output/lib
       QGSQUICK_INCLUDE_DIR = \
         $$PWD/../qgsquick/from_qgis \
         $$PWD/../qgsquick/from_qgis/attributes \
@@ -78,7 +78,7 @@ macx:!android {
     exists($${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick) {
       message("Building from QGSQUICK: $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
     } else {
-       error("Missing QGSQUICK library in $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
+      error("Missing QGSQUICK library in $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
     }
 
     INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}

@@ -79,7 +79,7 @@
     LIBS += -L$${QGSQUICK_LIB_DIR}
     LIBS += -lqgis_quick
     # path to runtime loading of QML plugin
-    DEFINES += "QML_BUILD_IMPORT_DIR=$${{QGSQUICK_QML_DIR}}"
+    DEFINES += "QML_BUILD_IMPORT_DIR=$${QGSQUICK_QML_DIR}"
 
     # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
