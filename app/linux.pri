@@ -66,7 +66,8 @@
       QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output
       QGSQUICK_INCLUDE_DIR = \
         $$PWD/../qgsquick/from_qgis \
-        $$PWD/../qgsquick/from_qgis/attributes
+        $$PWD/../qgsquick/from_qgis/attributes \
+        $${QGSQUICK_BUILD_DIR}/from_qgis
     }
 
     exists($${QGSQUICK_LIB_DIR}/libqgis_quick.so) {

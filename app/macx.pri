@@ -68,7 +68,8 @@ macx:!android {
       QGSQUICK_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib
       QGSQUICK_INCLUDE_DIR = \
         $$PWD/../qgsquick/from_qgis \
-        $$PWD/../qgsquick/from_qgis/attributes
+        $$PWD/../qgsquick/from_qgis/attributes \
+        $${QGSQUICK_BUILD_DIR}/from_qgis
     }
 
     exists($${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick) {
