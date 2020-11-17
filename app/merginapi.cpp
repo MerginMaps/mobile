@@ -818,7 +818,7 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.%1 You should now be able to sign in." ).arg( "\n" );
+    QString msg = tr( "Registration successful" );
     emit notify( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
