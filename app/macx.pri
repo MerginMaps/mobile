@@ -35,8 +35,6 @@ macx:!android {
           $${QGIS_SRC_DIR}/src/core/scalebar \
           $${QGIS_SRC_DIR}/src/core/symbology \
           $${QGIS_SRC_DIR}/src/core/textrenderer \
-          $${QGIS_SRC_DIR}/src/quickgui \
-          $${QGIS_SRC_DIR}/src/quickgui/attributes \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core
     }
@@ -60,19 +58,17 @@ macx:!android {
       # using installed QGSQUICK
       QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
       QGSQUICK_FRAMEWORK_DIR = $${QGSQUICK_INSTALL_PATH}/frameworks
+      QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include
     }
 
     isEmpty(QGSQUICK_INSTALL_PATH) {
       # using QGIS from build directory (has different layout of directories)
       # expecting QGIS_SRC_DIR and QGSQUICK_BUILD_DIR defined
-      QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output/qml
+      QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output
       QGSQUICK_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib
-
-      INCLUDEPATH += \
-          $${QGSQUICK_SRC_DIR}/src/quickgui \
-          $${QGSQUICK_SRC_DIR}/src/quickgui/attributes \
-          $${QGSQUICK_BUILD_DIR} \
-          $${QGSQUICK_BUILD_DIR}/src/quickgui
+      QGSQUICK_INCLUDE_DIR = \
+        $$PWD/../qgsquick/from_qgis \
+        $$PWD/../qgsquick/from_qgis/attributes
     }
 
     exists($${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick) {
@@ -81,6 +77,7 @@ macx:!android {
        error("Missing QGSQUICK library in $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/qgis_quick")
     }
 
+    INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
     INCLUDEPATH += $${QGSQUICK_FRAMEWORK_DIR}/qgis_quick.framework/Headers
     LIBS += -F$${QGSQUICK_FRAMEWORK_DIR}
     LIBS += -framework qgis_quick

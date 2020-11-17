@@ -36,8 +36,6 @@
           $${QGIS_SRC_DIR}/src/core/scalebar \
           $${QGIS_SRC_DIR}/src/core/symbology \
           $${QGIS_SRC_DIR}/src/core/textrenderer \
-          $${QGIS_SRC_DIR}/src/quickgui \
-          $${QGIS_SRC_DIR}/src/quickgui/attributes \
           $${QGIS_SRC_DIR}/external/nlohmann \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core
@@ -57,7 +55,7 @@
     !isEmpty(QGSQUICK_INSTALL_PATH) {
       # using installed QGSQUICK
       QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
-      QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
+      QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include
       QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
     }
 
@@ -65,8 +63,10 @@
       # using QGSQUICK from build directory (has different layout of directories)
       # expecting QGIS_SRC_DIR and QGSQUICK_BUILD_DIR defined
       QGSQUICK_LIB_DIR = $${QGSQUICK_BUILD_DIR}/output/lib
-      QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output/qml
-      QGIS_INCLUDE_DIR = $${QGIS_BUILD_DIR}/src/quickgui
+      QGSQUICK_QML_DIR = $${QGSQUICK_BUILD_DIR}/output
+      QGSQUICK_INCLUDE_DIR = \
+        $$PWD/../qgsquick/from_qgis \
+        $$PWD/../qgsquick/from_qgis/attributes
     }
 
     exists($${QGSQUICK_LIB_DIR}/libqgis_quick.so) {
