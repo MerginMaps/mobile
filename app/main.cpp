@@ -272,7 +272,7 @@ void initTestDeclarative()
 }
 #endif
 
-void addQmlImportPath(QQmlEngine& engine)
+void addQmlImportPath( QQmlEngine &engine )
 {
   // This adds a runtime qml directory containing QgsQuick plugin
   // when Input is installed (e.g. Android/Win32)
@@ -477,7 +477,7 @@ int main( int argc, char *argv[] )
 #endif
 
   QQmlEngine engine;
-  addQmlImportPath(engine);
+  addQmlImportPath( engine );
   initDeclarative();
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
