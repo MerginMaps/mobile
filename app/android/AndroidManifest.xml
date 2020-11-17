@@ -8,7 +8,8 @@
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
                  android:label="-- %%INSERT_APP_NAME%% --"
                  android:icon="@mipmap/ic_input"
-                 android:extractNativeLibs="true">
+                 android:extractNativeLibs="true"
+                 android:requestLegacyExternalStorage="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:name="uk.co.lutraconsulting.InputActivity"
                   android:label="Input"
@@ -86,7 +87,6 @@
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
     <!-- %%INSERT_PERMISSIONS -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.

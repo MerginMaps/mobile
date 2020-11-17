@@ -21,6 +21,7 @@ cmake \
 ninja
 cd ..
 ```
+
 4. Compile QGIS 
 ```
 mkdir build-QGIS-Desktop
@@ -31,7 +32,7 @@ cmake \
   -DWITH_DESKTOP=OFF \
   -DWITH_BINDINGS=OFF \
   -DENABLE_TESTS=OFF \
-  -DWITH_QUICK=ON \
+  -DWITH_QUICK=OFF \
   -DWITH_GRASS=OFF \
   -DWITH_QTWEBKIT=OFF \
   -DWITH_ANALYSIS=OFF \
@@ -50,6 +51,37 @@ ninja
 cd ..
 ```
 
+5. Compile QGSQUICK 
+```
+mkdir build-QGSQUICK-Desktop
+cd build-QGSQUICK-Desktop
+cmake \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DQGIS_VERSION_MAJOR=3 \
+  -DQGIS_VERSION_MINOR=17 \
+  -DQGIS_VERSION_PATCH=0 \
+  -DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
+  -DENABLE_TESTS=FALSE \
+  -DFORCE_STATIC_LIBS=FALSE \
+  -DUSE_QGIS_BUILD_DIR=TRUE \
+  -DQGIS_CMAKE_PATH=../QGIS/cmake \
+  -DQGIS_SRC_DIR=../QGIS \
+  -DQGIS_BUILD_DIR=../build-QGIS-Desktop \
+  -DQGIS_MAC_DEPS_DIR:INTERNAL=/opt/QGIS/qgis-deps-0.5.3/stage \
+  -GNinja -DCMAKE_MAKE_PROGRAM=/usr/local/bin/ninja \
+  ../input/qgsquick
+
+ninja
+cd ..
+```
+
 6. Change config.pri to point to your `~/Projects/quick` folder for geodiff/qgis
 7. Open Input in Qt Creator
 8. Compile and run
+9. in Run environment, you may need to:
+```
+DYLD_FRAMEWORK_PATH=/Users/peter/Projects/quick/build-Desktop/build-geodiff:/opt/Qt/5.14.2/clang_64/lib:/Users/peter/Projects/quick/build-Desktop/build-qgsquick/output/lib
+DYLD_INSERT_LIBRARIES=/opt/QGIS/qgis-deps-0.6.0/stage/lib/libsqlite3.dylib
+```

@@ -23,4 +23,4 @@ CONFIG(debug, debug|release) {
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH = $${QGIS_QML_DIR}
+QML_IMPORT_PATH = $${QGSQUICK_QML_DIR}

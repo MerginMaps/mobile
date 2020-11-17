@@ -1,0 +1,15 @@
+name: QgsQuick
+on: [push]
+jobs:
+  qgsquick_up_to_date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: download qgis
+        run: |
+          git clone https://github.com/qgis/QGIS.git --depth 1
+
+      - name: run check the qgsquick is up-to-date
+        run: |
+          ./scripts/copy_qgsquick.bash QGIS/
