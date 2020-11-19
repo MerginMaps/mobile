@@ -607,7 +607,7 @@ void MerginApi::registerUser( const QString &username,
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager.post( request, json );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::registrationFinished );
+  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( username, password ); } );
   InputUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -809,7 +809,7 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
-void MerginApi::registrationFinished()
+void MerginApi::registrationFinished( const QString &username, const QString &password )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -818,8 +818,11 @@ void MerginApi::registrationFinished()
   {
     InputUtils::log( "register", QStringLiteral( "Success" ) );
     emit registrationSucceeded();
-    QString msg = tr( "Registration successful.%1 You should now be able to sign in." ).arg( "\n" );
+    QString msg = tr( "Registration successful" );
     emit notify( msg );
+
+    if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
+      authorize( username, password );
   }
   else
   {

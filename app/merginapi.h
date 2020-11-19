@@ -425,7 +425,7 @@ class MerginApi: public QObject
     void createProjectFinished();
     void deleteProjectFinished();
     void authorizeFinished();
-    void registrationFinished();
+    void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
     void pingMerginReplyFinished();
 
   private:
