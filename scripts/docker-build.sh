@@ -65,41 +65,6 @@ echo "API: $ANDROIDAPI"
 mkdir -p ${BUILD_DIR_QGSQUICK}
 pushd ${BUILD_DIR_QGSQUICK}
 
-
-
-  export CFLAGS="-DANDROID -fomit-frame-pointer "
-  # --sysroot $NDKPLATFORM -I$STAGE_PATH/include"
-  # export CFLAGS="$CFLAGS -Wno-unused-command-line-argument"
-  export CFLAGS="$CFLAGS -L$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH -isystem $ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/include"
-  export CFLAGS="$CFLAGS -isystem $ANDROID_NDK_ROOT/sysroot/usr/include -isystem $ANDROID_NDK_ROOT/sysroot/usr/include/$TOOLCHAIN_SHORT_PREFIX "
-  export CFLAGS="$CFLAGS -D__ANDROID_API__=$ANDROIDAPI"
-
-  export CXXFLAGS="$CFLAGS"
-  export CPPFLAGS="$CFLAGS"
-
-  # export LDFLAGS="-lm -L$STAGE_PATH/lib"
-  export LDFLAGS="$LDFLAGS -L$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH"
-  # export LDFLAGS="$LDFLAGS -L$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$PYPLATFORM-x86_64/sysroot/usr/lib/$TOOLCHAIN_PREFIX/$ANDROIDAPI"
-
-  if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
-      # make sure that symbols from the following system libs are not exported - on 32-bit ARM this was causing crashes when unwinding
-      # stack when handling c++ exceptions. In our case, sqlite3.so exported some unwinding-related symbols which were being picked up
-      # by libproj.so and causing havoc.
-      # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
-      # https://github.com/android/ndk/issues/785
-      # https://github.com/android/ndk/issues/379
-      # https://github.com/lutraconsulting/input/issues/641
-      export LDFLAGS="$LDFLAGS -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libgcc_real.a -Wl,--exclude-libs,libunwind.a"
-  fi
-
-export ANDROID_CMAKE_LINKER_FLAGS=""
-ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/platforms/android-$ANDROIDAPI/arch-$QT_ARCH_PREFIX/usr/lib"
-ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$ANDROID_NDK_ROOT/sources/cxx-stl/llvm-libc++/libs/$ARCH"
-export LDFLAGS="$LDFLAGS -Wl,-lc++_shared"
-ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$STAGE_PATH/lib"
-ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-llog"
-ANDROID_CMAKE_LINKER_FLAGS="$ANDROID_CMAKE_LINKER_FLAGS;-Wl,-rpath=$QT_ANDROID/lib"
-
 export ANDROID_NDK=$ANDROID_NDK_ROOT
 
 cmake \
@@ -113,35 +78,14 @@ cmake \
     -DANDROID_NATIVE_API_LEVEL=$ANDROIDAPI \
     -DANDROID=ON \
     -DANDROID_STL=c++_shared \
-    -DQGIS_VERSION_MAJOR=3 \
-    -DQGIS_VERSION_MINOR=17 \
-    -DQGIS_VERSION_PATCH=0 \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR_QGSQUICK} \
     -DCMAKE_PREFIX_PATH=$QT_ANDROID \
-    -DENABLE_TESTS=FALSE \
     -DFORCE_STATIC_LIBS=FALSE \
     -DUSE_QGIS_BUILD_DIR=FALSE \
-    -DQGIS_INSTALL_PATH=$STAGE_PATH \
-    -DQGIS_CMAKE_PATH=$STAGE_PATH/cmake \
-    -DGDAL_CONFIG=$STAGE_PATH/bin/gdal-config \
-    -DGDAL_INCLUDE_DIR=$STAGE_PATH/include \
-    -DGDAL_LIBRARY=$STAGE_PATH/lib/libgdal.so \
-    -DGEOS_CONFIG=$STAGE_PATH/bin/geos-config \
-    -DGEOS_INCLUDE_DIR=$STAGE_PATH/include \
-    -DGEOS_LIBRARY=$STAGE_PATH/lib/libgeos_c.so \
-    -DSQLITE3_INCLUDE_DIR=$STAGE_PATH/include \
-    -DSQLITE3_LIBRARY=$STAGE_PATH/lib/libsqlite3.so \
-    -DQCA_INCLUDE_DIR=$STAGE_PATH/include/Qca-qt5/QtCrypto \
-    -DQCA_LIBRARY=$STAGE_PATH/lib/libqca-qt5_$ARCH.so \
-    -DQTKEYCHAIN_INCLUDE_DIR=$STAGE_PATH/include/qt5keychain \
-    -DQTKEYCHAIN_LIBRARY=$STAGE_PATH/lib/libqt5keychain_$ARCH.so \
     -DENABLE_QT5=ON \
-    -DENABLE_TESTS=OFF \
-    -DEXPAT_INCLUDE_DIR=$STAGE_PATH/include \
-    -DEXPAT_LIBRARY=$STAGE_PATH/lib/libexpat.so \
-    -DSPATIALINDEX_LIBRARY=$STAGE_PATH/lib/libspatialindex.so \
-    -DNATIVE_CRSSYNC_BIN=/usr/bin/true \
-    -DANDROID_TARGET_ARCH=$ARCH \
+    -DQGIS_INSTALL_PATH=$STAGE_PATH \
+    -DANDROID_INPUT_SDK_PATH=$STAGE_PATH \
+    -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
   ${SOURCE_DIR}/qgsquick
 
 make -j ${CORES} VERBOSE=1
