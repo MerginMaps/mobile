@@ -160,6 +160,8 @@ ENDIF()
 ADD_DEFINITIONS(-DQT_NO_CAST_TO_ASCII)
 
 SET(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(powerpc|ppc)")
   # spatialite crashes on ppc - see bugs.debian.org/603986
   add_definitions( -fno-strict-aliasing )
