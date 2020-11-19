@@ -29,7 +29,7 @@ android {
 
     # using installed QGSQUICK
     QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
-    QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include/qgis
+    QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include
     exists($${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so) {
       message("Building from QGIS: $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
     } else {
