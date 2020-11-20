@@ -5,7 +5,6 @@ ios {
 
     # QGIS
     QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
-    QGIS_NATIVE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_native.framework
     QGIS_CORE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework
 
     exists($${QGIS_CORE_FRAMEWORK}/qgis_core) {
@@ -14,12 +13,9 @@ ios {
       error("Missing qgis_core Framework in $${QGIS_CORE_FRAMEWORK}/qgis_core")
     }
 
-    INCLUDEPATH += \
-      $${QGIS_NATIVE_FRAMEWORK}/Headers \
-      $${QGIS_CORE_FRAMEWORK}/Headers
+    INCLUDEPATH += $${QGIS_CORE_FRAMEWORK}/Headers
 
-    LIBS += -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib  \
-            -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
+    LIBS += -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
     LIBS += -framework qgis_core
 
     # QgsQuick
@@ -53,8 +49,8 @@ ios {
     QT += multimedia multimediawidgets location
     QTPLUGIN += qios
 
-    LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS/lib
-    LIBS += -L$${QGSQUICK_INSTALL_PATH}/lib -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
+    LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
+    LIBS += -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
     LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
     LIBS += -lexpat -lcharset -lfreexl -lxml2
     LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1

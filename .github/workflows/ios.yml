@@ -123,7 +123,7 @@ jobs:
             -DIOS=TRUE \
             ${QGSQUICK_DIR}
 
-          make -j $(sysctl -n hw.ncpu)
+          make -j $(sysctl -n hw.ncpu) VERBOSE=1
           make install
 
           cp -v from_qgis/qgis_quick.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/

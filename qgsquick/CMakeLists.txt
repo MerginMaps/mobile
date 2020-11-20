@@ -229,7 +229,7 @@ IF (USE_QGIS_BUILD_DIR)
 
     IF (APPLE OR IOS)
         # macos and ios
-        SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework/qgis_core)
+        MESSAGE(ERROR "ios from build dir not supported")
     ELSE (APPLE OR IOS)
         IF (ANDROID)
             MESSAGE(ERROR "android from build dir not supported")
