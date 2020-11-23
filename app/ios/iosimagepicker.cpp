@@ -31,8 +31,8 @@ void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir 
   setTargetDir( targetDir );
   showImagePickerDirect( sourceType, this );
 #else
-  Q_UNUSED(sourceType)
-  Q_UNUSED(targetDir)
+  Q_UNUSED( sourceType )
+  Q_UNUSED( targetDir )
 #endif
 }
 

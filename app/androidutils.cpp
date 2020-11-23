@@ -117,7 +117,7 @@ void AndroidUtils::callCamera( const QString &targetPath )
     QtAndroid::startActivity( intent.object<jobject>(), CAMERA_CODE, this );
   }
 #else
-  Q_UNUSED(targetPath)
+  Q_UNUSED( targetPath )
 #endif
 }
 
