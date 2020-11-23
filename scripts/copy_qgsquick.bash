@@ -21,7 +21,7 @@ fi
 
 # first see how many files differs
 echo "differs??"
-diff $QGSQUICK_INPUT_DIR $QGSQUICK_QGIS_DIR
+diff -r $QGSQUICK_INPUT_DIR $QGSQUICK_QGIS_DIR
 DIFFERS=$?
 echo "The QGIS and INPUT copy differs? $DIFFERS"
 
