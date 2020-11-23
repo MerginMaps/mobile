@@ -665,9 +665,6 @@ ApplicationWindow {
         onShowNotificationRequested: {
             showMessage(message)
         }
-        onShowNotificationDialogRequested: {
-            showDialog(message)
-        }
     }
 
     FeaturePanel {

@@ -3,6 +3,10 @@ ios {
 
     DEFINES += MOBILE_OS
 
+    CONFIG(debug, debug|release){
+        error("Use release with debug info for debugging! Debug not supported due to static linking for the moment.")
+    }
+
     # QGIS
     QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
     QGIS_CORE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework

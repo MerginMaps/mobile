@@ -30,6 +30,9 @@ void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir 
 #ifdef Q_OS_IOS
   setTargetDir( targetDir );
   showImagePickerDirect( sourceType, this );
+#else
+  Q_UNUSED( sourceType )
+  Q_UNUSED( targetDir )
 #endif
 }
 

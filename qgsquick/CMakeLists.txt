@@ -227,21 +227,26 @@ IF (USE_QGIS_BUILD_DIR)
       ${QGIS_BUILD_DIR}/src/core
     )
 
-    IF (APPLE OR IOS)
-        # macos and ios
-        MESSAGE(ERROR "ios from build dir not supported")
-    ELSE (APPLE OR IOS)
-        IF (ANDROID)
-            MESSAGE(ERROR "android from build dir not supported")
-        ELSE (ANDROID)
-            IF (WIN32)
-                MESSAGE(ERROR "windows from build dir not supported")
-            ELSE (WIN32)
-                # Linux
-                SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib/libqgis_core.so)
-            ENDIF (WIN32)
-        ENDIF (ANDROID)
-    ENDIF (APPLE OR IOS)
+    IF (APPLE AND NOT IOS)
+        # macos
+        SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib/qgis_core.framework/qgis_core)
+    ELSE (APPLE AND NOT IOS)
+        IF (IOS)
+          #ios
+          MESSAGE(ERROR "ios from build dir not supported")
+        ELSE(IOS)
+          IF (ANDROID)
+              MESSAGE(ERROR "android from build dir not supported")
+          ELSE (ANDROID)
+              IF (WIN32)
+                  MESSAGE(ERROR "windows from build dir not supported")
+              ELSE (WIN32)
+                  # Linux
+                  SET(QGIS_CORE_LIB ${QGIS_BUILD_DIR}/output/lib/libqgis_core.so)
+              ENDIF (WIN32)
+          ENDIF (ANDROID)
+        ENDIF (IOS)
+    ENDIF (APPLE AND NOT IOS)
 ELSE(USE_QGIS_BUILD_DIR)
     IF (APPLE OR IOS)
         INCLUDE_DIRECTORIES(

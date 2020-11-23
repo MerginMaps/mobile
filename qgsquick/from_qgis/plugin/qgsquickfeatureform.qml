@@ -360,7 +360,7 @@ Item {
             model: QgsQuick.SubModel {
               id: contentModel
               model: form.model
-              rootIndex: form.model.hasTabs ? form.model.index(currentIndex, 0) : undefined
+              rootIndex: form.model.hasTabs ? form.model.index(currentIndex, 0) : QgsQuick.Utils.invalidIndex()
             }
 
             delegate: fieldItem
@@ -479,7 +479,7 @@ Item {
           target: form
           ignoreUnknownSignals: true
           onCanceled: {
-            if (typeof attributeEditorLoader.item.callbackOnCancel === "function") {
+            if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
               attributeEditorLoader.item.callbackOnCancel()
             }
           }
@@ -595,7 +595,7 @@ Item {
 
       ToolButton {
         id: closeButton
-        anchors.right: parent.right
+        Layout.alignment: Qt.AlignRight
 
         Layout.preferredWidth: form.style.toolbutton.size
         Layout.preferredHeight: form.style.toolbutton.size

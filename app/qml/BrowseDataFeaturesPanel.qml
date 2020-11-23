@@ -99,7 +99,7 @@ Item {
     BrowseDataView {
       id: browseDataView
       width: parent.width
-      height: parent.height - browseDataToolbar.height
+      height: parent.height - searchBar.height
       y: searchBar.height
       clip: true
       showAdditionalInfo: root.state == "search"

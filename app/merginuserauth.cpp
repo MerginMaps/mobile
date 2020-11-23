@@ -10,6 +10,7 @@
 #include "merginuserauth.h"
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
+  : QObject( parent )
 {
   clear();
 }

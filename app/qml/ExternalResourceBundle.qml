@@ -141,7 +141,7 @@ Item {
           itemWidget.sourceToDelete = ""
         }
 
-        property var onFormCancel: function onFormCanceled(itemWidget) {
+        property var onFormCanceled: function onFormCanceled(itemWidget) {
           itemWidget.sourceToDelete = ""
         }
     }
