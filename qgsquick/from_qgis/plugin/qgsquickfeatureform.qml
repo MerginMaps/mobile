@@ -442,7 +442,7 @@ Item {
           active: widget !== 'Hidden'
 
           source: {
-            if ( widget )
+            if ( widget !== undefined )
                return form.loadWidgetFn(widget.toLowerCase())
             else return ''
           }
