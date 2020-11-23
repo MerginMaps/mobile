@@ -595,7 +595,7 @@ Item {
 
       ToolButton {
         id: closeButton
-        anchors.right: parent.right
+        Layout.alignment: Qt.AlignRight
 
         Layout.preferredWidth: form.style.toolbutton.size
         Layout.preferredHeight: form.style.toolbutton.size
