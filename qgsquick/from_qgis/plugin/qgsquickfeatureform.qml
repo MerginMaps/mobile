@@ -479,7 +479,7 @@ Item {
           target: form
           ignoreUnknownSignals: true
           onCanceled: {
-            if (typeof attributeEditorLoader.item.callbackOnCancel === "function") {
+            if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
               attributeEditorLoader.item.callbackOnCancel()
             }
           }
