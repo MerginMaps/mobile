@@ -262,12 +262,14 @@ Item {
             rightPadding: 8 * QgsQuick.Utils.dp
             anchors.bottom: parent.bottom
 
-            width: contentItem.width + leftPadding + rightPadding
+            width: leftPadding + rightPadding
             height: form.style.tabs.buttonHeight
 
             contentItem: Text {
               // Make sure the width is derived from the text so we can get wider
               // than the parent item and the Flickable is useful
+              Component.onCompleted: tabButton.width = tabButton.width + paintedWidth
+
               width: paintedWidth
               text: tabButton.text
               color: !tabButton.enabled ? form.style.tabs.disabledColor : tabButton.down ||
