@@ -64,7 +64,7 @@ QVariant QgsQuickSubModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 
   QModelIndex sourceIndex = mapToSource( index );
-  if (sourceIndex.isValid())
+  if ( sourceIndex.isValid() )
     return mModel->data( sourceIndex, role );
   else
   {
@@ -79,7 +79,7 @@ bool QgsQuickSubModel::setData( const QModelIndex &index, const QVariant &value,
     return false;
 
   QModelIndex sourceIndex = mapToSource( index );
-  if (sourceIndex.isValid())
+  if ( sourceIndex.isValid() )
     return mModel->setData( sourceIndex, value, role );
   else
   {

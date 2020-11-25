@@ -101,7 +101,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   if ( mProject->fileName() != filePath || force )
   {
     res = mProject->read( filePath );
-    whileBlocking(&mActiveLayer)->resetActiveLayer();
+    whileBlocking( &mActiveLayer )->resetActiveLayer();
 
     mMapThemeModel.reloadMapThemes( mProject );
 
