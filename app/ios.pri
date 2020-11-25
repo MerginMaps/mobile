@@ -55,13 +55,13 @@ ios {
 
     LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
     LIBS += -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
-    LIBS += -lgeos -lqt5keychain -lqca-qt5 -lgdal
-    LIBS += -lexpat -lcharset -lfreexl -lxml2
-    LIBS += -lgdal -lproj -lspatialindex -lpq -lspatialite -lqca-qt5 -ltasn1
-    LIBS += -lzip -liconv -lbz2
-    LIBS += -lqgis_quick_plugin -lprotobuf-lite
-    # static providers
+    LIBS += -lqgis_quick_plugin
     LIBS += -lwmsprovider_a -lpostgresprovider_a
+    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lgdal -lpq -lspatialite
+    LIBS += -lcharset -lxml2
+    LIBS += -ltasn1 -lzip -lbz2 -lproj
+    LIBS += -lspatialindex -lgeos -lprotobuf-lite -lexpat -lfreexl -liconv
 
     RESOURCES += $$QGSQUICK_QML_DIR/QgsQuick/qgsquick.qrc
     RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc

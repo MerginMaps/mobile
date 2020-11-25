@@ -63,4 +63,5 @@ void ActiveLayer::setActiveLayer( QgsMapLayer *layer )
 void ActiveLayer::resetActiveLayer()
 {
   mLayer = nullptr;
+  emit activeLayerChanged( QString() );
 }
