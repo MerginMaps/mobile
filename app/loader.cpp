@@ -80,10 +80,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
     mProject->clear();
-    mActiveLayer.resetActiveLayer();
-    mMapThemeModel.reloadMapThemes( mProject );
-    setMapSettingsLayers();
-
+    whileBlocking( &mActiveLayer )->resetActiveLayer();
     emit projectReloaded( mProject );
     return true;
   }
