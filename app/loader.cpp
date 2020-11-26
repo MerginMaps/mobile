@@ -78,8 +78,12 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
+    emit projectWillBeReloaded();
     mProject->clear();
     mActiveLayer.resetActiveLayer();
+    mMapThemeModel.reloadMapThemes( mProject );
+    setMapSettingsLayers();
+
     emit projectReloaded( mProject );
     return true;
   }
@@ -100,11 +104,10 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   bool res = true;
   if ( mProject->fileName() != filePath || force )
   {
+    emit projectWillBeReloaded();
     res = mProject->read( filePath );
-    whileBlocking( &mActiveLayer )->resetActiveLayer();
-
+    mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mProject );
-
     setActiveLayer( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
 
