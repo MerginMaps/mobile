@@ -46,11 +46,6 @@ class ActiveLayer : public QObject
      */
     void setActiveLayer( QgsMapLayer *layer );
 
-    /**
-     * Resets active layer to nullptr.
-     */
-    void resetActiveLayer();
-
   signals:
 
     /**
@@ -58,6 +53,12 @@ class ActiveLayer : public QObject
      * @param layerName holds name of the new active layer, empty if active layer is null
      */
     void activeLayerChanged( const QString &layerName );
+
+  public slots:
+    /**
+     * Resets active layer to nullptr.
+     */
+    void resetActiveLayer();
 
   private:
     QgsMapLayer *mLayer;

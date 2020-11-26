@@ -699,6 +699,13 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: __loader
+        onProjectWillBeReloaded: {
+            featurePanel.reload()
+        }
+    }
+
     LoadingIndicator {
         id: loadingIndicator
         visible: false

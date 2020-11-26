@@ -32,6 +32,12 @@ Drawer {
         featureForm.save()
     }
 
+    function reload() {
+      // order matters!
+      attributeFormModel.forceClean();
+      attributeModel.forceClean();
+    }
+
     id: featurePanel
     visible: false
     modal: false
@@ -231,6 +237,7 @@ Drawer {
               }
 
             model: QgsQuick.AttributeFormModel {
+                id: attributeFormModel
                 attributeModel: QgsQuick.AttributeModel {
                     id: attributeModel
                 }
