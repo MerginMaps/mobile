@@ -240,6 +240,15 @@ Page {
               }
           }
 
+          // Help
+          PanelItem {
+             text: qsTr("Privacy Policy")
+             MouseArea {
+                 anchors.fill: parent
+                 onClicked: Qt.openUrlExternally(__inputHelp.privacyPolicyLink);
+             }
+          }
+
            // Debug/Logging
           PanelItem {
               text: qsTr("Diagnostic Log")
