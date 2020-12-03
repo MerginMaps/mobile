@@ -216,10 +216,17 @@ class MerginApi: public QObject
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * \param searchExpression Search filter on projects name.
      * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
-     * \param withFilter If true, applies "input" tag in request.
+     * \param filterTag .// TODO
      */
     Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),
                                    const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral() );
+
+    Q_INVOKABLE void fetchProjectList( const QString &searchExpression = QStringLiteral(),
+                                       const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+
+    Q_INVOKABLE void listProjectsPaginated( const QString &searchExpression = QStringLiteral(),
+                                            const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral() );
+
 
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
@@ -375,7 +382,7 @@ class MerginApi: public QObject
   signals:
     void apiSupportsSubscriptionsChanged();
 
-    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects );
+    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int requestedProjectCount = -1, bool isFirstPage = true );
     void listProjectsFailed();
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     /**
@@ -408,6 +415,7 @@ class MerginApi: public QObject
 
   private slots:
     void listProjectsReplyFinished();
+    void listProjectsPaginatedReplyFinished();
 
     // Pull slots
     void updateInfoReplyFinished();
@@ -430,6 +438,7 @@ class MerginApi: public QObject
 
   private:
     MerginProjectList parseListProjectsMetadata( const QByteArray &data );
+    MerginProjectList parseProjectJsonArray( const QJsonArray &vArray );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
@@ -556,6 +565,7 @@ class MerginApi: public QObject
 
     static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
+    const int PROJECT_PER_PAGE = 5; // TODO 50
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
 
     static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );

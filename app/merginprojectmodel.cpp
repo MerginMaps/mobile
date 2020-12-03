@@ -18,6 +18,8 @@ MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QOb
   QObject::connect( &mLocalProjects, &LocalProjectsManager::projectMetadataChanged, this, &MerginProjectModel::projectMetadataChanged );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
+
+  mAdditionalItem->status = Invalid;
 }
 
 QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
@@ -59,6 +61,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
           return QVariant( QStringLiteral( "noVersion" ) );
         case ProjectStatus::Modified:
           return QVariant( QStringLiteral( "modified" ) );
+        case ProjectStatus::Invalid:
+          return QVariant( QStringLiteral( "invalid" ) ); // TODO
       }
       break;
     }
@@ -96,10 +100,21 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects )
+void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, bool isFirstPage )
 {
   beginResetModel();
-  mMerginProjects.clear();
+  mMerginProjects.removeOne( mAdditionalItem );
+
+  if ( isFirstPage )
+  {
+    mMerginProjects.clear();
+    setLastPage( 1 );
+  }
+  else
+  {
+    setLastPage( lastPage() + 1 );
+  }
+
 
   for ( MerginProjectListEntry entry : merginProjects )
   {
@@ -129,6 +144,11 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects,
     mMerginProjects << project;
   }
 
+  if ( mMerginProjects.count() < expectedProjectCount )
+  {
+    mMerginProjects << mAdditionalItem;
+  }
+
   endResetModel();
 }
 
@@ -142,6 +162,28 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
     row++;
   }
   return -1;
+}
+
+void MerginProjectModel::setLastPage( int lastPage )
+{
+  mLastPage = lastPage;
+  emit lastPageChanged();
+}
+
+int MerginProjectModel::lastPage() const
+{
+  return mLastPage;
+}
+
+int MerginProjectModel::expectedProjectCount() const
+{
+  return mExpectedProjectCount;
+}
+
+void MerginProjectModel::setExpectedProjectCount( int expectedProjectCount )
+{
+  mExpectedProjectCount = expectedProjectCount;
+  emit expectedProjectCountChanged();
 }
 
 QString MerginProjectModel::searchExpression() const

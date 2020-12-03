@@ -49,6 +49,7 @@ QtObject {
     property real panelOpacity: 1
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
+    property real cornerRadius: 8 * QgsQuick.Utils.dp
 
     property real refWidth: 640
     property real refHeight: 1136

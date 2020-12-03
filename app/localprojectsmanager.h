@@ -18,7 +18,8 @@ enum ProjectStatus
   NoVersion,  //!< the project is not available locally
   UpToDate,   //!< both server and local copy are in sync with no extra modifications
   OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
-  Modified    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
+  Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
+  Invalid
 };
 Q_ENUMS( ProjectStatus )
 
