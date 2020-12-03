@@ -89,7 +89,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &fl
     query.addQueryItem( "flag", flag );
   }
   // Required query parameters
-  query.addQueryItem( "page", QString::number( page ) ); // TODO
+  query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/paginated" ) );

@@ -62,7 +62,7 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
         case ProjectStatus::Modified:
           return QVariant( QStringLiteral( "modified" ) );
         case ProjectStatus::Invalid:
-          return QVariant( QStringLiteral( "invalid" ) ); // TODO
+          return QVariant( QStringLiteral( "invalid" ) );
       }
       break;
     }

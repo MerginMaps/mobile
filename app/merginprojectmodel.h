@@ -70,11 +70,8 @@ class MerginProjectModel: public QAbstractListModel
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    //! Updates list of projects with synchronization progress if a project is pending
-    //!
     /**
-    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
-    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * Updates list of projects with synchronization progress if a project is pending.
     * \param merginProjects List of mergin projects
     * \param pendingProjects Projects in pending state
     * \param expectedProjectCount Total number of projects
