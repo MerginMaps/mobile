@@ -530,16 +530,17 @@ Item {
           }
 
           onDelegateButtonClicked: {
-            var flag = "explore"
+            var flag = ""
+            var searchText = ""
             if (toolbar.highlighted == myProjectsBtn.text) {
-              flag = "shared"
+              flag = "created"
             } else if (toolbar.highlighted == sharedProjectsBtn.text) {
                flag = "shared"
             } else if (toolbar.highlighted == exploreBtn.text) {
-              flag = "explore"
-           }
+              searchText = searchBar.text
+            }
 
-            __merginApi.fetchProjectList("", flag, "", __merginProjectsModel.lastPage + 1) // TODO
+            __merginApi.listProjects(searchText, flag, "", __merginProjectsModel.lastPage + 1)
           }
 
         }
@@ -609,7 +610,7 @@ Item {
                 toolbar.highlighted = myProjectsBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjectsPaginated("", "created")
+                __merginApi.listProjects("", "created")
               }
             }
           }
@@ -628,7 +629,7 @@ Item {
                 toolbar.highlighted = sharedProjectsBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjectsPaginated("", "shared")
+                __merginApi.listProjects("", "shared")
               }
             }
           }
@@ -647,7 +648,7 @@ Item {
                 toolbar.highlighted = exploreBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjectsPaginated( searchBar.text )
+                __merginApi.listProjects( searchBar.text )
               }
             }
           }
@@ -704,7 +705,7 @@ Item {
             onClicked: {
               stackView.pending = true
               // filters suppose to not change
-              __merginApi.listProjectsPaginated( searchBar.text )
+              __merginApi.listProjects( searchBar.text )
               reloadList.visible = false
             }
             background: Rectangle {

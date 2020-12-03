@@ -71,8 +71,16 @@ class MerginProjectModel: public QAbstractListModel
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     //! Updates list of projects with synchronization progress if a project is pending
-    //! @param isFirstPage If true clears current model, othewise merginProjects will be appended.
-    void updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, bool isFirstPage = true );
+    //!
+    /**
+    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
+    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * \param merginProjects List of mergin projects
+    * \param pendingProjects Projects in pending state
+    * \param expectedProjectCount Total number of projects
+    * \param page Int representing page.
+    */
+    void updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page );
 
     int filterCreator() const;
     void setFilterCreator( int filterCreator );
@@ -111,6 +119,7 @@ class MerginProjectModel: public QAbstractListModel
     QString mSearchExpression;
     int mExpectedProjectCount;
     int mLastPage;
+    //! Special item as a placeholder for custom component with extended funtionality
     std::shared_ptr<MerginProject> mAdditionalItem = std::make_shared<MerginProject>();
 
 };
