@@ -100,20 +100,16 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, bool isFirstPage )
+void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page )
 {
   beginResetModel();
   mMerginProjects.removeOne( mAdditionalItem );
 
-  if ( isFirstPage )
+  if ( page == 1 )
   {
     mMerginProjects.clear();
-    setLastPage( 1 );
   }
-  else
-  {
-    setLastPage( lastPage() + 1 );
-  }
+  setLastPage( page );
 
 
   for ( MerginProjectListEntry entry : merginProjects )

@@ -67,42 +67,7 @@ MerginUserInfo *MerginApi::userInfo() const
   return mUserInfo;
 }
 
-void MerginApi::listProjects( const QString &searchExpression,
-                              const QString &flag, const QString &filterTag )
-{
-
-  bool authorize = !flag.isEmpty();
-  if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
-  {
-    return;
-  }
-
-  QUrlQuery query;
-  if ( !filterTag.isEmpty() )
-  {
-    query.addQueryItem( "tags", filterTag );
-  }
-  if ( !searchExpression.isEmpty() )
-  {
-    query.addQueryItem( "q", searchExpression );
-  }
-  if ( !flag.isEmpty() )
-  {
-    query.addQueryItem( "flag", flag );
-  }
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project" ) );
-  url.setQuery( query );
-
-  // Even if the authorization is not required, it can be include to fetch more results
-  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
-  request.setUrl( url );
-
-  QNetworkReply *reply = mManager.get( request );
-  InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
-}
-
-void MerginApi::fetchProjectList( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
+void MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
 {
   bool authorize = !flag.isEmpty();
   if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
@@ -136,16 +101,8 @@ void MerginApi::fetchProjectList( const QString &searchExpression, const QString
 
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsPaginatedReplyFinished );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
 }
-
-void MerginApi::listProjectsPaginated( const QString &searchExpression,
-                                       const QString &flag, const QString &filterTag )
-{
-  // Always fetch first page
-  fetchProjectList( searchExpression, flag, filterTag, 1 );
-}
-
 
 void MerginApi::downloadNextItem( const QString &projectFullName )
 {
@@ -1209,44 +1166,6 @@ void MerginApi::listProjectsReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    QByteArray data = r->readAll();
-    mRemoteProjects = parseListProjectsMetadata( data );
-
-    // for any local projects we can update the latest server version
-    for ( MerginProjectListEntry project : mRemoteProjects )
-    {
-      QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );
-      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( fullProjectName );
-      if ( localProject.isValid() )
-      {
-        mLocalProjects.updateMerginServerVersion( localProject.projectDir, project.version );
-      }
-    }
-
-    InputUtils::log( "list projects", QStringLiteral( "Success - got %1 projects" ).arg( mRemoteProjects.count() ) );
-  }
-  else
-  {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjects" ), r->errorString(), serverMsg );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
-    InputUtils::log( "list projects", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mRemoteProjects.clear();
-
-    emit listProjectsFailed();
-  }
-
-  r->deleteLater();
-  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus );
-}
-
-void MerginApi::listProjectsPaginatedReplyFinished()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
   int projectCount = -1;
   int requestedPage = 1;
 
@@ -1269,8 +1188,6 @@ void MerginApi::listProjectsPaginatedReplyFinished()
       mRemoteProjects.clear();
     }
 
-    //mRemoteProjects = parseListProjectsMetadata( data );
-
     // for any local projects we can update the latest server version
     for ( MerginProjectListEntry project : mRemoteProjects )
     {
@@ -1296,7 +1213,7 @@ void MerginApi::listProjectsPaginatedReplyFinished()
   }
 
   r->deleteLater();
-  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage == 1 );
+  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage );
 }
 
 
