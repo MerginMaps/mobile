@@ -413,6 +413,7 @@ Item {
 
       Component {
         id: delegateItem
+
         ProjectDelegateItem {
           id: delegateItemContent
           cellWidth: projectsPanel.width
@@ -493,6 +494,7 @@ Item {
 
       Component {
         id: delegateItemMergin
+
         ProjectDelegateItem {
           cellWidth: projectsPanel.width
           cellHeight: projectsPanel.rowHeight
@@ -504,6 +506,7 @@ Item {
           iconSize: projectsPanel.iconSize
           projectFullName: __merginApi.getFullProjectName(projectNamespace, projectName)
           progressValue: syncProgress
+          isAdditional: status === "invalid"
 
           onMenuClicked: {
             if (status === "upToDate") return
@@ -524,6 +527,19 @@ Item {
             } else if (status === "modified") {
               __merginApi.uploadProject(projectNamespace, projectName)
             }
+          }
+
+          onDelegateButtonClicked: {
+            var flag = "explore"
+            if (toolbar.highlighted == myProjectsBtn.text) {
+              flag = "shared"
+            } else if (toolbar.highlighted == sharedProjectsBtn.text) {
+               flag = "shared"
+            } else if (toolbar.highlighted == exploreBtn.text) {
+              flag = "explore"
+           }
+
+            __merginApi.fetchProjectList("", flag, "", __merginProjectsModel.lastPage + 1) // TODO
           }
 
         }
@@ -593,7 +609,7 @@ Item {
                 toolbar.highlighted = myProjectsBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjects("", "created")
+                __merginApi.listProjectsPaginated("", "created")
               }
             }
           }
@@ -612,7 +628,7 @@ Item {
                 toolbar.highlighted = sharedProjectsBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjects("", "shared")
+                __merginApi.listProjectsPaginated("", "shared")
               }
             }
           }
@@ -631,7 +647,7 @@ Item {
                 toolbar.highlighted = exploreBtn.text
                 stackView.pending = true
                 showMergin = true
-                __merginApi.listProjects( searchBar.text )
+                __merginApi.listProjectsPaginated( searchBar.text )
               }
             }
           }
@@ -688,7 +704,7 @@ Item {
             onClicked: {
               stackView.pending = true
               // filters suppose to not change
-              __merginApi.listProjects( searchBar.text )
+              __merginApi.listProjectsPaginated( searchBar.text )
               reloadList.visible = false
             }
             background: Rectangle {

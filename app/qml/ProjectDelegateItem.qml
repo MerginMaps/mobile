@@ -14,6 +14,7 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 
 Rectangle {
     id: itemContainer
@@ -32,9 +33,12 @@ Rectangle {
     property bool disabled: false
     property real itemMargin: InputStyle.panelMargin
     property real progressValue: 0
+    property bool isAdditional: false
+
 
     signal itemClicked();
     signal menuClicked()
+    signal delegateButtonClicked()
 
     MouseArea {
         anchors.fill: parent
@@ -52,6 +56,7 @@ Rectangle {
     Item {
         width: parent.width
         height: parent.height
+        visible: !itemContainer.isAdditional
 
         RowLayout {
             id: row
@@ -160,4 +165,15 @@ Rectangle {
             anchors.bottom: parent.bottom
         }
     }
+
+    // Additional item
+    DelegateButton {
+      visible: itemContainer.isAdditional
+      width: itemContainer.width
+      height: itemContainer.height
+      text: qsTr("Fetch more")
+
+      onClicked: itemContainer.delegateButtonClicked()
+    }
+
 }

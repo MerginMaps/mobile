@@ -43,6 +43,8 @@ class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
+    Q_PROPERTY( int expectedProjectCount READ expectedProjectCount NOTIFY expectedProjectCountChanged )
+    Q_PROPERTY( int lastPage READ lastPage NOTIFY lastPageChanged )
 
   public:
     enum Roles
@@ -69,7 +71,8 @@ class MerginProjectModel: public QAbstractListModel
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     //! Updates list of projects with synchronization progress if a project is pending
-    void resetProjects( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects );
+    //! @param isFirstPage If true clears current model, othewise merginProjects will be appended.
+    void updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, bool isFirstPage = true );
 
     int filterCreator() const;
     void setFilterCreator( int filterCreator );
@@ -79,6 +82,16 @@ class MerginProjectModel: public QAbstractListModel
 
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
+
+    int expectedProjectCount() const;
+    void setExpectedProjectCount( int expectedProjectCount );
+
+    int lastPage() const;
+    void setLastPage( int lastPage );
+
+  signals:
+    void expectedProjectCountChanged();
+    void lastPageChanged();
 
   public slots:
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
@@ -96,6 +109,9 @@ class MerginProjectModel: public QAbstractListModel
     ProjectList mMerginProjects;
     LocalProjectsManager &mLocalProjects;
     QString mSearchExpression;
+    int mExpectedProjectCount;
+    int mLastPage;
+    std::shared_ptr<MerginProject> mAdditionalItem = std::make_shared<MerginProject>();
 
 };
 #endif // MERGINPROJECTMODEL_H
