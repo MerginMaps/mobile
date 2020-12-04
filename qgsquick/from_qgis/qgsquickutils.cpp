@@ -68,9 +68,22 @@ QgsPointXY QgsQuickUtils::transformPoint( const QgsCoordinateReferenceSystem &sr
     const QgsCoordinateTransformContext &context,
     const QgsPointXY &srcPoint )
 {
-  QgsCoordinateTransform mTransform( srcCrs, destCrs, context );
-  QgsPointXY pt = mTransform.transform( srcPoint );
-  return pt;
+  try
+  {
+    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    if ( ct.isValid() )
+    {
+      const QgsPointXY pt = ct.transform( srcPoint );
+      return pt;
+    } else {
+      logMessage( QObject::tr( "Invalid transform" ) );
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    logMessage( QObject::tr( "Transform error caught: %1" ).arg( cse.what() ) );
+  }
+  return srcPoint;
 }
 
 double QgsQuickUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
