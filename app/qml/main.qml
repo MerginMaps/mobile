@@ -179,7 +179,7 @@ ApplicationWindow {
     }
 
     function showDialog(message) {
-      alertDialog.text  = qsTr(message)
+      alertDialog.text  = message
       alertDialog.open()
     }
 
@@ -657,6 +657,15 @@ ApplicationWindow {
           if (projectFullName === currentProjectFullName) {
             mapCanvas.mapSettings.extentChanged()
           }
+        }
+    }
+
+    Connections {
+        target: __inputProjUtils
+        onProjError: {
+          var msg = message + "<br/>"
+          msg += qsTr("See how to setup custom %1PROJ resources%2").arg("<a href=\"" + __inputHelp.howToSetupProj + "\">").arg("</a>")
+          showDialog(msg)
         }
     }
 

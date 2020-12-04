@@ -66,6 +66,11 @@ QString InputHelp::howToDownloadProjectLink() const
   return inputHelpRoot + "/howto/data_sync";
 }
 
+QString InputHelp::howToSetupProj() const
+{
+  return inputHelpRoot + "/howto/proj";
+}
+
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;

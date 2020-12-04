@@ -91,6 +91,11 @@ macx:!android {
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
 
+    # Proj
+    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
+    LIBS += -L$${PROJ_LIB_DIR}
+    LIBS += -lproj
+
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
     # Uncomment this like to test the real in-app purchases on MacOS

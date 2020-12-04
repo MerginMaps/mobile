@@ -77,6 +77,9 @@ class InputUtils: public QObject
      */
     static QString downloadInProgressFilePath( const QString &projectDir );
 
+    /**
+     * Shows notification
+     */
     Q_INVOKABLE void showNotification( const QString &message );
 
     /**

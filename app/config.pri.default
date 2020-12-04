@@ -20,6 +20,9 @@ android {
 
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 unix:!macx:!android {
@@ -34,6 +37,12 @@ unix:!macx:!android {
   QGSQUICK_BUILD_DIR = $$(BASE_DIR)/build-QgsQuick-Desktop
 
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
+
+  GEODIFF_INCLUDE_DIR = $${BASE_DIR}/include
+  GEODIFF_LIB_DIR = $${BASE_DIR}/lib
+
+  PROJ_INCLUDE_DIR = $${BASE_DIR}/include
+  PROJ_LIB_DIR = $${BASE_DIR}/lib
 }
 
 macx:!android {
@@ -50,6 +59,9 @@ macx:!android {
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/Applications/include
   GEODIFF_LIB_DIR = $${BASE_DIR}/Applications/lib
+
+  PROJ_INCLUDE_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/include
+  PROJ_LIB_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/lib
 }
 
 ios {
@@ -59,6 +71,8 @@ ios {
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 win32 {
@@ -67,4 +81,6 @@ win32 {
   QGIS_QUICK_DATA_PATH = C:/input-data
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/include
   GEODIFF_LIB_DIR = $${BASE_DIR}/lib
+  PROJ_INCLUDE_DIR = $${BASE_DIR}/include
+  PROJ_LIB_DIR = $${BASE_DIR}/lib
 }

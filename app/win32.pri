@@ -47,6 +47,11 @@ win32 {
   LIBS += -L$${GEODIFF_LIB_DIR}
   LIBS += -lgeodiff
 
+  # Proj
+  INCLUDEPATH += $${PROJ_INCLUDE_DIR}
+  LIBS += -L$${PROJ_LIB_DIR}
+  LIBS += -lproj
+
   QT += printsupport
 
   CONFIG += c++11

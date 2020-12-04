@@ -8,6 +8,9 @@ android {
   # we try to use it as /sdcard/path and if not writable, use /storage/emulated/0/path (user home path)
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 win32 {
@@ -16,6 +19,8 @@ win32 {
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 ios {
@@ -25,14 +30,18 @@ ios {
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 macx:!android {
   QGIS_INSTALL_PATH = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac
   QGSQUICK_INSTALL_PATH = /Users/runner/work/input/input/install-QgsQuick
   QGIS_QUICK_DATA_PATH = /Users/runner/work/input/input/input/app/android/assets/qgis-data
-  GEODIFF_INCLUDE_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/include
-  GEODIFF_LIB_DIR = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac/lib
+  GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 
   # also setup coverall for macos build
   # --coverage option is synonym for: -fprofile-arcs -ftest-coverage -lgcov

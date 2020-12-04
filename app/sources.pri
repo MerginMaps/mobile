@@ -27,6 +27,7 @@ purchasing.cpp \
 variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
+inputprojutils.cpp \
 
 exists(merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")
@@ -64,6 +65,7 @@ purchasing.h \
 variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
+inputprojutils.h \
 
 contains(DEFINES, INPUT_TEST) {
 

@@ -75,7 +75,9 @@ QgsPointXY QgsQuickUtils::transformPoint( const QgsCoordinateReferenceSystem &sr
     {
       const QgsPointXY pt = ct.transform( srcPoint );
       return pt;
-    } else {
+    }
+    else
+    {
       logMessage( QObject::tr( "Invalid transform" ) );
     }
   }

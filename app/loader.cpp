@@ -78,7 +78,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
-    emit projectWillBeReloaded();
+    emit projectWillBeReloaded( QString() );
     mProject->clear();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
     emit projectReloaded( mProject );
@@ -101,7 +101,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   bool res = true;
   if ( mProject->fileName() != filePath || force )
   {
-    emit projectWillBeReloaded();
+    emit projectWillBeReloaded( filePath );
     res = mProject->read( filePath );
     mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mProject );
