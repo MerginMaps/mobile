@@ -50,6 +50,7 @@
 #include "variablesmanager.h"
 #include "inputhelp.h"
 #include "inputprojutils.h"
+#include "fieldsmodel.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -366,6 +367,7 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   InputHelp help( ma.get(), &iu );
+  FieldsModel fm;
 
   // layer models
   LayersModel lm;
@@ -481,6 +483,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
+  engine.rootContext()->setContextProperty( "__fieldsModel", &fm );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

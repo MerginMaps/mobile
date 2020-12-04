@@ -1,4 +1,5 @@
 SOURCES += \
+  $$PWD/fieldsmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 layersmodel.cpp \
@@ -38,6 +39,7 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
+  $$PWD/fieldsmodel.h \
 inputhelp.h \
 activelayer.h \
 layersmodel.h \

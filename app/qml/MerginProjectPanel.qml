@@ -276,6 +276,18 @@ Item {
         }
       }
 
+      // Temp button
+      Button {
+        id: projectWizardBtn
+        width: 100
+        height: 100
+        text: "Magic"
+        onClicked: {
+          //projectWizzardPanel
+          stackView.push(projectWizardComp)
+        }
+      }
+
       // Content
       ColumnLayout {
         id: contentLayout
@@ -870,6 +882,19 @@ Item {
         stackView.popOnePageOrClose()
       }
       onSubscribeClicked: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
+
+  Component {
+    id: projectWizardComp
+
+    ProjectWizardPage {
+      id: projectWizardPanel
+      height: projectsPanel.height
+      width: projectsPanel.width
+      onBackClicked: {
         stackView.popOnePageOrClose()
       }
     }
