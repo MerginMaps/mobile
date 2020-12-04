@@ -158,18 +158,14 @@ void InputProjUtils::initProjLib( const QString &pkgPath )
   {
     InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
   }
-  QStringList paths = {prefixPath};
-
 #else
-  // proj share lib is set from the proj installation on the desktop,
-  // so it should work without any modifications.
-  // to test check QgsProjUtils.searchPaths() in QGIS Python Console
-  QStringList paths = QgsProjUtils::searchPaths();
+  // Linux/MacOS, use bundled proj files
   QString prefixPath = pkgPath + "/proj";
 #endif
 
+  QStringList paths = {prefixPath};
   mCurrentCustomProjDir = prefixPath + "_custom";
-  qDebug() << "InputPROJ: Default Search Paths" << paths;
+  qDebug() << "InputPROJ: Input Search Paths" << paths;
   qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
 
   cleanCustomDir();
