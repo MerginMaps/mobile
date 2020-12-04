@@ -37,27 +37,25 @@ class InputProjUtils: public QObject
      */
     void modifyProjPath( const QString &projectFile );
 
-    /**
-     * Stores the default proj search paths. Should be called after qgis application is initialized
-     */
-    void setDefaultProjPaths();
-
   signals:
     //! Emitted where there is any error with transformations
     void projError( const QString &message );
 
   private:
     void warnUser( const QString &message );
+    void logUser( const QString &message, bool &variable );
+
+    void cleanCustomDir();
     void initCoordinateOperationHandlers();
 
     bool mPopUpShown = false;
+
     bool mMissingRequiredGridReported = false;
     bool mMissingPreferredGridReported = false;
     bool mCoordinateOperationCreationErrorReported = false;
     bool mMissingGridUsedByContextHandlerReported = false;
     bool mFallbackOperationOccurredReported = false;
 
-    QStringList sDefaultProjPaths;
     QString mCurrentCustomProjDir;
 };
 

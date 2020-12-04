@@ -76,14 +76,10 @@ QgsPointXY QgsQuickUtils::transformPoint( const QgsCoordinateReferenceSystem &sr
       const QgsPointXY pt = ct.transform( srcPoint );
       return pt;
     }
-    else
-    {
-      logMessage( QObject::tr( "Invalid transform" ) );
-    }
   }
   catch ( QgsCsException &cse )
   {
-    logMessage( QObject::tr( "Transform error caught: %1" ).arg( cse.what() ) );
+    Q_UNUSED( cse )
   }
   return srcPoint;
 }

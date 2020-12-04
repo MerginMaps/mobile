@@ -33,6 +33,7 @@ class InputUtils: public QObject
 
     Q_INVOKABLE bool removeFile( const QString &filePath );
     Q_INVOKABLE bool copyFile( const QString &srcPath, const QString &dstPath );
+
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
 

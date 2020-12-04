@@ -323,8 +323,12 @@ int main( int argc, char *argv[] )
   setEnvironmentQgisPrefixPath();
 
   QString appBundleDir;
+<<<<<<< HEAD
   QString demoDir;
 
+=======
+#ifdef MOBILE_OS
+>>>>>>> ba199d5... fix loading of the files
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
   demoDir = "assets:/demo-projects";
@@ -337,12 +341,18 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
   //TODO win32 package demo projects
 #endif
+#else
+  appBundleDir = dataDir;
+#endif
 
   InputProjUtils inputProjUtils;
   inputProjUtils.initProjLib( appBundleDir );
   init_qgis( appBundleDir );
+<<<<<<< HEAD
   copy_demo_projects( demoDir, projectDir );
   inputProjUtils.setDefaultProjPaths();
+=======
+>>>>>>> ba199d5... fix loading of the files
 
   // Create Input classes
   AndroidUtils au;

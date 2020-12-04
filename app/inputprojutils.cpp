@@ -24,6 +24,115 @@ InputProjUtils::InputProjUtils( QObject *parent )
   initCoordinateOperationHandlers();
 }
 
+void InputProjUtils::warnUser( const QString &message )
+{
+  if ( !mPopUpShown )
+  {
+    emit projError( message );
+  }
+}
+
+void InputProjUtils::logUser( const QString &message, bool &variable )
+{
+  if ( !variable )
+  {
+    InputUtils::log( "InputPROJ", message );
+    variable = true;
+  }
+}
+
+void InputProjUtils::cleanCustomDir()
+{
+  QDir dir( mCurrentCustomProjDir );
+  if ( !dir.isEmpty() )
+  {
+    qDebug() << "InputPROJ: cleaning custom proj dir " << mCurrentCustomProjDir;
+    dir.removeRecursively();
+  }
+}
+
+static QStringList detailsToStr( const QgsDatumTransform::TransformDetails &details )
+{
+  QStringList messages;
+  for ( const QgsDatumTransform::GridDetails &grid : details.grids )
+  {
+    if ( !grid.isAvailable )
+    {
+      messages.append( grid.shortName );
+    }
+  }
+  return messages;
+}
+
+void InputProjUtils::initCoordinateOperationHandlers()
+{
+  QgsCoordinateTransform::setCustomMissingRequiredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::GridDetails & grid )
+  {
+    Q_UNUSED( destinationCrs )
+    Q_UNUSED( sourceCrs )
+    logUser( QStringLiteral( "missing required grid: %1" ).arg( grid.shortName ), mMissingRequiredGridReported );
+    warnUser( tr( "Missing required PROJ datum shift grid: %1." ).arg( grid.shortName ) );
+  } );
+
+  QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::TransformDetails & preferredOperation,
+      const QgsDatumTransform::TransformDetails & availableOperation )
+  {
+    Q_UNUSED( destinationCrs )
+    Q_UNUSED( sourceCrs )
+    Q_UNUSED( availableOperation )
+    logUser( QStringLiteral( "missing preffered grid: %1" ).arg( detailsToStr( preferredOperation ).join( ";" ) ), mMissingPreferredGridReported );
+  } );
+
+  QgsCoordinateTransform::setCustomCoordinateOperationCreationErrorHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QString & error )
+  {
+    Q_UNUSED( destinationCrs )
+    Q_UNUSED( sourceCrs )
+    logUser( QStringLiteral( "coordinate operation creation error: %1" ).arg( error ), mCoordinateOperationCreationErrorReported );
+    warnUser( tr( "Error creating custom PROJ operation." ) );
+  } );
+
+  QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::TransformDetails & desired )
+  {
+    Q_UNUSED( destinationCrs )
+    Q_UNUSED( sourceCrs )
+    logUser( QStringLiteral( "custom missing grid used by context handler %1" ).arg( detailsToStr( desired ).join( ";" ) ), mMissingGridUsedByContextHandlerReported );
+    warnUser( tr( "Missing required PROJ datum shift grids: %1" ).arg( detailsToStr( desired ).join( "<br>" ) ) );
+  } );
+
+  QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QString & desired )
+  {
+    Q_UNUSED( destinationCrs )
+    Q_UNUSED( sourceCrs )
+    logUser( QStringLiteral( "fallbackOperationOccurredReported: %1" ).arg( desired ), mFallbackOperationOccurredReported );
+  } );
+}
+
+static void _updateProj( const QStringList &searchPaths )
+{
+  char **newPaths = new char *[searchPaths.count()];
+  for ( int i = 0; i < searchPaths.count(); ++i )
+  {
+    newPaths[i] = strdup( searchPaths.at( i ).toUtf8().constData() );
+  }
+  proj_context_set_search_paths( nullptr, searchPaths.count(), newPaths );
+  for ( int i = 0; i < searchPaths.count(); ++i )
+  {
+    free( newPaths[i] );
+  }
+  delete [] newPaths;
+}
+
+
 void InputProjUtils::initProjLib( const QString &pkgPath )
 {
 #ifdef MOBILE_OS
@@ -43,119 +152,32 @@ void InputProjUtils::initProjLib( const QString &pkgPath )
   QString prefixPath = pkgPath + "\\proj";
   QString projFilePath = prefixPath + "\\proj.db";
 #endif
+
   QFile projdb( projFilePath );
-  if ( projdb.exists() )
-  {
-    qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
-    qDebug() << "PROJ_LIB environment variable" << prefixPath;
-  }
-  else
+  if ( !projdb.exists() )
   {
     InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
   }
+  QStringList paths = {prefixPath};
 
 #else
   // proj share lib is set from the proj installation on the desktop,
   // so it should work without any modifications.
   // to test check QgsProjUtils.searchPaths() in QGIS Python Console
-  Q_UNUSED( pkgPath )
+  QStringList paths = QgsProjUtils::searchPaths();
+  QString prefixPath = pkgPath + "/proj";
 #endif
+
+  mCurrentCustomProjDir = prefixPath + "_custom";
+  qDebug() << "InputPROJ: Default Search Paths" << paths;
+  qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
+
+  cleanCustomDir();
+
+  paths.append( mCurrentCustomProjDir );
+  _updateProj( paths );
 }
 
-void InputProjUtils::setDefaultProjPaths()
-{
-  sDefaultProjPaths = QgsProjUtils::searchPaths();
-  qDebug() << "PROJ DEFAULT search paths" << sDefaultProjPaths;
-}
-
-void InputProjUtils::warnUser( const QString &message )
-{
-  if ( !mPopUpShown )
-  {
-    emit projError( message );
-  }
-}
-
-void InputProjUtils::initCoordinateOperationHandlers()
-{
-  QgsCoordinateTransform::setCustomMissingRequiredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::GridDetails & grid )
-  {
-    Q_UNUSED( destinationCrs )
-    Q_UNUSED( sourceCrs )
-
-    if ( !mMissingRequiredGridReported )
-      InputUtils::log( "InputProj", QStringLiteral( "missingRequiredGrid %1" ).arg( grid.shortName ) );
-    warnUser( tr( "Missing required PROJ datum shift grid: %1" ).arg( grid.shortName ) );
-  } );
-
-  QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::TransformDetails & preferredOperation,
-      const QgsDatumTransform::TransformDetails & availableOperation )
-  {
-    Q_UNUSED( destinationCrs )
-    Q_UNUSED( sourceCrs )
-    Q_UNUSED( preferredOperation )
-    Q_UNUSED( availableOperation )
-
-    if ( !mMissingPreferredGridReported )
-      InputUtils::log( "InputProj", QStringLiteral( "missingPrefferedGrid" ) );
-  } );
-
-  QgsCoordinateTransform::setCustomCoordinateOperationCreationErrorHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QString & error )
-  {
-    Q_UNUSED( destinationCrs )
-    Q_UNUSED( sourceCrs )
-
-    if ( !mCoordinateOperationCreationErrorReported )
-      InputUtils::log( "InputProj", QStringLiteral( "coordinateOperationCreationError: %1" ).arg( error ) );
-  } );
-
-  QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::TransformDetails & desired )
-  {
-    Q_UNUSED( destinationCrs )
-    Q_UNUSED( sourceCrs )
-    Q_UNUSED( desired )
-
-    if ( !mMissingGridUsedByContextHandlerReported )
-      InputUtils::log( "InputProj", QStringLiteral( "customMissingGridUsedByContextHandler %1" ) );
-    warnUser( tr( "Missing required PROJ datum shift grid" ) );
-
-  } );
-
-  QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QString & desired )
-  {
-    Q_UNUSED( destinationCrs )
-    Q_UNUSED( sourceCrs )
-    Q_UNUSED( desired )
-
-    if ( !mFallbackOperationOccurredReported )
-      InputUtils::log( "InputProj", QStringLiteral( "fallbackOperationOccurredReported" ) );
-  } );
-}
-
-static void _updateProj( const QStringList &searchPaths )
-{
-  char **newPaths = new char *[searchPaths.count()];
-  for ( int i = 0; i < searchPaths.count(); ++i )
-  {
-    newPaths[i] = strdup( searchPaths.at( i ).toUtf8().constData() );
-  }
-  proj_context_set_search_paths( nullptr, searchPaths.count(), newPaths );
-  for ( int i = 0; i < searchPaths.count(); ++i )
-  {
-    free( newPaths[i] );
-  }
-  delete [] newPaths;
-}
 
 void InputProjUtils::modifyProjPath( const QString &projectFile )
 {
@@ -166,26 +188,23 @@ void InputProjUtils::modifyProjPath( const QString &projectFile )
   mMissingGridUsedByContextHandlerReported = false;
   mFallbackOperationOccurredReported = false;
 
-  if ( projectFile.isEmpty() )
-  {
-    _updateProj( sDefaultProjPaths );
-    mCurrentCustomProjDir = QString();
-  }
-  else
+  // DO NOT remove all files here
+  // it would fail this situation
+  // project A => uses grid G
+  // switch to project B => do not use any grids
+  // switch back to project A => QGIS from proj's context raises setCustomMissingGridUsedByContextHandler
+
+  if ( !projectFile.isEmpty() )
   {
     QFileInfo fi( projectFile );
     QDir projDir( fi.absoluteDir().absolutePath() + "/proj" );
-    mCurrentCustomProjDir = projDir.absolutePath();
-    if ( projDir.isReadable() && !projDir.isEmpty() && !sDefaultProjPaths.contains( projectFile ) )
+    if ( projDir.isReadable() && !projDir.isEmpty() )
     {
-      qDebug() << "PROJ6 using custom resource folder: " << projDir.absolutePath();
+      bool success = InputUtils::cpDir( projDir.absolutePath(), mCurrentCustomProjDir );
+      if ( success )
+        qDebug() << "InputPROJ: updated custom proj dir with" << projDir.absolutePath();
+      else
+        qDebug() << "InputPROJ: failed to update custom proj dir with" << projDir.absolutePath();
     }
-    else
-    {
-      qDebug() << "PROJ6 missing custom resource folder: " << projDir.absolutePath();
-    }
-    QStringList searchPaths( sDefaultProjPaths );
-    searchPaths.append( mCurrentCustomProjDir );
-    _updateProj( searchPaths );
   }
 }
