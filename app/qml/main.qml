@@ -178,10 +178,14 @@ ApplicationWindow {
         }
     }
 
-    function showDialog(title, message) {
+    function showDialog(message) {
       alertDialog.text  = message
-      alertDialog.title = title
       alertDialog.open()
+    }
+
+    function showProjError(message) {
+      projDialog.text  = message
+      projDialog.open()
     }
 
     function updateRecordToolbar()
@@ -636,14 +640,22 @@ ApplicationWindow {
     MessageDialog {
         id: alertDialog
         onAccepted: alertDialog.close()
-        onLinkActivated: Qt.openUrlExternally(link)
+        title: qsTr("Communication error")
+    }
+
+    MessageDialog {
+        id: projDialog
+        onAccepted: projDialog.close()
+        title: qsTr("PROJ Error")
+        standardButtons: StandardButton.Ignore |StandardButton.Help
+        onHelp: Qt.openUrlExternally(__inputHelp.howToSetupProj)
     }
 
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
             var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
-            showAsDialog ? showDialog(qsTr("Communication error"), msg) : showMessage(msg)
+            showAsDialog ? showDialog(msg) : showMessage(msg)
         }
         onNotify: {
             showMessage(message)
@@ -664,9 +676,7 @@ ApplicationWindow {
     Connections {
         target: __inputProjUtils
         onProjError: {
-          var msg = message + "<br/>"
-          msg += qsTr("See how to %1add grids%2").arg("<a href=\"" + __inputHelp.howToSetupProj + "\">").arg("</a>")
-          showDialog(qsTr("PROJ Error"), msg)
+          showProjError(message)
         }
     }
 
