@@ -557,15 +557,15 @@ int main( int argc, char *argv[] )
   }
   catch ( QgsException &e )
   {
-    iu.log("Error", QStringLiteral("Caught unhandled QgsException %1").arg(e.what()) );
+    iu.log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
   }
   catch ( std::exception &e )
   {
-    iu.log("Error", QStringLiteral("Caught unhandled std::exception %1").arg(e.what()) );
+    iu.log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
   }
   catch ( ... )
   {
-    iu.log("Error", QStringLiteral("Caught unhandled unknown exception") );
+    iu.log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
   }
   return ret;
 }
