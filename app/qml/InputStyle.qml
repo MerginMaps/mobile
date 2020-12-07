@@ -30,6 +30,7 @@ QtObject {
     property color softRed: "#FC9FB1"
     property color softOrange: "#FDD7B1"
     property color softGreen: "#32AA3A"
+    property color softGrey: panelBackground2
 
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 

@@ -165,6 +165,7 @@ ApplicationWindow {
     }
 
     function getGpsIndicatorColor() {
+        if (!__appSettings.enableLocationChecked) return InputStyle.softGrey
         if (positionKit.accuracy <= 0) return InputStyle.softRed
         return positionKit.accuracy < __appSettings.gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
     }
@@ -386,14 +387,15 @@ ApplicationWindow {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
-
       onScreenPositionChanged: updatePosition()
+      enabled: __appSettings.enableLocationChecked
     }
 
     PositionMarker {
       id: positionMarker
       positionKit: positionKit
       z: zMapCanvas + 2
+      visible: __appSettings.enableLocationChecked
     }
 
     DigitizingController {
@@ -431,8 +433,12 @@ ApplicationWindow {
         onOpenProjectClicked: openProjectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: {
-          mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
-          digitizing.useGpsPoint = true
+          if (!__appSettings.enableLocationChecked) {
+            __appSettings.enableLocationChecked = true;
+          } else {
+            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+            digitizing.useGpsPoint = true
+          }
         }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked

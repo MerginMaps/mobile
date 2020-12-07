@@ -29,6 +29,7 @@ class AndroidUtils: public QObject
     explicit AndroidUtils( QObject *parent = nullptr );
 
     bool isAndroid() const;
+    static bool hasLocationPermission();
     static void requirePermissions();
     static bool checkAndAcquirePermissions( const QString &permissionString );
 
@@ -50,10 +51,6 @@ class AndroidUtils: public QObject
 
   public slots:
     void showToast( QString message );
-
-  private:
-    bool mIsAndroid;
-
 };
 
 #endif // ANDROIDUTILS_H

@@ -21,6 +21,7 @@ class AppSettings: public QObject
     Q_PROPERTY( QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged )
     Q_PROPERTY( QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged )
     Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
+    Q_PROPERTY( bool enableLocationChecked READ enableLocationChecked WRITE setEnableLocationChecked NOTIFY enableLocationCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
 
@@ -47,6 +48,9 @@ class AppSettings: public QObject
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
 
+    bool enableLocationChecked() const;
+    void setEnableLocationChecked( bool enableLocationChecked );
+
   signals:
     void defaultProjectChanged();
     void activeProjectChanged();
@@ -54,6 +58,7 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
+    void enableLocationCheckedChanged();
 
   private:
     // Projects path
@@ -62,6 +67,8 @@ class AppSettings: public QObject
     QString mActiveProject;
     // flag for following GPS position
     bool mAutoCenterMapChecked = false;
+    // flag for switching on/off location services
+    bool mEnableLocationChecked = false;
     // used in GPS signal indicator
     int mGpsAccuracyTolerance = -1;
     // Digitizing period in seconds

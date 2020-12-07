@@ -34,7 +34,7 @@ QgsQuickPositionKit::QgsQuickPositionKit( QObject *parent )
   useGpsLocation();
 }
 
-QGeoPositionInfoSource  *QgsQuickPositionKit::gpsSource()
+QGeoPositionInfoSource *QgsQuickPositionKit::gpsSource()
 {
   // this should give us "true" position source
   // on Linux it comes from Geoclue library
@@ -59,9 +59,37 @@ QGeoPositionInfoSource  *QgsQuickPositionKit::simulatedSource( double longitude,
   return new QgsQuickSimulatedPositionSource( this, longitude, latitude, radius );
 }
 
-QGeoPositionInfoSource *QgsQuickPositionKit::source() const
+bool QgsQuickPositionKit::isEnabled() const
 {
-  return mSource.get();
+  return mIsEnabled;
+}
+
+void QgsQuickPositionKit::setIsEnabled( bool isEnabled )
+{
+  qDebug() << "position" << ( mSource.get() ) << isEnabled << mIsEnabled;
+  if ( mSource )
+  {
+    if ( isEnabled )
+    {
+      mSource->startUpdates();
+      QgsDebugMsg( QStringLiteral( "Started position updates" ) );
+    }
+    else
+    {
+      mSource->stopUpdates();
+      QgsDebugMsg( QStringLiteral( "Stopped position updates" ) );
+    }
+  }
+  else
+  {
+    QgsDebugMsg( QStringLiteral( "Invalid position source: %1" ).arg( isEnabled ) );
+  }
+
+  if ( mIsEnabled != isEnabled )
+  {
+    mIsEnabled = isEnabled;
+    emit isEnabledChanged();
+  }
 }
 
 void QgsQuickPositionKit::useSimulatedLocation( double longitude, double latitude, double radius )
@@ -121,9 +149,6 @@ void QgsQuickPositionKit::replacePositionSource( QGeoPositionInfoSource *source 
   {
     connect( mSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &QgsQuickPositionKit::onPositionUpdated );
     connect( mSource.get(), &QGeoPositionInfoSource::updateTimeout, this,  &QgsQuickPositionKit::onUpdateTimeout );
-
-    mSource->startUpdates();
-
     QgsDebugMsg( QStringLiteral( "Position source changed: %1" ).arg( mSource->sourceName() ) );
   }
 }
@@ -236,6 +261,7 @@ void QgsQuickPositionKit::onSimulatePositionLongLatRadChanged( QVector<double> s
   }
 }
 
+
 double QgsQuickPositionKit::calculateScreenAccuracy()
 {
   if ( !mMapSettings )
@@ -269,6 +295,14 @@ QPointF QgsQuickPositionKit::screenPosition() const
 double QgsQuickPositionKit::screenAccuracy() const
 {
   return mScreenAccuracy;
+}
+
+QGeoPositionInfo QgsQuickPositionKit::lastKnownPosition( bool fromSatellitePositioningMethodsOnly ) const
+{
+  if ( mIsEnabled && mSource )
+    return mSource->lastKnownPosition( fromSatellitePositioningMethodsOnly );
+  else
+    return QGeoPositionInfo();
 }
 
 QVector<double> QgsQuickPositionKit::simulatePositionLongLatRad() const

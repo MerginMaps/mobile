@@ -318,17 +318,14 @@ void Loader::appStateChanged( Qt::ApplicationState state )
   logHelper << "Application changed state to: " << state;
   InputUtils::log( "Input", msg );
 
+  /* PP: not sure if this is required, if application is
+     deactivated, the QT event loop is disabled
   if ( !mRecording && mPositionKit )
   {
-    if ( state == Qt::ApplicationActive )
-    {
-      mPositionKit->source()->startUpdates();
-    }
-    else
-    {
-      mPositionKit->source()->stopUpdates();
-    }
+    bool enabled = (state == Qt::ApplicationActive);
+    mPositionKit->setIsEnabled(enabled);
   }
+  */
 }
 
 void Loader::appAboutToQuit()
