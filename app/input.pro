@@ -24,5 +24,3 @@ CONFIG(debug, debug|release) {
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGSQUICK_QML_DIR}
-
-ANDROID_ABIS = arm64-v8a

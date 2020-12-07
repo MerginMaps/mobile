@@ -140,11 +140,11 @@ void QgsQuickPositionKit::updateProjectedPosition()
 
   QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
   QgsPointXY projectedPositionXY = QgsQuickUtils::transformPoint(
-    positionCRS(),
-    mMapSettings->destinationCrs(),
-    mMapSettings->transformContext(),
-    srcPoint
-  );
+                                     positionCRS(),
+                                     mMapSettings->destinationCrs(),
+                                     mMapSettings->transformContext(),
+                                     srcPoint
+                                   );
 
   QgsPoint projectedPosition( projectedPositionXY );
   projectedPosition.addZValue( mPosition.z() );
