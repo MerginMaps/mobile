@@ -28,6 +28,7 @@ void InputProjUtils::warnUser( const QString &message )
 {
   if ( !mPopUpShown )
   {
+    mPopUpShown = true;
     emit projError( message );
   }
 }

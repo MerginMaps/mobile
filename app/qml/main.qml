@@ -178,8 +178,9 @@ ApplicationWindow {
         }
     }
 
-    function showDialog(message) {
+    function showDialog(title, message) {
       alertDialog.text  = message
+      alertDialog.title = title
       alertDialog.open()
     }
 
@@ -634,15 +635,15 @@ ApplicationWindow {
 
     MessageDialog {
         id: alertDialog
-        title: qsTr("Communication error")
         onAccepted: alertDialog.close()
+        onLinkActivated: Qt.openUrlExternally(link)
     }
 
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
             var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
-            showAsDialog ? showDialog(msg) : showMessage(msg)
+            showAsDialog ? showDialog(qsTr("Communication error"), msg) : showMessage(msg)
         }
         onNotify: {
             showMessage(message)
@@ -664,8 +665,8 @@ ApplicationWindow {
         target: __inputProjUtils
         onProjError: {
           var msg = message + "<br/>"
-          msg += qsTr("See how to setup custom %1PROJ resources%2").arg("<a href=\"" + __inputHelp.howToSetupProj + "\">").arg("</a>")
-          showDialog(msg)
+          msg += qsTr("See how to %1add grids%2").arg("<a href=\"" + __inputHelp.howToSetupProj + "\">").arg("</a>")
+          showDialog(qsTr("PROJ Error"), msg)
         }
     }
 
