@@ -549,7 +549,25 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
-  return app.exec();
+
+  int ret = EXIT_FAILURE;
+  try
+  {
+    ret = app.exec();
+  }
+  catch ( QgsException &e )
+  {
+    iu.log("Error", QStringLiteral("Caught unhandled QgsException %1").arg(e.what()) );
+  }
+  catch ( std::exception &e )
+  {
+    iu.log("Error", QStringLiteral("Caught unhandled std::exception %1").arg(e.what()) );
+  }
+  catch ( ... )
+  {
+    iu.log("Error", QStringLiteral("Caught unhandled unknown exception") );
+  }
+  return ret;
 }
 
 
