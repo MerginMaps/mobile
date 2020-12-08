@@ -39,7 +39,7 @@ bool IosUtils::hasLocationPermissionImpl()
 #endif
       default:
         qDebug() << "LocationPermissions: Unknown state";
-                 return false;
+        return false;
     }
   }
   else
