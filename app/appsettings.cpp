@@ -12,6 +12,9 @@
 #include <QSettings>
 #include <QFileInfo>
 
+#include "androidutils.h"
+#include "ios/iosutils.h"
+
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
@@ -19,6 +22,18 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
+  bool enableLocation;
+  if ( AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission() )
+  {
+    // We have system permission, use the user's settings for location services
+    enableLocation = settings.value( "locationEnabled", true ).toBool();
+  }
+  else
+  {
+    // We do not have system permission, ignore user's settings for location services
+    enableLocation = false;
+  }
+
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   settings.endGroup();
@@ -29,6 +44,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
   setLineRecordingInterval( lineRecordingInterval );
+  setLocationEnabled( enableLocation );
 }
 
 QString AppSettings::defaultLayer() const
@@ -150,5 +166,37 @@ void AppSettings::setLineRecordingInterval( int value )
     settings.endGroup();
 
     emit lineRecordingIntervalChanged();
+  }
+}
+
+bool AppSettings::isLocationEnabled() const
+{
+  return mLocationEnabled;
+}
+
+void AppSettings::setLocationEnabled( bool value )
+{
+  if ( mLocationEnabled != value )
+  {
+    if ( value )
+    {
+      bool hasPermission = AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission();
+      if ( !hasPermission )
+      {
+        bool aquiredPermission = AndroidUtils::acquireLocationPermission() && IosUtils::acquireLocationPermission();
+        if ( !aquiredPermission )
+        {
+          value = false;
+        }
+      }
+    }
+
+    mLocationEnabled = value;
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "locationEnabled", value );
+    settings.endGroup();
+
+    emit locationEnabledChanged();
   }
 }

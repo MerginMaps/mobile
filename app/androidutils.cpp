@@ -47,6 +47,20 @@ bool AndroidUtils::isAndroid() const
 #endif
 }
 
+bool AndroidUtils::hasLocationPermission()
+{
+#ifdef ANDROID
+  QtAndroid::PermissionResult r = QtAndroid::checkPermission( "android.permission.ACCESS_FINE_LOCATION" );
+  return ( r != QtAndroid::PermissionResult::Denied );
+#endif
+  return true;
+}
+
+bool AndroidUtils::acquireLocationPermission()
+{
+  return checkAndAcquirePermissions( "android.permission.ACCESS_FINE_LOCATION" );
+}
+
 //! https://stackoverflow.com/questions/35973235/android-permission-denial-starting-intent-with-revoked-permission-android-perms
 void AndroidUtils::requirePermissions()
 {

@@ -28,6 +28,8 @@ class IosUtils: public QObject
   public:
     explicit IosUtils( QObject *parent = nullptr );
     bool isIos() const;
+    static bool hasLocationPermission();
+    static bool acquireLocationPermission();
 
     Q_INVOKABLE void callImagePicker( const QString &targetPath );
     Q_INVOKABLE void callCamera( const QString &targetPath );
@@ -35,6 +37,11 @@ class IosUtils: public QObject
   signals:
     void imageSelected( const QString &imagePath );
   private:
+
+#ifdef Q_OS_IOS
+    static bool hasLocationPermissionImpl();
+    static bool acquireLocationPermissionImpl();
+#endif
 
     IOSImagePicker *mImagePicker;
     /**

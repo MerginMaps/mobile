@@ -165,6 +165,7 @@ ApplicationWindow {
     }
 
     function getGpsIndicatorColor() {
+        if (!__appSettings.locationEnabled) return InputStyle.softGrey
         if (positionKit.accuracy <= 0) return InputStyle.softRed
         return positionKit.accuracy < __appSettings.gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
     }
@@ -386,14 +387,15 @@ ApplicationWindow {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
-
       onScreenPositionChanged: updatePosition()
+      enabled: __appSettings.locationEnabled
     }
 
     PositionMarker {
       id: positionMarker
       positionKit: positionKit
       z: zMapCanvas + 2
+      visible: __appSettings.locationEnabled
     }
 
     DigitizingController {
@@ -431,8 +433,12 @@ ApplicationWindow {
         onOpenProjectClicked: openProjectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: {
-          mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
-          digitizing.useGpsPoint = true
+          if (!__appSettings.locationEnabled) {
+            __appSettings.locationEnabled = true;
+          } else {
+            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+            digitizing.useGpsPoint = true
+          }
         }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
@@ -485,6 +491,10 @@ ApplicationWindow {
         }
 
         onGpsSwitchClicked: {
+            if (!__appSettings.locationEnabled) {
+              return // leaving when GPS location is disabled in the settings
+            }
+
             if (!positionKit.hasPosition) {
                 showMessage(qsTr("GPS currently unavailable.%1Try to allow GPS Location in your device settings.").arg("<br/>"))
                 return // leaving when no gps is available

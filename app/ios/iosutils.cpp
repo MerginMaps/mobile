@@ -27,6 +27,24 @@ bool IosUtils::isIos() const
 #endif
 }
 
+bool IosUtils::hasLocationPermission()
+{
+#ifdef Q_OS_IOS
+  return hasLocationPermissionImpl();
+#else
+  return true;
+#endif
+}
+
+bool IosUtils::acquireLocationPermission()
+{
+#ifdef Q_OS_IOS
+  return acquireLocationPermissionImpl();
+#else
+  return true;
+#endif
+}
+
 void IosUtils::callImagePicker( const QString &targetPath )
 {
   mImagePicker->showImagePicker( 0, targetPath );
