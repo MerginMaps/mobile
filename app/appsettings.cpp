@@ -23,10 +23,13 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
   bool enableLocation;
-  if (AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission()) {
+  if ( AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission() )
+  {
     // We have system permission, use the user's settings for location services
     enableLocation = settings.value( "locationEnabled", true ).toBool();
-  } else {
+  }
+  else
+  {
     // We do not have system permission, ignore user's settings for location services
     enableLocation = false;
   }
