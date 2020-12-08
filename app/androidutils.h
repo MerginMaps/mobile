@@ -30,6 +30,8 @@ class AndroidUtils: public QObject
 
     bool isAndroid() const;
     static bool hasLocationPermission();
+    static bool acquireLocationPermission();
+
     static void requirePermissions();
     static bool checkAndAcquirePermissions( const QString &permissionString );
 

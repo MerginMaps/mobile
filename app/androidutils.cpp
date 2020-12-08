@@ -56,6 +56,11 @@ bool AndroidUtils::hasLocationPermission()
   return true;
 }
 
+bool AndroidUtils::acquireLocationPermission()
+{
+  return checkAndAcquirePermissions( "android.permission.ACCESS_FINE_LOCATION" );
+}
+
 //! https://stackoverflow.com/questions/35973235/android-permission-denial-starting-intent-with-revoked-permission-android-perms
 void AndroidUtils::requirePermissions()
 {

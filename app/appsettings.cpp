@@ -13,6 +13,7 @@
 #include <QFileInfo>
 
 #include "androidutils.h"
+#include "ios/iosutils.h"
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
@@ -21,17 +22,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
-  bool enableLocation = false;
-  if ( AndroidUtils::hasLocationPermission() )
-  {
-    if (settings.contains("locationEnabled")) {
-      enableLocation = settings.value( "locationEnabled" ).toBool();
-    } else {
-      // if you migrate from older InputApp version
-      enableLocation = true;
-    }
-  }
-
+  bool hasPermission = AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission();
+  bool enableLocation = enableLocation = settings.value( "locationEnabled", hasPermission ).toBool();
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   settings.endGroup();
@@ -176,6 +168,19 @@ void AppSettings::setLocationEnabled( bool value )
 {
   if ( mLocationEnabled != value )
   {
+    if ( value )
+    {
+      bool hasPermission = AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission();
+      if ( !hasPermission )
+      {
+        bool aquiredPermission = AndroidUtils::acquireLocationPermission() && IosUtils::acquireLocationPermission();
+        if ( !aquiredPermission )
+        {
+          value = false;
+        }
+      }
+    }
+
     mLocationEnabled = value;
     QSettings settings;
     settings.beginGroup( mGroupName );

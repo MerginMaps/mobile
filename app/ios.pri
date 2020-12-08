@@ -95,7 +95,8 @@ ios {
         ios/iosinterface.mm \
         ios/iosviewdelegate.mm \
         ios/iosimagepicker.mm \
-        ios/iosutils.mm
+        ios/iosutils.mm \
+        ios/iospermissions.mm
 
     DEFINES += "PURCHASING"
     DEFINES += "APPLE_PURCHASING"
