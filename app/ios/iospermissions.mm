@@ -10,9 +10,10 @@
 #include "iosutils.h"
 #import <CoreLocation/CoreLocation.h>
 
-// See https://github.com/qt/qtlocation/blob/cec9762f3c553a2870b32cfb3ba645bdcaaef671/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm#L141
 bool IosUtils::hasLocationPermissionImpl()
 {
+#if 0
+  // See https://github.com/qt/qtlocation/blob/cec9762f3c553a2870b32cfb3ba645bdcaaef671/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm#L141
   if ( [CLLocationManager locationServicesEnabled] )
   {
     // Location Services Are Enabled
@@ -47,12 +48,17 @@ bool IosUtils::hasLocationPermissionImpl()
     qDebug() << "LocationPermissions: Disabled in System Settings";
     return false;
   }
+#endif
+  return true;
 }
 
 bool IosUtils::acquireLocationPermissionImpl()
 {
+#if 0
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
   [locationManager requestWhenInUseAuthorization];
   [locationManager release];
   return hasLocationPermissionImpl();
+#endif
+  return true;
 }
