@@ -85,11 +85,11 @@ Page {
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
-                text: qsTr("Enable Location")
+                text: qsTr("Use GPS Location")
 
                 SettingsSwitch {
-                    checked: __appSettings.enableLocationChecked
-                    onCheckedChanged: __appSettings.enableLocationChecked = checked
+                    checked: __appSettings.locationEnabled
+                    onCheckedChanged: __appSettings.locationEnabled = checked
                 }
             }
 

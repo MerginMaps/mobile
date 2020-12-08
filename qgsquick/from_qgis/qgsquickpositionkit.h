@@ -125,7 +125,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      *
      * \since QGIS 3.18
      */
-    Q_PROPERTY( bool enabled READ isEnabled WRITE setIsEnabled NOTIFY isEnabledChanged )
+    Q_PROPERTY( bool enabled READ isEnabled WRITE setEnabled NOTIFY isEnabledChanged )
 
   public:
     //! Creates new position kit
@@ -208,7 +208,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     bool isEnabled() const;
 
     //! \copydoc QgsQuickPositionKit::enabled
-    void setIsEnabled( bool isEnabled );
+    void setEnabled( bool enabled );
 
   signals:
     //! \copydoc QgsQuickPositionKit::position

@@ -64,12 +64,11 @@ bool QgsQuickPositionKit::isEnabled() const
   return mIsEnabled;
 }
 
-void QgsQuickPositionKit::setIsEnabled( bool isEnabled )
+void QgsQuickPositionKit::setEnabled( bool enabled )
 {
-  qDebug() << "position" << ( mSource.get() ) << isEnabled << mIsEnabled;
   if ( mSource )
   {
-    if ( isEnabled )
+    if ( enabled )
     {
       mSource->startUpdates();
       QgsDebugMsg( QStringLiteral( "Started position updates" ) );
@@ -82,12 +81,12 @@ void QgsQuickPositionKit::setIsEnabled( bool isEnabled )
   }
   else
   {
-    QgsDebugMsg( QStringLiteral( "Invalid position source: %1" ).arg( isEnabled ) );
+    QgsDebugMsg( QStringLiteral( "Invalid position source: %1" ).arg( enabled ) );
   }
 
-  if ( mIsEnabled != isEnabled )
+  if ( mIsEnabled != enabled )
   {
-    mIsEnabled = isEnabled;
+    mIsEnabled = enabled;
     emit isEnabledChanged();
   }
 }

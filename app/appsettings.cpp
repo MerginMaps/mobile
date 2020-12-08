@@ -24,8 +24,14 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool enableLocation = false;
   if ( AndroidUtils::hasLocationPermission() )
   {
-    enableLocation = settings.value( "enableLocation", false ).toBool();
+    if (settings.contains("locationEnabled")) {
+      enableLocation = settings.value( "locationEnabled" ).toBool();
+    } else {
+      // if you migrate from older InputApp version
+      enableLocation = true;
+    }
   }
+
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   settings.endGroup();
@@ -36,7 +42,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
   setLineRecordingInterval( lineRecordingInterval );
-  setEnableLocationChecked( enableLocation );
+  setLocationEnabled( enableLocation );
 }
 
 QString AppSettings::defaultLayer() const
@@ -161,21 +167,21 @@ void AppSettings::setLineRecordingInterval( int value )
   }
 }
 
-bool AppSettings::enableLocationChecked() const
+bool AppSettings::isLocationEnabled() const
 {
-  return mEnableLocationChecked;
+  return mLocationEnabled;
 }
 
-void AppSettings::setEnableLocationChecked( bool value )
+void AppSettings::setLocationEnabled( bool value )
 {
-  if ( mEnableLocationChecked != value )
+  if ( mLocationEnabled != value )
   {
-    mEnableLocationChecked = value;
+    mLocationEnabled = value;
     QSettings settings;
     settings.beginGroup( mGroupName );
-    settings.setValue( "enableLocation", value );
+    settings.setValue( "locationEnabled", value );
     settings.endGroup();
 
-    emit enableLocationCheckedChanged();
+    emit locationEnabledChanged();
   }
 }
