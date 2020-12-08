@@ -22,8 +22,15 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
-  bool hasPermission = AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission();
-  bool enableLocation = enableLocation = settings.value( "locationEnabled", hasPermission ).toBool();
+  bool enableLocation;
+  if (AndroidUtils::hasLocationPermission() && IosUtils::hasLocationPermission()) {
+    // We have system permission, use the user's settings for location services
+    enableLocation = settings.value( "locationEnabled", true ).toBool();
+  } else {
+    // We do not have system permission, ignore user's settings for location services
+    enableLocation = false;
+  }
+
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   settings.endGroup();
