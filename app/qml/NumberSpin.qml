@@ -21,17 +21,12 @@ Item {
 
     Image {
         id: imageDecrease
-        height: root.rowHeight
+        height: root.height
         width: height
         source: "back.svg"
         sourceSize.width: width
         sourceSize.height: height
         fillMode: Image.PreserveAspectFit
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: if (minValue <= root.value - 1) root.value -=1
-        }
     }
 
     ColorOverlay {
@@ -45,7 +40,7 @@ Item {
         text: value + suffix
         color: InputStyle.fontColorBright
         font.pixelSize: InputStyle.fontPixelSizeNormal
-        height: root.rowHeight
+        height: root.height
         width: root.width - (2 * imageIncrease.width)
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
@@ -54,7 +49,7 @@ Item {
 
     Image {
         id: imageIncrease
-        height: root.rowHeight
+        height: root.height
         width: height
         anchors.left: valueText.right
         source: "back.svg"
@@ -62,11 +57,6 @@ Item {
         sourceSize.width: width
         sourceSize.height: height
         fillMode: Image.PreserveAspectFit
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: if (maxValue >= root.value + 1) root.value +=1
-        }
     }
 
     ColorOverlay {
@@ -76,4 +66,21 @@ Item {
         rotation: imageIncrease.rotation
     }
 
+    MouseArea {
+      y: imageDecrease.y - imageDecrease.height
+      x: imageDecrease.x - imageDecrease.width
+      width: imageDecrease.width * 3
+      height: imageDecrease.height * 3
+
+      onClicked: if (minValue <= root.value - 1) root.value -=1
+    }
+
+    MouseArea {
+      y: imageIncrease.y - imageIncrease.height
+      x: imageIncrease.x - imageIncrease.width
+      width: imageIncrease.width * 3
+      height: imageIncrease.height * 3
+
+      onClicked: if (maxValue >= root.value + 1) root.value +=1
+    }
 }
