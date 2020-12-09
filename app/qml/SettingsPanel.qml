@@ -87,6 +87,7 @@ Page {
                 text: qsTr("Follow GPS with map")
 
                 Switch {
+                    id: followGPSSwitch
                     anchors.margins: 0
                     padding: 0
                     id: autoCenterMapCheckBox
@@ -119,6 +120,11 @@ Page {
                             border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
                         }
                     }
+                }
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: followGPSSwitch.toggle()
                 }
             }
 
