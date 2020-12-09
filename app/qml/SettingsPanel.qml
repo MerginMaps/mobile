@@ -13,7 +13,6 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import lc 1.0
 import "."  // import InputStyle singleton
-import "./components"
 
 Page {
 
@@ -85,23 +84,41 @@ Page {
                 height: settingsPanel.rowHeight
                 width: parent.width
                 color: InputStyle.clrPanelMain
-                text: qsTr("Use GPS Location")
-
-                SettingsSwitch {
-                    checked: __appSettings.locationEnabled
-                    onCheckedChanged: __appSettings.locationEnabled = checked
-                }
-            }
-
-            PanelItem {
-                height: settingsPanel.rowHeight
-                width: parent.width
-                color: InputStyle.clrPanelMain
                 text: qsTr("Follow GPS with map")
 
-                SettingsSwitch {
+                Switch {
+                    anchors.margins: 0
+                    padding: 0
+                    id: autoCenterMapCheckBox
+                    height: InputStyle.fontPixelSizeNormal
+                    width: height * 2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: InputStyle.panelMargin
                     checked: __appSettings.autoCenterMapChecked
                     onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+
+                    property color highlighColor: InputStyle.softGreen
+                    property color disabledColor: InputStyle.panelBackgroundDark
+
+                    indicator: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: parent.height
+                        x: autoCenterMapCheckBox.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: parent.height/2
+                        color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : "#ffffff"
+                        border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+
+                        Rectangle {
+                            x: autoCenterMapCheckBox.checked ? parent.width - width : 0
+                            width: parent.height
+                            height: parent.height
+                            radius: parent.height/2
+                            color: "#ffffff"
+                            border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
+                        }
+                    }
                 }
             }
 

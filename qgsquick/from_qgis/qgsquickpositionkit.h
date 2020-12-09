@@ -33,8 +33,6 @@
  * Simulated position source generates random points in circles around the selected
  * point and radius. Real GPS position is not used in this mode.
  *
- * By default is it disabled. Use enabled property to start updating the location
- *
  * \note QML Type: PositionKit
  *
  * \since QGIS 3.4
@@ -117,15 +115,10 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     Q_PROPERTY( QVector<double> simulatePositionLongLatRad READ simulatePositionLongLatRad WRITE setSimulatePositionLongLatRad NOTIFY simulatePositionLongLatRadChanged )
 
     /**
-     * When enabled, start updates of the position source
-     * When disabled, stop updates of the position source
-     *
-     * Note that on enabling the position source, it requests the
-     * location permissions (Android/iOS) from user
-     *
-     * \since QGIS 3.18
+     * Internal source of GPS location data.
+     * Allows start/stop of its services or access properties.
      */
-    Q_PROPERTY( bool enabled READ isEnabled WRITE setEnabled NOTIFY isEnabledChanged )
+    Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
 
   public:
     //! Creates new position kit
@@ -148,13 +141,6 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
 
     //! \copydoc QgsQuickPositionKit::screenAccuracy
     double screenAccuracy() const;
-
-    /**
-     * Returns last known position
-     *
-     * \since QGIS 3.18
-     */
-    QGeoPositionInfo lastKnownPosition( bool fromSatellitePositioningMethodsOnly = false ) const;
 
     /**
      * GPS horizontal accuracy units - meters (constant)
@@ -180,6 +166,12 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     void setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad );
 
     /**
+     * Returns pointer to the internal QGeoPositionInfoSource object used to receive GPS location.
+     * \note The returned pointer is only valid until sourceChanged() signal is emitted
+     */
+    QGeoPositionInfoSource *source() const;
+
+    /**
      * Coordinate reference system of position - WGS84 (constant)
      */
     Q_INVOKABLE QgsCoordinateReferenceSystem positionCRS() const;
@@ -203,12 +195,6 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      * Use real GPS source (not simulated)
      */
     Q_INVOKABLE void useGpsLocation();
-
-    //! \copydoc QgsQuickPositionKit::enabled
-    bool isEnabled() const;
-
-    //! \copydoc QgsQuickPositionKit::enabled
-    void setEnabled( bool enabled );
 
   signals:
     //! \copydoc QgsQuickPositionKit::position
@@ -247,9 +233,6 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     //! Emitted when the internal source of GPS location data has been replaced.
     void sourceChanged();
 
-    //! \copydoc QgsQuickPositionKit::enabled (INTERNAL)
-    void isEnabledChanged();
-
   private slots:
     void onPositionUpdated( const QGeoPositionInfo &info );
     void onMapSettingsUpdated();
@@ -258,7 +241,6 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
 
   private:
     void replacePositionSource( QGeoPositionInfoSource *source );
-
     QString calculateStatusLabel();
     double calculateScreenAccuracy();
     void updateProjectedPosition();
@@ -277,8 +259,6 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     bool mHasPosition = false;
     bool mIsSimulated = false;
     QVector<double> mSimulatePositionLongLatRad;
-    bool mIsEnabled = false;
-
     std::unique_ptr<QGeoPositionInfoSource> mSource;
 
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned

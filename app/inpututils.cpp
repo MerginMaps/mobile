@@ -472,9 +472,9 @@ qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
 {
   if ( positionKit == nullptr ) return 0;
 
-  if ( positionKit->lastKnownPosition().isValid() )
+  if ( positionKit->source()->lastKnownPosition().isValid() )
   {
-    return positionKit->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
+    return positionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
   }
   return 0;
 }
