@@ -87,7 +87,6 @@ Page {
                 text: qsTr("Follow GPS with map")
 
                 Switch {
-                    id: followGPSSwitch
                     anchors.margins: 0
                     padding: 0
                     id: autoCenterMapCheckBox
@@ -124,7 +123,7 @@ Page {
 
                 MouseArea {
                   anchors.fill: parent
-                  onClicked: followGPSSwitch.toggle()
+                  onClicked: autoCenterMapCheckBox.toggle()
                 }
             }
 
