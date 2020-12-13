@@ -197,6 +197,12 @@ ApplicationWindow {
       recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( recordToolbar.activeVectorLayer )
     }
 
+    function clearRecordToolbar()
+    {
+      recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
+      digitizing.layer = recordToolbar.activeVectorLayer
+    }
+
     function updateBrowseDataPanel()
     {
       if ( browseDataPanel.visible )
@@ -460,7 +466,12 @@ ApplicationWindow {
     Connections {
       target: __activeLayer
       onActiveLayerChanged: {
-        updateRecordToolbar()
+        if (layerName) {
+          updateRecordToolbar()
+        } else
+        {
+          clearRecordToolbar()
+        }
       }
     }
 
