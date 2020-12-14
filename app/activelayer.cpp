@@ -62,6 +62,11 @@ void ActiveLayer::setActiveLayer( QgsMapLayer *layer )
 
 void ActiveLayer::resetActiveLayer()
 {
-  mLayer = nullptr;
-  emit activeLayerChanged( QString() );
+  // mLayer can be already invalid pointer
+  // as a leftover from unloaded QGIS project
+  void * lp = static_cast<void*>(mLayer);
+  if ( lp != nullptr ) {
+    mLayer = nullptr;
+    emit activeLayerChanged( QString() );
+  }
 }
