@@ -104,13 +104,15 @@ Rectangle {
         sourceSize.height: height
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit
-        
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            if ( searchField.displayText ) {
-              root.deactivate()
-            }
+      }
+
+      MouseArea {
+        x: cancelSearchBtn.x - cancelSearchBtn.width
+        height: cancelSearchBtn.height * 3
+        width: root.iconSize * 3
+        onClicked: {
+          if ( searchField.displayText ) {
+            root.deactivate()
           }
         }
       }
