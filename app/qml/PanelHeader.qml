@@ -68,8 +68,9 @@ Rectangle {
         }
 
         MouseArea {
-            anchors.fill: parent
-            onClicked: back()
+          anchors.fill: parent
+          anchors.leftMargin: -InputStyle.panelMargin
+          onClicked: back()
         }
     }
 

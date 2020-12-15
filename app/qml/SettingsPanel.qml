@@ -120,6 +120,11 @@ Page {
                         }
                     }
                 }
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: autoCenterMapCheckBox.toggle()
+                }
             }
 
             PanelItem {
@@ -188,6 +193,7 @@ Page {
                     suffix: " m"
                     onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal
+                    rowHeight: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
                     anchors.right: parent.right
@@ -208,6 +214,7 @@ Page {
                     suffix: " s"
                     onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
                     height: InputStyle.fontPixelSizeNormal
+                    rowHeight: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
                     anchors.right: parent.right
