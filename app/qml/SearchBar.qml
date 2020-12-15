@@ -60,7 +60,7 @@ Rectangle {
     
     TextField {
       id: searchField
-      width: parent.width
+      width: parent.width - iconContainer.width
       height: InputStyle.rowHeight
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: root.fontColor
@@ -92,9 +92,8 @@ Rectangle {
     Item {
       id: iconContainer
       height: searchField.height
-      width: root.iconSize
+      width: searchField.height + root.panelMargin
       anchors.right: parent.right
-      anchors.rightMargin: root.panelMargin
       
       Image {
         id: cancelSearchBtn
@@ -106,22 +105,21 @@ Rectangle {
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit
       }
-
-      MouseArea {
-        x: cancelSearchBtn.x - cancelSearchBtn.width
-        height: cancelSearchBtn.height * 3
-        width: root.iconSize * 3
-        onClicked: {
-          if ( searchField.displayText ) {
-            root.deactivate()
-          }
-        }
-      }
       
       ColorOverlay {
         anchors.fill: cancelSearchBtn
         source: cancelSearchBtn
         color: root.fontColor
+      }
+
+      MouseArea {
+        anchors.fill: iconContainer
+        z: 100
+        onClicked: {
+          if ( searchField.displayText ) {
+            root.deactivate()
+          }
+        }
       }
     }
   }
