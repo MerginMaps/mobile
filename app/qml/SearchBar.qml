@@ -37,8 +37,9 @@ Rectangle {
     * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
     */
   function deactivate() {
-    searchField.text = ""
     searchField.focus = false
+    if ( searchField.length > 0 )
+      searchField.clear()
     searchTextChanged("")
   }
 
