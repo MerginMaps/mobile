@@ -114,7 +114,6 @@ Rectangle {
 
       MouseArea {
         anchors.fill: iconContainer
-        z: 100
         onClicked: {
           if ( searchField.displayText ) {
             root.deactivate()
