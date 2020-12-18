@@ -725,17 +725,20 @@ void MerginApi::createProjectFinished()
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
 
-    // TODO: Set namespace to related localProjectInfo if is empty
+    // Upload data if createProject has been called for a local project with empty namespace (case of migrating a project)
     for ( const LocalProjectInfo &info : mLocalProjects.projects() )
     {
       if ( info.projectName == projectName && info.projectNamespace.isEmpty() )
       {
         mLocalProjects.updateMerginNamespace( info.projectDir, projectNamespace );
+
+        QDir projectDir( info.projectDir );
+        if ( projectDir.exists() && !projectDir.isEmpty() )
+        {
+          uploadProject( projectNamespace, projectName );
+        }
       }
     }
-
-    // TODO if dir is not empty?
-    uploadProject( projectNamespace, projectName );
   }
   else
   {
@@ -1117,11 +1120,17 @@ void MerginApi::pingMergin()
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
 
-void MerginApi::migrateProjectToMergin( const QString &projectName )
+void MerginApi::migrateProjectToMergin( const QString &projectName, const QString &projectNamespace )
 {
-  QString projectNamespace = mUserAuth->username();
   InputUtils::log( "migrate project", projectName );
-  createProject( projectNamespace, projectName );
+  if ( projectNamespace.isEmpty() )
+  {
+    createProject( mUserAuth->username(), projectName );
+  }
+  else
+  {
+    createProject( projectNamespace, projectName );
+  }
 }
 
 void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const QString &projectName )
@@ -1829,7 +1838,6 @@ void MerginApi::uploadInfoReplyFinished()
 
     LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
     transaction.projectDir = projectInfo.projectDir;
-
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
