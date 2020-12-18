@@ -1,0 +1,39 @@
+name: Android
+on: [push]
+env:
+  SDK_VERSION: android-19
+  INPUT_SDK: lutraconsulting/input-sdk:${SDK_VERSION}
+  KEYPASS: ${{ secrets.KEYPASS }}
+  STOREPASS: ${{ secrets.STOREPASS }}
+  encrypted_d617236a007d_key: ${{ encrypted_d617236a007d_key }}
+  encrypted_d617236a007d_iv: ${{ encrypted_d617236a007d_iv }}
+
+jobs:
+  android_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [armeabi-v7a, arm64-v8aarm64-v8a]
+    steps:
+      - uses: actions/checkout@v2
+      - name: install apk
+        run:
+          sudo apt update && sudo apt install -y pip3 gem openssl docker
+          gem update bundler
+          pip3 install dropbox
+          gem --version
+          python3 --version
+
+      - name: prepare
+        run: |
+          if [ -n "${STOREPASS}" ]; then openssl aes-256-cbc -K $encrypted_d617236a007d_key -iv $encrypted_d617236a007d_iv -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5; fi;
+          if [ -n "${STOREPASS}" ]; then openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5; fi;
+
+
+      - name: build
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          docker pull ${INPUT_SDK}
+          docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "VERSION=${TRAVIS_TAG}" ${INPUT_SDK} /usr/src/input/scripts/docker-build.sh
+          ./scripts/upload-artifacts.sh
