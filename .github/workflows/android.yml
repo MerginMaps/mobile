@@ -23,7 +23,7 @@ jobs:
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          if [ -n "${INPUTKEYSTORE_STOREPASS}" ]; then openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5; fi;
+          openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5
 
 
       - name: Extract GPS keystore
@@ -31,7 +31,7 @@ jobs:
           INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
 
         run: |
-          if [ -n "${INPUTKEYSTORE_STOREPASS}" ]; then openssl aes-256-cbc -k $INPUTKEYSTORE_DECRYPT_KEY -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5; fi;
+          openssl aes-256-cbc -k $INPUTKEYSTORE_DECRYPT_KEY -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5
 
       - name: Build and Upload
         env:
@@ -43,11 +43,11 @@ jobs:
         run: |
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
-              export GIT_TAG="$(clean ${GITHUB_REF/refs\/tags\//})"
+              export GIT_TAG="${GITHUB_REF//refs\/tags\//}"
               export GIT_BRANCH=""
           else
               export GIT_TAG=""
-              export GIT_BRANCH="$(clean ${GITHUB_REF/refs\/tags\//})"
+              export GIT_BRANCH="${GITHUB_REF}"
           fi
           echo "GIT_TAG: $GIT_TAG"
           echo "GIT_BRANCH: $GIT_BRANCH"
