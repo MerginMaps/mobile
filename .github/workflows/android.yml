@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Deps
-        run:
+        run: |
           sudo apt update && sudo apt install -y pip3 gem openssl docker ncurses-bin
           gem update bundler
           pip3 install dropbox
