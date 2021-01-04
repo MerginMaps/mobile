@@ -47,7 +47,7 @@ jobs:
               export GIT_BRANCH=""
           else
               export GIT_TAG=""
-              export GIT_BRANCH="${GITHUB_REF}"
+              export GIT_BRANCH="${GITHUB_REF//refs\/heads\//}"
           fi
           echo "GIT_TAG: $GIT_TAG"
           echo "GIT_BRANCH: $GIT_BRANCH"
