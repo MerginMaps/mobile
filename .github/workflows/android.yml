@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [armeabi-v7a, arm64-v8aarm64-v8a]
+        arch: [armeabi-v7a, arm64-v8a]
     steps:
       - uses: actions/checkout@v2
       - name: Install Deps
