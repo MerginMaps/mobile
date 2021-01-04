@@ -42,10 +42,13 @@ then
     export GITHUB_API=https://api.github.com/repos/${GITHUB_REPO}/commits/${GITHUB_SHA}/comments
   fi
 
-  echo "$APK_FILE"
+  echo "copy ${BUILD_FILE} -> $APK_FILE"
   sudo cp ${BUILD_FILE} ${APK_FILE}
-  python3 ./scripts/uploader.py --source${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
+  echo "run uploader"
+  python3 ./scripts/uploader.py --source ${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
+  echo "extract APK url"
   APK_URL=`tail -n 1 uploader.log`
+  echo "upload APK"
   curl -u inputapp-bot:${GITHUB_TOKEN} -X POST --data '{"body": "'${SIGNED}' apk: ['${ARCH}']('${APK_URL}') (SDK: ['${SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/'${SDK_VERSION}'))"}' ${GITHUB_API}
 
 else
