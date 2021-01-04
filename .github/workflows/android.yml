@@ -2,7 +2,6 @@ name: Android
 on: [push]
 env:
   SDK_VERSION: android-19
-  STOREPASS: ${{ secrets.STOREPASS }}
 
 jobs:
   android_build:
@@ -24,7 +23,7 @@ jobs:
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          if [ -n "${STOREPASS}" ]; then openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5; fi;
+          if [ -n "${INPUTKEYSTORE_STOREPASS}" ]; then openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5; fi;
 
 
       - name: Extract GPS keystore
@@ -32,22 +31,27 @@ jobs:
           INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
 
         run: |
-          if [ -n "${STOREPASS}" ]; then openssl aes-256-cbc -k $INPUTKEYSTORE_DECRYPT_KEY -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5; fi;
+          if [ -n "${INPUTKEYSTORE_STOREPASS}" ]; then openssl aes-256-cbc -k $INPUTKEYSTORE_DECRYPT_KEY -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5; fi;
 
       - name: Build and Upload
         env:
           ARCH: ${{ matrix.arch }}
           DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
+          INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
 
         run: |
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
-              GIT_TAG="$(clean ${var_to_use/refs\/tags\//})"
+              export GIT_TAG="$(clean ${GITHUB_REF/refs\/tags\//})"
+              export GIT_BRANCH=""
           else
-              GIT_TAG=""
+              export GIT_TAG=""
+              export GIT_BRANCH="$(clean ${GITHUB_REF/refs\/tags\//})"
           fi
+          echo "GIT_TAG: $GIT_TAG"
+          echo "GIT_BRANCH: $GIT_BRANCH"
 
           docker pull lutraconsulting/input-sdk:${SDK_VERSION}
-          docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "VERSION=${GIT_TAG}" lutraconsulting/input-sdk:${SDK_VERSION} /usr/src/input/scripts/docker-build.sh
+          docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "INPUTKEYSTORE_STOREPASS=${INPUTKEYSTORE_STOREPASS}" -e "VERSION=${GIT_TAG}" lutraconsulting/input-sdk:${SDK_VERSION} /usr/src/input/scripts/docker-build.sh
           ./scripts/upload-artifacts.sh
