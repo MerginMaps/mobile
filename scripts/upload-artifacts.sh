@@ -45,6 +45,7 @@ then
   echo "copy ${BUILD_FILE} -> $APK_FILE"
   sudo cp ${BUILD_FILE} ${APK_FILE}
   echo "run uploader"
+  python3 ./scripts/uploader.py --source ${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN --dry
   python3 ./scripts/uploader.py --source ${APK_FILE} --destination "/$DROPBOX_FOLDER/${APK_FILE}" --token DROPBOX_TOKEN > uploader.log 2>&1
   echo "extract APK url"
   APK_URL=`tail -n 1 uploader.log`
