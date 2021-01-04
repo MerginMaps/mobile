@@ -392,6 +392,12 @@ Item {
           contentWidth: grid.width
           clip: true
 
+          onCountChanged: {
+            if (merginProjectsList.visible || __merginProjectsModel.lastPage > 1) {
+              merginProjectsList.positionViewAtIndex(merginProjectsList.currentIndex, ListView.End)
+            }
+          }
+
           property int cellWidth: width
           property int cellHeight: projectsPanel.rowHeight
           property int borderWidth: 1
@@ -506,7 +512,7 @@ Item {
           iconSize: projectsPanel.iconSize
           projectFullName: __merginApi.getFullProjectName(projectNamespace, projectName)
           progressValue: syncProgress
-          isAdditional: status === "invalid"
+          isAdditional: status === "nonProjectItem"
 
           onMenuClicked: {
             if (status === "upToDate") return
@@ -540,6 +546,8 @@ Item {
               searchText = searchBar.text
             }
 
+            // Note that current index used to save last item position
+            merginProjectsList.currentIndex = merginProjectsList.count - 1
             __merginApi.listProjects(searchText, flag, "", __merginProjectsModel.lastPage + 1)
           }
 

@@ -52,7 +52,6 @@
         <file>TextHyperlink.qml</file>
         <file>LogPanel.qml</file>
         <file>components/PasswordField.qml</file>
-        <file>components/SettingsSwitch.qml</file>
         <file>components/DelegateButton.qml</file>
     </qresource>
 </RCC>

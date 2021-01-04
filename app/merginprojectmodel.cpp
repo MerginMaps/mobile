@@ -19,7 +19,7 @@ MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QOb
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
 
-  mAdditionalItem->status = Invalid;
+  mAdditionalItem->status = NonProjectItem;
 }
 
 QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
@@ -61,8 +61,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
           return QVariant( QStringLiteral( "noVersion" ) );
         case ProjectStatus::Modified:
           return QVariant( QStringLiteral( "modified" ) );
-        case ProjectStatus::Invalid:
-          return QVariant( QStringLiteral( "invalid" ) );
+        case ProjectStatus::NonProjectItem:
+          return QVariant( QStringLiteral( "nonProjectItem" ) );
       }
       break;
     }
