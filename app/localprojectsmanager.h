@@ -19,7 +19,7 @@ enum ProjectStatus
   UpToDate,   //!< both server and local copy are in sync with no extra modifications
   OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
   Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
-  Invalid      //!< only for mock projects, acts like a hook to enable extra functionality for models working with projects .
+  NonProjectItem      //!< only for mock projects, acts like a hook to enable extra functionality for models working with projects .
 };
 Q_ENUMS( ProjectStatus )
 
