@@ -260,6 +260,7 @@ Item {
       SearchBar {
         id: searchBar
         y: header.height
+        allowTimer: true
 
         onSearchTextChanged: {
           if (toolbar.highlighted === homeBtn.text) {
