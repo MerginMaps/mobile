@@ -1296,7 +1296,6 @@ void TestMerginApi::testUpdateWithMissedVersion()
 void TestMerginApi::testMigrateProject()
 {
   QString projectName = "testMigrateProject";
-  deleteLocalProject( mApi, mUsername, projectName );
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   createLocalProject( projectDir );
@@ -1317,7 +1316,6 @@ void TestMerginApi::testMigrateProject()
   QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY * 5 ) );
 
-
   // remove local copy of project
   deleteLocalProject( mApi, mUsername, projectName );
   QVERIFY( !QFileInfo::exists( projectDir ) );
@@ -1333,7 +1331,6 @@ void TestMerginApi::testMigrateProject()
 void TestMerginApi::testMigrateDetachProject()
 {
   QString projectName = "testMigrateDetachProject";
-  deleteLocalProject( mApi, mUsername, projectName );
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   createLocalProject( projectDir );
@@ -1450,6 +1447,6 @@ void TestMerginApi::createLocalProject( const QString projectDir )
 {
   QDir().mkdir( projectDir );
   bool r0 = QFile::copy( mTestDataPath + "/diff_project/base.gpkg", projectDir + "/base.gpkg" );
-  bool r1 = QFile::copy( mTestDataPath + "/project.qgs", projectDir + "/project.qgs" );
-  QVERIFY( r0 && r1 );
+
+  QVERIFY( r0 );
 }
