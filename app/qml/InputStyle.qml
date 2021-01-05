@@ -65,6 +65,7 @@ QtObject {
     property var galleryIcon: "qrc:/gallery.svg"
     property var backIcon: "qrc:/back.svg"
     property var plusIcon: "qrc:/plus.svg"
+    property var noIcon: "qrc:/no.svg"
     property var editIcon: "qrc:/edit.svg"
     property var infoIcon: "qrc:/info.svg"
     property var tableIcon: "qrc:/table.svg"

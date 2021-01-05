@@ -15,6 +15,7 @@ import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
+import "./components/"
 
 Item {
 
@@ -273,18 +274,6 @@ Item {
           } else if (toolbar.highlighted === myProjectsBtn.text) {
             __merginProjectsModel.searchExpression = text
           }
-        }
-      }
-
-      // Temp button
-      Button {
-        id: projectWizardBtn
-        width: 100
-        height: 100
-        text: "Magic"
-        onClicked: {
-          //projectWizzardPanel
-          stackView.push(projectWizardComp)
         }
       }
 
@@ -617,6 +606,30 @@ Item {
 
         }
       }
+
+      // Content bellow ListView section
+      Rectangle {
+        width: projectsPanel.width
+        height: InputStyle.rowHeightHeader
+        Layout.fillWidth: true
+        anchors.bottom: toolbar.top
+        z: 100
+        // DelegateButtonContainer
+        color: "red"
+
+        Component.onCompleted: console.log("!!!!!", projectsPanel.width, width)
+
+        DelegateButton {
+          height: InputStyle.rowHeightHeader
+          width: height * 4
+          text: qsTr("Create project")
+          anchors.centerIn: parent
+          //Layout.alignment: Qt.AlignVCenter
+          onClicked: stackView.push(projectWizardComp)
+        }
+      }
+
+
 
 
       // Toolbar

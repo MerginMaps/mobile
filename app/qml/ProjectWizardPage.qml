@@ -5,8 +5,10 @@ import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "."  // import InputStyle singleton
+import "."
+import "./components"
 
+// import InputStyle singleton
 Item {
   id: projectWizardPanel
 
@@ -15,7 +17,6 @@ Item {
   property real rowHeight: InputStyle.rowHeight
   property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
-
 
   // background
   Rectangle {
@@ -33,22 +34,22 @@ Item {
     titleText: qsTr("Create Project")
 
     onBack: {
-        projectWizardPanel.backClicked()
+      projectWizardPanel.backClicked()
     }
   }
 
   Column {
     id: contentLayout
-    height: projectWizardPanel.height-header.height
+    height: projectWizardPanel.height - header.height
     width: projectWizardPanel.width
     y: header.height
-    spacing: 0
+    spacing: InputStyle.panelSpacing
 
     Label {
       height: projectWizardPanel.rowheight
       width: parent.width
-//      horizontalAlignment: Qt.AlignHCenter
-//      verticalAlignment: Qt.AlignLeft
+      //      horizontalAlignment: Qt.AlignHCenter
+      //      verticalAlignment: Qt.AlignLeft
       text: qsTr("Project name")
       color: InputStyle.fontColor
       font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -68,67 +69,83 @@ Item {
     Repeater {
       model: __fieldsModel
 
-        Row {
-          id: fieldItem
-          //text: Name
-          //color: "red"
-          height: projectWizardPanel.rowHeight
-          width: projectWizardPanel.width
 
-          TextField {
-            id: textField
-            height: projectWizardPanel.rowHeight
-            topPadding: 10 * QgsQuick.Utils.dp
-            bottomPadding: 10 * QgsQuick.Utils.dp
-            anchors.left: parent.left
-            anchors.right: parent.right
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: projectWizardPanel.fontColor
-            placeholderText: "Field name"
-
-            background: Rectangle {
-                anchors.fill: parent
-                border.color: textField.activeFocus ? InputStyle.fontColor: InputStyle.panelBackgroundLight
-                border.width: textField.activeFocus ? 2 : 1
-                color: InputStyle.clrPanelMain
-                radius: InputStyle.cornerRadius
-            }
-        }
+      FieldRow {
+        height: projectWizardPanel.rowHeight
+        width: projectWizardPanel.width
+        color: projectWizardPanel.fontColor
+        widgetList: __fieldsModel.supportedTypes()
       }
     }
 
-   Row {
-     width: parent.width
-     height: projectWizardPanel.rowHeight
-     Button {
-         id: delegateButton
-         text: qsTr("Add field")
-         height: parent.height
-         width: height * 2
-         //anchors.horizontalCenter: parent.horizontalCenter
-         anchors.verticalCenter: parent.verticalCenter
-         font.pixelSize: InputStyle.fontPixelSizeTitle
+    Row {
+      width: parent.width
+      height: projectWizardPanel.rowHeight
+      Button {
+        id: delegateButton
+        text: qsTr("Add field")
+        height: parent.height
+        width: height * 2
+        //anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        font.pixelSize: InputStyle.fontPixelSizeTitle
 
-         background: Rectangle {
-           color: InputStyle.highlightColor
-           radius: InputStyle.cornerRadius
-         }
+        background: Rectangle {
+          color: InputStyle.highlightColor
+          radius: InputStyle.cornerRadius
+        }
 
-         onClicked: __fieldsModel.addField("new", "")
+        onClicked: __fieldsModel.addField("", "text")
 
-         contentItem: Text {
-           text: delegateButton.text
-           font: delegateButton.font
-           color: "white"
-           horizontalAlignment: Text.AlignHCenter
-           verticalAlignment: Text.AlignVCenter
-           elide: Text.ElideRight
-         }
-       }
-   }
+        contentItem: Text {
+          text: delegateButton.text
+          font: delegateButton.font
+          color: "white"
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
+        }
+      }
+    }
+  }
 
-   }
+  // footer toolbar
+  Rectangle {
+    property int itemSize: toolbar.height * 0.8
 
+    id: toolbar
+    height: InputStyle.rowHeightHeader
+    width: parent.width
+    anchors.bottom: parent.bottom
+    color: InputStyle.clrPanelBackground
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: {} // dont do anything, just do not let click event propagate
+    }
+
+    Row {
+      height: toolbar.height
+      width: parent.width
+      anchors.bottom: parent.bottom
+
+      Item {
+        width: parent.width/parent.children.length
+        height: parent.height
+        MainPanelButton {
+          id: createProjectBtn
+          width: toolbar.itemSize
+          text: qsTr("Create project")
+          faded: false // TOOD
+          imageSource: InputStyle.plusIcon
+
+          onActivated: {
+            // TODO
+          }
+        }
+      }
+    }
+  }
 
 
 }

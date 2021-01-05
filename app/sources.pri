@@ -1,13 +1,14 @@
 SOURCES += \
-  $$PWD/fieldsmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
+fieldsmodel.cpp \
 layersmodel.cpp \
 layersproxymodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
 projectsmodel.cpp \
+projectwizard.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
@@ -39,14 +40,15 @@ exists(merginsecrets.cpp) {
 }
 
 HEADERS += \
-  $$PWD/fieldsmodel.h \
 inputhelp.h \
 activelayer.h \
+fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
 projectsmodel.h \
+projectwizard.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \

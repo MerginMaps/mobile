@@ -3,6 +3,7 @@
 FieldsModel::FieldsModel( QObject *parent )
   : QAbstractListModel( parent )
 {
+    initModel();
 }
 
 bool FieldsModel::addField( const QString &name, const QString &type )
@@ -12,11 +13,23 @@ bool FieldsModel::addField( const QString &name, const QString &type )
 
   QgsField field;
   field.setName( name );
+  field.setType(QVariant::nameToType(type.toUtf8()));
   mFields.append( field );
 
   endResetModel();
   return true;
   //emit dataChanged();
+}
+
+QStringList FieldsModel::supportedTypes()
+{
+    QStringList supportedTypes;
+    supportedTypes << "text";
+    supportedTypes << "attachement";
+    supportedTypes << "date";
+
+
+    return supportedTypes;
 }
 
 QHash<int, QByteArray> FieldsModel::roleNames() const
@@ -98,4 +111,34 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
 //  }
 
   return false;
+}
+
+void FieldsModel::initModel()
+{
+    addField("Date", "text");
+    addField("Notes", "text");
+    addField("Photo", "text");
+}
+
+QVariant FieldsModel::parseType(const QString &type)
+{
+//    if ( type == QLatin1String( "text" ) )
+//         return QVariant::type()
+//       else if ( type == QLatin1String( "integer" ) )
+//         ogrType = OFTInteger;
+//       else if ( type == QLatin1String( "integer64" ) )
+//         ogrType = OFTInteger64;
+//       else if ( type == QLatin1String( "real" ) )
+//         ogrType = OFTReal;
+//       else if ( type == QLatin1String( "date" ) )
+//         ogrType = OFTDate;
+//       else if ( type == QLatin1String( "datetime" ) )
+//         ogrType = OFTDateTime;
+//       else if ( type == QLatin1String( "bool" ) )
+//       {
+//         ogrType = OFTInteger;
+//         isBool = true;
+//       }
+//       else if ( type == QLatin1String( "binary" ) )
+//         ogrType = OFTBinary;
 }
