@@ -66,6 +66,11 @@ if __name__ == '__main__':
     parser.add_argument('--token',
                         required=True,
                         help='Dropbox APIv2 Token key in environment')
+    parser.add_argument('--dry',
+                        action='store_true',
+                        required=False,
+                        default=False,
+                        help='Dry run')
 
     args = parser.parse_args()
     if not os.path.exists(args.source):
@@ -85,11 +90,14 @@ if __name__ == '__main__':
     except AuthError as err:
         raise UploadError("ERROR: Invalid access token; try re-generating an access token from the app console on the web.")
 
-    # Create a backup of the current settings file
-    backup(local=args.source, remote=args.destination)
+    if args.dry:
+        print ("dry run")
+    else:
+        # Create a backup of the current settings file
+        backup(local=args.source, remote=args.destination)
 
-    # Share for public
-    r = dbx.sharing_create_shared_link_with_settings(args.destination)
-    print("Upload " + args.source + " to " + args.destination + ":")
-    # make sure last like is alone since we use the link in the
-    print(r.url)
+        # Share for public
+        r = dbx.sharing_create_shared_link_with_settings(args.destination)
+        print("Upload " + args.source + " to " + args.destination + ":")
+        # make sure last like is alone since we use the link in the
+        print(r.url)
