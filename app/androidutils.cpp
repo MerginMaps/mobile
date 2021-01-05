@@ -98,7 +98,7 @@ void AndroidUtils::callCamera( const QString &targetPath )
   {
     if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.CAMERA" ) )
     {
-      // permanently denide permission, user needs to go to settings to allow permission
+      // permanently denied permission, user needs to go to settings to allow permission
       showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
     }
     else
