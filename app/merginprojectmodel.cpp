@@ -171,17 +171,6 @@ int MerginProjectModel::lastPage() const
   return mLastPage;
 }
 
-int MerginProjectModel::expectedProjectCount() const
-{
-  return mExpectedProjectCount;
-}
-
-void MerginProjectModel::setExpectedProjectCount( int expectedProjectCount )
-{
-  mExpectedProjectCount = expectedProjectCount;
-  emit expectedProjectCountChanged();
-}
-
 QString MerginProjectModel::searchExpression() const
 {
   return mSearchExpression;

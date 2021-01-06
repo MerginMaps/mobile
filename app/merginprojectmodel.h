@@ -43,7 +43,6 @@ class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
-    Q_PROPERTY( int expectedProjectCount READ expectedProjectCount NOTIFY expectedProjectCountChanged )
     Q_PROPERTY( int lastPage READ lastPage NOTIFY lastPageChanged )
 
   public:
@@ -88,14 +87,10 @@ class MerginProjectModel: public QAbstractListModel
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
 
-    int expectedProjectCount() const;
-    void setExpectedProjectCount( int expectedProjectCount );
-
     int lastPage() const;
     void setLastPage( int lastPage );
 
   signals:
-    void expectedProjectCountChanged();
     void lastPageChanged();
 
   public slots:
@@ -114,7 +109,6 @@ class MerginProjectModel: public QAbstractListModel
     ProjectList mMerginProjects;
     LocalProjectsManager &mLocalProjects;
     QString mSearchExpression;
-    int mExpectedProjectCount;
     int mLastPage;
     //! Special item as a placeholder for custom component with extended funtionality
     std::shared_ptr<MerginProject> mAdditionalItem = std::make_shared<MerginProject>();
