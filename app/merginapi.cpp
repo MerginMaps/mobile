@@ -1147,7 +1147,7 @@ void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const 
   mLocalProjects.resetMerginInfo( projectNamespace, projectName );
   mLocalProjects.reloadProjectDir();
 
-  emit notify( QStringLiteral( "Project detached from Mergin" ) );
+  emit notify( tr( "Project detached from Mergin" ) );
   emit projectDetached();
 }
 
