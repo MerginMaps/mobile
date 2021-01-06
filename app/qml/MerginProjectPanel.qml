@@ -442,7 +442,7 @@ Item {
             property real menuItemHeight: projectsPanel.rowHeight * 0.8
             property bool isMerginProject: projectNamespace !== ""
             id: contextMenu
-            height: contextMenu.isMerginProject ? menuItemHeight * 3 : menuItemHeight * 2
+            height: menuItemHeight * 2
             width:Math.min( parent.width, 300 * QgsQuick.Utils.dp )
             leftMargin: Math.max(parent.width - width, 0)
 
@@ -456,8 +456,7 @@ Item {
             }
 
             MenuItem {
-              height:  (projectNamespace && projectName) ? contextMenu.menuItemHeight : 0
-              visible: (projectNamespace && projectName)
+              height:  contextMenu.isMerginProject ? contextMenu.menuItemHeight : 0
               ExtendedMenuItem {
                   height: parent.height
                   rowHeight: parent.height
@@ -474,7 +473,7 @@ Item {
             }
 
             MenuItem {
-              height:  contextMenu.menuItemHeight
+              height: contextMenu.isMerginProject ? 0: contextMenu.menuItemHeight
               ExtendedMenuItem {
                   height: parent.height
                   rowHeight: parent.height
@@ -484,9 +483,7 @@ Item {
                   overlayImage: true
               }
               onClicked: {
-                if (contextMenu.isMerginProject) {
-                  __merginApi.detachProjectFromMergin(projectNamespace, projectName)
-                } else {
+                if (!contextMenu.isMerginProject) {
                   __merginApi.migrateProjectToMergin(projectName)
                 }
               }
