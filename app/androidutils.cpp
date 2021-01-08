@@ -51,7 +51,6 @@ bool AndroidUtils::isAndroid() const
 void AndroidUtils::requirePermissions()
 {
   checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" );
-  checkAndAcquirePermissions( "android.permission.CAMERA" );
 }
 
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
@@ -94,6 +93,21 @@ void AndroidUtils::callImagePicker()
 void AndroidUtils::callCamera( const QString &targetPath )
 {
 #ifdef ANDROID
+
+  if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
+  {
+    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.CAMERA" ) )
+    {
+      // permanently denied permission, user needs to go to settings to allow permission
+      showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
+    }
+    else
+    {
+      showToast( tr( "We need a camera permission in order to take a photo" ) );
+    }
+    return;
+  }
+
   const QString IMAGE_CAPTURE_ACTION = QString( "android.media.action.IMAGE_CAPTURE" );
 
   QAndroidJniObject activity = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
