@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
@@ -66,7 +75,7 @@ Item {
 
                 Text {
                     text: "v" + __version
-                    font.pixelSize: inputLinkBtn.height/2
+                    font.pixelSize: InputStyle.fontPixelSizeSmall
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: fontColor
                 }
@@ -75,8 +84,6 @@ Item {
                     id: inputLinkBtn
                     width: content.width - 2* root.panelMargin
                     height: fieldHeight * 0.7
-                    text: root.inputLink
-                    font.pixelSize: inputLinkBtn.height/2
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked:Qt.openUrlExternally(root.inputLink);
                     background: Rectangle {
@@ -84,8 +91,8 @@ Item {
                     }
 
                     contentItem: Text {
-                        text: inputLinkBtn.text
-                        font: inputLinkBtn.font
+                        text: root.inputLink
+                        font.pixelSize: InputStyle.fontPixelSizeNormal
                         color: InputStyle.highlightColor
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -96,8 +103,8 @@ Item {
 
             Text {
                 id: developedText
-                text: "Developed by"
-                font.pixelSize: inputLinkBtn.height/2
+                text: qsTr("Developed by")
+                font.pixelSize: InputStyle.fontPixelSizeSmall
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: lutraLogo.top
                 color: fontColor

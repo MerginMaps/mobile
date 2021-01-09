@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "inpututils.h"
 
 #include "qcoreapplication.h"
@@ -5,12 +14,15 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
+#include "qgsquickutils.h"
 
 #include "qgsquickmaptransform.h"
 
+#include <Qt>
 #include <QFile>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <algorithm>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
@@ -221,7 +233,7 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
     }
     catch ( QgsCsException &e )
     {
-      Q_UNUSED( e );
+      Q_UNUSED( e )
       return QVector<double>();
     }
   }
@@ -251,6 +263,21 @@ void InputUtils::setLogFilename( const QString &value )
   sLogFile = value;
 }
 
+QString InputUtils::logFilename()
+{
+  return sLogFile;
+}
+
+bool InputUtils::createEmptyFile( const QString &filePath )
+{
+  QFile newFile( filePath );
+  if ( !newFile.open( QIODevice::WriteOnly ) )
+    return false;
+
+  newFile.close();
+  return true;
+}
+
 QString InputUtils::filesToString( QList<MerginFile> files )
 {
   QStringList resultList;
@@ -267,13 +294,111 @@ QString InputUtils::appInfo()
          .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
+QString InputUtils::bytesToHumanSize( double bytes )
+{
+  const int precision = 1;
+  if ( bytes < 1e-5 )
+  {
+    return "0.0";
+  }
+  else if ( bytes < 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes, 'f', precision ) + " KB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
+  }
+  else
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
+  }
+}
+
+QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
+  return uuid.toString( QUuid::WithoutBraces );
+#else
+  QString str = uuid.toString();
+  str = str.mid( 1, str.length() - 2 );  // remove braces
+  return str;
+#endif
+}
+
+QString InputUtils::localizedDateFromUTFString( QString timestamp )
+{
+  if ( timestamp.isEmpty() )
+    return QString();
+
+  QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
+  if ( dateTime.isValid() )
+  {
+    return dateTime.date().toString( Qt::DefaultLocaleShortDate );
+  }
+  else
+  {
+    qDebug() << "Unable to convert UTF " << timestamp << " to QDateTime";
+    return QString();
+  }
+}
+
+QString InputUtils::appVersion()
+{
+  QString version;
+#ifdef INPUT_VERSION
+  version = STR( INPUT_VERSION );
+#endif
+  return version;
+}
+
+QString InputUtils::appPlatform()
+{
+#if defined( ANDROID )
+  const QString platform = "android";
+#elif defined( Q_OS_IOS )
+  const QString platform = "ios";
+#elif defined( Q_OS_WIN32 )
+  const QString platform = "win";
+#elif defined( Q_OS_LINUX )
+  const QString platform = "linux";
+#elif defined( Q_OS_MAC )
+  const QString platform = "macos";
+#else
+  const QString platform = "unknown";
+#endif
+  return platform;
+}
+
+void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
+{
+  QString levelStr;
+  switch ( level )
+  {
+    case Qgis::MessageLevel::Warning:
+      levelStr = "Warning";
+      break;
+    case Qgis::MessageLevel::Critical:
+      levelStr = "Error";
+      break;
+    default:
+      break;
+  }
+
+  log( "QGIS " + tag, levelStr + ": " + message );
+}
+
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
 {
   bool result  = true;
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
-    qDebug() << "Cannnot make path " << dstPath;
+    qDebug() << "Cannot make path " << dstPath;
     return false;
   }
 
@@ -302,12 +427,11 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
           log( "cpDir", QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
           result =  false;
         }
-        else if ( !QFile::copy( srcItemPath, dstItemPath ) )
+        if ( !QFile::copy( srcItemPath, dstItemPath ) )
         {
           log( "cpDir", QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
           result =  false;
         }
-
       }
       QFile::setPermissions( dstItemPath, QFile::ReadUser | QFile::WriteUser | QFile::ReadOwner | QFile::WriteOwner );
     }
@@ -325,7 +449,7 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   {
     QFileInfo info( srcPath );
     QString timestamp = ( dateTime.isValid() ) ? dateTime.toString( DATE_TIME_FORMAT ) : QDateTime::currentDateTime().toString( DATE_TIME_FORMAT );
-    QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );;
+    QString newFilename = QString( "%1.%2" ).arg( timestamp ).arg( info.suffix() );
     QString newPath( info.absolutePath() + "/" + newFilename );
 
     if ( QFile::rename( srcPath, newPath ) ) return newPath;
@@ -334,9 +458,25 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
+QString InputUtils::downloadInProgressFilePath( const QString &projectDir )
+{
+  return projectDir + "/.mergin/.project.downloading";
+}
+
 void InputUtils::showNotification( const QString &message )
 {
   emit showNotificationRequested( message );
+}
+
+qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
+{
+  if ( positionKit == nullptr ) return 0;
+
+  if ( positionKit->source()->lastKnownPosition().isValid() )
+  {
+    return positionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
+  }
+  return 0;
 }
 
 void InputUtils::log( const QString &topic, const QString &info )

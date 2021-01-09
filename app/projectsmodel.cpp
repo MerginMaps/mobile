@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "inpututils.h"
 #include "merginapi.h"
 
 ProjectModel::ProjectModel( LocalProjectsManager &localProjects, QObject *parent )
@@ -46,16 +47,15 @@ void ProjectModel::findProjectFiles()
     projectFile.folderName = dir.dirName();
     projectFile.projectName = project.projectName;
     projectFile.projectNamespace = project.projectNamespace;
-    QDateTime created = fi.created().toUTC();   // TODO: why UTC ???
-    if ( !project.qgisProjectFilePath.isEmpty() )
+    projectFile.isValid = project.isShowable();
+    QDateTime created = fi.created().toLocalTime();
+    if ( projectFile.isValid )
     {
       projectFile.info = QString( created.toString() );
-      projectFile.isValid = true;
     }
     else
     {
-      projectFile.info = "invalid project";
-      projectFile.isValid = false;
+      projectFile.info = project.qgisProjectError;
     }
     mProjectFiles << projectFile;
   }
@@ -122,6 +122,12 @@ int ProjectModel::rowAccordingPath( QString path ) const
 
 void ProjectModel::deleteProject( int row )
 {
+  if ( row < 0 || row >= mProjectFiles.length() )
+  {
+    InputUtils::log( "Deleting local project error", QStringLiteral( "Unable to delete local project, index out of bounds" ) );
+    return;
+  }
+
   ProjectFile project = mProjectFiles.at( row );
 
   mLocalProjects.deleteProjectDirectory( mLocalProjects.dataDir() + "/" + project.folderName );
@@ -163,7 +169,21 @@ bool ProjectModel::containsProject( const QString &projectNamespace, const QStri
   return mLocalProjects.hasMerginProject( projectNamespace, projectName );
 }
 
-void ProjectModel::addProject( QString projectFolder, QString projectName, bool successful )
+void ProjectModel::syncedProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully )
+{
+
+  // Do basic validity check
+  if ( successfully )
+  {
+    QString errMsg;
+    mLocalProjects.findQgisProjectFile( projectDir, errMsg );
+    mLocalProjects.updateProjectErrors( projectDir, errMsg );
+  }
+
+  reloadProjectFiles( projectDir, projectFullName, successfully );
+}
+
+void ProjectModel::reloadProjectFiles( QString projectFolder, QString projectName, bool successful )
 {
   if ( !successful ) return;
 

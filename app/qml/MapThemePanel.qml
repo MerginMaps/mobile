@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 
@@ -6,8 +15,6 @@ import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Drawer {
-
-    property int activeThemeIndex: 0
 
     id: mapThemePanel
     visible: false
@@ -18,6 +25,16 @@ Drawer {
     background: Rectangle {
         color: InputStyle.clrPanelMain
     }
+
+    Item {
+      focus: true
+      Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          mapThemePanel.close()
+        }
+      }
+    }
+
     PanelHeader {
           id: header
           height: InputStyle.rowHeightHeader
@@ -25,7 +42,7 @@ Drawer {
           color: InputStyle.panelBackgroundLight
           rowHeight: InputStyle.rowHeightHeader
           titleText: qsTr("Map Themes")
-          //backTextVisible: false
+          backTextVisible: false
           onBack: mapThemePanel.close()
           withBackButton: true
           layer.enabled: true
@@ -47,15 +64,12 @@ Drawer {
         property int cellHeight: InputStyle.rowHeight
         property int borderWidth: 1
 
-        Label {
+        TextHyperlink {
             anchors.fill: parent
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
             visible: parent.count == 0
-            text: qsTr("No themes in the project!")
-            color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            font.bold: true
+            text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
+                  .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
+                  .arg("</a>")
         }
 
     }
@@ -75,9 +89,8 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    __mapThemesModel.applyTheme(name)
-                    activeThemeIndex = index
-                    mapThemePanel.close()
+                  __loader.setActiveMapTheme( index )
+                  mapThemePanel.close()
                 }
             }
 
@@ -88,8 +101,8 @@ Drawer {
                 imageSource: "map_styles.svg"
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
-                highlight: activeThemeIndex === index
-                showBorder: activeThemeIndex - 1 !== index
+                highlight: __mapThemesModel.activeThemeIndex === index
+                showBorder: __mapThemesModel.activeThemeIndex - 1 !== index
             }
         }
 

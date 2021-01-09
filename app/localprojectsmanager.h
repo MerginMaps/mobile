@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef LOCALPROJECTSMANAGER_H
 #define LOCALPROJECTSMANAGER_H
 
@@ -9,7 +18,8 @@ enum ProjectStatus
   NoVersion,  //!< the project is not available locally
   UpToDate,   //!< both server and local copy are in sync with no extra modifications
   OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
-  Modified    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
+  Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
+  NonProjectItem      //!< only for mock projects, acts like a hook to enable extra functionality for models working with projects .
 };
 Q_ENUMS( ProjectStatus )
 
@@ -19,9 +29,14 @@ struct LocalProjectInfo
 {
   bool isValid() const { return !projectDir.isEmpty(); }
 
+  bool isShowable() const { return qgisProjectError.isEmpty(); }
+
   QString projectDir;  //!< full path to the project directory
 
   QString qgisProjectFilePath;  //!< path to the .qgs/.qgz file (or empty if not have exactly one such file)
+
+  QString qgisProjectError; //!< If project is invalid, projectError carry more information why
+  // TODO: reset when project is synchronized
 
   //
   // mergin-specific project info (may be empty)
@@ -52,6 +67,7 @@ class LocalProjectsManager : public QObject
     QList<LocalProjectInfo> projects() const { return mProjects; }
 
     LocalProjectInfo projectFromDirectory( const QString &projectDir ) const;
+    LocalProjectInfo projectFromProjectFilePath( const QString &projectDir ) const;
 
     LocalProjectInfo projectFromMerginName( const QString &projectFullName ) const;
     LocalProjectInfo projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
@@ -79,6 +95,12 @@ class LocalProjectsManager : public QObject
 
     //! after receiving project info with server version (local version stays the same
     void updateMerginServerVersion( const QString &projectDir, int version );
+
+    //! Updates qgisProjectError (after successful project synced)
+    void updateProjectErrors( const QString &projectDir, const QString &errMsg );
+
+    //! Finds all QGIS project files and set the err variable if any occured.
+    QString findQgisProjectFile( const QString &projectDir, QString &err );
 
 
     static ProjectStatus currentProjectStatus( const LocalProjectInfo &project );

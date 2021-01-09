@@ -1,11 +1,20 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "merginprojectmetadata.h"
 
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-
-
+#include <algorithm>
+#include <QFile>
 
 MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
 {
@@ -31,12 +40,11 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
     QList<int> versions;
     for ( QString key : history.keys() )
       versions << key.mid( 1 ).toInt();
-    qSort( versions );
+    std::sort( versions.begin(), versions.end() );
+
     if ( versions.count() > 0 )
     {
       merginFile.pullCanUseDiff = true;
-      // remove the first version (which we already have)
-      versions.removeAt( 0 );
       for ( int key : versions )
       {
         QJsonObject obj = history.value( QString( "v%1" ).arg( key ) ).toObject();
@@ -93,10 +101,10 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
   QJsonValue access = docObj.value( QStringLiteral( "access" ) );
   if ( access.isObject() )
   {
-    QJsonArray writers = access.toObject().value( "writers" ).toArray();
-    for ( QJsonValueRef tag : writers )
+    QJsonArray writersnames = access.toObject().value( "writersnames" ).toArray();
+    for ( QJsonValueRef tag : writersnames )
     {
-      project.writers.append( tag.toInt() );
+      project.writersnames.append( tag.toString() );
     }
   }
 

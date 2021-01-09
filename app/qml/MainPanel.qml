@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
@@ -11,6 +20,7 @@ Item {
     signal myLocationHold()
     signal addFeatureClicked()
     signal openMapThemesClicked()
+    signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
     property alias recordButton: recBtnIcon
@@ -19,6 +29,7 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
 
     id: mainPanel
+    focus: true
 
     Rectangle {
         anchors.fill: parent
@@ -50,7 +61,10 @@ Item {
                 text: qsTr("Projects")
                 imageSource: "project.svg"
 
-                onActivated: mainPanel.openProjectClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openProjectClicked()
+                }
             }
         }
 
@@ -69,8 +83,15 @@ Item {
                 imageSource2: "ic_gps_not_fixed_48px.svg"
                 imageSourceCondition: __appSettings.autoCenterMapChecked
 
-                onActivated: mainPanel.myLocationClicked()
-                onActivatedOnHold: mainPanel.myLocationHold()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.myLocationClicked()
+                }
+
+                onActivatedOnHold: {
+                  rootMenu.close()
+                  mainPanel.myLocationHold()
+                }
 
                 RoundIndicator {
                     width: parent.height/4
@@ -102,7 +123,10 @@ Item {
                     enabled: true
                 }
 
-                onActivated: mainPanel.addFeatureClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.addFeatureClicked()
+                }
             }
         }
 
@@ -119,14 +143,36 @@ Item {
                 text: qsTr("Zoom to project")
                 imageSource: "zoom_to_project.svg"
 
-                onActivated:mainPanel.zoomToProject()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.zoomToProject()
+                }
+            }
+        }
+
+        Item {
+            id: browseDataItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 5
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+                id: browseDataBtn
+                width: mainPanel.itemSize
+                text: qsTr("Browse data")
+                imageSource: "table.svg"
+
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openBrowseDataClicked()
+                }
             }
         }
 
         Item {
             id: mapThemesItem
             height: parent.height
-            visible: panelRow.itemsToShow > 5
+            visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -135,7 +181,10 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Map themes")
                 imageSource: "map_styles.svg"
-                onActivated: mainPanel.openMapThemesClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openMapThemesClicked()
+                }
             }
         }
 
@@ -143,7 +192,7 @@ Item {
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 5
+            visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -152,7 +201,10 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Settings")
                 imageSource: "settings.svg"
-                onActivated: mainPanel.openSettingsClicked()
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.openSettingsClicked()
+                }
             }
         }
 
@@ -166,13 +218,10 @@ Item {
               width: mainPanel.itemSize
               text: qsTr("More")
               imageSource: "more_menu.svg"
-              onActivated: {
-                if (rootMenu.isClosing) {
-                  rootMenu.isClosing = false
-                } else {
-                  rootMenu.open()
-                }
 
+              onActivated: {
+                if ( !rootMenu.visible ) rootMenu.open()
+                else rootMenu.close()
               }
             }
         }
@@ -180,14 +229,11 @@ Item {
 
     Menu {
         id: rootMenu
-        title: "Menu"
+        title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        property bool isClosing: false
         width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
-        closePolicy: Popup.CloseOnReleaseOutside
-
-        onAboutToHide: isClosing = true
+        closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
 
         MenuItem {
             width: parent.width
@@ -292,6 +338,25 @@ Item {
                 height: mainPanel.itemSize
                 rowHeight: height
                 width: parent.width
+                contentText: qsTr("Browse features")
+                imageSource: "table.svg"
+            }
+
+            onClicked: {
+                browseDataBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !mapThemesItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
                 contentText: qsTr("Map themes")
                 imageSource: "map_styles.svg"
             }
@@ -332,6 +397,4 @@ Item {
         layer.effect: Shadow {}
         visible: rootMenu.opened
     }
-
-
 }

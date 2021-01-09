@@ -1,27 +1,20 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "localprojectsmanager.h"
 
 #include "merginapi.h"
 #include "merginprojectmetadata.h"
+#include "inpututils.h"
 
 #include <QDir>
 #include <QDirIterator>
-
-static QString findQgisProjectFile( const QString &projectDir )
-{
-  QList<QString> foundProjectFiles;
-  QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    foundProjectFiles << it.filePath();
-  }
-  if ( foundProjectFiles.count() == 1 )
-  {
-    return foundProjectFiles.first();
-  }
-  return QString();
-}
-
 
 LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   : mDataDir( dataDir )
@@ -31,7 +24,7 @@ LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   {
     LocalProjectInfo info;
     info.projectDir = mDataDir + "/" + folderName;
-    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir );
+    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir, info.qgisProjectError );
 
     MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( info.projectDir + "/" + MerginApi::sMetadataFile );
     if ( metadata.isValid() )
@@ -54,6 +47,16 @@ LocalProjectInfo LocalProjectsManager::projectFromDirectory( const QString &proj
   for ( const LocalProjectInfo &info : mProjects )
   {
     if ( info.projectDir == projectDir )
+      return info;
+  }
+  return LocalProjectInfo();
+}
+
+LocalProjectInfo LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
+{
+  for ( const LocalProjectInfo &info : mProjects )
+  {
+    if ( info.qgisProjectFilePath == projectFilePath )
       return info;
   }
   return LocalProjectInfo();
@@ -101,7 +104,7 @@ void LocalProjectsManager::addMerginProject( const QString &projectDir, const QS
 {
   LocalProjectInfo project;
   project.projectDir = projectDir;
-  project.qgisProjectFilePath = findQgisProjectFile( projectDir );
+  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.qgisProjectError );
   project.projectNamespace = projectNamespace;
   project.projectName = projectName;
   // version info and status should be updated afterwards
@@ -164,6 +167,58 @@ void LocalProjectsManager::updateMerginServerVersion( const QString &projectDir,
   }
   Q_ASSERT( false );  // should not happen
 }
+
+void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const QString &errMsg )
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].projectDir == projectDir )
+    {
+      // Effects only local project list, no need to send projectMetadataChanged
+      mProjects[i].qgisProjectError = errMsg;
+      return;
+    }
+  }
+}
+
+QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QString &err )
+{
+  if ( QFile::exists( InputUtils::downloadInProgressFilePath( projectDir ) ) )
+  {
+    // if this is a mergin project and file indicating download in progress is still there
+    // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
+
+    err = tr( "Download failed, remove and retry" );
+    return QString();
+  }
+
+  QList<QString> foundProjectFiles;
+  QDirIterator it( projectDir, QStringList() << QStringLiteral( "*.qgs" ) << QStringLiteral( "*.qgz" ), QDir::Files, QDirIterator::Subdirectories );
+
+  while ( it.hasNext() )
+  {
+    it.next();
+    foundProjectFiles << it.filePath();
+  }
+
+  if ( foundProjectFiles.count() == 1 )
+  {
+    return foundProjectFiles.first();
+  }
+  else if ( foundProjectFiles.count() > 1 )
+  {
+    // error: multiple project files found
+    err = tr( "Found multiple QGIS project files" );
+  }
+  else if ( foundProjectFiles.count() < 1 )
+  {
+    // no projects
+    err = tr( "Failed to find a QGIS project file" );
+  }
+
+  return QString();
+}
+
 
 static QDateTime _getLastModifiedFileDateTime( const QString &path )
 {

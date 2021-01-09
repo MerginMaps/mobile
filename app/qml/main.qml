@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 
@@ -7,7 +16,6 @@ import QtQuick.Controls 2.2
 import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
-import QtLocation 5.8
 
 
 import QtQuick.Dialogs 1.1
@@ -20,7 +28,7 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
-    title: qsTr("Input")
+    title: "Input" // Do not translate
 
     property int zMapCanvas: 0
     property int zPanel: 20
@@ -28,6 +36,7 @@ ApplicationWindow {
 
     Item {
         id: stateManager
+        state: "view"
         states: [
             // Default state - when none of state below
             State {
@@ -46,24 +55,30 @@ ApplicationWindow {
         onStateChanged: {
             if (stateManager.state === "view") {
                 recordToolbar.visible = false
+                mainPanel.focus = true
+                digitizing.stopRecording();
             }
             else if (stateManager.state === "record") {
-                recordToolbar.visible = true
-                recordToolbar.extraPanelVisible = true
-                recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
                 updateRecordToolbar()
+                recordToolbar.visible = true
+                recordToolbar.focus = true
+                recordToolbar.extraPanelVisible = true
                 recordToolbar.gpsSwitchClicked()
+                digitizing.layer = recordToolbar.activeVectorLayer
             }
             else if (stateManager.state === "edit") {
+                recordToolbar.focus = true
                 featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
-                recordToolbar.activeLayerIndex = __layersModel.rowAccordingName(featurePanel.feature.layer.name,
-                                                                                   __layersModel.firstNonOnlyReadableLayerIndex())
+
+                __loader.setActiveLayer( featurePanel.feature.layer.name )
                 updateRecordToolbar()
 
-                var screenPos = digitizing.pointFeatureMapCoordinates(featurePanel.feature)
+                var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
                 mapCanvas.mapSettings.setCenter(screenPos);
+
+                browseDataPanel.clearStackAndClose()
             }
         }
     }
@@ -76,18 +91,36 @@ ApplicationWindow {
                 )
     }
 
-    function saveRecordedFeature(pair) {
-        if (digitizing.isPairValid(pair)) {
-            digitizingHighlight.featureLayerPair = pair
-            digitizingHighlight.visible = true
-            featurePanel.show_panel(pair, "Add", "form")
-        } else {
-            popup.text = "Recording feature is not valid"
-            popup.open()
+    function saveRecordedFeature( pair, hasGeometry = true ) {
+
+      if ( !digitizing.isPairValid( pair ) && hasGeometry ||
+            !pair.layer && !hasGeometry ) {
+        popup.text = qsTr( "Recorded feature is not valid" )
+        popup.open()
+      }
+      else {
+        if ( hasGeometry ) {
+          digitizingHighlight.featureLayerPair = pair
+          digitizingHighlight.visible = true
         }
-        stateManager.state = "view"
+
+        featurePanel.show_panel( pair, "Add", "form" )
+      }
+
+      stateManager.state = "view"
+      digitizing.useGpsPoint = false
     }
 
+
+    //! Returns point from gps (WGS84) or center screen point in map CRS
+    function getRecordedPoint() {
+      if (digitizing.useGpsPoint) {
+         return positionKit.position  // WGS84
+      } else {
+        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
+        return mapCanvas.mapSettings.screenToCoordinate(screenPoint)  // map CRS
+      }
+    }
 
     function editFeature() {
         var layer = featurePanel.feature.layer
@@ -101,30 +134,34 @@ ApplicationWindow {
             // TODO
         }
         else if (digitizing.hasPointGeometry(layer)) {
-            // assuming layer with point geometry
-            var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-            var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
-
-            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, centerPoint)
+            var recordedPoint = getRecordedPoint()
+            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
             featurePanel.saveFeatureGeom()
             stateManager.state = "view"
             featurePanel.show_panel(featurePanel.feature, "Edit", "form")
         }
     }
 
-    function recordFeature() {
-        var screenPoint = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-        var centerPoint = mapCanvas.mapSettings.screenToCoordinate(screenPoint)
+    function recordFeature( hasGeometry = true ) {
+      if ( hasGeometry )
+      {
+        var recordedPoint = getRecordedPoint()
 
-        if (digitizing.hasPointGeometry(activeLayerPanel.activeVectorLayer)) {
-            var pair = digitizing.pointFeatureFromPoint(centerPoint)
-            saveRecordedFeature(pair)
-        } else {
-            if (!digitizing.recording) {
-                digitizing.startRecording()
-            }
-            digitizing.addRecordPoint(centerPoint)
+        if ( digitizing.hasPointGeometry( __activeLayer.layer ) ) {
+          var pair = digitizing.pointFeatureFromPoint( recordedPoint, digitizing.useGpsPoint )
+          saveRecordedFeature( pair )
         }
+        else {
+          if ( !digitizing.recording )
+            digitizing.startRecording()
+
+          digitizing.addRecordPoint( recordedPoint, digitizing.useGpsPoint )
+        }
+      }
+      else
+      {
+        saveRecordedFeature( digitizing.featureWithoutGeometry(), hasGeometry )
+      }
     }
 
     function getGpsIndicatorColor() {
@@ -133,11 +170,11 @@ ApplicationWindow {
     }
 
     function showMessage(message) {
-        if (!__androidUtils.isAndroid) {
+        if ( !__androidUtils.isAndroid ) {
             popup.text = message
             popup.open()
         } else {
-            __androidUtils.showToast(message)
+            __androidUtils.showToast( message )
         }
     }
 
@@ -146,29 +183,52 @@ ApplicationWindow {
       alertDialog.open()
     }
 
-    function updateRecordToolbar() {
-        var layer = recordToolbar.activeVectorLayer
-        if (!layer)
-        {
-            // nothing to do with no active layer
-            return
-        }
+    function updateRecordToolbar()
+    {
+      if ( !__activeLayer.layer )
+        __loader.setActiveLayer( __recordingLayersModel.firstUsableLayer() )
 
-        if (digitizing.hasPointGeometry(layer)) {
-            recordToolbar.pointLayerSelected = true
-        } else {
-            recordToolbar.pointLayerSelected = false
-        }
-        recordToolbar.activeLayerName= __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.Name)
-        recordToolbar.activeLayerIcon = __layersModel.data(__layersModel.index(recordToolbar.activeLayerIndex), LayersModel.IconSource)
+      recordToolbar.activeVectorLayer = __activeLayer.vectorLayer
+      digitizing.layer = recordToolbar.activeVectorLayer
+      
+      if ( !recordToolbar.activeVectorLayer ) // nothing to do with no active layer
+        return
+
+      recordToolbar.pointLayerSelected = digitizing.hasPointGeometry( recordToolbar.activeVectorLayer )
     }
 
-    function updateActiveLayerByName(layerName) {
-        activeLayerPanel.activeLayerIndex = __layersModel.rowAccordingName(layerName,
-                                                                           __layersModel.firstNonOnlyReadableLayerIndex())
-        activeLayerPanel.activeLayerIndexChanged()
-        recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
-        recordToolbar.activeLayerIndexChanged()
+    function updateBrowseDataPanel()
+    {
+      if ( browseDataPanel.visible )
+        browseDataPanel.refreshFeaturesData()
+    }
+
+    function selectFeature( feature, shouldUpdateExtent, hasGeometry = true ) {
+
+      // update extent to fit feature above preview panel
+      if ( shouldUpdateExtent ) {
+          let panelOffsetRatio = featurePanel.previewHeight/window.height
+          __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
+      }
+
+      if ( hasGeometry ) {
+        highlight.featureLayerPair = feature
+        highlight.visible = true
+        featurePanel.show_panel( feature, "ReadOnly", "preview" )
+      }
+      else
+        featurePanel.show_panel( feature, "ReadOnly", "form" )
+    }
+
+    function updatePosition() {
+      if ((digitizing.useGpsPoint && stateManager.state !== "view")|| (stateManager.state === "view" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent(mainPanel.height))) {
+        var useGpsPoint = digitizing.useGpsPoint
+        mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
+        // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
+        digitizing.useGpsPoint = useGpsPoint
+      }
+
+      digitizingHighlight.positionChanged()
     }
 
     Component.onCompleted: {
@@ -191,9 +251,16 @@ ApplicationWindow {
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
         InputStyle.realHeight = window.height
-        console.log("Completed Running!")
+
         __loader.positionKit = positionKit
         __loader.recording = digitizing.recording
+        __loader.mapSettings = mapCanvas.mapSettings
+
+        // get focus when any project is active, otherwise let focus to merginprojectpanel
+        if ( __appSettings.activeProject )
+          mainPanel.forceActiveFocus()
+
+        console.log("Completed Running!")
     }
 
     QgsQuick.MapCanvas {
@@ -203,7 +270,6 @@ ApplicationWindow {
       width: parent.width
       z: zMapCanvas
 
-      mapSettings.layers: __layersModel.layers
       mapSettings.project: __loader.project
 
       QgsQuick.IdentifyKit {
@@ -223,20 +289,11 @@ ApplicationWindow {
         mapCanvas.forceActiveFocus()
         var screenPoint = Qt.point( mouse.x, mouse.y );
         var res = identifyKit.identifyOne(screenPoint);
+
         if (res.valid) {
-          highlight.featureLayerPair = res
-
-          // update extent to fit feature above preview panel
-          if (mouse.y > window.height - featurePanel.previewHeight) {
-              var panelOffsetRatio = featurePanel.previewHeight/window.height
-              __inputUtils.setExtentToFeature(res, mapCanvas.mapSettings, panelOffsetRatio)
-          }
-
-          highlight.visible = true
-          featurePanel.show_panel(res, "ReadOnly", "preview" )
-        } else if (featurePanel.visible) {
-            // closes feature/preview panel when there is nothing to show
-            featurePanel.visible = false
+          selectFeature(res, ( mouse.y > window.height - featurePanel.previewHeight ) )
+        } else if (featurePanel.visible) { // closes feature/preview panel when there is nothing to show
+          featurePanel.visible = false
         }
       }
     }
@@ -273,7 +330,7 @@ ApplicationWindow {
       id: digitizingHighlight
       anchors.fill: mapCanvas
 
-      property bool hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
+      hasPolygon: featureLayerPair !== null ? digitizing.hasPolygonGeometry(featureLayerPair.layer) : false
 
       mapSettings: mapCanvas.mapSettings
 
@@ -290,6 +347,8 @@ ApplicationWindow {
       markerWidth: highlight.markerWidth
       markerHeight: highlight.markerHeight
       markerAnchorY: highlight.markerAnchorY
+      recordingInProgress: digitizing.recording
+      guideLineAllowed: digitizing.manualRecording && stateManager.state === "record"
 
       // enable anti-aliasing to make the higlight look nicer
       // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
@@ -312,6 +371,13 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       z: zPanel   // make sure items from here are on top of the Z-order
 
+      onVisibleChanged: {
+        if (settingsPanel.visible)
+          settingsPanel.focus = true; // get focus
+        else
+          mainPanel.focus = true; // pass focus back to main panel
+      }
+
       gpsIndicatorColor: getGpsIndicatorColor()
     }
 	
@@ -321,14 +387,7 @@ ApplicationWindow {
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
 
-      onScreenPositionChanged: {
-        if (__appSettings.autoCenterMapChecked) {
-          var border = mainPanel.height
-          if (isPositionOutOfExtent(border)) {
-            mapCanvas.mapSettings.setCenter(positionKit.projectedPosition);
-          }
-        }
-      }
+      onScreenPositionChanged: updatePosition()
     }
 
     PositionMarker {
@@ -340,7 +399,7 @@ ApplicationWindow {
     DigitizingController {
         id: digitizing
         positionKit: positionMarker.positionKit
-        layer: activeLayerPanel.activeVectorLayer
+        layer: recordToolbar.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
 
@@ -371,11 +430,13 @@ ApplicationWindow {
 
         onOpenProjectClicked: openProjectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+        onMyLocationClicked: {
+          mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+          digitizing.useGpsPoint = true
+        }
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked =!__appSettings.autoCenterMapChecked
-            popup.text = "Autocenter mode " + (__appSettings.autoCenterMapChecked ? "on" : "off")
-            popup.open()
+            showMessage(__appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off"))
         }
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
@@ -384,17 +445,23 @@ ApplicationWindow {
           }
           __loader.zoomToProject(mapCanvas.mapSettings)
         }
+        onOpenBrowseDataClicked: browseDataPanel.visible = true
 
         recordButton.recording: digitizing.recording
         onAddFeatureClicked: {
-            if (__layersModel.noOfEditableLayers() > 0) {
+            if ( __recordingLayersModel.rowCount() > 0 ) {
                 stateManager.state = "record"
             } else {
-                popup.text = qsTr("No editable layers!")
-                popup.open()
+                showMessage(qsTr("No editable layers found."))
             }
-
         }
+    }
+
+    Connections {
+      target: __activeLayer
+      onActiveLayerChanged: {
+        updateRecordToolbar()
+      }
     }
 
     RecordToolbar {
@@ -406,13 +473,8 @@ ApplicationWindow {
         visible: false
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
-        activeLayerIndex: activeLayerPanel.activeLayerIndex
         // reset manualRecording after opening
         onVisibleChanged: if (visible) digitizing.manualRecording = true
-
-        onActiveLayerIndexChanged: {
-            updateRecordToolbar()
-        }
 
         onAddClicked: {
             if (stateManager.state === "record") {
@@ -424,18 +486,21 @@ ApplicationWindow {
 
         onGpsSwitchClicked: {
             if (!positionKit.hasPosition) {
-                popup.text = qsTr("The GPS is currently not available")
-                popup.open()
+                showMessage(qsTr("GPS currently unavailable.%1Try to allow GPS Location in your device settings.").arg("<br/>"))
                 return // leaving when no gps is available
             }
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
+            digitizing.useGpsPoint = true
         }
 
         onManualRecordingClicked: {
-            digitizing.manualRecording = !digitizing.manualRecording
-            if (!digitizing.manualRecording && stateManager.state === "record") {
-                digitizing.startRecording()
-            }
+          digitizing.manualRecording = !digitizing.manualRecording
+          if (!digitizing.manualRecording && stateManager.state === "record") {
+            digitizing.startRecording()
+            digitizing.useGpsPoint = true
+            updatePosition()
+            recordFeature() // record point immediately after turning on the streaming mode
+          }
         }
 
         onCancelClicked: {
@@ -443,7 +508,6 @@ ApplicationWindow {
                 featurePanel.show_panel(featurePanel.feature, "Edit", "form")
             }
             stateManager.state = "view"
-            digitizing.stopRecording();
             digitizingHighlight.visible = false
         }
 
@@ -452,7 +516,6 @@ ApplicationWindow {
         }
 
          onStopRecordingClicked: {
-             digitizing.stopRecording()
              var pair = digitizing.lineOrPolygonFeature();
              saveRecordedFeature(pair)
              stateManager.state = "view"
@@ -486,27 +549,8 @@ ApplicationWindow {
     Connections {
         target: mapCanvas.mapSettings
         onExtentChanged: {
+            digitizing.useGpsPoint = false
             scaleBar.visible = true
-        }
-    }
-
-    Rectangle {
-        id: gpsAccuracy
-        width: scaleBar.textWidth
-        height: 35 * QgsQuick.Utils.dp
-        x: 0
-        y: window.height - 2 * (35 * QgsQuick.Utils.dp)
-        z: zToolkits
-        color: InputStyle.clrPanelBackground
-        opacity: InputStyle.panelOpacity
-        visible: false
-        Text  {
-            anchors.fill: parent
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            color: scaleBar.barColor
-            font.pixelSize: scaleBar.height - 2 * scaleBar.lineWidth
-            text: QgsQuick.Utils.formatDistance( positionKit.accuracy, positionKit.accuracyUnits, 0 )
         }
     }
 
@@ -516,12 +560,20 @@ ApplicationWindow {
         width: window.width
         z: zPanel
 
+        onVisibleChanged: {
+          if (openProjectPanel.visible)
+            openProjectPanel.forceActiveFocus()
+          else
+          {
+            mainPanel.forceActiveFocus()
+          }
+        }
+
         onActiveProjectIndexChanged: {
             openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
             __appSettings.defaultProject = openProjectPanel.activeProjectPath
             __appSettings.activeProject = openProjectPanel.activeProjectPath
             __loader.load(openProjectPanel.activeProjectPath)
-            updateActiveLayerByName(__appSettings.defaultLayer)
         }
     }
 
@@ -532,10 +584,34 @@ ApplicationWindow {
         edge: Qt.BottomEdge
         z: zPanel
 
-        onLayerSettingChanged: {
-            recordToolbar.activeLayerIndex = activeLayerPanel.activeLayerIndex
-            updateRecordToolbar()
+        onActiveLayerChangeRequested: {
+          __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
         }
+    }
+
+    BrowseDataPanel {
+      id: browseDataPanel
+      width: window.width
+      height: window.height
+      focus: true
+      z: zPanel   // make sure items from here are on top of the Z-order
+
+      onFeatureSelectRequested: {
+        if ( pair.valid )
+          selectFeature( pair, true )
+        else if ( pair.feature.geometry.isNull )
+          selectFeature( pair, false, false )
+      }
+
+      onCreateFeatureRequested: {
+        digitizing.layer = selectedLayer
+        recordFeature( false )
+      }
+
+      onVisibleChanged: {
+        if ( !browseDataPanel.visible )
+          mainPanel.forceActiveFocus()
+      }
     }
 
     MapThemePanel {
@@ -558,17 +634,29 @@ ApplicationWindow {
 
     MessageDialog {
         id: alertDialog
-        title: qsTr("Synchronization error")
+        title: qsTr("Communication error")
         onAccepted: alertDialog.close()
     }
 
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
-            showAsDialog ? showDialog(message) : showMessage(message)
+            var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
+            showAsDialog ? showDialog(msg) : showMessage(msg)
         }
         onNotify: {
             showMessage(message)
+        }
+
+        onProjectDataChanged: {
+          var projectName = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectName)
+          var projectNamespace = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectNamespace)
+          var currentProjectFullName = __merginApi.getFullProjectName(projectNamespace, projectName)
+
+          //! if current project has been updated, refresh canvas
+          if (projectFullName === currentProjectFullName) {
+            mapCanvas.mapSettings.extentChanged()
+          }
         }
     }
 
@@ -590,14 +678,31 @@ ApplicationWindow {
         z: 0 // to featureform editors be visible
 
         onVisibleChanged: {
-            if (!visible) {
+            if ( !visible ) {
                 digitizingHighlight.visible = false
                 highlight.visible = false
+
+              if (stateManager.state !== "edit") {
+                if ( browseDataPanel.visible ) browseDataPanel.focus = true
+                else mainPanel.focus = true
+              }
             }
+            else featurePanel.forceActiveFocus()
         }
 
         onEditGeometryClicked: {
             stateManager.state = "edit"
+        }
+
+        onPanelClosed: {
+          updateBrowseDataPanel()
+        }
+    }
+
+    Connections {
+        target: __loader
+        onProjectWillBeReloaded: {
+            featurePanel.reload()
         }
     }
 

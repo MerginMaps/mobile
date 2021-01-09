@@ -1,0 +1,210 @@
+name: iOS Build
+on: [push]
+env:
+  QT_DROPBOX_HASH: whdez6vfckulgxu
+  QT_VERSION: 5.14.2
+  SDK_DROPBOX_HASH: nk6r6o52qyt4n77
+  IOS_SDK_VERSION: 10
+  IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
+  KEYCHAIN: ${{ 'inputapp.keychain' }}
+  XC_VERSION: ${{ '12.0.1' }}
+  IOS_MIN_SDK_VERSION: ${{ '12.0' }}
+
+jobs:
+  ios_build:
+    if: github.repository == 'lutraconsulting/input'
+    runs-on: macos-latest
+    steps:
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+
+      - uses: actions/checkout@v2
+
+      - name: Install brew deps
+        run: |
+          brew install gnupg
+          brew install openssl@1.1
+          brew install python3
+          pip3 install dropbox
+
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd app/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
+
+      - name: Configure Keychain
+        run: |
+          security create-keychain -p "" "$KEYCHAIN"
+          security list-keychains -s "$KEYCHAIN"
+          security default-keychain -s "$KEYCHAIN"
+          security unlock-keychain -p "" "$KEYCHAIN"
+          security set-keychain-settings
+          security list-keychains
+
+      - name: Configure Code Signing
+        env:
+          IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
+          IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
+          security import "./.github/secrets/ios/Certificates_ios_dist.p12" -k "$KEYCHAIN" -P "$IOS_CERT_KEY" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
+          cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
+
+      - name: Download and install input-sdk
+        run: |
+          DOWNLOAD_DIR=`pwd`
+          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz?dl=0"
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+          cd /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+          sudo chown -R $USER .
+          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz
+
+          ls -la ./arm64/include/geodiff.h
+          ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
+
+      - name: Download and install qt
+        run: |
+          DOWNLOAD_DIR=`pwd`
+          curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
+          sudo mkdir -p /opt/Qt/${QT_VERSION}/ios
+          cd /opt/Qt/${QT_VERSION}/ios
+          sudo chown -R $USER .
+          tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
+
+          echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
+          cp $DOWNLOAD_DIR/scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
+
+      - name: build QgsQuick
+        run: |
+          export QGSQUICK_DIR=`pwd`/qgsquick
+          ls ${QGSQUICK_DIR}
+
+          mkdir -p ../build-QgsQuick
+          mkdir -p ../install-QgsQuick
+          mkdir -p ../install-QgsQuick/images/QgsQuick
+
+          SYSROOT="$(xcrun --sdk iphoneos --show-sdk-path)"
+          echo "SYSROOT: $SYSROOT"
+
+          cd ../build-QgsQuick
+          export STAGE_PATH=/opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage/arm64
+          export PATH=${STAGE_PATH}/bin:$PATH
+
+          cmake \
+            -DENABLE_VISIBILITY=0 \
+            -DARCHS=arm64 \
+            -DENABLE_QT5=ON \
+            -DPLATFORM=OS \
+            -DENABLE_ARC=0 \
+            -DENABLE_BITCODE=0 \
+            -DCMAKE_TOOLCHAIN_FILE=${STAGE_PATH}/tools/ios.toolchain.cmake \
+            -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
+            -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
+            -DFORCE_STATIC_LIBS=TRUE \
+            -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="/opt/Qt/${QT_VERSION}/ios\;${STAGE_PATH}" \
+            -DQGIS_INSTALL_PATH=${STAGE_PATH} \
+            -DUSE_QGIS_BUILD_DIR=FALSE \
+            -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
+            -DIOS_INPUT_SDK_PATH=${STAGE_PATH} \
+            -DIOS_SYSROOT_PATH=${SYSROOT} \
+            -DIOS=TRUE \
+            ${QGSQUICK_DIR}
+
+          make -j $(sysctl -n hw.ncpu) VERBOSE=1
+          make install
+
+          cp -v from_qgis/qgis_quick.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -v ${QGSQUICK_DIR}/from_qgis/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
+          cp -v ${QGSQUICK_DIR}/from_qgis/images/* ../install-QgsQuick/images/QgsQuick/
+
+      - name: Create build system with qmake
+        run: |
+          INPUT_DIR=`pwd`
+
+          # setup config environment
+          cp scripts/ci/config.pri app/config.pri
+
+          # patch the Info.plist
+          CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
+          TIMESTAMP=`date "+%y%m%d%H%M%S"`
+          GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
+          BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
+          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${IOS_SDK_VERSION}.${TIMESTAMP}
+
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
+
+          mkdir -p ../build-INPUT
+          cd ../build-INPUT
+
+          # run qmake
+          /opt/Qt/${QT_VERSION}/ios/bin/qmake \
+            ${INPUT_DIR}/app/input.pro \
+            -spec macx-ios-clang \
+            CONFIG+=release \
+            CONFIG+=iphoneos \
+            CONFIG+=device \
+            CONFIG+=qtquickcompiler \
+            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
+            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
+            qprofile.value="LutraConsultingLtd.Input.AppStore" \
+            QMAKE_MAC_XCODE_SETTINGS+=qteam \
+            qteam.name=DEVELOPMENT_TEAM \
+            qteam.value=79QMH2QRAH \
+            QMAKE_MAC_XCODE_SETTINGS+=qidentity \
+            qidentity.name=CODE_SIGN_IDENTITY \
+            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
+            QMAKE_MAC_XCODE_SETTINGS+=qstyle \
+            qstyle.name=CODE_SIGN_STYLE \
+            qstyle.value=Manual
+
+      - name: Build Input
+        run: |
+          INPUT_DIR=`pwd`
+          cd ../build-INPUT
+
+          xcodebuild \
+            -project Input.xcodeproj/ \
+            -scheme Input \
+            -sdk iphoneos \
+            -configuration Release \
+            archive -archivePath Input.xcarchive \
+            "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
+
+      - name: Create Input Package
+        run: |
+          INPUT_DIR=`pwd`
+          cd ../build-INPUT
+          xcodebuild \
+            -archivePath Input.xcarchive \
+            -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
+            -exportPath $PWD \
+            -allowProvisioningUpdates \
+            -exportArchive
+
+      - name: Upload .ipa to TestFlight
+        env:
+          INPUTAPP_BOT_APPLEID_PASS: ${{ secrets.INPUTAPP_BOT_APPLEID_PASS }}
+          INPUTAPP_BOT_APPLEID_USER: ${{ secrets.INPUTAPP_BOT_APPLEID_USER }}
+          INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
+        if: success()
+        run: |
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
+          echo "Publishing ios ${CF_BUNDLE_VERSION}"
+          xcrun altool --upload-app -t ios -f ../build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+
+          # Add comment to GitHub
+          GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
+          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}

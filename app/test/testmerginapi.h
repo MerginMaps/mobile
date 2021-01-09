@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef TESTMERGINAPI_H
 #define TESTMERGINAPI_H
 
@@ -18,6 +27,7 @@ class TestMerginApi: public QObject
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
+    static const QString TEST_EMPTY_FILE_NAME;
 
   private slots:
 
@@ -33,6 +43,7 @@ class TestMerginApi: public QObject
     void testCreateDeleteProject();
     void testUploadProject();
     void testMultiChunkUploadDownload();
+    void testEmptyFileUploadDownload();
     void testPushAddedFile();
     void testPushRemovedFile();
     void testPushModifiedFile();
@@ -49,11 +60,11 @@ class TestMerginApi: public QObject
     void testDiffUpdateWithRebase();
     void testDiffUpdateWithRebaseFailed();
     void testUpdateWithDiffs();
+    void testUpdateWithMissedVersion();
+
+    void testRegister();
 
   private:
-    int SHORT_REPLY = 1000;
-    int LONG_REPLY = 5000;
-
     MerginApi *mApi;
     MerginProjectModel *mMerginProjectModel;
     ProjectModel *mProjectModel;

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
 import "."  // import InputStyle singleton
@@ -44,7 +53,7 @@ Rectangle {
 
         Text {
             id: backButtonText
-            text: "Back"
+            text: qsTr("Back")
             color: InputStyle.fontColorBright
             font.pixelSize: InputStyle.fontPixelSizeNormal
             height: header.rowHeight
@@ -59,8 +68,9 @@ Rectangle {
         }
 
         MouseArea {
-            anchors.fill: parent
-            onClicked: back()
+          anchors.fill: parent
+          anchors.leftMargin: -InputStyle.panelMargin
+          onClicked: back()
         }
     }
 

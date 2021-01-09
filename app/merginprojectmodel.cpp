@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "merginprojectmodel.h"
 
 #include <QString>
@@ -9,6 +18,8 @@ MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QOb
   QObject::connect( &mLocalProjects, &LocalProjectsManager::projectMetadataChanged, this, &MerginProjectModel::projectMetadataChanged );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
+
+  mAdditionalItem->status = NonProjectItem;
 }
 
 QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
@@ -30,11 +41,11 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
       // TODO: clientUpdated currently not being set
       if ( !project->clientUpdated.isValid() )
       {
-        return project->serverUpdated.toString();
+        return project->serverUpdated.toLocalTime().toString();
       }
       else
       {
-        return project->clientUpdated.toString();
+        return project->clientUpdated.toLocalTime().toString();
       }
     }
 
@@ -50,6 +61,8 @@ QVariant MerginProjectModel::data( const QModelIndex &index, int role ) const
           return QVariant( QStringLiteral( "noVersion" ) );
         case ProjectStatus::Modified:
           return QVariant( QStringLiteral( "modified" ) );
+        case ProjectStatus::NonProjectItem:
+          return QVariant( QStringLiteral( "nonProjectItem" ) );
       }
       break;
     }
@@ -87,12 +100,21 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
   return mMerginProjects.count();
 }
 
-void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects )
+void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page )
 {
   beginResetModel();
-  mMerginProjects.clear();
+  mMerginProjects.removeOne( mAdditionalItem );
+
+  if ( page == 1 )
+  {
+    mMerginProjects.clear();
+  }
+  setLastPage( page );
+
+
   for ( MerginProjectListEntry entry : merginProjects )
   {
+    QString fullProjectName = MerginApi::getFullProjectName( entry.projectNamespace, entry.projectName );
     std::shared_ptr<MerginProject> project = std::make_shared<MerginProject>();
     project->projectNamespace = entry.projectNamespace;
     project->projectName = entry.projectName;
@@ -107,8 +129,22 @@ void MerginProjectModel::resetProjects( const MerginProjectList &merginProjects 
       // TODO: what else to copy?
     }
 
+    if ( pendingProjects.contains( fullProjectName ) )
+    {
+
+      TransactionStatus projectTransaction = pendingProjects.value( fullProjectName );
+      project->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
+      project->pending = true;
+    }
+
     mMerginProjects << project;
   }
+
+  if ( mMerginProjects.count() < expectedProjectCount )
+  {
+    mMerginProjects << mAdditionalItem;
+  }
+
   endResetModel();
 }
 
@@ -122,6 +158,17 @@ int MerginProjectModel::findProjectIndex( const QString &projectFullName )
     row++;
   }
   return -1;
+}
+
+void MerginProjectModel::setLastPage( int lastPage )
+{
+  mLastPage = lastPage;
+  emit lastPageChanged();
+}
+
+int MerginProjectModel::lastPage() const
+{
+  return mLastPage;
 }
 
 QString MerginProjectModel::searchExpression() const

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "merginprojectstatusmodel.h"
 #include "geodiffutils.h"
 #include "inpututils.h"
@@ -10,6 +19,7 @@ MerginProjectStatusModel::MerginProjectStatusModel( LocalProjectsManager &localP
 
 int MerginProjectStatusModel::rowCount( const QModelIndex &parent ) const
 {
+  Q_UNUSED( parent )
   return mItems.length();
 }
 
@@ -57,7 +67,7 @@ void MerginProjectStatusModel::insertIntoItems( const QSet<QString> &files, cons
       ProjectStatusItem item;
       item.status = status;
       item.text = file;
-      item.section = "Changes";
+      item.section = tr( "Pending Changes" );
       mItems.append( item );
     }
   }
@@ -83,7 +93,7 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
 
         ProjectStatusItem item;
         item.status = ProjectChangelogStatus::Message;
-        item.text =  QStringLiteral( "Unable to determine changes" );
+        item.text =  tr( "Failed to determine changes" );
         item.filename = file;
         item.section = file;
 

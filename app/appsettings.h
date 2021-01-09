@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef APPSETTINGS_H
 #define APPSETTINGS_H
 
@@ -21,6 +30,8 @@ class AppSettings: public QObject
     QString defaultProject() const;
     void setDefaultProject( const QString &value );
 
+    QString defaultProjectName() const;
+
     QString activeProject() const;
     void setActiveProject( const QString &value );
 
@@ -29,8 +40,6 @@ class AppSettings: public QObject
 
     bool autoCenterMapChecked();
     void setAutoCenterMapChecked( const bool value );
-
-    QString defaultProjectName() const;
 
     int gpsAccuracyTolerance() const;
     void setGpsAccuracyTolerance( int gpsAccuracyTolerance );
@@ -63,7 +72,6 @@ class AppSettings: public QObject
 
     const QString mGroupName = QString( "inputApp" );
 
-    void reloadDefaultLayers();
 };
 
 #endif // APPSETTINGS_H

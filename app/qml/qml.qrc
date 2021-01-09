@@ -4,7 +4,6 @@
         <file>FeaturePanel.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>
-        <file>ProjectBtn.qml</file>
         <file>RecordBtn.qml</file>
         <file>ScaleBar.qml</file>
         <file>InputStyle.qml</file>
@@ -35,5 +34,24 @@
         <file>LoadingIndicator.qml</file>
         <file>ProjectLoadingScreen.qml</file>
         <file>ProjectStatusPanel.qml</file>
+        <file>RegistrationForm.qml</file>
+        <file>LoginForm.qml</file>
+        <file>LeftCheckBox.qml</file>
+        <file>BrowseDataPanel.qml</file>
+        <file>BrowseDataFeaturesPanel.qml</file>
+        <file>BrowseDataLayersPanel.qml</file>
+        <file>BrowseDataView.qml</file>
+        <file>LayerList.qml</file>
+        <file>SubscribePage.qml</file>
+        <file>TextWithIcon.qml</file>
+        <file>CircularProgressBar.qml</file>
+        <file>BrowseDataToolbar.qml</file>
+        <file>SearchBar.qml</file>
+        <file>SubscribePlanItem.qml</file>
+        <file>ValueRelationWidget.qml</file>
+        <file>TextHyperlink.qml</file>
+        <file>LogPanel.qml</file>
+        <file>components/PasswordField.qml</file>
+        <file>components/DelegateButton.qml</file>
     </qresource>
 </RCC>

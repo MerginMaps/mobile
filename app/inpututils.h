@@ -1,10 +1,27 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef INPUTUTILS_H
 #define INPUTUTILS_H
 
+#define STR1(x)  #x
+#define STR(x)  STR1(x)
+
 #include <QObject>
+#include <QtGlobal>
+#include <QUuid>
+#include "inputhelp.h"
 #include "merginapi.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
+#include "qgsquickpositionkit.h"
+#include "qgis.h"
 
 class InputUtils: public QObject
 {
@@ -53,7 +70,25 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
+    /**
+     * Returns name of temporary file indicating first time download of project is in progress
+     * \param projectName
+     */
+    static QString downloadInProgressFilePath( const QString &projectDir );
+
     Q_INVOKABLE void showNotification( const QString &message );
+
+    /**
+     * Returns speed from positionKit's QGeoPositionInfo.
+     * \param QgsQuickPositionKit positionKit.
+     * \result The ground speed, in meters/sec.
+     */
+    Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
+
+    /**
+     * Converts bytes to  human readable size (e.g. 1GB, 500MB)
+     */
+    Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
@@ -64,16 +99,41 @@ class InputUtils: public QObject
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
+    /**
+     * Add a log entry to internal log text file
+     *
+     * \see setLogFilename()
+     */
     static void log( const QString &topic, const QString &info );
 
+    /**
+     * Sets the filename of the internal text log file
+     */
     static void setLogFilename( const QString &value );
+
+    static QString logFilename();
+
+    static bool createEmptyFile( const QString &filePath );
 
     static QString filesToString( QList<MerginFile> files );
 
     static QString appInfo();
 
+    static QString uuidWithoutBraces( const QUuid &uuid );
+
+    static QString localizedDateFromUTFString( QString timestamp );
+
+    /** InputApp version */
+    static QString appVersion();
+
+    /** InputApp platform */
+    static QString appPlatform();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
+
+  public slots:
+    void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
   private:
 
@@ -81,9 +141,7 @@ class InputUtils: public QObject
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
     QString sanitizeName( const QString &path );
-
     static QString sLogFile;
-
     static void appendLog( const QByteArray &data, const QString &path );
 };
 

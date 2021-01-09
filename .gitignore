@@ -1,8 +1,11 @@
+*.orig
 *.DS_Store
 *.user
 *build*/
 app/config.pri
+app/merginsecrets.cpp
 *.idea
 test/temp_projects/
 test/temp_extra_projects/
 input.pro.user*
+app/android/assets/qgis-data/projects/

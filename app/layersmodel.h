@@ -1,10 +1,4 @@
 /***************************************************************************
-  qgsquicklayertreemodel.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : zilolv at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,58 +11,33 @@
 #ifndef LAYERSMODEL_H
 #define LAYERSMODEL_H
 
-#include <QAbstractListModel>
-#include <QList>
-#include <QSet>
+#include <QObject>
 
-class QgsMapLayer;
-class QgsProject;
+#include "qgsmaplayermodel.h"
 
-class LayersModel : public QAbstractListModel
+class LayersModel : public QgsMapLayerModel
 {
     Q_OBJECT
-    Q_PROPERTY( QList<QgsMapLayer *> layers READ layers NOTIFY layersChanged )
 
   public:
-    enum Roles
+    LayersModel();
+
+    //! Returns list of all layers
+    QList<QgsMapLayer *> layers() const { return mLayers; };
+
+    enum LayerRoles
     {
-      Name = Qt::UserRole + 1,
-      isVector,
-      isReadOnly,
-      IconSource,
-      VectorLayer,
-      HasGeometry
+      LayerNameRole = Qt::UserRole + 100, //! Reserved for QgsMapLayerModel roles
+      VectorLayerRole,
+      HasGeometryRole,
+      IconSourceRole,
+      LayerIdRole
     };
-    Q_ENUMS( Roles )
+    Q_ENUMS( LayerRoles )
 
-    explicit LayersModel( QgsProject *project, QObject *parent = nullptr );
-    ~LayersModel() override;
-
-    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-    Q_INVOKABLE int rowAccordingName( QString name, int defaultIndex = -1 ) const;
-    Q_INVOKABLE int noOfEditableLayers() const;
-    Q_INVOKABLE int firstNonOnlyReadableLayerIndex() const;
-
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
-
+    //! Methods overridden from QgsMapLayerModel
+    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
-
-    QList<QgsMapLayer *> layers() const;
-
-    int defaultLayerIndex() const;
-    void setDefaultLayerIndex( int index );
-
-  signals:
-    void layersChanged();
-    void defaultLayerIndexChanged();
-
-  public slots:
-    void reloadLayers(); //when project file changes, reload all layers, etc.
-
-  private:
-    QgsProject *mProject;
-    QList<QgsMapLayer *> mLayers; // all layers
 };
 
 #endif // LAYERSMODEL_H

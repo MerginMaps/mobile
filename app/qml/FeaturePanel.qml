@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
@@ -13,6 +22,7 @@ Drawer {
     property bool isReadOnly
 
     signal editGeometryClicked()
+    signal panelClosed()
 
     property alias formState: featureForm.state
     property alias feature: attributeModel.featureLayerPair
@@ -20,6 +30,12 @@ Drawer {
 
     function saveFeatureGeom() {
         featureForm.save()
+    }
+
+    function reload() {
+      // order matters!
+      attributeFormModel.forceClean();
+      attributeModel.forceClean();
     }
 
     id: featurePanel
@@ -32,6 +48,16 @@ Drawer {
 
     Behavior on height {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+    }
+
+    Item {
+      id: backHandler
+      focus: true
+      Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          featurePanel.close()
+        }
+      }
     }
 
     background: Rectangle {
@@ -65,6 +91,7 @@ Drawer {
         featurePanel.formState = formState
         featurePanel.visible = true
         featurePanel.isReadOnly = feature.layer.readOnly
+        backHandler.focus = true
 
         if (panelState === "preview") {
             previewPanel.title = __loader.featureTitle(feature)
@@ -108,7 +135,7 @@ Drawer {
             width: parent.width
             color: InputStyle.clrPanelMain
             rowHeight: InputStyle.rowHeightHeader
-            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Object") : qsTr("Object")
+            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
 
             onBack: featurePanel.visible = false
         }
@@ -127,7 +154,7 @@ Drawer {
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: "No photos added."
+                text: qsTr("No photos added.")
                 color: InputStyle.clrPanelMain
                 font.pixelSize: InputStyle.fontPixelSizeNormal
             }
@@ -144,7 +171,7 @@ Drawer {
             externalResourceHandler: externalResourceBundle.handler
             toolbarVisible: false
             style: QgsQuick.FeatureFormStyling {
-                property color backgroundColor: "white  "
+                property color backgroundColor: "white"
                 property real backgroundOpacity: 1
 
                 property QtObject group: QtObject {
@@ -182,6 +209,7 @@ Drawer {
                 property QtObject toolbutton: QtObject {
                   property color backgroundColor: "transparent"
                   property color backgroundColorInvalid: "#bdc3c7"
+                  property color activeButtonColor: InputStyle.panelBackgroundDarker
                   property real size: 80 * QgsQuick.Utils.dp
                 }
 
@@ -209,6 +237,7 @@ Drawer {
               }
 
             model: QgsQuick.AttributeFormModel {
+                id: attributeFormModel
                 attributeModel: QgsQuick.AttributeModel {
                     id: attributeModel
                 }
@@ -216,13 +245,19 @@ Drawer {
 
             project: featurePanel.project
             onSaved: {
+                featurePanel.panelClosed()
                 featurePanel.visible = false
             }
-            onCanceled: featurePanel.visible = false
+            onCanceled: {
+              featurePanel.panelClosed()
+              featurePanel.visible = false
+            }
 
             onStateChanged: {
                 toolbar.state = featureForm.state
             }
+
+            customWidgetCallback: valueRelationWidget.handler
         }
 
         FeatureToolbar {
@@ -233,6 +268,7 @@ Drawer {
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
             isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
+            saveBtnEnabled: featureForm.model.constraintsHardValid
 
             onEditClicked: featureForm.state = "Edit"
             onSaveClicked: featureForm.save()
@@ -247,16 +283,20 @@ Drawer {
           id: deleteDialog
           visible: false
           title: qsTr( "Delete feature" )
-          text: qsTr( "Really delete this feature?" )
+          text: qsTr( "Are you sure you want to delete this feature?" )
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Ok | StandardButton.Cancel
-          onAccepted: {
-            featureForm.model.attributeModel.deleteFeature()
-            visible = false
-            featureForm.canceled()
-          }
-          onRejected: {
-            visible = false
+
+          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+          onButtonClicked: {
+              if (clickedButton === StandardButton.Ok) {
+                featureForm.model.attributeModel.deleteFeature()
+                visible = false
+                featureForm.canceled()
+              }
+              else if (clickedButton === StandardButton.Cancel) {
+                visible = false
+              }
           }
         }
     }
@@ -265,4 +305,9 @@ Drawer {
       id: externalResourceBundle
     }
 
+    ValueRelationWidget {
+      id: valueRelationWidget
+
+      onWidgetClosed: backHandler.forceActiveFocus()
+    }
 }

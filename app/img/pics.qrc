@@ -44,5 +44,12 @@
         <file>stop.svg</file>
         <file>info.svg</file>
         <file>table.svg</file>
+        <file>envelope-solid.svg</file>
+        <file>database-solid.svg</file>
+        <file>ic_today.svg</file>
+        <file>exclamation-triangle-solid.svg</file>
+        <file>mIconTableLayer.svg</file>
+        <file>eye-slash.svg</file>
+        <file>eye.svg</file>
     </qresource>
 </RCC>

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 pragma Singleton
 import QtQuick 2.0
 
@@ -25,8 +34,8 @@ QtObject {
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 
     property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20 * rado2Lutra
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 28 * rado2Lutra
-    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 32 * rado2Lutra
+    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 24 * rado2Lutra
+    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 28 * rado2Lutra
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
@@ -40,6 +49,7 @@ QtObject {
     property real panelOpacity: 1
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
+    property real cornerRadius: 8 * QgsQuick.Utils.dp
 
     property real refWidth: 640
     property real refHeight: 1136
@@ -58,6 +68,10 @@ QtObject {
     property var editIcon: "qrc:/edit.svg"
     property var infoIcon: "qrc:/info.svg"
     property var tableIcon: "qrc:/table.svg"
+
+    property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
+    property var vectorLineIcon: "qrc:/mIconLineLayer.svg"
+    property var vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
 
 
     // Scaling function using QgsQuick screenDensity and deviceRatio

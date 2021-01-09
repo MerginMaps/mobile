@@ -4,11 +4,19 @@ call %~dp0\version.cmd
 echo Building InputApp: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
 
 set OLD_PATH=%PATH%
-set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage
+
+rem TODO: maybe input-sdk-win-x86_64-%WINSDK_VER% can be dropped for next SDK
+set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage\input-sdk-win-x86_64-%WINSDK_VER%
 if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
+rem TODO: rename cmake/qgis to qgis/cmake so we do not need this workaround
+robocopy %INPUT_SDK_DIR%\cmake\qgis %INPUT_SDK_DIR%\cmake\cmake /E /NFL
+
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
+set STAGE_PATH_QGSQUICK=%ROOT_DIR%\stage-qgsquick
+set BUILD_PATH_QGSQUICK=%ROOT_DIR%\build-qgsquick
+
 set RESULT_FILE=%ROOT_DIR%\inputapp-win-x86_64.exe
 set REPO_PATH=%ROOT_DIR%\repo\input
 IF EXIST "C:\projects\input\app\input.pro" (
@@ -19,18 +27,57 @@ if not exist %ROOT_DIR% mkdir %ROOT_DIR%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 if not exist %STAGE_PATH%  mkdir %STAGE_PATH%
 IF NOT EXIST %REPO_PATH% (echo INPUT REPO not cloned & goto error)
+if not exist %BUILD_PATH_QGSQUICK% mkdir %BUILD_PATH_QGSQUICK%
+if not exist %STAGE_PATH_QGSQUICK%  mkdir %STAGE_PATH_QGSQUICK%
+
+set CMAKE=C:\Program Files\CMake\bin
+set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
 
 if not "%PROGRAMFILES(X86)%"=="" set PF86=%PROGRAMFILES(X86)%
 if "%PF86%"=="" set PF86=%PROGRAMFILES%
 if "%PF86%"=="" (echo PROGRAMFILES not set & goto error)
+
 set VS140COMNTOOLS=%PF86%\Microsoft Visual Studio 14.0\Common7\Tools
 set VS14ROOT=%PF86%\Microsoft Visual Studio 14.0
 call "%VS14ROOT%\VC\vcvarsall.bat" amd64
 path %path%;%VS14ROOT%\VC\bin
 path %path%;%INPUT_SDK_DIR%\apps\Qt5\bin;%PATH%
+path %path%;%CMAKE%
+
+dir "%PF86%\Windows Kits"
+
+set Qt5_DIR=%INPUT_SDK_DIR%\apps\qt5\lib\cmake\Qt5
+
+rem shouldn't all these windows kit includes by set automatically?
+set LIB=%INPUT_SDK_DIR%\apps\Qt5\lib;%INPUT_SDK_DIR%\lib
+set LIB=%LIB%;%VS14ROOT%\VC\lib\amd64;%PF86%\Windows Kits\8.1\Lib\winv6.3\um\x64
+set LIB=%LIB%;%PF86%\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64
+set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
+set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include;%PF86%\Windows Kits\8.1\Include\um;%PF86%\Windows Kits\8.1\Include\shared
+set INCLUDE=%INCLUDE%;%PF86%\Windows Kits\10\Include\10.0.18362.0\ucrt
+
+rem QGSQUICK
+cd %BUILD_PATH_QGSQUICK%
+cmake -G %CMAKE_GENERATOR% ^
+ -DCMAKE_SYSTEM_VERSION=8.1 ^
+ -DCMAKE_INSTALL_PREFIX=%STAGE_PATH_QGSQUICK% ^
+ -DCMAKE_BUILD_TYPE=Release ^
+ -DCMAKE_PREFIX_PATH=%INPUT_SDK_DIR%\apps\Qt5% ^
+ -DENABLE_TESTS=FALSE ^
+ -DFORCE_STATIC_LIBS=FALSE ^
+ -DUSE_QGIS_BUILD_DIR=FALSE ^
+ -DQGIS_INSTALL_PATH=%INPUT_SDK_DIR% ^
+ -DQGIS_CMAKE_PATH=%INPUT_SDK_DIR%\cmake\qgis ^
+ -DCMAKE_DISABLE_FIND_PACKAGE_QtQmlTools=TRUE ^
+ %REPO_PATH%\qgsquick
+
+cmake --build . --config Release --target install
+
+IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
+IF NOT EXIST "%STAGE_PATH_QGSQUICK%\lib\qgis_quick.lib" goto error
 
 cd %BUILD_PATH%
-qmake CONFIG+=force_debug_info %REPO_PATH%\app
+qmake CONFIG+=release %REPO_PATH%\app
 nmake release VERBOSE=1
 IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
 rem for debugging use %BUILD_PATH%\release\*.pdb
@@ -53,7 +100,6 @@ more /P %REPO_PATH%\LICENSE > %STAGE_PATH%\license.txt
 rem OSGeo
 xcopy %INPUT_SDK_DIR%\bin\qgis_core.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\qgis_native.dll %STAGE_PATH%\ /Y
-xcopy %INPUT_SDK_DIR%\bin\qgis_quick.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\proj*.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\geos_c.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\gdal*.dll %STAGE_PATH%\ /Y 
@@ -87,23 +133,20 @@ xcopy %INPUT_SDK_DIR%\bin\hdf5_hl.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\libeay32.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\ssleay32.dll %STAGE_PATH%\ /Y 
 xcopy %INPUT_SDK_DIR%\bin\geodiff.dll %STAGE_PATH%\ /Y 
+xcopy %INPUT_SDK_DIR%\bin\libprotobuf-lite.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\bin\szip.dll %STAGE_PATH%\ /Y
 
 rem qgis providers
 xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y 
 
-rem proj3
-if not exist %STAGE_PATH%\share  mkdir %STAGE_PATH%\share
-robocopy %INPUT_SDK_DIR%\share\proj %STAGE_PATH%\share\proj /E
-
-rem qml
-robocopy %INPUT_SDK_DIR%\qml %STAGE_PATH%\qml /E
-robocopy %INPUT_SDK_DIR%\images\QgsQuick %STAGE_PATH%\images\QgsQuick /E
+rem QgsQuick
+xcopy %STAGE_PATH_QGSQUICK%\bin\qgis_quick.dll %STAGE_PATH%\ /Y
+robocopy %STAGE_PATH_QGSQUICK%\qml %STAGE_PATH%\qml /E
+robocopy %REPO_PATH%\qgsquick/from_qgis/images %STAGE_PATH%\images\QgsQuick /E
 
 rem system
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll %STAGE_PATH%\ /Y
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\vccorlib140.dll %STAGE_PATH%\ /Y
-xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll %STAGE_PATH%\ /Y
-xcopy %INPUT_SDK_DIR%\bin\msvcr100.dll %STAGE_PATH%\ /Y
+xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\*.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\bin\ms*.dll %STAGE_PATH%\ /Y
 
 rem Qt5
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Sql.dll %STAGE_PATH%\ /Y
@@ -114,6 +157,7 @@ xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\qca-qt5.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\qt5keychain.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Positioning.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Location.dll %STAGE_PATH%\ /Y
+xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5Sensors.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickTemplates2.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickControls2.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\apps\Qt5\bin\Qt5QuickWidgets.dll %STAGE_PATH%\ /Y

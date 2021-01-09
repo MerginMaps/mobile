@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store</string>
+	<key>uploadBitcode</key>
+	<false/>
+	<key>uploadSymbols</key>
+	<true/>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>LutraConsultingLtd.Input</key>
+		<string>LutraConsultingLtd.Input.AppStore</string>
+	</dict>
+	<key>signingCertificate</key>
+    <string>iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)</string>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>teamID</key>
+    <string>79QMH2QRAH</string>
+</dict>
+</plist>

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef MERGINPROJECTMODEL_H
 #define MERGINPROJECTMODEL_H
 
@@ -34,6 +43,7 @@ class MerginProjectModel: public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression )
+    Q_PROPERTY( int lastPage READ lastPage NOTIFY lastPageChanged )
 
   public:
     enum Roles
@@ -59,7 +69,14 @@ class MerginProjectModel: public QAbstractListModel
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    void resetProjects( const MerginProjectList &merginProjects );
+    /**
+    * Updates list of projects with synchronization progress if a project is pending.
+    * \param merginProjects List of mergin projects
+    * \param pendingProjects Projects in pending state
+    * \param expectedProjectCount Total number of projects
+    * \param page Int representing page.
+    */
+    void updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page );
 
     int filterCreator() const;
     void setFilterCreator( int filterCreator );
@@ -69,6 +86,12 @@ class MerginProjectModel: public QAbstractListModel
 
     QString searchExpression() const;
     void setSearchExpression( const QString &searchExpression );
+
+    int lastPage() const;
+    void setLastPage( int lastPage );
+
+  signals:
+    void lastPageChanged();
 
   public slots:
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
@@ -86,6 +109,9 @@ class MerginProjectModel: public QAbstractListModel
     ProjectList mMerginProjects;
     LocalProjectsManager &mLocalProjects;
     QString mSearchExpression;
+    int mLastPage;
+    //! Special item as a placeholder for custom component with extended funtionality
+    std::shared_ptr<MerginProject> mAdditionalItem = std::make_shared<MerginProject>();
 
 };
 #endif // MERGINPROJECTMODEL_H

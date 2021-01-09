@@ -1,8 +1,17 @@
 # Input
 
-[![Build Status](https://travis-ci.com/lutraconsulting/input.svg?branch=master)](https://travis-ci.com/lutraconsulting/input)
-[![CircleCI](https://circleci.com/gh/lutraconsulting/input.svg?style=svg)](https://circleci.com/gh/lutraconsulting/input)
-[![Build status](https://ci.appveyor.com/api/projects/status/05296dh8ml5b11vj?svg=true)](https://ci.appveyor.com/project/PeterPetrik/input)
+Platform builds:
+
+[![InputApp Android Build](https://github.com/lutraconsulting/input/workflows/Android/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Android%22)
+[![InputApp Win Build](https://ci.appveyor.com/api/projects/status/05296dh8ml5b11vj?svg=true)](https://ci.appveyor.com/project/PeterPetrik/input)
+[![InputApp iOS Build](https://github.com/lutraconsulting/input/workflows/iOS%20Build/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22iOS+Build%22)
+
+Other Checks:
+
+[![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
+[![InputApp Tests](https://github.com/lutraconsulting/input/workflows/Auto%20Tests/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Auto+Tests%22)
+[![Coverage Status](https://img.shields.io/coveralls/lutraconsulting/input.svg)](https://coveralls.io/github/lutraconsulting/input?branch=master)
+[![QgsQuick](https://github.com/lutraconsulting/input/workflows/QgsQuick/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22QgsQuick%22)
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
@@ -21,7 +30,7 @@ Click here to download the app on your mobile device:
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
 </p>
 
-For more information on how to use the app, see [Documentation](#documentation)
+For more information on how to use the app, see [Documentation](https://help.inputapp.io)
 
 ## Features
 
@@ -30,7 +39,8 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 * Mapping components - map canvas, GPS position, scale bar, markers
 * Support for capturing of new geometries
 * Display and editing of feature forms
-* Built-in service for syncronising data (Mergin)
+* Built-in service for synchronising data ([Mergin](https://public.cloudmergin.com/))
+* Translated to several [languages](https://www.transifex.com/lutra-consulting/input)
 
 <p float="left">
     <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen1.jpg" width="20%">
@@ -41,16 +51,11 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 ## Documentation
 
-- [Introduction](docs/users/introduction.md)
-- [Project configuration](docs/users/project_config.md)
-- [Moving data between desktop and mobile](docs/users/data_sync.md)
-- [Capturing data and editing forms using Input](docs/users/using_input.md)
-- [Input user interface](docs/users/input_ui.md)
-- [License](docs/users/licensing.md)
+Read more about the app [help.inputapp.io](https://help.inputapp.io)
 
 ## Developers
 
 For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
 
 ## Privacy policy
-Read more about the app privacy policy [here](privacy_policy.md)
+Read more about the app privacy policy [here](https://help.inputapp.io/privacy)

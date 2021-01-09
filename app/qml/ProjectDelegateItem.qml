@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -5,6 +14,7 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 
 Rectangle {
     id: itemContainer
@@ -23,9 +33,12 @@ Rectangle {
     property bool disabled: false
     property real itemMargin: InputStyle.panelMargin
     property real progressValue: 0
+    property bool isAdditional: false
+
 
     signal itemClicked();
     signal menuClicked()
+    signal delegateButtonClicked()
 
     MouseArea {
         anchors.fill: parent
@@ -43,46 +56,13 @@ Rectangle {
     Item {
         width: parent.width
         height: parent.height
+        visible: !itemContainer.isAdditional
 
         RowLayout {
             id: row
             anchors.fill: parent
-            anchors.rightMargin: itemContainer.itemMargin
             anchors.leftMargin: itemContainer.itemMargin
             spacing: InputStyle.panelMargin
-
-            Item {
-                id: iconContainer
-                height: itemContainer.cellHeight
-                width: itemContainer.iconSize
-
-                Image {
-                    id: icon
-                    visible: !pending
-                    anchors.centerIn: parent
-                    source: 'project.svg'
-                    width: itemContainer.iconSize
-                    height: width
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                ColorOverlay {
-                    anchors.fill: icon
-                    source: icon
-                    visible: !pending
-                    color: itemContainer.highlight ? itemContainer.primaryColor : itemContainer.secondaryColor
-                }
-
-                BusyIndicator {
-                    id: busyIndicator
-                    implicitHeight: itemContainer.cellHeight/2
-                    implicitWidth: implicitHeight
-                    running: pending
-                    anchors.centerIn: parent
-                }
-            }
 
             Item {
                 id: textContainer
@@ -150,7 +130,7 @@ Rectangle {
             Item {
                 id: statusContainer
                 height: itemContainer.cellHeight
-                width: itemContainer.iconSize
+                width: height
                 y: 0
 
                 MouseArea {
@@ -185,4 +165,15 @@ Rectangle {
             anchors.bottom: parent.bottom
         }
     }
+
+    // Additional item
+    DelegateButton {
+      visible: itemContainer.isAdditional
+      width: itemContainer.width
+      height: itemContainer.height
+      text: qsTr("Fetch more")
+
+      onClicked: itemContainer.delegateButtonClicked()
+    }
+
 }

@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -5,7 +14,7 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import "."  // import InputStyle singleton
 
-Popup {
+Page {
 
     property real rowHeight: InputStyle.rowHeight
     property string defaultLayer: __appSettings.defaultLayer
@@ -14,16 +23,27 @@ Popup {
     id: settingsPanel
     visible: false
     padding: 0
+    focus: true
 
     background: Rectangle {
         anchors.fill: parent
         color: InputStyle.clrPanelMain
     }
 
-    onAboutToHide: {
-        if (aboutPanel.visible) {
-            aboutPanel.visible = false
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+
+        if (aboutPanel.visible) { // hide about panel
+          aboutPanel.visible = false;
         }
+        else if (logPanel.visible) {
+          logPanel.visible = false
+        }
+        else if (settingsPanel.visible) {
+          settingsPanel.visible = false;
+        }
+      }
     }
 
     PanelHeader {
@@ -34,7 +54,7 @@ Popup {
         rowHeight: InputStyle.rowHeightHeader
         titleText: qsTr("Settings")
 
-        onBack: settingsPanel.close()
+        onBack: settingsPanel.visible = false;
     }
 
     Rectangle {
@@ -99,6 +119,11 @@ Popup {
                             border.color: autoCenterMapCheckBox.checked ? InputStyle.softGreen : autoCenterMapCheckBox.disabledColor
                         }
                     }
+                }
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: autoCenterMapCheckBox.toggle()
                 }
             }
 
@@ -168,6 +193,7 @@ Popup {
                     suffix: " m"
                     onValueChanged: __appSettings.gpsAccuracyTolerance = value
                     height: InputStyle.fontPixelSizeNormal
+                    rowHeight: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
                     anchors.right: parent.right
@@ -188,6 +214,7 @@ Popup {
                     suffix: " s"
                     onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
                     height: InputStyle.fontPixelSizeNormal
+                    rowHeight: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     width: height * 6
                     anchors.right: parent.right
@@ -210,12 +237,48 @@ Popup {
                    onClicked: aboutPanel.visible = true
                }
            }
+
+           // Help
+          PanelItem {
+              text: qsTr("Help")
+              MouseArea {
+                  anchors.fill: parent
+                  onClicked: Qt.openUrlExternally("https://help.inputapp.io/");
+              }
+          }
+
+          // Help
+          PanelItem {
+             text: qsTr("Privacy Policy")
+             MouseArea {
+                 anchors.fill: parent
+                 onClicked: Qt.openUrlExternally(__inputHelp.privacyPolicyLink);
+             }
+          }
+
+           // Debug/Logging
+          PanelItem {
+              text: qsTr("Diagnostic Log")
+              MouseArea {
+                  anchors.fill: parent
+                  onClicked: {
+                    logPanel.text = __inputHelp.fullLog(true, 200000) //0.2MB
+                    logPanel.visible = true
+                  }
+              }
+          }
         }
 
     }
 
     AboutPanel {
         id: aboutPanel
+        anchors.fill: parent
+        visible: false
+    }
+
+    LogPanel {
+        id: logPanel
         anchors.fill: parent
         visible: false
     }

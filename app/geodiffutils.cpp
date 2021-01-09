@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "geodiffutils.h"
 
 #include <QJsonArray>
@@ -44,7 +53,7 @@ QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, con
 
 int GeodiffUtils::createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath )
 {
-  QString uuid = QUuid::createUuid().toString( QUuid::WithoutBraces );
+  QString uuid = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
   QString diffName = filePath + "-diff-" + uuid;
   QString modifiedPath = projectDir + "/" + filePath;
   basePath = projectDir + "/.mergin/" + filePath;
@@ -83,6 +92,12 @@ GeodiffUtils::ChangesetSummary GeodiffUtils::parseChangesetSummary( const QStrin
 
 bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles )
 {
+  if ( diffFiles.isEmpty() )
+  {
+    InputUtils::log( "GEODIFF", "assemble server file fail: no input diff files!" );
+    return false;
+  }
+
   for ( QString diffFile : diffFiles )
   {
     int res = GEODIFF_applyChangeset( src.toUtf8().constData(), diffFile.toUtf8().constData() );
@@ -93,4 +108,18 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
     }
   }
   return true;
+}
+
+void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
+{
+  QString prefix;
+  switch ( level )
+  {
+    case LevelError: prefix = "GEODIFF error"; break;
+    case LevelWarning: prefix = "GEODIFF warning"; break;
+    case LevelInfo: prefix = "GEODIFF info"; break;
+    case LevelDebug: prefix = "GEODIFF debug"; break;
+    default: break;
+  }
+  InputUtils::log( prefix, msg );
 }

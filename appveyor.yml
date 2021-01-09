@@ -5,18 +5,21 @@ environment:
       secure: gqLWRiVUFKd+MsoevoouKEHG0tpvM9zhhSnCpzj9lRg4vcGq+ssWIG2m7kCbgLAC
     DROPBOX_TOKEN:
       secure: SbA10ZSj12UGtUP6o9r0gEATY+S3ZO6h0KhRZfZ3L2iM6Kx1T0gd+KgTD1D4C8ye0qKHbkRdCHxKwt5ETyo0iAK59b6UgRTbIUhmrvnWXIU=
-    WINSDKTAG: win-6
-    WINSDK: "https://www.dropbox.com/s/3cgjahttzmq04ue/input-sdk-win-x86_64-6.zip?dl=1"
+    MERGINSECRETS_DECRYPT_KEY:
+      secure: BHS6RRyzJOyfjZV6ADhpdG9IvxpBF57fMNtloAzSmoB6VeSRuA4T7evxRFZy1oDL3X9k8XEpiD7IAltvaPTCcCEffwLwX1JFF/YhQaopAzJLq9X7t3HkMMOTRv2lntDu
+    WINSDK_VER: 10
+    WINSDK_HASH: ljiaqxh5j244bzq
     PYEXE: "C:\\Python36-x64\\python"
 
 install:
   - "choco install wintail"
   - "%PYEXE% -m pip install dropbox"
   - "xcopy scripts\\ci\\config.pri app\\ /Y"
+  - "C:\\OpenSSL-Win64\\bin\\openssl aes-256-cbc -k %MERGINSECRETS_DECRYPT_KEY% -in app\\merginsecrets.cpp.enc -out app\\merginsecrets.cpp -d -md md5"
   - cmd: ".\\scripts\\download_sdk.cmd"
   - cmd: ".\\scripts\\build_win.cmd"
   - cmd: ".\\upload-artifacts.cmd"
 
 build: off
 
-skip_branch_with_pr: false
+skip_branch_with_pr: true

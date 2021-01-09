@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
@@ -25,20 +34,30 @@ Item {
     property bool manualRecordig: false
     property bool extraPanelVisible: true
 
-    property int activeLayerIndex: -1
-    property QgsQuick.VectorLayer activeVectorLayer: (activeLayerIndex >= 0) ?
-                                                         __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.VectorLayer) :
-                                                         null
-    property string activeLayerName: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.Name)
-    property string activeLayerIcon: __layersModel.data(__layersModel.index(activeLayerIndex), LayersModel.IconSource)
+    property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.vectorLayer
+    property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
+    property string activeLayerIcon: __loader.loadIconFromLayer( activeVectorLayer )
 
     id: root
     onClose: visible = false
+    focus: true
+
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true;
+        cancelButton.activated()
+      }
+    }
 
     Rectangle {
         anchors.fill: parent
         color: InputStyle.clrPanelBackground
         opacity: InputStyle.panelOpacity
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {} // dont do anything, just do not let click event propagate
+        }
     }
 
     Rectangle {

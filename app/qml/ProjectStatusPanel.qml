@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -8,15 +17,12 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   id: statusPanel
   property real rowHeight: InputStyle.rowHeight * 1.2
+  signal back()
 
   function open(projectFullName) {
     if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
       statusPanel.visible = true;
     } else __inputUtils.showNotification(qsTr("No Changes"))
-  }
-
-  function close() {
-    statusPanel.visible = false
   }
 
   // background
@@ -32,11 +38,11 @@ Item {
     width: parent.width
     color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Status")
+    titleText: qsTr("Project Status")
     z: contentLayout.z + 1
 
     onBack: {
-      statusPanel.visible = false
+      statusPanel.back()
     }
     withBackButton: true
 
@@ -56,7 +62,7 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
 
-      section.property: qsTr("section")
+      section.property: "section"
       section.criteria: ViewSection.FullString
       section.delegate: Item {
         height: statusPanel.rowHeight/2
