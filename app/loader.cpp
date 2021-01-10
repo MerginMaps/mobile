@@ -390,7 +390,7 @@ QString Loader::loadIconFromLayer( QgsMapLayer *layer )
 
 QString Loader::loadIconFromFeature( QgsFeature feature )
 {
-  return iconFromGeometry( feature.geometry().type() );
+    return iconFromGeometry( feature.geometry().type() );
 }
 
 QString Loader::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
@@ -402,4 +402,63 @@ QString Loader::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
     case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "mIconPolygonLayer.svg" );
     default: return QString( "mIconTableLayer.svg" );
   }
+}
+
+QgsPoint Loader::toPoint(QString n_str, QString e_str)
+{
+    double n = n_str.toDouble();
+    double e = e_str.toDouble();
+
+    QgsPoint mypoint = QgsPoint(e, n, 0);
+
+    if( mypoint.isEmpty() )
+        return QgsPoint();
+
+    return mypoint;
+}
+
+QVector<qreal> Loader::coordTransformer(QgsPoint sourceP, QgsCoordinateTransformContext context, QString sourceEPSG, QString destinationEPSG)
+{
+    double x = sourceP.x();
+    double y = sourceP.y();
+    double z = sourceP.z();
+
+    // If Z is NaN, coordinate transformation (proj4) will
+    // also set X and Y to NaN. But we also want to get projected
+    // coords if we do not have any Z coordinate.
+    if ( std::isnan( z ) )
+    {
+        z = 0;
+    }
+
+    QgsCoordinateTransform mCoordinateTransform;
+    mCoordinateTransform.setSourceCrs( QgsCoordinateReferenceSystem("EPSG:" + sourceEPSG ) );
+    mCoordinateTransform.setDestinationCrs( QgsCoordinateReferenceSystem("EPSG:" + destinationEPSG ) );
+    mCoordinateTransform.setContext( context );
+    try
+    {
+        mCoordinateTransform.transformInPlace( x, y, z );
+    }
+    catch ( const QgsCsException &exp )
+    {
+        qDebug() << exp.what();
+    }
+
+    QgsPoint mProjectedPosition = QgsPoint( x, y );
+    mProjectedPosition.addZValue( sourceP.z() );
+    QVector<qreal> coords;
+    coords << mProjectedPosition.x() << mProjectedPosition.y();
+    return coords;
+}
+
+bool Loader::pointIsEmpty( QgsPoint p )
+{
+    if( p.x() == 0.0 && p.y() == 0.0 )
+        return false;
+    return p.isEmpty();
+}
+
+long Loader::epsg_code()
+{
+    return mProject->crs().postgisSrid();
 }

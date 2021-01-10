@@ -58,6 +58,12 @@ class Loader: public QObject
     Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
     Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
+    // Convert x and y to QgsPoint
+    Q_INVOKABLE QgsPoint toPoint(QString n_str, QString e_str);
+    // Coordinate transformer
+    Q_INVOKABLE QVector<qreal> coordTransformer( QgsPoint sourceP, QgsCoordinateTransformContext context, QString sourceEPSG, QString destinationEPSG );
+    Q_INVOKABLE bool pointIsEmpty( QgsPoint p );
+    Q_INVOKABLE long epsg_code();
 
     /**
      * Updates active map theme.
