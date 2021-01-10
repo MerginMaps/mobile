@@ -49,8 +49,6 @@ ApplicationWindow {
         Component.onCompleted: epsgID = __loader.epsg_code()
         onPositionChanged: {
             if( epsgID !== 0 && src.valid ) {
-                // Converting Latitude and Longitude to active layer's coordinate system
-
                 // (array) Get GPS's lat and long
                 var currentPosition = src.position.coordinate
 
