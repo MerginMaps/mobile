@@ -141,6 +141,15 @@ Item {
       }
 
       Connections {
+        target: __projectWizard
+        onProjectCreated: {
+          if  (stackView.currentItem.objectName === "projectWizard") {
+            stackView.popOnePageOrClose()
+          }
+        }
+      }
+
+      Connections {
         target: __merginApi
         onListProjectsFinished: {
           stackView.pending = false
@@ -608,20 +617,17 @@ Item {
       }
 
       // Content bellow ListView section
-      Rectangle {
+      Item {
         width: projectsPanel.width
         height: InputStyle.rowHeightHeader
         Layout.fillWidth: true
         anchors.bottom: toolbar.top
         z: 100
         // DelegateButtonContainer
-        color: "red"
-
-        Component.onCompleted: console.log("!!!!!", projectsPanel.width, width)
 
         DelegateButton {
           height: InputStyle.rowHeightHeader
-          width: height * 4
+          width: parent/4
           text: qsTr("Create project")
           anchors.centerIn: parent
           //Layout.alignment: Qt.AlignVCenter
@@ -905,6 +911,7 @@ Item {
 
     ProjectWizardPage {
       id: projectWizardPanel
+      objectName: "projectWizard"
       height: projectsPanel.height
       width: projectsPanel.width
       onBackClicked: {

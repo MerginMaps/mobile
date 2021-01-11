@@ -56,19 +56,19 @@ Item {
     }
 
     TextField {
-      id: registerName
+      id: projectNameField
       width: parent.width
       height: projectWizardPanel.rowHeight
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: projectWizardPanel.fontColor
-      placeholderText: qsTr("")
+      placeholderText: qsTr("Project name")
       font.capitalization: Font.MixedCase
       inputMethodHints: Qt.ImhNoPredictiveText
+      text: "TODO" // TODO
     }
 
     Repeater {
       model: __fieldsModel
-
 
       FieldRow {
         height: projectWizardPanel.rowHeight
@@ -76,6 +76,7 @@ Item {
         color: projectWizardPanel.fontColor
         widgetList: __fieldsModel.supportedTypes()
       }
+
     }
 
     Row {
@@ -140,7 +141,7 @@ Item {
           imageSource: InputStyle.plusIcon
 
           onActivated: {
-            // TODO
+            __projectWizard.createProject(projectNameField.text)
           }
         }
       }

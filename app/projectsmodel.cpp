@@ -185,6 +185,12 @@ void ProjectModel::syncedProjectFinished( const QString &projectDir, const QStri
   reloadProjectFiles( projectDir, projectFullName, successfully );
 }
 
+void ProjectModel::addLocalProject( const QString &projectDir, const QString &projectName )
+{
+  mLocalProjects.addLocalProject( projectDir, projectName );
+  findProjectFiles();
+}
+
 void ProjectModel::reloadProjectFiles( QString projectFolder, QString projectName, bool successful )
 {
   if ( !successful ) return;
@@ -192,7 +198,5 @@ void ProjectModel::reloadProjectFiles( QString projectFolder, QString projectNam
   if ( projectFolder.isEmpty() ) return;
 
   Q_UNUSED( projectName );
-  beginResetModel();
   findProjectFiles();
-  endResetModel();
 }

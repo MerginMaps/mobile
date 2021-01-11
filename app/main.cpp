@@ -369,7 +369,7 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjects );
   InputHelp help( ma.get(), &iu );
   FieldsModel fm;
-  ProjectWizard pw;
+  ProjectWizard pw( projectDir, &fm );
 
   // layer models
   LayersModel lm;
@@ -386,6 +386,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
   QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &pm, &ProjectModel::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
@@ -486,6 +487,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__fieldsModel", &fm );
+  engine.rootContext()->setContextProperty( "__projectWizard", &pw );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

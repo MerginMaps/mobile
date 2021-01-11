@@ -5,11 +5,10 @@ import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "./.."
+import "./.." // import InputStyle singleton
 
-// import InputStyle singleton
 Item {
-  id: root
+  id: fieldDelegate
   signal removeClicked
 
   property real rowHeight: InputStyle.rowHeightHeader
@@ -19,8 +18,8 @@ Item {
 
   RowLayout {
     id: row
-    height: root.rowHeight
-    width: root.width
+    height: fieldDelegate.rowHeight
+    width: fieldDelegate.width
     spacing: InputStyle.panelSpacing
 
     TextField {
@@ -29,10 +28,12 @@ Item {
       topPadding: 10 * QgsQuick.Utils.dp
       bottomPadding: 10 * QgsQuick.Utils.dp
       font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: root.color
-      placeholderText: FieldName ? FieldName : qsTr("Field name")
+      color: fieldDelegate.color
+      placeholderText: AttributeName ? AttributeName : qsTr("Attribute name")
       Layout.fillWidth: true
       Layout.fillHeight: true
+
+      onAccepted: AttributeName = text
 
       background: Rectangle {
         anchors.fill: parent
@@ -48,19 +49,19 @@ Item {
       height: row.height
       Layout.fillWidth: true
       Layout.fillHeight: true
-      model: root.widgetList
+      model: fieldDelegate.widgetList
     }
 
     Item {
       id: imageBtn
-      height: root.iconSize
+      height: fieldDelegate.iconSize
       width: height
       Layout.fillWidth: true
       Layout.fillHeight: true
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.removeClicked()
+        onClicked: fieldDelegate.removeClicked()
       }
 
       Image {
@@ -77,7 +78,7 @@ Item {
       ColorOverlay {
         anchors.fill: image
         source: image
-        color: root.color
+        color: fieldDelegate.color
       }
     }
   }

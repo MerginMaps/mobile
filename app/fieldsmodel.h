@@ -6,6 +6,7 @@
 #include <QVector>
 
 #include "qgsfield.h"
+#include "qgsfields.h"
 
 class FieldsModel: public QAbstractListModel
 {
@@ -29,21 +30,27 @@ class FieldsModel: public QAbstractListModel
 
     Q_INVOKABLE bool addField( const QString &name, const QString &type );
     Q_INVOKABLE QStringList supportedTypes();
+    Q_INVOKABLE QgsFields fields();
+
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent ) const override;
     QVariant data( const QModelIndex &index, int role ) const override;
     bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole ) override;
 
-signals:
+  signals:
     void widgetListChanged();
 
-private:
-    QList<QgsField> mFields;
+  private:
+    //QList<QgsField> mFields;
+    QgsFields mFields;
+
+    //QgsFields;
     //QStringList widgetList;
     //! Inits model with default fields
     void initModel();
-    QVariant parseType(const QString &type);
+    QVariant::Type parseType( const QString &type );
+    QgsField createField( const QString &name, const QString &type );
 };
 
 #endif // FIELDSMODEL_H

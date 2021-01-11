@@ -140,6 +140,16 @@ class InputUtils: public QObject
     /** InputApp platform */
     static QString appPlatform();
 
+    /**
+    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
+    * \param QString path
+    * \param QString isPathDir True if the result path suppose to be a folder
+    */
+    static QString findUniquePath( const QString &path, bool isPathDir = true );
+
+    //! Creates a unique project directory for given project name (used for initial download of a project)
+    static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
