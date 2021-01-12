@@ -18,6 +18,7 @@
 #include <QUuid>
 #include "inputhelp.h"
 #include "merginapi.h"
+#include "androidutils.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickmapsettings.h"
 #include "qgsquickpositionkit.h"
@@ -90,6 +91,12 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
+    Q_INVOKABLE bool hasStoragePermission();
+
+    Q_INVOKABLE bool acquireStoragePermission();
+
+    Q_INVOKABLE void quitApp();
+
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
      * removes it and tries again (overwrite a file). If failes again, skips the file, sets result to false and continue.
@@ -143,6 +150,7 @@ class InputUtils: public QObject
     QString sanitizeName( const QString &path );
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
+    std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 
 #endif // INPUTUTILS_H

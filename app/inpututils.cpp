@@ -29,6 +29,7 @@ static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
+  mAndroidUtils = std::unique_ptr<AndroidUtils>( new AndroidUtils() );
 }
 
 bool InputUtils::removeFile( const QString &filePath )
@@ -317,6 +318,29 @@ QString InputUtils::bytesToHumanSize( double bytes )
   {
     return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
   }
+}
+
+bool InputUtils::hasStoragePermission()
+{
+  if ( appPlatform() == QStringLiteral( "android" ) )
+  {
+    return mAndroidUtils->checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" );
+  }
+  return true;
+}
+
+bool InputUtils::acquireStoragePermission()
+{
+  if ( appPlatform() == QStringLiteral( "android" ) )
+  {
+    return mAndroidUtils->requestStoragePermission();
+  }
+  return true;
+}
+
+void InputUtils::quitApp()
+{
+  QCoreApplication::quit();
 }
 
 QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
