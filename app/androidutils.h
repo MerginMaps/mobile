@@ -29,8 +29,12 @@ class AndroidUtils: public QObject
     explicit AndroidUtils( QObject *parent = nullptr );
 
     bool isAndroid() const;
+    bool checkPermission( const QString &permissionString );
+
     static void requirePermissions();
     static bool checkAndAcquirePermissions( const QString &permissionString );
+
+    Q_INVOKABLE bool requestStoragePermission();
 
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,

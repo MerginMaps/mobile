@@ -364,6 +364,7 @@ Item {
           delegate: delegateItem
 
           Text {
+            id: noProjectsText
             anchors.fill: parent
             textFormat: Text.RichText
             text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
@@ -374,7 +375,31 @@ Item {
                   .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
             onLinkActivated: Qt.openUrlExternally(link)
-            visible: grid.count === 0
+            visible: grid.count === 0 && !storagePermissionText.visible
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.bold: true
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            padding: InputStyle.panelMargin/2
+          }
+
+          Text {
+            id: storagePermissionText
+            anchors.fill: parent
+            textFormat: Text.RichText
+            text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
+                  qsTr("Input needs a storage permission, %1click to grant it%2 and then restart application.")
+                  .arg("<a href='missingPermission'>")
+                  .arg("</a>")
+
+            onLinkActivated: {
+              if ( __inputUtils.acquireStoragePermission() ) {
+                restartAppDialog.open()
+              }
+            }
+            visible: !__inputUtils.hasStoragePermission()
             color: InputStyle.fontColor
             font.pixelSize: InputStyle.fontPixelSizeNormal
             font.bold: true
@@ -546,6 +571,12 @@ Item {
               return
             }
 
+            if ( !__inputUtils.hasStoragePermission() ) {
+              if ( __inputUtils.acquireStoragePermission() )
+                restartAppDialog.open()
+              return
+            }
+
             if (status === "noVersion" || status === "outOfDate") {
               var withoutAuth = !__merginApi.userAuth.hasAuthData() && toolbar.highlighted === exploreBtn.text
               __merginApi.updateProject(projectNamespace, projectName, withoutAuth)
@@ -712,6 +743,16 @@ Item {
               visible = false
             }
         }
+      }
+
+      MessageDialog {
+        id: restartAppDialog
+        title: qsTr( "Input needs to be restarted" )
+        text: qsTr( "To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again." )
+        icon: StandardIcon.Warning
+        visible: false
+        standardButtons: StandardButton.Close
+        onRejected: __inputUtils.quitApp()
       }
 
       Item {

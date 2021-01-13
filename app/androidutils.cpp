@@ -73,6 +73,36 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
   return true;
 }
 
+bool AndroidUtils::checkPermission( const QString &permissionString )
+{
+#ifdef ANDROID
+  return QtAndroid::checkPermission( permissionString ) == QtAndroid::PermissionResult::Granted;
+#else
+  return true;
+#endif
+}
+
+bool AndroidUtils::requestStoragePermission()
+{
+#ifdef ANDROID
+
+  if ( !checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
+  {
+    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
+    {
+      // permanently denied permission, user needs to go to settings to allow permission
+      showToast( tr( "Storage permission is permanently denied, please allow it in settings" ) );
+    }
+    else
+    {
+      showToast( tr( "Input needs a storage permission in order to manipulate or download a project" ) );
+    }
+    return false;
+  }
+
+#endif
+  return true;
+}
 
 void AndroidUtils::callImagePicker()
 {
