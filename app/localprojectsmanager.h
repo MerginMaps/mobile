@@ -118,10 +118,6 @@ class LocalProjectsManager : public QObject
     void localProjectAdded( const QString &projectDir );
     void localProjectRemoved( const QString &projectDir );
 
-  public slots:
-    //! TODO only temporary
-    void addLocalProject( const QString &projectDir, const QString &projectName );
-
   private:
     void updateProjectStatus( LocalProjectInfo &project );
 

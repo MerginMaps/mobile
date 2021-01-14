@@ -514,20 +514,16 @@ class MerginApi: public QObject
     */
     QString generateConflictFileName( const QString &path, int version );
 
-    // TODO use method from InputUtils
-    /**
-    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
-    * \param QString path
-    * \param QString isPathDir True if the result path suppose to be a folder
-    */
-    QString findUniquePath( const QString &path, bool isPathDir = true );
+//    // TODO use method from InputUtils
+//    /**
+//    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
+//    * \param QString path
+//    * \param QString isPathDir True if the result path suppose to be a folder
+//    */
+//    QString findUniquePath( const QString &path, bool isPathDir = true );
     /** Creates a request to get project details (list of project files).
      */
     QNetworkReply *getProjectInfo( const QString &projectFullName, bool withoutAuth = false );
-
-    // TODO use method from InputUtils
-    //! Creates a unique project directory for given project name (used for initial download of a project)
-    QString createUniqueProjectDirectory( const QString &projectName );
 
     //! Called when download/update of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectUpdate( const QString &projectFullName );

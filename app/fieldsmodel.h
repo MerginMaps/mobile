@@ -44,6 +44,7 @@ class FieldsModel: public QAbstractListModel
 
   signals:
     void widgetListChanged();
+    void notify(const QString &message );
 
   private:
     QgsFields mFields;

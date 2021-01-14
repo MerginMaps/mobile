@@ -19,6 +19,7 @@ ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, 
   , mDataDir( dataDir )
   , mFieldsModel( fieldsModel )
 {
+     QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
 }
 
 QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
@@ -58,21 +59,21 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
     &errorMessage );
 
   // Check and configure layer
-  QgsVectorLayer *layer2 = new QgsVectorLayer( projectGpkgPath, "Points", "ogr" );
+  QgsVectorLayer *l = new QgsVectorLayer( projectGpkgPath, "Points", "ogr" );
 
-  Q_ASSERT( layer2->isValid() );
+  Q_ASSERT( l->isValid() );
 
-  layer2->startEditing();
-  layer2->setCrs( layerCrs );
-  for ( int i = 0; i < layer2->fields().count(); ++i )
+  l->startEditing();
+  l->setCrs( layerCrs );
+  for ( int i = 0; i < l->fields().count(); ++i )
   {
-    QgsField f = layer2->fields().at( i );
+    QgsField f = l->fields().at( i );
     QgsEditorWidgetSetup setup = getEditorWidget( f, mFieldsModel->findWidgetTypeByFieldName( f.name() ) );
-    layer2->setEditorWidgetSetup( i, setup );
+    l->setEditorWidgetSetup( i, setup );
   }
-  layer2->commitChanges();
+  l->commitChanges();
 
-  return layer2;
+  return l;
 }
 
 void ProjectWizard::createProject( QString const &projectName )
@@ -97,6 +98,7 @@ void ProjectWizard::createProject( QString const &projectName )
   project.writePath( projectGpkgPath );
   project.write( projectFilepath );
 
+  emit notify( tr("Project %1 created").arg( projectName ));
   emit projectCreated( projectDir, projectName );
 }
 

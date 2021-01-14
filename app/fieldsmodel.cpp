@@ -9,18 +9,15 @@ FieldsModel::FieldsModel( QObject *parent )
 
 bool FieldsModel::addField( const QString &name, const QString &type, const QString &widgetType )
 {
-  // TODO check if field with the given name exists - cannot append a field with existing name
+if (mFields.indexFromName(name) >= 0) {
+    notify(QString("Field '%1' has not been added due to empty or existing name ").arg(name));
+ }
+
   beginResetModel();
   QgsField field = createField( name, type, widgetType );
-  bool added = mFields.append( field );
-
-  if ( !added )
-  {
-    qDebug() << "Field has not been added due to empty or existing name: " << name;
-    // TODO notify
-  }
+  mFields.append( field );
   endResetModel();
-  return added;
+  return true;
 }
 
 bool FieldsModel::removeField( int row )
@@ -110,7 +107,6 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   {
     case AttributeName:
     {
-      mFields[row].setName( value.toString() );
       mFields.rename( row, value.toString() );
       emit dataChanged( index, index, {AttributeName} );
       break;
@@ -171,6 +167,7 @@ QVariant::Type FieldsModel::parseType( const QString &type )
     return QVariant::Bool;
   else if ( type == QLatin1String( "binary" ) )
     return QVariant::Invalid; // TODO
+  return QVariant::Invalid;
 }
 
 QgsField FieldsModel::createField( const QString &name, const QString &type, const QString &widgetType )

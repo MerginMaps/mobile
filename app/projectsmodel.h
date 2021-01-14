@@ -70,7 +70,6 @@ class ProjectModel : public QAbstractListModel
 
   public slots:
     void syncedProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully );
-    // TODO temporary function till local project will not be added to Mergin
     void addLocalProject( const QString &projectDir, const QString &projectName );
     void findProjectFiles();
 

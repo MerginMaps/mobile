@@ -16,6 +16,7 @@ class ProjectWizard : public QObject
     Q_INVOKABLE void createProject( QString const &projectName );
   signals:
     void projectCreated( const QString &projectDir, const QString &projectName );
+    void notify(const QString &message );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir );
     QgsEditorWidgetSetup getEditorWidget( QgsField const &field, const QString &widgetType );

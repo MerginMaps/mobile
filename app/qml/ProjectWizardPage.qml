@@ -6,9 +6,7 @@ import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."
-import "./components"
-
-// import InputStyle singleton
+import "./components" // import InputStyle singleton
 Item {
   id: projectWizardPanel
 
@@ -28,12 +26,6 @@ Item {
 
     projectWizardPanel.items
   }
-
-  Connections {
-    target: __projectWizard
-    onProjectCreated: __inputUtils.showNotification( qsTr(" Project %1 created ").arg( projectName ) )
-  }
-
 
   // background
   Rectangle {

@@ -187,7 +187,9 @@ void ProjectModel::syncedProjectFinished( const QString &projectDir, const QStri
 
 void ProjectModel::addLocalProject( const QString &projectDir, const QString &projectName )
 {
-  mLocalProjects.addLocalProject( projectDir, projectName );
+  Q_UNUSED( projectDir );
+  Q_UNUSED( projectName );
+  mLocalProjects.reloadProjectDir();
   findProjectFiles();
 }
 

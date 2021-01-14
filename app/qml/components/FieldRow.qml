@@ -50,10 +50,7 @@ Item {
       height: row.height
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
-      model: widgetList //fieldDelegate.widgetList
-//      textRole: "display"
-//      valueRole: "value"
-
+      model: widgetList
 
       MouseArea {
         anchors.fill: parent
@@ -78,7 +75,6 @@ Item {
         onClicked: {
           FieldType = model.value
           WidgetType = model.display
-          //comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
           comboBox.currentIndex = index
         }
       }
