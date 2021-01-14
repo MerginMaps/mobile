@@ -173,15 +173,16 @@ static void setEnvironmentQgisPrefixPath()
 }
 
 
-static void copy_demo_projects( const QString &projectDir )
+static void copy_demo_projects( const QString &demoDir, const QString &projectDir )
 {
-#if defined (ANDROID) || defined (Q_OS_IOS)
-  InputUtils::cpDir( "assets:/demo-projects", projectDir );
-#elif defined (Q_OS_WIN32)
-  InputUtils::cpDir( QCoreApplication::applicationDirPath() + "/demo-projects", projectDir );
-#else
-  Q_UNUSED( projectDir );
-#endif
+  if (!demoDir.isEmpty())
+    InputUtils::cpDir( demoDir, projectDir );
+
+  QFile demoFile( projectDir + "/Start here!/qgis-project.qgz" );
+  if ( demoFile.exists() )
+    qDebug() << "DEMO projects initialized";
+  else
+    InputUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
 }
 
 static void init_qgis( const QString &pkgPath )
@@ -361,19 +362,24 @@ int main( int argc, char *argv[] )
   setEnvironmentQgisPrefixPath();
 
   QString appBundleDir;
+  QString demoDir;
+
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
+  demoDir = "assets:/demo-projects";
 #endif
 #ifdef Q_OS_IOS
   appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
+  demoDir = QCoreApplication::applicationDirPath() + "/demo-projects";
 #endif
 #ifdef Q_OS_WIN32
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
+  //TODO win32 package demo projects
 #endif
 
   init_proj( appBundleDir );
   init_qgis( appBundleDir );
-  copy_demo_projects( projectDir );
+  copy_demo_projects( demoDir, projectDir );
 
   // Create Input classes
   AndroidUtils au;
