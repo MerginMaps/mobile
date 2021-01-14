@@ -373,6 +373,7 @@ int main( int argc, char *argv[] )
 
   init_proj( appBundleDir );
   init_qgis( appBundleDir );
+  copy_demo_projects( projectDir );
 
   // Create Input classes
   AndroidUtils au;
@@ -468,8 +469,6 @@ int main( int argc, char *argv[] )
       qDebug() << "Loaded font" << font;
   }
   app.setFont( QFont( "Lato" ) );
-
-  copy_demo_projects( projectDir );
 
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS  - to load QgsQuick C++ classes
