@@ -70,6 +70,11 @@ ios {
     QMAKE_INFO_PLIST = ios/Info.plist
 
     # https://doc.qt.io/qt-5.9/platform-notes-ios.html
+    demoFiles.files = $$files(android/assets/qgis-data/demo-projects/*)
+    demoFiles.path = qgis-data/demo-projects
+    QMAKE_BUNDLE_DATA += demoFiles
+
+
     crsFiles.files = $$files(android/assets/qgis-data/resources/*)
     crsFiles.path = qgis-data/resources
     QMAKE_BUNDLE_DATA += crsFiles
