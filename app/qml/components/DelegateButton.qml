@@ -9,6 +9,7 @@ Item {
   property real cornerRadius: InputStyle.cornerRadius
   property var bgColor: InputStyle.highlightColor
   property var textColor: "white"
+  property real btnWidth: delegateButtonContainer.height * 2
 
   id: delegateButtonContainer
 
@@ -16,7 +17,7 @@ Item {
     id: delegateButton
     text: delegateButtonContainer.text
     height: delegateButtonContainer.height / 2
-    width: delegateButtonContainer.height * 2
+    width: delegateButtonContainer.btnWidth
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
     font.pixelSize: InputStyle.fontPixelSizeTitle

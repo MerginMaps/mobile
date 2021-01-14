@@ -18,6 +18,7 @@ class ProjectWizard : public QObject
     void projectCreated( const QString &projectDir, const QString &projectName );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir );
+    QgsEditorWidgetSetup getEditorWidget( QgsField const &field, const QString &widgetType );
 
     QString mDataDir;
     FieldsModel *mFieldsModel;

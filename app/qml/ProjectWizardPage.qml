@@ -17,6 +17,23 @@ Item {
   property real rowHeight: InputStyle.rowHeight
   property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
+  property real panelMargin: 10 * QgsQuick.Utils.dp
+
+  property ListModel items: ListModel {}
+  property var supportedTypes: {
+    var types = __fieldsModel.supportedTypes()
+    for (var prop in types) {
+      projectWizardPanel.items.append({ "display": types[prop], "value": prop })
+    }
+
+    projectWizardPanel.items
+  }
+
+  Connections {
+    target: __projectWizard
+    onProjectCreated: __inputUtils.showNotification( qsTr(" Project %1 created ").arg( projectName ) )
+  }
+
 
   // background
   Rectangle {
@@ -38,73 +55,108 @@ Item {
     }
   }
 
-  Column {
-    id: contentLayout
-    height: projectWizardPanel.height - header.height
+  Item {
+    height: projectWizardPanel.height - header.height - toolbar.height
     width: projectWizardPanel.width
     y: header.height
-    spacing: InputStyle.panelSpacing
 
-    Label {
-      height: projectWizardPanel.rowheight
-      width: parent.width
-      //      horizontalAlignment: Qt.AlignHCenter
-      //      verticalAlignment: Qt.AlignLeft
-      text: qsTr("Project name")
-      color: InputStyle.fontColor
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-    }
+    ColumnLayout {
+      id: contentLayout
+      spacing: InputStyle.panelSpacing
+      anchors.fill: parent
+      anchors.margins: projectWizardPanel.panelMargin
 
-    TextField {
-      id: projectNameField
-      width: parent.width
-      height: projectWizardPanel.rowHeight
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: projectWizardPanel.fontColor
-      placeholderText: qsTr("Project name")
-      font.capitalization: Font.MixedCase
-      inputMethodHints: Qt.ImhNoPredictiveText
-      text: "TODO" // TODO
-    }
-
-    Repeater {
-      model: __fieldsModel
-
-      FieldRow {
-        height: projectWizardPanel.rowHeight
-        width: projectWizardPanel.width
-        color: projectWizardPanel.fontColor
-        widgetList: __fieldsModel.supportedTypes()
+      Label {
+        height: projectWizardPanel.rowheight
+        width: parent.width
+        Layout.preferredHeight: projectWizardPanel.rowHeight
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        text: qsTr("Project name")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
       }
 
-    }
-
-    Row {
-      width: parent.width
-      height: projectWizardPanel.rowHeight
-      Button {
-        id: delegateButton
-        text: qsTr("Add field")
-        height: parent.height
-        width: height * 2
-        //anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+      TextField {
+        id: projectNameField
+        width: parent.width
+        height: projectWizardPanel.rowHeight
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: projectWizardPanel.fontColor
+        placeholderText: qsTr("Project name")
+        font.capitalization: Font.MixedCase
+        inputMethodHints: Qt.ImhNoPredictiveText
+        text: "TODO" // TODO
+        Layout.fillWidth: true
+        Layout.preferredHeight: projectWizardPanel.rowHeight
 
         background: Rectangle {
-          color: InputStyle.highlightColor
+          anchors.fill: parent
+          border.color: projectNameField.activeFocus ? InputStyle.fontColor : InputStyle.panelBackgroundLight
+          border.width: projectNameField.activeFocus ? 2 : 1
+          color: InputStyle.clrPanelMain
           radius: InputStyle.cornerRadius
         }
+      }
 
-        onClicked: __fieldsModel.addField("", "text")
+      Label {
+        id: attributesLabel
+        height: projectWizardPanel.rowheight
+        width: parent.width
+        text: qsTr("Attributes")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        Layout.preferredHeight: projectWizardPanel.rowHeight
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+      }
 
-        contentItem: Text {
-          text: delegateButton.text
-          font: delegateButton.font
-          color: "white"
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
+      ListView {
+        model: __fieldsModel
+        width: parent.width
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        clip: true
+
+        delegate: FieldRow {
+          height: projectWizardPanel.rowHeight
+          width: contentLayout.width
+          color: projectWizardPanel.fontColor
+          widgetList: projectWizardPanel.supportedTypes
+
+          onRemoveClicked: __fieldsModel.removeField(index)
+        }
+      }
+
+      Row {
+        id: listButtonContainer
+        width: parent.width
+        height: projectWizardPanel.rowHeight
+        Layout.preferredHeight: projectWizardPanel.rowHeight
+        Layout.fillWidth: true
+        Button {
+          id: delegateButton
+          text: qsTr("Add field")
+          height: parent.height
+          width: height * 2
+          anchors.verticalCenter: parent.verticalCenter
+          font.pixelSize: InputStyle.fontPixelSizeTitle
+
+          background: Rectangle {
+            color: InputStyle.highlightColor
+            radius: InputStyle.cornerRadius
+          }
+
+          onClicked: __fieldsModel.addField("", "text")
+
+          contentItem: Text {
+            text: delegateButton.text
+            font: delegateButton.font
+            color: "white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
         }
       }
     }
@@ -131,13 +183,14 @@ Item {
       anchors.bottom: parent.bottom
 
       Item {
-        width: parent.width/parent.children.length
+        width: parent.width / parent.children.length
         height: parent.height
         MainPanelButton {
           id: createProjectBtn
           width: toolbar.itemSize
           text: qsTr("Create project")
-          faded: false // TOOD
+          enabled: projectNameField.text
+          faded: !enabled
           imageSource: InputStyle.plusIcon
 
           onActivated: {
@@ -147,6 +200,4 @@ Item {
       }
     }
   }
-
-
 }

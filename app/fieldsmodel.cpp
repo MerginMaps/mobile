@@ -7,56 +7,50 @@ FieldsModel::FieldsModel( QObject *parent )
   initModel();
 }
 
-bool FieldsModel::addField( const QString &name, const QString &type )
+bool FieldsModel::addField( const QString &name, const QString &type, const QString &widgetType )
 {
-  // TODO check if field with the given name exists
+  // TODO check if field with the given name exists - cannot append a field with existing name
   beginResetModel();
+  QgsField field = createField( name, type, widgetType );
+  bool added = mFields.append( field );
 
-//QVariant::Type qtype = QVariant::nameToType(name.toLocal8Bit().constData());
-  QVariant::Type qtype = parseType( type );
-  QgsField field( name, qtype, type );
-
-// TODO PROPER widget setup
-  if ( type == "text" )
+  if ( !added )
   {
-    QgsEditorWidgetSetup setup( QStringLiteral( "TextEdit" ), QVariantMap() );
-    field.setEditorWidgetSetup( setup );
+    qDebug() << "Field has not been added due to empty or existing name: " << name;
+    // TODO notify
   }
-  else
-  {
-    QgsEditorWidgetSetup setup( type, QVariantMap() );
-    field.setEditorWidgetSetup( setup );
-  }
-  qDebug() << "Creating field" << name << qtype << type;
-
-  mFields.append( field );
-
   endResetModel();
-  return true;
-  //emit dataChanged();
+  return added;
 }
 
-QStringList FieldsModel::supportedTypes()
+bool FieldsModel::removeField( int row )
 {
-  QStringList supportedTypes;
-  supportedTypes << QStringLiteral( "text" );
-  supportedTypes << QStringLiteral( "date" );
-  supportedTypes << QStringLiteral( "datetime" );
-  supportedTypes << QStringLiteral( "integer" );
-  supportedTypes << QStringLiteral( "real" );
-  supportedTypes << QStringLiteral( "bool" );
-  supportedTypes << QStringLiteral( "binary" );
+  if ( row < 0 || row >= mFields.count() )
+    return false;
+
+  beginResetModel();
+  mFields.remove( row );
+  endResetModel();
+  return true;
+}
+
+QVariantMap FieldsModel::supportedTypes()
+{
+  QVariantMap supportedTypes;
+  supportedTypes.insert( "text", "TextEdit" );
+  //supportedTypes.insert("date", "DateTime");
+  supportedTypes.insert( "datetime", "DateTime" );
+  supportedTypes.insert( "integer", "Range" );
+  supportedTypes.insert( "real", "TextEdit" );
+  supportedTypes.insert( "bool", "Bool" );
+  //supportedTypes.insert("binary", "value_tedt");
+  supportedTypes.insert( "text", "ExternalResource" ); // TODO rename
 
   return supportedTypes;
 }
 
 QgsFields FieldsModel::fields()
 {
-//  QgsFields fields;
-//  for ( QgsField field : mFields )
-//  {
-//    fields.append( field );
-//  }
   return mFields;
 }
 
@@ -64,8 +58,8 @@ QHash<int, QByteArray> FieldsModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
   roles[AttributeName]  = QByteArrayLiteral( "AttributeName" );
+  roles[FieldType]  = QByteArrayLiteral( "FieldType" );
   roles[WidgetType]  = QByteArrayLiteral( "WidgetType" );
-  roles[Field] = QByteArrayLiteral( "Field" );
 
   return roles;
 }
@@ -91,16 +85,12 @@ QVariant FieldsModel::data( const QModelIndex &index, int role ) const
       return field.name();
       break;
 
-//    case FieldType:
-//      field.type();
-//      break;
-
-    case WidgetType:
+    case FieldType:
       return field.typeName();
       break;
 
-    case Field:
-      return field;
+    case WidgetType:
+      return field.comment();
       break;
   }
 
@@ -121,13 +111,20 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
     case AttributeName:
     {
       mFields[row].setName( value.toString() );
+      mFields.rename( row, value.toString() );
       emit dataChanged( index, index, {AttributeName} );
       break;
     }
 
-    case WidgetType:
+    case FieldType:
     {
       mFields[row].setTypeName( value.toString() );
+      emit dataChanged( index, index, {FieldType} );
+      break;
+    }
+    case WidgetType:
+    {
+      mFields[row].setComment( value.toString() );
       emit dataChanged( index, index, {WidgetType} );
       break;
     }
@@ -136,14 +133,24 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   return false;
 }
 
+QString FieldsModel::findWidgetTypeByFieldName( const QString name ) const
+{
+  for ( int i = 0; i < mFields.count(); ++i )
+  {
+    if ( mFields.at( i ).name() == name )
+      return mFields.at( i ).comment();
+  }
+  return QString( "TextEdit" );
+}
+
 void FieldsModel::initModel()
 {
-  addField( "Date", "datetime" );
-  addField( "Notes", "text" );
-  addField( "Photo", "text" );
+  addField( "Date", "datetime", "DateTime" );
+  addField( "Notes", "text", "TextEdit" );
+  addField( "Photo", "text", "ExternalResource" );
   // ONLY FOR testing
-  addField( "Number", "integer" );
-  addField( "Bool", "bool" );
+  addField( "Number", "integer", "Range" );
+  addField( "Bool", "bool", "CheckBox" );
 }
 
 QVariant::Type FieldsModel::parseType( const QString &type )
@@ -163,54 +170,14 @@ QVariant::Type FieldsModel::parseType( const QString &type )
   else if ( type == QLatin1String( "bool" ) )
     return QVariant::Bool;
   else if ( type == QLatin1String( "binary" ) )
-    return QVariant::Invalid;
+    return QVariant::Invalid; // TODO
 }
 
-QgsField FieldsModel::createField( const QString &name, const QString &type )
+QgsField FieldsModel::createField( const QString &name, const QString &type, const QString &widgetType )
 {
-  //gsEditorWidgetSetup setup( type_temp, QVariantMap());
-
-  //QgsField field(name, QVariant::TextFormat, type);
-  //QString type_temp = QStringLiteral( "string" );
-
-  //field.setName( name );
-  //field.setType( QVariant::nameToType( type.toUtf8() ) );
-
-  QVariant::Type qtype;
-  if ( type == QLatin1String( "text" ) )
-  {
-    QgsField field( name, QVariant::String, type );
-    QgsEditorWidgetSetup setup( type, QVariantMap() );
-    field.setEditorWidgetSetup( setup );
-    return field;
-  }
-
-  else if ( type == QLatin1String( "integer" ) )
-  {
-    qtype = QVariant::Int;
-  }
-//             //return QgsEditorWidgetSetup( "string", QVariantMap());
-//           else if ( type == QLatin1String( "integer64" ) )
-//             ogrType = OFTInteger64;
-//           else if ( type == QLatin1String( "real" ) )
-//             ogrType = OFTReal;
-//           else if ( type == QLatin1String( "date" ) )
-//             ogrType = OFTDate;
-//           else if ( type == QLatin1String( "datetime" ) )
-//             ogrType = OFTDateTime;
-//           else if ( type == QLatin1String( "bool" ) )
-//           {
-//             ogrType = OFTInteger;
-//             isBool = true;
-//           }
-//    else {
-//        return QgsEditorWidgetSetup( "string", QVariantMap());
-//    }
-
-  qtype = QVariant::nameToType( name.toUtf8() );
+  QVariant::Type qtype = parseType( type );
   QgsField field( name, qtype, type );
-  QgsEditorWidgetSetup setup( type, QVariantMap() );
-  field.setEditorWidgetSetup( setup );
-  qDebug() << "Creating field" << name << qtype << type;
-  return QgsField( name, qtype, type );
+  field.setComment( widgetType ); // TODO widget type
+
+  return field;
 }

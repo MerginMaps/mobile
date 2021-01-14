@@ -623,11 +623,11 @@ Item {
         Layout.fillWidth: true
         anchors.bottom: toolbar.top
         z: 100
-        // DelegateButtonContainer
 
         DelegateButton {
           height: InputStyle.rowHeightHeader
-          width: parent/4
+          width: parent.width/2
+          btnWidth: InputStyle.rowHeightHeader * 4
           text: qsTr("Create project")
           anchors.centerIn: parent
           //Layout.alignment: Qt.AlignVCenter
