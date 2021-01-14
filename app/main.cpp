@@ -175,7 +175,7 @@ static void setEnvironmentQgisPrefixPath()
 
 static void copy_demo_projects( const QString &demoDir, const QString &projectDir )
 {
-  if (!demoDir.isEmpty())
+  if ( !demoDir.isEmpty() )
     InputUtils::cpDir( demoDir, projectDir );
 
   QFile demoFile( projectDir + "/Start here!/qgis-project.qgz" );
