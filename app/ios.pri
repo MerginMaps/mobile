@@ -69,7 +69,12 @@ ios {
     QMAKE_RPATHDIR += @executable_path/../Frameworks
     QMAKE_INFO_PLIST = ios/Info.plist
 
-    # https://doc.qt.io/qt-5.9/platform-notes-ios.html
+    # demo projects
+    demoFiles.files = $$files(android/assets/demo-projects/*)
+    demoFiles.path = demo-projects
+    QMAKE_BUNDLE_DATA += demoFiles
+
+    # qgis resources
     crsFiles.files = $$files(android/assets/qgis-data/resources/*)
     crsFiles.path = qgis-data/resources
     QMAKE_BUNDLE_DATA += crsFiles

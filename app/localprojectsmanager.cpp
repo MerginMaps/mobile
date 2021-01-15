@@ -46,6 +46,7 @@ void LocalProjectsManager::reloadProjectDir()
 
     mProjects << info;
   }
+  qDebug() << "LocalProjectsManager: found" << mProjects.size() << "projects";
 }
 
 LocalProjectInfo LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const

@@ -422,12 +422,13 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
-    qDebug() << "Cannot make path " << dstPath;
+    log( "cpDir", QString( "Cannot make path %1" ).arg( dstPath ) );
     return false;
   }
 
   QDir srcDir( srcPath );
-  foreach ( const QFileInfo &info, srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden ) )
+  const QFileInfoList fileInfoList = srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden );
+  foreach ( const QFileInfo &info, fileInfoList )
   {
     QString srcItemPath = srcPath + "/" + info.fileName();
     QString dstItemPath = dstPath + "/" + info.fileName();
