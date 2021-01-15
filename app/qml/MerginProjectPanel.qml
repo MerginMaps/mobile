@@ -356,6 +356,7 @@ Item {
           contentWidth: grid.width
           clip: true
           visible: !showMergin
+          maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
           property int cellWidth: width
           property int cellHeight: projectsPanel.rowHeight
@@ -417,6 +418,7 @@ Item {
           Layout.fillHeight: true
           contentWidth: grid.width
           clip: true
+          maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
           onCountChanged: {
             if (merginProjectsList.visible || __merginProjectsModel.lastPage > 1) {

@@ -19,6 +19,7 @@ ListView {
     implicitWidth: parent.width
     implicitHeight: contentHeight
     clip: true
+    maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
     delegate: Component {
       id: delegateItem

@@ -30,6 +30,7 @@ Item {
     implicitHeight: parent.height
     implicitWidth: parent.width
     spacing: 8 * QgsQuick.Utils.dp
+    maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
     model: featuresModel
 
