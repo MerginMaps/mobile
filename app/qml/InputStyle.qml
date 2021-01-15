@@ -75,6 +75,8 @@ QtObject {
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"
     property var vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
 
+    property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
+
 
     // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
