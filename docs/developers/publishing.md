@@ -1,5 +1,8 @@
 # Bump versions
 
+run `scripts/update_all_versions.bash MAJOR.MINOR.BUILD` to 
+automatically update: 
+
 1. ios: app/ios/Info.plist (JUST CFBundleShortVersionString, CFBundleVersion is calculated automatically)
 2. android: app/version.pri
 3. win: scripts/version.cmd
