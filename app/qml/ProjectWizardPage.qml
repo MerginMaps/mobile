@@ -21,7 +21,7 @@ Item {
   property var supportedTypes: {
     var types = __fieldsModel.supportedTypes()
     for (var prop in types) {
-      projectWizardPanel.items.append({ "display": types[prop], "value": prop })
+      projectWizardPanel.items.append({ "display": types[prop], "widget": prop })
     }
 
     projectWizardPanel.items
@@ -78,7 +78,6 @@ Item {
         placeholderText: qsTr("Project name")
         font.capitalization: Font.MixedCase
         inputMethodHints: Qt.ImhNoPredictiveText
-        text: "TODO" // TODO
         Layout.fillWidth: true
         Layout.preferredHeight: projectWizardPanel.rowHeight
 
@@ -139,7 +138,7 @@ Item {
             radius: InputStyle.cornerRadius
           }
 
-          onClicked: __fieldsModel.addField("", "text")
+          onClicked: __fieldsModel.addField("", "text", "TextEdit")
 
           contentItem: Text {
             text: delegateButton.text
@@ -181,12 +180,15 @@ Item {
           id: createProjectBtn
           width: toolbar.itemSize
           text: qsTr("Create project")
-          enabled: projectNameField.text
-          faded: !enabled
-          imageSource: InputStyle.plusIcon
+          faded: !projectNameField.text
+          imageSource: InputStyle.checkIcon
 
           onActivated: {
-            __projectWizard.createProject(projectNameField.text)
+            if (faded) {
+              __inputUtils.showNotification(qsTr("Empty project name"))
+            } else {
+              __projectWizard.createProject(projectNameField.text)
+            }
           }
         }
       }

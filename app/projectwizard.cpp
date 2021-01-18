@@ -19,7 +19,7 @@ ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, 
   , mDataDir( dataDir )
   , mFieldsModel( fieldsModel )
 {
-     QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
+  QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
 }
 
 QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
@@ -27,8 +27,8 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
   QString layerName( QStringLiteral( "Points" ) );
-  QgsCoordinateReferenceSystem layerCrs( " EPSG:4326" );
-  QgsFields predefinedFields = mFieldsModel->fields();
+  QgsCoordinateReferenceSystem layerCrs( "EPSG:4326" );
+  QgsFields predefinedFields = createFields( mFieldsModel->fields() );
 
   // Write layer as gpkg
   QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=EPSG:4326" ), layerName, "memory" );
@@ -98,16 +98,12 @@ void ProjectWizard::createProject( QString const &projectName )
   project.writePath( projectGpkgPath );
   project.write( projectFilepath );
 
-  emit notify( tr("Project %1 created").arg( projectName ));
+  emit notify( tr( "Project %1 created" ).arg( projectName ) );
   emit projectCreated( projectDir, projectName );
 }
 
 QgsEditorWidgetSetup ProjectWizard::getEditorWidget( const QgsField &field, const QString &widgetType )
 {
-
-  // TODO support Slider, SpinBox
-  // TODO DateTime formatter: qgsdatetimefieldformatter
-  qDebug() << "FIELD SETUP" << field.name() << field.typeName() << field.type() << widgetType;
   if ( field.name() == QStringLiteral( "fid" ) )
     return QgsEditorWidgetSetup( QStringLiteral( "Hidden" ), QVariantMap() );
 
@@ -128,17 +124,75 @@ QgsEditorWidgetSetup ProjectWizard::getEditorWidget( const QgsField &field, cons
       config.insert( QStringLiteral( "field_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
       config.insert( QStringLiteral( "display_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
     }
-    // TODO better widget for Range: Slider, etc
     else if ( widgetType == QStringLiteral( "Range" ) )
     {
       config.insert( QStringLiteral( "Style" ), QStringLiteral( "SpinBox" ) );
+      config.insert( QStringLiteral( "Precision" ), QStringLiteral( "0" ) );
+      config.insert( QStringLiteral( "Min" ), QString::number( INT_MIN ) );
+      config.insert( QStringLiteral( "Max" ), QString::number( INT_MAX ) );
+      config.insert( QStringLiteral( "Step" ), 1 );
     }
     else if ( widgetType == QStringLiteral( "ExternalResource" ) )
     {
-      config.insert( QStringLiteral( "RelativeStorage" ), 1 );
-      config.insert( QStringLiteral( "StorageMode" ), 0 );
+      config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "1" ) );
+      config.insert( QStringLiteral( "StorageMode" ), QStringLiteral( "0" ) );
+      config.insert( QStringLiteral( "PropertyCollection" ), QVariantMap() );
+      QgsPropertyCollection collection;
+      config.insert( QStringLiteral( "PropertyCollection" ), collection.toVariant( QgsPropertiesDefinition() ) );
     }
 
-    return QgsEditorWidgetSetup( widgetType, config );;
+    return QgsEditorWidgetSetup( widgetType, config );
   }
+}
+
+QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsConfig ) const
+{
+
+  QgsFields fields;
+  for ( const FieldConfiguration fc : fieldsConfig )
+  {
+    QString type = widgetToType( fc.widgetType );
+    QVariant::Type qtype = parseType( type );
+    QgsField field( fc.attributeName, qtype, type );
+    fields.append( field );
+  }
+  return fields;
+}
+
+QVariant::Type ProjectWizard::parseType( const QString &type ) const
+{
+  if ( type == QLatin1String( "text" ) )
+    return QVariant::String;
+  else if ( type == QLatin1String( "integer" ) )
+    return QVariant::Int;
+  else if ( type == QLatin1String( "integer64" ) )
+    return QVariant::Int;
+  else if ( type == QLatin1String( "real" ) )
+    return QVariant::Double;
+  else if ( type == QLatin1String( "date" ) )
+    return QVariant::Date;
+  else if ( type == QLatin1String( "datetime" ) )
+    return QVariant::DateTime;
+  else if ( type == QLatin1String( "bool" ) )
+    return QVariant::Bool;
+  else if ( type == QLatin1String( "binary" ) )
+    return QVariant::ByteArray;
+
+  return QVariant::Invalid;
+}
+
+QString ProjectWizard::widgetToType( const QString &widgetType ) const
+{
+  if ( widgetType == QStringLiteral( "TextEdit" ) )
+    return QStringLiteral( "text" );
+  else if ( widgetType == QStringLiteral( "Range" ) )
+    return QStringLiteral( "integer" );
+  else if ( widgetType == QStringLiteral( "DateTime" ) )
+    return QStringLiteral( "datetime" );
+  else if ( widgetType == QStringLiteral( "CheckBox" ) )
+    return QStringLiteral( "bool" );
+  else if ( widgetType == QStringLiteral( "ExternalResource" ) )
+    return QStringLiteral( "text" );
+
+  return QStringLiteral( "text" );
 }

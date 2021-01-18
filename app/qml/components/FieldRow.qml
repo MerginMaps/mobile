@@ -30,11 +30,13 @@ Item {
       bottomPadding: 10 * QgsQuick.Utils.dp
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: fieldDelegate.color
-      placeholderText: AttributeName ? AttributeName : qsTr("Attribute name")
+      placeholderText: qsTr("Attribute name")
+      text: AttributeName ? AttributeName : ""
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
 
-      onAccepted: AttributeName = text
+      onEditingFinished: AttributeName = text
+
 
       background: Rectangle {
         anchors.fill: parent
@@ -51,6 +53,12 @@ Item {
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
       model: widgetList
+      textRole: "display"
+      valueRole: "widget"
+
+      Component.onCompleted: {
+        comboBox.currentIndex = comboBox.indexOfValue(WidgetType);
+      }
 
       MouseArea {
         anchors.fill: parent
@@ -73,15 +81,14 @@ Item {
         highlighted: comboBox.highlightedIndex === index
         leftPadding: 5 * QgsQuick.Utils.dp
         onClicked: {
-          FieldType = model.value
-          WidgetType = model.display
+          WidgetType = model.widget
           comboBox.currentIndex = index
         }
       }
 
       contentItem: Text {
         height: comboBox.height * 0.8
-        text: WidgetType
+        text: comboBox.displayText
         font.pixelSize: InputStyle.fontPixelSizeNormal
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter

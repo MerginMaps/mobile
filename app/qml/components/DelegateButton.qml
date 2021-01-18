@@ -16,7 +16,7 @@ Item {
   Button {
     id: delegateButton
     text: delegateButtonContainer.text
-    height: delegateButtonContainer.height / 2
+    height: delegateButtonContainer.height
     width: delegateButtonContainer.btnWidth
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter

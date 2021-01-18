@@ -9,13 +9,15 @@ FieldsModel::FieldsModel( QObject *parent )
 
 bool FieldsModel::addField( const QString &name, const QString &type, const QString &widgetType )
 {
-if (mFields.indexFromName(name) >= 0) {
-    notify(QString("Field '%1' has not been added due to empty or existing name ").arg(name));
- }
 
   beginResetModel();
-  QgsField field = createField( name, type, widgetType );
-  mFields.append( field );
+
+  FieldConfiguration fc;
+  fc.attributeName = name;
+  fc.widgetType = widgetType;
+  fc.fieldType = type;
+  mFields.append( fc );
+
   endResetModel();
   return true;
 }
@@ -26,7 +28,7 @@ bool FieldsModel::removeField( int row )
     return false;
 
   beginResetModel();
-  mFields.remove( row );
+  mFields.removeAt( row );
   endResetModel();
   return true;
 }
@@ -34,19 +36,17 @@ bool FieldsModel::removeField( int row )
 QVariantMap FieldsModel::supportedTypes()
 {
   QVariantMap supportedTypes;
-  supportedTypes.insert( "text", "TextEdit" );
-  //supportedTypes.insert("date", "DateTime");
-  supportedTypes.insert( "datetime", "DateTime" );
-  supportedTypes.insert( "integer", "Range" );
-  supportedTypes.insert( "real", "TextEdit" );
-  supportedTypes.insert( "bool", "Bool" );
-  //supportedTypes.insert("binary", "value_tedt");
-  supportedTypes.insert( "text", "ExternalResource" ); // TODO rename
+  supportedTypes.insert( "TextEdit", "TextEdit" );
+  supportedTypes.insert( "DateTime", "DateTime" );
+  supportedTypes.insert( "Range", "Range" );
+  supportedTypes.insert( "TextEdit", "TextEdit" );
+  supportedTypes.insert( "CheckBox", "CheckBox" );
+  supportedTypes.insert( "ExternalResource", "Photo" );
 
   return supportedTypes;
 }
 
-QgsFields FieldsModel::fields()
+QList<FieldConfiguration> FieldsModel::fields()
 {
   return mFields;
 }
@@ -74,20 +74,16 @@ QVariant FieldsModel::data( const QModelIndex &index, int role ) const
   if ( row < 0 || row >= mFields.count() )
     return QVariant();
 
-  QgsField field = mFields[row];
+  FieldConfiguration field = mFields[row];
 
   switch ( role )
   {
     case AttributeName:
-      return field.name();
-      break;
-
-    case FieldType:
-      return field.typeName();
+      return field.attributeName;
       break;
 
     case WidgetType:
-      return field.comment();
+      return field.widgetType;
       break;
   }
 
@@ -103,24 +99,18 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   if ( row < 0 || row >= mFields.count() )
     return false;
 
+
   switch ( role )
   {
     case AttributeName:
     {
-      mFields.rename( row, value.toString() );
+      mFields[row].attributeName = value.toString();
       emit dataChanged( index, index, {AttributeName} );
-      break;
-    }
-
-    case FieldType:
-    {
-      mFields[row].setTypeName( value.toString() );
-      emit dataChanged( index, index, {FieldType} );
       break;
     }
     case WidgetType:
     {
-      mFields[row].setComment( value.toString() );
+      mFields[row].widgetType = value.toString();
       emit dataChanged( index, index, {WidgetType} );
       break;
     }
@@ -133,8 +123,8 @@ QString FieldsModel::findWidgetTypeByFieldName( const QString name ) const
 {
   for ( int i = 0; i < mFields.count(); ++i )
   {
-    if ( mFields.at( i ).name() == name )
-      return mFields.at( i ).comment();
+    if ( mFields.at( i ).attributeName == name )
+      return mFields.at( i ).widgetType;
   }
   return QString( "TextEdit" );
 }
@@ -147,34 +137,4 @@ void FieldsModel::initModel()
   // ONLY FOR testing
   addField( "Number", "integer", "Range" );
   addField( "Bool", "bool", "CheckBox" );
-}
-
-QVariant::Type FieldsModel::parseType( const QString &type )
-{
-  if ( type == QLatin1String( "text" ) )
-    return QVariant::String;
-  else if ( type == QLatin1String( "integer" ) )
-    return QVariant::Int;
-  else if ( type == QLatin1String( "integer64" ) )
-    return QVariant::Int;
-  else if ( type == QLatin1String( "real" ) )
-    return QVariant::Double;
-  else if ( type == QLatin1String( "date" ) )
-    return QVariant::Date;
-  else if ( type == QLatin1String( "datetime" ) )
-    return QVariant::DateTime;
-  else if ( type == QLatin1String( "bool" ) )
-    return QVariant::Bool;
-  else if ( type == QLatin1String( "binary" ) )
-    return QVariant::Invalid; // TODO
-  return QVariant::Invalid;
-}
-
-QgsField FieldsModel::createField( const QString &name, const QString &type, const QString &widgetType )
-{
-  QVariant::Type qtype = parseType( type );
-  QgsField field( name, qtype, type );
-  field.setComment( widgetType ); // TODO widget type
-
-  return field;
 }

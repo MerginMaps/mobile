@@ -622,6 +622,7 @@ Item {
         height: InputStyle.rowHeightHeader
         Layout.fillWidth: true
         anchors.bottom: toolbar.top
+        anchors.bottomMargin: InputStyle.panelMargin
         z: 100
 
         DelegateButton {
