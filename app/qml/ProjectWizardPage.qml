@@ -103,11 +103,18 @@ Item {
       }
 
       ListView {
+        id: fieldList
         model: __fieldsModel
         width: parent.width
         Layout.fillWidth: true
         Layout.fillHeight: true
         clip: true
+
+        onCountChanged: {
+          if (fieldList.visible) {
+            fieldList.positionViewAtEnd()
+          }
+        }
 
         delegate: FieldRow {
           height: projectWizardPanel.rowHeight
@@ -122,8 +129,7 @@ Item {
       Row {
         id: listButtonContainer
         width: parent.width
-        height: projectWizardPanel.rowHeight
-        Layout.preferredHeight: projectWizardPanel.rowHeight
+        Layout.preferredHeight: projectWizardPanel.rowHeight * 0.8
         Layout.fillWidth: true
         Button {
           id: delegateButton
@@ -138,7 +144,7 @@ Item {
             radius: InputStyle.cornerRadius
           }
 
-          onClicked: __fieldsModel.addField("", "text", "TextEdit")
+          onClicked: __fieldsModel.addField("", "TextEdit")
 
           contentItem: Text {
             text: delegateButton.text

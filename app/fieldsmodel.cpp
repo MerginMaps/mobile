@@ -7,15 +7,27 @@ FieldsModel::FieldsModel( QObject *parent )
   initModel();
 }
 
-bool FieldsModel::addField( const QString &name, const QString &type, const QString &widgetType )
+bool FieldsModel::addField( const QString &name, const QString &widgetType )
 {
+
+  if ( contains( name ) )
+  {
+    if ( name.isEmpty() )
+    {
+      notify( tr( "Please fill a name of previous field before adding a new field." ) );
+    }
+    else
+    {
+      notify( tr( "Field %1 already exists." ).arg( name ) );
+    }
+    return false;
+  }
 
   beginResetModel();
 
   FieldConfiguration fc;
   fc.attributeName = name;
   fc.widgetType = widgetType;
-  fc.fieldType = type;
   mFields.append( fc );
 
   endResetModel();
@@ -36,10 +48,9 @@ bool FieldsModel::removeField( int row )
 QVariantMap FieldsModel::supportedTypes()
 {
   QVariantMap supportedTypes;
-  supportedTypes.insert( "TextEdit", "TextEdit" );
+  supportedTypes.insert( "TextEdit", "Text" );
   supportedTypes.insert( "DateTime", "DateTime" );
-  supportedTypes.insert( "Range", "Range" );
-  supportedTypes.insert( "TextEdit", "TextEdit" );
+  supportedTypes.insert( "Range", "Number" );
   supportedTypes.insert( "CheckBox", "CheckBox" );
   supportedTypes.insert( "ExternalResource", "Photo" );
 
@@ -55,7 +66,6 @@ QHash<int, QByteArray> FieldsModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
   roles[AttributeName]  = QByteArrayLiteral( "AttributeName" );
-  roles[FieldType]  = QByteArrayLiteral( "FieldType" );
   roles[WidgetType]  = QByteArrayLiteral( "WidgetType" );
 
   return roles;
@@ -131,10 +141,17 @@ QString FieldsModel::findWidgetTypeByFieldName( const QString name ) const
 
 void FieldsModel::initModel()
 {
-  addField( "Date", "datetime", "DateTime" );
-  addField( "Notes", "text", "TextEdit" );
-  addField( "Photo", "text", "ExternalResource" );
-  // ONLY FOR testing
-  addField( "Number", "integer", "Range" );
-  addField( "Bool", "bool", "CheckBox" );
+  addField( "Date", "DateTime" );
+  addField( "Notes", "TextEdit" );
+  addField( "Photo", "ExternalResource" );
+}
+
+bool FieldsModel::contains( const QString &name )
+{
+  for ( int i = 0; i < mFields.count(); ++i )
+  {
+    if ( mFields.at( i ).attributeName == name )
+      return true;
+  }
+  return false;
 }

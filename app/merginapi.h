@@ -514,13 +514,6 @@ class MerginApi: public QObject
     */
     QString generateConflictFileName( const QString &path, int version );
 
-//    // TODO use method from InputUtils
-//    /**
-//    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
-//    * \param QString path
-//    * \param QString isPathDir True if the result path suppose to be a folder
-//    */
-//    QString findUniquePath( const QString &path, bool isPathDir = true );
     /** Creates a request to get project details (list of project files).
      */
     QNetworkReply *getProjectInfo( const QString &projectFullName, bool withoutAuth = false );

@@ -619,14 +619,15 @@ Item {
       // Content bellow ListView section
       Item {
         width: projectsPanel.width
-        height: InputStyle.rowHeightHeader
+        height: InputStyle.rowHeightHeader * 0.8
+        visible: !showMergin // only if local project page is selected
         Layout.fillWidth: true
         anchors.bottom: toolbar.top
         anchors.bottomMargin: InputStyle.panelMargin
         z: 100
 
         DelegateButton {
-          height: InputStyle.rowHeightHeader
+          height: parent.height
           width: parent.width/2
           btnWidth: InputStyle.rowHeightHeader * 3
           text: qsTr("Create project")

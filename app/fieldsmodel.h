@@ -29,14 +29,13 @@ class FieldsModel: public QAbstractListModel
     enum FeatureRoles
     {
       AttributeName = Qt::UserRole + 1,  //!< Attribute's display name (the original field name)
-      FieldType,
       WidgetType,  //!< Widget type name. Should match QT/QML editor widgets names.
     };
 
     //! Creates a new fields model
     explicit FieldsModel( QObject *parent = nullptr );
 
-    Q_INVOKABLE bool addField( const QString &name, const QString &type, const QString &widgetType = QString( "TextEdit" ) );
+    Q_INVOKABLE bool addField( const QString &name, const QString &widgetType = QString( "TextEdit" ) );
     Q_INVOKABLE bool removeField( int rowIndex );
     //! Returns map of supported widget's name (key) and string representation (value).
     Q_INVOKABLE QVariantMap supportedTypes();
@@ -58,6 +57,7 @@ class FieldsModel: public QAbstractListModel
 
     //! Inits model with default fields
     void initModel();
+    bool contains( const QString &name );
 };
 
 #endif // FIELDSMODEL_H
