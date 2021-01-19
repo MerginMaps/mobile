@@ -31,7 +31,7 @@ Item {
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: fieldDelegate.color
       placeholderText: qsTr("Attribute name")
-      text: AttributeName ? AttributeName : ""
+      text: AttributeName
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
 

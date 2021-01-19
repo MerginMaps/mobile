@@ -4,7 +4,6 @@
 FieldsModel::FieldsModel( QObject *parent )
   : QAbstractListModel( parent )
 {
-  initModel();
 }
 
 bool FieldsModel::addField( const QString &name, const QString &widgetType )
@@ -114,15 +113,19 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   {
     case AttributeName:
     {
+      if ( contains( value.toString() ) )
+      {
+        notify( tr( "Field %1 already exists. \nWon't be added to the project." ).arg( value.toString() ) );
+      }
       mFields[row].attributeName = value.toString();
       emit dataChanged( index, index, {AttributeName} );
-      break;
+      return true;
     }
     case WidgetType:
     {
       mFields[row].widgetType = value.toString();
       emit dataChanged( index, index, {WidgetType} );
-      break;
+      return true;
     }
   }
 
@@ -141,6 +144,7 @@ QString FieldsModel::findWidgetTypeByFieldName( const QString name ) const
 
 void FieldsModel::initModel()
 {
+  mFields.clear();
   addField( "Date", "DateTime" );
   addField( "Notes", "TextEdit" );
   addField( "Photo", "ExternalResource" );

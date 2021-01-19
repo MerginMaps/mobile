@@ -10,7 +10,7 @@ import "./components" // import InputStyle singleton
 Item {
   id: projectWizardPanel
 
-  signal backClicked
+  signal back
 
   property real rowHeight: InputStyle.rowHeight
   property var fontColor: InputStyle.fontColor
@@ -43,7 +43,7 @@ Item {
     titleText: qsTr("Create Project")
 
     onBack: {
-      projectWizardPanel.backClicked()
+      projectWizardPanel.back()
     }
   }
 
@@ -133,9 +133,9 @@ Item {
         Layout.fillWidth: true
         Button {
           id: delegateButton
-          text: qsTr("Add field")
+          text: qsTr("Add attribute")
           height: parent.height
-          width: height * 2
+          width: height * 3
           anchors.verticalCenter: parent.verticalCenter
           font.pixelSize: InputStyle.fontPixelSizeTitle
 

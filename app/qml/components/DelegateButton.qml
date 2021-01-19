@@ -10,13 +10,14 @@ Item {
   property var bgColor: InputStyle.highlightColor
   property var textColor: "white"
   property real btnWidth: delegateButtonContainer.height * 2
+  property real btnHeight: delegateButtonContainer.height * 0.8
 
   id: delegateButtonContainer
 
   Button {
     id: delegateButton
     text: delegateButtonContainer.text
-    height: delegateButtonContainer.height
+    height: delegateButtonContainer.btnHeight
     width: delegateButtonContainer.btnWidth
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter

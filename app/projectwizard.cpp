@@ -7,13 +7,6 @@
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
 
-#include <ogr_api.h>
-#include <ogr_srs_api.h>
-#include <gdal_version.h>
-
-#include <cpl_error.h>
-#include <cpl_string.h>
-
 ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
@@ -44,7 +37,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
   QgsVectorFileWriter::SaveVectorOptions options;
   options.driverName = QStringLiteral( "GPKG" );
   options.layerName = layerName;
-  options.fileEncoding = QStringLiteral( "UTF-8" ); // TODO check name/col name with special chars
+  options.fileEncoding = QStringLiteral( "UTF-8" );
   std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, QgsWkbTypes::Point, layerCrs, QgsCoordinateTransformContext(), options ) );
 
 
