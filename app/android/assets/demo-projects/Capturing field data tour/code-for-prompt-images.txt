@@ -1,0 +1,2 @@
+# image
+file://[%@project_folder%]/images/[% CASE 	WHEN "step" = 1 THEN 		'capturing-01.png' 	WHEN "step" = 2 THEN 		'capturing-02.png' 	WHEN "step" = 3 THEN 		'capturing-03.png' 	WHEN "step" = 4 THEN 		'capturing-04.png' 	WHEN "step" = 5 THEN 		'capturing-05.png' END %]

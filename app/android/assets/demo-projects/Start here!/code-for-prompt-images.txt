@@ -1,0 +1,16 @@
+# REMOVE THIS LINE AND MAKE SURE THERE ARE ONLY TWO LINES IN THE WHOLE THING, SPACES ON THE END OF EACH LINE BELOW BAR THE FIRST
+# image
+file://[%@project_folder%]/images/[% 
+CASE 
+	WHEN "step" = 1 THEN 
+		'start-here-01.png' 
+	WHEN "step" = 2 THEN 
+		'start-here-02.png' 
+	WHEN "step" = 3 THEN 
+		'start-here-03.png' 
+	WHEN "step" = 4 THEN 
+		'start-here-04.png' 
+	WHEN "step" = 5 THEN 
+		'start-here-05.png' 
+END 
+%]
