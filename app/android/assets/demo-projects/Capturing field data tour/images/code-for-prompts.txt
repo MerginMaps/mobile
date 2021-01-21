@@ -1,0 +1,38 @@
+[%
+CASE 
+	WHEN "step" = 1 THEN 
+		'<p>So you made it this far.. let\'s learn how to capture data including<br/>
+		photos.</p>
+		<p>To get back here, press 
+		<span><img src="file://' + @project_folder + '/' + 'images/moor.png' + '"/></span> then 
+		<span><img src="file://' + @project_folder + '/' + 'images/zoom-to-project.png' + '"/></span> - <strong>do this now so you can<br/>
+		find these steps again in a moment</strong>.</p>
+		<p><strong>Go to the next step on the tour</strong>.</p>'
+	WHEN "step" = 2 THEN 
+		'<img src="file://' + @project_folder + '/' + 'images/gps-and-symbol.png' + '"/>
+		<p>The GPS button centres on your location which is shown in orange.</p>
+		<p><strong>Press the GPS button to go to your location, then return here<br/>
+		(Zoom to project) for the next step in the tour</strong>.</p>'
+	WHEN "step" = 3 THEN 
+		'<p><span><img src="file://' + @project_folder + '/' + 'images/record.png' + '"/></span>Use the record button to create points, lines or areas. Use<br/>
+		the GPS button to centre on your current position or drag the map<br/>
+		to precisely position new points.</p>
+		<p><strong>Add some points to the <i>Field Notes</i> layer then return here for<br/>
+		the next step in the tour</strong>.</p>'
+	WHEN "step" = 4 THEN 
+		'<span><img src="file://' + @project_folder + '/' + 'images/record-layer.png' + '"/></span> Tapping the highlighted area<br/>
+		as shown above allows you to change the destination layer.</p>
+		<p><strong>Now add a line to the <i>Survey Tracks</i> layer then return here for<br/>
+		the next step in the tour</strong>.</p>'
+	WHEN "step" = 5 THEN 
+		'<p>Well done - you now know the basics of Input. We hope Input saves<br/>
+		you a lot of time in the field.</p>
+		<p>The next step is learning about Mergin. Input uses Mergin to load<br/>
+		projects without cables, share projects, sync field data in real-time<br/>
+		and to collaborate with others.</p>
+		<img src="file://' + @project_folder + '/' + 'images/mergin.png' + '"/>
+		<p><strong>Visit inputapp.io/mergin and make your next field visit wonderful!</strong></p>'
+	ELSE
+		'next step'
+END
+%]

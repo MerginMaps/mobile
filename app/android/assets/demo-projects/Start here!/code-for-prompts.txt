@@ -1,0 +1,43 @@
+[% 
+CASE 
+	WHEN "step" = 1 THEN 
+		'<p>Let\'s take a short tour.</p>
+		 <p>To get back to the start, press 
+		 <span><img src="file://' + @project_folder + '/' + 'images/moor.png' + '"/></span> then 
+		 <span><img src="file://' + @project_folder + '/' + 'images/zoom-to-project.png' + '"/></span> - <strong>try this now then <br/>
+		 come back here</strong>.</p>
+		 <p><strong>Follow the footsteps to the next stop on the tour</strong> - try pinching<br/>
+		 and dragging the map</strong></p>'
+	WHEN "step" = 2 THEN 
+		'<p><strong>Zoom out a bit so you can see more of the red points.</strong> - These are<br/>
+		air quality sensors measuring NO<sub>2</sub> and are coloured based on their<br/>
+		reading.</p>
+		<p><strong>Tap a sensor to see further information.</strong> - Summary information<br/>
+		is very configurable and can also show previews of attached images.</p>
+		<p><strong>Follow the footsteps to the next stop on the tour</strong>.</p>'
+	WHEN "step" = 3 THEN 
+		'<p>An Input project may contain <em>Map themes</em> which are predefined<br/>
+		layer selections and styles.</p>
+		<p><strong>Press <span><img src="file://' + @project_folder + '/' + 'images/moor.png' + '"/></span> then 
+		<span><img src="file://' + @project_folder + '/' + 'images/layers.png' + '"/></span> and select the <i>Sensor Status</i> theme.</strong></p>
+		<p><strong>Find the malfunctioning sensor - the next step in the tour is<br/>
+		nearby.</strong>.</p>'
+	WHEN "step" = 4 THEN 
+		'<p>We\'ve found the malfunctioning sensor and it\'s damaged and needs<br/>
+		repair.</p>
+		<p><strong>Tap the sensor, press <span><img src="file://' + @project_folder + '/' + 'images/edit.png' + '"/></span>, change its condition to <i>Repair needed</i><br/>
+		and press <i>Save</i></strong>. If you look again at the sensor you\'ll see details of<br/>
+		who made the last edit and when it was made.</p>
+		<p><strong>Follow the footsteps to the next stop on the tour</strong>.</p>'
+	WHEN "step" = 5 THEN 
+		'<p>So far we\'ve seen how to navigate, change layer themes and edit<br/>
+		the attributes of map features. Edits made in Input can be pushed<br/>
+		back to source datasets in real-time using <strong>Mergin</strong> - more on that<br/>
+		in the next tour.</p>
+		<p>In the next tour project, we\'ll see how easy it is to capture points,<br/>
+		lines and areas and how to attach photos. Access the next tour<br/>
+		from the <i>Projects</i> button at the bottom-left.</p>'
+	ELSE
+		'next step'
+END
+%]
