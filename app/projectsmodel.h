@@ -70,7 +70,7 @@ class ProjectModel : public QAbstractListModel
 
   public slots:
     void syncedProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully );
-    void addLocalProject( const QString &projectDir, const QString &projectName );
+    void addLocalProject( const QString &projectDir );
     void findProjectFiles();
 
   private:

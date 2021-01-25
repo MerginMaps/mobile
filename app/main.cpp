@@ -386,7 +386,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
   QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
-  QObject::connect( &pw, &ProjectWizard::projectCreated, &pm, &ProjectModel::addLocalProject );
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjects, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );

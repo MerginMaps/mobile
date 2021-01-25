@@ -17,14 +17,16 @@ Item {
   property var bgColor: InputStyle.clrPanelMain
   property real panelMargin: 10 * QgsQuick.Utils.dp
 
-  property ListModel items: ListModel {}
-  property var supportedTypes: {
+  property ListModel widgetsModel: ListModel {}
+
+  //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
+  property bool isWidgetModelReady: {
     var types = __fieldsModel.supportedTypes()
     for (var prop in types) {
-      projectWizardPanel.items.append({ "display": types[prop], "widget": prop })
+      projectWizardPanel.widgetsModel.append({ "display": types[prop], "widget": prop })
     }
 
-    projectWizardPanel.items
+    true
   }
 
   // background
@@ -109,52 +111,30 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
         clip: true
-
-        onCountChanged: {
-          if (fieldList.visible) {
-            fieldList.positionViewAtEnd()
-          }
-        }
+        spacing: projectWizardPanel.rowHeight * 0.1 // same as delegateButton "margin"
 
         delegate: FieldRow {
           height: projectWizardPanel.rowHeight
           width: contentLayout.width
           color: projectWizardPanel.fontColor
-          widgetList: projectWizardPanel.supportedTypes
+          widgetList: projectWizardPanel.widgetsModel
 
           onRemoveClicked: __fieldsModel.removeField(index)
         }
-      }
 
-      Row {
-        id: listButtonContainer
-        width: parent.width
-        Layout.preferredHeight: projectWizardPanel.rowHeight * 0.8
-        Layout.fillWidth: true
-        Button {
-          id: delegateButton
-          text: qsTr("Add attribute")
-          height: parent.height
-          width: height * 3
-          anchors.verticalCenter: parent.verticalCenter
-          font.pixelSize: InputStyle.fontPixelSizeTitle
-
-          background: Rectangle {
-            color: InputStyle.highlightColor
-            radius: InputStyle.cornerRadius
+        footer: DelegateButton {
+            height: projectWizardPanel.rowHeight
+            width: parent.width
+            btnWidth: projectWizardPanel.rowHeight * 3
+            btnHeight:projectWizardPanel.rowHeight * 0.8
+            text: qsTr("+ Add field")
+            onClicked: {
+              __fieldsModel.addField("", "TextEdit")
+              if (fieldList.visible) {
+                fieldList.positionViewAtEnd()
+              }
+            }
           }
-
-          onClicked: __fieldsModel.addField("", "TextEdit")
-
-          contentItem: Text {
-            text: delegateButton.text
-            font: delegateButton.font
-            color: "white"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-          }
-        }
       }
     }
   }

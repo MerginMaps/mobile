@@ -28,6 +28,8 @@ ProjectModel::ProjectModel( LocalProjectsManager &localProjects, QObject *parent
   , mLocalProjects( localProjects )
 {
   findProjectFiles();
+
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &ProjectModel::addLocalProject );
 }
 
 ProjectModel::~ProjectModel() {}
@@ -185,10 +187,9 @@ void ProjectModel::syncedProjectFinished( const QString &projectDir, const QStri
   reloadProjectFiles( projectDir, projectFullName, successfully );
 }
 
-void ProjectModel::addLocalProject( const QString &projectDir, const QString &projectName )
+void ProjectModel::addLocalProject( const QString &projectDir )
 {
   Q_UNUSED( projectDir );
-  Q_UNUSED( projectName );
   mLocalProjects.reloadProjectDir();
   findProjectFiles();
 }

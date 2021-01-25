@@ -634,10 +634,14 @@ Item {
           text: qsTr("Create project")
           anchors.centerIn: parent
           onClicked: {
-            __fieldsModel.initModel()
-            stackView.push(projectWizardComp)
+            if (__inputUtils.hasStoragePermission()) {
+              __fieldsModel.initModel()
+              stackView.push(projectWizardComp)
+          } else {
+              __inputUtils.acquireStoragePermission()
           }
         }
+       }
       }
 
 

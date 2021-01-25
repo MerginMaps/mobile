@@ -20,11 +20,11 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
   QString layerName( QStringLiteral( "Points" ) );
-  QgsCoordinateReferenceSystem layerCrs( "EPSG:4326" );
+  QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
   QgsFields predefinedFields = createFields( mFieldsModel->fields() );
 
   // Write layer as gpkg
-  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=EPSG:4326" ), layerName, "memory" );
+  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
   layer->startEditing();
   layer->setCrs( layerCrs );
   for ( QgsField f : predefinedFields )
@@ -79,15 +79,15 @@ void ProjectWizard::createProject( QString const &projectName )
   QgsProject project;
 
   // add background layer
-  QString urlWithParams( "tilePixelRatio=1&type=xyz&url=https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0" );
-  QgsRasterLayer *bgLayer = new QgsRasterLayer( urlWithParams, "OpenStreetMap", "wms" );
+  QString urlWithParams( BG_MAPS_CONFIG );
+  QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
   project.addMapLayer( bgLayer );
 
   // Add vector layer
   QgsVectorLayer *layer = createGpkgLayer( projectDir );
   project.addMapLayer( layer );
 
-  project.setCrs( QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:3857" ) ) );
+  project.setCrs( QgsCoordinateReferenceSystem( PROJECT_CRS_ID ) );
   project.writePath( projectGpkgPath );
   project.write( projectFilepath );
 

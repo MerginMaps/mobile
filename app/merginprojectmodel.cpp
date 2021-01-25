@@ -16,7 +16,7 @@ MerginProjectModel::MerginProjectModel( LocalProjectsManager &localProjects, QOb
   , mLocalProjects( localProjects )
 {
   QObject::connect( &mLocalProjects, &LocalProjectsManager::projectMetadataChanged, this, &MerginProjectModel::projectMetadataChanged );
-  QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
+  QObject::connect( &mLocalProjects, &LocalProjectsManager::localMerginProjectAdded, this, &MerginProjectModel::onLocalProjectAdded );
   QObject::connect( &mLocalProjects, &LocalProjectsManager::localProjectRemoved, this, &MerginProjectModel::onLocalProjectRemoved );
 
   mAdditionalItem->status = NonProjectItem;
