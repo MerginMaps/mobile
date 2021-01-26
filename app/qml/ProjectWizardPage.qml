@@ -127,7 +127,8 @@ Item {
             width: parent.width
             btnWidth: projectWizardPanel.rowHeight * 3
             btnHeight:projectWizardPanel.rowHeight * 0.8
-            text: qsTr("+ Add field")
+            text: qsTr("Add field")
+            iconSource: InputStyle.plusIcon
             onClicked: {
               __fieldsModel.addField("", "TextEdit")
               if (fieldList.visible) {

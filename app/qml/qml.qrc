@@ -56,5 +56,6 @@
         <file>components/DelegateButton.qml</file>
         <file>components/FieldRow.qml</file>
         <file>components/InputSwitch.qml</file>
+        <file>components/Symbol.qml</file>
     </qresource>
 </RCC>
