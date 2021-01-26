@@ -336,12 +336,16 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
   //TODO win32 package demo projects
 #endif
+
+  QString projDir;
+#ifdef MOBILE_OS
+  projDir = appBundleDir;
 #else
-  appBundleDir = dataDir;
+  projDir = dataDir;
 #endif
 
   InputProjUtils inputProjUtils;
-  inputProjUtils.initProjLib( appBundleDir );
+  inputProjUtils.initProjLib( projDir );
   init_qgis( appBundleDir );
   copy_demo_projects( demoDir, projectDir );
   inputProjUtils.setDefaultProjPaths();
