@@ -1,7 +1,7 @@
 name: Android
 on: [push]
 env:
-  SDK_VERSION: android-19
+  SDK_VERSION: android-20
 
 jobs:
   android_build:
