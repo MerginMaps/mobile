@@ -348,7 +348,6 @@ int main( int argc, char *argv[] )
   inputProjUtils.initProjLib( projDir );
   init_qgis( appBundleDir );
   copy_demo_projects( demoDir, projectDir );
-  inputProjUtils.setDefaultProjPaths();
 
   // Create Input classes
   AndroidUtils au;
