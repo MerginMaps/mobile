@@ -11,7 +11,7 @@ Item {
   property var fontColor: "white"
   property real btnWidth: delegateButtonContainer.height * 2
   property real btnHeight: delegateButtonContainer.height * 0.8
-  property var iconSource
+  property var iconSource: ""
 
   id: delegateButtonContainer
 

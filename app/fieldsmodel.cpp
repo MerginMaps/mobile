@@ -48,9 +48,9 @@ QVariantMap FieldsModel::supportedTypes()
 {
   QVariantMap supportedTypes;
   supportedTypes.insert( "TextEdit", "Text" );
-  supportedTypes.insert( "DateTime", "DateTime" );
+  supportedTypes.insert( "DateTime", "Date&time" );
   supportedTypes.insert( "Range", "Number" );
-  supportedTypes.insert( "CheckBox", "CheckBox" );
+  supportedTypes.insert( "CheckBox", "Checkbox" );
   supportedTypes.insert( "ExternalResource", "Photo" );
 
   return supportedTypes;

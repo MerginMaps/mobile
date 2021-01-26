@@ -30,13 +30,12 @@ Item {
       bottomPadding: 10 * QgsQuick.Utils.dp
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: fieldDelegate.color
-      placeholderText: qsTr("Attribute name")
+      placeholderText: qsTr("Field name")
       text: AttributeName
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
 
       onEditingFinished: AttributeName = text
-
 
       background: Rectangle {
         anchors.fill: parent
@@ -75,11 +74,11 @@ Item {
       delegate: ItemDelegate {
         width: comboBox.width
         height: comboBox.height * 0.8
-        text: model.display
+        text: model.display.replace('&', "&&") // issue ampersand character showing up as underscore
         font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
         font.pixelSize: InputStyle.fontPixelSizeNormal
         highlighted: comboBox.highlightedIndex === index
-        leftPadding: 5 * QgsQuick.Utils.dp
+        leftPadding: textField.leftPadding
         onClicked: {
           WidgetType = model.widget
           comboBox.currentIndex = index
@@ -93,7 +92,7 @@ Item {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        leftPadding: 5 * QgsQuick.Utils.dp
+        leftPadding: textField.leftPadding
         color: InputStyle.fontColor
       }
 

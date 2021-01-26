@@ -19,7 +19,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
 {
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
-  QString layerName( QStringLiteral( "Points" ) );
+  QString layerName( QStringLiteral( "Survey" ) );
   QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
   QgsFields predefinedFields = createFields( mFieldsModel->fields() );
 
@@ -52,7 +52,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
     &errorMessage );
 
   // Check and configure layer
-  QgsVectorLayer *l = new QgsVectorLayer( projectGpkgPath, "Points", "ogr" );
+  QgsVectorLayer *l = new QgsVectorLayer( projectGpkgPath, layerName, "ogr" );
 
   Q_ASSERT( l->isValid() );
 

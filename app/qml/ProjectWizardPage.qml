@@ -77,7 +77,6 @@ Item {
         height: projectWizardPanel.rowHeight
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: projectWizardPanel.fontColor
-        placeholderText: qsTr("Project name")
         font.capitalization: Font.MixedCase
         inputMethodHints: Qt.ImhNoPredictiveText
         Layout.fillWidth: true
