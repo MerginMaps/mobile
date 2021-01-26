@@ -95,7 +95,7 @@ Item {
         id: attributesLabel
         height: projectWizardPanel.rowheight
         width: parent.width
-        text: qsTr("Attributes")
+        text: qsTr("Fields")
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
         Layout.preferredHeight: projectWizardPanel.rowHeight
