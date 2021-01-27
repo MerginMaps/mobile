@@ -41,11 +41,10 @@ Rectangle {
 
     TextHyperlink {
       id: merginInfo
-      width: parent.width
+      width: loginForm.width - 2 * root.panelMargin
+      x: root.panelMargin
       height: InputStyle.rowHeightHeader
-      text: qsTr("%1Mergin%2 is a cloud synchronization service for Input.
-                  You can use it with your first projects for free. Sign in
-                  or Sign up to try it out.")
+      text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
                 .arg("<a href='" + __merginApi.apiRoot + "'>")
                 .arg("</a>")
     }
@@ -208,7 +207,7 @@ Rectangle {
         id: signUpButton
         width: loginForm.width - 2 * root.panelMargin
         height: fieldHeight * 0.7
-        text: qsTr("Sign up")
+        text: qsTr("Sign up for free")
         font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: loginForm.registrationRequested()
