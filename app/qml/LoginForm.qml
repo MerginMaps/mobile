@@ -39,6 +39,17 @@ Rectangle {
     width: parent.width
     anchors.bottom: parent.bottom
 
+    TextHyperlink {
+      id: merginInfo
+      width: parent.width
+      height: InputStyle.rowHeightHeader
+      text: qsTr("%1Mergin%2 is a cloud synchronization service for Input.
+                  You can use it with your first projects for free. Sign in
+                  or Sign up to try it out.")
+                .arg("<a href='" + __merginApi.apiRoot + "'>")
+                .arg("</a>")
+    }
+
     Image {
       source: "mergin_color.svg"
       height: fieldHeight
