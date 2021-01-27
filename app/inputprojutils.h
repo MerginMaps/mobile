@@ -29,13 +29,14 @@ class InputProjUtils: public QObject
 
     /**
      * Sets the PROJ_LIB dir, should be called before qgis application is initialized
+     * Copies all custom projections from all loaded projects to the custom PROJ folder.
      */
-    void initProjLib( const QString &pkgPath );
+    void initProjLib( const QString &pkgPath, const QString &projectsPath );
 
     /**
-     * Modifies proj search paths to include proj files relative to project directory
+     * Resets the custom handlers.
      */
-    void modifyProjPath( const QString &projectFile );
+    void resetHandlers();
 
   signals:
     //! Emitted where there is any error with transformations
@@ -46,6 +47,8 @@ class InputProjUtils: public QObject
     void logUser( const QString &message, bool &variable );
 
     void cleanCustomDir();
+    void copyCustomProj( const QString &projectsPath );
+
     void initCoordinateOperationHandlers();
 
     bool mPopUpShown = false;

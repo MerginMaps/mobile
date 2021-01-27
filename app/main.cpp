@@ -345,9 +345,9 @@ int main( int argc, char *argv[] )
 #endif
 
   InputProjUtils inputProjUtils;
-  inputProjUtils.initProjLib( projDir );
-  init_qgis( appBundleDir );
   copy_demo_projects( demoDir, projectDir );
+  inputProjUtils.initProjLib( projDir, projectDir );
+  init_qgis( appBundleDir );
 
   // Create Input classes
   AndroidUtils au;
@@ -382,7 +382,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
-  QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::modifyProjPath );
+  QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( QgsApplication::messageLog(),
                     static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
                     &iu,

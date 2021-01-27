@@ -74,7 +74,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "missing required grid: %1" ).arg( grid.shortName ), mMissingRequiredGridReported );
-    warnUser( tr( "Missing required PROJ datum shift grid: %1." ).arg( grid.shortName ) );
+    warnUser( tr( "Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input." ).arg( grid.shortName ) );
   } );
 
   QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -95,7 +95,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "coordinate operation creation error: %1" ).arg( error ), mCoordinateOperationCreationErrorReported );
-    warnUser( tr( "Error creating custom PROJ operation." ) );
+    warnUser( tr( "Error creating custom PROJ operation. For newly downloaded project please restart Input." ) );
   } );
 
   QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -105,7 +105,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "custom missing grid used by context handler %1" ).arg( detailsToStr( desired ).join( ";" ) ), mMissingGridUsedByContextHandlerReported );
-    warnUser( tr( "Missing required PROJ datum shift grids: %1" ).arg( detailsToStr( desired ).join( "<br>" ) ) );
+    warnUser( tr( "Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input." ).arg( detailsToStr( desired ).join( "<br>" ) ) );
   } );
 
   QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -134,7 +134,7 @@ static void _updateProj( const QStringList &searchPaths )
 }
 
 
-void InputProjUtils::initProjLib( const QString &pkgPath )
+void InputProjUtils::initProjLib( const QString &pkgPath, const QString &projectsPath )
 {
 #ifdef MOBILE_OS
 #ifdef ANDROID
@@ -170,13 +170,13 @@ void InputProjUtils::initProjLib( const QString &pkgPath )
   qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
 
   cleanCustomDir();
+  copyCustomProj( projectsPath );
 
   paths.append( mCurrentCustomProjDir );
   _updateProj( paths );
 }
 
-
-void InputProjUtils::modifyProjPath( const QString &projectFile )
+void InputProjUtils::resetHandlers()
 {
   mPopUpShown = false;
   mMissingRequiredGridReported = false;
@@ -184,24 +184,26 @@ void InputProjUtils::modifyProjPath( const QString &projectFile )
   mCoordinateOperationCreationErrorReported = false;
   mMissingGridUsedByContextHandlerReported = false;
   mFallbackOperationOccurredReported = false;
+}
 
-  // DO NOT remove all files here
-  // it would fail this situation
-  // project A => uses grid G
-  // switch to project B => do not use any grids
-  // switch back to project A => QGIS from proj's context raises setCustomMissingGridUsedByContextHandler
+void InputProjUtils::copyCustomProj( const QString &projectsPath )
+{
+  int nProjects = 0;
 
-  if ( !projectFile.isEmpty() )
+  QDirIterator it( projectsPath, QStringList() << QStringLiteral( "proj" ), QDir::Dirs, QDirIterator::Subdirectories );
+  while ( it.hasNext() )
   {
-    QFileInfo fi( projectFile );
-    QDir projDir( fi.absoluteDir().absolutePath() + "/proj" );
+    QDir projDir = it.next();
     if ( projDir.isReadable() && !projDir.isEmpty() )
     {
       bool success = InputUtils::cpDir( projDir.absolutePath(), mCurrentCustomProjDir );
       if ( success )
-        qDebug() << "InputPROJ: updated custom proj dir with" << projDir.absolutePath();
+        qDebug() << "InputPROJ: copied custom projections from" << projDir.absolutePath();
       else
-        qDebug() << "InputPROJ: failed to update custom proj dir with" << projDir.absolutePath();
+        qDebug() << "InputPROJ: failed to copy custom proj dir from" << projDir.absolutePath();
+
+      ++nProjects;
     }
   }
+  qDebug() << "InputPROJ: found" << nProjects << "projects with custom projections";
 }
