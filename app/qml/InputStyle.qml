@@ -40,6 +40,7 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
 
     property real panelSpacing: QgsQuick.Utils.dp * 5

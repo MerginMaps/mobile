@@ -9,8 +9,8 @@ Item {
   property real cornerRadius: InputStyle.cornerRadius
   property var bgColor: InputStyle.highlightColor
   property var fontColor: "white"
-  property real btnWidth: delegateButtonContainer.height * 2
-  property real btnHeight: delegateButtonContainer.height * 0.8
+  property real btnWidth: delegateButtonContainer.height * 3
+  property real btnHeight: InputStyle.delegateBtnHeight
   property var iconSource: ""
 
   id: delegateButtonContainer

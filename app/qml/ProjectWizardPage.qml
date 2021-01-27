@@ -124,8 +124,6 @@ Item {
         footer: DelegateButton {
             height: projectWizardPanel.rowHeight
             width: parent.width
-            btnWidth: projectWizardPanel.rowHeight * 3
-            btnHeight:projectWizardPanel.rowHeight * 0.8
             text: qsTr("Add field")
             iconSource: InputStyle.plusIcon
             onClicked: {

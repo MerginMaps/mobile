@@ -374,6 +374,21 @@ Item {
 
           delegate: delegateItem
 
+          footer:  DelegateButton {
+            height: projectsPanel.rowHeight
+            width: parent.width
+            text: qsTr("Create project")
+            anchors.centerIn: parent
+            onClicked: {
+              if (__inputUtils.hasStoragePermission()) {
+                __fieldsModel.initModel()
+                stackView.push(projectWizardComp)
+            } else {
+                __inputUtils.acquireStoragePermission()
+            }
+          }
+         }
+
           Text {
             id: noProjectsText
             anchors.fill: parent
@@ -615,35 +630,6 @@ Item {
 
         }
       }
-
-      // Content bellow ListView section
-      Item {
-        width: projectsPanel.width
-        height: InputStyle.rowHeightHeader * 0.8
-        visible: !showMergin // only if local project page is selected
-        Layout.fillWidth: true
-        anchors.bottom: toolbar.top
-        anchors.bottomMargin: InputStyle.panelMargin
-        z: 100
-
-        DelegateButton {
-          height: parent.height
-          width: parent.width/2
-          btnWidth: InputStyle.rowHeightHeader * 3
-          btnHeight: parent.height
-          text: qsTr("Create project")
-          anchors.centerIn: parent
-          onClicked: {
-            if (__inputUtils.hasStoragePermission()) {
-              __fieldsModel.initModel()
-              stackView.push(projectWizardComp)
-          } else {
-              __inputUtils.acquireStoragePermission()
-          }
-        }
-       }
-      }
-
 
       // Toolbar
       Rectangle {
