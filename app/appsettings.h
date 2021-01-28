@@ -23,6 +23,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
+    Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -47,6 +48,11 @@ class AppSettings: public QObject
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
 
+    bool reuseLastEnteredValues() const;
+
+  public slots:
+    void setReuseLastEnteredValues( bool reuseLastEnteredValues );
+
   signals:
     void defaultProjectChanged();
     void activeProjectChanged();
@@ -54,6 +60,8 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void lineRecordingIntervalChanged();
+
+    void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
 
   private:
     // Projects path
@@ -72,6 +80,8 @@ class AppSettings: public QObject
 
     const QString mGroupName = QString( "inputApp" );
 
+    // used to allow remembering values of last created feature to speed up digitizing for user
+    bool mReuseLastEnteredValues;
 };
 
 #endif // APPSETTINGS_H

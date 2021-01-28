@@ -68,7 +68,8 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     };
 
     //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
-    struct RememberedValues {
+    struct RememberedValues
+    {
       QgsFeature feature;
       QVector<bool> attributeFilter;
     };

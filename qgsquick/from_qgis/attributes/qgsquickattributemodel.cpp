@@ -98,7 +98,7 @@ void QgsQuickAttributeModel::prefillRememberedValues()
     return;
 
   QgsAttributes fromAttributes = from.feature.attributes();
-  for( int i = 0; i < fromAttributes.length(); i++ )
+  for ( int i = 0; i < fromAttributes.length(); i++ )
   {
     if ( from.attributeFilter.at( i ) )
       mFeatureLayerPair.featureRef().setAttribute( i, fromAttributes.at( i ) );
