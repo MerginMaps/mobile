@@ -115,11 +115,11 @@ class QUICK_EXPORT QgsQuickAttributeFormModel : public QSortFilterProxyModel
     //! Resets the model
     Q_INVOKABLE void forceClean();
 
-public slots:
+  public slots:
     //! Allows or forbids attribute model to reuse last entered values
     void setRememberValuesAllowed( bool rememberValuesAllowed );
 
-signals:
+  signals:
     //! \copydoc QgsQuickAttributeFormModel::attributeModel
     void attributeModelChanged();
 

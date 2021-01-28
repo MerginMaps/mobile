@@ -201,6 +201,13 @@ Page {
                 }
             }
 
+            // Header "Recording"
+            PanelItem {
+                color: InputStyle.panelBackgroundLight
+                text: qsTr("Recording")
+                bold: true
+            }
+
             PanelItem {
                 height: settingsPanel.rowHeight
                 width: parent.width
@@ -219,6 +226,54 @@ Page {
                     width: height * 6
                     anchors.right: parent.right
                     anchors.rightMargin: InputStyle.panelMargin
+                }
+            }
+
+
+            PanelItem {
+                height: settingsPanel.rowHeight
+                width: parent.width
+                color: InputStyle.clrPanelMain
+                text: qsTr("Save last values")
+
+                Switch {
+                    anchors.margins: 0
+                    padding: 0
+                    id: rememberValuesCheck
+                    height: InputStyle.fontPixelSizeNormal
+                    width: height * 2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: InputStyle.panelMargin
+                    checked: __appSettings.reuseLastEnteredValues
+                    onCheckedChanged: __appSettings.reuseLastEnteredValues = checked
+
+                    property color highlighColor: InputStyle.softGreen
+                    property color disabledColor: InputStyle.panelBackgroundDark
+
+                    indicator: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: parent.height
+                        x: rememberValuesCheck.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: parent.height/2
+                        color: rememberValuesCheck.checked ? InputStyle.softGreen : "#ffffff"
+                        border.color: rememberValuesCheck.checked ? InputStyle.softGreen : rememberValuesCheck.disabledColor
+
+                        Rectangle {
+                            x: rememberValuesCheck.checked ? parent.width - width : 0
+                            width: parent.height
+                            height: parent.height
+                            radius: parent.height/2
+                            color: "#ffffff"
+                            border.color: rememberValuesCheck.checked ? InputStyle.softGreen : rememberValuesCheck.disabledColor
+                        }
+                    }
+                }
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: rememberValuesCheck.toggle()
                 }
             }
 

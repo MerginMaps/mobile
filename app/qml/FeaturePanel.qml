@@ -170,6 +170,7 @@ Drawer {
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
             toolbarVisible: false
+            allowRememberAttribute: __appSettings.reuseLastEnteredValues
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1

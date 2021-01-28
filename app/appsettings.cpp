@@ -21,6 +21,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
   int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
+  bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -29,6 +30,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
   setLineRecordingInterval( lineRecordingInterval );
+  setReuseLastEnteredValues( reuseLastEnteredValues );
 }
 
 QString AppSettings::defaultLayer() const
@@ -150,5 +152,22 @@ void AppSettings::setLineRecordingInterval( int value )
     settings.endGroup();
 
     emit lineRecordingIntervalChanged();
+  }
+}
+
+bool AppSettings::reuseLastEnteredValues() const
+{
+  return mReuseLastEnteredValues;
+}
+
+void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
+{
+  if ( mReuseLastEnteredValues != reuseLastEnteredValues )
+  {
+    QSettings settings;
+    settings.beginGroup( mGroupName );
+    settings.setValue( "reuseLastEnteredValues", reuseLastEnteredValues );
+    mReuseLastEnteredValues = reuseLastEnteredValues;
+    emit reuseLastEnteredValuesChanged( mReuseLastEnteredValues );
   }
 }
