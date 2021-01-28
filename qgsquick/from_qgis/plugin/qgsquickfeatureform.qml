@@ -194,6 +194,11 @@ Item {
   }
 
   /**
+    * Forward change about remembering values to model
+    */
+  onAllowRememberAttributeChanged: form.model.rememberValuesAllowed = allowRememberAttribute
+
+  /**
    * This is a relay to forward private signals to internal components.
    */
   QtObject {
