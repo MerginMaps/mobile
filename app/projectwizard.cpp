@@ -77,8 +77,6 @@ void ProjectWizard::createProject( QString const &projectName )
   QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
-  bool hasPerms = QFile( projectGpkgPath ).setPermissions( QFileDevice::WriteOther );
-  qDebug() << "hasPermshasPermshasPermshasPerms" << hasPerms << QFile( projectGpkgPath ).permissions();
 
   QgsProject project;
 
