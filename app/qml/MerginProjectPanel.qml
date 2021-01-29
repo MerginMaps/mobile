@@ -378,7 +378,6 @@ Item {
             height: projectsPanel.rowHeight
             width: parent.width
             text: qsTr("Create project")
-            anchors.centerIn: parent
             onClicked: {
               if (__inputUtils.hasStoragePermission()) {
                 __fieldsModel.initModel()

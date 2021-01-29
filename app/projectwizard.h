@@ -21,6 +21,11 @@ class ProjectWizard : public QObject
      * \param projectName  Project's name for newly created project.
      */
     Q_INVOKABLE void createProject( QString const &projectName );
+
+  public slots:
+    //! To append "mapcanvas" property to project file required to correctly show a project.
+    void writeMapCanvasSetting( QDomDocument &doc );
+
   signals:
     /**
       * Emitted after a project has been craeted.
@@ -36,6 +41,7 @@ class ProjectWizard : public QObject
 
     QString mDataDir;
     FieldsModel *mFieldsModel;
+    QgsMapSettings *mSettings;
 
     const QString BG_MAPS_CONFIG = QStringLiteral( "tilePixelRatio=1&type=xyz&url=https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0" );
     const QString PROJECT_CRS_ID = QStringLiteral( "EPSG:3857" );

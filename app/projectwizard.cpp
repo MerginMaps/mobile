@@ -12,6 +12,8 @@ ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, 
   , mDataDir( dataDir )
   , mFieldsModel( fieldsModel )
 {
+
+  mSettings = new QgsMapSettings();
   QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
 }
 
@@ -75,24 +77,52 @@ void ProjectWizard::createProject( QString const &projectName )
   QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
+  bool hasPerms = QFile( projectGpkgPath ).setPermissions( QFileDevice::WriteOther );
+  qDebug() << "hasPermshasPermshasPermshasPerms" << hasPerms << QFile( projectGpkgPath ).permissions();
 
   QgsProject project;
 
-  // add background layer
+  // add layers
   QString urlWithParams( BG_MAPS_CONFIG );
   QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
-  project.addMapLayer( bgLayer );
-
-  // Add vector layer
   QgsVectorLayer *layer = createGpkgLayer( projectDir );
-  project.addMapLayer( layer );
+  QList<QgsMapLayer *> layers;
+  layers << bgLayer << layer;
+  project.addMapLayers(layers);
 
-  project.setCrs( QgsCoordinateReferenceSystem( PROJECT_CRS_ID ) );
+  // Configurate mapSettings
+  QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
+  mSettings->setExtent( bgLayer->extent() );
+  mSettings->setEllipsoid( "WGS84" );
+  mSettings->setDestinationCrs( projectCrs );
+  mSettings->setLayers( layers );
+
+  // Using writeProject signal to append mapCanvas project setting
+  connect( &project, &QgsProject::writeProject,
+           this, &ProjectWizard::writeMapCanvasSetting );
+
+  project.setCrs( projectCrs );
   project.writePath( projectGpkgPath );
   project.write( projectFilepath );
 
   emit notify( tr( "Project %1 created" ).arg( projectName ) );
   emit projectCreated( projectDir, projectName );
+}
+
+void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
+{
+  QDomNodeList nl = doc.elementsByTagName( QStringLiteral( "qgis" ) );
+  if ( !nl.count() )
+  {
+    QgsDebugMsg( QStringLiteral( "Unable to find qgis element in project file" ) );
+    return;
+  }
+  QDomNode qgisNode = nl.item( 0 );  // there should only be one, so zeroth element OK
+
+  QDomElement mapcanvasNode = doc.createElement( QStringLiteral( "mapcanvas" ) );
+  mapcanvasNode.setAttribute( QStringLiteral( "annotationsVisible" ), false );
+  qgisNode.appendChild( mapcanvasNode );
+  mSettings->writeXml( mapcanvasNode, doc );
 }
 
 QgsEditorWidgetSetup ProjectWizard::getEditorWidget( const QgsField &field, const QString &widgetType )
