@@ -86,7 +86,7 @@ void ProjectWizard::createProject( QString const &projectName )
   QgsVectorLayer *layer = createGpkgLayer( projectDir );
   QList<QgsMapLayer *> layers;
   layers << bgLayer << layer;
-  project.addMapLayers(layers);
+  project.addMapLayers( layers );
 
   // Configurate mapSettings
   QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
