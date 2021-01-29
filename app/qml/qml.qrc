@@ -53,5 +53,6 @@
         <file>LogPanel.qml</file>
         <file>components/PasswordField.qml</file>
         <file>components/DelegateButton.qml</file>
+        <file>components/InputSwitch.qml</file>
     </qresource>
 </RCC>
