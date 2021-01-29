@@ -235,6 +235,10 @@ Drawer {
                   property var today: QgsQuick.Utils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
                 }
+
+              property QtObject checkbox: QtObject {
+                property color baseColor: InputStyle.panelBackgroundDarker
+                }
               }
 
             model: QgsQuick.AttributeFormModel {
