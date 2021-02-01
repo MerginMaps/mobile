@@ -327,7 +327,6 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
   demoDir = "assets:/demo-projects";
-  demoDir = dataDir + "/qgis-data/resources/demo-projects";
 #endif
 #ifdef Q_OS_IOS
   appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
