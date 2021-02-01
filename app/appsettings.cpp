@@ -42,10 +42,7 @@ void AppSettings::setDefaultLayer( const QString &value )
 {
   if ( defaultLayer() != value )
   {
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "defaultLayer/" + mActiveProject, value );
-    settings.endGroup();
+    setValue( "defaultLayer/" + mActiveProject, value );
     mDefaultLayers.insert( mActiveProject, value );
     emit defaultLayerChanged();
   }
@@ -61,10 +58,7 @@ void AppSettings::setDefaultProject( const QString &value )
   if ( mDefaultProject != value )
   {
     mDefaultProject = value;
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "defaultProject", value );
-    settings.endGroup();
+    setValue( "defaultProject", value );
 
     emit defaultProjectChanged();
   }
@@ -97,10 +91,7 @@ void AppSettings::setAutoCenterMapChecked( bool value )
   if ( mAutoCenterMapChecked != value )
   {
     mAutoCenterMapChecked = value;
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "autoCenter", value );
-    settings.endGroup();
+    setValue( "autoCenter", value );
 
     emit autoCenterMapCheckedChanged();
   }
@@ -127,10 +118,7 @@ void AppSettings::setGpsAccuracyTolerance( int value )
   if ( mGpsAccuracyTolerance != value )
   {
     mGpsAccuracyTolerance = value;
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "gpsTolerance", value );
-    settings.endGroup();
+    setValue( "gpsTolerance", value );
 
     emit gpsAccuracyToleranceChanged();
   }
@@ -146,13 +134,20 @@ void AppSettings::setLineRecordingInterval( int value )
   if ( mLineRecordingInterval != value )
   {
     mLineRecordingInterval = value;
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "lineRecordingInterval", value );
-    settings.endGroup();
+    setValue( "lineRecordingInterval", value );
 
     emit lineRecordingIntervalChanged();
   }
+}
+
+bool AppSettings::isAppInitialized()
+{
+  return value( QStringLiteral( "isAppInitialized" ), QVariant( false ) ).toBool();
+}
+
+void AppSettings::setAppInitialized( const bool value )
+{
+  setValue( "isAppInitialized", value );
 }
 
 bool AppSettings::reuseLastEnteredValues() const
@@ -164,10 +159,26 @@ void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
 {
   if ( mReuseLastEnteredValues != reuseLastEnteredValues )
   {
-    QSettings settings;
-    settings.beginGroup( mGroupName );
-    settings.setValue( "reuseLastEnteredValues", reuseLastEnteredValues );
+	setValue( "reuseLastEnteredValues", value );
     mReuseLastEnteredValues = reuseLastEnteredValues;
     emit reuseLastEnteredValuesChanged( mReuseLastEnteredValues );
   }
+}
+
+void AppSettings::setValue( const QString &key, const QVariant &value )
+{
+  QSettings settings;
+  settings.beginGroup( mGroupName );
+  settings.setValue( key, value );
+  settings.endGroup();
+}
+
+QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
+{
+  QSettings settings;
+  settings.beginGroup( mGroupName );
+  QVariant value = settings.value( key, defaultValue );
+  settings.endGroup();
+
+  return value;
 }

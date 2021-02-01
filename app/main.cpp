@@ -327,6 +327,7 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
   demoDir = "assets:/demo-projects";
+  demoDir = dataDir + "/qgis-data/resources/demo-projects";
 #endif
 #ifdef Q_OS_IOS
   appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
@@ -343,9 +344,15 @@ int main( int argc, char *argv[] )
 #else
   projDir = dataDir;
 #endif
-
+  AppSettings as;
   InputProjUtils inputProjUtils;
-  copy_demo_projects( demoDir, projectDir );
+
+  // copy demo projects if the app is launched for the first time
+  if ( !as.isAppInitialized() )
+  {
+    copy_demo_projects( demoDir, projectDir );
+    as.setAppInitialized( true );
+  }
   inputProjUtils.initProjLib( projDir, projectDir );
   init_qgis( appBundleDir );
 
@@ -355,7 +362,6 @@ int main( int argc, char *argv[] )
   LocalProjectsManager localProjects( projectDir );
   ProjectModel pm( localProjects );
   MapThemesModel mtm;
-  AppSettings as;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
   InputUtils iu;
   MerginProjectModel mpm( localProjects );
