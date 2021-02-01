@@ -179,8 +179,13 @@ ApplicationWindow {
     }
 
     function showDialog(message) {
-      alertDialog.text  = qsTr(message)
+      alertDialog.text  = message
       alertDialog.open()
+    }
+
+    function showProjError(message) {
+      projDialog.text  = message
+      projDialog.open()
     }
 
     function updateRecordToolbar()
@@ -634,8 +639,16 @@ ApplicationWindow {
 
     MessageDialog {
         id: alertDialog
-        title: qsTr("Communication error")
         onAccepted: alertDialog.close()
+        title: qsTr("Communication error")
+    }
+
+    MessageDialog {
+        id: projDialog
+        onAccepted: projDialog.close()
+        title: qsTr("PROJ Error")
+        standardButtons: StandardButton.Ignore |StandardButton.Help
+        onHelp: Qt.openUrlExternally(__inputHelp.howToSetupProj)
     }
 
     Connections {
@@ -657,6 +670,13 @@ ApplicationWindow {
           if (projectFullName === currentProjectFullName) {
             mapCanvas.mapSettings.extentChanged()
           }
+        }
+    }
+
+    Connections {
+        target: __inputProjUtils
+        onProjError: {
+          showProjError(message)
         }
     }
 

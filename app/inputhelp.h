@@ -28,6 +28,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToSetupThemesLink READ howToSetupThemesLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToCreateNewProjectLink READ howToCreateNewProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToDownloadProjectLink READ howToDownloadProjectLink NOTIFY linkChanged )
+    Q_PROPERTY( QString howToSetupProj READ howToSetupProj NOTIFY linkChanged )
 
     Q_PROPERTY( bool submitReportPending READ submitReportPending NOTIFY submitReportPendingChanged )
 
@@ -48,6 +49,7 @@ class InputHelp: public QObject
     QString howToSetupThemesLink() const;
     QString howToCreateNewProjectLink() const;
     QString howToDownloadProjectLink() const;
+    QString howToSetupProj() const;
 
     bool submitReportPending() const;
     /**

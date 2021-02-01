@@ -14,11 +14,13 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-#include "qgsquickutils.h"
 
+#include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
+#include "inpututils.h"
 
 #include <Qt>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QRegularExpression>
@@ -525,4 +527,3 @@ void InputUtils::appendLog( const QByteArray &data, const QString &path )
   file.write( data );
   file.close();
 }
-

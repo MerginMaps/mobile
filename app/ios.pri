@@ -40,6 +40,11 @@ ios {
     LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
 
+    # Proj
+    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
+    LIBS += -L$${PROJ_LIB_DIR}
+    LIBS += -lproj
+
     # Disabling warnings in qgis qgswkbptr.h
     QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-shorten-64-to-32
 

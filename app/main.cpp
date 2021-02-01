@@ -49,6 +49,7 @@
 #include "merginuserinfo.h"
 #include "variablesmanager.h"
 #include "inputhelp.h"
+#include "inputprojutils.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -206,46 +207,6 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
-static void init_proj( const QString &pkgPath )
-{
-#ifdef MOBILE_OS
-#ifdef ANDROID
-  // win and ios resources are already in the bundle
-  InputUtils::cpDir( "assets:/qgis-data", pkgPath );
-  QString prefixPath = pkgPath + "/proj";
-  QString projFilePath = prefixPath + "/proj.db";
-#endif
-
-#ifdef Q_OS_IOS
-  QString prefixPath = pkgPath + "/proj";
-  QString projFilePath = prefixPath + "/proj.db";
-#endif
-
-#ifdef Q_OS_WIN32
-  QString prefixPath = pkgPath + "\\proj";
-  QString projFilePath = prefixPath + "\\proj.db";
-#endif
-
-  qDebug( "PROJ6 resources: %s", prefixPath.toLatin1().data() );
-  QFile projdb( projFilePath );
-  if ( projdb.exists() )
-  {
-    qputenv( "PROJ_LIB", prefixPath.toUtf8().constData() );
-  }
-  else
-  {
-    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
-  }
-
-#else
-  // proj share lib is set from the proj installation on the desktop,
-  // so it should work without any modifications.
-  // to test check QgsProjUtils.searchPaths() in QGIS Python Console
-  Q_UNUSED( pkgPath )
-#endif
-
-}
-
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -363,7 +324,6 @@ int main( int argc, char *argv[] )
 
   QString appBundleDir;
   QString demoDir;
-
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
   demoDir = "assets:/demo-projects";
@@ -377,9 +337,17 @@ int main( int argc, char *argv[] )
   //TODO win32 package demo projects
 #endif
 
-  init_proj( appBundleDir );
-  init_qgis( appBundleDir );
+  QString projDir;
+#ifdef MOBILE_OS
+  projDir = appBundleDir;
+#else
+  projDir = dataDir;
+#endif
+
+  InputProjUtils inputProjUtils;
   copy_demo_projects( demoDir, projectDir );
+  inputProjUtils.initProjLib( projDir, projectDir );
+  init_qgis( appBundleDir );
 
   // Create Input classes
   AndroidUtils au;
@@ -414,6 +382,7 @@ int main( int argc, char *argv[] )
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( QgsApplication::messageLog(),
                     static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
                     &iu,
@@ -494,6 +463,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
   engine.rootContext()->setContextProperty( "__iosUtils", &iosUtils );
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
+  engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
@@ -574,7 +544,25 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
-  return app.exec();
+
+  int ret = EXIT_FAILURE;
+  try
+  {
+    ret = app.exec();
+  }
+  catch ( QgsException &e )
+  {
+    iu.log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
+  }
+  catch ( std::exception &e )
+  {
+    iu.log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
+  }
+  catch ( ... )
+  {
+    iu.log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
+  }
+  return ret;
 }
 
 
