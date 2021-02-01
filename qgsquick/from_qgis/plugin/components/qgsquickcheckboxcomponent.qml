@@ -9,7 +9,6 @@
 
 import QtQuick 2.8
 import QtQuick.Templates 2.1 as T
-import "../" // import styling singleton
 
 T.CheckBox {
     id: control

@@ -236,7 +236,7 @@ Drawer {
                   property var back: InputStyle.backIcon
                 }
 
-              property QtObject checkbox: QtObject {
+              property QtObject checkboxComponent: QtObject {
                 property color baseColor: InputStyle.panelBackgroundDarker
                 }
               }
