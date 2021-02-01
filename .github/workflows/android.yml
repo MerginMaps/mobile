@@ -14,7 +14,7 @@ jobs:
       - name: Install Deps
         run: |
           sudo apt update && sudo apt install -y python3-pip gem openssl
-          gem update bundler
+          sudo gem update bundler
           pip3 install dropbox
           gem --version
           python3 --version
