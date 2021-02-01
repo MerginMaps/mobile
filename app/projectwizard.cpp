@@ -85,7 +85,7 @@ void ProjectWizard::createProject( QString const &projectName )
   QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
   QgsVectorLayer *layer = createGpkgLayer( projectDir );
   QList<QgsMapLayer *> layers;
-  layers << bgLayer << layer;
+  layers << layer << bgLayer;
   project.addMapLayers( layers );
 
   // Configurate mapSettings
