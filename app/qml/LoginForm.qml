@@ -20,7 +20,7 @@ import "./components"
 
 /**
   * Body of the AuthPanel with the login form - username and password
-  * Also has a link to switch to register form
+  * Also has a link to switch to register form and forgot password link
   */
 Rectangle {
   signal registrationRequested()
@@ -44,6 +44,17 @@ Rectangle {
       height: fieldHeight
       sourceSize.height: height
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    TextHyperlink {
+      id: merginInfo
+      width: loginForm.width - 2 * root.panelMargin
+      visible: !loginName.activeFocus && !passwordField.password.activeFocus
+      height: 2 * fieldHeight
+      anchors.horizontalCenter: parent.horizontalCenter
+      text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
+                .arg("<a href='" + __merginApi.apiRoot + "'>")
+                .arg("</a>")
     }
 
     Row {
@@ -197,7 +208,7 @@ Rectangle {
         id: signUpButton
         width: loginForm.width - 2 * root.panelMargin
         height: fieldHeight * 0.7
-        text: qsTr("Sign up")
+        text: qsTr("Sign up for free")
         font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: loginForm.registrationRequested()
