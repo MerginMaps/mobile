@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QVariant>
 
 class AppSettings: public QObject
 {
@@ -48,6 +49,9 @@ class AppSettings: public QObject
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
 
+    bool isAppInitizalized();
+    void setAppInitizalized( const bool value );
+
     bool reuseLastEnteredValues() const;
 
   public slots:
@@ -82,6 +86,10 @@ class AppSettings: public QObject
 
     // used to allow remembering values of last created feature to speed up digitizing for user
     bool mReuseLastEnteredValues;
+
+    void setValue( const QString &key, const QVariant &value );
+    QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
+
 };
 
 #endif // APPSETTINGS_H
