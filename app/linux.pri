@@ -35,6 +35,9 @@
           $${QGIS_SRC_DIR}/src/core/scalebar \
           $${QGIS_SRC_DIR}/src/core/symbology \
           $${QGIS_SRC_DIR}/src/core/textrenderer \
+          $${QGIS_SRC_DIR}/src/core/project \
+          $${QGIS_SRC_DIR}/src/core/vector \
+          $${QGIS_SRC_DIR}/src/core/editform \
           $${QGIS_SRC_DIR}/external/nlohmann \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core

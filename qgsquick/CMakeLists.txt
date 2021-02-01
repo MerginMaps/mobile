@@ -217,6 +217,9 @@ IF (USE_QGIS_BUILD_DIR)
       ${QGIS_SRC_DIR}/src/core/metadata
       ${QGIS_SRC_DIR}/src/core/providers/memory
       ${QGIS_SRC_DIR}/src/core/raster
+      ${QGIS_SRC_DIR}/src/core/vector
+      ${QGIS_SRC_DIR}/src/core/project
+      ${QGIS_SRC_DIR}/src/core/editform
       ${QGIS_SRC_DIR}/src/core/scalebar
       ${QGIS_SRC_DIR}/src/core/symbology
       ${QGIS_SRC_DIR}/src/core/textrenderer
