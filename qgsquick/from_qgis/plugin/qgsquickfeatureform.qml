@@ -508,6 +508,7 @@ Item {
         QgsQuick.CheckboxComponent {
           id: rememberCheckbox
           visible: rememberCheckboxContainer.visible
+          baseColor: form.style.checkboxComponent.baseColor
 
           implicitWidth: 40 * QgsQuick.Utils.dp
           implicitHeight: width
