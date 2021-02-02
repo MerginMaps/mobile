@@ -346,11 +346,11 @@ int main( int argc, char *argv[] )
   AppSettings as;
   InputProjUtils inputProjUtils;
 
-  // copy demo projects if the app is launched for the first time
-  if ( !as.isAppInitialized() )
+  // copy demo projects when the app is launched for the first time
+  if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
-    as.setAppInitialized( true );
+    as.setDemoProjectsCopied( true );
   }
   inputProjUtils.initProjLib( projDir, projectDir );
   init_qgis( appBundleDir );
