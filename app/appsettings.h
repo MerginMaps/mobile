@@ -49,8 +49,8 @@ class AppSettings: public QObject
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
 
-    bool isAppInitialized();
-    void setAppInitialized( const bool value );
+    bool demoProjectsCopied();
+    void setDemoProjectsCopied( const bool value );
 
     bool reuseLastEnteredValues() const;
 

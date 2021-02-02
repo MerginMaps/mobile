@@ -140,14 +140,14 @@ void AppSettings::setLineRecordingInterval( int value )
   }
 }
 
-bool AppSettings::isAppInitialized()
+bool AppSettings::demoProjectsCopied()
 {
-  return value( QStringLiteral( "isAppInitialized" ), QVariant( false ) ).toBool();
+  return value( QStringLiteral( "demoProjectsCopied" ), QVariant( false ) ).toBool();
 }
 
-void AppSettings::setAppInitialized( const bool value )
+void AppSettings::setDemoProjectsCopied( const bool value )
 {
-  setValue( "isAppInitialized", value );
+  setValue( "demoProjectsCopied", value );
 }
 
 bool AppSettings::reuseLastEnteredValues() const
