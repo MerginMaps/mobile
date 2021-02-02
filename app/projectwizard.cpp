@@ -13,7 +13,7 @@ ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, 
   , mFieldsModel( fieldsModel )
 {
 
-  mSettings = new QgsMapSettings();
+  mSettings = std::unique_ptr<QgsMapSettings>(new QgsMapSettings);
   QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
 }
 
@@ -58,7 +58,6 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
 
   Q_ASSERT( l->isValid() );
 
-  l->startEditing();
   l->setCrs( layerCrs );
   for ( int i = 0; i < l->fields().count(); ++i )
   {
@@ -66,7 +65,6 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
     QgsEditorWidgetSetup setup = getEditorWidget( f, mFieldsModel->findWidgetTypeByFieldName( f.name() ) );
     l->setEditorWidgetSetup( i, setup );
   }
-  l->commitChanges();
 
   return l;
 }
