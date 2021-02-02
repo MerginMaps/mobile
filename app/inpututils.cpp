@@ -400,6 +400,40 @@ QString InputUtils::appPlatform()
   return platform;
 }
 
+
+QString InputUtils::findUniquePath( const QString &path, bool isPathDir )
+{
+  QFileInfo pathInfo( path );
+  if ( pathInfo.exists() )
+  {
+    int i = 0;
+    QFileInfo info( path + QString::number( i ) );
+    while ( info.exists() && ( info.isDir() || !isPathDir ) )
+    {
+      ++i;
+      info.setFile( path + QString::number( i ) );
+    }
+    return path + QString::number( i );
+  }
+  else
+  {
+    return path;
+  }
+}
+
+
+QString InputUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )
+{
+  QString projectDirPath = findUniquePath( baseDataDir + "/" + projectName );
+  QDir projectDir( projectDirPath );
+  if ( !projectDir.exists() )
+  {
+    QDir dir( "" );
+    dir.mkdir( projectDirPath );
+  }
+  return projectDirPath;
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;

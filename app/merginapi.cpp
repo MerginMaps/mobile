@@ -1043,39 +1043,6 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir );
 }
 
-QString MerginApi::findUniquePath( const QString &path, bool isPathDir )
-{
-  QFileInfo pathInfo( path );
-  if ( pathInfo.exists() )
-  {
-    int i = 0;
-    QFileInfo info( path + QString::number( i ) );
-    while ( info.exists() && ( info.isDir() || !isPathDir ) )
-    {
-      ++i;
-      info.setFile( path + QString::number( i ) );
-    }
-    return path + QString::number( i );
-  }
-  else
-  {
-    return path;
-  }
-}
-
-
-QString MerginApi::createUniqueProjectDirectory( const QString &projectName )
-{
-  QString projectDirPath = findUniquePath( mDataDir + "/" + projectName );
-  QDir projectDir( projectDirPath );
-  if ( !projectDir.exists() )
-  {
-    QDir dir( "" );
-    dir.mkdir( projectDirPath );
-  }
-  return projectDirPath;
-}
-
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
 {
   return mDataDir + "/" + TEMP_FOLDER + projectFullName;
@@ -1378,7 +1345,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
     LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
-    QString newDest = findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
+    QString newDest = InputUtils::findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
     if ( !QFile::rename( dest, newDest ) )
     {
       InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
@@ -1432,7 +1399,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
-        QString newPath = findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
+        QString newPath = InputUtils::findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
         if ( !QFile::rename( origPath, newPath ) )
         {
           InputUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
@@ -1674,7 +1641,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
     removeProjectsTempFolder( projectNamespace, projectName );
 
     // project has not been downloaded yet - we need to create a directory for it
-    transaction.projectDir = createUniqueProjectDirectory( projectName );
+    transaction.projectDir = InputUtils::createUniqueProjectDirectory( mDataDir, projectName );
     transaction.firstTimeDownload = true;
 
     // create file indicating first time download in progress

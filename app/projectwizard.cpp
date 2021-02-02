@@ -1,0 +1,226 @@
+#include "projectwizard.h"
+#include "inpututils.h"
+
+#include "qgsproject.h"
+#include "qgsrasterlayer.h"
+#include "qgsvectorlayer.h"
+#include "qgsvectorfilewriter.h"
+#include "qgsdatetimefieldformatter.h"
+
+ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
+  : QObject( parent )
+  , mDataDir( dataDir )
+{
+
+  mSettings = std::unique_ptr<QgsMapSettings>( new QgsMapSettings );
+}
+
+QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig )
+{
+  QString gpkgName( QStringLiteral( "data" ) );
+  QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
+  QString layerName( QStringLiteral( "Survey" ) );
+  QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
+  QgsFields predefinedFields = createFields( fieldsConfig );
+
+  // Write layer as gpkg
+  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
+  layer->startEditing();
+  layer->setCrs( layerCrs );
+  for ( QgsField f : predefinedFields )
+  {
+    layer->addAttribute( f );
+  }
+  layer->updateFields();
+  layer->commitChanges();
+
+  QgsVectorFileWriter::SaveVectorOptions options;
+  options.driverName = QStringLiteral( "GPKG" );
+  options.layerName = layerName;
+  options.fileEncoding = QStringLiteral( "UTF-8" );
+  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, QgsWkbTypes::Point, layerCrs, QgsCoordinateTransformContext(), options ) );
+
+
+  QString errorMessage;
+  QgsVectorFileWriter::writeAsVectorFormatV2(
+    layer,
+    projectGpkgPath,
+    layer->transformContext(),
+    options,
+    nullptr,
+    nullptr,
+    &errorMessage );
+
+  // Check and configure layer
+  QgsVectorLayer *l = new QgsVectorLayer( projectGpkgPath, layerName, "ogr" );
+
+  Q_ASSERT( l->isValid() );
+
+  l->setCrs( layerCrs );
+  for ( int i = 0; i < l->fields().count(); ++i )
+  {
+    QgsField f = l->fields().at( i );
+    QgsEditorWidgetSetup setup = getEditorWidget( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
+    l->setEditorWidgetSetup( i, setup );
+  }
+
+  return l;
+}
+
+void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
+{
+  QString projectDir = InputUtils::createUniqueProjectDirectory( mDataDir, projectName );
+  QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
+  QString gpkgName( QStringLiteral( "data" ) );
+  QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
+
+  QgsProject project;
+
+  // add layers
+  QString urlWithParams( BG_MAPS_CONFIG );
+  QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
+  QgsVectorLayer *layer = createGpkgLayer( projectDir, fieldsModel->fields() );
+  QList<QgsMapLayer *> layers;
+  layers << layer << bgLayer;
+  project.addMapLayers( layers );
+
+  // Configurate mapSettings
+  QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
+  mSettings->setExtent( bgLayer->extent() );
+  mSettings->setEllipsoid( "WGS84" );
+  mSettings->setDestinationCrs( projectCrs );
+  mSettings->setLayers( layers );
+
+  // Using writeProject signal to append mapCanvas project setting
+  connect( &project, &QgsProject::writeProject,
+           this, &ProjectWizard::writeMapCanvasSetting );
+
+  project.setCrs( projectCrs );
+  project.writePath( projectGpkgPath );
+  project.write( projectFilepath );
+
+  emit notify( tr( "Project %1 created" ).arg( projectName ) );
+  emit projectCreated( projectDir, projectName );
+}
+
+void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
+{
+  QDomNodeList nl = doc.elementsByTagName( QStringLiteral( "qgis" ) );
+  if ( !nl.count() )
+  {
+    QgsDebugMsg( QStringLiteral( "Unable to find qgis element in project file" ) );
+    return;
+  }
+  QDomNode qgisNode = nl.item( 0 );  // there should only be one, so zeroth element OK
+
+  QDomElement mapcanvasNode = doc.createElement( QStringLiteral( "mapcanvas" ) );
+  mapcanvasNode.setAttribute( QStringLiteral( "annotationsVisible" ), false );
+  qgisNode.appendChild( mapcanvasNode );
+  mSettings->writeXml( mapcanvasNode, doc );
+}
+
+QgsEditorWidgetSetup ProjectWizard::getEditorWidget( const QgsField &field, const QString &widgetType )
+{
+  if ( field.name() == QStringLiteral( "fid" ) )
+    return QgsEditorWidgetSetup( QStringLiteral( "Hidden" ), QVariantMap() );
+
+  if ( widgetType.isEmpty() )
+  {
+    return QgsEditorWidgetSetup( QStringLiteral( "TextEdit" ), QVariantMap() );
+  }
+  else
+  {
+    QVariantMap config;
+    if ( widgetType == QStringLiteral( "TextEdit" ) )
+    {
+      config.insert( QStringLiteral( "isMultiline" ), false );
+      config.insert( QStringLiteral( "UseHtml" ), false );
+    }
+    else if ( widgetType == QStringLiteral( "DateTime" ) )
+    {
+      config.insert( QStringLiteral( "field_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
+      config.insert( QStringLiteral( "display_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
+    }
+    else if ( widgetType == QStringLiteral( "Range" ) )
+    {
+      config.insert( QStringLiteral( "Style" ), QStringLiteral( "SpinBox" ) );
+      config.insert( QStringLiteral( "Precision" ), QStringLiteral( "0" ) );
+      config.insert( QStringLiteral( "Min" ), QString::number( INT_MIN ) );
+      config.insert( QStringLiteral( "Max" ), QString::number( INT_MAX ) );
+      config.insert( QStringLiteral( "Step" ), 1 );
+    }
+    else if ( widgetType == QStringLiteral( "ExternalResource" ) )
+    {
+      config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "1" ) );
+      config.insert( QStringLiteral( "StorageMode" ), QStringLiteral( "0" ) );
+      config.insert( QStringLiteral( "PropertyCollection" ), QVariantMap() );
+      QgsPropertyCollection collection;
+      config.insert( QStringLiteral( "PropertyCollection" ), collection.toVariant( QgsPropertiesDefinition() ) );
+    }
+
+    return QgsEditorWidgetSetup( widgetType, config );
+  }
+}
+
+QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsConfig ) const
+{
+
+  QgsFields fields;
+  for ( const FieldConfiguration fc : fieldsConfig )
+  {
+    QString type = widgetToType( fc.widgetType );
+    QVariant::Type qtype = parseType( type );
+    QgsField field( fc.attributeName, qtype, type );
+    fields.append( field );
+  }
+  return fields;
+}
+
+QVariant::Type ProjectWizard::parseType( const QString &type ) const
+{
+  if ( type == QLatin1String( "text" ) )
+    return QVariant::String;
+  else if ( type == QLatin1String( "integer" ) )
+    return QVariant::Int;
+  else if ( type == QLatin1String( "integer64" ) )
+    return QVariant::Int;
+  else if ( type == QLatin1String( "real" ) )
+    return QVariant::Double;
+  else if ( type == QLatin1String( "date" ) )
+    return QVariant::Date;
+  else if ( type == QLatin1String( "datetime" ) )
+    return QVariant::DateTime;
+  else if ( type == QLatin1String( "bool" ) )
+    return QVariant::Bool;
+  else if ( type == QLatin1String( "binary" ) )
+    return QVariant::ByteArray;
+
+  return QVariant::Invalid;
+}
+
+QString ProjectWizard::widgetToType( const QString &widgetType ) const
+{
+  if ( widgetType == QStringLiteral( "TextEdit" ) )
+    return QStringLiteral( "text" );
+  else if ( widgetType == QStringLiteral( "Range" ) )
+    return QStringLiteral( "integer" );
+  else if ( widgetType == QStringLiteral( "DateTime" ) )
+    return QStringLiteral( "datetime" );
+  else if ( widgetType == QStringLiteral( "CheckBox" ) )
+    return QStringLiteral( "bool" );
+  else if ( widgetType == QStringLiteral( "ExternalResource" ) )
+    return QStringLiteral( "text" );
+
+  return QStringLiteral( "text" );
+}
+
+QString ProjectWizard::findWidgetTypeByFieldName( const QString name, const QList<FieldConfiguration> fieldsConfig ) const
+{
+
+  for ( int i = 0; i < fieldsConfig.count(); ++i )
+  {
+    if ( fieldsConfig.at( i ).attributeName == name )
+      return fieldsConfig.at( i ).widgetType;
+  }
+  return QString( "TextEdit" );
+}

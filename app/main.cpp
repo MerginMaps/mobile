@@ -50,6 +50,8 @@
 #include "variablesmanager.h"
 #include "inputhelp.h"
 #include "inputprojutils.h"
+#include "fieldsmodel.h"
+#include "projectwizard.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -225,6 +227,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
+  qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
 }
 
 #ifdef INPUT_TEST
@@ -366,6 +369,7 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   InputHelp help( ma.get(), &iu );
+  ProjectWizard pw( projectDir );
 
   // layer models
   LayersModel lm;
@@ -382,12 +386,14 @@ int main( int argc, char *argv[] )
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
   QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjects, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
   QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( QgsApplication::messageLog(),
                     static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
                     &iu,
@@ -481,6 +487,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
+  engine.rootContext()->setContextProperty( "__projectWizard", &pw );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

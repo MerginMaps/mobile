@@ -40,6 +40,7 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
@@ -64,7 +65,9 @@ QtObject {
     property var removeIcon: "qrc:/trash.svg"
     property var galleryIcon: "qrc:/gallery.svg"
     property var backIcon: "qrc:/back.svg"
+    property var checkIcon: "qrc:/check.svg"
     property var plusIcon: "qrc:/plus.svg"
+    property var noIcon: "qrc:/no.svg"
     property var editIcon: "qrc:/edit.svg"
     property var infoIcon: "qrc:/info.svg"
     property var tableIcon: "qrc:/table.svg"

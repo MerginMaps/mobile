@@ -100,7 +100,7 @@ Item {
 
                 width: toolbar.itemSize
                 text: qsTr("Save")
-                imageSource: "yes.svg"
+                imageSource: InputStyle.checkIcon
                 enabled: toolbar.saveBtnEnabled
 
                 onActivated: toolbar.saveClicked()

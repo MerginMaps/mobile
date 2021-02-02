@@ -107,16 +107,27 @@ void LocalProjectsManager::updateProjectStatus( const QString &projectDir )
   Q_ASSERT( false );  // should not happen
 }
 
-void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
 {
   LocalProjectInfo project;
   project.projectDir = projectDir;
   project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.qgisProjectError );
   project.projectNamespace = projectNamespace;
   project.projectName = projectName;
-  // version info and status should be updated afterwards
 
   mProjects << project;
+}
+
+void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+{
+  addProject( projectDir, projectNamespace, projectName );
+  // version info and status should be updated afterwards
+  emit localMerginProjectAdded( projectDir );
+}
+
+void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
+{
+  addProject( projectDir, QString(), projectName );
   emit localProjectAdded( projectDir );
 }
 

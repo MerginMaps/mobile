@@ -1,22 +1,25 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import "./.."  // import InputStyle singleton
-
+import QtGraphicalEffects 1.0
+import "./.." // import InputStyle singleton
 Item {
-  signal clicked()
+  signal clicked
 
   property string text
   property real cornerRadius: InputStyle.cornerRadius
   property var bgColor: InputStyle.highlightColor
-  property var textColor: "white"
+  property var fontColor: "white"
+  property real btnWidth: delegateButtonContainer.height * 3
+  property real btnHeight: InputStyle.delegateBtnHeight
+  property var iconSource: ""
 
   id: delegateButtonContainer
 
   Button {
     id: delegateButton
     text: delegateButtonContainer.text
-    height: delegateButtonContainer.height / 2
-    width: delegateButtonContainer.height * 2
+    height: delegateButtonContainer.btnHeight
+    width: delegateButtonContainer.btnWidth
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
     font.pixelSize: InputStyle.fontPixelSizeTitle
@@ -28,13 +31,30 @@ Item {
 
     onClicked: delegateButtonContainer.clicked()
 
-    contentItem: Text {
-      text: delegateButton.text
-      font: delegateButton.font
-      color: delegateButtonContainer.textColor
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
+    contentItem: Row {
+      anchors.fill: parent
+      spacing: 0
+
+      Symbol {
+        id: icon
+        visible: !!delegateButtonContainer.iconSource
+        height: visible ? delegateButtonContainer.btnHeight : 0
+        width: height
+        iconSize: height/2
+        source: delegateButtonContainer.iconSource
+        fontColor: delegateButtonContainer.fontColor
+      }
+
+      Text {
+        height: delegateButtonContainer.btnHeight
+        width: delegateButtonContainer.btnWidth - icon.width
+        text: delegateButton.text
+        font: delegateButton.font
+        color: delegateButtonContainer.fontColor
+        horizontalAlignment: icon.visible ? Text.AlignLeft : Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+      }
     }
   }
 }

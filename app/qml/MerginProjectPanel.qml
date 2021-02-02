@@ -15,6 +15,7 @@ import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."  // import InputStyle singleton
+import "./components/"
 
 Item {
 
@@ -136,6 +137,15 @@ Item {
            if (index !== activeProjectIndex) {
             activeProjectIndex = index
            }
+        }
+      }
+
+      Connections {
+        target: __projectWizard
+        onProjectCreated: {
+          if  (stackView.currentItem.objectName === "projectWizard") {
+            stackView.popOnePageOrClose()
+          }
         }
       }
 
@@ -363,6 +373,19 @@ Item {
           property int borderWidth: 1
 
           delegate: delegateItem
+
+          footer:  DelegateButton {
+            height: projectsPanel.rowHeight
+            width: parent.width
+            text: qsTr("Create project")
+            onClicked: {
+              if (__inputUtils.hasStoragePermission()) {
+                stackView.push(projectWizardComp)
+              } else if (__inputUtils.acquireStoragePermission()) {
+                restartAppDialog.open()
+              }
+            }
+         }
 
           Text {
             id: noProjectsText
@@ -605,7 +628,6 @@ Item {
 
         }
       }
-
 
       // Toolbar
       Rectangle {
@@ -870,6 +892,20 @@ Item {
         stackView.popOnePageOrClose()
       }
       onSubscribeClicked: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
+
+  Component {
+    id: projectWizardComp
+
+    ProjectWizardPage {
+      id: projectWizardPanel
+      objectName: "projectWizard"
+      height: projectsPanel.height
+      width: projectsPanel.width
+      onBack: {
         stackView.popOnePageOrClose()
       }
     }

@@ -79,8 +79,11 @@ class LocalProjectsManager : public QObject
 
     void updateProjectStatus( const QString &projectDir );
 
-    //! Should add an entry about newly created project
+    //! Should add an entry about newly created Mergin project
     void addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+
+    //! Should add an entry about newly created local project
+    void addLocalProject( const QString &projectDir, const QString &projectName );
 
     //! Should forget about that project (it has been removed already)
     void removeProject( const QString &projectDir );
@@ -115,11 +118,14 @@ class LocalProjectsManager : public QObject
 
   signals:
     void projectMetadataChanged( const QString &projectDir );
+    void localMerginProjectAdded( const QString &projectDir );
     void localProjectAdded( const QString &projectDir );
     void localProjectRemoved( const QString &projectDir );
 
   private:
     void updateProjectStatus( LocalProjectInfo &project );
+    //! Should add an entry about newly created project. Emits no signals
+    void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
 
   private:
     QString mDataDir;   //!< directory with all local projects
