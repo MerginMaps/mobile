@@ -7,23 +7,21 @@
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
 
-ProjectWizard::ProjectWizard( const QString &dataDir, FieldsModel *fieldsModel, QObject *parent )
+ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
-  , mFieldsModel( fieldsModel )
 {
 
-  mSettings = std::unique_ptr<QgsMapSettings>(new QgsMapSettings);
-  QObject::connect( mFieldsModel, &FieldsModel::notify, this, &ProjectWizard::notify );
+  mSettings = std::unique_ptr<QgsMapSettings>( new QgsMapSettings );
 }
 
-QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
+QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig )
 {
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
   QString layerName( QStringLiteral( "Survey" ) );
   QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
-  QgsFields predefinedFields = createFields( mFieldsModel->fields() );
+  QgsFields predefinedFields = createFields( fieldsConfig );
 
   // Write layer as gpkg
   QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
@@ -62,14 +60,14 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir )
   for ( int i = 0; i < l->fields().count(); ++i )
   {
     QgsField f = l->fields().at( i );
-    QgsEditorWidgetSetup setup = getEditorWidget( f, mFieldsModel->findWidgetTypeByFieldName( f.name() ) );
+    QgsEditorWidgetSetup setup = getEditorWidget( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
     l->setEditorWidgetSetup( i, setup );
   }
 
   return l;
 }
 
-void ProjectWizard::createProject( QString const &projectName )
+void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
 {
   QString projectDir = InputUtils::createUniqueProjectDirectory( mDataDir, projectName );
   QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
@@ -81,7 +79,7 @@ void ProjectWizard::createProject( QString const &projectName )
   // add layers
   QString urlWithParams( BG_MAPS_CONFIG );
   QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
-  QgsVectorLayer *layer = createGpkgLayer( projectDir );
+  QgsVectorLayer *layer = createGpkgLayer( projectDir, fieldsModel->fields() );
   QList<QgsMapLayer *> layers;
   layers << layer << bgLayer;
   project.addMapLayers( layers );
@@ -214,4 +212,15 @@ QString ProjectWizard::widgetToType( const QString &widgetType ) const
     return QStringLiteral( "text" );
 
   return QStringLiteral( "text" );
+}
+
+QString ProjectWizard::findWidgetTypeByFieldName( const QString name, const QList<FieldConfiguration> fieldsConfig ) const
+{
+
+  for ( int i = 0; i < fieldsConfig.count(); ++i )
+  {
+    if ( fieldsConfig.at( i ).attributeName == name )
+      return fieldsConfig.at( i ).widgetType;
+  }
+  return QString( "TextEdit" );
 }

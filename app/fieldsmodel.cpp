@@ -132,16 +132,6 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   return false;
 }
 
-QString FieldsModel::findWidgetTypeByFieldName( const QString name ) const
-{
-  for ( int i = 0; i < mFields.count(); ++i )
-  {
-    if ( mFields.at( i ).attributeName == name )
-      return mFields.at( i ).widgetType;
-  }
-  return QString( "TextEdit" );
-}
-
 void FieldsModel::initModel()
 {
   mFields.clear();

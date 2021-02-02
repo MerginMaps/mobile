@@ -21,12 +21,18 @@ Item {
 
   //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
   property bool isWidgetModelReady: {
-    var types = __fieldsModel.supportedTypes()
+    var types = fieldsModel.supportedTypes()
     for (var prop in types) {
       projectWizardPanel.widgetsModel.append({ "display": types[prop], "widget": prop })
     }
 
     true
+  }
+
+  FieldsModel {
+    id: fieldsModel
+    onNotify: __inputUtils.showNotification(message)
+    Component.onCompleted: fieldsModel.initModel()
   }
 
   // background
@@ -105,7 +111,7 @@ Item {
 
       ListView {
         id: fieldList
-        model: __fieldsModel
+        model: fieldsModel
         width: parent.width
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -118,7 +124,7 @@ Item {
           color: projectWizardPanel.fontColor
           widgetList: projectWizardPanel.widgetsModel
 
-          onRemoveClicked: __fieldsModel.removeField(index)
+          onRemoveClicked: fieldsModel.removeField(index)
         }
 
         footer: DelegateButton {
@@ -127,7 +133,7 @@ Item {
             text: qsTr("Add field")
             iconSource: InputStyle.plusIcon
             onClicked: {
-              __fieldsModel.addField("", "TextEdit")
+              fieldsModel.addField("", "TextEdit")
               if (fieldList.visible) {
                 fieldList.positionViewAtEnd()
               }
@@ -171,7 +177,7 @@ Item {
             if (faded) {
               __inputUtils.showNotification(qsTr("Empty project name"))
             } else {
-              __projectWizard.createProject(projectNameField.text)
+              __projectWizard.createProject(projectNameField.text, fieldsModel )
             }
           }
         }

@@ -380,7 +380,6 @@ Item {
             text: qsTr("Create project")
             onClicked: {
               if (__inputUtils.hasStoragePermission()) {
-                __fieldsModel.initModel()
                 stackView.push(projectWizardComp)
               } else if (__inputUtils.acquireStoragePermission()) {
                 restartAppDialog.open()

@@ -227,6 +227,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
+  qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
 }
 
 #ifdef INPUT_TEST
@@ -368,8 +369,7 @@ int main( int argc, char *argv[] )
   MerginProjectModel mpm( localProjects );
   MerginProjectStatusModel mpsm( localProjects );
   InputHelp help( ma.get(), &iu );
-  FieldsModel fm;
-  ProjectWizard pw( projectDir, &fm );
+  ProjectWizard pw( projectDir );
 
   // layer models
   LayersModel lm;
@@ -487,7 +487,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
-  engine.rootContext()->setContextProperty( "__fieldsModel", &fm );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
 
 #ifdef MOBILE_OS

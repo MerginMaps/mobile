@@ -46,9 +46,8 @@ class FieldsModel: public QAbstractListModel
     int rowCount( const QModelIndex &parent ) const override;
     QVariant data( const QModelIndex &index, int role ) const override;
     bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole ) override;
-
+    //! Returns fields configuration
     QList<FieldConfiguration> fields();
-    QString findWidgetTypeByFieldName( const QString name ) const;
 
   signals:
     void widgetListChanged();
