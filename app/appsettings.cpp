@@ -159,7 +159,7 @@ void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
 {
   if ( mReuseLastEnteredValues != reuseLastEnteredValues )
   {
-	setValue( "reuseLastEnteredValues", value );
+    setValue( "reuseLastEnteredValues", reuseLastEnteredValues );
     mReuseLastEnteredValues = reuseLastEnteredValues;
     emit reuseLastEnteredValuesChanged( mReuseLastEnteredValues );
   }
