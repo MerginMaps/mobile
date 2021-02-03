@@ -199,12 +199,12 @@
         <translation>Aucune photo n&apos;a été ajoutée.</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="285"/>
+        <location filename="../qml/FeaturePanel.qml" line="290"/>
         <source>Delete feature</source>
         <translation>Effacer une entité</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="286"/>
+        <location filename="../qml/FeaturePanel.qml" line="291"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Êtes-vous certain de vouloir effacer cette entité ?</translation>
     </message>
@@ -233,32 +233,78 @@
     </message>
 </context>
 <context>
+    <name>FieldRow</name>
+    <message>
+        <location filename="../qml/components/FieldRow.qml" line="33"/>
+        <source>Field name</source>
+        <translation>Nom du champ</translation>
+    </message>
+</context>
+<context>
+    <name>FieldsModel</name>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="16"/>
+        <source>Please fill a name of previous field before adding a new field.</source>
+        <translation>Veuillez donner un nom au champ précédent avant d&apos;ajouter un nouveau champ.</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="20"/>
+        <source>Field %1 already exists.</source>
+        <translation>Le champ %1 existe déjà.</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="118"/>
+        <source>Field %1 already exists. 
+Won&apos;t be added to the project.</source>
+        <translation>Le champ %1 existe déjà.
+Ne sera pas ajouté au projet.</translation>
+    </message>
+</context>
+<context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="172"/>
+        <location filename="../inputhelp.cpp" line="177"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Rapport transmis.%1Veuillez nous contacter par courriel à l&apos;adresse%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="177"/>
+        <location filename="../inputhelp.cpp" line="182"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Impossible de transmettre le rapport.%1Veuillez contrôler votre connexion Internet.</translation>
     </message>
 </context>
 <context>
+    <name>InputProjUtils</name>
+    <message>
+        <location filename="../inputprojutils.cpp" line="77"/>
+        <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
+        <translation>Grille de reprojection PROJ manquante : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
+    </message>
+    <message>
+        <location filename="../inputprojutils.cpp" line="98"/>
+        <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
+        <translation>Erreur lors de la création d&apos;une PROJ personnalisée. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
+    </message>
+    <message>
+        <location filename="../inputprojutils.cpp" line="108"/>
+        <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
+        <translation>Grilles de reprojection PROJ manquantes : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
+    </message>
+</context>
+<context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="227"/>
+        <location filename="../localprojectsmanager.cpp" line="238"/>
         <source>Download failed, remove and retry</source>
         <translation>Téléchargement échoué, supprimer et réessayer</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="247"/>
+        <location filename="../localprojectsmanager.cpp" line="258"/>
         <source>Found multiple QGIS project files</source>
         <translation>Des fichiers de projet QGIS multiples ont été trouvés</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="252"/>
+        <location filename="../localprojectsmanager.cpp" line="263"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Impossible de trouver un fichier de projet QGIS</translation>
     </message>
@@ -284,22 +330,27 @@
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="87"/>
+        <location filename="../qml/LoginForm.qml" line="55"/>
+        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
+        <translation>%1Mergin%2 utilise une synchronisation dans le cloud entre votre appareil mobile et votre ordinateur de bureau. Utilisez le aussi pour partager vos projets avec les autres et travailler en mode collaboratif.</translation>
+    </message>
+    <message>
+        <location filename="../qml/LoginForm.qml" line="98"/>
         <source>Username</source>
         <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="130"/>
+        <location filename="../qml/LoginForm.qml" line="141"/>
         <source>Sign in</source>
         <translation>Se connecter</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="200"/>
-        <source>Sign up</source>
-        <translation>S&apos;inscrire</translation>
+        <location filename="../qml/LoginForm.qml" line="211"/>
+        <source>Sign up for free</source>
+        <translation>S&apos;inscrire gratuitement</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="226"/>
+        <location filename="../qml/LoginForm.qml" line="237"/>
         <source>Forgot password?</source>
         <translation>Mot de passe oublié?</translation>
     </message>
@@ -409,7 +460,7 @@
         <translation>Inscription réussie</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="1150"/>
+        <location filename="../merginapi.cpp" line="1117"/>
         <source>Project detached from Mergin</source>
         <translation>Projet indépendant de Mergin</translation>
     </message>
@@ -422,107 +473,112 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="201"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="211"/>
         <source>Projects</source>
         <translation>Projets</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
         <source>Unable to get the list of projects.</source>
         <translation>Impossible de récupérer la liste des projets.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="436"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
         <source>No projects found!</source>
         <translation>Aucun projet n&apos;a été trouvé !</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="302"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="312"/>
         <source>Explore public projects.</source>
         <translation>Explorer les projets publics.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="371"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <source>Create project</source>
+        <translation>Créer un projet</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="395"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Aucun projet téléchargé n&apos;a été trouvé.%1Apprenez %2comment créer des projets%3 et %4les télécharger%3 sur votre appareil.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="393"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="417"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
         <translation>Input nécessite une autorisation de stockage, %1click pour l&apos;accorder %2 et ensuite redémarrer l&apos;application.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="489"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="514"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="496"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="521"/>
         <source>No Changes</source>
         <translation>Pas de modifications</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="506"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
         <source>Detach from Mergin</source>
         <translation>Détaché de Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="506"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
         <source>Upload to Mergin</source>
         <translation>Télécharger vers Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="523"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="548"/>
         <source>Remove from device</source>
         <translation>Supprimer de l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="646"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="670"/>
         <source>Home</source>
         <translation>Accueil</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="663"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="687"/>
         <source>My projects</source>
         <translation>Mes projets</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="682"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
         <source>Shared with me</source>
         <translation>Partagé avec moi</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="682"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
         <source>Shared</source>
         <translation>Partagé</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="701"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="725"/>
         <source>Explore</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="722"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="746"/>
         <source>Remove project</source>
         <translation>Supprimer le projet</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="723"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="747"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Toutes les modifications non-synchronisées seront perdues.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="750"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="774"/>
         <source>Input needs to be restarted</source>
         <translation>Input doit être redémarré</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="751"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="775"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
         <translation>Pour appliquer des modifications après avoir accordé une autorisation de stockage, Input doit être redémarré. Cliquez sur Fermer et ouvrez à nouveau Input.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="770"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="794"/>
         <source>Retry</source>
         <translation>Réessayer</translation>
     </message>
@@ -586,6 +642,47 @@
     </message>
 </context>
 <context>
+    <name>ProjectWizard</name>
+    <message>
+        <location filename="../projectwizard.cpp" line="102"/>
+        <source>Project %1 created</source>
+        <translation>Projet %1 créé</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectWizardPage</name>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <source>Create Project</source>
+        <translation>Créer un Projet</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="75"/>
+        <source>Project name</source>
+        <translation>Nom du projet</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="104"/>
+        <source>Fields</source>
+        <translation>Champs</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="133"/>
+        <source>Add field</source>
+        <translation>Ajouter un champ</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <source>Create project</source>
+        <translation>Créer un projet</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="178"/>
+        <source>Empty project name</source>
+        <translation>Nom de projet vide</translation>
+    </message>
+</context>
+<context>
     <name>Purchasing</name>
     <message>
         <location filename="../purchasing.cpp" line="517"/>
@@ -639,12 +736,12 @@
 <context>
     <name>QgsQuickAttributeFormModelBase</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="282"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="288"/>
         <source>Not NULL</source>
         <translation>Pas NULL</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="287"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="293"/>
         <source>Unique</source>
         <translation>Unique</translation>
     </message>
@@ -652,47 +749,47 @@
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="141"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>La valeur &quot;%1&quot; %4 n&apos;a pas pu être convertie en valeur compatible pour le champ %2(%3).</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="176"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="222"/>
         <source>Cannot update feature</source>
         <translation>Impossible de mettre l&apos;entité à jour</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="190"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="236"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>L&apos;entité %1 n&apos;a pas pu être chargée après l’enregistrement !</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="213"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="259"/>
         <source>Cannot delete feature</source>
         <translation>Impossible d&apos;effacer l&apos;entité</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="261"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="307"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>L&apos;expression de la valeur par défaut pour %1:%2 a une erreur d&apos;analyse : %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="271"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="317"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>L&apos;expression de la valeur par défaut pour %1:%2 a une erreur d&apos;évaluation : %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="298"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="344"/>
         <source>Feature could not be added</source>
         <translation>Impossible d&apos;ajouter l&apos;entité</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="309"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="357"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Impossible d&apos;enregistrer les modifications. Retour.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="329"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="377"/>
         <source>Cannot start editing</source>
         <translation>Impossible de débuter l&apos;édition</translation>
     </message>
@@ -725,28 +822,28 @@
 <context>
     <name>QgsQuickUtils</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="347"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="358"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>résolution de l&apos;écran : %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="348"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="359"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de l&apos;écran : %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="349"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>taille de l&apos;écran : %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="350"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
         <source>screen density: %1</source>
         <translation>densité de l&apos;écran : %1</translation>
     </message>
@@ -818,34 +915,44 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="55"/>
+        <location filename="../qml/SettingsPanel.qml" line="56"/>
         <source>Settings</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="79"/>
+        <location filename="../qml/SettingsPanel.qml" line="80"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="87"/>
+        <location filename="../qml/SettingsPanel.qml" line="88"/>
         <source>Follow GPS with map</source>
         <translation>Suivre le GPS avec la carte</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="134"/>
+        <location filename="../qml/SettingsPanel.qml" line="107"/>
         <source>GPS accuracy</source>
         <translation>Précision du GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="189"/>
+        <location filename="../qml/SettingsPanel.qml" line="162"/>
         <source>Accuracy threshold</source>
         <translation>Seuil de précision</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="207"/>
+        <location filename="../qml/SettingsPanel.qml" line="180"/>
+        <source>Recording</source>
+        <translation>Enregistrement</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="187"/>
         <source>Line rec. interval</source>
         <translation>Intervalle d&apos;enregistrement de la ligne</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="210"/>
+        <source>Reuse last value option</source>
+        <translation>Réutiliser la dernière valeur</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="234"/>
@@ -924,29 +1031,34 @@
         <translation>L&apos;entité enregistrée n&apos;est pas valide</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="444"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode d&apos;auto-centrage GPS activé</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="444"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode d&apos;auto-centrage GPS désactivé</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="455"/>
+        <location filename="../qml/main.qml" line="460"/>
         <source>No editable layers found.</source>
         <translation>Aucune couche éditable n&apos;a pu être trouvée.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="489"/>
+        <location filename="../qml/main.qml" line="494"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>Le GPS n&apos;est actuellement pas disponible.%1Essayez d&apos;autoriser la Localisation par GPS dans les options de votre appareil.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="637"/>
+        <location filename="../qml/main.qml" line="643"/>
         <source>Communication error</source>
         <translation>Erreur de communication</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="649"/>
+        <source>PROJ Error</source>
+        <translation>Erreur PROJ</translation>
     </message>
 </context>
 <context>
@@ -1009,27 +1121,27 @@
         <translation>Remarque: les contraintes souples n&apos;ont pas été respectées</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="583"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="606"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Ajouter une entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="585"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="608"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Éditer l&apos;entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="587"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="610"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Voir l&apos;entité sur &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="627"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="650"/>
         <source>Delete feature</source>
         <translation>Effacer l&apos;entité</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="628"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="651"/>
         <source>Really delete this feature?</source>
         <translation>Souhaitez-vous réellement effacer cette entité ?</translation>
     </message>
