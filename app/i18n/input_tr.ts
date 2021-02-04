@@ -79,6 +79,29 @@
     </message>
 </context>
 <context>
+    <name>AndroidUtils</name>
+    <message>
+        <location filename="../androidutils.cpp" line="94"/>
+        <source>Storage permission is permanently denied, please allow it in settings</source>
+        <translation>Depolama izni kalıcı olarak reddedildi, lütfen ayarlarda izin veriniz.</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="98"/>
+        <source>Input needs a storage permission in order to manipulate or download a project</source>
+        <translation>Input&apos;un bir projeyi işlemesi veya indirmesi için depolama izni alması gerekiyor</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="132"/>
+        <source>Camera permission is permanently denied, please allow it in settings</source>
+        <translation>Kamera izni kalıcı olarak reddedildi, lütfen ayarlarda izin veriniz</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="136"/>
+        <source>We need a camera permission in order to take a photo</source>
+        <translation>Fotoğraf çekmek için kamera iznine ihtiyacımız var</translation>
+    </message>
+</context>
+<context>
     <name>AuthPanel</name>
     <message>
         <location filename="../qml/AuthPanel.qml" line="79"/>
@@ -161,27 +184,27 @@
 <context>
     <name>FeaturePanel</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="132"/>
+        <location filename="../qml/FeaturePanel.qml" line="138"/>
         <source>Edit Feature</source>
         <translation>Obje Düzenle</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="132"/>
+        <location filename="../qml/FeaturePanel.qml" line="138"/>
         <source>Feature</source>
         <translation>Obje</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="151"/>
+        <location filename="../qml/FeaturePanel.qml" line="157"/>
         <source>No photos added.</source>
         <translation>Fotoğraf eklenmedi.</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="278"/>
+        <location filename="../qml/FeaturePanel.qml" line="290"/>
         <source>Delete feature</source>
         <translation>Nesne sil</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="279"/>
+        <location filename="../qml/FeaturePanel.qml" line="291"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Objeyi silmek istediğinizden emin misiniz?</translation>
     </message>
@@ -210,32 +233,78 @@
     </message>
 </context>
 <context>
+    <name>FieldRow</name>
+    <message>
+        <location filename="../qml/components/FieldRow.qml" line="33"/>
+        <source>Field name</source>
+        <translation>Alan adı</translation>
+    </message>
+</context>
+<context>
+    <name>FieldsModel</name>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="16"/>
+        <source>Please fill a name of previous field before adding a new field.</source>
+        <translation>Yeni bir alan eklemeden önce lütfen önceki alanın adını doldurun.</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="20"/>
+        <source>Field %1 already exists.</source>
+        <translation>% 1 alanı zaten var.</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="118"/>
+        <source>Field %1 already exists. 
+Won&apos;t be added to the project.</source>
+        <translation>%1 alanı zaten var.
+Projeye eklenmeyecek.</translation>
+    </message>
+</context>
+<context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="172"/>
+        <location filename="../inputhelp.cpp" line="177"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Rapor gönderildi.%1Lütfen %1 üzerinden bizimle iletişime geçin%2.</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="177"/>
+        <location filename="../inputhelp.cpp" line="182"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Rapor gönderilemedi. %1İnternet bağlantınızı kontrol edinizi.</translation>
     </message>
 </context>
 <context>
+    <name>InputProjUtils</name>
+    <message>
+        <location filename="../inputprojutils.cpp" line="77"/>
+        <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
+        <translation>Gerekli PROJ datum shift grid dosyası eksik:%1. Yeni indirilen proje için lütfen Input&apos;u yeniden başlatın.</translation>
+    </message>
+    <message>
+        <location filename="../inputprojutils.cpp" line="98"/>
+        <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
+        <translation>Özel PROJ işlemi oluşturulurken hata meydana. Yeni indirilen proje için lütfen Input&apos;u yeniden başlatın.</translation>
+    </message>
+    <message>
+        <location filename="../inputprojutils.cpp" line="108"/>
+        <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
+        <translation>Gerekli PROJ datum shift grid dosyası eksik:%1. Yeni indirilen proje için lütfen Input&apos;u yeniden başlatın.</translation>
+    </message>
+</context>
+<context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="191"/>
+        <location filename="../localprojectsmanager.cpp" line="238"/>
         <source>Download failed, remove and retry</source>
         <translation>İndirme başarısız, silin ve yeniden deneyin</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="211"/>
+        <location filename="../localprojectsmanager.cpp" line="258"/>
         <source>Found multiple QGIS project files</source>
         <translation>Birden fazla QGIS proje dosyası bulundu</translation>
     </message>
     <message>
-        <location filename="../localprojectsmanager.cpp" line="216"/>
+        <location filename="../localprojectsmanager.cpp" line="263"/>
         <source>Failed to find a QGIS project file</source>
         <translation>QGIS proje dosyası bulunamadı</translation>
     </message>
@@ -261,22 +330,27 @@
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="87"/>
+        <location filename="../qml/LoginForm.qml" line="55"/>
+        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
+        <translation>%1Mergin%2, mobil ve masaüstünüz arasında bulut tabanlı senkronizasyon sağlar. Ayrıca projelerinizi başkalarıyla paylaşmak ve işbirliği içinde çalışmak için de kullanabilirsiniz.</translation>
+    </message>
+    <message>
+        <location filename="../qml/LoginForm.qml" line="98"/>
         <source>Username</source>
         <translation>Kullanıcı Adı</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="130"/>
+        <location filename="../qml/LoginForm.qml" line="141"/>
         <source>Sign in</source>
         <translation>Oturum aç</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="200"/>
-        <source>Sign up</source>
-        <translation>Kayıt ol</translation>
+        <location filename="../qml/LoginForm.qml" line="211"/>
+        <source>Sign up for free</source>
+        <translation>Ücretsiz kaydol</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="226"/>
+        <location filename="../qml/LoginForm.qml" line="237"/>
         <source>Forgot password?</source>
         <translation>Şifrenizi mi unuttunuz?</translation>
     </message>
@@ -356,37 +430,42 @@
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../merginapi.cpp" line="556"/>
+        <location filename="../merginapi.cpp" line="558"/>
         <source>Username must have at least 4 characters</source>
         <translation>Kullanıcı adı en az 4 karakterden oluşmalıdır</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="563"/>
+        <location filename="../merginapi.cpp" line="565"/>
         <source>Please enter a valid email</source>
         <translation>Geçerli bir e-posta adresi giriniz</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="570"/>
+        <location filename="../merginapi.cpp" line="572"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Şifre yeterince kuvvetli değil. Şifre %1 en az 8 karakter, %1küçük harf, %1büyük harf, %1sayı veya özel karakter içermelidir</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="583"/>
+        <location filename="../merginapi.cpp" line="585"/>
         <source>Passwords do not match</source>
         <translation>Şifreler eşleşmiyor</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="590"/>
+        <location filename="../merginapi.cpp" line="592"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Lütfen Şartları ve Gizlilik Politikasını kabul edin</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="821"/>
-        <source>Registration successful.%1 You should now be able to sign in.</source>
-        <translation>Kayıt işlemi başarılır.%1 Şu anda oturum açabilmelisiniz.</translation>
+        <location filename="../merginapi.cpp" line="840"/>
+        <source>Registration successful</source>
+        <translation>Kayıt başarılı</translation>
     </message>
     <message>
-        <location filename="../merginapi.cpp" line="839"/>
+        <location filename="../merginapi.cpp" line="1117"/>
+        <source>Project detached from Mergin</source>
+        <translation>Proje Mergin&apos;den çıkarıldı</translation>
+    </message>
+    <message>
+        <location filename="../merginapi.cpp" line="861"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Seçilen Mergin sunucusu için yeni kayıt oluşturulamaz.%1Lütfen izinlerinizi kontrol ediniz.</translation>
     </message>
@@ -394,82 +473,112 @@
 <context>
     <name>MerginProjectPanel</name>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="201"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="211"/>
         <source>Projects</source>
         <translation>Projeler</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="404"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
         <source>Unable to get the list of projects.</source>
         <translation>Proje listesi alınamıyor.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="404"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
         <source>No projects found!</source>
         <translation>Proje bulunamadı!</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="301"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="312"/>
         <source>Explore public projects.</source>
         <translation>Herkese açık projeleri keşfedin.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="369"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
+        <source>Create project</source>
+        <translation>Proje oluştur</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="395"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>İndirilmiş proje bulunamadı. %2Proje oluşturmayı%3 ve %4onları cihazınıza indirmeyi%3 %1öğrenin.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="456"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="417"/>
+        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
+        <translation>Input&apos;un depolama iznine ihtiyacı var, %1izin vermek için tıklayın%2 ve ardından uygulamayı yeniden başlatın.</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="514"/>
         <source>Status</source>
         <translation>Durum</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="463"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="521"/>
         <source>No Changes</source>
         <translation>Değişiklik Yok</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="472"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
+        <source>Detach from Mergin</source>
+        <translation>Mergin&apos;den Ayır</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
+        <source>Upload to Mergin</source>
+        <translation>Mergin&apos;e Yükle</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="548"/>
         <source>Remove from device</source>
         <translation>Cihazdan kaldır</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="571"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="670"/>
         <source>Home</source>
         <translation>Ana Sayfa</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="588"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="687"/>
         <source>My projects</source>
         <translation>Projelerim</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="607"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
         <source>Shared with me</source>
         <translation>Benimle paylaşılanlar</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="607"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
         <source>Shared</source>
         <translation>Paylaşılan</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="626"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="725"/>
         <source>Explore</source>
         <translation>Keşfet</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="647"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="746"/>
         <source>Remove project</source>
         <translation>Projeyi kaldır</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="648"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="747"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Senkronize edilmemiş değişiklikler kaybolacaktır.</translation>
     </message>
     <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="685"/>
+        <location filename="../qml/MerginProjectPanel.qml" line="774"/>
+        <source>Input needs to be restarted</source>
+        <translation>Input yeniden başlatılmalı</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="775"/>
+        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
+        <translation>Depolama izni verdikten sonra değişiklikleri uygulamak için Input&apos;un yeniden başlatılması gerekir. Kapat&apos;a tıklayın ve Input&apos;u tekrar açın.</translation>
+    </message>
+    <message>
+        <location filename="../qml/MerginProjectPanel.qml" line="794"/>
         <source>Retry</source>
         <translation>Tekrar deneyin</translation>
     </message>
@@ -504,6 +613,14 @@
     </message>
 </context>
 <context>
+    <name>ProjectDelegateItem</name>
+    <message>
+        <location filename="../qml/ProjectDelegateItem.qml" line="174"/>
+        <source>Fetch more</source>
+        <translation>Daha fazlasını getir</translation>
+    </message>
+</context>
+<context>
     <name>ProjectLoadingScreen</name>
     <message>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
@@ -522,6 +639,47 @@
         <location filename="../qml/ProjectStatusPanel.qml" line="41"/>
         <source>Project Status</source>
         <translation>Proje Durumu</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectWizard</name>
+    <message>
+        <location filename="../projectwizard.cpp" line="102"/>
+        <source>Project %1 created</source>
+        <translation>%1 projesi oluşturuldu</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectWizardPage</name>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <source>Create Project</source>
+        <translation>Proje Oluştur</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="75"/>
+        <source>Project name</source>
+        <translation>Proje adı</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="104"/>
+        <source>Fields</source>
+        <translation>Alanlar</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="133"/>
+        <source>Add field</source>
+        <translation>Alan ekle</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <source>Create project</source>
+        <translation>Proje oluştur</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectWizardPage.qml" line="178"/>
+        <source>Empty project name</source>
+        <translation>Boş proje adı</translation>
     </message>
 </context>
 <context>
@@ -578,12 +736,12 @@
 <context>
     <name>QgsQuickAttributeFormModelBase</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="282"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="288"/>
         <source>Not NULL</source>
         <translation>Geçersiz değil</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="287"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="293"/>
         <source>Unique</source>
         <translation>Tek</translation>
     </message>
@@ -591,47 +749,47 @@
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="135"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="184"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>&quot;%1&quot; %4 değeri, %2 alanı (%3) için uyumlu bir değere dönüştürülemedi.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="170"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="222"/>
         <source>Cannot update feature</source>
         <translation>Nesne güncellenemiyor</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="184"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="236"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>%1 nesnesi işlendikten sonra getirilemedi</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="207"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="259"/>
         <source>Cannot delete feature</source>
         <translation>Nesne silinemiyor</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="255"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="307"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2 için varsayılan değer ifadesinde ayrıştırıcı hatası var: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="265"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="317"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2 için varsayılan değer ifadesinde değerlendirme hatası var: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="292"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="344"/>
         <source>Feature could not be added</source>
         <translation>Nesne eklenemedi</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="303"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="357"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Değişiklikler kaydedilemedi. Geri alınıyor.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="377"/>
         <source>Cannot start editing</source>
         <translation>Düzenlemeye başlanamıyor</translation>
     </message>
@@ -664,28 +822,28 @@
 <context>
     <name>QgsQuickUtils</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="347"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="358"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>ekran çözünürlüğü: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="348"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="359"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>ekran DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="349"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>ekran boyutu: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="350"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
         <source>screen density: %1</source>
         <translation>ekran yoğunluğu: %1</translation>
     </message>
@@ -749,7 +907,7 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../qml/SearchBar.qml" line="66"/>
+        <location filename="../qml/SearchBar.qml" line="67"/>
         <source>SEARCH</source>
         <translation>ARAMA</translation>
     </message>
@@ -757,47 +915,62 @@
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="55"/>
+        <location filename="../qml/SettingsPanel.qml" line="56"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="79"/>
+        <location filename="../qml/SettingsPanel.qml" line="80"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="87"/>
+        <location filename="../qml/SettingsPanel.qml" line="88"/>
         <source>Follow GPS with map</source>
         <translation>GPS&apos;i harita üzerinde takip et</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="129"/>
+        <location filename="../qml/SettingsPanel.qml" line="107"/>
         <source>GPS accuracy</source>
         <translation>GPS doğruluğu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="184"/>
+        <location filename="../qml/SettingsPanel.qml" line="162"/>
         <source>Accuracy threshold</source>
         <translation>Doğruluk eşiği</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="201"/>
+        <location filename="../qml/SettingsPanel.qml" line="180"/>
+        <source>Recording</source>
+        <translation>Kayıt</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="187"/>
         <source>Line rec. interval</source>
         <translation>Çizgi kayıt aralığı</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <location filename="../qml/SettingsPanel.qml" line="210"/>
+        <source>Reuse last value option</source>
+        <translation>Son değer seçeneğini yeniden kullan</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="234"/>
         <source>About</source>
         <translation>Hakkında</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="236"/>
+        <location filename="../qml/SettingsPanel.qml" line="243"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="245"/>
+        <location filename="../qml/SettingsPanel.qml" line="252"/>
+        <source>Privacy Policy</source>
+        <translation>Gizlilik Politikası</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="261"/>
         <source>Diagnostic Log</source>
         <translation>Aktivite Takibi</translation>
     </message>
@@ -858,29 +1031,34 @@
         <translation>Kaydedilen obje geçerli değil</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="444"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS otomatik merkez modu açık</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="444"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS otomatik merkez modu kapalı</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="455"/>
+        <location filename="../qml/main.qml" line="460"/>
         <source>No editable layers found.</source>
         <translation>Düzenlenebilir katman bulunamadı</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="489"/>
+        <location filename="../qml/main.qml" line="494"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS şu anda kullanılamıyor.%1Cihaz ayarlarınızda GPS Konumuna izin vermeyi deneyin.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="637"/>
+        <location filename="../qml/main.qml" line="643"/>
         <source>Communication error</source>
         <translation>İletişim hatası</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="649"/>
+        <source>PROJ Error</source>
+        <translation>PROJ hatası</translation>
     </message>
 </context>
 <context>
@@ -943,27 +1121,27 @@
         <translation>Not: Esnek kısıtlamalar karşılanmadı</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="581"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="606"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;&apos;e nesne ekle</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="583"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="608"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;&apos;de nesneyi düzenle</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="585"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="610"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;&apos;de nesneyi görüntüle</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="625"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="650"/>
         <source>Delete feature</source>
         <translation>Nesneyi sil</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="626"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="651"/>
         <source>Really delete this feature?</source>
         <translation>Nesne silinsin mi?</translation>
     </message>
