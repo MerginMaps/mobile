@@ -342,7 +342,7 @@ int main( int argc, char *argv[] )
 
   QString projDir;
 #ifdef MOBILE_OS
-  projDir = appBundleDir;
+  projDir = dataDir + "/qgis-data";
 #else
   projDir = dataDir;
 #endif

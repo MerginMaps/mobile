@@ -145,7 +145,7 @@ void InputProjUtils::initProjLib( const QString &pkgPath, const QString &project
 #endif
 
 #ifdef Q_OS_IOS
-  QString prefixPath = pkgPath + "/proj";
+  QString prefixPath = QCoreApplication::applicationDirPath() + "/qgis-data/proj";
   QString projFilePath = prefixPath + "/proj.db";
 #endif
 
@@ -165,7 +165,11 @@ void InputProjUtils::initProjLib( const QString &pkgPath, const QString &project
 #endif
 
   QStringList paths = {prefixPath};
+#ifdef Q_OS_IOS
+  mCurrentCustomProjDir = pkgPath + "/proj_custom";
+#else
   mCurrentCustomProjDir = prefixPath + "_custom";
+#endif
   qDebug() << "InputPROJ: Input Search Paths" << paths;
   qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
 
