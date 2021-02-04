@@ -43,14 +43,15 @@
 		<string>en</string>
 		<string>es</string>
 		<string>fr</string>
-                <string>de</string>
-                <string>it</string>
-                <string>pl</string>
-                <string>pt_PT</string>
-                <string>hr_HR</string>
-                <string>ca</string>
-                <string>tr</string>
-                <string>ja_JP</string>
+        <string>de</string>
+        <string>it</string>
+        <string>pl</string>
+        <string>pt_PT</string>
+        <string>hr_HR</string>
+        <string>ca</string>
+        <string>tr</string>
+        <string>sk</string>
+        <string>ja_JP</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
