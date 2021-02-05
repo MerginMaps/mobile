@@ -735,6 +735,10 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
+
+
+          // TODO @vsklencar create changeset
+          //createChangeset
           uploadProject( projectNamespace, projectName );
         }
       }
@@ -1840,7 +1844,21 @@ void MerginApi::uploadInfoReplyFinished()
       MerginFile merginFile = findFile( filePath, localFiles );
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       addedMerginFiles.append( merginFile );
+
+      if ( MerginApi::isFileDiffable( filePath ) )
+      {
+        // .mergin folder and basefiles for changeset may not exist yet for a virgin project (never uploaded to Mergin)
+        QString basefile = transaction.projectDir + "/.mergin/" + filePath;
+        createPathIfNotExists( basefile );
+
+        QString sourcePath = transaction.projectDir + "/" + filePath;
+        if ( !QFile::copy( sourcePath, basefile ) )
+        {
+          InputUtils::log( "push " + projectFullName, "failed to copy new basefile for: " + filePath );
+        }
+      }
     }
+
     for ( QString filePath : transaction.diff.localUpdated )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
