@@ -39,7 +39,7 @@ class InputProjUtils: public QObject
      * Sets the PROJ_LIB dir, should be called before qgis application is initialized
      * Copies all custom projections from all loaded projects to the custom PROJ folder.
      */
-    void initProjLib( const QString &pkgPath, const QString &projectsPath );
+    void initProjLib( const QString &appBundleDir, const QString &dataDir, const QString &projectsPath );
 
     /**
      * Resets the custom handlers.
@@ -57,6 +57,9 @@ class InputProjUtils: public QObject
     void cleanCustomDir();
     void copyCustomProj( const QString &projectsPath );
 
+    void setCurrentCustomProjDir( const QString &dataDir );
+    void setProjDir( const QString &appBundleDir );
+
     void initCoordinateOperationHandlers();
 
     bool mPopUpShown = false;
@@ -68,6 +71,7 @@ class InputProjUtils: public QObject
     bool mFallbackOperationOccurredReported = false;
 
     QString mCurrentCustomProjDir;
+    QString mProjDir;
 };
 
 #endif // INPUTPROJUTILS_H

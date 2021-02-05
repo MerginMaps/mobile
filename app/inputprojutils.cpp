@@ -133,43 +133,45 @@ static void _updateProj( const QStringList &searchPaths )
   delete [] newPaths;
 }
 
-
-void InputProjUtils::initProjLib( const QString &pkgPath, const QString &projectsPath )
+void InputProjUtils::setProjDir( const QString &appBundleDir )
 {
-#ifdef MOBILE_OS
 #ifdef ANDROID
   // win and ios resources are already in the bundle
-  InputUtils::cpDir( "assets:/qgis-data", pkgPath );
-  QString prefixPath = pkgPath + "/proj";
-  QString projFilePath = prefixPath + "/proj.db";
-#endif
-
-#ifdef Q_OS_IOS
-  QString prefixPath = QCoreApplication::applicationDirPath() + "/qgis-data/proj";
-  QString projFilePath = prefixPath + "/proj.db";
+  InputUtils::cpDir( "assets:/qgis-data", appBundleDir );
 #endif
 
 #ifdef Q_OS_WIN32
-  QString prefixPath = pkgPath + "\\proj";
-  QString projFilePath = prefixPath + "\\proj.db";
+  mProjDir = appBundleDir + "\\proj";
+  QString projFilePath = mProjDir + "\\proj.db";
+#else
+  mProjDir = appBundleDir + "/proj";
+  QString projFilePath = mProjDir + "/proj.db";
 #endif
 
   QFile projdb( projFilePath );
   if ( !projdb.exists() )
   {
-    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) );
+    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) + projFilePath );
   }
-#else
-  // Linux/MacOS, use bundled proj files
-  QString prefixPath = pkgPath + "/proj";
-#endif
+}
 
-  QStringList paths = {prefixPath};
+void InputProjUtils::setCurrentCustomProjDir( const QString &dataDir )
+{
 #ifdef Q_OS_IOS
-  mCurrentCustomProjDir = pkgPath + "/proj_custom";
+  // custom proj path has to be in data dir, not in the bundle
+  mCurrentCustomProjDir = dataDir + "/qgis_data/proj_custom";
 #else
-  mCurrentCustomProjDir = prefixPath + "_custom";
+  Q_UNUSED( dataDir )
+  mCurrentCustomProjDir = mProjDir + "_custom";
 #endif
+}
+
+void InputProjUtils::initProjLib( const QString &appBundleDir, const QString &dataDir, const QString &projectsPath )
+{
+  setProjDir( appBundleDir );
+  setCurrentCustomProjDir( dataDir );
+
+  QStringList paths = {mProjDir};
   qDebug() << "InputPROJ: Input Search Paths" << paths;
   qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
 

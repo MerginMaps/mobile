@@ -340,12 +340,6 @@ int main( int argc, char *argv[] )
   //TODO win32 package demo projects
 #endif
 
-  QString projDir;
-#ifdef MOBILE_OS
-  projDir = dataDir + "/qgis-data";
-#else
-  projDir = dataDir;
-#endif
   AppSettings as;
   InputProjUtils inputProjUtils;
 
@@ -355,7 +349,7 @@ int main( int argc, char *argv[] )
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
   }
-  inputProjUtils.initProjLib( projDir, projectDir );
+  inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
   init_qgis( appBundleDir );
 
   // Create Input classes
