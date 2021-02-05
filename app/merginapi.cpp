@@ -735,10 +735,6 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
-
-
-          // TODO @vsklencar create changeset
-          //createChangeset
           uploadProject( projectNamespace, projectName );
         }
       }
