@@ -250,7 +250,7 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="20"/>
         <source>Field %1 already exists.</source>
-        <translation>% 1 alanı zaten var.</translation>
+        <translation>%1 alanı zaten var.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="118"/>
