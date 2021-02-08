@@ -490,7 +490,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="312"/>
         <source>Explore public projects.</source>
-        <translation>公開されているプロジェクトを探しています。</translation>
+        <translation>公開プロジェクトを探しています。</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="380"/>
@@ -669,7 +669,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="133"/>
         <source>Add field</source>
-        <translation>フィールドを追加</translation>
+        <translation>追加する</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="172"/>
@@ -952,7 +952,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="210"/>
         <source>Reuse last value option</source>
-        <translation>最後に使った値を再利用するオプション</translation>
+        <translation>最後の値を再利用する</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="234"/>
