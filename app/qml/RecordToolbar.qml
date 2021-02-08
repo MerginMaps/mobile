@@ -74,15 +74,15 @@ Item {
             }
         }
 
-        Item {
+        Row {
             anchors.centerIn: parent
             height: extraPanelHeight
+            spacing: 0
 
             Item {
                 id: iconContainer
                 height: extraPanelHeight
                 width: extraPanelHeight
-                anchors.right: label.left
 
                 Image {
                     id: icon
@@ -109,6 +109,7 @@ Item {
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
+                rightPadding: extraPanelHeight/4
             }
         }
     }
