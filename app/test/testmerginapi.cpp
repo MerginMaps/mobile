@@ -95,6 +95,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithDiffs" );
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithMissedVersion" );
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testMigrateProjectAndSync" );
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
 }
 
@@ -1326,6 +1327,70 @@ void TestMerginApi::testMigrateProject()
   // verify that all files have been uploaded
   QStringList entryList2 = QDir( projectDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
   QCOMPARE( entryList, entryList2 );
+}
+
+void TestMerginApi::testMigrateProjectAndSync()
+{
+  // When a new project is migrated to Mergin, creating basefiles for diffable files was omitted.
+  // Therefore sync was not properly working resulting into having a conflict file.
+  // Test covers creting a new project, migrating it to Mergin and both sides sync.
+
+  // 1. [main] create project with .gpkg (v1) file
+  // 2. [main] migrate the project to mergin
+  // 3. [extra] download the project and make changes to .gpkg (v2)
+  // 4. [main] sync the project (v2), should be valid without conflicts
+  // 5. [main] make changes to .gpkg (v3) and sync
+  // 6. [extra] sync the project (v3), should be valid without conflicts
+
+  QString projectName = "testMigrateProjectAndSync";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  // step 1
+  createLocalProject( projectDir );
+  mApi->mLocalProjects.reloadProjectDir();
+  // step 2
+  QSignalSpy spy( mApi, &MerginApi::projectCreated );
+  QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
+
+  mApi->migrateProjectToMergin( projectName );
+
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+  QCOMPARE( mApi->transactions().count(), 1 );
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY * 5 ) );
+
+  // step 3
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // step 4
+  downloadRemoteProject( mApi, mUsername, projectName );
+  QVERIFY( QFile( projectDir + "/base.gpkg" ).exists() );
+  QStringList projectMerginDirEntries = QDir( projectDir + "/.mergin" ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+  for ( QString filepath : projectMerginDirEntries )
+  {
+    QVERIFY( !filepath.contains( QStringLiteral( "conflict" ) ) );
+  }
+
+  // step 5
+  r0 = QFile::remove( projectDir + "/base.gpkg" );
+  r1 = QFile::copy( mTestDataPath + "/added_row_2.gpkg", projectDir + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // step 6
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QVERIFY( QFile( projectDir + "/base.gpkg" ).exists() );
+  QStringList projectMerginDirExtraEntries = QDir( projectDirExtra + "/.mergin" ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+  for ( QString filepath : projectMerginDirExtraEntries )
+  {
+    QVERIFY( !filepath.contains( QStringLiteral( "conflict" ) ) );
+  }
 }
 
 void TestMerginApi::testMigrateDetachProject()
