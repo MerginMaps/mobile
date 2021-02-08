@@ -6,6 +6,7 @@
 #include "qgsfieldmodel.h"
 #include "qgsvectorlayer.h"
 #include "qgsmapsettings.h"
+#include <qgssinglesymbolrenderer.h>
 
 /**
  * Controller for creating new Input project.
@@ -38,6 +39,7 @@ class ProjectWizard : public QObject
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
     QgsEditorWidgetSetup getEditorWidget( QgsField const &field, const QString &widgetType );
     QgsFields createFields( const QList<FieldConfiguration> fieldsConfig ) const;
+    QgsSingleSymbolRenderer *surveyLayerRenderer();
     QVariant::Type parseType( const QString &type ) const;
     QString widgetToType( const QString &widgetType ) const;
     QString findWidgetTypeByFieldName( const QString name, const QList<FieldConfiguration> fieldsConfig ) const;

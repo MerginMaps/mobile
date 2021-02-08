@@ -6,6 +6,7 @@
 #include "qgsvectorlayer.h"
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
+#include <qgsmarkersymbollayer.h>
 
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
@@ -63,6 +64,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
     QgsEditorWidgetSetup setup = getEditorWidget( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
     l->setEditorWidgetSetup( i, setup );
   }
+  l->setRenderer( surveyLayerRenderer() );
 
   return l;
 }
@@ -174,6 +176,17 @@ QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsCon
     fields.append( field );
   }
   return fields;
+}
+
+QgsSingleSymbolRenderer *ProjectWizard::surveyLayerRenderer()
+{
+  QgsSimpleMarkerSymbolLayer *markerLayer = new QgsSimpleMarkerSymbolLayer( QgsSimpleMarkerSymbolLayer::Circle );
+  markerLayer->setSize( 3.0 );
+  markerLayer->setFillColor( QColor( "#d73027" ) );
+  markerLayer->setStrokeColor( QColor( "#e8e8e8" ) );
+  markerLayer->setStrokeWidth( 0.4 );
+  QgsMarkerSymbol *symbol = new QgsMarkerSymbol( QgsSymbolLayerList() << markerLayer );
+  return new QgsSingleSymbolRenderer( symbol );
 }
 
 QVariant::Type ProjectWizard::parseType( const QString &type ) const
