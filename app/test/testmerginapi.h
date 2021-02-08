@@ -62,6 +62,7 @@ class TestMerginApi: public QObject
     void testUpdateWithDiffs();
     void testUpdateWithMissedVersion();
     void testMigrateProject();
+    void testMigrateProjectAndSync();
     void testMigrateDetachProject();
 
     void testRegister();

@@ -1840,19 +1840,6 @@ void MerginApi::uploadInfoReplyFinished()
       MerginFile merginFile = findFile( filePath, localFiles );
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       addedMerginFiles.append( merginFile );
-
-      if ( MerginApi::isFileDiffable( filePath ) )
-      {
-        // .mergin folder and basefiles for changeset may not exist yet for a virgin project (never uploaded to Mergin)
-        QString basefile = transaction.projectDir + "/.mergin/" + filePath;
-        createPathIfNotExists( basefile );
-
-        QString sourcePath = transaction.projectDir + "/" + filePath;
-        if ( !QFile::copy( sourcePath, basefile ) )
-        {
-          InputUtils::log( "push " + projectFullName, "failed to copy new basefile for: " + filePath );
-        }
-      }
     }
 
     for ( QString filePath : transaction.diff.localUpdated )
@@ -1981,6 +1968,22 @@ void MerginApi::uploadFinishReplyFinished()
 
     transaction.projectMetadata = data;
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
+
+    //  a new diffable files suppose to have their basefile copies in .mergin
+    for ( QString filePath : transaction.diff.localAdded )
+    {
+      if ( MerginApi::isFileDiffable( filePath ) )
+      {
+        QString basefile = transaction.projectDir + "/.mergin/" + filePath;
+        createPathIfNotExists( basefile );
+
+        QString sourcePath = transaction.projectDir + "/" + filePath;
+        if ( !QFile::copy( sourcePath, basefile ) )
+        {
+          InputUtils::log( "push " + projectFullName, "failed to copy new basefile for: " + filePath );
+        }
+      }
+    }
 
     // clean up diff-related files
     for ( const MerginFile &merginFile : qgis::as_const( transaction.uploadDiffFiles ) )
