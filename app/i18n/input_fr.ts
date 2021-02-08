@@ -155,7 +155,7 @@
     <message>
         <location filename="../qml/BrowseDataToolbar.qml" line="67"/>
         <source>Done</source>
-        <translation>Terminé</translation>
+        <translation>Fait</translation>
     </message>
 </context>
 <context>
@@ -278,7 +278,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
-        <translation>Grille de reprojection PROJ manquante : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
+        <translation>Grille de transformation de coordonnées PROJ manquante : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
@@ -288,7 +288,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
-        <translation>Grilles de reprojection PROJ manquantes : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
+        <translation>Grilles de transformation de coordonnées PROJ manquantes : %1. Pour les nouveaux projets téléchargés veuillez redémarrer Input.</translation>
     </message>
 </context>
 <context>
@@ -332,7 +332,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/LoginForm.qml" line="55"/>
         <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 utilise une synchronisation dans le cloud entre votre appareil mobile et votre ordinateur de bureau. Utilisez le aussi pour partager vos projets avec les autres et travailler en mode collaboratif.</translation>
+        <translation>%1Mergin%2 utilise une synchronisation dans le cloud entre votre appareil mobile et votre ordinateur de bureau. Utilisez-le aussi pour partager vos projets avec les autres et travailler en mode collaboratif.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="98"/>
@@ -505,7 +505,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="417"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input nécessite une autorisation de stockage, %1click pour l&apos;accorder %2 et ensuite redémarrer l&apos;application.</translation>
+        <translation>Input nécessite une autorisation de stockage, %1cliquez pour l&apos;accorder %2 et ensuite redémarrer l&apos;application.</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="514"/>
@@ -942,7 +942,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="180"/>
         <source>Recording</source>
-        <translation>Enregistrement</translation>
+        <translation>Enregistrement en cours</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="187"/>
