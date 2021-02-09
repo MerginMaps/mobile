@@ -39,7 +39,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   options.driverName = QStringLiteral( "GPKG" );
   options.layerName = layerName;
   options.fileEncoding = QStringLiteral( "UTF-8" );
-  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, QgsWkbTypes::Point, layerCrs, QgsCoordinateTransformContext(), options ) );
+  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, QgsWkbTypes::PointZ, layerCrs, QgsCoordinateTransformContext(), options ) );
 
 
   QString errorMessage;
