@@ -25,7 +25,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   QgsFields predefinedFields = createFields( fieldsConfig );
 
   // Write layer as gpkg
-  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "Point?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
+  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
   layer->startEditing();
   layer->setCrs( layerCrs );
   for ( QgsField f : predefinedFields )
