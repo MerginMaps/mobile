@@ -30,7 +30,7 @@ Click here to download the app on your mobile device:
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
 </p>
 
-For more information on how to use the app, see [Documentation](https://help.inputapp.io)
+For more information on how to use the app, see [Documentation](https://help.inputapp.io).
 
 ## Features
 
