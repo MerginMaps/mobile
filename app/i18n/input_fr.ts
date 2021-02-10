@@ -373,24 +373,24 @@ Ne sera pas ajouté au projet.</translation>
         <location filename="../qml/MainPanel.qml" line="115"/>
         <location filename="../qml/MainPanel.qml" line="295"/>
         <source>Record</source>
-        <translation>Enregistrer</translation>
+        <translation>Sauver</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="143"/>
         <location filename="../qml/MainPanel.qml" line="322"/>
         <source>Zoom to project</source>
-        <translation>Zoomer vers le projet</translation>
+        <translation>Se localiser</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="162"/>
         <source>Browse data</source>
-        <translation>Parcourir les données</translation>
+        <translation>Voir données</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="182"/>
         <location filename="../qml/MainPanel.qml" line="360"/>
         <source>Map themes</source>
-        <translation>Thèmes de cartes</translation>
+        <translation>Thèmes</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="202"/>
@@ -419,7 +419,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="44"/>
         <source>Map Themes</source>
-        <translation>Thèmes de cartes</translation>
+        <translation>Thèmes</translation>
     </message>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="70"/>
