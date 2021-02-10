@@ -545,7 +545,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="706"/>
         <source>Shared with me</source>
-        <translation>Compartido conmigo</translation>
+        <translation>Compartido</translation>
     </message>
     <message>
         <location filename="../qml/MerginProjectPanel.qml" line="706"/>
