@@ -77,6 +77,7 @@ QtObject {
     property var detachIcon: "qrc:/unlink.svg"
     property var valueRelationIcon: "qrc:/value_relation_open.svg"
     property var comboboxIcon: "qrc:/combobox.svg"
+    property var qrCodeIcon: "qrc:/qrcode.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"

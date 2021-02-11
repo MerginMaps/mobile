@@ -30,6 +30,8 @@ variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 inputprojutils.cpp \
+codefilter.cpp \
+qrdecoder.cpp \
 
 exists(merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")
@@ -70,6 +72,8 @@ variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 inputprojutils.h \
+codefilter.h \
+qrdecoder.h \
 
 contains(DEFINES, INPUT_TEST) {
 

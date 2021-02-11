@@ -57,6 +57,12 @@ android {
     LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
 
+    # ZXing
+    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
+    LIBS += -L$${ZXING_LIB_DIR}
+    LIBS += -lZXing
+
+    QT += multimedia
     QT += printsupport
     QT += androidextras
 
@@ -107,6 +113,7 @@ android {
         $${QGIS_LIB_DIR}/libwcsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libwfsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libwmsprovider_$${ANDROID_TARGET_ARCH}.so \
+        $${QGIS_LIB_DIR}/libZXing.so \
         $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \

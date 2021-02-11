@@ -109,6 +109,17 @@ Item {
   }
 
   /**
+   * A handler for extra events in externalSourceWidget.
+   */
+  property var importDataHandler: QtObject {
+    /**
+     * TODO @vsklencar
+     * \param itemWidget editorWidget for modified field to send valueChanged signal.
+     */
+    property var importData: function importData(itemWidget) {}
+  }
+
+  /**
    * AttributeFormModel binded on a feature supporting auto-generated editor layouts and "tab" layout.
    */
   property QgsQuick.AttributeFormModel model
@@ -485,6 +496,14 @@ Item {
           target: attributeEditorLoader.item
           onValueChanged: {
             AttributeValue = isNull ? undefined : value
+          }
+        }
+
+        Connections {
+          target: attributeEditorLoader.item
+          ignoreUnknownSignals: true
+          onImportDataRequested: {
+           importDataHandler.importData(attributeEditorLoader.item)
           }
         }
 

@@ -17,6 +17,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 /**
  * Text Edit for QGIS Attribute Form
@@ -25,6 +26,9 @@ import QtQuick.Layouts 1.3
  */
 Item {
   signal valueChanged(var value, bool isNull)
+  signal importDataRequested()
+  property var rowHeight: customStyle.fields.height * 0.75
+  property real iconSize: rowHeight
 
   id: fieldItem
   enabled: !readOnly
@@ -99,8 +103,48 @@ Item {
     }
 
     onEditingFinished: {
-      valueChanged( text, text == '' )
+        valueChanged( text, text == '' )
+      }
     }
-  }
+
+    // Icon
+    Item {
+      id: importDataBtn
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+
+      property int borderWidth: 50 * QgsQuick.Utils.dp
+      width: fieldItem.iconSize
+      height: width
+      antialiasing: true
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          fieldItem.importDataRequested()
+        }
+      }
+
+      Image {
+        id: importDataBtnIcon
+        height: fieldItem.iconSize
+        sourceSize.height: fieldItem.iconSize
+        autoTransform: true
+        fillMode: Image.PreserveAspectFit
+        source: customStyle.icons.importData
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        visible: fieldItem.enabled
+        anchors.rightMargin: fieldItem.anchors.rightMargin
+      }
+
+      ColorOverlay {
+        anchors.fill: importDataBtnIcon
+        anchors.centerIn: parent
+        source: importDataBtnIcon
+        color: customStyle.fields.fontColor
+        smooth: true
+      }
+    }
 
 }
