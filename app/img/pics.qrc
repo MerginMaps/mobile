@@ -55,5 +55,6 @@
         <file>cloud-upload.svg</file>
         <file>value_relation_open.svg</file>
         <file>combobox.svg</file>
+        <file>qrcode.svg</file>
     </qresource>
 </RCC>

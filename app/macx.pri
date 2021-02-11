@@ -114,6 +114,7 @@ macx:!android {
 
     QT += printsupport
     QT += widgets
+    QT += multimedia
     DEFINES += "HAVE_WIDGETS"
 
     QMAKE_CXXFLAGS += -std=c++11

@@ -57,5 +57,8 @@
         <file>components/FieldRow.qml</file>
         <file>components/SettingsSwitch.qml</file>
         <file>components/Symbol.qml</file>
+        <file>CodeReader.qml</file>
+        <file>CodeReaderHandler.qml</file>
+        <file>CodeReaderOverlay.qml</file>
     </qresource>
 </RCC>

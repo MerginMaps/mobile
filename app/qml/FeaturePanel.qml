@@ -169,6 +169,7 @@ Drawer {
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
+            importDataHandler: codeReaderHandler.handler
             toolbarVisible: false
             allowRememberAttribute: __appSettings.reuseLastEnteredValues
             style: QgsQuick.FeatureFormStyling {
@@ -242,6 +243,7 @@ Drawer {
                   property var back: InputStyle.backIcon
                   property var combobox: InputStyle.comboboxIcon
                   property var valueRelationMore: InputStyle.valueRelationIcon
+                  property var importData: InputStyle.qrCodeIcon
                 }
 
               property QtObject checkboxComponent: QtObject {
@@ -322,5 +324,20 @@ Drawer {
       id: valueRelationWidget
 
       onWidgetClosed: backHandler.forceActiveFocus()
+    }
+
+    CodeReaderHandler {
+      id: codeReaderHandler
+      onInvokeQrScanner: codeReader.visible = true
+    }
+
+    CodeReader {
+      id: codeReader
+      width: featurePanel.width
+      height: featurePanel.height
+      visible: false
+      onScanFinished: {
+        codeReaderHandler.handler.setValue(value)
+      }
     }
 }

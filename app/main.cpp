@@ -52,6 +52,7 @@
 #include "inputprojutils.h"
 #include "fieldsmodel.h"
 #include "projectwizard.h"
+#include "codefilter.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -228,6 +229,7 @@ void initDeclarative()
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
+  qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
 }
 
 #ifdef INPUT_TEST
