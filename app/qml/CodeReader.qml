@@ -1,27 +1,35 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.7
 import QtQuick.Layouts 1.3
-import QtMultimedia 5.7
+import QtMultimedia 5.13
 import lc 1.0
 
-Page {
+Drawer {
   id: codeReader
+  palette.dark: InputStyle.fontColor // changes busy indicator color
 
   signal scanFinished(var value)
 
   onVisibleChanged: {
-    if (codeReader.visible) {
-      zxingFilter.active = true
-    }
+    zxingFilter.active = codeReader.visible
+    if (zxingFilter.active) {
+      camera.cameraState = Camera.ActiveState
+    } else
+      camera.cameraState = Camera.UnloadedState
+  }
+
+  function closeReader() {
+    zxingFilter.active = false
+    codeReader.visible = false
   }
 
   CodeFilter {
     id: zxingFilter
 
     onCapturedDataChanged: {
-      active = false
-      codeReader.visible = false
       codeReader.scanFinished(capturedData)
+      camera.cameraState = Camera.UnloadedState
+      codeReaderTimer.start()
     }
   }
 
@@ -31,8 +39,8 @@ Page {
       focus.focusMode = CameraFocus.FocusContinuous
       focus.focusPointMode = CameraFocus.FocusPointAuto
     }
-
-    onError: console.log("camera error:" + errorString)
+    cameraState: Camera.UnloadedState
+    onError: __inputUtils.showNotificationRequested(errorString)
   }
 
   ColumnLayout {
@@ -63,17 +71,38 @@ Page {
         filters: [zxingFilter]
         source: camera
         autoOrientation: true
-        fillMode: VideoOutput.PreserveAspectFit
+        fillMode: VideoOutput.PreserveAspectCrop
+        flushMode: VideoOutput.LastFrame
       }
 
       CodeReaderOverlay {
         id: overlay
         rectSize: Math.min(codeReader.height, codeReader.width) * 0.8
         width: codeReader.width
-        height: codeReader.height
+        height: codeReader.height - header.height
       }
     }
   }
 
+  BusyIndicator {
+    id: codeReaderBusyIndicator
+    width: codeReader.width / 8
+    height: width
+    running: codeReaderTimer.running
+    visible: running
+    anchors.centerIn: parent
+    z: codeReader.z + 1
+  }
 
+  Timer {
+    id: codeReaderTimer
+    interval: 1000
+    triggeredOnStart: false
+    repeat: false
+    onRunningChanged: {
+      if (!running) {
+        closeReader()
+      }
+    }
+  }
 }

@@ -99,6 +99,7 @@ void QgsQuickAttributeFormModelBase::setAttributeModel( QgsQuickAttributeModel *
     disconnect( mAttributeModel, &QgsQuickAttributeModel::layerChanged, this, &QgsQuickAttributeFormModelBase::onLayerChanged );
     disconnect( mAttributeModel, &QgsQuickAttributeModel::featureChanged, this, &QgsQuickAttributeFormModelBase::onFeatureChanged );
     disconnect( mAttributeModel, &QgsQuickAttributeModel::modelReset, this, &QgsQuickAttributeFormModelBase::onFeatureChanged );
+    disconnect( mAttributeModel, &QgsQuickAttributeModel::dataChangedFailed, this, &QgsQuickAttributeFormModelBase::dataChangedFailed );
   }
 
   mAttributeModel = attributeModel;
@@ -108,6 +109,7 @@ void QgsQuickAttributeFormModelBase::setAttributeModel( QgsQuickAttributeModel *
     connect( mAttributeModel, &QgsQuickAttributeModel::layerChanged, this, &QgsQuickAttributeFormModelBase::onLayerChanged );
     connect( mAttributeModel, &QgsQuickAttributeModel::featureChanged, this, &QgsQuickAttributeFormModelBase::onFeatureChanged );
     connect( mAttributeModel, &QgsQuickAttributeModel::modelReset, this, &QgsQuickAttributeFormModelBase::onFeatureChanged );
+    connect( mAttributeModel, &QgsQuickAttributeModel::dataChangedFailed, this, &QgsQuickAttributeFormModelBase::dataChangedFailed );
   }
 
   emit attributeModelChanged();
@@ -272,6 +274,7 @@ void QgsQuickAttributeFormModelBase::flatten( QgsAttributeEditorContainer *conta
         item->setData( true, QgsQuickAttributeFormModel::ConstraintHardValid );
         item->setData( true, QgsQuickAttributeFormModel::ConstraintSoftValid );
         item->setData( field.constraints().constraintDescription(), QgsQuickAttributeFormModel::ConstraintDescription );
+        item->setData( false, QgsQuickAttributeFormModel::ImportData );
 
         QStringList expressions;
         QStringList descriptions;

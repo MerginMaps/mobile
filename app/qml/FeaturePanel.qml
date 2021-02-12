@@ -272,6 +272,8 @@ Drawer {
                 toolbar.state = featureForm.state
             }
 
+            onNotify: __inputUtils.showNotificationRequested(message)
+
             customWidgetCallback: valueRelationWidget.handler
         }
 

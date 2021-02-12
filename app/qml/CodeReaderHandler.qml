@@ -28,6 +28,18 @@ Item {
     property var itemWidget
 
     /**
+     *
+     * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
+     */
+    property var supportImportData: function supportImportData(name) {
+      if (!!name && name.toLowerCase().includes("qrcode")) {
+        return true
+      } else {
+        return false
+      }
+    }
+
+    /**
      * TODO
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */

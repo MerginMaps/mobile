@@ -77,7 +77,8 @@ class QUICK_EXPORT QgsQuickAttributeFormModel : public QSortFilterProxyModel
       CurrentlyVisible, //!< Field visible
       ConstraintSoftValid, //! Constraint soft valid
       ConstraintHardValid, //! Constraint hard valid
-      ConstraintDescription //!< Contraint description
+      ConstraintDescription, //!< Contraint description
+      ImportData //!< Whether supports to set data from external sources (e.g QR code reader)
     };
 
     Q_ENUM( FeatureFieldRoles )

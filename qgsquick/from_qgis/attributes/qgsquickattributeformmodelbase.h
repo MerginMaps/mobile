@@ -124,6 +124,8 @@ class QgsQuickAttributeFormModelBase : public QStandardItemModel
     //! \copydoc QgsQuickAttributeFormModelBase::constraintsSoftValid
     void constraintsSoftValidChanged();
 
+    void dataChangedFailed( const QString &message );
+
   private slots:
     void onFeatureChanged();
     void onLayerChanged();
