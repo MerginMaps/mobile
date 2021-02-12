@@ -36,6 +36,8 @@ Item {
    */
   signal canceled
 
+  signal notify(var message)
+
    /**
     * A handler for extra events in externalSourceWidget.
     */
@@ -482,6 +484,7 @@ Item {
           property var featurePair: form.model.attributeModel.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
+          property bool supportDataImport: false // optional functionality, set via importDataHandler
 
           active: widget !== 'Hidden'
 
@@ -489,6 +492,10 @@ Item {
             if ( widget !== undefined )
                return form.loadWidgetFn(widget.toLowerCase())
             else return ''
+          }
+
+          Component.onCompleted: {
+            supportDataImport = importDataHandler.supportImportData(Name)
           }
         }
 
@@ -515,6 +522,11 @@ Item {
               attributeEditorLoader.item.dataUpdated( form.model.attributeModel.featureLayerPair.feature )
             }
           }
+        }
+
+        Connections {
+          target: form.model.attributeModel
+          onDataChangedFailed: notify(message)
         }
 
         Connections {

@@ -110,6 +110,7 @@ Item {
     // Icon
     Item {
       id: importDataBtn
+      visible: supportDataImport
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
 
@@ -146,5 +147,4 @@ Item {
         smooth: true
       }
     }
-
 }
