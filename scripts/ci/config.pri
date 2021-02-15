@@ -11,6 +11,8 @@ android {
 
   PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  ZXING_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
+  ZXING_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
 }
 
 win32 {
@@ -32,6 +34,8 @@ ios {
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
   PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
+  ZXING_INCLUDE_DIR=$${QGIS_INSTALL_PATH}/include
+  ZXING_LIB_DIR=$${QGIS_INSTALL_PATH}/lib/
 }
 
 macx:!android {
@@ -42,6 +46,8 @@ macx:!android {
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
   PROJ_INCLUDE_DIR = /opt/QGIS/qgis-deps-$$(QGIS_DEPS_VERSION)/stage/include
   PROJ_LIB_DIR = /opt/QGIS/qgis-deps-$$(QGIS_DEPS_VERSION)/stage/lib
+  ZXING_INCLUDE_DIR = /opt/QGIS/qgis-deps-$$(QGIS_DEPS_VERSION)/stage/include
+  ZXING_LIB_DIR = /opt/QGIS/qgis-deps-$$(QGIS_DEPS_VERSION)/stage/lib
 
   # also setup coverall for macos build
   # --coverage option is synonym for: -fprofile-arcs -ftest-coverage -lgcov

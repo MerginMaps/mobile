@@ -18,11 +18,6 @@ Drawer {
       camera.cameraState = Camera.UnloadedState
   }
 
-  function closeReader() {
-    zxingFilter.active = false
-    codeReader.visible = false
-  }
-
   CodeFilter {
     id: zxingFilter
 
@@ -101,7 +96,7 @@ Drawer {
     repeat: false
     onRunningChanged: {
       if (!running) {
-        closeReader()
+        codeReader.visible = false
       }
     }
   }

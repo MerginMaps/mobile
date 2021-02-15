@@ -2,9 +2,7 @@
 #define QR_DECODER_H
 
 #include <QObject>
-#ifdef MOBILE_OS
 #include <QVideoFrame>
-#endif
 #include <QOpenGLContext>
 
 /*!

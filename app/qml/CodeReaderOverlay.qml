@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   id: root
@@ -20,9 +21,8 @@ Item {
         model: [0, 1, 3, 2]
 
         delegate: Item {
-          // TODO visual params
-          property var length: 20
-          property var borderWidth: 5
+          property var length: 30  * QgsQuick.Utils.dp
+          property var borderWidth: 5 * QgsQuick.Utils.dp
           property var animationDuration: 1000
           property var primaryColor: InputStyle.fontColor
           property var secondaryColor: InputStyle.fontColorBright

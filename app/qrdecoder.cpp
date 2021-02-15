@@ -5,7 +5,7 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #ifdef MOBILE_OS
-#include <ReadBarcode.h>
+#include <ZXing/ReadBarcode.h>
 #endif
 #include <iostream>
 #include <QDebug>
