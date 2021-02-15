@@ -111,14 +111,20 @@ Item {
   }
 
   /**
-   * A handler for extra events in externalSourceWidget.
+   * A handler for extra events withing a TextEdit widget .
    */
   property var importDataHandler: QtObject {
     /**
-     * TODO @vsklencar
+     * Suppose to be called to invoke a component to set data automatically (e.g. code scanner, sensor).
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */
     property var importData: function importData(itemWidget) {}
+
+    /**
+     * Suppose to be called after `importData` function as a callback to set the value to the widget.
+     * \param value Value to be set.
+     */
+    property var setValue: function setValue(value) {}
   }
 
   /**

@@ -9,12 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
-import QgsQuick 0.1 as QgsQuick
-import "."
-// import InputStyle singleton
-import lc 1.0
 
 Item {
 
@@ -28,7 +22,7 @@ Item {
     property var itemWidget
 
     /**
-     *
+     * Suppose to set `supportDataImport` variable of feature form. If true, field supports QR code reader.
      * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
      */
     property var supportImportData: function supportImportData(name) {
@@ -40,7 +34,7 @@ Item {
     }
 
     /**
-     * TODO
+     * Invokes QR scaner and seves reference to the caller (widget) to save the value afterwards
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */
     property var importData: function importData(itemWidget) {
@@ -53,8 +47,8 @@ Item {
     }
 
     /**
-     * TODO
-     * \param itemWidget editorWidget for modified field to send valueChanged signal.
+     * Suppose to be called after `importData` function as a callback to set the value to the widget.
+     * \param value new current valaue to be set for a widget.
      */
     property var setValue: function setValue(value) {
       codeReaderHandler.itemWidget.valueChanged(value, value === "" || value === null)
