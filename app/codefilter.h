@@ -20,10 +20,8 @@ class CodeFilter : public QAbstractVideoFilter
 
     QString capturedData();
     bool isDecoding() const;
-#ifdef MOBILE_OS
     QRDecoder *decoder() const;
     QFuture<void> futureThread() const;
-#endif
     QVideoFilterRunnable *createFilterRunnable() override;
 
 
@@ -38,10 +36,8 @@ class CodeFilter : public QAbstractVideoFilter
     QSharedPointer<QMutex> _mutexP;
     QString mCapturedData;
     bool mIsDecoding;
-#ifdef MOBILE_OS
     QRDecoder *mDecoder;
     QFuture<void> mFutureThread;
-#endif
 };
 
 #endif // CODEFILTER_H

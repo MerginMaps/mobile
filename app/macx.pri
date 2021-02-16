@@ -96,6 +96,11 @@ macx:!android {
     LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
 
+    # ZXing
+    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
+    LIBS += -L$${ZXING_LIB_DIR}
+    LIBS += -lZXing
+
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
     # Uncomment this like to test the real in-app purchases on MacOS

@@ -12,13 +12,10 @@
 class QRDecoder : public QObject
 {
     Q_OBJECT
-#ifdef MOBILE_OS
     Q_PROPERTY( QString captured READ captured WRITE setCaptured NOTIFY capturedChanged )
     Q_PROPERTY( bool isDecoding READ isDecoding WRITE setIsDecoding NOTIFY isDecodingChanged )
-#endif
   public:
     explicit QRDecoder( QObject *parent = nullptr );
-#ifdef MOBILE_OS
     QString captured() const;
     bool isDecoding() const;
     QVideoFrame videoFrame() const;
@@ -43,7 +40,6 @@ class QRDecoder : public QObject
 
     void setCaptured( QString captured );
     void setIsDecoding( bool isDecoding );
-#endif
 };
 
 #endif // QR_DECODER_H

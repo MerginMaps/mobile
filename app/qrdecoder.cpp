@@ -4,9 +4,7 @@
 #include <QImage>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#ifdef MOBILE_OS
 #include <ZXing/ReadBarcode.h>
-#endif
 #include <iostream>
 #include <QDebug>
 
@@ -14,18 +12,15 @@ namespace ZXing
 {
   namespace Qt
   {
-#ifdef MOBILE_OS
     using ZXing::DecodeHints;
     using ZXing::BarcodeFormat;
     using ZXing::BarcodeFormats;
     using ZXing::Binarizer;
-#endif
     template <typename T, typename _ = decltype( ToString( T() ) )>
     QDebug operator<<( QDebug dbg, const T &v )
     {
       return dbg.noquote() << QString::fromStdString( ToString( v ) );
     }
-#ifdef MOBILE_OS
 
     class Result : private ZXing::Result
     {
@@ -67,12 +62,10 @@ namespace ZXing
 
       return ImgFmtFromQImg( img ) == ImageFormat::None ? exec( img.convertToFormat( QImage::Format_RGBX8888 ) ) : exec( img );
     }
-#endif
   } // namespace Qt
 } // namespace ZXing
 
 
-#ifdef MOBILE_OS
 using namespace ZXing::Qt;
 
 std::ostream &operator<<( std::ostream &os, const std::vector<ZXing::ResultPoint> &points )
@@ -82,14 +75,10 @@ std::ostream &operator<<( std::ostream &os, const std::vector<ZXing::ResultPoint
   return os;
 }
 
-#endif
-
 QRDecoder::QRDecoder( QObject *parent ) : QObject( parent )
 {
 
 }
-
-#ifdef MOBILE_OS
 
 QString QRDecoder::captured() const
 {
@@ -195,5 +184,3 @@ QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame )
 
   return QImage();
 }
-
-#endif

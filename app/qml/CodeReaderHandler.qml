@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +20,7 @@ Item {
     property var itemWidget
 
     /**
-     * Suppose to set `supportDataImport` variable of feature form. If true, field supports QR code reader.
+     * Suppose to set `supportDataImport` variable of a feature form. If true, field supports QR code reader.
      * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
      */
     property var supportImportData: function supportImportData(name) {
