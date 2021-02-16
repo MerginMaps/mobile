@@ -274,7 +274,6 @@ void QgsQuickAttributeFormModelBase::flatten( QgsAttributeEditorContainer *conta
         item->setData( true, QgsQuickAttributeFormModel::ConstraintHardValid );
         item->setData( true, QgsQuickAttributeFormModel::ConstraintSoftValid );
         item->setData( field.constraints().constraintDescription(), QgsQuickAttributeFormModel::ConstraintDescription );
-        item->setData( false, QgsQuickAttributeFormModel::ImportData );
 
         QStringList expressions;
         QStringList descriptions;
