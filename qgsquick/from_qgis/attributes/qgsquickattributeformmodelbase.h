@@ -123,7 +123,7 @@ class QgsQuickAttributeFormModelBase : public QStandardItemModel
     void constraintsHardValidChanged();
     //! \copydoc QgsQuickAttributeFormModelBase::constraintsSoftValid
     void constraintsSoftValidChanged();
-
+    //! Emitted when setData failed
     void dataChangedFailed( const QString &message );
 
   private slots:
