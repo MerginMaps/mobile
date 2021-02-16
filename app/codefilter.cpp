@@ -8,7 +8,6 @@
 #include <QOpenGLFunctions>
 #include <QDebug>
 
-#ifdef MOBILE_OS
 void processImage( QRDecoder *decoder, const QImage &image )
 {
   decoder->process( image );
@@ -52,25 +51,17 @@ class QRRunnable : public QVideoFilterRunnable
   private:
     CodeFilter *mFilter;
 };
-#endif
 
 CodeFilter::CodeFilter()
 {
-#ifdef MOBILE_OS
   mDecoder = new QRDecoder;
 
   QObject::connect( mDecoder, &QRDecoder::capturedChanged, this, &CodeFilter::setCapturedData );
-#endif
 }
 
 QVideoFilterRunnable *CodeFilter::createFilterRunnable()
 {
-#ifdef MOBILE_OS
   return new QRRunnable( this );
-#else
-  return nullptr;
-#endif
-
 }
 
 QString CodeFilter::capturedData()
@@ -89,8 +80,6 @@ bool CodeFilter::isDecoding() const
   return mIsDecoding;
 }
 
-#ifdef MOBILE_OS
-
 QRDecoder *CodeFilter::decoder() const
 {
   return mDecoder;
@@ -100,4 +89,3 @@ QFuture<void> CodeFilter::futureThread() const
 {
   return mFutureThread;
 }
-#endif
