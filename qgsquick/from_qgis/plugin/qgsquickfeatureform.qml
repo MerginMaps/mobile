@@ -36,6 +36,9 @@ Item {
    */
   signal canceled
 
+  /**
+   * When any notification message has to be shown.
+   */
   signal notify(var message)
 
    /**

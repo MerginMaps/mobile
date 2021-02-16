@@ -32,16 +32,13 @@ Item {
     }
 
     /**
-     * Invokes QR scaner and seves reference to the caller (widget) to save the value afterwards
+     * Invokes QR scaner and seves reference to the caller (widget) to save the value afterwards.
+     * NOTE: Not supported for WIN yet
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */
     property var importData: function importData(itemWidget) {
       codeReaderHandler.itemWidget = itemWidget
-      if (__androidUtils.isAndroid || __iosUtils.isIos) {
-        invokeQrScanner()
-      } else {
-        // Not implemented/supported yet
-      }
+      invokeQrScanner()
     }
 
     /**
