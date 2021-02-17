@@ -122,9 +122,10 @@ void QRDecoder::process( const QImage capturedImage )
   setIsDecoding( true );
 
   const auto hints = DecodeHints()
-                     .setFormats( BarcodeFormat::QR_CODE | BarcodeFormat::DATA_MATRIX | BarcodeFormat::CODABAR | BarcodeFormat::CODE_128 )
-                     .setTryHarder( true )
-                     .setBinarizer( Binarizer::FixedThreshold );
+                     .setFormats( BarcodeFormat::QR_CODE | BarcodeFormat::DATA_MATRIX | BarcodeFormat::CODABAR |
+                                  BarcodeFormat::CODE_39 | BarcodeFormat::CODE_93 | BarcodeFormat::CODE_128 |
+                                  BarcodeFormat::EAN_8 | BarcodeFormat::EAN_13 )
+                     .setTryHarder( true );
 
   const auto result = ReadBarcode( capturedImage, hints );
 
