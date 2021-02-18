@@ -14,7 +14,7 @@
 #include "qgsproject.h"
 #include "qgslayertree.h"
 
-LayersProxyModel::LayersProxyModel( LayersModel *model, ModelTypes modelType ) :
+LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelType ) :
   mModelType( modelType ),
   mModel( model )
 {

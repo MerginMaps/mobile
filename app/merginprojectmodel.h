@@ -78,10 +78,10 @@ class MerginProjectModel: public QAbstractListModel
     */
     void updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page );
 
-    int filterCreator() const;
+    int filterCreator() const; // TODO: remove, no use
     void setFilterCreator( int filterCreator );
 
-    int filterWriter() const;
+    int filterWriter() const; // TODO: remove, no use
     void setFilterWriter( int filterWriter );
 
     QString searchExpression() const;
