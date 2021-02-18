@@ -30,6 +30,9 @@ variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 inputprojutils.cpp \
+models/projectsproxymodel_future.cpp \
+models/projectsmodel_future.cpp \
+project_future.cpp \
 
 exists(merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")
@@ -70,6 +73,9 @@ variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 inputprojutils.h \
+models/projectsproxymodel_future.h \
+models/projectsmodel_future.h \
+project_future.h \
 
 contains(DEFINES, INPUT_TEST) {
 

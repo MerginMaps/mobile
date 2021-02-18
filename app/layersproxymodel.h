@@ -18,7 +18,7 @@
 
 #include "layersmodel.h"
 
-enum ModelTypes
+enum LayerModelTypes
 {
   ActiveLayerSelection,
   BrowseDataLayerSelection,
@@ -30,7 +30,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_OBJECT
 
   public:
-    LayersProxyModel( LayersModel *model, ModelTypes modelType = ModelTypes::AllLayers );
+    LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
@@ -63,7 +63,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     //! filters if input layer is visible in current map theme
     bool layerVisible( QgsMapLayer *layer ) const;
 
-    ModelTypes mModelType;
+    LayerModelTypes mModelType;
     LayersModel *mModel;
 
     /**
