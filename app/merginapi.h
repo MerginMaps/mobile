@@ -166,7 +166,7 @@ struct TransactionStatus
 };
 
 
-struct MerginProjectListEntry
+struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_future.h
 {
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
 
@@ -218,9 +218,17 @@ class MerginApi: public QObject
      * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
      * \param filterTag Name of tag that fetched projects have to have.
      * \param page Requested page of projects.
+     * \returns unique id of a request
      */
-    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),
-                                   const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+    Q_INVOKABLE QString listProjects( const QString &searchExpression = QStringLiteral(),
+                                      const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+
+    /**
+     *
+     * \param projectnames
+     * \returns unique id of a request
+     */
+    Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
@@ -374,7 +382,7 @@ class MerginApi: public QObject
     QString merginUserName() const;
 
     //! Disk usage of current logged in user in Mergin instance in Bytes
-    int diskUsage() const;
+    int diskUsage() const; // TODO: remove (no use)
 
     //! Total storage limit of current logged in user in Mergin instance in Bytes
     int storageLimit() const;
@@ -424,7 +432,8 @@ class MerginApi: public QObject
     void projectDetached();
 
   private slots:
-    void listProjectsReplyFinished();
+    void listProjectsReplyFinished( QString requestId );
+    void listProjectsByNameReplyFinished( QString requestId );
 
     // Pull slots
     void updateInfoReplyFinished();
@@ -446,8 +455,8 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
 
   private:
-    MerginProjectList parseListProjectsMetadata( const QByteArray &data );
-    MerginProjectList parseProjectJsonArray( const QJsonArray &vArray );
+    MerginProjectListEntry parseProjectMetadata( const QJsonObject &project );
+    MerginProjectList parseProjectsFromJson( const QJsonDocument &object );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );

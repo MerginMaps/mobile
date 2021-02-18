@@ -67,12 +67,12 @@ MerginUserInfo *MerginApi::userInfo() const
   return mUserInfo;
 }
 
-void MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
+QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
 {
   bool authorize = !flag.isEmpty();
   if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
-    return;
+    return QString();
   }
 
   QUrlQuery query;
@@ -100,10 +100,41 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &fl
   QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
+  QString requestId = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
+
   QNetworkReply *reply = mManager.get( request );
   InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::listProjectsReplyFinished );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
+
+  return requestId;
 }
+
+QString MerginApi::listProjectsByName( const QStringList &projectNames )
+{
+  setApiRoot( defaultApiRoot() );
+  // construct JSON body
+  QJsonDocument body;
+  QJsonObject projects;
+  QJsonArray projectsArr = QJsonArray::fromStringList( projectNames );
+
+  projects.insert( "projects", projectsArr );
+  body.setObject( projects );
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/by_names" ) );
+
+  QNetworkRequest request = getDefaultRequest( true );
+  request.setUrl( url );
+  request.setRawHeader( "Content-type", "application/json" );
+
+  QString requestId = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
+
+  QNetworkReply *reply = mManager.post( request, body.toJson() );
+  InputUtils::log( "list projects by name", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsByNameReplyFinished( requestId );} );
+
+  return requestId;
+}
+
 
 void MerginApi::downloadNextItem( const QString &projectFullName )
 {
@@ -1177,7 +1208,7 @@ QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
   return merginFiles;
 }
 
-void MerginApi::listProjectsReplyFinished()
+void MerginApi::listProjectsReplyFinished( QString requestId )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -1192,12 +1223,11 @@ void MerginApi::listProjectsReplyFinished()
 
     QByteArray data = r->readAll();
     QJsonDocument doc = QJsonDocument::fromJson( data );
+
     if ( doc.isObject() )
     {
-      QJsonObject obj = doc.object();
-      QJsonArray rawProjects = obj.value( "projects" ).toArray();
-      projectCount = obj.value( "count" ).toInt();
-      mRemoteProjects = parseProjectJsonArray( rawProjects );
+      projectCount = doc.object().value( "count" ).toInt();
+      mRemoteProjects = parseProjectsFromJson( doc );
     }
     else
     {
@@ -1229,7 +1259,46 @@ void MerginApi::listProjectsReplyFinished()
   }
 
   r->deleteLater();
+
+  Q_UNUSED( requestId )
+  //TODO: add requestId to signal
   emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage );
+}
+
+void MerginApi::listProjectsByNameReplyFinished( QString requestId )
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  /* TODO: Detect orphaned project? Project that was considered Mergin but did not get info back */
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    MerginProjectList projectList;
+    QByteArray data = r->readAll();
+    QJsonDocument json = QJsonDocument::fromJson( data );
+
+    projectList = parseProjectsFromJson( json );
+
+    for ( MerginProjectListEntry project : qAsConst( projectList ) )
+    {
+      qDebug() << "Project: " << project.projectName;
+    }
+
+    InputUtils::log( "list projects by name", QStringLiteral( "Success - got %1 projects" ).arg( projectList.count() ) );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjectsByName" ), r->errorString(), serverMsg );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjectsByName" ) );
+    InputUtils::log( "list projects by name", QStringLiteral( "FAILED - %1" ).arg( message ) );
+  }
+
+  r->deleteLater();
+
+  Q_UNUSED( requestId )
+  // TODO: emit signal with projects and requestId
 }
 
 
@@ -2224,55 +2293,72 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
   return diff;
 }
 
-
-MerginProjectList MerginApi::parseProjectJsonArray( const QJsonArray &vArray )
+MerginProjectListEntry MerginApi::parseProjectMetadata( const QJsonObject &proj )
 {
+  MerginProjectListEntry project;
 
-  MerginProjectList result;
-  for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
+  if ( proj.isEmpty() )
   {
-    QJsonObject projectMap = it->toObject();
-    MerginProjectListEntry project;
-
-    project.projectName = projectMap.value( QStringLiteral( "name" ) ).toString();
-    project.projectNamespace = projectMap.value( QStringLiteral( "namespace" ) ).toString();
-
-    QString versionStr = projectMap.value( QStringLiteral( "version" ) ).toString();
-    if ( versionStr.isEmpty() )
-    {
-      project.version = 0;
-    }
-    else if ( versionStr.startsWith( "v" ) ) // cut off 'v' part from v123
-    {
-      versionStr = versionStr.mid( 1 );
-      project.version = versionStr.toInt();
-    }
-
-    QDateTime updated = QDateTime::fromString( projectMap.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-    if ( !updated.isValid() )
-    {
-      project.serverUpdated = QDateTime::fromString( projectMap.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-    }
-    else
-    {
-      project.serverUpdated = updated;
-    }
-
-    result << project;
+    return project;
   }
-  return result;
+  if ( proj.contains( QStringLiteral( "error" ) ) )
+  {
+    // TODO: handle project error (might be orphaned project)
+
+    proj.value( QStringLiteral( "error" ) ).toInt( 0 ); // error code
+    return project;
+  }
+
+  project.projectName = proj.value( QStringLiteral( "name" ) ).toString();
+  project.projectNamespace = proj.value( QStringLiteral( "namespace" ) ).toString();
+
+  QString versionStr = proj.value( QStringLiteral( "version" ) ).toString();
+  if ( versionStr.isEmpty() )
+  {
+    project.version = 0;
+  }
+  else if ( versionStr.startsWith( "v" ) ) // cut off 'v' part from v123
+  {
+    versionStr = versionStr.mid( 1 );
+    project.version = versionStr.toInt();
+  }
+
+  QDateTime updated = QDateTime::fromString( proj.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+  if ( !updated.isValid() )
+  {
+    project.serverUpdated = QDateTime::fromString( proj.value( QStringLiteral( "created" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+  }
+  else
+  {
+    project.serverUpdated = updated;
+  }
+  return project;
 }
 
-MerginProjectList MerginApi::parseListProjectsMetadata( const QByteArray &data )
+
+MerginProjectList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
 {
+  if ( !doc.isObject() )
+    return MerginProjectList();
+
+  QJsonObject object = doc.object();
   MerginProjectList result;
 
-  QJsonDocument doc = QJsonDocument::fromJson( data );
-  if ( doc.isArray() )
+  if ( object.contains( "projects" ) && object.value( "projects" ).isArray() ) // listProjects API
   {
-    QJsonArray vArray = doc.array();
+    QJsonArray vArray = object.value( "projects" ).toArray();
 
-    result = parseProjectJsonArray( vArray );
+    for ( auto it = vArray.constBegin(); it != vArray.constEnd(); ++it )
+    {
+      result << parseProjectMetadata( it->toObject() );
+    }
+  }
+  else if ( !object.isEmpty() ) // listProjectsbyName API returns projects as separate objects not in array
+  {
+    for ( auto it = object.begin(); it != object.end(); ++it )
+    {
+      result << parseProjectMetadata( it->toObject() );
+    }
   }
   return result;
 }
