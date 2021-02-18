@@ -33,6 +33,9 @@ ios/iosutils.cpp \
 inputprojutils.cpp \
 codefilter.cpp \
 qrdecoder.cpp \
+models/projectsproxymodel_future.cpp \
+models/projectsmodel_future.cpp \
+project_future.cpp \
 
 exists(merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")
@@ -74,8 +77,14 @@ variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 inputprojutils.h \
+<<<<<<< HEAD
 codefilter.h \
 qrdecoder.h \
+=======
+models/projectsproxymodel_future.h \
+models/projectsmodel_future.h \
+project_future.h \
+>>>>>>> add future classes
 
 contains(DEFINES, INPUT_TEST) {
 
