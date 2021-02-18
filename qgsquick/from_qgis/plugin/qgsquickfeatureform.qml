@@ -391,15 +391,16 @@ Item {
       anchors {
         left: parent.left
         right: parent.right
-        leftMargin: 12 * QgsQuick.Utils.dp
+        leftMargin: form.style.fields.sideMargin
       }
 
       Label {
         id: fieldLabel
 
         text: Name ? qsTr(Name) : ''
-        font.bold: true
         color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
+        leftPadding: form.style.fields.sideMargin
+        font.pointSize: 14 // TODO
       }
 
       Label {
@@ -408,6 +409,7 @@ Item {
           left: parent.left
           right: parent.right
           top: fieldLabel.bottom
+          leftMargin: form.style.fields.sideMargin
         }
 
         text: ConstraintDescription ? qsTr(ConstraintDescription) : ''

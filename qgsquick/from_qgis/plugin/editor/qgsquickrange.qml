@@ -146,6 +146,7 @@ Item {
       font.pixelSize: customStyle.fields.fontPixelSize
       color: customStyle.fields.fontColor
       padding: fieldItem.customMargin
+      leftPadding: customStyle.fields.sideMargin
     }
 
     Slider {
@@ -158,6 +159,7 @@ Item {
       from: fieldItem.from
       to: fieldItem.to
       stepSize: fieldItem.step
+      rightPadding: customStyle.fields.sideMargin
 
       onValueChanged: {
         if (visible) {

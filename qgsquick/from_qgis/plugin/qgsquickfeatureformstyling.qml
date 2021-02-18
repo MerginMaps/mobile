@@ -70,7 +70,7 @@ QtObject {
       property real height: 48 * QgsQuick.Utils.dp
       property real cornerRadius: 0 * QgsQuick.Utils.dp
       property int fontPixelSize: 48 * QgsQuick.Utils.dp
-
+      property real sideMargin: 12 * QgsQuick.Utils.dp
     }
 
   property QtObject icons: QtObject {

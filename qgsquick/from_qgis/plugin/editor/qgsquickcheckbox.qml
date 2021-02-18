@@ -59,7 +59,7 @@ Item {
       verticalAlignment: Text.AlignVCenter
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
-      leftPadding: 6 * QgsQuick.Utils.dp
+      leftPadding: customStyle.fields.sideMargin
     }
 
     CheckBox {

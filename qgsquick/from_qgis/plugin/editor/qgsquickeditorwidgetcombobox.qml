@@ -49,7 +49,7 @@ ComboBox {
     font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
     font.pixelSize: comboStyle.fontPixelSize
     highlighted: comboBox.highlightedIndex === index
-    leftPadding: 5 * QgsQuick.Utils.dp
+    leftPadding: customStyle.fields.sideMargin
     onClicked: comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
   }
 
@@ -60,7 +60,7 @@ ComboBox {
     horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
-    leftPadding: 5 * QgsQuick.Utils.dp
+    leftPadding: customStyle.fields.sideMargin
     color: comboStyle.fontColor
   }
 

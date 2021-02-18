@@ -28,7 +28,7 @@ Item {
 
   id: fieldItem
   enabled: !readOnly
-  height: childrenRect.height
+  height: Math.max(textField.height, textArea.height)
   anchors {
     left: parent.left
     right: parent.right

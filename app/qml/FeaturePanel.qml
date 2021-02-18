@@ -202,7 +202,7 @@ Drawer {
                 }
 
                 property QtObject constraint: QtObject {
-                  property color validColor: "black"
+                  property color validColor: InputStyle.panelBackgroundDarker
                   property color invalidColor: "#c0392b"
                   property color descriptionColor: "#e67e22"
                 }
@@ -224,6 +224,7 @@ Drawer {
                     property real cornerRadius: 8 * QgsQuick.Utils.dp
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
+                    property real sideMargin: 12 * QgsQuick.Utils.dp
                   }
 
                 property QtObject icons: QtObject {
