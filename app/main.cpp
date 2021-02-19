@@ -343,6 +343,7 @@ int main( int argc, char *argv[] )
   inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
   init_qgis( appBundleDir );
 
+  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
