@@ -1260,9 +1260,7 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
 
   r->deleteLater();
 
-  Q_UNUSED( requestId )
-  //TODO: add requestId to signal
-  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage );
+  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage, requestId );
 }
 
 void MerginApi::listProjectsByNameReplyFinished( QString requestId )
@@ -1271,10 +1269,10 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
   Q_ASSERT( r );
 
   /* TODO: Detect orphaned project? Project that was considered Mergin but did not get info back */
+  MerginProjectList projectList;
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    MerginProjectList projectList;
     QByteArray data = r->readAll();
     QJsonDocument json = QJsonDocument::fromJson( data );
 
@@ -1297,8 +1295,7 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
 
   r->deleteLater();
 
-  Q_UNUSED( requestId )
-  // TODO: emit signal with projects and requestId
+  emit listProjectsByNameFinished( projectList, mTransactionalStatus, requestId );
 }
 
 

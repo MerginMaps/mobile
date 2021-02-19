@@ -177,7 +177,7 @@ struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_f
 
 };
 
-typedef QList<MerginProjectListEntry> MerginProjectList;
+typedef QList<MerginProjectListEntry> MerginProjectList; // TODO: replace with RemoteProject from Project_future.h
 
 typedef QHash<QString, TransactionStatus> Transactions;
 
@@ -224,9 +224,13 @@ class MerginApi: public QObject
                                       const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
 
     /**
+     * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in listProjectsByNameFinished
+     * method. Projects are parsed from response JSON.
      *
-     * \param projectnames
-     * \returns unique id of a request
+     * TODO: add info when error codes will be parsed
+     *
+     * \param projectNames QStringList of project full names (namespace/name)
+     * \returns unique id of a sent request
      */
     Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
@@ -379,13 +383,13 @@ class MerginApi: public QObject
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-    QString merginUserName() const;
+    QString merginUserName() const; // TODO: remove (use can be replaced with userInfo->username)
 
     //! Disk usage of current logged in user in Mergin instance in Bytes
     int diskUsage() const; // TODO: remove (no use)
 
     //! Total storage limit of current logged in user in Mergin instance in Bytes
-    int storageLimit() const;
+    int storageLimit() const; // TODO: remove (no use)
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
@@ -400,8 +404,9 @@ class MerginApi: public QObject
   signals:
     void apiSupportsSubscriptionsChanged();
 
-    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page );
+    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
+    void listProjectsByNameFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, QString requestId );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
@@ -553,7 +558,7 @@ class MerginApi: public QObject
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
-    MerginProjectList mRemoteProjects;
+    MerginProjectList mRemoteProjects; // TODO: remove (no use, only in tests - TBD)
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
