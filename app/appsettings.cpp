@@ -15,9 +15,7 @@
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
-  settings.setDefaultFormat( QSettings::NativeFormat );
   settings.beginGroup( mGroupName );
-
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
@@ -170,7 +168,6 @@ void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {
   QSettings settings;
-  settings.setDefaultFormat( QSettings::NativeFormat );
   settings.beginGroup( mGroupName );
   settings.setValue( key, value );
   settings.endGroup();
@@ -179,7 +176,6 @@ void AppSettings::setValue( const QString &key, const QVariant &value )
 QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
 {
   QSettings settings;
-  settings.setDefaultFormat( QSettings::NativeFormat );
   settings.beginGroup( mGroupName );
   QVariant value = settings.value( key, defaultValue );
   settings.endGroup();

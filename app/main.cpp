@@ -339,18 +339,17 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
   //TODO win32 package demo projects
 #endif
+  InputProjUtils inputProjUtils;
+  inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
+  init_qgis( appBundleDir );
 
   AppSettings as;
-  InputProjUtils inputProjUtils;
-
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
   }
-  inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
-  init_qgis( appBundleDir );
 
   // Create Input classes
   AndroidUtils au;
