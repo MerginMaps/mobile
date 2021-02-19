@@ -84,7 +84,7 @@ class MerginProjectModel: public QAbstractListModel
     int filterWriter() const; // TODO: remove, no use
     void setFilterWriter( int filterWriter );
 
-    QString searchExpression() const;
+    QString searchExpression() const; // TODO: remove, search will be in proxy model
     void setSearchExpression( const QString &searchExpression );
 
     int lastPage() const;
