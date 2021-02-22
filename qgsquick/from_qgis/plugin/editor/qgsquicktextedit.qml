@@ -88,6 +88,8 @@ Item {
     text: value || ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
+    onLinkActivated: Qt.openUrlExternally(link)
+
     background: Rectangle {
         color: customStyle.fields.backgroundColor
         radius: customStyle.fields.cornerRadius
