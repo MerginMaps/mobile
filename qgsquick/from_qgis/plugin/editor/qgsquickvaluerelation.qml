@@ -185,11 +185,11 @@ Item {
       Image {
         id: rightArrow
         source: QgsQuick.Utils.getThemeIcon("ic_angle_right")
-        width: 15
+        height: parent.height * 0.5
+        width: height / 2
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: 15
         anchors.verticalCenter: parent.verticalCenter
-        height: 30
         smooth: true
         visible: false
       }
