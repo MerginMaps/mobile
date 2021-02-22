@@ -28,11 +28,10 @@ Item {
 
   id: fieldItem
   enabled: !readOnly
-  height: childrenRect.height
+  height: Math.max(textField.height, textArea.height)
   anchors {
     left: parent.left
     right: parent.right
-    rightMargin: 10 * QgsQuick.Utils.dp
   }
 
   TextField {
@@ -43,7 +42,7 @@ Item {
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
-    font.pixelSize: customStyle.fields.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
 
     text: value || ''
@@ -82,7 +81,7 @@ Item {
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
-    font.pixelSize: customStyle.fields.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     wrapMode: Text.Wrap
     color: customStyle.fields.fontColor
     text: value || ''

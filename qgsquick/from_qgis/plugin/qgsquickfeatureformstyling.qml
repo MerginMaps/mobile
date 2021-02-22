@@ -20,6 +20,7 @@ import QgsQuick 0.1 as QgsQuick
 QtObject {
   property color backgroundColor: "white"
   property real backgroundOpacity: 1
+  property real titleLabelPointSize: 16
 
   property QtObject group: QtObject {
     property color backgroundColor: "lightGray"
@@ -45,6 +46,7 @@ QtObject {
     property real height: 48 * QgsQuick.Utils.dp
     property real buttonHeight: height * 0.8
     property real spacing: 0
+    property int tabLabelPointSize: 14
   }
 
   property QtObject constraint: QtObject {
@@ -70,7 +72,10 @@ QtObject {
       property real height: 48 * QgsQuick.Utils.dp
       property real cornerRadius: 0 * QgsQuick.Utils.dp
       property int fontPixelSize: 48 * QgsQuick.Utils.dp
-
+      property real sideMargin: 12 * QgsQuick.Utils.dp // left or right margin for a field's content
+      property real outerMargin: 20 * QgsQuick.Utils.dp // left or right margin for a whole field component
+      property int fontPointSize: 16
+      property int labelPointSize: 14
     }
 
   property QtObject icons: QtObject {

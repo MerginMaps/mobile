@@ -35,7 +35,6 @@ Item {
   anchors {
     right: parent.right
     left: parent.left
-    rightMargin: 10 * QgsQuick.Utils.dp
   }
 
   function getConfigValue(configValue, defaultValue) {
@@ -53,13 +52,13 @@ Item {
 
     Text {
       text: checkBox.checked ? fieldItem.checkedState : fieldItem.uncheckedState
-      font.pixelSize: customStyle.fields.fontPixelSize
+      font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
-      leftPadding: 6 * QgsQuick.Utils.dp
+      leftPadding: customStyle.fields.sideMargin
     }
 
     CheckBox {
@@ -67,8 +66,8 @@ Item {
       height: customStyle.fields.height/2
       width: height * 2
       anchors.right: parent.right
-      anchors.rightMargin: fieldItem.anchors.rightMargin
       anchors.verticalCenter: parent.verticalCenter
+      anchors.rightMargin: customStyle.fields.sideMargin
       id: checkBox
       leftPadding: 0
       checked: value === fieldItem.checkedState

@@ -44,7 +44,6 @@ Item {
   anchors {
     left: parent.left
     right: parent.right
-    rightMargin: 10 * QgsQuick.Utils.dp
   }
 
   onCurrentFeatureLayerPairChanged: {
@@ -169,7 +168,7 @@ Item {
       id: textField
       anchors.fill: parent
       readOnly: true
-      font.pixelSize: customStyle.fields.fontPixelSize
+      font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
       topPadding: 10 * QgsQuick.Utils.dp
       bottomPadding: 10 * QgsQuick.Utils.dp

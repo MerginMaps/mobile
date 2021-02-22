@@ -25,6 +25,7 @@ QtObject {
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
+    property color labelColor: "#999999"
 
     property color highlightColor: "#FD9626"
     property color softRed: "#FC9FB1"

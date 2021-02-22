@@ -47,20 +47,20 @@ ComboBox {
     height: comboBox.height * 0.8
     text: model.display
     font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
-    font.pixelSize: comboStyle.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     highlighted: comboBox.highlightedIndex === index
-    leftPadding: 5 * QgsQuick.Utils.dp
+    leftPadding: customStyle.fields.sideMargin
     onClicked: comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
   }
 
   contentItem: Text {
     height: comboBox.height * 0.8
     text: comboBox.displayText
-    font.pixelSize: comboStyle.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
-    leftPadding: 5 * QgsQuick.Utils.dp
+    leftPadding: customStyle.fields.sideMargin
     color: comboStyle.fontColor
   }
 
