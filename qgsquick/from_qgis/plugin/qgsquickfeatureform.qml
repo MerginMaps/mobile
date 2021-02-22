@@ -280,7 +280,6 @@ Item {
               color: !tabButton.enabled ? form.style.tabs.disabledColor : tabButton.down ||
                                           tabButton.checked ? form.style.tabs.activeColor : form.style.tabs.normalColor
               font.weight: tabButton.checked ? Font.DemiBold : Font.Normal
-              font.pointSize: form.style.tabs.tabLabelPointSize
 
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -429,7 +428,7 @@ Item {
           }
 
           text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
-          visible: !ConstraintHardValid || !ConstraintSoftValid
+          visible: (!ConstraintHardValid || !ConstraintSoftValid) && !!ConstraintDescription
           height: visible ? undefined : 0
           wrapMode: Text.WordWrap
           color: form.style.constraint.descriptionColor
