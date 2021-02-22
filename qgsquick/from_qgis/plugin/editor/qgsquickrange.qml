@@ -111,7 +111,7 @@ Item {
       contentItem: TextInput {
         z: 2
         text: spinbox.textFromValue(spinbox.value, spinbox.locale)
-        font.pixelSize: customStyle.fields.fontPixelSize
+        font.pointSize: customStyle.fields.fontPointSize
         color: customStyle.fields.fontColor
         selectionColor: customStyle.fields.fontColor
         selectedTextColor: "#ffffff"
@@ -141,7 +141,7 @@ Item {
       text: Number(slider.value).toFixed(precision).toLocaleString(fieldItem.locale) + fieldItem.suffix
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: Text.AlignLeft
-      font.pixelSize: customStyle.fields.fontPixelSize
+      font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
       padding: 10 * QgsQuick.Utils.dp
       leftPadding: customStyle.fields.sideMargin

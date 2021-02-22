@@ -20,6 +20,7 @@ import QgsQuick 0.1 as QgsQuick
 QtObject {
   property color backgroundColor: "white"
   property real backgroundOpacity: 1
+  property real titleLabelPointSize: 16
 
   property QtObject group: QtObject {
     property color backgroundColor: "lightGray"
@@ -45,6 +46,7 @@ QtObject {
     property real height: 48 * QgsQuick.Utils.dp
     property real buttonHeight: height * 0.8
     property real spacing: 0
+    property int tabLabelPointSize: 14
   }
 
   property QtObject constraint: QtObject {

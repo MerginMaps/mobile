@@ -52,7 +52,7 @@ Item {
 
     Text {
       text: checkBox.checked ? fieldItem.checkedState : fieldItem.uncheckedState
-      font.pixelSize: customStyle.fields.fontPixelSize
+      font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter

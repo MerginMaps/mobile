@@ -66,7 +66,7 @@ Item {
 
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
-                font.pixelSize: customStyle.fields.fontPixelSize
+                font.pointSize: customStyle.fields.fontPointSize
                 color: customStyle.fields.fontColor
                 padding: 0
                 topPadding: 10 * QgsQuick.Utils.dp

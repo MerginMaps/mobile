@@ -174,6 +174,7 @@ Drawer {
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
+                property real titleLabelPointSize: 16
 
                 property QtObject group: QtObject {
                   property color backgroundColor: InputStyle.panelBackgroundLight
@@ -199,6 +200,7 @@ Drawer {
                   property real height: 48 * QgsQuick.Utils.dp
                   property real buttonHeight: height * 0.8
                   property real spacing: 5 * QgsQuick.Utils.dp
+                  property int tabLabelPointSize: 12
                 }
 
                 property QtObject constraint: QtObject {
@@ -224,7 +226,7 @@ Drawer {
                     property real cornerRadius: 8 * QgsQuick.Utils.dp
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
-                    property real sideMargin: 12 * QgsQuick.Utils.dp
+                    property real sideMargin: 10 * QgsQuick.Utils.dp
                     property real outerMargin: 20 * QgsQuick.Utils.dp
                     property int fontPointSize: 15
                     property int labelPointSize: 12

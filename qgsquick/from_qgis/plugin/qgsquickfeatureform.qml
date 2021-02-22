@@ -280,6 +280,7 @@ Item {
               color: !tabButton.enabled ? form.style.tabs.disabledColor : tabButton.down ||
                                           tabButton.checked ? form.style.tabs.activeColor : form.style.tabs.normalColor
               font.weight: tabButton.checked ? Font.DemiBold : Font.Normal
+              font.pointSize: form.style.tabs.tabLabelPointSize
 
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -631,7 +632,7 @@ Item {
             qsTr( 'View feature on <i>%1</i>' ).arg(layerName)
         }
         font.bold: true
-        font.pointSize:form.style.fields.fontPointSize
+        font.pointSize:form.style.titleLabelPointSize
         elide: Label.ElideRight
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter

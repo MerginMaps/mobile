@@ -42,7 +42,7 @@ Item {
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
-    font.pixelSize: customStyle.fields.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
 
     text: value || ''
@@ -81,7 +81,7 @@ Item {
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
-    font.pixelSize: customStyle.fields.fontPixelSize
+    font.pointSize: customStyle.fields.fontPointSize
     wrapMode: Text.Wrap
     color: customStyle.fields.fontColor
     text: value || ''
