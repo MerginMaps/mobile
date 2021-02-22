@@ -26,6 +26,7 @@ ComboBox {
   id: comboBox
 
   property var comboStyle
+  property bool readOnly: false
   signal itemClicked( var index )
   anchors { left: parent.left; right: parent.right }
 
@@ -97,7 +98,7 @@ ComboBox {
     ColorOverlay {
       anchors.fill: comboboxIndicatorIcon
       source: comboboxIndicatorIcon
-      color: isReadOnly ? customStyle.toolbutton.backgroundColorInvalid : customStyle.toolbutton.activeButtonColor
+      color: readOnly ? customStyle.toolbutton.backgroundColorInvalid : customStyle.toolbutton.activeButtonColor
     }
   }
 }
