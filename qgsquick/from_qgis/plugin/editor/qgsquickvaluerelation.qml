@@ -185,7 +185,7 @@ Item {
       Image {
         id: rightArrow
         source: QgsQuick.Utils.getThemeIcon("ic_angle_right")
-        height: parent.height * 0.5
+        height: parent.height * 0.4
         width: height / 2
         anchors.right: parent.right
         anchors.rightMargin: 15

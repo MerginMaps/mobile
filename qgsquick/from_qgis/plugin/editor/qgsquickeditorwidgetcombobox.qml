@@ -86,7 +86,7 @@ ComboBox {
     Image {
       id: comboboxIndicatorIcon
       source: QgsQuick.Utils.getThemeIcon("ic_angle_double_down")
-      height: parent.height * 0.5
+      height: parent.height * 0.4
       width: height
       anchors.right: parent.right
       anchors.rightMargin: 10
