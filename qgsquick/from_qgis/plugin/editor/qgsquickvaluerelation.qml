@@ -215,6 +215,7 @@ Item {
     comboStyle: customStyle.fields
     textRole: 'FeatureTitle'
     height: parent.height
+    readOnly: isReadOnly
     model: vrModel
 
     Component.onCompleted: {

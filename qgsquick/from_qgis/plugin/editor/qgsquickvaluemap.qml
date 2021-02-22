@@ -25,6 +25,7 @@ import QgsQuick 0.1 as QgsQuick
  */
 Item {
   signal valueChanged(var value, bool isNull)
+  property bool isReadOnly: readOnly
 
   id: fieldItem
   enabled: !readOnly
@@ -42,6 +43,7 @@ Item {
     comboStyle: customStyle.fields
     textRole: 'display'
     height: parent.height
+    readOnly: isReadOnly
     model: ListModel {
       id: listModel
     }
