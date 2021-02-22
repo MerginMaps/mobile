@@ -78,4 +78,26 @@ ComboBox {
     }
   }
   // [/hidpi fixes]
+
+  indicator: Item {
+    anchors.fill: parent
+
+    Image {
+      id: comboboxIndicatorIcon
+      source: QgsQuick.Utils.getThemeIcon("ic_angle_double_down")
+      height: parent.height * 0.5
+      width: height
+      anchors.right: parent.right
+      anchors.rightMargin: 10
+      anchors.verticalCenter: parent.verticalCenter
+      fillMode: Image.PreserveAspectFit
+      visible: false
+    }
+
+    ColorOverlay {
+      anchors.fill: comboboxIndicatorIcon
+      source: comboboxIndicatorIcon
+      color: isReadOnly ? customStyle.toolbutton.backgroundColorInvalid : customStyle.toolbutton.activeButtonColor
+    }
+  }
 }
