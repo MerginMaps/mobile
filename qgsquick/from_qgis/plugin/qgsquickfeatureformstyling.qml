@@ -72,8 +72,8 @@ QtObject {
       property real height: 48 * QgsQuick.Utils.dp
       property real cornerRadius: 0 * QgsQuick.Utils.dp
       property int fontPixelSize: 48 * QgsQuick.Utils.dp
-      property real sideMargin: 12 * QgsQuick.Utils.dp
-      property real outerlMargin: 20 * QgsQuick.Utils.dp
+      property real sideMargin: 12 * QgsQuick.Utils.dp // left or right margin for a field's content
+      property real outerMargin: 20 * QgsQuick.Utils.dp // left or right margin for a whole field component
       property int fontPointSize: 16
       property int labelPointSize: 14
     }

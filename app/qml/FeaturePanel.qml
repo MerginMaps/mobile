@@ -204,7 +204,7 @@ Drawer {
                 }
 
                 property QtObject constraint: QtObject {
-                  property color validColor: InputStyle.panelBackgroundDarker
+                  property color validColor: InputStyle.labelColor
                   property color invalidColor: "#c0392b"
                   property color descriptionColor: "#e67e22"
                 }
