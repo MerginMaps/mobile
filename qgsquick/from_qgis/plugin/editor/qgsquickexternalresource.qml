@@ -140,7 +140,6 @@ Item {
   anchors {
     left: parent.left
     right: parent.right
-    rightMargin: 10 * QgsQuick.Utils.dp
   }
 
   states: [

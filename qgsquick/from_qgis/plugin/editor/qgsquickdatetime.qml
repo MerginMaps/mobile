@@ -35,7 +35,6 @@ Item {
     anchors {
       left: parent.left
       right: parent.right
-      rightMargin: 10 * QgsQuick.Utils.dp
     }
 
     property var timeToString: function timeToString(attrValue) {
@@ -141,7 +140,7 @@ Item {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 visible: fieldItem.enabled
-                anchors.rightMargin: fieldItem.anchors.rightMargin
+                anchors.rightMargin: customStyle.fields.sideMargin
 
                 MouseArea {
                     anchors.fill: parent

@@ -21,7 +21,6 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   signal valueChanged(var value, bool isNull)
 
-  property real customMargin: 10 * QgsQuick.Utils.dp
   property string widgetStyle: config["Style"] ? config["Style"] : "SpinBox"
   property int precision: config["Precision"]
   property real from: config["Min"]
@@ -37,7 +36,6 @@ Item {
   anchors {
     left: parent.left
     right: parent.right
-    rightMargin: fieldItem.customMargin
   }
 
   // background
@@ -145,7 +143,7 @@ Item {
       horizontalAlignment: Text.AlignLeft
       font.pixelSize: customStyle.fields.fontPixelSize
       color: customStyle.fields.fontColor
-      padding: fieldItem.customMargin
+      padding: 10 * QgsQuick.Utils.dp
       leftPadding: customStyle.fields.sideMargin
     }
 

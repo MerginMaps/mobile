@@ -184,7 +184,7 @@ Drawer {
                   property real bottomMargin: 1 * QgsQuick.Utils.dp
                   property real height: 64 * QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
-                  property int spacing: 10 * QgsQuick.Utils.dp
+                  property int spacing: 0
                   property int fontPixelSize: 24 * QgsQuick.Utils.dp
                 }
 
@@ -225,6 +225,9 @@ Drawer {
                     property real height: 54 * QgsQuick.Utils.dp
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
                     property real sideMargin: 12 * QgsQuick.Utils.dp
+                    property real outerMargin: 20 * QgsQuick.Utils.dp
+                    property int fontPointSize: 15
+                    property int labelPointSize: 12
                   }
 
                 property QtObject icons: QtObject {

@@ -391,38 +391,57 @@ Item {
       anchors {
         left: parent.left
         right: parent.right
-        leftMargin: form.style.fields.sideMargin
+        leftMargin: form.style.fields.outerMargin
+        rightMargin: form.style.fields.outerMargin
       }
 
-      Label {
-        id: fieldLabel
-
-        text: Name ? qsTr(Name) : ''
-        color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
-        leftPadding: form.style.fields.sideMargin
-        font.pointSize: 14 // TODO
-      }
-
-      Label {
-        id: constraintDescriptionLabel
+      Item {
+        id: labelPlaceholder
+        height: fieldLabel.height + constraintDescriptionLabel.height + 2 * form.style.fields.sideMargin
         anchors {
           left: parent.left
           right: parent.right
-          top: fieldLabel.bottom
-          leftMargin: form.style.fields.sideMargin
+          topMargin: form.style.fields.sideMargin
+          bottomMargin: form.style.fields.sideMargin
         }
 
-        text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
-        visible: !ConstraintHardValid || !ConstraintSoftValid
-        height: visible ? undefined : 0
-        wrapMode: Text.WordWrap
-        color: form.style.constraint.descriptionColor
+        Label {
+          id: fieldLabel
+
+          text: Name ? qsTr(Name) : ''
+          color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
+          leftPadding: form.style.fields.sideMargin
+          font.pointSize: form.style.fields.labelPointSize
+          horizontalAlignment: Text.AlignLeft
+          verticalAlignment: Text.AlignVCenter
+          anchors.topMargin: form.style.fields.sideMargin
+          anchors.top: parent.top
+        }
+
+        Label {
+          id: constraintDescriptionLabel
+          anchors {
+            left: parent.left
+            right: parent.right
+            top: fieldLabel.bottom
+            leftMargin: form.style.fields.sideMargin
+          }
+
+          text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
+          visible: !ConstraintHardValid || !ConstraintSoftValid
+          height: visible ? undefined : 0
+          wrapMode: Text.WordWrap
+          color: form.style.constraint.descriptionColor
+          horizontalAlignment: Text.AlignLeft
+          verticalAlignment: Text.AlignVCenter
+        }
+
       }
 
       Item {
         id: placeholder
         height: childrenRect.height
-        anchors { left: parent.left; right: rememberCheckboxContainer.left; top: constraintDescriptionLabel.bottom }
+        anchors { left: parent.left; right: rememberCheckboxContainer.left; top: labelPlaceholder.bottom }
 
         Loader {
           id: attributeEditorLoader
@@ -503,7 +522,7 @@ Item {
         implicitHeight: placeholder.height
 
         anchors {
-          top: constraintDescriptionLabel.bottom
+          top: labelPlaceholder.bottom
           right: parent.right
         }
 
@@ -612,7 +631,7 @@ Item {
             qsTr( 'View feature on <i>%1</i>' ).arg(layerName)
         }
         font.bold: true
-        font.pointSize: 16
+        font.pointSize:form.style.fields.fontPointSize
         elide: Label.ElideRight
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
