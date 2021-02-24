@@ -104,6 +104,27 @@ bool AndroidUtils::requestStoragePermission()
   return true;
 }
 
+bool AndroidUtils::requestCameraPermission()
+{
+#ifdef ANDROID
+
+  if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
+  {
+    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.CAMERA" ) )
+    {
+      // permanently denied permission, user needs to go to settings to allow permission
+      showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
+    }
+    else
+    {
+      showToast( tr( "We need a camera permission in order to take a photo" ) );
+    }
+    return false;
+  }
+#endif
+  return true;
+}
+
 void AndroidUtils::callImagePicker()
 {
 #ifdef ANDROID
@@ -124,17 +145,8 @@ void AndroidUtils::callCamera( const QString &targetPath )
 {
 #ifdef ANDROID
 
-  if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
+  if ( !requestCameraPermission() )
   {
-    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.CAMERA" ) )
-    {
-      // permanently denied permission, user needs to go to settings to allow permission
-      showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
-    }
-    else
-    {
-      showToast( tr( "We need a camera permission in order to take a photo" ) );
-    }
     return;
   }
 

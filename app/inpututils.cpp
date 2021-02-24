@@ -340,6 +340,15 @@ bool InputUtils::acquireStoragePermission()
   return true;
 }
 
+bool InputUtils::acquireCameraPermission()
+{
+  if ( appPlatform() == QStringLiteral( "android" ) )
+  {
+    return mAndroidUtils->requestCameraPermission();
+  }
+  return true;
+}
+
 void InputUtils::quitApp()
 {
   QCoreApplication::quit();
