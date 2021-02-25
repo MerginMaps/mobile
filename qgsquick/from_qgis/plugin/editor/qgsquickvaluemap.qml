@@ -44,6 +44,7 @@ Item {
     textRole: 'display'
     height: parent.height
     readOnly: isReadOnly
+    iconSize: fieldItem.height * 0.50
     model: ListModel {
       id: listModel
     }

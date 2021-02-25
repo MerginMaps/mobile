@@ -27,7 +27,9 @@ ComboBox {
 
   property var comboStyle
   property bool readOnly: false
+  property real iconSize
   signal itemClicked( var index )
+
   anchors { left: parent.left; right: parent.right }
 
   MouseArea {
@@ -85,13 +87,14 @@ ComboBox {
 
     Image {
       id: comboboxIndicatorIcon
-      source: QgsQuick.Utils.getThemeIcon("ic_angle_double_down")
-      height: parent.height * 0.4
-      width: height
+      source: customStyle.icons.combobox
+      height: iconSize ? iconSize : parent.height * 0.4
+      width: height / 2
       anchors.right: parent.right
-      anchors.rightMargin: 10
+      anchors.rightMargin: customStyle.fields.sideMargin
       anchors.verticalCenter: parent.verticalCenter
       fillMode: Image.PreserveAspectFit
+      autoTransform: true
       visible: false
     }
 

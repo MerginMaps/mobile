@@ -32,6 +32,7 @@ Item {
   property var currentFeatureLayerPair: featurePair
   property string widgetType: ""
   property bool isReadOnly: readOnly
+  property real iconSize: fieldItem.height * 0.50
 
   property var model: QgsQuick.FeaturesListModel {
     id: vrModel
@@ -184,11 +185,12 @@ Item {
 
       Image {
         id: rightArrow
-        source: QgsQuick.Utils.getThemeIcon("ic_angle_right")
-        height: parent.height * 0.4
+        source: customStyle.icons.valueRelationMore
+        height: fieldItem.iconSize
+        sourceSize.height: fieldItem.iconSize
         width: height / 2
         anchors.right: parent.right
-        anchors.rightMargin: 15
+        anchors.rightMargin: customStyle.fields.sideMargin
         anchors.verticalCenter: parent.verticalCenter
         smooth: true
         visible: false
@@ -216,6 +218,7 @@ Item {
     textRole: 'FeatureTitle'
     height: parent.height
     readOnly: isReadOnly
+    iconSize: fieldItem.iconSize
     model: vrModel
 
     Component.onCompleted: {

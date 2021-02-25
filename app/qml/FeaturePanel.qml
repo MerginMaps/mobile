@@ -212,7 +212,7 @@ Drawer {
                 property QtObject toolbutton: QtObject {
                   property color backgroundColor: "transparent"
                   property color backgroundColorInvalid: "#bdc3c7"
-                  property color activeButtonColor: InputStyle.panelBackgroundDarker
+                  property color activeButtonColor: InputStyle.activeButtonColor
                   property real size: 80 * QgsQuick.Utils.dp
                 }
 
@@ -240,6 +240,8 @@ Drawer {
                   property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
                   property var today: QgsQuick.Utils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
+                  property var combobox: InputStyle.comboboxIcon
+                  property var valueRelationMore: InputStyle.valueRelationIcon
                 }
 
               property QtObject checkboxComponent: QtObject {

@@ -155,7 +155,7 @@ Item {
             ColorOverlay {
                 anchors.fill: todayBtn
                 source: todayBtn
-                color: customStyle.fields.fontColor
+                color: customStyle.toolbutton.activeButtonColor
                 visible: todayBtn.visible
             }
         }
