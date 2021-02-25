@@ -8,7 +8,8 @@
 #include "qrdecoder.h"
 
 /*!
- * \brief Filter used to capture QR code from camera
+ * Used to process a video output from QML Camera by using QRDecoder.
+ * A part of the filter is QVideoFilterRunnable that is resposible for actual processing. The result of proceseed image is parsed QR Code content.
  */
 class CodeFilter : public QAbstractVideoFilter
 {

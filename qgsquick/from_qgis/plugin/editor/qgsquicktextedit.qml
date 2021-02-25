@@ -43,6 +43,7 @@ Item {
     height: textArea.height == 0 ? customStyle.fields.height : 0
     topPadding: 10 * QgsQuick.Utils.dp
     bottomPadding: 10 * QgsQuick.Utils.dp
+    rightPadding: textField.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
@@ -84,6 +85,7 @@ Item {
     height: config['IsMultiline'] === true ? undefined : 0
     topPadding: customStyle.fields.height * 0.25
     bottomPadding: customStyle.fields.height * 0.25
+    rightPadding: textArea.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
@@ -113,6 +115,7 @@ Item {
       visible: supportDataImport
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
+      anchors.rightMargin: customStyle.fields.sideMargin
 
       property int borderWidth: 50 * QgsQuick.Utils.dp
       width: fieldItem.iconSize
