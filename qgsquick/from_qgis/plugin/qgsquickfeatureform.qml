@@ -222,6 +222,10 @@ Item {
     saved()
   }
 
+  function hasAnyChanges() {
+    return form.model.attributeModel.hasAnyChanges()
+  }
+
   /**
     * Forward change about remembering values to model
     */
