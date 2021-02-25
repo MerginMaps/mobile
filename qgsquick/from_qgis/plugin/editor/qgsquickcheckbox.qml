@@ -13,7 +13,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QgsQuick 0.1 as QgsQuick
 
@@ -23,24 +23,26 @@ import QgsQuick 0.1 as QgsQuick
  * Do not use directly from Application QML
  */
 Item {
-  signal valueChanged( var value, bool isNull )
+  id: fieldItem
 
   property var checkedState: getConfigValue(config['CheckedState'], true)
   property var uncheckedState: getConfigValue(config['UncheckedState'], false)
   property string booleanEnum: "1" // QMetaType::Bool Enum of Qvariant::Type
+  property bool isReadOnly: readOnly
 
-  id: fieldItem
-  enabled: !readOnly
-  height: childrenRect.height
-  anchors {
-    right: parent.right
-    left: parent.left
-  }
+  signal valueChanged( var value, bool isNull )
 
   function getConfigValue(configValue, defaultValue) {
     if (!configValue && field.type + "" === fieldItem.booleanEnum) {
       return defaultValue
     } else return configValue
+  }
+
+  enabled: !readOnly
+  height: childrenRect.height
+  anchors {
+    right: parent.right
+    left: parent.left
   }
 
   Rectangle {
@@ -51,7 +53,7 @@ Item {
     anchors { right: parent.right; left: parent.left }
 
     Text {
-      text: checkBox.checked ? fieldItem.checkedState : fieldItem.uncheckedState
+      text: switchComp.checked ? fieldItem.checkedState : fieldItem.uncheckedState
       font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
       horizontalAlignment: Text.AlignLeft
@@ -61,44 +63,31 @@ Item {
       leftPadding: customStyle.fields.sideMargin
     }
 
-    CheckBox {
+    QgsQuick.SwitchComponent {
+      id: switchComp
+
       property var currentValue: value
-      height: customStyle.fields.height/2
-      width: height * 2
+
+      isReadOnly: fieldItem.isReadOnly
+      bgndColorActive: customStyle.toolbutton.activeButtonColor
+      bgndColorInactive: customStyle.toolbutton.backgroundColorInvalid
+
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: customStyle.fields.sideMargin
-      id: checkBox
-      leftPadding: 0
+
+      implicitHeight: fieldContainer.height * 0.6
+      implicitWidth: 2 * height
+
       checked: value === fieldItem.checkedState
 
-      indicator: Rectangle {
-        implicitWidth: parent.width
-        implicitHeight: parent.height
-        x: checkBox.leftPadding
-        y: parent.height / 2 - height / 2
-        radius: parent.height/2
-        color: checkBox.checked ? customStyle.fields.fontColor : "#ffffff"
-        border.color: checkBox.checked ? customStyle.fields.fontColor : customStyle.fields.normalColor
-
-        Rectangle {
-          x: checkBox.checked ? parent.width - width : 0
-          width: parent.height
-          height: parent.height
-          radius: parent.height/2
-          color: "#ffffff"
-          border.color: checkBox.checked ? customStyle.fields.fontColor : customStyle.fields.normalColor
-        }
-      }
-
-      onCheckedChanged: {
-        valueChanged( checked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
-        forceActiveFocus()
+      onSwitchChecked: {
+        valueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
       }
 
       // Workaround to get a signal when the value has changed
       onCurrentValueChanged: {
-        checked = currentValue === fieldItem.checkedState
+        switchComp.checked = currentValue === fieldItem.checkedState
       }
     }
   }
