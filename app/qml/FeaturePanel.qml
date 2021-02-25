@@ -38,6 +38,14 @@ Drawer {
       attributeModel.forceClean();
     }
 
+    function onAboutToClose() {
+      if (featureForm.hasAnyChanges())  {
+        saveChangesDialog.open()
+      } else {
+        featurePanel.visible = false
+      }
+    }
+
     id: featurePanel
     visible: false
     modal: false
@@ -55,7 +63,7 @@ Drawer {
       focus: true
       Keys.onReleased: {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          featurePanel.close()
+          featurePanel.onAboutToClose()
         }
       }
     }
@@ -134,10 +142,36 @@ Drawer {
             height: InputStyle.rowHeightHeader
             width: parent.width
             color: InputStyle.clrPanelMain
+            fontBtnColor: InputStyle.highlightColor
             rowHeight: InputStyle.rowHeightHeader
             titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
+            backIconVisible: false
+            backText: qsTr("Cancel")
 
-            onBack: featurePanel.visible = false
+            onBack: {
+              featurePanel.close()
+            }
+
+            Text {
+                id: saveButtonText
+                text: qsTr("Save")
+                enabled: featureForm.model.constraintsHardValid
+                color: enabled ? InputStyle.highlightColor : "red"
+                font.pixelSize: InputStyle.fontPixelSizeNormal
+                height: header.rowHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.top: parent.top
+                anchors.rightMargin: InputStyle.panelMargin // same as back button
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: featureForm.save()
+                }
+            }
+
         }
 
         // TODO currently disabled since supporting photos is not yet implemented
@@ -279,10 +313,8 @@ Drawer {
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
             isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
-            saveBtnEnabled: featureForm.model.constraintsHardValid
 
             onEditClicked: featureForm.state = "Edit"
-            onSaveClicked: featureForm.save()
             onDeleteClicked: deleteDialog.visible = true
             onEditGeometryClicked: {
                 featurePanel.editGeometryClicked()
@@ -308,6 +340,29 @@ Drawer {
               else if (clickedButton === StandardButton.Cancel) {
                 visible = false
               }
+          }
+        }
+
+        MessageDialog {
+          id: saveChangesDialog
+          visible: false
+          title: qsTr( "Uncommited changes" )
+          text: qsTr( "Do you want to save changes?" )
+          icon: StandardIcon.Warning
+          standardButtons: StandardButton.Ok | StandardButton.No | StandardButton.Cancel
+
+          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+          onButtonClicked: {
+              if (clickedButton === StandardButton.Ok) {
+                featureForm.save()
+              }
+              else if (clickedButton === StandardButton.No) {
+                featureForm.canceled()
+              }
+              else if (clickedButton === StandardButton.Cancel) {
+                // Do nothing
+              }
+              visible = false
           }
         }
     }

@@ -112,6 +112,9 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Adds feature from featureLayerPair to the layer
     Q_INVOKABLE void create();
 
+    //! Returns true if a current feature is new or has uncomitted attribute changes. Geometry change is omitted.
+    Q_INVOKABLE bool hasAnyChanges();
+
     /**
      * Suppress layer's QgsEditFormConfig
      *

@@ -18,6 +18,7 @@
 #include "qgsvectorlayer.h"
 
 #include "qgsquickattributemodel.h"
+#include "qgsvectorlayereditbuffer.h"
 
 QgsQuickAttributeModel::QgsQuickAttributeModel( QObject *parent )
   : QAbstractListModel( parent )
@@ -348,6 +349,11 @@ void QgsQuickAttributeModel::create()
   commit();
 
   emit featureCreated( mFeatureLayerPair.featureRef() );
+}
+
+bool QgsQuickAttributeModel::hasAnyChanges()
+{
+  return mFeatureLayerPair.feature().id() < 0 || mFeatureLayerPair.layer()->editBuffer()->isFeatureAttributesChanged( mFeatureLayerPair.feature().id() );
 }
 
 bool QgsQuickAttributeModel::commit()
