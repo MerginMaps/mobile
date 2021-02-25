@@ -7,11 +7,16 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick 2.7
+import QtQuick.Controls 2.7
+import "."  // import InputStyle singleton
 
 Item {
 
   property alias handler: codeReaderHandler
   signal invokeQrScanner()
+
+  id: codeReaderBundle
+  anchors.fill: parent
 
   QtObject {
     id: codeReaderHandler
@@ -38,7 +43,16 @@ Item {
      */
     property var importData: function importData(itemWidget) {
       codeReaderHandler.itemWidget = itemWidget
-      invokeQrScanner()
+
+      if (!codeReaderLoader.active) {
+        if (__inputUtils.acquireCameraPermission())
+          codeReaderLoader.active = true
+        else {
+          return
+        }
+      }
+
+      codeReaderLoader.item.visible = true
     }
 
     /**
@@ -47,6 +61,27 @@ Item {
      */
     property var setValue: function setValue(value) {
       codeReaderHandler.itemWidget.valueChanged(value, value === "" || value === null)
+    }
+  }
+
+
+  Loader {
+    id: codeReaderLoader
+    sourceComponent: cameraComponent
+    active: false
+  }
+
+  Component {
+    id: cameraComponent
+    CodeReader {
+      id: codeReader
+      width: codeReaderBundle.width
+      height: codeReaderBundle.height
+
+      visible: false
+      onScanFinished: {
+        codeReaderHandler.setValue(value)
+      }
     }
   }
 }

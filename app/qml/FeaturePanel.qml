@@ -330,37 +330,6 @@ Drawer {
 
     CodeReaderHandler {
       id: codeReaderHandler
-      onInvokeQrScanner: {
-        if (!codeReaderLoader.active) {
-          if (__inputUtils.acquireCameraPermission())
-            codeReaderLoader.active = true
-          else {
-            return
-          }
-        }
-
-        codeReaderLoader.item.visible = true
-      }
     }
-
-    Loader {
-      id: codeReaderLoader
-      sourceComponent: cameraComponent
-      active: false
-    }
-
-    Component {
-      id: cameraComponent
-      CodeReader {
-        id: codeReader
-        width: featurePanel.width
-        height: featurePanel.height
-        visible: false
-        onScanFinished: {
-          codeReaderHandler.handler.setValue(value)
-        }
-      }
-    }
-
 
 }
