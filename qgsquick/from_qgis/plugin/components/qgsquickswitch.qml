@@ -20,9 +20,9 @@ T.Switch {
           let actualPosition = control.visualPosition * (control.width - width)
 
           if ( control.checked ) // limit maximum position
-            return Math.min( actualPosition, actualPosition - 10 * QgsQuick.Utils.dp )
+            return Math.min( actualPosition, control.width * 0.55 )
           else // limit minimum position
-            return Math.max( actualPosition, 10 * QgsQuick.Utils.dp )
+            return Math.max( actualPosition, control.width * 0.13 )
         }
         y: (control.height - height) / 2
         height: parent.height * 0.66

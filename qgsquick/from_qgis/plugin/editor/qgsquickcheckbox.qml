@@ -52,6 +52,11 @@ Item {
     radius: customStyle.fields.cornerRadius
     anchors { right: parent.right; left: parent.left }
 
+    MouseArea {
+      anchors.fill: parent
+      onClicked: switchComp.toggle()
+    }
+
     Text {
       text: switchComp.checked ? fieldItem.checkedState : fieldItem.uncheckedState
       font.pointSize: customStyle.fields.fontPointSize
@@ -77,7 +82,6 @@ Item {
       anchors.rightMargin: customStyle.fields.sideMargin
 
       implicitHeight: fieldContainer.height * 0.6
-      implicitWidth: 2 * height
 
       checked: value === fieldItem.checkedState
 
