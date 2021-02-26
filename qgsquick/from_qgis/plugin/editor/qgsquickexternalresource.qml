@@ -242,7 +242,7 @@ Item {
   }
 
   Item {
-    property real itemHeight: fieldItem.height * 0.25
+    property real itemHeight: fieldItem.height * 0.2
 
     id: buttonsContainer
     anchors.centerIn: imageContainer
@@ -293,7 +293,7 @@ Item {
 
           height: parent.height
           color: customStyle.fields.fontColor
-          width: 3 * QgsQuick.Utils.dp
+          width: 1.5 * QgsQuick.Utils.dp
           anchors.centerIn: parent
         }
       }
