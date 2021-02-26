@@ -523,7 +523,7 @@ Item {
         id: rememberCheckboxContainer
         visible: form.allowRememberAttribute && form.state === "Add" && EditorWidget !== "Hidden"
 
-        implicitWidth: visible ? 40 * QgsQuick.Utils.dp : 0
+        implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height
 
         anchors {
@@ -538,8 +538,8 @@ Item {
 
           implicitWidth: 40 * QgsQuick.Utils.dp
           implicitHeight: width
-          x: -5 // hack to get over placeholder spacing
           y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
+          x: (parent.width + form.style.fields.outerMargin) / 7
 
           onCheckboxClicked: RememberValue = buttonState
           checked: RememberValue ? true : false
