@@ -173,6 +173,7 @@ Item {
       color: customStyle.fields.fontColor
       topPadding: 10 * QgsQuick.Utils.dp
       bottomPadding: 10 * QgsQuick.Utils.dp
+      leftPadding: customStyle.fields.sideMargin
 
       MouseArea {
         anchors.fill: parent
