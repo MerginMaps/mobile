@@ -371,6 +371,11 @@ Item {
             }
 
             delegate: fieldItem
+
+            footer: Rectangle {
+              opacity: 1
+              height: 15 * QgsQuick.Utils.dp
+            }
           }
         }
       }
