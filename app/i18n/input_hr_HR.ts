@@ -155,7 +155,7 @@
     <message>
         <location filename="../qml/BrowseDataToolbar.qml" line="67"/>
         <source>Done</source>
-        <translation>Gotovo</translation>
+        <translation>Završi</translation>
     </message>
 </context>
 <context>
@@ -867,7 +867,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/RecordToolbar.qml" line="182"/>
         <source>Done</source>
-        <translation>Gotovo</translation>
+        <translation>Završi</translation>
     </message>
     <message>
         <location filename="../qml/RecordToolbar.qml" line="196"/>
@@ -931,12 +931,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="107"/>
         <source>GPS accuracy</source>
-        <translation>GPS točnost</translation>
+        <translation>GPS preciznost</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="162"/>
         <source>Accuracy threshold</source>
-        <translation>Prag točnosti</translation>
+        <translation>Prag preciznosti</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="180"/>
