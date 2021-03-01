@@ -48,7 +48,6 @@ Drawer {
       color: InputStyle.panelBackgroundLight
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Choose Active Layer")
-      backTextVisible: false
       onBack: layerPanel.close()
       withBackButton: true
       layer.enabled: true

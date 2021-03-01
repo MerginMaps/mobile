@@ -17,9 +17,9 @@ Rectangle {
 
     property real rowHeight
     property string titleText: ""
-    property string backText: qsTr("Back")
+    property string backText: qsTr("Cancel")
     property bool withBackButton: true
-    property bool backTextVisible: true
+    property bool backTextVisible: false
     property bool backIconVisible: true
     property color fontBtnColor: InputStyle.fontColorBright
 
@@ -69,7 +69,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             anchors.leftMargin: backIconVisible ? header.rowHeight/4 : 0
-            visible: ((title.contentWidth + backButton.width * 2) > header.width) || !backTextVisible ? false : true
+            visible: backTextVisible
         }
 
         MouseArea {

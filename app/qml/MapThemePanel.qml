@@ -42,7 +42,6 @@ Drawer {
           color: InputStyle.panelBackgroundLight
           rowHeight: InputStyle.rowHeightHeader
           titleText: qsTr("Map Themes")
-          backTextVisible: false
           onBack: mapThemePanel.close()
           withBackButton: true
           layer.enabled: true
