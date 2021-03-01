@@ -146,7 +146,7 @@ Drawer {
             rowHeight: InputStyle.rowHeightHeader
             titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
             backIconVisible: false
-            backText: qsTr("Cancel")
+            backTextVisible: true
 
             onBack: {
               featurePanel.close()
