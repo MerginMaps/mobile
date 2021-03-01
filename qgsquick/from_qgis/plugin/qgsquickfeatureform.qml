@@ -117,6 +117,13 @@ Item {
    * A handler for extra events withing a TextEdit widget .
    */
   property var importDataHandler: QtObject {
+
+    /**
+     * Suppose to set `supportDataImport` variable of a feature form. If true, enables to set data by this handler.
+     * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
+     */
+    property var supportImportData: function supportImportData(name) { return false }
+
     /**
      * Suppose to be called to invoke a component to set data automatically (e.g. code scanner, sensor).
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
@@ -493,7 +500,7 @@ Item {
           property var featurePair: form.model.attributeModel.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
-          property bool supportDataImport: false // optional functionality, set via importDataHandler
+          property bool supportDataImport: importDataHandler.supportImportData(Name)
 
           active: widget !== 'Hidden'
 
@@ -501,10 +508,6 @@ Item {
             if ( widget !== undefined )
                return form.loadWidgetFn(widget.toLowerCase())
             else return ''
-          }
-
-          Component.onCompleted: {
-            supportDataImport = importDataHandler.supportImportData(Name)
           }
         }
 

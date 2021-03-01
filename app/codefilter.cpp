@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "codefilter.h"
 #include <QVideoFilterRunnable>
 #include <QFuture>
@@ -8,9 +17,12 @@
 #include <QOpenGLFunctions>
 #include <QDebug>
 
-void processImage( QRDecoder *decoder, const QImage &image )
+void processImage( std::shared_ptr<QRDecoder> &decoder, const QImage &image )
 {
-  decoder->process( image );
+  if ( decoder != nullptr )
+  {
+    decoder->process( image );
+  }
 };
 
 class QRRunnable : public QVideoFilterRunnable
@@ -29,6 +41,11 @@ class QRRunnable : public QVideoFilterRunnable
     {
       Q_UNUSED( surfaceFormat );
       Q_UNUSED( flags );
+
+      if ( mFilter == nullptr )
+      {
+        return *input;
+      }
 
       if ( mFilter->decoder()->isDecoding() )
       {
@@ -54,9 +71,9 @@ class QRRunnable : public QVideoFilterRunnable
 
 CodeFilter::CodeFilter()
 {
-  mDecoder = new QRDecoder;
+  mDecoder = std::shared_ptr<QRDecoder>( new QRDecoder );
 
-  QObject::connect( mDecoder, &QRDecoder::capturedChanged, this, &CodeFilter::setCapturedData );
+  QObject::connect( mDecoder.get(), &QRDecoder::capturedChanged, this, &CodeFilter::setCapturedData );
 }
 
 QVideoFilterRunnable *CodeFilter::createFilterRunnable()
@@ -80,7 +97,7 @@ bool CodeFilter::isDecoding() const
   return mIsDecoding;
 }
 
-QRDecoder *CodeFilter::decoder() const
+std::shared_ptr<QRDecoder> CodeFilter::decoder() const
 {
   return mDecoder;
 }

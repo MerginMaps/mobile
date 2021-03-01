@@ -103,10 +103,6 @@ Drawer {
     interval: 1000
     triggeredOnStart: false
     repeat: false
-    onRunningChanged: {
-      if (!running) {
-        codeReader.visible = false
-      }
-    }
+    onTriggered: codeReader.visible = false
   }
 }
