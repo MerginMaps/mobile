@@ -738,6 +738,11 @@ ApplicationWindow {
         target: __loader
         onLoadingStarted: projectLoadingScreen.visible = true
         onLoadingFinished: projectLoadingScreen.visible = false
+        onProjectReloaded: {
+          // clear all previous references to old project
+          highlight.featureLayerPair = null
+          digitizingHighlight.featureLayerPair = null
+        }
     }
 
     ProjectLoadingScreen {
