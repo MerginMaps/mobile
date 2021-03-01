@@ -155,6 +155,7 @@ Drawer {
             Text {
                 id: saveButtonText
                 text: qsTr("Save")
+                visible: featureForm.state === "Edit" || featureForm.state === "Add"
                 enabled: featureForm.model.constraintsHardValid
                 color: enabled ? InputStyle.highlightColor : "red"
                 font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -355,11 +356,11 @@ Drawer {
           title: qsTr( "Uncommited changes" )
           text: qsTr( "Do you want to save changes?" )
           icon: StandardIcon.Warning
-          standardButtons: StandardButton.Ok | StandardButton.No | StandardButton.Cancel
+          standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
 
           //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
           onButtonClicked: {
-              if (clickedButton === StandardButton.Ok) {
+              if (clickedButton === StandardButton.Yes) {
                 featureForm.save()
               }
               else if (clickedButton === StandardButton.No) {

@@ -356,7 +356,7 @@ void QgsQuickAttributeModel::create()
 
 bool QgsQuickAttributeModel::hasAnyChanges()
 {
-  return mFeatureLayerPair.feature().id() < 0 || mFeatureLayerPair.layer()->editBuffer()->isFeatureAttributesChanged( mFeatureLayerPair.feature().id() );
+  return FID_IS_NULL( mFeatureLayerPair.feature().id() ) || mFeatureLayerPair.layer()->editBuffer()->isFeatureAttributesChanged( mFeatureLayerPair.feature().id() );
 }
 
 bool QgsQuickAttributeModel::commit()
