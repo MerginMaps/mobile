@@ -353,7 +353,7 @@ Drawer {
         MessageDialog {
           id: saveChangesDialog
           visible: false
-          title: qsTr( "Uncommited changes" )
+          title: qsTr( "Unsaved changes" )
           text: qsTr( "Do you want to save changes?" )
           icon: StandardIcon.Warning
           standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
