@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef CODEFILTER_H
 #define CODEFILTER_H
 
@@ -21,10 +30,16 @@ class CodeFilter : public QAbstractVideoFilter
 
     QString capturedData();
     bool isDecoding() const;
-    QRDecoder *decoder() const;
+    std::shared_ptr<QRDecoder> decoder() const;
     QFuture<void> futureThread() const;
+    /**
+     * Factory function to create a new instance of a QVideoFilterRunnable subclass corresponding to this filter.
+     * This function is called on the thread on which the Qt Quick scene graph performs rendering, with the OpenGL context bound.
+     * Ownership of the returned instance is transferred: the returned instance will live on the render thread and will be destroyed
+     * automatically when necessary.
+     * @return a new QVideoFilterRunnable instance associated with CodeFilter instance.
+     */
     QVideoFilterRunnable *createFilterRunnable() override;
-
 
   signals:
     void capturedDataChanged();
@@ -34,10 +49,9 @@ class CodeFilter : public QAbstractVideoFilter
     void setCapturedData( const QString &capturedData );
 
   private:
-    QSharedPointer<QMutex> _mutexP;
     QString mCapturedData;
     bool mIsDecoding;
-    QRDecoder *mDecoder;
+    std::shared_ptr<QRDecoder> mDecoder = nullptr;
     QFuture<void> mFutureThread;
 };
 
