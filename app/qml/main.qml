@@ -739,7 +739,8 @@ ApplicationWindow {
         onLoadingStarted: projectLoadingScreen.visible = true
         onLoadingFinished: projectLoadingScreen.visible = false
         onProjectReloaded: {
-          // clear all previous references to old project
+          // clear all previous references to old project (if we don't clear references to the previous project,
+          // highlights may end up with dangling pointers to map layers and cause crashes)
           highlight.featureLayerPair = null
           digitizingHighlight.featureLayerPair = null
         }
