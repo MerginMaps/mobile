@@ -43,14 +43,13 @@ Item {
     height: textArea.height == 0 ? customStyle.fields.height : 0
     topPadding: 10 * QgsQuick.Utils.dp
     bottomPadding: 10 * QgsQuick.Utils.dp
+    leftPadding: customStyle.fields.sideMargin
     rightPadding: textField.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
     anchors.left: parent.left
     anchors.right: parent.right
     font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
-    leftPadding: customStyle.fields.sideMargin
-    rightPadding: customStyle.fields.sideMargin
 
     text: value || ''
     inputMethodHints: field.isNumeric || widget == 'Range' ? field.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly : Qt.ImhNone
@@ -85,6 +84,7 @@ Item {
     height: config['IsMultiline'] === true ? undefined : 0
     topPadding: customStyle.fields.height * 0.25
     bottomPadding: customStyle.fields.height * 0.25
+    leftPadding: customStyle.fields.sideMargin
     rightPadding: textArea.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
     anchors.left: parent.left
@@ -94,8 +94,6 @@ Item {
     color: customStyle.fields.fontColor
     text: value || ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
-    leftPadding: customStyle.fields.sideMargin
-    rightPadding: customStyle.fields.sideMargin
 
     onLinkActivated: Qt.openUrlExternally(link)
 
