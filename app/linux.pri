@@ -98,6 +98,11 @@
     # GDAL
     INCLUDEPATH += $${OGR_INCLUDE_DIR}
 
+    # ZXing
+    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
+    LIBS += -L$${ZXING_LIB_DIR}
+    LIBS += -lZXing
+
     # TESTING stuff (only desktop)
     DEFINES += "INPUT_TEST"
     QT += testlib
