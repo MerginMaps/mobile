@@ -36,10 +36,10 @@ jobs:
           ./scripts/release_i18n_qm.bash
 
           echo "Unreleased translations (translated but not released)"
-          git diff --name-only || true
+          git diff --name-only -- ':!*input_i18n.qrc' || true
 
           echo "Number of changes"
-          NCHANGES=`git diff --name-only | wc -l`
+          NCHANGES=`git diff --name-only -- ':!*input_i18n.qrc' | wc -l`
           echo "Number of changes $NCHANGES"
 
           if [ "$NCHANGES" -gt "0" ]; then
