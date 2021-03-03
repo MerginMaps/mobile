@@ -11,6 +11,9 @@ automatically update:
 
 Create and update release translations
 
+1. run `./scripts/update_i18n_ts.bash /opt/Qt/<ver>/<platform>` and commit to master. This will update strings in transifex
+2. run `./scripts/release_i18n_qm.bash` to convert ts to qm files to apply translated entries to the released Input app binary.
+
 # Beta releases
 
 Create beta release on all supported platforms
