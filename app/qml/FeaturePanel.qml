@@ -233,10 +233,12 @@ Drawer {
                   property color normalBackgroundColor: InputStyle.panelBackgroundLight
                   property color activeBackgroundColor: InputStyle.panelBackgroundLight
                   property color disabledBackgroundColor: InputStyle.panelBackgroundDark
-                  property real height: InputStyle.rowHeight
+                  property real height: InputStyle.rowHeight * 0.9
                   property real buttonHeight: height
                   property real spacing: 0
                   property int tabLabelPointSize: 12
+                  property real borderWidth: 1 * QgsQuick.Utils.dp
+                  property color borderColor: InputStyle.labelColor
                 }
 
                 property QtObject constraint: QtObject {
