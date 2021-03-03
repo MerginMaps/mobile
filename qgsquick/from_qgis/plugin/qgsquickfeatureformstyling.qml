@@ -47,6 +47,8 @@ QtObject {
     property real buttonHeight: height * 0.8
     property real spacing: 0
     property int tabLabelPointSize: 14
+    property real borderWidth: 0 * QgsQuick.Utils.dp
+    property color borderColor: "#999999"
   }
 
   property QtObject constraint: QtObject {

@@ -262,6 +262,8 @@ Item {
       anchors {
         left: parent.left
         right: parent.right
+        leftMargin: form.style.fields.outerMargin
+        rightMargin: form.style.fields.outerMargin
       }
       height: form.model.hasTabs ? tabRow.height : 0
 
@@ -312,7 +314,10 @@ Item {
               text: tabButton.text
               color: !tabButton.enabled ? form.style.tabs.disabledColor : tabButton.down ||
                                           tabButton.checked ? form.style.tabs.activeColor : form.style.tabs.normalColor
-              font.weight: tabButton.checked ? Font.DemiBold : Font.Normal
+              font.weight: Font.DemiBold
+              font.underline: tabButton.checked ? true : false
+              font.pointSize: form.style.tabs.tabLabelPointSize
+              opacity: tabButton.checked ? 1 : 0.5
 
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -412,6 +417,21 @@ Item {
           }
         }
       }
+    }
+
+    // Borders
+    Rectangle {
+      width: parent.width
+      height: form.style.tabs.borderWidth
+      anchors.top: flickable.top
+      color: form.style.tabs.borderColor
+    }
+
+    Rectangle {
+      width: parent.width
+      height: form.style.tabs.borderWidth
+      anchors.bottom: flickable.bottom
+      color: form.style.tabs.borderColor
     }
   }
 
