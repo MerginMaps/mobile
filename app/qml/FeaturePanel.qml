@@ -229,13 +229,13 @@ Drawer {
                   property color normalColor: InputStyle.fontColor
                   property color activeColor: InputStyle.fontColor
                   property color disabledColor: InputStyle.fontColor
-                  property color backgroundColor: InputStyle.panelBackgroundDark
+                  property color backgroundColor: InputStyle.panelBackgroundLight
                   property color normalBackgroundColor: InputStyle.panelBackgroundLight
-                  property color activeBackgroundColor: "#FFFFFF"
+                  property color activeBackgroundColor: InputStyle.panelBackgroundLight
                   property color disabledBackgroundColor: InputStyle.panelBackgroundDark
-                  property real height: 48 * QgsQuick.Utils.dp
-                  property real buttonHeight: height * 0.8
-                  property real spacing: 5 * QgsQuick.Utils.dp
+                  property real height: InputStyle.rowHeight
+                  property real buttonHeight: height
+                  property real spacing: 0
                   property int tabLabelPointSize: 12
                 }
 
