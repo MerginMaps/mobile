@@ -20,7 +20,7 @@ jobs:
           ./scripts/update_i18n_ts.bash /usr/share/qt5
 
           echo "Changes in i18n entries"
-          git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\>
+          git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true
 
           NCHANGES=`git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> | wc -l`
           echo "Number of changes $NCHANGES"
@@ -36,7 +36,7 @@ jobs:
           ./scripts/release_i18n_qm.bash
 
           echo "Unreleased translations (translated but not released)"
-          git diff --name-only
+          git diff --name-only || true
 
           echo "Number of changes"
           NCHANGES=`git diff --name-only | wc -l`
