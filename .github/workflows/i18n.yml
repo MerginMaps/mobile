@@ -22,8 +22,7 @@ jobs:
           echo "Changes in i18n entries"
           git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\>
 
-          echo "Number of changes"
-          NCHANGES=`git diff app/i18n/input_en.ts | grep -Ec \\+\\\s+\<source\>`
+          NCHANGES=`git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> | wc -l`
           echo "Number of changes $NCHANGES"
 
           if [ "$NCHANGES" -gt "0" ]; then
