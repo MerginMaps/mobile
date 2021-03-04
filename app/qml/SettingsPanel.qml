@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,13 +8,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
 import lc 1.0
-import "."  // import InputStyle singleton
+import "."
+// import InputStyle singleton
 import "./components"
 
 Item {
@@ -30,8 +32,7 @@ Item {
       if (stackview.depth > 1) {
         // hide about or log panel
         stackview.pop(null)
-      }
-      else
+      } else
         root.visible = false
     }
   }
@@ -183,6 +184,24 @@ Item {
             }
           }
 
+          PanelItem {
+            height: settingsPanel.rowHeight
+            width: parent.width
+            text: qsTr("Accuracy warning")
+
+            SettingsSwitch {
+              id: accuracyWarningSwitch
+
+              checked: __appSettings.gpsAccuracyWarning
+              onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
+            }
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: accuracyWarningSwitch.toggle()
+            }
+          }
+
           // Header "Recording"
           PanelItem {
             color: InputStyle.panelBackgroundLight
@@ -278,7 +297,10 @@ Item {
             text: qsTr("Diagnostic log")
             MouseArea {
               anchors.fill: parent
-              onClicked: stackview.push(logPanelComponent, {text: __inputHelp.fullLog(true, 200000)})
+              onClicked: stackview.push(logPanelComponent, {
+                                          "text": __inputHelp.fullLog(true,
+                                                                      200000)
+                                        })
             }
           }
         }
