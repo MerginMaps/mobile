@@ -145,8 +145,8 @@ Drawer {
             fontBtnColor: InputStyle.highlightColor
             rowHeight: InputStyle.rowHeightHeader
             titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
-            backIconVisible: false
-            backTextVisible: true
+            backIconVisible: !saveButtonText.visible
+            backTextVisible: saveButtonText.visible
 
             onBack: {
               featurePanel.close()
