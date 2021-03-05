@@ -12,7 +12,7 @@ Item {
   signal removeClicked(var index)
 
   property real rowHeight: InputStyle.rowHeightHeader
-  property real iconSize: rowHeight
+  property real iconSize: rowHeight * 0.4
   property color color: InputStyle.fontColor
   property var widgetList: []
 
@@ -21,29 +21,16 @@ Item {
     height: fieldDelegate.rowHeight
     width: fieldDelegate.width
     spacing: InputStyle.panelSpacing
-    property real itemSize: (parent.width - fieldDelegate.rowHeight)/2
+    property real itemSize: (parent.width - imageBtn.width - (3* row.spacing)) / 2
 
-    TextField {
+    InputTextField {
       id: textField
-      height: row.height
-      topPadding: 10 * QgsQuick.Utils.dp
-      bottomPadding: 10 * QgsQuick.Utils.dp
-      font.pixelSize: InputStyle.fontPixelSizeNormal
       color: fieldDelegate.color
-      placeholderText: qsTr("Field name")
       text: AttributeName
       Layout.fillHeight: true
       Layout.preferredWidth: row.itemSize
 
       onEditingFinished: AttributeName = text
-
-      background: Rectangle {
-        anchors.fill: parent
-        border.color: textField.activeFocus ? InputStyle.fontColor : InputStyle.panelBackgroundLight
-        border.width: textField.activeFocus ? 2 : 1
-        color: InputStyle.clrPanelMain
-        radius: InputStyle.cornerRadius
-      }
     }
 
     ComboBox {
@@ -104,42 +91,48 @@ Item {
           id: backgroundRect
           border.color: comboBox.pressed ? InputStyle.fontColor : InputStyle.panelBackgroundLight
           border.width: comboBox.visualFocus ? 2 : 1
-          color: "white"
+          color: InputStyle.panelBackgroundLight
           radius: InputStyle.cornerRadius
         }
       }
 
+      indicator: Item {
+        height: parent.height
+        anchors.right: parent.right
 
+        Image {
+          id: comboboxIndicatorIcon
+          source: InputStyle.comboboxIcon
+          height: fieldDelegate.iconSize
+          width: height / 2
+          anchors.right: parent.right
+          anchors.rightMargin: InputStyle.innerFieldMargin
+          anchors.verticalCenter: parent.verticalCenter
+          fillMode: Image.PreserveAspectFit
+          autoTransform: true
+          visible: false
+        }
+
+        ColorOverlay {
+          anchors.fill: comboboxIndicatorIcon
+          source: comboboxIndicatorIcon
+          color: InputStyle.activeButtonColor
+        }
+      }
     }
 
-    Item {
+    Symbol {
       id: imageBtn
-      height: fieldDelegate.iconSize
-      width: height
+      height: fieldDelegate.height/2
       Layout.fillHeight: true
+      source: InputStyle.noIcon
+      iconSize: fieldDelegate.iconSize
 
       MouseArea {
         anchors.fill: parent
         onClicked: {
           fieldDelegate.removeClicked(index)
         }
-      }
-
-      Image {
-        id: image
-        anchors.centerIn: imageBtn
-        source: InputStyle.noIcon
-        height: imageBtn.height/2
-        width: height
-        sourceSize.width: width
-        sourceSize.height: height
-        fillMode: Image.PreserveAspectFit
-      }
-
-      ColorOverlay {
-        anchors.fill: image
-        source: image
-        color: fieldDelegate.color
       }
     }
   }

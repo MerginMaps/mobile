@@ -262,10 +262,10 @@ Drawer {
                     property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
                     property real cornerRadius: 8 * QgsQuick.Utils.dp
-                    property real height: 54 * QgsQuick.Utils.dp
+                    property real height: InputStyle.fieldHeight
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
-                    property real sideMargin: 10 * QgsQuick.Utils.dp
-                    property real outerMargin: 20 * QgsQuick.Utils.dp
+                    property real sideMargin: InputStyle.innerFieldMargin
+                    property real outerMargin: InputStyle.outerFieldMargin
                     property int fontPointSize: 15
                     property int labelPointSize: 12
                   }

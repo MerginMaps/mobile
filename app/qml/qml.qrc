@@ -52,10 +52,12 @@
         <file>TextHyperlink.qml</file>
         <file>LogPanel.qml</file>
         <file>ProjectWizardPage.qml</file>
-        <file>components/PasswordField.qml</file>
         <file>components/DelegateButton.qml</file>
         <file>components/FieldRow.qml</file>
+        <file>components/InputTextField.qml</file>
+        <file>components/PasswordField.qml</file>
         <file>components/SettingsSwitch.qml</file>
+        <file>components/SimpleTextWithIcon.qml</file>
         <file>components/Symbol.qml</file>
         <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
