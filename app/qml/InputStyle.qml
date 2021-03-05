@@ -42,6 +42,7 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real fieldHeight: scale(54)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
 
@@ -53,6 +54,8 @@ QtObject {
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
     property real cornerRadius: 8 * QgsQuick.Utils.dp
+    property real innerFieldMargin: 10 * QgsQuick.Utils.dp  // TODO rename fieldMargin
+    property real outerFieldMargin: 20 * QgsQuick.Utils.dp  // TODO change for PanelMargin
 
     property real refWidth: 640
     property real refHeight: 1136

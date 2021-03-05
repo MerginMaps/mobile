@@ -5,14 +5,14 @@ import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "."
-import "./components" // import InputStyle singleton
+import "." // import InputStyle singleton
+import "./components"
 Item {
   id: projectWizardPanel
 
   signal back
 
-  property real rowHeight: InputStyle.rowHeight
+  property real rowHeight: InputStyle.fieldHeight
   property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
   property real panelMargin: 10 * QgsQuick.Utils.dp
@@ -62,9 +62,10 @@ Item {
 
     ColumnLayout {
       id: contentLayout
-      spacing: InputStyle.panelSpacing
+      spacing: 0
       anchors.fill: parent
-      anchors.margins: projectWizardPanel.panelMargin
+      anchors.leftMargin: InputStyle.outerFieldMargin
+      anchors.rightMargin: InputStyle.outerFieldMargin
 
       Label {
         height: projectWizardPanel.rowheight
@@ -75,26 +76,12 @@ Item {
         text: qsTr("Project name")
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
+        leftPadding: InputStyle.innerFieldMargin
       }
 
-      TextField {
+      InputTextField {
         id: projectNameField
-        width: parent.width
         height: projectWizardPanel.rowHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: projectWizardPanel.fontColor
-        font.capitalization: Font.MixedCase
-        inputMethodHints: Qt.ImhNoPredictiveText
-        Layout.fillWidth: true
-        Layout.preferredHeight: projectWizardPanel.rowHeight
-
-        background: Rectangle {
-          anchors.fill: parent
-          border.color: projectNameField.activeFocus ? InputStyle.fontColor : InputStyle.panelBackgroundLight
-          border.width: projectNameField.activeFocus ? 2 : 1
-          color: InputStyle.clrPanelMain
-          radius: InputStyle.cornerRadius
-        }
       }
 
       Label {
@@ -107,6 +94,7 @@ Item {
         Layout.preferredHeight: projectWizardPanel.rowHeight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
+        leftPadding: InputStyle.innerFieldMargin
       }
 
       ListView {
@@ -119,7 +107,8 @@ Item {
         spacing: projectWizardPanel.rowHeight * 0.1 // same as delegateButton "margin"
 
         delegate: FieldRow {
-          height: projectWizardPanel.rowHeight
+          rowHeight: projectWizardPanel.rowHeight
+          height: rowHeight
           width: contentLayout.width
           color: projectWizardPanel.fontColor
           widgetList: projectWizardPanel.widgetsModel
@@ -127,18 +116,23 @@ Item {
           onRemoveClicked: fieldsModel.removeField(index)
         }
 
-        footer: DelegateButton {
-            height: projectWizardPanel.rowHeight
+        footer: Item {
             width: parent.width
-            text: qsTr("Add field")
-            iconSource: InputStyle.plusIcon
-            onClicked: {
-              fieldsModel.addField("", "TextEdit")
-              if (fieldList.visible) {
-                fieldList.positionViewAtEnd()
+            height: projectWizardPanel.rowHeight + 2* (projectWizardPanel.rowHeight * 0.1)
+          DelegateButton {
+              height: projectWizardPanel.rowHeight
+              width: parent.width
+              text: qsTr("Add field")
+              anchors.centerIn: parent
+              iconSource: InputStyle.plusIcon
+              onClicked: {
+                fieldsModel.addField("", "TextEdit")
+                if (fieldList.visible) {
+                  fieldList.positionViewAtEnd()
+                }
               }
             }
-          }
+        }
       }
     }
   }
