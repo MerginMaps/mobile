@@ -31,9 +31,7 @@ Item {
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
 
-      onTextChanged: {
-        AttributeName = textField.text
-      }
+      onDisplayTextChanged: AttributeName = displayText
     }
 
     ComboBox {
