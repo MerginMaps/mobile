@@ -132,11 +132,13 @@ Item {
 
               Text {
                   text: "-"
+                  height: parent.height
                   font.pixelSize: spinbox.font.pixelSize * 2
-                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
-                  anchors.fill: parent
+                  font.bold: true
                   fontSizeMode: Text.Fit
-                  horizontalAlignment: Text.AlignHCenter
+                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  leftPadding: customStyle.fields.sideMargin
+                  horizontalAlignment: Text.AlignLeft
                   verticalAlignment: Text.AlignVCenter
               }
           }
@@ -151,11 +153,14 @@ Item {
 
               Text {
                   text: "+"
+                  height: parent.height
                   font.pixelSize: spinbox.font.pixelSize * 2
-                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
-                  anchors.fill: parent
+                  font.bold: true
                   fontSizeMode: Text.Fit
-                  horizontalAlignment: Text.AlignHCenter
+                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  anchors.right: parent.right
+                  rightPadding: customStyle.fields.sideMargin
+                  horizontalAlignment: Text.AlignRight
                   verticalAlignment: Text.AlignVCenter
               }
           }
@@ -209,7 +214,7 @@ Item {
       handle: Rectangle {
               x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
               y: slider.topPadding + slider.availableHeight / 2 - height / 2
-              implicitWidth: slider.height * 0.5
+              implicitWidth: slider.height * 0.6 * 0.66 + (2 * border.width) // Similar to indicator QgsQuick.SwitchWidget of CheckBox widget
               implicitHeight: implicitWidth
               radius: height * 0.5
               color: "white"
