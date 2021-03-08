@@ -21,6 +21,7 @@ QgsQuickFeaturesListModel::QgsQuickFeaturesListModel( QObject *parent )
   : QAbstractListModel( parent ),
     mCurrentLayer( nullptr )
 {
+  QObject::connect( QgsProject::instance(), &QgsProject::cleared, this, &QgsQuickFeaturesListModel::emptyData );
 }
 
 QgsQuickFeaturesListModel::~QgsQuickFeaturesListModel() = default;
