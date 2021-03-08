@@ -72,7 +72,7 @@ Item {
         anchors.fill: parent
         border.color: customStyle.fields.normalColor
         border.width: 1 * QgsQuick.Utils.dp
-        color: fieldItem.enabled ? "#ffffff" : customStyle.fields.backgroundColor
+        color: customStyle.fields.backgroundColor
         radius: customStyle.fields.cornerRadius
       }
 
@@ -122,13 +122,43 @@ Item {
         inputMethodHints: Qt.ImhFormattedNumbersOnly
       }
 
-      Component.onCompleted: {
-        up.indicator.color = customStyle.fields.backgroundColor
-        up.indicator.radius = customStyle.fields.cornerRadius
-        down.indicator.radius = customStyle.fields.cornerRadius
-        down.indicator.color = customStyle.fields.backgroundColor
-      }
+      down.indicator: Rectangle {
+              x: spinbox.mirrored ? parent.width - width: 0
+              height: parent.height
+              implicitWidth: parent.height
+              implicitHeight: parent.height
+              color: customStyle.fields.backgroundColor
+              radius: customStyle.fields.cornerRadius
 
+              Text {
+                  text: "-"
+                  font.pixelSize: spinbox.font.pixelSize * 2
+                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  anchors.fill: parent
+                  fontSizeMode: Text.Fit
+                  horizontalAlignment: Text.AlignHCenter
+                  verticalAlignment: Text.AlignVCenter
+              }
+          }
+
+      up.indicator: Rectangle {
+              x: spinbox.mirrored ? 0 : parent.width - width
+              height: parent.height
+              implicitWidth: parent.height
+              implicitHeight: parent.height
+              color: customStyle.fields.backgroundColor
+              radius: customStyle.fields.cornerRadius
+
+              Text {
+                  text: "+"
+                  font.pixelSize: spinbox.font.pixelSize * 2
+                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  anchors.fill: parent
+                  fontSizeMode: Text.Fit
+                  horizontalAlignment: Text.AlignHCenter
+                  verticalAlignment: Text.AlignVCenter
+              }
+          }
     }
 
     // Slider
@@ -173,8 +203,18 @@ Item {
         width: slider.availableWidth
         height: implicitHeight
         radius: 2 * QgsQuick.Utils.dp
-        color:  fieldItem.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
+        color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
       }
+
+      handle: Rectangle {
+              x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
+              y: slider.topPadding + slider.availableHeight / 2 - height / 2
+              implicitWidth: slider.height * 0.5
+              implicitHeight: implicitWidth
+              radius: height * 0.5
+              color: "white"
+              border.color: customStyle.fields.backgroundColorInactive
+          }
     }
   }
 
