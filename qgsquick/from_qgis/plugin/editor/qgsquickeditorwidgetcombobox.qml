@@ -83,7 +83,8 @@ ComboBox {
   // [/hidpi fixes]
 
   indicator: Item {
-    anchors.fill: parent
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
 
     Image {
       id: comboboxIndicatorIcon
