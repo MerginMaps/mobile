@@ -21,22 +21,26 @@ Item {
     height: fieldDelegate.rowHeight
     width: fieldDelegate.width
     spacing: InputStyle.panelSpacing
-    property real itemSize: (parent.width - imageBtn.width - (3* row.spacing)) / 2
+    property real itemSize: (parent.width - imageBtn.width - (2* row.spacing)) / 2
 
     InputTextField {
       id: textField
       color: fieldDelegate.color
       text: AttributeName
       Layout.fillHeight: true
+      Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
 
-      onEditingFinished: AttributeName = text
+      onTextChanged: {
+        AttributeName = textField.text
+      }
     }
 
     ComboBox {
       id: comboBox
       height: row.height
       Layout.fillHeight: true
+      Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
       model: widgetList
       textRole: "display"
