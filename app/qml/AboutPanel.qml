@@ -12,119 +12,134 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.12
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
-Item {
-    property string inputLink: "https://inputapp.io/"
+Page {
+  id: root
 
-    property real fieldHeight: InputStyle.rowHeight
-    property real panelMargin: fieldHeight/4
-    property color fontColor: "white"
-    property color bgColor: InputStyle.fontColor
+  property string inputLink: "https://inputapp.io/"
+  property real fieldHeight: InputStyle.rowHeight
+  property real panelMargin: fieldHeight / 4
+  property color fontColor: "white"
+  property color bgColor: InputStyle.fontColor
+  property bool isPortraitOrientation: Screen.primaryOrientation === Qt.PortraitOrientation
 
-    function close() {
-        visible = false
+  signal close()
+
+  function setAnchors() {
+    if ( isPortraitOrientation )
+    {
+      lutraLogo.anchors.right = undefined
+      lutraLogo.anchors.horizontalCenter = content.horizontalCenter
+      lutraLogo.anchors.bottomMargin = 2 * InputStyle.panelMargin
+      lutraLogo.anchors.rightMargin = undefined
     }
+    else // landscape
+    {
+      lutraLogo.anchors.horizontalCenter = undefined
+      lutraLogo.anchors.right = content.right
+      lutraLogo.anchors.bottomMargin = InputStyle.panelMargin
+      lutraLogo.anchors.rightMargin = InputStyle.panelMargin
+    }
+  }
 
-    id: root
+  Keys.onReleased: {
+    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+      event.accepted = true
+      close()
+    }
+  }
 
-    Pane {
-        id: pane
+  onIsPortraitOrientationChanged: setAnchors()
+  Component.onCompleted: setAnchors()
 
-        width: parent.width
-        height: parent.height
-        anchors.verticalCenter: parent.verticalCenter
+  background: Rectangle {
+    color: root.bgColor
+  }
+
+  header: PanelHeader {
+    id: header
+    height: InputStyle.rowHeightHeader
+    width: parent.width
+    color: root.bgColor
+    rowHeight: InputStyle.rowHeightHeader
+    titleText: ""
+
+    onBack: root.close()
+    withBackButton: true
+  }
+
+  Item {
+    id: content
+    anchors.fill: parent
+    anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height : 0
+
+    Column {
+      id: columnLayout
+      anchors.verticalCenter: parent.verticalCenter
+      width: parent.width
+
+      Image {
+        id: inputLogo
+        source: "input.svg"
+        width: content.width / 2
+        sourceSize.width: width
         anchors.horizontalCenter: parent.horizontalCenter
+      }
 
+      Text {
+        text: "v" + __version
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: fontColor
+      }
 
+      Button {
+        id: inputLinkBtn
+        width: content.width - 2 * root.panelMargin
+        height: fieldHeight * 0.7
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: Qt.openUrlExternally(root.inputLink)
         background: Rectangle {
-            color: root.bgColor
+          color: InputStyle.fontColor
         }
 
-        PanelHeader {
-          id: header
-          height: InputStyle.rowHeightHeader
-          width: parent.width
-          color: root.bgColor
-          rowHeight: InputStyle.rowHeightHeader
-          titleText: ""
-
-          onBack: root.close()
-          withBackButton: true
+        contentItem: Text {
+          text: root.inputLink
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
-
-        Item {
-            id: content
-            anchors.fill: parent
-            anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height: 0
-
-
-            Column {
-                id: columnLayout
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-
-                Image {
-                    id: inputLogo
-                    source: "input.svg"
-                    width: content.width/2
-                    sourceSize.width: width
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Text {
-                    text: "v" + __version
-                    font.pixelSize: InputStyle.fontPixelSizeSmall
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    color: fontColor
-                }
-
-                Button {
-                    id: inputLinkBtn
-                    width: content.width - 2* root.panelMargin
-                    height: fieldHeight * 0.7
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked:Qt.openUrlExternally(root.inputLink);
-                    background: Rectangle {
-                        color: InputStyle.fontColor
-                    }
-
-                    contentItem: Text {
-                        text: root.inputLink
-                        font.pixelSize: InputStyle.fontPixelSizeNormal
-                        color: InputStyle.highlightColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-                }
-            }
-
-            Text {
-                id: developedText
-                text: qsTr("Developed by")
-                font.pixelSize: InputStyle.fontPixelSizeSmall
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: lutraLogo.top
-                color: fontColor
-            }
-
-            Image {
-                id: lutraLogo
-                source: "lutra_logo.svg"
-                width: inputLogo.width/2
-                sourceSize.width: width
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: InputStyle.panelMargin * 2
-            }
-
-            ColorOverlay {
-                anchors.fill: lutraLogo
-                source: lutraLogo
-                color: fontColor
-            }
-        }
+      }
     }
+
+    Text {
+      id: developedText
+      text: qsTr("Developed by")
+      font.pixelSize: InputStyle.fontPixelSizeSmall
+      anchors.horizontalCenter: lutraLogo.horizontalCenter
+      anchors.bottom: lutraLogo.top
+      color: fontColor
+    }
+
+    Image {
+      id: lutraLogo
+      source: "lutra_logo.svg"
+      width: inputLogo.width / 2
+      sourceSize.width: width
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: InputStyle.panelMargin * 2
+    }
+
+    ColorOverlay {
+      anchors.fill: lutraLogo
+      source: lutraLogo
+      color: fontColor
+    }
+  }
 }
