@@ -1,8 +1,19 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef PROJECT_FUTURE_H
 #define PROJECT_FUTURE_H
 
 #include <QObject>
+#include <qdebug.h>
 #include <QDateTime>
+#include <memory>
 
 enum ProjectStatus_future
 {
@@ -16,41 +27,59 @@ enum ProjectStatus_future
 };
 Q_ENUMS( ProjectStatus_future )
 
-struct RemoteProject
+struct LocalProject_future
 {
+  LocalProject_future() { qDebug() << "Building LocalProject_future " << this; }
+  ~LocalProject_future() { qDebug() << "Removing LocalProject_future " << this; }
+
   QString projectName;
   QString projectNamespace;
 
-  QString projectIdentifier() { return QString(); };
+  QString projectIdentifier() { return QString(); }
 
-  QDateTime serverUpdated; // available latest version of project files on server // TODO: maybe we do not need this at all
+  QString projectDir;
+  QString projectError;
 
+  QString qgisProjectFilePath;
+
+  int localVersion = -1;
+
+  void copyValues( const LocalProject_future &other );
+};
+
+struct MerginProject_future
+{
+  MerginProject_future() { qDebug() << "Building MerginProject_future " << this; }
+  ~MerginProject_future() { qDebug() << "Removing MerginProject_future " << this; }
+
+  QString projectName;
+  QString projectNamespace;
+
+  QString projectIdentifier();
+
+  QDateTime serverUpdated; // available latest version of project files on server // TODO: maybe we do not need this at all - only as description
+  int serverVersion;
+
+  ProjectStatus_future status = ProjectStatus_future::_NoVersion;
   bool pending = false;
-  ProjectStatus_future status = ProjectStatus_future::_NoVersion;
+
   qreal progress = 0;
+  // TODO: Add error code
 };
 
-
-struct MerginProject_deprecated
+struct Project_future
 {
-  QString projectName;
-  QString projectNamespace;
-  QString projectDir;  // full path to the project directory
-  QDateTime clientUpdated; // client's version of project files
-  QDateTime serverUpdated; // available latest version of project files on server
-  bool pending = false; // if there is a pending request for downlaod/update a project
-  ProjectStatus_future status = ProjectStatus_future::_NoVersion;
-  qreal progress = 0;  // progress in case of pending download/upload (values [0..1])
-};
+  Project_future() { qDebug() << "Building Project_future " << this; }
+  ~Project_future() { qDebug() << "Removing Project_future " << this; }
 
+  std::unique_ptr<MerginProject_future> mergin;
+  std::unique_ptr<LocalProject_future> local;
 
-class Project_future : public QObject
-{
-    Q_OBJECT
-  public:
-  explicit Project_future( QObject *parent = nullptr );
-  ~Project_future() override {}
+  bool isMergin() { return mergin != nullptr; }
+  bool isLocal() { return local != nullptr; }
 
+  //! Attributes that should be there no matter the project type
+  QString projectInfo;
 };
 
 #endif // PROJECT_FUTURE_H

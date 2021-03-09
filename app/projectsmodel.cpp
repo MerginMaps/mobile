@@ -187,7 +187,7 @@ void ProjectModel::syncedProjectFinished( const QString &projectDir, const QStri
   reloadProjectFiles( projectDir, projectFullName, successfully );
 }
 
-void ProjectModel::addLocalProject( const QString &projectDir )
+void ProjectModel::addLocalProject( const QString &projectDir ) // TODO: not needed if localProjectsManager emits added signal
 {
   Q_UNUSED( projectDir );
   mLocalProjects.reloadProjectDir();

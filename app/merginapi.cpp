@@ -30,7 +30,8 @@
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
-const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
+//const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://dev.dev.cloudmergin.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
@@ -106,6 +107,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
 
+  qDebug() << "MerginAPI: ListProjects, returning requestId: " << requestId;
   return requestId;
 }
 
@@ -1084,7 +1086,7 @@ QString MerginApi::generateConflictFileName( const QString &path, int version )
   return QString( "%1_conflict_%2_v%3" ).arg( path, mUserAuth->username(), QString::number( version ) );
 }
 
-QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName )
+QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName ) // TODO: move to inpututils?
 {
   return QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
 }
