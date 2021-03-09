@@ -11,7 +11,7 @@
 #define LOCALPROJECTSMANAGER_H
 
 #include <QObject>
-
+#include <project_future.h>
 
 enum ProjectStatus
 {
@@ -49,6 +49,9 @@ struct LocalProjectInfo
   int serverVersion = -1;  //!< the project version most recently seen on server (may be -1 if no info from server is available)
 
   ProjectStatus status = NoVersion;
+
+  bool operator ==( const LocalProjectInfo &other ) { return ( projectName == other.projectName && projectNamespace == other.projectNamespace );}
+  bool operator !=( const LocalProjectInfo &other ) { return !( *this == other ); }
 
   // Sync status (e.g. progress) is not kept here because if a project does not exist locally yet
   // and it is only being downloaded for the first time, it's not in the list of local projects either
@@ -114,7 +117,7 @@ class LocalProjectsManager : public QObject
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
 
-    static ProjectStatus currentProjectStatus( const LocalProjectInfo &project );
+    static ProjectStatus currentProjectStatus( const LocalProjectInfo &project ); // TODO: local project manager should not have status
 
   signals:
     void projectMetadataChanged( const QString &projectDir );
@@ -123,13 +126,16 @@ class LocalProjectsManager : public QObject
     void localProjectRemoved( const QString &projectDir );
 
   private:
-    void updateProjectStatus( LocalProjectInfo &project );
+    void updateProjectStatus( LocalProjectInfo &project ); // TODO: local project manager should not have status
+
     //! Should add an entry about newly created project. Emits no signals
     void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
 
   private:
     QString mDataDir;   //!< directory with all local projects
     QList<LocalProjectInfo> mProjects;
+
+    QList<LocalProject_future> mLocalProjects_future;
 };
 
 

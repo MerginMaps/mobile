@@ -77,14 +77,11 @@ variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 inputprojutils.h \
-<<<<<<< HEAD
 codefilter.h \
 qrdecoder.h \
-=======
 models/projectsproxymodel_future.h \
 models/projectsmodel_future.h \
 project_future.h \
->>>>>>> add future classes
 
 contains(DEFINES, INPUT_TEST) {
 
