@@ -82,7 +82,7 @@ class ProjectModel : public QAbstractListModel
       QString projectNamespace;   //!< mergin project namespace (first part of "namespace/project"). empty for non-mergin project
       QString folderName;         //!< name of the project folder (not the full path)
       QString path;               //!< path to the .qgs/.qgz project file
-      QString info;
+      QString info; // Description!
       bool isValid;
 
       /**

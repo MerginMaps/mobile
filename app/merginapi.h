@@ -175,6 +175,15 @@ struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_f
   int version = -1;
   QDateTime serverUpdated; // available latest version of project files on server
 
+  bool operator ==( const MerginProjectListEntry &other )
+  {
+    return ( this->projectName == other.projectName ) && ( this->projectNamespace == other.projectNamespace );
+  }
+
+  bool operator !=( const MerginProjectListEntry &other )
+  {
+    return !( *this == other );
+  }
 };
 
 typedef QList<MerginProjectListEntry> MerginProjectList; // TODO: replace with RemoteProject from Project_future.h
