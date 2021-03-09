@@ -31,6 +31,11 @@ InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
   emit linkChanged();
 }
 
+QString InputHelp::helpRootLink() const
+{
+  return inputHelpRoot;
+}
+
 QString InputHelp::privacyPolicyLink() const
 {
   return inputHelpRoot + "/privacy";
