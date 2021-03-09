@@ -13,9 +13,10 @@
 #include <QAbstractListModel>
 #include <memory>
 
-#include "localprojectsmanager.h"
 #include "project_future.h"
 #include "merginapi.h"
+
+class LocalProjectsManager;
 
 /**
  * \brief The ProjectModelTypes enum
@@ -40,6 +41,7 @@ class ProjectsModel_future : public QAbstractListModel
 
     enum Roles
     {
+      // TODO: rewrite to individual roles
       Project = Qt::UserRole + 1
     };
     Q_ENUMS( Roles )
@@ -48,21 +50,22 @@ class ProjectsModel_future : public QAbstractListModel
     ~ProjectsModel_future() override {};
 
     // Needed methods from QAbstractListModel
-//    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-//    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-//    QHash<int, QByteArray> roleNames() const override;
-//    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
+    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     //! Called to list projects, either fetch more or get first
     Q_INVOKABLE void listProjects();
 
     //! Method detecting local project for remote projects
-    void mergeProjects();
+    void mergeProjects( const MerginProjectList &merginProjects, Transactions pendingProjects );
 
   public slots:
-    void listProjectsFinished();
-    void projectSyncFinished();
-    void projectSyncProgressChanged();
+    void onListProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
+    void onListProjectsByNameFinished();
+    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
 
   private:
 
@@ -70,7 +73,7 @@ class ProjectsModel_future : public QAbstractListModel
 
     MerginApi *mBackend;
     LocalProjectsManager &mLocalProjectsManager;
-    QList<Project_future> mProjects;
+    QList<std::shared_ptr<Project_future>> mProjects;
 
     ProjectModelTypes mModelType;
 

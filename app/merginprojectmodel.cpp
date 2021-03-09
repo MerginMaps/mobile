@@ -103,7 +103,7 @@ int MerginProjectModel::rowCount( const QModelIndex &parent ) const
 void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, QHash<QString, TransactionStatus> pendingProjects, int expectedProjectCount, int page )
 {
   beginResetModel();
-  mMerginProjects.removeOne( mAdditionalItem );
+  mMerginProjects.removeOne( mAdditionalItem ); // TODO: remove
 
   if ( page == 1 )
   {
@@ -140,7 +140,7 @@ void MerginProjectModel::updateModel( const MerginProjectList &merginProjects, Q
     mMerginProjects << project;
   }
 
-  if ( mMerginProjects.count() < expectedProjectCount )
+  if ( mMerginProjects.count() < expectedProjectCount ) // TODO: remove
   {
     mMerginProjects << mAdditionalItem;
   }
