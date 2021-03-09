@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -13,8 +11,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
 import lc 1.0
-import "."
-// import InputStyle singleton
+import "." // import InputStyle singleton
 import "./components"
 
 Item {
@@ -187,7 +184,7 @@ Item {
           PanelItem {
             height: settingsPanel.rowHeight
             width: parent.width
-            text: qsTr("Accuracy warning")
+            text: qsTr("Show accuracy warning")
 
             SettingsSwitch {
               id: accuracyWarningSwitch
