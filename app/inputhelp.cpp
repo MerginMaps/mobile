@@ -76,6 +76,11 @@ QString InputHelp::howToSetupProj() const
   return inputHelpRoot + "/howto/proj";
 }
 
+QString InputHelp::merginTermsLink() const
+{
+  return "https://public.cloudmergin.com/assets/mergin_terms_of_service.pdf";
+}
+
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;
