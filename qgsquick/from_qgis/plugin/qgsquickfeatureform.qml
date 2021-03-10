@@ -425,6 +425,7 @@ Item {
       height: form.style.tabs.borderWidth
       anchors.top: flickable.top
       color: form.style.tabs.borderColor
+      visible: flickable.height
     }
 
     Rectangle {
@@ -432,6 +433,7 @@ Item {
       height: form.style.tabs.borderWidth
       anchors.bottom: flickable.bottom
       color: form.style.tabs.borderColor
+      visible: flickable.height
     }
   }
 
