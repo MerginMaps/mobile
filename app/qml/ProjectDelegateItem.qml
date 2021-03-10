@@ -18,7 +18,7 @@ import "./components"
 
 Rectangle {
     id: itemContainer
-    color: itemContainer.highlight ? InputStyle.fontColorBright : itemContainer.primaryColor
+    color: itemContainer.highlight ? InputStyle.panelItemHighlight : itemContainer.primaryColor
 
     property color primaryColor: InputStyle.clrPanelMain
     property color secondaryColor: InputStyle.fontColor
