@@ -27,7 +27,7 @@ ListView {
       Rectangle {
         id: itemContainer
         property color primaryColor: InputStyle.clrPanelMain
-        property color secondaryColor: InputStyle.fontColorBright
+        property color secondaryColor: InputStyle.panelItemHighlight
         width: listView.cellWidth
         height: listView.cellHeight
         visible: height ? true : false
@@ -38,9 +38,12 @@ ListView {
         MouseArea {
           anchors.fill: parent
           onClicked: {
+            activeIndex = index
             listItemClicked( model.layerId )
           }
         }
+
+        Component.onCompleted: if (layerName === __activeLayer.layerName) activeIndex = index
 
         ExtendedMenuItem {
             id: item
@@ -50,7 +53,7 @@ ListView {
             imageSource: iconSource ? iconSource : ""
             overlayImage: false
             highlight: highlightingAllowed && layerId === activeLayerId
-            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || activeIndex - 1 !== index : true
+            showBorder: highlightingAllowed ? !__appSettings.defaultLayer || (listView.activeIndex !== index && listView.activeIndex - 1 !== index) : true
         }
     }
   }

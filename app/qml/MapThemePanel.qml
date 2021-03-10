@@ -77,13 +77,11 @@ Drawer {
         id: delegateItem
         Rectangle {
             id: itemContainer
-            property color primaryColor: InputStyle.clrPanelMain
-            property color secondaryColor: InputStyle.fontColorBright
             width: listView.cellWidth
             height: listView.cellHeight
             anchors.leftMargin: InputStyle.panelMargin
             anchors.rightMargin: InputStyle.panelMargin
-            color: item.highlight ? secondaryColor : primaryColor
+            color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
 
             MouseArea {
                 anchors.fill: parent
@@ -101,7 +99,7 @@ Drawer {
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
                 highlight: __mapThemesModel.activeThemeIndex === index
-                showBorder: __mapThemesModel.activeThemeIndex - 1 !== index
+                showBorder: __mapThemesModel.activeThemeIndex - 1 !== index && __mapThemesModel.activeThemeIndex !== index
             }
         }
 
