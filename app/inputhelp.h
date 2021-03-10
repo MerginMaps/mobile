@@ -22,7 +22,7 @@ class InputHelp: public QObject
     Q_OBJECT
 
     Q_PROPERTY( QString privacyPolicyLink READ privacyPolicyLink NOTIFY linkChanged )
-    Q_PROPERTY( QString helpRootLink READ helpRootLink NOTIFY linkChanged )
+    Q_PROPERTY( QString helpRootLink READ helpRootLink )
     Q_PROPERTY( QString merginSubscriptionDetailsLink READ merginSubscriptionDetailsLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableDigitizingLink READ howToEnableDigitizingLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableBrowsingDataLink READ howToEnableBrowsingDataLink NOTIFY linkChanged )
@@ -30,7 +30,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToCreateNewProjectLink READ howToCreateNewProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToDownloadProjectLink READ howToDownloadProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToSetupProj READ howToSetupProj NOTIFY linkChanged )
-    Q_PROPERTY( QString merginTermsLink READ merginTermsLink NOTIFY linkChanged )
+    Q_PROPERTY( QString merginTermsLink READ merginTermsLink )
 
     Q_PROPERTY( bool submitReportPending READ submitReportPending NOTIFY submitReportPendingChanged )
 

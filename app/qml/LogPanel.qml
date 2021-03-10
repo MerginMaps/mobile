@@ -84,7 +84,7 @@ Item {
 
       width: root.width
       height: InputStyle.rowHeightHeader
-      text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send Log to Developers")
+      text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send to Developers")
 
       onClicked: {
         if (!__inputHelp.submitReportPending)
