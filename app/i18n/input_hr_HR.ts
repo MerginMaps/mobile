@@ -73,7 +73,7 @@
         <translation>Odaberi aktivni sloj</translation>
     </message>
     <message>
-        <location filename="../qml/ActiveLayerPanel.qml" line="63"/>
+        <location filename="../qml/ActiveLayerPanel.qml" line="62"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>Nije pronađen niti jedan sloj predviđen za snimanje u projektu. Pogledajte %1kako omogućiti sloj za snimanje u projektu%2.</translation>
     </message>
@@ -91,12 +91,12 @@
         <translation>Input mora imati dozvole za pristup uređaju za pohranu podataka za upravljanje projektima ili preuzimanje projekata</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="132"/>
+        <location filename="../androidutils.cpp" line="116"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Dozvole za pristup kameri su onemogućene, molimo omogućite ih u postavkama</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="136"/>
+        <location filename="../androidutils.cpp" line="120"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Potrebne su dozvole za pristup kameri za dodavanje fotografija</translation>
     </message>
@@ -159,6 +159,14 @@
     </message>
 </context>
 <context>
+    <name>CodeReader</name>
+    <message>
+        <location filename="../qml/CodeReader.qml" line="60"/>
+        <source>Scan code</source>
+        <translation>Skeniraj kod</translation>
+    </message>
+</context>
+<context>
     <name>ExternalResourceBundle</name>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
@@ -184,50 +192,60 @@
 <context>
     <name>FeaturePanel</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="138"/>
+        <location filename="../qml/FeaturePanel.qml" line="147"/>
         <source>Edit Feature</source>
         <translation>Uredi objekt</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="138"/>
+        <location filename="../qml/FeaturePanel.qml" line="147"/>
         <source>Feature</source>
         <translation>Objekt</translation>
     </message>
     <message>
         <location filename="../qml/FeaturePanel.qml" line="157"/>
+        <source>Save</source>
+        <translation>Spremi</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturePanel.qml" line="192"/>
         <source>No photos added.</source>
         <translation>Nema dodanih fotografija</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="290"/>
+        <location filename="../qml/FeaturePanel.qml" line="335"/>
         <source>Delete feature</source>
         <translation>Izbriši objekt</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="291"/>
+        <location filename="../qml/FeaturePanel.qml" line="336"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Zaista izbrisati ovaj objekt?</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturePanel.qml" line="356"/>
+        <source>Unsaved changes</source>
+        <translation>Nespremljene izmjene</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturePanel.qml" line="357"/>
+        <source>Do you want to save changes?</source>
+        <translation>Želite li spremiti izmjene?</translation>
     </message>
 </context>
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="63"/>
+        <location filename="../qml/FeatureToolbar.qml" line="60"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="86"/>
+        <location filename="../qml/FeatureToolbar.qml" line="83"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="102"/>
-        <source>Save</source>
-        <translation>Spremi</translation>
-    </message>
-    <message>
-        <location filename="../qml/FeatureToolbar.qml" line="118"/>
+        <location filename="../qml/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>Uredi geometriju</translation>
     </message>
@@ -421,7 +439,7 @@ Won&apos;t be added to the project.</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="70"/>
+        <location filename="../qml/MapThemePanel.qml" line="69"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>Projekt nema definiranih tema. Pogledajte %1kako kreirati teme%2.</translation>
     </message>
@@ -598,9 +616,9 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PanelHeader</name>
     <message>
-        <location filename="../qml/PanelHeader.qml" line="56"/>
-        <source>Back</source>
-        <translation>Nazad</translation>
+        <location filename="../qml/PanelHeader.qml" line="20"/>
+        <source>Cancel</source>
+        <translation>Odustani</translation>
     </message>
 </context>
 <context>
@@ -643,7 +661,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="102"/>
+        <location filename="../projectwizard.cpp" line="104"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 stvoren</translation>
     </message>
@@ -735,12 +753,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QgsQuickAttributeFormModelBase</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="288"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="290"/>
         <source>Not NULL</source>
         <translation>Nije NULL</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="293"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="295"/>
         <source>Unique</source>
         <translation>Jedinstven</translation>
     </message>
@@ -748,47 +766,52 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="184"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="185"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="222"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="186"/>
+        <source>Value %1 is not compatible with field type %2.</source>
+        <translation>Vrijednost %1 nije odgovarajuća sa tipom podatka za polje %2.</translation>
+    </message>
+    <message>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="226"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="236"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="240"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Objekt %1 nije mogao biti dohvaćen nakon izvršenja</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="259"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="263"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="307"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="311"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="317"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="321"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="344"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="348"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="357"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Nije bilo moguće spremiti promjene. Povratak stanja.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="377"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="386"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
@@ -821,28 +844,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QgsQuickUtils</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="358"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="359"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="362"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
+        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="363"/>
         <source>screen density: %1</source>
         <translation>gustoća zaslona: %1</translation>
     </message>
@@ -850,27 +873,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>RecordToolbar</name>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="128"/>
+        <location filename="../qml/RecordToolbar.qml" line="129"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="151"/>
+        <location filename="../qml/RecordToolbar.qml" line="152"/>
         <source>Undo</source>
         <translation>Poništi</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="166"/>
+        <location filename="../qml/RecordToolbar.qml" line="167"/>
         <source>Add Point</source>
         <translation>Dodaj točku</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="182"/>
+        <location filename="../qml/RecordToolbar.qml" line="183"/>
         <source>Done</source>
         <translation>Završi</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="196"/>
+        <location filename="../qml/RecordToolbar.qml" line="197"/>
         <source>Cancel</source>
         <translation>Odustani</translation>
     </message>
@@ -1063,7 +1086,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>qgsquickdatetime</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="44"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="43"/>
         <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="85"/>
         <source>(no date)</source>
         <translation>(bez datuma)</translation>
@@ -1092,17 +1115,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>qgsquickexternalresource</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="269"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="268"/>
         <source>Take a photo</source>
         <translation>Slikaj</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="293"/>
-        <source>Add from gallery</source>
-        <translation>Dodaj iz galerije</translation>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="307"/>
+        <source>From gallery</source>
+        <translation>Iz galerije</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="313"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="326"/>
         <source>Image is not available: </source>
         <translation>Slika nije dostupna:</translation>
     </message>
@@ -1110,37 +1133,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>qgsquickfeatureform</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="175"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="204"/>
         <source>Constraints not valid</source>
         <translation>Ograničenja nisu ispravna</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="180"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="209"/>
         <source>Note: soft constraints were not met</source>
         <translation>Bilješka: Blaga ograničenja nisu ispunjena</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="606"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="679"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Dodaj objekt na &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="608"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="681"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Uredi objekt na &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="610"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="683"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Pogledaj objekt na &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="650"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="723"/>
         <source>Delete feature</source>
         <translation>Izbriši objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="651"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="724"/>
         <source>Really delete this feature?</source>
         <translation>Zaista izbrisati ovaj objekt?</translation>
     </message>
