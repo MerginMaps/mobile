@@ -164,14 +164,14 @@ Item {
           id: createProjectBtn
           width: toolbar.itemSize
           text: qsTr("Create project")
-          faded: !projectNameField.text
+          faded: !projectNameField.displayText
           imageSource: InputStyle.checkIcon
 
           onActivated: {
             if (faded) {
               __inputUtils.showNotification(qsTr("Empty project name"))
             } else {
-              __projectWizard.createProject(projectNameField.text, fieldsModel )
+              __projectWizard.createProject(projectNameField.displayText, fieldsModel )
             }
           }
         }
