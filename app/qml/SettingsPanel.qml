@@ -257,7 +257,7 @@ Item {
 
           // Privacy Policy
           PanelItem {
-            text: qsTr("Privacy Policy")
+            text: qsTr("Privacy policy")
             MouseArea {
               anchors.fill: parent
               onClicked: Qt.openUrlExternally(__inputHelp.privacyPolicyLink)
@@ -266,7 +266,7 @@ Item {
 
           // Terms of Service
           PanelItem {
-            text: qsTr("Mergin Terms of Service")
+            text: qsTr("Mergin terms of service")
             MouseArea {
               anchors.fill: parent
               onClicked: Qt.openUrlExternally(__inputHelp.merginTermsLink)
@@ -275,7 +275,7 @@ Item {
 
           // Debug/Logging
           PanelItem {
-            text: qsTr("Diagnostic Log")
+            text: qsTr("Diagnostic log")
             MouseArea {
               anchors.fill: parent
               onClicked: stackview.push(logPanelComponent, {text: __inputHelp.fullLog(true, 200000)})
