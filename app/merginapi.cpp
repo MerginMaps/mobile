@@ -82,7 +82,7 @@ void MerginApi::listProjects( const QString &searchExpression, const QString &fl
   }
   if ( !searchExpression.isEmpty() )
   {
-    query.addQueryItem( "name", searchExpression );
+    query.addQueryItem( "name", searchExpression.toUtf8().toPercentEncoding() );
   }
   if ( !flag.isEmpty() )
   {
