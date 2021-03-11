@@ -37,6 +37,7 @@ class TestMerginApi: public QObject
 
     void testListProject();
     void testDownloadProject();
+    void testDownloadProjectSpecChars();
     void testCancelDownloadProject();
     void testCreateProjectTwice();
     void testDeleteNonExistingProject();

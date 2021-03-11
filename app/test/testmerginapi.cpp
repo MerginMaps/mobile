@@ -71,6 +71,7 @@ void TestMerginApi::initTestCase()
   // remove any projects on the server that may prevent us from creating them
   deleteRemoteProject( mApiExtra, mUsername, "testListProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testDownloadProjectSpecChars" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushRemovedFile" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
@@ -175,6 +176,50 @@ void TestMerginApi::testDownloadProject()
 
   // verify that download in progress file is erased
   QVERIFY( !QFile::exists( InputUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
+}
+
+void TestMerginApi::testDownloadProjectSpecChars()
+{
+  // Create and upload project with project file containing special chars in its name.
+  // Especially testing a name containing "+" sign which was converted into a space when a download query gets to Mergin server
+  // https://doc.qt.io/qt-5/qurlquery.html#handling-of-spaces-and-plus
+  QString projectName = "testDownloadProjectSpecChars";
+  QString projectNamespace = mUsername;
+  QString projectDir = mApi->projectsPath() + "/" + projectName + "/";
+
+  // create an empty project on the server
+  QSignalSpy spy( mApi, &MerginApi::projectCreated );
+  mApi->createProject( projectNamespace, projectName );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+  // make MerginApi aware of the project and its directory
+  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+
+  // Copy data
+  QString sourcePath = mTestDataPath + "/" + TestMerginApi::TEST_PROJECT_NAME + "/";
+  InputUtils::cpDir( sourcePath, projectDir );
+
+  // Add special characters in the project file name
+  QFile projectFile( projectDir + "/project.qgs" );
+  QVERIFY( projectFile.exists() );
+  QString specChars( "+?%@&" );
+  QString newProjectFileName = QString( "%1.qgs" ).arg( specChars );
+  QVERIFY( projectFile.rename( projectDir + "/" + newProjectFileName ) );
+
+  // Upload data
+  QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
+  mApi->uploadProject( projectNamespace, projectName );
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
+  QList<QVariant> arguments = spy2.takeFirst();
+  QVERIFY( arguments.at( 2 ).toBool() );
+
+  // Download project and check if the project file is there
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+  QFile projectFileExtra( projectDirExtra + "/" + newProjectFileName );
+  QVERIFY( projectFileExtra.exists() );
 }
 
 void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath )

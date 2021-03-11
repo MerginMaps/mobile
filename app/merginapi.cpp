@@ -121,7 +121,8 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/" ) + projectFullName );
   QUrlQuery query;
-  query.addQueryItem( "file", item.filePath );
+  // Handles special chars in a filePath (e.g prevents to convert "+" sign into a space)
+  query.addQueryItem( "file", item.filePath.toUtf8().toPercentEncoding() );
   query.addQueryItem( "version", QStringLiteral( "v%1" ).arg( item.version ) );
   if ( item.downloadDiff )
     query.addQueryItem( "diff", "true" );
