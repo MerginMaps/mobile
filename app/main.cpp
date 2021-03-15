@@ -52,6 +52,7 @@
 #include "inputprojutils.h"
 #include "fieldsmodel.h"
 #include "projectwizard.h"
+#include "codefilter.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -228,6 +229,7 @@ void initDeclarative()
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
+  qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
 }
 
 #ifdef INPUT_TEST
@@ -339,18 +341,18 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
   //TODO win32 package demo projects
 #endif
-
-  AppSettings as;
   InputProjUtils inputProjUtils;
+  inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
+  init_qgis( appBundleDir );
 
+  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
+  AppSettings as;
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
   }
-  inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
-  init_qgis( appBundleDir );
 
   // Create Input classes
   AndroidUtils au;

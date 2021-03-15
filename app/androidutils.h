@@ -35,6 +35,7 @@ class AndroidUtils: public QObject
     static bool checkAndAcquirePermissions( const QString &permissionString );
 
     Q_INVOKABLE bool requestStoragePermission();
+    bool requestCameraPermission();
 
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,

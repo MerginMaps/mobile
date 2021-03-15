@@ -38,6 +38,14 @@ Drawer {
       attributeModel.forceClean();
     }
 
+    function onAboutToClose() {
+      if (featureForm.hasAnyChanges())  {
+        saveChangesDialog.open()
+      } else {
+        featurePanel.visible = false
+      }
+    }
+
     id: featurePanel
     visible: false
     modal: false
@@ -55,7 +63,7 @@ Drawer {
       focus: true
       Keys.onReleased: {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          featurePanel.close()
+          featurePanel.onAboutToClose()
         }
       }
     }
@@ -134,10 +142,37 @@ Drawer {
             height: InputStyle.rowHeightHeader
             width: parent.width
             color: InputStyle.clrPanelMain
+            fontBtnColor: InputStyle.highlightColor
             rowHeight: InputStyle.rowHeightHeader
             titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
+            backIconVisible: !saveButtonText.visible
+            backTextVisible: saveButtonText.visible
 
-            onBack: featurePanel.visible = false
+            onBack: {
+              featurePanel.close()
+            }
+
+            Text {
+                id: saveButtonText
+                text: qsTr("Save")
+                visible: featureForm.state === "Edit" || featureForm.state === "Add"
+                enabled: featureForm.model.constraintsHardValid
+                color: enabled ? InputStyle.highlightColor : "red"
+                font.pixelSize: InputStyle.fontPixelSizeNormal
+                height: header.rowHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.top: parent.top
+                anchors.rightMargin: InputStyle.panelMargin // same as back button
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: featureForm.save()
+                }
+            }
+
         }
 
         // TODO currently disabled since supporting photos is not yet implemented
@@ -169,11 +204,13 @@ Drawer {
             anchors.top: photoContainer.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
+            importDataHandler: codeReaderHandler.handler
             toolbarVisible: false
             allowRememberAttribute: __appSettings.reuseLastEnteredValues
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
+                property real titleLabelPointSize: 16
 
                 property QtObject group: QtObject {
                   property color backgroundColor: InputStyle.panelBackgroundLight
@@ -184,7 +221,7 @@ Drawer {
                   property real bottomMargin: 1 * QgsQuick.Utils.dp
                   property real height: 64 * QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
-                  property int spacing: 10 * QgsQuick.Utils.dp
+                  property int spacing: 0
                   property int fontPixelSize: 24 * QgsQuick.Utils.dp
                 }
 
@@ -192,17 +229,20 @@ Drawer {
                   property color normalColor: InputStyle.fontColor
                   property color activeColor: InputStyle.fontColor
                   property color disabledColor: InputStyle.fontColor
-                  property color backgroundColor: InputStyle.panelBackgroundDark
+                  property color backgroundColor: InputStyle.panelBackgroundLight
                   property color normalBackgroundColor: InputStyle.panelBackgroundLight
-                  property color activeBackgroundColor: "#FFFFFF"
+                  property color activeBackgroundColor: InputStyle.panelBackgroundLight
                   property color disabledBackgroundColor: InputStyle.panelBackgroundDark
-                  property real height: 48 * QgsQuick.Utils.dp
-                  property real buttonHeight: height * 0.8
-                  property real spacing: 5 * QgsQuick.Utils.dp
+                  property real height: InputStyle.rowHeight * 0.9
+                  property real buttonHeight: height
+                  property real spacing: 0
+                  property int tabLabelPointSize: 12
+                  property real borderWidth: 1 * QgsQuick.Utils.dp
+                  property color borderColor: InputStyle.labelColor
                 }
 
                 property QtObject constraint: QtObject {
-                  property color validColor: "black"
+                  property color validColor: InputStyle.labelColor
                   property color invalidColor: "#c0392b"
                   property color descriptionColor: "#e67e22"
                 }
@@ -210,7 +250,7 @@ Drawer {
                 property QtObject toolbutton: QtObject {
                   property color backgroundColor: "transparent"
                   property color backgroundColorInvalid: "#bdc3c7"
-                  property color activeButtonColor: InputStyle.panelBackgroundDarker
+                  property color activeButtonColor: InputStyle.activeButtonColor
                   property real size: 80 * QgsQuick.Utils.dp
                 }
 
@@ -222,8 +262,12 @@ Drawer {
                     property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
                     property real cornerRadius: 8 * QgsQuick.Utils.dp
-                    property real height: 54 * QgsQuick.Utils.dp
+                    property real height: InputStyle.fieldHeight
                     property int fontPixelSize: 22 * QgsQuick.Utils.dp
+                    property real sideMargin: InputStyle.innerFieldMargin
+                    property real outerMargin: InputStyle.outerFieldMargin
+                    property int fontPointSize: 15
+                    property int labelPointSize: 12
                   }
 
                 property QtObject icons: QtObject {
@@ -234,6 +278,9 @@ Drawer {
                   property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
                   property var today: QgsQuick.Utils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
+                  property var combobox: InputStyle.comboboxIcon
+                  property var valueRelationMore: InputStyle.valueRelationIcon
+                  property var importData: InputStyle.qrCodeIcon
                 }
 
               property QtObject checkboxComponent: QtObject {
@@ -262,6 +309,8 @@ Drawer {
                 toolbar.state = featureForm.state
             }
 
+            onNotify: __inputUtils.showNotificationRequested(message)
+
             customWidgetCallback: valueRelationWidget.handler
         }
 
@@ -273,10 +322,8 @@ Drawer {
             state: featurePanel.formState
             visible: !featurePanel.isReadOnly
             isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
-            saveBtnEnabled: featureForm.model.constraintsHardValid
 
             onEditClicked: featureForm.state = "Edit"
-            onSaveClicked: featureForm.save()
             onDeleteClicked: deleteDialog.visible = true
             onEditGeometryClicked: {
                 featurePanel.editGeometryClicked()
@@ -304,6 +351,29 @@ Drawer {
               }
           }
         }
+
+        MessageDialog {
+          id: saveChangesDialog
+          visible: false
+          title: qsTr( "Unsaved changes" )
+          text: qsTr( "Do you want to save changes?" )
+          icon: StandardIcon.Warning
+          standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+
+          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+          onButtonClicked: {
+              if (clickedButton === StandardButton.Yes) {
+                featureForm.save()
+              }
+              else if (clickedButton === StandardButton.No) {
+                featureForm.canceled()
+              }
+              else if (clickedButton === StandardButton.Cancel) {
+                // Do nothing
+              }
+              visible = false
+          }
+        }
     }
 
     ExternalResourceBundle {
@@ -315,4 +385,9 @@ Drawer {
 
       onWidgetClosed: backHandler.forceActiveFocus()
     }
+
+    CodeReaderHandler {
+      id: codeReaderHandler
+    }
+
 }

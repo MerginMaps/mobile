@@ -14,11 +14,8 @@ import "."  // import InputStyle singleton
 Item {
     property int itemSize: toolbar.height * 0.8
     property bool isFeaturePoint: false
-    property bool saveBtnEnabled: true
 
     signal editClicked()
-    signal saveClicked()
-    signal addPhotoClicked()
     signal deleteClicked()
     signal editGeometryClicked()
 
@@ -90,22 +87,6 @@ Item {
                     toolbar.deleteClicked()
                 }
             }
-        }
-
-        Item {
-            width: parent.width/parent.children.length
-            height: parent.height
-
-            MainPanelButton {
-
-                width: toolbar.itemSize
-                text: qsTr("Save")
-                imageSource: InputStyle.checkIcon
-                enabled: toolbar.saveBtnEnabled
-
-                onActivated: toolbar.saveClicked()
-            }
-
         }
 
         Item {

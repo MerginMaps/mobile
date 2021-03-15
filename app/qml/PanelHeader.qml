@@ -17,8 +17,11 @@ Rectangle {
 
     property real rowHeight
     property string titleText: ""
+    property string backText: qsTr("Cancel")
     property bool withBackButton: true
-    property bool backTextVisible: true
+    property bool backTextVisible: false
+    property bool backIconVisible: true
+    property color fontBtnColor: InputStyle.fontColorBright
 
     signal back()
 
@@ -33,7 +36,7 @@ Rectangle {
 
         Image {
             id: image
-            height: InputStyle.fontPixelSizeNormal
+            height: backIconVisible ? InputStyle.fontPixelSizeNormal : 0
             width: height
             source: "back.svg"
             sourceSize.width: width
@@ -43,18 +46,20 @@ Rectangle {
             anchors.topMargin: anchors.bottomMargin
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            visible: false
         }
 
         ColorOverlay {
             anchors.fill: image
             source: image
             color: InputStyle.fontColorBright
+            visible: header.backIconVisible
         }
 
         Text {
             id: backButtonText
-            text: qsTr("Back")
-            color: InputStyle.fontColorBright
+            text: header.backText
+            color: header.fontBtnColor
             font.pixelSize: InputStyle.fontPixelSizeNormal
             height: header.rowHeight
             verticalAlignment: Text.AlignVCenter
@@ -63,8 +68,8 @@ Rectangle {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.top: parent.top
-            anchors.leftMargin: header.rowHeight/4
-            visible: ((title.contentWidth + backButton.width * 2) > header.width) || !backTextVisible ? false : true
+            anchors.leftMargin: backIconVisible ? header.rowHeight/4 : 0
+            visible: backTextVisible
         }
 
         MouseArea {

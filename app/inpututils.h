@@ -99,6 +99,8 @@ class InputUtils: public QObject
 
     Q_INVOKABLE bool acquireStoragePermission();
 
+    Q_INVOKABLE bool acquireCameraPermission();
+
     Q_INVOKABLE void quitApp();
 
     /**

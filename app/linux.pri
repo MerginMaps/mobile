@@ -95,6 +95,14 @@
     LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
 
+    # GDAL
+    INCLUDEPATH += $${OGR_INCLUDE_DIR}
+
+    # ZXing
+    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
+    LIBS += -L$${ZXING_LIB_DIR}
+    LIBS += -lZXing
+
     # TESTING stuff (only desktop)
     DEFINES += "INPUT_TEST"
     QT += testlib
@@ -106,6 +114,7 @@
 
     QT += printsupport
     QT += widgets
+    QT += multimedia
     DEFINES += "HAVE_WIDGETS"
 
     QMAKE_CXXFLAGS += -std=c++11

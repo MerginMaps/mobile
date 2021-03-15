@@ -15,46 +15,18 @@ Item {
 
   id: delegateButtonContainer
 
-  Button {
-    id: delegateButton
-    text: delegateButtonContainer.text
+  SimpleTextWithIcon {
+    onClicked: delegateButtonContainer.clicked()
     height: delegateButtonContainer.btnHeight
     width: delegateButtonContainer.btnWidth
+    source: delegateButtonContainer.iconSource
+    text: delegateButtonContainer.text
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
-    font.pixelSize: InputStyle.fontPixelSizeTitle
-
-    background: Rectangle {
-      color: delegateButtonContainer.bgColor
-      radius: delegateButtonContainer.cornerRadius
-    }
-
-    onClicked: delegateButtonContainer.clicked()
-
-    contentItem: Row {
-      anchors.fill: parent
-      spacing: 0
-
-      Symbol {
-        id: icon
-        visible: !!delegateButtonContainer.iconSource
-        height: visible ? delegateButtonContainer.btnHeight : 0
-        width: height
-        iconSize: height/2
-        source: delegateButtonContainer.iconSource
-        fontColor: delegateButtonContainer.fontColor
-      }
-
-      Text {
-        height: delegateButtonContainer.btnHeight
-        width: delegateButtonContainer.btnWidth - icon.width
-        text: delegateButton.text
-        font: delegateButton.font
-        color: delegateButtonContainer.fontColor
-        horizontalAlignment: icon.visible ? Text.AlignLeft : Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
-    }
+    icon.width: delegateButtonContainer.btnHeight/2
+    radius: delegateButtonContainer.cornerRadius
+    color: delegateButtonContainer.bgColor
+    fontBold: true
   }
+
 }

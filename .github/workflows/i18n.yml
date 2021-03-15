@@ -1,0 +1,48 @@
+name: Translations
+on:
+  # Trigger the workflow only on master
+  push:
+    branches:
+      - master
+jobs:
+  code_style:
+    if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install deps
+        run: |
+          sudo apt-get install qt5-default qttools5-dev-tools
+
+      - uses: actions/checkout@v2
+
+      - name: Check for new translation entries
+        run: |
+          ./scripts/update_i18n_ts.bash /usr/share/qt5
+
+          echo "Changes in i18n entries"
+          git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true
+
+          NCHANGES=`git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> | wc -l`
+          echo "Number of changes $NCHANGES"
+
+          if [ "$NCHANGES" -gt "0" ]; then
+            echo "Run ./scripts/update_i18n_ts.bash to fix"
+            echo "Step ./scripts/release_i18n_qm.bash skipped do to this error"
+            exit 1
+          fi
+
+      - name: Check if qm files are up-to-date
+        run: |
+          ./scripts/release_i18n_qm.bash
+
+          echo "Unreleased translations (translated but not released)"
+          git diff --name-only -- ':!*input_i18n.qrc' || true
+
+          echo "Number of changes"
+          NCHANGES=`git diff --name-only -- ':!*input_i18n.qrc' | wc -l`
+          echo "Number of changes $NCHANGES"
+
+          if [ "$NCHANGES" -gt "0" ]; then
+            echo "Run ./scripts/release_i18n_qm.bash to fix"
+            exit 1
+          fi

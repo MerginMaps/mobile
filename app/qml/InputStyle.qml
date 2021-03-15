@@ -18,6 +18,7 @@ QtObject {
     property color fontColor: "#006146"
     property color fontColorBright: "#679D70"
     property color panelBackground2: "#C6CCC7"
+    property color activeButtonColor: "#006146"
 
     // Secondary colors
     property color clrPanelMain: "white"
@@ -25,6 +26,7 @@ QtObject {
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
+    property color labelColor: "#999999"
 
     property color highlightColor: "#FD9626"
     property color softRed: "#FC9FB1"
@@ -40,6 +42,7 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real fieldHeight: scale(54)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
 
@@ -51,6 +54,8 @@ QtObject {
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
     property real cornerRadius: 8 * QgsQuick.Utils.dp
+    property real innerFieldMargin: 10 * QgsQuick.Utils.dp  // TODO rename fieldMargin
+    property real outerFieldMargin: 20 * QgsQuick.Utils.dp  // TODO change for PanelMargin
 
     property real refWidth: 640
     property real refHeight: 1136
@@ -73,6 +78,9 @@ QtObject {
     property var tableIcon: "qrc:/table.svg"
     property var uploadIcon: "qrc:/cloud-upload.svg"
     property var detachIcon: "qrc:/unlink.svg"
+    property var valueRelationIcon: "qrc:/value_relation_open.svg"
+    property var comboboxIcon: "qrc:/combobox.svg"
+    property var qrCodeIcon: "qrc:/qrcode.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"

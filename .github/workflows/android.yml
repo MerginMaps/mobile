@@ -1,11 +1,11 @@
 name: Android
 on: [push]
 env:
-  SDK_VERSION: android-20
+  SDK_VERSION: android-21
 
 jobs:
   android_build:
-    if: ( github.repository == 'lutraconsulting/input' ) && ("!contains(github.event.head_commit.message, 'Translate ')")
+    if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     strategy:
       matrix:

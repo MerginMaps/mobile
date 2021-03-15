@@ -96,6 +96,11 @@ macx:!android {
     LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
 
+    # ZXing
+    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
+    LIBS += -L$${ZXING_LIB_DIR}
+    LIBS += -lZXing
+
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
     # Uncomment this like to test the real in-app purchases on MacOS
@@ -114,6 +119,7 @@ macx:!android {
 
     QT += printsupport
     QT += widgets
+    QT += multimedia
     DEFINES += "HAVE_WIDGETS"
 
     QMAKE_CXXFLAGS += -std=c++11
