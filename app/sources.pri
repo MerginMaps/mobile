@@ -33,8 +33,8 @@ ios/iosutils.cpp \
 inputprojutils.cpp \
 codefilter.cpp \
 qrdecoder.cpp \
-models/projectsproxymodel_future.cpp \
-models/projectsmodel_future.cpp \
+projectsproxymodel_future.cpp \
+projectsmodel_future.cpp \
 project_future.cpp \
 
 exists(merginsecrets.cpp) {
@@ -79,8 +79,8 @@ ios/iosutils.h \
 inputprojutils.h \
 codefilter.h \
 qrdecoder.h \
-models/projectsproxymodel_future.h \
-models/projectsmodel_future.h \
+projectsproxymodel_future.h \
+projectsmodel_future.h \
 project_future.h \
 
 contains(DEFINES, INPUT_TEST) {
