@@ -117,6 +117,8 @@ void ProjectsModel_future::mergeProjects( const MerginProjectList &merginProject
         std::unique_ptr<MerginProject_future> mergin = std::unique_ptr<MerginProject_future>( new MerginProject_future() );
         mergin->projectName = merginProjects[i].projectName;
         mergin->projectNamespace = merginProjects[i].projectNamespace;
+        mergin->serverVersion = merginProjects[i].version;
+        mergin->serverUpdated = merginProjects[i].serverUpdated;
         // TODO: later copy data by copy constructor
         // TODO: check for project errors (from ListByName API ~> not authorized / no rights / no version)
 
