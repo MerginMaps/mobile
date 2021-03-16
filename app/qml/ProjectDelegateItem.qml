@@ -167,7 +167,7 @@ Rectangle {
     }
 
     // Additional item
-    DelegateButton {
+    DelegateButton { // TODO: replace with footer property on projects listview
       visible: itemContainer.isAdditional
       width: itemContainer.width
       height: itemContainer.height
