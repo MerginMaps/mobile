@@ -33,7 +33,7 @@ struct LocalProject_future
   QString projectName;
   QString projectNamespace;
 
-  QString projectIdentifier();
+  QString id();
 
   QString projectDir;
   QString projectError; // Error that leads to project not being able to open in app
@@ -53,15 +53,16 @@ struct MerginProject_future
   QString projectName;
   QString projectNamespace;
 
-  QString projectIdentifier();
-
-  QDateTime serverUpdated; // available latest version of project files on server // TODO: maybe we do not need this at all - only as description
+  QString id();
+  QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion;
 
   ProjectStatus_future status = ProjectStatus_future::_NoVersion;
   bool pending = false;
 
   qreal progress = 0;
+
+  // Maybe better use enum or int for error code
   QString remoteError; // Error leading to project not being able to sync
 };
 
@@ -75,9 +76,6 @@ struct Project_future
 
   bool isMergin() { return mergin != nullptr; }
   bool isLocal() { return local != nullptr; }
-
-  //! Attributes that should be there no matter the project type
-  QString projectDescription; // rather on the fly
 };
 
 #endif // PROJECT_FUTURE_H

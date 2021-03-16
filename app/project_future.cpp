@@ -21,12 +21,12 @@ void LocalProject_future::copyValues( const LocalProject_future &other )
   localVersion = other.localVersion;
 }
 
-QString MerginProject_future::projectIdentifier()
+QString MerginProject_future::id()
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
 
-QString LocalProject_future::projectIdentifier()
+QString LocalProject_future::id()
 {
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
