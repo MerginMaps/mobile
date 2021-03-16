@@ -58,18 +58,23 @@ class ProjectsModel_future : public QAbstractListModel
     //! Called to list projects, either fetch more or get first
     Q_INVOKABLE void listProjects();
 
+    //! Called to list projects, either fetch more or get first
+    Q_INVOKABLE void listProjectsByName();
+
     //! Method detecting local project for remote projects
     void mergeProjects( const MerginProjectList &merginProjects, Transactions pendingProjects );
 
   public slots:
     void onListProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
-    void onListProjectsByNameFinished();
+    void onListProjectsByNameFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, QString requestId );
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
 
   private:
 
     QString modelTypeToFlag() const;
+    void printProjects() const;
+    QStringList projectNames() const;
 
     MerginApi *mBackend;
     LocalProjectsManager &mLocalProjectsManager;
