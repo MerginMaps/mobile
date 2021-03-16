@@ -21,24 +21,22 @@ enum ProjectStatus_future
   _UpToDate,   //!< both server and local copy are in sync with no extra modifications
   _OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
   _Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
-  _NonProjectItem      //!< only for mock projects, acts like a hook to enable extra functionality for models working with projects .
-  // TODO: replace _NonProjectItem with footer property in ListView
-  // TODO2: add orphaned state?
+  // TODO: add orphaned state
 };
 Q_ENUMS( ProjectStatus_future )
 
 struct LocalProject_future
 {
-  LocalProject_future() { qDebug() << "Building LocalProject_future " << this; }
-  ~LocalProject_future() { qDebug() << "Removing LocalProject_future " << this; }
+  LocalProject_future() {}; /*{ qDebug() << "Building LocalProject_future " << this; }*/
+  ~LocalProject_future() {}; /*{ qDebug() << "Removing LocalProject_future " << this; }*/
 
   QString projectName;
   QString projectNamespace;
 
-  QString projectIdentifier() { return QString(); }
+  QString projectIdentifier();
 
   QString projectDir;
-  QString projectError;
+  QString projectError; // Error that leads to project not being able to open in app
 
   QString qgisProjectFilePath;
 
@@ -49,8 +47,8 @@ struct LocalProject_future
 
 struct MerginProject_future
 {
-  MerginProject_future() { qDebug() << "Building MerginProject_future " << this; }
-  ~MerginProject_future() { qDebug() << "Removing MerginProject_future " << this; }
+  MerginProject_future() {}; /*{ qDebug() << "Building MerginProject_future " << this; }*/
+  ~MerginProject_future() {}; /*{ qDebug() << "Removing MerginProject_future " << this; }*/
 
   QString projectName;
   QString projectNamespace;
@@ -64,13 +62,13 @@ struct MerginProject_future
   bool pending = false;
 
   qreal progress = 0;
-  // TODO: Add error code
+  QString remoteError; // Error leading to project not being able to sync
 };
 
 struct Project_future
 {
-  Project_future() { qDebug() << "Building Project_future " << this; }
-  ~Project_future() { qDebug() << "Removing Project_future " << this; }
+  Project_future() {}; /*{ qDebug() << "Building Project_future " << this; }*/
+  ~Project_future() {}; /*{ qDebug() << "Removing Project_future " << this; }*/
 
   std::unique_ptr<MerginProject_future> mergin;
   std::unique_ptr<LocalProject_future> local;
@@ -79,7 +77,7 @@ struct Project_future
   bool isLocal() { return local != nullptr; }
 
   //! Attributes that should be there no matter the project type
-  QString projectInfo;
+  QString projectDescription; // rather on the fly
 };
 
 #endif // PROJECT_FUTURE_H
