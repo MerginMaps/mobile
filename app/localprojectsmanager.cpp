@@ -22,7 +22,7 @@ LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   reloadProjectDir();
 }
 
-void LocalProjectsManager::reloadProjectDir()
+void LocalProjectsManager::reloadProjectDir() // TODO: maybe add function to reload one specific project
 {
   mProjects.clear();
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
@@ -46,6 +46,7 @@ void LocalProjectsManager::reloadProjectDir()
 
     mProjects << info;
   }
+
   qDebug() << "LocalProjectsManager: found" << mProjects.size() << "projects";
 }
 
