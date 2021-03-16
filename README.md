@@ -33,6 +33,15 @@ Click here to download the app on your mobile device:
 
 For more information on how to use the app, see [Documentation](https://help.inputapp.io).
 
+## How to help/contribute?
+
+- Help with translations, join [Input App Transifex Team](https://www.transifex.com/lutra-consulting/input)
+- Write a review of the application on Ap Store or Android Google Play
+- Test the application and report the bugs
+- Write a blog post or case study or create a youtube video. We are happy to help to promote it or co-author and place on our websites
+- Software developer? Code and prepare a pull request. We will help you with setup of the development environment and answer your questions.
+- Donate or [subscribe](https://public.cloudmergin.com) to the Mergin cloud service to help us maintain the project.
+
 ## Features
 
 Input features touch optimised GUI components based on Qt Quick (based on QGIS core library).  
