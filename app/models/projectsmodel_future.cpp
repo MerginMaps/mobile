@@ -120,9 +120,9 @@ void ProjectsModel_future::mergeProjects( const MerginProjectList &merginProject
         // TODO: later copy data by copy constructor
         // TODO: check for project errors (from ListByName API ~> not authorized / no rights / no version)
 
-        if ( pendingProjects.contains( mergin->projectIdentifier() ) )
+        if ( pendingProjects.contains( mergin->id() ) )
         {
-          TransactionStatus projectTransaction = pendingProjects.value( mergin->projectIdentifier() );
+          TransactionStatus projectTransaction = pendingProjects.value( mergin->id() );
           mergin->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
           mergin->pending = true;
         }
@@ -145,9 +145,9 @@ void ProjectsModel_future::mergeProjects( const MerginProjectList &merginProject
       mergin->projectNamespace = remoteEntry.projectNamespace;
       // TODO: later copy data by copy constructor
 
-      if ( pendingProjects.contains( mergin->projectIdentifier() ) )
+      if ( pendingProjects.contains( mergin->id() ) )
       {
-        TransactionStatus projectTransaction = pendingProjects.value( mergin->projectIdentifier() );
+        TransactionStatus projectTransaction = pendingProjects.value( mergin->id() );
         mergin->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
         mergin->pending = true;
       }
