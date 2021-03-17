@@ -27,13 +27,13 @@ Q_ENUMS( ProjectStatus_future )
 
 struct LocalProject_future
 {
-  LocalProject_future() {}; /*{ qDebug() << "Building LocalProject_future " << this; }*/
-  ~LocalProject_future() {}; /*{ qDebug() << "Removing LocalProject_future " << this; }*/
+  LocalProject_future() {};
+  ~LocalProject_future() {};
 
   QString projectName;
   QString projectNamespace;
 
-  QString id();
+  QString id(); //! projectFullName for time being
 
   QString projectDir;
   QString projectError; // Error that leads to project not being able to open in app
@@ -47,13 +47,14 @@ struct LocalProject_future
 
 struct MerginProject_future
 {
-  MerginProject_future() {}; /*{ qDebug() << "Building MerginProject_future " << this; }*/
-  ~MerginProject_future() {}; /*{ qDebug() << "Removing MerginProject_future " << this; }*/
+  MerginProject_future() {};
+  ~MerginProject_future() {};
 
   QString projectName;
   QString projectNamespace;
 
-  QString id();
+  QString id(); //! projectFullName for time being
+
   QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion;
 
@@ -68,14 +69,32 @@ struct MerginProject_future
 
 struct Project_future
 {
-  Project_future() {}; /*{ qDebug() << "Building Project_future " << this; }*/
-  ~Project_future() {}; /*{ qDebug() << "Removing Project_future " << this; }*/
+  Project_future() {};
+  ~Project_future() {};
 
   std::unique_ptr<MerginProject_future> mergin;
   std::unique_ptr<LocalProject_future> local;
 
-  bool isMergin() { return mergin != nullptr; }
-  bool isLocal() { return local != nullptr; }
+  bool isMergin() const { return mergin != nullptr; }
+  bool isLocal() const { return local != nullptr; }
+
+  bool operator ==( const Project_future &other )
+  {
+    if ( this->isLocal() && other.isLocal() )
+    {
+      return this->local->id() == other.local->id();
+    }
+    else if ( this->isMergin() && other.isMergin() )
+    {
+      return this->mergin->id() == other.mergin->id();
+    }
+    return false;
+  }
+
+  bool operator !=( const Project_future &other )
+  {
+    return !( *this == other );
+  }
 };
 
 #endif // PROJECT_FUTURE_H

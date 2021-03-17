@@ -41,8 +41,15 @@ class ProjectsModel_future : public QAbstractListModel
 
     enum Roles
     {
-      // TODO: rewrite to individual roles
-      Project = Qt::UserRole + 1
+      ProjectName = Qt::UserRole + 1,
+      ProjectNamespace,
+      ProjectFullName, // or ProjectId, filled with folderName if project is not
+      ProjectDescription,
+      ProjectPending,
+      ProjectIsMergin,
+      ProjectIsLocal,
+      ProjectStatus,
+      ProjectProgress
     };
     Q_ENUMS( Roles )
 
@@ -61,6 +68,12 @@ class ProjectsModel_future : public QAbstractListModel
     //! Called to list projects, either fetch more or get first
     Q_INVOKABLE void listProjectsByName();
 
+    //! Syncs specified project - upload or update
+    Q_INVOKABLE void syncProject( QString projectNamespace, QString projectName );
+
+    //! Stops running project upload or update
+    Q_INVOKABLE void stopProjectSync( QString projectNamespace, QString projectName );
+
     //! Method detecting local project for remote projects
     void mergeProjects( const MerginProjectList &merginProjects, Transactions pendingProjects );
 
@@ -75,6 +88,9 @@ class ProjectsModel_future : public QAbstractListModel
     QString modelTypeToFlag() const;
     void printProjects() const;
     QStringList projectNames() const;
+
+    bool containsProject( QString projectId ) const;
+    std::shared_ptr<Project_future> projectFromId( QString projectId ) const;
 
     MerginApi *mBackend;
     LocalProjectsManager &mLocalProjectsManager;
