@@ -10,6 +10,7 @@
 #include "projectsmodel_future.h"
 #include "localprojectsmanager.h"
 #include "inpututils.h"
+#include "merginuserauth.h"
 
 ProjectsModel_future::ProjectsModel_future(
   MerginApi *merginApi,
@@ -41,21 +42,29 @@ ProjectsModel_future::ProjectsModel_future(
   }
 }
 
-QVariant ProjectsModel_future::data( const QModelIndex &, int ) const
+QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
 {
-  return QVariant( "Test data" );
+  if ( !index.isValid() )
+    return QVariant();
+
+   std::shared_ptr<Project_future> project = mProjects.at( index.row() );
+
+  switch ( role ) {
+    default: return QVariant("TestData");
+  }
 }
 
-QModelIndex ProjectsModel_future::index( int, int, const QModelIndex & ) const
+QModelIndex ProjectsModel_future::index( int row, int col, const QModelIndex &parent ) const
 {
-  return QModelIndex();
+  Q_UNUSED( col )
+  Q_UNUSED( parent )
+  return createIndex( row, 0, nullptr );
 }
 
 QHash<int, QByteArray> ProjectsModel_future::roleNames() const
 {
   QHash<int, QByteArray> roles;
-  roles[Roles::Project] = QStringLiteral( "project" ).toLatin1();
-
+  roles[Roles::ProjectName] = QStringLiteral( "ProjectName" ).toLatin1();
   return roles;
 }
 
@@ -104,6 +113,8 @@ void ProjectsModel_future::mergeProjects( const MerginProjectList &merginProject
       local->projectName = localProject.projectName;
       local->projectNamespace = localProject.projectNamespace;
       local->projectDir = localProject.projectDir;
+      local->projectError = localProject.qgisProjectError;
+      local->qgisProjectFilePath = localProject.qgisProjectFilePath;
       // TODO: later copy data by copy constructor
       project->local = std::move( local );
 
@@ -215,19 +226,104 @@ void ProjectsModel_future::onListProjectsByNameFinished( const MerginProjectList
   endResetModel();
 }
 
+void ProjectsModel_future::syncProject( QString projectNamespace, QString projectName )
+{
+  std::shared_ptr<Project_future> project = projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+
+  if ( project == nullptr )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "not in projects list";
+    return;
+  }
+
+  if ( !project->isMergin() )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not a mergin project";
+    return;
+  }
+
+  if ( project->mergin->pending )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is already ";
+    return;
+  }
+
+  if ( project->mergin->status == _NoVersion || project->mergin->status == _OutOfDate )
+  {
+    qDebug() << "PMR: updating project:" << project->mergin->id();
+
+    bool useAuth = !mBackend->userAuth()->hasAuthData() && mModelType == ProjectModelTypes::ExploreProjectsModel;
+    mBackend->updateProject( projectNamespace, projectName, useAuth );
+  }
+  else if ( project->mergin->status == _Modified )
+  {
+    qDebug() << "PMR: uploading project:" << project->mergin->id();
+    mBackend->uploadProject( projectNamespace, projectName );
+  }
+}
+
+void ProjectsModel_future::stopProjectSync( QString projectNamespace, QString projectName )
+{
+  std::shared_ptr<Project_future> project = projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+
+  if ( project == nullptr )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "not in projects list";
+    return;
+  }
+
+  if ( !project->isMergin() )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not a mergin project";
+    return;
+  }
+
+  if ( !project->mergin->pending )
+  {
+    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not pending";
+    return;
+  }
+
+  if ( project->mergin->status == _NoVersion || project->mergin->status == _OutOfDate )
+  {
+    qDebug() << "PMR: cancelling update of project:" << project->mergin->id();
+    mBackend->updateCancel( project->mergin->id() );
+  }
+  else if ( project->mergin->status == _Modified )
+  {
+    qDebug() << "PMR: cancelling upload of project:" << project->mergin->id();
+    mBackend->uploadCancel( project->mergin->id() );
+  }
+}
+
 void ProjectsModel_future::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully )
 {
   Q_UNUSED( projectDir )
-  Q_UNUSED( projectFullName )
-  Q_UNUSED( successfully )
+
+  std::shared_ptr<Project_future> project = projectFromId( projectFullName );
+  if ( !project || !project->isMergin() || !successfully )
+    return;
+
+  project->mergin->pending = false;
+  project->mergin->progress = 0;
+
+  QModelIndex ix = index( mProjects.indexOf( project ) );
+  emit dataChanged( ix, ix );
 
   qDebug() << "PMR: Project " << projectFullName << " finished sync";
 }
 
 void ProjectsModel_future::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
 {
-  Q_UNUSED( projectFullName )
-  Q_UNUSED( progress )
+  std::shared_ptr<Project_future> project = projectFromId( projectFullName );
+  if ( !project || !project->isMergin() )
+    return;
+
+  project->mergin->pending = progress >= 0;
+  project->mergin->progress = progress >= 0 ? progress : 0;
+
+  QModelIndex ix = index( mProjects.indexOf( project ) );
+  emit dataChanged( ix, ix );
 
   qDebug() << "PMR: Project " << projectFullName << " changed sync progress to " << progress;
 }
@@ -247,7 +343,7 @@ QString ProjectsModel_future::modelTypeToFlag() const
 
 void ProjectsModel_future::printProjects() const // TODO: Helper function, remove after refactoring is done
 {
-  qDebug() << "Model " << this << " with type " << modelTypeToFlag() << " has projects: ";
+  qDebug() << "PMR: Model " << this << " with type " << modelTypeToFlag() << " has projects: ";
   for ( const auto &proj : mProjects )
   {
     QString lcl = proj->isLocal() ? "local" : "";
@@ -276,4 +372,23 @@ QStringList ProjectsModel_future::projectNames() const // TODO: use local projec
   }
 
   return projectNames;
+}
+
+bool ProjectsModel_future::containsProject( QString projectId ) const
+{
+  std::shared_ptr<Project_future> proj = projectFromId( projectId );
+  return proj != nullptr;
+}
+
+std::shared_ptr<Project_future> ProjectsModel_future::projectFromId( QString projectId ) const
+{
+  for ( int ix = 0; ix < mProjects.size(); ++ix )
+  {
+    if ( mProjects[ix]->isMergin() && mProjects[ix]->mergin->id() == projectId )
+      return mProjects[ix];
+    else if ( mProjects[ix]->isLocal() && mProjects[ix]->local->id() == projectId )
+      return mProjects[ix];
+  }
+
+  return nullptr;
 }

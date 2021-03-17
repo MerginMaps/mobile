@@ -121,6 +121,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   projects.insert( "projects", projectsArr );
   body.setObject( projects );
+  qDebug() << "PMR: listProjectsByName(): requesting projects " << projectNames;
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/by_names" ) );
 
@@ -1237,6 +1238,7 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
     }
 
     // for any local projects we can update the latest server version
+    // TODO: this should now be done inside model so no need to do it here (LocalProjects do not have server version anymore)
     for ( MerginProjectListEntry project : mRemoteProjects )
     {
       QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );

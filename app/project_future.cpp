@@ -8,8 +8,9 @@
  ***************************************************************************/
 
 #include "project_future.h"
-
 #include "merginapi.h"
+
+#include <QDirIterator>
 
 void LocalProject_future::copyValues( const LocalProject_future &other )
 {
@@ -31,5 +32,6 @@ QString LocalProject_future::id()
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
 
-  return projectDir;
+  QDir dir( projectDir );
+  return dir.dirName();
 }
