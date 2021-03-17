@@ -54,9 +54,6 @@ public class CameraActivity extends Activity implements SensorEventListener {
     private float[] mMagnetometerData = new float[3];
     // stores time -> azimuth (degree) for a whole run of the activity
     private HashMap<Long, Double> azimuthData = new HashMap<Long, Double>();
-    private HashMap<Long, Double> pitchData = new HashMap<Long, Double>();
-    private HashMap<Long, Double> rollData = new HashMap<Long, Double>();
-    private HashMap<Long, Double> cameraAngleData = new HashMap<Long, Double>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,12 +169,7 @@ public class CameraActivity extends Activity implements SensorEventListener {
 
         // Store sensor values
         double normDegrees = adjustDegreesToScreenOrientation(degrees);
-        double cameraAngle = adjustCameraAngleOrientation(pitchDegrees, rollDegrees);
-
         azimuthData.put(System.currentTimeMillis(), normDegrees);
-        pitchData.put(System.currentTimeMillis(), pitchDegrees);
-        rollData.put(System.currentTimeMillis(), rollDegrees);
-        cameraAngleData.put(System.currentTimeMillis(), cameraAngle);
     }
 
 
@@ -239,21 +231,12 @@ public class CameraActivity extends Activity implements SensorEventListener {
             // TODO: after copy, verify if is correctly copied and then remove the old one
         }
         finish();
-
-        // TODO
         azimuthData.clear();
-        pitchData.clear();
-        rollData.clear();
-        cameraAngleData.clear();
     }
 
     private void extendGPSExifData(long captureTime) {
         double degrees = getValueByTime(azimuthData, captureTime);
-        double cameraAngle = getValueByTime(cameraAngleData, captureTime);
-        double pitch = getValueByTime(pitchData, captureTime);
-        double roll = getValueByTime(rollData, captureTime);
-
-        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), degrees, cameraAngle, pitch, roll);
+        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), degrees);
     }
 
     private double getValueByTime(HashMap<Long, Double> data, long time) {
@@ -286,25 +269,6 @@ public class CameraActivity extends Activity implements SensorEventListener {
                 return normalizeDegree(degrees + 270);
             }
             default: return degrees;
-        }
-    }
-
-    private double adjustCameraAngleOrientation(double pitch, double roll) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0: {
-                return (360 - pitch);
-            }
-            case Surface.ROTATION_90: {
-                return (360 - roll);
-            }
-            case Surface.ROTATION_180: {
-                return pitch;
-            }
-            case Surface.ROTATION_270: {
-                return roll;
-            }
-            default: return pitch;
         }
     }
 
