@@ -75,6 +75,7 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 
 QString AndroidUtils::getExifInfo( const QString &filePath )
 {
+#ifdef ANDROID
   QAndroidJniObject jFilePath = QAndroidJniObject::fromString( filePath );
   QAndroidJniObject jTag = QAndroidJniObject::fromString( "GPSDestBearing" ); // TODO
   QAndroidJniObject attribute = QAndroidJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
@@ -83,6 +84,9 @@ QString AndroidUtils::getExifInfo( const QString &filePath )
                                 jFilePath.object<jstring>(),
                                 jTag.object<jstring>() );
   return attribute.toString();
+#else
+  return QString();
+#endif
 }
 
 bool AndroidUtils::checkPermission( const QString &permissionString )
