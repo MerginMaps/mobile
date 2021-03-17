@@ -26,21 +26,24 @@ Item {
   property string labelText
 
   id: root
-  width: text.paintedWidth
-  height: root.iconSize + text.paintedHeight
 
   ColumnLayout {
     anchors.fill: parent
-    spacing: 20 * QgsQuick.Utils.dp
+    spacing: 2 * QgsQuick.Utils.dp
 
     Item {
       id: iconContainer
-      implicitHeight: 15 * QgsQuick.Utils.dp
-      Layout.alignment: Qt.AlignHCenter
+
+      Layout.fillHeight: true
+      Layout.preferredHeight: root.height / 2
+      Layout.preferredWidth: root.width
 
       Image {
         id: icon
-        x: -width/2
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+
         source: root.iconSource
         width: root.iconSize
         height: root.iconSize
@@ -58,16 +61,21 @@ Item {
 
     Item {
       id: textContainer
-      implicitHeight: 15 * QgsQuick.Utils.dp
 
+      Layout.fillHeight: true
+      Layout.preferredHeight: root.height / 2
+      Layout.preferredWidth: root.width
 
       Text {
         id: text
-        height: root.iconSize
+
         text: root.labelText
         font.pointSize: root.fontPointSize
+        width: parent.width
         color: root.fontColor
-        Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
+        maximumLineCount: 3
       }
     }
   }

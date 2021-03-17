@@ -250,14 +250,8 @@ Item {
     anchors.margins: fieldItem.textMargin
     visible: fieldItem.state === "notSet"
 
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
-
     RowLayout {
-      width: parent.width
-      height: photoButton.height * 2
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.verticalCenter: parent.verticalCenter
+      anchors.fill: parent
 
       QgsQuick.IconTextItem {
         id: photoButton
@@ -266,10 +260,11 @@ Item {
         iconSource: fieldItem.cameraIcon
         iconSize: buttonsContainer.itemHeight
         labelText: qsTr("Take a photo")
-
         visible: !readOnly && fieldItem.state !== " valid"
-        height: buttonsContainer.itemHeight * 1.5
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+        Layout.preferredHeight: parent.height
+        Layout.fillWidth: true
+        Layout.preferredWidth: ( parent.width - lineContainer.width ) / 2
 
         MouseArea {
           anchors.fill: parent
@@ -285,13 +280,15 @@ Item {
 
       Item {
         id: lineContainer
-        height: parent.height
         visible: !readOnly && fieldItem.state !== " valid"
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: line.width * 2
 
         Rectangle {
           id: line
 
-          height: parent.height
+          height: parent.height * 0.7
           color: customStyle.fields.fontColor
           width: 1.5 * QgsQuick.Utils.dp
           anchors.centerIn: parent
@@ -307,8 +304,10 @@ Item {
         labelText: qsTr("From gallery")
 
         visible: !readOnly && fieldItem.state !== " valid"
-        height: buttonsContainer.itemHeight * 1.5
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+        Layout.preferredHeight: parent.height
+        Layout.fillWidth: true
+        Layout.preferredWidth: ( parent.width - lineContainer.width ) / 2
 
         MouseArea {
           anchors.fill: parent
