@@ -74,7 +74,7 @@ class ProjectsModel_future : public QAbstractListModel
     //! Stops running project upload or update
     Q_INVOKABLE void stopProjectSync( QString projectNamespace, QString projectName );
 
-    //! Method detecting local project for remote projects
+    //! Method merging local and remote projects based on the model type
     void mergeProjects( const MerginProjectList &merginProjects, Transactions pendingProjects );
 
   public slots:
@@ -82,6 +82,12 @@ class ProjectsModel_future : public QAbstractListModel
     void onListProjectsByNameFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, QString requestId );
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
+
+    void onProjectAdded( const LocalProject_future &project );
+    void onProjectDeleted( const QString &projectFullName );
+
+    void onProjectDetachedFromMergin( const QString &projectFullName );
+    void onProjectAttachedToMergin() {};
 
   private:
 
@@ -99,7 +105,7 @@ class ProjectsModel_future : public QAbstractListModel
     ProjectModelTypes mModelType;
 
     //! For pagination
-    int mPopulatedPage = -1;
+    int mPopulatedPage = -1; // -> on the fly in QML:: QML should pass this to model
 
     //! For processing only my requests
     QString mLastRequestId;

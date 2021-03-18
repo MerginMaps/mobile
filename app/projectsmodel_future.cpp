@@ -24,6 +24,7 @@ ProjectsModel_future::ProjectsModel_future(
 {
   QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &ProjectsModel_future::onProjectSyncProgressChanged );
   QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &ProjectsModel_future::onProjectSyncFinished );
+  QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel_future::onProjectDetachedFromMergin );
 
   // TODO: connect to signals from LocalProjectsManager
 //  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectAdded )
@@ -40,6 +41,8 @@ ProjectsModel_future::ProjectsModel_future(
   {
     // Implement RecentProjectsModel type
   }
+
+//  QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel_future::onProjectAdded );
 }
 
 QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
@@ -326,6 +329,22 @@ void ProjectsModel_future::onProjectSyncProgressChanged( const QString &projectF
   emit dataChanged( ix, ix );
 
   qDebug() << "PMR: Project " << projectFullName << " changed sync progress to " << progress;
+}
+
+void ProjectsModel_future::onProjectAdded( const LocalProject_future &project )
+{
+  std::shared_ptr<Project_future> newProject = std::shared_ptr<Project_future>( new Project_future() );
+  newProject->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( project ) );
+}
+
+void ProjectsModel_future::onProjectDeleted( const QString &projectFullName )
+{
+  Q_UNUSED( projectFullName )
+}
+
+void ProjectsModel_future::onProjectDetachedFromMergin( const QString &projectFullName )
+{
+  Q_UNUSED( projectFullName )
 }
 
 QString ProjectsModel_future::modelTypeToFlag() const
