@@ -15,26 +15,19 @@ import java.util.stream.Collectors;
 import android.os.Bundle;
 import android.os.Environment;
 import android.net.Uri;
-import android.view.Display;
-import android.view.Surface;
-import android.view.WindowManager;
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
 import android.support.v4.content.FileProvider;
-
-import uk.co.lutraconsulting.EXIFUtils;
-// Sensors
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-public class CameraActivity extends Activity implements SensorEventListener {
+import uk.co.lutraconsulting.EXIFUtils;
+import uk.co.lutraconsulting.OrientationSensor;
+
+public class CameraActivity extends Activity {
     private static final String TAG = "Camera Activity";
     private static final int CAMERA_CODE = 102;
 
@@ -42,18 +35,26 @@ public class CameraActivity extends Activity implements SensorEventListener {
     private File cameraFile;
 
     // Sensors
-    int SENSOR_DELAY_MS = 5000;
-    int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL; //SENSOR_DELAY_MS * 1000;
+    int DATA_FREQUENCY = 1000; // in ms // TODO CHANGE
+    int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL; // 200-300ms, value in micoseconds
     private SensorManager mSensorManager;
-    private Sensor mSensorAccelerometer;
-    private Sensor mSensorMagnetometer;
+    private OrientationSensor orientationSensor;
 
-    // Current data from accelerometer & magnetometer.  The arrays hold values
-    // for X, Y, and Z.
-    private float[] mAccelerometerData = new float[3];
-    private float[] mMagnetometerData = new float[3];
-    // stores time -> azimuth (degree) for a whole run of the activity
-    private HashMap<Long, Double> azimuthData = new HashMap<Long, Double>();
+//    private Sensor mSensorAccelerometer;
+//    private Sensor mSensorMagnetometer;
+//
+//    float[] mGravity;
+//    float[] mGeomagnetic;
+//
+//    // time in ms of last data insertion
+//    long lastRecorderData;
+//
+//    // Current data from accelerometer & magnetometer.  The arrays hold values
+//    // for X, Y, and Z.
+//    private float[] mAccelerometerData = new float[3];
+//    private float[] mMagnetometerData = new float[3];
+//    // stores time (milliseconds) -> azimuth (degrees) for a whole run of the activity
+//    private HashMap<Long, Integer> azimuthData = new HashMap<Long, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,8 @@ public class CameraActivity extends Activity implements SensorEventListener {
         // Init sensors
         mSensorManager = (SensorManager) getSystemService(
                 Context.SENSOR_SERVICE);
-        mSensorAccelerometer = mSensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER);
-        mSensorMagnetometer = mSensorManager.getDefaultSensor(
-                Sensor.TYPE_MAGNETIC_FIELD);
+        orientationSensor = new OrientationSensor(mSensorManager, null);
+        orientationSensor.Register(this, SENSOR_DELAY);
 
         targetPath = getIntent().getExtras().getString("targetPath");
         Log.d(TAG, "targetPath: " + targetPath);
@@ -100,87 +99,6 @@ public class CameraActivity extends Activity implements SensorEventListener {
         return;
     }
 
-    /**
-     * Listeners for the sensors are registered in this callback so that
-     * they can be unregistered in onStop().
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (mSensorAccelerometer != null) {
-            mSensorManager.registerListener(this, mSensorAccelerometer,
-                    SENSOR_DELAY);
-        }
-        if (mSensorMagnetometer != null) {
-            mSensorManager.registerListener(this, mSensorMagnetometer,
-                    SENSOR_DELAY);
-        }
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        // The sensor type (as defined in the Sensor class).
-        int sensorType = sensorEvent.sensor.getType();
-
-        // The sensorEvent object is reused across calls to onSensorChanged().
-        // clone() gets a copy so the data doesn't change out from under us
-        switch (sensorType) {
-            case Sensor.TYPE_ACCELEROMETER:
-                mAccelerometerData = sensorEvent.values.clone();
-                break;
-            case Sensor.TYPE_MAGNETIC_FIELD:
-                mMagnetometerData = sensorEvent.values.clone();
-                break;
-            default:
-                return;
-        }
-        // Compute the rotation matrix: merges and translates the data
-        // from the accelerometer and magnetometer, in the device coordinate
-        // system, into a matrix in the world's coordinate system.
-        //
-        // The second argument is an inclination matrix, which isn't
-        // used in this example.
-        float[] rotationMatrix = new float[9];
-        boolean rotationOK = SensorManager.getRotationMatrix(rotationMatrix,
-                null, mAccelerometerData, mMagnetometerData);
-
-        // Remap the matrix based on current device/activity rotation.
-        float[] rotationMatrixAdjusted = new float[9];
-        rotationMatrixAdjusted = rotationMatrix.clone();
-
-        // Get the orientation of the device (azimuth, pitch, roll) based
-        // on the rotation matrix. Output units are radians.
-        float orientationValues[] = new float[3];
-        if (rotationOK) {
-            SensorManager.getOrientation(rotationMatrixAdjusted,
-                    orientationValues);
-        }
-
-        // Pull out the individual values from the array.
-        float azimuth = orientationValues[0];
-        float pitch = orientationValues[1];
-        float roll = orientationValues[2];
-
-        // angle in degree [0 - 360] degree
-        double degrees = toDegrees(orientationValues[0]); // angle of rotation about the -z axis
-        double pitchDegrees = toDegrees(orientationValues[1]); // angle of rotation about the x axis
-        double rollDegrees = toDegrees(orientationValues[2]); // angle of rotation about the y axis
-
-        // Store sensor values
-        double normDegrees = adjustDegreesToScreenOrientation(degrees);
-        azimuthData.put(System.currentTimeMillis(), normDegrees);
-    }
-
-
-    /**
-     * Must be implemented to satisfy the SensorEventListener interface;
-     * unused in this app.
-     */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-    }
-
     private File createImageFile(String targetPath) throws IOException {
         // Create an image file name
         String currentPhotoPath;
@@ -204,7 +122,7 @@ public class CameraActivity extends Activity implements SensorEventListener {
         Log.d(TAG, "onActivityResult()");
         Log.d(TAG, "request: " + requestCode);
         Log.d(TAG, "resultCode: " + resultCode);
-        mSensorManager.unregisterListener(this);
+        orientationSensor.Unregister();
 
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(TAG, "tmp exists: " + cameraFile.exists());
@@ -231,49 +149,21 @@ public class CameraActivity extends Activity implements SensorEventListener {
             // TODO: after copy, verify if is correctly copied and then remove the old one
         }
         finish();
-        azimuthData.clear();
     }
 
     private void extendGPSExifData(long captureTime) {
-        double degrees = getValueByTime(azimuthData, captureTime);
+        int degrees = getValueByTime(orientationSensor.m_azimuth_data, captureTime);
         EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), degrees);
+        orientationSensor.m_azimuth_data.clear();
     }
 
-    private double getValueByTime(HashMap<Long, Double> data, long time) {
-        List<Double> result = data.entrySet().stream()
-                .filter(x -> Math.abs(x.getKey() - time) <= SENSOR_DELAY_MS)
+    private int getValueByTime(HashMap<Long, Integer> data, long time) {
+        List<Integer> result = data.entrySet().stream()
+                .filter(x -> Math.abs(x.getKey() - time) <= orientationSensor.DATA_FREQUENCY)
                 .map(x->x.getValue())
                 .collect(Collectors.toList());
         if (result.isEmpty()) return -1;
         return result.get(0);
-    }
-
-    private double toDegrees(double value) {
-        return normalizeDegree(Math.toDegrees(value) + 360);
-    }
-
-    // Angle of the device according to surface (camera pointing to surface has 0 degree)
-    private double adjustDegreesToScreenOrientation(double degrees) {
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0: {
-                return normalizeDegree(degrees);
-            }
-            case Surface.ROTATION_90: {
-                return normalizeDegree(degrees + 90);
-            }
-            case Surface.ROTATION_180: {
-                return normalizeDegree(degrees + 180);
-            }
-            case Surface.ROTATION_270: {
-                return normalizeDegree(degrees + 270);
-            }
-            default: return degrees;
-        }
-    }
-
-    private double normalizeDegree(double degree) {
-        return degree % 360;
     }
 
     private void copyFile(File src, File dst) throws IOException {

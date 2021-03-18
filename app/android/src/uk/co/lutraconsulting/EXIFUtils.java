@@ -26,9 +26,9 @@ public class EXIFUtils
     private static final String GPS_LAT_TAG = "GPSLatitude";
     private static final String GPS_DATE_TAG = "GPSDateStamp";
 
-    public static void writeExifGpsDirection(String src, double exifOrientation) {
+    public static void writeExifGpsDirection(String src, int exifOrientation) {
         HashMap<String, String> attributes = new HashMap<String, String>();
-        attributes.put(GPS_BEARING_TAG, calculateRational(exifOrientation));
+        attributes.put(GPS_BEARING_TAG, exifOrientation + "/1"); // has to be in rational format
         attributes.put(GPS_BEARING_REF_TAG, "M");
         writeExifAttributes(src, attributes);
     }
@@ -97,18 +97,5 @@ public class EXIFUtils
             }
         }
         return result;
-    }
-
-    // Converts double value to rational string representation
-    private static String calculateRational(double d) {
-
-        double precision_multiplier = Math.pow(10, DEGREE_PRECISION);
-        double rounded = Math.round(d * precision_multiplier)/precision_multiplier;
-        String[] fraction = Double.toString(rounded).split("\\.");
-
-        int denominator = (int)Math.pow(10, fraction[1].length());
-        int numerator = Integer.parseInt(fraction[0] + "" + fraction[1]);
-
-        return numerator + "/" + denominator;
     }
 }
