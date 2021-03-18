@@ -444,6 +444,7 @@ class MerginApi: public QObject
     void uploadCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
+    void projectAttachedToMergin( const QString &projectFullName );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
