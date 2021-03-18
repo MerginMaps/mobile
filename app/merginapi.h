@@ -331,7 +331,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName );
 
 
-    LocalProjectInfo getLocalProject( const QString &projectFullName );
+    LocalProject_future getLocalProject( const QString &projectFullName ); // Test function
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
@@ -502,7 +502,7 @@ class MerginApi: public QObject
     void sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
-    void createPathIfNotExists( const QString &filePath );
+    void createPathIfNotExists( const QString &filePath ); // TODO: make static and move to InputUtils
 
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
