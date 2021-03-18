@@ -27,7 +27,7 @@ Q_ENUMS( ProjectStatus_future )
 
 struct LocalProject_future
 {
-  LocalProject_future() {};
+  LocalProject_future() {}; // TODO: define copy constructor
   ~LocalProject_future() {};
 
   QString projectName;

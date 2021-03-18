@@ -443,7 +443,7 @@ class MerginApi: public QObject
     //! Emitted when upload cancellation request has finished
     void uploadCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
-    void projectDetached();
+    void projectDetached( const QString &projectFullName );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

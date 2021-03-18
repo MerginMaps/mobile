@@ -1150,7 +1150,7 @@ void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const 
   mLocalProjects.reloadProjectDir();
 
   emit notify( tr( "Project detached from Mergin" ) );
-  emit projectDetached();
+  emit projectDetached( projectFullName );
 }
 
 QString MerginApi::apiRoot() const
@@ -1518,6 +1518,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   // add the local project if not there yet
   if ( !mLocalProjects.projectFromMerginName( projectFullName ).isValid() )
   {
+    qDebug() << "PMR: Downloaded project" << projectFullName;
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
 
