@@ -33,7 +33,7 @@ struct LocalProject_future
   QString projectName;
   QString projectNamespace;
 
-  QString id(); //! projectFullName for time being
+  QString id() const; //! projectFullName for time being
 
   QString projectDir;
   QString projectError; // Error that leads to project not being able to open in app
@@ -43,6 +43,8 @@ struct LocalProject_future
   int localVersion = -1;
 
   void copyValues( const LocalProject_future &other );
+
+  bool isValid() { return !projectDir.isEmpty(); }
 };
 
 struct MerginProject_future
@@ -53,7 +55,7 @@ struct MerginProject_future
   QString projectName;
   QString projectNamespace;
 
-  QString id(); //! projectFullName for time being
+  QString id() const; //! projectFullName for time being
 
   QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion;

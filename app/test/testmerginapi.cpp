@@ -160,7 +160,7 @@ void TestMerginApi::testDownloadProject()
 
   // check that the local projects are updated
   QVERIFY( mApi->localProjectsManager().hasMerginProject( mUsername, projectName ) );
-  LocalProjectInfo project = mApi->localProjectsManager().projectFromMerginName( projectNamespace, projectName );
+  LocalProjectInfo project = mApi->localProjectsManager().projectFromFullName( projectNamespace, projectName );
   QVERIFY( project.isValid() );
   QCOMPARE( project.projectDir, mApi->projectsPath() + "/" + projectName );
   QCOMPARE( project.serverVersion, 1 );
@@ -253,7 +253,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   QCOMPARE( info.size(), 0 );
   QVERIFY( dir.isEmpty() );
 
-  api->localProjectsManager().removeProject( projectDir );
+  api->localProjectsManager().removeLocalProject( projectDir );
 
   QCOMPARE( QFileInfo( projectDir ).size(), 0 );
   QVERIFY( QDir( projectDir ).isEmpty() );
@@ -1347,7 +1347,7 @@ void TestMerginApi::testMigrateProject()
   createLocalProject( projectDir );
 
   // reload localmanager after copying the project
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
   QStringList entryList = QDir( projectDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
 
   // migrate project
@@ -1393,7 +1393,7 @@ void TestMerginApi::testMigrateProjectAndSync()
 
   // step 1
   createLocalProject( projectDir );
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
   // step 2
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
@@ -1446,7 +1446,7 @@ void TestMerginApi::testMigrateDetachProject()
   createLocalProject( projectDir );
 
   // reload localmanager after copying the project
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
 
   // migrate project
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
@@ -1516,7 +1516,7 @@ void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNa
   QDir projectDir( project.projectDir );
   projectDir.removeRecursively();
 
-  api->localProjectsManager().removeProject( project.projectDir );
+  api->localProjectsManager().removeLocalProject( project.projectDir );
 }
 
 void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )

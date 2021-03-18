@@ -153,6 +153,8 @@ class InputUtils: public QObject
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
 
+    static bool removeDir( const QString &projectDir );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

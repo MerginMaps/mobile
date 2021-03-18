@@ -19,18 +19,18 @@
 LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   : mDataDir( dataDir )
 {
-  reloadProjectDir();
+  reloadDataDir();
 }
 
-void LocalProjectsManager::reloadProjectDir() // TODO: maybe add function to reload one specific project
+void LocalProjectsManager::reloadDataDir() // TODO: maybe add function to reload one specific project
 {
   mProjects.clear();
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
   for ( QString folderName : entryList )
   {
-    LocalProjectInfo info;
+    LocalProject_future info;
     info.projectDir = mDataDir + "/" + folderName;
-    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir, info.qgisProjectError );
+    info.qgisProjectFilePath = findQgisProjectFile( info.projectDir, info.projectError );
 
     MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( info.projectDir + "/" + MerginApi::sMetadataFile );
     if ( metadata.isValid() )
@@ -39,10 +39,10 @@ void LocalProjectsManager::reloadProjectDir() // TODO: maybe add function to rel
       info.projectNamespace = metadata.projectNamespace;
       info.localVersion = metadata.version;
     }
-    else
-    {
-      info.projectName = folderName;
-    }
+//    else
+//    {
+//      info.projectName = folderName;
+//    }
 
     mProjects << info;
   }
@@ -50,180 +50,171 @@ void LocalProjectsManager::reloadProjectDir() // TODO: maybe add function to rel
   qDebug() << "LocalProjectsManager: found" << mProjects.size() << "projects";
 }
 
-LocalProjectInfo LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
+LocalProject_future LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
 {
-  for ( const LocalProjectInfo &info : mProjects )
+  for ( const LocalProject_future &info : mProjects )
   {
     if ( info.projectDir == projectDir )
       return info;
   }
-  return LocalProjectInfo();
+  return LocalProject_future();
 }
 
-LocalProjectInfo LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
+LocalProject_future LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
 {
-  for ( const LocalProjectInfo &info : mProjects )
+  for ( const LocalProject_future &info : mProjects )
   {
     if ( info.qgisProjectFilePath == projectFilePath )
       return info;
   }
-  return LocalProjectInfo();
+  return LocalProject_future();
 }
 
-LocalProjectInfo LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
+LocalProject_future LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
-  for ( const LocalProjectInfo &info : mProjects )
+  for ( const LocalProject_future &info : mProjects )
   {
-    if ( MerginApi::getFullProjectName( info.projectNamespace, info.projectName ) == projectFullName )
+    if ( info.id() == projectFullName )
       return info;
   }
-  return LocalProjectInfo();
+  return LocalProject_future();
 }
 
-LocalProjectInfo LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
+LocalProject_future LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
 {
   return projectFromMerginName( MerginApi::getFullProjectName( projectNamespace, projectName ) );
 }
 
-bool LocalProjectsManager::hasMerginProject( const QString &projectFullName ) const
-{
-  return projectFromMerginName( projectFullName ).isValid();
-}
+//bool LocalProjectsManager::hasMerginProject( const QString &projectFullName ) const
+//{
+//  return projectFromMerginName( projectFullName ).isValid();
+//}
 
-bool LocalProjectsManager::hasMerginProject( const QString &projectNamespace, const QString &projectName ) const
-{
-  return hasMerginProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-}
+//bool LocalProjectsManager::hasMerginProject( const QString &projectNamespace, const QString &projectName ) const
+//{
+//  return hasMerginProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+//}
 
-void LocalProjectsManager::updateProjectStatus( const QString &projectDir )
-{
-  for ( LocalProjectInfo &info : mProjects )
-  {
-    if ( info.projectDir == projectDir )
-    {
-      updateProjectStatus( info );
-      return;
-    }
-  }
-  Q_ASSERT( false );  // should not happen
-}
+//void LocalProjectsManager::updateProjectStatus( const QString &projectDir )
+//{
+//  for ( LocalProject_future &info : mProjects )
+//  {
+//    if ( info.projectDir == projectDir )
+//    {
+//      updateProjectStatus( info );
+//      return;
+//    }
+//  }
+//  Q_ASSERT( false );  // should not happen
+//}
 
-void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName, const QString &projectNamespace )
 {
-  LocalProjectInfo project;
+  LocalProject_future project;
   project.projectDir = projectDir;
-  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.qgisProjectError );
+  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.projectError );
   project.projectNamespace = projectNamespace;
   project.projectName = projectName;
 
   mProjects << project;
-}
-
-void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
-{
-  addProject( projectDir, projectNamespace, projectName );
-  // version info and status should be updated afterwards
-  emit localMerginProjectAdded( projectDir );
-}
-
-void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
-{
-  addProject( projectDir, QString(), projectName );
   emit localProjectAdded( projectDir );
 }
 
-void LocalProjectsManager::removeProject( const QString &projectDir )
+//void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+//{
+//  addProject( projectDir, projectNamespace, projectName );
+//  // version info and status should be updated afterwards
+//  emit localMerginProjectAdded( projectDir );
+//}
+
+//void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
+//{
+//  addProject( projectDir, QString(), projectName );
+//  emit localProjectAdded( projectDir );
+//}
+
+void LocalProjectsManager::removeLocalProject( const QString &projectDir )
 {
   for ( int i = 0; i < mProjects.count(); ++i )
   {
     if ( mProjects[i].projectDir == projectDir )
     {
+      InputUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
+
       emit localProjectRemoved( projectDir );
       return;
     }
   }
 }
 
-void LocalProjectsManager::resetMerginInfo( const QString &projectNamespace, const QString &projectName )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectNamespace == projectNamespace && mProjects[i].projectName == projectName )
-    {
-      mProjects[i].localVersion = -1;
-      mProjects[i].serverVersion = -1;
-      mProjects[i].projectNamespace.clear();
-      updateProjectStatus( mProjects[i] );
-      emit projectMetadataChanged( mProjects[i].projectDir );
-      return;
-    }
-  }
-}
+//void LocalProjectsManager::removeMerginInfo( const QString &projectFullName )
+//{
+//  for ( int i = 0; i < mProjects.count(); ++i )
+//  {
+//    if ( mProjects[i].id() == projectFullName )
+//    {
+//      mProjects[i].localVersion = -1;
+//      mProjects[i].projectNamespace.clear();
+//      InputUtils::removeDir( mProjects[i].projectDir + "/.mergin" );
 
-void LocalProjectsManager::deleteProjectDirectory( const QString &projectDir )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      Q_ASSERT( !projectDir.isEmpty() && projectDir != "/" );
-      QDir( projectDir ).removeRecursively();
-      mProjects.removeAt( i );
-      return;
-    }
-  }
-}
+//      emit localProjectDataChanged( mProjects[i].projectDir );
+//      return;
+//    }
+//  }
+//}
 
-void LocalProjectsManager::updateMerginLocalVersion( const QString &projectDir, int version )
+void LocalProjectsManager::updateLocalVersion( const QString &projectDir, int version )
 {
   for ( int i = 0; i < mProjects.count(); ++i )
   {
     if ( mProjects[i].projectDir == projectDir )
     {
       mProjects[i].localVersion = version;
-      updateProjectStatus( mProjects[i] );
+
+      emit localProjectDataChanged( mProjects[i].projectDir );
       return;
     }
   }
   Q_ASSERT( false );  // should not happen
 }
 
-void LocalProjectsManager::updateMerginServerVersion( const QString &projectDir, int version )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      mProjects[i].serverVersion = version;
-      updateProjectStatus( mProjects[i] );
-      return;
-    }
-  }
-  Q_ASSERT( false );  // should not happen
-}
+//void LocalProjectsManager::updateMerginServerVersion( const QString &projectDir, int version )
+//{
+//  for ( int i = 0; i < mProjects.count(); ++i )
+//  {
+//    if ( mProjects[i].projectDir == projectDir )
+//    {
+//      mProjects[i].serverVersion = version;
+//      updateProjectStatus( mProjects[i] );
+//      return;
+//    }
+//  }
+//  Q_ASSERT( false );  // should not happen
+//}
 
-void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const QString &errMsg )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      // Effects only local project list, no need to send projectMetadataChanged
-      mProjects[i].qgisProjectError = errMsg;
-      return;
-    }
-  }
-}
+//void LocalProjectsManager::updateProjectErrors( const QString &projectDir, const QString &errMsg )
+//{
+//  for ( int i = 0; i < mProjects.count(); ++i )
+//  {
+//    if ( mProjects[i].projectDir == projectDir )
+//    {
+//      // Effects only local project list, no need to send projectMetadataChanged
+//      mProjects[i].qgisProjectError = errMsg;
+//      return;
+//    }
+//  }
+//}
 
-void LocalProjectsManager::updateMerginNamespace( const QString &projectDir, const QString &projectNamespace )
+void LocalProjectsManager::updateNamespace( const QString &projectDir, const QString &projectNamespace )
 {
   for ( int i = 0; i < mProjects.count(); ++i )
   {
     if ( mProjects[i].projectDir == projectDir )
     {
-      // Effects only local project list, no need to send projectMetadataChanged
       mProjects[i].projectNamespace = projectNamespace;
+
+      emit localProjectDataChanged( mProjects[i].projectDir );
       return;
     }
   }
@@ -301,12 +292,15 @@ static int _getProjectFilesCount( const QString &path )
   return count;
 }
 
-ProjectStatus LocalProjectsManager::currentProjectStatus( const LocalProjectInfo &project )
+ProjectStatus_future LocalProjectsManager::currentProjectStatus( const Project_future &project )
 {
+  if ( !project.isMergin() || !project.isLocal() ) // This is not a Mergin project or not downloaded project
+    return ProjectStatus_future::_NoVersion;
+
   // There was no sync yet
-  if ( project.localVersion < 0 )
+  if ( project.local->localVersion < 0 )
   {
-    return ProjectStatus::NoVersion;
+    return ProjectStatus_future::_NoVersion;
   }
 
   //
@@ -314,31 +308,31 @@ ProjectStatus LocalProjectsManager::currentProjectStatus( const LocalProjectInfo
   //
 
   // Something has locally changed after last sync with server
-  QString metadataFilePath = project.projectDir + "/" + MerginApi::sMetadataFile;
-  QDateTime lastModified = _getLastModifiedFileDateTime( project.projectDir );
+  QString metadataFilePath = project.local->projectDir + "/" + MerginApi::sMetadataFile;
+  QDateTime lastModified = _getLastModifiedFileDateTime( project.local->projectDir );
   QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
   MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  int filesCount = _getProjectFilesCount( project.projectDir );
+  int filesCount = _getProjectFilesCount( project.local->projectDir );
   if ( lastSync < lastModified || meta.files.count() != filesCount )
   {
-    return ProjectStatus::Modified;
+    return ProjectStatus_future::_Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
-  if ( project.localVersion < project.serverVersion )
+  if ( project.local->localVersion < project.mergin->serverVersion )
   {
-    return ProjectStatus::OutOfDate;
+    return ProjectStatus_future::_OutOfDate;
   }
 
-  return ProjectStatus::UpToDate;
+  return ProjectStatus_future::_UpToDate;
 }
 
-void LocalProjectsManager::updateProjectStatus( LocalProjectInfo &project )
-{
-  ProjectStatus newStatus = currentProjectStatus( project );
-  if ( newStatus != project.status )
-  {
-    project.status = newStatus;
-    emit projectMetadataChanged( project.projectDir );
-  }
-}
+//void LocalProjectsManager::updateProjectStatus( LocalProject_future &project )
+//{
+//  ProjectStatus newStatus = currentProjectStatus( project );
+//  if ( newStatus != project.status )
+//  {
+//    project.status = newStatus;
+//    emit projectMetadataChanged( project.projectDir );
+//  }
+//}

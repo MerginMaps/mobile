@@ -761,11 +761,12 @@ void MerginApi::createProjectFinished()
     extractProjectName( projectFullName, projectNamespace, projectName );
 
     // Upload data if createProject has been called for a local project with empty namespace (case of migrating a project)
-    for ( const LocalProjectInfo &info : mLocalProjects.projects() )
+    for ( const LocalProject_future &info : mLocalProjects.projects() )
     {
       if ( info.projectName == projectName && info.projectNamespace.isEmpty() )
       {
-        mLocalProjects.updateMerginNamespace( info.projectDir, projectNamespace );
+        mLocalProjects.updateNamespace( info.projectDir, projectNamespace );
+        emit projectAttachedToMergin( projectFullName );
 
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
@@ -1137,17 +1138,18 @@ void MerginApi::migrateProjectToMergin( const QString &projectName, const QStrin
 
 void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const QString &projectName )
 {
-  // remove mergin folder
+  // Remove mergin folder
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+
   if ( projectInfo.isValid() )
   {
-    QDir merginProjectDir( projectInfo.projectDir + "/.mergin" );
-    merginProjectDir.removeRecursively();
+    InputUtils::removeDir( projectInfo.projectDir + "/.mergin" );
   }
-  // Update localProjects (updating mMerginProjects can be omitted since it is updated on listing projects)
-  mLocalProjects.resetMerginInfo( projectNamespace, projectName );
-  mLocalProjects.reloadProjectDir();
+
+  // Update localProject
+  mLocalProjects.updateNamespace( projectInfo.projectDir, "" );
+  mLocalProjects.updateLocalVersion( projectInfo.projectDir, -1 );
 
   emit notify( tr( "Project detached from Mergin" ) );
   emit projectDetached( projectFullName );
@@ -2438,7 +2440,9 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     writeData( transaction.projectMetadata, transaction.projectDir + "/" + MerginApi::sMetadataFile );
 
     // update info of local projects
-    mLocalProjects.updateMerginLocalVersion( transaction.projectDir, transaction.version );
+    mLocalProjects.updateLocalVersion( transaction.projectDir, transaction.version );
+
+    // TODO: emit server version
     mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
 
     InputUtils::log( "sync " + projectFullName, QStringLiteral( "### Finished ###  New project version: %1\n" ).arg( transaction.version ) );
