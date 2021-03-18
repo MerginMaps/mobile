@@ -488,6 +488,14 @@ QString InputUtils::createUniqueProjectDirectory( const QString &baseDataDir, co
   return projectDirPath;
 }
 
+bool InputUtils::removeDir( const QString &dir )
+{
+  if( dir.isEmpty() || dir == "/" )
+    return false;
+
+  return QDir( dir ).removeRecursively();
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;

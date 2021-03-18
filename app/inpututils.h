@@ -169,6 +169,7 @@ class InputUtils: public QObject
 
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     static void registerInputExpressionFunctions();
+    static bool removeDir( const QString &projectDir );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
