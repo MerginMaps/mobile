@@ -941,7 +941,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   }
 
   int sinceVersion = -1;
-  LocalProjectInfo projectInfo = getLocalProject( projectFullName );
+  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( projectInfo.isValid() )
   {
     // let's also fetch the recent history of diffable files
@@ -1066,7 +1066,7 @@ QString MerginApi::extractServerErrorMsg( const QByteArray &data )
 }
 
 
-LocalProjectInfo MerginApi::getLocalProject( const QString &projectFullName )
+LocalProject_future MerginApi::getLocalProject( const QString &projectFullName )
 {
   return mLocalProjects.projectFromMerginName( projectFullName );
 }
@@ -1242,15 +1242,15 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
 
     // for any local projects we can update the latest server version
     // TODO: this should now be done inside model so no need to do it here (LocalProjects do not have server version anymore)
-    for ( MerginProjectListEntry project : mRemoteProjects )
-    {
-      QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );
-      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( fullProjectName );
-      if ( localProject.isValid() )
-      {
-        mLocalProjects.updateMerginServerVersion( localProject.projectDir, project.version );
-      }
-    }
+//    for ( MerginProjectListEntry project : mRemoteProjects )
+//    {
+//      QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );
+//      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( fullProjectName );
+//      if ( localProject.isValid() )
+//      {
+//        mLocalProjects.updateMerginServerVersion( localProject.projectDir, project.version );
+//      }
+//    }
 
     InputUtils::log( "list projects", QStringLiteral( "Success - got %1 projects" ).arg( mRemoteProjects.count() ) );
   }
@@ -1417,7 +1417,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
-    LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
+    LocalProject_future info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = InputUtils::findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
     if ( !QFile::rename( dest, newDest ) )
     {
@@ -1471,7 +1471,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
       {
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
-        LocalProjectInfo info = mLocalProjects.projectFromMerginName( projectFullName );
+        LocalProject_future info = mLocalProjects.projectFromMerginName( projectFullName );
         QString newPath = InputUtils::findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
         if ( !QFile::rename( origPath, newPath ) )
         {
@@ -1528,7 +1528,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
     if ( !QFile::remove( InputUtils::downloadInProgressFilePath( transaction.projectDir ) ) )
       InputUtils::log( QStringLiteral( "sync %1" ).arg( projectFullName ), QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
 
-    mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
+    mLocalProjects.addLocalProject( projectDir, projectName, projectNamespace );
   }
 
   finishProjectSync( projectFullName, true );
@@ -1700,8 +1700,8 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-  if ( projectInfo.isValid() )
+  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  if ( projectInfo.isValid() ) // If project is already downloaded
   {
     transaction.projectDir = projectInfo.projectDir;
   }
@@ -1877,20 +1877,20 @@ void MerginApi::uploadInfoReplyFinished()
     transaction.replyUploadProjectInfo->deleteLater();
     transaction.replyUploadProjectInfo = nullptr;
 
-    LocalProjectInfo projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
     // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
-    projectInfo.serverVersion = serverProject.version;
+//    projectInfo.serverVersion = serverProject.version;
 
     // now let's figure a key question: are we on the most recent version of the project
     // if we're about to do upload? because if not, we need to do local update first
-    if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < projectInfo.serverVersion )
+    if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < serverProject.version )
     {
       InputUtils::log( "push " + projectFullName, QStringLiteral( "Need pull first: local version %1 | server version %2" )
-                       .arg( projectInfo.localVersion ).arg( projectInfo.serverVersion ) );
+                       .arg( projectInfo.localVersion ).arg( serverProject.version ) );
       transaction.updateBeforeUpload = true;
       startProjectUpdate( projectFullName, data );
       return;
@@ -1899,7 +1899,7 @@ void MerginApi::uploadInfoReplyFinished()
     QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
 
-    mLocalProjects.updateMerginServerVersion( transaction.projectDir, serverProject.version );
+//    mLocalProjects.updateMerginServerVersion( transaction.projectDir, serverProject.version );
 
     transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
     InputUtils::log( "push " + projectFullName, transaction.diff.dump() );
@@ -2308,7 +2308,7 @@ MerginProjectListEntry MerginApi::parseProjectMetadata( const QJsonObject &proj 
   }
   if ( proj.contains( QStringLiteral( "error" ) ) )
   {
-    // TODO: handle project error (might be orphaned project)
+    // TODO: handle project error (user might be logged out / do not have write rights / project is on different server / project is orphaned)
 
     proj.value( QStringLiteral( "error" ) ).toInt( 0 ); // error code
     return project;
@@ -2442,8 +2442,9 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     // update info of local projects
     mLocalProjects.updateLocalVersion( transaction.projectDir, transaction.version );
 
-    // TODO: emit server version
-    mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
+//    mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
+//    TODO: Is it neccessary to update server version at all?
+//    emit updateServerVersion( transaction.projectDir, transaction.version );
 
     InputUtils::log( "sync " + projectFullName, QStringLiteral( "### Finished ###  New project version: %1\n" ).arg( transaction.version ) );
   }
@@ -2481,7 +2482,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
       }
     }
   }
-
 }
 
 bool MerginApi::writeData( const QByteArray &data, const QString &path )
