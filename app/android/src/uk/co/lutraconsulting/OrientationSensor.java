@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -19,6 +20,7 @@ public class OrientationSensor implements SensorEventListener {
 
     public final static int SENSOR_UNAVAILABLE = -1;
     public final static int DATA_FREQUENCY = 500; // in ms
+    private static final String TAG = "Orientation sensor";
 
     // references to other objects
     SensorManager m_sm;
@@ -171,6 +173,8 @@ public class OrientationSensor implements SensorEventListener {
                 double azimuth_degrees = (Math.toDegrees(m_azimuth_radians) + 360) % 360;
                 m_azimuth_data.put(System.currentTimeMillis(), (int) azimuth_degrees);
             }
+        } else {
+            Log.d(TAG, "Sensors are not available");
         }
         if (m_parent != null) m_parent.onSensorChanged(evnt);
     }

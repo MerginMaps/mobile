@@ -26,10 +26,10 @@ public class EXIFUtils
     private static final String GPS_LAT_TAG = "GPSLatitude";
     private static final String GPS_DATE_TAG = "GPSDateStamp";
 
-    public static void writeExifGpsDirection(String src, int exifOrientation) {
+    public static void writeExifGpsDirection(String src, int bearing, String bearing_ref) {
         HashMap<String, String> attributes = new HashMap<String, String>();
-        attributes.put(GPS_BEARING_TAG, exifOrientation + "/1"); // has to be in rational format
-        attributes.put(GPS_BEARING_REF_TAG, "M");
+        attributes.put(GPS_BEARING_TAG, bearing + "/1"); // has to be in rational format
+        attributes.put(GPS_BEARING_REF_TAG, bearing_ref);
         writeExifAttributes(src, attributes);
     }
 
@@ -40,6 +40,7 @@ public class EXIFUtils
             ExifInterface exifInterface = new ExifInterface(src);
             for (String key: attributes.keySet()) {
                 exifInterface.setAttribute(key, attributes.get(key));
+                Log.d(TAG, "Set attribute: " + key + " -> " + attributes.get(key));
             }
             exifInterface.saveAttributes();
         } catch (IOException e) {

@@ -34,27 +34,8 @@ public class CameraActivity extends Activity {
     private String targetPath;
     private File cameraFile;
 
-    // Sensors
-    int DATA_FREQUENCY = 1000; // in ms // TODO CHANGE
-    int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL; // 200-300ms, value in micoseconds
     private SensorManager mSensorManager;
     private OrientationSensor orientationSensor;
-
-//    private Sensor mSensorAccelerometer;
-//    private Sensor mSensorMagnetometer;
-//
-//    float[] mGravity;
-//    float[] mGeomagnetic;
-//
-//    // time in ms of last data insertion
-//    long lastRecorderData;
-//
-//    // Current data from accelerometer & magnetometer.  The arrays hold values
-//    // for X, Y, and Z.
-//    private float[] mAccelerometerData = new float[3];
-//    private float[] mMagnetometerData = new float[3];
-//    // stores time (milliseconds) -> azimuth (degrees) for a whole run of the activity
-//    private HashMap<Long, Integer> azimuthData = new HashMap<Long, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +46,7 @@ public class CameraActivity extends Activity {
         mSensorManager = (SensorManager) getSystemService(
                 Context.SENSOR_SERVICE);
         orientationSensor = new OrientationSensor(mSensorManager, null);
-        orientationSensor.Register(this, SENSOR_DELAY);
+        orientationSensor.Register(this, SensorManager.SENSOR_DELAY_NORMAL);
 
         targetPath = getIntent().getExtras().getString("targetPath");
         Log.d(TAG, "targetPath: " + targetPath);
@@ -152,8 +133,9 @@ public class CameraActivity extends Activity {
     }
 
     private void extendGPSExifData(long captureTime) {
-        int degrees = getValueByTime(orientationSensor.m_azimuth_data, captureTime);
-        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), degrees);
+        int bearing = getValueByTime(orientationSensor.m_azimuth_data, captureTime);
+        String bearing_ref = "M"; // stands for Magnetic North since we use magnetic sensor
+        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), bearing, bearing_ref);
         orientationSensor.m_azimuth_data.clear();
     }
 
