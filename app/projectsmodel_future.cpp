@@ -43,6 +43,7 @@ ProjectsModel_future::ProjectsModel_future(
   }
 
 //  QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel_future::onProjectAdded );
+  QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel_future::onProjectDataChanged );
 }
 
 QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
@@ -331,20 +332,34 @@ void ProjectsModel_future::onProjectSyncProgressChanged( const QString &projectF
   qDebug() << "PMR: Project " << projectFullName << " changed sync progress to " << progress;
 }
 
-void ProjectsModel_future::onProjectAdded( const LocalProject_future &project )
+void ProjectsModel_future::onProjectAdded( const QString &projectDir )
 {
-  std::shared_ptr<Project_future> newProject = std::shared_ptr<Project_future>( new Project_future() );
-  newProject->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( project ) );
+  Q_UNUSED( projectDir )
+  qDebug() << "PMR: Added project" << projectDir;
 }
 
 void ProjectsModel_future::onProjectDeleted( const QString &projectFullName )
 {
   Q_UNUSED( projectFullName )
+  qDebug() << "PMR: Deleted project" << projectFullName;
+}
+
+void ProjectsModel_future::onProjectDataChanged( const QString &projectDir )
+{
+  Q_UNUSED( projectDir )
+  qDebug() << "PMR: Data changed in project" << projectDir;
 }
 
 void ProjectsModel_future::onProjectDetachedFromMergin( const QString &projectFullName )
 {
   Q_UNUSED( projectFullName )
+  qDebug() << "PMR: Project detached from mergin " << projectFullName;
+}
+
+void ProjectsModel_future::onProjectAttachedToMergin(const QString &projectFullName)
+{
+  Q_UNUSED( projectFullName )
+  qDebug() << "PMR: Project attached to mergin " << projectFullName;
 }
 
 QString ProjectsModel_future::modelTypeToFlag() const

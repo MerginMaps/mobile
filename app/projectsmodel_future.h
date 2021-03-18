@@ -83,11 +83,12 @@ class ProjectsModel_future : public QAbstractListModel
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
 
-    void onProjectAdded( const LocalProject_future &project );
+    void onProjectAdded( const QString &projectDir );
     void onProjectDeleted( const QString &projectFullName );
+    void onProjectDataChanged( const QString &projectDir );
 
     void onProjectDetachedFromMergin( const QString &projectFullName );
-    void onProjectAttachedToMergin() {};
+    void onProjectAttachedToMergin( const QString &projectFullName );
 
   private:
 
