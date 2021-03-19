@@ -26,7 +26,7 @@ public class EXIFUtils
     private static final String GPS_DATE_TAG = "GPSDateStamp";
 
     /**
-     * Writes EXIF data related to bering.
+     * Writes image direction to EXIF metadata.
      * @param src Absolute path of a file
      * @param direction [0-359] degrees (0=North, 90=East, ...)
      * @param direction_ref Either "M" as Magnetic North or "T" as True North
@@ -38,12 +38,12 @@ public class EXIFUtils
             attributes.put(GPS_DIRECTION_REF_TAG, direction_ref);
             writeExifAttributes(src, attributes);
         } else {
-            Log.d(TAG, "Skipped writing bearing (" + direction + ") - it is out of the range");
+            Log.d(TAG, "Skipped writing direction (" + direction + ") - it is out of the range");
         }
     }
 
     /**
-     * Writes EXIF data.
+     * Writes given attributes to EXIF metadata.
      * @param src Absolute path of a file
      * @param attributes Map of exif tag -> value to be written into EXIF
      */
