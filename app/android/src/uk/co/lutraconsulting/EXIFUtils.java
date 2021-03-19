@@ -32,7 +32,7 @@ public class EXIFUtils
      * @param direction_ref Either "M" as Magnetic North or "T" as True North
      */
     public static void writeExifGpsDirection(String src, int direction, String direction_ref) {
-        if (direction >= 0 || direction <= 359) {
+        if (direction >= 0 && direction <= 359) {
             HashMap<String, String> attributes = new HashMap<String, String>();
             attributes.put(GPS_DIRECTION_TAG, direction + "/1"); // has to be in rational format
             attributes.put(GPS_DIRECTION_REF_TAG, direction_ref);
