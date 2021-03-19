@@ -481,7 +481,8 @@ ApplicationWindow {
       id: gpsAccuracyBanner
       width: parent.width - gpsAccuracyBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
-      text: qsTr("Please make sure you have good view of the sky.")
+      text: qsTr("Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky.")
+        .arg(__inputUtils.formatNumber(positionKit.accuracy))
       link: "https://help.inputapp.io/howto/gps_accuracy"
       showWarning: recordToolbar.visible && showGpsAccuracyWarning()
     }
