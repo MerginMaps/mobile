@@ -30,6 +30,7 @@ QtObject {
 
     property color highlightColor: "#FD9626"
     property color panelItemHighlight: "#9ABFA0"
+    property color warningBannerColor: "#FFFF99"
     property color softRed: "#FC9FB1"
     property color softOrange: "#FDD7B1"
     property color softGreen: "#32AA3A"
@@ -82,6 +83,7 @@ QtObject {
     property var valueRelationIcon: "qrc:/value_relation_open.svg"
     property var comboboxIcon: "qrc:/combobox.svg"
     property var qrCodeIcon: "qrc:/qrcode.svg"
+    property var exclamationIcon: "qrc:/exclamation-circle.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"

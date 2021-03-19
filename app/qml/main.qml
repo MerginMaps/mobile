@@ -164,9 +164,17 @@ ApplicationWindow {
       }
     }
 
+    function isGpsAccuracyLow() {
+      return (positionKit.accuracy <= 0) || (positionKit.accuracy > __appSettings.gpsAccuracyTolerance)
+    }
+
     function getGpsIndicatorColor() {
         if (positionKit.accuracy <= 0) return InputStyle.softRed
-        return positionKit.accuracy < __appSettings.gpsAccuracyTolerance ? InputStyle.softGreen : InputStyle.softOrange
+        return isGpsAccuracyLow() ? InputStyle.softOrange : InputStyle.softGreen
+    }
+
+    function showGpsAccuracyWarning() {
+      return (__appSettings.gpsAccuracyWarning && positionKit.hasPosition && (digitizing.useGpsPoint || !digitizing.manualRecording) && isGpsAccuracyLow() )
     }
 
     function showMessage(message) {
@@ -469,6 +477,16 @@ ApplicationWindow {
       }
     }
 
+    Banner {
+      id: gpsAccuracyBanner
+      width: parent.width - gpsAccuracyBanner.anchors.margins * 2
+      height: InputStyle.rowHeight * 2
+      text: qsTr("Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky.")
+        .arg(__inputUtils.formatNumber(positionKit.accuracy))
+      link: "https://help.inputapp.io/howto/gps_accuracy"
+      showWarning: recordToolbar.visible && showGpsAccuracyWarning()
+    }
+
     RecordToolbar {
         id: recordToolbar
         width: window.width
@@ -479,7 +497,12 @@ ApplicationWindow {
         gpsIndicatorColor: getGpsIndicatorColor()
         manualRecordig: digitizing.manualRecording
         // reset manualRecording after opening
-        onVisibleChanged: if (visible) digitizing.manualRecording = true
+        onVisibleChanged: {
+          if (visible) digitizing.manualRecording = true
+          if  (gpsAccuracyBanner.showWarning) {
+            gpsAccuracyBanner.state = visible ? "show" : "fade"
+          }
+        }
 
         onAddClicked: {
             if (stateManager.state === "record") {
@@ -491,7 +514,7 @@ ApplicationWindow {
 
         onGpsSwitchClicked: {
             if (!positionKit.hasPosition) {
-                showMessage(qsTr("GPS currently unavailable.%1Try to allow GPS Location in your device settings.").arg("<br/>"))
+                showMessage(qsTr("GPS currently unavailable.%1Try to allow GPS Location in your device settings.").arg("\n"))
                 return // leaving when no gps is available
             }
             mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)

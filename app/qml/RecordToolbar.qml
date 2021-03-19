@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 import lc 1.0
 
 Item {
@@ -60,58 +61,17 @@ Item {
         }
     }
 
-    Rectangle {
-        id: extraPanel
-        height: extraPanelHeight
-        width: parent.width
-        color: InputStyle.fontColorBright
-        visible: extraPanelVisible
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                layerLabelClicked()
-            }
-        }
-
-        Row {
-            anchors.centerIn: parent
-            height: extraPanelHeight
-            spacing: 0
-
-            Item {
-                id: iconContainer
-                height: extraPanelHeight
-                width: extraPanelHeight
-
-                Image {
-                    id: icon
-                    anchors.fill: parent
-                    anchors.margins: extraPanelHeight/4
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    source: root.activeLayerIcon
-                    fillMode: Image.PreserveAspectFit
-                }
-
-                ColorOverlay {
-                    anchors.fill: icon
-                    source: icon
-                    color: "white"
-                }
-            }
-
-            Text {
-                id: label
-                height: extraPanel.height
-                text: root.activeLayerName
-                color: "white"
-                font.bold: true
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                rightPadding: extraPanelHeight/4
-            }
-        }
+    SimpleTextWithIcon {
+      id: extraPanel
+      height: extraPanelHeight
+      width: parent.width
+      color: InputStyle.fontColorBright
+      fontColor: "white"
+      fontPixelSize: InputStyle.fontPixelSizeSmall
+      visible: extraPanelVisible
+      source: root.activeLayerIcon
+      text: root.activeLayerName
+      onClicked: layerLabelClicked()
     }
 
     RowLayout {
