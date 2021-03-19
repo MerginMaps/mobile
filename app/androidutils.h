@@ -34,8 +34,13 @@ class AndroidUtils: public QObject
     static void requirePermissions();
     static bool checkAndAcquirePermissions( const QString &permissionString );
 
-    //! Calls getEXIFAttribute from Java
-    static QString getExifInfo( const QString &filePath );
+    /**
+     * Reads EXIF and returns value for given parameters.
+     * @param filePath Absolute path to a file
+     * @param tag EXIF string tag
+     * @return String value of EXIF attribute for given parameters. Note that rational numbers are still in rational string format.
+     */
+    static QString getExifInfo( const QString &filePath, const QString &tag );
 
     Q_INVOKABLE bool requestStoragePermission();
     bool requestCameraPermission();

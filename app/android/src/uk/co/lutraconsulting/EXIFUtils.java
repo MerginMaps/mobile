@@ -18,21 +18,35 @@ import android.util.Log;
 public class EXIFUtils
 {
     private static final String TAG = "EXIF Utils";
-    private static final int DEGREE_PRECISION = 2;
     // GPS EXIF TAGS
-    private static final String GPS_BEARING_TAG = "GPSDestBearing";
-    private static final String GPS_BEARING_REF_TAG = "GPSDestBearingRef";
+    private static final String GPS_DIRECTION_TAG = "GPSImgDirection";
+    private static final String GPS_DIRECTION_REF_TAG = "GPSImgDirectionRef";
     private static final String GPS_LON_TAG = "GPSLongitude";
     private static final String GPS_LAT_TAG = "GPSLatitude";
     private static final String GPS_DATE_TAG = "GPSDateStamp";
 
-    public static void writeExifGpsDirection(String src, int bearing, String bearing_ref) {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-        attributes.put(GPS_BEARING_TAG, bearing + "/1"); // has to be in rational format
-        attributes.put(GPS_BEARING_REF_TAG, bearing_ref);
-        writeExifAttributes(src, attributes);
+    /**
+     * Writes EXIF data related to bering.
+     * @param src Absolute path of a file
+     * @param direction [0-359] degrees (0=North, 90=East, ...)
+     * @param direction_ref Either "M" as Magnetic North or "T" as True North
+     */
+    public static void writeExifGpsDirection(String src, int direction, String direction_ref) {
+        if (direction >= 0 || direction <= 359) {
+            HashMap<String, String> attributes = new HashMap<String, String>();
+            attributes.put(GPS_DIRECTION_TAG, direction + "/1"); // has to be in rational format
+            attributes.put(GPS_DIRECTION_REF_TAG, direction_ref);
+            writeExifAttributes(src, attributes);
+        } else {
+            Log.d(TAG, "Skipped writing bearing (" + direction + ") - it is out of the range");
+        }
     }
 
+    /**
+     * Writes EXIF data.
+     * @param src Absolute path of a file
+     * @param attributes Map of exif tag -> value to be written into EXIF
+     */
     public static void writeExifAttributes(String src, HashMap<String, String> attributes) {
         Log.d(TAG, "WriteExif: " + src + " to file: ");
         InputStream in = null;
@@ -58,13 +72,19 @@ public class EXIFUtils
 
     public static HashMap<String, String> getExifGpsAttributes(String filepath) {
         List<String> exifTags = new ArrayList<String>();
-        exifTags.add(GPS_BEARING_TAG);
+        exifTags.add(GPS_DIRECTION_TAG);
         exifTags.add(GPS_LAT_TAG);
         exifTags.add(GPS_LON_TAG);
         exifTags.add(GPS_DATE_TAG);
         return getEXIFdata(filepath, exifTags);
     }
 
+    /**
+     * Reads and returns EXIF values for given file and for given EXIF Tag.
+     * @param filepath Absolute path of a file
+     * @param tag String EXIF tag to be read
+     * @return String EXIF value for given parameters
+     */
     public static String getEXIFAttribute(String filepath, String tag) {
         Log.d(TAG, "getEXIFAttribute: " + filepath + " - " + tag);
         List<String> exifTags = new ArrayList<String>();
@@ -72,6 +92,12 @@ public class EXIFUtils
         return getEXIFdata(filepath, exifTags).get(tag);
     }
 
+    /**
+     * Reads and returns EXIF values for given file and for given EXIF Tags.
+     * @param filepath Absolute path of a file
+     * @param exifTags List of EXIF tags to read
+     * @return Map of EXIF tag -> values
+     */
     public static HashMap<String, String> getEXIFdata(String filepath, List<String> exifTags) {
         Log.d(TAG, "getEXIFdata: " + filepath + " to file: ");
         InputStream in = null;

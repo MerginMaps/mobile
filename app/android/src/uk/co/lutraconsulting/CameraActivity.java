@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.graphics.Bitmap;
 import android.support.v4.content.FileProvider;
 import android.hardware.SensorManager;
+import android.hardware.camera2.CameraManager;
 
 import uk.co.lutraconsulting.EXIFUtils;
 import uk.co.lutraconsulting.OrientationSensor;
@@ -133,9 +134,14 @@ public class CameraActivity extends Activity {
     }
 
     private void extendGPSExifData(long captureTime) {
-        int bearing = getValueByTime(orientationSensor.m_azimuth_data, captureTime);
-        String bearing_ref = "M"; // stands for Magnetic North since we use magnetic sensor
-        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), bearing, bearing_ref);
+        int direction = getValueByTime(orientationSensor.m_azimuth_data, captureTime);
+        if (direction < 0) {
+            Log.d(TAG, "Skipping writing to EXIF, have no data from sensor");
+            return;
+        }
+
+        String direction_ref = "M"; // stands for Magnetic North since we use magnetic sensor
+        EXIFUtils.writeExifGpsDirection(cameraFile.getAbsolutePath(), direction, direction_ref);
         orientationSensor.m_azimuth_data.clear();
     }
 
