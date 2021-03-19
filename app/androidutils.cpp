@@ -73,6 +73,22 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
   return true;
 }
 
+QString AndroidUtils::getExifInfo( const QString &filePath, const QString &tag )
+{
+#ifdef ANDROID
+  QAndroidJniObject jFilePath = QAndroidJniObject::fromString( filePath );
+  QAndroidJniObject jTag = QAndroidJniObject::fromString( tag );
+  QAndroidJniObject attribute = QAndroidJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
+                                "getEXIFAttribute",
+                                "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+                                jFilePath.object<jstring>(),
+                                jTag.object<jstring>() );
+  return attribute.toString();
+#else
+  return QString();
+#endif
+}
+
 bool AndroidUtils::checkPermission( const QString &permissionString )
 {
 #ifdef ANDROID
@@ -226,6 +242,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QString absolutePath = absolutePathJNI.toString();
 
     QString selectedImagePath = "file://" + absolutePath;
+
     emit imageSelected( absolutePath );
   }
   else
