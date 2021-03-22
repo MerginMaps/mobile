@@ -121,7 +121,7 @@ class LocalProjectsManager : public QObject
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
 
-    static ProjectStatus_future currentProjectStatus( const Project_future &project ); // TODO: maybe move somewhere else?
+    static ProjectStatus_future currentProjectStatus( const std::shared_ptr<Project_future> project ); // TODO: maybe move somewhere else?
 
   signals:
     void projectMetadataChanged( const QString &projectDir );
