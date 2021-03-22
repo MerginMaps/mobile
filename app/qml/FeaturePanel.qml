@@ -221,7 +221,7 @@ Drawer {
                   property real bottomMargin: 1 * QgsQuick.Utils.dp
                   property real height: 64 * QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
-                  property int spacing: 0
+                  property int spacing: InputStyle.formSpacing
                   property int fontPixelSize: 24 * QgsQuick.Utils.dp
                 }
 

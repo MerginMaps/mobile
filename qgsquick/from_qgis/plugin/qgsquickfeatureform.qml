@@ -374,13 +374,13 @@ Item {
               Item {
                 id: headerContainer
                 width: parent.width
-                height: section === "" ? 0 : form.style.group.height + 2 * form.style.fields.sideMargin // fields use sideMargin twice for top margin
+                height: section === "" ? 0 : form.style.group.height + form.style.group.spacing // add space after section header
 
                 Rectangle {
                   width: parent.width
                   height: section === "" ? 0 : form.style.group.height
                   color: form.style.group.marginColor
-                  anchors.bottom: parent.bottom
+                  anchors.top: parent.top
                   
                   Rectangle {
                     anchors.fill: parent
@@ -417,9 +417,9 @@ Item {
 
             delegate: fieldItem
 
-            footer: Rectangle {
+            header: Rectangle {
               opacity: 1
-              height: 15 * QgsQuick.Utils.dp
+              height: form.style.group.spacing
             }
           }
         }
@@ -465,7 +465,7 @@ Item {
 
       Item {
         id: labelPlaceholder
-        height: fieldLabel.height + constraintDescriptionLabel.height + 2 * form.style.fields.sideMargin
+        height: fieldLabel.height + constraintDescriptionLabel.height + form.style.fields.sideMargin
         anchors {
           left: parent.left
           right: parent.right
@@ -482,7 +482,6 @@ Item {
           font.pointSize: form.style.fields.labelPointSize
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
-          anchors.topMargin: form.style.fields.sideMargin
           anchors.top: parent.top
         }
 
