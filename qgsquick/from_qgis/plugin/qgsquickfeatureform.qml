@@ -378,7 +378,7 @@ Item {
 
                 Rectangle {
                   width: parent.width
-                  height: form.style.group.height
+                  height: section === "" ? 0 : form.style.group.height
                   color: form.style.group.marginColor
                   anchors.bottom: parent.bottom
                   
