@@ -49,7 +49,7 @@ class ProjectsModel_future : public QAbstractListModel
       ProjectIsMergin,
       ProjectIsLocal,
       ProjectStatus,
-      ProjectProgress
+      ProjectSyncProgress
     };
     Q_ENUMS( Roles )
 
@@ -83,9 +83,9 @@ class ProjectsModel_future : public QAbstractListModel
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
 
-    void onProjectAdded( const QString &projectDir );
-    void onProjectRemoved( const QString &projectFullName );
-    void onProjectDataChanged( const QString &projectDir );
+    void onProjectAdded( const LocalProject_future &project );
+    void onAboutToRemoveProject( const LocalProject_future project );
+    void onProjectDataChanged( const LocalProject_future &project );
 
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );

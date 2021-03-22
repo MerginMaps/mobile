@@ -126,9 +126,10 @@ class LocalProjectsManager : public QObject
   signals:
     void projectMetadataChanged( const QString &projectDir );
     void localMerginProjectAdded( const QString &projectDir );
-    void localProjectAdded( const QString &projectDir );
-    void localProjectRemoved( const QString &projectDir );
-    void localProjectDataChanged( const QString &projectDir );
+    void localProjectAdded( const LocalProject_future &project );
+    void aboutToRemoveLocalProject( const LocalProject_future project );
+    void localProjectDataChanged( const LocalProject_future &project );
+    void dataDirReloaded();
 
 //  private:
 //    void updateProjectStatus( LocalProject_future &project ); // TODO: local project manager should not have status

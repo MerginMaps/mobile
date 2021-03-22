@@ -46,6 +46,7 @@ void LocalProjectsManager::reloadDataDir() // TODO: maybe add function to reload
 
     mProjects << info;
   }
+  emit dataDirReloaded();
 
   qDebug() << "LocalProjectsManager: found" << mProjects.size() << "projects";
 }
@@ -124,10 +125,11 @@ void LocalProjectsManager::removeLocalProject( const QString &projectDir )
   {
     if ( mProjects[i].projectDir == projectDir )
     {
+      emit aboutToRemoveLocalProject( mProjects[i] );
+
       InputUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
 
-      emit localProjectRemoved( projectDir );
       return;
     }
   }
@@ -157,7 +159,7 @@ void LocalProjectsManager::updateLocalVersion( const QString &projectDir, int ve
     {
       mProjects[i].localVersion = version;
 
-      emit localProjectDataChanged( mProjects[i].projectDir );
+      emit localProjectDataChanged( mProjects[i] );
       return;
     }
   }
@@ -199,7 +201,7 @@ void LocalProjectsManager::updateNamespace( const QString &projectDir, const QSt
     {
       mProjects[i].projectNamespace = projectNamespace;
 
-      emit localProjectDataChanged( mProjects[i].projectDir );
+      emit localProjectDataChanged( mProjects[i] );
       return;
     }
   }
@@ -252,7 +254,7 @@ void LocalProjectsManager::addProject(const QString &projectDir, const QString &
   project.projectNamespace = projectNamespace;
 
   mProjects << project;
-  emit localProjectAdded( projectDir );
+  emit localProjectAdded( project );
 }
 
 static QDateTime _getLastModifiedFileDateTime( const QString &path )
