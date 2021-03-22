@@ -11,9 +11,10 @@
 #define PROJECT_FUTURE_H
 
 #include <QObject>
-#include <qdebug.h>
 #include <QDateTime>
+#include <QDirIterator>
 #include <memory>
+#include <qdebug.h>
 
 enum ProjectStatus_future
 {
@@ -98,6 +99,27 @@ struct Project_future
 
   bool isMergin() const { return mergin != nullptr; }
   bool isLocal() const { return local != nullptr; }
+
+  QString projectName()
+  {
+    if ( isLocal() ) return local->projectName;
+    else if ( isMergin() ) return mergin->projectName;
+    return QString();
+  }
+
+  QString projectNamespace()
+  {
+    if ( isLocal() ) return local->projectNamespace;
+    else if ( isMergin() ) return mergin->projectNamespace;
+    return QString();
+  }
+
+  QString projectId()
+  {
+    if ( isLocal() ) return local->id();
+    else if ( isMergin() ) return mergin->id();
+    return QString();
+  }
 
   bool operator ==( const Project_future &other )
   {
