@@ -27,6 +27,7 @@
 #include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
+#include "project_future.h"
 
 class MerginUserAuth;
 class MerginUserInfo;
@@ -166,27 +167,27 @@ struct TransactionStatus
 };
 
 
-struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_future.h
-{
-  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
+//struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_future.h
+//{
+//  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
 
-  QString projectName;
-  QString projectNamespace;
-  int version = -1;
-  QDateTime serverUpdated; // available latest version of project files on server
+//  QString projectName;
+//  QString projectNamespace;
+//  int version = -1;
+//  QDateTime serverUpdated; // available latest version of project files on server
 
-  bool operator ==( const MerginProjectListEntry &other )
-  {
-    return ( this->projectName == other.projectName ) && ( this->projectNamespace == other.projectNamespace );
-  }
+//  bool operator ==( const MerginProjectListEntry &other )
+//  {
+//    return ( this->projectName == other.projectName ) && ( this->projectNamespace == other.projectNamespace );
+//  }
 
-  bool operator !=( const MerginProjectListEntry &other )
-  {
-    return !( *this == other );
-  }
-};
+//  bool operator !=( const MerginProjectListEntry &other )
+//  {
+//    return !( *this == other );
+//  }
+//};
 
-typedef QList<MerginProjectListEntry> MerginProjectList; // TODO: replace with RemoteProject from Project_future.h
+//typedef QList<MerginProjectListEntry> MerginProjectList; // TODO: replace with RemoteProject from Project_future.h
 
 typedef QHash<QString, TransactionStatus> Transactions;
 
@@ -385,7 +386,7 @@ class MerginApi: public QObject
     static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir );
 
     //! Returns the most recent list of projects fetched from the server
-    MerginProjectList projects();
+//    MerginProjectList projects();
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
@@ -413,9 +414,9 @@ class MerginApi: public QObject
   signals:
     void apiSupportsSubscriptionsChanged();
 
-    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
+    void listProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
-    void listProjectsByNameFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, QString requestId );
+    void listProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
@@ -470,8 +471,8 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
 
   private:
-    MerginProjectListEntry parseProjectMetadata( const QJsonObject &project );
-    MerginProjectList parseProjectsFromJson( const QJsonDocument &object );
+    MerginProject_future parseProjectMetadata( const QJsonObject &project );
+    MerginProjectsList parseProjectsFromJson( const QJsonDocument &object );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
@@ -568,7 +569,7 @@ class MerginApi: public QObject
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
-    MerginProjectList mRemoteProjects; // TODO: remove (no use, only in tests - TBD)
+//    MerginProjectList mRemoteProjects; // TODO: remove (no use, only in tests - TBD)
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)

@@ -1189,10 +1189,10 @@ QString MerginApi::merginUserName() const
   return userAuth()->username();
 }
 
-MerginProjectList MerginApi::projects()
-{
-  return mRemoteProjects;
-}
+//MerginProjectList MerginApi::projects()
+//{
+//  return mRemoteProjects;
+//}
 
 QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
 {
@@ -1221,6 +1221,7 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
 
   int projectCount = -1;
   int requestedPage = 1;
+  MerginProjectsList projectList;
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -1233,12 +1234,12 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
     if ( doc.isObject() )
     {
       projectCount = doc.object().value( "count" ).toInt();
-      mRemoteProjects = parseProjectsFromJson( doc );
+      projectList = parseProjectsFromJson( doc );
     }
-    else
-    {
-      mRemoteProjects.clear();
-    }
+//    else
+//    {
+//      mRemoteProjects.clear();
+//    }
 
     // for any local projects we can update the latest server version
     // TODO: this should now be done inside model so no need to do it here (LocalProjects do not have server version anymore)
@@ -1252,7 +1253,7 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
 //      }
 //    }
 
-    InputUtils::log( "list projects", QStringLiteral( "Success - got %1 projects" ).arg( mRemoteProjects.count() ) );
+    InputUtils::log( "list projects", QStringLiteral( "Success - got %1 projects" ).arg( projectList.count() ) );
   }
   else
   {
@@ -1260,14 +1261,14 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjects" ), r->errorString(), serverMsg );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
     InputUtils::log( "list projects", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mRemoteProjects.clear();
+//    mRemoteProjects.clear();
 
     emit listProjectsFailed();
   }
 
   r->deleteLater();
 
-  emit listProjectsFinished( mRemoteProjects, mTransactionalStatus, projectCount, requestedPage, requestId );
+  emit listProjectsFinished( projectList, mTransactionalStatus, projectCount, requestedPage, requestId );
 }
 
 void MerginApi::listProjectsByNameReplyFinished( QString requestId )
@@ -1276,20 +1277,13 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
   Q_ASSERT( r );
 
   /* TODO: Detect orphaned project? Project that was considered Mergin but did not get info back */
-  MerginProjectList projectList;
+  MerginProjectsList projectList;
 
   if ( r->error() == QNetworkReply::NoError )
   {
     QByteArray data = r->readAll();
     QJsonDocument json = QJsonDocument::fromJson( data );
-
     projectList = parseProjectsFromJson( json );
-
-    for ( MerginProjectListEntry project : qAsConst( projectList ) )
-    {
-      qDebug() << "Project: " << project.projectName;
-    }
-
     InputUtils::log( "list projects by name", QStringLiteral( "Success - got %1 projects" ).arg( projectList.count() ) );
   }
   else
@@ -2298,19 +2292,19 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
   return diff;
 }
 
-MerginProjectListEntry MerginApi::parseProjectMetadata( const QJsonObject &proj )
+MerginProject_future MerginApi::parseProjectMetadata( const QJsonObject &proj )
 {
-  MerginProjectListEntry project;
+  MerginProject_future project;
 
   if ( proj.isEmpty() )
   {
     return project;
   }
+
   if ( proj.contains( QStringLiteral( "error" ) ) )
   {
-    // TODO: handle project error (user might be logged out / do not have write rights / project is on different server / project is orphaned)
-
-    proj.value( QStringLiteral( "error" ) ).toInt( 0 ); // error code
+    // handle project error (user might be logged out / do not have write rights / project is on different server / project is orphaned)
+    project.remoteError = proj.value( QStringLiteral( "error" ) ).toInt( 0 ); // error code
     return project;
   }
 
@@ -2320,12 +2314,12 @@ MerginProjectListEntry MerginApi::parseProjectMetadata( const QJsonObject &proj 
   QString versionStr = proj.value( QStringLiteral( "version" ) ).toString();
   if ( versionStr.isEmpty() )
   {
-    project.version = 0;
+    project.serverVersion = 0;
   }
   else if ( versionStr.startsWith( "v" ) ) // cut off 'v' part from v123
   {
     versionStr = versionStr.mid( 1 );
-    project.version = versionStr.toInt();
+    project.serverVersion = versionStr.toInt();
   }
 
   QDateTime updated = QDateTime::fromString( proj.value( QStringLiteral( "updated" ) ).toString(), Qt::ISODateWithMs ).toUTC();
@@ -2341,13 +2335,13 @@ MerginProjectListEntry MerginApi::parseProjectMetadata( const QJsonObject &proj 
 }
 
 
-MerginProjectList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
+MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
 {
   if ( !doc.isObject() )
-    return MerginProjectList();
+    return MerginProjectsList();
 
   QJsonObject object = doc.object();
-  MerginProjectList result;
+  MerginProjectsList result;
 
   if ( object.contains( "projects" ) && object.value( "projects" ).isArray() ) // listProjects API
   {
