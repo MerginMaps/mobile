@@ -140,6 +140,46 @@ void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQu
   mapSettings->setExtent( currentExtent );
 }
 
+QString InputUtils::formatExifString( const QString &exifValue, const QString &tag )
+{
+
+  if ( tag == QStringLiteral( "GPSLongitude" ) )
+  {
+    return formatExifCoordinateString( exifValue );
+  }
+  else if ( tag == QStringLiteral( "GPSLatitude" ) )
+  {
+    return formatExifCoordinateString( exifValue );
+  }
+  else if ( tag == QStringLiteral( "GPSImgDirection" ) )
+  {
+    return QString::number( formatRationalNumberString( exifValue ) ) + "°";
+  }
+  else
+  {
+    return exifValue;
+  }
+}
+
+QString InputUtils::formatExifCoordinateString( const QString &rationalValue )
+{
+  QStringList values = rationalValue.split( "," );
+  if ( values.size() != 3 ) return rationalValue;
+
+  float degree = formatRationalNumberString( values.at( 0 ) );
+  float minutes = formatRationalNumberString( values.at( 1 ) );
+  float seconds = formatRationalNumberString( values.at( 2 ) );
+  float res = degree + minutes / 60 + seconds / 3600;
+  return QString::number( res );
+}
+
+float InputUtils::formatRationalNumberString( const QString &rationalValue )
+{
+  QStringList number = rationalValue.split( "/" );
+  int numerator = number.at( 0 ).toInt();
+  int denominator = number.at( 1 ).toInt();
+  return numerator / denominator;
+}
 
 double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
 {
