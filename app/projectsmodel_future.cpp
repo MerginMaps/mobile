@@ -31,6 +31,7 @@ ProjectsModel_future::ProjectsModel_future(
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
     QObject::connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &ProjectsModel_future::onListProjectsByNameFinished );
+    loadLocalProjects(); // at app start, we need to fill model with local projects
   }
   else if ( mModelType != ProjectModelTypes::RecentProjectsModel )
   {
@@ -44,6 +45,7 @@ ProjectsModel_future::ProjectsModel_future(
   QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel_future::onProjectAdded );
   QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::aboutToRemoveLocalProject, this, &ProjectsModel_future::onAboutToRemoveProject );
   QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel_future::onProjectDataChanged );
+  QObject::connect( &mLocalProjectsManager, &LocalProjectsManager::dataDirReloaded, this, &ProjectsModel_future::loadLocalProjects );
 }
 
 QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
@@ -103,15 +105,16 @@ int ProjectsModel_future::rowCount( const QModelIndex & ) const
   return mProjects.count();
 }
 
-void ProjectsModel_future::listProjects()
+void ProjectsModel_future::listProjects( int page, QString searchExpression )
 {
   if ( mModelType == LocalProjectsModel )
   {
     InputUtils::log( "Input", "Can not call listProjects API on LocalProjectsModel" );
+    // maybe call listProjectsByName();
     return;
   }
 
-  mLastRequestId = mBackend->listProjects( "", modelTypeToFlag(), "", 1 ); //TODO: pagination
+  mLastRequestId = mBackend->listProjects( "", "" /*modelTypeToFlag()*/, searchExpression, page );
 }
 
 void ProjectsModel_future::listProjectsByName()
@@ -125,14 +128,14 @@ void ProjectsModel_future::listProjectsByName()
   mLastRequestId = mBackend->listProjectsByName( projectNames() );
 }
 
-void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects )
+void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
 {
   LocalProjectsList localProjects = mLocalProjectsManager.projects();
 
   qDebug() << "PMR: mergeProjects(): # of local projects = " << localProjects.size() << " # of mergin projects = " << merginProjects.size();
 
-  // TODO: clear projects only if this is local project or paginated page == 1
-  mProjects.clear();
+  if ( !keepPrevious )
+    mProjects.clear();
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
@@ -195,6 +198,11 @@ void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjec
   }
 }
 
+int ProjectsModel_future::serverProjectsCount() const
+{
+  return mServerProjectsCount;
+}
+
 void ProjectsModel_future::onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId )
 {
   qDebug() << "PMR: onListProjectsFinished(): received response with requestId = " << requestId;
@@ -204,14 +212,12 @@ void ProjectsModel_future::onListProjectsFinished( const MerginProjectsList &mer
     return;
   }
 
-  // TODO: save projectsCount and paginatedPage to model so that QML can respond accordingly -> show "fetch more"
-  Q_UNUSED( projectsCount );
-  Q_UNUSED( page );
+  setServerProjectsCount( projectsCount );
 
   qDebug() << "PMR: onListProjectsFinished(): project count =  " << projectsCount << " but mergin projects emited: " << merginProjects.size();
 
   beginResetModel();
-  mergeProjects( merginProjects, pendingProjects );
+  mergeProjects( merginProjects, pendingProjects, page != 1 ); // throw projects only if paginating first page
   printProjects();
   endResetModel();
 }
@@ -416,6 +422,15 @@ void ProjectsModel_future::onProjectAttachedToMergin( const QString &projectFull
   qDebug() << "PMR: Project attached to mergin " << projectFullName;
 }
 
+void ProjectsModel_future::setServerProjectsCount( int serverProjectsCount )
+{
+  if ( mServerProjectsCount == serverProjectsCount )
+    return;
+
+  mServerProjectsCount = serverProjectsCount;
+  emit serverProjectsCountChanged( mServerProjectsCount );
+}
+
 QString ProjectsModel_future::modelTypeToFlag() const
 {
   switch ( mModelType )
@@ -460,6 +475,16 @@ QStringList ProjectsModel_future::projectNames() const
   }
 
   return projectNames;
+}
+
+void ProjectsModel_future::loadLocalProjects()
+{
+  if ( mModelType == LocalProjectsModel )
+  {
+    beginResetModel();
+    mergeProjects( MerginProjectsList(), Transactions() ); // Fills model with local projects
+    endResetModel();
+  }
 }
 
 bool ProjectsModel_future::containsProject( QString projectId ) const
