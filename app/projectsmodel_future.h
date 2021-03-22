@@ -48,8 +48,10 @@ class ProjectsModel_future : public QAbstractListModel
       ProjectPending,
       ProjectIsMergin,
       ProjectIsLocal,
+      ProjectIsValid,
       ProjectStatus,
-      ProjectSyncProgress
+      ProjectSyncProgress,
+      ProjectRemoteError
     };
     Q_ENUMS( Roles )
 

@@ -290,13 +290,13 @@ static int _getProjectFilesCount( const QString &path )
   return count;
 }
 
-ProjectStatus_future LocalProjectsManager::currentProjectStatus( const Project_future &project )
+ProjectStatus_future LocalProjectsManager::currentProjectStatus( const std::shared_ptr<Project_future> project )
 {
-  if ( !project.isMergin() || !project.isLocal() ) // This is not a Mergin project or not downloaded project
+  if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus_future::_NoVersion;
 
   // There was no sync yet
-  if ( project.local->localVersion < 0 )
+  if ( project->local->localVersion < 0 )
   {
     return ProjectStatus_future::_NoVersion;
   }
@@ -306,18 +306,18 @@ ProjectStatus_future LocalProjectsManager::currentProjectStatus( const Project_f
   //
 
   // Something has locally changed after last sync with server
-  QString metadataFilePath = project.local->projectDir + "/" + MerginApi::sMetadataFile;
-  QDateTime lastModified = _getLastModifiedFileDateTime( project.local->projectDir );
+  QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
+  QDateTime lastModified = _getLastModifiedFileDateTime( project->local->projectDir );
   QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
   MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  int filesCount = _getProjectFilesCount( project.local->projectDir );
+  int filesCount = _getProjectFilesCount( project->local->projectDir );
   if ( lastSync < lastModified || meta.files.count() != filesCount )
   {
     return ProjectStatus_future::_Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
-  if ( project.local->localVersion < project.mergin->serverVersion )
+  if ( project->local->localVersion < project->mergin->serverVersion )
   {
     return ProjectStatus_future::_OutOfDate;
   }

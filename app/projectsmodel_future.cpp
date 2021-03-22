@@ -61,12 +61,14 @@ QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
     case ProjectFullName: return QVariant( project->projectId() );
     case ProjectIsLocal: return QVariant( project->isLocal() );
     case ProjectIsMergin: return QVariant( project->isMergin() );
+    case ProjectStatus: return QVariant( LocalProjectsManager::currentProjectStatus( project ) );
+    case ProjectIsValid: return QVariant( !project->isLocal() || ( project->isLocal() && project->local->projectError.isEmpty() ) );
     case ProjectDescription: {
       if ( project->isLocal() && !project->local->projectError.isEmpty() )
         return project->local->projectError;
 
       QFileInfo fi( project->local->projectDir );
-      return fi.lastModified(); // TODO: Better project info
+      return fi.lastModified();
     }
     default: {
       if ( !project->isMergin() ) return QVariant();
@@ -74,6 +76,7 @@ QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
       // Roles only for projects that has mergin part
       if ( role == ProjectPending ) return QVariant( project->mergin->pending );
       else if ( role == ProjectSyncProgress ) return QVariant( project->mergin->progress );
+      else if ( role == ProjectRemoteError ) return QVariant( project->mergin->remoteError );
       return QVariant();
     }
   }
@@ -114,7 +117,7 @@ void ProjectsModel_future::listProjects( int page, QString searchExpression )
     return;
   }
 
-  mLastRequestId = mBackend->listProjects( "", "" /*modelTypeToFlag()*/, searchExpression, page );
+  mLastRequestId = mBackend->listProjects( "", modelTypeToFlag(), searchExpression, page );
 }
 
 void ProjectsModel_future::listProjectsByName()
