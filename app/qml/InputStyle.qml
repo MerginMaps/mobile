@@ -58,6 +58,7 @@ QtObject {
     property real cornerRadius: 8 * QgsQuick.Utils.dp
     property real innerFieldMargin: 10 * QgsQuick.Utils.dp  // TODO rename fieldMargin
     property real outerFieldMargin: 20 * QgsQuick.Utils.dp  // TODO change for PanelMargin
+    property real formSpacing: 10 * QgsQuick.Utils.dp
 
     property real refWidth: 640
     property real refHeight: 1136
