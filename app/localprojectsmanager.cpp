@@ -26,7 +26,7 @@ void LocalProjectsManager::reloadDataDir() // TODO: maybe add function to reload
 {
   mProjects.clear();
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
-  for ( QString folderName : entryList )
+  for ( const QString &folderName : entryList )
   {
     LocalProject_future info;
     info.projectDir = mDataDir + "/" + folderName;
@@ -108,30 +108,15 @@ LocalProject_future LocalProjectsManager::projectFromMerginName( const QString &
 //  Q_ASSERT( false );  // should not happen
 //}
 
-void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName, const QString &projectNamespace )
+void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
 {
-  LocalProject_future project;
-  project.projectDir = projectDir;
-  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.projectError );
-  project.projectNamespace = projectNamespace;
-  project.projectName = projectName;
-
-  mProjects << project;
-  emit localProjectAdded( projectDir );
+  addProject( projectDir, QString(), projectName );
 }
 
-//void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
-//{
-//  addProject( projectDir, projectNamespace, projectName );
-//  // version info and status should be updated afterwards
-//  emit localMerginProjectAdded( projectDir );
-//}
-
-//void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
-//{
-//  addProject( projectDir, QString(), projectName );
-//  emit localProjectAdded( projectDir );
-//}
+void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+{
+  addProject( projectDir, projectNamespace, projectName );
+}
 
 void LocalProjectsManager::removeLocalProject( const QString &projectDir )
 {
@@ -258,6 +243,17 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
   return QString();
 }
 
+void LocalProjectsManager::addProject(const QString &projectDir, const QString &projectNamespace, const QString &projectName)
+{
+  LocalProject_future project;
+  project.projectDir = projectDir;
+  project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.projectError );
+  project.projectName = projectName;
+  project.projectNamespace = projectNamespace;
+
+  mProjects << project;
+  emit localProjectAdded( projectDir );
+}
 
 static QDateTime _getLastModifiedFileDateTime( const QString &path )
 {

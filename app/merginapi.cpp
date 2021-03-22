@@ -1527,7 +1527,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
     if ( !QFile::remove( InputUtils::downloadInProgressFilePath( transaction.projectDir ) ) )
       InputUtils::log( QStringLiteral( "sync %1" ).arg( projectFullName ), QStringLiteral( "Failed to remove download in progress file for project name %1" ).arg( projectName ) );
 
-    mLocalProjects.addLocalProject( projectDir, projectName, projectNamespace );
+    mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
 
   finishProjectSync( projectFullName, true );
