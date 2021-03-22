@@ -453,7 +453,8 @@ Item {
     Item {
       id: fieldContainer
       visible: Type === 'field'
-      height: childrenRect.height
+      // We also need to set height to zero if Type is not field otherwise children created blank space in form
+      height: Type === 'field' ? childrenRect.height : 0
 
       anchors {
         left: parent.left
