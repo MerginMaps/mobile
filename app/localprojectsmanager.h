@@ -79,15 +79,15 @@ class LocalProjectsManager : public QObject
     LocalProject_future projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
 
     //! Adds entry about newly created project
-    void addLocalProject( const QString &projectDir, const QString &projectName, const QString &projectNamespace = QString() );
+    void addLocalProject( const QString &projectDir, const QString &projectName );
 
 //    bool hasMerginProject( const QString &projectFullName ) const;
 //    bool hasMerginProject( const QString &projectNamespace, const QString &projectName ) const;
 
 //    void updateProjectStatus( const QString &projectDir );
 
-    //! Should add an entry about newly created Mergin project
-//    void addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+    //! Adds entry for downloaded project
+    void addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
 
     //! Should add an entry about newly created local project
 //    void addLocalProject( const QString &projectDir, const QString &projectName );
@@ -134,6 +134,8 @@ class LocalProjectsManager : public QObject
 //    void updateProjectStatus( LocalProject_future &project ); // TODO: local project manager should not have status
 
   private:
+    void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+
     QString mDataDir;   //!< directory with all local projects
     QList<LocalProject_future> mProjects;
 };
