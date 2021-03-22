@@ -10,13 +10,6 @@
 #include "project_future.h"
 #include "merginapi.h"
 
-#include <QDirIterator>
-
-QString MerginProject_future::id() const
-{
-  return MerginApi::getFullProjectName( projectNamespace, projectName );
-}
-
 QString LocalProject_future::id() const
 {
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
@@ -24,4 +17,9 @@ QString LocalProject_future::id() const
 
   QDir dir( projectDir );
   return dir.dirName();
+}
+
+QString MerginProject_future::id() const
+{
+  return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
