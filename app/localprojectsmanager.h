@@ -67,7 +67,7 @@ class LocalProjectsManager : public QObject
 
     QString dataDir() const { return mDataDir; }
 
-    QList<LocalProject_future> projects() const { return mProjects; }
+    LocalProjectsList projects() const { return mProjects; }
 
     //! Loads all projects from mDataDir, removes all old projects
     void reloadDataDir();
@@ -137,7 +137,7 @@ class LocalProjectsManager : public QObject
     void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
 
     QString mDataDir;   //!< directory with all local projects
-    QList<LocalProject_future> mProjects;
+    LocalProjectsList mProjects;
 };
 
 

@@ -12,16 +12,6 @@
 
 #include <QDirIterator>
 
-void LocalProject_future::copyValues( const LocalProject_future &other )
-{
-  projectName = other.projectName;
-  projectNamespace = other.projectNamespace;
-  projectDir = other.projectDir;
-  projectError = other.projectError;
-  qgisProjectFilePath = other.qgisProjectFilePath;
-  localVersion = other.localVersion;
-}
-
 QString MerginProject_future::id() const
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );

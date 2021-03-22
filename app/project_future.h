@@ -21,7 +21,8 @@ enum ProjectStatus_future
   _UpToDate,   //!< both server and local copy are in sync with no extra modifications
   _OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
   _Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
-  // TODO: add orphaned state
+
+  // Maybe orphaned state in future
 };
 Q_ENUMS( ProjectStatus_future )
 
@@ -42,9 +43,17 @@ struct LocalProject_future
 
   int localVersion = -1;
 
-  void copyValues( const LocalProject_future &other );
-
   bool isValid() { return !projectDir.isEmpty(); }
+
+  bool operator ==( const LocalProject_future &other )
+  {
+    return ( this->id() == other.id() ) && ( this->projectDir == other.projectDir );
+  }
+
+  bool operator !=( const LocalProject_future &other )
+  {
+    return !( *this == other );
+  }
 };
 
 struct MerginProject_future
@@ -67,6 +76,16 @@ struct MerginProject_future
 
   // Maybe better use enum or int for error code
   QString remoteError; // Error leading to project not being able to sync
+
+  bool operator ==( const MerginProject_future &other )
+  {
+    return ( this->id() == other.id() );
+  }
+
+  bool operator !=( const MerginProject_future &other )
+  {
+    return !( *this == other );
+  }
 };
 
 struct Project_future
@@ -98,5 +117,8 @@ struct Project_future
     return !( *this == other );
   }
 };
+
+typedef QList<MerginProject_future> MerginProjectsList;
+typedef QList<LocalProject_future> LocalProjectsList;
 
 #endif // PROJECT_FUTURE_H

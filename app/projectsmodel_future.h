@@ -75,16 +75,16 @@ class ProjectsModel_future : public QAbstractListModel
     Q_INVOKABLE void stopProjectSync( QString projectNamespace, QString projectName );
 
     //! Method merging local and remote projects based on the model type
-    void mergeProjects( const MerginProjectList &merginProjects, Transactions pendingProjects );
+    void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects );
 
   public slots:
-    void onListProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
-    void onListProjectsByNameFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, QString requestId );
+    void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
+    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
 
     void onProjectAdded( const QString &projectDir );
-    void onProjectDeleted( const QString &projectFullName );
+    void onProjectRemoved( const QString &projectFullName );
     void onProjectDataChanged( const QString &projectDir );
 
     void onProjectDetachedFromMergin( const QString &projectFullName );
