@@ -173,7 +173,6 @@ class InputUtils: public QObject
     QString sanitizeName( const QString &path );
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
-
     std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 
