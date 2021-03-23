@@ -54,6 +54,9 @@
 #include "projectwizard.h"
 #include "codefilter.h"
 
+#include "projectsmodel_future.h"
+#include "projectsproxymodel_future.h"
+
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
 #include "test/testlinks.h"
@@ -230,6 +233,9 @@ void initDeclarative()
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
+
+  qmlRegisterUncreatableType<ProjectsModel_future>( "lc", 1, 0, "ProjectsModelF", "" );
+  qmlRegisterUncreatableType<ProjectsProxyModel_future>( "lc", 1, 0, "ProjectsProxyModelF", "" );
 }
 
 #ifdef INPUT_TEST
@@ -367,6 +373,17 @@ int main( int argc, char *argv[] )
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
 
+  // project models - instance for each category
+  ProjectsModel_future myProjectsModel( ma.get(), ProjectModelTypes::MyProjectsModel, localProjects );
+  ProjectsModel_future localProjectsModel( ma.get(), ProjectModelTypes::LocalProjectsModel, localProjects );
+  ProjectsModel_future sharedProjectsModel( ma.get(), ProjectModelTypes::SharedProjectsModel, localProjects );
+  ProjectsModel_future exploreProjectsModel( ma.get(), ProjectModelTypes::ExploreProjectsModel, localProjects );
+
+  ProjectsProxyModel_future myProjectsProxyModel( &myProjectsModel );
+  ProjectsProxyModel_future localProjectsProxyModel( &localProjectsModel );
+  ProjectsProxyModel_future sharedProjectsProxyModel( &sharedProjectsModel );
+  ProjectsProxyModel_future exploreProjectsProxyModel( &exploreProjectsModel );
+
   // layer models
   LayersModel lm;
   LayersProxyModel browseLpm( &lm, LayerModelTypes::BrowseDataLayerSelection );
@@ -380,11 +397,11 @@ int main( int argc, char *argv[] )
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
-  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
-  QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
+//  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
+//  QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjects, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
-  QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
+//  QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
+//  QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
@@ -484,6 +501,11 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
+
+  engine.rootContext()->setContextProperty( "__myProjectsModel", &myProjectsModel ); // TODO: maybe project models do not need to be exposed?
+  engine.rootContext()->setContextProperty( "__localProjectsModel", &localProjectsModel );
+  engine.rootContext()->setContextProperty( "__myProjectsProxyModel", &myProjectsProxyModel );
+  engine.rootContext()->setContextProperty( "__localProjectsProxyModel", &localProjectsProxyModel );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

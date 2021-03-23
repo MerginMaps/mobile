@@ -83,6 +83,8 @@ class ProjectsModel_future : public QAbstractListModel
 
     int serverProjectsCount() const;
 
+    ProjectModelTypes modelType() const;
+
 public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
