@@ -17,7 +17,6 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
 {
   apiRootChanged();
   authChanged();
-  QgsExpression::registerFunction( new ExifFunction() );
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
