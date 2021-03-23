@@ -13,7 +13,6 @@
 #include <QObject>
 #include "merginapi.h"
 #include "qgsproject.h"
-#include "qvariant.h"
 
 class MerginApi;
 
