@@ -508,3 +508,8 @@ std::shared_ptr<Project_future> ProjectsModel_future::projectFromId( QString pro
 
   return nullptr;
 }
+
+ProjectModelTypes ProjectsModel_future::modelType() const
+{
+    return mModelType;
+}
