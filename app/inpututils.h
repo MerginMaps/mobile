@@ -153,14 +153,11 @@ class InputUtils: public QObject
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
 
-    /**
-     * Simple formatter for an attribute read from EXIF. The final format depends on tag, currently supporting only few GPS tags.
-     * If given tag doesnt match supporte tags, raw attribute is returned.
-     * @param exifValue Raw attribute value read from EXIF metadata
-     * @param tag EXif tag for given attribute
-     * @return Formatted string for given parameters
-     */
-    static QString formatExifString( const QString &exifValue, const QString &tag );
+    //! Converts string in rational number format to double
+    static double convertRationalNumber( const QString &rationalValue );
+
+    //! Converts string coordinate in EXIF rational number format (rational64u[3] - degree,minutes,seconds) to double
+    static double convertCoordinateString( const QString &rationalValue );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
@@ -176,8 +173,7 @@ class InputUtils: public QObject
     QString sanitizeName( const QString &path );
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
-    static QString formatExifCoordinateString( const QString &rationalValue );
-    static float formatRationalNumberString( const QString &rationalValue );
+
     std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 

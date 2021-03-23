@@ -140,44 +140,23 @@ void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQu
   mapSettings->setExtent( currentExtent );
 }
 
-QString InputUtils::formatExifString( const QString &exifValue, const QString &tag )
-{
-
-  if ( tag == QStringLiteral( "GPSLongitude" ) )
-  {
-    return formatExifCoordinateString( exifValue );
-  }
-  else if ( tag == QStringLiteral( "GPSLatitude" ) )
-  {
-    return formatExifCoordinateString( exifValue );
-  }
-  else if ( tag == QStringLiteral( "GPSImgDirection" ) )
-  {
-    return QString::number( formatRationalNumberString( exifValue ) ) + "°";
-  }
-  else
-  {
-    return exifValue;
-  }
-}
-
-QString InputUtils::formatExifCoordinateString( const QString &rationalValue )
+double InputUtils::convertCoordinateString( const QString &rationalValue )
 {
   QStringList values = rationalValue.split( "," );
-  if ( values.size() != 3 ) return rationalValue;
+  if ( values.size() != 3 ) return 0;
 
-  float degree = formatRationalNumberString( values.at( 0 ) );
-  float minutes = formatRationalNumberString( values.at( 1 ) );
-  float seconds = formatRationalNumberString( values.at( 2 ) );
-  float res = degree + minutes / 60 + seconds / 3600;
-  return QString::number( res );
+  double degree = convertRationalNumber( values.at( 0 ) );
+  double minutes = convertRationalNumber( values.at( 1 ) );
+  double seconds = convertRationalNumber( values.at( 2 ) );
+  double result = degree + minutes / 60 + seconds / 3600;
+  return result;
 }
 
-float InputUtils::formatRationalNumberString( const QString &rationalValue )
+double InputUtils::convertRationalNumber( const QString &rationalValue )
 {
   QStringList number = rationalValue.split( "/" );
-  int numerator = number.at( 0 ).toInt();
-  int denominator = number.at( 1 ).toInt();
+  double numerator = number.at( 0 ).toDouble();
+  double denominator = number.at( 1 ).toDouble();
   return numerator / denominator;
 }
 
