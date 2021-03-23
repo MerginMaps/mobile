@@ -22,15 +22,27 @@ class ProjectsProxyModel_future : public QSortFilterProxyModel
 {
     Q_OBJECT
   public:
-    explicit ProjectsProxyModel_future( ProjectModelTypes modelType, QObject *parent = nullptr );
+    explicit ProjectsProxyModel_future( ProjectsModel_future *projectSourceModel, QObject *parent = nullptr );
     ~ProjectsProxyModel_future() override {};
 
-  protected:
+  Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
+
+  QString searchExpression() const;
+
+public slots:
+  void setSearchExpression(QString SearchExpression);
+
+signals:
+  void searchExpressionChanged(QString SearchExpression);
+
+protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
-//    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+//    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override;
 
   private:
+    ProjectsModel_future *mModel;
     ProjectModelTypes mModelType;
+    QString mSearchExpression;
 };
 
 #endif // PROJECTSPROXYMODEL_FUTURE_H
