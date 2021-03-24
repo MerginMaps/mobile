@@ -20,28 +20,33 @@
  */
 class ProjectsProxyModel_future : public QSortFilterProxyModel
 {
-    Q_OBJECT
-  public:
-    explicit ProjectsProxyModel_future( ProjectsModel_future *projectSourceModel, QObject *parent = nullptr );
-    ~ProjectsProxyModel_future() override {};
+  Q_OBJECT
 
   Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
+  Q_PROPERTY( ProjectsModel_future *projectSourceModel READ projectSourceModel WRITE setProjectSourceModel )
+
+public:
+    explicit ProjectsProxyModel_future( QObject *parent = nullptr );
+    ~ProjectsProxyModel_future() override {};
 
   QString searchExpression() const;
+  ProjectsModel_future *projectSourceModel() const;
 
 public slots:
-  void setSearchExpression(QString SearchExpression);
+  void setSearchExpression( QString searchExpression );
+  void setProjectSourceModel( ProjectsModel_future *sourceModel );
 
 signals:
-  void searchExpressionChanged(QString SearchExpression);
+  void searchExpressionChanged( QString SearchExpression );
 
 protected:
-    bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
-//    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override;
+    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override;
 
   private:
+    void initialize();
+
     ProjectsModel_future *mModel;
-    ProjectModelTypes mModelType;
+    ProjectsModel_future::ProjectModelTypes mModelType = ProjectsModel_future::EmptyProjectsModel;
     QString mSearchExpression;
 };
 
