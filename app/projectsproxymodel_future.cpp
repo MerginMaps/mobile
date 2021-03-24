@@ -9,20 +9,31 @@
 
 #include "projectsproxymodel_future.h"
 
-ProjectsProxyModel_future::ProjectsProxyModel_future( ProjectsModel_future *projectsSourceModel, QObject *parent ) :
-  QSortFilterProxyModel( parent ),
-  mModel( projectsSourceModel )
+ProjectsProxyModel_future::ProjectsProxyModel_future( QObject *parent ) : QSortFilterProxyModel( parent )
 {
+  qDebug() << "PMR: Building proxy model " << this;
+}
+
+void ProjectsProxyModel_future::initialize()
+{
+  qDebug() << "PMR: Initializing proxy model" << this;
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
-  setSortRole( ProjectsModel_future::Roles::ProjectFullName );
-  setSortCaseSensitivity( Qt::CaseSensitivity::CaseInsensitive );
+  setFilterRole( ProjectsModel_future::ProjectFullName );
+  setFilterCaseSensitivity( Qt::CaseInsensitive );
+
+  sort( 0, Qt::AscendingOrder );
 }
 
 QString ProjectsProxyModel_future::searchExpression() const
 {
   return mSearchExpression;
+}
+
+ProjectsModel_future *ProjectsProxyModel_future::projectSourceModel() const
+{
+  return mModel;
 }
 
 void ProjectsProxyModel_future::setSearchExpression( QString searchExpression )
@@ -31,62 +42,58 @@ void ProjectsProxyModel_future::setSearchExpression( QString searchExpression )
     return;
 
   mSearchExpression = searchExpression;
-
-  if ( mSearchExpression.isEmpty() )
-    invalidate();
-  else
-    setFilterRegularExpression( QRegularExpression( mSearchExpression ) );
-
+  setFilterFixedString( mSearchExpression );
   emit searchExpressionChanged( mSearchExpression );
 }
 
-bool ProjectsProxyModel_future::filterAcceptsRow( int, const QModelIndex &sourceParent ) const
+void ProjectsProxyModel_future::setProjectSourceModel( ProjectsModel_future *sourceModel )
 {
-  // return true if it passes search filter
-  QString projectName = sourceModel()->data( sourceParent, ProjectsModel_future::Roles::ProjectName ).toString();
-  QString projectNamespace = sourceModel()->data( sourceParent, ProjectsModel_future::Roles::ProjectNamespace ).toString();
+  if ( mModel == sourceModel )
+    return;
 
-  QRegExp filter = filterRegExp();
-  if ( filter.isEmpty() )
-    return true;
-
-  return ( projectName.contains( filter ) || projectNamespace.contains( filter ) );
+  mModel = sourceModel;
+  QObject::connect( mModel, &ProjectsModel_future::modelInitialized, this, &ProjectsProxyModel_future::initialize );
 }
 
-//bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelIndex &right ) const
-//{
-//  TODO: Maybe simply setting sort role as projectFullName would work the same
 
-//  if ( mModelType == LocalProjectsModel )
-//  {
+bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelIndex &right ) const
+{
+  if ( mModelType == ProjectsModel_future::LocalProjectsModel )
+  {
+    bool lProjectIsMergin = mModel->data( left, ProjectsModel_future::ProjectIsMergin ).toBool();
+    bool rProjectIsMergin = mModel->data( right, ProjectsModel_future::ProjectIsMergin ).toBool();
+
     /**
      * Ordering of local projects: first non-mergin projects (using folder name),
      * then mergin projects (sorted first by namespace, then project name)
      */
 
-//    if ( projectNamespace.isEmpty() && other.projectNamespace.isEmpty() )
-//    {
-//      return folderName.compare( other.folderName, Qt::CaseInsensitive ) < 0;
-//    }
-//    if ( !projectNamespace.isEmpty() && other.projectNamespace.isEmpty() )
-//    {
-//      return false;
-//    }
-//    if ( projectNamespace.isEmpty() && !other.projectNamespace.isEmpty() )
-//    {
-//      return true;
-//    }
+    if ( !lProjectIsMergin && !rProjectIsMergin )
+    {
+      QString lProjectFullName = mModel->data( left, ProjectsModel_future::ProjectFullName ).toString();
+      QString rProjectFullName = mModel->data( right, ProjectsModel_future::ProjectFullName ).toString();
 
-//    if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) == 0 )
-//    {
-//      return projectName.compare( other.projectName, Qt::CaseInsensitive ) < 0;
-//    }
-//    if ( projectNamespace.compare( other.projectNamespace, Qt::CaseInsensitive ) < 0 )
-//    {
-//      return true;
-//    }
-//    else
-//      return false;
-//    return true;
-//  }
-//}
+      return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
+    }
+    if ( !lProjectIsMergin && rProjectIsMergin )
+    {
+      return false;
+    }
+    if ( lProjectIsMergin && !rProjectIsMergin )
+    {
+      return true;
+    }
+
+    QString lNamespace = mModel->data( left, ProjectsModel_future::ProjectNamespace ).toString();
+    QString lProjectName = mModel->data( left, ProjectsModel_future::ProjectName ).toString();
+    QString rNamespace = mModel->data( right, ProjectsModel_future::ProjectNamespace ).toString();
+    QString rProjectName = mModel->data( right, ProjectsModel_future::ProjectName ).toString();
+
+    if ( lNamespace == rNamespace )
+    {
+      return lProjectName.compare( rProjectName, Qt::CaseInsensitive ) < 0;
+    }
+    return lNamespace.compare( rNamespace, Qt::CaseInsensitive ) < 0;
+  }
+  return false;
+}
