@@ -56,6 +56,7 @@
 
 #include "projectsmodel_future.h"
 #include "projectsproxymodel_future.h"
+#include "project_future.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -234,8 +235,9 @@ void initDeclarative()
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
 
-  qmlRegisterUncreatableType<ProjectsModel_future>( "lc", 1, 0, "ProjectsModelF", "" );
-  qmlRegisterUncreatableType<ProjectsProxyModel_future>( "lc", 1, 0, "ProjectsProxyModelF", "" );
+  qmlRegisterType<ProjectsModel_future>( "lc", 1, 0, "ProjectsModel" );
+  qmlRegisterType<ProjectsProxyModel_future>( "lc", 1, 0, "ProjectsProxyModel" );
+  qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 }
 
 #ifdef INPUT_TEST
