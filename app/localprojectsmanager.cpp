@@ -290,15 +290,15 @@ static int _getProjectFilesCount( const QString &path )
   return count;
 }
 
-ProjectStatus_future LocalProjectsManager::currentProjectStatus( const std::shared_ptr<Project_future> project )
+ProjectStatus::Status LocalProjectsManager::currentProjectStatus( const std::shared_ptr<Project_future> project )
 {
   if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
-    return ProjectStatus_future::_NoVersion;
+    return ProjectStatus::NoVersion;
 
   // There was no sync yet
   if ( project->local->localVersion < 0 )
   {
-    return ProjectStatus_future::_NoVersion;
+    return ProjectStatus::NoVersion;
   }
 
   //
@@ -313,16 +313,16 @@ ProjectStatus_future LocalProjectsManager::currentProjectStatus( const std::shar
   int filesCount = _getProjectFilesCount( project->local->projectDir );
   if ( lastSync < lastModified || meta.files.count() != filesCount )
   {
-    return ProjectStatus_future::_Modified;
+    return ProjectStatus::Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
   if ( project->local->localVersion < project->mergin->serverVersion )
   {
-    return ProjectStatus_future::_OutOfDate;
+    return ProjectStatus::OutOfDate;
   }
 
-  return ProjectStatus_future::_UpToDate;
+  return ProjectStatus::UpToDate;
 }
 
 //void LocalProjectsManager::updateProjectStatus( LocalProject_future &project )

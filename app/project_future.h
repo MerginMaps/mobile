@@ -16,16 +16,19 @@
 #include <memory>
 #include <qdebug.h>
 
-enum ProjectStatus_future
-{
-  _NoVersion,  //!< the project is not available locally
-  _UpToDate,   //!< both server and local copy are in sync with no extra modifications
-  _OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
-  _Modified,    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
+namespace ProjectStatus {
+  Q_NAMESPACE
+  enum Status
+  {
+    NoVersion,  //!< the project is not available locally
+    UpToDate,   //!< both server and local copy are in sync with no extra modifications
+    OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
+    Modified,   //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
 
-  // Maybe orphaned state in future
-};
-Q_ENUMS( ProjectStatus_future )
+    // Maybe orphaned state in future
+  };
+  Q_ENUM_NS( Status )
+}
 
 struct LocalProject_future
 {
@@ -48,7 +51,7 @@ struct LocalProject_future
 
   bool operator ==( const LocalProject_future &other )
   {
-    return ( this->id() == other.id() ) && ( this->projectDir == other.projectDir );
+    return ( this->id() == other.id() );
   }
 
   bool operator !=( const LocalProject_future &other )
@@ -70,7 +73,7 @@ struct MerginProject_future
   QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion;
 
-  ProjectStatus_future status = ProjectStatus_future::_NoVersion;
+  ProjectStatus::Status status = ProjectStatus::NoVersion;
   bool pending = false;
 
   qreal progress = 0;
@@ -102,22 +105,22 @@ struct Project_future
 
   QString projectName()
   {
-    if ( isLocal() ) return local->projectName;
-    else if ( isMergin() ) return mergin->projectName;
+    if ( isMergin() ) return mergin->projectName;
+    else if ( isLocal() ) return local->projectName;
     return QString();
   }
 
   QString projectNamespace()
   {
-    if ( isLocal() ) return local->projectNamespace;
-    else if ( isMergin() ) return mergin->projectNamespace;
+    if ( isMergin() ) return mergin->projectNamespace;
+    else if ( isLocal() ) return local->projectNamespace;
     return QString();
   }
 
   QString projectId()
   {
-    if ( isLocal() ) return local->id();
-    else if ( isMergin() ) return mergin->id();
+    if ( isMergin() ) return mergin->id();
+    else if ( isLocal() ) return local->id();
     return QString();
   }
 

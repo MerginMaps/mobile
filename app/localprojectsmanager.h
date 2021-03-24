@@ -93,7 +93,7 @@ class LocalProjectsManager : public QObject
 //    void addLocalProject( const QString &projectDir, const QString &projectName );
 
     //! Should forget about that project (it has been removed already)
-    void removeLocalProject( const QString &projectDir );
+    Q_INVOKABLE void removeLocalProject( const QString &projectDir );
 
     //! Resets mergin related info for given project.
 //    void removeMerginInfo( const QString &projectFullName );
@@ -121,7 +121,7 @@ class LocalProjectsManager : public QObject
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
 
-    static ProjectStatus_future currentProjectStatus( const std::shared_ptr<Project_future> project ); // TODO: maybe move somewhere else?
+    static ProjectStatus::Status currentProjectStatus( const std::shared_ptr<Project_future> project ); // TODO: maybe move somewhere else?
 
   signals:
     void projectMetadataChanged( const QString &projectDir );

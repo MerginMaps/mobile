@@ -19,18 +19,6 @@
 class LocalProjectsManager;
 
 /**
- * \brief The ProjectModelTypes enum
- */
-enum ProjectModelTypes
-{
-  LocalProjectsModel = 0,
-  MyProjectsModel,
-  SharedProjectsModel,
-  ExploreProjectsModel,
-  RecentProjectsModel
-};
-
-/**
  * \brief The ProjectsModel_future class
  */
 class ProjectsModel_future : public QAbstractListModel
@@ -43,26 +31,50 @@ class ProjectsModel_future : public QAbstractListModel
     {
       ProjectName = Qt::UserRole + 1,
       ProjectNamespace,
-      ProjectFullName, // or ProjectId, filled with folderName if project is not
+      ProjectFullName,
+      ProjectId, // Filled with ProjectFullName for time being
+      ProjectDirectory,
       ProjectDescription,
       ProjectPending,
       ProjectIsMergin,
       ProjectIsLocal,
+      ProjectFilePath,
       ProjectIsValid,
-      ProjectStatus,
+      ProjectSyncStatus,
       ProjectSyncProgress,
       ProjectRemoteError
     };
-    Q_ENUMS( Roles )
+    Q_ENUM( Roles )
 
-    ProjectsModel_future( MerginApi *merginApi, ProjectModelTypes modelType, LocalProjectsManager &localProjectsManager, QObject *parent = nullptr );
+    /**
+     * \brief The ProjectModelTypes enum
+     */
+    enum ProjectModelTypes
+    {
+      EmptyProjectsModel = 0, // default, holding no projects ~ invalid model
+      LocalProjectsModel,
+      MyProjectsModel,
+      SharedProjectsModel,
+      ExploreProjectsModel,
+      RecentProjectsModel
+    };
+    Q_ENUM( ProjectModelTypes )
+
+    ProjectsModel_future( QObject *parent = nullptr );
     ~ProjectsModel_future() override {};
 
-    Q_PROPERTY( int serverProjectsCount READ serverProjectsCount WRITE setServerProjectsCount NOTIFY serverProjectsCountChanged );
+    Q_PROPERTY( int serverProjectsCount READ serverProjectsCount WRITE setServerProjectsCount NOTIFY serverProjectsCountChanged ) // TODO: replace with builtin canFetchMore
+
+    // From Qt 5.15 we can use REQUIRED keyword here that will ensure object will be always instantiated from QML with these mandatory properties
+    Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
+    Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager )
+    Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
 
     // Needed methods from QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
+    Q_INVOKABLE bool canFetchMore( const QModelIndex &parent ) const override;
+    Q_INVOKABLE void fetchMore( const QModelIndex &parent ) override;
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
@@ -73,17 +85,24 @@ class ProjectsModel_future : public QAbstractListModel
     Q_INVOKABLE void listProjectsByName();
 
     //! Syncs specified project - upload or update
-    Q_INVOKABLE void syncProject( QString projectNamespace, QString projectName );
+    Q_INVOKABLE void syncProject( const QString &projectNamespace, const QString &projectName );
 
     //! Stops running project upload or update
-    Q_INVOKABLE void stopProjectSync( QString projectNamespace, QString projectName );
+    Q_INVOKABLE void stopProjectSync( const QString &projectNamespace, const QString &projectName );
+
+    //! Forwards call to LocalProjectsManager to remove local project
+    Q_INVOKABLE void removeLocalProject( const QString &projectDir );
 
     //! Method merging local and remote projects based on the model type
     void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
 
     int serverProjectsCount() const;
 
-    ProjectModelTypes modelType() const;
+    ProjectsModel_future::ProjectModelTypes modelType() const;
+
+    MerginApi *merginApi() const { return mBackend; }
+
+    LocalProjectsManager *localProjectsManager() const { return mLocalProjectsManager; }
 
 public slots:
     // MerginAPI - backend signals
@@ -100,9 +119,13 @@ public slots:
     void onProjectDataChanged( const LocalProject_future &project );
 
     void setServerProjectsCount( int serverProjectsCount );
+    void setMerginApi( MerginApi *merginApi );
+    void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
+    void setModelType( ProjectModelTypes modelType );
 
 signals:
     void serverProjectsCountChanged( int serverProjectsCount );
+    void modelInitialized();
 
 private:
 
@@ -110,15 +133,16 @@ private:
     void printProjects() const;
     QStringList projectNames() const;
     void loadLocalProjects();
+    void initializeProjectsModel();
 
     bool containsProject( QString projectId ) const;
     std::shared_ptr<Project_future> projectFromId( QString projectId ) const;
 
-    MerginApi *mBackend;
-    LocalProjectsManager &mLocalProjectsManager;
+    MerginApi *mBackend = nullptr;
+    LocalProjectsManager *mLocalProjectsManager = nullptr;
     QList<std::shared_ptr<Project_future>> mProjects;
 
-    ProjectModelTypes mModelType;
+    ProjectModelTypes mModelType = EmptyProjectsModel;
 
     //! For pagination
     int mServerProjectsCount = -1;
