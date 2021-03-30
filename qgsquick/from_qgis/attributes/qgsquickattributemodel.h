@@ -125,6 +125,10 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Resets remembered attributes
     Q_INVOKABLE virtual void resetAttributes();
 
+    //! Updates attributes according their default value definition.
+    //! Only for attributes with defined default value definition and flag `applyOnUpdate`.
+    Q_INVOKABLE void updateDefaultValuesAttributes();
+
     //! Gives information whether field with given index is remembered or not
     bool isFieldRemembered( const int fieldIndex ) const;
 

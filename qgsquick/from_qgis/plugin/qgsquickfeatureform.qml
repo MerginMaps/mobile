@@ -381,7 +381,7 @@ Item {
                   height: section === "" ? 0 : form.style.group.height
                   color: form.style.group.marginColor
                   anchors.top: parent.top
-                  
+
                   Rectangle {
                     anchors.fill: parent
                     anchors {
@@ -391,7 +391,7 @@ Item {
                       bottomMargin: form.style.group.bottomMargin
                     }
                     color: form.style.group.backgroundColor
-                    
+
                     Text {
                       anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
                       font.bold: true
@@ -547,7 +547,12 @@ Item {
         Connections {
           target: attributeEditorLoader.item
           onValueChanged: {
+            var valueChanged = value != AttributeValue
             AttributeValue = isNull ? undefined : value
+            // updates other attributes if a user males a change
+            if (valueChanged) {
+              form.model.attributeModel.updateDefaultValuesAttributes()
+            }
           }
         }
 

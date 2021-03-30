@@ -336,6 +336,47 @@ void QgsQuickAttributeModel::resetAttributes()
   endResetModel();
 }
 
+void QgsQuickAttributeModel::updateDefaultValuesAttributes()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
+  QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
+  expressionContext.setFeature( mFeatureLayerPair.feature() );
+  QgsFields fields = mFeatureLayerPair.layer()->fields();
+
+  beginResetModel();
+  for ( int i = 0; i < fields.count(); ++i )
+  {
+    QgsDefaultValue defaultDefinition = fields.at( i ).defaultValueDefinition();
+    if ( !defaultDefinition.expression().isEmpty() && defaultDefinition.applyOnUpdate() )
+    {
+      QgsExpression exp( fields.at( i ).defaultValueDefinition().expression() );
+      exp.prepare( &expressionContext );
+      if ( exp.hasParserError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     fields.at( i ).name(),
+                                     exp.parserErrorString() ),
+                                   QStringLiteral( "QgsQuick" ),
+                                   Qgis::Warning );
+
+      QVariant value = exp.evaluate( &expressionContext );
+
+      if ( exp.hasEvalError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     fields.at( i ).name(),
+                                     exp.evalErrorString() ),
+                                   QStringLiteral( "QgsQuick" ),
+                                   Qgis::Warning );
+      else
+        mFeatureLayerPair.featureRef().setAttribute( i, value );
+    }
+  }
+  endResetModel();
+}
+
 void QgsQuickAttributeModel::create()
 {
   if ( !mFeatureLayerPair.layer() )
