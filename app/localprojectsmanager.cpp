@@ -22,7 +22,7 @@ LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   reloadDataDir();
 }
 
-void LocalProjectsManager::reloadDataDir() // TODO: maybe add function to reload one specific project
+void LocalProjectsManager::reloadDataDir()
 {
   mProjects.clear();
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
@@ -39,16 +39,15 @@ void LocalProjectsManager::reloadDataDir() // TODO: maybe add function to reload
       info.projectNamespace = metadata.projectNamespace;
       info.localVersion = metadata.version;
     }
-//    else
-//    {
-//      info.projectName = folderName;
-//    }
+    else
+    {
+      info.projectName = folderName;
+    }
 
     mProjects << info;
   }
+  qDebug() << "LPM found " << mProjects.size() << " in " << mDataDir;
   emit dataDirReloaded();
-
-  qDebug() << "LocalProjectsManager: found" << mProjects.size() << "projects";
 }
 
 LocalProject_future LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
@@ -119,11 +118,11 @@ void LocalProjectsManager::addMerginProject( const QString &projectDir, const QS
   addProject( projectDir, projectNamespace, projectName );
 }
 
-void LocalProjectsManager::removeLocalProject( const QString &projectDir )
+void LocalProjectsManager::removeLocalProject( const QString &projectId )
 {
   for ( int i = 0; i < mProjects.count(); ++i )
   {
-    if ( mProjects[i].projectDir == projectDir )
+    if ( mProjects[i].id() == projectId )
     {
       emit aboutToRemoveLocalProject( mProjects[i] );
 
@@ -133,6 +132,30 @@ void LocalProjectsManager::removeLocalProject( const QString &projectDir )
       return;
     }
   }
+}
+
+bool LocalProjectsManager::projectIsValid( const QString &path ) const
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].qgisProjectFilePath == path )
+    {
+      return mProjects[i].projectError.isEmpty();
+    }
+  }
+  return false;
+}
+
+QString LocalProjectsManager::projectId( const QString &path ) const
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].qgisProjectFilePath == path )
+    {
+      return mProjects[i].id();
+    }
+  }
+  return QString();
 }
 
 //void LocalProjectsManager::removeMerginInfo( const QString &projectFullName )
@@ -245,7 +268,7 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
   return QString();
 }
 
-void LocalProjectsManager::addProject(const QString &projectDir, const QString &projectNamespace, const QString &projectName)
+void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
 {
   LocalProject_future project;
   project.projectDir = projectDir;
@@ -257,73 +280,73 @@ void LocalProjectsManager::addProject(const QString &projectDir, const QString &
   emit localProjectAdded( project );
 }
 
-static QDateTime _getLastModifiedFileDateTime( const QString &path )
-{
-  QDateTime lastModified;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      if ( it.fileInfo().lastModified() > lastModified )
-      {
-        lastModified = it.fileInfo().lastModified();
-      }
-    }
-  }
-  return lastModified.toUTC();
-}
+//static QDateTime _getLastModifiedFileDateTime( const QString &path )
+//{
+//  QDateTime lastModified;
+//  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
+//  while ( it.hasNext() )
+//  {
+//    it.next();
+//    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
+//    {
+//      if ( it.fileInfo().lastModified() > lastModified )
+//      {
+//        lastModified = it.fileInfo().lastModified();
+//      }
+//    }
+//  }
+//  return lastModified.toUTC();
+//}
 
-static int _getProjectFilesCount( const QString &path )
-{
-  int count = 0;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      count++;
-    }
-  }
-  return count;
-}
+//static int _getProjectFilesCount( const QString &path )
+//{
+//  int count = 0;
+//  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
+//  while ( it.hasNext() )
+//  {
+//    it.next();
+//    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
+//    {
+//      count++;
+//    }
+//  }
+//  return count;
+//}
 
-ProjectStatus::Status LocalProjectsManager::currentProjectStatus( const std::shared_ptr<Project_future> project )
-{
-  if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
-    return ProjectStatus::NoVersion;
+//ProjectStatus::Status LocalProjectsManager::currentProjectStatus( const std::shared_ptr<Project_future> project )
+//{
+//  if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
+//    return ProjectStatus::NoVersion;
 
-  // There was no sync yet
-  if ( project->local->localVersion < 0 )
-  {
-    return ProjectStatus::NoVersion;
-  }
+//  // There was no sync yet
+//  if ( project->local->localVersion < 0 )
+//  {
+//    return ProjectStatus::NoVersion;
+//  }
 
-  //
-  // TODO: this check for local modifications should be revisited
-  //
+//  //
+//  // TODO: this check for local modifications should be revisited
+//  //
 
-  // Something has locally changed after last sync with server
-  QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
-  QDateTime lastModified = _getLastModifiedFileDateTime( project->local->projectDir );
-  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
-  MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  int filesCount = _getProjectFilesCount( project->local->projectDir );
-  if ( lastSync < lastModified || meta.files.count() != filesCount )
-  {
-    return ProjectStatus::Modified;
-  }
+//  // Something has locally changed after last sync with server
+//  QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
+//  QDateTime lastModified = _getLastModifiedFileDateTime( project->local->projectDir );
+//  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
+//  MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
+//  int filesCount = _getProjectFilesCount( project->local->projectDir );
+//  if ( lastSync < lastModified || meta.files.count() != filesCount )
+//  {
+//    return ProjectStatus::Modified;
+//  }
 
-  // Version is lower than latest one, last sync also before updated
-  if ( project->local->localVersion < project->mergin->serverVersion )
-  {
-    return ProjectStatus::OutOfDate;
-  }
+//  // Version is lower than latest one, last sync also before updated
+//  if ( project->local->localVersion < project->mergin->serverVersion )
+//  {
+//    return ProjectStatus::OutOfDate;
+//  }
 
-  return ProjectStatus::UpToDate;
-}
+//  return ProjectStatus::UpToDate;
+//}
 
 //void LocalProjectsManager::updateProjectStatus( LocalProject_future &project )
 //{

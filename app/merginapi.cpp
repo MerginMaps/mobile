@@ -1874,9 +1874,8 @@ void MerginApi::uploadInfoReplyFinished()
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
     // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
-//    projectInfo.serverVersion = serverProject.version;
+    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
 
     // now let's figure a key question: are we on the most recent version of the project
     // if we're about to do upload? because if not, we need to do local update first
@@ -1891,8 +1890,6 @@ void MerginApi::uploadInfoReplyFinished()
 
     QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-
-//    mLocalProjects.updateMerginServerVersion( transaction.projectDir, serverProject.version );
 
     transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
     InputUtils::log( "push " + projectFullName, transaction.diff.dump() );
@@ -2355,7 +2352,13 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
   {
     for ( auto it = object.begin(); it != object.end(); ++it )
     {
-      result << parseProjectMetadata( it->toObject() );
+      MerginProject_future project = parseProjectMetadata( it->toObject() );
+      if ( !project.remoteError.isEmpty() )
+      {
+        // add project namespace/name from object name in case of error
+        MerginApi::extractProjectName( it.key(), project.projectNamespace, project.projectName );
+      }
+      result << project;
     }
   }
   return result;
@@ -2434,10 +2437,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
     // update info of local projects
     mLocalProjects.updateLocalVersion( transaction.projectDir, transaction.version );
-
-//    mLocalProjects.updateMerginServerVersion( transaction.projectDir, transaction.version );
-//    TODO: Is it neccessary to update server version at all?
-//    emit updateServerVersion( transaction.projectDir, transaction.version );
 
     InputUtils::log( "sync " + projectFullName, QStringLiteral( "### Finished ###  New project version: %1\n" ).arg( transaction.version ) );
   }
