@@ -125,7 +125,7 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
 
 bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
 {
-  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( !projectInfo.projectDir.isEmpty() )
   {
     ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
