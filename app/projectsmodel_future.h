@@ -53,9 +53,9 @@ class ProjectsModel_future : public QAbstractListModel
     {
       EmptyProjectsModel = 0, // default, holding no projects ~ invalid model
       LocalProjectsModel,
-      MyProjectsModel,
+      CreatedProjectsModel,
       SharedProjectsModel,
-      ExploreProjectsModel,
+      PublicProjectsModel,
       RecentProjectsModel
     };
     Q_ENUM( ProjectModelTypes )
@@ -63,46 +63,51 @@ class ProjectsModel_future : public QAbstractListModel
     ProjectsModel_future( QObject *parent = nullptr );
     ~ProjectsModel_future() override {};
 
-    Q_PROPERTY( int serverProjectsCount READ serverProjectsCount WRITE setServerProjectsCount NOTIFY serverProjectsCountChanged ) // TODO: replace with builtin canFetchMore
-
     // From Qt 5.15 we can use REQUIRED keyword here that will ensure object will be always instantiated from QML with these mandatory properties
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
     Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager )
     Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
 
+    Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
+
     // Needed methods from QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
     Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-    Q_INVOKABLE bool canFetchMore( const QModelIndex &parent ) const override;
-    Q_INVOKABLE void fetchMore( const QModelIndex &parent ) override;
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
     //! Called to list projects, either fetch more or get first
-    Q_INVOKABLE void listProjects( int page = 1, const QString searchExpression = QString() );
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
 
     //! Called to list projects, either fetch more or get first
     Q_INVOKABLE void listProjectsByName();
 
     //! Syncs specified project - upload or update
-    Q_INVOKABLE void syncProject( const QString &projectNamespace, const QString &projectName );
+    Q_INVOKABLE void syncProject( const QString &projectId );
 
     //! Stops running project upload or update
-    Q_INVOKABLE void stopProjectSync( const QString &projectNamespace, const QString &projectName );
+    Q_INVOKABLE void stopProjectSync( const QString &projectId );
 
     //! Forwards call to LocalProjectsManager to remove local project
-    Q_INVOKABLE void removeLocalProject( const QString &projectDir );
+    Q_INVOKABLE void removeLocalProject( const QString &projectId );
+
+    //! Migrates local project to mergin
+    Q_INVOKABLE void migrateProject( const QString &projectId );
+
+    Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
+
+    Q_INVOKABLE QVariant dataFrom( int fromRole, QVariant fromValue, int desiredRole ) const;
 
     //! Method merging local and remote projects based on the model type
     void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
-
-    int serverProjectsCount() const;
 
     ProjectsModel_future::ProjectModelTypes modelType() const;
 
     MerginApi *merginApi() const { return mBackend; }
 
     LocalProjectsManager *localProjectsManager() const { return mLocalProjectsManager; }
+
+    bool hasMoreProjects() const;
 
 public slots:
     // MerginAPI - backend signals
@@ -118,17 +123,15 @@ public slots:
     void onAboutToRemoveProject( const LocalProject_future project );
     void onProjectDataChanged( const LocalProject_future &project );
 
-    void setServerProjectsCount( int serverProjectsCount );
     void setMerginApi( MerginApi *merginApi );
     void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
     void setModelType( ProjectModelTypes modelType );
 
 signals:
-    void serverProjectsCountChanged( int serverProjectsCount );
     void modelInitialized();
+    void hasMoreProjectsChanged();
 
 private:
-
     QString modelTypeToFlag() const;
     void printProjects() const;
     QStringList projectNames() const;
@@ -146,6 +149,7 @@ private:
 
     //! For pagination
     int mServerProjectsCount = -1;
+    int mPaginatedPage = 1;
 
     //! For processing only my requests
     QString mLastRequestId;

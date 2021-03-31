@@ -16,18 +16,21 @@
 #include <memory>
 #include <qdebug.h>
 
+struct Project_future;
+
 namespace ProjectStatus {
   Q_NAMESPACE
   enum Status
   {
-    NoVersion,  //!< the project is not available locally
+    NoVersion,  //!< the project is not downloaded
     UpToDate,   //!< both server and local copy are in sync with no extra modifications
     OutOfDate,  //!< server has newer version than what is available locally (but the project is not modified locally)
-    Modified,   //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
-
+    Modified    //!< there are some local modifications in the project that need to be pushed (note: also server may have newer version)
     // Maybe orphaned state in future
   };
   Q_ENUM_NS( Status )
+
+  Status projectStatus( const std::shared_ptr<Project_future> project );
 }
 
 struct LocalProject_future

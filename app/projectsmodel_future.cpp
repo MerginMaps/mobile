@@ -64,11 +64,11 @@ QVariant ProjectsModel_future::data( const QModelIndex &index, int role ) const
   switch ( role ) {
     case ProjectName: return QVariant( project->projectName() );
     case ProjectNamespace: return QVariant( project->projectNamespace() );
-    case ProjectFullName: return MerginApi::getFullProjectName( project->projectNamespace(), project->projectName() );
+    case ProjectFullName: return QVariant( project->projectId() );
     case ProjectId: return QVariant( project->projectId() );
     case ProjectIsLocal: return QVariant( project->isLocal() );
     case ProjectIsMergin: return QVariant( project->isMergin() );
-    case ProjectSyncStatus: return QVariant( LocalProjectsManager::currentProjectStatus( project ) );
+    case ProjectSyncStatus: return QVariant( project->isMergin() ? project->mergin->status : ProjectStatus::NoVersion );
     case ProjectFilePath: return QVariant( project->isLocal() ? project->local->qgisProjectFilePath : QString() );
     case ProjectDirectory: return QVariant( project->isLocal() ? project->local->projectDir : QString() );
     case ProjectIsValid: {
@@ -111,23 +111,13 @@ QModelIndex ProjectsModel_future::index( int row, int col, const QModelIndex &pa
   return createIndex( row, 0, nullptr );
 }
 
-bool ProjectsModel_future::canFetchMore( const QModelIndex & ) const
-{
-//  return mServerProjectsCount > mProjects.size();
-  return true;
-}
-
-void ProjectsModel_future::fetchMore( const QModelIndex & )
-{
-
-}
-
 QHash<int, QByteArray> ProjectsModel_future::roleNames() const
 {
   QHash<int, QByteArray> roles;
   roles[Roles::ProjectName]         = QStringLiteral( "ProjectName" ).toLatin1();
   roles[Roles::ProjectNamespace]    = QStringLiteral( "ProjectNamespace" ).toLatin1();
   roles[Roles::ProjectFullName]     = QStringLiteral( "ProjectFullName" ).toLatin1();
+  roles[Roles::ProjectId]           = QStringLiteral( "ProjectId" ).toLatin1();
   roles[Roles::ProjectDirectory]    = QStringLiteral( "ProjectDirectory" ).toLatin1();
   roles[Roles::ProjectIsLocal]      = QStringLiteral( "ProjectIsLocal" ).toLatin1();
   roles[Roles::ProjectIsMergin]     = QStringLiteral( "ProjectIsMergin" ).toLatin1();
@@ -146,7 +136,7 @@ int ProjectsModel_future::rowCount( const QModelIndex & ) const
   return mProjects.count();
 }
 
-void ProjectsModel_future::listProjects( int page, QString searchExpression )
+void ProjectsModel_future::listProjects( const QString &searchExpression, int page )
 {
   if ( mModelType == LocalProjectsModel )
   {
@@ -154,7 +144,7 @@ void ProjectsModel_future::listProjects( int page, QString searchExpression )
     return;
   }
 
-  mLastRequestId = mBackend->listProjects( "", modelTypeToFlag(), searchExpression, page );
+  mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
 }
 
 void ProjectsModel_future::listProjectsByName()
@@ -165,6 +155,99 @@ void ProjectsModel_future::listProjectsByName()
   }
 
   mLastRequestId = mBackend->listProjectsByName( projectNames() );
+}
+
+bool ProjectsModel_future::hasMoreProjects() const
+{
+  if ( mProjects.size() < mServerProjectsCount )
+    return true;
+
+  return false;
+}
+
+void ProjectsModel_future::fetchAnotherPage( const QString &searchExpression )
+{
+  listProjects( searchExpression, mPaginatedPage + 1 );
+}
+
+QVariant ProjectsModel_future::dataFrom( int fromRole, QVariant fromValue, int desiredRole ) const
+{
+  switch ( fromRole )
+  {
+    case ProjectId:
+    {
+      std::shared_ptr<Project_future> project = projectFromId( fromValue.toString() );
+      if ( project )
+      {
+        QModelIndex ix = index( mProjects.indexOf( project ) );
+        return data( ix, desiredRole );
+      }
+      return QVariant();
+    }
+
+    case ProjectFilePath:
+    {
+      for ( int i = 0; i < mProjects.size(); i++ )
+      {
+        if ( mProjects[i]->isLocal() && mProjects[i]->local->qgisProjectFilePath == fromValue.toString() )
+        {
+          QModelIndex ix = index( i );
+          return data( ix, desiredRole );
+        }
+      }
+    }
+    default: return QVariant();
+  }
+
+  return QVariant();
+}
+
+void ProjectsModel_future::onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId )
+{
+  qDebug() << "PMR: onListProjectsFinished(): received response with requestId = " << requestId;
+  if ( mLastRequestId != requestId )
+  {
+    qDebug() << "PMR: onListProjectsFinished(): ignoring request with id " << requestId;
+    return;
+  }
+
+  qDebug() << "PMR: onListProjectsFinished(): project count =  " << projectsCount << " but mergin projects emited: " << merginProjects.size();
+
+  if ( page == 1 )
+  {
+    // if we are populating first page, reset model and throw away previous projects
+    beginResetModel();
+    mergeProjects( merginProjects, pendingProjects, false );
+    printProjects();
+    endResetModel();
+  }
+  else
+  {
+    // paginating next page, keep previous projects and emit model add items
+    beginInsertRows( QModelIndex(), mProjects.size(), mProjects.size() + merginProjects.size() - 1 );
+    mergeProjects( merginProjects, pendingProjects, true );
+    printProjects();
+    endInsertRows();
+  }
+
+  mServerProjectsCount = projectsCount;
+  mPaginatedPage = page;
+  emit hasMoreProjectsChanged();
+}
+
+void ProjectsModel_future::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId )
+{
+  qDebug() << "PMR: onListProjectsByNameFinished(): received response with requestId = " << requestId;
+  if ( mLastRequestId != requestId )
+  {
+    qDebug() << "PMR: onListProjectsByNameFinished(): ignoring request with id " << requestId;
+    return;
+  }
+
+  beginResetModel();
+  mergeProjects( merginProjects, pendingProjects );
+  printProjects();
+  endResetModel();
 }
 
 void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
@@ -182,9 +265,7 @@ void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjec
     for ( const auto &localProject : localProjects )
     {
       std::shared_ptr<Project_future> project = std::shared_ptr<Project_future>( new Project_future() );
-      std::unique_ptr<LocalProject_future> local = std::unique_ptr<LocalProject_future>( new LocalProject_future( localProject ) );
-
-      project->local = std::move( local );
+      project->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( localProject ) );
 
       MerginProject_future remoteEntry;
       remoteEntry.projectName = project->local->projectName;
@@ -201,6 +282,7 @@ void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjec
           project->mergin->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
           project->mergin->pending = true;
         }
+        project->mergin->status = ProjectStatus::projectStatus( project );
       }
       else if ( project->local->localVersion > -1 )
       {
@@ -208,6 +290,7 @@ void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjec
         project->mergin = std::unique_ptr<MerginProject_future>( new MerginProject_future() );
         project->mergin->projectName = project->local->projectName;
         project->mergin->projectNamespace = project->local->projectNamespace;
+        project->mergin->status = ProjectStatus::projectStatus( project );
       }
 
       mProjects << project;
@@ -238,70 +321,32 @@ void ProjectsModel_future::mergeProjects( const MerginProjectsList &merginProjec
         int ix = localProjects.indexOf( localProject );
         project->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( localProjects[ix] ) );
       }
+      project->mergin->status = ProjectStatus::projectStatus( project );
 
       mProjects << project;
     }
   }
 }
 
-int ProjectsModel_future::serverProjectsCount() const
+void ProjectsModel_future::syncProject( const QString &projectId )
 {
-  return mServerProjectsCount;
-}
-
-void ProjectsModel_future::onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId )
-{
-  qDebug() << "PMR: onListProjectsFinished(): received response with requestId = " << requestId;
-  if ( mLastRequestId != requestId )
-  {
-    qDebug() << "PMR: onListProjectsFinished(): ignoring request with id " << requestId;
-    return;
-  }
-
-  setServerProjectsCount( projectsCount );
-
-  qDebug() << "PMR: onListProjectsFinished(): project count =  " << projectsCount << " but mergin projects emited: " << merginProjects.size();
-
-  beginResetModel();
-  mergeProjects( merginProjects, pendingProjects, page != 1 ); // throw projects only if paginating first page
-  printProjects();
-  endResetModel();
-}
-
-void ProjectsModel_future::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId )
-{
-  qDebug() << "PMR: onListProjectsByNameFinished(): received response with requestId = " << requestId;
-  if ( mLastRequestId != requestId )
-  {
-    qDebug() << "PMR: onListProjectsByNameFinished(): ignoring request with id " << requestId;
-    return;
-  }
-
-  beginResetModel();
-  mergeProjects( merginProjects, pendingProjects );
-  printProjects();
-  endResetModel();
-}
-
-void ProjectsModel_future::syncProject( const QString &projectNamespace, const QString &projectName )
-{
-  std::shared_ptr<Project_future> project = projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  std::shared_ptr<Project_future> project = projectFromId( projectId );
 
   if ( project == nullptr )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "not in projects list";
+    qDebug() << "PMR: project" << projectId << "not in projects list";
     return;
   }
 
   if ( !project->isMergin() )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not a mergin project";
+    qDebug() << "PMR: project" << projectId << "is not a mergin project";
     return;
   }
 
   if ( project->mergin->pending )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is already syncing";
+    qDebug() << "PMR: project" << projectId << "is already syncing";
     return;
   }
 
@@ -309,35 +354,35 @@ void ProjectsModel_future::syncProject( const QString &projectNamespace, const Q
   {
     qDebug() << "PMR: updating project:" << project->mergin->id();
 
-    bool useAuth = !mBackend->userAuth()->hasAuthData() && mModelType == ProjectModelTypes::ExploreProjectsModel;
-    mBackend->updateProject( projectNamespace, projectName, useAuth );
+    bool useAuth = !mBackend->userAuth()->hasAuthData() && mModelType == ProjectModelTypes::PublicProjectsModel;
+    mBackend->updateProject( project->mergin->projectNamespace, project->mergin->projectName, useAuth );
   }
   else if ( project->mergin->status == ProjectStatus::Modified )
   {
     qDebug() << "PMR: uploading project:" << project->mergin->id();
-    mBackend->uploadProject( projectNamespace, projectName );
+    mBackend->uploadProject( project->mergin->projectNamespace, project->mergin->projectName );
   }
 }
 
-void ProjectsModel_future::stopProjectSync( const QString &projectNamespace, const QString &projectName )
+void ProjectsModel_future::stopProjectSync( const QString &projectId )
 {
-  std::shared_ptr<Project_future> project = projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  std::shared_ptr<Project_future> project = projectFromId( projectId );
 
   if ( project == nullptr )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "not in projects list";
+    qDebug() << "PMR: project" << projectId << "not in projects list";
     return;
   }
 
   if ( !project->isMergin() )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not a mergin project";
+    qDebug() << "PMR: project" << projectId << "is not a mergin project";
     return;
   }
 
   if ( !project->mergin->pending )
   {
-    qDebug() << "PMR: project" << MerginApi::getFullProjectName(projectNamespace, projectName) << "is not pending";
+    qDebug() << "PMR: project" << projectId << "is not pending";
     return;
   }
 
@@ -353,9 +398,18 @@ void ProjectsModel_future::stopProjectSync( const QString &projectNamespace, con
   }
 }
 
-void ProjectsModel_future::removeLocalProject( const QString &projectDir )
+void ProjectsModel_future::removeLocalProject( const QString &projectId )
 {
-  mLocalProjectsManager->removeLocalProject( projectDir );
+  mLocalProjectsManager->removeLocalProject( projectId );
+}
+
+void ProjectsModel_future::migrateProject( const QString &projectId )
+{
+  // if it is indeed a local project
+  std::shared_ptr<Project_future> project = projectFromId( projectId );
+
+  if ( project->isLocal() )
+    mBackend->migrateProjectToMergin( project->local->projectName );
 }
 
 void ProjectsModel_future::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully )
@@ -398,6 +452,8 @@ void ProjectsModel_future::onProjectAdded( const LocalProject_future &project )
   {
     // add local information ~ project downloaded
     proj->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( project ) );
+    if ( proj->isMergin() )
+      proj->mergin->status = ProjectStatus::projectStatus( proj );
 
     QModelIndex ix = index( mProjects.indexOf( proj ) );
     emit dataChanged( ix, ix );
@@ -424,13 +480,27 @@ void ProjectsModel_future::onAboutToRemoveProject( const LocalProject_future pro
 
   if ( proj )
   {
-    int removeIndex = mProjects.indexOf( proj );
+    if ( mModelType == LocalProjectsModel )
+    {
+      int removeIndex = mProjects.indexOf( proj );
 
-    beginRemoveRows( QModelIndex(), removeIndex, removeIndex );
-    mProjects.removeOne( proj );
-    endRemoveRows();
+      beginRemoveRows( QModelIndex(), removeIndex, removeIndex );
+      mProjects.removeOne( proj );
+      endRemoveRows();
 
-    qDebug() << "PMR: Deleted project" << project.id();
+      qDebug() << "PMR: Deleted project" << project.id();
+    }
+    else
+    {
+      // just remove local part
+      proj->local.reset();
+
+      if ( proj->isMergin() )
+        proj->mergin->status = ProjectStatus::projectStatus( proj );
+
+      QModelIndex ix = index( mProjects.indexOf( proj ) );
+      emit dataChanged( ix, ix );
+    }
   }
 }
 
@@ -441,6 +511,9 @@ void ProjectsModel_future::onProjectDataChanged( const LocalProject_future &proj
   if ( proj )
   {
     proj->local = std::unique_ptr<LocalProject_future>( new LocalProject_future( project ) );
+    if ( proj->isMergin() )
+      proj->mergin->status = ProjectStatus::projectStatus( proj );
+
     QModelIndex editIndex = index( mProjects.indexOf( proj ) );
 
     emit dataChanged( editIndex, editIndex );
@@ -454,7 +527,7 @@ void ProjectsModel_future::onProjectDetachedFromMergin( const QString &projectFu
 
   if ( proj )
   {
-    proj->mergin = nullptr;
+    proj->mergin.reset();
     QModelIndex editIndex = index( mProjects.indexOf( proj ) );
 
     emit dataChanged( editIndex, editIndex );
@@ -472,15 +545,6 @@ void ProjectsModel_future::onProjectAttachedToMergin( const QString &projectFull
   listProjectsByName();
 
   qDebug() << "PMR: Project attached to mergin " << projectFullName;
-}
-
-void ProjectsModel_future::setServerProjectsCount( int serverProjectsCount )
-{
-  if ( mServerProjectsCount == serverProjectsCount )
-    return;
-
-  mServerProjectsCount = serverProjectsCount;
-  emit serverProjectsCountChanged( mServerProjectsCount );
 }
 
 void ProjectsModel_future::setMerginApi( MerginApi *merginApi )
@@ -517,7 +581,7 @@ QString ProjectsModel_future::modelTypeToFlag() const
 {
   switch ( mModelType )
   {
-    case MyProjectsModel:
+    case CreatedProjectsModel:
       return QStringLiteral( "created" );
     case SharedProjectsModel:
       return QStringLiteral( "shared" );
@@ -565,6 +629,7 @@ void ProjectsModel_future::loadLocalProjects()
   {
     beginResetModel();
     mergeProjects( MerginProjectsList(), Transactions() ); // Fills model with local projects
+    printProjects();
     endResetModel();
   }
 }
