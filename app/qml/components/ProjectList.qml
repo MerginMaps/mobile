@@ -75,7 +75,7 @@ Item {
       width: parent.width
       height: InputStyle.rowHeightHeader * 1.2
 
-      projectFullName: model.ProjectFullName
+      projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
       projectDescription: model.ProjectDescription
       projectStatus: model.ProjectSyncStatus ? model.ProjectSyncStatus : ProjectStatus.NoVersion
