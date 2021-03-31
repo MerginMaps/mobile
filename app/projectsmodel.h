@@ -109,7 +109,7 @@ class ProjectsModel : public QAbstractListModel
 
     bool hasMoreProjects() const;
 
-public slots:
+  public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
@@ -127,11 +127,11 @@ public slots:
     void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
     void setModelType( ProjectModelTypes modelType );
 
-signals:
+  signals:
     void modelInitialized();
     void hasMoreProjectsChanged();
 
-private:
+  private:
     QString modelTypeToFlag() const;
     void printProjects() const;
     QStringList projectNames() const;

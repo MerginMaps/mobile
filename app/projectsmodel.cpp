@@ -61,7 +61,8 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
 
   std::shared_ptr<Project> project = mProjects.at( index.row() );
 
-  switch ( role ) {
+  switch ( role )
+  {
     case ProjectName: return QVariant( project->projectName() );
     case ProjectNamespace: return QVariant( project->projectNamespace() );
     case ProjectFullName: return QVariant( project->projectId() );
@@ -71,12 +72,14 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
     case ProjectSyncStatus: return QVariant( project->isMergin() ? project->mergin->status : ProjectStatus::NoVersion );
     case ProjectFilePath: return QVariant( project->isLocal() ? project->local->qgisProjectFilePath : QString() );
     case ProjectDirectory: return QVariant( project->isLocal() ? project->local->projectDir : QString() );
-    case ProjectIsValid: {
+    case ProjectIsValid:
+    {
       if ( !project->isLocal() )
         return true; // Mergin projects are by default valid, remote error only affects syncing, not opening of a project
       return project->local->projectError.isEmpty();
     }
-    case ProjectDescription: {
+    case ProjectDescription:
+    {
       if ( project->isLocal() )
       {
         if ( !project->local->projectError.isEmpty() )
@@ -92,7 +95,8 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
       }
       return QVariant(); // This should not happen
     }
-    default: {
+    default:
+    {
       if ( !project->isMergin() ) return QVariant();
 
       // Roles only for projects that has mergin part
@@ -655,5 +659,5 @@ std::shared_ptr<Project> ProjectsModel::projectFromId( QString projectId ) const
 
 ProjectsModel::ProjectModelTypes ProjectsModel::modelType() const
 {
-    return mModelType;
+  return mModelType;
 }
