@@ -7,34 +7,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "projectsproxymodel_future.h"
+#include "projectsproxymodel.h"
 
-ProjectsProxyModel_future::ProjectsProxyModel_future( QObject *parent ) : QSortFilterProxyModel( parent )
+ProjectsProxyModel::ProjectsProxyModel( QObject *parent ) : QSortFilterProxyModel( parent )
 {
 }
 
-void ProjectsProxyModel_future::initialize()
+void ProjectsProxyModel::initialize()
 {
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
-  setFilterRole( ProjectsModel_future::ProjectFullName );
+  setFilterRole( ProjectsModel::ProjectFullName );
   setFilterCaseSensitivity( Qt::CaseInsensitive );
 
   sort( 0, Qt::AscendingOrder );
 }
 
-QString ProjectsProxyModel_future::searchExpression() const
+QString ProjectsProxyModel::searchExpression() const
 {
   return mSearchExpression;
 }
 
-ProjectsModel_future *ProjectsProxyModel_future::projectSourceModel() const
+ProjectsModel *ProjectsProxyModel::projectSourceModel() const
 {
   return mModel;
 }
 
-void ProjectsProxyModel_future::setSearchExpression( QString searchExpression )
+void ProjectsProxyModel::setSearchExpression( QString searchExpression )
 {
   if ( mSearchExpression == searchExpression )
     return;
@@ -44,22 +44,22 @@ void ProjectsProxyModel_future::setSearchExpression( QString searchExpression )
   emit searchExpressionChanged( mSearchExpression );
 }
 
-void ProjectsProxyModel_future::setProjectSourceModel( ProjectsModel_future *sourceModel )
+void ProjectsProxyModel::setProjectSourceModel( ProjectsModel *sourceModel )
 {
   if ( mModel == sourceModel )
     return;
 
   mModel = sourceModel;
-  QObject::connect( mModel, &ProjectsModel_future::modelInitialized, this, &ProjectsProxyModel_future::initialize );
+  QObject::connect( mModel, &ProjectsModel::modelInitialized, this, &ProjectsProxyModel::initialize );
 }
 
 
-bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelIndex &right ) const
+bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
 {
-  if ( mModelType == ProjectsModel_future::LocalProjectsModel )
+  if ( mModelType == ProjectsModel::LocalProjectsModel )
   {
-    bool lProjectIsMergin = mModel->data( left, ProjectsModel_future::ProjectIsMergin ).toBool();
-    bool rProjectIsMergin = mModel->data( right, ProjectsModel_future::ProjectIsMergin ).toBool();
+    bool lProjectIsMergin = mModel->data( left, ProjectsModel::ProjectIsMergin ).toBool();
+    bool rProjectIsMergin = mModel->data( right, ProjectsModel::ProjectIsMergin ).toBool();
 
     /**
      * Ordering of local projects: first non-mergin projects (using folder name),
@@ -68,8 +68,8 @@ bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelI
 
     if ( !lProjectIsMergin && !rProjectIsMergin )
     {
-      QString lProjectFullName = mModel->data( left, ProjectsModel_future::ProjectFullName ).toString();
-      QString rProjectFullName = mModel->data( right, ProjectsModel_future::ProjectFullName ).toString();
+      QString lProjectFullName = mModel->data( left, ProjectsModel::ProjectFullName ).toString();
+      QString rProjectFullName = mModel->data( right, ProjectsModel::ProjectFullName ).toString();
       qDebug() << "Comparing " << lProjectFullName << rProjectFullName;
 
       return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
@@ -83,10 +83,10 @@ bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelI
       return false;
     }
 
-    QString lNamespace = mModel->data( left, ProjectsModel_future::ProjectNamespace ).toString();
-    QString lProjectName = mModel->data( left, ProjectsModel_future::ProjectName ).toString();
-    QString rNamespace = mModel->data( right, ProjectsModel_future::ProjectNamespace ).toString();
-    QString rProjectName = mModel->data( right, ProjectsModel_future::ProjectName ).toString();
+    QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
+    QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
+    QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
+    QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
 
     if ( lNamespace == rNamespace )
     {

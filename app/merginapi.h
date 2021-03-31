@@ -27,7 +27,7 @@
 #include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
-#include "project_future.h"
+#include "project.h"
 
 class MerginUserAuth;
 class MerginUserInfo;
@@ -309,7 +309,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName );
 
 
-    LocalProject_future getLocalProject( const QString &projectFullName ); // Test function
+    LocalProject getLocalProject( const QString &projectFullName ); // Test function
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
@@ -439,7 +439,7 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
 
   private:
-    MerginProject_future parseProjectMetadata( const QJsonObject &project );
+    MerginProject parseProjectMetadata( const QJsonObject &project );
     MerginProjectsList parseProjectsFromJson( const QJsonDocument &object );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
