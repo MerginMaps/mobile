@@ -21,7 +21,7 @@ Rectangle {
   id: root
 
   // Required properties
-  property string projectFullName
+  property string projectDisplayName
   property string projectId
   property string projectDescription
   property int projectStatus
@@ -168,7 +168,7 @@ Rectangle {
       Text {
         id: mainText
 
-        text: __inputUtils.formatProjectName( projectFullName )
+        text: __inputUtils.formatProjectName( projectDisplayName )
         height: textContainer.height/2
         width: textContainer.width
         font.pixelSize: InputStyle.fontPixelSizeNormal
