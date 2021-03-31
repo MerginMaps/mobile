@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "project_future.h"
+#include "project.h"
 #include "merginapi.h"
 #include "inpututils.h"
 
-QString LocalProject_future::id() const
+QString LocalProject::id() const
 {
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
@@ -20,12 +20,12 @@ QString LocalProject_future::id() const
   return dir.dirName();
 }
 
-QString MerginProject_future::id() const
+QString MerginProject::id() const
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
 
-ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Project_future> project )
+ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Project> project )
 {
   if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus::NoVersion;

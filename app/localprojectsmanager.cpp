@@ -28,7 +28,7 @@ void LocalProjectsManager::reloadDataDir()
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
   for ( const QString &folderName : entryList )
   {
-    LocalProject_future info;
+    LocalProject info;
     info.projectDir = mDataDir + "/" + folderName;
     info.qgisProjectFilePath = findQgisProjectFile( info.projectDir, info.projectError );
 
@@ -51,37 +51,37 @@ void LocalProjectsManager::reloadDataDir()
   emit dataDirReloaded();
 }
 
-LocalProject_future LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
+LocalProject LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
 {
-  for ( const LocalProject_future &info : mProjects )
+  for ( const LocalProject &info : mProjects )
   {
     if ( info.projectDir == projectDir )
       return info;
   }
-  return LocalProject_future();
+  return LocalProject();
 }
 
-LocalProject_future LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
+LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
 {
-  for ( const LocalProject_future &info : mProjects )
+  for ( const LocalProject &info : mProjects )
   {
     if ( info.qgisProjectFilePath == projectFilePath )
       return info;
   }
-  return LocalProject_future();
+  return LocalProject();
 }
 
-LocalProject_future LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
+LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
-  for ( const LocalProject_future &info : mProjects )
+  for ( const LocalProject &info : mProjects )
   {
     if ( info.id() == projectFullName )
       return info;
   }
-  return LocalProject_future();
+  return LocalProject();
 }
 
-LocalProject_future LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
+LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
 {
   return projectFromMerginName( MerginApi::getFullProjectName( projectNamespace, projectName ) );
 }
@@ -205,7 +205,7 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
 
 void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
 {
-  LocalProject_future project;
+  LocalProject project;
   project.projectDir = projectDir;
   project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.projectError );
   project.projectName = projectName;

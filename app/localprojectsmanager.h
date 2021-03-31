@@ -11,7 +11,7 @@
 #define LOCALPROJECTSMANAGER_H
 
 #include <QObject>
-#include <project_future.h>
+#include <project.h>
 
 class LocalProjectsManager : public QObject
 {
@@ -26,11 +26,11 @@ class LocalProjectsManager : public QObject
 
     LocalProjectsList projects() const { return mProjects; }
 
-    LocalProject_future projectFromDirectory( const QString &projectDir ) const;
-    LocalProject_future projectFromProjectFilePath( const QString &projectFilePath ) const;
+    LocalProject projectFromDirectory( const QString &projectDir ) const;
+    LocalProject projectFromProjectFilePath( const QString &projectFilePath ) const;
 
-    LocalProject_future projectFromMerginName( const QString &projectFullName ) const;
-    LocalProject_future projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
+    LocalProject projectFromMerginName( const QString &projectFullName ) const;
+    LocalProject projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
 
     //! Adds entry about newly created project
     void addLocalProject( const QString &projectDir, const QString &projectName );
@@ -57,9 +57,9 @@ class LocalProjectsManager : public QObject
   signals:
     void projectMetadataChanged( const QString &projectDir );
     void localMerginProjectAdded( const QString &projectDir );
-    void localProjectAdded( const LocalProject_future &project );
-    void aboutToRemoveLocalProject( const LocalProject_future project );
-    void localProjectDataChanged( const LocalProject_future &project );
+    void localProjectAdded( const LocalProject &project );
+    void aboutToRemoveLocalProject( const LocalProject project );
+    void localProjectDataChanged( const LocalProject &project );
     void dataDirReloaded();
 
   private:

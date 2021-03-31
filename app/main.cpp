@@ -52,9 +52,9 @@
 #include "projectwizard.h"
 #include "codefilter.h"
 
-#include "projectsmodel_future.h"
-#include "projectsproxymodel_future.h"
-#include "project_future.h"
+#include "projectsmodel.h"
+#include "projectsproxymodel.h"
+#include "project.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -232,8 +232,8 @@ void initDeclarative()
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
 
-  qmlRegisterType<ProjectsModel_future>( "lc", 1, 0, "ProjectsModel" );
-  qmlRegisterType<ProjectsProxyModel_future>( "lc", 1, 0, "ProjectsProxyModel" );
+  qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
+  qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 }
 

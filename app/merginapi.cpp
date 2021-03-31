@@ -757,7 +757,7 @@ void MerginApi::createProjectFinished()
     extractProjectName( projectFullName, projectNamespace, projectName );
 
     // Upload data if createProject has been called for a local project with empty namespace (case of migrating a project)
-    for ( const LocalProject_future &info : mLocalProjects.projects() )
+    for ( const LocalProject &info : mLocalProjects.projects() )
     {
       if ( info.projectName == projectName && info.projectNamespace.isEmpty() )
       {
@@ -937,7 +937,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   }
 
   int sinceVersion = -1;
-  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( projectInfo.isValid() )
   {
     // let's also fetch the recent history of diffable files
@@ -1062,7 +1062,7 @@ QString MerginApi::extractServerErrorMsg( const QByteArray &data )
 }
 
 
-LocalProject_future MerginApi::getLocalProject( const QString &projectFullName )
+LocalProject MerginApi::getLocalProject( const QString &projectFullName )
 {
   return mLocalProjects.projectFromMerginName( projectFullName );
 }
@@ -1136,7 +1136,7 @@ void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const 
 {
   // Remove mergin folder
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
 
   if ( projectInfo.isValid() )
   {
@@ -1385,7 +1385,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
-    LocalProject_future info = mLocalProjects.projectFromMerginName( projectFullName );
+    LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = InputUtils::findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
     if ( !QFile::rename( dest, newDest ) )
     {
@@ -1439,7 +1439,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
       {
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
-        LocalProject_future info = mLocalProjects.projectFromMerginName( projectFullName );
+        LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
         QString newPath = InputUtils::findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
         if ( !QFile::rename( origPath, newPath ) )
         {
@@ -1667,7 +1667,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( projectInfo.isValid() ) // If project is already downloaded
   {
     transaction.projectDir = projectInfo.projectDir;
@@ -1844,7 +1844,7 @@ void MerginApi::uploadInfoReplyFinished()
     transaction.replyUploadProjectInfo->deleteLater();
     transaction.replyUploadProjectInfo = nullptr;
 
-    LocalProject_future projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
@@ -2262,9 +2262,9 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
   return diff;
 }
 
-MerginProject_future MerginApi::parseProjectMetadata( const QJsonObject &proj )
+MerginProject MerginApi::parseProjectMetadata( const QJsonObject &proj )
 {
-  MerginProject_future project;
+  MerginProject project;
 
   if ( proj.isEmpty() )
   {
@@ -2326,7 +2326,7 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
   {
     for ( auto it = object.begin(); it != object.end(); ++it )
     {
-      MerginProject_future project = parseProjectMetadata( it->toObject() );
+      MerginProject project = parseProjectMetadata( it->toObject() );
       if ( !project.remoteError.isEmpty() )
       {
         // add project namespace/name from object name in case of error

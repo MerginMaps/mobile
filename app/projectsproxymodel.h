@@ -7,34 +7,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECTSPROXYMODEL_FUTURE_H
-#define PROJECTSPROXYMODEL_FUTURE_H
+#ifndef PROJECTSPROXYMODEL_H
+#define PROJECTSPROXYMODEL_H
 
 #include <QObject>
 #include <QSortFilterProxyModel>
 
-#include "projectsmodel_future.h"
+#include "projectsmodel.h"
 
 /**
- * @brief The ProjectsProxyModel_future class
+ * @brief The ProjectsProxyModel class
  */
-class ProjectsProxyModel_future : public QSortFilterProxyModel
+class ProjectsProxyModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 
   Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
-  Q_PROPERTY( ProjectsModel_future *projectSourceModel READ projectSourceModel WRITE setProjectSourceModel )
+  Q_PROPERTY( ProjectsModel *projectSourceModel READ projectSourceModel WRITE setProjectSourceModel )
 
 public:
-    explicit ProjectsProxyModel_future( QObject *parent = nullptr );
-    ~ProjectsProxyModel_future() override {};
+    explicit ProjectsProxyModel( QObject *parent = nullptr );
+    ~ProjectsProxyModel() override {};
 
   QString searchExpression() const;
-  ProjectsModel_future *projectSourceModel() const;
+  ProjectsModel *projectSourceModel() const;
 
 public slots:
   void setSearchExpression( QString searchExpression );
-  void setProjectSourceModel( ProjectsModel_future *sourceModel );
+  void setProjectSourceModel( ProjectsModel *sourceModel );
 
 signals:
   void searchExpressionChanged( QString SearchExpression );
@@ -45,9 +45,9 @@ protected:
   private:
     void initialize();
 
-    ProjectsModel_future *mModel;
-    ProjectsModel_future::ProjectModelTypes mModelType = ProjectsModel_future::EmptyProjectsModel;
+    ProjectsModel *mModel;
+    ProjectsModel::ProjectModelTypes mModelType = ProjectsModel::EmptyProjectsModel;
     QString mSearchExpression;
 };
 
-#endif // PROJECTSPROXYMODEL_FUTURE_H
+#endif // PROJECTSPROXYMODEL_H
