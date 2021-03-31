@@ -25,6 +25,7 @@ Rectangle {
     property color backgroundColor: InputStyle.fontColor
     property bool isHighlighted: false
     property bool enabled: true
+    property bool handleClicks: true // enable property is used also for color
     property bool faded: false
 
     signal activated()
@@ -35,7 +36,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        enabled: root.enabled
+        enabled: root.enabled && handleClicks
         onClicked: {
             root.activated()
         }
