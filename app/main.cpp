@@ -32,14 +32,12 @@
 #include "ios/iosutils.h"
 #include "inpututils.h"
 #include "positiondirection.h"
-#include "projectsmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginsubscriptionstatus.h"
 #include "merginsubscriptiontype.h"
-#include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "layersproxymodel.h"
 #include "layersmodel.h"
@@ -219,7 +217,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
   qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
-  qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
@@ -365,26 +362,13 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   IosUtils iosUtils;
-  LocalProjectsManager localProjects( projectDir );
-  ProjectModel pm( localProjects );
+  LocalProjectsManager localProjectsManager( projectDir );
   MapThemesModel mtm;
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
   InputUtils iu;
-  MerginProjectModel mpm( localProjects );
-  MerginProjectStatusModel mpsm( localProjects );
+  MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
-
-  // project models - instance for each category
-  ProjectsModel_future myProjectsModel( ma.get(), ProjectModelTypes::MyProjectsModel, localProjects );
-  ProjectsModel_future localProjectsModel( ma.get(), ProjectModelTypes::LocalProjectsModel, localProjects );
-  ProjectsModel_future sharedProjectsModel( ma.get(), ProjectModelTypes::SharedProjectsModel, localProjects );
-  ProjectsModel_future exploreProjectsModel( ma.get(), ProjectModelTypes::ExploreProjectsModel, localProjects );
-
-  ProjectsProxyModel_future myProjectsProxyModel( &myProjectsModel );
-  ProjectsProxyModel_future localProjectsProxyModel( &localProjectsModel );
-  ProjectsProxyModel_future sharedProjectsProxyModel( &sharedProjectsModel );
-  ProjectsProxyModel_future exploreProjectsProxyModel( &exploreProjectsModel );
 
   // layer models
   LayersModel lm;
@@ -399,11 +383,7 @@ int main( int argc, char *argv[] )
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
-//  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
-//  QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
-  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjects, &LocalProjectsManager::addLocalProject );
-//  QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
-//  QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
@@ -491,23 +471,17 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
-  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
-
-  engine.rootContext()->setContextProperty( "__myProjectsModel", &myProjectsModel ); // TODO: maybe project models do not need to be exposed?
-  engine.rootContext()->setContextProperty( "__localProjectsModel", &localProjectsModel );
-  engine.rootContext()->setContextProperty( "__myProjectsProxyModel", &myProjectsProxyModel );
-  engine.rootContext()->setContextProperty( "__localProjectsProxyModel", &localProjectsProxyModel );
+  engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
