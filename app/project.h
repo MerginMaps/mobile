@@ -18,7 +18,8 @@
 
 struct Project;
 
-namespace ProjectStatus {
+namespace ProjectStatus
+{
   Q_NAMESPACE
   enum Status
   {
