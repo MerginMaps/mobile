@@ -39,6 +39,7 @@ Item {
             id: iconContainer
             height: rowHeight
             width: rowHeight
+            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
             Image {
                 id: icon
@@ -64,6 +65,7 @@ Item {
             x: iconContainer.width + panelMargin
             width: parent.width - rowHeight
             height: rowHeight
+            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
             Text {
                 id: mainText
@@ -87,6 +89,6 @@ Item {
         width: row.width
         height: 1
         visible: root.showBorder
-        anchors.bottom: parent.bottom
+        anchors.bottom: parent ? parent.bottom : undefined
     }
 }

@@ -22,13 +22,12 @@
         <file>PositionMarker.qml</file>
         <file>Shadow.qml</file>
         <file>NumberSpin.qml</file>
-        <file>ProjectDelegateItem.qml</file>
         <file>AuthPanel.qml</file>
         <file>ExternalResourceBundle.qml</file>
         <file>RecordToolbar.qml</file>
         <file>RecordCrosshair.qml</file>
         <file>AboutPanel.qml</file>
-        <file>MerginProjectPanel.qml</file>
+        <file>ProjectPanel.qml</file>
         <file>AccountPage.qml</file>
         <file>Highlight.qml</file>
         <file>LoadingIndicator.qml</file>
@@ -62,5 +61,8 @@
         <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
         <file>CodeReaderOverlay.qml</file>
+        <file>components/ProjectList.qml</file>
+        <file>ProjectListPage.qml</file>
+        <file>components/ProjectDelegateItem.qml</file>
     </qresource>
 </RCC>

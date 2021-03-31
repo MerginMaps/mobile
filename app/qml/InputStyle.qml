@@ -19,6 +19,7 @@ QtObject {
     property color fontColorBright: "#679D70"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
+    property color activeButtonColorOrange: "#FD9626"
 
     // Secondary colors
     property color clrPanelMain: "white"
@@ -81,6 +82,10 @@ QtObject {
     property var valueRelationIcon: "qrc:/value_relation_open.svg"
     property var comboboxIcon: "qrc:/combobox.svg"
     property var qrCodeIcon: "qrc:/qrcode.svg"
+    property var syncIcon: "qrc:sync.svg"
+    property var downloadIcon: "qrc:download.svg"
+    property var stopIcon: "qrc:stop.svg"
+    property var moreMenuIcon: "qrc:/more_menu.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"
