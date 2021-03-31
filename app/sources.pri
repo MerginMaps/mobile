@@ -7,7 +7,6 @@ layersproxymodel.cpp \
 localprojectsmanager.cpp \
 main.cpp \
 merginprojectmetadata.cpp \
-projectsmodel.cpp \
 projectwizard.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
@@ -17,7 +16,6 @@ merginapi.cpp \
 merginapistatus.cpp \
 merginsubscriptionstatus.cpp \
 merginsubscriptiontype.cpp \
-merginprojectmodel.cpp \
 merginprojectstatusmodel.cpp \
 merginuserauth.cpp \
 merginuserinfo.cpp \
@@ -52,7 +50,6 @@ layersmodel.h \
 layersproxymodel.h \
 localprojectsmanager.h \
 merginprojectmetadata.h \
-projectsmodel.h \
 projectwizard.h \
 loader.h \
 digitizingcontroller.h \
@@ -62,7 +59,6 @@ merginapi.h \
 merginapistatus.h \
 merginsubscriptionstatus.h \
 merginsubscriptiontype.h \
-merginprojectmodel.h \
 merginprojectstatusmodel.h \
 merginuserauth.h \
 merginuserinfo.h \

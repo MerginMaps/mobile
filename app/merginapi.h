@@ -166,29 +166,6 @@ struct TransactionStatus
   ProjectDiff diff;
 };
 
-
-//struct MerginProjectListEntry // TODO: replace with RemoteProject from Project_future.h
-//{
-//  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
-
-//  QString projectName;
-//  QString projectNamespace;
-//  int version = -1;
-//  QDateTime serverUpdated; // available latest version of project files on server
-
-//  bool operator ==( const MerginProjectListEntry &other )
-//  {
-//    return ( this->projectName == other.projectName ) && ( this->projectNamespace == other.projectNamespace );
-//  }
-
-//  bool operator !=( const MerginProjectListEntry &other )
-//  {
-//    return !( *this == other );
-//  }
-//};
-
-//typedef QList<MerginProjectListEntry> MerginProjectList; // TODO: replace with RemoteProject from Project_future.h
-
 typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
@@ -247,7 +224,7 @@ class MerginApi: public QObject
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
+     * files are removed. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
      * If update has been successful, updates metadata file of the project.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
@@ -259,7 +236,7 @@ class MerginApi: public QObject
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
      * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
-     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
+     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
@@ -385,21 +362,12 @@ class MerginApi: public QObject
      */
     static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir );
 
-    //! Returns the most recent list of projects fetched from the server
-//    MerginProjectList projects();
-
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
     QString merginUserName() const; // TODO: remove (use can be replaced with userInfo->username)
-
-    //! Disk usage of current logged in user in Mergin instance in Bytes
-    int diskUsage() const; // TODO: remove (no use)
-
-    //! Total storage limit of current logged in user in Mergin instance in Bytes
-    int storageLimit() const; // TODO: remove (no use)
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
@@ -569,7 +537,6 @@ class MerginApi: public QObject
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
-//    MerginProjectList mRemoteProjects; // TODO: remove (no use, only in tests - TBD)
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)

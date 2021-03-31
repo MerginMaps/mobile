@@ -54,8 +54,6 @@ class LocalProjectsManager : public QObject
     //! Finds all QGIS project files and set the err variable if any occured.
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
-    static ProjectStatus::Status currentProjectStatus( const std::shared_ptr<Project_future> project ); // TODO: maybe move somewhere else?
-
   signals:
     void projectMetadataChanged( const QString &projectDir );
     void localMerginProjectAdded( const QString &projectDir );

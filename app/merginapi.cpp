@@ -30,8 +30,7 @@
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
-//const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
-const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://dev.dev.cloudmergin.com/" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
@@ -107,13 +106,11 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   InputUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
 
-  qDebug() << "MerginAPI: ListProjects, returning requestId: " << requestId;
   return requestId;
 }
 
 QString MerginApi::listProjectsByName( const QStringList &projectNames )
 {
-  setApiRoot( defaultApiRoot() );
   // construct JSON body
   QJsonDocument body;
   QJsonObject projects;
@@ -121,7 +118,6 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   projects.insert( "projects", projectsArr );
   body.setObject( projects );
-  qDebug() << "PMR: listProjectsByName(): requesting projects " << projectNames;
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/by_names" ) );
 
@@ -1188,11 +1184,6 @@ QString MerginApi::merginUserName() const
   return userAuth()->username();
 }
 
-//MerginProjectList MerginApi::projects()
-//{
-//  return mRemoteProjects;
-//}
-
 QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
 {
   QList<MerginFile> merginFiles;
@@ -1235,22 +1226,6 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
       projectCount = doc.object().value( "count" ).toInt();
       projectList = parseProjectsFromJson( doc );
     }
-//    else
-//    {
-//      mRemoteProjects.clear();
-//    }
-
-    // for any local projects we can update the latest server version
-    // TODO: this should now be done inside model so no need to do it here (LocalProjects do not have server version anymore)
-//    for ( MerginProjectListEntry project : mRemoteProjects )
-//    {
-//      QString fullProjectName = getFullProjectName( project.projectNamespace, project.projectName );
-//      LocalProjectInfo localProject = mLocalProjects.projectFromMerginName( fullProjectName );
-//      if ( localProject.isValid() )
-//      {
-//        mLocalProjects.updateMerginServerVersion( localProject.projectDir, project.version );
-//      }
-//    }
 
     InputUtils::log( "list projects", QStringLiteral( "Success - got %1 projects" ).arg( projectList.count() ) );
   }
@@ -1260,7 +1235,6 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjects" ), r->errorString(), serverMsg );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjects" ) );
     InputUtils::log( "list projects", QStringLiteral( "FAILED - %1" ).arg( message ) );
-//    mRemoteProjects.clear();
 
     emit listProjectsFailed();
   }
@@ -1513,7 +1487,6 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
   // add the local project if not there yet
   if ( !mLocalProjects.projectFromMerginName( projectFullName ).isValid() )
   {
-    qDebug() << "PMR: Downloaded project" << projectFullName;
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
 
