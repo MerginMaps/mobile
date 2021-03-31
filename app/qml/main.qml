@@ -276,6 +276,15 @@ ApplicationWindow {
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
+        // DO NOT COMMIT!!! vvv
+        if ( !__androidUtils.isAndroid )
+        {
+          window.width = 423
+          window.height = 601
+          window.x = 1100
+          window.y = 266
+        }
+
         console.log("Completed Running!")
     }
 
@@ -686,10 +695,6 @@ ApplicationWindow {
         onNotify: showMessage(message)
 
         onProjectDataChanged: {
-//          var projectName = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectName)
-//          var projectNamespace = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectNamespace)
-//          var currentProjectFullName = __merginApi.getFullProjectName(projectNamespace, projectName)
-
           //! if current project has been updated, refresh canvas
           if (projectFullName === projectPanel.activeProjectId) {
             mapCanvas.mapSettings.extentChanged()
