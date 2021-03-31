@@ -11,12 +11,10 @@
 
 ProjectsProxyModel_future::ProjectsProxyModel_future( QObject *parent ) : QSortFilterProxyModel( parent )
 {
-  qDebug() << "PMR: Building proxy model " << this;
 }
 
 void ProjectsProxyModel_future::initialize()
 {
-  qDebug() << "PMR: Initializing proxy model" << this;
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
@@ -72,16 +70,17 @@ bool ProjectsProxyModel_future::lessThan( const QModelIndex &left, const QModelI
     {
       QString lProjectFullName = mModel->data( left, ProjectsModel_future::ProjectFullName ).toString();
       QString rProjectFullName = mModel->data( right, ProjectsModel_future::ProjectFullName ).toString();
+      qDebug() << "Comparing " << lProjectFullName << rProjectFullName;
 
       return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
     }
     if ( !lProjectIsMergin && rProjectIsMergin )
     {
-      return false;
+      return true;
     }
     if ( lProjectIsMergin && !rProjectIsMergin )
     {
-      return true;
+      return false;
     }
 
     QString lNamespace = mModel->data( left, ProjectsModel_future::ProjectNamespace ).toString();

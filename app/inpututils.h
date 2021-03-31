@@ -155,6 +155,10 @@ class InputUtils: public QObject
 
     static bool removeDir( const QString &projectDir );
 
+    static QDateTime getLastModifiedFileDateTime( const QString &path );
+
+    static int getProjectFilesCount( const QString &path );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
