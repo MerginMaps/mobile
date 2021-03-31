@@ -183,8 +183,7 @@ Rectangle {
 
         visible: !projectIsPending
         height: textContainer.height/2
-//        text: projectDescription
-        text: projectStatus
+        text: projectDescription
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.left: parent.left
