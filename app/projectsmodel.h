@@ -7,21 +7,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECTSMODEL_FUTURE_H
-#define PROJECTSMODEL_FUTURE_H
+#ifndef PROJECTSMODEL_H
+#define PROJECTSMODEL_H
 
 #include <QAbstractListModel>
 #include <memory>
 
-#include "project_future.h"
+#include "project.h"
 #include "merginapi.h"
 
 class LocalProjectsManager;
 
 /**
- * \brief The ProjectsModel_future class
+ * \brief The ProjectsModel class
  */
-class ProjectsModel_future : public QAbstractListModel
+class ProjectsModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -60,8 +60,8 @@ class ProjectsModel_future : public QAbstractListModel
     };
     Q_ENUM( ProjectModelTypes )
 
-    ProjectsModel_future( QObject *parent = nullptr );
-    ~ProjectsModel_future() override {};
+    ProjectsModel( QObject *parent = nullptr );
+    ~ProjectsModel() override {};
 
     // From Qt 5.15 we can use REQUIRED keyword here that will ensure object will be always instantiated from QML with these mandatory properties
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
@@ -101,7 +101,7 @@ class ProjectsModel_future : public QAbstractListModel
     //! Method merging local and remote projects based on the model type
     void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
 
-    ProjectsModel_future::ProjectModelTypes modelType() const;
+    ProjectsModel::ProjectModelTypes modelType() const;
 
     MerginApi *merginApi() const { return mBackend; }
 
@@ -119,9 +119,9 @@ public slots:
     void onProjectAttachedToMergin( const QString &projectFullName );
 
     // LocalProjectsManager signals
-    void onProjectAdded( const LocalProject_future &project );
-    void onAboutToRemoveProject( const LocalProject_future project );
-    void onProjectDataChanged( const LocalProject_future &project );
+    void onProjectAdded( const LocalProject &project );
+    void onAboutToRemoveProject( const LocalProject project );
+    void onProjectDataChanged( const LocalProject &project );
 
     void setMerginApi( MerginApi *merginApi );
     void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
@@ -139,11 +139,11 @@ private:
     void initializeProjectsModel();
 
     bool containsProject( QString projectId ) const;
-    std::shared_ptr<Project_future> projectFromId( QString projectId ) const;
+    std::shared_ptr<Project> projectFromId( QString projectId ) const;
 
     MerginApi *mBackend = nullptr;
     LocalProjectsManager *mLocalProjectsManager = nullptr;
-    QList<std::shared_ptr<Project_future>> mProjects;
+    QList<std::shared_ptr<Project>> mProjects;
 
     ProjectModelTypes mModelType = EmptyProjectsModel;
 
@@ -155,4 +155,4 @@ private:
     QString mLastRequestId;
 };
 
-#endif // PROJECTSMODEL_FUTURE_H
+#endif // PROJECTSMODEL_H

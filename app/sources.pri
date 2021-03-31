@@ -30,9 +30,9 @@ ios/iosutils.cpp \
 inputprojutils.cpp \
 codefilter.cpp \
 qrdecoder.cpp \
-projectsproxymodel_future.cpp \
-projectsmodel_future.cpp \
-project_future.cpp \
+project.cpp \
+projectsmodel.cpp \
+projectsproxymodel.cpp \
 
 exists(merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")
@@ -73,9 +73,9 @@ ios/iosutils.h \
 inputprojutils.h \
 codefilter.h \
 qrdecoder.h \
-projectsproxymodel_future.h \
-projectsmodel_future.h \
-project_future.h \
+project.h \
+projectsmodel.h \
+projectsproxymodel.h \
 
 contains(DEFINES, INPUT_TEST) {
 

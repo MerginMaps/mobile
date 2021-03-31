@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECT_FUTURE_H
-#define PROJECT_FUTURE_H
+#ifndef PROJECT_H
+#define PROJECT_H
 
 #include <QObject>
 #include <QDateTime>
@@ -16,7 +16,7 @@
 #include <memory>
 #include <qdebug.h>
 
-struct Project_future;
+struct Project;
 
 namespace ProjectStatus {
   Q_NAMESPACE
@@ -30,13 +30,13 @@ namespace ProjectStatus {
   };
   Q_ENUM_NS( Status )
 
-  Status projectStatus( const std::shared_ptr<Project_future> project );
+  Status projectStatus( const std::shared_ptr<Project> project );
 }
 
-struct LocalProject_future
+struct LocalProject
 {
-  LocalProject_future() {}; // TODO: define copy constructor
-  ~LocalProject_future() {};
+  LocalProject() {}; // TODO: define copy constructor
+  ~LocalProject() {};
 
   QString projectName;
   QString projectNamespace;
@@ -52,21 +52,21 @@ struct LocalProject_future
 
   bool isValid() { return !projectDir.isEmpty(); }
 
-  bool operator ==( const LocalProject_future &other )
+  bool operator ==( const LocalProject &other )
   {
     return ( this->id() == other.id() );
   }
 
-  bool operator !=( const LocalProject_future &other )
+  bool operator !=( const LocalProject &other )
   {
     return !( *this == other );
   }
 };
 
-struct MerginProject_future
+struct MerginProject
 {
-  MerginProject_future() {};
-  ~MerginProject_future() {};
+  MerginProject() {};
+  ~MerginProject() {};
 
   QString projectName;
   QString projectNamespace;
@@ -84,24 +84,24 @@ struct MerginProject_future
   // Maybe better use enum or int for error code
   QString remoteError; // Error leading to project not being able to sync
 
-  bool operator ==( const MerginProject_future &other )
+  bool operator ==( const MerginProject &other )
   {
     return ( this->id() == other.id() );
   }
 
-  bool operator !=( const MerginProject_future &other )
+  bool operator !=( const MerginProject &other )
   {
     return !( *this == other );
   }
 };
 
-struct Project_future
+struct Project
 {
-  Project_future() {};
-  ~Project_future() {};
+  Project() {};
+  ~Project() {};
 
-  std::unique_ptr<MerginProject_future> mergin;
-  std::unique_ptr<LocalProject_future> local;
+  std::unique_ptr<MerginProject> mergin;
+  std::unique_ptr<LocalProject> local;
 
   bool isMergin() const { return mergin != nullptr; }
   bool isLocal() const { return local != nullptr; }
@@ -127,7 +127,7 @@ struct Project_future
     return QString();
   }
 
-  bool operator ==( const Project_future &other )
+  bool operator ==( const Project &other )
   {
     if ( this->isLocal() && other.isLocal() )
     {
@@ -140,13 +140,13 @@ struct Project_future
     return false;
   }
 
-  bool operator !=( const Project_future &other )
+  bool operator !=( const Project &other )
   {
     return !( *this == other );
   }
 };
 
-typedef QList<MerginProject_future> MerginProjectsList;
-typedef QList<LocalProject_future> LocalProjectsList;
+typedef QList<MerginProject> MerginProjectsList;
+typedef QList<LocalProject> LocalProjectsList;
 
-#endif // PROJECT_FUTURE_H
+#endif // PROJECT_H
