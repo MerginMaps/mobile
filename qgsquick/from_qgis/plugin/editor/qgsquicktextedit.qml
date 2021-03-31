@@ -75,7 +75,7 @@ Item {
     }
 
     onTextChanged: {
-      valueChanged( text, text == '' )
+      valueChanged( text, text == undefined )
     }
   }
 

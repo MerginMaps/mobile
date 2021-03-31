@@ -551,7 +551,7 @@ Item {
             AttributeValue = isNull ? undefined : value
             // updates other attributes if a user males a change
             if (valueChanged) {
-              form.model.attributeModel.updateDefaultValuesAttributes()
+              form.model.attributeModel.updateDefaultValuesAttributes(Field)
             }
           }
         }

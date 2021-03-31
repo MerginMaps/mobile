@@ -336,7 +336,7 @@ void QgsQuickAttributeModel::resetAttributes()
   endResetModel();
 }
 
-void QgsQuickAttributeModel::updateDefaultValuesAttributes()
+void QgsQuickAttributeModel::updateDefaultValuesAttributes( const QgsField &editedField )
 {
   if ( !mFeatureLayerPair.layer() )
     return;
@@ -351,6 +351,12 @@ void QgsQuickAttributeModel::updateDefaultValuesAttributes()
     QgsDefaultValue defaultDefinition = fields.at( i ).defaultValueDefinition();
     if ( !defaultDefinition.expression().isEmpty() && defaultDefinition.applyOnUpdate() )
     {
+      // Skip evaluation for a given (last edited ) field to have same behaviour as it is in QGIS
+      // This allows to edit value, but eventually it will be overwritten by "on update" default value if defined
+      // when all attributes are saved and form is closed (as in QGIS)
+      if ( editedField.name() == fields.at( i ).name() )
+        continue;
+
       QgsExpression exp( fields.at( i ).defaultValueDefinition().expression() );
       exp.prepare( &expressionContext );
       if ( exp.hasParserError() )
@@ -371,7 +377,10 @@ void QgsQuickAttributeModel::updateDefaultValuesAttributes()
                                    QStringLiteral( "QgsQuick" ),
                                    Qgis::Warning );
       else
-        mFeatureLayerPair.featureRef().setAttribute( i, value );
+      {
+        QModelIndex index = this->index( i );
+        setData( index, value, AttributeValue );
+      }
     }
   }
   endResetModel();
