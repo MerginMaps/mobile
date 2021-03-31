@@ -450,7 +450,7 @@ QString InputUtils::createUniqueProjectDirectory( const QString &baseDataDir, co
 
 bool InputUtils::removeDir( const QString &dir )
 {
-  if( dir.isEmpty() || dir == "/" )
+  if ( dir.isEmpty() || dir == "/" )
     return false;
 
   return QDir( dir ).removeRecursively();
