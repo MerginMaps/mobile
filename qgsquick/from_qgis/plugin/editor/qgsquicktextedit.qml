@@ -103,7 +103,7 @@ Item {
     }
 
     onEditingFinished: {
-        valueChanged( text, text == '' )
+        valueChanged( text, text === undefined )
       }
     }
 
