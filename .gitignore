@@ -3,7 +3,7 @@
 *.user
 *build*/
 app/config.pri
-app/merginsecrets.cpp
+core/merginsecrets.cpp
 *.idea
 test/temp_projects/
 test/temp_extra_projects/

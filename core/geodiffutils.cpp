@@ -16,14 +16,16 @@
 #include <QUuid>
 
 #include <geodiff.h>
-
-#include "inpututils.h"
+#include "coreutils.h"
 
 
 QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary )
 {
-  QString diffPath, basePath;
-  int res = createChangeset( projectDir, filePath, diffPath, basePath );
+  QString diffName;
+  int res = createChangeset( projectDir, filePath, diffName );
+  QString diffPath = projectDir + "/.mergin/" + diffName;
+  QString basePath = projectDir + "/.mergin/" + filePath;
+
   if ( res == GEODIFF_SUCCESS )
   {
     QTemporaryFile f;
@@ -51,14 +53,14 @@ QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, con
 }
 
 
-int GeodiffUtils::createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath )
+int GeodiffUtils::createChangeset( const QString &projectDir, const QString &fileName, QString &diffName )
 {
-  QString uuid = InputUtils::uuidWithoutBraces( QUuid::createUuid() );
-  QString diffName = filePath + "-diff-" + uuid;
-  QString modifiedPath = projectDir + "/" + filePath;
-  basePath = projectDir + "/.mergin/" + filePath;
-  diffPath = projectDir + "/.mergin/" + diffName;
-  return GEODIFF_createChangeset( basePath.toUtf8(), modifiedPath.toUtf8(), diffPath.toUtf8() );
+  QString uuid = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+  diffName = fileName + "-diff-" + uuid;
+  QString modifiedAbsPath = projectDir + "/" + fileName;
+  QString baseAbsPath = projectDir + "/.mergin/" + fileName;
+  QString diffAbsPath = projectDir + "/.mergin/" + diffName;
+  return GEODIFF_createChangeset( baseAbsPath.toUtf8(), modifiedAbsPath.toUtf8(), diffAbsPath.toUtf8() );
 }
 
 
@@ -94,7 +96,7 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
 {
   if ( diffFiles.isEmpty() )
   {
-    InputUtils::log( "GEODIFF", "assemble server file fail: no input diff files!" );
+    CoreUtils::log( "GEODIFF", "assemble server file fail: no input diff files!" );
     return false;
   }
 
@@ -103,7 +105,7 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
     int res = GEODIFF_applyChangeset( src.toUtf8().constData(), diffFile.toUtf8().constData() );
     if ( res != GEODIFF_SUCCESS )
     {
-      InputUtils::log( "GEODIFF", "assemble server file fail: apply changeset failed " + diffFile );
+      CoreUtils::log( "GEODIFF", "assemble server file fail: apply changeset failed " + diffFile );
       return false;
     }
   }
@@ -121,5 +123,5 @@ void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
     case LevelDebug: prefix = "GEODIFF debug"; break;
     default: break;
   }
-  InputUtils::log( prefix, msg );
+  CoreUtils::log( prefix, msg );
 }

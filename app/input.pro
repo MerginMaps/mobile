@@ -15,7 +15,11 @@ include(linux.pri)
 include(macx.pri)
 include(win32.pri)
 include(sources.pri)
+include($$PWD/../core/core.pri)
 
+INCLUDEPATH += $$PWD/../core
+
+DEFINES += INPUT_APP
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
 CONFIG(debug, debug|release) {
   DEFINES += "QGIS_PREFIX_PATH=$${QGIS_PREFIX_PATH}"

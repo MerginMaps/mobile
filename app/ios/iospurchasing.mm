@@ -8,6 +8,7 @@
  ***************************************************************************/
 #include <QDebug>
 #include "inpututils.h"
+#include "coreutils.h"
 
 #import "iospurchasing.h"
 #import <StoreKit/StoreKit.h>
@@ -303,7 +304,7 @@ void IosPurchasingBackend::processTransaction( QSharedPointer<IosPurchasingTrans
   }
   else if ( transaction->status() == IosPurchasingTransaction::PurchaseFailed )
   {
-    InputUtils::log( "transaction creation", QStringLiteral( "Failed: " ) + transaction->errMsg() );
+    CoreUtils::log( "transaction creation", QStringLiteral( "Failed: " ) + transaction->errMsg() );
     emit transactionCreationFailed();
     transaction->finalizeTransaction();
   }

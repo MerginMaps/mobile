@@ -30,7 +30,7 @@ jobs:
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd app/
+          cd core/
           /usr/local/opt/openssl@1.1/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \

@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 #include "merginuserinfo.h"
-#include "inpututils.h"
+#include "coreutils.h"
 
 MerginUserInfo::MerginUserInfo( QObject *parent )
   : QObject( parent )
@@ -67,11 +67,11 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     QString validUntil = subscriptionObj.value( QStringLiteral( "valid_until" ) ).toString();
     if ( nextPaymentDate.isEmpty() )
     {
-      mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( validUntil );
+      mSubscriptionTimestamp = CoreUtils::localizedDateFromUTFString( validUntil );
     }
     else
     {
-      mSubscriptionTimestamp = InputUtils::localizedDateFromUTFString( nextPaymentDate );
+      mSubscriptionTimestamp = CoreUtils::localizedDateFromUTFString( nextPaymentDate );
     }
 
     mSubscriptionId = subscriptionObj.value( QStringLiteral( "id" ) ).toInt();

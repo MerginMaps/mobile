@@ -31,6 +31,7 @@
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "positiondirection.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
@@ -188,7 +189,7 @@ static void copy_demo_projects( const QString &demoDir, const QString &projectDi
   if ( demoFile.exists() )
     qDebug() << "DEMO projects initialized";
   else
-    InputUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
+    CoreUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
 }
 
 static void init_qgis( const QString &pkgPath )
@@ -270,7 +271,7 @@ int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
 
-  const QString version = InputUtils::appVersion();
+  const QString version = CoreUtils::appVersion();
 
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
@@ -328,7 +329,7 @@ int main( int argc, char *argv[] )
   }
 #endif
 
-  InputUtils::setLogFilename( projectDir + "/.logs" );
+  CoreUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
 
   QString appBundleDir;
@@ -399,7 +400,7 @@ int main( int argc, char *argv[] )
     // Cleaning default project due to a project loading has crashed during the last run.
     as.setDefaultProject( QString() );
     projectLoadingFile.remove();
-    InputUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
+    CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
   }
 
 #ifdef INPUT_TEST
@@ -557,15 +558,15 @@ int main( int argc, char *argv[] )
   }
   catch ( QgsException &e )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
   }
   catch ( std::exception &e )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
   }
   catch ( ... )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
   }
   return ret;
 }
