@@ -248,12 +248,10 @@ ApplicationWindow {
       // load default project
       if ( __appSettings.defaultProject ) {
         let path = __appSettings.defaultProject
-        let isValid = __localProjectsManager.projectIsValid( path )
-        let id = __localProjectsManager.projectId( path )
 
-        if ( isValid && __loader.load( path ) ) {
+        if ( __localProjectsManager.projectIsValid( path ) && __loader.load( path ) ) {
           projectPanel.activeProjectPath = path
-          projectPanel.activeProjectId = id
+          projectPanel.activeProjectId = __localProjectsManager.projectId( path )
           __appSettings.activeProject = path
         }
         else {
@@ -275,15 +273,6 @@ ApplicationWindow {
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
-
-        // DO NOT COMMIT!!! vvv
-        if ( !__androidUtils.isAndroid )
-        {
-          window.width = 423
-          window.height = 601
-          window.x = 1100
-          window.y = 266
-        }
 
         console.log("Completed Running!")
     }

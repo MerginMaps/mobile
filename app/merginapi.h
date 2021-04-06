@@ -308,9 +308,6 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName );
 
-
-    LocalProject getLocalProject( const QString &projectFullName ); // Test function
-
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
@@ -346,6 +343,8 @@ class MerginApi: public QObject
     * \param projectName
     */
     void deleteProject( const QString &projectNamespace, const QString &projectName );
+
+    LocalProject getLocalProject( const QString &projectFullName );
 
     // Production and Test functions (therefore not private)
 
