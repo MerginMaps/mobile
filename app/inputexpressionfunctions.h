@@ -18,6 +18,7 @@
 
 #include "androidutils.h"
 #include "inpututils.h"
+#include "ios/iosimagepicker.h"
 
 const static QString GPS_DIRECTION_TAG = "GPSImgDirection";
 const static QString GPS_LON_TAG = "GPSLongitude";

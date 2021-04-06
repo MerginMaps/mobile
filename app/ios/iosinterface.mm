@@ -15,8 +15,17 @@
 
 #include <QtCore>
 #include <QImage>
+#import <ImageIO/ImageIO.h>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
+
+#import <AssetsLibrary/ALAsset.h>
+#import <AssetsLibrary/ALAssetRepresentation.h>
+#import <ImageIO/CGImageSource.h>
+#import <ImageIO/CGImageProperties.h>
+#import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation IOSInterface
 
@@ -80,6 +89,48 @@ static QImage fromUIImage( UIImage *image )
   return result;
 }
 
+
+static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
+{
+  NSData *data = [NSData dataWithContentsOfFile:imagePath];
+  CGImageSourceRef source = CGImageSourceCreateWithData( ( __bridge CFDataRef )data, NULL );
+  NSDictionary *metadata = [( NSDictionary * )CGImageSourceCopyPropertiesAtIndex( source, 0, NULL )autorelease];
+
+  // Modify EXIF tag for GPS group
+  // TODO more generic handle of EXIF (tagskCGImageProperty*)
+  NSString *newTag = [tag stringByReplacingOccurrencesOfString: @"GPS" withString:@""];
+  NSMutableDictionary *GPSDictionary = [metadata objectForKey:( NSString * )kCGImagePropertyGPSDictionary];
+
+  CFRelease( source );
+
+  NSObject *rawValue = [GPSDictionary objectForKey:( NSObject * )newTag];
+  return rawValue;
+}
+
+static bool copyFile( NSString *srcPath, NSString *dstPath )
+{
+  if ( [[NSFileManager defaultManager] isReadableFileAtPath:srcPath] )
+  {
+
+    @try
+    {
+      BOOL result = [[NSFileManager defaultManager] copyItemAtPath:srcPath toPath:dstPath error: nil];
+      qDebug() << "File copied succesfully: " << result;
+      return result;
+    }
+    @catch ( NSException *exception )
+    {
+      qDebug() << "An exception occures during copying file: " << exception.reason;
+      return false;
+    }
+  }
+  else
+  {
+    qDebug() << [NSString stringWithFormat:@"Path not readable, cannot copy %1$@ -> %2$@", srcPath, dstPath];
+    return false;
+  }
+}
+
 -( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
 {
   UIApplication *app = [UIApplication sharedApplication];
@@ -117,10 +168,38 @@ static QImage fromUIImage( UIImage *image )
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull note )
+                                         {
+                                           // TODO fetch Location data when an image is captured
+                                         }];
+
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
     {
       Q_UNUSED( picker )
+
+      NSString *targetDir = delegate->handler->targetDir().toNSString();
+      NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
+      [dateformate setDateFormat: @"yyyyMMdd_HHmmss"];
+      NSString *fileName = [dateformate stringFromDate:[NSDate date]];
+      NSString *fileNameWithSuffix = [fileName stringByAppendingString:@".jpg"];
+      NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
+
+      bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
+      if ( isCameraPhoto )
+      {
+        // Camera handling // TODO write location metadata
+        // now done in IOSImagePicker::onImagePickerFinished
+      }
+      else
+      {
+        // Gallery handling
+        NSString *infoImageUrl = info[UIImagePickerControllerImageURL];
+        NSURL *url = [info objectForKey:UIImagePickerControllerReferenceURL];
+        [url startAccessingSecurityScopedResource];
+        copyFile( infoImageUrl, imagePath );
+        [url stopAccessingSecurityScopedResource];
+      }
 
       UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
       if ( !chosenImage )
@@ -133,6 +212,11 @@ static QImage fromUIImage( UIImage *image )
         QImage image = fromUIImage( chosenImage );
         QVariantMap data;
         data["image"] = image;
+        if ( !isCameraPhoto )
+        {
+          QString imagePathData( [imagePath UTF8String] );
+          data["imagePath"] = imagePathData;
+        }
 
         if ( delegate->handler )
         {
@@ -167,4 +251,34 @@ static QImage fromUIImage( UIImage *image )
 
   }
 }
+
+- ( NSString * ) readExif:( NSString * ) imageFileURL : ( NSString * )tag
+{
+  NSObject *result = readExifAttribute( imageFileURL, tag );
+  if ( !result )
+  {
+    return nil;
+  }
+
+  if ( [result class] == [NSString class] )
+  {
+    return ( NSString * ) result;
+  }
+  else if ( [result class] == [NSNumber class] )
+  {
+    NSString *stringResult = [( NSNumber * )result stringValue];
+    return stringResult;
+  }
+  else if ( [result class] == [NSDecimalNumber class] )
+  {
+    NSString *stringResult = [( NSDecimalNumber * )result stringValue];
+    return stringResult;
+  }
+  else
+  {
+    NSString *stringResult = [NSString stringWithFormat:@"%@", result];
+    return stringResult;
+  }
+}
+
 @end
