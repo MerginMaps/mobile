@@ -232,7 +232,6 @@ void initDeclarative()
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
-
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
