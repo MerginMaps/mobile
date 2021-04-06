@@ -1667,7 +1667,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-  if ( projectInfo.isValid() ) // If project is already downloaded
+  if ( projectInfo.isValid() )
   {
     transaction.projectDir = projectInfo.projectDir;
   }
