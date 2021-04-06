@@ -75,7 +75,7 @@ Item {
     }
 
     onTextChanged: {
-      valueChanged( text, text == '' )
+      valueChanged( text, text === undefined )
     }
   }
 
@@ -103,7 +103,7 @@ Item {
     }
 
     onEditingFinished: {
-        valueChanged( text, text == '' )
+        valueChanged( text, text === undefined )
       }
     }
 
