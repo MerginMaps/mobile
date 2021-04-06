@@ -11,11 +11,12 @@
 #define TESTMERGINAPI_H
 
 #include <QObject>
+#include <QSignalSpy>
 
 #include <qgsvectorlayer.h>
 #include <merginapi.h>
 #include <projectsmodel.h>
-#include <merginprojectmodel.h>
+#include "project.h"
 
 #include <qgsapplication.h>
 
@@ -23,7 +24,7 @@ class TestMerginApi: public QObject
 {
     Q_OBJECT
   public:
-    explicit TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm );
+    explicit TestMerginApi( MerginApi *api );
     ~TestMerginApi() = default;
 
     static const QString TEST_PROJECT_NAME;
@@ -69,25 +70,29 @@ class TestMerginApi: public QObject
 
   private:
     MerginApi *mApi;
-    MerginProjectModel *mMerginProjectModel;
-    ProjectModel *mProjectModel;
+    std::unique_ptr<ProjectsModel> mLocalProjectsModel;
+    std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
     QString mUsername;
     QString mTestDataPath;
     //! extra API to do requests we are not testing (as if some other user did those)
     MerginApi *mApiExtra = nullptr;
     LocalProjectsManager *mLocalProjectsExtra = nullptr;
 
-    MerginProjectList getProjectList();
+    MerginProjectsList getProjectList( QString tag = "created" );
+    MerginProjectsList projectListFromSpy( QSignalSpy &spy );
+    int serverVersionFromSpy( QSignalSpy &spy );
 
     //! Creates a project on the server and pushes an initial version and removes the local copy.
     void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
     //! Deletes a project on the server
     void deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
-    //! Downloads a remote project to the local drive
+    //! Downloads a remote project to the local drive, extended version also sets server version
+    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );
     void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
-    //! Uploads any local changes in the local project to the remote project
+    //! Uploads any local changes in the local project to the remote project, extended version also sets server version
+    void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );
     void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Deletes a project from the local drive
@@ -100,6 +105,8 @@ class TestMerginApi: public QObject
 
     //! Creates local project in given project directory
     void createLocalProject( const QString projectDir );
+
+    void refreshProjectsModel( const ProjectsModel::ProjectModelTypes modelType = ProjectsModel::LocalProjectsModel );
 };
 
 # endif // TESTMERGINAPI_H

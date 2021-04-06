@@ -239,7 +239,7 @@ void initDeclarative()
 #ifdef INPUT_TEST
 void initTestDeclarative()
 {
-  qRegisterMetaType<MerginProjectList>( "MerginProjectList" );
+  qRegisterMetaType<MerginProjectsList>( "MerginProjectsList" );
 }
 #endif
 
@@ -418,7 +418,7 @@ int main( int argc, char *argv[] )
     int nFailed = 0;
     if ( IS_MERGIN_API_TEST )
     {
-      TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
+      TestMerginApi merginApiTest( ma.get() );
       nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
     }
     else if ( IS_LINKS_TEST )
