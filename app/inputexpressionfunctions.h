@@ -80,7 +80,16 @@ class InputExpressionFunctions
           if ( values.size() != 1 ) return QVariant();
 
           QString filepath( values.at( 0 ).toString() );
-          return QVariant( InputUtils::convertRationalNumber( AndroidUtils::getExifInfo( filepath, GPS_DIRECTION_TAG ) ) );
+          QString resultString = AndroidUtils::getExifInfo( filepath, GPS_DIRECTION_TAG );
+          if ( resultString.isEmpty() )
+            return QVariant();
+
+          double resultDouble = InputUtils::convertRationalNumber( resultString );
+          // If invalid value; expecting [0-360]
+          if ( resultDouble == -1 )
+            return QVariant();
+
+          return QVariant( resultDouble );
 # else
           return QString();
 #endif
@@ -109,7 +118,11 @@ class InputExpressionFunctions
           if ( values.size() != 1 ) return QVariant();
 
           QString filepath( values.at( 0 ).toString() );
-          return QVariant( InputUtils::convertCoordinateString( AndroidUtils::getExifInfo( filepath, GPS_LAT_TAG ) ) );
+          QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LAT_TAG );
+          if ( resultString.isEmpty() )
+            return QVariant();
+
+          return QVariant( InputUtils::convertCoordinateString( resultString ) );
 # else
           return QString();
 #endif
@@ -138,7 +151,11 @@ class InputExpressionFunctions
           if ( values.size() != 1 ) return QVariant();
 
           QString filepath( values.at( 0 ).toString() );
-          return QVariant( InputUtils::convertCoordinateString( AndroidUtils::getExifInfo( filepath, GPS_LON_TAG ) ) );
+          QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LON_TAG );
+          if ( resultString.isEmpty() )
+            return QVariant();
+
+          return QVariant( InputUtils::convertCoordinateString( resultString ) );
 # else
           return QString();
 #endif

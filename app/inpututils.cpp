@@ -145,16 +145,22 @@ double InputUtils::convertCoordinateString( const QString &rationalValue )
   QStringList values = rationalValue.split( "," );
   if ( values.size() != 3 ) return 0;
 
-  double degree = convertRationalNumber( values.at( 0 ) );
+  double degrees = convertRationalNumber( values.at( 0 ) );
   double minutes = convertRationalNumber( values.at( 1 ) );
   double seconds = convertRationalNumber( values.at( 2 ) );
-  double result = degree + minutes / 60 + seconds / 3600;
+  double result = degrees + minutes / 60 + seconds / 3600;
   return result;
 }
 
 double InputUtils::convertRationalNumber( const QString &rationalValue )
 {
+  if ( rationalValue.isEmpty() )
+    return -1;
+
   QStringList number = rationalValue.split( "/" );
+  if ( number.size() != 2 )
+    return -1;
+
   double numerator = number.at( 0 ).toDouble();
   double denominator = number.at( 1 ).toDouble();
   return numerator / denominator;
