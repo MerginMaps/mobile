@@ -101,6 +101,11 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   NSString *newTag = [tag stringByReplacingOccurrencesOfString: @"GPS" withString:@""];
   NSMutableDictionary *GPSDictionary = [metadata objectForKey:( NSString * )kCGImagePropertyGPSDictionary];
 
+  if ( !GPSDictionary )
+  {
+    return nil;
+  }
+
   CFRelease( source );
 
   NSObject *rawValue = [GPSDictionary objectForKey:( NSObject * )newTag];
