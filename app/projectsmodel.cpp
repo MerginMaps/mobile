@@ -416,7 +416,7 @@ void ProjectsModel::migrateProject( const QString &projectId )
     mBackend->migrateProjectToMergin( project->local->projectName );
 }
 
-void ProjectsModel::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully )
+void ProjectsModel::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int newVersion )
 {
   Q_UNUSED( projectDir )
 
@@ -426,6 +426,8 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectDir, const QStr
 
   project->mergin->pending = false;
   project->mergin->progress = 0;
+  project->mergin->serverVersion = newVersion;
+  project->mergin->status = ProjectStatus::projectStatus( project );
 
   QModelIndex ix = index( mProjects.indexOf( project ) );
   emit dataChanged( ix, ix );

@@ -109,11 +109,15 @@ class ProjectsModel : public QAbstractListModel
 
     bool hasMoreProjects() const;
 
+    bool containsProject( QString projectId ) const;
+
+    std::shared_ptr<Project> projectFromId( QString projectId ) const;
+
   public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
-    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int newVersion );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );
@@ -137,9 +141,6 @@ class ProjectsModel : public QAbstractListModel
     QStringList projectNames() const;
     void loadLocalProjects();
     void initializeProjectsModel();
-
-    bool containsProject( QString projectId ) const;
-    std::shared_ptr<Project> projectFromId( QString projectId ) const;
 
     MerginApi *mBackend = nullptr;
     LocalProjectsManager *mLocalProjectsManager = nullptr;
