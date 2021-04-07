@@ -85,6 +85,8 @@ struct MerginProject
   // Maybe better use enum or int for error code
   QString remoteError; // Error leading to project not being able to sync
 
+  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
+
   bool operator ==( const MerginProject &other )
   {
     return ( this->id() == other.id() );
@@ -149,5 +151,5 @@ struct Project
 
 typedef QList<MerginProject> MerginProjectsList;
 typedef QList<LocalProject> LocalProjectsList;
-
+Q_DECLARE_METATYPE( MerginProjectsList )
 #endif // PROJECT_H
