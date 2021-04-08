@@ -378,7 +378,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
 
-  InputExpressionFunctions::registerFunctions();
+  InputUtils::registerInputExpressionFunctions();
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

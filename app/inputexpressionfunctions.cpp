@@ -8,15 +8,69 @@
  ***************************************************************************/
 
 #include "inputexpressionfunctions.h"
+#include "math.h"
 
-InputExpressionFunctions::InputExpressionFunctions()
+QVariant ReadExif::func( const QVariantList &values, const QgsExpressionContext *, QgsExpression *, const QgsExpressionNodeFunction * )
 {
+#ifdef ANDROID
+  if ( values.size() != 2 ) return QVariant();
+
+  QString filepath( values.at( 0 ).toString() );
+  QString exifTag( values.at( 1 ).toString() );
+  return AndroidUtils::getExifInfo( filepath, exifTag );
+# else
+  return QString();
+#endif
 }
 
-void InputExpressionFunctions::registerFunctions()
+QVariant ReadExifImgDirection::func( const QVariantList &values, const QgsExpressionContext *, QgsExpression *, const QgsExpressionNodeFunction * )
 {
-  QgsExpression::registerFunction( new ReadExif() );
-  QgsExpression::registerFunction( new ReadExifImgDirection() );
-  QgsExpression::registerFunction( new ReadExifLongitude() );
-  QgsExpression::registerFunction( new ReadExifLatitude() );
+#ifdef ANDROID
+  if ( values.size() != 1 ) return QVariant();
+
+  QString filepath( values.at( 0 ).toString() );
+  QString resultString = AndroidUtils::getExifInfo( filepath, GPS_DIRECTION_TAG );
+  if ( resultString.isEmpty() )
+    return QVariant();
+
+  double resultDouble = InputUtils::convertRationalNumber( resultString );
+  if ( isnan( resultDouble ) )
+    return QVariant();
+
+  return QVariant( resultDouble );
+# else
+  return QString();
+#endif
+}
+
+QVariant ReadExifLatitude::func( const QVariantList &values, const QgsExpressionContext *, QgsExpression *, const QgsExpressionNodeFunction * )
+{
+#ifdef ANDROID
+  if ( values.size() != 1 ) return QVariant();
+
+  QString filepath( values.at( 0 ).toString() );
+  QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LAT_TAG );
+  if ( resultString.isEmpty() )
+    return QVariant();
+
+  return QVariant( InputUtils::convertCoordinateString( resultString ) );
+# else
+  return QString();
+#endif
+}
+
+QVariant ReadExifLongitude::func( const QVariantList &values, const QgsExpressionContext *, QgsExpression *, const QgsExpressionNodeFunction * )
+{
+#ifdef ANDROID
+  if ( values.size() != 1 ) return QVariant();
+
+  QString filepath( values.at( 0 ).toString() );
+  QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LON_TAG );
+  if ( resultString.isEmpty() )
+    return QVariant();
+
+  return QVariant( InputUtils::convertCoordinateString( resultString ) );
+# else
+  return QString();
+#endif
 }

@@ -167,6 +167,9 @@ class InputUtils: public QObject
      */
     static double convertCoordinateString( const QString &rationalValue );
 
+    //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
+    static void registerInputExpressionFunctions();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
@@ -181,6 +184,7 @@ class InputUtils: public QObject
     QString sanitizeName( const QString &path );
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
+    static double ratherZeroThanNaN( double d );
     std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 
