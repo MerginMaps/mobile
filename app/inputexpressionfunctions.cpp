@@ -54,7 +54,6 @@ QVariant ReadExifLatitude::func( const QVariantList &values, const QgsExpression
 
   QString filepath( values.at( 0 ).toString() );
 #ifdef ANDROID
-
   QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LAT_TAG );
   if ( resultString.isEmpty() )
     return QVariant();
@@ -74,8 +73,6 @@ QVariant ReadExifLongitude::func( const QVariantList &values, const QgsExpressio
 
   QString filepath( values.at( 0 ).toString() );
 #ifdef ANDROID
-
-
   QString resultString = AndroidUtils::getExifInfo( filepath, GPS_LON_TAG );
   if ( resultString.isEmpty() )
     return QVariant();

@@ -41,8 +41,8 @@ QString IOSImagePicker::readExif( const QString &filepath, const QString &tag )
 #ifdef Q_OS_IOS
   return readExifDirect( filepath, tag );
 #else
-  Q_UNUSED( sourceType )
-  Q_UNUSED( targetDir )
+  Q_UNUSED( filepath )
+  Q_UNUSED( tag )
 #endif
 }
 
