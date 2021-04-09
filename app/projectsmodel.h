@@ -121,6 +121,7 @@ class ProjectsModel : public QAbstractListModel
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );
+    void onAuthChanged(); // when user logs out
 
     // LocalProjectsManager signals
     void onProjectAdded( const LocalProject &project );

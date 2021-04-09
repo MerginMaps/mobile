@@ -28,6 +28,7 @@ void ProjectsModel::initializeProjectsModel()
   QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &ProjectsModel::onProjectSyncFinished );
   QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
   QObject::connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
+  QObject::connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
@@ -551,6 +552,19 @@ void ProjectsModel::onProjectAttachedToMergin( const QString &projectFullName )
   listProjectsByName();
 
   qDebug() << "PMR: Project attached to mergin " << projectFullName;
+}
+
+void ProjectsModel::onAuthChanged()
+{
+  if ( !mBackend->userAuth() || !mBackend->userAuth()->hasAuthData() ) // user logged out, clear created and shared lists
+  {
+    if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
+    {
+      beginResetModel();
+      mProjects.clear();
+      endResetModel();
+    }
+  }
 }
 
 void ProjectsModel::setMerginApi( MerginApi *merginApi )
