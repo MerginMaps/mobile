@@ -9,7 +9,7 @@
 
 #include "merginprojectstatusmodel.h"
 #include "geodiffutils.h"
-#include "inpututils.h"
+#include "coreutils.h"
 
 MerginProjectStatusModel::MerginProjectStatusModel( LocalProjectsManager &localProjects, QObject *parent )
   : QAbstractListModel( parent )
@@ -89,7 +89,7 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
       QString summaryJson = GeodiffUtils::diffableFilePendingChanges( projectDir, file, true );
       if ( summaryJson.startsWith( "ERROR" ) )
       {
-        InputUtils::log( "MerginProjectStatusModel", QString( "Diff summary JSON for %1 in %2 has an error." ).arg( projectDir ).arg( file ) );
+        CoreUtils::log( "MerginProjectStatusModel", QString( "Diff summary JSON for %1 in %2 has an error." ).arg( projectDir ).arg( file ) );
 
         ProjectStatusItem item;
         item.status = ProjectChangelogStatus::Message;

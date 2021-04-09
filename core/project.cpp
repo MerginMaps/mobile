@@ -9,7 +9,7 @@
 
 #include "project.h"
 #include "merginapi.h"
-#include "inpututils.h"
+#include "coreutils.h"
 
 QString LocalProject::id() const
 {
@@ -42,10 +42,10 @@ ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Projec
 
   // Something has locally changed after last sync with server
   QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
-  QDateTime lastModified = InputUtils::getLastModifiedFileDateTime( project->local->projectDir );
+  QDateTime lastModified = CoreUtils::getLastModifiedFileDateTime( project->local->projectDir );
   QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
   MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  int filesCount = InputUtils::getProjectFilesCount( project->local->projectDir );
+  int filesCount = CoreUtils::getProjectFilesCount( project->local->projectDir );
   if ( lastSync < lastModified || meta.files.count() != filesCount )
   {
     return ProjectStatus::Modified;

@@ -7,6 +7,9 @@ Build and run Input on various platforms:
 - [Android](./android.md)
 - [Windows](./win.md)
 
+Build and run Mergin Client
+- [Mergin CPP Client](./client.md)
+
 Other topics:
 - [Translations](./translations.md)
 - [Publishing](./publishing.md)

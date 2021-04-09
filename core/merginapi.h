@@ -378,6 +378,15 @@ class MerginApi: public QObject
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
 
+    /**
+    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
+    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * \param sourceString QString either url or fullname of a project
+    * \param projectNamespace QString to be set as namespace, might not change original value
+    * \param projectName QString to be set to name of a project
+    */
+    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
+
   signals:
     void apiSupportsSubscriptionsChanged();
 
@@ -480,14 +489,6 @@ class MerginApi: public QObject
     bool validateAuthAndContinute();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
-    /**
-    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
-    * and the previous of last (namespace) substring after splitting sourceString with slash.
-    * \param sourceString QString either url or fullname of a project
-    * \param projectNamespace QString to be set as namespace, might not change original value
-    * \param projectName QString to be set to name of a project
-    */
-    bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
     /**
     * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
     * \param data Data received from mergin server on a request failed.

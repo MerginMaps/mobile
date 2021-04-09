@@ -74,12 +74,6 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
     /**
-     * Returns name of temporary file indicating first time download of project is in progress
-     * \param projectName
-     */
-    static QString downloadInProgressFilePath( const QString &projectDir );
-
-    /**
      * Shows notification
      */
     Q_INVOKABLE void showNotification( const QString &message );
@@ -113,51 +107,10 @@ class InputUtils: public QObject
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
-    /**
-     * Add a log entry to internal log text file
-     *
-     * \see setLogFilename()
-     */
-    static void log( const QString &topic, const QString &info );
-
-    /**
-     * Sets the filename of the internal text log file
-     */
-    static void setLogFilename( const QString &value );
-
-    static QString logFilename();
-
-    static bool createEmptyFile( const QString &filePath );
-
     static QString filesToString( QList<MerginFile> files );
-
-    static QString appInfo();
-
-    static QString uuidWithoutBraces( const QUuid &uuid );
-
-    static QString localizedDateFromUTFString( QString timestamp );
-
-    /** InputApp version */
-    static QString appVersion();
 
     /** InputApp platform */
     static QString appPlatform();
-
-    /**
-    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
-    * \param QString path
-    * \param QString isPathDir True if the result path suppose to be a folder
-    */
-    static QString findUniquePath( const QString &path, bool isPathDir = true );
-
-    //! Creates a unique project directory for given project name (used for initial download of a project)
-    static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
-
-    static bool removeDir( const QString &projectDir );
-
-    static QDateTime getLastModifiedFileDateTime( const QString &path );
-
-    static int getProjectFilesCount( const QString &path );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
@@ -171,8 +124,6 @@ class InputUtils: public QObject
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
     QString sanitizeName( const QString &path );
-    static QString sLogFile;
-    static void appendLog( const QByteArray &data, const QString &path );
     std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 

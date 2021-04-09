@@ -24,7 +24,7 @@ jobs:
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in app/merginsecrets.cpp.enc -out app/merginsecrets.cpp -d -md md5
+          openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in core/merginsecrets.cpp.enc -out core/merginsecrets.cpp -d -md md5
 
 
       - name: Extract GPS keystore
