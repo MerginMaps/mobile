@@ -234,7 +234,19 @@ Item {
 
         onStateChanged: {
           refreshProjectList()
-          console.log("New state: ", pageContent.state)
+          pageFooter.setActiveButton( pageContent.state )
+        }
+
+        Connections {
+          target: root
+          onVisibleChanged: {
+            if ( root.visible ) { // projectsPanel opened
+              pageContent.state = "local"
+            }
+            else {
+              pageContent.state = ""
+            }
+          }
         }
 
         StackLayout {
@@ -297,6 +309,15 @@ Item {
         id: pageFooter
 
         property int itemSize: pageFooter.height * 0.8
+
+        function setActiveButton( state ) {
+          switch( state ) {
+            case "local": pageFooter.setCurrentIndex( 0 ); break
+            case "created": pageFooter.setCurrentIndex( 1 ); break
+            case "shared": pageFooter.setCurrentIndex( 2 ); break
+            case "public": pageFooter.setCurrentIndex( 3 ); break
+          }
+        }
 
         spacing: 0
         contentHeight: InputStyle.rowHeightHeader
