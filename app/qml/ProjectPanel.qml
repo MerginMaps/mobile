@@ -233,6 +233,7 @@ Item {
         ]
 
         onStateChanged: {
+          __merginApi.pingMergin()
           refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
         }
