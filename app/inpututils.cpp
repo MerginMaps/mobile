@@ -18,6 +18,7 @@
 #include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
 #include "inpututils.h"
+#include "inputexpressionfunctions.h"
 
 #include <Qt>
 #include <QDir>
@@ -25,6 +26,8 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <algorithm>
+#include <limits>
+#include <math.h>
 
 QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
@@ -140,6 +143,43 @@ void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQu
   mapSettings->setExtent( currentExtent );
 }
 
+double InputUtils::convertCoordinateString( const QString &rationalValue )
+{
+  QStringList values = rationalValue.split( "," );
+  if ( values.size() != 3 ) return 0;
+
+  double degrees = ratherZeroThanNaN( convertRationalNumber( values.at( 0 ) ) );
+  double minutes = ratherZeroThanNaN( convertRationalNumber( values.at( 1 ) ) );
+  double seconds = ratherZeroThanNaN( convertRationalNumber( values.at( 2 ) ) );
+
+  double result = degrees + minutes / 60 + seconds / 3600;
+  return result;
+}
+
+void InputUtils::registerInputExpressionFunctions()
+{
+  QgsExpression::registerFunction( new ReadExif() );
+  QgsExpression::registerFunction( new ReadExifImgDirection() );
+  QgsExpression::registerFunction( new ReadExifLongitude() );
+  QgsExpression::registerFunction( new ReadExifLatitude() );
+}
+
+double InputUtils::convertRationalNumber( const QString &rationalValue )
+{
+  if ( rationalValue.isEmpty() )
+    return std::numeric_limits<double>::quiet_NaN();
+
+  QStringList number = rationalValue.split( "/" );
+  if ( number.size() != 2 )
+    return std::numeric_limits<double>::quiet_NaN();
+
+  double numerator = number.at( 0 ).toDouble();
+  double denominator = number.at( 1 ).toDouble();
+  if ( denominator == 0 )
+    return denominator;
+
+  return numerator / denominator;
+}
 
 double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
 {
@@ -574,4 +614,9 @@ void InputUtils::appendLog( const QByteArray &data, const QString &path )
 
   file.write( data );
   file.close();
+}
+
+double InputUtils::ratherZeroThanNaN( double d )
+{
+  return ( isnan( d ) ) ? 0.0 : d;
 }

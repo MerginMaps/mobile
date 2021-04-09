@@ -153,6 +153,23 @@ class InputUtils: public QObject
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
 
+    /**
+     * Converts string in rational number format to double.
+     * @param rationalValue String - expecting value in format "numerator/denominator" (e.g "123/100").
+     * @return -1 if format is invalid, otherwise double value of given string.
+     */
+    static double convertRationalNumber( const QString &rationalValue );
+
+    /**
+     * Converts string coordinate in EXIF rational number format (rational64u[3] - degrees,minutes,seconds) to double.
+     * @param rationalValue String - expecting value in format "12/1,3/1,456789/10000".
+     * @return 0 if format is invalid, otherwise double for given string coordinate.
+     */
+    static double convertCoordinateString( const QString &rationalValue );
+
+    //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
+    static void registerInputExpressionFunctions();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
@@ -167,6 +184,7 @@ class InputUtils: public QObject
     QString sanitizeName( const QString &path );
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
+    static double ratherZeroThanNaN( double d );
     std::unique_ptr<AndroidUtils> mAndroidUtils;
 };
 

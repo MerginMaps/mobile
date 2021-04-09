@@ -53,6 +53,7 @@
 #include "fieldsmodel.h"
 #include "projectwizard.h"
 #include "codefilter.h"
+#include "inputexpressionfunctions.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -376,6 +377,8 @@ int main( int argc, char *argv[] )
   Loader loader( mtm, as, al );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
+
+  InputUtils::registerInputExpressionFunctions();
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );

@@ -22,6 +22,7 @@ merginprojectstatusmodel.cpp \
 merginuserauth.cpp \
 merginuserinfo.cpp \
 androidutils.cpp \
+inputexpressionfunctions.cpp \
 inpututils.cpp \
 geodiffutils.cpp \
 positiondirection.cpp \
@@ -64,6 +65,7 @@ merginprojectstatusmodel.h \
 merginuserauth.h \
 merginuserinfo.h \
 androidutils.h \
+inputexpressionfunctions.h \
 inpututils.h \
 geodiffutils.h \
 positiondirection.h \
