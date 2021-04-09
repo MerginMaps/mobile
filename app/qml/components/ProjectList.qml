@@ -92,7 +92,14 @@ Item {
       viewContentY: ListView.view.contentY
       viewHeight: ListView.view.height
 
-      onOpenRequested: root.openProjectRequested( projectId, model.ProjectFilePath )
+      onOpenRequested: {
+        if ( model.ProjectIsLocal )
+          root.openProjectRequested( projectId, model.ProjectFilePath )
+        else if ( !model.ProjectIsLocal && model.ProjectIsMergin ) {
+          downloadProjectDialog.relatedProjectId = model.ProjectId
+          downloadProjectDialog.open()
+        }
+      }
       onSyncRequested: controllerModel.syncProject( projectId )
       onMigrateRequested: controllerModel.migrateProject( projectId )
       onRemoveRequested: {
@@ -244,6 +251,7 @@ Item {
 
   MessageDialog {
     id: removeDialog
+
     property string relatedProjectId
 
     title: qsTr( "Remove project" )
@@ -270,6 +278,18 @@ Item {
         visible = false
       }
     }
+  }
+
+  MessageDialog {
+    id: downloadProjectDialog
+
+    property string relatedProjectId
+
+    title: qsTr( "Download project" )
+    text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
+    icon: StandardIcon.Question
+    standardButtons: StandardButton.Yes | StandardButton.No
+    onYes: controllerModel.syncProject( relatedProjectId )
   }
 
   MessageDialog {
