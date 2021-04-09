@@ -54,6 +54,7 @@ Item {
     anchors.fill: parent
     clip: true
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+    visible: !storagePermissionText.visible
 
     // Proxy model with source projects model
     model: ProjectsProxyModel {
@@ -133,6 +134,67 @@ Item {
         }
       }
     }
+  }
+
+  Text {
+    id: storagePermissionText
+
+    anchors.fill: parent
+    textFormat: Text.RichText
+    text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
+          qsTr("Input needs a storage permission, %1click to grant it%2 and then restart application.")
+    .arg("<a href='missingPermission'>")
+    .arg("</a>")
+
+    onLinkActivated: {
+      if ( __inputUtils.acquireStoragePermission() ) {
+        restartAppDialog.open()
+      }
+    }
+    visible: !__inputUtils.hasStoragePermission()
+    color: InputStyle.fontColor
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.bold: true
+    verticalAlignment: Text.AlignVCenter
+    horizontalAlignment: Text.AlignHCenter
+    wrapMode: Text.WordWrap
+    padding: InputStyle.panelMargin/2
+  }
+
+  Text {
+    id: noLocalProjectsText
+
+    anchors.fill: parent
+    textFormat: Text.RichText
+    text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
+          qsTr("No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.")
+    .arg("<br/>")
+    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
+    .arg("</a>")
+    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
+
+    onLinkActivated: Qt.openUrlExternally(link)
+    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel
+    color: InputStyle.fontColor
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.bold: true
+    verticalAlignment: Text.AlignVCenter
+    horizontalAlignment: Text.AlignHCenter
+    wrapMode: Text.WordWrap
+    padding: InputStyle.panelMargin/2
+  }
+
+  Label {
+    id: noMerginProjectsTexts
+
+    anchors.fill: parent
+    horizontalAlignment: Qt.AlignHCenter
+    verticalAlignment: Qt.AlignVCenter
+    visible: reloadList.visible || ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
+    text: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
+    color: InputStyle.fontColor
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.bold: true
   }
 
   MessageDialog {
