@@ -4,25 +4,15 @@ activelayer.cpp \
 fieldsmodel.cpp \
 layersmodel.cpp \
 layersproxymodel.cpp \
-localprojectsmanager.cpp \
 main.cpp \
-merginprojectmetadata.cpp \
 projectwizard.cpp \
 loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
-merginapi.cpp \
-merginapistatus.cpp \
-merginsubscriptionstatus.cpp \
-merginsubscriptiontype.cpp \
-merginprojectstatusmodel.cpp \
-merginuserauth.cpp \
-merginuserinfo.cpp \
 androidutils.cpp \
 inputexpressionfunctions.cpp \
 inpututils.cpp \
-geodiffutils.cpp \
 positiondirection.cpp \
 purchasing.cpp \
 variablesmanager.cpp \
@@ -31,17 +21,8 @@ ios/iosutils.cpp \
 inputprojutils.cpp \
 codefilter.cpp \
 qrdecoder.cpp \
-project.cpp \
 projectsmodel.cpp \
-projectsproxymodel.cpp \
-
-exists(merginsecrets.cpp) {
-  message("Using production Mergin API_KEYS")
-  SOURCES += merginsecrets.cpp
-} else {
-  message("Using development (dummy) Mergin API_KEY")
-  DEFINES += USE_MERGIN_DUMMY_API_KEY
-}
+projectsproxymodel.cpp
 
 HEADERS += \
 inputhelp.h \
@@ -49,24 +30,14 @@ activelayer.h \
 fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
-localprojectsmanager.h \
-merginprojectmetadata.h \
 projectwizard.h \
 loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
-merginapi.h \
-merginapistatus.h \
-merginsubscriptionstatus.h \
-merginsubscriptiontype.h \
-merginprojectstatusmodel.h \
-merginuserauth.h \
-merginuserinfo.h \
 androidutils.h \
 inputexpressionfunctions.h \
 inpututils.h \
-geodiffutils.h \
 positiondirection.h \
 purchasing.h \
 variablesmanager.h \
@@ -75,7 +46,6 @@ ios/iosutils.h \
 inputprojutils.h \
 codefilter.h \
 qrdecoder.h \
-project.h \
 projectsmodel.h \
 projectsproxymodel.h \
 

@@ -6,6 +6,7 @@
 
 #include "testmerginapi.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "geodiffutils.h"
 #include "testutils.h"
 #include "merginuserauth.h"
@@ -190,7 +191,7 @@ void TestMerginApi::testDownloadProject()
   QCOMPARE( projectDirEntries.count(), 2 );
 
   // verify that download in progress file is erased
-  QVERIFY( !QFile::exists( InputUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
+  QVERIFY( !QFile::exists( CoreUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
 }
 
 void TestMerginApi::testDownloadProjectSpecChars()
@@ -1529,7 +1530,7 @@ void TestMerginApi::testRegister()
 
   // we do not have a method to delete existing user in the mApi, so for now just make sure
   // the name does not exists
-  QString quiteRandom = InputUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
+  QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   QString username = "test_" + quiteRandom;
   QString email = username + "@nonexistant.email.com";
 

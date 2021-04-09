@@ -14,6 +14,7 @@
 #include "merginapi.h"
 #include "inpututils.h"
 #include "merginuserinfo.h"
+#include "coreutils.h"
 
 #if defined (APPLE_PURCHASING)
 #include "ios/iospurchasing.h"
@@ -160,7 +161,7 @@ void PurchasingTransaction::verificationFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    InputUtils::log( "purchase successful", QStringLiteral( "Payment success" ) );
+    CoreUtils::log( "purchase successful", QStringLiteral( "Payment success" ) );
     mPlan->purchasing()->onTransactionVerificationSucceeded( this );
   }
   else
@@ -168,7 +169,7 @@ void PurchasingTransaction::verificationFinished()
     QString serverMsg = api->extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "purchase" ), r->errorString(), serverMsg );
     emit api->networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: purchase" ) );
-    InputUtils::log( "purchase", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    CoreUtils::log( "purchase", QStringLiteral( "FAILED - %1" ).arg( message ) );
     mPlan->purchasing()->onTransactionVerificationFailed( this );
   }
   r->deleteLater();
@@ -377,7 +378,7 @@ void Purchasing::fetchPurchasingPlans( )
   request.setUrl( url );
   QNetworkReply *reply = mMerginApi->mManager.get( request );
   connect( reply, &QNetworkReply::finished, this, &Purchasing::onFetchPurchasingPlansFinished );
-  InputUtils::log( "request plan", QStringLiteral( "Requesting purchasing plans for provider %1" ).arg( MerginSubscriptionType::toString( mBackend->provider() ) ) );
+  CoreUtils::log( "request plan", QStringLiteral( "Requesting purchasing plans for provider %1" ).arg( MerginSubscriptionType::toString( mBackend->provider() ) ) );
 }
 
 void Purchasing::onFetchPurchasingPlansFinished()
@@ -387,7 +388,7 @@ void Purchasing::onFetchPurchasingPlansFinished()
   QString serverMsg;
   if ( r->error() == QNetworkReply::NoError )
   {
-    InputUtils::log( "fetch plans", QStringLiteral( "Success" ) );
+    CoreUtils::log( "fetch plans", QStringLiteral( "Success" ) );
     QByteArray data = r->readAll();
     const QJsonDocument doc = QJsonDocument::fromJson( data );
     if ( doc.isArray() )
@@ -419,7 +420,7 @@ void Purchasing::onFetchPurchasingPlansFinished()
   else
   {
     serverMsg = mMerginApi->extractServerErrorMsg( r->readAll() );
-    InputUtils::log( "fetch plans", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    CoreUtils::log( "fetch plans", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
   }
   r->deleteLater();
 }
@@ -449,7 +450,7 @@ void Purchasing::onPlanRegistrationFailed( const QString &id )
 
   if ( mPlansWithPendingRegistration.empty() && mRegisteredPlans.empty() )
   {
-    InputUtils::log( "Plan Registration", QStringLiteral( "Failed to register any plans" ) );
+    CoreUtils::log( "Plan Registration", QStringLiteral( "Failed to register any plans" ) );
   }
 }
 
@@ -509,7 +510,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mMerginApi->mManager.post( request, json );
   connect( reply, &QNetworkReply::finished, transaction.get(), &PurchasingTransaction::verificationFinished );
-  InputUtils::log( "process transaction", QStringLiteral( "Requesting processing of in-app transaction: " ) + url.toString() );
+  CoreUtils::log( "process transaction", QStringLiteral( "Requesting processing of in-app transaction: " ) + url.toString() );
 }
 
 void Purchasing::onTransactionCreationFailed()

@@ -15,6 +15,7 @@
 
 #include "loader.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
@@ -316,7 +317,7 @@ void Loader::appStateChanged( Qt::ApplicationState state )
   QDebug logHelper( &msg );
 
   logHelper << "Application changed state to: " << state;
-  InputUtils::log( "Input", msg );
+  CoreUtils::log( "Input", msg );
 
   if ( !mRecording && mPositionKit )
   {
@@ -333,7 +334,7 @@ void Loader::appStateChanged( Qt::ApplicationState state )
 
 void Loader::appAboutToQuit()
 {
-  InputUtils::log( "Input", "Application has quit" );
+  CoreUtils::log( "Input", "Application has quit" );
 }
 
 QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer *layer )

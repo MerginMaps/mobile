@@ -11,7 +11,7 @@
 
 #include "merginapi.h"
 #include "merginprojectmetadata.h"
-#include "inpututils.h"
+#include "coreutils.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -104,7 +104,7 @@ void LocalProjectsManager::removeLocalProject( const QString &projectId )
     {
       emit aboutToRemoveLocalProject( mProjects[i] );
 
-      InputUtils::removeDir( mProjects[i].projectDir );
+      CoreUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
 
       return;
@@ -167,7 +167,7 @@ void LocalProjectsManager::updateNamespace( const QString &projectDir, const QSt
 
 QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QString &err )
 {
-  if ( QFile::exists( InputUtils::downloadInProgressFilePath( projectDir ) ) )
+  if ( QFile::exists( CoreUtils::downloadInProgressFilePath( projectDir ) ) )
   {
     // if this is a mergin project and file indicating download in progress is still there
     // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)

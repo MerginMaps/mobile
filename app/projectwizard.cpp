@@ -1,5 +1,6 @@
 #include "projectwizard.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 #include "qgsproject.h"
 #include "qgsrasterlayer.h"
@@ -71,7 +72,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
 
 void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
 {
-  QString projectDir = InputUtils::createUniqueProjectDirectory( mDataDir, projectName );
+  QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
   QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );

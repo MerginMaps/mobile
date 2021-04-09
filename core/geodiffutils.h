@@ -48,9 +48,12 @@ class GeodiffUtils
     //! Returns JSON with local pending changes o a diffable file
     static QString diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary );
 
-    //! Runs geodiff on a local project's file, compares it to locally cached original and creates a diff file
-    //! (diff file path returned in the argument, returns geodiff return value - zero on success)
-    static int createChangeset( const QString &projectDir, const QString &filePath, QString &diffPath, QString &basePath );
+    /**
+     *  Runs geodiff on a local project's file, compares it to locally cached original and creates a diff file
+     * (diff file path returned in the argument is RELATIVE to "projectDir/.mergin/" DIR)
+     * \returns geodiff return value - zero on success
+     */
+    static int createChangeset( const QString &projectDir, const QString &fileName, QString &diffName );
 
     //! Takes "src" file and applies a sequence of changesets for the list in "diffFiles"
     static bool applyDiffs( const QString &src, const QStringList &diffFiles );
