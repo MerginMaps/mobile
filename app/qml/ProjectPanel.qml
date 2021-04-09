@@ -419,43 +419,6 @@ Item {
 
       // Other components
 
-      Item {
-        id: reloadList
-        width: parent.width
-        height: root.rowHeight
-        visible: false
-        Layout.alignment: Qt.AlignVCenter
-        y: root.height/3 * 2
-
-        Button {
-            id: reloadBtn
-            width: reloadList.width - 2* InputStyle.panelMargin
-            height: reloadList.height
-            text: qsTr("Retry")
-            font.pixelSize: reloadBtn.height/2
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-              stackView.pending = true
-
-              // filters suppose to not change
-              projectsPage.refreshProjectList( true )
-              reloadList.visible = false
-            }
-            background: Rectangle {
-                color: InputStyle.highlightColor
-            }
-
-            contentItem: Text {
-                text: reloadBtn.text
-                font: reloadBtn.font
-                color: InputStyle.clrPanelMain
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                elide: Text.ElideRight
-            }
-        }
-      }
-
       Connections {
         target: __projectWizard
         onProjectCreated: {
@@ -469,9 +432,6 @@ Item {
         target: __merginApi
         onListProjectsFinished: {
           stackView.pending = false
-        }
-        onListProjectsFailed: {
-          reloadList.visible = true
         }
         onListProjectsByNameFinished: stackView.pending = false
         onApiVersionStatusChanged: {
@@ -597,5 +557,4 @@ Item {
       }
     }
   }
-
 }

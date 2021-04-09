@@ -1270,6 +1270,8 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listProjectsByName" ), r->errorString(), serverMsg );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listProjectsByName" ) );
     CoreUtils::log( "list projects by name", QStringLiteral( "FAILED - %1" ).arg( message ) );
+
+    emit listProjectsFailed();
   }
 
   r->deleteLater();

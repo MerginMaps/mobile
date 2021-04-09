@@ -197,6 +197,51 @@ Item {
     font.bold: true
   }
 
+  Item {
+    id: reloadList
+
+    width: parent.width
+    height: InputStyle.rowHeightHeader
+    visible: false
+    y: root.height/3 * 2
+
+    Connections {
+      target: __merginApi
+
+      onListProjectsFailed: reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
+      onListProjectsFinished: reloadList.visible = false // hide reload list on other models
+    }
+
+    Button {
+        id: reloadBtn
+        width: reloadList.width - 2* InputStyle.panelMargin
+        height: reloadList.height
+        text: qsTr("Retry")
+        font.pixelSize: reloadBtn.height/2
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: {
+          stackView.pending = true
+
+          // filters suppose to not change
+          projectsPage.refreshProjectList( true )
+          reloadList.visible = false
+        }
+        background: Rectangle {
+            color: InputStyle.highlightColor
+            radius: InputStyle.cornerRadius
+        }
+
+        contentItem: Text {
+            text: reloadBtn.text
+            font: reloadBtn.font
+            color: InputStyle.clrPanelMain
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+    }
+  }
+
   MessageDialog {
     id: removeDialog
     property string relatedProjectId
