@@ -27,6 +27,7 @@ Item {
   property real panelMargin: InputStyle.panelMargin
 
   signal openProjectRequested( string projectId, string projectPath )
+  signal resetView() // resets view to state as when panel is opened
 
   function openPanel() {
     root.visible = true
@@ -179,7 +180,6 @@ Item {
                 if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
                   __merginApi.getUserInfo()
                   stackView.push( accountPanelComp )
-                  reloadList.visible = false
                 }
                 else
                   stackView.push( authPanelComp, { state: "login" })
@@ -247,6 +247,11 @@ Item {
             else {
               pageContent.state = ""
             }
+          }
+
+          onResetView: {
+            if ( pageContent.state === "created" || pageContent.state === "shared" )
+              pageContent.state = "local"
           }
         }
 
@@ -487,18 +492,13 @@ Item {
         }
         onAuthChanged: {
           stackView.pending = false
-          if (__merginApi.userAuth.hasAuthData()) {
-            refreshProjectList()
+          if ( __merginApi.userAuth.hasAuthData() ) {
+            stackView.popOnePageOrClose()
+            projectsPage.refreshProjectList()
             root.forceActiveFocus()
           }
-          stackView.popOnePageOrClose()
-
         }
-        onAuthFailed: {
-          homeBtn.activated()
-          stackView.pending = false
-          root.forceActiveFocus()
-        }
+        onAuthFailed: stackView.pending = false
         onRegistrationFailed: stackView.pending = false
         onRegistrationSucceeded: stackView.pending = false
 
@@ -519,8 +519,8 @@ Item {
       toolbarHeight: InputStyle.rowHeightHeader
       onBack: {
         stackView.popOnePageOrClose()
-        if  (stackView.currentItem.objectName === "projectsPanel") {
-          __merginApi.authFailed() // activate homeBtn
+        if ( !__merginApi.userAuth.hasAuthData() ) {
+          root.resetView()
         }
       }
     }
@@ -556,10 +556,11 @@ Item {
         }
       }
       onSignOutClicked: {
-        if (__merginApi.userAuth.hasAuthData()) {
+        if ( __merginApi.userAuth.hasAuthData() ) {
           __merginApi.clearAuth()
-          stackView.popOnePageOrClose()
         }
+        stackView.popOnePageOrClose()
+        root.resetView()
       }
       onRestorePurchasesClicked: {
         __purchasing.restore()
