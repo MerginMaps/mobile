@@ -23,9 +23,11 @@ Item {
   signal openProjectRequested( string projectId, string projectFilePath )
   signal showLocalChangesRequested( string projectId )
 
-  function refreshProjectsList() {
-    searchBar.deactivate()
-    projectlist.refreshProjectList()
+  function refreshProjectsList( keepSearchFilter = false ) {
+    if ( !keepSearchFilter )
+      searchBar.deactivate()
+
+    projectlist.refreshProjectList( searchBar.text )
   }
 
   SearchBar {

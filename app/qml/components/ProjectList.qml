@@ -32,8 +32,8 @@ Item {
     else viewModel.searchExpression = searchText
   }
 
-  function refreshProjectList() {
-    controllerModel.listProjects()
+  function refreshProjectList( searchText ) {
+    controllerModel.listProjects( searchText )
   }
 
   function modelData( fromRole, fromValue, desiredRole ) {
@@ -129,7 +129,6 @@ Item {
           stackView.push(projectWizardComp)
         }
         else if ( __inputUtils.acquireStoragePermission() ) {
-//          TODO: reload project dir ~> rather connect to permission granted signal and reload project dir
           restartAppDialog.open()
         }
       }

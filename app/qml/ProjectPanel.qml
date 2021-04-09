@@ -121,21 +121,21 @@ Item {
         else __inputUtils.showNotification( qsTr( "No Changes" ) )
       }
 
-      function refreshProjectList() {
+      function refreshProjectList( keepSearchFilter = false ) {
 
         stackView.pending = true
         switch( pageContent.state ) {
           case "local":
-            localProjectsPage.refreshProjectsList()
+            localProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "created":
-            createdProjectsPage.refreshProjectsList()
+            createdProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "shared":
-            sharedProjectsPage.refreshProjectsList()
+            sharedProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "public":
-            publicProjectsPage.refreshProjectsList()
+            publicProjectsPage.refreshProjectsList( keepSearchFilter )
             break
         }
       }
@@ -506,8 +506,9 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
               stackView.pending = true
+
               // filters suppose to not change
-              __merginApi.listProjects( searchBar.text )
+              projectsPage.refreshProjectList( true )
               reloadList.visible = false
             }
             background: Rectangle {
