@@ -10,6 +10,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.12
 import lc 1.0
 import "../"
 import "."
@@ -138,6 +139,7 @@ Item {
       width: parent.width
       height: InputStyle.rowHeight
       text: qsTr("Create project")
+      visible: listview.count > 0
 
       onClicked: {
         if ( __inputUtils.hasStoragePermission() ) {
@@ -175,27 +177,62 @@ Item {
     padding: InputStyle.panelMargin/2
   }
 
-  Text {
-    id: noLocalProjectsText
+  Item {
+    id: noLocalProjectsMessageContainer
+
+    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel
 
     anchors.fill: parent
-    textFormat: Text.RichText
-    text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
-          qsTr("No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.")
-    .arg("<br/>")
-    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
-    .arg("</a>")
-    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
-    onLinkActivated: Qt.openUrlExternally(link)
-    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel
-    color: InputStyle.fontColor
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    font.bold: true
-    verticalAlignment: Text.AlignVCenter
-    horizontalAlignment: Text.AlignHCenter
-    wrapMode: Text.WordWrap
-    padding: InputStyle.panelMargin/2
+    ColumnLayout {
+      id: colayout
+
+      anchors.fill: parent
+      spacing: 0
+
+      RichTextBlock {
+        id: noLocalProjectsText
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
+              qsTr( "No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device." )
+        .arg("<br/>")
+        .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
+        .arg("</a>")
+        .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
+
+        onLinkActivated: Qt.openUrlExternally(link)
+      }
+
+
+      RichTextBlock {
+        id: createProjectText
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        text: qsTr( "You can also create new project by clicking button below." )
+      }
+
+      DelegateButton {
+        id: createdProjectsWhenNone
+
+        Layout.preferredHeight: InputStyle.rowHeight
+        Layout.fillWidth: true
+
+        text: qsTr( "Create project" )
+        onClicked: {
+          if ( __inputUtils.hasStoragePermission() ) {
+            stackView.push(projectWizardComp)
+          }
+          else if ( __inputUtils.acquireStoragePermission() ) {
+            restartAppDialog.open()
+          }
+        }
+      }
+    }
   }
 
   Label {

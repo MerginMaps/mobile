@@ -65,5 +65,6 @@
         <file>components/Symbol.qml</file>
         <file>components/ProjectDelegateItem.qml</file>
         <file>components/ProjectList.qml</file>
+        <file>components/RichTextBlock.qml</file>
     </qresource>
 </RCC>
