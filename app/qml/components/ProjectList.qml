@@ -100,7 +100,14 @@ Item {
           downloadProjectDialog.open()
         }
       }
-      onSyncRequested: controllerModel.syncProject( projectId )
+      onSyncRequested: {
+        if ( __inputUtils.hasStoragePermission() ) {
+          controllerModel.syncProject( projectId )
+        }
+        else if ( __inputUtils.acquireStoragePermission() ) {
+          restartAppDialog.open()
+        }
+      }
       onMigrateRequested: controllerModel.migrateProject( projectId )
       onRemoveRequested: {
         removeDialog.relatedProjectId = projectId
@@ -289,7 +296,14 @@ Item {
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     icon: StandardIcon.Question
     standardButtons: StandardButton.Yes | StandardButton.No
-    onYes: controllerModel.syncProject( relatedProjectId )
+    onYes: {
+      if ( __inputUtils.hasStoragePermission() ) {
+        controllerModel.syncProject( relatedProjectId )
+      }
+      else if ( __inputUtils.acquireStoragePermission() ) {
+        restartAppDialog.open()
+      }
+    }
   }
 
   MessageDialog {
