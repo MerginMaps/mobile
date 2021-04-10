@@ -151,7 +151,7 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
 
   mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
 
-  if ( !mLastRequestId.isEmpty() && page == 1 )
+  if ( !mLastRequestId.isEmpty() )
     emit setModelIsLoading( true );
 }
 

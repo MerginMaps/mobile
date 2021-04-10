@@ -20,7 +20,7 @@ Rectangle {
 
   signal searchTextChanged( string text )
 
-  property string text: searchField.displayText
+  property string text: ""
   property bool allowTimer: false
   property int emitInterval: 200
   

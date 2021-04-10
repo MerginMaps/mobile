@@ -430,9 +430,7 @@ Item {
 
       Connections {
         target: __merginApi
-        onListProjectsFinished: {
-          stackView.pending = false
-        }
+        onListProjectsFinished: stackView.pending = false
         onListProjectsByNameFinished: stackView.pending = false
         onApiVersionStatusChanged: {
           stackView.pending = false
@@ -461,8 +459,6 @@ Item {
         onAuthFailed: stackView.pending = false
         onRegistrationFailed: stackView.pending = false
         onRegistrationSucceeded: stackView.pending = false
-
-        //TODO: on sync project failed: push auth panel too
       }
     }
   }

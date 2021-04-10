@@ -20,20 +20,20 @@ Item {
 
   property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
+  property string searchText: ""
 
   signal openProjectRequested( string projectId, string projectFilePath )
   signal showLocalChangesRequested( string projectId )
   signal activeProjectDeleted()
 
-  function searchTextChanged( searchText ) {
-    if ( projectModelType === ProjectsModel.PublicProjectsModel )
-    {
+  onSearchTextChanged: {
+    if ( projectModelType === ProjectsModel.PublicProjectsModel ) {
       controllerModel.listProjects( searchText )
     }
     else viewModel.searchExpression = searchText
   }
 
-  function refreshProjectList( searchText ) {
+  function refreshProjectList() {
     controllerModel.listProjects( searchText )
   }
 
@@ -259,37 +259,41 @@ Item {
     Connections {
       target: __merginApi
 
-      onListProjectsFailed: reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
-      onListProjectsFinished: reloadList.visible = false // hide reload list on other models
+      onListProjectsFailed: {
+        reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
+      }
+
+      onListProjectsFinished: {
+        if ( projectCount > -1 )
+          reloadList.visible = false
+      }
     }
 
     Button {
-        id: reloadBtn
-        width: reloadList.width - 2* InputStyle.panelMargin
-        height: reloadList.height
-        text: qsTr("Retry")
-        font.pixelSize: reloadBtn.height/2
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: {
-          stackView.pending = true
+      id: reloadBtn
+      width: reloadList.width - 2* InputStyle.panelMargin
+      height: reloadList.height
+      text: qsTr("Retry")
+      font.pixelSize: reloadBtn.height/2
+      anchors.horizontalCenter: parent.horizontalCenter
+      onClicked: {
+        // filters suppose to not change
+        controllerModel.listProjects( root.searchText )
+        reloadList.visible = false
+      }
+      background: Rectangle {
+        color: InputStyle.highlightColor
+        radius: InputStyle.cornerRadius
+      }
 
-          // filters suppose to not change
-          projectsPage.refreshProjectList( true )
-          reloadList.visible = false
-        }
-        background: Rectangle {
-            color: InputStyle.highlightColor
-            radius: InputStyle.cornerRadius
-        }
-
-        contentItem: Text {
-            text: reloadBtn.text
-            font: reloadBtn.font
-            color: InputStyle.clrPanelMain
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
+      contentItem: Text {
+        text: reloadBtn.text
+        font: reloadBtn.font
+        color: InputStyle.clrPanelMain
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+      }
     }
   }
 

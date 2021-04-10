@@ -23,10 +23,8 @@ Item {
   signal openProjectRequested( string projectId, string projectFilePath )
   signal showLocalChangesRequested( string projectId )
 
-  function refreshProjectsList( keepSearchFilter = false ) {
-    if ( !keepSearchFilter )
-      searchBar.deactivate()
-
+  function refreshProjectsList() {
+    searchBar.deactivate()
     projectlist.refreshProjectList( searchBar.text )
   }
 
@@ -41,8 +39,6 @@ Item {
     }
 
     allowTimer: true
-
-    onSearchTextChanged: projectlist.searchTextChanged( text )
   }
 
   ProjectList {
@@ -50,6 +46,7 @@ Item {
 
     projectModelType: root.projectModelType
     activeProjectId: root.activeProjectId
+    searchText: searchBar.text
 
     anchors {
       left: parent.left
