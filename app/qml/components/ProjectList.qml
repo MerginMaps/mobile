@@ -167,7 +167,7 @@ Item {
         restartAppDialog.open()
       }
     }
-    visible: !__inputUtils.hasStoragePermission()
+    visible: !__inputUtils.hasStoragePermission() && !reloadList.visible
     color: InputStyle.fontColor
     font.pixelSize: InputStyle.fontPixelSizeNormal
     font.bold: true
@@ -180,7 +180,7 @@ Item {
   Item {
     id: noLocalProjectsMessageContainer
 
-    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel
+    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel && root.searchText === ""
 
     anchors.fill: parent
 
@@ -279,7 +279,6 @@ Item {
       onClicked: {
         // filters suppose to not change
         controllerModel.listProjects( root.searchText )
-        reloadList.visible = false
       }
       background: Rectangle {
         color: InputStyle.highlightColor

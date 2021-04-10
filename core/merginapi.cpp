@@ -71,6 +71,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   bool authorize = !flag.isEmpty();
   if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
+    emit listProjectsFailed();
     return QString();
   }
 
