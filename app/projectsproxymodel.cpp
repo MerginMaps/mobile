@@ -18,7 +18,11 @@ void ProjectsProxyModel::initialize()
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
-  setFilterRole( ProjectsModel::ProjectFullName );
+  if ( mModelType == ProjectsModel::CreatedProjectsModel )
+    setFilterRole( ProjectsModel::ProjectName );
+  else
+    setFilterRole( ProjectsModel::ProjectFullName );
+
   setFilterCaseSensitivity( Qt::CaseInsensitive );
 
   sort( 0, Qt::AscendingOrder );
@@ -70,7 +74,6 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
     {
       QString lProjectFullName = mModel->data( left, ProjectsModel::ProjectFullName ).toString();
       QString rProjectFullName = mModel->data( right, ProjectsModel::ProjectFullName ).toString();
-      qDebug() << "Comparing " << lProjectFullName << rProjectFullName;
 
       return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
     }
@@ -82,17 +85,17 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
     {
       return false;
     }
-
-    QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
-    QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
-    QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
-    QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
-
-    if ( lNamespace == rNamespace )
-    {
-      return lProjectName.compare( rProjectName, Qt::CaseInsensitive ) < 0;
-    }
-    return lNamespace.compare( rNamespace, Qt::CaseInsensitive ) < 0;
   }
-  return false;
+
+  // comparing 2 mergin projects
+  QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
+  QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
+  QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
+  QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
+
+  if ( lNamespace == rNamespace )
+  {
+    return lProjectName.compare( rProjectName, Qt::CaseInsensitive ) < 0;
+  }
+  return lNamespace.compare( rNamespace, Qt::CaseInsensitive ) < 0;
 }
