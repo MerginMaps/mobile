@@ -150,6 +150,9 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
   }
 
   mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
+
+  if ( !mLastRequestId.isEmpty() && page == 1 )
+    emit setModelIsLoading( true );
 }
 
 void ProjectsModel::listProjectsByName()
@@ -160,6 +163,9 @@ void ProjectsModel::listProjectsByName()
   }
 
   mLastRequestId = mBackend->listProjectsByName( projectNames() );
+
+  if ( !mLastRequestId.isEmpty() )
+    emit setModelIsLoading( true );
 }
 
 bool ProjectsModel::hasMoreProjects() const
@@ -238,6 +244,8 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   mServerProjectsCount = projectsCount;
   mPaginatedPage = page;
   emit hasMoreProjectsChanged();
+
+  emit setModelIsLoading( false );
 }
 
 void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId )
@@ -253,6 +261,8 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
   mergeProjects( merginProjects, pendingProjects );
   printProjects();
   endResetModel();
+
+  emit setModelIsLoading( false );
 }
 
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
@@ -671,6 +681,17 @@ std::shared_ptr<Project> ProjectsModel::projectFromId( QString projectId ) const
   }
 
   return nullptr;
+}
+
+bool ProjectsModel::isLoading() const
+{
+  return mModelIsLoading;
+}
+
+void ProjectsModel::setModelIsLoading( bool state )
+{
+  mModelIsLoading = state;
+  emit isLoadingChanged( mModelIsLoading );
 }
 
 ProjectsModel::ProjectModelTypes ProjectsModel::modelType() const

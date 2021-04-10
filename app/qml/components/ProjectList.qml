@@ -241,7 +241,7 @@ Item {
     anchors.fill: parent
     horizontalAlignment: Qt.AlignHCenter
     verticalAlignment: Qt.AlignVCenter
-    visible: reloadList.visible || ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
+    visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
     text: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
     color: InputStyle.fontColor
     font.pixelSize: InputStyle.fontPixelSizeNormal

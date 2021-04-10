@@ -69,6 +69,7 @@ class ProjectsModel : public QAbstractListModel
     Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
 
     Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
 
     // Needed methods from QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
@@ -113,7 +114,11 @@ class ProjectsModel : public QAbstractListModel
 
     std::shared_ptr<Project> projectFromId( QString projectId ) const;
 
-  public slots:
+    bool isLoading() const;
+
+    void setModelIsLoading( bool state );
+
+public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
@@ -136,7 +141,9 @@ class ProjectsModel : public QAbstractListModel
     void modelInitialized();
     void hasMoreProjectsChanged();
 
-  private:
+    void isLoadingChanged( bool isLoading );
+
+private:
     QString modelTypeToFlag() const;
     void printProjects() const;
     QStringList projectNames() const;
@@ -155,6 +162,8 @@ class ProjectsModel : public QAbstractListModel
 
     //! For processing only my requests
     QString mLastRequestId;
+
+    bool mModelIsLoading;
 };
 
 #endif // PROJECTSMODEL_H
