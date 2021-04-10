@@ -122,19 +122,14 @@ Rectangle {
     let items = getMoreMenuItems()
     items = items.split(',')
 
-    if ( contextMenu.contentData )
-      while( contextMenu.contentData.length > 0 )
-        contextMenu.takeItem( 0 );
+    // clear previous items
+    while( contextMenu.count > 0 )
+      contextMenu.takeItem( 0 );
 
     items.forEach( item => { contextMenu.addItem(
-                      menuItemComponent.createObject( null, itemsMap[item] ) )
+                      menuItemComponent.createObject( contextMenu, itemsMap[item] ) )
                   })
     contextMenu.height = items.length * root.menuItemHeight
-  }
-
-  onProjectStatusChanged: {
-    console.log("Project " + projectId + " status changed to: " + projectStatus)
-    fillMoreMenu()
   }
 
   color: root.highlight || !projectIsValid ? InputStyle.panelItemHighlight : root.primaryColor
@@ -296,7 +291,10 @@ Rectangle {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: contextMenu.open()
+        onClicked: {
+          fillMoreMenu()
+          contextMenu.open()
+        }
       }
     }
   }
@@ -326,8 +324,6 @@ Rectangle {
         NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
       }
     }
-
-    Component.onCompleted: fillMoreMenu()
 
     //! sets y-offset either above or below related item according relative position to end of the list
     onAboutToShow: {
