@@ -599,7 +599,6 @@ ApplicationWindow {
         }
 
         onOpenProjectRequested: {
-          console.log("loading ", projectPath)
           __appSettings.defaultProject = projectPath
           __appSettings.activeProject = projectPath
           __loader.load( projectPath )

@@ -145,7 +145,6 @@ public slots:
 
 private:
     QString modelTypeToFlag() const;
-    void printProjects() const;
     QStringList projectNames() const;
     void loadLocalProjects();
     void initializeProjectsModel();

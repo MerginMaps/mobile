@@ -14,7 +14,6 @@
 #include <QDateTime>
 #include <QDirIterator>
 #include <memory>
-#include <qdebug.h>
 
 struct Project;
 
