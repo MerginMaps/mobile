@@ -1,12 +1,12 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
-#include <QSignalSpy>
 
 #define STR1(x)  #x
 #define STR(x)  STR1(x)
 
 #include "testmerginapi.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "geodiffutils.h"
 #include "testutils.h"
 #include "merginuserauth.h"
@@ -16,23 +16,31 @@ const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 const QString TestMerginApi::TEST_EMPTY_FILE_NAME = "test_empty_file.md";
 
 
-static MerginProjectListEntry _findProjectByName( const QString &projectNamespace, const QString &projectName, const MerginProjectList &projects )
+static MerginProject _findProjectByName( const QString &projectNamespace, const QString &projectName, const MerginProjectsList &projects )
 {
-  for ( MerginProjectListEntry project : projects )
+  for ( MerginProject project : projects )
   {
     if ( project.projectName == projectName && project.projectNamespace == projectNamespace )
       return project;
   }
-  return MerginProjectListEntry();
+  return MerginProject();
 }
 
 
-TestMerginApi::TestMerginApi( MerginApi *api, MerginProjectModel *mpm, ProjectModel *pm )
+TestMerginApi::TestMerginApi( MerginApi *api )
 {
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
-  mMerginProjectModel = mpm;
-  mProjectModel = pm;
+
+  mLocalProjectsModel = std::unique_ptr<ProjectsModel>( new ProjectsModel );
+  mLocalProjectsModel->setModelType( ProjectsModel::LocalProjectsModel );
+  mLocalProjectsModel->setMerginApi( mApi );
+  mLocalProjectsModel->setLocalProjectsManager( &mApi->localProjectsManager() );
+
+  mCreatedProjectsModel = std::unique_ptr<ProjectsModel>( new ProjectsModel );
+  mCreatedProjectsModel->setModelType( ProjectsModel::CreatedProjectsModel );
+  mCreatedProjectsModel->setMerginApi( mApi );
+  mCreatedProjectsModel->setLocalProjectsManager( &mApi->localProjectsManager() );
 }
 
 void TestMerginApi::initTestCase()
@@ -119,8 +127,10 @@ void TestMerginApi::testListProject()
   mApi->listProjects( QString() );
   QVERIFY( spy0.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
-  QVERIFY( !_findProjectByName( mUsername, projectName, mApi->projects() ).isValid() );
-  QVERIFY( !mApi->localProjectsManager().hasMerginProject( mUsername, projectName ) );
+  MerginProjectsList projects = projectListFromSpy( spy0 );
+
+  QVERIFY( !_findProjectByName( mUsername, projectName, projects ).isValid() );
+  QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mUsername, projectName ).isValid() );
 
   // create the project on the server (the content is not important)
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
@@ -130,10 +140,12 @@ void TestMerginApi::testListProject()
   mApi->listProjects( QString() );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
-  QVERIFY( _findProjectByName( mUsername, projectName, mApi->projects() ).isValid() );
+  projects = projectListFromSpy( spy );
+
+  QVERIFY( _findProjectByName( mUsername, projectName, projects ).isValid() );
 
   // project is not available locally, so it has no entry
-  QVERIFY( !mApi->localProjectsManager().hasMerginProject( mUsername, projectName ) );
+  QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mUsername, projectName ).isValid() );
 }
 
 /**
@@ -159,23 +171,27 @@ void TestMerginApi::testDownloadProject()
   QCOMPARE( mApi->transactions().count(), 0 );
 
   // check that the local projects are updated
-  QVERIFY( mApi->localProjectsManager().hasMerginProject( mUsername, projectName ) );
-  LocalProjectInfo project = mApi->localProjectsManager().projectFromMerginName( projectNamespace, projectName );
-  QVERIFY( project.isValid() );
-  QCOMPARE( project.projectDir, mApi->projectsPath() + "/" + projectName );
-  QCOMPARE( project.serverVersion, 1 );
-  QCOMPARE( project.localVersion, 1 );
-  QCOMPARE( project.status, UpToDate );
+  QVERIFY( mApi->localProjectsManager().projectFromMerginName( mUsername, projectName ).isValid() );
 
-  bool downloadSuccessful = mProjectModel->containsProject( projectNamespace, projectName );
+  // update model to have latest info
+  refreshProjectsModel( ProjectsModel::LocalProjectsModel );
+
+  std::shared_ptr<Project> project = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project && project->isLocal() && project->isMergin() );
+  QCOMPARE( project->local->projectDir, mApi->projectsPath() + "/" + projectName );
+  QCOMPARE( project->local->localVersion, 1 );
+  QCOMPARE( project->mergin->serverVersion, 1 );
+  QCOMPARE( project->mergin->status, ProjectStatus::UpToDate );
+
+  bool downloadSuccessful = mApi->localProjectsManager().projectFromMerginName( projectNamespace, projectName ).isValid();
   QVERIFY( downloadSuccessful );
 
   // there should be something in the directory
-  QStringList projectDirEntries = QDir( project.projectDir ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+  QStringList projectDirEntries = QDir( project->local->projectDir ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
   QCOMPARE( projectDirEntries.count(), 2 );
 
   // verify that download in progress file is erased
-  QVERIFY( !QFile::exists( InputUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
+  QVERIFY( !QFile::exists( CoreUtils::downloadInProgressFilePath( mTestDataPath + "/" + TEST_PROJECT_NAME ) ) );
 }
 
 void TestMerginApi::testDownloadProjectSpecChars()
@@ -253,7 +269,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   QCOMPARE( info.size(), 0 );
   QVERIFY( dir.isEmpty() );
 
-  api->localProjectsManager().removeProject( projectDir );
+  api->localProjectsManager().removeLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
 
   QCOMPARE( QFileInfo( projectDir ).size(), 0 );
   QVERIFY( QDir( projectDir ).isEmpty() );
@@ -311,7 +327,7 @@ void TestMerginApi::testCreateProjectTwice()
   QString projectName = "testCreateProjectTwice";
   QString projectNamespace = mUsername;
 
-  MerginProjectList projects = getProjectList();
+  MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
@@ -321,7 +337,9 @@ void TestMerginApi::testCreateProjectTwice()
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
-  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
+
+  QVERIFY( mCreatedProjectsModel->rowCount() );
   QVERIFY( _findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // Create again, expecting error
@@ -351,7 +369,7 @@ void TestMerginApi::testDeleteNonExistingProject()
   // Checks if projects doesn't exist
   QString projectName = "testDeleteNonExistingProject";
   QString projectNamespace = mUsername;
-  MerginProjectList projects = getProjectList();
+  MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // Try to delete non-existing project
@@ -370,7 +388,7 @@ void TestMerginApi::testCreateDeleteProject()
   // Create a project
   QString projectName = "testCreateDeleteProject";
   QString projectNamespace = mUsername;
-  MerginProjectList projects = getProjectList();
+  MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
@@ -380,7 +398,9 @@ void TestMerginApi::testCreateDeleteProject()
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
   projects = getProjectList();
-  QVERIFY( !mMerginProjectModel->projects().isEmpty() );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
+
+  QVERIFY( mCreatedProjectsModel->rowCount() );
   Q_ASSERT( _findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // Delete created project
@@ -405,7 +425,7 @@ void TestMerginApi::testUploadProject()
   QCOMPARE( spy0.count(), 1 );
   QCOMPARE( spy0.takeFirst().at( 1 ).toBool(), true );
 
-  MerginProjectList projects = getProjectList();
+  MerginProjectsList projects = getProjectList();
   QVERIFY( _findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // copy project's test data to the new project directory
@@ -413,9 +433,9 @@ void TestMerginApi::testUploadProject()
   mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
 
   // project info does not have any version information yet
-  LocalProjectInfo project0 = mApi->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QCOMPARE( project0.serverVersion, -1 );
-  QCOMPARE( project0.localVersion, -1 );
+  std::shared_ptr<Project> project0 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project0 && project0->isLocal() && !project0->isMergin() );
+  QCOMPARE( project0->local->localVersion, -1 );
 
   //
   // try to upload, but cancel it immediately afterwards
@@ -432,9 +452,9 @@ void TestMerginApi::testUploadProject()
   QVERIFY( !arguments.at( 2 ).toBool() );
 
   // server version is still not available (cancelled before project info)
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QCOMPARE( project1.serverVersion, -1 );
-  QCOMPARE( project1.localVersion, -1 );
+  std::shared_ptr<Project> project1 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && !project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, -1 );
 
   //
   // try to upload, but cancel it after started to upload files
@@ -457,10 +477,17 @@ void TestMerginApi::testUploadProject()
   QList<QVariant> argumentsX = spyX.takeFirst();
   QVERIFY( !argumentsX.at( 2 ).toBool() );
 
-  // server version is now available (cancelled after project info)
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QCOMPARE( project2.serverVersion, 0 );
-  QCOMPARE( project2.localVersion, -1 );
+  // server version is now available (cancelled after project info), but after projects model refresh
+  std::shared_ptr<Project> project2 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && !project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, -1 );
+
+  refreshProjectsModel( ProjectsModel::LocalProjectsModel );
+
+  project2 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, -1 );
+  QCOMPARE( project2->mergin->serverVersion, 0 );
 
   //
   // try to upload - and let the upload finish successfully
@@ -472,10 +499,11 @@ void TestMerginApi::testUploadProject()
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
-  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-  QCOMPARE( project3.serverVersion, 1 );
-  QCOMPARE( project3.localVersion, 1 );
-  QCOMPARE( project3.status, UpToDate );
+  std::shared_ptr<Project> project3 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QVERIFY( project3 && project3->isLocal() && project3->isMergin() );
+  QCOMPARE( project3->local->localVersion, 1 );
+  QCOMPARE( project3->mergin->serverVersion, 1 );
+  QCOMPARE( project3->mergin->status, ProjectStatus::UpToDate );
 }
 
 void TestMerginApi::testMultiChunkUploadDownload()
@@ -553,13 +581,15 @@ void TestMerginApi::testPushAddedFile()
   QString projectName = "testPushAddedFile";
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project0 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project0.serverVersion, 1 );
-  QCOMPARE( project0.localVersion, 1 );
-  QCOMPARE( project0.status, UpToDate );
+  std::shared_ptr<Project> project0 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project0 && project0->isLocal() && project0->isMergin() );
+  QCOMPARE( project0->local->localVersion, 1 );
+  QCOMPARE( project0->mergin->serverVersion, 1 );
+  QCOMPARE( project0->mergin->status, ProjectStatus::UpToDate );
 
   // add a single file
   QString newFilePath = mApi->projectsPath() + "/" + projectName + "/added.txt";
@@ -569,28 +599,32 @@ void TestMerginApi::testPushAddedFile()
   file.close();
 
   // check that the status is "modified"
-  mApi->localProjectsManager().updateProjectStatus( mApi->projectsPath() + "/" + projectName );  // force update of status
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project1.serverVersion, 1 );
-  QCOMPARE( project1.localVersion, 1 );
-  QCOMPARE( project1.status, Modified );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel ); // force update of status
+
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 1 );
+  QCOMPARE( project1->mergin->serverVersion, 1 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::Modified );
 
   // upload
   uploadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project2.serverVersion, 2 );
-  QCOMPARE( project2.localVersion, 2 );
-  QCOMPARE( project2.status, UpToDate );
+  std::shared_ptr<Project> project2 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, 2 );
+  QCOMPARE( project2->mergin->serverVersion, 2 );
+  QCOMPARE( project2->mergin->status, ProjectStatus::UpToDate );
 
   deleteLocalProject( mApi, mUsername, projectName );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project3.serverVersion, 2 );
-  QCOMPARE( project3.localVersion, 2 );
-  QCOMPARE( project3.status, UpToDate );
+  std::shared_ptr<Project> project3 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project3 && project3->isLocal() && project3->isMergin() );
+  QCOMPARE( project3->local->localVersion, 2 );
+  QCOMPARE( project3->mergin->serverVersion, 2 );
+  QCOMPARE( project3->mergin->status, ProjectStatus::UpToDate );
 
   // check it has the new file
   QFileInfo fi( newFilePath );
@@ -605,13 +639,15 @@ void TestMerginApi::testPushRemovedFile()
   QString projectName = "testPushRemovedFile";
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project0 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project0.serverVersion, 1 );
-  QCOMPARE( project0.localVersion, 1 );
-  QCOMPARE( project0.status, UpToDate );
+  std::shared_ptr<Project> project0 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project0 && project0->isLocal() && project0->isMergin() );
+  QCOMPARE( project0->local->localVersion, 1 );
+  QCOMPARE( project0->mergin->serverVersion, 1 );
+  QCOMPARE( project0->mergin->status, ProjectStatus::UpToDate );
 
   // Remove file
   QString removedFilePath = mApi->projectsPath() + "/" + projectName + "/test1.txt";
@@ -621,29 +657,33 @@ void TestMerginApi::testPushRemovedFile()
   QVERIFY( !file.exists() );
 
   // check that it is considered as modified now
-  mApi->localProjectsManager().updateProjectStatus( mApi->projectsPath() + "/" + projectName );  // force update of status
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project1.serverVersion, 1 );
-  QCOMPARE( project1.localVersion, 1 );
-  QCOMPARE( project1.status, Modified );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel ); // force update of status
+
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 1 );
+  QCOMPARE( project1->mergin->serverVersion, 1 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::Modified );
 
   // upload changes
 
   uploadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project2.serverVersion, 2 );
-  QCOMPARE( project2.localVersion, 2 );
-  QCOMPARE( project2.status, UpToDate );
+  std::shared_ptr<Project> project2 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, 2 );
+  QCOMPARE( project2->mergin->serverVersion, 2 );
+  QCOMPARE( project2->mergin->status, ProjectStatus::UpToDate );
 
   deleteLocalProject( mApi, mUsername, projectName );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project3.serverVersion, 2 );
-  QCOMPARE( project3.localVersion, 2 );
-  QCOMPARE( project3.status, UpToDate );
+  std::shared_ptr<Project> project3 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project3 && project3->isLocal() && project3->isMergin() );
+  QCOMPARE( project3->local->localVersion, 2 );
+  QCOMPARE( project3->mergin->serverVersion, 2 );
+  QCOMPARE( project3->mergin->status, ProjectStatus::UpToDate );
 
   // check it has the new file
   QFileInfo fi( removedFilePath );
@@ -658,6 +698,7 @@ void TestMerginApi::testPushModifiedFile()
   QString projectName = "testPushModifiedFile";
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
@@ -673,19 +714,21 @@ void TestMerginApi::testPushModifiedFile()
   file.close();
 
   // check that the status is "modified"
-  mApi->localProjectsManager().updateProjectStatus( mApi->projectsPath() + "/" + projectName );  // force update of status
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project1.serverVersion, 1 );
-  QCOMPARE( project1.localVersion, 1 );
-  QCOMPARE( project1.status, Modified );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel ); // force update of status
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 1 );
+  QCOMPARE( project1->mergin->serverVersion, 1 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::Modified );
 
   // upload
   uploadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project2.serverVersion, 2 );
-  QCOMPARE( project2.localVersion, 2 );
-  QCOMPARE( project2.status, UpToDate );
+  std::shared_ptr<Project> project2 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, 2 );
+  QCOMPARE( project2->mergin->serverVersion, 2 );
+  QCOMPARE( project2->mergin->status, ProjectStatus::UpToDate );
 
   // verify the remote project has updated file
 
@@ -695,10 +738,11 @@ void TestMerginApi::testPushModifiedFile()
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project3.serverVersion, 2 );
-  QCOMPARE( project3.localVersion, 2 );
-  QCOMPARE( project3.status, UpToDate );
+  std::shared_ptr<Project> project3 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project3 && project3->isLocal() && project3->isMergin() );
+  QCOMPARE( project3->local->localVersion, 2 );
+  QCOMPARE( project3->mergin->serverVersion, 2 );
+  QCOMPARE( project3->mergin->status, ProjectStatus::UpToDate );
 
   QVERIFY( file.open( QIODevice::ReadOnly ) );
   QCOMPARE( file.readAll(), QByteArray( "v2" ) );
@@ -711,23 +755,26 @@ void TestMerginApi::testPushNoChanges()
   QString projectDir = mApi->projectsPath() + "/" + projectName;
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
   // check that the status is still "up-to-date"
-  mApi->localProjectsManager().updateProjectStatus( projectDir );  // force update of status
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project1.serverVersion, 1 );
-  QCOMPARE( project1.localVersion, 1 );
-  QCOMPARE( project1.status, UpToDate );
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 1 );
+  QCOMPARE( project1->mergin->serverVersion, 1 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::UpToDate );
 
   // upload - should do nothing
   uploadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project2.serverVersion, 1 );
-  QCOMPARE( project2.localVersion, 1 );
-  QCOMPARE( project2.status, UpToDate );
+
+  std::shared_ptr<Project> project2 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, 1 );
+  QCOMPARE( project2->mergin->serverVersion, 1 );
+  QCOMPARE( project2->mergin->status, ProjectStatus::UpToDate );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
 }
@@ -742,15 +789,17 @@ void TestMerginApi::testUpdateAddedFile()
   QString extraProjectDir = mApiExtra->projectsPath() + "/" + projectName;
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   // download initial version
   downloadRemoteProject( mApi, mUsername, projectName );
   QVERIFY( !QFile::exists( projectDir + "/test-remote-new.txt" ) );
 
-  LocalProjectInfo project0 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project0.serverVersion, 1 );
-  QCOMPARE( project0.localVersion, 1 );
-  QCOMPARE( project0.status, UpToDate );
+  std::shared_ptr<Project> project0 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project0 && project0->isLocal() && project0->isMergin() );
+  QCOMPARE( project0->local->localVersion, 1 );
+  QCOMPARE( project0->mergin->serverVersion, 1 );
+  QCOMPARE( project0->mergin->status, ProjectStatus::UpToDate );
 
   // remove a file on the server
   downloadRemoteProject( mApiExtra, mUsername, projectName );
@@ -759,20 +808,23 @@ void TestMerginApi::testUpdateAddedFile()
   QVERIFY( QFile::exists( extraProjectDir + "/test-remote-new.txt" ) );
 
   // list projects - just so that we can figure out we are behind
-  getProjectList();
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
-  LocalProjectInfo project1 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project1.serverVersion, 2 );
-  QCOMPARE( project1.localVersion, 1 );
-  QCOMPARE( project1.status, OutOfDate );
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 1 );
+  QCOMPARE( project1->mergin->serverVersion, 2 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::OutOfDate );
 
   // now try to update
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project2 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project2.serverVersion, 2 );
-  QCOMPARE( project2.localVersion, 2 );
-  QCOMPARE( project2.status, UpToDate );
+  std::shared_ptr<Project> project2 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project2 && project2->isLocal() && project2->isMergin() );
+  QCOMPARE( project2->local->localVersion, 2 );
+  QCOMPARE( project2->mergin->serverVersion, 2 );
+  QCOMPARE( project2->mergin->status, ProjectStatus::UpToDate );
+
 
   // check that the added file is there
   QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
@@ -967,6 +1019,7 @@ void TestMerginApi::testUploadWithUpdate()
   QString extraFilenameRemote = extraProjectDir + "/test-new-remote-file.txt";
 
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  refreshProjectsModel( ProjectsModel::CreatedProjectsModel );
 
   downloadRemoteProject( mApi, mUsername, projectName );
 
@@ -986,10 +1039,11 @@ void TestMerginApi::testUploadWithUpdate()
   deleteLocalProject( mApi, mUsername, projectName );
   downloadRemoteProject( mApi, mUsername, projectName );
 
-  LocalProjectInfo project3 = mApi->getLocalProject( MerginApi::getFullProjectName( mUsername, projectName ) );
-  QCOMPARE( project3.serverVersion, 3 );
-  QCOMPARE( project3.localVersion, 3 );
-  QCOMPARE( project3.status, UpToDate );
+  std::shared_ptr<Project> project1 = mCreatedProjectsModel->projectFromId( MerginApi::getFullProjectName( mUsername, projectName ) );
+  QVERIFY( project1 && project1->isLocal() && project1->isMergin() );
+  QCOMPARE( project1->local->localVersion, 3 );
+  QCOMPARE( project1->mergin->serverVersion, 3 );
+  QCOMPARE( project1->mergin->status, ProjectStatus::UpToDate );
 
   QCOMPARE( readFileContent( filenameLocal ), QByteArray( "new local content" ) );
   QCOMPARE( readFileContent( filenameRemote ), QByteArray( "new remote content" ) );
@@ -1347,7 +1401,7 @@ void TestMerginApi::testMigrateProject()
   createLocalProject( projectDir );
 
   // reload localmanager after copying the project
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
   QStringList entryList = QDir( projectDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
 
   // migrate project
@@ -1393,7 +1447,7 @@ void TestMerginApi::testMigrateProjectAndSync()
 
   // step 1
   createLocalProject( projectDir );
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
   // step 2
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
@@ -1446,7 +1500,7 @@ void TestMerginApi::testMigrateDetachProject()
   createLocalProject( projectDir );
 
   // reload localmanager after copying the project
-  mApi->mLocalProjects.reloadProjectDir();
+  mApi->mLocalProjects.reloadDataDir();
 
   // migrate project
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
@@ -1476,7 +1530,7 @@ void TestMerginApi::testRegister()
 
   // we do not have a method to delete existing user in the mApi, so for now just make sure
   // the name does not exists
-  QString quiteRandom = InputUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
+  QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   QString username = "test_" + quiteRandom;
   QString email = username + "@nonexistant.email.com";
 
@@ -1491,15 +1545,38 @@ void TestMerginApi::testRegister()
 
 //////// HELPER FUNCTIONS ////////
 
-MerginProjectList TestMerginApi::getProjectList()
+MerginProjectsList TestMerginApi::getProjectList( QString tag )
 {
   QSignalSpy spy( mApi,  &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString(), "created", QString() );
+  mApi->listProjects( QString(), tag, QString() );
   spy.wait( TestUtils::SHORT_REPLY );
 
-  return mApi->projects();
+  return projectListFromSpy( spy );
 }
 
+MerginProjectsList TestMerginApi::projectListFromSpy( QSignalSpy &spy )
+{
+  QList<QVariant> response = spy.takeFirst();
+
+  // get projects emited from MerginAPI, it is first argument in listProjectsFinished signal
+  MerginProjectsList projects;
+  if ( response.length() > 0 )
+    projects = qvariant_cast<MerginProjectsList>( response.at( 0 ) );
+
+  return projects;
+}
+
+int TestMerginApi::serverVersionFromSpy( QSignalSpy &spy )
+{
+  QList<QVariant> response = spy.takeFirst();
+
+  // get version number emited from MerginApi::syncProjectFinished, it is third argument
+  int serverVersion = -1;
+  if ( response.length() >= 4 )
+    serverVersion = response.at( 3 ).toInt();
+
+  return serverVersion;
+}
 
 void TestMerginApi::deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {
@@ -1510,29 +1587,43 @@ void TestMerginApi::deleteRemoteProject( MerginApi *api, const QString &projectN
 
 void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {
-  LocalProjectInfo project = api->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  LocalProject project = api->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QVERIFY( project.isValid() );
   QVERIFY( project.projectDir.startsWith( api->projectsPath() ) );  // just to make sure we don't delete something wrong (-:
-  QDir projectDir( project.projectDir );
-  projectDir.removeRecursively();
+//  QDir projectDir( project.projectDir );
+//  projectDir.removeRecursively();
 
-  api->localProjectsManager().removeProject( project.projectDir );
+  api->localProjectsManager().removeLocalProject( project.id() );
 }
 
 void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+{
+  int serverVersion;
+  downloadRemoteProject( api, projectNamespace, projectName, serverVersion );
+}
+
+void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion )
 {
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   api->updateProject( projectNamespace, projectName );
   QCOMPARE( api->transactions().count(), 1 );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
+  serverVersion = serverVersionFromSpy( spy );
 }
 
 void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+{
+  int serverVersion;
+  uploadRemoteProject( api, projectNamespace, projectName, serverVersion );
+}
+
+void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion )
 {
   api->uploadProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY * 30 ) );
   QCOMPARE( spy.count(), 1 );
+  serverVersion = serverVersionFromSpy( spy );
 }
 
 void TestMerginApi::writeFileContent( const QString &filename, const QByteArray &data )
@@ -1559,4 +1650,23 @@ void TestMerginApi::createLocalProject( const QString projectDir )
   bool r0 = QFile::copy( mTestDataPath + "/diff_project/base.gpkg", projectDir + "/base.gpkg" );
 
   QVERIFY( r0 );
+}
+
+void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes modelType )
+{
+
+  if ( modelType == ProjectsModel::LocalProjectsModel )
+  {
+    QSignalSpy spy( mApi, &MerginApi::listProjectsByNameFinished );
+    mLocalProjectsModel->listProjects();
+    QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+    QCOMPARE( spy.count(), 1 );
+  }
+  else if ( modelType == ProjectsModel::CreatedProjectsModel )
+  {
+    QSignalSpy spy( mApi, &MerginApi::listProjectsFinished );
+    mCreatedProjectsModel->listProjects();
+    QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+    QCOMPARE( spy.count(), 1 );
+  }
 }

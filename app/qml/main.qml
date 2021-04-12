@@ -245,21 +245,22 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        if (__appSettings.defaultProject) {
-            var path = __appSettings.defaultProject ? __appSettings.defaultProject : openProjectPanel.activeProjectPath
-            var defaultIndex = __projectsModel.rowAccordingPath(path)
-            var isValid = __projectsModel.data(__projectsModel.index(defaultIndex), ProjectModel.IsValid)
-            if (isValid && __loader.load(path)) {
-                openProjectPanel.activeProjectIndex = defaultIndex !== -1 ? defaultIndex : 0
-                __appSettings.activeProject = path
-            } else {
-                // if default project load failed, delete default setting
-                __appSettings.defaultProject = ""
-                openProjectPanel.openPanel()
-            }
-        } else {
-            openProjectPanel.openPanel()
+      // load default project
+      if ( __appSettings.defaultProject ) {
+        let path = __appSettings.defaultProject
+
+        if ( __localProjectsManager.projectIsValid( path ) && __loader.load( path ) ) {
+          projectPanel.activeProjectPath = path
+          projectPanel.activeProjectId = __localProjectsManager.projectId( path )
+          __appSettings.activeProject = path
         }
+        else {
+          // if default project load failed, delete default setting
+          __appSettings.defaultProject = ""
+          projectPanel.openPanel()
+        }
+      }
+      else projectPanel.openPanel()
 
         InputStyle.deviceRatio = window.screen.devicePixelRatio
         InputStyle.realWidth = window.width
@@ -441,7 +442,7 @@ ApplicationWindow {
 
         gpsIndicatorColor: getGpsIndicatorColor()
 
-        onOpenProjectClicked: openProjectPanel.openPanel()
+        onOpenProjectClicked: projectPanel.openPanel()
         onOpenMapThemesClicked: mapThemesPanel.visible = true
         onMyLocationClicked: {
           mapCanvas.mapSettings.setCenter(positionKit.projectedPosition)
@@ -582,26 +583,25 @@ ApplicationWindow {
         }
     }
 
-    MerginProjectPanel {
-        id: openProjectPanel
+    ProjectPanel {
+        id: projectPanel
         height: window.height
         width: window.width
         z: zPanel
 
         onVisibleChanged: {
-          if (openProjectPanel.visible)
-            openProjectPanel.forceActiveFocus()
+          if (projectPanel.visible)
+            projectPanel.forceActiveFocus()
           else
           {
             mainPanel.forceActiveFocus()
           }
         }
 
-        onActiveProjectIndexChanged: {
-            openProjectPanel.activeProjectPath = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.Path)
-            __appSettings.defaultProject = openProjectPanel.activeProjectPath
-            __appSettings.activeProject = openProjectPanel.activeProjectPath
-            __loader.load(openProjectPanel.activeProjectPath)
+        onOpenProjectRequested: {
+          __appSettings.defaultProject = projectPath
+          __appSettings.activeProject = projectPath
+          __loader.load( projectPath )
         }
     }
 
@@ -680,17 +680,11 @@ ApplicationWindow {
             var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
             showAsDialog ? showDialog(msg) : showMessage(msg)
         }
-        onNotify: {
-            showMessage(message)
-        }
+        onNotify: showMessage(message)
 
         onProjectDataChanged: {
-          var projectName = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectName)
-          var projectNamespace = __projectsModel.data(__projectsModel.index(openProjectPanel.activeProjectIndex), ProjectModel.ProjectNamespace)
-          var currentProjectFullName = __merginApi.getFullProjectName(projectNamespace, projectName)
-
           //! if current project has been updated, refresh canvas
-          if (projectFullName === currentProjectFullName) {
+          if (projectFullName === projectPanel.activeProjectId) {
             mapCanvas.mapSettings.extentChanged()
           }
         }

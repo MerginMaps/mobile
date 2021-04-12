@@ -13,6 +13,7 @@
 #include "merginsubscriptionstatus.h"
 #include "merginapi.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 #include "qgsquickutils.h"
 
@@ -91,7 +92,7 @@ QString InputHelp::fullLog( bool isHtml )
   qint64 limit = 500000;
   QVector<QString> retLines = logHeader( isHtml );
 
-  QFile file( InputUtils::logFilename() );
+  QFile file( CoreUtils::logFilename() );
   if ( file.open( QIODevice::ReadOnly ) )
   {
     qint64 fileSize = file.size();
@@ -109,7 +110,7 @@ QString InputHelp::fullLog( bool isHtml )
   }
   else
   {
-    retLines.push_back( QString( "Unable to open log file %1" ).arg( InputUtils::logFilename() ) );
+    retLines.push_back( QString( "Unable to open log file %1" ).arg( CoreUtils::logFilename() ) );
   }
 
   QString ret;
@@ -129,7 +130,7 @@ QString InputHelp::fullLog( bool isHtml )
 QVector<QString> InputHelp::logHeader( bool isHtml )
 {
   QVector<QString> retLines;
-  retLines.push_back( QStringLiteral( "Input App: %1 - %2" ).arg( InputUtils::appVersion() ).arg( InputUtils::appPlatform() ) );
+  retLines.push_back( QStringLiteral( "Input App: %1 - %2" ).arg( CoreUtils::appVersion() ).arg( InputUtils::appPlatform() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
   retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
   retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
@@ -157,7 +158,7 @@ void InputHelp::submitReport()
   // There is a limit of 1MB on the remote service, send less, let say half of that
   QString log = fullLog( false );
   QByteArray logArr = log.toUtf8();
-  QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform() ).arg( InputUtils::appVersion() );
+  QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersion() );
   QString username = mMerginApi->userAuth()->username().toHtmlEscaped();
   if ( username.isEmpty() )
     username = "unknown";
@@ -183,12 +184,12 @@ void InputHelp::onSubmitReportReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    InputUtils::log( "submit report", "Report submitted!" );
+    CoreUtils::log( "submit report", "Report submitted!" );
     emit mInputUtils->showNotification( tr( "Report submitted.%1Please contact us on%1%2" ).arg( "<br />" ).arg( helpDeskMail ) );
   }
   else
   {
-    InputUtils::log( "submit report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+    CoreUtils::log( "submit report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
     emit mInputUtils->showNotification( tr( "Failed to submit report.%1Please check your internet connection." ).arg( "<br>" ) );
   }
 }

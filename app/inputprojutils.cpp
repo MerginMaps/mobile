@@ -14,6 +14,7 @@
 #include <QFileInfo>
 
 #include "inpututils.h"
+#include "coreutils.h"
 #include "proj.h"
 #include "qgsprojutils.h"
 #include "inputhelp.h"
@@ -37,7 +38,7 @@ void InputProjUtils::logUser( const QString &message, bool &variable )
 {
   if ( !variable )
   {
-    InputUtils::log( "InputPROJ", message );
+    CoreUtils::log( "InputPROJ", message );
     variable = true;
   }
 }
@@ -151,7 +152,7 @@ void InputProjUtils::setProjDir( const QString &appBundleDir )
   QFile projdb( projFilePath );
   if ( !projdb.exists() )
   {
-    InputUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) + projFilePath );
+    CoreUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) + projFilePath );
   }
 }
 

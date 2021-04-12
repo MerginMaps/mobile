@@ -19,6 +19,7 @@ QtObject {
     property color fontColorBright: "#679D70"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
+    property color activeButtonColorOrange: "#FD9626"
 
     // Secondary colors
     property color clrPanelMain: "white"
@@ -47,6 +48,7 @@ QtObject {
     property real fieldHeight: scale(54)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
+    property real projectItemHeight: rowHeightHeader * 1.2
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real shadowVerticalOffset: -2 * QgsQuick.Utils.dp
@@ -85,6 +87,10 @@ QtObject {
     property var comboboxIcon: "qrc:/combobox.svg"
     property var qrCodeIcon: "qrc:/qrcode.svg"
     property var exclamationIcon: "qrc:/exclamation-circle.svg"
+    property var syncIcon: "qrc:sync.svg"
+    property var downloadIcon: "qrc:download.svg"
+    property var stopIcon: "qrc:stop.svg"
+    property var moreMenuIcon: "qrc:/more_menu.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"

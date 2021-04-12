@@ -27,6 +27,7 @@
 #include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
+#include "project.h"
 
 class MerginUserAuth;
 class MerginUserInfo;
@@ -165,20 +166,6 @@ struct TransactionStatus
   ProjectDiff diff;
 };
 
-
-struct MerginProjectListEntry
-{
-  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
-
-  QString projectName;
-  QString projectNamespace;
-  int version = -1;
-  QDateTime serverUpdated; // available latest version of project files on server
-
-};
-
-typedef QList<MerginProjectListEntry> MerginProjectList;
-
 typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
@@ -218,14 +205,24 @@ class MerginApi: public QObject
      * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
      * \param filterTag Name of tag that fetched projects have to have.
      * \param page Requested page of projects.
+     * \returns unique id of a request
      */
-    Q_INVOKABLE void listProjects( const QString &searchExpression = QStringLiteral(),
-                                   const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+    Q_INVOKABLE QString listProjects( const QString &searchExpression = QStringLiteral(),
+                                      const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+
+    /**
+     * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in listProjectsByNameFinished
+     * method. Projects are parsed from response JSON.
+     *
+     * \param projectNames QStringList of project full names (namespace/name)
+     * \returns unique id of a sent request
+     */
+    Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
      * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
+     * files are removed. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
      * If update has been successful, updates metadata file of the project.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
@@ -237,7 +234,7 @@ class MerginApi: public QObject
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
      * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
-     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which MerginProjectModel updates status of the project item.
+     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
@@ -309,9 +306,6 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName );
 
-
-    LocalProjectInfo getLocalProject( const QString &projectFullName );
-
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
@@ -348,6 +342,8 @@ class MerginApi: public QObject
     */
     void deleteProject( const QString &projectNamespace, const QString &projectName );
 
+    LocalProject getLocalProject( const QString &projectFullName );
+
     // Production and Test functions (therefore not private)
 
     /**
@@ -363,21 +359,12 @@ class MerginApi: public QObject
      */
     static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir );
 
-    //! Returns the most recent list of projects fetched from the server
-    MerginProjectList projects();
-
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-    QString merginUserName() const;
-
-    //! Disk usage of current logged in user in Mergin instance in Bytes
-    int diskUsage() const;
-
-    //! Total storage limit of current logged in user in Mergin instance in Bytes
-    int storageLimit() const;
+    QString merginUserName() const; // TODO: replace (can be replaced with userInfo->username)
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
@@ -389,12 +376,22 @@ class MerginApi: public QObject
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
 
+    /**
+    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
+    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * \param sourceString QString either url or fullname of a project
+    * \param projectNamespace QString to be set as namespace, might not change original value
+    * \param projectName QString to be set to name of a project
+    */
+    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
+
   signals:
     void apiSupportsSubscriptionsChanged();
 
-    void listProjectsFinished( const MerginProjectList &merginProjects, Transactions pendingProjects, int projectCount, int page );
+    void listProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
-    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully = true );
+    void listProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get uploaded or downloaded.
@@ -421,10 +418,12 @@ class MerginApi: public QObject
     //! Emitted when upload cancellation request has finished
     void uploadCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
-    void projectDetached();
+    void projectDetached( const QString &projectFullName );
+    void projectAttachedToMergin( const QString &projectFullName );
 
   private slots:
-    void listProjectsReplyFinished();
+    void listProjectsReplyFinished( QString requestId );
+    void listProjectsByNameReplyFinished( QString requestId );
 
     // Pull slots
     void updateInfoReplyFinished();
@@ -446,8 +445,8 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
 
   private:
-    MerginProjectList parseListProjectsMetadata( const QByteArray &data );
-    MerginProjectList parseProjectJsonArray( const QJsonArray &vArray );
+    MerginProject parseProjectMetadata( const QJsonObject &project );
+    MerginProjectsList parseProjectsFromJson( const QJsonDocument &object );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
@@ -488,14 +487,6 @@ class MerginApi: public QObject
     bool validateAuthAndContinute();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
-    /**
-    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
-    * and the previous of last (namespace) substring after splitting sourceString with slash.
-    * \param sourceString QString either url or fullname of a project
-    * \param projectNamespace QString to be set as namespace, might not change original value
-    * \param projectName QString to be set to name of a project
-    */
-    bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
     /**
     * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
     * \param data Data received from mergin server on a request failed.
@@ -544,7 +535,6 @@ class MerginApi: public QObject
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
-    MerginProjectList mRemoteProjects;
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)

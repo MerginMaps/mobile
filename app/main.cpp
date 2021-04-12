@@ -31,15 +31,14 @@
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "positiondirection.h"
-#include "projectsmodel.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginsubscriptionstatus.h"
 #include "merginsubscriptiontype.h"
-#include "merginprojectmodel.h"
 #include "merginprojectstatusmodel.h"
 #include "layersproxymodel.h"
 #include "layersmodel.h"
@@ -54,6 +53,10 @@
 #include "projectwizard.h"
 #include "codefilter.h"
 #include "inputexpressionfunctions.h"
+
+#include "projectsmodel.h"
+#include "projectsproxymodel.h"
+#include "project.h"
 
 #ifdef INPUT_TEST
 #include "test/testmerginapi.h"
@@ -187,7 +190,7 @@ static void copy_demo_projects( const QString &demoDir, const QString &projectDi
   if ( demoFile.exists() )
     qDebug() << "DEMO projects initialized";
   else
-    InputUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
+    CoreUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
 }
 
 static void init_qgis( const QString &pkgPath )
@@ -216,7 +219,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
   qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
-  qmlRegisterUncreatableType<ProjectModel>( "lc", 1, 0, "ProjectModel", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
@@ -231,12 +233,15 @@ void initDeclarative()
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
+  qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
+  qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
+  qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 }
 
 #ifdef INPUT_TEST
 void initTestDeclarative()
 {
-  qRegisterMetaType<MerginProjectList>( "MerginProjectList" );
+  qRegisterMetaType<MerginProjectsList>( "MerginProjectsList" );
 }
 #endif
 
@@ -267,7 +272,7 @@ int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
 
-  const QString version = InputUtils::appVersion();
+  const QString version = CoreUtils::appVersion();
 
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
@@ -325,7 +330,7 @@ int main( int argc, char *argv[] )
   }
 #endif
 
-  InputUtils::setLogFilename( projectDir + "/.logs" );
+  CoreUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
 
   QString appBundleDir;
@@ -358,20 +363,18 @@ int main( int argc, char *argv[] )
   // Create Input classes
   AndroidUtils au;
   IosUtils iosUtils;
-  LocalProjectsManager localProjects( projectDir );
-  ProjectModel pm( localProjects );
+  LocalProjectsManager localProjectsManager( projectDir );
   MapThemesModel mtm;
-  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjects ) );
+  std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
   InputUtils iu;
-  MerginProjectModel mpm( localProjects );
-  MerginProjectStatusModel mpsm( localProjects );
+  MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
 
   // layer models
   LayersModel lm;
-  LayersProxyModel browseLpm( &lm, ModelTypes::BrowseDataLayerSelection );
-  LayersProxyModel recordingLpm( &lm, ModelTypes::ActiveLayerSelection );
+  LayersProxyModel browseLpm( &lm, LayerModelTypes::BrowseDataLayerSelection );
+  LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
   Loader loader( mtm, as, al );
@@ -383,11 +386,7 @@ int main( int argc, char *argv[] )
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
-  QObject::connect( ma.get(), &MerginApi::syncProjectFinished, &pm, &ProjectModel::syncedProjectFinished );
-  QObject::connect( ma.get(), &MerginApi::projectDetached, &pm, &ProjectModel::findProjectFiles );
-  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjects, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::listProjectsFinished, &mpm, &MerginProjectModel::updateModel );
-  QObject::connect( ma.get(), &MerginApi::syncProjectStatusChanged, &mpm, &MerginProjectModel::syncProjectStatusChanged );
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
@@ -404,7 +403,7 @@ int main( int argc, char *argv[] )
     // Cleaning default project due to a project loading has crashed during the last run.
     as.setDefaultProject( QString() );
     projectLoadingFile.remove();
-    InputUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
+    CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
   }
 
 #ifdef INPUT_TEST
@@ -423,7 +422,7 @@ int main( int argc, char *argv[] )
     int nFailed = 0;
     if ( IS_MERGIN_API_TEST )
     {
-      TestMerginApi merginApiTest( ma.get(), &mpm, &pm );
+      TestMerginApi merginApiTest( ma.get() );
       nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
     }
     else if ( IS_LINKS_TEST )
@@ -475,18 +474,17 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__projectsModel", &pm );
   engine.rootContext()->setContextProperty( "__loader", &loader );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
-  engine.rootContext()->setContextProperty( "__merginProjectsModel", &mpm );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
+  engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
@@ -563,15 +561,15 @@ int main( int argc, char *argv[] )
   }
   catch ( QgsException &e )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
   }
   catch ( std::exception &e )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
   }
   catch ( ... )
   {
-    iu.log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
+    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
   }
   return ret;
 }

@@ -17,8 +17,8 @@
 
 #include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
-#include "inpututils.h"
 #include "inputexpressionfunctions.h"
+#include "coreutils.h"
 
 #include <Qt>
 #include <QDir>
@@ -29,7 +29,6 @@
 #include <limits>
 #include <math.h>
 
-QString InputUtils::sLogFile = QStringLiteral();
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
@@ -306,26 +305,6 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLay
   return data;
 }
 
-void InputUtils::setLogFilename( const QString &value )
-{
-  sLogFile = value;
-}
-
-QString InputUtils::logFilename()
-{
-  return sLogFile;
-}
-
-bool InputUtils::createEmptyFile( const QString &filePath )
-{
-  QFile newFile( filePath );
-  if ( !newFile.open( QIODevice::WriteOnly ) )
-    return false;
-
-  newFile.close();
-  return true;
-}
-
 QString InputUtils::filesToString( QList<MerginFile> files )
 {
   QStringList resultList;
@@ -334,12 +313,6 @@ QString InputUtils::filesToString( QList<MerginFile> files )
     resultList << file.path;
   }
   return resultList.join( ", " );
-}
-
-QString InputUtils::appInfo()
-{
-  return QString( "%1/%2 (%3/%4)" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
-         .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
 QString InputUtils::bytesToHumanSize( double bytes )
@@ -399,43 +372,6 @@ void InputUtils::quitApp()
   QCoreApplication::quit();
 }
 
-QString InputUtils::uuidWithoutBraces( const QUuid &uuid )
-{
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 11, 0 )
-  return uuid.toString( QUuid::WithoutBraces );
-#else
-  QString str = uuid.toString();
-  str = str.mid( 1, str.length() - 2 );  // remove braces
-  return str;
-#endif
-}
-
-QString InputUtils::localizedDateFromUTFString( QString timestamp )
-{
-  if ( timestamp.isEmpty() )
-    return QString();
-
-  QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
-  if ( dateTime.isValid() )
-  {
-    return dateTime.date().toString( Qt::DefaultLocaleShortDate );
-  }
-  else
-  {
-    qDebug() << "Unable to convert UTF " << timestamp << " to QDateTime";
-    return QString();
-  }
-}
-
-QString InputUtils::appVersion()
-{
-  QString version;
-#ifdef INPUT_VERSION
-  version = STR( INPUT_VERSION );
-#endif
-  return version;
-}
-
 QString InputUtils::appPlatform()
 {
 #if defined( ANDROID )
@@ -454,40 +390,6 @@ QString InputUtils::appPlatform()
   return platform;
 }
 
-
-QString InputUtils::findUniquePath( const QString &path, bool isPathDir )
-{
-  QFileInfo pathInfo( path );
-  if ( pathInfo.exists() )
-  {
-    int i = 0;
-    QFileInfo info( path + QString::number( i ) );
-    while ( info.exists() && ( info.isDir() || !isPathDir ) )
-    {
-      ++i;
-      info.setFile( path + QString::number( i ) );
-    }
-    return path + QString::number( i );
-  }
-  else
-  {
-    return path;
-  }
-}
-
-
-QString InputUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )
-{
-  QString projectDirPath = findUniquePath( baseDataDir + "/" + projectName );
-  QDir projectDir( projectDirPath );
-  if ( !projectDir.exists() )
-  {
-    QDir dir( "" );
-    dir.mkdir( projectDirPath );
-  }
-  return projectDirPath;
-}
-
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;
@@ -503,7 +405,7 @@ void InputUtils::onQgsLogMessageReceived( const QString &message, const QString 
       break;
   }
 
-  log( "QGIS " + tag, levelStr + ": " + message );
+  CoreUtils::log( "QGIS " + tag, levelStr + ": " + message );
 }
 
 bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable )
@@ -512,7 +414,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   QDir parentDstDir( QFileInfo( dstPath ).path() );
   if ( !parentDstDir.mkpath( dstPath ) )
   {
-    log( "cpDir", QString( "Cannot make path %1" ).arg( dstPath ) );
+    CoreUtils::log( "cpDir", QString( "Cannot make path %1" ).arg( dstPath ) );
     return false;
   }
 
@@ -526,7 +428,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
       {
-        log( "cpDir", QString( "Cannot copy a dir from %1 to %2" ).arg( srcItemPath ).arg( dstItemPath ) );
+        CoreUtils::log( "cpDir", QString( "Cannot copy a dir from %1 to %2" ).arg( srcItemPath ).arg( dstItemPath ) );
         result = false;
       }
     }
@@ -539,12 +441,12 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
       {
         if ( !QFile::remove( dstItemPath ) )
         {
-          log( "cpDir", QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
+          CoreUtils::log( "cpDir", QString( "Cannot remove a file from %1" ).arg( dstItemPath ) );
           result =  false;
         }
         if ( !QFile::copy( srcItemPath, dstItemPath ) )
         {
-          log( "cpDir", QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
+          CoreUtils::log( "cpDir", QString( "Cannot overwrite a file %1 with %2" ).arg( dstItemPath ).arg( dstItemPath ) );
           result =  false;
         }
       }
@@ -552,7 +454,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
     else
     {
-      log( "cpDir", QString( "Unhandled item %1 in cpDir" ).arg( info.filePath() ) );
+      CoreUtils::log( "cpDir", QString( "Unhandled item %1 in cpDir" ).arg( info.filePath() ) );
     }
   }
   return result;
@@ -573,11 +475,6 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
-QString InputUtils::downloadInProgressFilePath( const QString &projectDir )
-{
-  return projectDir + "/.mergin/.project.downloading";
-}
-
 void InputUtils::showNotification( const QString &message )
 {
   emit showNotificationRequested( message );
@@ -592,28 +489,6 @@ qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
     return positionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
   }
   return 0;
-}
-
-void InputUtils::log( const QString &topic, const QString &info )
-{
-  QString logFilePath;
-  QByteArray data;
-  data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ) );
-
-  qDebug() << data;
-  appendLog( data, sLogFile );
-}
-
-void InputUtils::appendLog( const QByteArray &data, const QString &path )
-{
-  QFile file( path );
-  if ( !file.open( QIODevice::Append ) )
-  {
-    return;
-  }
-
-  file.write( data );
-  file.close();
 }
 
 double InputUtils::ratherZeroThanNaN( double d )
