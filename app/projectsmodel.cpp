@@ -178,38 +178,6 @@ void ProjectsModel::fetchAnotherPage( const QString &searchExpression )
   listProjects( searchExpression, mPaginatedPage + 1 );
 }
 
-QVariant ProjectsModel::dataFrom( int fromRole, QVariant fromValue, int desiredRole ) const
-{
-  switch ( fromRole )
-  {
-    case ProjectId:
-    {
-      std::shared_ptr<Project> project = projectFromId( fromValue.toString() );
-      if ( project )
-      {
-        QModelIndex ix = index( mProjects.indexOf( project ) );
-        return data( ix, desiredRole );
-      }
-      return QVariant();
-    }
-
-    case ProjectFilePath:
-    {
-      for ( int i = 0; i < mProjects.size(); i++ )
-      {
-        if ( mProjects[i]->isLocal() && mProjects[i]->local->qgisProjectFilePath == fromValue.toString() )
-        {
-          QModelIndex ix = index( i );
-          return data( ix, desiredRole );
-        }
-      }
-    }
-    default: return QVariant();
-  }
-
-  return QVariant();
-}
-
 void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId )
 {
   if ( mLastRequestId != requestId )

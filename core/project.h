@@ -17,6 +17,9 @@
 
 struct Project;
 
+/**
+ * \brief ProjectStatus namespace
+ */
 namespace ProjectStatus
 {
   Q_NAMESPACE
@@ -35,7 +38,7 @@ namespace ProjectStatus
 
 struct LocalProject
 {
-  LocalProject() {}; // TODO: define copy constructor
+  LocalProject() {};
   ~LocalProject() {};
 
   QString projectName;
@@ -78,10 +81,8 @@ struct MerginProject
 
   ProjectStatus::Status status = ProjectStatus::NoVersion;
   bool pending = false;
-
   qreal progress = 0;
 
-  // Maybe better use enum or int for error code
   QString remoteError; // Error leading to project not being able to sync
 
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
@@ -151,4 +152,5 @@ struct Project
 typedef QList<MerginProject> MerginProjectsList;
 typedef QList<LocalProject> LocalProjectsList;
 Q_DECLARE_METATYPE( MerginProjectsList )
+
 #endif // PROJECT_H

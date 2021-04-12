@@ -366,7 +366,7 @@ class MerginApi: public QObject
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-    QString merginUserName() const; // TODO: remove (use can be replaced with userInfo->username)
+    QString merginUserName() const; // TODO: replace (can be replaced with userInfo->username)
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
@@ -479,7 +479,7 @@ class MerginApi: public QObject
     void sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
-    void createPathIfNotExists( const QString &filePath ); // TODO: make static and move to InputUtils
+    void createPathIfNotExists( const QString &filePath );
 
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );

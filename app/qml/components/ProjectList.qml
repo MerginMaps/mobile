@@ -37,10 +37,6 @@ Item {
     controllerModel.listProjects( searchText )
   }
 
-  function modelData( fromRole, fromValue, desiredRole ) {
-    controllerModel.dataFrom( fromRole, fromValue, desiredRole )
-  }
-
   ListView {
     id: listview
 

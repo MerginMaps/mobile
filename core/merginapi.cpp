@@ -1255,7 +1255,6 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  /* TODO: Detect orphaned project? Project that was considered Mergin but did not get info back */
   MerginProjectsList projectList;
 
   if ( r->error() == QNetworkReply::NoError )
