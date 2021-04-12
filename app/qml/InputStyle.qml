@@ -48,6 +48,7 @@ QtObject {
     property real fieldHeight: scale(54)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
+    property real projectItemHeight: rowHeightHeader * 1.2
 
     property real panelSpacing: QgsQuick.Utils.dp * 5
     property real shadowVerticalOffset: -2 * QgsQuick.Utils.dp

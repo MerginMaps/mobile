@@ -71,7 +71,7 @@ Item {
       id: projectDelegate
 
       width: parent.width
-      height: InputStyle.rowHeightHeader * 1.2
+      height: InputStyle.projectItemHeight
 
       projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
@@ -148,11 +148,11 @@ Item {
     }
   }
 
-  Text {
+  RichTextBlock {
     id: storagePermissionText
 
     anchors.fill: parent
-    textFormat: Text.RichText
+
     text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
           qsTr("Input needs a storage permission, %1click to grant it%2 and then restart application.")
     .arg("<a href='missingPermission'>")
@@ -164,13 +164,6 @@ Item {
       }
     }
     visible: !__inputUtils.hasStoragePermission() && !reloadList.visible
-    color: InputStyle.fontColor
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    font.bold: true
-    verticalAlignment: Text.AlignVCenter
-    horizontalAlignment: Text.AlignHCenter
-    wrapMode: Text.WordWrap
-    padding: InputStyle.panelMargin/2
   }
 
   Item {

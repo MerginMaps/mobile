@@ -23,9 +23,6 @@ Item {
   property string activeProjectId: ""
   property string activeProjectPath: ""
 
-  property real rowHeight: InputStyle.rowHeightHeader * 1.2
-  property real panelMargin: InputStyle.panelMargin
-
   signal openProjectRequested( string projectId, string projectPath )
   signal resetView() // resets view to state as when panel is opened
 
@@ -162,7 +159,7 @@ Item {
           width: InputStyle.rowHeightHeader * 0.8
           height: InputStyle.rowHeightHeader
           anchors.right: parent.right
-          anchors.rightMargin: root.panelMargin
+          anchors.rightMargin: InputStyle.panelMargin
 
           Rectangle {
             id: avatarImage
