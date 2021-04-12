@@ -19,7 +19,6 @@
 #include <QtCore>
 #include <QImage>
 
-
 #include "iosinterface.h"
 #include "iosimagepicker.h"
 
@@ -27,4 +26,13 @@ void IOSImagePicker::showImagePickerDirect( int sourceType, IOSImagePicker *hand
 {
   IOSInterface *obj = [[IOSInterface alloc]init];
   [obj showImagePicker:sourceType:handler];
+}
+
+QString IOSImagePicker::readExifDirect( const QString &filepath, const QString &tag )
+{
+  NSString *result = [IOSInterface readExif:filepath.toNSString():tag.toNSString()];
+  if ( result )
+    return QString::fromNSString( result );
+  else
+    return QString();
 }

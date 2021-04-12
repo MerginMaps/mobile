@@ -15,8 +15,16 @@
 
 #include <QtCore>
 #include <QImage>
+#import <ImageIO/ImageIO.h>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
+#include "inpututils.h"
+
+#import <ImageIO/CGImageSource.h>
+#import <ImageIO/CGImageProperties.h>
+#import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation IOSInterface
 
@@ -80,6 +88,37 @@ static QImage fromUIImage( UIImage *image )
   return result;
 }
 
+
+static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
+{
+  NSData *data = [NSData dataWithContentsOfFile:imagePath];
+  CGImageSourceRef source = CGImageSourceCreateWithData( ( __bridge CFDataRef )data, NULL );
+  NSDictionary *metadata = [( NSDictionary * )CGImageSourceCopyPropertiesAtIndex( source, 0, NULL )autorelease];
+
+  NSMutableDictionary *dict = nil;
+  NSString *key = nil;
+  if ( [tag hasPrefix:@"GPS"] )
+  {
+    key = [tag stringByReplacingOccurrencesOfString: @"GPS" withString:@""];
+    dict = [metadata objectForKey:( NSString * )kCGImagePropertyGPSDictionary];
+  }
+  else
+  {
+    key = tag;
+    dict = [metadata objectForKey:( NSString * )kCGImagePropertyExifDictionary];
+  }
+
+  if ( !dict )
+  {
+    return nil;
+  }
+
+  NSObject *result = [dict objectForKey:( NSObject * )key];
+
+  CFRelease( source );
+  return result;
+}
+
 -( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
 {
   UIApplication *app = [UIApplication sharedApplication];
@@ -122,6 +161,23 @@ static QImage fromUIImage( UIImage *image )
     {
       Q_UNUSED( picker )
 
+      NSString *targetDir = delegate->handler->targetDir().toNSString();
+      NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
+      [dateformate setDateFormat: @"yyyyMMdd_HHmmss"];
+      NSString *fileName = [dateformate stringFromDate:[NSDate date]];
+      NSString *fileNameWithSuffix = [fileName stringByAppendingString:@".jpg"];
+      NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
+
+      bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
+      bool isAtTargetLocation = false;
+      if ( !isCameraPhoto )
+      {
+        // Gallery handling
+        // Copy an image with metadata from imageURL to targetPath
+        NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
+        isAtTargetLocation = InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
+      }
+
       UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
       if ( !chosenImage )
       {
@@ -133,6 +189,12 @@ static QImage fromUIImage( UIImage *image )
         QImage image = fromUIImage( chosenImage );
         QVariantMap data;
         data["image"] = image;
+        // If an image is already located at targetPath (Gallery case)
+        if ( isAtTargetLocation )
+        {
+          QString imagePathData( [imagePath UTF8String] );
+          data["imagePath"] = imagePathData;
+        }
 
         if ( delegate->handler )
         {
@@ -167,4 +229,34 @@ static QImage fromUIImage( UIImage *image )
 
   }
 }
+
++ ( NSString * ) readExif:( NSString * ) imageFileURL : ( NSString * )tag
+{
+  NSObject *result = readExifAttribute( imageFileURL, tag );
+  if ( !result )
+  {
+    return nil;
+  }
+
+  if ( [result class] == [NSString class] )
+  {
+    return ( NSString * ) result;
+  }
+  else if ( [result class] == [NSNumber class] )
+  {
+    NSString *stringResult = [( NSNumber * )result stringValue];
+    return stringResult;
+  }
+  else if ( [result class] == [NSDecimalNumber class] )
+  {
+    NSString *stringResult = [( NSDecimalNumber * )result stringValue];
+    return stringResult;
+  }
+  else
+  {
+    NSString *stringResult = [NSString stringWithFormat:@"%@", result];
+    return stringResult;
+  }
+}
+
 @end

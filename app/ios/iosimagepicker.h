@@ -34,6 +34,11 @@ class IOSImagePicker : public QObject
     */
     Q_INVOKABLE void showImagePicker( int sourceMode, const QString  &targetDir );
 
+    /**
+     * Calls the objective-c function to read EXIF metadata.
+     */
+    static QString readExifDirect( const QString &filepath, const QString &tag );
+
     QString targetDir() const;
     void setTargetDir( const QString &targetDir );
 
@@ -43,7 +48,8 @@ class IOSImagePicker : public QObject
 
   public slots:
     /**
-     * Callback after succesfuly choosing an image - saves image at targetDir location.
+     * Callback after succesfuly captured photo - saves image at targetDir location.
+     * After successful image selection from a gallery, only emits a singal with final location from result data.
      */
     void onImagePickerFinished( bool successful, const QVariantMap &data );
 

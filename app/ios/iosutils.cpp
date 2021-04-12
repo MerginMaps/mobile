@@ -41,3 +41,13 @@ IOSImagePicker *IosUtils::imagePicker() const
 {
   return mImagePicker;
 }
+
+QString IosUtils::readExif( const QString &filepath, const QString &tag )
+{
+#ifdef Q_OS_IOS
+  return IOSImagePicker::readExifDirect( filepath, tag );
+#else
+  Q_UNUSED( filepath )
+  Q_UNUSED( tag )
+#endif
+}

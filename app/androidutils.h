@@ -40,7 +40,7 @@ class AndroidUtils: public QObject
      * @param tag EXIF string tag
      * @return String value of EXIF attribute for given parameters. Note that rational numbers are still in rational string format.
      */
-    static QString getExifInfo( const QString &filePath, const QString &tag );
+    static QString readExif( const QString &filePath, const QString &tag );
 
     Q_INVOKABLE bool requestStoragePermission();
     bool requestCameraPermission();
