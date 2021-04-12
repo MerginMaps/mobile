@@ -141,7 +141,7 @@ class ProjectsModel : public QAbstractListModel
 
     void setModelIsLoading( bool state );
 
-public slots:
+  public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
@@ -166,7 +166,7 @@ public slots:
 
     void isLoadingChanged( bool isLoading );
 
-private:
+  private:
     QString modelTypeToFlag() const;
     QStringList projectNames() const;
     void loadLocalProjects();
