@@ -57,7 +57,6 @@ void ProjectsProxyModel::setProjectSourceModel( ProjectsModel *sourceModel )
   QObject::connect( mModel, &ProjectsModel::modelInitialized, this, &ProjectsProxyModel::initialize );
 }
 
-
 bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
 {
   if ( mModelType == ProjectsModel::LocalProjectsModel )

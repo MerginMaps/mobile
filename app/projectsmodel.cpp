@@ -11,6 +11,7 @@
 #include "localprojectsmanager.h"
 #include "inpututils.h"
 #include "merginuserauth.h"
+#include "coreutils.h"
 
 ProjectsModel::ProjectsModel( QObject *parent ) : QAbstractListModel( parent )
 {
@@ -63,7 +64,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
   {
     case ProjectName: return QVariant( project->projectName() );
     case ProjectNamespace: return QVariant( project->projectNamespace() );
-    case ProjectFullName: return QVariant( project->projectId() );
+    case ProjectFullName: return QVariant( project->projectFullName() );
     case ProjectId: return QVariant( project->projectId() );
     case ProjectIsLocal: return QVariant( project->isLocal() );
     case ProjectIsMergin: return QVariant( project->isMergin() );
@@ -91,7 +92,10 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
       {
         return QVariant( project->mergin->serverUpdated );
       }
-      return QVariant(); // This should not happen
+
+      // This should not happen
+      CoreUtils::log( "Project error", "Found project that is not downloaded nor remote" );
+      return QVariant();
     }
     default:
     {
@@ -167,10 +171,7 @@ void ProjectsModel::listProjectsByName()
 
 bool ProjectsModel::hasMoreProjects() const
 {
-  if ( mProjects.size() < mServerProjectsCount )
-    return true;
-
-  return false;
+  return ( mProjects.size() < mServerProjectsCount );
 }
 
 void ProjectsModel::fetchAnotherPage( const QString &searchExpression )
@@ -223,7 +224,7 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
 
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
 {
-  LocalProjectsList localProjects = mLocalProjectsManager->projects();
+  const LocalProjectsList localProjects = mLocalProjectsManager->projects();
 
   if ( !keepPrevious )
     mProjects.clear();
@@ -234,21 +235,21 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
     for ( const auto &localProject : localProjects )
     {
       std::shared_ptr<Project> project = std::shared_ptr<Project>( new Project() );
-      project->local = std::unique_ptr<LocalProject>( new LocalProject( localProject ) );
+      project->local = std::unique_ptr<LocalProject>( localProject.clone() );
 
-      MerginProject remoteEntry;
-      remoteEntry.projectName = project->local->projectName;
-      remoteEntry.projectNamespace = project->local->projectNamespace;
-
-      if ( merginProjects.contains( remoteEntry ) )
+      const auto res = std::find_if( merginProjects.begin(), merginProjects.end(), [&project]( const MerginProject & me )
       {
-        int i = merginProjects.indexOf( remoteEntry );
-        project->mergin = std::unique_ptr<MerginProject>( new MerginProject( merginProjects[i] ) );
+        return ( project->local->projectName == me.projectName && project->local->projectNamespace == me.projectNamespace );
+      } );
+
+      if ( res != merginProjects.end() )
+      {
+        project->mergin = std::unique_ptr<MerginProject>( res->clone() );
 
         if ( pendingProjects.contains( project->mergin->id() ) )
         {
-          TransactionStatus projectTransaction = pendingProjects.value( project->mergin->id() );
-          project->mergin->progress = projectTransaction.transferedSize / projectTransaction.totalSize;
+          TransactionStatus transaction = pendingProjects.value( project->mergin->id() );
+          project->mergin->progress = transaction.totalSize != 0 ? transaction.transferedSize / transaction.totalSize : 0;
           project->mergin->pending = true;
         }
         project->mergin->status = ProjectStatus::projectStatus( project );
@@ -271,7 +272,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
     for ( const auto &remoteEntry : merginProjects )
     {
       std::shared_ptr<Project> project = std::shared_ptr<Project>( new Project() );
-      project->mergin = std::unique_ptr<MerginProject>( new MerginProject( remoteEntry ) );
+      project->mergin = std::unique_ptr<MerginProject>( remoteEntry.clone() );
 
       if ( pendingProjects.contains( project->mergin->id() ) )
       {
@@ -280,15 +281,14 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
         project->mergin->pending = true;
       }
 
-      // find downloaded projects
-      LocalProject localProject;
-      localProject.projectName = project->mergin->projectName;
-      localProject.projectNamespace = project->mergin->projectNamespace;
-
-      if ( localProjects.contains( localProject ) )
+      const auto res = std::find_if( localProjects.begin(), localProjects.end(), [&project]( const LocalProject & le )
       {
-        int ix = localProjects.indexOf( localProject );
-        project->local = std::unique_ptr<LocalProject>( new LocalProject( localProjects[ix] ) );
+        return ( project->mergin->projectName == le.projectName && project->mergin->projectNamespace == le.projectNamespace );
+      } );
+
+      if ( res != localProjects.end() )
+      {
+        project->local = std::unique_ptr<LocalProject>( res->clone() );
       }
       project->mergin->status = ProjectStatus::projectStatus( project );
 
@@ -387,7 +387,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &project )
   if ( proj )
   {
     // add local information ~ project downloaded
-    proj->local = std::unique_ptr<LocalProject>( new LocalProject( project ) );
+    proj->local = std::unique_ptr<LocalProject>( project.clone() );
     if ( proj->isMergin() )
       proj->mergin->status = ProjectStatus::projectStatus( proj );
 
@@ -397,8 +397,8 @@ void ProjectsModel::onProjectAdded( const LocalProject &project )
   else if ( mModelType == LocalProjectsModel )
   {
     // add project to project list ~ project created
-    std::shared_ptr<Project> newProject = std::shared_ptr<Project>( new Project() );
-    newProject->local = std::unique_ptr<LocalProject>( new LocalProject( project ) );
+    std::shared_ptr<Project> newProject = std::make_shared<Project>();
+    newProject->local = std::unique_ptr<LocalProject>( project.clone() );
 
     int insertIndex = mProjects.size();
 
@@ -442,7 +442,7 @@ void ProjectsModel::onProjectDataChanged( const LocalProject &project )
 
   if ( proj )
   {
-    proj->local = std::unique_ptr<LocalProject>( new LocalProject( project ) );
+    proj->local = std::unique_ptr<LocalProject>( project.clone() );
     if ( proj->isMergin() )
       proj->mergin->status = ProjectStatus::projectStatus( proj );
 
@@ -469,7 +469,7 @@ void ProjectsModel::onProjectDetachedFromMergin( const QString &projectFullName 
   }
 }
 
-void ProjectsModel::onProjectAttachedToMergin( const QString &projectFullName )
+void ProjectsModel::onProjectAttachedToMergin( const QString & )
 {
   // To ensure project will be in sync with server, send listProjectByName request.
   // In theory we could send that request only for this one project.
@@ -532,7 +532,7 @@ QString ProjectsModel::modelTypeToFlag() const
 QStringList ProjectsModel::projectNames() const
 {
   QStringList projectNames;
-  LocalProjectsList projects = mLocalProjectsManager->projects();
+  const LocalProjectsList projects = mLocalProjectsManager->projects();
 
   for ( const auto &proj : projects )
   {
@@ -561,14 +561,13 @@ bool ProjectsModel::containsProject( QString projectId ) const
 
 std::shared_ptr<Project> ProjectsModel::projectFromId( QString projectId ) const
 {
-  for ( int ix = 0; ix < mProjects.size(); ++ix )
+  for ( const std::shared_ptr<Project> &it : mProjects )
   {
-    if ( mProjects[ix]->isMergin() && mProjects[ix]->mergin->id() == projectId )
-      return mProjects[ix];
-    else if ( mProjects[ix]->isLocal() && mProjects[ix]->local->id() == projectId )
-      return mProjects[ix];
+    if ( it->isMergin() && it->mergin->id() == projectId )
+      return it;
+    else if ( it->isLocal() && it->local->id() == projectId )
+      return it;
   }
-
   return nullptr;
 }
 

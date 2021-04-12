@@ -60,6 +60,8 @@ struct LocalProject
 
   bool isValid() { return !projectDir.isEmpty(); }
 
+  LocalProject *clone() const;
+
   bool operator ==( const LocalProject &other )
   {
     return ( this->id() == other.id() );
@@ -95,9 +97,11 @@ struct MerginProject
   bool pending = false;
   qreal progress = 0;
 
-  QString remoteError; // Error leading to project not being able to sync
+  QString remoteError; // Error leading to project not being able to sync (received error code from server)
 
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
+
+  MerginProject *clone() const;
 
   bool operator ==( const MerginProject &other )
   {
@@ -146,6 +150,11 @@ struct Project
     if ( isMergin() ) return mergin->id();
     else if ( isLocal() ) return local->id();
     return QString();
+  }
+
+  QString projectFullName()
+  {
+    return projectId();
   }
 
   bool operator ==( const Project &other )

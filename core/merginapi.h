@@ -214,8 +214,6 @@ class MerginApi: public QObject
      * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in listProjectsByNameFinished
      * method. Projects are parsed from response JSON.
      *
-     * TODO: add info when error codes will be parsed
-     *
      * \param projectNames QStringList of project full names (namespace/name)
      * \returns unique id of a sent request
      */

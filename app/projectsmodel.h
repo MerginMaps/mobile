@@ -49,7 +49,7 @@ class ProjectsModel : public QAbstractListModel
       ProjectName = Qt::UserRole + 1,
       ProjectNamespace,
       ProjectFullName,
-      ProjectId, // Filled with ProjectFullName for time being
+      ProjectId,
       ProjectDirectory,
       ProjectDescription,
       ProjectPending,
@@ -101,10 +101,10 @@ class ProjectsModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    //! Called to list projects, either fetch more or get first, search expression
+    //! lists projects, either fetch more or get first, search expression
     Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
 
-    //! Called to list projects via listProjectsByName API, used in LocalProjectsModel
+    //! lists projects via listProjectsByName API, used in LocalProjectsModel
     Q_INVOKABLE void listProjectsByName();
 
     //! Syncs specified project - upload or update
@@ -122,7 +122,7 @@ class ProjectsModel : public QAbstractListModel
     //! Calls listProjects with incremented page
     Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
 
-    //! Method merging local and remote projects based on the model type
+    //! Merges local and remote projects based on the model type
     void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
 
     ProjectsModel::ProjectModelTypes modelType() const;

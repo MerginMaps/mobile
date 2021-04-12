@@ -48,7 +48,7 @@ class ProjectsProxyModel : public QSortFilterProxyModel
   private:
     void initialize();
 
-    ProjectsModel *mModel;
+    ProjectsModel *mModel = nullptr; // not owned by this, needs to be set in order to proxy model to work
     ProjectsModel::ProjectModelTypes mModelType = ProjectsModel::EmptyProjectsModel;
     QString mSearchExpression;
 };
