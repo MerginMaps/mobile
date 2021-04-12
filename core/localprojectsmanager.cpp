@@ -47,7 +47,8 @@ void LocalProjectsManager::reloadDataDir()
     mProjects << info;
   }
 
-  qDebug() << "Found " << mProjects.size() << " local projects in " << mDataDir;
+  QString msg = QString( "Found %1 local projects in %2" ).arg( mProjects.size() ).arg( mDataDir );
+  CoreUtils::log( "Local projects", msg );
   emit dataDirReloaded();
 }
 
