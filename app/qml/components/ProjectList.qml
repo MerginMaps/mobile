@@ -92,7 +92,7 @@ Item {
       onOpenRequested: {
         if ( model.ProjectIsLocal )
           root.openProjectRequested( projectId, model.ProjectFilePath )
-        else if ( !model.ProjectIsLocal && model.ProjectIsMergin ) {
+        else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectPending) {
           downloadProjectDialog.relatedProjectId = model.ProjectId
           downloadProjectDialog.open()
         }
