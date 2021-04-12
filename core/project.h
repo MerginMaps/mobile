@@ -17,9 +17,6 @@
 
 struct Project;
 
-/**
- * \brief ProjectStatus namespace
- */
 namespace ProjectStatus
 {
   Q_NAMESPACE
@@ -33,9 +30,17 @@ namespace ProjectStatus
   };
   Q_ENUM_NS( Status )
 
+  //! Returns project state from ProjectStatus::Status enum for the project
   Status projectStatus( const std::shared_ptr<Project> project );
 }
 
+/**
+ * \brief The LocalProject struct is used as a struct for projects that are available on the device.
+ * The struct is used in the \see Projects struct and also for communication between LocalProjectsManager and ProjectsModel
+ *
+ * \note Struct contains member id() which in this time returns projects full name, however, once we
+ * start using projects IDs, it can be replaced for that ID.
+ */
 struct LocalProject
 {
   LocalProject() {};
@@ -66,6 +71,13 @@ struct LocalProject
   }
 };
 
+/**
+ * \brief The MerginProject struct is used for projects that comes from Mergin.
+ * This struct is used in the \see Projects struct and also for communication between MerginAPI and ProjectsModel
+ *
+ * \note Struct contains member id() which in this time returns projects full name, however, once we
+ * start using projects IDs, it can be replaced for that ID.
+ */
 struct MerginProject
 {
   MerginProject() {};
@@ -98,6 +110,12 @@ struct MerginProject
   }
 };
 
+/**
+ * \brief The Project struct serves as a struct for any kind of project (local/mergin).
+ * It consists of two main parts - mergin and local.
+ * Both parts are pointers to their specific structs and based on the pointer value (nullptr or assigned) this structs
+ * decides if the project is local, mergin or both.
+ */
 struct Project
 {
   Project() {};

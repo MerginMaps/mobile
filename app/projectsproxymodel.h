@@ -16,7 +16,10 @@
 #include "projectsmodel.h"
 
 /**
- * @brief The ProjectsProxyModel class
+ * \brief The ProjectsProxyModel class used as a proxy filter/sort model for the \see ProjectsModel class.
+ *
+ * ProjectsProxyModel is a QML type with required property of projectSourceModel. Without source model, this model does nothing (is not initialized).
+ * After setting source model, this model starts sorting and allows filtering (search) from view.
  */
 class ProjectsProxyModel : public QSortFilterProxyModel
 {

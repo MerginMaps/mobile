@@ -19,7 +19,24 @@
 class LocalProjectsManager;
 
 /**
- * \brief The ProjectsModel class
+ * \brief The ProjectsModel class holds projects (both local and mergin). Model loads local projects from LocalProjectsManager that hold them
+   during runtime. Remote (Mergin) projects are fetched from MerginAPI calling listProjects or listProjectsByName (based on the type of the model).
+ *
+ * The main job of the model is to merge projects coming from MerginAPI and LocalProjectsManager. By merging it means Each time new response is received from MerginAPI, model erases
+ * old remembered projects and fetches new. Merge logic depends on the model type (described below).
+ *
+ * Model can have different types that affect handling of the projects.
+ *  - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
+ *  - Created-, Shared-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+ *  - EmptyProjectsModel is default state
+ *
+ *  To avoid overriding of requests, model remembers last sent request ID and upon receiving signal from MerginAPI about listProjectsFinished, it firsts compares
+ *  the remembered ID with returned ID. If they do not match, response is ignored.
+ *
+ *  Model also support pagination. To fetch another page call fetchAnotherPage.
+ *
+ *  This is a QML type with 3 required properties (pointer to merginApi, pointer to localProjectsManager and modelType). Without these properties model does nothing.
+ *  After setting all of these properties, model is initialized, starts listening to various signals and offers data.
  */
 class ProjectsModel : public QAbstractListModel
 {
@@ -47,7 +64,10 @@ class ProjectsModel : public QAbstractListModel
     Q_ENUM( Roles )
 
     /**
-     * \brief The ProjectModelTypes enum
+     * \brief The ProjectModelTypes enum:
+     * - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
+     * - Created-, Shared-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+     * - EmptyProjectsModel is default state
      */
     enum ProjectModelTypes
     {
@@ -63,12 +83,16 @@ class ProjectsModel : public QAbstractListModel
     ProjectsModel( QObject *parent = nullptr );
     ~ProjectsModel() override {};
 
-    // From Qt 5.15 we can use REQUIRED keyword here that will ensure object will be always instantiated from QML with these mandatory properties
+    // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will be always instantiated from QML with these mandatory properties
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
     Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager )
     Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
 
+    //! Indicates that model has more projects to fetch, so view can call fetchAnotherPage
     Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
+
+    //! Indicates that model is currently processing projects, filling its storage.
+    //! Models loading starts when listProjectsAPI is sent and finishes after endResetModel signal is emitted when projects are merged.
     Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
 
     // Needed methods from QAbstractListModel
@@ -77,10 +101,10 @@ class ProjectsModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-    //! Called to list projects, either fetch more or get first
+    //! Called to list projects, either fetch more or get first, search expression
     Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
 
-    //! Called to list projects, either fetch more or get first
+    //! Called to list projects via listProjectsByName API, used in LocalProjectsModel
     Q_INVOKABLE void listProjectsByName();
 
     //! Syncs specified project - upload or update
@@ -95,9 +119,8 @@ class ProjectsModel : public QAbstractListModel
     //! Migrates local project to mergin
     Q_INVOKABLE void migrateProject( const QString &projectId );
 
+    //! Calls listProjects with incremented page
     Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
-
-    Q_INVOKABLE QVariant dataFrom( int fromRole, QVariant fromValue, int desiredRole ) const;
 
     //! Method merging local and remote projects based on the model type
     void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
