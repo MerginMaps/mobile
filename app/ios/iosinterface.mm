@@ -18,9 +18,8 @@
 #import <ImageIO/ImageIO.h>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
+#include "inpututils.h"
 
-#import <AssetsLibrary/ALAsset.h>
-#import <AssetsLibrary/ALAssetRepresentation.h>
 #import <ImageIO/CGImageSource.h>
 #import <ImageIO/CGImageProperties.h>
 #import <Foundation/Foundation.h>
@@ -96,44 +95,28 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   CGImageSourceRef source = CGImageSourceCreateWithData( ( __bridge CFDataRef )data, NULL );
   NSDictionary *metadata = [( NSDictionary * )CGImageSourceCopyPropertiesAtIndex( source, 0, NULL )autorelease];
 
-  // Modify EXIF tag for GPS group
-  // TODO more generic handle of EXIF (tagskCGImageProperty*)
-  NSString *newTag = [tag stringByReplacingOccurrencesOfString: @"GPS" withString:@""];
-  NSMutableDictionary *GPSDictionary = [metadata objectForKey:( NSString * )kCGImagePropertyGPSDictionary];
+  NSMutableDictionary *dict = nil;
+  NSString *key = nil;
+  if ( [tag hasPrefix:@"GPS"] )
+  {
+    key = [tag stringByReplacingOccurrencesOfString: @"GPS" withString:@""];
+    dict = [metadata objectForKey:( NSString * )kCGImagePropertyGPSDictionary];
+  }
+  else
+  {
+    key = tag;
+    dict = [metadata objectForKey:( NSString * )kCGImagePropertyExifDictionary];
+  }
 
-  if ( !GPSDictionary )
+  if ( !dict )
   {
     return nil;
   }
 
+  NSObject *result = [dict objectForKey:( NSObject * )key];
+
   CFRelease( source );
-
-  NSObject *rawValue = [GPSDictionary objectForKey:( NSObject * )newTag];
-  return rawValue;
-}
-
-static bool copyFile( NSString *srcPath, NSString *dstPath )
-{
-  if ( [[NSFileManager defaultManager] isReadableFileAtPath:srcPath] )
-  {
-
-    @try
-    {
-      BOOL result = [[NSFileManager defaultManager] copyItemAtPath:srcPath toPath:dstPath error: nil];
-      qDebug() << "File copied succesfully: " << result;
-      return result;
-    }
-    @catch ( NSException *exception )
-    {
-      qDebug() << "An exception occures during copying file: " << exception.reason;
-      return false;
-    }
-  }
-  else
-  {
-    qDebug() << [NSString stringWithFormat:@"Path not readable, cannot copy %1$@ -> %2$@", srcPath, dstPath];
-    return false;
-  }
+  return result;
 }
 
 -( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
@@ -173,11 +156,6 @@ static bool copyFile( NSString *srcPath, NSString *dstPath )
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull note )
-                                         {
-                                           // TODO fetch Location data when an image is captured
-                                         }];
-
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
     {
@@ -191,19 +169,13 @@ static bool copyFile( NSString *srcPath, NSString *dstPath )
       NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
 
       bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
-      if ( isCameraPhoto )
-      {
-        // Camera handling // TODO write location metadata
-        // now done in IOSImagePicker::onImagePickerFinished
-      }
-      else
+      bool isAtTargetLocation = false;
+      if ( !isCameraPhoto )
       {
         // Gallery handling
-        NSString *infoImageUrl = info[UIImagePickerControllerImageURL];
-        NSURL *url = [info objectForKey:UIImagePickerControllerReferenceURL];
-        [url startAccessingSecurityScopedResource];
-        copyFile( infoImageUrl, imagePath );
-        [url stopAccessingSecurityScopedResource];
+        // Copy an image with metadata from imageURL to targetPath
+        NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
+        isAtTargetLocation = InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
       }
 
       UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
@@ -217,7 +189,8 @@ static bool copyFile( NSString *srcPath, NSString *dstPath )
         QImage image = fromUIImage( chosenImage );
         QVariantMap data;
         data["image"] = image;
-        if ( !isCameraPhoto )
+        // If an image is already located at targetPath (Gallery case)
+        if ( isAtTargetLocation )
         {
           QString imagePathData( [imagePath UTF8String] );
           data["imagePath"] = imagePathData;
@@ -257,7 +230,7 @@ static bool copyFile( NSString *srcPath, NSString *dstPath )
   }
 }
 
-- ( NSString * ) readExif:( NSString * ) imageFileURL : ( NSString * )tag
++ ( NSString * ) readExif:( NSString * ) imageFileURL : ( NSString * )tag
 {
   NSObject *result = readExifAttribute( imageFileURL, tag );
   if ( !result )

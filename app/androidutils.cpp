@@ -73,7 +73,7 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
   return true;
 }
 
-QString AndroidUtils::getExifInfo( const QString &filePath, const QString &tag )
+QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID
   QAndroidJniObject jFilePath = QAndroidJniObject::fromString( filePath );

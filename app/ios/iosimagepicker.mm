@@ -30,8 +30,9 @@ void IOSImagePicker::showImagePickerDirect( int sourceType, IOSImagePicker *hand
 
 QString IOSImagePicker::readExifDirect( const QString &filepath, const QString &tag )
 {
-  // TODO make static call
-  IOSInterface *obj = [[IOSInterface alloc]init];
-  NSString *result = [obj readExif:filepath.toNSString():tag.toNSString()];
-  return QString::fromNSString( result );
+  NSString *result = [IOSInterface readExif:filepath.toNSString():tag.toNSString()];
+  if ( result )
+    return QString::fromNSString( result );
+  else
+    return QString();
 }

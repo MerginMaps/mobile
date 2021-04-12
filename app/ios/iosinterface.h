@@ -26,7 +26,7 @@
 */
 @interface IOSInterface : NSObject
 -( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )hander;
--( NSString * )readExif:( NSString * ) imageFileURL:( NSString * )tag;
++( NSString * )readExif:( NSString * ) imageFileURL:( NSString * )tag;
 @end
 
 #endif // IOSINTERFACE_H

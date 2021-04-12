@@ -37,7 +37,6 @@ class IOSImagePicker : public QObject
     /**
      * Calls the objective-c function to read EXIF metadata.
      */
-    static QString readExif( const QString &filepath, const QString &tag );
     static QString readExifDirect( const QString &filepath, const QString &tag );
 
     QString targetDir() const;

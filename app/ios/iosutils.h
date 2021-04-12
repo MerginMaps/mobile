@@ -32,6 +32,7 @@ class IosUtils: public QObject
     Q_INVOKABLE void callImagePicker( const QString &targetPath );
     Q_INVOKABLE void callCamera( const QString &targetPath );
     IOSImagePicker *imagePicker() const;
+    static QString readExif( const QString &filepath, const QString &tag );
   signals:
     void imageSelected( const QString &imagePath );
   private:
