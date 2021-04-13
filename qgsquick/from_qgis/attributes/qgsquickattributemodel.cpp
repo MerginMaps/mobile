@@ -406,7 +406,14 @@ void QgsQuickAttributeModel::create()
 
 bool QgsQuickAttributeModel::hasAnyChanges()
 {
-  return FID_IS_NULL( mFeatureLayerPair.feature().id() ) || mFeatureLayerPair.layer()->editBuffer()->isFeatureAttributesChanged( mFeatureLayerPair.feature().id() );
+  if ( FID_IS_NULL( mFeatureLayerPair.feature().id() ) ) return true;
+
+  if ( mFeatureLayerPair.layer() &&  mFeatureLayerPair.layer()->editBuffer() )
+  {
+    return mFeatureLayerPair.layer()->editBuffer()->isFeatureAttributesChanged( mFeatureLayerPair.feature().id() );
+  }
+
+  return false;
 }
 
 bool QgsQuickAttributeModel::commit()
