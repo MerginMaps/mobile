@@ -25,10 +25,10 @@ Item {
     property var itemWidget
 
     /**
-     * Suppose to set `supportDataImport` variable of a feature form. If true, field supports QR code reader.
+     * Suppose to set `supportsDataImport` variable of a feature form. If true, field supports QR code reader.
      * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
      */
-    property var supportImportData: function supportImportData(name) {
+    property var supportsDataImport: function supportsDataImport(name) {
       if (!!name && name.toLowerCase().includes("qrcode")) {
         return true
       } else {
