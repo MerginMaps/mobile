@@ -18,12 +18,14 @@
 
 #include <QObject>
 #include "iosimagepicker.h"
+#include "qgsquickpositionkit.h"
 
 class IosUtils: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( IOSImagePicker *mImagePicker READ imagePicker )
+    Q_PROPERTY( QgsQuickPositionKit *positionKit MEMBER mPositionKit  NOTIFY positionKitChanged )
 
   public:
     explicit IosUtils( QObject *parent = nullptr );
@@ -33,15 +35,21 @@ class IosUtils: public QObject
     Q_INVOKABLE void callCamera( const QString &targetPath );
     IOSImagePicker *imagePicker() const;
     static QString readExif( const QString &filepath, const QString &tag );
+
   signals:
     void imageSelected( const QString &imagePath );
+    void positionKitChanged();
+
   private:
 
-    IOSImagePicker *mImagePicker;
+    IOSImagePicker *mImagePicker = nullptr;
+    QgsQuickPositionKit *mPositionKit = nullptr;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */
     void setIdleTimerDisabled();
+
+
 };
 
 #endif // IOSUTILS_H

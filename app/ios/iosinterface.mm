@@ -20,6 +20,7 @@
 #include "iosviewdelegate.h"
 #include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#include "qgsquickpositionkit.h"
 
 #import <ImageIO/CGImageSource.h>
 #import <ImageIO/CGImageProperties.h>
@@ -187,6 +188,34 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
 
         // 2. Get your metadata (includes the EXIF data).
         NSDictionary *metadata = [info objectForKey:UIImagePickerControllerMediaMetadata];
+
+        // 3. Add GPS EXIF data
+        NSMutableDictionary *gpsDict = [[NSMutableDictionary alloc]init];
+        QgsQuickPositionKit *positionKit = delegate->handler->positionKit();
+        if ( positionKit )
+        {
+          if ( positionKit->hasPosition() )
+          {
+            const QgsPoint position = positionKit->position();
+            [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
+            [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+            [gpsDict setValue:position.x() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
+            [gpsDict setValue:position.y() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
+            [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
+            [gpsDict setValue:[NSNumber numberWithShort:positionKit->position().z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
+            [gpsDict setValue:[NSNumber numberWithFloat:positionKit->direction()] forKey:( NSString * )kCGImagePropertyGPSImgDirection];
+            [gpsDict setValue:@"T" forKey:( NSString * )kCGImagePropertyGPSImgDirectionRef];
+            [metadata setObject:gpsDict forKey:( NSString * )kCGImagePropertyGPSDictionary];
+          }
+          else
+          {
+            qWarning( "no position in position kit, no GPS EXIF" );
+          }
+        }
+        else
+        {
+          qWarning( "invalid position kit, no GPS EXIF" );
+        }
 
         // 3. Create your file URL.
         NSURL *outputURL = [NSURL URLWithString:[imagePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];

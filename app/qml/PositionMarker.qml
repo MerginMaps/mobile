@@ -22,7 +22,10 @@ Item {
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
 
-    onPositionKitChanged: positionDirection.positionKit = positionMarker.positionKit
+    onPositionKitChanged: {
+      positionDirection.positionKit = positionMarker.positionKit
+      __inputUtils.positionDirection = positionDirection
+    }
 
     PositionDirection {
       id: positionDirection

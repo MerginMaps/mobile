@@ -400,7 +400,6 @@ ApplicationWindow {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
-
       onScreenPositionChanged: updatePosition()
     }
 

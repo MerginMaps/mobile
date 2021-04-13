@@ -15,6 +15,7 @@
 
 #include "iosimagepicker.h"
 #include "qdatetime.h"
+#include "positiondirection.h"
 
 #include <QDebug>
 #include <QImage>
@@ -25,10 +26,11 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 }
 
-void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir )
+void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir, QgsQuickPositionKit *positionKit )
 {
 #ifdef Q_OS_IOS
   setTargetDir( targetDir );
+  setPositionKit( positionKit );
   showImagePickerDirect( sourceType, this );
 #else
   Q_UNUSED( sourceType )
@@ -47,6 +49,12 @@ void IOSImagePicker::setTargetDir( const QString &targetDir )
   emit targetDirChanged();
 }
 
+void IOSImagePicker::setPositionKit( QgsQuickPositionKit *positionKit )
+{
+  mPositionKit = positionKit;
+  emit positionKitChanged();
+}
+
 void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &data )
 {
   if ( successful )
@@ -58,4 +66,9 @@ void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &
   {
     qWarning() << QString( "Failed with err" ).arg( data["error"].value<QString>() );
   }
+}
+
+QgsQuickPositionKit *IOSImagePicker::positionKit() const
+{
+  return mPositionKit;
 }

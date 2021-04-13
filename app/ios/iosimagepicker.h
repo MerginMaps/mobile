@@ -19,6 +19,8 @@
 #include <QObject>
 #include <QVariantMap>
 
+class QgsQuickPositionKit;
+
 /**
  * The class suppose to be used in QML to invoke iOS image picker and postprocess the image if any has been choosen.
 */
@@ -31,8 +33,9 @@ class IOSImagePicker : public QObject
     * Method suppose to be used in QML and calls IOSImagePicker::showImagePickerDirect which invokes IOSViewDelegate and image picker.
     * \param sourceMode - when 0 == Gallery, 1 == Camera.
     * \param targetDir - String representing directory path where captured photo suppose to be saved.
+    * \param position - object to get GPS EXIF data from
     */
-    Q_INVOKABLE void showImagePicker( int sourceMode, const QString  &targetDir );
+    Q_INVOKABLE void showImagePicker( int sourceMode, const QString  &targetDir, QgsQuickPositionKit *positionKit );
 
     /**
      * Calls the objective-c function to read EXIF metadata.
@@ -41,9 +44,12 @@ class IOSImagePicker : public QObject
 
     QString targetDir() const;
     void setTargetDir( const QString &targetDir );
+    void setPositionKit( QgsQuickPositionKit *positionKit );
+    QgsQuickPositionKit *positionKit() const;
 
   signals:
     void targetDirChanged();
+    void positionKitChanged();
     void imageCaptured( const QString &absoluteImagePath );
 
   public slots:
@@ -55,6 +61,7 @@ class IOSImagePicker : public QObject
 
   private:
     QString mTargetDir;
+    QgsQuickPositionKit *mPositionKit = nullptr;
 
     /**
      * Calls the objective-c function to show image picker.
