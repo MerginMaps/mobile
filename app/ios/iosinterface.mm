@@ -19,6 +19,7 @@
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
 #include "inpututils.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #import <ImageIO/CGImageSource.h>
 #import <ImageIO/CGImageProperties.h>
@@ -31,6 +32,7 @@
 static UIImagePickerController *imagePickerController = nullptr;
 static UIActivityIndicatorView *imagePickerIndicatorView = nullptr;
 
+/*
 static QImage fromUIImage( UIImage *image )
 {
   QImage::Format format = QImage::Format_RGB32;
@@ -87,7 +89,7 @@ static QImage fromUIImage( UIImage *image )
 
   return result;
 }
-
+*/
 
 static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
 {
@@ -168,48 +170,72 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
       NSString *fileNameWithSuffix = [fileName stringByAppendingString:@".jpg"];
       NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
 
+      QString err;
+
       bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
-      bool isAtTargetLocation = false;
-      if ( !isCameraPhoto )
+      if ( isCameraPhoto )
+      {
+        // New capture handling
+
+
+        // 1. Get your image.
+        UIImage *capturedImage = info[UIImagePickerControllerEditedImage];
+        if ( !capturedImage )
+        {
+          capturedImage = info[UIImagePickerControllerOriginalImage];
+        }
+
+        // 2. Get your metadata (includes the EXIF data).
+        NSDictionary *metadata = [info objectForKey:UIImagePickerControllerMediaMetadata];
+
+        // 3. Create your file URL.
+        NSURL *outputURL = [NSURL URLWithString:[imagePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+
+        // 4. Set your compression quuality (0.0 to 1.0).
+        NSMutableDictionary *mutableMetadata = [metadata mutableCopy];
+        [mutableMetadata setObject:@( 1.0 ) forKey:( __bridge NSString * )kCGImageDestinationLossyCompressionQuality];
+
+        // 5. Create an image destination.
+        CGImageDestinationRef imageDestination = CGImageDestinationCreateWithURL( ( __bridge CFURLRef )outputURL, kUTTypeJPEG, 1, NULL );
+        if ( imageDestination == NULL )
+        {
+          err = "failed to create image destination.";
+        }
+        else
+        {
+          // 6. Save the image
+          CGImageDestinationAddImage( imageDestination, capturedImage.CGImage, ( __bridge CFDictionaryRef )mutableMetadata );
+          if ( CGImageDestinationFinalize( imageDestination ) == NO )
+          {
+            err = "failed to finalize the image.";
+          }
+
+          CFRelease( imageDestination );
+        }
+      }
+      else
       {
         // Gallery handling
         // Copy an image with metadata from imageURL to targetPath
         NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        isAtTargetLocation = InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
+        InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
+        infoImageUrl = nil;
       }
 
-      UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-      if ( !chosenImage )
-      {
-        chosenImage = info[UIImagePickerControllerOriginalImage];
-      }
-
-      if ( chosenImage )
-      {
-        QImage image = fromUIImage( chosenImage );
-        QVariantMap data;
-        data["image"] = image;
-        // If an image is already located at targetPath (Gallery case)
-        if ( isAtTargetLocation )
-        {
-          QString imagePathData( [imagePath UTF8String] );
-          data["imagePath"] = imagePathData;
-        }
-
-        if ( delegate->handler )
-        {
-
-          QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
-                                     Q_ARG( bool, true ),
-                                     Q_ARG( const QVariantMap, data ) );
-        }
-
-
-      }
-
-      delegate = nil;
       [picker dismissViewControllerAnimated:YES completion:nil];
+      if ( delegate->handler )
+      {
 
+        QVariantMap data;
+        QString imagePathData( [imagePath UTF8String] );
+        data["imagePath"] = imagePathData;
+        data["error"] = err;
+        QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
+                                   Q_ARG( bool, err.isEmpty() ),
+                                   Q_ARG( const QVariantMap, data ) );
+
+      }
+      delegate = nil;
     };
 
 
