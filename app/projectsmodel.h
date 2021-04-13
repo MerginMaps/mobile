@@ -169,6 +169,7 @@ class ProjectsModel : public QAbstractListModel
   private:
     QString modelTypeToFlag() const;
     QStringList projectNames() const;
+    void clearProjects();
     void loadLocalProjects();
     void initializeProjectsModel();
 

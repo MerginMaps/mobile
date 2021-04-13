@@ -153,7 +153,10 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
   mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
 
   if ( !mLastRequestId.isEmpty() )
-    emit setModelIsLoading( true );
+  {
+    setModelIsLoading( true );
+    clearProjects();
+  }
 }
 
 void ProjectsModel::listProjectsByName()
@@ -166,7 +169,10 @@ void ProjectsModel::listProjectsByName()
   mLastRequestId = mBackend->listProjectsByName( projectNames() );
 
   if ( !mLastRequestId.isEmpty() )
-    emit setModelIsLoading( true );
+  {
+    setModelIsLoading( true );
+    clearProjects();
+  }
 }
 
 bool ProjectsModel::hasMoreProjects() const
@@ -205,7 +211,7 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   mPaginatedPage = page;
   emit hasMoreProjectsChanged();
 
-  emit setModelIsLoading( false );
+  setModelIsLoading( false );
 }
 
 void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId )
@@ -219,7 +225,7 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
   mergeProjects( merginProjects, pendingProjects );
   endResetModel();
 
-  emit setModelIsLoading( false );
+  setModelIsLoading( false );
 }
 
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
@@ -512,9 +518,7 @@ void ProjectsModel::onAuthChanged()
   {
     if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
     {
-      beginResetModel();
-      mProjects.clear();
-      endResetModel();
+      clearProjects();
     }
   }
 }
@@ -571,6 +575,16 @@ QStringList ProjectsModel::projectNames() const
   }
 
   return projectNames;
+}
+
+void ProjectsModel::clearProjects()
+{
+  beginResetModel();
+  mProjects.clear();
+  mServerProjectsCount = -1;
+  endResetModel();
+
+  emit hasMoreProjectsChanged();
 }
 
 void ProjectsModel::loadLocalProjects()
