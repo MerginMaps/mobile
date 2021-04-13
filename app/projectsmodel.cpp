@@ -153,7 +153,10 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
   mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
 
   if ( !mLastRequestId.isEmpty() )
-    emit setModelIsLoading( true );
+  {
+    setModelIsLoading( true );
+    clearProjects();
+  }
 }
 
 void ProjectsModel::listProjectsByName()
@@ -166,7 +169,10 @@ void ProjectsModel::listProjectsByName()
   mLastRequestId = mBackend->listProjectsByName( projectNames() );
 
   if ( !mLastRequestId.isEmpty() )
-    emit setModelIsLoading( true );
+  {
+    setModelIsLoading( true );
+    clearProjects();
+  }
 }
 
 bool ProjectsModel::hasMoreProjects() const
@@ -205,7 +211,7 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   mPaginatedPage = page;
   emit hasMoreProjectsChanged();
 
-  emit setModelIsLoading( false );
+  setModelIsLoading( false );
 }
 
 void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId )
@@ -219,7 +225,7 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
   mergeProjects( merginProjects, pendingProjects );
   endResetModel();
 
-  emit setModelIsLoading( false );
+  setModelIsLoading( false );
 }
 
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious )
@@ -251,6 +257,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
           TransactionStatus transaction = pendingProjects.value( project->mergin->id() );
           project->mergin->progress = transaction.totalSize != 0 ? transaction.transferedSize / transaction.totalSize : 0;
           project->mergin->pending = true;
+          pendingProjects.remove( project->mergin->id() );
         }
         project->mergin->status = ProjectStatus::projectStatus( project );
       }
@@ -264,6 +271,24 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
       }
 
       mProjects << project;
+    }
+
+    // lets check also for projects that are currently being downloaded and add them to local projects list
+    Transactions::const_iterator i = pendingProjects.constBegin();
+
+    while ( i != pendingProjects.constEnd() )
+    {
+      // all projects that are left in transactions are those being downloaded, so we add all of them
+      std::shared_ptr<Project> project = std::make_shared<Project>();
+      project->mergin = std::unique_ptr<MerginProject>( new MerginProject() );
+
+      MerginApi::extractProjectName( i.key(), project->mergin->projectNamespace, project->mergin->projectName );
+      project->mergin->progress = i.value().totalSize != 0 ? i.value().transferedSize / i.value().totalSize : 0;
+      project->mergin->pending = true;
+      project->mergin->status = ProjectStatus::projectStatus( project );
+
+      mProjects << project;
+      ++i;
     }
   }
   else if ( mModelType != ProjectModelTypes::RecentProjectsModel )
@@ -355,16 +380,28 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectDir, const QStr
   Q_UNUSED( projectDir )
 
   std::shared_ptr<Project> project = projectFromId( projectFullName );
-  if ( !project || !project->isMergin() || !successfully )
+  if ( !project || !project->isMergin() )
     return;
 
-  project->mergin->pending = false;
-  project->mergin->progress = 0;
-  project->mergin->serverVersion = newVersion;
-  project->mergin->status = ProjectStatus::projectStatus( project );
+  if ( successfully )
+  {
+    project->mergin->pending = false;
+    project->mergin->progress = 0;
+    project->mergin->serverVersion = newVersion;
+    project->mergin->status = ProjectStatus::projectStatus( project );
 
-  QModelIndex ix = index( mProjects.indexOf( project ) );
-  emit dataChanged( ix, ix );
+    QModelIndex ix = index( mProjects.indexOf( project ) );
+    emit dataChanged( ix, ix );
+  }
+  else if ( !successfully && mModelType == LocalProjectsModel && !project->isLocal() )
+  {
+    // remove project from localProjectsModel when first time download was cancelled or failed
+    int removeIndex = mProjects.indexOf( project );
+
+    beginRemoveRows( QModelIndex(), removeIndex, removeIndex );
+    mProjects.removeOne( project );
+    endRemoveRows();
+  }
 }
 
 void ProjectsModel::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
@@ -482,9 +519,7 @@ void ProjectsModel::onAuthChanged()
   {
     if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
     {
-      beginResetModel();
-      mProjects.clear();
-      endResetModel();
+      clearProjects();
     }
   }
 }
@@ -541,6 +576,16 @@ QStringList ProjectsModel::projectNames() const
   }
 
   return projectNames;
+}
+
+void ProjectsModel::clearProjects()
+{
+  beginResetModel();
+  mProjects.clear();
+  mServerProjectsCount = -1;
+  endResetModel();
+
+  emit hasMoreProjectsChanged();
 }
 
 void ProjectsModel::loadLocalProjects()

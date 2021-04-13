@@ -92,7 +92,7 @@ Item {
       onOpenRequested: {
         if ( model.ProjectIsLocal )
           root.openProjectRequested( projectId, model.ProjectFilePath )
-        else if ( !model.ProjectIsLocal && model.ProjectIsMergin ) {
+        else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectPending) {
           downloadProjectDialog.relatedProjectId = model.ProjectId
           downloadProjectDialog.open()
         }
@@ -169,7 +169,11 @@ Item {
   Item {
     id: noLocalProjectsMessageContainer
 
-    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel && root.searchText === ""
+    visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
+             !storagePermissionText.visible &&
+             projectModelType === ProjectsModel.LocalProjectsModel &&
+             root.searchText === "" &&
+             !controllerModel.isLoading
 
     anchors.fill: parent
 

@@ -18,14 +18,17 @@ void ProjectsProxyModel::initialize()
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
-  if ( mModelType == ProjectsModel::CreatedProjectsModel )
-    setFilterRole( ProjectsModel::ProjectName );
-  else
-    setFilterRole( ProjectsModel::ProjectFullName );
+  if ( mModelType != ProjectsModel::PublicProjectsModel ) // do not sort at all in public projects, they come sorted from Mergin
+  {
+    if ( mModelType == ProjectsModel::CreatedProjectsModel )
+      setFilterRole( ProjectsModel::ProjectName );
+    else
+      setFilterRole( ProjectsModel::ProjectFullName );
 
-  setFilterCaseSensitivity( Qt::CaseInsensitive );
+    setFilterCaseSensitivity( Qt::CaseInsensitive );
 
-  sort( 0, Qt::AscendingOrder );
+    sort( 0, Qt::AscendingOrder );
+  }
 }
 
 QString ProjectsProxyModel::searchExpression() const

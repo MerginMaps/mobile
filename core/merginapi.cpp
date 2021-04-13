@@ -88,7 +88,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   {
     query.addQueryItem( "flag", flag );
   }
-  query.addQueryItem( "order_by", QStringLiteral( "name" ) );
+  query.addQueryItem( "order_by", QStringLiteral( "namespace" ) );
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );
