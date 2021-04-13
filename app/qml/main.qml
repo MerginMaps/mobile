@@ -267,6 +267,7 @@ ApplicationWindow {
         InputStyle.realHeight = window.height
 
         __loader.positionKit = positionKit
+        __iosUtils.positionKit = positionKit
         __loader.recording = digitizing.recording
         __loader.mapSettings = mapCanvas.mapSettings
 

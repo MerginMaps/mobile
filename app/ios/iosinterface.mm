@@ -196,16 +196,23 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
         {
           if ( positionKit->hasPosition() )
           {
-            const QgsPoint position = positionKit->position();
-            [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
-            [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
-            [gpsDict setValue:position.x() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
-            [gpsDict setValue:position.y() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
-            [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
-            [gpsDict setValue:[NSNumber numberWithShort:positionKit->position().z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
-            [gpsDict setValue:[NSNumber numberWithFloat:positionKit->direction()] forKey:( NSString * )kCGImagePropertyGPSImgDirection];
-            [gpsDict setValue:@"T" forKey:( NSString * )kCGImagePropertyGPSImgDirectionRef];
-            [metadata setObject:gpsDict forKey:( NSString * )kCGImagePropertyGPSDictionary];
+            @try
+            {
+              const QgsPoint position = positionKit->position();
+              [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
+              [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+              [gpsDict setValue:position.x() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
+              [gpsDict setValue:position.y() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
+              [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
+              [gpsDict setValue:[NSNumber numberWithShort:positionKit->position().z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
+              // TODO ImgDirection missing value
+              [gpsDict setValue:[NSNumber numberWithFloat:positionKit->direction()] forKey:( NSString * )kCGImagePropertyGPSImgDirection];
+              [gpsDict setValue:@"T" forKey:( NSString * )kCGImagePropertyGPSImgDirectionRef];
+            }
+            @catch ( NSException *exception )
+            {
+              qDebug() << "An exception occures during extracting GPS info: " << exception.reason;
+            }
           }
           else
           {
@@ -218,10 +225,13 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
         }
 
         // 3. Create your file URL.
-        NSURL *outputURL = [NSURL URLWithString:[imagePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+        NSString *imagePathFixed = [NSString stringWithFormat:@"%@/%@", @"file://", imagePath];
+        NSURL *outputURL = [NSURL URLWithString:[imagePathFixed stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
 
         // 4. Set your compression quuality (0.0 to 1.0).
         NSMutableDictionary *mutableMetadata = [metadata mutableCopy];
+        if ( [gpsDict count] != 0 )
+          [mutableMetadata setObject:gpsDict forKey:( NSString * )kCGImagePropertyGPSDictionary];
         [mutableMetadata setObject:@( 1.0 ) forKey:( __bridge NSString * )kCGImageDestinationLossyCompressionQuality];
 
         // 5. Create an image destination.
