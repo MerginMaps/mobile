@@ -169,7 +169,11 @@ Item {
   Item {
     id: noLocalProjectsMessageContainer
 
-    visible: listview.count === 0 && !storagePermissionText.visible && projectModelType === ProjectsModel.LocalProjectsModel && root.searchText === ""
+    visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
+             !storagePermissionText.visible &&
+             projectModelType === ProjectsModel.LocalProjectsModel &&
+             root.searchText === "" &&
+             !controllerModel.isLoading
 
     anchors.fill: parent
 

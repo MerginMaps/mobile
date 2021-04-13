@@ -276,7 +276,8 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
     // lets check also for projects that are currently being downloaded and add them to local projects list
     Transactions::const_iterator i = pendingProjects.constBegin();
 
-    while (i != pendingProjects.constEnd()) {
+    while ( i != pendingProjects.constEnd() )
+    {
       // all projects that are left in transactions are those being downloaded, so we add all of them
       std::shared_ptr<Project> project = std::make_shared<Project>();
       project->mergin = std::unique_ptr<MerginProject>( new MerginProject() );
