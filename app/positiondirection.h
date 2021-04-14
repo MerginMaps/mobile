@@ -58,9 +58,7 @@ class PositionDirection : public QObject
     void updateDirection();
 
   private:
-    //! any direction value in degrees that is < -180 is not valid.
-    qreal MIN_INVALID_DIRECTION = -180.1;
-    qreal mDirection = MIN_INVALID_DIRECTION;
+    qreal mDirection = Compass::MIN_INVALID_DIRECTION;
     bool mHasDirection = false;
     QgsQuickPositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;

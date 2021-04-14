@@ -15,7 +15,6 @@
 
 #include "iosimagepicker.h"
 #include "qdatetime.h"
-#include "positiondirection.h"
 
 #include <QDebug>
 #include <QImage>

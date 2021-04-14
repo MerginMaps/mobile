@@ -19,12 +19,12 @@
 #include <QObject>
 #include "iosimagepicker.h"
 #include "qgsquickpositionkit.h"
-#include "positiondirection.h"
 #include "compass.h"
 
 class IosUtils: public QObject
 {
     Q_OBJECT
+
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( IOSImagePicker *mImagePicker READ imagePicker )
     Q_PROPERTY( QgsQuickPositionKit *positionKit MEMBER mPositionKit NOTIFY positionKitChanged )

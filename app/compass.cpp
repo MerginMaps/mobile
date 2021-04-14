@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "compass.h"
 
 Compass::Compass( QObject *parent ) : QObject( parent )
@@ -13,7 +22,7 @@ Compass::Compass( QObject *parent ) : QObject( parent )
 
 qreal Compass::direction() const
 {
-  qreal newDirection = -180.1; // TODO @vsklencar
+  qreal newDirection = MIN_INVALID_DIRECTION;
   if ( mCompass->reading() )
   {
     newDirection = mCompass->reading()->azimuth() + mCompass->userOrientation();

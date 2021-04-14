@@ -21,7 +21,6 @@
 #include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #include "qgsquickpositionkit.h"
-#include "positiondirection.h"
 #include "compass.h"
 
 #import <ImageIO/CGImageSource.h>
@@ -67,7 +66,7 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   return result;
 }
 
-+( QString )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath:( QgsQuickPositionKit * )positionKit:( Compass * )compass
++( QString )handleCameraPhoto:( NSDictionary * )info :( NSString * )imagePath
 {
   QString err;
   // 1. Get your image.
@@ -201,8 +200,9 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull note )
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
                                          {
+                                           Q_UNUSED( notification )
                                            // Fetch GPS data when an image is captured
                                            mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
                                          }];
@@ -212,23 +212,21 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
     {
       Q_UNUSED( picker )
 
-      NSString *targetDir = delegate->handler->targetDir().toNSString();
-      NSString *imagePath = generateImagePath( targetDir );
-
+      NSString *imagePath = generateImagePath( delegate->handler->targetDir().toNSString() );
       QString err;
 
       bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
       if ( isCameraPhoto )
       {
         // Camera handling
-        err = [IOSInterface handleCameraPhoto:info:imagePath:delegate->handler->positionKit():delegate->handler->compass()];
+        err = [IOSInterface handleCameraPhoto:info:imagePath];
       }
       else
       {
         // Gallery handling
         // Copy an image with metadata from imageURL to targetPath
         NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        if ( InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
+        if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
         {
           err = QStringLiteral( "Copying image from a gallery failed." );
         }
