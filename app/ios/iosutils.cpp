@@ -49,5 +49,6 @@ QString IosUtils::readExif( const QString &filepath, const QString &tag )
 #else
   Q_UNUSED( filepath )
   Q_UNUSED( tag )
+  return QString();
 #endif
 }

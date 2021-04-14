@@ -24,6 +24,7 @@
 #include "qgsmapthemecollection.h"
 
 #include <QString>
+#include <QDebug>
 
 MapThemesModel::MapThemesModel( QObject *parent )
   : QAbstractListModel( parent )
