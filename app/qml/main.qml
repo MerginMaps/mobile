@@ -269,6 +269,8 @@ ApplicationWindow {
         __loader.positionKit = positionKit
         __loader.recording = digitizing.recording
         __loader.mapSettings = mapCanvas.mapSettings
+        __iosUtils.positionKit = positionKit
+        __iosUtils.compass = compass
 
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
@@ -400,13 +402,17 @@ ApplicationWindow {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
-
       onScreenPositionChanged: updatePosition()
+    }
+
+    Compass {
+      id: compass
     }
 
     PositionMarker {
       id: positionMarker
       positionKit: positionKit
+      compass: compass
       z: zMapCanvas + 2
     }
 

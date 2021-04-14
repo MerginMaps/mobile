@@ -29,12 +29,12 @@ bool IosUtils::isIos() const
 
 void IosUtils::callImagePicker( const QString &targetPath )
 {
-  mImagePicker->showImagePicker( 0, targetPath );
+  mImagePicker->showImagePicker( targetPath );
 }
 
 void IosUtils::callCamera( const QString &targetPath )
 {
-  mImagePicker->showImagePicker( 1, targetPath );
+  mImagePicker->callCamera( targetPath, mPositionKit, mCompass );
 }
 
 IOSImagePicker *IosUtils::imagePicker() const

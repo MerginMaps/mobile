@@ -11,16 +11,10 @@
 
 PositionDirection::PositionDirection( QObject *parent ) : QObject( parent )
 {
-  mOrientationSensor = new QOrientationSensor( this );
-  mCompass = new QCompass( this );
-
-  mOrientationSensor->start();
-  mCompass->start();
   mTimer.setInterval( 200 );
   mTimer.start();
 
   QObject::connect( &mTimer, &QTimer::timeout, this, &PositionDirection::updateDirection );
-  QObject::connect( mOrientationSensor, &QOrientationSensor::readingChanged, this, &PositionDirection::setUserOrientation );
 }
 
 void PositionDirection::updateDirection()
@@ -36,17 +30,16 @@ void PositionDirection::updateDirection()
     groundSpeed = mPositionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
   }
 
-  qreal newDirection = MIN_INVALID_DIRECTION;
+  qreal newDirection = Compass::MIN_INVALID_DIRECTION;
   if ( groundSpeed >= mSpeedLimit )
   {
     newDirection = mPositionKit->direction();
   }
   else if ( mCompass->reading() )
   {
-    newDirection = mCompass->reading()->azimuth() + mCompass->userOrientation();
+    newDirection = mCompass->direction();
   }
-
-  if ( mDirection <= MIN_INVALID_DIRECTION && newDirection > MIN_INVALID_DIRECTION )
+  if ( mDirection <= Compass::MIN_INVALID_DIRECTION && newDirection > Compass::MIN_INVALID_DIRECTION )
   {
     mDirection = newDirection;
     setHasDirection( true );
@@ -61,27 +54,17 @@ void PositionDirection::updateDirection()
     setHasDirection( true );
     emit directionChanged();
   }
-
 }
 
-void PositionDirection::setUserOrientation()
+Compass *PositionDirection::compass() const
 {
-  if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::TopUp )
-  {
-    mCompass->setUserOrientation( 0 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::TopDown )
-  {
-    mCompass->setUserOrientation( 180 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::RightUp )
-  {
-    mCompass->setUserOrientation( 90 );
-  }
-  else if ( mOrientationSensor->reading()->orientation() == QOrientationReading::Orientation::LeftUp )
-  {
-    mCompass->setUserOrientation( 270 );
-  }
+  return mCompass;
+}
+
+void PositionDirection::setCompass( Compass *compass )
+{
+  mCompass = compass;
+  emit compassChanged();
 }
 
 bool PositionDirection::hasDirection() const

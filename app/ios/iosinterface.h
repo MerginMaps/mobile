@@ -25,8 +25,11 @@
  * The interface of objective-c methods.
 */
 @interface IOSInterface : NSObject
--( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )hander;
++( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )hander;
++( QString )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath;
 +( NSString * )readExif:( NSString * ) imageFileURL:( NSString * )tag;
+
+extern NSMutableDictionary *mGpsData;
 @end
 
 #endif // IOSINTERFACE_H

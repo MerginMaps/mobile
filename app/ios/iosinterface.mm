@@ -19,6 +19,9 @@
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
 #include "inpututils.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#include "qgsquickpositionkit.h"
+#include "compass.h"
 
 #import <ImageIO/CGImageSource.h>
 #import <ImageIO/CGImageProperties.h>
@@ -31,63 +34,7 @@
 static UIImagePickerController *imagePickerController = nullptr;
 static UIActivityIndicatorView *imagePickerIndicatorView = nullptr;
 
-static QImage fromUIImage( UIImage *image )
-{
-  QImage::Format format = QImage::Format_RGB32;
-
-  CGColorSpaceRef colorSpace = CGImageGetColorSpace( image.CGImage );
-  CGFloat width = image.size.width;
-  CGFloat height = image.size.height;
-
-  int orientation = [image imageOrientation];
-  int degree = 0;
-
-  switch ( orientation )
-  {
-    case UIImageOrientationLeft:
-      degree = -90;
-      break;
-    case UIImageOrientationDown: // Down
-      degree = 180;
-      break;
-    case UIImageOrientationRight:
-      degree = 90;
-      break;
-  }
-
-  if ( degree == 90 || degree == -90 )
-  {
-    CGFloat tmp = width;
-    width = height;
-    height = tmp;
-  }
-
-  QSize size( width, height );
-
-  QImage result = QImage( size, format );
-
-  CGContextRef contextRef = CGBitmapContextCreate( result.bits(),                // Pointer to  data
-                            width,                       // Width of bitmap
-                            height,                       // Height of bitmap
-                            8,                          // Bits per component
-                            result.bytesPerLine(),              // Bytes per row
-                            colorSpace,                 // Colorspace
-                            kCGImageAlphaNoneSkipFirst |
-                            kCGBitmapByteOrder32Little ); // Bitmap info flags
-
-  CGContextDrawImage( contextRef, CGRectMake( 0, 0, width, height ), image.CGImage );
-  CGContextRelease( contextRef );
-
-  if ( degree != 0 )
-  {
-    QTransform myTransform;
-    myTransform.rotate( degree );
-    result = result.transformed( myTransform, Qt::SmoothTransformation );
-  }
-
-  return result;
-}
-
+NSMutableDictionary *mGpsData = [[NSMutableDictionary alloc]init];
 
 static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
 {
@@ -119,7 +66,106 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   return result;
 }
 
--( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
++( QString )handleCameraPhoto:( NSDictionary * )info :( NSString * )imagePath
+{
+  QString err;
+  // 1. Get your image.
+  UIImage *capturedImage = info[UIImagePickerControllerEditedImage];
+  if ( !capturedImage )
+  {
+    capturedImage = info[UIImagePickerControllerOriginalImage];
+  }
+
+  // 2. Create your file URL.
+  NSString *imagePathFixed = [NSString stringWithFormat:@"%@/%@", @"file://", imagePath];
+  NSURL *outputURL = [NSURL URLWithString:[imagePathFixed stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+
+  // 3. Get your metadata (includes the EXIF data) + extended with GPS EXIF data
+  NSDictionary *metadata = [info objectForKey:UIImagePickerControllerMediaMetadata];
+  NSMutableDictionary *mutableMetadata = [metadata mutableCopy];
+  if ( [mGpsData count] != 0 )
+    [mutableMetadata setObject:mGpsData forKey:( NSString * )kCGImagePropertyGPSDictionary];
+
+  // 4. Set your compression quuality (0.0 to 1.0).
+  [mutableMetadata setObject:@( 1.0 ) forKey:( __bridge NSString * )kCGImageDestinationLossyCompressionQuality];
+
+  // 5. Create an image destination.
+  CGImageDestinationRef imageDestination = CGImageDestinationCreateWithURL( ( __bridge CFURLRef )outputURL, kUTTypeJPEG, 1, NULL );
+  if ( imageDestination == NULL )
+  {
+    err = "failed to create image destination.";
+  }
+  else
+  {
+    // 6. Save the image
+    CGImageDestinationAddImage( imageDestination, capturedImage.CGImage, ( __bridge CFDictionaryRef )mutableMetadata );
+    if ( CGImageDestinationFinalize( imageDestination ) == NO )
+    {
+      err = "failed to finalize the image.";
+    }
+
+    CFRelease( imageDestination );
+  }
+
+  return err;
+}
+
+static NSString *generateImagePath( NSString *targetDir )
+{
+  NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
+  [dateformate setDateFormat: @"yyyyMMdd_HHmmss"];
+  NSString *fileName = [dateformate stringFromDate:[NSDate date]];
+  NSString *fileNameWithSuffix = [fileName stringByAppendingString:@".jpg"];
+  NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
+  return imagePath;
+}
+
+static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compass *compass )
+{
+  NSMutableDictionary *gpsDict = [[NSMutableDictionary alloc]init];
+  if ( positionKit )
+  {
+    if ( positionKit->hasPosition() )
+    {
+      @try
+      {
+        const QgsPoint position = positionKit->position();
+        [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
+        [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+        [gpsDict setValue:position.x() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
+        [gpsDict setValue:position.y() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
+        [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
+        [gpsDict setValue:[NSNumber numberWithShort:positionKit->position().z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
+      }
+      @catch ( NSException *exception )
+      {
+        qWarning() << "An exception occures during extracting GPS info: " << exception.reason;
+      }
+    }
+    else
+    {
+      qWarning( "no position in position kit, no GPS EXIF" );
+    }
+  }
+  else
+  {
+    qWarning( "invalid position kit, no GPS EXIF" );
+  }
+
+  if ( compass )
+  {
+    [gpsDict setValue:[NSNumber numberWithFloat:compass->direction()] forKey:( NSString * )kCGImagePropertyGPSImgDirection];
+    [gpsDict setValue:@"T" forKey:( NSString * )kCGImagePropertyGPSImgDirectionRef];
+  }
+  else
+  {
+    qWarning( "invalid compass, no GPS Direction" );
+  }
+
+  return gpsDict;
+}
+
++( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
 {
   UIApplication *app = [UIApplication sharedApplication];
 
@@ -133,8 +179,6 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
 
   if ( ![UIImagePickerController isSourceTypeAvailable:( UIImagePickerControllerSourceType ) sourceType] )
   {
-
-
     NSString *alertTitle = @"Image picker";
     NSString *alertMessage = @"The functionality is not available";
     NSString *alertOkButtonText = @"Ok";
@@ -156,60 +200,51 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
+                                         {
+                                           Q_UNUSED( notification )
+                                           // Fetch GPS data when an image is captured
+                                           mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
+                                         }];
+
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
     {
       Q_UNUSED( picker )
 
-      NSString *targetDir = delegate->handler->targetDir().toNSString();
-      NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
-      [dateformate setDateFormat: @"yyyyMMdd_HHmmss"];
-      NSString *fileName = [dateformate stringFromDate:[NSDate date]];
-      NSString *fileNameWithSuffix = [fileName stringByAppendingString:@".jpg"];
-      NSString *imagePath = [targetDir stringByAppendingPathComponent:fileNameWithSuffix];
+      NSString *imagePath = generateImagePath( delegate->handler->targetDir().toNSString() );
+      QString err;
 
       bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
-      bool isAtTargetLocation = false;
-      if ( !isCameraPhoto )
+      if ( isCameraPhoto )
+      {
+        // Camera handling
+        err = [IOSInterface handleCameraPhoto:info:imagePath];
+      }
+      else
       {
         // Gallery handling
         // Copy an image with metadata from imageURL to targetPath
         NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        isAtTargetLocation = InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
-      }
-
-      UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-      if ( !chosenImage )
-      {
-        chosenImage = info[UIImagePickerControllerOriginalImage];
-      }
-
-      if ( chosenImage )
-      {
-        QImage image = fromUIImage( chosenImage );
-        QVariantMap data;
-        data["image"] = image;
-        // If an image is already located at targetPath (Gallery case)
-        if ( isAtTargetLocation )
+        if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
         {
-          QString imagePathData( [imagePath UTF8String] );
-          data["imagePath"] = imagePathData;
+          err = QStringLiteral( "Copying image from a gallery failed." );
         }
-
-        if ( delegate->handler )
-        {
-
-          QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
-                                     Q_ARG( bool, true ),
-                                     Q_ARG( const QVariantMap, data ) );
-        }
-
-
+        infoImageUrl = nil;
       }
 
-      delegate = nil;
       [picker dismissViewControllerAnimated:YES completion:nil];
-
+      if ( delegate->handler )
+      {
+        QVariantMap data;
+        QString imagePathData( [imagePath UTF8String] );
+        data["imagePath"] = imagePathData;
+        data["error"] = err;
+        QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
+                                   Q_ARG( bool, err.isEmpty() ),
+                                   Q_ARG( const QVariantMap, data ) );
+      }
+      delegate = nil;
     };
 
 

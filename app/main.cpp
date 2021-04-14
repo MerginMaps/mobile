@@ -53,6 +53,7 @@
 #include "projectwizard.h"
 #include "codefilter.h"
 #include "inputexpressionfunctions.h"
+#include "compass.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -231,6 +232,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
+  qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
