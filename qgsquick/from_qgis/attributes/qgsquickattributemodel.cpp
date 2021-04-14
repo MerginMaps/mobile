@@ -185,7 +185,10 @@ bool QgsQuickAttributeModel::setData( const QModelIndex &index, const QVariant &
         QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
         QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
         QgsMessageLog::logMessage( msg );
-        emit dataChangedFailed( userFriendlyMsg );
+        if ( !val.isNull() )
+        {
+          emit dataChangedFailed( userFriendlyMsg );
+        }
         return false;
       }
       bool success = mFeatureLayerPair.featureRef().setAttribute( index.row(), val );
