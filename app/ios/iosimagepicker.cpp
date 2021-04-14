@@ -26,7 +26,7 @@ IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
 {
 }
 
-void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir, QgsQuickPositionKit *positionKit, PositionDirection *compass )
+void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir, QgsQuickPositionKit *positionKit, Compass *compass )
 {
 #ifdef Q_OS_IOS
   setTargetDir( targetDir );
@@ -69,12 +69,12 @@ void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &
   }
 }
 
-PositionDirection *IOSImagePicker::compass() const
+Compass *IOSImagePicker::compass() const
 {
   return mCompass;
 }
 
-void IOSImagePicker::setCompass( PositionDirection *compass )
+void IOSImagePicker::setCompass( Compass *compass )
 {
   mCompass = compass;
   emit compassChanged();

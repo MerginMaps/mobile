@@ -404,9 +404,16 @@ ApplicationWindow {
       onScreenPositionChanged: updatePosition()
     }
 
+    Compass {
+      id: compass
+
+      Component.onCompleted: __iosUtils.compass = compass // TODO @vsklencar
+    }
+
     PositionMarker {
       id: positionMarker
       positionKit: positionKit
+      compass: compass
       z: zMapCanvas + 2
     }
 

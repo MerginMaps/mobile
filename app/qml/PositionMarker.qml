@@ -19,15 +19,15 @@ Item {
     id: positionMarker
     property int size: InputStyle.rowHeightHeader/2
     property QgsQuick.PositionKit positionKit
+    property Compass compass
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
 
     onPositionKitChanged: positionDirection.positionKit = positionMarker.positionKit
+    onCompassChanged: positionDirection.compass = positionMarker.compass
 
     PositionDirection {
       id: positionDirection
-
-      Component.onCompleted: __iosUtils.compass = positionDirection
     }
 
     Rectangle {

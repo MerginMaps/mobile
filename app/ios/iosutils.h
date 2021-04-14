@@ -20,14 +20,15 @@
 #include "iosimagepicker.h"
 #include "qgsquickpositionkit.h"
 #include "positiondirection.h"
+#include "compass.h"
 
 class IosUtils: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( IOSImagePicker *mImagePicker READ imagePicker )
-    Q_PROPERTY( QgsQuickPositionKit *positionKit MEMBER mPositionKit  NOTIFY positionKitChanged )
-    Q_PROPERTY( PositionDirection *compass MEMBER mCompass NOTIFY compassChanged )
+    Q_PROPERTY( QgsQuickPositionKit *positionKit MEMBER mPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( Compass *compass MEMBER mCompass NOTIFY compassChanged )
 
   public:
     explicit IosUtils( QObject *parent = nullptr );
@@ -47,8 +48,7 @@ class IosUtils: public QObject
 
     IOSImagePicker *mImagePicker = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
-    // TODO
-    PositionDirection *mCompass = nullptr;
+    Compass *mCompass = nullptr;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */

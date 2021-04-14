@@ -16,6 +16,7 @@
 #include <QCompass>
 
 #include "qgsquickpositionkit.h"
+#include "compass.h"
 
 
 /**
@@ -31,6 +32,7 @@ class PositionDirection : public QObject
 
     Q_PROPERTY( qreal direction READ direction NOTIFY directionChanged )
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
     Q_PROPERTY( bool hasDirection READ hasDirection NOTIFY hasDirectionChanged )
 
   public:
@@ -44,13 +46,16 @@ class PositionDirection : public QObject
     bool hasDirection() const;
     void setHasDirection( bool hasDirection );
 
+    Compass *compass() const;
+    void setCompass( Compass *compass );
+
   signals:
     void directionChanged();
     void positionKitChanged();
+    void compassChanged();
     void hasDirectionChanged();
   public slots:
     void updateDirection();
-    void setUserOrientation();
 
   private:
     //! any direction value in degrees that is < -180 is not valid.
@@ -58,8 +63,7 @@ class PositionDirection : public QObject
     qreal mDirection = MIN_INVALID_DIRECTION;
     bool mHasDirection = false;
     QgsQuickPositionKit *mPositionKit = nullptr;
-    QOrientationSensor *mOrientationSensor = nullptr;
-    QCompass *mCompass = nullptr;
+    Compass *mCompass = nullptr;
     QTimer mTimer;
     const qreal mUpdateMinAngleDelta = 3; //! in degrees.
     const qreal mSpeedLimit = 4.16;  //! 4.16 m/s ~= 15km/h. Over speed limit, directions depends on direction of movement.

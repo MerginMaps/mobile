@@ -22,6 +22,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #include "qgsquickpositionkit.h"
 #include "positiondirection.h"
+#include "compass.h"
 
 #import <ImageIO/CGImageSource.h>
 #import <ImageIO/CGImageProperties.h>
@@ -66,9 +67,8 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   return result;
 }
 
-+( void )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath:( QgsQuickPositionKit * )positionKit:( PositionDirection * )compass
++( void )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath:( QgsQuickPositionKit * )positionKit:( Compass * )compass
 {
-  qDebug() << "Call method!!";
   QString err;
   // 1. Get your image.
   UIImage *capturedImage = info[UIImagePickerControllerEditedImage];
@@ -120,7 +120,7 @@ static NSString *generateImagePath( NSString *targetDir )
   return imagePath;
 }
 
-static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, PositionDirection *compass )
+static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compass *compass )
 {
   NSMutableDictionary *gpsDict = [[NSMutableDictionary alloc]init];
   if ( positionKit )
@@ -223,6 +223,7 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Positi
       if ( isCameraPhoto )
       {
         // New capture handling
+        // TODO handle errors @vsklencar
         [IOSInterface handleCameraPhoto:info:imagePath:delegate->handler->positionKit():delegate->handler->compass()];
       }
       else
@@ -237,7 +238,6 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Positi
       [picker dismissViewControllerAnimated:YES completion:nil];
       if ( delegate->handler )
       {
-
         QVariantMap data;
         QString imagePathData( [imagePath UTF8String] );
         data["imagePath"] = imagePathData;
@@ -245,7 +245,6 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Positi
         QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
                                    Q_ARG( bool, err.isEmpty() ),
                                    Q_ARG( const QVariantMap, data ) );
-
       }
       delegate = nil;
     };

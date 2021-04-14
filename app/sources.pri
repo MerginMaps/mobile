@@ -22,7 +22,8 @@ inputprojutils.cpp \
 codefilter.cpp \
 qrdecoder.cpp \
 projectsmodel.cpp \
-projectsproxymodel.cpp
+projectsproxymodel.cpp \
+compass.cpp \
 
 HEADERS += \
 inputhelp.h \
@@ -48,6 +49,7 @@ codefilter.h \
 qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \
+compass.h \
 
 contains(DEFINES, INPUT_TEST) {
 
