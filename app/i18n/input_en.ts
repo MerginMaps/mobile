@@ -486,7 +486,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="137"/>
-        <location filename="../qml/components/ProjectList.qml" line="214"/>
+        <location filename="../qml/components/ProjectList.qml" line="218"/>
         <source>Create project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -496,58 +496,58 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="189"/>
+        <location filename="../qml/components/ProjectList.qml" line="193"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="205"/>
+        <location filename="../qml/components/ProjectList.qml" line="209"/>
         <source>You can also create new project by clicking button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="234"/>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
         <source>Unable to get the list of projects.</source>
         <translation type="unfinished">Unable to get the list of projects.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="234"/>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
         <source>No projects found!</source>
         <translation type="unfinished">No projects found!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="265"/>
+        <location filename="../qml/components/ProjectList.qml" line="269"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="293"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Remove project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="294"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="324"/>
+        <location filename="../qml/components/ProjectList.qml" line="328"/>
         <source>Download project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="325"/>
+        <location filename="../qml/components/ProjectList.qml" line="329"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="341"/>
+        <location filename="../qml/components/ProjectList.qml" line="345"/>
         <source>Input needs to be restarted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="342"/>
+        <location filename="../qml/components/ProjectList.qml" line="346"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -729,44 +729,44 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="226"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="229"/>
         <source>Cannot update feature</source>
         <translation>Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="240"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="243"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Feature %1 could not be fetched after commit</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="263"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="266"/>
         <source>Cannot delete feature</source>
         <translation>Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="311"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="363"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="314"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="321"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="373"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="324"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="376"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="398"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="401"/>
         <source>Feature could not be added</source>
         <translation>Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="416"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="426"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Could not save changes. Rolling back.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="436"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="446"/>
         <source>Cannot start editing</source>
         <translation>Cannot start editing</translation>
     </message>
