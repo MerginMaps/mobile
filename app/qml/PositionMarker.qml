@@ -26,6 +26,8 @@ Item {
 
     PositionDirection {
       id: positionDirection
+
+      Component.onCompleted: __iosUtils.compass = positionDirection
     }
 
     Rectangle {
