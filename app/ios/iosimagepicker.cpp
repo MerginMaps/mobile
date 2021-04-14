@@ -22,20 +22,27 @@
 #include <QImageWriter>
 #include <QUrl>
 
-IOSImagePicker::IOSImagePicker( QObject *parent ) : QObject( parent )
+void IOSImagePicker::showImagePicker( const QString  &targetDir )
 {
+#ifdef Q_OS_IOS
+  setTargetDir( targetDir );
+  showImagePickerDirect( this );
+#else
+  Q_UNUSED( targetDir )
+#endif
 }
 
-void IOSImagePicker::showImagePicker( int sourceType, const QString  &targetDir, QgsQuickPositionKit *positionKit, Compass *compass )
+void IOSImagePicker::callCamera( const QString &targetDir, QgsQuickPositionKit *positionKit, Compass *compass )
 {
 #ifdef Q_OS_IOS
   setTargetDir( targetDir );
   setPositionKit( positionKit );
   setCompass( compass );
-  showImagePickerDirect( sourceType, this );
+  callCameraDirect( this );
 #else
-  Q_UNUSED( sourceType )
   Q_UNUSED( targetDir )
+  Q_UNUSED( positionKit )
+  Q_UNUSED( compass )
 #endif
 }
 

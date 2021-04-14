@@ -267,9 +267,10 @@ ApplicationWindow {
         InputStyle.realHeight = window.height
 
         __loader.positionKit = positionKit
-        __iosUtils.positionKit = positionKit
         __loader.recording = digitizing.recording
         __loader.mapSettings = mapCanvas.mapSettings
+        __iosUtils.positionKit = positionKit
+        __iosUtils.compass = compass
 
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
@@ -406,8 +407,6 @@ ApplicationWindow {
 
     Compass {
       id: compass
-
-      Component.onCompleted: __iosUtils.compass = compass // TODO @vsklencar
     }
 
     PositionMarker {

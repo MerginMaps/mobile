@@ -29,14 +29,20 @@ class IOSImagePicker : public QObject
 {
     Q_OBJECT
   public:
-    explicit IOSImagePicker( QObject *parent = nullptr );
+    ~IOSImagePicker() = default;
     /**
     * Method suppose to be used in QML and calls IOSImagePicker::showImagePickerDirect which invokes IOSViewDelegate and image picker.
-    * \param sourceMode - when 0 == Gallery, 1 == Camera.
+    * \param targetDir - String representing directory path where captured photo suppose to be saved.
+    */
+    Q_INVOKABLE void showImagePicker( const QString  &targetDir );
+
+    /**
+    * Method suppose to be used in QML and calls IOSImagePicker::showImagePickerDirect which invokes IOSViewDelegate and image picker.
     * \param targetDir - String representing directory path where captured photo suppose to be saved.
     * \param position - object to get GPS EXIF data from
+    * \param compass - object to get GPS direction for EXIF data
     */
-    Q_INVOKABLE void showImagePicker( int sourceMode, const QString  &targetDir, QgsQuickPositionKit *positionKit, Compass *compass );
+    Q_INVOKABLE void callCamera( const QString  &targetDir, QgsQuickPositionKit *positionKit, Compass *compass );
 
     /**
      * Calls the objective-c function to read EXIF metadata.
@@ -72,6 +78,10 @@ class IOSImagePicker : public QObject
     /**
      * Calls the objective-c function to show image picker.
      */
-    void showImagePickerDirect( int sourceType, IOSImagePicker *handler );
+    void showImagePickerDirect( IOSImagePicker *handler );
+    /**
+     * Calls the objective-c function to open camera.
+     */
+    void callCameraDirect( IOSImagePicker *handler );
 };
 #endif // IOSIMAGEPICKER_H

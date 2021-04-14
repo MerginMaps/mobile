@@ -67,7 +67,7 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
   return result;
 }
 
-+( void )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath:( QgsQuickPositionKit * )positionKit:( Compass * )compass
++( QString )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath:( QgsQuickPositionKit * )positionKit:( Compass * )compass
 {
   QString err;
   // 1. Get your image.
@@ -108,6 +108,7 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
     CFRelease( imageDestination );
   }
 
+  return err;
 }
 
 static NSString *generateImagePath( NSString *targetDir )
@@ -139,7 +140,7 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
       }
       @catch ( NSException *exception )
       {
-        qDebug() << "An exception occures during extracting GPS info: " << exception.reason;
+        qWarning() << "An exception occures during extracting GPS info: " << exception.reason;
       }
     }
     else
@@ -165,7 +166,7 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
   return gpsDict;
 }
 
--( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
++( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )handler
 {
   UIApplication *app = [UIApplication sharedApplication];
 
@@ -179,8 +180,6 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
 
   if ( ![UIImagePickerController isSourceTypeAvailable:( UIImagePickerControllerSourceType ) sourceType] )
   {
-
-
     NSString *alertTitle = @"Image picker";
     NSString *alertMessage = @"The functionality is not available";
     NSString *alertOkButtonText = @"Ok";
@@ -202,7 +201,6 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
-    // TODO use NSNotificationCenter::post and userInfo to pass GPSData dict instead of global variable.
     [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull note )
                                          {
                                            // Fetch GPS data when an image is captured
@@ -222,16 +220,18 @@ static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compas
       bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
       if ( isCameraPhoto )
       {
-        // New capture handling
-        // TODO handle errors @vsklencar
-        [IOSInterface handleCameraPhoto:info:imagePath:delegate->handler->positionKit():delegate->handler->compass()];
+        // Camera handling
+        err = [IOSInterface handleCameraPhoto:info:imagePath:delegate->handler->positionKit():delegate->handler->compass()];
       }
       else
       {
         // Gallery handling
         // Copy an image with metadata from imageURL to targetPath
         NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) );
+        if ( InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
+        {
+          err = QStringLiteral( "Copying image from a gallery failed." );
+        }
         infoImageUrl = nil;
       }
 

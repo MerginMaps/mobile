@@ -45,7 +45,6 @@ class IosUtils: public QObject
     void compassChanged();
 
   private:
-
     IOSImagePicker *mImagePicker = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
@@ -53,8 +52,6 @@ class IosUtils: public QObject
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */
     void setIdleTimerDisabled();
-
-
 };
 
 #endif // IOSUTILS_H

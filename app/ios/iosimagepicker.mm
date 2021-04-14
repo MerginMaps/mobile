@@ -22,10 +22,14 @@
 #include "iosinterface.h"
 #include "iosimagepicker.h"
 
-void IOSImagePicker::showImagePickerDirect( int sourceType, IOSImagePicker *handler )
+void IOSImagePicker::showImagePickerDirect( IOSImagePicker *handler )
 {
-  IOSInterface *obj = [[IOSInterface alloc]init];
-  [obj showImagePicker:sourceType:handler];
+  [IOSInterface showImagePicker:UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypePhotoLibrary:handler];
+}
+
+void IOSImagePicker::callCameraDirect( IOSImagePicker *handler )
+{
+  [IOSInterface showImagePicker:UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera:handler];
 }
 
 QString IOSImagePicker::readExifDirect( const QString &filepath, const QString &tag )
