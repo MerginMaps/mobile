@@ -9,6 +9,10 @@ env:
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '12.0.1' }}
   IOS_MIN_SDK_VERSION: ${{ '12.0' }}
+  # apparently we cannot cache /opt directory as it fails to restore
+  # so we copy the deps in the home directory
+  DEPS_CACHE_DIR: /Users/runner/work/deps-cache
+
 jobs:
   ios_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
@@ -60,7 +64,23 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
-      - name: Download and install input-sdk
+      # Input-SDK caching
+      - name: Cache input-sdk
+        id: cache-input-sdk
+        uses: pat-s/always-upload-cache@v2.1.3
+        with:
+          path: ${{ env.DEPS_CACHE_DIR }}/input-sdk/${{ env.IOS_SDK_VERSION }}
+          key: input-sdk-v1-${{ env.IOS_SDK_VERSION }}-ios
+
+      - name: Restore input-sdk (from cache)
+        if: steps.cache-input-sdk.outputs.cache-hit == 'true'
+        run: |
+          sudo mkdir -p /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+          sudo chown -R $USER /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+          sudo cp -r ${DEPS_CACHE_DIR}/input-sdk/${IOS_SDK_VERSION}/stage /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
+
+      - name: Download input-sdk
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz?dl=0"
@@ -69,10 +89,26 @@ jobs:
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz
 
-          ls -la ./arm64/include/geodiff.h
-          ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
+          mkdir -p ${DEPS_CACHE_DIR}/input-sdk/${IOS_SDK_VERSION}
+          cp -r /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage ${DEPS_CACHE_DIR}/input-sdk/${IOS_SDK_VERSION}/stage || true
 
-      - name: Download and install qt
+      # Qt caching
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.3
+        with:
+          path: ${{ env.DEPS_CACHE_DIR }}/Qt/${{ env.QT_VERSION }}/ios
+          key: qt-v1-${{ env.QT_VERSION }}-ios
+
+      - name: Restore Qt (from cache)
+        if: steps.cache-qt.outputs.cache-hit == 'true'
+        run: |
+          sudo mkdir -p /opt/Qt/${QT_VERSION}
+          sudo chown -R $USER /opt/Qt/${QT_VERSION}
+          sudo cp -r ${DEPS_CACHE_DIR}/Qt/${QT_VERSION}/ios /opt/Qt/${QT_VERSION}/ios
+
+      - name: Download Qt
+        if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
           DOWNLOAD_DIR=`pwd`
           curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
@@ -80,9 +116,11 @@ jobs:
           cd /opt/Qt/${QT_VERSION}/ios
           sudo chown -R $USER .
           tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
-
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
           cp $DOWNLOAD_DIR/scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
+
+          mkdir -p ${DEPS_CACHE_DIR}/Qt/${QT_VERSION}
+          cp -r /opt/Qt/${QT_VERSION}/ios ${DEPS_CACHE_DIR}/Qt/${QT_VERSION}/ios || true
 
       - name: build QgsQuick
         run: |
