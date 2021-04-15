@@ -2,7 +2,7 @@
 <context>
     <name>AboutPanel</name>
     <message>
-        <location filename="../qml/AboutPanel.qml" line="106"/>
+        <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
         <translation>Autori</translation>
     </message>
@@ -37,7 +37,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="175"/>
         <source>Using %1 / %2</source>
-        <translation>Využitých %1/%2</translation>
+        <translation>Využitých %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="193"/>
@@ -81,22 +81,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="94"/>
+        <location filename="../androidutils.cpp" line="110"/>
         <source>Storage permission is permanently denied, please allow it in settings</source>
         <translation>Prístup k súborom je zamietnutý, prosím, povoľte ho v nastaveniach</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="98"/>
+        <location filename="../androidutils.cpp" line="114"/>
         <source>Input needs a storage permission in order to manipulate or download a project</source>
         <translation>Pre manipuláciu s projektami potrebuje aplikácia Input vaše povolenie na prístup k súborom</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="116"/>
+        <location filename="../androidutils.cpp" line="132"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Povolenie na prístup ku kamere je zakázané, prosím, povoľte ho v nastaveniach</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="120"/>
+        <location filename="../androidutils.cpp" line="136"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Aplikácia Input potrebuje povolenie ku kamere aby mohla spraviť fotografiu</translation>
     </message>
@@ -122,6 +122,14 @@
         <location filename="../qml/AuthPanel.qml" line="128"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>Server Mergin je dočasne nedostupný, prosím skúste neskôr.</translation>
+    </message>
+</context>
+<context>
+    <name>Banner</name>
+    <message>
+        <location filename="../qml/Banner.qml" line="74"/>
+        <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos;&gt;Learn more&lt;/a&gt;</source>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos;&gt;Zisti viac&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -212,22 +220,22 @@
         <translation>Žiadne obrázky.</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="335"/>
+        <location filename="../qml/FeaturePanel.qml" line="337"/>
         <source>Delete feature</source>
         <translation>Vymazať objekt</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="336"/>
+        <location filename="../qml/FeaturePanel.qml" line="338"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Naozaj si prajete vymazať tento objekt?</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="356"/>
+        <location filename="../qml/FeaturePanel.qml" line="358"/>
         <source>Unsaved changes</source>
         <translation>Neuložené zmeny</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="357"/>
+        <location filename="../qml/FeaturePanel.qml" line="359"/>
         <source>Do you want to save changes?</source>
         <translation>Chcete uložiť zmeny?</translation>
     </message>
@@ -248,14 +256,6 @@
         <location filename="../qml/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>Upraviť geometriu</translation>
-    </message>
-</context>
-<context>
-    <name>FieldRow</name>
-    <message>
-        <location filename="../qml/components/FieldRow.qml" line="33"/>
-        <source>Field name</source>
-        <translation>Názov stĺpca</translation>
     </message>
 </context>
 <context>
@@ -281,12 +281,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="177"/>
+        <location filename="../inputhelp.cpp" line="188"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Vaša požiadavka bola zaznamenaná.%1Kontaktujte nás prosím na adrese%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="182"/>
+        <location filename="../inputhelp.cpp" line="193"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku.%1Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>
@@ -294,55 +294,37 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InputProjUtils</name>
     <message>
-        <location filename="../inputprojutils.cpp" line="77"/>
+        <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
         <translation>Chýbajú požadované PROJ shift grid model súbory: %1. Ak ide o prvé spustenie projektu, prosím reštartujte Input.</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="98"/>
+        <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
         <translation>Nepodarilo sa vykonať PROJ operáciu. Ak ide o prvé spustenie projektu, prosím reštartujte Input.</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="108"/>
+        <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
         <translation>Chýbajú požadované PROJ shift grid model súbory: %1. Ak ide o prvé spustenie projektu, prosím reštartujte Input.</translation>
     </message>
 </context>
 <context>
-    <name>LocalProjectsManager</name>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="238"/>
-        <source>Download failed, remove and retry</source>
-        <translation>Sťahovanie zlyhalo, vymažte projekt a skúste znova</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="258"/>
-        <source>Found multiple QGIS project files</source>
-        <translation>Našlo sa viacero QGIS projektov</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="263"/>
-        <source>Failed to find a QGIS project file</source>
-        <translation>Nenašiel sa žiaden QGIS projekt</translation>
-    </message>
-</context>
-<context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="45"/>
+        <location filename="../qml/LogPanel.qml" line="51"/>
         <source>Diagnostic Log</source>
         <translation>Záznam činnosti</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="86"/>
+        <location filename="../qml/LogPanel.qml" line="87"/>
         <source>Sending...</source>
         <translation>Odosielam...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="86"/>
-        <source>Send Log to Developers</source>
-        <translation>Odoslať záznam o aktivite tvorcom aplikácie</translation>
+        <location filename="../qml/LogPanel.qml" line="87"/>
+        <source>Send to Developers</source>
+        <translation>Pošli vývojárom</translation>
     </message>
 </context>
 <context>
@@ -446,175 +428,6 @@ a preto nebude pridaný do projektu.</translation>
     </message>
 </context>
 <context>
-    <name>MerginApi</name>
-    <message>
-        <location filename="../merginapi.cpp" line="558"/>
-        <source>Username must have at least 4 characters</source>
-        <translation>Používateľské meno musí mať aspoň 4 znaky</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="565"/>
-        <source>Please enter a valid email</source>
-        <translation>Zadajte prosím platný email</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="572"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>Heslo nie je dostatočne silné. Skontrolujte, či obsahuje%1 minimálne 8 znakov,%1 obsahuje aspoň jedno malé písmeno,%1 aspoň jedno veľké písmeno a%1 aspoň jednu číslicu alebo špeciálny znak</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="585"/>
-        <source>Passwords do not match</source>
-        <translation>Heslá sa nezhodujú</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="592"/>
-        <source>Please accept Terms and Privacy Policy</source>
-        <translation>Prosím potvrďte súhlas s podmienkami používania a zásadami ochrany osobných údajov</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="840"/>
-        <source>Registration successful</source>
-        <translation>Registrácia prebehla úspešne</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="1117"/>
-        <source>Project detached from Mergin</source>
-        <translation>Projekt bol odpojený z Mergin</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="861"/>
-        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
-        <translation>Registrácia nie je povolená na zvolenom Mergin serveri.%1Kontaktujte, prosím, svojeho administrátora.</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectPanel</name>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="211"/>
-        <source>Projects</source>
-        <translation>Projekty</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>Unable to get the list of projects.</source>
-        <translation>Nepodarilo sa získať zoznam projektov.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>No projects found!</source>
-        <translation>Žiadne projekty!</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="312"/>
-        <source>Explore public projects.</source>
-        <translation>Tu môžete nájsť verejné Mergin projekty.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
-        <source>Create project</source>
-        <translation>Vytvoriť nový projekt</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="395"/>
-        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>Nenašli sa žiadne stiahnuté projekty.%1Pozrite sa %2ako vytvoriť projekt%3 a %4ako stiahnuť projekt%3 do vášho zariadenia.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="417"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input potrebuje vaše povolenie na prístup do súborov, %1kliknutím sem ho môžete udeliť%2 a následne, prosím, reštartujte aplikáciu.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="514"/>
-        <source>Status</source>
-        <translation>Stav projektu</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="521"/>
-        <source>No Changes</source>
-        <translation>Žiadne zmeny</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Detach from Mergin</source>
-        <translation>Odpojiť z Mergin</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Upload to Mergin</source>
-        <translation>Nahrať na Mergin</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="548"/>
-        <source>Remove from device</source>
-        <translation>Odstrániť zo zariadenia</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="670"/>
-        <source>Home</source>
-        <translation>Domov</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="687"/>
-        <source>My projects</source>
-        <translation>Moje projekty</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared with me</source>
-        <translation>Zdieľané so mnou</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared</source>
-        <translation>Zdieľané</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="725"/>
-        <source>Explore</source>
-        <translation>Iné projekty</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="746"/>
-        <source>Remove project</source>
-        <translation>Odstrániť projekt</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="747"/>
-        <source>Any unsynchronized changes will be lost.</source>
-        <translation>Všetky neuložené zmeny budú stratené.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="774"/>
-        <source>Input needs to be restarted</source>
-        <translation>Aplikácia musí byť reštartovaná.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="775"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Pre aplikovanie zmien s povolením, prosím, reštartujte aplikáciu. Kliknite na tlačidlo nižšie a aplikáciu znovu spustite.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="794"/>
-        <source>Retry</source>
-        <translation>Skúsiť znovu</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectStatusModel</name>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="70"/>
-        <source>Pending Changes</source>
-        <translation>Zmeny na uloženie</translation>
-    </message>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="96"/>
-        <source>Failed to determine changes</source>
-        <translation>Nepodarilo sa zistiť zmeny</translation>
-    </message>
-</context>
-<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/PanelHeader.qml" line="20"/>
@@ -633,9 +446,110 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/ProjectDelegateItem.qml" line="174"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
+        <source>Synchronize project</source>
+        <translation>Synchronizuj projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
+        <source>Local changes</source>
+        <translation>Lokálne zmeny</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
+        <source>Remove from device</source>
+        <translation>Odstrániť zo zariadenia</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
+        <source>Upload to Mergin</source>
+        <translation>Nahrať do Merginu</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
+        <source>Download from Mergin</source>
+        <translation>Stiahnuť z Merginu</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="255"/>
+        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <translation>Nie je možné synchronizovať projekt. Uistite sa, že ste prihlásený a máte dostatočné práva v Mergine. </translation>
+    </message>
+</context>
+<context>
+    <name>ProjectList</name>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="124"/>
         <source>Fetch more</source>
-        <translation>Načítať viac</translation>
+        <translation>Stiahnuť ďalšie</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="137"/>
+        <location filename="../qml/components/ProjectList.qml" line="218"/>
+        <source>Create project</source>
+        <translation>Vytvor projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="157"/>
+        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
+        <translation>Input potrebuje práva na zápis. %1Udel ich%2 a potom reštartuj aplikáciu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="193"/>
+        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
+        <translation>Nenašli sa žiadne projekty.%1Zisti %2 ako vytvoriť projekty%3 a %4stiahni ich%3 do aplikácie.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="209"/>
+        <source>You can also create new project by clicking button below.</source>
+        <translation>Môžes takisto vytvoriť nový projekt keď klikneš na tlačítko dole.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>Unable to get the list of projects.</source>
+        <translation>Nepodarilo sa získať zoznam projektov.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>No projects found!</source>
+        <translation>Žiadne projekty!</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="269"/>
+        <source>Retry</source>
+        <translation>Skúsiť znovu</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <source>Remove project</source>
+        <translation>Odstrániť projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <source>Any unsynchronized changes will be lost.</source>
+        <translation>Všetky neuložené zmeny budú stratené.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="328"/>
+        <source>Download project</source>
+        <translation>Stiahnuť projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="329"/>
+        <source>Would you like to download the project
+ %1 ?</source>
+        <translation>Chcete stiahnuť projekt
+%1 ?</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="345"/>
+        <source>Input needs to be restarted</source>
+        <translation>Aplikácia musí byť reštartovaná.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="346"/>
+        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
+        <translation>Pre aplikovanie zmien s povolením, prosím, reštartujte aplikáciu. Kliknite na tlačidlo nižšie a aplikáciu znovu spustite.</translation>
     </message>
 </context>
 <context>
@@ -644,6 +558,44 @@ a preto nebude pridaný do projektu.</translation>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
         <source>Opening project ...</source>
         <translation>Otváram projekt ...</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectPanel</name>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="119"/>
+        <source>No Changes</source>
+        <translation>Žiadne zmeny</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="144"/>
+        <source>Projects</source>
+        <translation>Projekty</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="339"/>
+        <source>Home</source>
+        <translation>Domov</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="361"/>
+        <source>My projects</source>
+        <translation>Moje projekty</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared with me</source>
+        <translation>Zdieľané so mnou</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared</source>
+        <translation>Zdieľané</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="405"/>
+        <source>Explore</source>
+        <translation>Iné projekty</translation>
     </message>
 </context>
 <context>
@@ -662,7 +614,7 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="104"/>
+        <location filename="../projectwizard.cpp" line="105"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 bol vytvorený</translation>
     </message>
@@ -675,27 +627,27 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Vytvoriť nový projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="75"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
         <source>Project name</source>
         <translation>Názov projektu</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="104"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
         <source>Fields</source>
         <translation>Stĺpce</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="133"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
         <source>Add field</source>
         <translation>Pridať stĺpce</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
         <source>Create project</source>
         <translation>Vytvoriť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="178"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
         <source>Empty project name</source>
         <translation>Zadajte názov projektu</translation>
     </message>
@@ -703,27 +655,27 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="517"/>
+        <location filename="../purchasing.cpp" line="518"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Nepodarilo sa spracovať platobné údaje.%1Predplatné nebolo zakúpené.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="525"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Successfully restored your subscription</source>
         <translation>Úspešne ste si obnovili vaše predplatné</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="527"/>
+        <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully purchased subscription</source>
         <translation>Predplatné úspešne zakúpené</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="540"/>
         <source>Failed to purchase subscription</source>
         <translation>Nepodarilo sa zakúpiť predplatné</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="537"/>
+        <location filename="../purchasing.cpp" line="538"/>
         <source>Unable to restore your subscription</source>
         <translation>Nepodarilo sa obnoviť vaše predplatné</translation>
     </message>
@@ -731,22 +683,22 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="117"/>
+        <location filename="../purchasing.cpp" line="118"/>
         <source>Monthly subscription</source>
         <translation>Mesačné predplatné</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="121"/>
+        <location filename="../purchasing.cpp" line="122"/>
         <source>Annual subscription</source>
         <translation>Ročné predplatné</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="126"/>
+        <location filename="../purchasing.cpp" line="127"/>
         <source>month</source>
         <translation>mesiac</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="130"/>
+        <location filename="../purchasing.cpp" line="131"/>
         <source>year</source>
         <translation>rok</translation>
     </message>
@@ -777,42 +729,44 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Hodnota %1 sa nedá použiť pre typ stĺpca %2.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="226"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="229"/>
         <source>Cannot update feature</source>
         <translation>Nepodarilo sa upraviť objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="240"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="243"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Objekt %1 sa nepodarilo načítať po uložení</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="263"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="266"/>
         <source>Cannot delete feature</source>
         <translation>Nepodarilo sa vymazať objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="311"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="314"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Predvolený výraz pre %1:%2 obsahuje chybu: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="321"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="324"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="376"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Predvolený výraz pre %1:%2 obsahuje chybu: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="348"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="401"/>
         <source>Feature could not be added</source>
         <translation>Objekt sa nepodarilo pridať</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="426"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Nepodarilo sa uložiť zmeny. Návrat k pôvodným hodnotám.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="386"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="446"/>
         <source>Cannot start editing</source>
         <translation>Nepodarilo sa spustiť režim úprav</translation>
     </message>
@@ -874,27 +828,27 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>RecordToolbar</name>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="129"/>
+        <location filename="../qml/RecordToolbar.qml" line="89"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="152"/>
+        <location filename="../qml/RecordToolbar.qml" line="112"/>
         <source>Undo</source>
         <translation>Vrátiť</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="167"/>
+        <location filename="../qml/RecordToolbar.qml" line="127"/>
         <source>Add Point</source>
         <translation>Pridať bod</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="183"/>
+        <location filename="../qml/RecordToolbar.qml" line="143"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="197"/>
+        <location filename="../qml/RecordToolbar.qml" line="157"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
@@ -938,63 +892,73 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="56"/>
+        <location filename="../qml/SettingsPanel.qml" line="62"/>
         <source>Settings</source>
         <translation>Nastavenia</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="80"/>
+        <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="88"/>
+        <location filename="../qml/SettingsPanel.qml" line="95"/>
         <source>Follow GPS with map</source>
         <translation>Sledovať GPS na mape</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="107"/>
+        <location filename="../qml/SettingsPanel.qml" line="114"/>
         <source>GPS accuracy</source>
         <translation>Presnosť GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="162"/>
+        <location filename="../qml/SettingsPanel.qml" line="169"/>
         <source>Accuracy threshold</source>
         <translation>Hranica presnosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="180"/>
+        <location filename="../qml/SettingsPanel.qml" line="187"/>
+        <source>Show accuracy warning</source>
+        <translation>Ukázovať výstrahu pre presnosť GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="205"/>
         <source>Recording</source>
         <translation>Vytváranie objektov</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="187"/>
+        <location filename="../qml/SettingsPanel.qml" line="212"/>
         <source>Line rec. interval</source>
         <translation>Interval na záznam čiary</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="210"/>
+        <location filename="../qml/SettingsPanel.qml" line="234"/>
         <source>Reuse last value option</source>
         <translation>Prepoužiť hodnoty z posledného objektu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="234"/>
+        <location filename="../qml/SettingsPanel.qml" line="258"/>
         <source>About</source>
         <translation>O programe</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="243"/>
+        <location filename="../qml/SettingsPanel.qml" line="267"/>
         <source>Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="252"/>
-        <source>Privacy Policy</source>
+        <location filename="../qml/SettingsPanel.qml" line="276"/>
+        <source>Privacy policy</source>
         <translation>Podmienky používania</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="261"/>
-        <source>Diagnostic Log</source>
+        <location filename="../qml/SettingsPanel.qml" line="285"/>
+        <source>Mergin terms of service</source>
+        <translation>Zmluvné podmienky Merginu</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="294"/>
+        <source>Diagnostic log</source>
         <translation>Záznam činnosti</translation>
     </message>
 </context>
@@ -1054,32 +1018,37 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Vytvorený objekt nie je platný</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="444"/>
+        <location filename="../qml/main.qml" line="453"/>
         <source>GPS auto-center mode on</source>
         <translation>Automatické GPS zameranie zapnuté</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="444"/>
+        <location filename="../qml/main.qml" line="453"/>
         <source>GPS auto-center mode off</source>
         <translation>Automatické GPS zameranie vypnuté</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="460"/>
+        <location filename="../qml/main.qml" line="469"/>
         <source>No editable layers found.</source>
         <translation>Nenašla sa žiadna upraviteľná vrstva.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="494"/>
+        <location filename="../qml/main.qml" line="485"/>
+        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
+        <translation>Nízka presnosť GPS (%1 m)12Skúste zaistiť priamy výhľad na oblohu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="518"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS nie je dostupné.%1Skúste zapnúť GPS lokalizáciu vo vašom zariadení.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="643"/>
+        <location filename="../qml/main.qml" line="666"/>
         <source>Communication error</source>
         <translation>Chyba v komunikácií so serverom</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="649"/>
+        <location filename="../qml/main.qml" line="672"/>
         <source>PROJ Error</source>
         <translation>Chyba PROJ</translation>
     </message>
@@ -1116,17 +1085,17 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>qgsquickexternalresource</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="268"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="262"/>
         <source>Take a photo</source>
         <translation>Odfotiť</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="307"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="304"/>
         <source>From gallery</source>
         <translation>Z galérie</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="326"/>
+        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="325"/>
         <source>Image is not available: </source>
         <translation>Obrázok nie je dostupný:</translation>
     </message>
@@ -1144,27 +1113,27 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Upozornenie: požiadavky nesplnené</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="679"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="713"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Pridať objekt na &lt;i&gt;%1 &lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="681"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="715"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Upraviť objekt na &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="683"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="717"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Objekt na &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="723"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="757"/>
         <source>Delete feature</source>
         <translation>Vymazať objekt</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="724"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="758"/>
         <source>Really delete this feature?</source>
         <translation>Naozaj vymazať tento objekt?</translation>
     </message>
