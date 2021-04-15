@@ -88,6 +88,7 @@ QtObject {
     property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
     property var today: QgsQuick.Utils.getThemeIcon("ic_today")
     property var back: QgsQuick.Utils.getThemeIcon("ic_back")
+    property var importData: QgsQuick.Utils.getThemeIcon("ic_camera")
     property var combobox: QgsQuick.Utils.getThemeIcon("ic_angle_down")
     property var valueRelationMore: QgsQuick.Utils.getThemeIcon("ic_angle_right")
   }
