@@ -114,7 +114,7 @@ Item {
   }
 
   /**
-   * A handler for extra events withing a TextEdit widget .
+   * A handler for extra events for a TextEdit widget .
    */
   property var importDataHandler: QtObject {
 
@@ -769,4 +769,3 @@ Item {
     }
   }
 }
-
