@@ -152,7 +152,12 @@ Item {
         elements.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
         for ( let i = dataStartIndex + 2; i < data.length; i += 2 )
         {
-          elements.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          if (data[ i ] === geometryType) {
+            console.log("Skipping ", data[ i ], data[ i + 1 ])
+            continue
+          } else {
+            elements.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          }
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
