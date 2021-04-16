@@ -113,6 +113,65 @@ Item {
     guideLine.pathElements = elements
   }
 
+  //! Util function to create array of array of coordinates
+  //! [X] -> [[X]]
+  //! index 0 is geometry type
+  //! index 1 is no of vertices
+  function prepareData(data)
+  {
+    let result = []
+    let d = []
+    let polygonType = 2
+    d.push(data[0])
+    d.push(data[1])
+    let startIndex = 2
+
+    for ( let i = startIndex; i < data.length; i += 2 ) {
+      // Rather simplified condition used for testing
+      if (data[i] !== polygonType) {
+        d.push(data[i])
+        d.push(data[i+1])
+      } else {
+        result.push(Array.from(d))
+        d = []
+        d.push(data[i])
+        d.push(data[i+1])
+      }
+    }
+    result.push(Array.from(d))
+    return result
+  }
+
+  function createPolyHighlight(polyData, no) {
+    let color = ["red", "brown", "blue", "green", "yellow", "red", "brown", "blue", "green", "yellow", "red", "brown", "blue", "green", "yellow", "red", "brown", "blue", "green", "yellow"]
+    let currPolygon = shapePart.createObject(shapePart, {fillColor: color[no]})
+    let objOwner = currPolygon;
+    let elements = []
+
+    let startIndex = 2
+    let endIndex = polyData.length
+    elements.push( componentMoveTo.createObject( objOwner, { "x": data[ startIndex ], "y": data[ startIndex + 1 ] } ) )
+    for ( let j = startIndex; j < endIndex; j += 2 ) {
+      elements.push( componentLineTo.createObject( objOwner, { "x": polyData[ j ], "y": polyData[ j + 1 ] } ) )
+    }
+
+    currPolygon.pathElements = Array.from(elements)
+    return currPolygon
+  }
+
+  function createMultiPolyHighlight(data)
+  {
+    let multipolygonData = []
+    multipolygonShapePath.data = []
+
+    for ( let i = 0; i < data.length; i += 1 ) {
+      let polyData = data[i]
+      let currPolygon = createPolyHighlight(polyData, i)
+      multipolygonData.push(currPolygon)
+     }
+    multipolygonShapePath.data = multipolygonData
+  }
+
   function constructHighlights()
   {
     if ( !featureLayerPair || !mapSettings ) return
@@ -135,6 +194,18 @@ Item {
       }
       else // line or polygon
       {
+
+        // True if drawing as Shape with multiple ShapePaths
+        // False if using single ShapePath and simple filtering data <-- resolves crash
+        let showAsMultipolygonShape = false
+
+        if (showAsMultipolygonShape) {
+          let testData = prepareData(data)
+          console.log("Multipolygons: ", testData.length)
+          createMultiPolyHighlight(testData)
+          return
+        }
+
         // place temporary point marker if this is the first point in line / polygon
         if ( recordingInProgress && data.length < dataStartIndex + 3 )
         {
@@ -281,6 +352,24 @@ Item {
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
     }
+
+    Shape{
+      id: multipolygonShapePath
+      data: []
+    }
+
+    Component {
+        id: shapePart;
+
+        ShapePath {
+          strokeColor: highlight.outlineColor
+          strokeWidth: highlight.outlinePenWidth / highlight.mapTransformScale  // negate scaling from the transform
+          fillColor: highlight.fillColor
+          capStyle: ShapePath.FlatCap
+          joinStyle: ShapePath.BevelJoin
+        }
+    }
+
 
     ShapePath {
       id: guideLine // also used for guide polygon
