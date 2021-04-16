@@ -150,7 +150,7 @@ Item {
 
     let startIndex = 2
     let endIndex = polyData.length
-    elements.push( componentMoveTo.createObject( objOwner, { "x": data[ startIndex ], "y": data[ startIndex + 1 ] } ) )
+    elements.push( componentMoveTo.createObject( objOwner, { "x": polyData[ startIndex ], "y": polyData[ startIndex + 1 ] } ) )
     for ( let j = startIndex; j < endIndex; j += 2 ) {
       elements.push( componentLineTo.createObject( objOwner, { "x": polyData[ j ], "y": polyData[ j + 1 ] } ) )
     }
@@ -197,7 +197,7 @@ Item {
 
         // True if drawing as Shape with multiple ShapePaths
         // False if using single ShapePath and simple filtering data <-- resolves crash
-        let showAsMultipolygonShape = false
+        let showAsMultipolygonShape = true
 
         if (showAsMultipolygonShape) {
           let testData = prepareData(data)
