@@ -148,17 +148,19 @@ Item {
         let objOwner = ( geometryType === 1 ? lineShapePath : polygonShapePath )
         let elements = ( geometryType === 1 ? newLineElements : newPolygonElements )
 
-        // move brush to the first point and start drawing from next point
-        elements.push( componentMoveTo.createObject( objOwner, { "x": data[ dataStartIndex ], "y": data[ dataStartIndex + 1 ] } ) )
-        for ( let i = dataStartIndex + 2; i < data.length; i += 2 )
+        // Create (multi) geometry for the highlight
+        let i = 0
+        let k = 0
+        while ( i < data.length )
         {
-          if (data[ i ] === geometryType) {
-            //! a new interior rings starts here
-            elements.push( componentMoveTo.createObject( objOwner, { "x": data[ i + 2 ], "y": data[ i + 3 ] } ) )
-            continue
-          } else {
-            elements.push( componentLineTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          let geomType = data[ i++ ];
+          let pointsCount = data[ i++ ];
+          elements.push( componentMoveTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          for ( k = i; k < i + pointsCount * 2; k += 2 )
+          {
+            elements.push( componentLineTo.createObject( objOwner, { "x": data[ k ], "y": data[ k + 1 ] } ) )
           }
+          i = k
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
