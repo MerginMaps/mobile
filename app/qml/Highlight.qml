@@ -155,8 +155,10 @@ Item {
         {
           let geomType = data[ i++ ];
           let pointsCount = data[ i++ ];
+          // Move to the first point
           elements.push( componentMoveTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
-          for ( k = i; k < i + pointsCount * 2; k += 2 )
+          // Draw lines for rest of points in the segment
+          for ( k = i + 2; k < i + pointsCount * 2; k += 2 )
           {
             elements.push( componentLineTo.createObject( objOwner, { "x": data[ k ], "y": data[ k + 1 ] } ) )
           }
