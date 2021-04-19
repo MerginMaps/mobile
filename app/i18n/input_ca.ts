@@ -463,12 +463,12 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
         <source>Upload to Mergin</source>
-        <translation>Pujar a Mergin</translation>
+        <translation>Carregar a Mergin</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
         <source>Download from Mergin</source>
-        <translation>Baixar de Mergin</translation>
+        <translation>Descarregar de Mergin</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="255"/>
@@ -492,7 +492,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="157"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input necessita permis per desar, %1clic per concedir%2 i llavors reiniciar aplicació.</translation>
+        <translation>Input necessita permis d&apos;emmagatzematge, %1clic per concedir%2 i llavors reinicia l&apos;aplicació.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="193"/>
@@ -502,7 +502,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="209"/>
         <source>You can also create new project by clicking button below.</source>
-        <translation>També es pot crear un nou projecte fent clic al botó següent.</translation>
+        <translation>També pots crear un nou projecte fent clic al botó següent.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="238"/>
@@ -517,12 +517,12 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="269"/>
         <source>Retry</source>
-        <translation>Tornar a provar</translation>
+        <translation>Provar de nou</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Remove project</source>
-        <translation>Esborrar projecte</translation>
+        <translation>Eliminar projecte</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="298"/>
@@ -549,7 +549,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="346"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Cal reiniciar Input per fer efectius els canvis després de concedir el permís d&apos;emmagatzematge. Feu clic a Tanca i obriu de nou Input.</translation>
+        <translation>Cal reiniciar Input per fer efectius els canvis després de concedir el permís d&apos;emmagatzematge. Fes clic a Tanca i obre de nou Input.</translation>
     </message>
 </context>
 <context>
@@ -719,54 +719,54 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="185"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="194"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir a un valor compatible per al camp %2(%3).</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="186"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="195"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation>El valor %1 no és compatible amb el tipus de camp %2.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="229"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="238"/>
         <source>Cannot update feature</source>
         <translation>No es pot actualitzar la característica</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="243"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="252"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>No s&apos;ha pogut obtenir la característica %1 després de consignada</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="266"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="275"/>
         <source>Cannot delete feature</source>
         <translation>No es pot esborrar la característica</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="314"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="375"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>L&apos;expressió de valor predeterminat per a %1:%2 retorna un error d&apos;anàlisi: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="324"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="376"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="333"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="385"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>L&apos;expressió de valor predeterminat per a %1:%2 retorna un error d&apos;avaluació: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="401"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="410"/>
         <source>Feature could not be added</source>
         <translation>No s&apos;ha pogut afegir la característica</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="426"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="435"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Impossible desar canvis. Tornant enrere.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="446"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="455"/>
         <source>Cannot start editing</source>
         <translation>Impossible començar a editar</translation>
     </message>
@@ -1018,37 +1018,37 @@ No s&apos;afegirà al projecte.</translation>
         <translation>La característica enregistrada no és vàlida</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="453"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="453"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="469"/>
+        <location filename="../qml/main.qml" line="475"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="485"/>
+        <location filename="../qml/main.qml" line="491"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Precisió de posició GPS baixa (%1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos de tenir una bona vista del cel.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="518"/>
+        <location filename="../qml/main.qml" line="524"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS no disponible.%1Proveu de permetre la ubicació del GPS a la configuració del dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="666"/>
+        <location filename="../qml/main.qml" line="672"/>
         <source>Communication error</source>
         <translation>Error de comunicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="672"/>
+        <location filename="../qml/main.qml" line="678"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
