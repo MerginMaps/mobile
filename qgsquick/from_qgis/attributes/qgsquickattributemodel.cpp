@@ -14,6 +14,9 @@
  ***************************************************************************/
 
 #include "qgis.h"
+
+#include <QDebug>
+
 #include "qgsmessagelog.h"
 #include "qgsvectorlayer.h"
 
@@ -172,6 +175,12 @@ bool QgsQuickAttributeModel::setData( const QModelIndex &index, const QVariant &
 {
   if ( data( index, role ) == value )
     return true;
+
+  if ( !index.isValid() )
+  {
+    qDebug() << "Warning: QgsQuickAttributeModel::setData invalid index" << index << "value: " << value << "role: " << role;
+    return false;
+  }
 
   switch ( role )
   {
