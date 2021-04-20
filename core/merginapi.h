@@ -265,6 +265,8 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo();
+    //! Sends subscribtion info request using old userInfo endpoint.
+    Q_INVOKABLE void getSubscriptionInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
@@ -437,6 +439,7 @@ class MerginApi: public QObject
     void uploadCancelReplyFinished();
 
     void getUserInfoFinished();
+    void getBillingInfoFinished();
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished();

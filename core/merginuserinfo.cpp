@@ -43,11 +43,15 @@ void MerginUserInfo::clear()
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
   // parse profile data
-  QJsonObject profileObj = docObj.value( QStringLiteral( "profile" ) ).toObject();
-  mEmail = profileObj.value( QStringLiteral( "email" ) ).toString();
-  mDiskUsage = profileObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
-  mStorageLimit = profileObj.value( QStringLiteral( "storage" ) ).toDouble();
+  mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
+  mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
+  mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
 
+  emit userInfoChanged();
+}
+
+void MerginUserInfo::setSubscriptionInfoFromJson( QJsonObject docObj )
+{
   // parse service data
   QJsonObject serviceObj = docObj.value( QStringLiteral( "service" ) ).toObject();
 

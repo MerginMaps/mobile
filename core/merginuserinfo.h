@@ -56,6 +56,7 @@ class MerginUserInfo: public QObject
 
     void setLocalizedPrice( const QString &price );
     void setFromJson( QJsonObject docObj );
+    void setSubscriptionInfoFromJson( QJsonObject docObj );
 
   signals:
     void userInfoChanged();

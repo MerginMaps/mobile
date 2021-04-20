@@ -176,6 +176,8 @@ Item {
               onClicked: {
                 if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
                   __merginApi.getUserInfo()
+                  if (__merginApi.apiSupportsSubscriptions)
+                    __merginApi.getSubscriptionInfo()
                   stackView.push( accountPanelComp )
                 }
                 else
@@ -434,11 +436,9 @@ Item {
           if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
             if (__merginApi.userAuth.hasAuthData()) {
               refreshProjectList()
-            } else if (toolbar.highlighted !== homeBtn.text) {
-              if (stackView.currentItem.objectName !== "authPanel") {
+            } else if (stackView.currentItem.objectName !== "authPanel") {
                 stackView.push(authPanelComp, {state: "login"})
               }
-            }
           }
         }
         onAuthRequested: {

@@ -31,6 +31,7 @@ Page {
   property string subscriptionsTimestamp: __merginApi.userInfo.subscriptionTimestamp
   property string nextBillPrice: __merginApi.userInfo.nextBillPrice
   property bool ownsActiveSubscription: __merginApi.userInfo.ownsActiveSubscription
+  property bool apiSupportsSubscriptions: __merginApi.apiSupportsSubscriptions
 
   id: root
   visible: true
@@ -110,6 +111,7 @@ Page {
     }
 
     TextWithIcon {
+      visible: root.apiSupportsSubscriptions
       width: parent.width
       source: 'edit.svg'
       text: root.planAlias
