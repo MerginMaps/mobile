@@ -528,7 +528,6 @@ void Purchasing::onTransactionVerificationSucceeded( PurchasingTransaction *tran
     notify( tr( "Successfully purchased subscription" ) );
 
   removePendingTransaction( transaction );
-  mMerginApi->getUserInfo();
   mMerginApi->getSubscriptionInfo();
 }
 

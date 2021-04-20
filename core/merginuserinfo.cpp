@@ -58,6 +58,10 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 
 void MerginUserInfo::setSubscriptionInfoFromJson( QJsonObject docObj )
 {
+
+  QJsonObject profileObj = docObj.value( QStringLiteral( "profile" ) ).toObject();
+  mStorageLimit = profileObj.value( QStringLiteral( "storage" ) ).toDouble();
+
   // parse service data
   QJsonObject serviceObj = docObj.value( QStringLiteral( "service" ) ).toObject();
 
