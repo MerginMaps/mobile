@@ -15,9 +15,6 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 import QtQml.Models 2.2
 import QtQml 2.2
 
@@ -138,42 +135,19 @@ Item {
   }
 
   /**
-   * AttributeFormModel binded on a feature supporting auto-generated editor layouts and "tab" layout.
-   */
-  property QgsQuick.AttributeFormModel model
-
-  /**
-   * Visibility of toolbar.
-   */
-  property alias toolbarVisible: toolbar.visible
-
-  /**
-   * When adding a new feature, add checkbox to be able to save the same value for the next feature as default.
-   */
-  property bool allowRememberAttribute: false
-
-  /**
    * Active project.
    */
   property QgsQuick.Project project
 
   /**
+   * Controller
+   */
+  property QgsQuick.AttributeController controller
+
+  /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
   property var loadWidgetFn: QgsQuick.Utils.getEditorComponentSource
-
-  /**
-   * Icon path for save button.
-   */
-  property string saveButtonIcon: QgsQuick.Utils.getThemeIcon( "ic_save_white" )
-  /**
-   * Icon path for delete button.
-   */
-  property string deleteButtonIcon: QgsQuick.Utils.getThemeIcon( "ic_delete_forever_white" )
-  /**
-   * Icon path for close button
-   */
-  property string closeButtonIcon: QgsQuick.Utils.getThemeIcon( "ic_clear_white" )
 
   /**
    * Predefined form styling
@@ -199,37 +173,32 @@ Item {
   }
 
   function save() {
-    if ( !model.constraintsHardValid )
+    if ( !controller.constraintsHardValid )
     {
       console.log( qsTr( 'Constraints not valid') )
       return
     }
-    else if ( !model.constraintsSoftValid )
+    else if ( !controller.constraintsSoftValid )
     {
       console.log( qsTr( 'Note: soft constraints were not met') )
     }
 
     parent.focus = true
     if ( form.state === "Add" ) {
-      model.create()
+      controller.create()
       state = "Edit"
     }
     else
     {
-      model.save()
+      controller.save()
     }
 
     saved()
   }
 
   function hasAnyChanges() {
-    return form.model.attributeModel.hasAnyChanges()
+    return form.controller.hasAnyChanges()
   }
-
-  /**
-    * Forward change about remembering values to model
-    */
-  onAllowRememberAttributeChanged: form.model.rememberValuesAllowed = allowRememberAttribute
 
   /**
    * This is a relay to forward private signals to internal components.
@@ -250,12 +219,7 @@ Item {
     clip: true
     color: form.style.tabs.backgroundColor
 
-    anchors {
-      top: toolbar.bottom
-      bottom: parent.bottom
-      left: parent.left
-      right: parent.right
-    }
+    anchors.fill: parent
 
     Flickable {
       id: flickable
@@ -265,7 +229,7 @@ Item {
         leftMargin: form.style.fields.outerMargin
         rightMargin: form.style.fields.outerMargin
       }
-      height: form.model.hasTabs ? tabRow.height : 0
+      height: form.controller.hasTabs ? tabRow.height : 0
 
       flickableDirection: Flickable.HorizontalFlick
       contentWidth: tabRow.width
@@ -273,7 +237,7 @@ Item {
       // Tabs
       TabBar {
         id: tabRow
-        visible: model.hasTabs
+        visible: form.controller.hasTabs
         height: form.style.tabs.height
         spacing: form.style.tabs.spacing
 
@@ -293,7 +257,7 @@ Item {
         }
 
         Repeater {
-          model: form.model
+          model: form.controller.attributeTabProxyModel
 
           TabButton {
             id: tabButton
@@ -334,27 +298,25 @@ Item {
 
     SwipeView {
       id: swipeView
-      currentIndex: tabRow.currentIndex
+      currentIndex: form.controller.hasTabs ? tabRow.currentIndex : 0
       anchors {
         top: flickable.bottom
         left: parent.left
         right: parent.right
         bottom: parent.bottom
-      }
+     }
 
       Repeater {
-        /**
-         * One page per tab in tabbed forms, 1 page in auto forms
-         */
-        model: form.model.hasTabs ? form.model : 1
+        //One page per tab in tabbed forms, 1 page in auto forms
+
+        model: form.controller.attributeTabProxyModel
+        id: swipeViewRepeater
 
         Item {
           id: formPage
           property int currentIndex: index
 
-          /**
-           * The main form content area
-           */
+          // The main form content area
           Rectangle {
             anchors.fill: parent
             color: form.style.backgroundColor
@@ -404,18 +366,16 @@ Item {
               }
             }
 
+
             Connections {
               target: master
               onReset: content.contentY = 0
             }
 
-            model: QgsQuick.SubModel {
-              id: contentModel
-              model: form.model
-              rootIndex: form.model.hasTabs ? form.model.index(currentIndex, 0) : QgsQuick.Utils.invalidIndex()
-            }
 
-            delegate: fieldItem
+            model: swipeViewRepeater.model.attributeFormProxyModel(formPage.currentIndex)
+
+           delegate: fieldItem
 
             header: Rectangle {
               opacity: 1
@@ -452,9 +412,9 @@ Item {
 
     Item {
       id: fieldContainer
-      visible: Type === 'field'
+      visible: Type === QgsQuick.FormItemType.Field
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
-      height: Type === 'field' ? childrenRect.height : 0
+      height: Type === QgsQuick.FormItemType.Field ? childrenRect.height : 0
 
       anchors {
         left: parent.left
@@ -476,7 +436,7 @@ Item {
         Label {
           id: fieldLabel
 
-          text: Name ? qsTr(Name) : ''
+          text: Name
           color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
           leftPadding: form.style.fields.sideMargin
           font.pointSize: form.style.fields.labelPointSize
@@ -510,6 +470,7 @@ Item {
         height: childrenRect.height
         anchors { left: parent.left; right: rememberCheckboxContainer.left; top: labelPlaceholder.bottom }
 
+
         Loader {
           id: attributeEditorLoader
 
@@ -524,13 +485,13 @@ Item {
           property var field: Field
           property var constraintHardValid: ConstraintHardValid
           property var constraintSoftValid: ConstraintSoftValid
-          property bool constraintsHardValid: form.model.constraintsHardValid
-          property bool constraintsSoftValid: form.model.constraintsSoftValid
+          property bool constraintsHardValid: form.controller.constraintsHardValid
+          property bool constraintsSoftValid: form.controller.constraintsSoftValid
           property var homePath: form.project ? form.project.homePath : ""
           property var customStyle: form.style
           property var externalResourceHandler: form.externalResourceHandler
           property bool readOnly: form.state == "ReadOnly" || !AttributeEditable
-          property var featurePair: form.model.attributeModel.featureLayerPair
+          property var featurePair: form.controller.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
@@ -544,17 +505,21 @@ Item {
           }
         }
 
+
+        //  TODO?!?
+        /*
         Connections {
           target: attributeEditorLoader.item
           onValueChanged: {
             var valueChanged = value != AttributeValue
             AttributeValue = isNull ? undefined : value
-            // updates other attributes if a user males a change
+            // updates other attributes if a user makes a change
             if (valueChanged) {
               form.model.attributeModel.updateDefaultValuesAttributes(Field)
             }
           }
         }
+        */
 
         Connections {
           target: attributeEditorLoader.item
@@ -565,17 +530,17 @@ Item {
         }
 
         Connections {
-          target: form.model
+          target: form.controller
           onDataChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
             {
-              attributeEditorLoader.item.dataUpdated( form.model.attributeModel.featureLayerPair.feature )
+              attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
             }
           }
         }
 
         Connections {
-          target: form.model.attributeModel
+          target: form.controller
           onDataChangedFailed: notify(message)
         }
 
@@ -602,7 +567,7 @@ Item {
 
       Item {
         id: rememberCheckboxContainer
-        visible: form.allowRememberAttribute && form.state === "Add" && EditorWidget !== "Hidden"
+        visible: form.controller.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
 
         implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height
@@ -638,134 +603,6 @@ Item {
     target: Qt.inputMethod
     onVisibleChanged: {
       Qt.inputMethod.commit()
-    }
-  }
-
-  /** The form toolbar **/
-  Item {
-    id: toolbar
-    height: visible ? 48 * QgsQuick.Utils.dp : 0
-    visible: form.state === 'Add'
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-
-    RowLayout {
-      anchors.fill: parent
-      Layout.margins: 0
-
-      ToolButton {
-        id: saveButton
-        Layout.preferredWidth: form.style.toolbutton.size
-        Layout.preferredHeight: form.style.toolbutton.size
-
-        visible: form.state !== "ReadOnly"
-
-        contentItem: Image {
-          source: form.saveButtonIcon
-          sourceSize: Qt.size(width, height)
-        }
-
-        background: Rectangle {
-          color: model.constraintsSoftValid && model.constraintsHardValid ? form.style.toolbutton.backgroundColor : form.style.toolbutton.backgroundColorInvalid
-        }
-
-        enabled: model.constraintsHardValid
-
-        onClicked: {
-          form.save()
-        }
-      }
-
-      ToolButton {
-        id: deleteButton
-
-        Layout.preferredWidth: form.style.toolbutton.size
-        Layout.preferredHeight: form.style.toolbutton.size
-
-        visible: form.state === "Edit"
-
-        contentItem: Image {
-          source: form.deleteButtonIcon
-          sourceSize: Qt.size(width, height)
-        }
-
-        background: Rectangle {
-          color: form.style.toolbutton.backgroundColor
-        }
-
-        onClicked: deleteDialog.visible = true
-      }
-
-      Label {
-        id: titleLabel
-
-        text:
-        {
-          var currentLayer = model.attributeModel.featureLayerPair.layer
-          var layerName = 'N/A'
-          if (!!currentLayer)
-            layerName = currentLayer.name
-
-          if ( form.state === 'Add' )
-            qsTr( 'Add feature on <i>%1</i>' ).arg(layerName )
-          else if ( form.state === 'Edit' )
-            qsTr( 'Edit feature on <i>%1</i>' ).arg(layerName)
-          else
-            qsTr( 'View feature on <i>%1</i>' ).arg(layerName)
-        }
-        font.bold: true
-        font.pointSize:form.style.titleLabelPointSize
-        elide: Label.ElideRight
-        horizontalAlignment: Qt.AlignHCenter
-        verticalAlignment: Qt.AlignVCenter
-        Layout.fillWidth: true
-        color: "white"
-      }
-
-      ToolButton {
-        id: closeButton
-        Layout.alignment: Qt.AlignRight
-
-        Layout.preferredWidth: form.style.toolbutton.size
-        Layout.preferredHeight: form.style.toolbutton.size
-
-        contentItem: Image {
-          source: form.closeButtonIcon
-          sourceSize: Qt.size(width, height)
-        }
-
-        background: Rectangle {
-          color: form.style.toolbutton.backgroundColor
-        }
-
-        onClicked: {
-          Qt.inputMethod.hide()
-          form.canceled()
-        }
-      }
-    }
-  }
-
-  MessageDialog {
-    id: deleteDialog
-
-    visible: false
-
-    title: qsTr( "Delete feature" )
-    text: qsTr( "Really delete this feature?" )
-    icon: StandardIcon.Warning
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
-    onAccepted: {
-      model.attributeModel.deleteFeature()
-      visible = false
-
-      form.canceled()
-    }
-    onRejected: {
-      visible = false
     }
   }
 }

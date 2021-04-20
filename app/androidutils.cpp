@@ -85,6 +85,8 @@ QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
                                 jTag.object<jstring>() );
   return attribute.toString();
 #else
+  Q_UNUSED( filePath )
+  Q_UNUSED( tag )
   return QString();
 #endif
 }
@@ -94,6 +96,7 @@ bool AndroidUtils::checkPermission( const QString &permissionString )
 #ifdef ANDROID
   return QtAndroid::checkPermission( permissionString ) == QtAndroid::PermissionResult::Granted;
 #else
+  Q_UNUSED( permissionString )
   return true;
 #endif
 }

@@ -17,6 +17,7 @@
 #include <QScreen>
 #include <QString>
 #include <QWindow>
+#include <QDebug>
 
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"
@@ -347,20 +348,28 @@ void QgsQuickUtils::formatToUSCSDistance( double srcDistance,
 
 QString QgsQuickUtils::dumpScreenInfo() const
 {
-  // take the first top level window
-  QScreen *screen = QGuiApplication::topLevelWindows().at( 0 )->screen();
-  double dpiX = screen->physicalDotsPerInchX();
-  double dpiY = screen->physicalDotsPerInchY();
-  int height = screen->geometry().height();
-  int width = screen->geometry().width();
-  double sizeX = static_cast<double>( width ) / dpiX * 25.4;
-  double sizeY = static_cast<double>( height ) / dpiY * 25.4;
-
   QString msg;
-  msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
-  msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
-  msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-  msg += tr( "screen density: %1" ).arg( mScreenDensity );
+  // take the first top level window
+  const QWindowList windows = QGuiApplication::topLevelWindows();
+  if ( !windows.isEmpty() )
+  {
+    QScreen *screen = windows.at( 0 )->screen();
+    double dpiX = screen->physicalDotsPerInchX();
+    double dpiY = screen->physicalDotsPerInchY();
+    int height = screen->geometry().height();
+    int width = screen->geometry().width();
+    double sizeX = static_cast<double>( width ) / dpiX * 25.4;
+    double sizeY = static_cast<double>( height ) / dpiY * 25.4;
+
+    msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
+    msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
+    msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
+    msg += tr( "screen density: %1" ).arg( mScreenDensity );
+  }
+  else
+  {
+    msg += QLatin1String( "screen info: application is not initialized!" );
+  }
   return msg;
 }
 
@@ -431,13 +440,19 @@ qreal QgsQuickUtils::screenDensity() const
 {
   return mScreenDensity;
 }
+
 qreal QgsQuickUtils::calculateScreenDensity()
 {
   // calculate screen density for calculation of real pixel sizes from density-independent pixels
   // take the first top level window
-  QScreen *screen = QGuiApplication::topLevelWindows().at( 0 )->screen();
-  double dpiX = screen->physicalDotsPerInchX();
-  double dpiY = screen->physicalDotsPerInchY();
-  double dpi = dpiX < dpiY ? dpiX : dpiY; // In case of asymmetrical DPI. Improbable
+  double dpi = 96.0;
+  const QWindowList windows = QGuiApplication::topLevelWindows();
+  if ( !windows.isEmpty() )
+  {
+    QScreen *screen = windows.at( 0 )->screen();
+    double dpiX = screen->physicalDotsPerInchX();
+    double dpiY = screen->physicalDotsPerInchY();
+    dpi = dpiX < dpiY ? dpiX : dpiY; // In case of asymmetrical DPI. Improbable
+  }
   return dpi / 160.;  // 160 DPI is baseline for density-independent pixels in Android
 }

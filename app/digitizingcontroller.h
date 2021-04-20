@@ -15,8 +15,6 @@
 #include "qgscoordinatetransform.h"
 #include "qgsfeature.h"
 #include "qgsgeometry.h"
-
-#include "qgsquickattributemodel.h"
 #include "qgsquickmapsettings.h"
 #include "qgsquickpositionkit.h"
 #include "qgsquickfeaturelayerpair.h"
@@ -31,7 +29,6 @@ class DigitizingController : public QObject
     Q_PROPERTY( bool manualRecording READ manualRecording WRITE setManualRecording NOTIFY manualRecordingChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
-    Q_PROPERTY( QgsQuickAttributeModel *recordingFeatureModel READ recordingFeatureModel NOTIFY recordingFeatureModelChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
     //! If True, recorded point is from GPS and contains z-coord
     Q_PROPERTY( bool useGpsPoint MEMBER mUseGpsPoint NOTIFY useGpsPointChanged )
@@ -74,7 +71,6 @@ class DigitizingController : public QObject
     std::unique_ptr<QgsPoint> getLayerPoint( const QgsPoint &point, bool isGpsPoint );
     QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
     QgsQuickFeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
-    QgsQuickAttributeModel *recordingFeatureModel() const { return mRecordingModel; }
 
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
@@ -111,7 +107,7 @@ class DigitizingController : public QObject
     bool mManualRecording = true;
     QgsQuickPositionKit *mPositionKit = nullptr;
     QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings, point's coord in layer CRS
-    QgsQuickAttributeModel *mRecordingModel = nullptr;  //!< to be used for highlight of feature being recorded
+    QgsQuickFeatureLayerPair mFeatureLayerPair; //!< to be used for highlight of feature being recorded
     QgsQuickMapSettings *mMapSettings = nullptr;
     int mLineRecordingInterval = 3; // in seconds
     QDateTime mLastTimeRecorded;

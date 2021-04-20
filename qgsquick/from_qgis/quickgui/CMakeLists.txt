@@ -1,10 +1,12 @@
 ############################################################
 # sources
 set(QGIS_QUICK_GUI_MOC_HDRS
+  attributes/qgsquickattributecontroller.h
   attributes/qgsquickattributeformmodel.h
-  attributes/qgsquickattributeformmodelbase.h
-  attributes/qgsquickattributemodel.h
-  attributes/qgsquicksubmodel.h
+  attributes/qgsquickattributeformproxymodel.h
+  attributes/qgsquickattributetabproxymodel.h
+  attributes/qgsquickattributetabmodel.h
+  attributes/qgsquickattributedata.h
 
   qgsquickfeaturelayerpair.h
   qgsquickcoordinatetransformer.h
@@ -26,10 +28,12 @@ set(QGIS_QUICK_GUI_HDRS
 )
 
 set(QGIS_QUICK_GUI_SRC
+  attributes/qgsquickattributedata.cpp
+  attributes/qgsquickattributecontroller.cpp
   attributes/qgsquickattributeformmodel.cpp
-  attributes/qgsquickattributeformmodelbase.cpp
-  attributes/qgsquickattributemodel.cpp
-  attributes/qgsquicksubmodel.cpp
+  attributes/qgsquickattributeformproxymodel.cpp
+  attributes/qgsquickattributetabproxymodel.cpp
+  attributes/qgsquickattributetabmodel.cpp
 
   qgsquickfeaturelayerpair.cpp
   qgsquickcoordinatetransformer.cpp

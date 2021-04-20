@@ -25,17 +25,14 @@ Drawer {
     signal panelClosed()
 
     property alias formState: featureForm.state
-    property alias feature: attributeModel.featureLayerPair
-    property alias currentAttributeModel: attributeModel
+    property alias feature: attributeController.featureLayerPair
 
     function saveFeatureGeom() {
         featureForm.save()
     }
 
     function reload() {
-      // order matters!
-      attributeFormModel.forceClean();
-      attributeModel.forceClean();
+      attributeController.forceClean();
     }
 
     function onAboutToClose() {
@@ -56,6 +53,11 @@ Drawer {
 
     Behavior on height {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+    }
+
+    QgsQuick.AttributeController {
+      id: attributeController
+      rememberValuesAllowed: __appSettings.reuseLastEnteredValues
     }
 
     Item {
@@ -113,7 +115,7 @@ Drawer {
 
     PreviewPanel {
       id: previewPanel
-      model: featureForm.model
+      controller: attributeController
       height: featurePanel.previewHeight
       width: parent.width
       visible: false
@@ -156,7 +158,7 @@ Drawer {
                 id: saveButtonText
                 text: qsTr("Save")
                 visible: featureForm.state === "Edit" || featureForm.state === "Add"
-                enabled: featureForm.model.constraintsHardValid
+                enabled: featureForm.controller.constraintsHardValid
                 color: enabled ? InputStyle.highlightColor : "red"
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 height: header.rowHeight
@@ -175,38 +177,18 @@ Drawer {
 
         }
 
-        // TODO currently disabled since supporting photos is not yet implemented
-        Rectangle {
-            id: photoContainer
-            height: 0
-            visible: false
-            width: parent.width
-            anchors.top: header.bottom
-            color: InputStyle.panelBackground2
-
-            Text {
-                id: backButtonText
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: qsTr("No photos added.")
-                color: InputStyle.clrPanelMain
-                font.pixelSize: InputStyle.fontPixelSizeNormal
-            }
-        }
-
         QgsQuick.FeatureForm {
             id: featureForm
             visible: true
 
             width: parent.width
-            height: parent.height - header.height - photoContainer.height - toolbar.height
-            anchors.top: photoContainer.bottom
+            height: parent.height - header.height - toolbar.height
+            anchors.top: header.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
             importDataHandler: codeReaderHandler.handler
-            toolbarVisible: false
-            allowRememberAttribute: __appSettings.reuseLastEnteredValues
+            controller: attributeController
+            project: featurePanel.project
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
@@ -288,14 +270,7 @@ Drawer {
                 }
               }
 
-            model: QgsQuick.AttributeFormModel {
-                id: attributeFormModel
-                attributeModel: QgsQuick.AttributeModel {
-                    id: attributeModel
-                }
-            }
 
-            project: featurePanel.project
             onSaved: {
                 featurePanel.panelClosed()
                 featurePanel.visible = false

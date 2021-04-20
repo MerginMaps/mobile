@@ -17,7 +17,7 @@ import "."  // import InputStyle singleton
 Item {
     id: previewPanel
     property real rowHeight: InputStyle.rowHeight
-    property QgsQuick.AttributeFormModel model
+    property QgsQuick.AttributeController controller
 
     property alias titleBorder: titleBorder
     property string title: ""
@@ -139,7 +139,7 @@ Item {
 
                 ListView {
                     visible: mapTipType == 'fields'
-                    model: previewPanel.model
+                    model: attributeController.attributeFormPreviewModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp

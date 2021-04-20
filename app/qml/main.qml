@@ -426,11 +426,7 @@ ApplicationWindow {
         onRecordingChanged: {
             __loader.recording = digitizing.recording
         }
-    }
 
-    // Highlighting a new feature while digitizing
-    Connections {
-        target: digitizing.recordingFeatureModel
         onFeatureLayerPairChanged: {
             if (digitizing.recording) {
                 digitizingHighlight.visible = true
@@ -438,6 +434,19 @@ ApplicationWindow {
             }
         }
     }
+
+    // Highlighting a new feature while digitizing
+    /*
+      Connections {
+              target: digitizing.recordingFeatureModel
+              onFeatureLayerPairChanged: {
+                  if (digitizing.recording) {
+                      digitizingHighlight.visible = true
+                      digitizingHighlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+                  }
+              }
+          }
+      */
 
     MainPanel {
         id: mainPanel

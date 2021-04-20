@@ -21,7 +21,6 @@ DigitizingController::DigitizingController( QObject *parent )
   : QObject( parent )
   , mMapSettings( nullptr )
 {
-  mRecordingModel = new QgsQuickAttributeModel( this );
 }
 
 void DigitizingController::setPositionKit( QgsQuickPositionKit *kit )
@@ -39,30 +38,30 @@ void DigitizingController::setPositionKit( QgsQuickPositionKit *kit )
 
 QgsQuickFeatureLayerPair DigitizingController::featureLayerPair() const
 {
-  return mRecordingModel->featureLayerPair();
+  return mFeatureLayerPair;
 }
 
 void DigitizingController::setFeatureLayerPair( QgsQuickFeatureLayerPair pair )
 {
-  if ( pair == mRecordingModel->featureLayerPair() )
+  if ( pair == mFeatureLayerPair )
     return;
 
-  mRecordingModel->setFeatureLayerPair( pair );
+  mFeatureLayerPair = pair;
   emit layerChanged();
 }
 
 QgsVectorLayer *DigitizingController::layer() const
 {
-  return mRecordingModel->featureLayerPair().layer();
+  return mFeatureLayerPair.layer();
 }
 
 void DigitizingController::setLayer( QgsVectorLayer *layer )
 {
-  if ( layer == mRecordingModel->featureLayerPair().layer() )
+  if ( layer == mFeatureLayerPair.layer() )
     return;
 
-  QgsQuickFeatureLayerPair pair( mRecordingModel->featureLayerPair().featureRef(), layer );
-  mRecordingModel->setFeatureLayerPair( pair );
+  QgsQuickFeatureLayerPair pair( mFeatureLayerPair.featureRef(), layer );
+  mFeatureLayerPair = pair;
   emit layerChanged();
 }
 
@@ -265,7 +264,8 @@ void DigitizingController::onPositionChanged()
       mRecordedPoints.last().setZ( layerPoint->z() );
     }
   }
-  mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
+
+  setFeatureLayerPair( lineOrPolygonFeature() );
 }
 
 
@@ -324,8 +324,7 @@ void DigitizingController::addRecordPoint( const QgsPoint &point, bool isGpsPoin
   std::unique_ptr<QgsPoint> layerPoint = getLayerPoint( point, isGpsPoint );
   mRecordedPoints.append( *layerPoint.get() );
 
-  // update geometry so we can use the model for highlight in map
-  mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
+  setFeatureLayerPair( lineOrPolygonFeature() );
 }
 
 void DigitizingController::removeLastPoint()
@@ -343,5 +342,5 @@ void DigitizingController::removeLastPoint()
   }
 
   mRecordedPoints.removeLast();
-  mRecordingModel->setFeatureLayerPair( lineOrPolygonFeature() );
+  setFeatureLayerPair( lineOrPolygonFeature() );
 }
