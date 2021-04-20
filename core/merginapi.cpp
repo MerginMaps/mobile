@@ -665,14 +665,14 @@ void MerginApi::getUserInfo( )
 
 void MerginApi::getSubscriptionInfo()
 {
+  if ( !apiSupportsSubscriptions() )
+  {
+    CoreUtils::log( "subscription info", QStringLiteral( "Request skipped - server doesn't support subscriptions." ) );
+  }
+
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
-  }
-
-  if ( !apiSupportsSubscriptions() )
-  {
-    CoreUtils::log( "billing info", QStringLiteral( "Request skipped - server doesnt support subsriptions. " ) );
   }
 
   QNetworkRequest request = getDefaultRequest();
@@ -681,8 +681,8 @@ void MerginApi::getSubscriptionInfo()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
-  CoreUtils::log( "billing info", QStringLiteral( "Requesting billing info: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::getBillingInfoFinished );
+  CoreUtils::log( "subscription info", QStringLiteral( "Requesting subscription info: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getSubscriptionInfoFinished );
 }
 
 void MerginApi::clearAuth()
@@ -846,12 +846,8 @@ void MerginApi::authorizeFinished()
       QJsonObject docObj = doc.object();
       mUserAuth->setFromJson( docObj );
 
-      // TODO @vsklencar: send an extra request if serverSupportsSubscriptions
       getUserInfo();
-      if ( apiSupportsSubscriptions() )
-      {
-        getSubscriptionInfo();
-      }
+      getSubscriptionInfo();
     }
     else
     {
@@ -2148,14 +2144,14 @@ void MerginApi::getUserInfoFinished()
   r->deleteLater();
 }
 
-void MerginApi::getBillingInfoFinished()
+void MerginApi::getSubscriptionInfoFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "billing info", QStringLiteral( "Success" ) );
+    CoreUtils::log( "subscription info", QStringLiteral( "Success" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
@@ -2166,10 +2162,11 @@ void MerginApi::getBillingInfoFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getBillingInfo" ), r->errorString(), serverMsg );
-    CoreUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mUserInfo->clear(); // TODO @vsklencar
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getBillingInfo" ) );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getSubscriptionInfo" ), r->errorString(), serverMsg );
+    CoreUtils::log( "subscription info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    mUserInfo->clearSubscriptionData();
+    mUserInfo->clearPlanInfo();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getSubscriptionInfo" ) );
   }
 
   r->deleteLater();

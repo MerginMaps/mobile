@@ -25,18 +25,24 @@ void MerginUserInfo::clearSubscriptionData()
   mOwnsActiveSubscription = false;
 }
 
+void MerginUserInfo::clearPlanInfo()
+{
+  mPlanAlias = "";
+  mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
+  mPlanProductId = "";
+  emit planProviderChanged();
+  emit planProductIdChanged();
+}
+
 void MerginUserInfo::clear()
 {
   clearSubscriptionData();
   mEmail = "";
-  mPlanAlias = "";
-  mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
-  mPlanProductId = "";
+  clearPlanInfo();
   mDiskUsage = 0;
   mStorageLimit = 0;
+  clearPlanInfo();
 
-  emit planProviderChanged();
-  emit planProductIdChanged();
   emit userInfoChanged();
 }
 

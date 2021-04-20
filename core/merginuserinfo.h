@@ -40,6 +40,7 @@ class MerginUserInfo: public QObject
 
   public:
     void clearSubscriptionData();
+    void clearPlanInfo();
     void clear();
 
     QString email() const;
