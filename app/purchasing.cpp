@@ -529,6 +529,7 @@ void Purchasing::onTransactionVerificationSucceeded( PurchasingTransaction *tran
 
   removePendingTransaction( transaction );
   mMerginApi->getUserInfo();
+  mMerginApi->getSubscriptionInfo();
 }
 
 void Purchasing::onTransactionVerificationFailed( PurchasingTransaction *transaction )
