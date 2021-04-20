@@ -63,6 +63,10 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 Read more about the app [help.inputapp.io](https://help.inputapp.io)
 
+## Questions and Answers by the community
+
+See [GIS Stack Exchange](https://gis.stackexchange.com/questions/tagged/inputapp) with **inputapp** tag to ask questions and see other users' answers.
+
 ## Developers
 
 For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
