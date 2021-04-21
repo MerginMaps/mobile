@@ -22,17 +22,16 @@ class MerginUserInfo: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
-
-    Q_PROPERTY( QString planAlias READ planAlias NOTIFY userInfoChanged ) // see PurchasingPlan::alias()
-    Q_PROPERTY( /*MerginSubscriptionType::SubscriptionType*/ int planProvider READ planProvider NOTIFY userInfoChanged ) // see PurchasingTransaction::provider()
-    Q_PROPERTY( QString planProductId READ planProductId NOTIFY userInfoChanged ) // see PurchasingPlan::id()
-
-    Q_PROPERTY( /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus READ subscriptionStatus NOTIFY userInfoChanged )
     Q_PROPERTY( double storageLimit READ storageLimit NOTIFY userInfoChanged )
-    Q_PROPERTY( QString subscriptionTimestamp READ subscriptionTimestamp NOTIFY userInfoChanged )
-    Q_PROPERTY( QString nextBillPrice READ nextBillPrice NOTIFY userInfoChanged ) // in Bytes
     Q_PROPERTY( double diskUsage READ diskUsage NOTIFY userInfoChanged ) // in Bytes
-    Q_PROPERTY( bool ownsActiveSubscription READ ownsActiveSubscription NOTIFY userInfoChanged )
+
+    Q_PROPERTY( QString planAlias READ planAlias NOTIFY subscriptionChanged ) // see PurchasingPlan::alias()
+    Q_PROPERTY( /*MerginSubscriptionType::SubscriptionType*/ int planProvider READ planProvider NOTIFY subscriptionChanged ) // see PurchasingTransaction::provider()
+    Q_PROPERTY( QString planProductId READ planProductId NOTIFY subscriptionChanged ) // see PurchasingPlan::id()
+    Q_PROPERTY( /*MerginSubscriptionStatus::SubscriptionStatus*/ int subscriptionStatus READ subscriptionStatus NOTIFY subscriptionChanged )
+    Q_PROPERTY( QString subscriptionTimestamp READ subscriptionTimestamp NOTIFY subscriptionChanged )
+    Q_PROPERTY( QString nextBillPrice READ nextBillPrice NOTIFY subscriptionChanged ) // in Bytes
+    Q_PROPERTY( bool ownsActiveSubscription READ ownsActiveSubscription NOTIFY subscriptionChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -61,6 +60,7 @@ class MerginUserInfo: public QObject
 
   signals:
     void userInfoChanged();
+    void subscriptionChanged();
     void planProductIdChanged();
     void planProviderChanged();
 

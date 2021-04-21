@@ -38,11 +38,11 @@ void MerginUserInfo::clear()
 {
   clearSubscriptionData();
   mEmail = "";
-  clearPlanInfo();
   mDiskUsage = 0;
   mStorageLimit = 0;
   clearPlanInfo();
 
+  emit subscriptionChanged();
   emit userInfoChanged();
 }
 
@@ -130,7 +130,7 @@ void MerginUserInfo::setSubscriptionInfoFromJson( QJsonObject docObj )
     emit planProductIdChanged();
   }
 
-  emit userInfoChanged();
+  emit subscriptionChanged();
 }
 
 bool MerginUserInfo::ownsActiveSubscription() const
@@ -146,7 +146,7 @@ void MerginUserInfo::setLocalizedPrice( const QString &price )
   if ( price != mNextBillPrice )
   {
     mNextBillPrice = price;
-    emit userInfoChanged();
+    emit subscriptionChanged();
   }
 }
 

@@ -48,6 +48,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
+  QObject::connect( mUserInfo, &MerginUserInfo::subscriptionChanged, this, &MerginApi::userInfoChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
 
   loadAuthData();
