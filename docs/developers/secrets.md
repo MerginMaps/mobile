@@ -16,12 +16,12 @@ manifest files.
 
 encrypt
 ```
-cd app/
+cd core/
 openssl aes-256-cbc -in merginsecrets.cpp -out merginsecrets.cpp.enc -md md5
 ```
 
 decrypt
 ```
-cd app/
+cd core/
 openssl aes-256-cbc -d -in merginsecrets.cpp.enc -out merginsecrets.cpp -md md5
 ```
