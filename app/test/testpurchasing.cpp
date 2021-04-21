@@ -35,7 +35,7 @@ void TestPurchasing::runPurchasingCommand( TestingPurchasingBackend::NextPurchas
 {
   mPurchasingBackend->setNextPurchaseResult( result );
 
-  QSignalSpy spy0( mApi->userInfo(), &MerginUserInfo::subscriptionChanged );
+  QSignalSpy spy0( mApi, &MerginApi::subscriptionChanged );
   mPurchasing->purchase( planId );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
@@ -51,6 +51,11 @@ void TestPurchasing::initTestCase()
   mApi->authorize( username, password );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
+
+  QSignalSpy spy2( mApi, &MerginApi::subscriptionChanged );
+  mApi->getSubscriptionInfo();
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
 
   // verify we have test or none subscription
   MerginSubscriptionType::SubscriptionType subscriptionType = mApi->userInfo()->planProvider();

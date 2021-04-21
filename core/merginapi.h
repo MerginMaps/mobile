@@ -413,6 +413,7 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
+    void subscriptionChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
