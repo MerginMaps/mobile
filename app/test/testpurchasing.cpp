@@ -35,7 +35,7 @@ void TestPurchasing::runPurchasingCommand( TestingPurchasingBackend::NextPurchas
 {
   mPurchasingBackend->setNextPurchaseResult( result );
 
-  QSignalSpy spy0( mApi, &MerginApi::userInfoChanged );
+  QSignalSpy spy0( mApi->userInfo(), &MerginUserInfo::planProductIdChanged );
   mPurchasing->purchase( planId );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
