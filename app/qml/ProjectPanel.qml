@@ -434,7 +434,7 @@ Item {
           if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
             if (__merginApi.userAuth.hasAuthData()) {
               refreshProjectList()
-            } else if (toolbar.highlighted !== homeBtn.text) {
+            } else if (pageContent.state !== 'local') {
               if (stackView.currentItem.objectName !== "authPanel") {
                 stackView.push(authPanelComp, {state: "login"})
               }
