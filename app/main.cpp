@@ -37,6 +37,7 @@
 #include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
+#include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginsubscriptiontype.h"
 #include "merginprojectstatusmodel.h"
@@ -219,6 +220,7 @@ void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
   qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
+  qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );

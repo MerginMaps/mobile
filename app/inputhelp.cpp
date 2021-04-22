@@ -10,6 +10,7 @@
 #include "inputhelp.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginapi.h"
 #include "inpututils.h"
@@ -139,8 +140,8 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->userInfo()->diskUsage() ) )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->userInfo()->storageLimit() ) ) );
-    retLines.push_back( QStringLiteral( "Subscription plan: %1" ).arg( mMerginApi->userInfo()->planAlias() ) );
-    retLines.push_back( QStringLiteral( "Subscription Status: %1" ).arg( MerginSubscriptionStatus::toString( static_cast<MerginSubscriptionStatus::SubscriptionStatus>( mMerginApi->userInfo()->subscriptionStatus() ) ) ) );
+    retLines.push_back( QStringLiteral( "Subscription plan: %1" ).arg( mMerginApi->subscriptionInfo()->planAlias() ) );
+    retLines.push_back( QStringLiteral( "Subscription Status: %1" ).arg( MerginSubscriptionStatus::toString( static_cast<MerginSubscriptionStatus::SubscriptionStatus>( mMerginApi->subscriptionInfo()->subscriptionStatus() ) ) ) );
   }
   else
   {

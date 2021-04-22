@@ -324,7 +324,7 @@ QString InputUtils::bytesToHumanSize( double bytes )
   }
   else if ( bytes < 1024.0 * 1024.0 )
   {
-    return QString::number( bytes, 'f', precision ) + " KB";
+    return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
   }
   else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
   {

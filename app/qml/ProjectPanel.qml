@@ -436,9 +436,11 @@ Item {
           if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
             if (__merginApi.userAuth.hasAuthData()) {
               refreshProjectList()
-            } else if (stackView.currentItem.objectName !== "authPanel") {
+            } else if (toolbar.highlighted !== homeBtn.text) {
+              if (stackView.currentItem.objectName !== "authPanel") {
                 stackView.push(authPanelComp, {state: "login"})
               }
+            }
           }
         }
         onAuthRequested: {
@@ -502,7 +504,7 @@ Item {
         stackView.popOnePageOrClose()
       }
       onManagePlansClicked: {
-        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.userInfo.ownsActiveSubscription )) {
+        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
           stackView.push( subscribePanelComp)
         } else {
           Qt.openUrlExternally(__purchasing.subscriptionManageUrl);

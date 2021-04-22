@@ -31,6 +31,7 @@
 
 class MerginUserAuth;
 class MerginUserInfo;
+class MerginSubscriptionInfo;
 class Purchasing;
 
 struct ProjectDiff
@@ -175,6 +176,7 @@ class MerginApi: public QObject
     Q_OBJECT
     Q_PROPERTY( MerginUserAuth *userAuth READ userAuth NOTIFY authChanged )
     Q_PROPERTY( MerginUserInfo *userInfo READ userInfo NOTIFY userInfoChanged )
+    Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
@@ -185,6 +187,7 @@ class MerginApi: public QObject
 
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
+    MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
      * Returns path of the local directory in which all projects are stored.
@@ -413,7 +416,7 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
-    void subscriptionChanged();
+    void subscriptionInfoChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
@@ -447,6 +450,8 @@ class MerginApi: public QObject
     void authorizeFinished();
     void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
     void pingMerginReplyFinished();
+    //! When plan has been changed, an extra userInfo request is needed to update also storage.
+    void onPlanProductIdChanged();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -542,8 +547,8 @@ class MerginApi: public QObject
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
+    MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
-
 
     enum CustomAttribute
     {

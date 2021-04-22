@@ -3,6 +3,7 @@ SOURCES += \
   $$PWD/coreutils.cpp \
   $$PWD/merginapi.cpp \
   $$PWD/merginapistatus.cpp \
+  $$PWD/merginsubscriptioninfo.cpp \
   $$PWD/merginsubscriptionstatus.cpp \
   $$PWD/merginsubscriptiontype.cpp \
   $$PWD/merginprojectstatusmodel.cpp \
@@ -17,6 +18,7 @@ HEADERS += \
   $$PWD/coreutils.h \
   $$PWD/merginapi.h \
   $$PWD/merginapistatus.h \
+  $$PWD/merginsubscriptioninfo.h \
   $$PWD/merginsubscriptionstatus.h \
   $$PWD/merginsubscriptiontype.h \
   $$PWD/merginprojectstatusmodel.h \

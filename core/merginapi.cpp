@@ -24,7 +24,7 @@
 #include "localprojectsmanager.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
-// #include "purchasing.h"
+#include "merginsubscriptioninfo.h"
 
 #include <geodiff.h>
 
@@ -40,6 +40,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
   , mUserInfo( new MerginUserInfo )
+  , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
 {
   qRegisterMetaType<Transactions>();
@@ -48,7 +49,8 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
-  QObject::connect( mUserInfo, &MerginUserInfo::subscriptionChanged, this, &MerginApi::subscriptionChanged );
+  QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
+  QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
 
   loadAuthData();
@@ -65,6 +67,11 @@ MerginUserAuth *MerginApi::userAuth() const
 MerginUserInfo *MerginApi::userInfo() const
 {
   return mUserInfo;
+}
+
+MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
+{
+  return mSubscriptionInfo;
 }
 
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
@@ -668,7 +675,7 @@ void MerginApi::getSubscriptionInfo()
 {
   if ( !apiSupportsSubscriptions() )
   {
-    CoreUtils::log( "subscription info", QStringLiteral( "Request skipped - server doesn't support subscriptions." ) );
+    qDebug() << "Subscription info request skipped - server doesn't support subscriptions.";
   }
 
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
@@ -690,6 +697,7 @@ void MerginApi::clearAuth()
 {
   mUserAuth->clear();
   mUserInfo->clear();
+  mSubscriptionInfo->clear();
 }
 
 void MerginApi::resetApiRoot()
@@ -846,8 +854,6 @@ void MerginApi::authorizeFinished()
     {
       QJsonObject docObj = doc.object();
       mUserAuth->setFromJson( docObj );
-
-      getUserInfo();
     }
     else
     {
@@ -956,6 +962,11 @@ void MerginApi::pingMerginReplyFinished()
   }
   r->deleteLater();
   emit pingMerginFinished( apiVersion, serverSupportsSubscriptions, serverMsg );
+}
+
+void MerginApi::onPlanProductIdChanged()
+{
+  getUserInfo();
 }
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )
@@ -2156,7 +2167,7 @@ void MerginApi::getSubscriptionInfoFinished()
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      mUserInfo->setSubscriptionInfoFromJson( docObj );
+      mSubscriptionInfo->setFromJson( docObj );
     }
   }
   else
@@ -2164,8 +2175,7 @@ void MerginApi::getSubscriptionInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getSubscriptionInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "subscription info", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mUserInfo->clearSubscriptionData();
-    mUserInfo->clearPlanInfo();
+    mSubscriptionInfo->clear();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getSubscriptionInfo" ) );
   }
 
