@@ -11,6 +11,7 @@
 
 #include "merginapi.h"
 #include "merginuserinfo.h"
+#include "merginsubscriptioninfo.h"
 #include "inpututils.h"
 
 #if defined (HAVE_WIDGETS)
@@ -58,7 +59,7 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
       items << "Buy professional plan | tier12";
     }
 
-    if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+    if ( mMerginApi->subscriptionInfo()->ownsActiveSubscription() )
     {
       items << "Immediately refund the subscription (got refund) | cancel"
             << "Set grace period | grace"
@@ -116,7 +117,7 @@ void TestingPurchasingBackend::createTransaction( QSharedPointer<PurchasingPlan>
 
 void TestingPurchasingBackend::restore()
 {
-  if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+  if ( mMerginApi->subscriptionInfo()->ownsActiveSubscription() )
   {
     // we can try to "restore" only recommended plan in test backend
     return;
@@ -146,11 +147,11 @@ QString TestingPurchasingBackend::subscriptionBillingUrl()
 QSharedPointer<TestingPurchasingTransaction> TestingPurchasingBackend::createTestingTransaction( QSharedPointer<PurchasingPlan> plan, const QString &data, bool restore )
 {
   QString planMerginId;
-  const int id = mMerginApi->userInfo()->subscriptionId();
+  const int id = mMerginApi->subscriptionInfo()->subscriptionId();
   if ( id > 0 )
   {
     // this is an existing subscription
-    planMerginId = QString::number( mMerginApi->userInfo()->subscriptionId() );
+    planMerginId = QString::number( mMerginApi->subscriptionInfo()->subscriptionId() );
   }
 
   QString recept = planMerginId + "|" + data;

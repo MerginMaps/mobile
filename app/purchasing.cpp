@@ -14,6 +14,7 @@
 #include "merginapi.h"
 #include "inpututils.h"
 #include "merginuserinfo.h"
+#include "merginsubscriptioninfo.h"
 #include "coreutils.h"
 
 #if defined (APPLE_PURCHASING)
@@ -199,8 +200,8 @@ Purchasing::Purchasing( MerginApi *merginApi, QObject *parent )
   connect( mMerginApi, &MerginApi::apiRootChanged, this, &Purchasing::onMerginServerChanged );
   connect( mMerginApi, &MerginApi::apiSupportsSubscriptionsChanged, this, &Purchasing::onMerginServerStatusChanged );
   connect( mMerginApi, &MerginApi::apiVersionStatusChanged, this, &Purchasing::onMerginServerStatusChanged );
-  connect( mMerginApi->userInfo(), &MerginUserInfo::planProviderChanged, this, &Purchasing::evaluateHasInAppPurchases );
-  connect( mMerginApi->userInfo(), &MerginUserInfo::planProductIdChanged, this, &Purchasing::onMerginPlanProductIdChanged );
+  connect( mMerginApi->subscriptionInfo(), &MerginSubscriptionInfo::planProviderChanged, this, &Purchasing::evaluateHasInAppPurchases );
+  connect( mMerginApi->subscriptionInfo(), &MerginSubscriptionInfo::planProductIdChanged, this, &Purchasing::onMerginPlanProductIdChanged );
 
   connect( this, &Purchasing::hasInAppPurchasesChanged, this, &Purchasing::onHasInAppPurchasesChanged );
 }
@@ -238,11 +239,11 @@ void Purchasing::evaluateHasInAppPurchases()
     mBackend->userCanMakePayments();
 
   bool hasCompatiblePlanType = true;
-  if ( mMerginApi->userInfo()->ownsActiveSubscription() )
+  if ( mMerginApi->subscriptionInfo()->ownsActiveSubscription() )
   {
     hasCompatiblePlanType =
       bool( mBackend ) &&
-      mBackend->provider() == mMerginApi->userInfo()->planProvider();
+      mBackend->provider() == mMerginApi->subscriptionInfo()->planProvider();
   }
   setHasInAppPurchases( hasInApp && hasCompatiblePlanType );
 }
@@ -344,15 +345,15 @@ void Purchasing::onMerginPlanProductIdChanged()
   if ( !mBackend )
     return;
 
-  QString planId = mMerginApi->userInfo()->planProductId();
+  QString planId = mMerginApi->subscriptionInfo()->planProductId();
   if ( planId.isEmpty() )
     return;
 
-  if ( mBackend->provider() != mMerginApi->userInfo()->planProvider() )
+  if ( mBackend->provider() != mMerginApi->subscriptionInfo()->planProvider() )
     return;
 
-  QString price = mBackend->getLocalizedPrice( mMerginApi->userInfo()->planProductId() );
-  mMerginApi->userInfo()->setLocalizedPrice( price );
+  QString price = mBackend->getLocalizedPrice( mMerginApi->subscriptionInfo()->planProductId() );
+  mMerginApi->subscriptionInfo()->setLocalizedPrice( price );
 }
 
 void Purchasing::onMerginServerStatusChanged()
@@ -528,7 +529,7 @@ void Purchasing::onTransactionVerificationSucceeded( PurchasingTransaction *tran
     notify( tr( "Successfully purchased subscription" ) );
 
   removePendingTransaction( transaction );
-  mMerginApi->getUserInfo();
+  mMerginApi->getSubscriptionInfo();
 }
 
 void Purchasing::onTransactionVerificationFailed( PurchasingTransaction *transaction )

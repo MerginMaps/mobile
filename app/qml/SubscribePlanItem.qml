@@ -22,7 +22,7 @@ Item {
   property var plan
   property string name
 
-  property bool hasPlan: __merginApi.userInfo.ownsActiveSubscription || !root.plan
+  property bool hasPlan: __merginApi.subscriptionInfo.ownsActiveSubscription || !root.plan
 
   Column {
     width: parent.width

@@ -24,13 +24,14 @@ Page {
 
   property string username: __merginApi.userAuth.username
   property string email: __merginApi.userInfo.email
-  property string planAlias: __merginApi.userInfo.planAlias
-  property int storageLimit: __merginApi.userInfo.storageLimit
   property int diskUsage: __merginApi.userInfo.diskUsage
-  property int subscriptionStatus: __merginApi.userInfo.subscriptionStatus
-  property string subscriptionsTimestamp: __merginApi.userInfo.subscriptionTimestamp
-  property string nextBillPrice: __merginApi.userInfo.nextBillPrice
-  property bool ownsActiveSubscription: __merginApi.userInfo.ownsActiveSubscription
+  property int storageLimit: __merginApi.userInfo.storageLimit
+  property string planAlias: __merginApi.subscriptionInfo.planAlias
+  property int subscriptionStatus: __merginApi.subscriptionInfo.subscriptionStatus
+  property string subscriptionsTimestamp: __merginApi.subscriptionInfo.subscriptionTimestamp
+  property string nextBillPrice: __merginApi.subscriptionInfo.nextBillPrice
+  property bool ownsActiveSubscription: __merginApi.subscriptionInfo.ownsActiveSubscription
+  property bool apiSupportsSubscriptions: __merginApi.apiSupportsSubscriptions
 
   id: root
   visible: true
@@ -110,6 +111,7 @@ Page {
     }
 
     TextWithIcon {
+      visible: root.apiSupportsSubscriptions
       width: parent.width
       source: 'edit.svg'
       text: root.planAlias

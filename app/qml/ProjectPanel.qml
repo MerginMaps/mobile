@@ -176,6 +176,8 @@ Item {
               onClicked: {
                 if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
                   __merginApi.getUserInfo()
+                  if (__merginApi.apiSupportsSubscriptions)
+                    __merginApi.getSubscriptionInfo()
                   stackView.push( accountPanelComp )
                 }
                 else
@@ -502,7 +504,7 @@ Item {
         stackView.popOnePageOrClose()
       }
       onManagePlansClicked: {
-        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.userInfo.ownsActiveSubscription )) {
+        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
           stackView.push( subscribePanelComp)
         } else {
           Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
