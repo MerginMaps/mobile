@@ -37,8 +37,6 @@ void MerginSubscriptionInfo::clearPlanInfo()
 void MerginSubscriptionInfo::clear()
 {
   clearSubscriptionData();
-//  mDiskUsage = 0;
-//  mStorageLimit = 0;
   clearPlanInfo();
 
   emit subscriptionInfoChanged();
@@ -170,16 +168,6 @@ int MerginSubscriptionInfo::subscriptionStatus() const
 {
   return mSubscriptionStatus;
 }
-
-//double MerginSubscriptionInfo::diskUsage() const
-//{
-//  return mDiskUsage;
-//}
-
-//double MerginSubscriptionInfo::storageLimit() const
-//{
-//  return mStorageLimit;
-//}
 
 QString MerginSubscriptionInfo::subscriptionTimestamp() const
 {

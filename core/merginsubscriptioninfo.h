@@ -10,7 +10,6 @@
 #ifndef MERGINSUBSCRIPTIONINFO_H
 #define MERGINSUBSCRIPTIONINFO_H
 
-
 #include <QObject>
 #include <QString>
 #include <QJsonObject>
