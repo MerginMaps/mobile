@@ -281,12 +281,12 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="187"/>
+        <location filename="../inputhelp.cpp" line="188"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Rapport ingediend.%1Neem contact met ons op%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="192"/>
+        <location filename="../inputhelp.cpp" line="193"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Rapport kan niet worden ingediend.%1Controleer uw internetverbinding.</translation>
     </message>
@@ -294,37 +294,19 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>InputProjUtils</name>
     <message>
-        <location filename="../inputprojutils.cpp" line="77"/>
+        <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
         <translation>Verplichte PROJ datum transformatie grid ontbreekt: %1 Start Input opnieuw voor een nieuw gedownload project.</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="98"/>
+        <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
         <translation>Fout bij het maken van een aangepaste PROJ operatie. Start Input opnieuw voor een nieuw gedownload project</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="108"/>
+        <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
         <translation>Verplichte PROJ datum transformatie grid ontbreekt: %1 Start Input opnieuw voor een nieuw gedownload project.</translation>
-    </message>
-</context>
-<context>
-    <name>LocalProjectsManager</name>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="238"/>
-        <source>Download failed, remove and retry</source>
-        <translation>Download mislukt, verwijder en probeer opnieuw</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="258"/>
-        <source>Found multiple QGIS project files</source>
-        <translation>Meerdere QGIS project bestanden gevonden</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="263"/>
-        <source>Failed to find a QGIS project file</source>
-        <translation>Geen QGIS project bestand gevonden</translation>
     </message>
 </context>
 <context>
@@ -446,175 +428,6 @@ Wordt niet toegevoegd aan het project.</translation>
     </message>
 </context>
 <context>
-    <name>MerginApi</name>
-    <message>
-        <location filename="../merginapi.cpp" line="559"/>
-        <source>Username must have at least 4 characters</source>
-        <translation>Gebruikersnaam moet minimaal 4 karakters hebben</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="566"/>
-        <source>Please enter a valid email</source>
-        <translation>Voeg een geldig e-mailadres in</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="573"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>Wachtwoord niet sterk genoeg. Het moet%1 minstens 8 tekens lang zijn%1 bevat kleine letters%1 bevat hoofdletters%1 bevat cijfers of speciale tekens</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="586"/>
-        <source>Passwords do not match</source>
-        <translation>Wachtwoorden komen niet overeen</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="593"/>
-        <source>Please accept Terms and Privacy Policy</source>
-        <translation>Accepteer de voorwaarden en het privacybeleid</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="841"/>
-        <source>Registration successful</source>
-        <translation>Registratie succesvol</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="1118"/>
-        <source>Project detached from Mergin</source>
-        <translation>Project ontkoppelt van Mergin</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="862"/>
-        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
-        <translation>Nieuwe registraties zijn niet toegestaan ​​op de geselecteerde Mergin-server.%1 Neem contact op met uw beheerder.</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectPanel</name>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="211"/>
-        <source>Projects</source>
-        <translation>Projecten</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>Unable to get the list of projects.</source>
-        <translation>Verkrijgen projectlijst niet mogelijk.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>No projects found!</source>
-        <translation>Geen projecten gevonden!</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="312"/>
-        <source>Explore public projects.</source>
-        <translation>Ontdek publieke projecten.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
-        <source>Create project</source>
-        <translation>Maak project aan</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="395"/>
-        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>Geen gedownloade projecten gevonden.%1Leer%2 hoe u projecten maakt%3 en%4 download ze%3 naar uw apparaat.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="417"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input heeft een opslagmachtiging nodig, %1 klik om het%2 te verlenen en start de toepassing opnieuw.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="514"/>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="521"/>
-        <source>No Changes</source>
-        <translation>Geen wijzigingen</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Detach from Mergin</source>
-        <translation>Ontkoppel van Mergin</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Upload to Mergin</source>
-        <translation>Upload naar Mergin</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="548"/>
-        <source>Remove from device</source>
-        <translation>Verwijder van apparaat</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="670"/>
-        <source>Home</source>
-        <translation>Thuis</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="687"/>
-        <source>My projects</source>
-        <translation>Mijn projecten</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared with me</source>
-        <translation>Gedeeld met mij</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared</source>
-        <translation>Gedeeld</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="725"/>
-        <source>Explore</source>
-        <translation>Verkennen</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="746"/>
-        <source>Remove project</source>
-        <translation>Verwijder project</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="747"/>
-        <source>Any unsynchronized changes will be lost.</source>
-        <translation>Niet opgeslagen wijzigingen gaan verloren.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="774"/>
-        <source>Input needs to be restarted</source>
-        <translation>Input moet opnieuw worden opgestart</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="775"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Om wijzigingen toe te passen nadat opslagmachtiging is verleend, moet Input opnieuw worden gestart. Klik op sluiten en open Input opnieuw.</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="794"/>
-        <source>Retry</source>
-        <translation>Probeer opnieuw</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectStatusModel</name>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="70"/>
-        <source>Pending Changes</source>
-        <translation>In afwachting van wijzigingen</translation>
-    </message>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="96"/>
-        <source>Failed to determine changes</source>
-        <translation>Kan geen wijzigingen vaststellen</translation>
-    </message>
-</context>
-<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/PanelHeader.qml" line="20"/>
@@ -633,9 +446,110 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/ProjectDelegateItem.qml" line="174"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
+        <source>Synchronize project</source>
+        <translation>Synchroniseer project</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
+        <source>Local changes</source>
+        <translation>Lokale wijzigingen</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
+        <source>Remove from device</source>
+        <translation>Verwijder van appraat</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
+        <source>Upload to Mergin</source>
+        <translation>Upload naar Mergin</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
+        <source>Download from Mergin</source>
+        <translation>Download vanaf Mergin</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="255"/>
+        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <translation>Kon het project niet synchroniseren, zorg ervoor dat u bent ingelogd en voldoende rechten heeft.</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectList</name>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="124"/>
         <source>Fetch more</source>
         <translation>Haal meer op</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="137"/>
+        <location filename="../qml/components/ProjectList.qml" line="218"/>
+        <source>Create project</source>
+        <translation>Maak project aan</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="157"/>
+        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
+        <translation>Input heeft een opslagmachtiging nodig, %1 klik om het te verlenen%2 en herstart de applicatie.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="193"/>
+        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
+        <translation>Geen gedownloade projecten gevonden.%1Leer%2 hoe u projecten aan kunt maken%3 en%4download ze%3 naar uw apparaat.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="209"/>
+        <source>You can also create new project by clicking button below.</source>
+        <translation>U kunt ook een nieuw project maken door op de onderstaande knop te klikken.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>Unable to get the list of projects.</source>
+        <translation>Kan de lijst met projecten niet ophalen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>No projects found!</source>
+        <translation>Geen projecten gevonden!</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="269"/>
+        <source>Retry</source>
+        <translation>Probeer opnieuw</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <source>Remove project</source>
+        <translation>Verwijder project</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <source>Any unsynchronized changes will be lost.</source>
+        <translation>Niet opgeslagen wijzigingen gaan verloren.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="328"/>
+        <source>Download project</source>
+        <translation>Download project</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="329"/>
+        <source>Would you like to download the project
+ %1 ?</source>
+        <translation>Wilt u het project downloaden
+%1 ?</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="345"/>
+        <source>Input needs to be restarted</source>
+        <translation>Input moet herstart worden</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="346"/>
+        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
+        <translation>Om wijzigingen toe te passen nadat opslagmachtiging is verleend, moet Input opnieuw worden gestart. Klik op sluiten en open Input opnieuw.</translation>
     </message>
 </context>
 <context>
@@ -644,6 +558,44 @@ Wordt niet toegevoegd aan het project.</translation>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
         <source>Opening project ...</source>
         <translation>Project openen ...</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectPanel</name>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="119"/>
+        <source>No Changes</source>
+        <translation>Geen wijzigingen</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="144"/>
+        <source>Projects</source>
+        <translation>Projecten</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="339"/>
+        <source>Home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="361"/>
+        <source>My projects</source>
+        <translation>Mijn projecten</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared with me</source>
+        <translation>Gedeeld met mij</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared</source>
+        <translation>Gedeeld</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="405"/>
+        <source>Explore</source>
+        <translation>Verken</translation>
     </message>
 </context>
 <context>
@@ -662,7 +614,7 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="104"/>
+        <location filename="../projectwizard.cpp" line="105"/>
         <source>Project %1 created</source>
         <translation>Project %1 aangemaakt</translation>
     </message>
@@ -703,27 +655,27 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="517"/>
+        <location filename="../purchasing.cpp" line="518"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Verwerking van de betalingsgegevens is niet gelukt. %1 Abonnement is niet verstrekt.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="525"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Successfully restored your subscription</source>
         <translation>Herstel van uw abonnement is gelukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="527"/>
+        <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully purchased subscription</source>
         <translation>Aankoop van abonnement is gelukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="540"/>
         <source>Failed to purchase subscription</source>
         <translation>Aankoop van abonnement is mislukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="537"/>
+        <location filename="../purchasing.cpp" line="538"/>
         <source>Unable to restore your subscription</source>
         <translation>Het is niet gelukt uw abonnement te herstellen</translation>
     </message>
@@ -731,22 +683,22 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="117"/>
+        <location filename="../purchasing.cpp" line="118"/>
         <source>Monthly subscription</source>
         <translation>Maandelijks abonnement</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="121"/>
+        <location filename="../purchasing.cpp" line="122"/>
         <source>Annual subscription</source>
         <translation>Jaarlijks abonnement</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="126"/>
+        <location filename="../purchasing.cpp" line="127"/>
         <source>month</source>
         <translation>maand</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="130"/>
+        <location filename="../purchasing.cpp" line="131"/>
         <source>year</source>
         <translation>jaar</translation>
     </message>
@@ -767,52 +719,54 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="185"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="194"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Waarde &quot;%1&quot; %4 kan niet geconverteerd worden naar een toegestane waarde voor veld %2(%3).</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="186"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="195"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation>Waarde %1 kan niet gebruikt worden voor veldtype %2.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="226"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="238"/>
         <source>Cannot update feature</source>
         <translation>Kan object niet wijzigen</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="240"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="252"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Object %1 kon niet worden opgehaald na de commit</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="263"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="275"/>
         <source>Cannot delete feature</source>
         <translation>Kan object niet verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="311"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="375"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Default waarde expressie voor %1:%2 geeft  parseer-fout: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="321"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="333"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="385"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Default-waarde expressie voor %1:%2 geeft evaluatie-fout: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="348"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="410"/>
         <source>Feature could not be added</source>
         <translation>Object kon niet worden toegevoegd</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="435"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Wijzigingen konden niet worden opgeslagen en worden teruggedraaid.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="386"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="455"/>
         <source>Cannot start editing</source>
         <translation>Wijzigen kan niet starten</translation>
     </message>
@@ -919,7 +873,7 @@ Wordt niet toegevoegd aan het project.</translation>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="214"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Ik accepteer de %1voorwaarden en Condities%3 en %2privacybeleid%3 van Mergin</translation>
+        <translation>Ik accepteer de %1gebruiksovereenkomst, de voorwaarden%3 en het %2privacybeleid%3 van Mergin</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="236"/>
@@ -1000,7 +954,7 @@ Wordt niet toegevoegd aan het project.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="285"/>
         <source>Mergin terms of service</source>
-        <translation>Gebruiksovereenkomst van Mergin</translation>
+        <translation>Gebruiksovereenkomst van Mergin diensten</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="294"/>
@@ -1030,7 +984,7 @@ Wordt niet toegevoegd aan het project.</translation>
     <message>
         <location filename="../qml/SubscribePage.qml" line="162"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Uw gekozen Mergin abonnement zal automatisch verlengd worden. U kunt deze op elk moment wijzigen of opzeggen. %1Meer informatie%2</translation>
+        <translation>Uw gekozen Mergin abonnement wordt bij einde contract automatisch verlengd. U kunt deze op elk moment wijzigen of opzeggen. %1Meer informatie%2</translation>
     </message>
 </context>
 <context>
@@ -1053,7 +1007,7 @@ Wordt niet toegevoegd aan het project.</translation>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="66"/>
         <source>Email support</source>
-        <translation>E-mail support</translation>
+        <translation>Ondersteuning via E-mail</translation>
     </message>
 </context>
 <context>
@@ -1064,37 +1018,37 @@ Wordt niet toegevoegd aan het project.</translation>
         <translation>Opgenomen object is niet geldig</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="452"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode on</source>
         <translation>Modus GPS Auto centreren aan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="452"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode off</source>
         <translation>Modus GPS Auto centreren uit</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="475"/>
         <source>No editable layers found.</source>
         <translation>Geen muteerbare lagen aanwezig.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="484"/>
+        <location filename="../qml/main.qml" line="491"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Lage GPS nauwkeurigheid (%1 m)&lt;br&gt;&lt;br&gt;Zoek meer de open ruimte op met vrij zicht naar de lucht.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="517"/>
+        <location filename="../qml/main.qml" line="524"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS momenteel niet beschikbaar. %1Probeer de instelling te wijzigen die gebruik van GPS lokatie toestaat.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="666"/>
+        <location filename="../qml/main.qml" line="672"/>
         <source>Communication error</source>
         <translation>Communicatiefout</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="672"/>
+        <location filename="../qml/main.qml" line="678"/>
         <source>PROJ Error</source>
         <translation>Foutmelding PROJ </translation>
     </message>
@@ -1151,35 +1105,35 @@ Wordt niet toegevoegd aan het project.</translation>
     <message>
         <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="204"/>
         <source>Constraints not valid</source>
-        <translation>Waardebeperking niet geldig</translation>
+        <translation>Voldoet niet aan validiteitscontrole</translation>
     </message>
     <message>
         <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="209"/>
         <source>Note: soft constraints were not met</source>
-        <translation>Notitie: voldoet niet aan zachte beperkingen</translation>
+        <translation>Notitie: voldoet niet aan zachte validiteitscontrole</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="701"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="713"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Object toevegen op &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="703"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="715"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Object wijzigen op &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="705"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="717"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>Object bekijken op &lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="745"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="757"/>
         <source>Delete feature</source>
         <translation>Object verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="746"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="758"/>
         <source>Really delete this feature?</source>
         <translation>Dit object echt verwijderen?</translation>
     </message>
