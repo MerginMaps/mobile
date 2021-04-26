@@ -8,6 +8,7 @@ set(QGIS_QUICK_GUI_MOC_HDRS
 
   qgsquickfeaturelayerpair.h
   qgsquickcoordinatetransformer.h
+  qgsquickexpressioncontextutils.h
   qgsquickfeaturehighlight.h
   qgsquickidentifykit.h
   qgsquickmapcanvasmap.h
@@ -33,6 +34,7 @@ set(QGIS_QUICK_GUI_SRC
 
   qgsquickfeaturelayerpair.cpp
   qgsquickcoordinatetransformer.cpp
+  qgsquickexpressioncontextutils.cpp
   qgsquickfeaturehighlight.cpp
   qgsquickhighlightsgnode.cpp
   qgsquickidentifykit.cpp

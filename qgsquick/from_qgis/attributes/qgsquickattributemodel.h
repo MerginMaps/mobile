@@ -23,6 +23,7 @@
 
 #include "qgis_quick.h"
 #include "qgsquickfeaturelayerpair.h"
+#include "qgsquickpositionkit.h"
 
 /**
  * \ingroup quick
@@ -51,6 +52,10 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
      * QgsQuickFeatureLayerPair for the model. Input for attributes model.
      */
     Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+
+
+    Q_PROPERTY( PositionInfo positionInfo READ positionInfo WRITE setPositionInfo NOTIFY positionInfoChanged )
+
 
     /**
      * Feature roles enum.
@@ -150,6 +155,9 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Returns whether model is remembering last entered values
     bool rememberValuesAllowed() const;
 
+    PositionInfo positionInfo() const;
+    void setPositionInfo( const PositionInfo &positionInfo );
+
   public slots:
 
     //! Handles feature creation
@@ -177,6 +185,9 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Emitted when setData failed
     void dataChangedFailed( const QString &message );
 
+    //! Position infofrmation updated
+    void positionInfoChanged();
+
   protected:
     //! Commits model changes
     bool commit();
@@ -196,6 +207,9 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     QHash<QString, RememberedValues> mRememberedValues;
 
     bool mRememberValuesAllowed;
+
+    // TODO @vsklencar use pointer?
+    PositionInfo mPositionInfo;
 };
 
 #endif // QGSQUICKATTRIBUTEMODEL_H

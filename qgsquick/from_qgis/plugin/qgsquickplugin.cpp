@@ -71,6 +71,7 @@ void QgsQuickPlugin::registerTypes( const char *uri )
   qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+  qRegisterMetaType< PositionInfo >( "PositioInfo" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( uri, 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsProject >( uri, 0, 1, "Project" );

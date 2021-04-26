@@ -25,6 +25,21 @@
 #include "qgsquickmapsettings.h"
 #include "qgsquickcoordinatetransformer.h"
 
+struct PositionInfo
+{
+  QgsGeometry point;
+  QDateTime timestamp;
+  qreal direction;
+  qreal groundSpeed;
+  qreal magneticVariation;
+  qreal horizontalAccuracy;
+  qreal verticalAccuracy;
+  qreal horizontalVerticalAccuracy;
+  qreal verticalSpeed;
+};
+
+Q_DECLARE_METATYPE( PositionInfo );
+
 /**
  * \ingroup quick
  * \brief Convenient set of tools to read GPS position and accuracy.
@@ -120,6 +135,8 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      */
     Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
 
+    Q_PROPERTY( PositionInfo lastPositionInfo READ lastPositionInfo NOTIFY lastPositionInfoChanged )
+
   public:
     //! Creates new position kit
     explicit QgsQuickPositionKit( QObject *parent = nullptr );
@@ -196,6 +213,12 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      */
     Q_INVOKABLE void useGpsLocation();
 
+    // TODO @vsklencar
+    void updateLastPositionInfo( const QGeoPositionInfo &geoPositionInfo );
+
+    PositionInfo lastPositionInfo() const;
+    void setLastPositionInfo( const PositionInfo &lastPositionInfo );
+
   signals:
     //! \copydoc QgsQuickPositionKit::position
     void positionChanged();
@@ -233,6 +256,8 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     //! Emitted when the internal source of GPS location data has been replaced.
     void sourceChanged();
 
+    void lastPositionInfoChanged();
+
   private slots:
     void onPositionUpdated( const QGeoPositionInfo &info );
     void onMapSettingsUpdated();
@@ -260,6 +285,10 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     bool mIsSimulated = false;
     QVector<double> mSimulatePositionLongLatRad;
     std::unique_ptr<QGeoPositionInfoSource> mSource;
+
+    //! Last known position info
+    //std::shared_ptr<PositionInfo> mPositionInfo = nullptr;
+    PositionInfo mLastPositionInfo;
 
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
 };

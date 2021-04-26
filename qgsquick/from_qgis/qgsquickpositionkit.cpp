@@ -59,6 +59,17 @@ QGeoPositionInfoSource  *QgsQuickPositionKit::simulatedSource( double longitude,
   return new QgsQuickSimulatedPositionSource( this, longitude, latitude, radius );
 }
 
+PositionInfo QgsQuickPositionKit::lastPositionInfo() const
+{
+  return mLastPositionInfo;
+}
+
+void QgsQuickPositionKit::setLastPositionInfo( const PositionInfo &lastPositionInfo )
+{
+  mLastPositionInfo = lastPositionInfo;
+  emit lastPositionInfoChanged();
+}
+
 QGeoPositionInfoSource *QgsQuickPositionKit::source() const
 {
   return mSource.get();
@@ -200,6 +211,8 @@ void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
     emit directionChanged();
   }
 
+  updateLastPositionInfo( info );
+
   // recalculate projected/screen variables
   onMapSettingsUpdated();
 }
@@ -338,4 +351,18 @@ void QgsQuickPositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   }
 
   emit mapSettingsChanged();
+}
+
+void QgsQuickPositionKit::updateLastPositionInfo( const QGeoPositionInfo &geoPositionInfo )
+{
+  // TODO @vsklencar fill struct
+  PositionInfo info;
+  info.verticalSpeed = geoPositionInfo.attribute( QGeoPositionInfo::VerticalSpeed );
+  info.groundSpeed = geoPositionInfo.attribute( QGeoPositionInfo::GroundSpeed );
+  info.horizontalAccuracy = geoPositionInfo.attribute( QGeoPositionInfo::HorizontalAccuracy );
+  info.verticalAccuracy = geoPositionInfo.attribute( QGeoPositionInfo::VerticalAccuracy );
+  info.direction = geoPositionInfo.attribute( QGeoPositionInfo::Direction );
+
+  setLastPositionInfo( info );
+
 }

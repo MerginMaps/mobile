@@ -292,6 +292,7 @@ Drawer {
                 id: attributeFormModel
                 attributeModel: QgsQuick.AttributeModel {
                     id: attributeModel
+                    positionInfo: positionKit.lastPositionInfo // TODO @vsklencar
                 }
             }
 

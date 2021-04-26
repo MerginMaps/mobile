@@ -22,6 +22,7 @@
 
 #include "qgsquickattributemodel.h"
 #include "qgsvectorlayereditbuffer.h"
+#include "qgsquickexpressioncontextutils.h"
 
 QgsQuickAttributeModel::QgsQuickAttributeModel( QObject *parent )
   : QAbstractListModel( parent )
@@ -107,6 +108,17 @@ void QgsQuickAttributeModel::prefillRememberedValues()
     if ( from.attributeFilter.at( i ) )
       mFeatureLayerPair.featureRef().setAttribute( i, fromAttributes.at( i ) );
   }
+}
+
+PositionInfo QgsQuickAttributeModel::positionInfo() const
+{
+  return mPositionInfo;
+}
+
+void QgsQuickAttributeModel::setPositionInfo( const PositionInfo &positionInfo )
+{
+  mPositionInfo = positionInfo;
+  emit positionInfoChanged();
 }
 
 void QgsQuickAttributeModel::setFeature( const QgsFeature &feature )
@@ -354,6 +366,8 @@ void QgsQuickAttributeModel::updateDefaultValuesAttributes( const QgsField &edit
     return;
 
   QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
+  expressionContext << QgsQuickExpressionContextUtils::positionScope( mPositionInfo );
+
   expressionContext.setFeature( mFeatureLayerPair.feature() );
   QgsFields fields = mFeatureLayerPair.layer()->fields();
 
