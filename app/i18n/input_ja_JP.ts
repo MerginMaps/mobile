@@ -281,12 +281,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="187"/>
+        <location filename="../inputhelp.cpp" line="188"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>リポートは送信されました。%1次のアドレスに連絡してください：%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="192"/>
+        <location filename="../inputhelp.cpp" line="193"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>リポートの送信に失敗しました。%1インターネット接続を確認してください。</translation>
     </message>
@@ -294,37 +294,19 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputProjUtils</name>
     <message>
-        <location filename="../inputprojutils.cpp" line="77"/>
+        <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
         <translation>必要なPROJのデータム・グリッド・シフト定義がありません：%1。 新しくダウンロードしたプロジェクトを使うには、Inputを再起動してください。</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="98"/>
+        <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
         <translation>PROJの定義のカスタマイズでエラーが発生しました。新しくダウンロードしたプロジェクトを使うには、Inputを再起動してください。</translation>
     </message>
     <message>
-        <location filename="../inputprojutils.cpp" line="108"/>
+        <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
         <translation>必要なPROJのデータム・グリッド・シフト定義がありません：%1。 新しくダウンロードしたプロジェクトを使うには、Inputを再起動してください。</translation>
-    </message>
-</context>
-<context>
-    <name>LocalProjectsManager</name>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="238"/>
-        <source>Download failed, remove and retry</source>
-        <translation>ダウンロード失敗,削除して再度試して下さい</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="258"/>
-        <source>Found multiple QGIS project files</source>
-        <translation>複数のQGISプロジェクトファイルが見つかりました</translation>
-    </message>
-    <message>
-        <location filename="../localprojectsmanager.cpp" line="263"/>
-        <source>Failed to find a QGIS project file</source>
-        <translation>QGISプロジェクトファイルが見つかりません</translation>
     </message>
 </context>
 <context>
@@ -446,175 +428,6 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>MerginApi</name>
-    <message>
-        <location filename="../merginapi.cpp" line="559"/>
-        <source>Username must have at least 4 characters</source>
-        <translation>ユーザー名は4文字以上でなければなりません。</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="566"/>
-        <source>Please enter a valid email</source>
-        <translation>正しいメールを入力して下さい</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="573"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>パスワードの強度が十分ではありません。少なくとも以下の要素を満たす必要があります。%1 8文字以上の長さ%1 小文字を含む%1 大文字を含む%1 数字または特殊文字を含む</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="586"/>
-        <source>Passwords do not match</source>
-        <translation>パスワードが一致しません。</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="593"/>
-        <source>Please accept Terms and Privacy Policy</source>
-        <translation>利用規約と個人情報保護についてに同意してください。</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="841"/>
-        <source>Registration successful</source>
-        <translation>登録が成功しました</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="1118"/>
-        <source>Project detached from Mergin</source>
-        <translation>Merginから切り離されたプロジェクト</translation>
-    </message>
-    <message>
-        <location filename="../merginapi.cpp" line="862"/>
-        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
-        <translation>選択したMerginサーバーでは新規登録ができません。%1 管理者にご確認ください。</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectPanel</name>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="211"/>
-        <source>Projects</source>
-        <translation>プロジェクト</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>Unable to get the list of projects.</source>
-        <translation>プロジェクトのリストを取得できません</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="461"/>
-        <source>No projects found!</source>
-        <translation>プロジェクトが見つかりません!</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="312"/>
-        <source>Explore public projects.</source>
-        <translation>公開プロジェクトを探しています。</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="380"/>
-        <source>Create project</source>
-        <translation>プロジェクトを作成</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="395"/>
-        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>ダウンロードされたプロジェクトはありません。%2プロジェクトの作り方%3 とデバイスへの %4ダウンロードの方法%3 を%1学びましょう。</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="417"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Inputはストレージへのアクセス許可が必要です。 %1クリックして許可し、%2 アプリを再起動します。</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="514"/>
-        <source>Status</source>
-        <translation>状態</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="521"/>
-        <source>No Changes</source>
-        <translation>変更はありません</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Detach from Mergin</source>
-        <translation>Merginから切り離す</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="531"/>
-        <source>Upload to Mergin</source>
-        <translation>Merginにアップロード</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="548"/>
-        <source>Remove from device</source>
-        <translation>デバイスから削除</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="670"/>
-        <source>Home</source>
-        <translation>ホーム</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="687"/>
-        <source>My projects</source>
-        <translation>プロジェクト</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared with me</source>
-        <translation>共有プロジェクト</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="706"/>
-        <source>Shared</source>
-        <translation>共有</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="725"/>
-        <source>Explore</source>
-        <translation>探す</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="746"/>
-        <source>Remove project</source>
-        <translation>プロジェクトを削除</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="747"/>
-        <source>Any unsynchronized changes will be lost.</source>
-        <translation>同期されていない変更は失われます。</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="774"/>
-        <source>Input needs to be restarted</source>
-        <translation>Inputは再起動が必要です</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="775"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>ストレージへの許可を与えた後に変更を適用するには、Inputを再起動する必要があります。閉じるをクリックして、再度Inputを開きます。</translation>
-    </message>
-    <message>
-        <location filename="../qml/MerginProjectPanel.qml" line="794"/>
-        <source>Retry</source>
-        <translation>リトライ</translation>
-    </message>
-</context>
-<context>
-    <name>MerginProjectStatusModel</name>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="70"/>
-        <source>Pending Changes</source>
-        <translation>保留している変更</translation>
-    </message>
-    <message>
-        <location filename="../merginprojectstatusmodel.cpp" line="96"/>
-        <source>Failed to determine changes</source>
-        <translation>変更点の判別に失敗しました</translation>
-    </message>
-</context>
-<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/PanelHeader.qml" line="20"/>
@@ -633,9 +446,110 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/ProjectDelegateItem.qml" line="174"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
+        <source>Synchronize project</source>
+        <translation>プロジェクトを同期</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
+        <source>Local changes</source>
+        <translation>ローカルの変更</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
+        <source>Remove from device</source>
+        <translation>デバイスから削除</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
+        <source>Upload to Mergin</source>
+        <translation>Merginにアップロード</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
+        <source>Download from Mergin</source>
+        <translation>Merginからダウンロード</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="255"/>
+        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <translation>プロジェクトを同期できませんでした。十分な権限を持ってログインしているか確認してください。</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectList</name>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="124"/>
         <source>Fetch more</source>
         <translation>もっと取得</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="137"/>
+        <location filename="../qml/components/ProjectList.qml" line="218"/>
+        <source>Create project</source>
+        <translation>プロジェクトを作成</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="157"/>
+        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
+        <translation>Inputはストレージへのアクセス許可が必要です。 %1クリックして許可し、%2 アプリを再起動します。</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="193"/>
+        <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
+        <translation>ダウンロードされたプロジェクトはありません。%2プロジェクトの作り方%3 とデバイスへの %4ダウンロードの方法%3 を%1学びましょう。</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="209"/>
+        <source>You can also create new project by clicking button below.</source>
+        <translation>下のボタンをクリックして、新しいプロジェクトを作成することもできます。</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>Unable to get the list of projects.</source>
+        <translation>プロジェクトのリストを取得できません</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <source>No projects found!</source>
+        <translation>プロジェクトが見つかりません!</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="269"/>
+        <source>Retry</source>
+        <translation>リトライ</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <source>Remove project</source>
+        <translation>プロジェクトを削除</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <source>Any unsynchronized changes will be lost.</source>
+        <translation>同期されていない変更は失われます。</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="328"/>
+        <source>Download project</source>
+        <translation>プロジェクトをダウンロード</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="329"/>
+        <source>Would you like to download the project
+ %1 ?</source>
+        <translation>プロジェクトをダウンロードしますか
+ %1 ?</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="345"/>
+        <source>Input needs to be restarted</source>
+        <translation>Inputは再起動が必要です</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/ProjectList.qml" line="346"/>
+        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
+        <translation>ストレージへの許可を与えた後に変更を適用するには、Inputを再起動する必要があります。閉じるをクリックして、再度Inputを開きます。</translation>
     </message>
 </context>
 <context>
@@ -644,6 +558,44 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
         <source>Opening project ...</source>
         <translation>プロジェクトを開いています...</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectPanel</name>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="119"/>
+        <source>No Changes</source>
+        <translation>変更はありません</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="144"/>
+        <source>Projects</source>
+        <translation>プロジェクト</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="339"/>
+        <source>Home</source>
+        <translation>ホーム</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="361"/>
+        <source>My projects</source>
+        <translation>プロジェクト</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared with me</source>
+        <translation>共有プロジェクト</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <source>Shared</source>
+        <translation>共有</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="405"/>
+        <source>Explore</source>
+        <translation>探す</translation>
     </message>
 </context>
 <context>
@@ -662,7 +614,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="104"/>
+        <location filename="../projectwizard.cpp" line="105"/>
         <source>Project %1 created</source>
         <translation>プロジェクト %1 が作成されました</translation>
     </message>
@@ -703,27 +655,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="517"/>
+        <location filename="../purchasing.cpp" line="518"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>支払い処理できませんでした。%1サブスクリプションは購入されませんでした。</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="525"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Successfully restored your subscription</source>
         <translation>サブスクリプションを復元しました</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="527"/>
+        <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully purchased subscription</source>
         <translation>サブスクリプションを購入しました</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="540"/>
         <source>Failed to purchase subscription</source>
         <translation>サブスクリプションの購入に失敗しました</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="537"/>
+        <location filename="../purchasing.cpp" line="538"/>
         <source>Unable to restore your subscription</source>
         <translation>サブスクリプションを復元できませんでした</translation>
     </message>
@@ -731,22 +683,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="117"/>
+        <location filename="../purchasing.cpp" line="118"/>
         <source>Monthly subscription</source>
         <translation>月間サブスクリプション</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="121"/>
+        <location filename="../purchasing.cpp" line="122"/>
         <source>Annual subscription</source>
         <translation>年間サブスクリプション</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="126"/>
+        <location filename="../purchasing.cpp" line="127"/>
         <source>month</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="130"/>
+        <location filename="../purchasing.cpp" line="131"/>
         <source>year</source>
         <translation>年</translation>
     </message>
@@ -767,52 +719,54 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QgsQuickAttributeModel</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="185"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="194"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>値 &quot;%1&quot; %4 はフィールド%2(%3)のための互換値に変換できませんでした。</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="186"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="195"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation>値 %1 フィールドタイプ %2と互換性がありません。</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="226"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="238"/>
         <source>Cannot update feature</source>
         <translation>地物を更新できません</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="240"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="252"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>コミット後に地物 %1 を取得できませんでした</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="263"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="275"/>
         <source>Cannot delete feature</source>
         <translation>地物を削除できません</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="311"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="375"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2 のデフォルト値の式の変換でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="321"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="333"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="385"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2 のデフォルト値の式の評価でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="348"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="410"/>
         <source>Feature could not be added</source>
         <translation>地物を追加できませんでした</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="366"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="435"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>変更を保存できませんでした。ロールバックします。</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="386"/>
+        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="455"/>
         <source>Cannot start editing</source>
         <translation>編集を開始できません</translation>
     </message>
@@ -1064,37 +1018,37 @@ Won&apos;t be added to the project.</source>
         <translation>記録された地物は有効ではありません</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="452"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS自動センターモードをON</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="452"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS自動センターモードをOFF</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="475"/>
         <source>No editable layers found.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="484"/>
+        <location filename="../qml/main.qml" line="491"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>GPSの位置精度が低いです (%1 m)&lt;br&gt;&lt;br&gt;空の見晴らしの良いところで使用してください</translation>
+        <translation>GPSの位置精度が低いです (%1 m)&lt;br&gt;&lt;br&gt;空の見晴らしの良いところで使用してください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="517"/>
+        <location filename="../qml/main.qml" line="524"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPSは現在使用できません。%1デバイスの設定でGPSロケーションを許可してください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="666"/>
+        <location filename="../qml/main.qml" line="672"/>
         <source>Communication error</source>
         <translation>通信エラー</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="672"/>
+        <location filename="../qml/main.qml" line="678"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
@@ -1159,27 +1113,27 @@ Won&apos;t be added to the project.</source>
         <translation>注：ソフトな制約が満たされませんでした</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="701"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="713"/>
         <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;に地物を追加</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="703"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="715"/>
         <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;の地物を編集</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="705"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="717"/>
         <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
         <translation>&lt;i&gt;%1&lt;/i&gt;の地物を表示</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="745"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="757"/>
         <source>Delete feature</source>
         <translation>地物の削除</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="746"/>
+        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="758"/>
         <source>Really delete this feature?</source>
         <translation>この地物を本当に削除しますか?</translation>
     </message>
