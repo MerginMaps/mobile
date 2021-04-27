@@ -55,7 +55,12 @@ class CoreUtils
 
     /**
      * Sets the filename of the internal text log file
+     * - Use LOG_TO_DEVNULL to do not output any logs
+     * - Use LOG_TO_STDOUT to output to stdout
+     * - Use filename to output to any file
      */
+    static const QString LOG_TO_DEVNULL;
+    static const QString LOG_TO_STDOUT;
     static void setLogFilename( const QString &value );
 
     static QString logFilename();
