@@ -27,15 +27,17 @@
 
 struct PositionInfo
 {
-  QgsGeometry point;
-  QDateTime timestamp;
-  qreal direction;
-  qreal groundSpeed;
-  qreal magneticVariation;
-  qreal horizontalAccuracy;
-  qreal verticalAccuracy;
-  qreal horizontalVerticalAccuracy;
-  qreal verticalSpeed;
+  double longitude = std::numeric_limits< double >::quiet_NaN();
+  double latitude = std::numeric_limits< double >::quiet_NaN();
+  double altitude = std::numeric_limits< double >::quiet_NaN();
+  QgsPoint position;
+  double direction = std::numeric_limits< double >::quiet_NaN();
+  double groundSpeed = std::numeric_limits< double >::quiet_NaN();
+  double magneticVariation = std::numeric_limits< double >::quiet_NaN();
+  double horizontalAccuracy = std::numeric_limits< double >::quiet_NaN();
+  double verticalAccuracy = std::numeric_limits< double >::quiet_NaN();
+  double horizontalVerticalAccuracy = std::numeric_limits< double >::quiet_NaN();
+  double verticalSpeed = std::numeric_limits< double >::quiet_NaN();
 };
 
 Q_DECLARE_METATYPE( PositionInfo );
@@ -135,6 +137,9 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      */
     Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
 
+    /**
+    * Stores last known position information from QGeoPositionSource
+    */
     Q_PROPERTY( PositionInfo lastPositionInfo READ lastPositionInfo NOTIFY lastPositionInfoChanged )
 
   public:
@@ -213,10 +218,10 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      */
     Q_INVOKABLE void useGpsLocation();
 
-    // TODO @vsklencar
-    void updateLastPositionInfo( const QGeoPositionInfo &geoPositionInfo );
-
+    //! \copydoc QgsQuickPositionKit::lastPositionInfo
     PositionInfo lastPositionInfo() const;
+
+    //! \copydoc QgsQuickPositionKit::lastPositionInfo
     void setLastPositionInfo( const PositionInfo &lastPositionInfo );
 
   signals:
@@ -256,6 +261,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     //! Emitted when the internal source of GPS location data has been replaced.
     void sourceChanged();
 
+    //! \copydoc QgsQuickPositionKit::lastPositionInfo
     void lastPositionInfoChanged();
 
   private slots:
@@ -275,22 +281,19 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     QGeoPositionInfoSource *gpsSource();
     QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
 
-    QgsPoint mPosition;
+    //! Last known position information from QGeoPositionInfoSource
+    PositionInfo mLastPositionInfo;
     QgsPoint mProjectedPosition;
     QPointF mScreenPosition;
-    double mAccuracy = -1;
     double mScreenAccuracy = 2;
-    double mDirection = -1;
     bool mHasPosition = false;
     bool mIsSimulated = false;
     QVector<double> mSimulatePositionLongLatRad;
     std::unique_ptr<QGeoPositionInfoSource> mSource;
 
-    //! Last known position info
-    //std::shared_ptr<PositionInfo> mPositionInfo = nullptr;
-    PositionInfo mLastPositionInfo;
-
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    //! returns value for given attribute
+    double getAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute );
 };
 
 #endif // QGSQUICKPOSITIONKIT_H

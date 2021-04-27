@@ -16,10 +16,12 @@ import "."  // import InputStyle singleton
 Drawer {
 
     property var mapSettings
+    property var positionKit
     property var project
     property real panelHeight
     property real previewHeight
     property bool isReadOnly
+    property bool useGpsPoint
 
     signal editGeometryClicked()
     signal panelClosed()
@@ -292,7 +294,8 @@ Drawer {
                 id: attributeFormModel
                 attributeModel: QgsQuick.AttributeModel {
                     id: attributeModel
-                    positionInfo: positionKit.lastPositionInfo // TODO @vsklencar
+                    positionInfo: positionKit.lastPositionInfo
+                    useGpsPoint: featurePanel.useGpsPoint
                 }
             }
 

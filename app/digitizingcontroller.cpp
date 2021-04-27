@@ -16,6 +16,7 @@
 
 #include "qgsquickutils.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsquickexpressioncontextutils.h"
 
 DigitizingController::DigitizingController( QObject *parent )
   : QObject( parent )
@@ -206,6 +207,8 @@ QgsQuickFeatureLayerPair DigitizingController::createFeatureLayerPair( const Qgs
 {
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  context << QgsQuickExpressionContextUtils::positionScope( mPositionKit->lastPositionInfo(), mUseGpsPoint );
+
   QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geometry, attrs.toMap(), &context );
 
   return QgsQuickFeatureLayerPair( feat, featureLayerPair().layer() );

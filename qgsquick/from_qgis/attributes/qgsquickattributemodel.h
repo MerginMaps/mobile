@@ -52,10 +52,10 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
      * QgsQuickFeatureLayerPair for the model. Input for attributes model.
      */
     Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
-
-
+    //! Position information for the model.
     Q_PROPERTY( PositionInfo positionInfo READ positionInfo WRITE setPositionInfo NOTIFY positionInfoChanged )
-
+    //! If true, position information matches with feauteLayerPair.
+    Q_PROPERTY( bool useGpsPoint READ useGpsPoint WRITE setUseGpsPoint NOTIFY useGpsPointChanged )
 
     /**
      * Feature roles enum.
@@ -155,8 +155,15 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Returns whether model is remembering last entered values
     bool rememberValuesAllowed() const;
 
+    //! Gets current positionInfo
     PositionInfo positionInfo() const;
+    //! Sets current positionInfo
     void setPositionInfo( const PositionInfo &positionInfo );
+
+    //! Gets mUseGpsPoint
+    bool useGpsPoint() const;
+    //! Sets mUseGpsPoint
+    void setUseGpsPoint( bool useGpsPoint );
 
   public slots:
 
@@ -188,6 +195,9 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Position infofrmation updated
     void positionInfoChanged();
 
+    //! UseGpsPoint changed
+    void useGpsPointChanged();
+
   protected:
     //! Commits model changes
     bool commit();
@@ -207,8 +217,10 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     QHash<QString, RememberedValues> mRememberedValues;
 
     bool mRememberValuesAllowed;
+    //! If true, position information matches with feauteLayerPair.
+    bool mUseGpsPoint;
 
-    // TODO @vsklencar use pointer?
+    //! Stores position information - used with updating/resetting attributes
     PositionInfo mPositionInfo;
 };
 

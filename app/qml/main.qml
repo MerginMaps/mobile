@@ -108,7 +108,6 @@ ApplicationWindow {
       }
 
       stateManager.state = "view"
-      digitizing.useGpsPoint = false
     }
 
 
@@ -717,6 +716,8 @@ ApplicationWindow {
         mapSettings: mapCanvas.mapSettings
         panelHeight: window.height
         previewHeight: window.height/3
+        positionKit: positionKit
+        useGpsPoint: digitizing.useGpsPoint
         project: __loader.project
         z: 0 // to featureform editors be visible
 

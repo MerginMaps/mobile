@@ -110,6 +110,17 @@ void QgsQuickAttributeModel::prefillRememberedValues()
   }
 }
 
+bool QgsQuickAttributeModel::useGpsPoint() const
+{
+  return mUseGpsPoint;
+}
+
+void QgsQuickAttributeModel::setUseGpsPoint( bool useGpsPoint )
+{
+  mUseGpsPoint = useGpsPoint;
+  emit useGpsPointChanged();
+}
+
 PositionInfo QgsQuickAttributeModel::positionInfo() const
 {
   return mPositionInfo;
@@ -318,6 +329,7 @@ void QgsQuickAttributeModel::resetAttributes()
     return;
 
   QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
+  expressionContext << QgsQuickExpressionContextUtils::positionScope( mPositionInfo, mUseGpsPoint );
   expressionContext.setFeature( mFeatureLayerPair.feature() );
 
   QgsFields fields = mFeatureLayerPair.layer()->fields();
@@ -366,7 +378,7 @@ void QgsQuickAttributeModel::updateDefaultValuesAttributes( const QgsField &edit
     return;
 
   QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
-  expressionContext << QgsQuickExpressionContextUtils::positionScope( mPositionInfo );
+  expressionContext << QgsQuickExpressionContextUtils::positionScope( mPositionInfo, mUseGpsPoint );
 
   expressionContext.setFeature( mFeatureLayerPair.feature() );
   QgsFields fields = mFeatureLayerPair.layer()->fields();

@@ -20,17 +20,24 @@
 
 /**
  * \ingroup quick
- * \brief TODO
- *
+ * \brief The utility class providing an extra QgsExpressionContextScope with new variables.
  * \since QGIS 3.20
  */
-class QgsQuickExpressionContextUtils
+class QUICK_EXPORT QgsQuickExpressionContextUtils: public QObject
 {
+
+    Q_OBJECT
 
     ~QgsQuickExpressionContextUtils() = default;
   public:
-    static QgsExpressionContextScope *positionScope( PositionInfo &positionInformation );
-    static QgsExpressionContextScope *positionScopeTest( const QString &test );
+    /**
+       * @brief Creates a new QgsExpressionContextScope with position variables that suppose to extend expression scope while creating/editing a feature.
+       * @param positionInformation The source of position information.
+       * @param usesGpsPosition Value is set to the "position_point_from_gps" variable. Suppose to be true when given positionInformation matches a feature
+       * that a new scope will be used with.
+       * @return QgsExpressionContextScope
+       */
+    static QgsExpressionContextScope *positionScope( PositionInfo positionInformation, bool usesGpsPosition );
   private:
     static void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );
 };

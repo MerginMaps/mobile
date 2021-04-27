@@ -149,7 +149,7 @@ void QgsQuickPositionKit::updateProjectedPosition()
   if ( !mMapSettings )
     return;
 
-  QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
+  QgsPointXY srcPoint = QgsPointXY( mLastPositionInfo.position.x(), mLastPositionInfo.position.y() );
   QgsPointXY projectedPositionXY = QgsQuickUtils::transformPoint(
                                      positionCRS(),
                                      mMapSettings->destinationCrs(),
@@ -158,13 +158,21 @@ void QgsQuickPositionKit::updateProjectedPosition()
                                    );
 
   QgsPoint projectedPosition( projectedPositionXY );
-  projectedPosition.addZValue( mPosition.z() );
+  projectedPosition.addZValue( mLastPositionInfo.position.z() );
 
   if ( projectedPosition != mProjectedPosition )
   {
     mProjectedPosition = projectedPosition;
     emit projectedPositionChanged();
   }
+}
+
+double QgsQuickPositionKit::getAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute )
+{
+  double value = -1;
+  if ( info.hasAttribute( attribute ) )
+    value = info.attribute( attribute );
+  return value;
 }
 
 void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
@@ -182,36 +190,49 @@ void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
                         info.coordinate().latitude(),
                         info.coordinate().altitude() ); // can be NaN
 
-  if ( position != mPosition )
+  if ( position != this->position() )
   {
-    mPosition = position;
+    mLastPositionInfo.position = position;
+    mLastPositionInfo.latitude = info.coordinate().longitude();
+    mLastPositionInfo.latitude = info.coordinate().latitude();
+    mLastPositionInfo.altitude = info.coordinate().altitude();
     emit positionChanged();
   }
   // calculate accuracy
-  double accuracy;
-  if ( info.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) )
-    accuracy = info.attribute( QGeoPositionInfo::HorizontalAccuracy );
-  else
-    accuracy = -1;
-  if ( !qgsDoubleNear( accuracy, mAccuracy ) )
+  double accuracy = getAttribute( info, QGeoPositionInfo::HorizontalAccuracy );
+  if ( !qgsDoubleNear( accuracy, this->accuracy() ) )
   {
-    mAccuracy = accuracy;
+    mLastPositionInfo.horizontalAccuracy = accuracy;
     emit accuracyChanged();
   }
 
-  // calculate direction
-  double direction;
-  if ( info.hasAttribute( QGeoPositionInfo::Direction ) )
-    direction = info.attribute( QGeoPositionInfo::Direction );
-  else
-    direction = -1;
-  if ( !qgsDoubleNear( direction, mDirection ) )
+  double verticalAccuracy = getAttribute( info, QGeoPositionInfo::VerticalAccuracy );
+  if ( !qgsDoubleNear( verticalAccuracy, mLastPositionInfo.verticalAccuracy ) )
   {
-    mDirection = direction;
+    mLastPositionInfo.verticalAccuracy = verticalAccuracy;
+  }
+
+  double verticalSpeed = getAttribute( info, QGeoPositionInfo::VerticalSpeed );
+  if ( !qgsDoubleNear( verticalSpeed, mLastPositionInfo.verticalSpeed ) )
+  {
+    mLastPositionInfo.verticalSpeed = verticalSpeed;
+  }
+
+  double groundSpeed = getAttribute( info, QGeoPositionInfo::GroundSpeed );
+  if ( !qgsDoubleNear( groundSpeed, mLastPositionInfo.groundSpeed ) )
+  {
+    mLastPositionInfo.groundSpeed = groundSpeed;
+  }
+
+  // calculate direction
+  double direction = getAttribute( info, QGeoPositionInfo::Direction );
+  if ( !qgsDoubleNear( direction, this->direction() ) )
+  {
+    mLastPositionInfo.direction = direction;
     emit directionChanged();
   }
 
-  updateLastPositionInfo( info );
+  emit lastPositionInfoChanged();
 
   // recalculate projected/screen variables
   onMapSettingsUpdated();
@@ -305,12 +326,12 @@ bool QgsQuickPositionKit::hasPosition() const
 
 QgsPoint QgsQuickPositionKit::position() const
 {
-  return mPosition;
+  return mLastPositionInfo.position;
 }
 
 double QgsQuickPositionKit::accuracy() const
 {
-  return mAccuracy;
+  return mLastPositionInfo.horizontalAccuracy;
 }
 
 QgsUnitTypes::DistanceUnit QgsQuickPositionKit::accuracyUnits() const
@@ -320,7 +341,7 @@ QgsUnitTypes::DistanceUnit QgsQuickPositionKit::accuracyUnits() const
 
 double QgsQuickPositionKit::direction() const
 {
-  return mDirection;
+  return mLastPositionInfo.direction;
 }
 
 bool QgsQuickPositionKit::isSimulated() const
@@ -351,18 +372,4 @@ void QgsQuickPositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   }
 
   emit mapSettingsChanged();
-}
-
-void QgsQuickPositionKit::updateLastPositionInfo( const QGeoPositionInfo &geoPositionInfo )
-{
-  // TODO @vsklencar fill struct
-  PositionInfo info;
-  info.verticalSpeed = geoPositionInfo.attribute( QGeoPositionInfo::VerticalSpeed );
-  info.groundSpeed = geoPositionInfo.attribute( QGeoPositionInfo::GroundSpeed );
-  info.horizontalAccuracy = geoPositionInfo.attribute( QGeoPositionInfo::HorizontalAccuracy );
-  info.verticalAccuracy = geoPositionInfo.attribute( QGeoPositionInfo::VerticalAccuracy );
-  info.direction = geoPositionInfo.attribute( QGeoPositionInfo::Direction );
-
-  setLastPositionInfo( info );
-
 }
