@@ -169,7 +169,7 @@ void QgsQuickPositionKit::updateProjectedPosition()
 
 double QgsQuickPositionKit::getAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute )
 {
-  double value = -1;
+  double value = std::numeric_limits< double >::quiet_NaN();
   if ( info.hasAttribute( attribute ) )
     value = info.attribute( attribute );
   return value;
@@ -193,7 +193,7 @@ void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
   if ( position != this->position() )
   {
     mLastPositionInfo.position = position;
-    mLastPositionInfo.latitude = info.coordinate().longitude();
+    mLastPositionInfo.longitude = info.coordinate().longitude();
     mLastPositionInfo.latitude = info.coordinate().latitude();
     mLastPositionInfo.altitude = info.coordinate().altitude();
     emit positionChanged();

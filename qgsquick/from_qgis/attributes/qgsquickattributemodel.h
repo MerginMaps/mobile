@@ -192,7 +192,7 @@ class QUICK_EXPORT QgsQuickAttributeModel : public QAbstractListModel
     //! Emitted when setData failed
     void dataChangedFailed( const QString &message );
 
-    //! Position infofrmation updated
+    //! Position information changed
     void positionInfoChanged();
 
     //! UseGpsPoint changed

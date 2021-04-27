@@ -15,14 +15,16 @@ QgsExpressionContextScope *QgsQuickExpressionContextUtils::positionScope( Positi
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QObject::tr( "Position" ) );
 
   const QgsGeometry point = QgsGeometry( new QgsPoint( positionInformation.longitude, positionInformation.latitude, positionInformation.altitude ) );
+  addPositionVariable( scope, QStringLiteral( "longitude" ), notNaNorEmpty( positionInformation.longitude ) );
+  addPositionVariable( scope, QStringLiteral( "latitude" ), notNaNorEmpty( positionInformation.latitude ) );
+  addPositionVariable( scope, QStringLiteral( "altitude" ), notNaNorEmpty( positionInformation.altitude ) );
   addPositionVariable( scope, QStringLiteral( "coordinate" ), QVariant::fromValue<QgsGeometry>( point ) );
-  //addPositionVariable( scope, QStringLiteral( "timestamp" ), positionInformation.timestamp );
-  addPositionVariable( scope, QStringLiteral( "direction" ), positionInformation.direction );
-  addPositionVariable( scope, QStringLiteral( "ground_speed" ), positionInformation.groundSpeed );
-  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), positionInformation.magneticVariation );
-  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), positionInformation.horizontalAccuracy );
-  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), positionInformation.verticalAccuracy );
-  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), positionInformation.verticalSpeed );
+  addPositionVariable( scope, QStringLiteral( "direction" ), notNaNorEmpty( positionInformation.direction ) );
+  addPositionVariable( scope, QStringLiteral( "ground_speed" ), notNaNorEmpty( positionInformation.groundSpeed ) );
+  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), notNaNorEmpty( positionInformation.magneticVariation ) );
+  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), notNaNorEmpty( positionInformation.horizontalAccuracy ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), notNaNorEmpty( positionInformation.verticalAccuracy ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), notNaNorEmpty( positionInformation.verticalSpeed ) );
   addPositionVariable( scope, QStringLiteral( "from_gps" ), usesGpsPosition );
 
   return scope;
@@ -30,8 +32,7 @@ QgsExpressionContextScope *QgsQuickExpressionContextUtils::positionScope( Positi
 
 void QgsQuickExpressionContextUtils::addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue )
 {
-  // TODO @vsklencar check validity of the value
-  if ( true )
+  if ( value.isValid() )
   {
     scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "position_%1" ).arg( name ), value, true, true ) );
   }
@@ -39,4 +40,9 @@ void QgsQuickExpressionContextUtils::addPositionVariable( QgsExpressionContextSc
   {
     scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "position_%1" ).arg( name ), defaultValue, true, true ) );
   }
+}
+
+QVariant QgsQuickExpressionContextUtils::notNaNorEmpty( double value )
+{
+  return ( std::isnan( value ) ) ? QVariant() : QVariant( value );
 }

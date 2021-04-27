@@ -40,6 +40,7 @@ class QUICK_EXPORT QgsQuickExpressionContextUtils: public QObject
     static QgsExpressionContextScope *positionScope( PositionInfo positionInformation, bool usesGpsPosition );
   private:
     static void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );
+    static QVariant notNaNorEmpty( double value );
 };
 
 #endif // QGSQUICKEXPRESSIONCONTEXTUTILS_H
