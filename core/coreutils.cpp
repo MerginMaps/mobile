@@ -14,11 +14,14 @@
 #include <QDir>
 #include <QFile>
 #include <QDirIterator>
+#include <QTextStream>
 
 #include "qcoreapplication.h"
 #include "merginapi.h"
 
-QString CoreUtils::sLogFile = QStringLiteral();
+const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
+const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
+QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 
 QString CoreUtils::appInfo()
 {
@@ -93,22 +96,31 @@ void CoreUtils::log( const QString &topic, const QString &info )
   QString logFilePath;
   QByteArray data;
   data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ) );
-
-  qDebug() << data;
   appendLog( data, sLogFile );
 }
 
 void CoreUtils::appendLog( const QByteArray &data, const QString &path )
 {
-  QFile file( path );
-
-  if ( path.isEmpty() || !file.open( QIODevice::Append ) )
+  if ( path != LOG_TO_DEVNULL )
   {
-    return;
+    if ( path == LOG_TO_STDOUT )
+    {
+      QTextStream out( stdout );
+      out << data;
+    }
+    else
+    {
+      qDebug() << data;
+      QFile file( path );
+      if ( path.isEmpty() || !file.open( QIODevice::Append ) )
+      {
+        qDebug() << "ERROR: Invalid log file";
+        return;
+      }
+      file.write( data );
+      file.close();
+    }
   }
-
-  file.write( data );
-  file.close();
 }
 
 QDateTime CoreUtils::getLastModifiedFileDateTime( const QString &path )
