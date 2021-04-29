@@ -671,7 +671,7 @@ ApplicationWindow {
         onOpenSubscriptionPlans: {
           if (__merginApi.apiSupportsSubscriptions) {
             storageLimitDialog.close()
-            projectPanel.stackView.push( projectPanel.subscribePanelComp )
+            projectPanel.manageSubscriptionPlans()
           }
         }
     }

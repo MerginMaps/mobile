@@ -23,9 +23,6 @@ Item {
   property string activeProjectId: ""
   property string activeProjectPath: ""
 
-  property alias stackView: stackView
-  property alias subscribePanelComp: subscribePanelComp
-
   signal openProjectRequested( string projectId, string projectPath )
   signal resetView() // resets view to state as when panel is opened
 
@@ -37,6 +34,14 @@ Item {
   function hidePanel() {
     root.visible = false
     stackView.clearStackAndClose()
+  }
+
+  function manageSubscriptionPlans() {
+    if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
+      stackView.push( subscribePanelComp)
+    } else {
+      Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+    }
   }
 
   visible: false
@@ -506,13 +511,7 @@ Item {
       onBack: {
         stackView.popOnePageOrClose()
       }
-      onManagePlansClicked: {
-        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
-          stackView.push( subscribePanelComp)
-        } else {
-          Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
-        }
-      }
+      onManagePlansClicked: manageSubscriptionPlans()
       onSignOutClicked: {
         if ( __merginApi.userAuth.hasAuthData() ) {
           __merginApi.clearAuth()
