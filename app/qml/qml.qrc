@@ -66,5 +66,6 @@
         <file>components/ProjectDelegateItem.qml</file>
         <file>components/ProjectList.qml</file>
         <file>components/RichTextBlock.qml</file>
+        <file>StorageLimitDialog.qml</file>
     </qresource>
 </RCC>

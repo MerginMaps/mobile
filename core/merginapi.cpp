@@ -1598,14 +1598,28 @@ void MerginApi::uploadStartReplyFinished()
     int status = statusCode.toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString errorMsg = r->errorString();
-    bool showAsDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
+    bool showLimitReachedDialog = status == 400 && serverMsg == QStringLiteral( "You have reached a data limit" );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     transaction.replyUploadStart->deleteLater();
     transaction.replyUploadStart = nullptr;
 
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), showAsDialog );
+    if ( showLimitReachedDialog )
+    {
+      QList<MerginFile> files = transaction.uploadQueue;
+      qreal uploadSize = 0;
+      for ( MerginFile f : files )
+      {
+        uploadSize = uploadSize + f.size;
+      }
+      emit storageLimitReached( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), uploadSize );
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
+    }
+
     finishProjectSync( projectFullName, false );
   }
 }

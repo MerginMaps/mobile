@@ -23,6 +23,9 @@ Item {
   property string activeProjectId: ""
   property string activeProjectPath: ""
 
+  property alias stackView: stackView
+  property alias subscribePanelComp: subscribePanelComp
+
   signal openProjectRequested( string projectId, string projectPath )
   signal resetView() // resets view to state as when panel is opened
 
