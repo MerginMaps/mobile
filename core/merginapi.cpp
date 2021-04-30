@@ -966,8 +966,9 @@ void MerginApi::pingMerginReplyFinished()
 
 void MerginApi::onPlanProductIdChanged()
 {
-  if (mUserAuth->hasAuthData()) {
-      getUserInfo();
+  if ( mUserAuth->hasAuthData() )
+  {
+    getUserInfo();
   }
 }
 
