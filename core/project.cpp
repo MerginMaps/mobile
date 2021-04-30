@@ -62,19 +62,22 @@ ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Projec
     return ProjectStatus::NoVersion;
   }
 
-  //
-  // TODO: this check for local modifications should be revisited
-  //
-
   // Something has locally changed after last sync with server
   QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
   QDateTime lastModified = CoreUtils::getLastModifiedFileDateTime( project->local->projectDir );
-  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified();
+  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified().toUTC();
   MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
   int filesCount = CoreUtils::getProjectFilesCount( project->local->projectDir );
   if ( lastSync < lastModified || meta.files.count() != filesCount )
   {
-    return ProjectStatus::Modified;
+    // When GPKG is opened, its header is updated and therefore lastModified timestamp is updated as well.
+    // Double check if there is really something to upload
+    QList<MerginFile> localFiles = MerginApi::getLocalProjectFiles( project->local->projectDir + "/" );
+    MerginProjectMetadata serverProject = MerginProjectMetadata::fromCachedJson( metadataFilePath );
+    ProjectDiff diff = MerginApi::compareProjectFiles( serverProject.files, serverProject.files, localFiles, project->local->projectDir );
+
+    if ( !diff.localAdded.isEmpty() || !diff.localDeleted.isEmpty() || !diff.localUpdated.isEmpty() )
+      return ProjectStatus::Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
