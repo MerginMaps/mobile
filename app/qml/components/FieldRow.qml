@@ -30,8 +30,6 @@ Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
-
-      onDisplayTextChanged: AttributeName = displayText
     }
 
     ComboBox {
