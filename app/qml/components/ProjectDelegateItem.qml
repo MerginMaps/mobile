@@ -73,6 +73,12 @@ Rectangle {
     return ""
   }
 
+  function getIconColor() {
+    if (root.highlight) return root.primaryColor
+    else if (!projectIsValid) return InputStyle.panelBackgroundDark
+    else return InputStyle.activeButtonColorOrange
+  }
+
   function getMoreMenuItems() {
     if ( projectIsMergin && projectIsLocal )
     {
@@ -132,19 +138,12 @@ Rectangle {
     contextMenu.height = items.length * root.menuItemHeight
   }
 
-  color: root.highlight || !projectIsValid ? InputStyle.panelItemHighlight : root.primaryColor
+  color: root.highlight ? InputStyle.panelItemHighlight : root.primaryColor
 
   MouseArea {
     anchors.fill: parent
     enabled: projectIsValid
     onClicked: openRequested()
-  }
-
-  Rectangle {
-    visible: !projectIsValid
-    width: parent.width
-    height: parent.height
-    color: InputStyle.panelBackgroundDark
   }
 
   RowLayout {
@@ -167,7 +166,9 @@ Rectangle {
         height: textContainer.height/2
         width: textContainer.width
         font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.highlight || !projectIsValid ? root.primaryColor : root.secondaryColor
+        color: if (root.highlight) root.primaryColor
+               else if (!projectIsValid) InputStyle.panelBackgroundDark
+               else root.secondaryColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignBottom
         elide: Text.ElideRight
@@ -184,7 +185,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.top: mainText.bottom
         font.pixelSize: InputStyle.fontPixelSizeSmall
-        color: root.highlight || !projectIsValid ? root.primaryColor : InputStyle.panelBackgroundDark
+        color: root.highlight ? root.primaryColor : InputStyle.panelBackgroundDark
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop
         elide: Text.ElideRight
@@ -244,7 +245,7 @@ Rectangle {
       ColorOverlay {
         anchors.fill: statusIcon
         source: statusIcon
-        color: root.highlight || !projectIsValid ? root.primaryColor : InputStyle.activeButtonColorOrange
+        color: getIconColor()
       }
 
       MouseArea {
@@ -286,7 +287,7 @@ Rectangle {
       ColorOverlay {
         anchors.fill: moreMenuIcon
         source: moreMenuIcon
-        color: root.highlight || !projectIsValid ? root.primaryColor : InputStyle.activeButtonColorOrange
+        color: getIconColor()
       }
 
       MouseArea {
