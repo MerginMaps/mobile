@@ -36,6 +36,9 @@ Rectangle {
   property color secondaryColor: InputStyle.fontColor
   property real itemMargin: InputStyle.panelMargin
 
+  property color iconColor: if (root.highlight) return root.primaryColor
+                            else if (!projectIsValid) return InputStyle.panelBackgroundDark
+                            else return InputStyle.activeButtonColorOrange
   property real iconSize: height * 0.3
   property real borderWidth: 1 * QgsQuick.Utils.dp
   property real menuItemHeight: height * 0.8
@@ -71,12 +74,6 @@ Rectangle {
       return InputStyle.uploadIcon
 
     return ""
-  }
-
-  function getIconColor() {
-    if (root.highlight) return root.primaryColor
-    else if (!projectIsValid) return InputStyle.panelBackgroundDark
-    else return InputStyle.activeButtonColorOrange
   }
 
   function getMoreMenuItems() {
@@ -245,7 +242,7 @@ Rectangle {
       ColorOverlay {
         anchors.fill: statusIcon
         source: statusIcon
-        color: getIconColor()
+        color: root.iconColor
       }
 
       MouseArea {
@@ -287,7 +284,7 @@ Rectangle {
       ColorOverlay {
         anchors.fill: moreMenuIcon
         source: moreMenuIcon
-        color: getIconColor()
+        color: root.iconColor
       }
 
       MouseArea {
