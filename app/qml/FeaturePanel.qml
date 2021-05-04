@@ -55,9 +55,14 @@ Drawer {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
+    QgsQuick.RememberAttributes {
+      id: rememberAttributesController
+      rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+    }
+
     QgsQuick.AttributeController {
       id: attributeController
-      rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+      rememberAttributes: rememberAttributesController
     }
 
     Item {
@@ -108,14 +113,14 @@ Drawer {
             previewPanel.mapTipType = __loader.mapTipType(feature)
             previewPanel.mapTipHtml = __loader.mapTipHtml(feature)
             previewPanel.mapTipImage = __loader.mapTipImage(feature)
-            previewPanel.previewFields = __loader.mapTipFields(feature)
+            attributeController.attributeFormPreviewFields = __loader.mapTipFields(feature)
         }
         stateManager.state = panelState
     }
 
     PreviewPanel {
       id: previewPanel
-      controller: attributeController
+      attributeController: attributeController
       height: featurePanel.previewHeight
       width: parent.width
       visible: false

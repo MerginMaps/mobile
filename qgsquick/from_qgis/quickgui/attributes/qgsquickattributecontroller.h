@@ -73,6 +73,8 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     //! Returns TRUE if has any changes
     Q_PROPERTY( bool hasAnyChanges READ hasAnyChanges NOTIFY hasAnyChangesChanged )
 
+    Q_PROPERTY( QStringList attributeFormPreviewFields READ attributeFormPreviewFields WRITE setAttributeFormPreviewFields NOTIFY attributeFormPreviewFieldsChanged )
+
     Q_PROPERTY( QgsQuickRememberAttributes *rememberAttributes READ rememberAttributes WRITE setRememberAttributes NOTIFY rememberAttributesChanged )
 
     //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values
@@ -103,8 +105,8 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QgsQuickAttributeFormModel *attributeFormPreviewModel() const;
 
     // emits attributeFormPreviewModelChanged
-    Q_INVOKABLE void setPreviewFields( const QStringList &fieldNames );
-
+    void setAttributeFormPreviewFields( const QStringList &fieldNames );
+    QStringList attributeFormPreviewFields() const;
 
     Q_INVOKABLE bool deleteFeature();
     Q_INVOKABLE void create();
@@ -136,6 +138,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void constraintsSoftValidChanged();
     void hasTabsChanged();
     void attributeFormPreviewModelChanged();
+    void attributeFormPreviewFieldsChanged();
 
     void formDataChanged( QUuid uuid );
     void tabDataChanged( int id );
@@ -178,7 +181,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;
     QVector<QgsQuickAttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
     std::unique_ptr<QgsQuickAttributeFormModel> mAttributeFormPreviewModel;
-    QVector<QUuid> mPreviewFieldsUuids; // order of preview field
+    QStringList mPreviewFields; // order of preview field
     QgsExpressionContext mExpressionContext;
     QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>> mFormItemsData; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number

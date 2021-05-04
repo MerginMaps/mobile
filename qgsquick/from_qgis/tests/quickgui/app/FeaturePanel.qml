@@ -62,8 +62,14 @@ Drawer {
     featurePanel.visible = true
   }
 
+  QgsQuick.RememberAttributes {
+    id: rememberAttributesController
+    rememberValuesAllowed: true
+  }
+
   QgsQuick.AttributeController {
     id: attributeController
+    rememberAttributes: rememberAttributesController
   }
 
   QgsQuick.FeatureForm {
@@ -81,7 +87,7 @@ Drawer {
   Item {
     id: toolbar
     height: visible ? 48 * QgsQuick.Utils.dp : 0
-    visible: true // form.state === 'Add'
+    visible: true
     anchors {
       top: parent.top
       left: parent.left

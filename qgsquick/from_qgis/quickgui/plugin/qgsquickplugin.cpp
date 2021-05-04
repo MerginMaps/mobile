@@ -30,6 +30,7 @@
 #include "qgsvectorlayer.h"
 #include "qgsunittypes.h"
 
+#include "qgsquickrememberattributes.h"
 #include "qgsquickattributeformmodel.h"
 #include "qgsquickattributeformproxymodel.h"
 #include "qgsquickattributecontroller.h"
@@ -81,6 +82,7 @@ void QgsQuickPlugin::registerTypes( const char *uri )
   qmlRegisterUncreatableType< QgsQuickAttributeTabModel >( uri, 0, 1, "AttributeTabModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< QgsQuickAttributeTabProxyModel >( uri, 0, 1, "AttributeTabProxyModel", "Created by AttributeController" );
   qmlRegisterType< QgsQuickAttributeController >( uri, 0, 1, "AttributeController" );
+  qmlRegisterType< QgsQuickRememberAttributes >( uri, 0, 1, "RememberAttributes" );
   qmlRegisterType< QgsQuickFeatureHighlight >( uri, 0, 1, "FeatureHighlight" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( uri, 0, 1, "CoordinateTransformer" );
   qmlRegisterType< QgsQuickIdentifyKit >( uri, 0, 1, "IdentifyKit" );

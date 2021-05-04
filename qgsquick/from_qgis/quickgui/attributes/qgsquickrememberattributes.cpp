@@ -16,6 +16,7 @@
 #include "qgsquickrememberattributes.h"
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsattributes.h"
+#include "qgsquickfeaturelayerpair.h"
 
 QgsQuickRememberAttributes::QgsQuickRememberAttributes( QObject *parent )
   : QObject( parent )
@@ -42,6 +43,13 @@ void QgsQuickRememberAttributes::storeLayerFields( const QgsVectorLayer *layer )
 {
   if ( layer && ( !mRememberedValues.contains( layer->id() ) ) )
     mRememberedValues[layer->id()].attributeFilter.fill( false, layer->fields().size() );
+}
+
+void QgsQuickRememberAttributes::storeFeature( const QgsQuickFeatureLayerPair &pair )
+{
+  if ( pair.layer() )
+    storeLayerFields( pair.layer() );
+  mRememberedValues[pair.layer()->id()].feature = pair.feature();
 }
 
 bool QgsQuickRememberAttributes::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const

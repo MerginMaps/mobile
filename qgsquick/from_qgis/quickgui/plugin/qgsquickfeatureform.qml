@@ -567,7 +567,7 @@ Item {
 
       Item {
         id: rememberCheckboxContainer
-        visible: form.controller.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
+        visible: form.controller.rememberAttributes.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
 
         implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height

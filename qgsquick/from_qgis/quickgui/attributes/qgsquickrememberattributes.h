@@ -22,6 +22,8 @@
 
 #include <QHash>
 
+class QgsQuickFeatureLayerPair;
+
 /**
  * \ingroup quick
  *
@@ -44,15 +46,16 @@ class QUICK_EXPORT QgsQuickRememberAttributes : public QObject
     void setRememberValuesAllowed( bool rememberValuesAllowed );
 
     void storeLayerFields( const QgsVectorLayer *layer );
+    void storeFeature( const QgsQuickFeatureLayerPair &pair );
 
     // Returns false if the value is not remembered
     bool rememberedValue( const QgsVectorLayer *layer, int fieldIndex, QVariant &value ) const;
+
     // Returns false if the value should not be remembered
     bool shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const;
 
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
-
   signals:
     void rememberValuesAllowedChanged();
 

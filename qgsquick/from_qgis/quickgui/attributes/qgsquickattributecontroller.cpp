@@ -28,6 +28,9 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsmessagelog.h"
 
+// See
+// https://github.com/qgis/QGIS/blob/2d1aa68f0d044f2aced7ebeca8d2fa6b754ac970/tests/src/gui/testqgsattributeform.cpp
+
 QgsQuickAttributeController::QgsQuickAttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new QgsQuickAttributeTabProxyModel() )
@@ -74,6 +77,7 @@ void QgsQuickAttributeController::setFeatureLayerPair( const QgsQuickFeatureLaye
     {
       emit attributeTabProxyModelChanged();
       emit attributeFormPreviewModelChanged();
+      emit attributeFormPreviewFieldsChanged();
       emit hasTabsChanged();
     }
     emit featureLayerPairChanged();
@@ -85,7 +89,7 @@ QgsAttributeEditorContainer *QgsQuickAttributeController::autoLayoutTabContainer
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
   Q_ASSERT( layer );
 
-  QgsAttributeEditorContainer *root = new QgsAttributeEditorContainer( QString(), nullptr );
+  QgsAttributeEditorContainer *root = new QgsAttributeEditorContainer( QLatin1String( "AutoLayoutRoot" ), nullptr );
   QgsFields fields = layer->fields();
   for ( int i = 0; i < fields.size(); ++i )
   {
@@ -159,28 +163,6 @@ void QgsQuickAttributeController::flatten(
           continue;
         }
         QgsField field = layer->fields().at( fieldIndex );
-
-        // Qt::CheckState rememberFlag = Qt::Unchecked;
-        //if ( rememberValuesAllowed() && mAttributeModel->isFieldRemembered( fieldIndex ) )
-        //rememberFlag = Qt::Checked;
-
-        /* QStandardItem *item = new QStandardItem();
-        item->setData( layer->attributeDisplayName( fieldIndex ), QgsQuickAttributeFormModel::Name );
-        item->setData( mAttributeModel->featureLayerPair().feature().attribute( fieldIndex ), QgsQuickAttributeFormModel::AttributeValue );
-        item->setData( !layer->editFormConfig().readOnly( fieldIndex ), QgsQuickAttributeFormModel::AttributeEditable );
-        QgsEditorWidgetSetup setup = layer->editorWidgetSetup( fieldIndex );
-        item->setData( setup.type(), QgsQuickAttributeFormModel::EditorWidget );
-        item->setData( setup.config(), QgsQuickAttributeFormModel::EditorWidgetConfig );
-        item->setData( rememberFlag, QgsQuickAttributeFormModel::RememberValue );
-        item->setData( layer->fields().at( fieldIndex ), QgsQuickAttributeFormModel::Field );
-        item->setData( QStringLiteral( "field" ), QgsQuickAttributeFormModel::ElementType );
-        item->setData( fieldIndex, QgsQuickAttributeFormModel::FieldIndex );
-        item->setData( container->isGroupBox() ? container->name() : QString(), QgsQuickAttributeFormModel::Group );
-        item->setData( true, QgsQuickAttributeFormModel::Visible );
-        item->setData( true, QgsQuickAttributeFormModel::ConstraintHardValid );
-        item->setData( true, QgsQuickAttributeFormModel::ConstraintSoftValid );
-        item->setData( field.constraints().constraintDescription(), QgsQuickAttributeFormModel::ConstraintDescription );
-        */
         QStringList expressions;
         QStringList descriptions;
         QString expression = field.constraints().constraintExpression();
@@ -225,7 +207,6 @@ void QgsQuickAttributeController::flatten(
 
 
         items.append( fieldUuid );
-        // parent->appendRow( item );
         break;
       }
 
@@ -258,17 +239,17 @@ void QgsQuickAttributeController::createTab( QgsAttributeEditorContainer *contai
   if ( container->visibilityExpression().enabled() )
   {
     expr = container->visibilityExpression().data();
-    // mVisibilityExpressions.append( qMakePair( expr, QVector<QUuid>() << tabUuid ) );
   }
 
   QVector<QUuid> formItemsUuids;
   flatten( container, tabRow, QString(), formItemsUuids );
 
   std::shared_ptr<QgsQuickTabItem> tabItem( new QgsQuickTabItem( tabRow,
-      QLatin1String( "AutoLayoutRoot" ),
+      container->name(),
       formItemsUuids,
-      expr
-                                                               ) );
+      expr )
+                                          );
+
   mTabItems.push_back( tabItem );
 }
 
@@ -279,7 +260,7 @@ void QgsQuickAttributeController::updateOnLayerChange()
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new QgsQuickAttributeTabProxyModel() );
   mAttributeFormPreviewModel.reset();
-  mPreviewFieldsUuids.clear();
+  mPreviewFields.clear();
   mConstraintsHardValid = false;
   mConstraintsSoftValid = false;
   mFormItemsData.clear();
@@ -554,18 +535,11 @@ QgsQuickAttributeFormModel *QgsQuickAttributeController::attributeFormPreviewMod
   return mAttributeFormPreviewModel.get();
 }
 
-void QgsQuickAttributeController::setPreviewFields( const QStringList &fieldNames )
+void QgsQuickAttributeController::setAttributeFormPreviewFields( const QStringList &fieldNames )
 {
-  QStringList fieldNamesForPreview;
-  for ( const QUuid &id : qAsConst( mPreviewFieldsUuids ) )
+  if ( mPreviewFields != fieldNames || !mAttributeFormPreviewModel )
   {
-    std::shared_ptr<QgsQuickFormItemData> item = mFormItemsData[id];
-    fieldNamesForPreview << item->name();
-  }
-
-  if ( fieldNamesForPreview != fieldNames || !mAttributeFormPreviewModel )
-  {
-    QVector<QUuid> previewFields( fieldNames.size() );
+    QVector<QUuid> previewFieldsUuids( fieldNames.size() );
     QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
     while ( formItemsDataIterator != mFormItemsData.end() )
     {
@@ -574,7 +548,7 @@ void QgsQuickAttributeController::setPreviewFields( const QStringList &fieldName
       {
         int i = fieldNames.indexOf( item->name() );
         if ( i > 0 )
-          previewFields[i] = item->id();
+          previewFieldsUuids[i] = item->id();
       }
       ++formItemsDataIterator;
     }
@@ -582,11 +556,17 @@ void QgsQuickAttributeController::setPreviewFields( const QStringList &fieldName
     mAttributeFormPreviewModel.reset( new QgsQuickAttributeFormModel(
                                         nullptr,
                                         this,
-                                        previewFields
-
+                                        previewFieldsUuids
                                       ) );
+
     emit attributeFormPreviewModelChanged();
+    emit attributeFormPreviewFieldsChanged();
   }
+}
+
+QStringList QgsQuickAttributeController::attributeFormPreviewFields() const
+{
+  return mPreviewFields;
 }
 
 bool QgsQuickAttributeController::deleteFeature()
@@ -632,18 +612,10 @@ void QgsQuickAttributeController::create()
   }
   commit();
 
-  /*
-  if ( mRememberValuesAllowed )
+  if ( mRememberAttributes )
   {
-    QString layerName = mFeatureLayerPair.layer()->id();
-
-    // save created feature to remember values
-    if ( mRememberedValues.contains( layerName ) )
-    {
-      mRememberedValues[layerName].feature = feature;
-    }
+    mRememberAttributes->storeFeature( mFeatureLayerPair );
   }
-  */
 }
 
 bool QgsQuickAttributeController::save()
@@ -672,7 +644,6 @@ bool QgsQuickAttributeController::save()
   {
     QgsFeature feat;
     if ( mFeatureLayerPair.layer()->getFeatures( QgsFeatureRequest().setFilterFid( mFeatureLayerPair.feature().id() ) ).nextFeature( feat ) )
-      //setFeature( feat );
       setFeatureLayerPair( QgsQuickFeatureLayerPair( feat, mFeatureLayerPair.layer() ) );
     else
       QgsMessageLog::logMessage( tr( "Feature %1 could not be fetched after commit" ).arg( mFeatureLayerPair.feature().id() ),
