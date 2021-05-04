@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
@@ -7,7 +16,7 @@ import "./components"
 
 Dialog {
   property var uploadSize
-  property string titleText
+  property string titleText: qsTr("You have reached a data limit")
   property int diskUsage: __merginApi.userInfo.diskUsage
   property int storageLimit: __merginApi.userInfo.storageLimit
   property string planAlias: __merginApi.subscriptionInfo.planAlias
@@ -96,7 +105,7 @@ Dialog {
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.underline: true
       color: InputStyle.fontColor
-      text: qsTr("Find a plan that fits you better!")
+      text: qsTr("Manage subscriptions")
       visible: __merginApi.apiSupportsSubscriptions
 
       MouseArea {
@@ -112,7 +121,7 @@ Dialog {
     }
 
     DelegateButton {
-      text: "OK"
+      text: qsTr("Cancel")
       onClicked: root.close()
       height: root.fieldHeight
       width: parent.width

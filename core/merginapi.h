@@ -405,7 +405,7 @@ class MerginApi: public QObject
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
     void reloadProject( const QString &projectDir );
     void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
-    void storageLimitReached( const QString &message, const QString &additionalInfo, qreal uploadSize );
+    void storageLimitReached( qreal uploadSize );
     void notify( const QString &message );
     void authRequested();
     void authChanged();

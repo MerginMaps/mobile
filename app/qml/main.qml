@@ -669,8 +669,8 @@ ApplicationWindow {
     StorageLimitDialog {
         id: storageLimitDialog
         onOpenSubscriptionPlans: {
+          storageLimitDialog.close()
           if (__merginApi.apiSupportsSubscriptions) {
-            storageLimitDialog.close()
             projectPanel.manageSubscriptionPlans()
           }
         }
@@ -702,7 +702,6 @@ ApplicationWindow {
           if (__merginApi.apiSupportsSubscriptions) {
             __merginApi.getSubscriptionInfo()
           }
-          storageLimitDialog.titleText = message
           storageLimitDialog.uploadSize = uploadSize
           storageLimitDialog.open()
         }

@@ -1613,7 +1613,7 @@ void MerginApi::uploadStartReplyFinished()
       {
         uploadSize = uploadSize + f.size;
       }
-      emit storageLimitReached( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ), uploadSize );
+      emit storageLimitReached( uploadSize );
     }
     else
     {
