@@ -118,15 +118,16 @@ void TestQgsQuickAttributeController::twoFields()
   Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
   Q_ASSERT( !controller.attributeFormProxyModelForTab( 1 ) );
 
-  const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
-  QCOMPARE( item1->name(), "fldtxt" );
-  QCOMPARE( item1->value(), "one" );
-  QCOMPARE( item1->isVisible(), true );
+  const QgsQuickFormItem item1 = controller.formItem( formItems.at( 0 ) );
+  Q_ASSERT( item1.isValid() );
+  QCOMPARE( item1.name(), "fldtxt" );
+  QCOMPARE( item1.value(), "one" );
+  QCOMPARE( item1.isVisible(), true );
 
-  const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
-  QCOMPARE( item2->name(), "fldint" );
-  QCOMPARE( item2->value(), 1 );
-  QCOMPARE( item2->isVisible(), true );
+  const QgsQuickFormItem item2 = controller.formItem( formItems.at( 1 ) );
+  QCOMPARE( item2.name(), "fldint" );
+  QCOMPARE( item2.value(), 1 );
+  QCOMPARE( item2.isVisible(), true );
 
 
 }

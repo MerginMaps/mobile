@@ -38,7 +38,7 @@ class QgsQuickAttributeFormProxyModel;
 class QgsQuickAttributeTabModel;
 class QgsQuickAttributeTabProxyModel;
 class QgsVectorLayer;
-
+class QgsQuickRememberAttributes;
 
 /**
  * \ingroup quick
@@ -70,8 +70,10 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     //! Returns TRUE if remembering values is allowed
     Q_PROPERTY( bool hasTabs READ hasTabs NOTIFY hasTabsChanged )
 
-    //! Returns TRUE if remembering values is allowed
-    Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
+    //! Returns TRUE if has any changes
+    Q_PROPERTY( bool hasAnyChanges READ hasAnyChanges NOTIFY hasAnyChangesChanged )
+
+    Q_PROPERTY( QgsQuickRememberAttributes *rememberAttributes READ rememberAttributes WRITE setRememberAttributes NOTIFY rememberAttributesChanged )
 
     //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values
     Q_PROPERTY( bool constraintsHardValid READ constraintsHardValid NOTIFY constraintsHardValidChanged )
@@ -91,12 +93,10 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     //! Sets current featureLayerPair
     void setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair );
 
-    bool rememberValuesAllowed() const;
-    void setRememberValuesAllowed( bool rememberValuesAllowed );
-
     bool constraintsHardValid() const;
     bool constraintsSoftValid() const;
     bool hasTabs() const;
+    bool hasAnyChanges();
 
     QgsQuickAttributeTabProxyModel *attributeTabProxyModel() const;
     QgsQuickAttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
@@ -109,12 +109,12 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     Q_INVOKABLE bool deleteFeature();
     Q_INVOKABLE void create();
     Q_INVOKABLE bool save();
-    Q_INVOKABLE bool hasAnyChanges();
+
 
     int tabCount() const;
 
     // for data modification use setForm*Value() functions
-    const QgsQuickFormItem *formItem( const QUuid &id ) const;
+    QgsQuickFormItem formItem( const QUuid &id ) const;
 
     // for data modification use setTab*Value() functions;
     const QgsQuickTabItem *tabItem( int tabRow ) const;
@@ -124,10 +124,14 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     // Returns true if successful; otherwise returns false.
     bool setFormValue( const QUuid &id, QVariant value );
 
+    QgsQuickRememberAttributes *rememberAttributes() const;
+    void setRememberAttributes( QgsQuickRememberAttributes *rememberAttributes );
+
   signals:
+    void hasAnyChangesChanged();
+    void rememberAttributesChanged();
     void featureLayerPairChanged();
     void attributeTabProxyModelChanged();
-    void rememberValuesAllowedChanged();
     void constraintsHardValidChanged();
     void constraintsSoftValidChanged();
     void hasTabsChanged();
@@ -140,13 +144,13 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void dataChanged( const QString &msg ); // TODO what is this?? feature for signal...
 
   private:
+    void setHasAnyChanges( bool hasChanges );
+
     bool isValidTabId( int id ) const;
     bool isValidFormId( const QUuid &id ) const;
 
     bool startEditing();
     bool commit();
-    QgsFeature itemToFeature( std::shared_ptr<QgsQuickFormItem> item );
-
 
     void updateOnLayerChange();
     void updateOnFeatureChange();
@@ -166,9 +170,9 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     // Generates fake root tab for auto-layout
     QgsAttributeEditorContainer *autoLayoutTabContainer() const;
 
-    bool mRememberValuesAllowed = false;
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
+    bool mHasAnyChanges = false;
 
     QgsQuickFeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;
@@ -176,8 +180,10 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     std::unique_ptr<QgsQuickAttributeFormModel> mAttributeFormPreviewModel;
     QVector<QUuid> mPreviewFieldsUuids; // order of preview field
     QgsExpressionContext mExpressionContext;
-    QMap<QUuid, std::shared_ptr<QgsQuickFormItem>> mFormItems; // order of fields in tab is in tab item
+    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>> mFormItemsData; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number
+
+    QgsQuickRememberAttributes *mRememberAttributes; // not owned
 
 };
 #endif // QGSQUICKATTRIBUTECONTROLLER_H

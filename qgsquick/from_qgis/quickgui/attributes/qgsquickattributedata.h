@@ -23,31 +23,77 @@
 #include <QUuid>
 #include <QVariantMap>
 #include <QObject>
+#include <memory>
 
 #include "qgsfieldconstraints.h"
 #include "qgseditorwidgetsetup.h"
 #include "qgsexpression.h"
 #include "qgsfield.h"
 
+class QgsQuickFormItemData;
+
 class QUICK_EXPORT QgsQuickFormItem
 {
     Q_GADGET
 
+
   public:
     enum FormItemType
     {
-      Container = 1,
+      Invalid = 1,
+      Container,
       Relation,
-      Field
+      Field,
     };
     Q_ENUMS( FormItemType )
 
-    QgsQuickFormItem(
+    // invalid
+    QgsQuickFormItem();
+
+    QgsQuickFormItem( std::shared_ptr<QgsQuickFormItemData> item,
+                      bool shouldRememberValue,
+                      QVariant value
+                    );
+    ~QgsQuickFormItem();
+
+    QVariant value() const;
+    bool shouldRememberValue() const;
+    bool isModified() const;
+    bool isValid() const;
+
+    QgsQuickFormItem::FormItemType type() const;
+    QString name() const;
+    bool isEditable() const;
+    QString editorWidgetType() const;
+    QVariantMap editorWidgetConfig() const;
+    int fieldIndex() const;
+    bool constraintSoftValid() const;
+    bool constraintHardValid() const;
+    bool isVisible() const;
+    QString constraintDescription() const;
+    QUuid id() const;
+    int parentTabId() const;
+    QgsExpression visibilityExpression() const;
+    QgsField field() const;
+    QString groupName() const;
+    QVariant originalValue() const;
+
+  private:
+
+    const std::shared_ptr<QgsQuickFormItemData> mItem;
+    const bool mShouldRememberValue;
+    const QVariant mValue;
+};
+
+class QgsQuickFormItemData
+{
+  public:
+    QgsQuickFormItemData(
       const QUuid &id,
       const QgsField &field,
       const QString &groupName,
       int parentTabId,
-      FormItemType type,
+      QgsQuickFormItem::FormItemType type,
       const QString &name,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
@@ -57,26 +103,12 @@ class QUICK_EXPORT QgsQuickFormItem
     );
 
 
-    FormItemType type() const;
+    QgsQuickFormItem::FormItemType type() const;
     QString name() const;
     bool isEditable() const;
     QString editorWidgetType() const;
     QVariantMap editorWidgetConfig() const;
     int fieldIndex() const;
-
-    QVariant value() const;
-
-    // value != original value
-    bool isModified() const;
-
-    // keeps original value
-    void setValue( const QVariant &value );
-
-    // also sets value
-    void setOriginalValue( const QVariant &originalValue );
-
-    bool shouldRememberValue() const;
-    void setShouldRememberValue( bool shouldRememberValue );
 
     bool constraintSoftValid() const;
     void setConstraintSoftValid( bool constraintSoftValid );
@@ -101,12 +133,16 @@ class QUICK_EXPORT QgsQuickFormItem
 
     QString groupName() const;
 
+    QVariant originalValue() const;
+    void setOriginalValue( const QVariant &originalValue );
+
   private:
+
     const QUuid mId;
     const QgsField mField;
     const QString mGroupName; //empty for no group, group/tab name if widget is in container
     const int mParentTabId;
-    const FormItemType mType;
+    const QgsQuickFormItem::FormItemType mType;
     const QString mName;
     const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
@@ -114,12 +150,10 @@ class QUICK_EXPORT QgsQuickFormItem
     const QgsFieldConstraints mConstraints;
     const QgsExpression mVisibilityExpression;
 
-    QVariant mValue;
-    QVariant mOriginalValue;
-    bool mShouldRememberValue = false;
     bool mConstraintSoftValid = false;
     bool mConstraintHardValid = false;
     bool mVisible = false;
+    QVariant mOriginalValue; // original unmodified value
 };
 
 class QUICK_EXPORT QgsQuickTabItem

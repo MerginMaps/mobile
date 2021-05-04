@@ -18,6 +18,7 @@
 #include "qgsquickattributeformproxymodel.h"
 #include "qgsquickattributetabmodel.h"
 #include "qgsquickattributetabproxymodel.h"
+#include "qgsquickrememberattributes.h"
 
 #include <QDebug>
 #include <QSet>
@@ -88,7 +89,7 @@ QgsAttributeEditorContainer *QgsQuickAttributeController::autoLayoutTabContainer
   QgsFields fields = layer->fields();
   for ( int i = 0; i < fields.size(); ++i )
   {
-    // TODO hidden fields -> add them to the mFormItems
+    // TODO hidden fields -> add them to the mFormItems?
     if ( fields.at( i ).editorWidgetSetup().type() != QLatin1String( "Hidden" ) )
     {
       QgsAttributeEditorField *field = new QgsAttributeEditorField( fields.at( i ).name(), i, root );
@@ -96,6 +97,22 @@ QgsAttributeEditorContainer *QgsQuickAttributeController::autoLayoutTabContainer
     }
   }
   return root;
+}
+
+QgsQuickRememberAttributes *QgsQuickAttributeController::rememberAttributes() const
+{
+  return mRememberAttributes;
+}
+
+void QgsQuickAttributeController::setRememberAttributes( QgsQuickRememberAttributes *rememberAttributes )
+{
+  if ( mRememberAttributes != rememberAttributes )
+  {
+    mRememberAttributes = rememberAttributes;
+    if ( mRememberAttributes && mFeatureLayerPair.layer() )
+      mRememberAttributes->storeLayerFields( mFeatureLayerPair.layer() );
+    emit rememberAttributesChanged();
+  }
 }
 
 void QgsQuickAttributeController::flatten(
@@ -187,9 +204,9 @@ void QgsQuickAttributeController::flatten(
         const QString groupName = container->isGroupBox() ? container->name() : QString();
 
         // mConstraints.insert( item, field.constraints() );
-        std::shared_ptr<QgsQuickFormItem> formItem =
-          std::shared_ptr<QgsQuickFormItem>(
-            new QgsQuickFormItem(
+        std::shared_ptr<QgsQuickFormItemData> formItemData =
+          std::shared_ptr<QgsQuickFormItemData>(
+            new QgsQuickFormItemData(
               fieldUuid,
               field,
               groupName,
@@ -204,7 +221,7 @@ void QgsQuickAttributeController::flatten(
             )
           );
 
-        mFormItems[formItem->id()] = formItem;
+        mFormItemsData[formItemData->id()] = formItemData;
 
 
         items.append( fieldUuid );
@@ -265,7 +282,7 @@ void QgsQuickAttributeController::updateOnLayerChange()
   mPreviewFieldsUuids.clear();
   mConstraintsHardValid = false;
   mConstraintsSoftValid = false;
-  mFormItems.clear();
+  mFormItemsData.clear();
   mTabItems.clear();
 
   // 1) DATA
@@ -299,6 +316,8 @@ void QgsQuickAttributeController::updateOnLayerChange()
     }
 
     mExpressionContext = layer->createExpressionContext();
+    if ( mRememberAttributes )
+      mRememberAttributes->storeLayerFields( layer );
   }
 
   // 2) MODELS
@@ -324,20 +343,28 @@ void QgsQuickAttributeController::updateOnFeatureChange()
 {
   const QgsFeature feature = mFeatureLayerPair.feature();
 
-  QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-  while ( formItemsIterator != mFormItems.end() )
+  QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+  while ( formItemsDataIterator != mFormItemsData.end() )
   {
-    std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
-    if ( item->type() == QgsQuickFormItem::Field )
+    std::shared_ptr<QgsQuickFormItemData> itemData = formItemsDataIterator.value();
+    if ( itemData->type() == QgsQuickFormItem::Field )
     {
-      const int fieldIndex = item->fieldIndex();
-      Q_ASSERT( fieldIndex >= 0 );
+      int fieldIndex = itemData->fieldIndex();
       const QVariant newVal = feature.attribute( fieldIndex );
-
-      // TODO use remember value when adding new feature!
-      item->setOriginalValue( newVal );
+      mFormItemsData[itemData->id()]->setOriginalValue( newVal );
+      if ( mRememberAttributes && FID_IS_NULL( mFeatureLayerPair.feature().id() ) ) // this is a new feature
+      {
+        QVariant rememberedValue;
+        bool shouldUseRememberedValue = mRememberAttributes->rememberedValue(
+                                          mFeatureLayerPair.layer(),
+                                          fieldIndex,
+                                          rememberedValue
+                                        );
+        if ( shouldUseRememberedValue )
+          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
+      }
     }
-    ++formItemsIterator;
+    ++formItemsDataIterator;
   }
 
   recalculateDerivedItems();
@@ -378,10 +405,10 @@ void QgsQuickAttributeController::recalculateDerivedItems()
 
   // Evaluate form items visibility
   {
-    QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-    while ( formItemsIterator != mFormItems.end() )
+    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+    while ( formItemsDataIterator != mFormItemsData.end() )
     {
-      std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
+      std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
       QgsExpression exp = item->visibilityExpression();
       exp.prepare( &mExpressionContext );
       bool visible = true;
@@ -392,7 +419,7 @@ void QgsQuickAttributeController::recalculateDerivedItems()
         item->setVisible( visible );
         changedFormItems << item->id();
       }
-      ++formItemsIterator;
+      ++formItemsDataIterator;
     }
   }
 
@@ -400,10 +427,10 @@ void QgsQuickAttributeController::recalculateDerivedItems()
   {
     bool allConstraintsHardValid = true;
     {
-      QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-      while ( formItemsIterator != mFormItems.end() )
+      QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+      while ( formItemsDataIterator != mFormItemsData.end() )
       {
-        std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
+        std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
         QStringList errors;
         bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
         if ( hardConstraintSatisfied != item->constraintHardValid() )
@@ -415,7 +442,7 @@ void QgsQuickAttributeController::recalculateDerivedItems()
         {
           allConstraintsHardValid = false;
         }
-        ++formItemsIterator;
+        ++formItemsDataIterator;
       }
     }
     if ( allConstraintsHardValid != constraintsHardValid() )
@@ -429,10 +456,10 @@ void QgsQuickAttributeController::recalculateDerivedItems()
   {
     bool allConstraintsSoftValid = true;
     {
-      QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-      while ( formItemsIterator != mFormItems.end() )
+      QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+      while ( formItemsDataIterator != mFormItemsData.end() )
       {
-        std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
+        std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
         QStringList errors;
         bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
         if ( softConstraintSatisfied != item->constraintSoftValid() )
@@ -444,7 +471,7 @@ void QgsQuickAttributeController::recalculateDerivedItems()
         {
           allConstraintsSoftValid = false;
         }
-        ++formItemsIterator;
+        ++formItemsDataIterator;
       }
     }
     if ( allConstraintsSoftValid != constraintsSoftValid() )
@@ -454,26 +481,33 @@ void QgsQuickAttributeController::recalculateDerivedItems()
     }
   }
 
+  // Check if we have any changes
+  {
+    bool anyChanges = false;
+    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+    while ( formItemsDataIterator != mFormItemsData.end() )
+    {
+      std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
+      if ( item->type() == QgsQuickFormItem::Field )
+      {
+        if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
+        {
+          anyChanges = true;
+          break;
+        }
+      }
+
+      ++formItemsDataIterator;
+    }
+    setHasAnyChanges( anyChanges );
+  }
+
   // Emit all signals
   QSet<QUuid>::const_iterator i = changedFormItems.constBegin();
   while ( i != changedFormItems.constEnd() )
   {
     emit formDataChanged( *i );
     ++i;
-  }
-}
-
-bool QgsQuickAttributeController::rememberValuesAllowed() const
-{
-  return mRememberValuesAllowed;
-}
-
-void QgsQuickAttributeController::setRememberValuesAllowed( bool rememberValuesAllowed )
-{
-  if ( mRememberValuesAllowed != rememberValuesAllowed )
-  {
-    mRememberValuesAllowed = rememberValuesAllowed;
-    emit rememberValuesAllowedChanged();
   }
 }
 
@@ -525,24 +559,24 @@ void QgsQuickAttributeController::setPreviewFields( const QStringList &fieldName
   QStringList fieldNamesForPreview;
   for ( const QUuid &id : qAsConst( mPreviewFieldsUuids ) )
   {
-    std::shared_ptr<QgsQuickFormItem> item = mFormItems[id];
+    std::shared_ptr<QgsQuickFormItemData> item = mFormItemsData[id];
     fieldNamesForPreview << item->name();
   }
 
   if ( fieldNamesForPreview != fieldNames || !mAttributeFormPreviewModel )
   {
     QVector<QUuid> previewFields( fieldNames.size() );
-    QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-    while ( formItemsIterator != mFormItems.end() )
+    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+    while ( formItemsDataIterator != mFormItemsData.end() )
     {
-      std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
+      std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
       if ( item->type() == QgsQuickFormItem::Field )
       {
         int i = fieldNames.indexOf( item->name() );
         if ( i > 0 )
           previewFields[i] = item->id();
       }
-      ++formItemsIterator;
+      ++formItemsDataIterator;
     }
 
     mAttributeFormPreviewModel.reset( new QgsQuickAttributeFormModel(
@@ -687,51 +721,23 @@ bool QgsQuickAttributeController::commit()
   }
 }
 
-QgsFeature QgsQuickAttributeController::itemToFeature( std::shared_ptr<QgsQuickFormItem> item )
-{
-  Q_ASSERT( mFeatureLayerPair.layer() );
-  Q_ASSERT( mFeatureLayerPair.feature().isValid() );
-  Q_ASSERT( item->type() == QgsQuickFormItem::Field );
-
-  QgsFeature feat = mFeatureLayerPair.feature();
-
-  const int fieldIndex = item->fieldIndex();
-  const QVariant value = item->value();
-  const bool success = mFeatureLayerPair.featureRef().setAttribute( fieldIndex, value );
-  if ( !success )
-    QgsMessageLog::logMessage( tr( "Could not update value for feature" ),
-                               QStringLiteral( "QgsQuick" ),
-                               Qgis::Warning );
-
-  return feat;
-}
-
-
 bool QgsQuickAttributeController::hasAnyChanges()
 {
-  if ( FID_IS_NULL( mFeatureLayerPair.feature().id() ) )
-    return true;
+  return mHasAnyChanges;
+}
 
-  if ( !mFeatureLayerPair.isValid() )
-    return false;
-
-  QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
-  while ( formItemsIterator != mFormItems.end() )
+void QgsQuickAttributeController::setHasAnyChanges( bool hasChanges )
+{
+  if ( hasChanges != mHasAnyChanges )
   {
-    std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
-    if ( item->type() == QgsQuickFormItem::Field )
-    {
-      if ( item->isModified() )
-        return true;
-    }
-    ++formItemsIterator;
+    mHasAnyChanges = hasChanges;
+    emit hasAnyChangesChanged();
   }
-  return false;
 }
 
 bool QgsQuickAttributeController::isValidFormId( const QUuid &id ) const
 {
-  return mFormItems.contains( id );
+  return mFormItemsData.contains( id );
 }
 
 bool QgsQuickAttributeController::isValidTabId( int id ) const
@@ -739,16 +745,22 @@ bool QgsQuickAttributeController::isValidTabId( int id ) const
   return ( id >= 0 ) && ( id < tabCount() );
 }
 
-const QgsQuickFormItem *QgsQuickAttributeController::formItem( const QUuid &id ) const
+QgsQuickFormItem QgsQuickAttributeController::formItem( const QUuid &id ) const
 {
   if ( isValidFormId( id ) )
   {
-    return mFormItems[id].get();
+    std::shared_ptr<QgsQuickFormItemData> data = mFormItemsData[id];
+
+    QVariant value = mFeatureLayerPair.feature().attribute( data->fieldIndex() );
+    bool shouldRememeberValue = false;
+    if ( mRememberAttributes )
+      shouldRememeberValue = mRememberAttributes->shouldRememberValue( mFeatureLayerPair.layer(), data->fieldIndex() );
+    QgsQuickFormItem item( data, shouldRememeberValue, value );
+
+    return item;
   }
   else
-  {
-    return nullptr;
-  }
+    return QgsQuickFormItem();
 }
 
 const QgsQuickTabItem *QgsQuickAttributeController::tabItem( int tabRow ) const
@@ -761,14 +773,16 @@ const QgsQuickTabItem *QgsQuickAttributeController::tabItem( int tabRow ) const
 
 bool QgsQuickAttributeController::setFormShouldRememberValue( const QUuid &id, bool shouldRememberValue )
 {
+  if ( !mRememberAttributes )
+    return true; //noop
+
   if ( isValidFormId( id ) )
   {
-    bool oldVal = mFormItems[id]->shouldRememberValue();
-    if ( shouldRememberValue != oldVal )
+    std::shared_ptr<QgsQuickFormItemData> data = mFormItemsData[id];
+    bool changed = mRememberAttributes->setShouldRememberValue( mFeatureLayerPair.layer(), data->fieldIndex(), shouldRememberValue );
+    if ( changed )
     {
-      mFormItems[id]->setShouldRememberValue( shouldRememberValue );
       emit formDataChanged( id );
-      recalculateDerivedItems();
     }
     return true;
   }
@@ -782,8 +796,8 @@ bool QgsQuickAttributeController::setFormValue( const QUuid &id, QVariant value 
 {
   if ( isValidFormId( id ) )
   {
-    std::shared_ptr<QgsQuickFormItem> item = mFormItems[id];
-    QVariant oldVal = item->value();
+    std::shared_ptr<QgsQuickFormItemData> item = mFormItemsData[id];
+    QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
     if ( value != oldVal )
     {
       QVariant val( value );
@@ -799,8 +813,7 @@ bool QgsQuickAttributeController::setFormValue( const QUuid &id, QVariant value 
         }
         return false;
       }
-
-      mFormItems[id]->setValue( val );
+      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( id );
       recalculateDerivedItems();
     }
