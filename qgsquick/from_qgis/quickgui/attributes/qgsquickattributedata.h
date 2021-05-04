@@ -66,8 +66,14 @@ class QUICK_EXPORT QgsQuickFormItem
 
     QVariant value() const;
 
-    // also stores the last value in lastValue()
+    // value != original value
+    bool isModified() const;
+
+    // keeps original value
     void setValue( const QVariant &value );
+
+    // also sets value
+    void setOriginalValue( const QVariant &originalValue );
 
     bool shouldRememberValue() const;
     void setShouldRememberValue( bool shouldRememberValue );
@@ -82,8 +88,6 @@ class QUICK_EXPORT QgsQuickFormItem
     void setVisible( bool visible );
 
     QString constraintDescription() const;
-
-    QVariant lastValue() const;
 
     QUuid id() const;
 
@@ -111,7 +115,7 @@ class QUICK_EXPORT QgsQuickFormItem
     const QgsExpression mVisibilityExpression;
 
     QVariant mValue;
-    QVariant mLastValue;
+    QVariant mOriginalValue;
     bool mShouldRememberValue = false;
     bool mConstraintSoftValid = false;
     bool mConstraintHardValid = false;

@@ -25,6 +25,7 @@
 #include "qgsattributeeditorfield.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsmessagelog.h"
 
 QgsQuickAttributeController::QgsQuickAttributeController( QObject *parent )
   : QObject( parent )
@@ -332,7 +333,9 @@ void QgsQuickAttributeController::updateOnFeatureChange()
       const int fieldIndex = item->fieldIndex();
       Q_ASSERT( fieldIndex >= 0 );
       const QVariant newVal = feature.attribute( fieldIndex );
-      item->setValue( newVal );
+
+      // TODO use remember value when adding new feature!
+      item->setOriginalValue( newVal );
     }
     ++formItemsIterator;
   }
@@ -552,28 +555,177 @@ void QgsQuickAttributeController::setPreviewFields( const QStringList &fieldName
   }
 }
 
-void QgsQuickAttributeController::deleteFeature()
+bool QgsQuickAttributeController::deleteFeature()
 {
-  // TODO
-  qDebug() << "delete feature TODO";
+  if ( !mFeatureLayerPair.layer() )
+    return false;
+
+  bool rv = true;
+
+  if ( !startEditing() )
+  {
+    rv = false;
+  }
+
+  bool isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
+  rv = commit();
+
+  if ( !isDeleted )
+    QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Warning );
+  else
+  {
+    mFeatureLayerPair = QgsQuickFeatureLayerPair();
+    emit featureLayerPairChanged();
+  }
+
+  return rv;
 }
 
 void QgsQuickAttributeController::create()
 {
-  // TODO
-  qDebug() << "create feature TODO";
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
+  startEditing();
+  QgsFeature feat = mFeatureLayerPair.feature();
+  if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+  {
+    QgsMessageLog::logMessage( tr( "Feature could not be added" ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Critical );
+  }
+  commit();
+
+  /*
+  if ( mRememberValuesAllowed )
+  {
+    QString layerName = mFeatureLayerPair.layer()->id();
+
+    // save created feature to remember values
+    if ( mRememberedValues.contains( layerName ) )
+    {
+      mRememberedValues[layerName].feature = feature;
+    }
+  }
+  */
 }
 
-void QgsQuickAttributeController::save()
+bool QgsQuickAttributeController::save()
 {
-  // TODO
-  qDebug() << "save feature TODO";
+  if ( !mFeatureLayerPair.layer() )
+    return false;
+
+  bool rv = true;
+
+  if ( !startEditing() )
+  {
+    rv = false;
+  }
+
+  QgsFeature feat = mFeatureLayerPair.feature();
+  if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
+    QgsMessageLog::logMessage( tr( "Cannot update feature" ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Warning );
+
+  // This calls lower-level I/O functions which shouldn't be used
+  // in a Q_INVOKABLE because they can make the UI unresponsive.
+  rv = commit();
+
+  if ( rv )
+  {
+    QgsFeature feat;
+    if ( mFeatureLayerPair.layer()->getFeatures( QgsFeatureRequest().setFilterFid( mFeatureLayerPair.feature().id() ) ).nextFeature( feat ) )
+      //setFeature( feat );
+      setFeatureLayerPair( QgsQuickFeatureLayerPair( feat, mFeatureLayerPair.layer() ) );
+    else
+      QgsMessageLog::logMessage( tr( "Feature %1 could not be fetched after commit" ).arg( mFeatureLayerPair.feature().id() ),
+                                 QStringLiteral( "QgsQuick" ),
+                                 Qgis::Warning );
+  }
+  return rv;
 }
+
+bool QgsQuickAttributeController::startEditing()
+{
+  Q_ASSERT( mFeatureLayerPair.layer() );
+
+  // Already an edit session active
+  if ( mFeatureLayerPair.layer()->editBuffer() )
+    return true;
+
+  if ( !mFeatureLayerPair.layer()->startEditing() )
+  {
+    QgsMessageLog::logMessage( tr( "Cannot start editing" ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Warning );
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+bool QgsQuickAttributeController::commit()
+{
+  Q_ASSERT( mFeatureLayerPair.layer() );
+
+  if ( !mFeatureLayerPair.layer()->commitChanges() )
+  {
+    QgsMessageLog::logMessage( tr( "Could not save changes. Rolling back." ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Critical );
+    mFeatureLayerPair.layer()->rollBack();
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+QgsFeature QgsQuickAttributeController::itemToFeature( std::shared_ptr<QgsQuickFormItem> item )
+{
+  Q_ASSERT( mFeatureLayerPair.layer() );
+  Q_ASSERT( mFeatureLayerPair.feature().isValid() );
+  Q_ASSERT( item->type() == QgsQuickFormItem::Field );
+
+  QgsFeature feat = mFeatureLayerPair.feature();
+
+  const int fieldIndex = item->fieldIndex();
+  const QVariant value = item->value();
+  const bool success = mFeatureLayerPair.featureRef().setAttribute( fieldIndex, value );
+  if ( !success )
+    QgsMessageLog::logMessage( tr( "Could not update value for feature" ),
+                               QStringLiteral( "QgsQuick" ),
+                               Qgis::Warning );
+
+  return feat;
+}
+
 
 bool QgsQuickAttributeController::hasAnyChanges()
 {
-  // TODO
-  qDebug() << "has changes TODO";
+  if ( FID_IS_NULL( mFeatureLayerPair.feature().id() ) )
+    return true;
+
+  if ( !mFeatureLayerPair.isValid() )
+    return false;
+
+  QMap<QUuid, std::shared_ptr<QgsQuickFormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<QgsQuickFormItem> item = formItemsIterator.value();
+    if ( item->type() == QgsQuickFormItem::Field )
+    {
+      if ( item->isModified() )
+        return true;
+    }
+    ++formItemsIterator;
+  }
   return false;
 }
 
@@ -630,10 +782,25 @@ bool QgsQuickAttributeController::setFormValue( const QUuid &id, QVariant value 
 {
   if ( isValidFormId( id ) )
   {
-    QVariant oldVal = mFormItems[id]->value();
+    std::shared_ptr<QgsQuickFormItem> item = mFormItems[id];
+    QVariant oldVal = item->value();
     if ( value != oldVal )
     {
-      mFormItems[id]->setValue( value );
+      QVariant val( value );
+      const QgsField fld = item->field();
+      if ( !fld.convertCompatible( val ) )
+      {
+        QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+        QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
+        QgsMessageLog::logMessage( msg );
+        if ( !val.isNull() )
+        {
+          emit dataChangedFailed( userFriendlyMsg );
+        }
+        return false;
+      }
+
+      mFormItems[id]->setValue( val );
       emit formDataChanged( id );
       recalculateDerivedItems();
     }

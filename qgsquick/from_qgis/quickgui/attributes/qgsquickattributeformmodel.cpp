@@ -65,15 +65,13 @@ QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) 
     case QgsQuickAttributeFormModel::EditorWidgetConfig:
       return item->editorWidgetConfig();
     case QgsQuickAttributeFormModel::RememberValue:
-      return item->lastValue();
+      return item->shouldRememberValue();
     case QgsQuickAttributeFormModel::Field:
       return item->field();
     case FieldIndex:
       return item->fieldIndex();
     case QgsQuickAttributeFormModel::Group:
       return item->groupName();
-    //case QgsQuickAttributeFormModel::AttributeEditorElement:
-    //  return item.;
     case Visible:
       return item->isVisible();
     case ConstraintSoftValid:

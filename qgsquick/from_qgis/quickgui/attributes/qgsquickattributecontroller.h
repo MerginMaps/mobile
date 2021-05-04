@@ -106,9 +106,9 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     Q_INVOKABLE void setPreviewFields( const QStringList &fieldNames );
 
 
-    Q_INVOKABLE void deleteFeature();
+    Q_INVOKABLE bool deleteFeature();
     Q_INVOKABLE void create();
-    Q_INVOKABLE void save();
+    Q_INVOKABLE bool save();
     Q_INVOKABLE bool hasAnyChanges();
 
     int tabCount() const;
@@ -143,6 +143,11 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     bool isValidTabId( int id ) const;
     bool isValidFormId( const QUuid &id ) const;
 
+    bool startEditing();
+    bool commit();
+    QgsFeature itemToFeature( std::shared_ptr<QgsQuickFormItem> item );
+
+
     void updateOnLayerChange();
     void updateOnFeatureChange();
 
@@ -170,10 +175,6 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QVector<QgsQuickAttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
     std::unique_ptr<QgsQuickAttributeFormModel> mAttributeFormPreviewModel;
     QVector<QUuid> mPreviewFieldsUuids; // order of preview field
-
-    // typedef QPair<QgsExpression, QVector<QUuid> > VisibilityExpression;
-    // QList<VisibilityExpression> mVisibilityExpressions;
-    // QMap<QStandardItem *, QgsFieldConstraints> mConstraints;
     QgsExpressionContext mExpressionContext;
     QMap<QUuid, std::shared_ptr<QgsQuickFormItem>> mFormItems; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number

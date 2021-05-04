@@ -59,7 +59,6 @@ class QUICK_EXPORT QgsQuickAttributeFormModel : public QAbstractListModel
       Field, //!< Field
       FieldIndex, //!< Index
       Group, //!< Group name
-      //AttributeEditorElement, //!< Attribute editor element
       Visible, //!< Field visible
       ConstraintSoftValid, //! Constraint soft valid
       ConstraintHardValid, //! Constraint hard valid

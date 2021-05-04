@@ -78,9 +78,10 @@ QVariant QgsQuickFormItem::value() const
   return mValue;
 }
 
+
+
 void QgsQuickFormItem::setValue( const QVariant &value )
 {
-  mLastValue = mValue;
   mValue = value;
 }
 
@@ -129,9 +130,9 @@ QString QgsQuickFormItem::constraintDescription() const
   return mConstraints.constraintDescription();
 }
 
-QVariant QgsQuickFormItem::lastValue() const
+bool QgsQuickFormItem::isModified() const
 {
-  return mLastValue;
+  return mOriginalValue == mValue;
 }
 
 QUuid QgsQuickFormItem::id() const
@@ -162,6 +163,12 @@ QgsField QgsQuickFormItem::field() const
 QString QgsQuickFormItem::groupName() const
 {
   return mGroupName;
+}
+
+void QgsQuickFormItem::setOriginalValue( const QVariant &originalValue )
+{
+  mOriginalValue = originalValue;
+  setValue( originalValue );
 }
 
 QgsQuickTabItem::QgsQuickTabItem( const int &id,
