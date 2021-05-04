@@ -452,7 +452,7 @@ class MerginApi: public QObject
     void pingMerginReplyFinished();
     /**
      * @brief When plan has been changed, an extra userInfo request is needed to update also storage.
-     * Calls user info only when has authData, otherwise slots catches the signal from clering user data after signing out.
+     * Calls user info only when has authData, otherwise slots catches the signal from clearing user data after signing out.
      */
     void onPlanProductIdChanged();
 
