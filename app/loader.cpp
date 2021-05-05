@@ -241,42 +241,6 @@ QString Loader::mapTipImage( QgsQuickFeatureLayerPair pair )
     return QString();
 }
 
-QStringList Loader::mapTipFields( QgsQuickFeatureLayerPair pair )
-{
-  QString mapTip = pair.layer()->mapTipTemplate();
-  QStringList lst;
-  const QgsFields fields = pair.layer()->fields();
-  const int LIMIT = 3;  // max. 3 fields can fit in the preview
-
-  if ( mapTip.isEmpty() )
-  {
-    // user has not provided any map tip - let's use first two fields to show
-    // at least something.
-    QString featureTitleExpression = pair.layer()->displayExpression();
-    for ( QgsField field : fields )
-    {
-      if ( featureTitleExpression != field.name() )
-        lst << field.displayName();  // yes, using alias, not the original field name
-      if ( lst.count() == LIMIT )
-        break;
-    }
-  }
-  else
-  {
-    // user has specified "# fields" on the first line and then each next line is a field name
-    QStringList lines = mapTip.split( '\n' );
-    for ( int i = 1; i < lines.count(); ++i ) // starting from index to avoid first line with "# fields"
-    {
-      int index = fields.indexFromName( lines[i] );
-      if ( index >= 0 )
-        lst << fields[index].displayName();  // yes, using alias, not the original field name
-      if ( lst.count() == LIMIT )
-        break;
-    }
-  }
-  return lst;
-}
-
 bool Loader::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;

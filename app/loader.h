@@ -55,7 +55,6 @@ class Loader: public QObject
     Q_INVOKABLE QString mapTipHtml( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
-    Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
     Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 

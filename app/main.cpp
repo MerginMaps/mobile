@@ -55,6 +55,7 @@
 #include "codefilter.h"
 #include "inputexpressionfunctions.h"
 #include "compass.h"
+#include "attributepreviewmodel.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -240,6 +241,7 @@ void initDeclarative()
   qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
+  qmlRegisterType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 }
 

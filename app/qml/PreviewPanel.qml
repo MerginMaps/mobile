@@ -13,11 +13,12 @@ import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
     id: previewPanel
     property real rowHeight: InputStyle.rowHeight
-    property QgsQuick.AttributeController attributeController
+    property AttributePreviewModel previewModel
     property string title: ""
     property string mapTipType: ""
     property string mapTipImage: ""
@@ -137,7 +138,7 @@ Item {
 
                 ListView {
                     visible: mapTipType == 'fields'
-                    model: attributeController.attributeFormPreviewModel
+                    model: previewModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp
@@ -146,8 +147,7 @@ Item {
                     delegate: Item {
                         id: root
                         width: parent.width
-                        height: attributeController.attributeFormPreviewFields.indexOf(Name) >= 0 ? previewPanel.rowHeight/2 : 0
-                        visible: height
+                        visible: true
 
                         Text {
                             id: fieldName
@@ -162,7 +162,7 @@ Item {
 
                         Text {
                             id: text2
-                            text: AttributeValue ? AttributeValue : ""
+                            text: Value ? Value : ""
                             anchors.left: fieldName.right
                             anchors.right: parent.right
                             anchors.bottom: parent.bottom

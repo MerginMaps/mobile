@@ -12,6 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Drawer {
 
@@ -65,6 +66,10 @@ Drawer {
       rememberAttributes: rememberAttributesController
     }
 
+    AttributePreviewModel {
+      id: attributePreviewModel
+    }
+
     Item {
       id: backHandler
       focus: true
@@ -113,14 +118,14 @@ Drawer {
             previewPanel.mapTipType = __loader.mapTipType(feature)
             previewPanel.mapTipHtml = __loader.mapTipHtml(feature)
             previewPanel.mapTipImage = __loader.mapTipImage(feature)
-            attributeController.attributeFormPreviewFields = __loader.mapTipFields(feature)
+            attributePreviewModel.resetModel(feature)
         }
         stateManager.state = panelState
     }
 
     PreviewPanel {
       id: previewPanel
-      attributeController: attributeController
+      previewModel: attributePreviewModel
       height: featurePanel.previewHeight
       width: parent.width
       visible: false

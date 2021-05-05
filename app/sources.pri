@@ -1,4 +1,5 @@
 SOURCES += \
+attributepreviewmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -26,6 +27,7 @@ projectsproxymodel.cpp \
 compass.cpp \
 
 HEADERS += \
+attributepreviewmodel.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
