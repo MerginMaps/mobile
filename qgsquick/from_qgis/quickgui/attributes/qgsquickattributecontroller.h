@@ -147,6 +147,8 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void dataChanged( const QString &msg ); // TODO what is this?? feature for signal...
 
   private:
+    void clearAll();
+
     void setHasAnyChanges( bool hasChanges );
 
     bool isValidTabId( int id ) const;
@@ -158,7 +160,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void updateOnLayerChange();
     void updateOnFeatureChange();
 
-    // visibility & constrains
+    // visibility & constrains & default vals
     void recalculateDerivedItems();
 
     // generate tab
@@ -176,6 +178,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
     bool mHasAnyChanges = false;
+    bool mHasTabs = false;
 
     QgsQuickFeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;

@@ -137,7 +137,7 @@ Item {
 
                 ListView {
                     visible: mapTipType == 'fields'
-                    model: controller.attributeFormPreviewModel
+                    model: attributeController.attributeFormPreviewModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp

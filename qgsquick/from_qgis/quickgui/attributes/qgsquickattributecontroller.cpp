@@ -28,9 +28,6 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsmessagelog.h"
 
-// See
-// https://github.com/qgis/QGIS/blob/2d1aa68f0d044f2aced7ebeca8d2fa6b754ac970/tests/src/gui/testqgsattributeform.cpp
-
 QgsQuickAttributeController::QgsQuickAttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new QgsQuickAttributeTabProxyModel() )
@@ -89,18 +86,16 @@ QgsAttributeEditorContainer *QgsQuickAttributeController::autoLayoutTabContainer
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
   Q_ASSERT( layer );
 
-  QgsAttributeEditorContainer *root = new QgsAttributeEditorContainer( QLatin1String( "AutoLayoutRoot" ), nullptr );
-  QgsFields fields = layer->fields();
+  std::unique_ptr<QgsAttributeEditorContainer> root( new QgsAttributeEditorContainer( QLatin1String( "AutoLayoutRoot" ), nullptr ) );
+  root->setIsGroupBox( false ); //tab!
+
+  const QgsFields fields = layer->fields();
   for ( int i = 0; i < fields.size(); ++i )
   {
-    // TODO hidden fields -> add them to the mFormItems?
-    if ( fields.at( i ).editorWidgetSetup().type() != QLatin1String( "Hidden" ) )
-    {
-      QgsAttributeEditorField *field = new QgsAttributeEditorField( fields.at( i ).name(), i, root );
-      root->addChildElement( field );
-    }
+    QgsAttributeEditorField *field = new QgsAttributeEditorField( fields.at( i ).name(), i, root.get() );
+    root->addChildElement( field );
   }
-  return root;
+  return root.release();
 }
 
 QgsQuickRememberAttributes *QgsQuickAttributeController::rememberAttributes() const
@@ -253,9 +248,8 @@ void QgsQuickAttributeController::createTab( QgsAttributeEditorContainer *contai
   mTabItems.push_back( tabItem );
 }
 
-void QgsQuickAttributeController::updateOnLayerChange()
+void QgsQuickAttributeController::clearAll()
 {
-  // 0) CLEAR
   mExpressionContext = QgsExpressionContext();
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new QgsQuickAttributeTabProxyModel() );
@@ -265,6 +259,12 @@ void QgsQuickAttributeController::updateOnLayerChange()
   mConstraintsSoftValid = false;
   mFormItemsData.clear();
   mTabItems.clear();
+  mHasTabs = false;
+}
+
+void QgsQuickAttributeController::updateOnLayerChange()
+{
+  clearAll();
 
   // 1) DATA
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
@@ -273,19 +273,44 @@ void QgsQuickAttributeController::updateOnLayerChange()
     if ( layer->editFormConfig().layout() == QgsEditFormConfig::TabLayout )
     {
       QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
-      // Do NOT support more columns!
-      root->setColumnCount( 1 );
+      if ( root->columnCount() > 1 )
+      {
+        qDebug() << "root tab in manual config has multiple columns. not supported on mobile devices!";
+        root->setColumnCount( 1 );
+      }
+
       for ( QgsAttributeEditorElement *element : root->children() )
       {
         if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
         {
-          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-          createTab( container );
+          mHasTabs = true;
+          break;
         }
-        else
+      }
+
+      if ( mHasTabs )
+      {
+        for ( QgsAttributeEditorElement *element : root->children() )
         {
-          qDebug() << "element in tab layout that is not part of any tab. Ignoring!";
+          if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+          {
+            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
+            if ( container->columnCount() > 1 )
+            {
+              qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
+              container->setColumnCount( 1 );
+            }
+            createTab( container );
+          }
+          else
+          {
+            qDebug() << "element in tab layout that is not part of any tab. Ignoring!";
+          }
         }
+      }
+      else
+      {
+        createTab( root );
       }
     }
     else
@@ -390,11 +415,20 @@ void QgsQuickAttributeController::recalculateDerivedItems()
     while ( formItemsDataIterator != mFormItemsData.end() )
     {
       std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
-      QgsExpression exp = item->visibilityExpression();
-      exp.prepare( &mExpressionContext );
       bool visible = true;
-      if ( exp.isValid() )
-        visible = exp.evaluate( &mExpressionContext ).toInt();
+      if ( item->editorWidgetType() == QLatin1String( "Hidden" ) )
+      {
+        visible = false;
+      }
+      else
+      {
+        QgsExpression exp = item->visibilityExpression();
+        exp.prepare( &mExpressionContext );
+
+        if ( exp.isValid() )
+          visible = exp.evaluate( &mExpressionContext ).toInt();
+      }
+
       if ( item->visible() != visible )
       {
         item->setVisible( visible );
@@ -504,7 +538,7 @@ bool QgsQuickAttributeController::constraintsSoftValid() const
 
 bool QgsQuickAttributeController::hasTabs() const
 {
-  return tabCount() > 1;
+  return mHasTabs;
 }
 
 QgsQuickAttributeTabProxyModel *QgsQuickAttributeController::attributeTabProxyModel() const
