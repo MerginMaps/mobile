@@ -31,7 +31,7 @@ Item {
       Layout.preferredWidth: row.itemSize
 
       Component.onCompleted: text = AttributeName
-      onDisplayTextChanged: AttributeName = displayText
+      onTextChanged: AttributeName = text
     }
 
     ComboBox {
