@@ -26,10 +26,12 @@ Item {
     InputTextField {
       id: textField
       color: fieldDelegate.color
-      text: AttributeName
       Layout.fillHeight: true
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
+
+      Component.onCompleted: text = AttributeName
+      onDisplayTextChanged: AttributeName = displayText
     }
 
     ComboBox {
