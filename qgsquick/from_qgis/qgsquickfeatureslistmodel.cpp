@@ -97,6 +97,9 @@ QString QgsQuickFeaturesListModel::foundPair( const QgsQuickFeatureLayerPair &pa
   {
     for ( const QgsField &field : fields )
     {
+      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) )
+        continue;
+
       QString attrValue = pair.feature().attribute( field.name() ).toString();
 
       if ( attrValue.toLower().indexOf( word.toLower() ) != -1 )
@@ -132,6 +135,9 @@ QString QgsQuickFeaturesListModel::buildSearchExpression()
 
     for ( const QgsField &field : fields )
     {
+      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) )
+        continue;
+
       if ( field.isNumeric() && searchExpressionIsNumeric )
         expressionParts << QStringLiteral( "%1 ~ '%2.*'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
       else if ( field.type() == QVariant::String )
