@@ -144,37 +144,32 @@ Item {
                     spacing: 2 * QgsQuick.Utils.dp
                     interactive: false
 
-                    delegate: Item {
+                    delegate: Row {
                         id: root
+                        spacing: InputStyle.panelMargin
                         width: parent.width
-                        visible: true
 
-                        Text {
-                            id: fieldName
-                            text: Name
-                            width: root.width/2
-                            height: root.height
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            color: InputStyle.fontColorBright
-                            elide: Text.ElideRight
-                            anchors.rightMargin: InputStyle.panelMargin
-                        }
+                          Text {
+                              id: fieldName
+                              text: Name
+                              width: root.width/2
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
+                              color: InputStyle.fontColorBright
+                              elide: Text.ElideRight
+                          }
 
-                        Text {
-                            id: text2
-                            text: Value ? Value : ""
-                            anchors.left: fieldName.right
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            anchors.top: parent.top
-                            height: root.height
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            color: InputStyle.fontColor
-                            elide: Text.ElideRight
+                          Text {
+                              id: text2
+                              text: Value ? Value : ""
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
+                              color: InputStyle.fontColor
+                              elide: Text.ElideRight
+
                         }
                     }
                 }
             }
         }
+
     }
 }

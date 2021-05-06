@@ -73,8 +73,6 @@ void QgsQuickAttributeController::setFeatureLayerPair( const QgsQuickFeatureLaye
     if ( hasLayerChanged )
     {
       emit attributeTabProxyModelChanged();
-      emit attributeFormPreviewModelChanged();
-      emit attributeFormPreviewFieldsChanged();
       emit hasTabsChanged();
     }
     emit featureLayerPairChanged();
@@ -253,8 +251,6 @@ void QgsQuickAttributeController::clearAll()
   mExpressionContext = QgsExpressionContext();
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new QgsQuickAttributeTabProxyModel() );
-  mAttributeFormPreviewModel.reset();
-  mPreviewFields.clear();
   mConstraintsHardValid = false;
   mConstraintsSoftValid = false;
   mFormItemsData.clear();
@@ -562,45 +558,6 @@ QgsQuickAttributeFormProxyModel *QgsQuickAttributeController::attributeFormProxy
   {
     return nullptr;
   }
-}
-
-QgsQuickAttributeFormModel *QgsQuickAttributeController::attributeFormPreviewModel() const
-{
-  return mAttributeFormPreviewModel.get();
-}
-
-void QgsQuickAttributeController::setAttributeFormPreviewFields( const QStringList &fieldNames )
-{
-  if ( mPreviewFields != fieldNames || !mAttributeFormPreviewModel )
-  {
-    QVector<QUuid> previewFieldsUuids( fieldNames.size() );
-    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
-    while ( formItemsDataIterator != mFormItemsData.end() )
-    {
-      std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
-      if ( item->type() == QgsQuickFormItem::Field )
-      {
-        int i = fieldNames.indexOf( item->name() );
-        if ( i > 0 )
-          previewFieldsUuids[i] = item->id();
-      }
-      ++formItemsDataIterator;
-    }
-
-    mAttributeFormPreviewModel.reset( new QgsQuickAttributeFormModel(
-                                        nullptr,
-                                        this,
-                                        previewFieldsUuids
-                                      ) );
-
-    emit attributeFormPreviewModelChanged();
-    emit attributeFormPreviewFieldsChanged();
-  }
-}
-
-QStringList QgsQuickAttributeController::attributeFormPreviewFields() const
-{
-  return mPreviewFields;
 }
 
 bool QgsQuickAttributeController::deleteFeature()

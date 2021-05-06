@@ -64,16 +64,11 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     // this is newer nullprt
     Q_PROPERTY( QgsQuickAttributeTabProxyModel *attributeTabProxyModel READ attributeTabProxyModel  NOTIFY attributeTabProxyModelChanged )
 
-    // this is newer nullprt
-    Q_PROPERTY( QgsQuickAttributeFormModel *attributeFormPreviewModel READ attributeFormPreviewModel  NOTIFY attributeFormPreviewModelChanged )
-
     //! Returns TRUE if remembering values is allowed
     Q_PROPERTY( bool hasTabs READ hasTabs NOTIFY hasTabsChanged )
 
     //! Returns TRUE if has any changes
     Q_PROPERTY( bool hasAnyChanges READ hasAnyChanges NOTIFY hasAnyChangesChanged )
-
-    Q_PROPERTY( QStringList attributeFormPreviewFields READ attributeFormPreviewFields WRITE setAttributeFormPreviewFields NOTIFY attributeFormPreviewFieldsChanged )
 
     Q_PROPERTY( QgsQuickRememberAttributes *rememberAttributes READ rememberAttributes WRITE setRememberAttributes NOTIFY rememberAttributesChanged )
 
@@ -102,16 +97,10 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
 
     QgsQuickAttributeTabProxyModel *attributeTabProxyModel() const;
     QgsQuickAttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
-    QgsQuickAttributeFormModel *attributeFormPreviewModel() const;
-
-    // emits attributeFormPreviewModelChanged
-    void setAttributeFormPreviewFields( const QStringList &fieldNames );
-    QStringList attributeFormPreviewFields() const;
 
     Q_INVOKABLE bool deleteFeature();
     Q_INVOKABLE void create();
     Q_INVOKABLE bool save();
-
 
     int tabCount() const;
 
@@ -137,8 +126,6 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void constraintsHardValidChanged();
     void constraintsSoftValidChanged();
     void hasTabsChanged();
-    void attributeFormPreviewModelChanged();
-    void attributeFormPreviewFieldsChanged();
 
     void formDataChanged( QUuid uuid );
     void tabDataChanged( int id );
@@ -183,8 +170,6 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QgsQuickFeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;
     QVector<QgsQuickAttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
-    std::unique_ptr<QgsQuickAttributeFormModel> mAttributeFormPreviewModel;
-    QStringList mPreviewFields; // order of preview field
     QgsExpressionContext mExpressionContext;
     QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>> mFormItemsData; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number
