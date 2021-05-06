@@ -90,7 +90,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
       }
       else if ( project->isMergin() )
       {
-        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatTimeDiff( project->mergin->serverUpdated ) ) );
+        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( project->mergin->serverUpdated ) ) );
       }
 
       // This should not happen

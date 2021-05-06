@@ -30,6 +30,7 @@
 #include <math.h>
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
+static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -113,7 +114,7 @@ QString InputUtils::formatNumber( const double number, int precision )
 
 QString InputUtils::formatDuration( int lengthOfCycle, const QString &cycleName )
 {
-  if ( lengthOfCycle == 1 )
+  if ( lengthOfCycle == 0 || lengthOfCycle == 1 )
   {
     return QStringLiteral( "%1 %2 ago" ).arg( lengthOfCycle ).arg( cycleName );
   }
@@ -123,43 +124,37 @@ QString InputUtils::formatDuration( int lengthOfCycle, const QString &cycleName 
   }
 }
 
-QString InputUtils::formatTimeDiff( const QDateTime &datetime )
+QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
 {
-  QDateTime currentTime = QDateTime::currentDateTime();
-  qint64 daysDiff = datetime.daysTo( currentTime );
+  qint64 daysDiff = tMin.daysTo( tMax );
 
   // datetime is invalid
   if ( daysDiff < 0 )
   {
-    return QStringLiteral( "Invalid datetime" );
+    return INVALID_DATETIME_STR;
   }
 
-  if ( daysDiff == 0 )
+  // diff is maximum one day
+  // Note that difference from 23:55 to 0:05 the next day counts as one day
+  if ( daysDiff == 0 || daysDiff == 1 )
   {
-    qint64 secsDiff = datetime.secsTo( currentTime );
+    qint64 secsDiff = tMin.secsTo( tMax );
     if ( secsDiff <= 0 )
     {
-      return QStringLiteral( "Invalid datetime" );
+      return INVALID_DATETIME_STR;
     }
-    if ( secsDiff <= 60 * 60 )
+    if ( secsDiff < 60 * 60 )
     {
       return formatDuration( secsDiff / 60, QStringLiteral( "minute" ) );
     }
-    else if ( secsDiff <= 60 * 60 * 24 )
+    else if ( secsDiff < 60 * 60 * 24 )
     {
-      return formatDuration( qCeil( daysDiff / 60 * 24 ), QStringLiteral( "hour" ) );
+      return formatDuration( qCeil( secsDiff / ( 60 * 60 ) ), QStringLiteral( "hour" ) );
     }
     else
     {
-      return formatDuration( qCeil( daysDiff / 60 * 24 ), QStringLiteral( "hour" ) );
+      return formatDuration( daysDiff, QStringLiteral( "day" ) );
     }
-  }
-  else if ( daysDiff == 1 )
-  {
-    // Could be only few minutes over midnight
-
-
-    return QStringLiteral( "1 day ago" );
   }
   else if ( daysDiff < 7 )
   {
@@ -175,10 +170,10 @@ QString InputUtils::formatTimeDiff( const QDateTime &datetime )
   }
   else
   {
-    return formatDuration( qCeil( daysDiff / 365 ), QStringLiteral( "month" ) );
+    return formatDuration( qCeil( daysDiff / 365 ), QStringLiteral( "year" ) );
   }
 
-  return QStringLiteral( "Invalid datetime" );
+  return INVALID_DATETIME_STR;
 }
 
 void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )

@@ -37,8 +37,6 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    static QString formatTimeDiff( const QDateTime &datetime );
-
     Q_INVOKABLE void setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
@@ -129,6 +127,15 @@ class InputUtils: public QObject
 
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     static void registerInputExpressionFunctions();
+
+    /**
+     * @brief Creates formatted string of difference for given tMin and tMax datetimes (in minutes, hours, ... ago).
+     * Note, that tMin < tMax, otherwise arguments are invalid.
+     * @param tMin Datetime in the past
+     * @param tMax Datetime after tMin, currentDateTime by default.
+     * @return Formatted string
+     */
+    static QString formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax = QDateTime::currentDateTimeUtc() );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
