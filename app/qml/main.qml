@@ -666,6 +666,16 @@ ApplicationWindow {
         z: zPanel + 1000 // the most top
     }
 
+    StorageLimitDialog {
+        id: storageLimitDialog
+        onOpenSubscriptionPlans: {
+          storageLimitDialog.close()
+          if (__merginApi.apiSupportsSubscriptions) {
+            projectPanel.manageSubscriptionPlans()
+          }
+        }
+    }
+
     MessageDialog {
         id: alertDialog
         onAccepted: alertDialog.close()
@@ -686,7 +696,17 @@ ApplicationWindow {
             var msg = message ? message : qsTr("Failed to communicate with Mergin.%1Try improving your network connection.".arg("<br/>"))
             showAsDialog ? showDialog(msg) : showMessage(msg)
         }
-        onNotify: showMessage(message)
+
+        onStorageLimitReached: {
+          __merginApi.getUserInfo()
+          if (__merginApi.apiSupportsSubscriptions) {
+            __merginApi.getSubscriptionInfo()
+          }
+          storageLimitDialog.uploadSize = uploadSize
+          storageLimitDialog.open()
+        }
+
+        onNotify: showDialog(msg)
 
         onProjectDataChanged: {
           //! if current project has been updated, refresh canvas

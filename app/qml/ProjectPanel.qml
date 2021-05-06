@@ -36,6 +36,14 @@ Item {
     stackView.clearStackAndClose()
   }
 
+  function manageSubscriptionPlans() {
+    if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
+      stackView.push( subscribePanelComp)
+    } else {
+      Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+    }
+  }
+
   visible: false
   focus: true
 
@@ -503,13 +511,7 @@ Item {
       onBack: {
         stackView.popOnePageOrClose()
       }
-      onManagePlansClicked: {
-        if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
-          stackView.push( subscribePanelComp)
-        } else {
-          Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
-        }
-      }
+      onManagePlansClicked: manageSubscriptionPlans()
       onSignOutClicked: {
         if ( __merginApi.userAuth.hasAuthData() ) {
           __merginApi.clearAuth()
