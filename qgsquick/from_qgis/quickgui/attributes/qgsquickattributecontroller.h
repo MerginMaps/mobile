@@ -146,6 +146,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
 
     void updateOnLayerChange();
     void updateOnFeatureChange();
+    bool isNewFeature() const;
 
     // visibility & constrains & default vals
     void recalculateDerivedItems();

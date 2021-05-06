@@ -202,45 +202,6 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   mapSettings->setExtent( extent );
 }
 
-QString Loader::featureTitle( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  QgsExpression expr( pair.layer()->displayExpression() );
-  return expr.evaluate( &context ).toString();
-}
-
-QString Loader::mapTipHtml( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  return QgsExpression::replaceExpressionText( pair.layer()->mapTipTemplate(), &context );
-}
-
-QString Loader::mapTipType( QgsQuickFeatureLayerPair pair )
-{
-  // Stripping extra CR char to unify Windows lines with Unix.
-  QString mapTip = pair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
-  if ( mapTip.startsWith( "# image\n" ) )
-    return "image";
-  else if ( mapTip.startsWith( "# fields\n" ) || mapTip.isEmpty() )
-    return "fields";
-  else
-    return "html";
-}
-
-QString Loader::mapTipImage( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  QString mapTip = pair.layer()->mapTipTemplate();
-  QStringList lst = mapTip.split( '\n' ); // first line is "# image"
-  if ( lst.count() >= 2 )
-    return QgsExpression::replaceExpressionText( lst[1], &context );
-  else
-    return QString();
-}
-
 bool Loader::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
@@ -301,15 +262,7 @@ void Loader::appAboutToQuit()
   CoreUtils::log( "Input", "Application has quit" );
 }
 
-QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer *layer )
-{
-  // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
-  QList<QgsExpressionContextScope *> scopes;
-  scopes << QgsExpressionContextUtils::globalScope();
-  scopes << QgsExpressionContextUtils::projectScope( mProject );
-  scopes << QgsExpressionContextUtils::layerScope( layer );
-  return scopes;
-}
+
 
 void Loader::setActiveLayer( QString layerName ) const
 {

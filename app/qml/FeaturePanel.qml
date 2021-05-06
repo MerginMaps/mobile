@@ -66,8 +66,9 @@ Drawer {
       rememberAttributes: rememberAttributesController
     }
 
-    AttributePreviewModel {
-      id: attributePreviewModel
+    AttributePreviewController {
+      id: attributePreviewController
+      project: __loader.project
     }
 
     Item {
@@ -108,24 +109,17 @@ Drawer {
 
     function show_panel(feature, formState, panelState) {
         featurePanel.feature = feature
+        attributePreviewController.featureLayerPair = feature
         featurePanel.formState = formState
         featurePanel.visible = true
         featurePanel.isReadOnly = feature.layer.readOnly
         backHandler.focus = true
-
-        if (panelState === "preview") {
-            previewPanel.title = __loader.featureTitle(feature)
-            previewPanel.mapTipType = __loader.mapTipType(feature)
-            previewPanel.mapTipHtml = __loader.mapTipHtml(feature)
-            previewPanel.mapTipImage = __loader.mapTipImage(feature)
-            attributePreviewModel.resetModel(feature)
-        }
         stateManager.state = panelState
     }
 
     PreviewPanel {
       id: previewPanel
-      previewModel: attributePreviewModel
+      controller: attributePreviewController
       height: featurePanel.previewHeight
       width: parent.width
       visible: false

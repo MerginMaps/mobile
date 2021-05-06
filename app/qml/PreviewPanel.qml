@@ -18,11 +18,7 @@ import lc 1.0
 Item {
     id: previewPanel
     property real rowHeight: InputStyle.rowHeight
-    property AttributePreviewModel previewModel
-    property string title: ""
-    property string mapTipType: ""
-    property string mapTipImage: ""
-    property string mapTipHtml: ""
+    property AttributePreviewController controller
 
     property bool isReadOnly
 
@@ -61,7 +57,7 @@ Item {
                         id: titleText
                         height: parent.height
                         width: parent.width - rowHeight
-                        text: previewPanel.title
+                        text: controller.title
                         font.pixelSize: InputStyle.fontPixelSizeTitle
                         color: InputStyle.fontColor
                         font.bold: true
@@ -121,15 +117,15 @@ Item {
                 // we have three options what will be in the preview content: html content, image or field values
 
                 Text {
-                    visible: mapTipType == 'html'
-                    text: mapTipHtml
+                    visible: controller.type === AttributePreviewController.HTML
+                    text: controller.html
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                 }
 
                 Image {
-                    visible: mapTipType == 'image'
-                    source: mapTipImage
+                    visible: controller.type === AttributePreviewController.Image
+                    source: controller.photo
                     sourceSize: Qt.size(width, height)
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
@@ -137,8 +133,8 @@ Item {
                 }
 
                 ListView {
-                    visible: mapTipType == 'fields'
-                    model: previewModel
+                    visible: controller.type === AttributePreviewController.Fields
+                    model: controller.fieldModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp
@@ -159,7 +155,7 @@ Item {
                           }
 
                           Text {
-                              id: text2
+                              id: fieldValue
                               text: Value ? Value : ""
                               font.pixelSize: InputStyle.fontPixelSizeNormal
                               color: InputStyle.fontColor

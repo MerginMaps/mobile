@@ -352,7 +352,7 @@ void QgsQuickAttributeController::updateOnFeatureChange()
       int fieldIndex = itemData->fieldIndex();
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItemsData[itemData->id()]->setOriginalValue( newVal );
-      if ( mRememberAttributes && FID_IS_NULL( mFeatureLayerPair.feature().id() ) ) // this is a new feature
+      if ( mRememberAttributes && isNewFeature() ) // this is a new feature
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributes->rememberedValue(
@@ -370,6 +370,11 @@ void QgsQuickAttributeController::updateOnFeatureChange()
   recalculateDerivedItems();
 }
 
+bool QgsQuickAttributeController::isNewFeature() const
+{
+  return FID_IS_NULL( mFeatureLayerPair.feature().id() );
+}
+
 bool QgsQuickAttributeController::recalculateDefaultValues(
   QSet<QUuid> &changedFormItems,
   QgsExpressionContext &expressionContext
@@ -382,7 +387,11 @@ bool QgsQuickAttributeController::recalculateDefaultValues(
     std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
     const QgsField field = item->field();
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
-    if ( !defaultDefinition.expression().isEmpty() && defaultDefinition.applyOnUpdate() )
+    bool shouldApplyDefaultValue =
+      !defaultDefinition.expression().isEmpty() &&
+      ( isNewFeature() || defaultDefinition.applyOnUpdate() );
+
+    if ( shouldApplyDefaultValue )
     {
       QgsExpression exp( field.defaultValueDefinition().expression() );
       exp.prepare( &expressionContext );
@@ -423,6 +432,7 @@ bool QgsQuickAttributeController::recalculateDefaultValues(
         }
       }
     }
+    ++formItemsDataIterator;
   }
   return hasChanges;
 }
