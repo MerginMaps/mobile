@@ -86,11 +86,12 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
           return QVariant( project->local->projectError );
         }
         QFileInfo fi( project->local->projectDir );
-        return QVariant( fi.lastModified().toLocalTime() ); // Maybe use better timestamp format https://doc.qt.io/qt-5/qdatetime.html#toString-3
+        // lastModified of projectDir is not reliable - gpkg file may have modified header after opening it. See more #1320
+        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( fi.lastModified().toUTC() ) ) );
       }
       else if ( project->isMergin() )
       {
-        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( project->mergin->serverUpdated ) ) );
+        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( project->mergin->serverUpdated.toUTC() ) ) );
       }
 
       // This should not happen

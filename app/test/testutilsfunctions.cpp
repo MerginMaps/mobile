@@ -19,8 +19,9 @@ void TestUtilsFunctions::testFormatDuration()
 {
   QDateTime t0 = QDateTime::currentDateTime();
 
-  testFormatDuration( t0, 0, QStringLiteral( "Invalid datetime" ) );
-  testFormatDuration( t0, 1, QStringLiteral( "0 minute ago" ) );
+  testFormatDuration( t0, -1, QStringLiteral( "Invalid datetime" ) );
+  testFormatDuration( t0, 0, QStringLiteral( "a few seconds ago" ) );
+  testFormatDuration( t0, 1, QStringLiteral( "a few seconds ago" ) );
   testFormatDuration( t0, 60, QStringLiteral( "1 minute ago" ) );
   testFormatDuration( t0, 2 * 60, QStringLiteral( "2 minutes ago" ) );
   testFormatDuration( t0, 1 * 60 * 60, QStringLiteral( "1 hour ago" ) );

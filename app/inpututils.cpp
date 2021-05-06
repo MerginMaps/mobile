@@ -114,7 +114,7 @@ QString InputUtils::formatNumber( const double number, int precision )
 
 QString InputUtils::formatDuration( int lengthOfCycle, const QString &cycleName )
 {
-  if ( lengthOfCycle == 0 || lengthOfCycle == 1 )
+  if ( lengthOfCycle == 1 )
   {
     return QStringLiteral( "%1 %2 ago" ).arg( lengthOfCycle ).arg( cycleName );
   }
@@ -139,11 +139,15 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   if ( daysDiff == 0 || daysDiff == 1 )
   {
     qint64 secsDiff = tMin.secsTo( tMax );
-    if ( secsDiff <= 0 )
+    if ( secsDiff < 0 )
     {
       return INVALID_DATETIME_STR;
     }
-    if ( secsDiff < 60 * 60 )
+    else if ( secsDiff < 60 )
+    {
+      return QStringLiteral( "a few seconds ago" );
+    }
+    else if ( secsDiff < 60 * 60 )
     {
       return formatDuration( secsDiff / 60, QStringLiteral( "minute" ) );
     }
