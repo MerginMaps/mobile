@@ -76,6 +76,9 @@ void QgsQuickAttributeController::setFeatureLayerPair( const QgsQuickFeatureLaye
       emit hasTabsChanged();
     }
     emit featureLayerPairChanged();
+    emit constraintsHardValidChanged();
+    emit constraintsSoftValidChanged();
+    emit hasAnyChangesChanged();
   }
 }
 

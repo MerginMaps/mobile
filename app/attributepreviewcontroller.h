@@ -155,9 +155,6 @@ class AttributePreviewController: public QObject
     std::unique_ptr<AttributePreviewModel> mFieldModel;
     PreviewType mType = PreviewType::Empty;
     const int mLimit = 3;
-
-
-
 };
 
 #endif // ATTRIBUTEPREVIEWMODEL_H
