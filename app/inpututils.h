@@ -37,7 +37,6 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-
     Q_INVOKABLE void setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
@@ -129,6 +128,15 @@ class InputUtils: public QObject
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     static void registerInputExpressionFunctions();
 
+    /**
+     * @brief Creates formatted string of difference for given tMin and tMax datetimes (in minutes, hours, ... ago).
+     * Note, that tMin < tMax, otherwise arguments are invalid.
+     * @param tMin Datetime in the past
+     * @param tMax Datetime after tMin, currentDateTime by default.
+     * @return Formatted string
+     */
+    static QString formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax = QDateTime::currentDateTimeUtc() );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
@@ -140,7 +148,7 @@ class InputUtils: public QObject
     // on iOS the names from gallery pickers are like
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
-    QString sanitizeName( const QString &path );
+    static QString sanitizeName( const QString &path );
 
     static double ratherZeroThanNaN( double d );
     std::unique_ptr<AndroidUtils> mAndroidUtils;

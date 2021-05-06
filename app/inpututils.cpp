@@ -30,6 +30,7 @@
 #include <math.h>
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
+static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
 
 InputUtils::InputUtils( QObject *parent ): QObject( parent )
 {
@@ -109,6 +110,67 @@ QString InputUtils::formatProjectName( const QString &fullProjectName )
 QString InputUtils::formatNumber( const double number, int precision )
 {
   return QString::number( number, 'f', precision );
+}
+
+QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
+{
+  qint64 daysDiff = tMin.daysTo( tMax );
+
+  // datetime is invalid
+  if ( daysDiff < 0 )
+  {
+    return INVALID_DATETIME_STR;
+  }
+
+  // diff is maximum one day
+  // Note that difference from 23:55 to 0:05 the next day counts as one day
+  if ( daysDiff == 0 || daysDiff == 1 )
+  {
+    qint64 secsDiff = tMin.secsTo( tMax );
+    if ( secsDiff < 0 )
+    {
+      return INVALID_DATETIME_STR;
+    }
+    else if ( secsDiff < 60 )
+    {
+      return tr( "just now" );
+    }
+    else if ( secsDiff < 60 * 60 )
+    {
+      int period = secsDiff / 60 ;
+      return ( period > 1 ) ? tr( "%1 minutes ago" ).arg( period ) : tr( "%1 minute ago" ).arg( period );
+    }
+    else if ( secsDiff < 60 * 60 * 24 )
+    {
+      int period = secsDiff / ( 60 * 60 );
+      return ( period > 1 ) ? tr( "%1 hours ago" ).arg( period ) : tr( "%1 hour ago" ).arg( period );
+    }
+    else
+    {
+      return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
+    }
+  }
+  else if ( daysDiff < 7 )
+  {
+    return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
+  }
+  else if ( daysDiff < 31 )
+  {
+    int period = daysDiff / 7;
+    return ( period > 1 ) ? tr( "%1 weeks ago" ).arg( period ) : tr( "%1 week ago" ).arg( period );
+  }
+  else if ( daysDiff < 365 )
+  {
+    int period = daysDiff / 31;
+    return ( period > 1 ) ? tr( "%1 months ago" ).arg( period ) : tr( "%1 month ago" ).arg( period );
+  }
+  else
+  {
+    int period = daysDiff / 365;
+    return ( period > 1 ) ? tr( "%1 years ago" ).arg( period ) : tr( "%1 year ago" ).arg( period );
+  }
+
+  return INVALID_DATETIME_STR;
 }
 
 void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
