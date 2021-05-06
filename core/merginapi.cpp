@@ -966,7 +966,10 @@ void MerginApi::pingMerginReplyFinished()
 
 void MerginApi::onPlanProductIdChanged()
 {
-  getUserInfo();
+  if ( mUserAuth->hasAuthData() )
+  {
+    getUserInfo();
+  }
 }
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )

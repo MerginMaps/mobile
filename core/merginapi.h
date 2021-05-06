@@ -451,7 +451,10 @@ class MerginApi: public QObject
     void authorizeFinished();
     void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
     void pingMerginReplyFinished();
-    //! When plan has been changed, an extra userInfo request is needed to update also storage.
+    /**
+     * @brief When plan has been changed, an extra userInfo request is needed to update also storage.
+     * Calls user info only when has authData, otherwise slots catches the signal from clearing user data after signing out.
+     */
     void onPlanProductIdChanged();
 
   private:
