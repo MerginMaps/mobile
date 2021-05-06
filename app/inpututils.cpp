@@ -112,18 +112,6 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDuration( int lengthOfCycle, const QString &cycleName )
-{
-  if ( lengthOfCycle == 1 )
-  {
-    return QStringLiteral( "%1 %2 ago" ).arg( lengthOfCycle ).arg( cycleName );
-  }
-  else
-  {
-    return QStringLiteral( "%1 %2s ago" ).arg( lengthOfCycle ).arg( cycleName );
-  }
-}
-
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
 {
   qint64 daysDiff = tMin.daysTo( tMax );
@@ -145,36 +133,41 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
     }
     else if ( secsDiff < 60 )
     {
-      return QStringLiteral( "a few seconds ago" );
+      return tr( "just now" );
     }
     else if ( secsDiff < 60 * 60 )
     {
-      return formatDuration( secsDiff / 60, QStringLiteral( "minute" ) );
+      int period = secsDiff / 60 ;
+      return ( period > 1 ) ? tr( "%1 minutes ago" ).arg( period ) : tr( "%1 minute ago" ).arg( period );
     }
     else if ( secsDiff < 60 * 60 * 24 )
     {
-      return formatDuration( qCeil( secsDiff / ( 60 * 60 ) ), QStringLiteral( "hour" ) );
+      int period = secsDiff / ( 60 * 60 );
+      return ( period > 1 ) ? tr( "%1 hours ago" ).arg( period ) : tr( "%1 hour ago" ).arg( period );
     }
     else
     {
-      return formatDuration( daysDiff, QStringLiteral( "day" ) );
+      return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
     }
   }
   else if ( daysDiff < 7 )
   {
-    return formatDuration( daysDiff, QStringLiteral( "day" ) );
+    return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
   }
   else if ( daysDiff < 31 )
   {
-    return formatDuration( qCeil( daysDiff / 7 ), QStringLiteral( "week" ) );
+    int period = daysDiff / 7;
+    return ( period > 1 ) ? tr( "%1 weeks ago" ).arg( period ) : tr( "%1 week ago" ).arg( period );
   }
   else if ( daysDiff < 365 )
   {
-    return formatDuration( qCeil( daysDiff / 31 ), QStringLiteral( "month" ) );
+    int period = daysDiff / 31;
+    return ( period > 1 ) ? tr( "%1 months ago" ).arg( period ) : tr( "%1 month ago" ).arg( period );
   }
   else
   {
-    return formatDuration( qCeil( daysDiff / 365 ), QStringLiteral( "year" ) );
+    int period = daysDiff / 365;
+    return ( period > 1 ) ? tr( "%1 years ago" ).arg( period ) : tr( "%1 year ago" ).arg( period );
   }
 
   return INVALID_DATETIME_STR;

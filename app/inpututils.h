@@ -149,7 +149,6 @@ class InputUtils: public QObject
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
     static QString sanitizeName( const QString &path );
-    static QString formatDuration( int lengthOfCycle,  const QString &cycleName );
 
     static double ratherZeroThanNaN( double d );
     std::unique_ptr<AndroidUtils> mAndroidUtils;

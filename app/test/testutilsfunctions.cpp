@@ -20,8 +20,8 @@ void TestUtilsFunctions::testFormatDuration()
   QDateTime t0 = QDateTime::currentDateTime();
 
   testFormatDuration( t0, -1, QStringLiteral( "Invalid datetime" ) );
-  testFormatDuration( t0, 0, QStringLiteral( "a few seconds ago" ) );
-  testFormatDuration( t0, 1, QStringLiteral( "a few seconds ago" ) );
+  testFormatDuration( t0, 0, QStringLiteral( "just now" ) );
+  testFormatDuration( t0, 1, QStringLiteral( "just now" ) );
   testFormatDuration( t0, 60, QStringLiteral( "1 minute ago" ) );
   testFormatDuration( t0, 2 * 60, QStringLiteral( "2 minutes ago" ) );
   testFormatDuration( t0, 1 * 60 * 60, QStringLiteral( "1 hour ago" ) );
@@ -38,7 +38,7 @@ void TestUtilsFunctions::testFormatDuration()
 
 void TestUtilsFunctions::testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult )
 {
-  QDateTime t1 = t0.addSecs( ( -1 ) * diffSecs );
-  QString str_t1 = InputUtils::formatDateTimeDiff( t1, t0 );
+  QDateTime t1 = t0.addSecs( diffSecs );
+  QString str_t1 = InputUtils::formatDateTimeDiff( t0, t1 );
   QCOMPARE( str_t1, expectedResult );
 }
