@@ -29,21 +29,7 @@ class QgsProject;
 
 /**
  * Simple name-value model to be used in the preview panel
- * for feature attributes
- *
- * The definition is in the mapTip of the layer.
- *
- * It has 2 modes:
- *  1. mapTip is empty:
- *         It creates limitFields() fields that are
- *         different from the display field, so the
- *         fields in the model are not the same as in
- *         the preview panel title
- *
- *  2. mapTipe
- *
- * Intended use is to call resetModel() before opening the panel to
- * reset the model items.
+ * for feature attributes in "fields" mode
  *
  * \note QML Type: AttributePreviewModel
  */
@@ -74,6 +60,40 @@ class AttributePreviewModel : public QAbstractListModel
     QVector<QPair<QString, QString>> mItems; //!< pair of name&value
 };
 
+/*
+* The definition is in the mapTip of the layer.
+*
+* mapTip is set in QGIS>LayerProperties>Display>MapTip
+*
+* It has 5 modes:
+*  1. qgis' mapTip is empty:
+*         It creates limitFields() fields that are
+*         different from the display field, so the
+*         fields in the model are not the same as in
+*         the preview panel title
+*      => PreviewType.Fields
+*      => not supported by QGIS
+*
+*  2. qgis' mapTip constains "# fields", following by one
+*         "display name" per line. Only first mLimit
+*         fields are shown.
+*      => PreviewType.Fields
+*      => not supported by QGIS
+*
+*  3. qgis' mapTip constains "# image", following by relative
+*         path to the image
+*     => PreviewType.Image
+*     => not supported by QGIS
+*
+*  4. qgis' mapTip constains some (html) text
+*     => PreviewType.Html
+*     => supported by QGIS
+*
+*  5. we are unable to parse the mapTip or there are no fields
+*         in the layer
+*    => PreviewType.Empty
+*    => supported by QGIS
+*/
 class AttributePreviewController: public QObject
 {
     Q_OBJECT

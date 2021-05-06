@@ -117,14 +117,21 @@ Item {
                 // we have three options what will be in the preview content: html content, image or field values
 
                 Text {
-                    visible: controller.type === AttributePreviewController.HTML
+                    visible: controller.type == AttributePreviewController.Empty
+                    text: qsTr("No map tip available.")
+                    anchors.fill: parent
+                    anchors.topMargin: InputStyle.panelMargin
+                }
+
+                Text {
+                    visible: controller.type == AttributePreviewController.HTML
                     text: controller.html
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                 }
 
                 Image {
-                    visible: controller.type === AttributePreviewController.Image
+                    visible: controller.type == AttributePreviewController.Image
                     source: controller.photo
                     sourceSize: Qt.size(width, height)
                     fillMode: Image.PreserveAspectFit
@@ -133,7 +140,7 @@ Item {
                 }
 
                 ListView {
-                    visible: controller.type === AttributePreviewController.Fields
+                    visible: controller.type == AttributePreviewController.Fields
                     model: controller.fieldModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
@@ -166,6 +173,5 @@ Item {
                 }
             }
         }
-
     }
 }

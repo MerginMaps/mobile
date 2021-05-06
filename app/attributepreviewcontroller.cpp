@@ -158,7 +158,8 @@ AttributePreviewModel *AttributePreviewController::fieldModel() const
 }
 
 AttributePreviewController::AttributePreviewController( QObject *parent )
-  : mFieldModel( new AttributePreviewModel() )
+  : QObject( parent )
+  , mFieldModel( new AttributePreviewModel() )
 {
 }
 
@@ -171,9 +172,12 @@ void AttributePreviewController::setFeatureLayerPair( const QgsQuickFeatureLayer
     mFeatureLayerPair = pair;
     recalculate();
     emit featureLayerPairChanged();
+
     emit htmlChanged();
     emit photoChanged();
     emit typeChanged();
+    emit titleChanged();
+    emit fieldModelChanged();
   }
 }
 
