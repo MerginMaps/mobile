@@ -45,8 +45,11 @@ class QgsQuickRememberAttributes;
  *
  * This is implementation of the controller between QgsQuickAttribute*Model
  * and the QML's QgsQuick.FeatureForm. It is responsible for creation of the
- * models, and CRUD management of the edits. It connects the QgsFeature Fields
- * on the backend side and the QML widgets on the user side
+ * models, and CRUD management between QgsFeature and the form. It connects
+ * the QgsFeature Fields on the backend side and the QML widgets on the user side
+ *
+ * Remember values functionality is done by QgsQuickRememberAttributes controller.
+ * Preview forms are not supported by this class.
  *
  * \note QML Type: AttributeController
  *
