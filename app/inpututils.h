@@ -37,6 +37,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
+    static QString formatTimeDiff( const QDateTime &datetime );
 
     Q_INVOKABLE void setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
@@ -140,7 +141,8 @@ class InputUtils: public QObject
     // on iOS the names from gallery pickers are like
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
     // we need to change it to something more readable
-    QString sanitizeName( const QString &path );
+    static QString sanitizeName( const QString &path );
+    static QString formatDuration( int lengthOfCycle,  const QString &cycleName );
 
     static double ratherZeroThanNaN( double d );
     std::unique_ptr<AndroidUtils> mAndroidUtils;

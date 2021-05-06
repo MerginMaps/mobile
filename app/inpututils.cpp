@@ -111,6 +111,76 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
+QString InputUtils::formatDuration( int lengthOfCycle, const QString &cycleName )
+{
+  if ( lengthOfCycle == 1 )
+  {
+    return QStringLiteral( "%1 %2 ago" ).arg( lengthOfCycle ).arg( cycleName );
+  }
+  else
+  {
+    return QStringLiteral( "%1 %2s ago" ).arg( lengthOfCycle ).arg( cycleName );
+  }
+}
+
+QString InputUtils::formatTimeDiff( const QDateTime &datetime )
+{
+  QDateTime currentTime = QDateTime::currentDateTime();
+  qint64 daysDiff = datetime.daysTo( currentTime );
+
+  // datetime is invalid
+  if ( daysDiff < 0 )
+  {
+    return QStringLiteral( "Invalid datetime" );
+  }
+
+  if ( daysDiff == 0 )
+  {
+    qint64 secsDiff = datetime.secsTo( currentTime );
+    if ( secsDiff <= 0 )
+    {
+      return QStringLiteral( "Invalid datetime" );
+    }
+    if ( secsDiff <= 60 * 60 )
+    {
+      return formatDuration( secsDiff / 60, QStringLiteral( "minute" ) );
+    }
+    else if ( secsDiff <= 60 * 60 * 24 )
+    {
+      return formatDuration( qCeil( daysDiff / 60 * 24 ), QStringLiteral( "hour" ) );
+    }
+    else
+    {
+      return formatDuration( qCeil( daysDiff / 60 * 24 ), QStringLiteral( "hour" ) );
+    }
+  }
+  else if ( daysDiff == 1 )
+  {
+    // Could be only few minutes over midnight
+
+
+    return QStringLiteral( "1 day ago" );
+  }
+  else if ( daysDiff < 7 )
+  {
+    return formatDuration( daysDiff, QStringLiteral( "day" ) );
+  }
+  else if ( daysDiff < 31 )
+  {
+    return formatDuration( qCeil( daysDiff / 7 ), QStringLiteral( "week" ) );
+  }
+  else if ( daysDiff < 365 )
+  {
+    return formatDuration( qCeil( daysDiff / 31 ), QStringLiteral( "month" ) );
+  }
+  else
+  {
+    return formatDuration( qCeil( daysDiff / 365 ), QStringLiteral( "month" ) );
+  }
+
+  return QStringLiteral( "Invalid datetime" );
+}
+
 void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
 
