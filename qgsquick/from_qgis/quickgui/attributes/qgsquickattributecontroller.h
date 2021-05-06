@@ -149,6 +149,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
 
     // visibility & constrains & default vals
     void recalculateDerivedItems();
+    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
 
     // generate tab
     void createTab( QgsAttributeEditorContainer *container );
@@ -170,7 +171,6 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QgsQuickFeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;
     QVector<QgsQuickAttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
-    QgsExpressionContext mExpressionContext;
     QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>> mFormItemsData; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number
 

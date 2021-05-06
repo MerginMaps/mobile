@@ -248,7 +248,6 @@ void QgsQuickAttributeController::createTab( QgsAttributeEditorContainer *contai
 
 void QgsQuickAttributeController::clearAll()
 {
-  mExpressionContext = QgsExpressionContext();
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new QgsQuickAttributeTabProxyModel() );
   mConstraintsHardValid = false;
@@ -317,7 +316,6 @@ void QgsQuickAttributeController::updateOnLayerChange()
       createTab( tab );
     }
 
-    mExpressionContext = layer->createExpressionContext();
     if ( mRememberAttributes )
       mRememberAttributes->storeLayerFields( layer );
   }
@@ -372,7 +370,64 @@ void QgsQuickAttributeController::updateOnFeatureChange()
   recalculateDerivedItems();
 }
 
-void QgsQuickAttributeController::recalculateDerivedItems()
+bool QgsQuickAttributeController::recalculateDefaultValues(
+  QSet<QUuid> &changedFormItems,
+  QgsExpressionContext &expressionContext
+)
+{
+  bool hasChanges = false;
+  QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>>::iterator formItemsDataIterator = mFormItemsData.begin();
+  while ( formItemsDataIterator != mFormItemsData.end() )
+  {
+    std::shared_ptr<QgsQuickFormItemData> item = formItemsDataIterator.value();
+    const QgsField field = item->field();
+    const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
+    if ( !defaultDefinition.expression().isEmpty() && defaultDefinition.applyOnUpdate() )
+    {
+      QgsExpression exp( field.defaultValueDefinition().expression() );
+      exp.prepare( &expressionContext );
+      if ( exp.hasParserError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     field.name(),
+                                     exp.parserErrorString() ),
+                                   QStringLiteral( "QgsQuick" ),
+                                   Qgis::Warning );
+
+      QVariant value = exp.evaluate( &expressionContext );
+
+      if ( exp.hasEvalError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     field.name(),
+                                     exp.evalErrorString() ),
+                                   QStringLiteral( "QgsQuick" ),
+                                   Qgis::Warning );
+      else
+      {
+        QVariant val( value );
+        if ( !field.convertCompatible( val ) )
+        {
+          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+          QgsMessageLog::logMessage( msg );
+        }
+        else
+        {
+          QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
+          if ( val != oldVal )
+          {
+            mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+            changedFormItems.insert( item->id() );
+            hasChanges = true;
+          }
+        }
+      }
+    }
+  }
+  return hasChanges;
+}
+
+void QgsQuickAttributeController::recalculateDerivedItems( )
 {
   QSet<QUuid> changedFormItems;
 
@@ -380,9 +435,31 @@ void QgsQuickAttributeController::recalculateDerivedItems()
   if ( !layer || !layer->isValid() )
     return;
 
+  if ( !mFeatureLayerPair.feature().isValid() )
+    return;
+
+  // Create context
   QgsFields fields = mFeatureLayerPair.feature().fields();
-  mExpressionContext.setFields( fields );
-  mExpressionContext.setFeature( featureLayerPair().feature() );
+  QgsExpressionContext expressionContext = layer->createExpressionContext();
+  expressionContext.setFields( fields );
+  expressionContext.setFeature( featureLayerPair().featureRef() );
+
+  // Evaluate default values
+  // it could be recursive, so
+  // let say try few times
+  const int LIMIT = 3;
+  int tryNumber = 0;
+  bool anyValueChanged = true;
+  while ( anyValueChanged || tryNumber < LIMIT )
+  {
+    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext );
+    ++tryNumber;
+  }
+  if ( anyValueChanged )
+  {
+    // ok we cut the loop on limit...
+    qDebug() << "Evaluation of default values was not finished in " << LIMIT << " tries. Giving up, sorry!";
+  }
 
   // Evaluate tab items visiblity
   {
@@ -391,10 +468,10 @@ void QgsQuickAttributeController::recalculateDerivedItems()
     {
       std::shared_ptr<QgsQuickTabItem> item = *tabItemsIterator;
       QgsExpression exp = item->visibilityExpression();
-      exp.prepare( &mExpressionContext );
+      exp.prepare( &expressionContext );
       bool visible = true;
       if ( exp.isValid() )
-        exp.evaluate( &mExpressionContext ).toInt();
+        exp.evaluate( &expressionContext ).toInt();
 
       if ( item->isVisible() != visible )
       {
@@ -419,10 +496,10 @@ void QgsQuickAttributeController::recalculateDerivedItems()
       else
       {
         QgsExpression exp = item->visibilityExpression();
-        exp.prepare( &mExpressionContext );
+        exp.prepare( &expressionContext );
 
         if ( exp.isValid() )
-          visible = exp.evaluate( &mExpressionContext ).toInt();
+          visible = exp.evaluate( &expressionContext ).toInt();
       }
 
       if ( item->visible() != visible )
