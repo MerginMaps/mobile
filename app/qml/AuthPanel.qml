@@ -86,6 +86,7 @@ Item {
     height: root.height - header.height
     width: root.width
     y: header.height
+    bottomPadding: 0
     background: Rectangle {
       color: root.bgColor
     }
@@ -96,6 +97,10 @@ Item {
       visible: !warningMsgContainer.visible
       height: Qt.inputMethod.visible ? parent.height + staticPane.height - Qt.inputMethod.keyboardRectangle.height : parent.height - staticPane.height
       width: parent.width
+      bgColor: root.bgColor
+      panelMargin: root.panelMargin
+      fontColor: root.fontColor
+      fieldHeight: root.fieldHeight
 
       onRegistrationRequested: {
         registrationForm.clean()
