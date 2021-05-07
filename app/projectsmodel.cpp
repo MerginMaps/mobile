@@ -156,7 +156,9 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
   if ( !mLastRequestId.isEmpty() )
   {
     setModelIsLoading( true );
-    clearProjects();
+    // clear only after requesting the very first page, otherwise we want to append results to the model
+    if ( page == 1 )
+      clearProjects();
   }
 }
 
