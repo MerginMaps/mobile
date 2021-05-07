@@ -207,56 +207,47 @@ Rectangle {
         }
       }
 
-      Column {
-        //anchors.fill: parent
-        spacing: loginForm.panelMargin / 2
+      Button {
+        id: signUpButton
+        width: loginForm.width - 2 * loginForm.panelMargin
+        height: fieldHeight * 0.7
+        text: qsTr("Sign up for free")
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: loginForm.registrationRequested()
+        background: Rectangle {
+          color: loginForm.bgColor
+        }
 
-        Button {
-          id: signUpButton
-          width: loginForm.width - 2 * loginForm.panelMargin
-          height: fieldHeight * 0.7
-          text: qsTr("Sign up for free")
-          font.pixelSize: InputStyle.fontPixelSizeSmall
-          anchors.horizontalCenter: parent.horizontalCenter
-          onClicked: loginForm.registrationRequested()
-          background: Rectangle {
-            color: loginForm.bgColor
-          }
-
-          contentItem: Text {
-            text: signUpButton.text
-            font: signUpButton.font
-            color: InputStyle.highlightColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-          }
+        contentItem: Text {
+          text: signUpButton.text
+          font: signUpButton.font
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
       }
 
-      Column {
-        spacing: loginForm.panelMargin / 2
+      Button {
+        id: resetPasswordButton
+        width: loginForm.width - 2 * loginForm.panelMargin
+        height: fieldHeight * 0.7
+        text: qsTr("Forgot password?")
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl());
+        background: Rectangle {
+          color: loginForm.bgColor
+        }
 
-        Button {
-          id: resetPasswordButton
-          width: loginForm.width - 2 * loginForm.panelMargin
-          height: fieldHeight * 0.7
-          text: qsTr("Forgot password?")
-          font.pixelSize: InputStyle.fontPixelSizeSmall
-          anchors.horizontalCenter: parent.horizontalCenter
-          onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl());
-          background: Rectangle {
-            color: loginForm.bgColor
-          }
-
-          contentItem: Text {
-            text: resetPasswordButton.text
-            font: resetPasswordButton.font
-            color: InputStyle.highlightColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-          }
+        contentItem: Text {
+          text: resetPasswordButton.text
+          font: resetPasswordButton.font
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
       }
     }
