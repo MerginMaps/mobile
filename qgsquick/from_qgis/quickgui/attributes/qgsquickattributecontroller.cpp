@@ -142,8 +142,6 @@ void QgsQuickAttributeController::flatten(
         }
 
         flatten( container, parentTabRow, visibilityExpression, items );
-        //if ( !visibilityExpression.isEmpty() )
-        //  mVisibilityExpressions.append( qMakePair( QgsExpression( visibilityExpression ), newItems ) );
         break;
       }
 
@@ -180,8 +178,6 @@ void QgsQuickAttributeController::flatten(
         }
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
-
-        // mConstraints.insert( item, field.constraints() );
         std::shared_ptr<QgsQuickFormItem> formItemData =
           std::shared_ptr<QgsQuickFormItem>(
             new QgsQuickFormItem(
