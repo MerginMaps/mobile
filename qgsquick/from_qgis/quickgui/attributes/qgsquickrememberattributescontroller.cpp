@@ -41,8 +41,10 @@ void QgsQuickRememberAttributesController::setRememberValuesAllowed( bool rememb
 
 void QgsQuickRememberAttributesController::storeLayerFields( const QgsVectorLayer *layer )
 {
-  if ( layer && ( !mRememberedValues.contains( layer->id() ) ) )
+  if ( layer && ( !mRememberedValues.contains( layer->id() ) ) ) {
+    mRememberedValues[layer->id()] = RememberedValues();
     mRememberedValues[layer->id()].attributeFilter.fill( false, layer->fields().size() );
+  }
 }
 
 void QgsQuickRememberAttributesController::storeFeature( const QgsQuickFeatureLayerPair &pair )

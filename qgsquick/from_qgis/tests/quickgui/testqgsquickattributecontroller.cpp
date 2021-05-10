@@ -76,7 +76,7 @@ void TestQgsQuickAttributeController::noFields()
   Q_ASSERT( tabItem );
   QCOMPARE( tabItem->tabIndex(), 0 );
   QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
-  QCOMPARE( tabItem->isVisible(), true );
+  QCOMPARE( tabItem->isVisible(), false );
 
   // but there are no fields!
   const QVector<QUuid> formItems = tabItem->formItems();
