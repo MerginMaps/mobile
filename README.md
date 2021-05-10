@@ -49,7 +49,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 * Mapping components - map canvas, GPS position, scale bar, markers
 * Support for capturing of new geometries
 * Display and editing of feature forms
-* Built-in service for synchronising data ([Mergin](https://public.cloudmergin.com/))
+* Built-in service for storing and synchronising data ([Mergin](https://public.cloudmergin.com/))
 * Translated to several [languages](https://www.transifex.com/lutra-consulting/input)
 
 <p float="left">
