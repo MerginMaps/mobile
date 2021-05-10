@@ -53,10 +53,6 @@ class QUICK_EXPORT QgsQuickAttributeTabModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
-
-    // TODO
-    // should be here so in QML when you change the tabproxymodel (e.g. new layer) the function is
-    // called again and model is repopulated
     Q_INVOKABLE QgsQuickAttributeFormProxyModel *attributeFormProxyModel( int row ) const;
 
   public slots:
