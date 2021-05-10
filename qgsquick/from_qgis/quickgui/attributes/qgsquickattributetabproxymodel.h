@@ -40,9 +40,7 @@ class QUICK_EXPORT QgsQuickAttributeTabProxyModel : public QSortFilterProxyModel
 
     bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
 
-    // TODO
-    // should be here so in QML when you change the tabproxymodel (e.g. new layer) the function is
-    // called again and model is repopulated
+    // Get attribute form proxy model for particular tab index
     Q_INVOKABLE QgsQuickAttributeFormProxyModel *attributeFormProxyModel( int sourceRow ) const;
 };
 

@@ -38,7 +38,7 @@ class QgsQuickAttributeFormProxyModel;
 class QgsQuickAttributeTabModel;
 class QgsQuickAttributeTabProxyModel;
 class QgsVectorLayer;
-class QgsQuickRememberAttributes;
+class QgsQuickRememberAttributesController;
 
 /**
  * \ingroup quick
@@ -49,7 +49,6 @@ class QgsQuickRememberAttributes;
  * the QgsFeature Fields on the backend side and the QML widgets on the user side
  *
  * Remember values functionality is done by QgsQuickRememberAttributes controller.
- * Preview forms are not supported by this class.
  *
  * \note QML Type: AttributeController
  *
@@ -64,16 +63,16 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
      */
     Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
 
-    // this is newer nullprt
+    // this is never nullptr (a form with no tabs will be parsed as having a single tab)
     Q_PROPERTY( QgsQuickAttributeTabProxyModel *attributeTabProxyModel READ attributeTabProxyModel  NOTIFY attributeTabProxyModelChanged )
 
-    //! Returns TRUE if remembering values is allowed
+    //! Returns TRUE if form is in Drag&Drop mode and has any tabs
     Q_PROPERTY( bool hasTabs READ hasTabs NOTIFY hasTabsChanged )
 
     //! Returns TRUE if has any changes
     Q_PROPERTY( bool hasAnyChanges READ hasAnyChanges NOTIFY hasAnyChangesChanged )
 
-    Q_PROPERTY( QgsQuickRememberAttributes *rememberAttributes READ rememberAttributes WRITE setRememberAttributes NOTIFY rememberAttributesChanged )
+    Q_PROPERTY( QgsQuickRememberAttributesController *rememberAttributesController READ rememberAttributesController WRITE setRememberAttributesController NOTIFY rememberAttributesChanged )
 
     //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values
     Q_PROPERTY( bool constraintsHardValid READ constraintsHardValid NOTIFY constraintsHardValidChanged )
@@ -86,7 +85,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     ~QgsQuickAttributeController() override;
 
     //! Restore clean/initial state: no layer, no feature!
-    Q_INVOKABLE void forceClean();
+    Q_INVOKABLE void reset();
 
     //! Gets current featureLayerPair
     QgsQuickFeatureLayerPair featureLayerPair() const;
@@ -96,30 +95,36 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     bool constraintsHardValid() const;
     bool constraintsSoftValid() const;
     bool hasTabs() const;
-    bool hasAnyChanges();
+    bool hasAnyChanges() const;
 
     QgsQuickAttributeTabProxyModel *attributeTabProxyModel() const;
     QgsQuickAttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
     Q_INVOKABLE bool deleteFeature();
-    Q_INVOKABLE void create();
+    Q_INVOKABLE bool create();
     Q_INVOKABLE bool save();
 
     int tabCount() const;
 
     // for data modification use setForm*Value() functions
-    QgsQuickFormItem formItem( const QUuid &id ) const;
+    const QgsQuickFormItem *formItem( const QUuid &id ) const;
 
     // for data modification use setTab*Value() functions;
     const QgsQuickTabItem *tabItem( int tabRow ) const;
 
     // Returns true if successful; otherwise returns false.
     bool setFormShouldRememberValue( const QUuid &id, bool shouldRememberValue );
+
+    bool formShouldRememberValue( int fieldIndex ) const;
+
     // Returns true if successful; otherwise returns false.
     bool setFormValue( const QUuid &id, QVariant value );
 
-    QgsQuickRememberAttributes *rememberAttributes() const;
-    void setRememberAttributes( QgsQuickRememberAttributes *rememberAttributes );
+    QVariant formValue( int fieldIndex ) const;
+
+
+    QgsQuickRememberAttributesController *rememberAttributesController() const;
+    void setRememberAttributesController( QgsQuickRememberAttributesController *rememberAttributes );
 
   signals:
     void hasAnyChangesChanged();
@@ -130,12 +135,9 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     void constraintsSoftValidChanged();
     void hasTabsChanged();
 
+    void formDataChangedFailed( const QString &msg );
     void formDataChanged( QUuid uuid );
     void tabDataChanged( int id );
-
-    void dataChangedFailed( const QString &msg );
-    void dataChanged( const QString &msg ); // TODO what is this?? feature for signal...
-
   private:
     void clearAll();
 
@@ -175,10 +177,10 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QgsQuickFeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<QgsQuickAttributeTabProxyModel> mAttributeTabProxyModel;
     QVector<QgsQuickAttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
-    QMap<QUuid, std::shared_ptr<QgsQuickFormItemData>> mFormItemsData; // order of fields in tab is in tab item
+    QMap<QUuid, std::shared_ptr<QgsQuickFormItem>> mFormItems; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number
 
-    QgsQuickRememberAttributes *mRememberAttributes; // not owned
+    QgsQuickRememberAttributesController *mRememberAttributesController; // not owned
 
 };
 #endif // QGSQUICKATTRIBUTECONTROLLER_H

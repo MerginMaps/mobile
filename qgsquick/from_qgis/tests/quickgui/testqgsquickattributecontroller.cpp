@@ -37,7 +37,6 @@ class TestQgsQuickAttributeController: public QObject
 
     void noFields();
     void twoFields();
-    void twoTabs();
 };
 
 void TestQgsQuickAttributeController::init()
@@ -75,7 +74,7 @@ void TestQgsQuickAttributeController::noFields()
   // we always have one tabs
   const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
   Q_ASSERT( tabItem );
-  QCOMPARE( tabItem->id(), 0 );
+  QCOMPARE( tabItem->tabIndex(), 0 );
   QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
   QCOMPARE( tabItem->isVisible(), true );
 
@@ -109,7 +108,7 @@ void TestQgsQuickAttributeController::twoFields()
 
   const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
   Q_ASSERT( tabItem );
-  QCOMPARE( tabItem->id(), 0 );
+  QCOMPARE( tabItem->tabIndex(), 0 );
   QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
   QCOMPARE( tabItem->isVisible(), true );
   Q_ASSERT( controller.attributeTabProxyModel() );
@@ -119,63 +118,15 @@ void TestQgsQuickAttributeController::twoFields()
   Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
   Q_ASSERT( !controller.attributeFormProxyModelForTab( 1 ) );
 
-  const QgsQuickFormItem item1 = controller.formItem( formItems.at( 0 ) );
-  Q_ASSERT( item1.isValid() );
-  QCOMPARE( item1.name(), "fldtxt" );
-  QCOMPARE( item1.value(), "one" );
-  QCOMPARE( item1.isVisible(), true );
+  const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
+  QCOMPARE( item1->name(), "fldtxt" );
+  QCOMPARE( controller.formValue( item1->fieldIndex() ), "one" );
+  QCOMPARE( item1->isVisible(), true );
 
-  const QgsQuickFormItem item2 = controller.formItem( formItems.at( 1 ) );
-  QCOMPARE( item2.name(), "fldint" );
-  QCOMPARE( item2.value(), 1 );
-  QCOMPARE( item2.isVisible(), true );
-}
-
-void TestQgsQuickAttributeController::twoTabs()
-{
-  std::unique_ptr<QgsVectorLayer> layer(
-    new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string&field=fldint:integer" ),
-                        QStringLiteral( "layer" ),
-                        QStringLiteral( "memory" )
-                      )
-  );
-
-  QVERIFY( layer && layer->isValid() );
-  QgsFeature f1( layer->dataProvider()->fields(), 1 );
-  f1.setAttribute( QStringLiteral( "fldtxt" ), "one" );
-  f1.setAttribute( QStringLiteral( "fldint" ), 1 );
-  layer->dataProvider()->addFeatures( QgsFeatureList() << f1 );
-
-
-  QgsQuickAttributeController controller;
-  QgsQuickFeatureLayerPair pair( f1, layer.get() );
-  controller.setFeatureLayerPair( pair );
-
-  // we do not have more then 2 tabs
-  QVERIFY( !controller.hasTabs() );
-
-  const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
-  Q_ASSERT( tabItem );
-  QCOMPARE( tabItem->id(), 0 );
-  QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
-  QCOMPARE( tabItem->isVisible(), true );
-  Q_ASSERT( controller.attributeTabProxyModel() );
-
-  const QVector<QUuid> formItems = tabItem->formItems();
-  QCOMPARE( formItems.size(), 2 );
-  Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
-  Q_ASSERT( !controller.attributeFormProxyModelForTab( 1 ) );
-
-  const QgsQuickFormItem item1 = controller.formItem( formItems.at( 0 ) );
-  Q_ASSERT( item1.isValid() );
-  QCOMPARE( item1.name(), "fldtxt" );
-  QCOMPARE( item1.value(), "one" );
-  QCOMPARE( item1.isVisible(), true );
-
-  const QgsQuickFormItem item2 = controller.formItem( formItems.at( 1 ) );
-  QCOMPARE( item2.name(), "fldint" );
-  QCOMPARE( item2.value(), 1 );
-  QCOMPARE( item2.isVisible(), true );
+  const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
+  QCOMPARE( item2->name(), "fldint" );
+  QCOMPARE( controller.formValue( item2->fieldIndex() ), 1 );
+  QCOMPARE( item2->isVisible(), true );
 }
 
 QGSTEST_MAIN( TestQgsQuickAttributeController )

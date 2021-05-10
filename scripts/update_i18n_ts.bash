@@ -9,7 +9,7 @@ LUPDATE_PARAMS="-extensions qml,cpp,hpp,h,ui,c -ts"
 echo "update_18n_ts.bash QT_DIST_DIR"
 
 if [ ! -f "$DIR/../qgsquick/from_qgis/quickgui/qgsquickutils.cpp" ]; then
-  echo "Missing $DIR/qgsquick/from_qgis/quickguiquickgui/qgsquickutils.cpp!"
+  echo "Missing $DIR/qgsquick/from_qgis/quickgui/qgsquickutils.cpp!"
   exit 1;
 fi
 

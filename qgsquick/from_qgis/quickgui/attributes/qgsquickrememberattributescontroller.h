@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickrememberattributes.h
+  qgsquickrememberattributescontroller.h
   --------------------------------------
   Date                 : 4.5.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKREMEMBERATTRIBUTES_H
-#define QGSQUICKREMEMBERATTRIBUTES_H
+#ifndef QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
+#define QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
 
 #include "qgis_quick.h"
 #include "qgsfeature.h"
@@ -31,7 +31,7 @@ class QgsQuickFeatureLayerPair;
  *
  * \since QGIS 3.20
  */
-class QUICK_EXPORT QgsQuickRememberAttributes : public QObject
+class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ class QUICK_EXPORT QgsQuickRememberAttributes : public QObject
     Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
 
   public:
-    QgsQuickRememberAttributes( QObject *parent = nullptr );
-    ~QgsQuickRememberAttributes() override;
+    QgsQuickRememberAttributesController( QObject *parent = nullptr );
+    ~QgsQuickRememberAttributesController() override;
 
     bool rememberValuesAllowed() const;
     void setRememberValuesAllowed( bool rememberValuesAllowed );
@@ -75,5 +75,5 @@ class QUICK_EXPORT QgsQuickRememberAttributes : public QObject
 
 };
 
-#endif // QGSQUICKREMEMBERATTRIBUTES_H
+#endif // QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
 

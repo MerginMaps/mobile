@@ -73,7 +73,7 @@ QgsQuickAttributeFormProxyModel *QgsQuickAttributeTabModel::attributeFormProxyMo
 
 void QgsQuickAttributeTabModel::onTabDataChanged( int row )
 {
-  Q_ASSERT( row > 0 );
+  Q_ASSERT( row >= 0 );
   const QModelIndex modelIndex = index( row, 0 );
   emit dataChanged( modelIndex, modelIndex );
 }

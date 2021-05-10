@@ -46,40 +46,40 @@ QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) 
     return QVariant();
 
   const QUuid uuid = mData[row];
-  const QgsQuickFormItem item = mController->formItem( uuid );
-  if ( !item.isValid() )
+  const QgsQuickFormItem *item = mController->formItem( uuid );
+  if ( !item )
     return QVariant();
 
   switch ( role )
   {
     case Name:
-      return item.name();
+      return item->name();
     case Type:
-      return item.type();
+      return item->type();
     case AttributeValue:
-      return item.value();
+      return mController->formValue( item->fieldIndex() );
     case AttributeEditable:
-      return item.isEditable();
+      return item->isEditable();
     case QgsQuickAttributeFormModel::EditorWidget:
-      return item.editorWidgetType();
+      return item->editorWidgetType();
     case QgsQuickAttributeFormModel::EditorWidgetConfig:
-      return item.editorWidgetConfig();
+      return item->editorWidgetConfig();
     case QgsQuickAttributeFormModel::RememberValue:
-      return item.shouldRememberValue();
+      return mController->formShouldRememberValue( item->fieldIndex() );
     case QgsQuickAttributeFormModel::Field:
-      return item.field();
+      return item->field();
     case FieldIndex:
-      return item.fieldIndex();
+      return item->fieldIndex();
     case QgsQuickAttributeFormModel::Group:
-      return item.groupName();
+      return item->groupName();
     case Visible:
-      return item.isVisible();
+      return item->isVisible();
     case ConstraintSoftValid:
-      return item.constraintSoftValid();
+      return item->constraintSoftValid();
     case ConstraintHardValid:
-      return item.constraintHardValid();
+      return item->constraintHardValid();
     case ConstraintDescription:
-      return item.constraintDescription();
+      return item->constraintDescription();
     default:
       return QVariant();
   }
@@ -136,8 +136,8 @@ Qt::ItemFlags QgsQuickAttributeFormModel::flags( const QModelIndex &index ) cons
 
   Qt::ItemFlags ret = Qt::ItemIsEnabled;
   const QUuid uuid = mData[row];
-  const QgsQuickFormItem item = mController->formItem( uuid );
-  if ( item.isEditable() )
+  const QgsQuickFormItem *item = mController->formItem( uuid );
+  if ( item && item->isEditable() )
     ret |= Qt::ItemIsEditable;
 
   return ret;

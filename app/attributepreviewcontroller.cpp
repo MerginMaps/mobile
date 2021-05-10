@@ -172,12 +172,6 @@ void AttributePreviewController::setFeatureLayerPair( const QgsQuickFeatureLayer
     mFeatureLayerPair = pair;
     recalculate();
     emit featureLayerPairChanged();
-
-    emit htmlChanged();
-    emit photoChanged();
-    emit typeChanged();
-    emit titleChanged();
-    emit fieldModelChanged();
   }
 }
 

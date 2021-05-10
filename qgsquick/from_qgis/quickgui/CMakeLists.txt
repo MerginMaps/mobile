@@ -7,7 +7,7 @@ set(QGIS_QUICK_GUI_MOC_HDRS
   attributes/qgsquickattributetabproxymodel.h
   attributes/qgsquickattributetabmodel.h
   attributes/qgsquickattributedata.h
-  attributes/qgsquickrememberattributes.h
+  attributes/qgsquickrememberattributescontroller.h
 
   qgsquickfeaturelayerpair.h
   qgsquickcoordinatetransformer.h
@@ -35,7 +35,7 @@ set(QGIS_QUICK_GUI_SRC
   attributes/qgsquickattributeformproxymodel.cpp
   attributes/qgsquickattributetabproxymodel.cpp
   attributes/qgsquickattributetabmodel.cpp
-  attributes/qgsquickrememberattributes.cpp
+  attributes/qgsquickrememberattributescontroller.cpp
 
   qgsquickfeaturelayerpair.cpp
   qgsquickcoordinatetransformer.cpp

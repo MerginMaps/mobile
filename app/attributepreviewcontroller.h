@@ -102,11 +102,11 @@ class AttributePreviewController: public QObject
     Q_PROPERTY( QgsProject *project WRITE setProject NOTIFY projectChanged )
 
     // never nullprt
-    Q_PROPERTY( AttributePreviewModel *fieldModel READ fieldModel NOTIFY fieldModelChanged )
-    Q_PROPERTY( QString html READ html NOTIFY htmlChanged )
-    Q_PROPERTY( QString photo READ photo NOTIFY photoChanged )
-    Q_PROPERTY( PreviewType type READ type NOTIFY typeChanged )
-    Q_PROPERTY( QString title READ title NOTIFY titleChanged )
+    Q_PROPERTY( AttributePreviewModel *fieldModel READ fieldModel NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( QString html READ html NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( QString photo READ photo NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( PreviewType type READ type NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( QString title READ title NOTIFY featureLayerPairChanged )
 
   public:
     enum PreviewType
@@ -132,11 +132,6 @@ class AttributePreviewController: public QObject
 
   signals:
     void featureLayerPairChanged();
-    void htmlChanged();
-    void photoChanged();
-    void typeChanged();
-    void fieldModelChanged();
-    void titleChanged();
     void projectChanged();
 
   private:

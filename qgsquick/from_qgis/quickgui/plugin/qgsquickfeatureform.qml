@@ -508,7 +508,6 @@ Item {
         Connections {
           target: attributeEditorLoader.item
           onValueChanged: {
-            var valueChanged = value != AttributeValue
             AttributeValue = isNull ? undefined : value
           }
         }
@@ -523,7 +522,7 @@ Item {
 
         Connections {
           target: form.controller
-          onDataChanged: {
+          onFormDataChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
             {
               attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
@@ -533,7 +532,7 @@ Item {
 
         Connections {
           target: form.controller
-          onDataChangedFailed: notify(message)
+          onFormDataChangedFailed: notify(message)
         }
 
         Connections {
@@ -559,7 +558,7 @@ Item {
 
       Item {
         id: rememberCheckboxContainer
-        visible: form.controller.rememberAttributes.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
+        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
 
         implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height

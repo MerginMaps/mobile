@@ -56,14 +56,14 @@ Drawer {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
-    QgsQuick.RememberAttributes {
+    QgsQuick.RememberAttributesController {
       id: rememberAttributesController
       rememberValuesAllowed: __appSettings.reuseLastEnteredValues
     }
 
     QgsQuick.AttributeController {
       id: attributeController
-      rememberAttributes: rememberAttributesController
+      rememberAttributesController: rememberAttributesController
     }
 
     AttributePreviewController {
