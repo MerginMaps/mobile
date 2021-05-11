@@ -10,57 +10,57 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="150"/>
+        <location filename="../qml/AccountPage.qml" line="152"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Vaša pretplata je otkazana %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="47"/>
+        <location filename="../qml/AccountPage.qml" line="48"/>
         <source>My Account</source>
         <translation>Moj račun</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="122"/>
+        <location filename="../qml/AccountPage.qml" line="124"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>Vaša pretplata neće biti produžena nakon %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="131"/>
+        <location filename="../qml/AccountPage.qml" line="133"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Molimo ispravite %1postavke naplate%2 što prije</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="141"/>
+        <location filename="../qml/AccountPage.qml" line="143"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Vaš slijedeći račun iznosi %1 na dan %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="175"/>
+        <location filename="../qml/AccountPage.qml" line="177"/>
         <source>Using %1 / %2</source>
         <translation>Iskorišteno %1/%2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="193"/>
+        <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Manage Subscription</source>
         <translation>Upravljanje pretplatom</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="193"/>
+        <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Working...</source>
         <translation>Radim...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="193"/>
+        <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Subscription plans</source>
         <translation>Plan pretplate</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="229"/>
+        <location filename="../qml/AccountPage.qml" line="231"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>Možete također %1obnoviti%2 vašu kupnju</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="248"/>
+        <location filename="../qml/AccountPage.qml" line="250"/>
         <source>Sign out</source>
         <translation>Odjava</translation>
     </message>
@@ -280,12 +280,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="188"/>
+        <location filename="../inputhelp.cpp" line="189"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Obavijest je poslana.%1Molimo kontaktirajte nas na%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="193"/>
+        <location filename="../inputhelp.cpp" line="194"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Obavijest nije poslana.%1Molimo provjerite Vašu internetsku vezu.</translation>
     </message>
@@ -445,32 +445,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="99"/>
         <source>Synchronize project</source>
         <translation>Sinkroniziraj projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="104"/>
         <source>Local changes</source>
         <translation>Lokalne izmjene</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="109"/>
         <source>Remove from device</source>
         <translation>Ukloni sa uređaja</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="114"/>
         <source>Upload to Mergin</source>
         <translation>Prenesi na Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="119"/>
         <source>Download from Mergin</source>
         <translation>Preuzmi s Mergina</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="255"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="253"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>Nije moguće sinkronizirati projekt, provjerite jeste li prijavljeni i imate li odgovarajuće dozvole.</translation>
     </message>
@@ -562,37 +562,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="119"/>
+        <location filename="../qml/ProjectPanel.qml" line="127"/>
         <source>No Changes</source>
         <translation>Nema promjena</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="144"/>
+        <location filename="../qml/ProjectPanel.qml" line="152"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="339"/>
+        <location filename="../qml/ProjectPanel.qml" line="349"/>
         <source>Home</source>
         <translation>Početna stranica</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="361"/>
+        <location filename="../qml/ProjectPanel.qml" line="371"/>
         <source>My projects</source>
         <translation>Moji projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <location filename="../qml/ProjectPanel.qml" line="395"/>
         <source>Shared with me</source>
         <translation>Podijeljeno samnom</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="385"/>
+        <location filename="../qml/ProjectPanel.qml" line="395"/>
         <source>Shared</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="405"/>
+        <location filename="../qml/ProjectPanel.qml" line="415"/>
         <source>Explore</source>
         <translation>Istraži</translation>
     </message>
@@ -654,27 +654,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="518"/>
+        <location filename="../purchasing.cpp" line="519"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Neuspjela obrada podataka za plaćanje.%1Pretplata nije kupljena.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="526"/>
+        <location filename="../purchasing.cpp" line="527"/>
         <source>Successfully restored your subscription</source>
         <translation>Uspješno obnovljena pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="528"/>
+        <location filename="../purchasing.cpp" line="529"/>
         <source>Successfully purchased subscription</source>
         <translation>Uspješno kupljena pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="540"/>
+        <location filename="../purchasing.cpp" line="541"/>
         <source>Failed to purchase subscription</source>
         <translation>Neuspješni pokušaj kupnje pretplate</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="538"/>
+        <location filename="../purchasing.cpp" line="539"/>
         <source>Unable to restore your subscription</source>
         <translation>Nije moguće obnoviti pretplatu</translation>
     </message>
@@ -682,22 +682,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="118"/>
+        <location filename="../purchasing.cpp" line="119"/>
         <source>Monthly subscription</source>
         <translation>Mjesečna pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="122"/>
+        <location filename="../purchasing.cpp" line="123"/>
         <source>Annual subscription</source>
         <translation>Godišnja pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="127"/>
+        <location filename="../purchasing.cpp" line="128"/>
         <source>month</source>
         <translation>mjesec</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="131"/>
+        <location filename="../purchasing.cpp" line="132"/>
         <source>year</source>
         <translation>godina</translation>
     </message>
@@ -962,6 +962,39 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>StorageLimitDialog</name>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="19"/>
+        <source>You have reached a data limit</source>
+        <translation>Dosegli ste ograničenje podatkovnog prostora</translation>
+    </message>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="59"/>
+        <source>Data to sync: %1</source>
+        <translation>Podaci za sinkronizaciju: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="85"/>
+        <source>Using %1 / %2</source>
+        <translation>Korištenje %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="95"/>
+        <source>Plan: %1</source>
+        <translation>Plan: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="108"/>
+        <source>Manage subscriptions</source>
+        <translation>Upravljanje pretplatom</translation>
+    </message>
+    <message>
+        <location filename="../qml/StorageLimitDialog.qml" line="124"/>
+        <source>Cancel</source>
+        <translation>Odustani</translation>
+    </message>
+</context>
+<context>
     <name>SubscribePage</name>
     <message>
         <location filename="../qml/SubscribePage.qml" line="60"/>
@@ -1042,12 +1075,12 @@ Won&apos;t be added to the project.</source>
         <translation>GPS trenutno nije dostupan.%1Pokušajte omogućiti GPS lokaciju u postavkama Vašeg uređaja.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="672"/>
+        <location filename="../qml/main.qml" line="682"/>
         <source>Communication error</source>
         <translation>Greška u komunikaciji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="678"/>
+        <location filename="../qml/main.qml" line="688"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
