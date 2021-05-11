@@ -23,6 +23,11 @@ QgsQuickRememberAttributesController::QgsQuickRememberAttributesController( QObj
 {
 }
 
+void QgsQuickRememberAttributesController::reset()
+{
+  mRememberedValues.clear();
+}
+
 QgsQuickRememberAttributesController::~QgsQuickRememberAttributesController() = default;
 
 bool QgsQuickRememberAttributesController::rememberValuesAllowed() const
@@ -61,7 +66,7 @@ bool QgsQuickRememberAttributesController::shouldRememberValue( const QgsVectorL
   if ( !mRememberValuesAllowed )
     return false;
 
-  if ( !layer && !mRememberedValues.contains( layer->id() ) )
+  if ( !layer || !mRememberedValues.contains( layer->id() ) )
     return false;
 
   const RememberedValues from = mRememberedValues[layer->id()];
@@ -103,7 +108,7 @@ bool QgsQuickRememberAttributesController::rememberedValue(
   if ( !mRememberValuesAllowed )
     return false;
 
-  if ( !layer && !mRememberedValues.contains( layer->id() ) )
+  if ( !layer || !mRememberedValues.contains( layer->id() ) )
     return false;
 
   const RememberedValues from = mRememberedValues[layer->id()];

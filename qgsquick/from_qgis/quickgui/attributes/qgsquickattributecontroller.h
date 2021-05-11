@@ -122,7 +122,6 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
 
     QVariant formValue( int fieldIndex ) const;
 
-
     QgsQuickRememberAttributesController *rememberAttributesController() const;
     void setRememberAttributesController( QgsQuickRememberAttributesController *rememberAttributes );
 

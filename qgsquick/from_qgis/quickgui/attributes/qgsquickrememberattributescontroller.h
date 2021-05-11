@@ -42,6 +42,9 @@ class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
     QgsQuickRememberAttributesController( QObject *parent = nullptr );
     ~QgsQuickRememberAttributesController() override;
 
+    //! Restore clean/initial state: no layers, no features!
+    Q_INVOKABLE void reset();
+
     bool rememberValuesAllowed() const;
     void setRememberValuesAllowed( bool rememberValuesAllowed );
 
@@ -56,10 +59,9 @@ class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
 
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
+
   signals:
     void rememberValuesAllowedChanged();
-
-  public slots:
 
   private:
     //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
