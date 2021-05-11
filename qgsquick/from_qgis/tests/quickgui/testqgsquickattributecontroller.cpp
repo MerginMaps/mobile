@@ -116,7 +116,6 @@ void TestQgsQuickAttributeController::twoFields()
   const QVector<QUuid> formItems = tabItem->formItems();
   QCOMPARE( formItems.size(), 2 );
   Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
-  Q_ASSERT( !controller.attributeFormProxyModelForTab( 1 ) );
 
   const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
   QCOMPARE( item1->name(), "fldtxt" );
