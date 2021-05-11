@@ -31,6 +31,14 @@ Rectangle {
   property color fontColor
   property var fieldHeight
 
+  property bool isKeyboardOpen: Qt.inputMethod.keyboardRectangle.height
+  onIsKeyboardOpenChanged: if (!isKeyboardOpen) {
+      if (loginName.focus)
+        loginName.focus = false
+      if (passwordField.password.focus)
+        passwordField.password.focus = false
+    }
+
   function clean() {
     passwordField.password.text = ""
     loginName.text = ""
@@ -108,6 +116,7 @@ Rectangle {
           background: Rectangle {
             color: loginForm.bgColor
           }
+          onEditingFinished: focus = false
         }
       }
 
