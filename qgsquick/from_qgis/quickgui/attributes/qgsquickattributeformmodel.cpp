@@ -110,8 +110,8 @@ QHash<int, QByteArray> QgsQuickAttributeFormModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 
-  roles[Type]  = QByteArray( "Type" );
-  roles[Name]  = QByteArray( "Name" );
+  roles[Type] = QByteArray( "Type" );
+  roles[Name] = QByteArray( "Name" );
   roles[AttributeValue] = QByteArray( "AttributeValue" );
   roles[AttributeEditable] = QByteArray( "AttributeEditable" );
   roles[EditorWidget] = QByteArray( "EditorWidget" );
@@ -162,8 +162,7 @@ bool QgsQuickAttributeFormModel::setData( const QModelIndex &index, const QVaria
 
     case AttributeValue:
     {
-      bool shouldRememberValue = value.toBool();
-      return mController->setFormValue( uuid, shouldRememberValue );
+      return mController->setFormValue( uuid, value );
     }
 
     default:

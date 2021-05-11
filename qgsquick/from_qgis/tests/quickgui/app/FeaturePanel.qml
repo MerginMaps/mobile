@@ -21,9 +21,6 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-// TODO form.style -> extract and remove from qgsquick
-// TODO icons delete/add/create remove from qgsquick
-
 Drawer {
 
   property var mapSettings

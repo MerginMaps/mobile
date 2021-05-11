@@ -33,7 +33,7 @@ Drawer {
     }
 
     function reload() {
-      attributeController.forceClean();
+      attributeController.reset();
     }
 
     function onAboutToClose() {

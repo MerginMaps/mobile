@@ -31,7 +31,7 @@ class QgsQuickAttributeFormProxyModel;
  *
  * \note QML Type: AttributeTabModel
  *
- * \since QGIS 3.20
+ * \since QGIS 3.22
  */
 class QUICK_EXPORT QgsQuickAttributeTabModel : public QAbstractListModel
 {

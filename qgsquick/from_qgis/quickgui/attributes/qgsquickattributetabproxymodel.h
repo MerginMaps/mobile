@@ -29,7 +29,7 @@ class QgsQuickAttributeFormProxyModel;
  *
  * \note QML Type: AttributeTabProxyModel
  *
- * \since QGIS 3.20
+ * \since QGIS 3.22
  */
 class QUICK_EXPORT QgsQuickAttributeTabProxyModel : public QSortFilterProxyModel
 {

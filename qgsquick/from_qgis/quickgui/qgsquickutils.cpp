@@ -17,7 +17,6 @@
 #include <QScreen>
 #include <QString>
 #include <QWindow>
-#include <QDebug>
 
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"
