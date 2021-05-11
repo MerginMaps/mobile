@@ -124,7 +124,7 @@ class AttributePreviewController: public QObject
     void setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair );
     QgsQuickFeatureLayerPair featureLayerPair() const;
     void setProject( QgsProject *project );
-    QgsProject* project() const;
+    QgsProject *project() const;
     AttributePreviewModel *fieldModel() const;
     QString html() const;
     QString photo() const;

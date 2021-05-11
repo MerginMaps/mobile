@@ -190,7 +190,7 @@ void AttributePreviewController::setProject( QgsProject *project )
   }
 }
 
-QgsProject* AttributePreviewController::project() const
+QgsProject *AttributePreviewController::project() const
 {
   return mProject;
 }
