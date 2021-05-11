@@ -706,7 +706,7 @@ ApplicationWindow {
           storageLimitDialog.open()
         }
 
-        onNotify: showDialog(msg)
+        onNotify: showMessage(message)
 
         onProjectDataChanged: {
           //! if current project has been updated, refresh canvas
