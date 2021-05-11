@@ -57,17 +57,25 @@ void QgsQuickRememberAttributesController::storeFeature( const QgsQuickFeatureLa
 
 bool QgsQuickRememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
-  QVariant dummy;
-  return rememberedValue(
-           layer,
-           fieldIndex,
-           dummy );
+  // global switch off of the functionality
+  if ( !mRememberValuesAllowed )
+    return false;
+
+  if ( !layer && !mRememberedValues.contains( layer->id() ) )
+    return false;
+
+  const RememberedValues from = mRememberedValues[layer->id()];
+  if ( fieldIndex < 0 || fieldIndex >= from.attributeFilter.size() )
+    // serious screw-up, mismatch between layer and stored layer?
+    return false;
+
+  return from.attributeFilter.at( fieldIndex );
 }
 
 bool QgsQuickRememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
   // global switch off of the functionality
-  if ( mRememberValuesAllowed )
+  if ( !mRememberValuesAllowed )
     return false;
 
   if ( layer && mRememberedValues.contains( layer->id() ) )
@@ -92,7 +100,7 @@ bool QgsQuickRememberAttributesController::rememberedValue(
   QVariant &value ) const
 {
   // global switch off of the functionality
-  if ( mRememberValuesAllowed )
+  if ( !mRememberValuesAllowed )
     return false;
 
   if ( !layer && !mRememberedValues.contains( layer->id() ) )
