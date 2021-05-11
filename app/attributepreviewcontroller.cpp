@@ -175,6 +175,11 @@ void AttributePreviewController::setFeatureLayerPair( const QgsQuickFeatureLayer
   }
 }
 
+QgsQuickFeatureLayerPair AttributePreviewController::featureLayerPair() const
+{
+  return mFeatureLayerPair;
+}
+
 void AttributePreviewController::setProject( QgsProject *project )
 {
   if ( mProject != project )
@@ -183,6 +188,11 @@ void AttributePreviewController::setProject( QgsProject *project )
     setFeatureLayerPair( QgsQuickFeatureLayerPair() );
     emit projectChanged();
   }
+}
+
+QgsProject* AttributePreviewController::project() const
+{
+  return mProject;
 }
 
 void AttributePreviewController::recalculate()

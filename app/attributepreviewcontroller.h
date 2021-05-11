@@ -98,8 +98,8 @@ class AttributePreviewController: public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
-    Q_PROPERTY( QgsProject *project WRITE setProject NOTIFY projectChanged )
+    Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
 
     // never nullprt
     Q_PROPERTY( AttributePreviewModel *fieldModel READ fieldModel NOTIFY featureLayerPairChanged )
@@ -122,8 +122,9 @@ class AttributePreviewController: public QObject
     ~AttributePreviewController() override;
 
     void setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair );
+    QgsQuickFeatureLayerPair featureLayerPair() const;
     void setProject( QgsProject *project );
-
+    QgsProject* project() const;
     AttributePreviewModel *fieldModel() const;
     QString html() const;
     QString photo() const;
