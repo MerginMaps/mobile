@@ -66,7 +66,7 @@ void TestQgsQuickAttributeController::noFields()
   QgsQuickFeatureLayerPair pair( f1, layer.get() );
   controller.setFeatureLayerPair( pair );
 
-  // we do not have more then 2 tabs
+  // we do not have tabs
   QVERIFY( !controller.hasTabs() );
   const QgsQuickTabItem *item2 = controller.tabItem( 1 );
   QVERIFY( !item2 );
@@ -103,7 +103,7 @@ void TestQgsQuickAttributeController::twoFields()
   QgsQuickFeatureLayerPair pair( f1, layer.get() );
   controller.setFeatureLayerPair( pair );
 
-  // we do not have more then 2 tabs
+  // we do not have tabs
   QVERIFY( !controller.hasTabs() );
 
   const QgsQuickTabItem *tabItem = controller.tabItem( 0 );

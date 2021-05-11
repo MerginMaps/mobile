@@ -119,7 +119,7 @@ jobs:
           export DYLD_INSERT_LIBRARIES=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/libsqlite3.dylib
           export QGSQUICK_BUILD_QML_DIR=/Users/runner/work/input/input/install-QgsQuick
           export QGIS_PREFIX_PATH=/opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/QGIS.app/Contents/MacOS
-          ctest -VV
+          ctest -VV --output-on-failure
 
       - name: run help links tests
         run: |
