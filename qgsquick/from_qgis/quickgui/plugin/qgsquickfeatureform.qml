@@ -272,7 +272,11 @@ Item {
             contentItem: Text {
               // Make sure the width is derived from the text so we can get wider
               // than the parent item and the Flickable is useful
-              Component.onCompleted: tabButton.width = tabButton.width + paintedWidth
+              Component.onCompleted: {
+                tabButton.width = tabButton.width + paintedWidth
+                if (tabRow.currentIndex == index)
+                  tabButton.checked = true
+              }
 
               width: paintedWidth
               text: tabButton.text
