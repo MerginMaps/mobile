@@ -17,7 +17,7 @@ Other Checks:
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
 ## Download
-Click here to download the app on your mobile device:
+Click below to download the app on your mobile device:
 
 **Current Release**
 <p>
