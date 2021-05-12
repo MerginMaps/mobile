@@ -80,7 +80,7 @@ jobs:
 
           cmake \
             -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
             -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
             -DENABLE_TESTS=TRUE  \
