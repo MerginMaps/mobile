@@ -38,8 +38,8 @@ class  AttributeTabModel : public QAbstractListModel
     Q_OBJECT
   public:
     AttributeTabModel( QObject *parent,
-                               AttributeController *controller,
-                               int tabCount );
+                       AttributeController *controller,
+                       int tabCount );
     ~AttributeTabModel() override;
 
     enum AttributeTabRoles

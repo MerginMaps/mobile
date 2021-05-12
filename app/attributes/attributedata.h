@@ -116,10 +116,10 @@ class  TabItem
 {
   public:
     TabItem( const int &id,
-                     const QString &name,
-                     const QVector<QUuid> &formItems,
-                     const QgsExpression &visibilityExpression
-                   );
+             const QString &name,
+             const QVector<QUuid> &formItems,
+             const QgsExpression &visibilityExpression
+           );
 
     QString name() const;
     const QVector<QUuid> formItems() const;

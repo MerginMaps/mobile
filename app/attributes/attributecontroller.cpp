@@ -237,10 +237,10 @@ void AttributeController::createTab( QgsAttributeEditorContainer *container )
   flatten( container, tabRow, QString(), formItemsUuids );
 
   std::shared_ptr<TabItem> tabItem( new TabItem( tabRow,
-      container->name(),
-      formItemsUuids,
-      expr )
-                                          );
+                                    container->name(),
+                                    formItemsUuids,
+                                    expr )
+                                  );
 
   mTabItems.push_back( tabItem );
 }

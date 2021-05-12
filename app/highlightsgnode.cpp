@@ -23,7 +23,7 @@
 #include "qgspolygon.h"
 
 HighlightSGNode::HighlightSGNode( const QgsGeometry &geom,
-    const QColor &color, float width )
+                                  const QColor &color, float width )
   : QSGNode()
   , mWidth( width )
 {

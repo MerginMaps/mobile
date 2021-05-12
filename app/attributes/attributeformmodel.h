@@ -43,8 +43,8 @@ class  AttributeFormModel : public QAbstractListModel
 
   public:
     AttributeFormModel( QObject *parent,
-                                AttributeController *controller,
-                                const QVector<QUuid> &data );
+                        AttributeController *controller,
+                        const QVector<QUuid> &data );
     ~AttributeFormModel() override;
 
     enum AttributeFormRoles

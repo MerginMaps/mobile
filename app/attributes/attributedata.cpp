@@ -150,9 +150,9 @@ void FormItem::setOriginalValue( const QVariant &originalValue )
 
 
 TabItem::TabItem( const int &id,
-                                  const QString &name,
-                                  const QVector<QUuid> &formItems,
-                                  const QgsExpression &visibilityExpression )
+                  const QString &name,
+                  const QVector<QUuid> &formItems,
+                  const QgsExpression &visibilityExpression )
   : mTabIndex( id )
   , mName( name )
   , mFormItems( formItems )

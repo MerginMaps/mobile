@@ -86,8 +86,8 @@ void ScaleBarKit::updateScaleBar()
   double dist;
   QgsUnitTypes::DistanceUnit distUnits;
   Utils().humanReadableDistance( distInMeters, QgsUnitTypes::DistanceMeters,
-                                         mSystemOfMeasurement,
-                                         dist, distUnits );
+                                 mSystemOfMeasurement,
+                                 dist, distUnits );
 
   mUnits = QgsUnitTypes::toAbbreviatedString( distUnits );
 

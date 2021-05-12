@@ -57,6 +57,37 @@
 #include "compass.h"
 #include "attributepreviewcontroller.h"
 
+#include "qgsfeature.h"
+#include "qgslogger.h"
+#include "qgsmaplayer.h"
+#include "qgsmessagelog.h"
+#include "qgspointxy.h"
+#include "qgsproject.h"
+#include "qgsrelationmanager.h"
+#include "qgscoordinatetransformcontext.h"
+#include "qgsvectorlayer.h"
+#include "qgsunittypes.h"
+
+#include "rememberattributescontroller.h"
+#include "attributeformmodel.h"
+#include "attributeformproxymodel.h"
+#include "attributecontroller.h"
+#include "attributetabmodel.h"
+#include "attributetabproxymodel.h"
+#include "featurehighlight.h"
+#include "coordinatetransformer.h"
+#include "identifykit.h"
+#include "featurelayerpair.h"
+#include "mapcanvasmap.h"
+#include "mapsettings.h"
+#include "maptransform.h"
+#include "messagelogmodel.h"
+#include "plugin.h"
+#include "positionkit.h"
+#include "scalebarkit.h"
+#include "utils.h"
+#include "featureslistmodel.h"
+
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
 #include "project.h"
@@ -245,6 +276,44 @@ void initDeclarative()
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
+
+  qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
+  qRegisterMetaType< QgsAttributes > ( "QgsAttributes" );
+  qRegisterMetaType< QgsCoordinateReferenceSystem >( "QgsCoordinateReferenceSystem" );
+  qRegisterMetaType< QgsCoordinateTransformContext >( "QgsCoordinateTransformContext" );
+  qRegisterMetaType< QgsFeature > ( "QgsFeature" );
+  qRegisterMetaType< QgsFeatureId > ( "QgsFeatureId" );
+  qRegisterMetaType< QgsPoint >( "QgsPoint" );
+  qRegisterMetaType< QgsPointXY >( "QgsPointXY" );
+  qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
+  qRegisterMetaType< QgsUnitTypes::SystemOfMeasurement >( "QgsUnitTypes::SystemOfMeasurement" );
+  qRegisterMetaType< QgsUnitTypes::DistanceUnit >( "QgsUnitTypes::DistanceUnit" );
+  qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
+  qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
+  qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+
+  qmlRegisterUncreatableType< QgsUnitTypes >( uri, 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
+  qmlRegisterUncreatableType< FormItem >( uri, 0, 1, "FormItemType", "Only enums from FormItem can be used" );
+  qmlRegisterType< QgsProject >( uri, 0, 1, "Project" );
+  qmlRegisterUncreatableType< AttributeFormModel >( uri, 0, 1, "AttributeFormModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeFormProxyModel >( uri, 0, 1, "AttributeFormProxyModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabModel >( uri, 0, 1, "AttributeTabModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabProxyModel >( uri, 0, 1, "AttributeTabProxyModel", "Created by AttributeController" );
+  qmlRegisterType< AttributeController >( uri, 0, 1, "AttributeController" );
+  qmlRegisterType< RememberAttributesController >( uri, 0, 1, "RememberAttributesController" );
+  qmlRegisterType< FeatureHighlight >( uri, 0, 1, "FeatureHighlight" );
+  qmlRegisterType< CoordinateTransformer >( uri, 0, 1, "CoordinateTransformer" );
+  qmlRegisterType< IdentifyKit >( uri, 0, 1, "IdentifyKit" );
+  qmlRegisterType< MapCanvasMap >( uri, 0, 1, "MapCanvasMap" );
+  qmlRegisterType< MapSettings >( uri, 0, 1, "MapSettings" );
+  qmlRegisterType< MapTransform >( uri, 0, 1, "MapTransform" );
+  qmlRegisterType< MessageLogModel >( uri, 0, 1, "MessageLogModel" );
+  qmlRegisterType< PositionKit >( uri, 0, 1, "PositionKit" );
+  qmlRegisterType< ScaleBarKit >( uri, 0, 1, "ScaleBarKit" );
+  qmlRegisterType< QgsVectorLayer >( uri, 0, 1, "VectorLayer" );
+  qmlRegisterType< FeaturesListModel >( uri, 0, 1, "FeaturesListModel" );
+
+  qmlRegisterSingletonType< Utils >( uri, 0, 1, "Utils", _utilsProvider );
 }
 
 #ifdef INPUT_TEST
