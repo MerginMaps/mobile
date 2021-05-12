@@ -179,7 +179,7 @@ class QUICK_EXPORT QgsQuickAttributeController : public QObject
     QMap<QUuid, std::shared_ptr<QgsQuickFormItem>> mFormItems; // order of fields in tab is in tab item
     QVector<std::shared_ptr<QgsQuickTabItem>> mTabItems; // order of tabs by tab row number
 
-    QgsQuickRememberAttributesController *mRememberAttributesController; // not owned
+    QgsQuickRememberAttributesController *mRememberAttributesController = nullptr; // not owned
 
 };
 #endif // QGSQUICKATTRIBUTECONTROLLER_H
