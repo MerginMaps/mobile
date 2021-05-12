@@ -40,7 +40,7 @@ Drawer {
     }
 
     function onAboutToClose() {
-      if (featureForm.hasAnyChanges())  {
+      if (attributeController.hasAnyChanges)  {
         saveChangesDialog.open()
       } else {
         featurePanel.visible = false

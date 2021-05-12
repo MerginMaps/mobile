@@ -196,10 +196,6 @@ Item {
     saved()
   }
 
-  function hasAnyChanges() {
-    return form.controller.hasAnyChanges()
-  }
-
   /**
    * This is a relay to forward private signals to internal components.
    */
