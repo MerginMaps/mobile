@@ -9,7 +9,6 @@ android {
   INPUT_SDK_DIR = $${BASE_DIR}/input-sdk/build-android
   INPUT_SDK_STAGE_DIR = $${INPUT_SDK_DIR}/stage
   QGIS_INSTALL_PATH = $${INPUT_SDK_STAGE_DIR}/$$ANDROID_TARGET_ARCH
-  QGSQUICK_INSTALL_PATH = $$(BASE_DIR)/install-QgsQuick-$$ANDROID_TARGET_ARCH
 
   # Relative path within Android internal storage which will be used for storage of data
   # (user's Input projects and also QGIS and PROJ data files). Normally this does not need adjusting.
@@ -31,7 +30,6 @@ android {
 unix:!macx:!android {
   # option 1: using QGIS from installed path
   # QGIS_INSTALL_PATH = $${BASE_DIR}/Applications
-  # QGSQUICK_INSTALL_PATH = $$(BASE_DIR)/install-QgsQuick
 
   # option 2: using QGIS from build directory (not installed)
   # note: this is used for regular development and well tested
@@ -57,13 +55,11 @@ unix:!macx:!android {
 macx:!android {
   # option 1: using QGIS from installed path
   # QGIS_INSTALL_PATH =  $${BASE_DIR}/Applications
-  # QGSQUICK_INSTALL_PATH = $$(BASE_DIR)/install-QgsQuick
 
   # option 2: using QGIS from build directory (not installed)
   # note: this is used for regular development and well tested
   QGIS_SRC_DIR = $${BASE_DIR}/QGIS
   QGIS_BUILD_DIR = $${BASE_DIR}/build-QGIS-Desktop
-  QGSQUICK_BUILD_DIR = $$(BASE_DIR)/build-QgsQuick-Desktop
 
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/Applications/include
@@ -78,7 +74,6 @@ macx:!android {
 
 ios {
   QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-ios-<SDK_version>/stage/arm64
-  QGSQUICK_INSTALL_PATH = $$(BASE_DIR)/install-QgsQuick
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
@@ -91,7 +86,6 @@ ios {
 
 win32 {
   QGIS_INSTALL_PATH =  $${BASE_DIR}/input-sdk/x86_64/stage
-  QGSQUICK_INSTALL_PATH = $$(BASE_DIR)/install-QgsQuick
   QGIS_QUICK_DATA_PATH = C:/input-data
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/include
   GEODIFF_LIB_DIR = $${BASE_DIR}/lib

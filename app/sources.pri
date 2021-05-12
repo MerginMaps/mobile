@@ -1,5 +1,25 @@
 SOURCES += \
-attributepreviewcontroller.cpp \
+attributes/attributecontroller.cpp \
+attributes/attributedata.cpp \
+attributes/attributeformmodel.cpp \
+attributes/attributeformproxymodel.cpp \
+attributes/attributepreviewcontroller.cpp \
+attributes/attributetabmodel.cpp \
+attributes/attributetabproxymodel.cpp \
+attributes/rememberattributescontroller.cpp \
+featurelayerpair.cpp \
+coordinatetransformer.cpp \
+featurehighlight.cpp \
+highlightsgnode.cpp \
+identifykit.cpp \
+mapcanvasmap.cpp \
+mapsettings.cpp \
+maptransform.cpp \
+positionkit.cpp \
+scalebarkit.cpp \
+simulatedpositionsource.cpp \
+utils.cpp \
+featureslistmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -27,7 +47,27 @@ projectsproxymodel.cpp \
 compass.cpp \
 
 HEADERS += \
-attributepreviewcontroller.h \
+attributes/attributecontroller.h \
+attributes/attributedata.h \
+attributes/attributeformmodel.h \
+attributes/attributeformproxymodel.h \
+attributes/attributepreviewcontroller.h \
+attributes/attributetabmodel.h \
+attributes/attributetabproxymodel.h \
+attributes/rememberattributescontroller.h \
+highlightsgnode.h \
+featurelayerpair.h \
+coordinatetransformer.h \
+featurehighlight.h \
+identifykit.h \
+mapcanvasmap.h \
+mapsettings.h \
+maptransform.h \
+positionkit.h \
+scalebarkit.h \
+simulatedpositionsource.h \
+utils.h \
+featureslistmodel.h
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
