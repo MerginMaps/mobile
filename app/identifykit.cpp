@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickidentifykit.cpp
+  identifykit.cpp
  ---------------------
   Date                 : 30.8.2016
   Copyright            : (C) 2016 by Matthias Kuhn
@@ -19,23 +19,23 @@
 #include "qgsrenderer.h"
 #include "qgsvectorlayer.h"
 
-#include "qgsquickidentifykit.h"
-#include "qgsquickmapsettings.h"
+#include "identifykit.h"
+#include "mapsettings.h"
 #include "qgsexpressioncontextutils.h"
 
 #include "qgis.h"
 
-QgsQuickIdentifyKit::QgsQuickIdentifyKit( QObject *parent )
+IdentifyKit::IdentifyKit( QObject *parent )
   : QObject( parent )
 {
 }
 
-QgsQuickMapSettings *QgsQuickIdentifyKit::mapSettings() const
+MapSettings *IdentifyKit::mapSettings() const
 {
   return mMapSettings;
 }
 
-void QgsQuickIdentifyKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+void IdentifyKit::setMapSettings( MapSettings *mapSettings )
 {
   if ( mapSettings == mMapSettings )
     return;
@@ -44,9 +44,9 @@ void QgsQuickIdentifyKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   emit mapSettingsChanged();
 }
 
-QgsQuickFeatureLayerPairs QgsQuickIdentifyKit::identify( const QPointF &point, QgsVectorLayer *layer )
+FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *layer )
 {
-  QgsQuickFeatureLayerPairs results;
+  FeatureLayerPairs results;
 
   if ( !mMapSettings )
   {
@@ -60,7 +60,7 @@ QgsQuickFeatureLayerPairs QgsQuickIdentifyKit::identify( const QPointF &point, Q
     QgsFeatureList featureList = identifyVectorLayer( layer, mapPoint );
     for ( const QgsFeature &feature : featureList )
     {
-      results.append( QgsQuickFeatureLayerPair( feature, layer ) );
+      results.append( FeatureLayerPair( feature, layer ) );
     }
     QgsDebugMsg( QStringLiteral( "IdentifyKit identified %1 results for layer %2" ).arg( results.count() ).arg( layer->name() ) );
   }
@@ -78,7 +78,7 @@ QgsQuickFeatureLayerPairs QgsQuickIdentifyKit::identify( const QPointF &point, Q
 
         for ( const QgsFeature &feature : featureList )
         {
-          results.append( QgsQuickFeatureLayerPair( feature, vl ) );
+          results.append( FeatureLayerPair( feature, vl ) );
         }
       }
       if ( mIdentifyMode == IdentifyMode::TopDownStopAtFirst && !results.isEmpty() )
@@ -94,7 +94,7 @@ QgsQuickFeatureLayerPairs QgsQuickIdentifyKit::identify( const QPointF &point, Q
   return results;
 }
 
-static QgsQuickFeatureLayerPair _closestFeature( const QgsQuickFeatureLayerPairs &results, const QgsMapSettings &mapSettings, const QPointF &point, double searchRadius )
+static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const QgsMapSettings &mapSettings, const QPointF &point, double searchRadius )
 {
   QgsPointXY mapPoint = mapSettings.mapToPixel().toMapCoordinates( point.toPoint() );
   QgsGeometry mapPointGeom( QgsGeometry::fromPointXY( mapPoint ) );
@@ -103,7 +103,7 @@ static QgsQuickFeatureLayerPair _closestFeature( const QgsQuickFeatureLayerPairs
   int iMinPoint = -1, iMinLine = -1, iMinPolygon = -1;
   for ( int i = 0; i < results.count(); ++i )
   {
-    const QgsQuickFeatureLayerPair &res = results.at( i );
+    const FeatureLayerPair &res = results.at( i );
     QgsGeometry geom( res.feature().geometry() );
     try
     {
@@ -155,16 +155,16 @@ static QgsQuickFeatureLayerPair _closestFeature( const QgsQuickFeatureLayerPairs
   else if ( iMinPolygon != -1 )
     return results.at( iMinPolygon );
   else
-    return QgsQuickFeatureLayerPair();
+    return FeatureLayerPair();
 }
 
-QgsQuickFeatureLayerPair QgsQuickIdentifyKit::identifyOne( const QPointF &point, QgsVectorLayer *layer )
+FeatureLayerPair IdentifyKit::identifyOne( const QPointF &point, QgsVectorLayer *layer )
 {
-  QgsQuickFeatureLayerPairs results = identify( point, layer );
+  FeatureLayerPairs results = identify( point, layer );
   return _closestFeature( results, mMapSettings->mapSettings(), point, searchRadiusMU() );
 }
 
-QgsFeatureList QgsQuickIdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const QgsPointXY &point ) const
+QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const QgsPointXY &point ) const
 {
   QgsFeatureList results;
 
@@ -238,28 +238,28 @@ QgsFeatureList QgsQuickIdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, 
   return results;
 }
 
-double QgsQuickIdentifyKit::searchRadiusMU( const QgsRenderContext &context ) const
+double IdentifyKit::searchRadiusMU( const QgsRenderContext &context ) const
 {
   return mSearchRadiusMm * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
-double QgsQuickIdentifyKit::searchRadiusMU() const
+double IdentifyKit::searchRadiusMU() const
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mMapSettings->mapSettings() );
   return searchRadiusMU( context );
 }
 
-QgsRectangle QgsQuickIdentifyKit::toLayerCoordinates( QgsMapLayer *layer, const QgsRectangle &rect ) const
+QgsRectangle IdentifyKit::toLayerCoordinates( QgsMapLayer *layer, const QgsRectangle &rect ) const
 {
   return mMapSettings->mapSettings().mapToLayerCoordinates( layer, rect );
 }
 
-double QgsQuickIdentifyKit::searchRadiusMm() const
+double IdentifyKit::searchRadiusMm() const
 {
   return mSearchRadiusMm;
 }
 
-void QgsQuickIdentifyKit::setSearchRadiusMm( double searchRadiusMm )
+void IdentifyKit::setSearchRadiusMm( double searchRadiusMm )
 {
   if ( qgsDoubleNear( mSearchRadiusMm, searchRadiusMm ) )
     return;
@@ -268,12 +268,12 @@ void QgsQuickIdentifyKit::setSearchRadiusMm( double searchRadiusMm )
   emit searchRadiusMmChanged();
 }
 
-int QgsQuickIdentifyKit::featuresLimit() const
+int IdentifyKit::featuresLimit() const
 {
   return mFeaturesLimit;
 }
 
-void QgsQuickIdentifyKit::setFeaturesLimit( int limit )
+void IdentifyKit::setFeaturesLimit( int limit )
 {
   if ( mFeaturesLimit == limit )
     return;

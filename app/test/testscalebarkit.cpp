@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickscalebarkit.cpp.cpp
+     testscalebarkit.cpp.cpp
      --------------------------------------
   Date                 : May 2018
   Copyright            : (C) 2018 by Viktor Sklencar
@@ -20,12 +20,12 @@
 #include "qgstest.h"
 #include "qgis.h"
 
-#include "qgsquickutils.h"
-#include "qgsquickmapcanvasmap.h"
-#include "qgsquickscalebarkit.h"
+#include "utils.h"
+#include "mapcanvasmap.h"
+#include "scalebarkit.h"
 
 
-class TestQgsQuickScaleBarKit: public QObject
+class TestScaleBarKit: public QObject
 {
     Q_OBJECT
   private slots:
@@ -35,20 +35,20 @@ class TestQgsQuickScaleBarKit: public QObject
     void updateScaleBar(); // test text of scalebar after update.
 };
 
-void TestQgsQuickScaleBarKit::updateScaleBar()
+void TestScaleBarKit::updateScaleBar()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( 49, 16, 50, 17 );
-  QgsQuickMapCanvasMap canvas;
+  MapCanvasMap canvas;
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  MapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
 
-  QgsQuickScaleBarKit kit;
+  ScaleBarKit kit;
   kit.setMapSettings( ms );
   QVERIFY( kit.units() == QString( "km" ) );
   QVERIFY( kit.distance() == 50 );
@@ -59,5 +59,5 @@ void TestQgsQuickScaleBarKit::updateScaleBar()
   QVERIFY( kit.distance() == 200 );
 }
 
-QGSTEST_MAIN( TestQgsQuickScaleBarKit )
-#include "testqgsquickscalebarkit.moc"
+QGSTEST_MAIN( TestScaleBarKit )
+#include "testscalebarkit.moc"

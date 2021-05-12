@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickmaptransform.cpp
+  maptransform.cpp
   --------------------------------------
   Date                 : 27.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -13,39 +13,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickmaptransform.h"
-#include "qgsquickmapsettings.h"
+#include "maptransform.h"
+#include "mapsettings.h"
 
-void QgsQuickMapTransform::applyTo( QMatrix4x4 *matrix ) const
+void MapTransform::applyTo( QMatrix4x4 *matrix ) const
 {
   *matrix *= mMatrix;
   matrix->optimize();
 }
 
-QgsQuickMapSettings *QgsQuickMapTransform::mapSettings() const
+MapSettings *MapTransform::mapSettings() const
 {
   return mMapSettings;
 }
 
-void QgsQuickMapTransform::setMapSettings( QgsQuickMapSettings *mapSettings )
+void MapTransform::setMapSettings( MapSettings *mapSettings )
 {
   if ( mapSettings == mMapSettings )
     return;
 
   if ( mMapSettings )
-    disconnect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickMapTransform::updateMatrix );
+    disconnect( mMapSettings, &MapSettings::visibleExtentChanged, this, &MapTransform::updateMatrix );
 
   mMapSettings = mapSettings;
 
   if ( mMapSettings )
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickMapTransform::updateMatrix );
+    connect( mMapSettings, &MapSettings::visibleExtentChanged, this, &MapTransform::updateMatrix );
 
   updateMatrix();
 
   emit mapSettingsChanged();
 }
 
-void QgsQuickMapTransform::updateMatrix()
+void MapTransform::updateMatrix()
 {
   QMatrix4x4 matrix;
   float scaleFactor = static_cast<float>( 1.0 / mMapSettings->mapUnitsPerPixel() );

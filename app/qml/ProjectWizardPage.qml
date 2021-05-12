@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
-import QgsQuick 0.1 as QgsQuick
+
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
@@ -15,7 +15,7 @@ Item {
   property real rowHeight: InputStyle.fieldHeight
   property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
-  property real panelMargin: 10 * QgsQuick.Utils.dp
+  property real panelMargin: 10 * Utils.dp
 
   property ListModel widgetsModel: ListModel {}
 

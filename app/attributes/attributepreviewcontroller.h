@@ -20,7 +20,7 @@
 #include <QVector>
 #include <QString>
 
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 
 
 class QgsExpressionContextScope;
@@ -98,7 +98,7 @@ class AttributePreviewController: public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
     Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
 
     // never nullprt
@@ -124,8 +124,8 @@ class AttributePreviewController: public QObject
     //! Restore clean/initial state: no layer, no feature!
     Q_INVOKABLE void reset();
 
-    void setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair );
-    QgsQuickFeatureLayerPair featureLayerPair() const;
+    void setFeatureLayerPair( const FeatureLayerPair &pair );
+    FeatureLayerPair featureLayerPair() const;
     void setProject( QgsProject *project );
     QgsProject *project() const;
     AttributePreviewModel *fieldModel() const;
@@ -147,7 +147,7 @@ class AttributePreviewController: public QObject
     QString featureTitle();
 
     QgsProject *mProject = nullptr;
-    QgsQuickFeatureLayerPair mFeatureLayerPair;
+    FeatureLayerPair mFeatureLayerPair;
     QString mHtml;
     QString mPhoto;
     QString mTitle;

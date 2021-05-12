@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickidentifykit.h
+  identifykit.h
  ---------------------
   Date                 : 30.8.2016
   Copyright            : (C) 2016 by Matthias Kuhn
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKIDENTIFYKIT_H
-#define QGSQUICKIDENTIFYKIT_H
+#ifndef IDENTIFYKIT_H
+#define IDENTIFYKIT_H
 
 #include <QObject>
 #include <QPair>
@@ -24,11 +24,11 @@
 #include "qgspoint.h"
 #include "qgsrendercontext.h"
 
-#include "qgis_quick.h"
-#include "qgsquickfeaturelayerpair.h"
+
+#include "featurelayerpair.h"
 
 class QgsMapLayer;
-class QgsQuickMapSettings;
+class MapSettings;
 class QgsVectorLayer;
 
 /**
@@ -43,14 +43,14 @@ class QgsVectorLayer;
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
+class  IdentifyKit : public QObject
 {
     Q_OBJECT
 
     /**
      * Map settings. Set directly when creating QML object.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Search radius for the identify functions
@@ -60,7 +60,7 @@ class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
     Q_PROPERTY( double searchRadiusMm READ searchRadiusMm WRITE setSearchRadiusMm NOTIFY searchRadiusMmChanged )
 
     /**
-     * Maximum number of features returned from the QgsQuickIdentifyKit::identify()
+     * Maximum number of features returned from the IdentifyKit::identify()
      *
      * Default is 100.
      */
@@ -96,24 +96,24 @@ class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
     Q_ENUM( IdentifyMode )
 
     //! Constructor of new identify kit.
-    explicit QgsQuickIdentifyKit( QObject *parent = nullptr );
+    explicit IdentifyKit( QObject *parent = nullptr );
 
-    //! \copydoc QgsQuickIdentifyKit::mapSettings
-    QgsQuickMapSettings *mapSettings() const;
+    //! \copydoc IdentifyKit::mapSettings
+    MapSettings *mapSettings() const;
 
-    //! \copydoc QgsQuickIdentifyKit::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    //! \copydoc IdentifyKit::mapSettings
+    void setMapSettings( MapSettings *mapSettings );
 
-    //! \copydoc QgsQuickIdentifyKit::searchRadiusMm
+    //! \copydoc IdentifyKit::searchRadiusMm
     double searchRadiusMm() const;
 
-    //! \copydoc QgsQuickIdentifyKit::searchRadiusMm
+    //! \copydoc IdentifyKit::searchRadiusMm
     void setSearchRadiusMm( double searchRadiusMm );
 
-    //! \copydoc QgsQuickIdentifyKit::featuresLimit
+    //! \copydoc IdentifyKit::featuresLimit
     int featuresLimit() const;
 
-    //! \copydoc QgsQuickIdentifyKit::featuresLimit
+    //! \copydoc IdentifyKit::featuresLimit
     void setFeaturesLimit( int limit );
 
     /**
@@ -124,12 +124,12 @@ class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
       * with non-empty identified feature list (IdentifyMode::TopDownStopAtFirst)
       * If layer is not NULLPTR, identifies the closest feature from given layer regardless identify mode.
       *
-      * To modify search radius, use QgsQuickIdentifyKit::searchRadiusMm
+      * To modify search radius, use IdentifyKit::searchRadiusMm
       *
       * \param point position to search a feature from
       * \param layer if defined, search for a feature only from this layer
       */
-    Q_INVOKABLE QgsQuickFeatureLayerPair identifyOne( const QPointF &point, QgsVectorLayer *layer = nullptr );
+    Q_INVOKABLE FeatureLayerPair identifyOne( const QPointF &point, QgsVectorLayer *layer = nullptr );
 
     /**
       * Gets all features in the search radius
@@ -139,26 +139,26 @@ class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
       * with non-empty identified feature list (IdentifyMode::TopDownStopAtFirst)
       * If layer is not NULLPTR, identifies only features from given layer regardless identify mode.
       *
-      * To limit number of results, use QgsQuickIdentifyKit::featuresLimit
-      * To modify search radius, use QgsQuickIdentifyKit::searchRadiusMm
+      * To limit number of results, use IdentifyKit::featuresLimit
+      * To modify search radius, use IdentifyKit::searchRadiusMm
       *
       * \param point position to search features ob
       * \param layer if defined, search for features only from this layer
       */
-    Q_INVOKABLE QgsQuickFeatureLayerPairs identify( const QPointF &point, QgsVectorLayer *layer = nullptr );
+    Q_INVOKABLE FeatureLayerPairs identify( const QPointF &point, QgsVectorLayer *layer = nullptr );
 
   signals:
-    //! \copydoc QgsQuickIdentifyKit::mapSettings
+    //! \copydoc IdentifyKit::mapSettings
     void mapSettingsChanged();
-    //! \copydoc QgsQuickIdentifyKit::searchRadiusMm
+    //! \copydoc IdentifyKit::searchRadiusMm
     void searchRadiusMmChanged();
-    //! \copydoc QgsQuickIdentifyKit::featuresLimit
+    //! \copydoc IdentifyKit::featuresLimit
     void featuresLimitChanged();
-    //! \copydoc QgsQuickIdentifyKit::identifyMode
+    //! \copydoc IdentifyKit::identifyMode
     void identifyModeChanged();
 
   private:
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    MapSettings *mMapSettings = nullptr; // not owned
 
     double searchRadiusMU( const QgsRenderContext &context ) const;
     double searchRadiusMU() const;
@@ -171,4 +171,4 @@ class QUICK_EXPORT QgsQuickIdentifyKit : public QObject
     IdentifyMode mIdentifyMode = IdentifyMode::TopDownAll;
 };
 
-#endif // QGSQUICKIDENTIFYKIT_H
+#endif // IDENTIFYKIT_H

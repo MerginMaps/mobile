@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickdatetime.qml
+ datetime.qml
   --------------------------------------
   Date                 : 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -18,11 +18,11 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4 as Controls1
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
  * Calendar for QGIS Attribute Form
- * Requires various global properties set to function, see qgsquickfeatureform Loader section
+ * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  */
 Item {
@@ -51,8 +51,8 @@ Item {
     ColumnLayout {
         id: main
         property var currentValue: value
-        property bool fieldIsDate: QgsQuick.Utils.fieldType( field ) === 'QDate'
-        property var typeFromFieldFormat: QgsQuick.Utils.dateTimeFieldFormat( config['field_format'] )
+        property bool fieldIsDate: Utils.fieldType( field ) === 'QDate'
+        property var typeFromFieldFormat: Utils.dateTimeFieldFormat( config['field_format'] )
         property var rowHeight: customStyle.fields.height * 0.75
 
         anchors { right: parent.right; left: parent.left }
@@ -69,8 +69,8 @@ Item {
                 font.pointSize: customStyle.fields.fontPointSize
                 color: customStyle.fields.fontColor
                 padding: 0
-                topPadding: 10 * QgsQuick.Utils.dp
-                bottomPadding: 10 * QgsQuick.Utils.dp
+                topPadding: 10 * Utils.dp
+                bottomPadding: 10 * Utils.dp
                 leftPadding: customStyle.fields.sideMargin
                 background: Rectangle {
                     radius: customStyle.fields.cornerRadius

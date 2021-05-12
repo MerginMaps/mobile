@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickrememberattributescontroller.cpp
+  rememberattributescontroller.cpp
   ----------------------------------------
   Date                 : 4.5.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,29 +13,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickrememberattributescontroller.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "rememberattributescontroller.h"
+#include "featurelayerpair.h"
 #include "qgsattributes.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 
-QgsQuickRememberAttributesController::QgsQuickRememberAttributesController( QObject *parent )
+RememberAttributesController::RememberAttributesController( QObject *parent )
   : QObject( parent )
 {
 }
 
-void QgsQuickRememberAttributesController::reset()
+void RememberAttributesController::reset()
 {
   mRememberedValues.clear();
 }
 
-QgsQuickRememberAttributesController::~QgsQuickRememberAttributesController() = default;
+RememberAttributesController::~RememberAttributesController() = default;
 
-bool QgsQuickRememberAttributesController::rememberValuesAllowed() const
+bool RememberAttributesController::rememberValuesAllowed() const
 {
   return mRememberValuesAllowed;
 }
 
-void QgsQuickRememberAttributesController::setRememberValuesAllowed( bool rememberValuesAllowed )
+void RememberAttributesController::setRememberValuesAllowed( bool rememberValuesAllowed )
 {
   if ( mRememberValuesAllowed != rememberValuesAllowed )
   {
@@ -44,7 +44,7 @@ void QgsQuickRememberAttributesController::setRememberValuesAllowed( bool rememb
   }
 }
 
-void QgsQuickRememberAttributesController::storeLayerFields( const QgsVectorLayer *layer )
+void RememberAttributesController::storeLayerFields( const QgsVectorLayer *layer )
 {
   if ( layer && ( !mRememberedValues.contains( layer->id() ) ) )
   {
@@ -53,14 +53,14 @@ void QgsQuickRememberAttributesController::storeLayerFields( const QgsVectorLaye
   }
 }
 
-void QgsQuickRememberAttributesController::storeFeature( const QgsQuickFeatureLayerPair &pair )
+void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 {
   if ( pair.layer() )
     storeLayerFields( pair.layer() );
   mRememberedValues[pair.layer()->id()].feature = pair.feature();
 }
 
-bool QgsQuickRememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
+bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
   // global switch off of the functionality
   if ( !mRememberValuesAllowed )
@@ -77,7 +77,7 @@ bool QgsQuickRememberAttributesController::shouldRememberValue( const QgsVectorL
   return from.attributeFilter.at( fieldIndex );
 }
 
-bool QgsQuickRememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
+bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
   // global switch off of the functionality
   if ( !mRememberValuesAllowed )
@@ -99,7 +99,7 @@ bool QgsQuickRememberAttributesController::setShouldRememberValue( const QgsVect
   return false;
 }
 
-bool QgsQuickRememberAttributesController::rememberedValue(
+bool RememberAttributesController::rememberedValue(
   const QgsVectorLayer *layer,
   int fieldIndex,
   QVariant &value ) const

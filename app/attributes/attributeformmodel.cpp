@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributeformmodel.cpp
+ attributeformmodel.cpp
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,29 +13,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickattributeformmodel.h"
-#include "qgsquickattributecontroller.h"
-#include "qgsquickattributedata.h"
+#include "attributeformmodel.h"
+#include "attributecontroller.h"
+#include "attributedata.h"
 
-QgsQuickAttributeFormModel::QgsQuickAttributeFormModel( QObject *parent, QgsQuickAttributeController *controller, const QVector<QUuid> &data )
+AttributeFormModel::AttributeFormModel( QObject *parent, AttributeController *controller, const QVector<QUuid> &data )
   : QAbstractListModel( parent )
   , mController( controller )
   , mData( data )
 {
   Q_ASSERT( mController );
-  connect( mController, &QgsQuickAttributeController::formDataChanged, this, &QgsQuickAttributeFormModel::onFormDataChanged );
-  connect( mController, &QgsQuickAttributeController::featureLayerPairChanged, this, &QgsQuickAttributeFormModel::onFeatureChanged );
+  connect( mController, &AttributeController::formDataChanged, this, &AttributeFormModel::onFormDataChanged );
+  connect( mController, &AttributeController::featureLayerPairChanged, this, &AttributeFormModel::onFeatureChanged );
 }
 
-QgsQuickAttributeFormModel::~QgsQuickAttributeFormModel() = default;
+AttributeFormModel::~AttributeFormModel() = default;
 
-int QgsQuickAttributeFormModel::rowCount( const QModelIndex &parent ) const
+int AttributeFormModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
   return mData.size();
 }
 
-QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) const
+QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
 {
   Q_ASSERT( mController );
   if ( !index.isValid() )
@@ -46,7 +46,7 @@ QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) 
     return QVariant();
 
   const QUuid uuid = mData[row];
-  const QgsQuickFormItem *item = mController->formItem( uuid );
+  const FormItem *item = mController->formItem( uuid );
   if ( !item )
     return QVariant();
 
@@ -60,17 +60,17 @@ QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) 
       return mController->formValue( item->fieldIndex() );
     case AttributeEditable:
       return item->isEditable();
-    case QgsQuickAttributeFormModel::EditorWidget:
+    case AttributeFormModel::EditorWidget:
       return item->editorWidgetType();
-    case QgsQuickAttributeFormModel::EditorWidgetConfig:
+    case AttributeFormModel::EditorWidgetConfig:
       return item->editorWidgetConfig();
-    case QgsQuickAttributeFormModel::RememberValue:
+    case AttributeFormModel::RememberValue:
       return mController->formShouldRememberValue( item->fieldIndex() );
-    case QgsQuickAttributeFormModel::Field:
+    case AttributeFormModel::Field:
       return item->field();
     case FieldIndex:
       return item->fieldIndex();
-    case QgsQuickAttributeFormModel::Group:
+    case AttributeFormModel::Group:
       return item->groupName();
     case Visible:
       return item->isVisible();
@@ -85,7 +85,7 @@ QVariant QgsQuickAttributeFormModel::data( const QModelIndex &index, int role ) 
   }
 }
 
-void QgsQuickAttributeFormModel::onFormDataChanged( const QUuid id )
+void AttributeFormModel::onFormDataChanged( const QUuid id )
 {
   const int row = mData.indexOf( id );
   if ( rowIsValid( row ) )
@@ -95,18 +95,18 @@ void QgsQuickAttributeFormModel::onFormDataChanged( const QUuid id )
   }
 }
 
-void QgsQuickAttributeFormModel::onFeatureChanged()
+void AttributeFormModel::onFeatureChanged()
 {
   if ( rowCount() > 0 )
     emit dataChanged( index( 0, 0 ), index( rowCount() - 1, 0 ) );
 }
 
-bool QgsQuickAttributeFormModel::rowIsValid( int row ) const
+bool AttributeFormModel::rowIsValid( int row ) const
 {
   return ( row >= 0 ) && ( row < mData.size() );
 }
 
-QHash<int, QByteArray> QgsQuickAttributeFormModel::roleNames() const
+QHash<int, QByteArray> AttributeFormModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 
@@ -117,8 +117,8 @@ QHash<int, QByteArray> QgsQuickAttributeFormModel::roleNames() const
   roles[EditorWidget] = QByteArray( "EditorWidget" );
   roles[EditorWidgetConfig] = QByteArray( "EditorWidgetConfig" );
   roles[RememberValue] = QByteArray( "RememberValue" );
-  roles[QgsQuickAttributeFormModel::Field] = QByteArray( "Field" );
-  roles[QgsQuickAttributeFormModel::Group] = QByteArray( "Group" );
+  roles[AttributeFormModel::Field] = QByteArray( "Field" );
+  roles[AttributeFormModel::Group] = QByteArray( "Group" );
   roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
   roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
   roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );
@@ -126,7 +126,7 @@ QHash<int, QByteArray> QgsQuickAttributeFormModel::roleNames() const
   return roles;
 }
 
-Qt::ItemFlags QgsQuickAttributeFormModel::flags( const QModelIndex &index ) const
+Qt::ItemFlags AttributeFormModel::flags( const QModelIndex &index ) const
 {
   const int row = index.row();
   if ( !rowIsValid( row ) )
@@ -136,14 +136,14 @@ Qt::ItemFlags QgsQuickAttributeFormModel::flags( const QModelIndex &index ) cons
 
   Qt::ItemFlags ret = Qt::ItemIsEnabled;
   const QUuid uuid = mData[row];
-  const QgsQuickFormItem *item = mController->formItem( uuid );
+  const FormItem *item = mController->formItem( uuid );
   if ( item && item->isEditable() )
     ret |= Qt::ItemIsEditable;
 
   return ret;
 }
 
-bool QgsQuickAttributeFormModel::setData( const QModelIndex &index, const QVariant &value, int role )
+bool AttributeFormModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
   const int row = index.row();
   if ( !rowIsValid( row ) )

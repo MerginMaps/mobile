@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickhighlightsgnode.h
+ highlightsgnode.h
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -13,14 +13,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKHIGHLIGHTSGNODE_H
-#define QGSQUICKHIGHLIGHTSGNODE_H
+#ifndef HIGHLIGHTSGNODE_H
+#define HIGHLIGHTSGNODE_H
 
 #include <QtQuick/QSGNode>
 #include <QtQuick/QSGFlatColorMaterial>
 
 #include "qgsgeometry.h"
-#include "qgis_quick.h"
+
 
 class QgsLineString;
 class QgsPoint;
@@ -35,7 +35,7 @@ class QgsPolygon;
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickHighlightSGNode : public QSGNode
+class  HighlightSGNode : public QSGNode
 {
   public:
 
@@ -46,9 +46,9 @@ class QUICK_EXPORT QgsQuickHighlightSGNode : public QSGNode
      * \param color color used to render geom
      * \param width width of pen, see QSGGeometry::setLineWidth()
      */
-    QgsQuickHighlightSGNode( const QgsGeometry &geom, const QColor &color, float width );
+    HighlightSGNode( const QgsGeometry &geom, const QColor &color, float width );
     //! Destructor
-    ~QgsQuickHighlightSGNode() = default;
+    ~HighlightSGNode() = default;
 
   private:
     void handleGeometryCollection( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type );
@@ -62,4 +62,4 @@ class QUICK_EXPORT QgsQuickHighlightSGNode : public QSGNode
     float mWidth  = 20;
 };
 
-#endif // QGSQUICKHIGHLIGHTSGNODE
+#endif // HIGHLIGHTSGNODE

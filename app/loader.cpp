@@ -53,7 +53,7 @@ QgsProject *Loader::project()
   return mProject;
 }
 
-void Loader::setPositionKit( QgsQuickPositionKit *kit )
+void Loader::setPositionKit( PositionKit *kit )
 {
   mPositionKit = kit;
   emit positionKitChanged();
@@ -127,7 +127,7 @@ bool Loader::reloadProject( QString projectDir )
   return false;
 }
 
-void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
+void Loader::setMapSettings( MapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -162,12 +162,12 @@ void Loader::setMapSettingsLayers() const
   mMapSettings->setTransformContext( mProject->transformContext() );
 }
 
-QgsQuickMapSettings *Loader::mapSettings() const
+MapSettings *Loader::mapSettings() const
 {
   return mMapSettings;
 }
 
-void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
+void Loader::zoomToProject( MapSettings *mapSettings )
 {
   if ( !mapSettings )
   {

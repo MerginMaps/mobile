@@ -10,7 +10,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-import QgsQuick 0.1 as QgsQuick
+
 import "."  // import InputStyle singleton
 
 Item {
@@ -77,7 +77,7 @@ Item {
          * \param imagePath Absolute path to an image.
          */
         property var removeImage: function removeImage(itemWidget, imagePath) {
-            if (QgsQuick.Utils.fileExists(imagePath)) {
+            if (Utils.fileExists(imagePath)) {
               externalResourceHandler.itemWidget = itemWidget
               imageDeleteDialog.imagePath = imagePath
               imageDeleteDialog.open()
@@ -92,12 +92,12 @@ Item {
          * ItemWidget reference is always set here to avoid ambiguity in case of
          * multiple external resource (attachment) fields.
          * \param itemWidget editorWidget for a modified field to send valueChanged signal.
-         * \param prefixToRelativePath depends on widget's config, see more qgsquickexternalwidget.qml
-         * \param value depends on widget's config, see more in qgsquickexternalwidget.qml
+         * \param prefixToRelativePath depends on widget's config, see more externalwidget.qml
+         * \param value depends on widget's config, see more in externalwidget.qml
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
           if (value) {
-            var newCurrentValue = QgsQuick.Utils.getRelativePath(value, prefixToRelativePath)
+            var newCurrentValue = Utils.getRelativePath(value, prefixToRelativePath)
             itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
@@ -112,7 +112,7 @@ Item {
           //! final absolute location of an image.
           var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(externalResourceHandler.itemWidget.targetDir, filename)
 
-          if (!QgsQuick.Utils.fileExists(absolutePath)) {
+          if (!Utils.fileExists(absolutePath)) {
             var success = __inputUtils.copyFile(imagePath, absolutePath)
             if (!success)
             {

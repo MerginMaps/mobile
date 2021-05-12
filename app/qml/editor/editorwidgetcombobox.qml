@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickcombobox.qml
+ combobox.qml
   --------------------------------------
   Date                 : 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -16,10 +16,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
- * ComboBox for QGIS Attribute Form - used by QgsQuickValueMap and QgsQuickValueRelation
+ * ComboBox for QGIS Attribute Form - used by alueMap and alueRelation
  * Do not use directly from Application QML
  */
 ComboBox {
@@ -68,7 +68,7 @@ ComboBox {
   }
 
   background: Item {
-    implicitWidth: 120 * QgsQuick.Utils.dp
+    implicitWidth: 120 * Utils.dp
     implicitHeight: comboBox.height * 0.8
 
     Rectangle {

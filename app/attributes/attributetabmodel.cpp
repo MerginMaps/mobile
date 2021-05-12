@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributetabmodel.cpp
+ attributetabmodel.cpp
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,72 +13,72 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickattributetabmodel.h"
-#include "qgsquickattributecontroller.h"
-#include "qgsquickattributedata.h"
+#include "attributetabmodel.h"
+#include "attributecontroller.h"
+#include "attributedata.h"
 
-QgsQuickAttributeTabModel::QgsQuickAttributeTabModel( QObject *parent, QgsQuickAttributeController *controller, int tabCount )
+AttributeTabModel::AttributeTabModel( QObject *parent, AttributeController *controller, int tabCount )
   : QAbstractListModel( parent )
   , mController( controller )
   , mTabCount( tabCount )
 {
   Q_ASSERT( mController );
-  connect( mController, &QgsQuickAttributeController::tabDataChanged, this, &QgsQuickAttributeTabModel::onTabDataChanged );
-  connect( mController, &QgsQuickAttributeController::featureLayerPairChanged, this, &QgsQuickAttributeTabModel::onFeatureChanged );
+  connect( mController, &AttributeController::tabDataChanged, this, &AttributeTabModel::onTabDataChanged );
+  connect( mController, &AttributeController::featureLayerPairChanged, this, &AttributeTabModel::onFeatureChanged );
 }
 
-QHash<int, QByteArray> QgsQuickAttributeTabModel::roleNames() const
+QHash<int, QByteArray> AttributeTabModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-  roles[QgsQuickAttributeTabModel::Name]  = QByteArray( "Name" );
-  roles[QgsQuickAttributeTabModel::Visible] = QByteArray( "Visible" );
+  roles[AttributeTabModel::Name]  = QByteArray( "Name" );
+  roles[AttributeTabModel::Visible] = QByteArray( "Visible" );
   return roles;
 }
 
-QgsQuickAttributeTabModel::~QgsQuickAttributeTabModel() = default;
+AttributeTabModel::~AttributeTabModel() = default;
 
-int QgsQuickAttributeTabModel::rowCount( const QModelIndex &parent ) const
+int AttributeTabModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
   return mTabCount;
 }
 
-QVariant QgsQuickAttributeTabModel::data( const QModelIndex &index, int role ) const
+QVariant AttributeTabModel::data( const QModelIndex &index, int role ) const
 {
   Q_ASSERT( mController );
   if ( !index.isValid() )
     return QVariant();
 
   const int row = index.row();
-  const QgsQuickTabItem *item = mController->tabItem( row );
+  const TabItem *item = mController->tabItem( row );
   if ( !item )
     return QVariant();
 
   switch ( role )
   {
-    case QgsQuickAttributeTabModel::Name:
+    case AttributeTabModel::Name:
       return item->name();
-    case QgsQuickAttributeTabModel::Visible:
+    case AttributeTabModel::Visible:
       return item->isVisible();
     default:
       return QVariant();
   }
 }
 
-QgsQuickAttributeFormProxyModel *QgsQuickAttributeTabModel::attributeFormProxyModel( int row ) const
+AttributeFormProxyModel *AttributeTabModel::attributeFormProxyModel( int row ) const
 {
   Q_ASSERT( mController );
   return mController->attributeFormProxyModelForTab( row );
 }
 
-void QgsQuickAttributeTabModel::onTabDataChanged( int row )
+void AttributeTabModel::onTabDataChanged( int row )
 {
   Q_ASSERT( row >= 0 );
   const QModelIndex modelIndex = index( row, 0 );
   emit dataChanged( modelIndex, modelIndex );
 }
 
-void QgsQuickAttributeTabModel::onFeatureChanged()
+void AttributeTabModel::onFeatureChanged()
 {
   if ( rowCount() > 0 )
     emit dataChanged( index( 0, 0 ), index( rowCount() - 1, 0 ) );

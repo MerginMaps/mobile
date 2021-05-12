@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributetabmodel.h
+ attributetabmodel.h
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -12,16 +12,16 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef QGSQUICKATTRIBUTETABMODEL_H
-#define QGSQUICKATTRIBUTETABMODEL_H
+#ifndef ATTRIBUTETABMODEL_H
+#define ATTRIBUTETABMODEL_H
 
-#include "qgis_quick.h"
+
 #include <QAbstractListModel>
 #include <QUuid>
 #include <QVector>
 
-class QgsQuickAttributeController;
-class QgsQuickAttributeFormProxyModel;
+class AttributeController;
+class AttributeFormProxyModel;
 
 /**
  * \ingroup quick
@@ -33,14 +33,14 @@ class QgsQuickAttributeFormProxyModel;
  *
  * \since QGIS 3.22
  */
-class QUICK_EXPORT QgsQuickAttributeTabModel : public QAbstractListModel
+class  AttributeTabModel : public QAbstractListModel
 {
     Q_OBJECT
   public:
-    QgsQuickAttributeTabModel( QObject *parent,
-                               QgsQuickAttributeController *controller,
+    AttributeTabModel( QObject *parent,
+                               AttributeController *controller,
                                int tabCount );
-    ~QgsQuickAttributeTabModel() override;
+    ~AttributeTabModel() override;
 
     enum AttributeTabRoles
     {
@@ -53,15 +53,15 @@ class QUICK_EXPORT QgsQuickAttributeTabModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
-    Q_INVOKABLE QgsQuickAttributeFormProxyModel *attributeFormProxyModel( int row ) const;
+    Q_INVOKABLE AttributeFormProxyModel *attributeFormProxyModel( int row ) const;
 
   public slots:
     void onTabDataChanged( int row );
     void onFeatureChanged();
 
   private:
-    const QgsQuickAttributeController *mController = nullptr; // not owned
+    const AttributeController *mController = nullptr; // not owned
     const int mTabCount;
 };
 
-#endif // QGSQUICKATTRIBUTETABMODEL_H
+#endif // ATTRIBUTETABMODEL_H

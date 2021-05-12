@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickutils.cpp
+  utils.cpp
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -29,13 +29,13 @@
 #include "qgsvaluerelationfieldformatter.h"
 #include "qgsdatetimefieldformatter.h"
 
-#include "qgsquickfeaturelayerpair.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickutils.h"
+#include "featurelayerpair.h"
+#include "mapsettings.h"
+#include "utils.h"
 #include "qgsunittypes.h"
 
 
-QgsQuickUtils::QgsQuickUtils( QObject *parent )
+Utils::Utils( QObject *parent )
   : QObject( parent )
   , mScreenDensity( calculateScreenDensity() )
 {
@@ -44,27 +44,27 @@ QgsQuickUtils::QgsQuickUtils( QObject *parent )
 /**
  * Makes QgsCoordinateReferenceSystem::fromEpsgId accessible for QML components
  */
-QgsCoordinateReferenceSystem QgsQuickUtils::coordinateReferenceSystemFromEpsgId( long epsg )
+QgsCoordinateReferenceSystem Utils::coordinateReferenceSystemFromEpsgId( long epsg )
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( epsg );
 }
 
-QgsPointXY QgsQuickUtils::pointXY( double x, double y )
+QgsPointXY Utils::pointXY( double x, double y )
 {
   return QgsPointXY( x, y );
 }
 
-QgsPoint QgsQuickUtils::point( double x, double y, double z, double m )
+QgsPoint Utils::point( double x, double y, double z, double m )
 {
   return QgsPoint( x, y, z, m );
 }
 
-QgsPoint QgsQuickUtils::coordinateToPoint( const QGeoCoordinate &coor )
+QgsPoint Utils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
 }
 
-QgsPointXY QgsQuickUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+QgsPointXY Utils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
     const QgsCoordinateReferenceSystem &destCrs,
     const QgsCoordinateTransformContext &context,
     const QgsPointXY &srcPoint )
@@ -85,7 +85,7 @@ QgsPointXY QgsQuickUtils::transformPoint( const QgsCoordinateReferenceSystem &sr
   return srcPoint;
 }
 
-double QgsQuickUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
+double Utils::screenUnitsToMeters( MapSettings *mapSettings, int baseLengthPixels )
 {
   if ( mapSettings == nullptr ) return 0.0;
 
@@ -102,14 +102,14 @@ double QgsQuickUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int
   return mDistanceArea.measureLine( p1, p2 );
 }
 
-bool QgsQuickUtils::fileExists( const QString &path )
+bool Utils::fileExists( const QString &path )
 {
   QFileInfo check_file( path );
   // check if file exists and if yes: Is it really a file and no directory?
   return ( check_file.exists() && check_file.isFile() );
 }
 
-QString QgsQuickUtils::getRelativePath( const QString &path, const QString &prefixPath )
+QString Utils::getRelativePath( const QString &path, const QString &prefixPath )
 {
   QString modPath = path;
   QString filePrefix( "file://" );
@@ -145,26 +145,26 @@ QString QgsQuickUtils::getRelativePath( const QString &path, const QString &pref
   return QString();
 }
 
-void QgsQuickUtils::logMessage( const QString &message, const QString &tag, Qgis::MessageLevel level )
+void Utils::logMessage( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QgsMessageLog::logMessage( message, tag, level );
 }
 
-QgsQuickFeatureLayerPair QgsQuickUtils::featureFactory( const QgsFeature &feature, QgsVectorLayer *layer )
+FeatureLayerPair Utils::featureFactory( const QgsFeature &feature, QgsVectorLayer *layer )
 {
-  return QgsQuickFeatureLayerPair( feature, layer );
+  return FeatureLayerPair( feature, layer );
 }
 
-const QUrl QgsQuickUtils::getThemeIcon( const QString &name )
+const QUrl Utils::getThemeIcon( const QString &name )
 {
   QString path = QStringLiteral( "qrc:/%1.svg" ).arg( name );
   QgsDebugMsg( QStringLiteral( "Using icon %1 from %2" ).arg( name, path ) );
   return QUrl( path );
 }
 
-const QUrl QgsQuickUtils::getEditorComponentSource( const QString &widgetName )
+const QUrl Utils::getEditorComponentSource( const QString &widgetName )
 {
-  QString path( "qgsquick%1.qml" );
+  QString path( "%1.qml" );
   QStringList supportedWidgets = { QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),
@@ -183,7 +183,7 @@ const QUrl QgsQuickUtils::getEditorComponentSource( const QString &widgetName )
   }
 }
 
-QString QgsQuickUtils::formatPoint(
+QString Utils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,
   int decimals,
@@ -192,7 +192,7 @@ QString QgsQuickUtils::formatPoint(
   return QgsCoordinateFormatter::format( point, format, decimals, flags );
 }
 
-QString QgsQuickUtils::formatDistance( double distance,
+QString Utils::formatDistance( double distance,
                                        QgsUnitTypes::DistanceUnit units,
                                        int decimals,
                                        QgsUnitTypes::SystemOfMeasurement destSystem )
@@ -207,14 +207,14 @@ QString QgsQuickUtils::formatDistance( double distance,
          .arg( QgsUnitTypes::toAbbreviatedString( destUnits ) );
 }
 
-bool QgsQuickUtils::removeFile( const QString &filePath )
+bool Utils::removeFile( const QString &filePath )
 {
   QFile file( filePath );
   return file.remove( filePath );
 }
 
 
-void QgsQuickUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::DistanceUnit srcUnits,
+void Utils::humanReadableDistance( double srcDistance, QgsUnitTypes::DistanceUnit srcUnits,
     QgsUnitTypes::SystemOfMeasurement destSystem,
     double &destDistance, QgsUnitTypes::DistanceUnit &destUnits )
 {
@@ -236,7 +236,7 @@ void QgsQuickUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::Dis
   }
 }
 
-void QgsQuickUtils::formatToMetricDistance( double srcDistance,
+void Utils::formatToMetricDistance( double srcDistance,
     QgsUnitTypes::DistanceUnit srcUnits,
     double &destDistance,
     QgsUnitTypes::DistanceUnit &destUnits )
@@ -277,7 +277,7 @@ void QgsQuickUtils::formatToMetricDistance( double srcDistance,
   destUnits = QgsUnitTypes::DistanceMillimeters;
 }
 
-void QgsQuickUtils::formatToImperialDistance( double srcDistance,
+void Utils::formatToImperialDistance( double srcDistance,
     QgsUnitTypes::DistanceUnit srcUnits,
     double &destDistance,
     QgsUnitTypes::DistanceUnit &destUnits )
@@ -311,7 +311,7 @@ void QgsQuickUtils::formatToImperialDistance( double srcDistance,
   return;
 }
 
-void QgsQuickUtils::formatToUSCSDistance( double srcDistance,
+void Utils::formatToUSCSDistance( double srcDistance,
     QgsUnitTypes::DistanceUnit srcUnits,
     double &destDistance,
     QgsUnitTypes::DistanceUnit &destUnits )
@@ -345,7 +345,7 @@ void QgsQuickUtils::formatToUSCSDistance( double srcDistance,
   return;
 }
 
-QString QgsQuickUtils::dumpScreenInfo() const
+QString Utils::dumpScreenInfo() const
 {
   QString msg;
   // take the first top level window
@@ -372,7 +372,7 @@ QString QgsQuickUtils::dumpScreenInfo() const
   return msg;
 }
 
-QVariantMap QgsQuickUtils::createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature )
+QVariantMap Utils::createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature )
 {
   QVariantMap valueMap;
   QgsValueRelationFieldFormatter::ValueRelationCache cache = QgsValueRelationFieldFormatter::createCache( config, formFeature );
@@ -384,7 +384,7 @@ QVariantMap QgsQuickUtils::createValueRelationCache( const QVariantMap &config, 
   return valueMap;
 }
 
-QString QgsQuickUtils::evaluateExpression( const QgsQuickFeatureLayerPair &pair, QgsProject *activeProject, const QString &expression )
+QString Utils::evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression )
 {
   QList<QgsExpressionContextScope *> scopes;
   scopes << QgsExpressionContextUtils::globalScope();
@@ -397,7 +397,7 @@ QString QgsQuickUtils::evaluateExpression( const QgsQuickFeatureLayerPair &pair,
   return expr.evaluate( &context ).toString();
 }
 
-void QgsQuickUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior )
+void Utils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior )
 {
   QgsFeatureIds qgsFids;
   for ( const int &fid : fids )
@@ -405,12 +405,12 @@ void QgsQuickUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<in
   layer->selectByIds( qgsFids, behavior );
 }
 
-QString QgsQuickUtils::fieldType( const QgsField &field )
+QString Utils::fieldType( const QgsField &field )
 {
   return QVariant( field.type() ).typeName();
 }
 
-QString QgsQuickUtils::dateTimeFieldFormat( const QString &fieldFormat )
+QString Utils::dateTimeFieldFormat( const QString &fieldFormat )
 {
   if ( QgsDateTimeFieldFormatter::DATE_FORMAT == fieldFormat )
   {
@@ -430,17 +430,17 @@ QString QgsQuickUtils::dateTimeFieldFormat( const QString &fieldFormat )
   }
 }
 
-QModelIndex QgsQuickUtils::invalidIndex()
+QModelIndex Utils::invalidIndex()
 {
   return QModelIndex();
 }
 
-qreal QgsQuickUtils::screenDensity() const
+qreal Utils::screenDensity() const
 {
   return mScreenDensity;
 }
 
-qreal QgsQuickUtils::calculateScreenDensity()
+qreal Utils::calculateScreenDensity()
 {
   // calculate screen density for calculation of real pixel sizes from density-independent pixels
   // take the first top level window

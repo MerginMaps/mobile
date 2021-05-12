@@ -15,8 +15,8 @@
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
 
-#include "qgsquickutils.h"
-#include "qgsquickmaptransform.h"
+#include "utils.h"
+#include "maptransform.h"
 #include "inputexpressionfunctions.h"
 #include "coreutils.h"
 
@@ -173,7 +173,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   return INVALID_DATETIME_STR;
 }
 
-void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, MapSettings *mapSettings, double panelOffsetRatio )
 {
 
   if ( !mapSettings )
@@ -242,19 +242,19 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsScale( MapSettings *ms )
 {
   if ( !ms ) return 1;
   return 1 / ms->mapUnitsPerPixel();
 }
 
-double InputUtils::mapSettingsOffsetX( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsOffsetX( MapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().xMinimum();
 }
 
-double InputUtils::mapSettingsOffsetY( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsOffsetY( MapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().yMaximum();
@@ -326,7 +326,7 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
 }
 
 
-QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, MapSettings *mapSettings )
 {
   if ( !mapSettings || !pair.isValid() )
     return QVector<double>();
@@ -542,7 +542,7 @@ void InputUtils::showNotification( const QString &message )
   emit showNotificationRequested( message );
 }
 
-qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
+qreal InputUtils::groundSpeedFromSource( PositionKit *positionKit )
 {
   if ( positionKit == nullptr ) return 0;
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickutils.cpp
+     testutils.cpp
      --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -25,9 +25,9 @@
 #include "qgis.h"
 #include "qgsunittypes.h"
 
-#include "qgsquickutils.h"
+#include "utils.h"
 
-class TestQgsQuickUtils: public QObject
+class TestUtils: public QObject
 {
     Q_OBJECT
   private slots:
@@ -46,26 +46,26 @@ class TestQgsQuickUtils: public QObject
     void getRelativePath();
 
   private:
-    QgsQuickUtils utils;
+    Utils utils;
 };
 
-void TestQgsQuickUtils::screen_density()
+void TestUtils::screen_density()
 {
   qreal dp = utils.screenDensity();
   QVERIFY( ( dp > 0 ) && ( dp < 1000 ) );
 }
 
-void TestQgsQuickUtils::dump_screen_info()
+void TestUtils::dump_screen_info()
 {
   QVERIFY( utils.dumpScreenInfo().contains( "screen" ) );
 }
 
-void TestQgsQuickUtils::screenUnitsToMeters()
+void TestUtils::screenUnitsToMeters()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
-  QgsQuickMapSettings ms;
+  MapSettings ms;
   ms.setDestinationCrs( crsGPS );
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
   ms.setOutputSize( QSize( 1000, 500 ) );
@@ -73,7 +73,7 @@ void TestQgsQuickUtils::screenUnitsToMeters()
   QGSCOMPARENEAR( sutm, 213, 1.0 );
 }
 
-void TestQgsQuickUtils::transformedPoint()
+void TestUtils::transformedPoint()
 {
   QgsPointXY pointXY = utils.pointXY( 49.9, 16.3 );
   QGSCOMPARENEAR( pointXY.x(), 49.9, 1e-4 );
@@ -97,14 +97,14 @@ void TestQgsQuickUtils::transformedPoint()
   QGSCOMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
 }
 
-void TestQgsQuickUtils::formatPoint()
+void TestUtils::formatPoint()
 {
   QgsPoint point( -2.234521, 34.4444421 );
   QString point2str = utils.formatPoint( point );
   QVERIFY( point2str == "-2.235,34.444" );
 }
 
-void TestQgsQuickUtils::formatDistance()
+void TestUtils::formatDistance()
 {
   QString dist2str = utils.formatDistance( 1222.234, QgsUnitTypes::DistanceMeters,  2 );
   QVERIFY( dist2str == "1.22 km" );
@@ -139,7 +139,7 @@ void TestQgsQuickUtils::formatDistance()
   QVERIFY( dist2str == "1.2 NM" );
 }
 
-void TestQgsQuickUtils::loadIcon()
+void TestUtils::loadIcon()
 {
   QUrl url = utils.getThemeIcon( "ic_save_white" );
   QCOMPARE( url.toString(), QLatin1String( "qrc:/ic_save_white.svg" ) );
@@ -149,23 +149,23 @@ void TestQgsQuickUtils::loadIcon()
   QCOMPARE( fileName, QLatin1String( "ic_save_white.svg" ) );
 }
 
-void TestQgsQuickUtils::fileExists()
+void TestUtils::fileExists()
 {
   QString path = QStringLiteral( TEST_DATA_DIR ) + "/quickapp_project.qgs";
   QVERIFY( utils.fileExists( path ) );
 }
 
 
-void TestQgsQuickUtils::loadQmlComponent()
+void TestUtils::loadQmlComponent()
 {
   QUrl dummy = utils.getEditorComponentSource( "dummy" );
-  QCOMPARE( dummy.path(), QString( "qgsquicktextedit.qml" ) );
+  QCOMPARE( dummy.path(), QString( "textedit.qml" ) );
 
   QUrl valuemap = utils.getEditorComponentSource( "valuemap" );
-  QCOMPARE( valuemap.path(), QString( "qgsquickvaluemap.qml" ) );
+  QCOMPARE( valuemap.path(), QString( "valuemap.qml" ) );
 }
 
-void TestQgsQuickUtils::getRelativePath()
+void TestUtils::getRelativePath()
 {
   QString prefixPath = QStringLiteral( "%1/" ).arg( TEST_DATA_DIR );
   QString fileName = QStringLiteral( "quickapp_project.qgs" );
@@ -190,5 +190,5 @@ void TestQgsQuickUtils::getRelativePath()
 }
 
 
-QGSTEST_MAIN( TestQgsQuickUtils )
-#include "testqgsquickutils.moc"
+QGSTEST_MAIN( TestUtils )
+#include "testutils.moc"

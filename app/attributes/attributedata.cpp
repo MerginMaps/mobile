@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributedata.cpp
+ attributedata.cpp
   --------------------------------------
   Date                 : 22.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -14,14 +14,14 @@
  ***************************************************************************/
 
 
-#include "qgsquickattributedata.h"
+#include "attributedata.h"
 
-QgsQuickFormItem::QgsQuickFormItem(
+FormItem::FormItem(
   const QUuid &id,
   const QgsField &field,
   const QString &groupName,
   const int parentTabId,
-  QgsQuickFormItem::FormItemType type,
+  FormItem::FormItemType type,
   const QString &name,
   bool isEditable,
   const QgsEditorWidgetSetup &editorWidgetSetup,
@@ -43,113 +43,113 @@ QgsQuickFormItem::QgsQuickFormItem(
 {
 }
 
-QgsQuickFormItem::FormItemType QgsQuickFormItem::type() const
+FormItem::FormItemType FormItem::type() const
 {
   return mType;
 }
 
-QString QgsQuickFormItem::name() const
+QString FormItem::name() const
 {
   return mName;
 }
 
-bool QgsQuickFormItem::isEditable() const
+bool FormItem::isEditable() const
 {
   return mIsEditable;
 }
 
-QString QgsQuickFormItem::editorWidgetType() const
+QString FormItem::editorWidgetType() const
 {
   return mEditorWidgetSetup.type();
 }
 
-QVariantMap QgsQuickFormItem::editorWidgetConfig() const
+QVariantMap FormItem::editorWidgetConfig() const
 {
   return mEditorWidgetSetup.config();
 }
 
-int QgsQuickFormItem::fieldIndex() const
+int FormItem::fieldIndex() const
 {
   return mFieldIndex;
 }
 
-bool QgsQuickFormItem::constraintSoftValid() const
+bool FormItem::constraintSoftValid() const
 {
   return mConstraintSoftValid;
 }
 
-void QgsQuickFormItem::setConstraintSoftValid( bool constraintSoftValid )
+void FormItem::setConstraintSoftValid( bool constraintSoftValid )
 {
   mConstraintSoftValid = constraintSoftValid;
 }
 
-bool QgsQuickFormItem::constraintHardValid() const
+bool FormItem::constraintHardValid() const
 {
   return mConstraintHardValid;
 }
 
-void QgsQuickFormItem::setConstraintHardValid( bool constraintHardValid )
+void FormItem::setConstraintHardValid( bool constraintHardValid )
 {
   mConstraintHardValid = constraintHardValid;
 }
 
-bool QgsQuickFormItem::isVisible() const
+bool FormItem::isVisible() const
 {
   return mVisible;
 }
 
-void QgsQuickFormItem::setVisible( bool visible )
+void FormItem::setVisible( bool visible )
 {
   mVisible = visible;
 }
 
-QString QgsQuickFormItem::constraintDescription() const
+QString FormItem::constraintDescription() const
 {
   return mConstraints.constraintDescription();
 }
 
-QUuid QgsQuickFormItem::id() const
+QUuid FormItem::id() const
 {
   return mId;
 }
 
-int QgsQuickFormItem::parentTabId() const
+int FormItem::parentTabId() const
 {
   return mParentTabId;
 }
 
-QgsExpression QgsQuickFormItem::visibilityExpression() const
+QgsExpression FormItem::visibilityExpression() const
 {
   return mVisibilityExpression;
 }
 
-bool QgsQuickFormItem::visible() const
+bool FormItem::visible() const
 {
   return mVisible;
 }
 
-QgsField QgsQuickFormItem::field() const
+QgsField FormItem::field() const
 {
   return mField;
 }
 
-QString QgsQuickFormItem::groupName() const
+QString FormItem::groupName() const
 {
   return mGroupName;
 }
 
-QVariant QgsQuickFormItem::originalValue() const
+QVariant FormItem::originalValue() const
 {
   return mOriginalValue;
 }
 
-void QgsQuickFormItem::setOriginalValue( const QVariant &originalValue )
+void FormItem::setOriginalValue( const QVariant &originalValue )
 {
   mOriginalValue = originalValue;
 }
 
 
-QgsQuickTabItem::QgsQuickTabItem( const int &id,
+TabItem::TabItem( const int &id,
                                   const QString &name,
                                   const QVector<QUuid> &formItems,
                                   const QgsExpression &visibilityExpression )
@@ -160,32 +160,32 @@ QgsQuickTabItem::QgsQuickTabItem( const int &id,
 {
 }
 
-QString QgsQuickTabItem::name() const
+QString TabItem::name() const
 {
   return mName;
 }
 
-bool QgsQuickTabItem::isVisible() const
+bool TabItem::isVisible() const
 {
   return mVisible;
 }
 
-void QgsQuickTabItem::setVisible( bool visible )
+void TabItem::setVisible( bool visible )
 {
   mVisible = visible;
 }
 
-int QgsQuickTabItem::tabIndex() const
+int TabItem::tabIndex() const
 {
   return mTabIndex;
 }
 
-QgsExpression QgsQuickTabItem::visibilityExpression() const
+QgsExpression TabItem::visibilityExpression() const
 {
   return mVisibilityExpression;
 }
 
-const QVector<QUuid> QgsQuickTabItem::formItems() const
+const QVector<QUuid> TabItem::formItems() const
 {
   return mFormItems;
 }

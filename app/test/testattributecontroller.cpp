@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickattributecontroller.cpp
+     testattributecontroller.cpp
      --------------------------------------
   Date                 : May 2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -23,13 +23,13 @@
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
 
-#include "qgsquickattributecontroller.h"
-#include "qgsquickattributetabproxymodel.h"
-#include "qgsquickattributetabmodel.h"
-#include "qgsquickattributeformproxymodel.h"
-#include "qgsquickattributeformmodel.h"
+#include "attributecontroller.h"
+#include "attributetabproxymodel.h"
+#include "attributetabmodel.h"
+#include "attributeformproxymodel.h"
+#include "attributeformmodel.h"
 
-class TestQgsQuickAttributeController: public QObject
+class TestAttributeController: public QObject
 {
     Q_OBJECT
   private slots:
@@ -41,16 +41,16 @@ class TestQgsQuickAttributeController: public QObject
     void twoTabsDragAndDropLayout();
 };
 
-void TestQgsQuickAttributeController::init()
+void TestAttributeController::init()
 {
 }
 
-void TestQgsQuickAttributeController::cleanup()
+void TestAttributeController::cleanup()
 {
 }
 
 
-void TestQgsQuickAttributeController::noFields()
+void TestAttributeController::noFields()
 {
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( QStringLiteral( "Point" ),
@@ -64,17 +64,17 @@ void TestQgsQuickAttributeController::noFields()
   layer->dataProvider()->addFeatures( QgsFeatureList() << f1 );
 
 
-  QgsQuickAttributeController controller;
-  QgsQuickFeatureLayerPair pair( f1, layer.get() );
+  AttributeController controller;
+  FeatureLayerPair pair( f1, layer.get() );
   controller.setFeatureLayerPair( pair );
 
   // we do not have tabs
   QVERIFY( !controller.hasTabs() );
-  const QgsQuickTabItem *item2 = controller.tabItem( 1 );
+  const TabItem *item2 = controller.tabItem( 1 );
   QVERIFY( !item2 );
 
   // we always have one tabs
-  const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
+  const TabItem *tabItem = controller.tabItem( 0 );
   Q_ASSERT( tabItem );
   QCOMPARE( tabItem->tabIndex(), 0 );
   QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
@@ -85,7 +85,7 @@ void TestQgsQuickAttributeController::noFields()
   QCOMPARE( formItems.size(), 0 );
 }
 
-void TestQgsQuickAttributeController::twoFieldsAutoLayout()
+void TestAttributeController::twoFieldsAutoLayout()
 {
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string&field=fldint:integer" ),
@@ -101,14 +101,14 @@ void TestQgsQuickAttributeController::twoFieldsAutoLayout()
   layer->dataProvider()->addFeatures( QgsFeatureList() << f1 );
 
 
-  QgsQuickAttributeController controller;
-  QgsQuickFeatureLayerPair pair( f1, layer.get() );
+  AttributeController controller;
+  FeatureLayerPair pair( f1, layer.get() );
   controller.setFeatureLayerPair( pair );
 
   // we do not have tabs
   QVERIFY( !controller.hasTabs() );
 
-  const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
+  const TabItem *tabItem = controller.tabItem( 0 );
   Q_ASSERT( tabItem );
   QCOMPARE( tabItem->tabIndex(), 0 );
   QCOMPARE( tabItem->name(), "AutoLayoutRoot" );
@@ -119,18 +119,18 @@ void TestQgsQuickAttributeController::twoFieldsAutoLayout()
   QCOMPARE( formItems.size(), 2 );
   Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
 
-  const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
+  const FormItem *item1 = controller.formItem( formItems.at( 0 ) );
   QCOMPARE( item1->name(), "fldtxt" );
   QCOMPARE( controller.formValue( item1->fieldIndex() ), "one" );
   QCOMPARE( item1->isVisible(), true );
 
-  const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
+  const FormItem *item2 = controller.formItem( formItems.at( 1 ) );
   QCOMPARE( item2->name(), "fldint" );
   QCOMPARE( controller.formValue( item2->fieldIndex() ), 1 );
   QCOMPARE( item2->isVisible(), true );
 }
 
-void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
+void TestAttributeController::twoTabsDragAndDropLayout()
 {
   QString dataDir( TEST_DATA_DIR );  // defined in CMakeLists.txt
   QString planesVectorFile = dataDir + "/points.shp";
@@ -148,8 +148,8 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
   QgsFeature f1 = layer->getFeature( 0 );
   QVERIFY( f1.isValid() );
 
-  QgsQuickAttributeController controller;
-  QgsQuickFeatureLayerPair pair( f1, layer.get() );
+  AttributeController controller;
+  FeatureLayerPair pair( f1, layer.get() );
   controller.setFeatureLayerPair( pair );
 
   // we do have tabs
@@ -157,7 +157,7 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
 
   // first tab
   {
-    const QgsQuickTabItem *tabItem = controller.tabItem( 0 );
+    const TabItem *tabItem = controller.tabItem( 0 );
     Q_ASSERT( tabItem );
     QCOMPARE( tabItem->tabIndex(), 0 );
     QCOMPARE( tabItem->name(), "General" );
@@ -168,17 +168,17 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
     QCOMPARE( formItems.size(), 3 );
     Q_ASSERT( controller.attributeFormProxyModelForTab( 0 ) );
 
-    const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
+    const FormItem *item1 = controller.formItem( formItems.at( 0 ) );
     QCOMPARE( item1->name(), "Class" );
     QCOMPARE( controller.formValue( item1->fieldIndex() ), "Jet" );
     QCOMPARE( item1->isVisible(), true );
 
-    const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
+    const FormItem *item2 = controller.formItem( formItems.at( 1 ) );
     QCOMPARE( item2->name(), "Heading" );
     QCOMPARE( controller.formValue( item2->fieldIndex() ), 90 );
     QCOMPARE( item2->isVisible(), true );
 
-    const QgsQuickFormItem *item3 = controller.formItem( formItems.at( 2 ) );
+    const FormItem *item3 = controller.formItem( formItems.at( 2 ) );
     QCOMPARE( item3->name(), "Importance" );
     QCOMPARE( controller.formValue( item3->fieldIndex() ), 3 );
     QCOMPARE( item3->isVisible(), true );
@@ -186,7 +186,7 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
 
   // second  tab
   {
-    const QgsQuickTabItem *tabItem = controller.tabItem( 1 );
+    const TabItem *tabItem = controller.tabItem( 1 );
     Q_ASSERT( tabItem );
     QCOMPARE( tabItem->tabIndex(), 1 );
     QCOMPARE( tabItem->name(), "People" );
@@ -197,17 +197,17 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
     QCOMPARE( formItems.size(), 3 );
     Q_ASSERT( controller.attributeFormProxyModelForTab( 1 ) );
 
-    const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
+    const FormItem *item1 = controller.formItem( formItems.at( 0 ) );
     QCOMPARE( item1->name(), "Pilots" );
     QCOMPARE( controller.formValue( item1->fieldIndex() ), 2 );
     QCOMPARE( item1->isVisible(), true );
 
-    const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
+    const FormItem *item2 = controller.formItem( formItems.at( 1 ) );
     QCOMPARE( item2->name(), "Cabin Crew" );
     QCOMPARE( controller.formValue( item2->fieldIndex() ), 0 );
     QCOMPARE( item2->isVisible(), true );
 
-    const QgsQuickFormItem *item3 = controller.formItem( formItems.at( 2 ) );
+    const FormItem *item3 = controller.formItem( formItems.at( 2 ) );
     QCOMPARE( item3->name(), "Staff" );
     QCOMPARE( controller.formValue( item3->fieldIndex() ), 2 );
     QCOMPARE( item3->isVisible(), true );
@@ -216,12 +216,12 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
   // now change to different feature
   QgsFeature f2 = layer->getFeature( 10 );
   QVERIFY( f2.isValid() );
-  QgsQuickFeatureLayerPair pair2( f2, layer.get() );
+  FeatureLayerPair pair2( f2, layer.get() );
   controller.setFeatureLayerPair( pair2 );
 
   // check if the data changed
   {
-    const QgsQuickTabItem *tabItem = controller.tabItem( 1 );
+    const TabItem *tabItem = controller.tabItem( 1 );
     Q_ASSERT( tabItem );
     QCOMPARE( tabItem->tabIndex(), 1 );
     QCOMPARE( tabItem->name(), "People" );
@@ -232,17 +232,17 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
     QCOMPARE( formItems.size(), 3 );
     Q_ASSERT( controller.attributeFormProxyModelForTab( 1 ) );
 
-    const QgsQuickFormItem *item1 = controller.formItem( formItems.at( 0 ) );
+    const FormItem *item1 = controller.formItem( formItems.at( 0 ) );
     QCOMPARE( item1->name(), "Pilots" );
     QCOMPARE( controller.formValue( item1->fieldIndex() ), 1 );
     QCOMPARE( item1->isVisible(), true );
 
-    const QgsQuickFormItem *item2 = controller.formItem( formItems.at( 1 ) );
+    const FormItem *item2 = controller.formItem( formItems.at( 1 ) );
     QCOMPARE( item2->name(), "Cabin Crew" );
     QCOMPARE( controller.formValue( item2->fieldIndex() ), 1 );
     QCOMPARE( item2->isVisible(), true );
 
-    const QgsQuickFormItem *item3 = controller.formItem( formItems.at( 2 ) );
+    const FormItem *item3 = controller.formItem( formItems.at( 2 ) );
     QCOMPARE( item3->name(), "Staff" );
     QCOMPARE( controller.formValue( item3->fieldIndex() ), 2 );
     QCOMPARE( item3->isVisible(), true );
@@ -250,5 +250,5 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
 }
 
 
-QGSTEST_MAIN( TestQgsQuickAttributeController )
-#include "testqgsquickattributecontroller.moc"
+QGSTEST_MAIN( TestAttributeController )
+#include "testattributecontroller.moc"

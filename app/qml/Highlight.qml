@@ -10,7 +10,7 @@
 import QtQuick 2.11
 import QtQuick.Shapes 1.11
 
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   id: highlight
@@ -20,20 +20,20 @@ Item {
   // color for line geometries
   property color lineColor: "black"
   // width for line geometries
-  property real lineWidth: 2 * QgsQuick.Utils.dp
+  property real lineWidth: 2 * Utils.dp
 
   // color for polygon geometries
   property color fillColor: "red"
 
   // width for outlines of lines and polygons
-  property real outlinePenWidth: 1 * QgsQuick.Utils.dp
+  property real outlinePenWidth: 1 * Utils.dp
   // color for outlines of lines and polygons
   property color outlineColor: "black"
 
   property string markerType: "circle"   // "circle" or "image"
   property color markerColor: "grey"
-  property real markerWidth: 30 * QgsQuick.Utils.dp
-  property real markerHeight: 30 * QgsQuick.Utils.dp
+  property real markerWidth: 30 * Utils.dp
+  property real markerHeight: 30 * Utils.dp
   property real markerAnchorX: markerWidth/2
   property real markerAnchorY: markerHeight/2
   property url markerImageSource   // e.g. "file:///home/martin/all_the_things.jpg"
@@ -43,7 +43,7 @@ Item {
   property bool hasPolygon: false
 
   // for transformation of the highlight to the correct location on the map
-  property QgsQuick.MapSettings mapSettings
+  property MapSettings mapSettings
 
   property bool recordingInProgress: false
   property color guideLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
@@ -53,11 +53,11 @@ Item {
   //
   // internal properties not meant to be modified from outside
   //
-  property real markerOffsetY: 14 * QgsQuick.Utils.dp // for circle marker type to be aligned with crosshair
-  property real markerCircleSize: 15 * QgsQuick.Utils.dp
+  property real markerOffsetY: 14 * Utils.dp // for circle marker type to be aligned with crosshair
+  property real markerCircleSize: 15 * Utils.dp
 
   // transform used by line/path
-  property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
+  property MapTransform mapTransform: MapTransform {
     mapSettings: highlight.mapSettings
   }
 

@@ -35,7 +35,6 @@ unix:!macx:!android {
   # note: this is used for regular development and well tested
   QGIS_SRC_DIR = $${BASE_DIR}/QGIS
   QGIS_BUILD_DIR = $${BASE_DIR}/build-QGIS-Desktop
-  QGSQUICK_BUILD_DIR = $$(BASE_DIR)/build-QgsQuick-Desktop
 
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
 

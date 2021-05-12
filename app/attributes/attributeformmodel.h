@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributeformmodel.h
+ attributeformmodel.h
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,16 +13,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKATTRIBUTEFORMMODEL_H
-#define QGSQUICKATTRIBUTEFORMMODEL_H
+#ifndef ATTRIBUTEFORMMODEL_H
+#define ATTRIBUTEFORMMODEL_H
 
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QUuid>
 
-#include "qgis_quick.h"
 
-class QgsQuickAttributeController;
+
+class AttributeController;
 
 /**
  * \ingroup quick
@@ -37,15 +37,15 @@ class QgsQuickAttributeController;
  *
  * \since QGIS 3.22
  */
-class QUICK_EXPORT QgsQuickAttributeFormModel : public QAbstractListModel
+class  AttributeFormModel : public QAbstractListModel
 {
     Q_OBJECT
 
   public:
-    QgsQuickAttributeFormModel( QObject *parent,
-                                QgsQuickAttributeController *controller,
+    AttributeFormModel( QObject *parent,
+                                AttributeController *controller,
                                 const QVector<QUuid> &data );
-    ~QgsQuickAttributeFormModel() override;
+    ~AttributeFormModel() override;
 
     enum AttributeFormRoles
     {
@@ -80,8 +80,8 @@ class QUICK_EXPORT QgsQuickAttributeFormModel : public QAbstractListModel
   private:
     bool rowIsValid( int row ) const;
 
-    QgsQuickAttributeController *mController = nullptr; // not owned
+    AttributeController *mController = nullptr; // not owned
     const QVector<QUuid> mData;
 };
 
-#endif // QGSQUICKATTRIBUTEFORMMODEL_H
+#endif // ATTRIBUTEFORMMODEL_H

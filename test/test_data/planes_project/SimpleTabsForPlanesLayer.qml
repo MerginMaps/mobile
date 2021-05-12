@@ -276,7 +276,7 @@
   <editform tolerant="1"></editform>
   <editforminit/>
   <editforminitcodesource>0</editforminitcodesource>
-  <editforminitfilepath>/Users/peter/Projects/quick/input/qgsquick/from_qgis/src/quickgui/app/qgis-data</editforminitfilepath>
+  <editforminitfilepath>/Users/peter/Projects/quick/input//from_qgis/src/quickgui/app/qgis-data</editforminitfilepath>
   <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is

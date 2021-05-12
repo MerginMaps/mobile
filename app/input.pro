@@ -26,5 +26,3 @@ CONFIG(debug, debug|release) {
   DEFINES += "QGIS_QUICK_EXPAND_TEST_DATA"
 }
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH = $${QGSQUICK_QML_DIR}

@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquicksimulatedpositionsource.h
+ simulatedpositionsource.h
   --------------------------------------
   Date                 : Dec. 2017
   Copyright            : (C) 2017 Peter Petrik
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKSIMULATEDPOSITIONSOURCE_H
-#define QGSQUICKSIMULATEDPOSITIONSOURCE_H
+#ifndef SIMULATEDPOSITIONSOURCE_H
+#define SIMULATEDPOSITIONSOURCE_H
 
 /// @cond PRIVATE
 
@@ -27,7 +27,7 @@
 // version without notice, or even be removed.
 //
 
-#include "qgis_quick.h"
+
 #include <QObject>
 #include <QTimer>
 #include <QtPositioning>
@@ -48,11 +48,11 @@
  *
  * \since QGIS 3.4
  */
-class QUICK_NO_EXPORT QgsQuickSimulatedPositionSource : public QGeoPositionInfoSource
+class QUICK_NO_EXPORT SimulatedPositionSource : public QGeoPositionInfoSource
 {
     Q_OBJECT
   public:
-    QgsQuickSimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius );
+    SimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius );
 
     QGeoPositionInfo lastKnownPosition( bool /*fromSatellitePositioningMethodsOnly = false*/ ) const { return mLastPosition; }
     PositioningMethods supportedPositioningMethods() const { return AllPositioningMethods; }
@@ -83,4 +83,4 @@ class QUICK_NO_EXPORT QgsQuickSimulatedPositionSource : public QGeoPositionInfoS
 
 /// @endcond
 
-#endif // QGSQUICKSIMULATEDPOSITIONSOURCE_H
+#endif // SIMULATEDPOSITIONSOURCE_H

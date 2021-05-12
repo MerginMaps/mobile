@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickrememberattributescontroller.h
+  rememberattributescontroller.h
   --------------------------------------
   Date                 : 4.5.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,16 +13,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
-#define QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
+#ifndef REMEMBERATTRIBUTESCONTROLLER_H
+#define REMEMBERATTRIBUTESCONTROLLER_H
 
-#include "qgis_quick.h"
+
 #include "qgsfeature.h"
 #include "qgsvectorlayer.h"
 
 #include <QHash>
 
-class QgsQuickFeatureLayerPair;
+class FeatureLayerPair;
 
 /**
  * \ingroup quick
@@ -31,7 +31,7 @@ class QgsQuickFeatureLayerPair;
  *
  * \since QGIS 3.20
  */
-class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
+class  RememberAttributesController : public QObject
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
     Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
 
   public:
-    QgsQuickRememberAttributesController( QObject *parent = nullptr );
-    ~QgsQuickRememberAttributesController() override;
+    RememberAttributesController( QObject *parent = nullptr );
+    ~RememberAttributesController() override;
 
     //! Restore clean/initial state: no layers, no features!
     Q_INVOKABLE void reset();
@@ -49,7 +49,7 @@ class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
     void setRememberValuesAllowed( bool rememberValuesAllowed );
 
     void storeLayerFields( const QgsVectorLayer *layer );
-    void storeFeature( const QgsQuickFeatureLayerPair &pair );
+    void storeFeature( const FeatureLayerPair &pair );
 
     // Returns false if the value is not remembered
     bool rememberedValue( const QgsVectorLayer *layer, int fieldIndex, QVariant &value ) const;
@@ -77,5 +77,5 @@ class QUICK_EXPORT QgsQuickRememberAttributesController : public QObject
 
 };
 
-#endif // QGSQUICKREMEMBERATTRIBUTESCONTROLLER_H
+#endif // REMEMBERATTRIBUTESCONTROLLER_H
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquicktextedit.qml
+ textedit.qml
   --------------------------------------
   Date                 : 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -15,13 +15,13 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QgsQuick 0.1 as QgsQuick
+
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 /**
  * Text Edit for QGIS Attribute Form
- * Requires various global properties set to function, see qgsquickfeatureform Loader section
+ * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  */
 Item {
@@ -41,8 +41,8 @@ Item {
   TextField {
     id: textField
     height: textArea.height == 0 ? customStyle.fields.height : 0
-    topPadding: 10 * QgsQuick.Utils.dp
-    bottomPadding: 10 * QgsQuick.Utils.dp
+    topPadding: 10 * Utils.dp
+    bottomPadding: 10 * Utils.dp
     leftPadding: customStyle.fields.sideMargin
     rightPadding: textField.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
@@ -115,7 +115,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: customStyle.fields.sideMargin
 
-      property int borderWidth: 50 * QgsQuick.Utils.dp
+      property int borderWidth: 50 * Utils.dp
       width: fieldItem.iconSize
       height: width
       antialiasing: true

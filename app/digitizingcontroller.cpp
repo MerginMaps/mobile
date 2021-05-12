@@ -14,7 +14,7 @@
 #include "qgswkbtypes.h"
 #include "qgspolygon.h"
 
-#include "qgsquickutils.h"
+#include "utils.h"
 #include "qgsvectorlayerutils.h"
 
 DigitizingController::DigitizingController( QObject *parent )
@@ -23,25 +23,25 @@ DigitizingController::DigitizingController( QObject *parent )
 {
 }
 
-void DigitizingController::setPositionKit( QgsQuickPositionKit *kit )
+void DigitizingController::setPositionKit( PositionKit *kit )
 {
   if ( mPositionKit )
-    disconnect( mPositionKit, &QgsQuickPositionKit::positionChanged, this, &DigitizingController::onPositionChanged );
+    disconnect( mPositionKit, &PositionKit::positionChanged, this, &DigitizingController::onPositionChanged );
 
   mPositionKit = kit;
 
   if ( mPositionKit )
-    connect( mPositionKit, &QgsQuickPositionKit::positionChanged, this, &DigitizingController::onPositionChanged );
+    connect( mPositionKit, &PositionKit::positionChanged, this, &DigitizingController::onPositionChanged );
 
   emit positionKitChanged();
 }
 
-QgsQuickFeatureLayerPair DigitizingController::featureLayerPair() const
+FeatureLayerPair DigitizingController::featureLayerPair() const
 {
   return mFeatureLayerPair;
 }
 
-void DigitizingController::setFeatureLayerPair( QgsQuickFeatureLayerPair pair )
+void DigitizingController::setFeatureLayerPair( FeatureLayerPair pair )
 {
   if ( pair == mFeatureLayerPair )
     return;
@@ -60,7 +60,7 @@ void DigitizingController::setLayer( QgsVectorLayer *layer )
   if ( layer == mFeatureLayerPair.layer() )
     return;
 
-  QgsQuickFeatureLayerPair pair( mFeatureLayerPair.featureRef(), layer );
+  FeatureLayerPair pair( mFeatureLayerPair.featureRef(), layer );
   mFeatureLayerPair = pair;
   emit layerChanged();
 }
@@ -80,7 +80,7 @@ bool DigitizingController::hasPointGeometry( QgsVectorLayer *layer ) const
   return layer && layer->geometryType() == QgsWkbTypes::PointGeometry;
 }
 
-bool DigitizingController::isPairValid( QgsQuickFeatureLayerPair pair ) const
+bool DigitizingController::isPairValid( FeatureLayerPair pair ) const
 {
   return pair.isValid() && hasEnoughPoints();
 }
@@ -201,19 +201,19 @@ QgsGeometry DigitizingController::getPointGeometry( const QgsPoint &point, bool 
   return geom;
 }
 
-QgsQuickFeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry &geometry )
+FeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry &geometry )
 {
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
   QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geometry, attrs.toMap(), &context );
 
-  return QgsQuickFeatureLayerPair( feat, featureLayerPair().layer() );
+  return FeatureLayerPair( feat, featureLayerPair().layer() );
 }
 
-QgsQuickFeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint )
+FeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint )
 {
   if ( !featureLayerPair().layer() || !mMapSettings )
-    return QgsQuickFeatureLayerPair();
+    return FeatureLayerPair();
 
   QgsGeometry geom = getPointGeometry( point, isGpsPoint );
 
@@ -269,13 +269,13 @@ void DigitizingController::onPositionChanged()
 }
 
 
-QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
+FeatureLayerPair DigitizingController::lineOrPolygonFeature()
 {
   if ( !featureLayerPair().layer() )
-    return QgsQuickFeatureLayerPair();
+    return FeatureLayerPair();
 
   if ( mRecordedPoints.isEmpty() )
-    return QgsQuickFeatureLayerPair();
+    return FeatureLayerPair();
 
   QgsGeometry geom;
   QgsLineString *linestring = new QgsLineString;
@@ -295,12 +295,12 @@ QgsQuickFeatureLayerPair DigitizingController::lineOrPolygonFeature()
   return createFeatureLayerPair( geom );
 }
 
-QgsQuickFeatureLayerPair DigitizingController::featureWithoutGeometry()
+FeatureLayerPair DigitizingController::featureWithoutGeometry()
 {
   return createFeatureLayerPair( QgsGeometry() );
 }
 
-QgsPoint DigitizingController::pointFeatureMapCoordinates( QgsQuickFeatureLayerPair pair )
+QgsPoint DigitizingController::pointFeatureMapCoordinates( FeatureLayerPair pair )
 {
   if ( !pair.layer() )
     return QgsPoint();
@@ -309,7 +309,7 @@ QgsPoint DigitizingController::pointFeatureMapCoordinates( QgsQuickFeatureLayerP
   return QgsPoint( res );
 }
 
-QgsQuickFeatureLayerPair DigitizingController::changePointGeometry( QgsQuickFeatureLayerPair pair, QgsPoint point, bool isGpsPoint )
+FeatureLayerPair DigitizingController::changePointGeometry( FeatureLayerPair pair, QgsPoint point, bool isGpsPoint )
 {
   QgsGeometry geom = getPointGeometry( point, isGpsPoint );
   pair.featureRef().setGeometry( geom );

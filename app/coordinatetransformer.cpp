@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickcoordinatetransformer.cpp
+ coordinatetransformer.cpp
   --------------------------------------
   Date                 : 1.6.2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -13,26 +13,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickcoordinatetransformer.h"
+#include "coordinatetransformer.h"
 #include "qgslogger.h"
 
-QgsQuickCoordinateTransformer::QgsQuickCoordinateTransformer( QObject *parent )
+CoordinateTransformer::CoordinateTransformer( QObject *parent )
   : QObject( parent )
 {
   mCoordinateTransform.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
 }
 
-QgsPoint QgsQuickCoordinateTransformer::projectedPosition() const
+QgsPoint CoordinateTransformer::projectedPosition() const
 {
   return mProjectedPosition;
 }
 
-QgsPoint QgsQuickCoordinateTransformer::sourcePosition() const
+QgsPoint CoordinateTransformer::sourcePosition() const
 {
   return mSourcePosition;
 }
 
-void QgsQuickCoordinateTransformer::setSourcePosition( const QgsPoint &sourcePosition )
+void CoordinateTransformer::setSourcePosition( const QgsPoint &sourcePosition )
 {
   if ( mSourcePosition == sourcePosition )
     return;
@@ -43,12 +43,12 @@ void QgsQuickCoordinateTransformer::setSourcePosition( const QgsPoint &sourcePos
   updatePosition();
 }
 
-QgsCoordinateReferenceSystem QgsQuickCoordinateTransformer::destinationCrs() const
+QgsCoordinateReferenceSystem CoordinateTransformer::destinationCrs() const
 {
   return mCoordinateTransform.destinationCrs();
 }
 
-void QgsQuickCoordinateTransformer::setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs )
+void CoordinateTransformer::setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs )
 {
   if ( destinationCrs == mCoordinateTransform.destinationCrs() )
     return;
@@ -58,12 +58,12 @@ void QgsQuickCoordinateTransformer::setDestinationCrs( const QgsCoordinateRefere
   updatePosition();
 }
 
-QgsCoordinateReferenceSystem QgsQuickCoordinateTransformer::sourceCrs() const
+QgsCoordinateReferenceSystem CoordinateTransformer::sourceCrs() const
 {
   return mCoordinateTransform.sourceCrs();
 }
 
-void QgsQuickCoordinateTransformer::setSourceCrs( const QgsCoordinateReferenceSystem &sourceCrs )
+void CoordinateTransformer::setSourceCrs( const QgsCoordinateReferenceSystem &sourceCrs )
 {
   if ( sourceCrs == mCoordinateTransform.sourceCrs() )
     return;
@@ -74,18 +74,18 @@ void QgsQuickCoordinateTransformer::setSourceCrs( const QgsCoordinateReferenceSy
   updatePosition();
 }
 
-void QgsQuickCoordinateTransformer::setTransformContext( const QgsCoordinateTransformContext &context )
+void CoordinateTransformer::setTransformContext( const QgsCoordinateTransformContext &context )
 {
   mCoordinateTransform.setContext( context );
   emit transformContextChanged();
 }
 
-QgsCoordinateTransformContext QgsQuickCoordinateTransformer::transformContext() const
+QgsCoordinateTransformContext CoordinateTransformer::transformContext() const
 {
   return mCoordinateTransform.context();
 }
 
-void QgsQuickCoordinateTransformer::updatePosition()
+void CoordinateTransformer::updatePosition()
 {
   double x = mSourcePosition.x();
   double y = mSourcePosition.y();

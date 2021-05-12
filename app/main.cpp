@@ -71,7 +71,7 @@
 #endif
 #endif
 
-#include "qgsquickutils.h"
+#include "utils.h"
 #include "qgsproject.h"
 
 #ifndef NDEBUG
@@ -98,7 +98,7 @@
 #include "appsettings.h"
 
 #ifdef Q_OS_IOS
-#include "qgsquickplugin.h"
+#include "plugin.h"
 #endif
 
 static QString getDataDir()
@@ -256,13 +256,13 @@ void initTestDeclarative()
 
 void addQmlImportPath( QQmlEngine &engine )
 {
-  // This adds a runtime qml directory containing QgsQuick plugin
+  // This adds a runtime qml directory containing  plugin
   // when Input is installed (e.g. Android/Win32)
   engine.addImportPath( QgsApplication::qmlImportPath() );
   qDebug() << "adding QML import Path: " << QgsApplication::qmlImportPath();
 
 #ifdef QML_BUILD_IMPORT_DIR
-  // Adds a runtime qml directory containing QgsQuick plugin
+  // Adds a runtime qml directory containing  plugin
   // if we are using the developer mode (not installed Input)
   // e.g. Linux/MacOS
   QString qmlBuildImportPath( STR( QML_BUILD_IMPORT_DIR ) );
@@ -271,7 +271,7 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 
 #ifdef Q_OS_IOS
-  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
+  // REQUIRED FOR IOS - to load /*.qml files defined in qmldir
   engine.addImportPath( "qrc:///" );
   qDebug() << "adding QML import Path: " << "qrc:///";
 #endif
@@ -478,9 +478,9 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Lato" ) );
 
 #ifdef Q_OS_IOS
-  // REQUIRED FOR IOS  - to load QgsQuick C++ classes
-  QgsQuickPlugin plugin;
-  plugin.registerTypes( "QgsQuick" );
+  // REQUIRED FOR IOS  - to load  C++ classes
+  Plugin plugin;
+  plugin.registerTypes( "" );
 #endif
 
   QQmlEngine engine;
@@ -569,7 +569,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // Add some data for debugging
-  qDebug() << QgsQuickUtils().dumpScreenInfo();
+  qDebug() << Utils().dumpScreenInfo();
   qDebug() << "data directory: " << dataDir;
   qDebug() <<  "All up and running";
 

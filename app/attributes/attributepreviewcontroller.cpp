@@ -14,7 +14,7 @@
  ***************************************************************************/
 
 #include "attributepreviewcontroller.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 #include "qgsfield.h"
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
@@ -166,12 +166,12 @@ AttributePreviewController::AttributePreviewController( QObject *parent )
 
 void AttributePreviewController::reset()
 {
-  setFeatureLayerPair( QgsQuickFeatureLayerPair() );
+  setFeatureLayerPair( FeatureLayerPair() );
 }
 
 AttributePreviewController::~AttributePreviewController() = default;
 
-void AttributePreviewController::setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair )
+void AttributePreviewController::setFeatureLayerPair( const FeatureLayerPair &pair )
 {
   if ( mFeatureLayerPair != pair )
   {
@@ -181,7 +181,7 @@ void AttributePreviewController::setFeatureLayerPair( const QgsQuickFeatureLayer
   }
 }
 
-QgsQuickFeatureLayerPair AttributePreviewController::featureLayerPair() const
+FeatureLayerPair AttributePreviewController::featureLayerPair() const
 {
   return mFeatureLayerPair;
 }
@@ -191,7 +191,7 @@ void AttributePreviewController::setProject( QgsProject *project )
   if ( mProject != project )
   {
     mProject = project;
-    setFeatureLayerPair( QgsQuickFeatureLayerPair() );
+    setFeatureLayerPair( FeatureLayerPair() );
     emit projectChanged();
   }
 }

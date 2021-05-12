@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickpositionmarker.qml
+  positionmarker.qml
   --------------------------------------
   Date                 : Dec 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -17,23 +17,23 @@ import QtQuick 2.3
 import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
  * \brief Graphical representation of physical location on the map.
  *
  * Source position and accuracy taken from PositionKit is drawn as a marker on the map.
  * Marker is grayed out when position is not available. When PositionKit support reading of the accuracy,
- * the circle is drawn around the marker. PositionKit must be connected, for example GPS position source from QgsQuickPositionKit.
+ * the circle is drawn around the marker. PositionKit must be connected, for example GPS position source from ositionKit.
  */
 Item {
   id: positionMarker
-  property int size: 48 * QgsQuick.Utils.dp
+  property int size: 48 * Utils.dp
 
   /**
    * Utils for handling position.
    */
-  property QgsQuick.PositionKit positionKit
+  property PositionKit positionKit
 
   /**
    * Color of the marker when position is known.
@@ -52,7 +52,7 @@ Item {
   /**
    * Icon for position marker.
    */
-  property var markerIcon: QgsQuick.Utils.getThemeIcon("ic_navigation_black")
+  property var markerIcon: Utils.getThemeIcon("ic_navigation_black")
 
   /**
    * Source position accuracy circle-shaped indicator around positionMarker.
@@ -69,7 +69,7 @@ Item {
     height: accuracyIndicator.width
     color: baseColor
     border.color: "black"
-    border.width: 3 * QgsQuick.Utils.dp
+    border.width: 3 * Utils.dp
     radius: width*0.5
     opacity: 0.1
   }
@@ -79,8 +79,8 @@ Item {
    */
   Rectangle {
     id: navigationMarker
-    property int borderWidth: 2 * QgsQuick.Utils.dp
-    width: positionMarker.size + 20 * QgsQuick.Utils.dp
+    property int borderWidth: 2 * Utils.dp
+    width: positionMarker.size + 20 * Utils.dp
     height: width
     color: "white"
     border.color: baseColor

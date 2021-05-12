@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickmapsettings.cpp
+  mapsettings.cpp
   --------------------------------------
   Date                 : 27.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -20,21 +20,21 @@
 #include "qgsproject.h"
 #include "qgis.h"
 
-#include "qgsquickmapsettings.h"
+#include "mapsettings.h"
 
-QgsQuickMapSettings::QgsQuickMapSettings( QObject *parent )
+MapSettings::MapSettings( QObject *parent )
   : QObject( parent )
 {
   // Connect signals for derived values
-  connect( this, &QgsQuickMapSettings::destinationCrsChanged, this, &QgsQuickMapSettings::mapUnitsPerPixelChanged );
-  connect( this, &QgsQuickMapSettings::extentChanged, this, &QgsQuickMapSettings::mapUnitsPerPixelChanged );
-  connect( this, &QgsQuickMapSettings::outputSizeChanged, this, &QgsQuickMapSettings::mapUnitsPerPixelChanged );
-  connect( this, &QgsQuickMapSettings::extentChanged, this, &QgsQuickMapSettings::visibleExtentChanged );
-  connect( this, &QgsQuickMapSettings::rotationChanged, this, &QgsQuickMapSettings::visibleExtentChanged );
-  connect( this, &QgsQuickMapSettings::outputSizeChanged, this, &QgsQuickMapSettings::visibleExtentChanged );
+  connect( this, &MapSettings::destinationCrsChanged, this, &MapSettings::mapUnitsPerPixelChanged );
+  connect( this, &MapSettings::extentChanged, this, &MapSettings::mapUnitsPerPixelChanged );
+  connect( this, &MapSettings::outputSizeChanged, this, &MapSettings::mapUnitsPerPixelChanged );
+  connect( this, &MapSettings::extentChanged, this, &MapSettings::visibleExtentChanged );
+  connect( this, &MapSettings::rotationChanged, this, &MapSettings::visibleExtentChanged );
+  connect( this, &MapSettings::outputSizeChanged, this, &MapSettings::visibleExtentChanged );
 }
 
-void QgsQuickMapSettings::setProject( QgsProject *project )
+void MapSettings::setProject( QgsProject *project )
 {
   if ( project == mProject )
     return;
@@ -50,7 +50,7 @@ void QgsQuickMapSettings::setProject( QgsProject *project )
   // Connect all signals
   if ( mProject )
   {
-    connect( mProject, &QgsProject::readProject, this, &QgsQuickMapSettings::onReadProject );
+    connect( mProject, &QgsProject::readProject, this, &MapSettings::onReadProject );
     setDestinationCrs( mProject->crs() );
     mMapSettings.setTransformContext( mProject->transformContext() );
   }
@@ -62,22 +62,22 @@ void QgsQuickMapSettings::setProject( QgsProject *project )
   emit projectChanged();
 }
 
-QgsProject *QgsQuickMapSettings::project() const
+QgsProject *MapSettings::project() const
 {
   return mProject;
 }
 
-QgsCoordinateTransformContext QgsQuickMapSettings::transformContext() const
+QgsCoordinateTransformContext MapSettings::transformContext() const
 {
   return mMapSettings.transformContext();
 }
 
-QgsRectangle QgsQuickMapSettings::extent() const
+QgsRectangle MapSettings::extent() const
 {
   return mMapSettings.extent();
 }
 
-void QgsQuickMapSettings::setExtent( const QgsRectangle &extent )
+void MapSettings::setExtent( const QgsRectangle &extent )
 {
   if ( mMapSettings.extent() == extent )
     return;
@@ -86,7 +86,7 @@ void QgsQuickMapSettings::setExtent( const QgsRectangle &extent )
   emit extentChanged();
 }
 
-void QgsQuickMapSettings::setCenter( const QgsPoint &center )
+void MapSettings::setCenter( const QgsPoint &center )
 {
   QgsVector delta = QgsPointXY( center ) - mMapSettings.extent().center();
 
@@ -99,24 +99,24 @@ void QgsQuickMapSettings::setCenter( const QgsPoint &center )
   setExtent( e );
 }
 
-double QgsQuickMapSettings::mapUnitsPerPixel() const
+double MapSettings::mapUnitsPerPixel() const
 {
   return mMapSettings.mapUnitsPerPixel();
 }
 
-QgsRectangle QgsQuickMapSettings::visibleExtent() const
+QgsRectangle MapSettings::visibleExtent() const
 {
   return mMapSettings.visibleExtent();
 }
 
-QPointF QgsQuickMapSettings::coordinateToScreen( const QgsPoint &point ) const
+QPointF MapSettings::coordinateToScreen( const QgsPoint &point ) const
 {
   QgsPointXY pt( point.x(), point.y() );
   QgsPointXY pp = mMapSettings.mapToPixel().transform( pt );
   return pp.toQPointF();
 }
 
-QgsPoint QgsQuickMapSettings::screenToCoordinate( const QPointF &point ) const
+QgsPoint MapSettings::screenToCoordinate( const QPointF &point ) const
 {
   // use floating point precision with mapToCoordinates (i.e. do not use QPointF::toPoint)
   // this is to avoid rounding errors with an odd screen width or height
@@ -125,22 +125,22 @@ QgsPoint QgsQuickMapSettings::screenToCoordinate( const QPointF &point ) const
   return QgsPoint( pp );
 }
 
-QgsMapSettings QgsQuickMapSettings::mapSettings() const
+QgsMapSettings MapSettings::mapSettings() const
 {
   return mMapSettings;
 }
 
-void QgsQuickMapSettings::setTransformContext( const QgsCoordinateTransformContext &ctx )
+void MapSettings::setTransformContext( const QgsCoordinateTransformContext &ctx )
 {
   mMapSettings.setTransformContext( ctx );
 }
 
-QSize QgsQuickMapSettings::outputSize() const
+QSize MapSettings::outputSize() const
 {
   return mMapSettings.outputSize();
 }
 
-void QgsQuickMapSettings::setOutputSize( const QSize &outputSize )
+void MapSettings::setOutputSize( const QSize &outputSize )
 {
   if ( mMapSettings.outputSize() == outputSize )
     return;
@@ -149,12 +149,12 @@ void QgsQuickMapSettings::setOutputSize( const QSize &outputSize )
   emit outputSizeChanged();
 }
 
-double QgsQuickMapSettings::outputDpi() const
+double MapSettings::outputDpi() const
 {
   return mMapSettings.outputDpi();
 }
 
-void QgsQuickMapSettings::setOutputDpi( double outputDpi )
+void MapSettings::setOutputDpi( double outputDpi )
 {
   if ( qgsDoubleNear( mMapSettings.outputDpi(), outputDpi ) )
     return;
@@ -163,12 +163,12 @@ void QgsQuickMapSettings::setOutputDpi( double outputDpi )
   emit outputDpiChanged();
 }
 
-QgsCoordinateReferenceSystem QgsQuickMapSettings::destinationCrs() const
+QgsCoordinateReferenceSystem MapSettings::destinationCrs() const
 {
   return mMapSettings.destinationCrs();
 }
 
-void QgsQuickMapSettings::setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs )
+void MapSettings::setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs )
 {
   if ( mMapSettings.destinationCrs() == destinationCrs )
     return;
@@ -177,18 +177,18 @@ void QgsQuickMapSettings::setDestinationCrs( const QgsCoordinateReferenceSystem 
   emit destinationCrsChanged();
 }
 
-QList<QgsMapLayer *> QgsQuickMapSettings::layers() const
+QList<QgsMapLayer *> MapSettings::layers() const
 {
   return mMapSettings.layers();
 }
 
-void QgsQuickMapSettings::setLayers( const QList<QgsMapLayer *> &layers )
+void MapSettings::setLayers( const QList<QgsMapLayer *> &layers )
 {
   mMapSettings.setLayers( layers );
   emit layersChanged();
 }
 
-void QgsQuickMapSettings::onReadProject( const QDomDocument &doc )
+void MapSettings::onReadProject( const QDomDocument &doc )
 {
   if ( mProject )
   {
@@ -215,23 +215,23 @@ void QgsQuickMapSettings::onReadProject( const QDomDocument &doc )
   }
 }
 
-double QgsQuickMapSettings::rotation() const
+double MapSettings::rotation() const
 {
   return mMapSettings.rotation();
 }
 
-void QgsQuickMapSettings::setRotation( double rotation )
+void MapSettings::setRotation( double rotation )
 {
   if ( !qgsDoubleNear( rotation, 0 ) )
     QgsMessageLog::logMessage( tr( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( rotation ) );
 }
 
-QColor QgsQuickMapSettings::backgroundColor() const
+QColor MapSettings::backgroundColor() const
 {
   return mMapSettings.backgroundColor();
 }
 
-void QgsQuickMapSettings::setBackgroundColor( const QColor &color )
+void MapSettings::setBackgroundColor( const QColor &color )
 {
   if ( mMapSettings.backgroundColor() == color )
     return;

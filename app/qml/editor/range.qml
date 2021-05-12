@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickrange.qml
+ range.qml
   --------------------------------------
   Date                 : 2019
   Copyright            : (C) 2019 by Viktor Sklencar
@@ -16,7 +16,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   signal valueChanged(var value, bool isNull)
@@ -42,7 +42,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     border.color: customStyle.fields.normalColor
-    border.width: 1 * QgsQuick.Utils.dp
+    border.width: 1 * Utils.dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
@@ -71,7 +71,7 @@ Item {
       background: Rectangle {
         anchors.fill: parent
         border.color: customStyle.fields.normalColor
-        border.width: 1 * QgsQuick.Utils.dp
+        border.width: 1 * Utils.dp
         color: customStyle.fields.backgroundColor
         radius: customStyle.fields.cornerRadius
       }
@@ -178,7 +178,7 @@ Item {
       horizontalAlignment: Text.AlignLeft
       font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
-      padding: 10 * QgsQuick.Utils.dp
+      padding: 10 * Utils.dp
       leftPadding: customStyle.fields.sideMargin
     }
 
@@ -207,14 +207,14 @@ Item {
         implicitHeight: slider.height * 0.1
         width: slider.availableWidth
         height: implicitHeight
-        radius: 2 * QgsQuick.Utils.dp
+        radius: 2 * Utils.dp
         color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
       }
 
       handle: Rectangle {
               x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
               y: slider.topPadding + slider.availableHeight / 2 - height / 2
-              implicitWidth: slider.height * 0.6 * 0.66 + (2 * border.width) // Similar to indicator QgsQuick.SwitchWidget of CheckBox widget
+              implicitWidth: slider.height * 0.6 * 0.66 + (2 * border.width) // Similar to indicator SwitchWidget of CheckBox widget
               implicitHeight: implicitWidth
               radius: height * 0.5
               color: "white"

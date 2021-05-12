@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickcheckbox.qml
+ checkbox.qml
   --------------------------------------
   Date                 : 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -15,11 +15,11 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
  * Checkbox for QGIS Attribute Form
- * Requires various global properties set to function, see qgsquickfeatureform Loader section
+ * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  */
 Item {
@@ -68,7 +68,7 @@ Item {
       leftPadding: customStyle.fields.sideMargin
     }
 
-    QgsQuick.SwitchComponent {
+    SwitchComponent {
       id: switchComp
 
       property var currentValue: value

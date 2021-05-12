@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickmapcanvas.qml
+ mapcanvas.qml
   --------------------------------------
   Date                 : 10.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -15,7 +15,7 @@
 import QtQuick 2.3
 import QtQuick.Controls 2.2
 import QtQml 2.2
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   id: mapArea
@@ -28,7 +28,7 @@ Item {
    *
    * This is a readonly property.
    *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * See also apCanvasMap::mapSettings
    */
   property alias mapSettings: mapCanvasWrapper.mapSettings
 
@@ -38,7 +38,7 @@ Item {
    *
    * This is a readonly property.
    *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * See also apCanvasMap::mapSettings
    */
   property alias isRendering: mapCanvasWrapper.isRendering
 
@@ -50,7 +50,7 @@ Item {
   /**
    * What is the minimum distance (in pixels) in order to start dragging map
    */
-  property real minimumStartDragDistance: 5 * QgsQuick.Utils.dp
+  property real minimumStartDragDistance: 5 * Utils.dp
 
   signal clicked(var mouse)
 
@@ -76,7 +76,7 @@ Item {
           mapCanvasWrapper.__freezecount).length !== 0
   }
 
-  QgsQuick.MapCanvasMap {
+  MapCanvasMap {
     id: mapCanvasWrapper
 
     anchors.fill: parent

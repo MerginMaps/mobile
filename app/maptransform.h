@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickmaptransform.h
+  maptransform.h
   --------------------------------------
   Date                 : 27.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -13,40 +13,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKMAPTRANSFORM_H
-#define QGSQUICKMAPTRANSFORM_H
+#ifndef MAPTRANSFORM_H
+#define MAPTRANSFORM_H
 
 #include <QQuickItem>
 #include <QMatrix4x4>
 
-#include "qgis_quick.h"
 
-class QgsQuickMapSettings;
+
+class MapSettings;
 
 /**
  * \ingroup quick
- * \brief The QgsQuickMapTransform is transformation that can be attached to any QQuickItem.
+ * \brief The MapTransform is transformation that can be attached to any QQuickItem.
  *
- * If the item is based on the map coordinates, QgsQuickMapTransform will
+ * If the item is based on the map coordinates, MapTransform will
  * transform it to the device coordinates based on the attached map settings.
  *
  * \note QML Type: MapTransform
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickMapTransform : public QQuickTransform
+class  MapTransform : public QQuickTransform
 {
     Q_OBJECT
 
     /**
      * Associated map settings. Should be initialized before the first use from mapcanvas map settings.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
     //! Creates a new map transform
-    QgsQuickMapTransform() = default;
-    ~QgsQuickMapTransform() = default;
+    MapTransform() = default;
+    ~MapTransform() = default;
 
     /**
      * Applies transformation based on current map settings to a matrix.
@@ -56,22 +56,22 @@ class QUICK_EXPORT QgsQuickMapTransform : public QQuickTransform
      */
     void applyTo( QMatrix4x4 *matrix ) const;
 
-    //! \copydoc QgsQuickMapTransform::mapSettings
-    QgsQuickMapSettings *mapSettings() const;
+    //! \copydoc MapTransform::mapSettings
+    MapSettings *mapSettings() const;
 
-    //! \copydoc QgsQuickMapTransform::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    //! \copydoc MapTransform::mapSettings
+    void setMapSettings( MapSettings *mapSettings );
 
   signals:
-    //! \copydoc QgsQuickMapTransform::mapSettings
+    //! \copydoc MapTransform::mapSettings
     void mapSettingsChanged();
 
   private slots:
     void updateMatrix();
 
   private:
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    MapSettings *mMapSettings = nullptr; // not owned
     QMatrix4x4 mMatrix;
 };
 
-#endif // QGSQUICKMAPTRANSFORM_H
+#endif // MAPTRANSFORM_H

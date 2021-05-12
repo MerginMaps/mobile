@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickscalebar.qml
+  scalebar.qml
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -14,7 +14,7 @@
  ***************************************************************************/
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   id: scaleBar
@@ -22,7 +22,7 @@ Item {
   /**
    * The mapSettings property contains configuration for rendering of the map.
    *
-   * Must be connected before usage from QgsQuick.MapCanvas::mapSettings
+   * Must be connected before usage from MapCanvas::mapSettings
    */
   property alias mapSettings: scaleBarKit.mapSettings
   /**
@@ -39,9 +39,9 @@ Item {
   /**
    * Kit for all calculation of width and text of the scalebar
    *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * See also apCanvasMap::mapSettings
    */
-  property QgsQuick.ScaleBarKit scaleBarKit: QgsQuick.ScaleBarKit {
+  property ScaleBarKit scaleBarKit: ScaleBarKit {
     id: scaleBarKit
   }
   /**
@@ -71,7 +71,7 @@ Item {
   /**
    * Size of scalebar line (height of bar)
    */
-  property int lineWidth: 5 * QgsQuick.Utils.dp
+  property int lineWidth: 5 * Utils.dp
 
   width: textWidth + barWidth
 
@@ -121,14 +121,14 @@ Item {
     Rectangle {
       id: leftBar
       width: scaleBar.lineWidth
-      height: scaleBar.height - 20 * QgsQuick.Utils.dp
+      height: scaleBar.height - 20 * Utils.dp
       y: (scaleBar.height - leftBar.height) / 2
       color: barColor
       opacity: 1
     }
 
     Rectangle {
-      width: scaleBar.width - text.width - 15 * QgsQuick.Utils.dp
+      width: scaleBar.width - text.width - 15 * Utils.dp
       height: scaleBar.lineWidth
       y: (scaleBar.height - scaleBar.lineWidth) / 2
       color: barColor
@@ -137,7 +137,7 @@ Item {
     Rectangle {
       id: rightBar
       width: scaleBar.lineWidth
-      height: scaleBar.height - 20 * QgsQuick.Utils.dp
+      height: scaleBar.height - 20 * Utils.dp
       y: (scaleBar.height - leftBar.height) / 2
       color: barColor
     }

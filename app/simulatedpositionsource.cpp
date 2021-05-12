@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquicksimulatedpositionsource.cpp
+ simulatedpositionsource.cpp
   --------------------------------------
   Date                 : Dec. 2017
   Copyright            : (C) 2017 Peter Petrik
@@ -13,23 +13,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquicksimulatedpositionsource.h"
+#include "simulatedpositionsource.h"
 
 #include <QTimer>
 
 /// @cond PRIVATE
 
-QgsQuickSimulatedPositionSource::QgsQuickSimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius )
+SimulatedPositionSource::SimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius )
   : QGeoPositionInfoSource( parent )
   , mTimer( qgis::make_unique< QTimer >() )
   , mFlightRadius( flightRadius )
   , mLongitude( longitude )
   , mLatitude( latitude )
 {
-  connect( mTimer.get(), &QTimer::timeout, this, &QgsQuickSimulatedPositionSource::readNextPosition );
+  connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionSource::readNextPosition );
 }
 
-void QgsQuickSimulatedPositionSource::startUpdates()
+void SimulatedPositionSource::startUpdates()
 {
   int interval = updateInterval();
   if ( interval < minimumUpdateInterval() )
@@ -39,19 +39,19 @@ void QgsQuickSimulatedPositionSource::startUpdates()
   readNextPosition();
 }
 
-void QgsQuickSimulatedPositionSource::stopUpdates()
+void SimulatedPositionSource::stopUpdates()
 {
   mTimer->stop();
 }
 
-void QgsQuickSimulatedPositionSource::requestUpdate( int /*timeout*/ )
+void SimulatedPositionSource::requestUpdate( int /*timeout*/ )
 {
   readNextPosition();
 }
 
 
 
-void QgsQuickSimulatedPositionSource::readNextPosition()
+void SimulatedPositionSource::readNextPosition()
 {
   if ( mFlightRadius <= 0 )
     readConstantPosition();
@@ -59,7 +59,7 @@ void QgsQuickSimulatedPositionSource::readNextPosition()
     readRandomPosition();
 }
 
-void QgsQuickSimulatedPositionSource::readRandomPosition()
+void SimulatedPositionSource::readRandomPosition()
 {
   double latitude = mLatitude, longitude = mLongitude;
   latitude += sin( mAngle * M_PI / 180 ) * mFlightRadius;
@@ -90,7 +90,7 @@ void QgsQuickSimulatedPositionSource::readRandomPosition()
   }
 }
 
-void QgsQuickSimulatedPositionSource::readConstantPosition()
+void SimulatedPositionSource::readConstantPosition()
 {
   QGeoCoordinate coordinate( mLatitude, mLongitude );
   coordinate.setAltitude( 20 );

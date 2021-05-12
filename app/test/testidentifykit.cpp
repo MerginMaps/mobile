@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickidentifykit.cpp
+     testidentifykit.cpp
      --------------------------------------
   Date                 : May 2018
   Copyright            : (C) 2018 by Viktor Sklencar
@@ -25,11 +25,11 @@
 #include "qgsgeometry.h"
 #include "qgsvectordataprovider.h"
 
-#include "qgsquickmapcanvasmap.h"
-#include "qgsquickidentifykit.h"
+#include "mapcanvasmap.h"
+#include "identifykit.h"
 
 
-class TestQgsQuickScaleBarKit: public QObject
+class TestScaleBarKit: public QObject
 {
     Q_OBJECT
   private slots:
@@ -41,24 +41,24 @@ class TestQgsQuickScaleBarKit: public QObject
     void identifyInRadius();
 };
 
-void TestQgsQuickScaleBarKit::identifyOne()
+void TestScaleBarKit::identifyOne()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  MapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  MapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -81,18 +81,18 @@ void TestQgsQuickScaleBarKit::identifyOne()
 
   // exactly matches f1 point
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF() );
+  FeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF() );
   QVERIFY( identifiedFeature.isValid() );
   QVERIFY( identifiedFeature.feature().geometry().asPoint() == point );
 }
 
-void TestQgsQuickScaleBarKit::identifyOneDefinedVector()
+void TestScaleBarKit::identifyOneDefinedVector()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  MapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
@@ -100,13 +100,13 @@ void TestQgsQuickScaleBarKit::identifyOneDefinedVector()
   QgsVectorLayer *tempLayer2 = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl2" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  MapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -129,30 +129,30 @@ void TestQgsQuickScaleBarKit::identifyOneDefinedVector()
   tempLayer2->dataProvider()->addFeatures( QgsFeatureList() << f2 );
 
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF(), tempLayer2 );
+  FeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF(), tempLayer2 );
   QVERIFY( identifiedFeature.isValid() );
   QVERIFY( identifiedFeature.feature().geometry().asPoint() == point2 );
 
 }
 
-void TestQgsQuickScaleBarKit::identifyInRadius()
+void TestScaleBarKit::identifyInRadius()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  MapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  MapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -173,7 +173,7 @@ void TestQgsQuickScaleBarKit::identifyInRadius()
 
   kit.setSearchRadiusMm( 1.0 );
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPairs res = kit.identify( screenPoint.toQPointF() );
+  FeatureLayerPairs res = kit.identify( screenPoint.toQPointF() );
   QVERIFY( res.size() == 1 );
 
   kit.setSearchRadiusMm( 100.0 );
@@ -181,5 +181,5 @@ void TestQgsQuickScaleBarKit::identifyInRadius()
   QVERIFY( res.size() == 2 );
 }
 
-QGSTEST_MAIN( TestQgsQuickScaleBarKit )
-#include "testqgsquickidentifykit.moc"
+QGSTEST_MAIN( TestScaleBarKit )
+#include "testidentifykit.moc"

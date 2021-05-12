@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickvaluerelation.qml
+ valuerelation.qml
   --------------------------------------
   Date                 : 2019
   Copyright            : (C) 2019 by Viktor Sklencar
@@ -16,11 +16,11 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
  * Value Relation for QGIS Attribute Form
- * Requires various global properties set to function, see qgsquickfeatureform Loader section
+ * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  */
 Item {
@@ -34,7 +34,7 @@ Item {
   property bool isReadOnly: readOnly
   property real iconSize: fieldItem.height * 0.50
 
-  property var model: QgsQuick.FeaturesListModel {
+  property var model: FeaturesListModel {
     id: vrModel
   }
 
@@ -68,7 +68,7 @@ Item {
       // construct JSON-like value list of key column
       // { val1, val2, val3, ... }
 
-      let keys = featureIds.map( id => vrModel.attributeFromValue( QgsQuick.FeaturesListModel.FeatureId, id, QgsQuick.FeaturesListModel.KeyColumn ) )
+      let keys = featureIds.map( id => vrModel.attributeFromValue( FeaturesListModel.FeatureId, id, FeaturesListModel.KeyColumn ) )
       let valueList = '{' + keys.join(',') + '}'
 
       valueChanged(valueList, isNull)
@@ -77,9 +77,9 @@ Item {
     else {
       valueChanged(
             vrModel.attributeFromValue(
-              QgsQuick.FeaturesListModel.FeatureId,
+              FeaturesListModel.FeatureId,
               featureIds,
-              QgsQuick.FeaturesListModel.KeyColumn
+              FeaturesListModel.KeyColumn
               ),
             isNull)
     }
@@ -100,7 +100,7 @@ Item {
   function getCurrentValueAsFeatureId() {
     if ( allowMultipleValues && widgetValue != null && widgetValue.startsWith('{') )
     {
-      let arr = vrModel.convertMultivalueFormat( widgetValue, QgsQuick.FeaturesListModel.FeatureId )
+      let arr = vrModel.convertMultivalueFormat( widgetValue, FeaturesListModel.FeatureId )
       return Object.values(arr)
     }
 
@@ -128,14 +128,14 @@ Item {
           reset = true
       }
       else {
-        let text = vrModel.attributeFromValue( QgsQuick.FeaturesListModel.KeyColumn, widgetValue, QgsQuick.FeaturesListModel.FeatureTitle )
+        let text = vrModel.attributeFromValue( FeaturesListModel.KeyColumn, widgetValue, FeaturesListModel.FeatureTitle )
         textField.text = text || ""
         if ( !text )
           reset = true
       }
     }
     else if ( widgetType === "combobox" ) {
-      let index = vrModel.rowFromAttribute( QgsQuick.FeaturesListModel.KeyColumn, widgetValue )
+      let index = vrModel.rowFromAttribute( FeaturesListModel.KeyColumn, widgetValue )
       combobox.currentIndex = index
       if ( index < 0 )
         reset = true
@@ -171,8 +171,8 @@ Item {
       readOnly: true
       font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
-      topPadding: 10 * QgsQuick.Utils.dp
-      bottomPadding: 10 * QgsQuick.Utils.dp
+      topPadding: 10 * Utils.dp
+      bottomPadding: 10 * Utils.dp
       leftPadding: customStyle.fields.sideMargin
 
       MouseArea {
@@ -212,7 +212,7 @@ Item {
     }
   }
 
-  QgsQuick.EditorWidgetComboBox {
+  EditorWidgetComboBox {
     id: combobox
 
     comboStyle: customStyle.fields
@@ -223,7 +223,7 @@ Item {
     model: vrModel
 
     Component.onCompleted: {
-      currentIndex = vrModel.rowFromAttribute( QgsQuick.FeaturesListModel.KeyColumn, value )
+      currentIndex = vrModel.rowFromAttribute( FeaturesListModel.KeyColumn, value )
     }
 
     /**
@@ -231,7 +231,7 @@ Item {
      * No need to set currentIndex manually since it is done in onWidgetValueChanged update function
      */
     onItemClicked: {
-      valueChanged( vrModel.attributeFromValue( QgsQuick.FeaturesListModel.FeatureId, index, QgsQuick.FeaturesListModel.KeyColumn ), false )
+      valueChanged( vrModel.attributeFromValue( FeaturesListModel.FeatureId, index, FeaturesListModel.KeyColumn ), false )
     }
   }
 }

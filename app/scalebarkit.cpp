@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickscalebarkit.cpp
+  scalebarkit.cpp
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -19,23 +19,23 @@
 #include "qgsdistancearea.h"
 #include "qgspointxy.h"
 
-#include "qgsquickmapsettings.h"
-#include "qgsquickscalebarkit.h"
-#include "qgsquickutils.h"
+#include "mapsettings.h"
+#include "scalebarkit.h"
+#include "utils.h"
 #include "qgsunittypes.h"
 
-QgsQuickScaleBarKit::QgsQuickScaleBarKit( QObject *parent )
+ScaleBarKit::ScaleBarKit( QObject *parent )
   : QObject( parent )
   , mPreferredWidth( 300 )
   , mWidth( mPreferredWidth )
   , mDistance( 0 )
   , mUnits( "" )
 {
-  connect( this, &QgsQuickScaleBarKit::mapSettingsChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-  connect( this, &QgsQuickScaleBarKit::preferredWidthChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
+  connect( this, &ScaleBarKit::mapSettingsChanged, this, &ScaleBarKit::updateScaleBar );
+  connect( this, &ScaleBarKit::preferredWidthChanged, this, &ScaleBarKit::updateScaleBar );
 }
 
-void QgsQuickScaleBarKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ScaleBarKit::setMapSettings( MapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -51,41 +51,41 @@ void QgsQuickScaleBarKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   // Connect all signals to change scale bar when needed!
   if ( mMapSettings )
   {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &QgsQuickScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::extentChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::destinationCrsChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::mapUnitsPerPixelChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::visibleExtentChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::outputSizeChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &MapSettings::outputDpiChanged, this, &ScaleBarKit::updateScaleBar );
   }
 
   emit mapSettingsChanged();
 }
 
-int QgsQuickScaleBarKit::width() const
+int ScaleBarKit::width() const
 {
   return mWidth;
 }
 
-QString QgsQuickScaleBarKit::units() const
+QString ScaleBarKit::units() const
 {
   return mUnits;
 }
 
-int QgsQuickScaleBarKit::distance() const
+int ScaleBarKit::distance() const
 {
   return mDistance;
 }
 
-void QgsQuickScaleBarKit::updateScaleBar()
+void ScaleBarKit::updateScaleBar()
 {
   if ( !mMapSettings )
     return;
 
-  double distInMeters = QgsQuickUtils().screenUnitsToMeters( mMapSettings, mPreferredWidth ); // meters
+  double distInMeters = Utils().screenUnitsToMeters( mMapSettings, mPreferredWidth ); // meters
   double dist;
   QgsUnitTypes::DistanceUnit distUnits;
-  QgsQuickUtils().humanReadableDistance( distInMeters, QgsUnitTypes::DistanceMeters,
+  Utils().humanReadableDistance( distInMeters, QgsUnitTypes::DistanceMeters,
                                          mSystemOfMeasurement,
                                          dist, distUnits );
 

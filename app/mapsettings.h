@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickmapsettings.h
+  mapsettings.h
   --------------------------------------
   Date                 : 27.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKMAPSETTINGS_H
-#define QGSQUICKMAPSETTINGS_H
+#ifndef MAPSETTINGS_H
+#define MAPSETTINGS_H
 
 #include <QObject>
 
@@ -24,13 +24,13 @@
 #include "qgspoint.h"
 #include "qgsrectangle.h"
 
-#include "qgis_quick.h"
+
 
 class QgsProject;
 
 /**
  * \ingroup quick
- * \brief The QgsQuickMapSettings class encapsulates QgsMapSettings class to offer
+ * \brief The MapSettings class encapsulates QgsMapSettings class to offer
  * settings of configuration of map rendering via QML properties.
  *
  * On top of QgsMapSettings functionality, when QgsProject is attached,
@@ -43,13 +43,13 @@ class QgsProject;
  *
  * \since QGIS 3.2
  */
-class QUICK_EXPORT QgsQuickMapSettings : public QObject
+class  MapSettings : public QObject
 {
     Q_OBJECT
 
     /**
      * A project property should be used as a primary source of project all other components
-     * in the application. QgsProject should be attached to QgsQuickMapSettings before
+     * in the application. QgsProject should be attached to MapSettings before
      * it is read (QgsProject::read)
      *
      * When project is read, map settings (CRS, extent, ...) are automatically set from its DOM.
@@ -60,7 +60,7 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      * Geographical coordinates of the rectangle that should be rendered.
      * The actual visible extent used for rendering could be slightly different
      * since the given extent may be expanded in order to fit the aspect ratio
-     * of output size. Use QgsQuickMapSettings::visibleExtent to get the resulting extent.
+     * of output size. Use MapSettings::visibleExtent to get the resulting extent.
      *
      * Automatically loaded from project on QgsProject::readProject
      */
@@ -116,8 +116,8 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
 
   public:
     //! Create new map settings
-    QgsQuickMapSettings( QObject *parent = nullptr );
-    ~QgsQuickMapSettings() = default;
+    MapSettings( QObject *parent = nullptr );
+    ~MapSettings() = default;
 
     //! Clone map settings
     QgsMapSettings mapSettings() const;
@@ -128,10 +128,10 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     //! \copydoc QgsMapSettings::setExtent()
     void setExtent( const QgsRectangle &extent );
 
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc MapSettings::project
     void setProject( QgsProject *project );
 
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc MapSettings::project
     QgsProject *project() const;
 
     //! Move current map extent to have center point defined by \a center
@@ -168,16 +168,16 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     //! \copydoc QgsMapSettings::setTransformContext()
     void setTransformContext( const QgsCoordinateTransformContext &context );
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc MapSettings::rotation
     double rotation() const;
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc MapSettings::rotation
     void setRotation( double rotation );
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc MapSettings::backgroundColor
     QColor backgroundColor() const;
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc MapSettings::backgroundColor
     void setBackgroundColor( const QColor &color );
 
     /**
@@ -227,34 +227,34 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     void setLayers( const QList<QgsMapLayer *> &layers );
 
   signals:
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc MapSettings::project
     void projectChanged();
 
-    //! \copydoc QgsQuickMapSettings::extent
+    //! \copydoc MapSettings::extent
     void extentChanged();
 
-    //! \copydoc QgsQuickMapSettings::destinationCrs
+    //! \copydoc MapSettings::destinationCrs
     void destinationCrsChanged();
 
-    //! \copydoc QgsQuickMapSettings::mapUnitsPerPixel
+    //! \copydoc MapSettings::mapUnitsPerPixel
     void mapUnitsPerPixelChanged();
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc MapSettings::rotation
     void rotationChanged();
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc MapSettings::backgroundColor
     void backgroundColorChanged();
 
-    //! \copydoc QgsQuickMapSettings::visibleExtent
+    //! \copydoc MapSettings::visibleExtent
     void visibleExtentChanged();
 
-    //! \copydoc QgsQuickMapSettings::outputSize
+    //! \copydoc MapSettings::outputSize
     void outputSizeChanged();
 
-    //! \copydoc QgsQuickMapSettings::outputDpi
+    //! \copydoc MapSettings::outputDpi
     void outputDpiChanged();
 
-    //! \copydoc QgsQuickMapSettings::layers
+    //! \copydoc MapSettings::layers
     void layersChanged();
 
   private slots:
@@ -272,4 +272,4 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
 
 };
 
-#endif // QGSQUICKMAPSETTINGS_H
+#endif // MAPSETTINGS_H

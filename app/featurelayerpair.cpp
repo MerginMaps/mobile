@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickfeaturelayerpair.cpp
+  featurelayerpair.cpp
  ---------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -16,47 +16,47 @@
 #include "qgsvectorlayer.h"
 #include "qgsfeature.h"
 
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 
-QgsQuickFeatureLayerPair::QgsQuickFeatureLayerPair() = default;
+FeatureLayerPair::FeatureLayerPair() = default;
 
-QgsQuickFeatureLayerPair::QgsQuickFeatureLayerPair( const QgsFeature &feature, QgsVectorLayer *layer )
+FeatureLayerPair::FeatureLayerPair( const QgsFeature &feature, QgsVectorLayer *layer )
   : mLayer( layer )
   , mFeature( feature )
 {
 }
 
-QgsVectorLayer *QgsQuickFeatureLayerPair::layer() const
+QgsVectorLayer *FeatureLayerPair::layer() const
 {
   return mLayer;
 }
 
-QgsFeature QgsQuickFeatureLayerPair::feature() const
+QgsFeature FeatureLayerPair::feature() const
 {
   return mFeature;
 }
 
-QgsFeature &QgsQuickFeatureLayerPair::featureRef()
+QgsFeature &FeatureLayerPair::featureRef()
 {
   return mFeature;
 }
 
-bool QgsQuickFeatureLayerPair::isValid() const
+bool FeatureLayerPair::isValid() const
 {
   return ( mLayer && mFeature.isValid() && hasValidGeometry() );
 }
 
-bool QgsQuickFeatureLayerPair::operator==( const QgsQuickFeatureLayerPair &other ) const
+bool FeatureLayerPair::operator==( const FeatureLayerPair &other ) const
 {
   return ( mLayer == other.layer() ) && ( mFeature == other.feature() );
 }
 
-bool QgsQuickFeatureLayerPair::operator!=( const QgsQuickFeatureLayerPair &other ) const
+bool FeatureLayerPair::operator!=( const FeatureLayerPair &other ) const
 {
   return ( mLayer != other.layer() ) || ( mFeature != other.feature() );
 }
 
-bool QgsQuickFeatureLayerPair::hasValidGeometry() const
+bool FeatureLayerPair::hasValidGeometry() const
 {
   Q_ASSERT( mLayer );
 

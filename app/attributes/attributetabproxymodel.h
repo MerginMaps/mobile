@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickattributetabproxymodel.h
+  attributetabproxymodel.h
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,14 +13,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKATTRIBUTETABPROXYMODEL_H
-#define QGSQUICKATTRIBUTETABPROXYMODEL_H
+#ifndef ATTRIBUTETABPROXYMODEL_H
+#define ATTRIBUTETABPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
-#include "qgis_quick.h"
 
-class QgsQuickAttributeTabModel;
-class QgsQuickAttributeFormProxyModel;
+
+class AttributeTabModel;
+class AttributeFormProxyModel;
 
 /**
  * \ingroup quick
@@ -31,17 +31,17 @@ class QgsQuickAttributeFormProxyModel;
  *
  * \since QGIS 3.22
  */
-class QUICK_EXPORT QgsQuickAttributeTabProxyModel : public QSortFilterProxyModel
+class  AttributeTabProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
   public:
-    QgsQuickAttributeTabProxyModel( QObject *parent = nullptr );
-    ~QgsQuickAttributeTabProxyModel() override;
+    AttributeTabProxyModel( QObject *parent = nullptr );
+    ~AttributeTabProxyModel() override;
 
     bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
 
     // Get attribute form proxy model for particular tab index
-    Q_INVOKABLE QgsQuickAttributeFormProxyModel *attributeFormProxyModel( int sourceRow ) const;
+    Q_INVOKABLE AttributeFormProxyModel *attributeFormProxyModel( int sourceRow ) const;
 };
 
-#endif // QGSQUICKATTRIBUTETABPROXYMODEL_H
+#endif // ATTRIBUTETABPROXYMODEL_H

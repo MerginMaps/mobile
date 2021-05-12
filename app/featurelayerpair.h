@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickfeaturelayerpair.h
+  featurelayerpair.h
  ---------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -13,14 +13,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKFEATURELAYERPAIR_H
-#define QGSQUICKFEATURELAYERPAIR_H
+#ifndef FEATURELAYERPAIR_H
+#define FEATURELAYERPAIR_H
 
 #include <QObject>
 
 #include "qgsfeature.h"
 
-#include "qgis_quick.h"
+
 
 class QgsVectorLayer;
 
@@ -33,11 +33,11 @@ class QgsVectorLayer;
  *
  * Note that the feature may or may not be part of the layer's features
  *
- * \note QML Type: QgsQuickFeatureLayerPair
+ * \note QML Type: FeatureLayerPair
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickFeatureLayerPair
+class  FeatureLayerPair
 {
     Q_GADGET
 
@@ -68,22 +68,22 @@ class QUICK_EXPORT QgsQuickFeatureLayerPair
 
   public:
     //! Constructs invalid feature-layer pair.
-    QgsQuickFeatureLayerPair();
+    FeatureLayerPair();
 
     /**
      * Constructor of a new feature-layer pair
      * \param feature QgsFeature associated.
      * \param layer Vector layer which the feature belongs to
      */
-    QgsQuickFeatureLayerPair( const QgsFeature &feature, QgsVectorLayer *layer );
+    FeatureLayerPair( const QgsFeature &feature, QgsVectorLayer *layer );
 
-    //! \copydoc QgsQuickFeatureLayerPair::layer
+    //! \copydoc FeatureLayerPair::layer
     QgsVectorLayer *layer() const;
 
-    //! \copydoc QgsQuickFeatureLayerPair::feature
+    //! \copydoc FeatureLayerPair::feature
     QgsFeature feature() const;
 
-    //! \copydoc QgsQuickFeatureLayerPair::feature
+    //! \copydoc FeatureLayerPair::feature
     QgsFeature &featureRef();
 
     /**
@@ -97,8 +97,8 @@ class QUICK_EXPORT QgsQuickFeatureLayerPair
      */
     bool isValid() const;
 
-    bool operator==( const QgsQuickFeatureLayerPair &other ) const;
-    bool operator!=( const QgsQuickFeatureLayerPair &other ) const;
+    bool operator==( const FeatureLayerPair &other ) const;
+    bool operator!=( const FeatureLayerPair &other ) const;
 
   private:
     bool hasValidGeometry() const;
@@ -107,8 +107,8 @@ class QUICK_EXPORT QgsQuickFeatureLayerPair
     QgsFeature mFeature;
 };
 
-typedef QList<QgsQuickFeatureLayerPair> QgsQuickFeatureLayerPairs;
+typedef QList<FeatureLayerPair> FeatureLayerPairs;
 
-Q_DECLARE_METATYPE( QgsQuickFeatureLayerPair )
+Q_DECLARE_METATYPE( FeatureLayerPair )
 
-#endif // QGSQUICKFEATURELAYERPAIR_H
+#endif // FEATURELAYERPAIR_H

@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickhighlightsgnode.cpp
+ highlightsgnode.cpp
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -13,7 +13,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickhighlightsgnode.h"
+#include "highlightsgnode.h"
 
 #include "qgstessellator.h"
 #include "qgsgeometrycollection.h"
@@ -22,7 +22,7 @@
 #include "qgspoint.h"
 #include "qgspolygon.h"
 
-QgsQuickHighlightSGNode::QgsQuickHighlightSGNode( const QgsGeometry &geom,
+HighlightSGNode::HighlightSGNode( const QgsGeometry &geom,
     const QColor &color, float width )
   : QSGNode()
   , mWidth( width )
@@ -31,7 +31,7 @@ QgsQuickHighlightSGNode::QgsQuickHighlightSGNode( const QgsGeometry &geom,
   handleGeometryCollection( geom.constGet(), geom.type() );
 }
 
-void QgsQuickHighlightSGNode::handleGeometryCollection( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type )
+void HighlightSGNode::handleGeometryCollection( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type )
 {
   const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
   if ( collection && !collection->isEmpty() )
@@ -48,7 +48,7 @@ void QgsQuickHighlightSGNode::handleGeometryCollection( const QgsAbstractGeometr
   }
 }
 
-void QgsQuickHighlightSGNode::handleSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type )
+void HighlightSGNode::handleSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type )
 {
   switch ( type )
   {
@@ -82,7 +82,7 @@ void QgsQuickHighlightSGNode::handleSingleGeometry( const QgsAbstractGeometry *g
   }
 }
 
-QSGGeometryNode *QgsQuickHighlightSGNode::createLineGeometry( const QgsLineString *line )
+QSGGeometryNode *HighlightSGNode::createLineGeometry( const QgsLineString *line )
 {
   Q_ASSERT( line );
 
@@ -110,7 +110,7 @@ QSGGeometryNode *QgsQuickHighlightSGNode::createLineGeometry( const QgsLineStrin
   return node.release();
 }
 
-QSGGeometryNode *QgsQuickHighlightSGNode::createPointGeometry( const QgsPoint *point )
+QSGGeometryNode *HighlightSGNode::createPointGeometry( const QgsPoint *point )
 {
   Q_ASSERT( point );
 
@@ -132,7 +132,7 @@ QSGGeometryNode *QgsQuickHighlightSGNode::createPointGeometry( const QgsPoint *p
   return node.release();
 }
 
-QSGGeometryNode *QgsQuickHighlightSGNode::createPolygonGeometry( const QgsPolygon *polygon )
+QSGGeometryNode *HighlightSGNode::createPolygonGeometry( const QgsPolygon *polygon )
 {
   Q_ASSERT( polygon );
 

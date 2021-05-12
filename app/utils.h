@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickutils.h
+  utils.h
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKUTILS_H
-#define QGSQUICKUTILS_H
+#ifndef UTILS_H
+#define UTILS_H
 
 
 #include <QObject>
@@ -31,9 +31,8 @@
 #include "qgspoint.h"
 #include "qgspointxy.h"
 #include "qgsunittypes.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickfeaturelayerpair.h"
-#include "qgis_quick.h"
+#include "mapsettings.h"
+#include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 
 
@@ -44,13 +43,13 @@ class QgsCoordinateReferenceSystem;
 /**
  * \ingroup quick
  *
- * \brief Encapsulating the common utilities for QgsQuick library.
+ * \brief Encapsulating the common utilities for  library.
  *
  * \note QML Type: Utils (Singleton)
  *
  * \since QGIS 3.2
  */
-class QUICK_EXPORT QgsQuickUtils: public QObject
+class  Utils: public QObject
 {
     Q_OBJECT
 
@@ -58,7 +57,7 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
       * "dp" is useful for building building components that work well with different screen densities.
       * It stands for density-independent pixels. A width of 10dp is going to be the same physical size
       * on all screens regardless their density. In QML code, all values are specified in screen pixels,
-      * so in order to set a width of 10dp, one would use the following code: "width: 10 * QgsQuick.Utils.dp"
+      * so in order to set a width of 10dp, one would use the following code: "width: 10 * .Utils.dp"
       *
       * 1dp is approximately 0.16mm. When screen has 160 DPI (baseline), the value of "dp" is 1.
       * On high DPI screen the value will be greater, e.g. 1.5.
@@ -69,11 +68,11 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
 
   public:
     //! Create new utilities
-    QgsQuickUtils( QObject *parent = nullptr );
+    Utils( QObject *parent = nullptr );
     //! Destructor
-    ~QgsQuickUtils() = default;
+    ~Utils() = default;
 
-    //! \copydoc QgsQuickUtils::dp
+    //! \copydoc Utils::dp
     qreal screenDensity() const;
 
     /**
@@ -117,7 +116,7 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
     /**
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
       */
-    Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );
+    Q_INVOKABLE static double screenUnitsToMeters( MapSettings *mapSettings, int baseLengthPixels );
 
     /**
       * Returns whether file on path exists
@@ -138,17 +137,17 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
       * Log message in QgsMessageLog
       */
     Q_INVOKABLE static void logMessage( const QString &message,
-                                        const QString &tag = QString( "QgsQuick" ),
+                                        const QString &tag = QString( "" ),
                                         Qgis::MessageLevel level = Qgis::Warning );
 
     /**
-      * QgsQuickFeatureLayerPair factory for tuple of QgsFeature and QgsVectorLayer used in QgsQUick library.
-      * \param feature QgsFeature linked to new QgsQuickFeature instance.
+      * FeatureLayerPair factory for tuple of QgsFeature and QgsVectorLayer used in QgsQUick library.
+      * \param feature QgsFeature linked to new Feature instance.
       * \param layer QgsVectorLayer which the feature belongs to, optional.
       *
       * \since QGIS 3.4
       */
-    Q_INVOKABLE static QgsQuickFeatureLayerPair featureFactory( const QgsFeature &feature, QgsVectorLayer *layer = nullptr );
+    Q_INVOKABLE static FeatureLayerPair featureFactory( const QgsFeature &feature, QgsVectorLayer *layer = nullptr );
 
     /**
       * Returns QUrl to image from library's /images folder.
@@ -212,7 +211,7 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
     /**
       * Converts distance to human readable distance in destination system of measurement
       *
-      * \sa QgsQuickUtils::formatDistance()
+      * \sa Utils::formatDistance()
       *
       * \param srcDistance distance in units
       * \param srcUnits units of dist
@@ -252,7 +251,7 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
      *
      * \since QGIS 3.10
      */
-    Q_INVOKABLE static QString evaluateExpression( const QgsQuickFeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
+    Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
 
     /**
      * Selects features in a layer
@@ -307,4 +306,4 @@ class QUICK_EXPORT QgsQuickUtils: public QObject
     qreal mScreenDensity;
 };
 
-#endif // QGSQUICKUTILS_H
+#endif // UTILS_H

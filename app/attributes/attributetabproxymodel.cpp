@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickattributetabproxymodel.cpp
+  attributetabproxymodel.cpp
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,29 +13,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickattributetabproxymodel.h"
-#include "qgsquickattributetabmodel.h"
-#include "qgsquickattributecontroller.h"
+#include "attributetabproxymodel.h"
+#include "attributetabmodel.h"
+#include "attributecontroller.h"
 
-QgsQuickAttributeTabProxyModel::QgsQuickAttributeTabProxyModel( QObject *parent )
+AttributeTabProxyModel::AttributeTabProxyModel( QObject *parent )
   : QSortFilterProxyModel( parent )
 {
 }
 
-QgsQuickAttributeTabProxyModel::~QgsQuickAttributeTabProxyModel() = default;
+AttributeTabProxyModel::~AttributeTabProxyModel() = default;
 
-bool QgsQuickAttributeTabProxyModel::QgsQuickAttributeTabProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
+bool AttributeTabProxyModel::AttributeTabProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
 {
   if ( !sourceModel() )
     return false;
   QModelIndex sourceIndex = sourceModel()->index( sourceRow, 0, sourceParent );
-  return sourceModel()->data( sourceIndex, QgsQuickAttributeTabModel::AttributeTabRoles::Visible ).toBool();
+  return sourceModel()->data( sourceIndex, AttributeTabModel::AttributeTabRoles::Visible ).toBool();
 }
 
-QgsQuickAttributeFormProxyModel *QgsQuickAttributeTabProxyModel::attributeFormProxyModel( int sourceRow ) const
+AttributeFormProxyModel *AttributeTabProxyModel::attributeFormProxyModel( int sourceRow ) const
 {
   if ( !sourceModel() )
     return nullptr;
 
-  return qobject_cast<QgsQuickAttributeTabModel *>( sourceModel() )->attributeFormProxyModel( sourceRow );
+  return qobject_cast<AttributeTabModel *>( sourceModel() )->attributeFormProxyModel( sourceRow );
 }

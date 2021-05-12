@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickmapcanvasmap.h
+  mapcanvasmap.h
   --------------------------------------
   Date                 : 10.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKMAPCANVASMAP_H
-#define QGSQUICKMAPCANVASMAP_H
+#ifndef MAPCANVASMAP_H
+#define MAPCANVASMAP_H
 
 #include <memory>
 
@@ -25,8 +25,8 @@
 #include "qgsmapsettings.h"
 #include "qgspoint.h"
 
-#include "qgis_quick.h"
-#include "qgsquickmapsettings.h"
+
+#include "mapsettings.h"
 
 class QgsMapRendererParallelJob;
 class QgsMapRendererCache;
@@ -38,18 +38,18 @@ class QgsLabelingResults;
  * according to the current map settings. Client code is expected to use
  * MapCanvas item rather than using this class directly.
  *
- * QgsQuickMapCanvasMap instance internally creates QgsQuickMapSettings in
- * constructor. The QgsProject should be attached to the QgsQuickMapSettings.
- * The map settings for other QgsQuick components should be initialized from
- * QgsQuickMapCanvasMap's mapSettings
+ * MapCanvasMap instance internally creates MapSettings in
+ * constructor. The QgsProject should be attached to the MapSettings.
+ * The map settings for other  components should be initialized from
+ * MapCanvasMap's mapSettings
  *
  * \note QML Type: MapCanvasMap
  *
- * \sa QgsQuickMapCanvas
+ * \sa MapCanvas
  *
  * \since QGIS 3.2
  */
-class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
+class  MapCanvasMap : public QQuickItem
 {
     Q_OBJECT
 
@@ -61,7 +61,7 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
      *
      * This is a readonly property.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings )
+    Q_PROPERTY( MapSettings *mapSettings READ mapSettings )
 
     /**
      * When freeze property is set to TRUE, the map canvas does not refresh.
@@ -90,33 +90,33 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
 
   public:
     //! Create map canvas map
-    QgsQuickMapCanvasMap( QQuickItem *parent = nullptr );
-    ~QgsQuickMapCanvasMap() = default;
+    MapCanvasMap( QQuickItem *parent = nullptr );
+    ~MapCanvasMap() = default;
 
     QSGNode *updatePaintNode( QSGNode *oldNode, QQuickItem::UpdatePaintNodeData * ) override;
 
-    //! \copydoc QgsQuickMapCanvasMap::mapSettings
-    QgsQuickMapSettings *mapSettings() const;
+    //! \copydoc MapCanvasMap::mapSettings
+    MapSettings *mapSettings() const;
 
-    //! \copydoc QgsQuickMapCanvasMap::freeze
+    //! \copydoc MapCanvasMap::freeze
     bool freeze() const;
 
-    //! \copydoc QgsQuickMapCanvasMap::freeze
+    //! \copydoc MapCanvasMap::freeze
     void setFreeze( bool freeze );
 
-    //! \copydoc QgsQuickMapCanvasMap::isRendering
+    //! \copydoc MapCanvasMap::isRendering
     bool isRendering() const;
 
-    //! \copydoc QgsQuickMapCanvasMap::mapUpdateInterval
+    //! \copydoc MapCanvasMap::mapUpdateInterval
     int mapUpdateInterval() const;
 
-    //! \copydoc QgsQuickMapCanvasMap::mapUpdateInterval
+    //! \copydoc MapCanvasMap::mapUpdateInterval
     void setMapUpdateInterval( int mapUpdateInterval );
 
-    //! \copydoc QgsQuickMapCanvasMap::incrementalRendering
+    //! \copydoc MapCanvasMap::incrementalRendering
     bool incrementalRendering() const;
 
-    //! \copydoc QgsQuickMapCanvasMap::incrementalRendering
+    //! \copydoc MapCanvasMap::incrementalRendering
     void setIncrementalRendering( bool incrementalRendering );
 
   signals:
@@ -131,16 +131,16 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
      */
     void mapCanvasRefreshed();
 
-    //! \copydoc QgsQuickMapCanvasMap::freeze
+    //! \copydoc MapCanvasMap::freeze
     void freezeChanged();
 
-    //! \copydoc QgsQuickMapCanvasMap::isRendering
+    //! \copydoc MapCanvasMap::isRendering
     void isRenderingChanged();
 
-    //!\copydoc QgsQuickMapCanvasMap::mapUpdateInterval
+    //!\copydoc MapCanvasMap::mapUpdateInterval
     void mapUpdateIntervalChanged();
 
-    //!\copydoc QgsQuickMapCanvasMap::incrementalRendering
+    //!\copydoc MapCanvasMap::incrementalRendering
     void incrementalRenderingChanged();
 
   protected:
@@ -185,7 +185,7 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
     void updateTransform();
     void zoomToFullExtent();
 
-    std::unique_ptr<QgsQuickMapSettings> mMapSettings;
+    std::unique_ptr<MapSettings> mMapSettings;
     bool mPinching = false;
     QPoint mPinchStartPoint;
     QgsMapRendererParallelJob *mJob = nullptr;
@@ -202,4 +202,4 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
     bool mIncrementalRendering = false;
 };
 
-#endif // QGSQUICKMAPCANVASMAP_H
+#endif // MAPCANVASMAP_H

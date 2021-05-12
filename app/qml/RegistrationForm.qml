@@ -14,7 +14,7 @@ import QtQuick.Controls 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
@@ -102,7 +102,7 @@ Rectangle {
       id: registerNameBorder
       color: root.fontColor
       y: registerName.height - height
-      height: 2 * QgsQuick.Utils.dp
+      height: 2 * Utils.dp
       opacity: registerName.focus ? 1 : 0.6
       width: parent.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
@@ -155,7 +155,7 @@ Rectangle {
     Rectangle {
       id: emailBorder
       color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
+      height: 2 * Utils.dp
       y: email.height - height
       opacity: email.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -173,7 +173,7 @@ Rectangle {
     Rectangle {
       id: passBorder
       color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
+      height: 2 * Utils.dp
       y: fieldHeight - height
       opacity: passwordField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -193,7 +193,7 @@ Rectangle {
     Rectangle {
       id: confirmPassBorder
       color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
+      height: 2 * Utils.dp
       y: fieldHeight - height
       opacity: passwordConfirmField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -221,7 +221,7 @@ Rectangle {
     Rectangle {
       id: acceptTOCBorder
       color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
+      height: 2 * Utils.dp
       y: acceptTOC.height - height
       opacity: acceptTOC.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2

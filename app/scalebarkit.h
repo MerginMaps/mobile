@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickscalebarkit.h
+  scalebarkit.h
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Peter Petrik
@@ -13,21 +13,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKSCALEBARKIT_H
-#define QGSQUICKSCALEBARKIT_H
+#ifndef SCALEBARKIT_H
+#define SCALEBARKIT_H
 
 #include <QObject>
 #include <QString>
 
-#include "qgis_quick.h"
-#include "qgsquickutils.h"
 
-class QgsQuickMapSettings;
+#include "utils.h"
+
+class MapSettings;
 
 /**
  * \ingroup quick
  *
- * \brief The class QgsQuickScaleBarKit encapsulates the utilities to calculate
+ * \brief The class ScaleBarKit encapsulates the utilities to calculate
  * scale bar properties
  *
  * It requires connection to mapSettings of the active canvas to automatically
@@ -44,14 +44,14 @@ class QgsQuickMapSettings;
  *
  * \since QGIS 3.2
  */
-class QUICK_EXPORT QgsQuickScaleBarKit : public QObject
+class  ScaleBarKit : public QObject
 {
     Q_OBJECT
 
     /**
      * Associated map settings. Should be initialized before the first use from mapcanvas map settings.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings MEMBER mMapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Preferred width of scalebar in pixels. Default set to 300.
@@ -83,24 +83,24 @@ class QUICK_EXPORT QgsQuickScaleBarKit : public QObject
 
   public:
     //! create new scale bar kit
-    explicit QgsQuickScaleBarKit( QObject *parent = nullptr );
-    ~QgsQuickScaleBarKit() = default;
+    explicit ScaleBarKit( QObject *parent = nullptr );
+    ~ScaleBarKit() = default;
 
-    //! \copydoc QgsQuickScaleBarKit::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    //! \copydoc ScaleBarKit::mapSettings
+    void setMapSettings( MapSettings *mapSettings );
 
-    //! \copydoc QgsQuickScaleBarKit::width
+    //! \copydoc ScaleBarKit::width
     int width() const;
 
     /**
-     * \copydoc QgsQuickScaleBarKit::units
-     * \see QgsQuickScaleBarKit::units()
+     * \copydoc ScaleBarKit::units
+     * \see ScaleBarKit::units()
      */
     int distance() const;
 
     /**
-     * \copydoc QgsQuickScaleBarKit::units
-     * \see QgsQuickScaleBarKit::distance()
+     * \copydoc ScaleBarKit::units
+     * \see ScaleBarKit::distance()
      */
     QString units() const;
 
@@ -111,13 +111,13 @@ class QUICK_EXPORT QgsQuickScaleBarKit : public QObject
      */
     void scaleBarChanged();
 
-    //! \copydoc QgsQuickScaleBarKit::mapSettings
+    //! \copydoc ScaleBarKit::mapSettings
     void mapSettingsChanged();
 
-    //! \copydoc QgsQuickScaleBarKit::preferredWidth
+    //! \copydoc ScaleBarKit::preferredWidth
     void preferredWidthChanged();
 
-    //! \copydoc QgsQuickScaleBarKit::systemOfMeasurement
+    //! \copydoc ScaleBarKit::systemOfMeasurement
     void systemOfMeasurementChanged();
 
   public slots:
@@ -125,7 +125,7 @@ class QUICK_EXPORT QgsQuickScaleBarKit : public QObject
     void updateScaleBar();
 
   private:
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    MapSettings *mMapSettings = nullptr; // not owned
     int mPreferredWidth; // pixels
     int mWidth; // pixels
     int mDistance; // in meters or kilometers, rounded
@@ -134,4 +134,4 @@ class QUICK_EXPORT QgsQuickScaleBarKit : public QObject
 };
 
 
-#endif // QGSQUICKSCALEBARKIT_H
+#endif // SCALEBARKIT_H

@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickexternalresource.qml
+ externalresource.qml
   --------------------------------------
   Date                 : 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -17,11 +17,11 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
-import QgsQuick 0.1 as QgsQuick
+
 
 /**
  * External Resource (Photo capture) for QGIS Attribute Form
- * Requires various global properties set to function, see qgsquickfeatureform Loader section
+ * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  * The widget is interactive which allows interactions even in readOnly state (e.g showing preview), but no edit!
  *
@@ -63,7 +63,7 @@ Item {
   property var notAvailableImageIcon: customStyle.icons.notAvailable
   property var backIcon: customStyle.icons.back
   property real iconSize:  customStyle.fields.height
-  property real textMargin: QgsQuick.Utils.dp * 10
+  property real textMargin: Utils.dp * 10
   /**
    * 0 - Relative path disabled
    * 1 - Relative path to project
@@ -89,7 +89,7 @@ Item {
     }
 
     if (expression) {
-      QgsQuick.Utils.evaluateExpression(featurePair, activeProject, expression)
+      Utils.evaluateExpression(featurePair, activeProject, expression)
     } else {
       config["DefaultRoot"] ? config["DefaultRoot"] : homePath
     }
@@ -121,7 +121,7 @@ Item {
   function showDefaultPanel() {
     if (!photoCapturePanelLoader.item) {
       // Load the photo capture panel if not loaded yet
-      photoCapturePanelLoader.setSource("qgsquickphotopanel.qml")
+      photoCapturePanelLoader.setSource("photopanel.qml")
       photoCapturePanelLoader.item.height = window.height
       photoCapturePanelLoader.item.width = window.width
       photoCapturePanelLoader.item.edge = Qt.RightEdge
@@ -197,7 +197,7 @@ Item {
           fieldItem.state = "notAvailable"
           return ""
         }
-        else if (image.currentValue && QgsQuick.Utils.fileExists(absolutePath)) {
+        else if (image.currentValue && Utils.fileExists(absolutePath)) {
           fieldItem.state = "valid"
           return "file://" + absolutePath
         }
@@ -253,7 +253,7 @@ Item {
     RowLayout {
       anchors.fill: parent
 
-      QgsQuick.IconTextItem {
+      IconTextItem {
         id: photoButton
         fontColor: customStyle.fields.fontColor
         fontPointSize: customStyle.fields.fontPointSize
@@ -290,12 +290,12 @@ Item {
 
           height: parent.height * 0.7
           color: customStyle.fields.fontColor
-          width: 1.5 * QgsQuick.Utils.dp
+          width: 1.5 * Utils.dp
           anchors.centerIn: parent
         }
       }
 
-      QgsQuick.IconTextItem {
+      IconTextItem {
         id: browseButton
         fontColor: customStyle.fields.fontColor
         fontPointSize: customStyle.fields.fontPointSize

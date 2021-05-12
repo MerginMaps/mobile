@@ -17,12 +17,12 @@
 
 #include "qgsvectorlayer.h"
 
-#include "qgsquickfeaturehighlight.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickhighlightsgnode.h"
+#include "featurehighlight.h"
+#include "mapsettings.h"
+#include "highlightsgnode.h"
 
 
-QgsQuickFeatureHighlight::QgsQuickFeatureHighlight( QQuickItem *parent )
+FeatureHighlight::FeatureHighlight( QQuickItem *parent )
   : QQuickItem( parent )
 {
   setFlags( QQuickItem::ItemHasContents );
@@ -31,25 +31,25 @@ QgsQuickFeatureHighlight::QgsQuickFeatureHighlight( QQuickItem *parent )
   // transform to device coords
   mTransform.appendToItem( this );
 
-  connect( this, &QgsQuickFeatureHighlight::mapSettingsChanged, this, &QgsQuickFeatureHighlight::onMapSettingsChanged );
-  connect( this, &QgsQuickFeatureHighlight::featureLayerPairChanged, this, &QgsQuickFeatureHighlight::markDirty );
-  connect( this, &QgsQuickFeatureHighlight::colorChanged, this, &QgsQuickFeatureHighlight::markDirty );
-  connect( this, &QgsQuickFeatureHighlight::widthChanged, this, &QgsQuickFeatureHighlight::markDirty );
+  connect( this, &FeatureHighlight::mapSettingsChanged, this, &FeatureHighlight::onMapSettingsChanged );
+  connect( this, &FeatureHighlight::featureLayerPairChanged, this, &FeatureHighlight::markDirty );
+  connect( this, &FeatureHighlight::colorChanged, this, &FeatureHighlight::markDirty );
+  connect( this, &FeatureHighlight::widthChanged, this, &FeatureHighlight::markDirty );
 }
 
-void QgsQuickFeatureHighlight::markDirty()
+void FeatureHighlight::markDirty()
 {
   mDirty = true;
   update();
 }
 
-void QgsQuickFeatureHighlight::onMapSettingsChanged()
+void FeatureHighlight::onMapSettingsChanged()
 {
   mTransform.setMapSettings( mMapSettings );
   markDirty();
 }
 
-QSGNode *QgsQuickFeatureHighlight::updatePaintNode( QSGNode *n, QQuickItem::UpdatePaintNodeData * )
+QSGNode *FeatureHighlight::updatePaintNode( QSGNode *n, QQuickItem::UpdatePaintNodeData * )
 {
   if ( !mDirty || !mMapSettings || !mFeatureLayerPair.isValid() )
     return n;
@@ -68,7 +68,7 @@ QSGNode *QgsQuickFeatureHighlight::updatePaintNode( QSGNode *n, QQuickItem::Upda
     try
     {
       geom.transform( transf );
-      std::unique_ptr<QgsQuickHighlightSGNode> rb( new QgsQuickHighlightSGNode( geom, mColor, mWidth ) );
+      std::unique_ptr<HighlightSGNode> rb( new HighlightSGNode( geom, mColor, mWidth ) );
       rb->setFlag( QSGNode::OwnedByParent );
       n->appendChildNode( rb.release() );
     }

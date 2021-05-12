@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickfeatureslistmodel.cpp
+  featureslistmodel.cpp
  ---------------------------
   Date                 : Sep 2020
   Copyright            : (C) 2020 by Tomas Mizera
@@ -13,21 +13,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickfeatureslistmodel.h"
+#include "featureslistmodel.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgslogger.h"
 
-QgsQuickFeaturesListModel::QgsQuickFeaturesListModel( QObject *parent )
+FeaturesListModel::FeaturesListModel( QObject *parent )
   : QAbstractListModel( parent ),
     mCurrentLayer( nullptr )
 {
   // avoid dangling pointers to mCurrentLayer/mCurrentFeature when switching projects
-  QObject::connect( QgsProject::instance(), &QgsProject::cleared, this, &QgsQuickFeaturesListModel::emptyData );
+  QObject::connect( QgsProject::instance(), &QgsProject::cleared, this, &FeaturesListModel::emptyData );
 }
 
-QgsQuickFeaturesListModel::~QgsQuickFeaturesListModel() = default;
+FeaturesListModel::~FeaturesListModel() = default;
 
-int QgsQuickFeaturesListModel::rowCount( const QModelIndex &parent ) const
+int FeaturesListModel::rowCount( const QModelIndex &parent ) const
 {
   // For list models only the root node (an invalid parent) should return the list's size. For all
   // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
@@ -37,7 +37,7 @@ int QgsQuickFeaturesListModel::rowCount( const QModelIndex &parent ) const
   return mFeatures.count();
 }
 
-QVariant QgsQuickFeaturesListModel::featureTitle( const QgsQuickFeatureLayerPair &featurePair ) const
+QVariant FeaturesListModel::featureTitle( const FeatureLayerPair &featurePair ) const
 {
   QString title;
 
@@ -59,7 +59,7 @@ QVariant QgsQuickFeaturesListModel::featureTitle( const QgsQuickFeatureLayerPair
   return title;
 }
 
-QVariant QgsQuickFeaturesListModel::data( const QModelIndex &index, int role ) const
+QVariant FeaturesListModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
   if ( row < 0 || row >= mFeatures.count() )
@@ -68,7 +68,7 @@ QVariant QgsQuickFeaturesListModel::data( const QModelIndex &index, int role ) c
   if ( !index.isValid() )
     return QVariant();
 
-  const QgsQuickFeatureLayerPair pair = mFeatures.at( index.row() );
+  const FeatureLayerPair pair = mFeatures.at( index.row() );
 
   switch ( role )
   {
@@ -84,7 +84,7 @@ QVariant QgsQuickFeaturesListModel::data( const QModelIndex &index, int role ) c
   return QVariant();
 }
 
-QString QgsQuickFeaturesListModel::foundPair( const QgsQuickFeatureLayerPair &pair ) const
+QString FeaturesListModel::foundPair( const FeatureLayerPair &pair ) const
 {
   if ( mSearchExpression.isEmpty() )
     return QString();
@@ -115,7 +115,7 @@ QString QgsQuickFeaturesListModel::foundPair( const QgsQuickFeatureLayerPair &pa
   return foundPairs.join( ", " );
 }
 
-QString QgsQuickFeaturesListModel::buildSearchExpression()
+QString FeaturesListModel::buildSearchExpression()
 {
   if ( mSearchExpression.isEmpty() || !mCurrentLayer )
     return QString();
@@ -152,7 +152,7 @@ QString QgsQuickFeaturesListModel::buildSearchExpression()
   return expression;
 }
 
-void QgsQuickFeaturesListModel::setupFeatureRequest( QgsFeatureRequest &request )
+void FeaturesListModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
   if ( !mFilterExpression.isEmpty() && !mSearchExpression.isEmpty() )
   {
@@ -183,7 +183,7 @@ void QgsQuickFeaturesListModel::setupFeatureRequest( QgsFeatureRequest &request 
   }
 }
 
-void QgsQuickFeaturesListModel::loadFeaturesFromLayer( QgsVectorLayer *layer )
+void FeaturesListModel::loadFeaturesFromLayer( QgsVectorLayer *layer )
 {
   if ( layer && layer->isValid() )
     mCurrentLayer = layer;
@@ -201,7 +201,7 @@ void QgsQuickFeaturesListModel::loadFeaturesFromLayer( QgsVectorLayer *layer )
 
     while ( it.nextFeature( f ) )
     {
-      mFeatures << QgsQuickFeatureLayerPair( f, mCurrentLayer );
+      mFeatures << FeatureLayerPair( f, mCurrentLayer );
     }
 
     emit featuresCountChanged( featuresCount() );
@@ -209,7 +209,7 @@ void QgsQuickFeaturesListModel::loadFeaturesFromLayer( QgsVectorLayer *layer )
   }
 }
 
-void QgsQuickFeaturesListModel::setupValueRelation( const QVariantMap &config )
+void FeaturesListModel::setupValueRelation( const QVariantMap &config )
 {
   beginResetModel();
   emptyData();
@@ -233,7 +233,7 @@ void QgsQuickFeaturesListModel::setupValueRelation( const QVariantMap &config )
   endResetModel();
 }
 
-void QgsQuickFeaturesListModel::populateFromLayer( QgsVectorLayer *layer )
+void FeaturesListModel::populateFromLayer( QgsVectorLayer *layer )
 {
   beginResetModel();
   emptyData();
@@ -242,12 +242,12 @@ void QgsQuickFeaturesListModel::populateFromLayer( QgsVectorLayer *layer )
   endResetModel();
 }
 
-void QgsQuickFeaturesListModel::reloadFeatures()
+void FeaturesListModel::reloadFeatures()
 {
   loadFeaturesFromLayer();
 }
 
-void QgsQuickFeaturesListModel::emptyData()
+void FeaturesListModel::emptyData()
 {
   mFeatures.clear();
   mCurrentLayer = nullptr;
@@ -258,7 +258,7 @@ void QgsQuickFeaturesListModel::emptyData()
   mCurrentFeature = QgsFeature();
 }
 
-QHash<int, QByteArray> QgsQuickFeaturesListModel::roleNames() const
+QHash<int, QByteArray> FeaturesListModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
   roleNames[FeatureTitle] = QStringLiteral( "FeatureTitle" ).toLatin1();
@@ -270,19 +270,19 @@ QHash<int, QByteArray> QgsQuickFeaturesListModel::roleNames() const
   return roleNames;
 }
 
-int QgsQuickFeaturesListModel::featuresCount() const
+int FeaturesListModel::featuresCount() const
 {
   if ( mCurrentLayer && mCurrentLayer->isValid() )
     return mCurrentLayer->featureCount();
   return 0;
 }
 
-QString QgsQuickFeaturesListModel::searchExpression() const
+QString FeaturesListModel::searchExpression() const
 {
   return mSearchExpression;
 }
 
-void QgsQuickFeaturesListModel::setSearchExpression( const QString &searchExpression )
+void FeaturesListModel::setSearchExpression( const QString &searchExpression )
 {
   mSearchExpression = searchExpression;
   emit searchExpressionChanged( mSearchExpression );
@@ -290,22 +290,22 @@ void QgsQuickFeaturesListModel::setSearchExpression( const QString &searchExpres
   loadFeaturesFromLayer();
 }
 
-void QgsQuickFeaturesListModel::setFeatureTitleField( const QString &attribute )
+void FeaturesListModel::setFeatureTitleField( const QString &attribute )
 {
   mFeatureTitleField = attribute;
 }
 
-void QgsQuickFeaturesListModel::setKeyField( const QString &attribute )
+void FeaturesListModel::setKeyField( const QString &attribute )
 {
   mKeyField = attribute;
 }
 
-void QgsQuickFeaturesListModel::setFilterExpression( const QString &filterExpression )
+void FeaturesListModel::setFilterExpression( const QString &filterExpression )
 {
   mFilterExpression = filterExpression;
 }
 
-void QgsQuickFeaturesListModel::setCurrentFeature( QgsFeature feature )
+void FeaturesListModel::setCurrentFeature( QgsFeature feature )
 {
   if ( mCurrentFeature == feature )
     return;
@@ -315,17 +315,17 @@ void QgsQuickFeaturesListModel::setCurrentFeature( QgsFeature feature )
   emit currentFeatureChanged( mCurrentFeature );
 }
 
-QgsFeature QgsQuickFeaturesListModel::currentFeature() const
+QgsFeature FeaturesListModel::currentFeature() const
 {
   return mCurrentFeature;
 }
 
-int QgsQuickFeaturesListModel::featuresLimit() const
+int FeaturesListModel::featuresLimit() const
 {
   return FEATURES_LIMIT;
 }
 
-int QgsQuickFeaturesListModel::rowFromAttribute( const int role, const QVariant &value ) const
+int FeaturesListModel::rowFromAttribute( const int role, const QVariant &value ) const
 {
   for ( int i = 0; i < mFeatures.count(); ++i )
   {
@@ -338,7 +338,7 @@ int QgsQuickFeaturesListModel::rowFromAttribute( const int role, const QVariant 
   return -1;
 }
 
-QVariant QgsQuickFeaturesListModel::attributeFromValue( const int role, const QVariant &value, const int requestedRole ) const
+QVariant FeaturesListModel::attributeFromValue( const int role, const QVariant &value, const int requestedRole ) const
 {
   for ( int i = 0; i < mFeatures.count(); ++i )
   {
@@ -352,7 +352,7 @@ QVariant QgsQuickFeaturesListModel::attributeFromValue( const int role, const QV
   return QVariant();
 }
 
-QVariant QgsQuickFeaturesListModel::convertMultivalueFormat( const QVariant &multivalue, const int role )
+QVariant FeaturesListModel::convertMultivalueFormat( const QVariant &multivalue, const int role )
 {
   QStringList list = QgsValueRelationFieldFormatter::valueToStringList( multivalue );
   QList<QVariant> retList;
@@ -367,12 +367,12 @@ QVariant QgsQuickFeaturesListModel::convertMultivalueFormat( const QVariant &mul
   return retList;
 }
 
-QgsQuickFeatureLayerPair QgsQuickFeaturesListModel::featureLayerPair( const int &featureId )
+FeatureLayerPair FeaturesListModel::featureLayerPair( const int &featureId )
 {
-  for ( const QgsQuickFeatureLayerPair &i : mFeatures )
+  for ( const FeatureLayerPair &i : mFeatures )
   {
     if ( i.feature().id() == featureId )
       return i;
   }
-  return QgsQuickFeatureLayerPair();
+  return FeatureLayerPair();
 }

@@ -19,8 +19,8 @@
 
 #include <QObject>
 #include "qgsproject.h"
-#include "qgsquickutils.h"
-#include "qgsquickpositionkit.h"
+#include "utils.h"
+#include "positionkit.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
@@ -30,9 +30,9 @@ class Loader: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
-    Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
     explicit Loader(
@@ -43,14 +43,14 @@ class Loader: public QObject
 
     QgsProject *project();
 
-    QgsQuickPositionKit *positionKit() const { return mPositionKit; }
-    void setPositionKit( QgsQuickPositionKit *kit );
+    PositionKit *positionKit() const { return mPositionKit; }
+    void setPositionKit( PositionKit *kit );
 
     bool isRecording() const { return mRecording; }
     void setRecording( bool isRecording );
 
     Q_INVOKABLE bool load( const QString &filePath );
-    Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE void zoomToProject( MapSettings *mapSettings );
     Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
     Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
@@ -76,13 +76,13 @@ class Loader: public QObject
     /**
      * mapSettings method returns mapsettings pointer
      */
-    QgsQuickMapSettings *mapSettings() const;
+    MapSettings *mapSettings() const;
 
     /**
      * setMapSettings method sets mapSettings
      * Method also reloads the layer list
      */
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    void setMapSettings( MapSettings *mapSettings );
 
     /**
      * setMapSettingsLayers reloads layer list from current project
@@ -118,13 +118,13 @@ class Loader: public QObject
 
 
     QgsProject *mProject = nullptr;
-    QgsQuickPositionKit *mPositionKit = nullptr;
+    PositionKit *mPositionKit = nullptr;
     bool mRecording = false;
 
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    QgsQuickMapSettings *mMapSettings = nullptr;
+    MapSettings *mMapSettings = nullptr;
 
     /**
     * Reloads project.

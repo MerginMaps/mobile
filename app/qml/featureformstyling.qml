@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickfeatureformstyling.qml
+ featureformstyling.qml
   --------------------------------------
   Date                 : January 2018
   Copyright            : (C) 2018 by Martin Dobias
@@ -15,7 +15,7 @@
 
 import QtQuick 2.0
 
-import QgsQuick 0.1 as QgsQuick
+
 
 QtObject {
   property color backgroundColor: "white"
@@ -25,14 +25,14 @@ QtObject {
   property QtObject group: QtObject {
     property color backgroundColor: "lightGray"
     property color marginColor: "black"
-    property real leftMargin: 1 * QgsQuick.Utils.dp
-    property real rightMargin: 1 * QgsQuick.Utils.dp
-    property real topMargin: 1 * QgsQuick.Utils.dp
-    property real bottomMargin: 1 * QgsQuick.Utils.dp
-    property real height: 64 * QgsQuick.Utils.dp
+    property real leftMargin: 1 * Utils.dp
+    property real rightMargin: 1 * Utils.dp
+    property real topMargin: 1 * Utils.dp
+    property real bottomMargin: 1 * Utils.dp
+    property real height: 64 * Utils.dp
     property color fontColor: "black"
-    property int spacing: 10 * QgsQuick.Utils.dp
-    property int fontPixelSize: 24 * QgsQuick.Utils.dp
+    property int spacing: 10 * Utils.dp
+    property int fontPixelSize: 24 * Utils.dp
   }
 
   property QtObject tabs: QtObject {
@@ -43,11 +43,11 @@ QtObject {
     property color normalBackgroundColor: "#FFFFFF"
     property color activeBackgroundColor: "#4CAF50"
     property color disabledBackgroundColor: "#999999"
-    property real height: 48 * QgsQuick.Utils.dp
+    property real height: 48 * Utils.dp
     property real buttonHeight: height * 0.8
     property real spacing: 0
     property int tabLabelPointSize: 14
-    property real borderWidth: 0 * QgsQuick.Utils.dp
+    property real borderWidth: 0 * Utils.dp
     property color borderColor: "#999999"
   }
 
@@ -61,7 +61,7 @@ QtObject {
     property color backgroundColor: "transparent"
     property color backgroundColorInvalid: "#bdc3c7"
     property color activeButtonColor: "black"
-    property real size: 80 * QgsQuick.Utils.dp
+    property real size: 80 * Utils.dp
   }
 
     property QtObject fields: QtObject {
@@ -71,26 +71,26 @@ QtObject {
       property color activeColor: "#1B5E20"
       property color attentionColor: "red"
       property color normalColor: "#4CAF50"
-      property real height: 48 * QgsQuick.Utils.dp
-      property real cornerRadius: 0 * QgsQuick.Utils.dp
-      property int fontPixelSize: 48 * QgsQuick.Utils.dp
-      property real sideMargin: 12 * QgsQuick.Utils.dp // left or right margin for a field's content
-      property real outerMargin: 20 * QgsQuick.Utils.dp // left or right margin for a whole field component
+      property real height: 48 * Utils.dp
+      property real cornerRadius: 0 * Utils.dp
+      property int fontPixelSize: 48 * Utils.dp
+      property real sideMargin: 12 * Utils.dp // left or right margin for a field's content
+      property real outerMargin: 20 * Utils.dp // left or right margin for a whole field component
       property int fontPointSize: 16
       property int labelPointSize: 14
     }
 
   property QtObject icons: QtObject {
-    property var camera: QgsQuick.Utils.getThemeIcon("ic_camera")
-    property var remove: QgsQuick.Utils.getThemeIcon("ic_delete_forever_white")
-    property var gallery: QgsQuick.Utils.getThemeIcon("ic_gallery")
-    property var brokenImage: QgsQuick.Utils.getThemeIcon("ic_broken_image_black")
-    property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
-    property var today: QgsQuick.Utils.getThemeIcon("ic_today")
-    property var back: QgsQuick.Utils.getThemeIcon("ic_back")
-    property var importData: QgsQuick.Utils.getThemeIcon("ic_camera")
-    property var combobox: QgsQuick.Utils.getThemeIcon("ic_angle_down")
-    property var valueRelationMore: QgsQuick.Utils.getThemeIcon("ic_angle_right")
+    property var camera: Utils.getThemeIcon("ic_camera")
+    property var remove: Utils.getThemeIcon("ic_delete_forever_white")
+    property var gallery: Utils.getThemeIcon("ic_gallery")
+    property var brokenImage: Utils.getThemeIcon("ic_broken_image_black")
+    property var notAvailable: Utils.getThemeIcon("ic_photo_notavailable_white")
+    property var today: Utils.getThemeIcon("ic_today")
+    property var back: Utils.getThemeIcon("ic_back")
+    property var importData: Utils.getThemeIcon("ic_camera")
+    property var combobox: Utils.getThemeIcon("ic_angle_down")
+    property var valueRelationMore: Utils.getThemeIcon("ic_angle_right")
   }
 
   property QtObject checkboxComponent: QtObject {

@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributeformproxymodel.cpp
+ attributeformproxymodel.cpp
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,19 +13,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickattributeformproxymodel.h"
-#include "qgsquickattributeformmodel.h"
-#include "qgsquickattributecontroller.h"
+#include "attributeformproxymodel.h"
+#include "attributeformmodel.h"
+#include "attributecontroller.h"
 
-QgsQuickAttributeFormProxyModel::QgsQuickAttributeFormProxyModel( QObject *parent )
+AttributeFormProxyModel::AttributeFormProxyModel( QObject *parent )
   : QSortFilterProxyModel( parent )
 {
 }
 
-QgsQuickAttributeFormProxyModel::~QgsQuickAttributeFormProxyModel() = default;
+AttributeFormProxyModel::~AttributeFormProxyModel() = default;
 
-bool QgsQuickAttributeFormProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
+bool AttributeFormProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
 {
   QModelIndex sourceIndex = sourceModel()->index( sourceRow, 0, sourceParent );
-  return sourceModel()->data( sourceIndex, QgsQuickAttributeFormModel::AttributeFormRoles::Visible ).toBool();
+  return sourceModel()->data( sourceIndex, AttributeFormModel::AttributeFormRoles::Visible ).toBool();
 }

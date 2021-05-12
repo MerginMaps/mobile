@@ -9,11 +9,11 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.12
-import QgsQuick 0.1 as QgsQuick
+
 
 import "../" // import InputStyle singleton
 
-QgsQuick.SwitchComponent {
+SwitchComponent {
   id: switchComp
 
   implicitHeight: parent.height * 0.45

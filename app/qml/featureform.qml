@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickfeatureform.qml
+ featureform.qml
   --------------------------------------
   Date                 : Nov 2017
   Copyright            : (C) 2017 by Matthias Kuhn
@@ -21,7 +21,7 @@ import QtQml 2.2
 // We use calendar in datetime widget that is not yet implemented in Controls 2.2
 import QtQuick.Controls 1.4 as Controls1
 
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   /**
@@ -137,17 +137,17 @@ Item {
   /**
    * Active project.
    */
-  property QgsQuick.Project project
+  property Project project
 
   /**
    * Controller
    */
-  property QgsQuick.AttributeController controller
+  property AttributeController controller
 
   /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
-  property var loadWidgetFn: QgsQuick.Utils.getEditorComponentSource
+  property var loadWidgetFn: Utils.getEditorComponentSource
 
   /**
    * Predefined form styling
@@ -258,8 +258,8 @@ Item {
           TabButton {
             id: tabButton
             text: Name
-            leftPadding: 8 * QgsQuick.Utils.dp
-            rightPadding: 8 * QgsQuick.Utils.dp
+            leftPadding: 8 * Utils.dp
+            rightPadding: 8 * Utils.dp
             anchors.bottom: parent.bottom
 
             width: leftPadding + rightPadding
@@ -412,9 +412,9 @@ Item {
 
     Item {
       id: fieldContainer
-      visible: Type === QgsQuick.FormItemType.Field
+      visible: Type === FormItemType.Field
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
-      height: Type === QgsQuick.FormItemType.Field ? childrenRect.height : 0
+      height: Type === FormItemType.Field ? childrenRect.height : 0
 
       anchors {
         left: parent.left
@@ -560,7 +560,7 @@ Item {
         id: rememberCheckboxContainer
         visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
 
-        implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
+        implicitWidth: visible ? 35 * Utils.dp : 0
         implicitHeight: placeholder.height
 
         anchors {
@@ -568,12 +568,12 @@ Item {
           right: parent.right
         }
 
-        QgsQuick.CheckboxComponent {
+        CheckboxComponent {
           id: rememberCheckbox
           visible: rememberCheckboxContainer.visible
           baseColor: form.style.checkboxComponent.baseColor
 
-          implicitWidth: 40 * QgsQuick.Utils.dp
+          implicitWidth: 40 * Utils.dp
           implicitHeight: width
           y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
           x: (parent.width + form.style.fields.outerMargin) / 7

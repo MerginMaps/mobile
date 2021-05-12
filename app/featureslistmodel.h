@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickfeatureslistmodel.h
+  featureslistmodel.h
  ---------------------------
   Date                 : Sep 2020
   Copyright            : (C) 2020 by Tomas Mizera
@@ -13,13 +13,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKFEATURESMODEL_H
-#define QGSQUICKFEATURESMODEL_H
+#ifndef FEATURESMODEL_H
+#define FEATURESMODEL_H
 
 #include <QAbstractListModel>
 
 #include "qgsvectorlayer.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 #include "qgsvaluerelationfieldformatter.h"
 
 /**
@@ -32,7 +32,7 @@
  *
  * \since QGIS 3.16
  */
-class QUICK_EXPORT QgsQuickFeaturesListModel : public QAbstractListModel
+class  FeaturesListModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -75,11 +75,11 @@ class QUICK_EXPORT QgsQuickFeaturesListModel : public QAbstractListModel
     Q_ENUM( modelRoles );
 
     //! Create features list model
-    explicit QgsQuickFeaturesListModel( QObject *parent = nullptr );
-    ~QgsQuickFeaturesListModel() override;
+    explicit FeaturesListModel( QObject *parent = nullptr );
+    ~FeaturesListModel() override;
 
-    //! Function to get QgsQuickFeatureLayerPair by feature id
-    Q_INVOKABLE QgsQuickFeatureLayerPair featureLayerPair( const int &featureId );
+    //! Function to get FeatureLayerPair by feature id
+    Q_INVOKABLE FeatureLayerPair featureLayerPair( const int &featureId );
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
@@ -193,20 +193,20 @@ class QUICK_EXPORT QgsQuickFeaturesListModel : public QAbstractListModel
     void emptyData();
 
     //! Builds feature title in list
-    QVariant featureTitle( const QgsQuickFeatureLayerPair &featurePair ) const;
+    QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
 
     //! Builds qgis filter expression from search expression
     QString buildSearchExpression();
 
     //! Returns found attribute and its value from search expression
-    QString foundPair( const QgsQuickFeatureLayerPair &feat ) const;
+    QString foundPair( const FeatureLayerPair &feat ) const;
 
     /**
      * QList of loaded features from layer
      * Hold maximum of FEATURES_LIMIT features
      * \note mFeatures.size() is not always the same as mFeaturesCount
      */
-    QgsQuickFeatureLayerPairs mFeatures;
+    FeatureLayerPairs mFeatures;
 
     //! Number of maximum features loaded from layer
     const int FEATURES_LIMIT = 10000;
@@ -230,4 +230,4 @@ class QUICK_EXPORT QgsQuickFeaturesListModel : public QAbstractListModel
     QString mFeatureTitleField;
 };
 
-#endif // QGSQUICKFEATURESMODEL_H
+#endif // FEATURESMODEL_H

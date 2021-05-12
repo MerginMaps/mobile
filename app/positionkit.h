@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickpositionkit.h
+ positionkit.h
   --------------------------------------
   Date                 : Dec. 2017
   Copyright            : (C) 2017 Peter Petrik
@@ -13,17 +13,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKPOSITIONKIT_H
-#define QGSQUICKPOSITIONKIT_H
+#ifndef POSITIONKIT_H
+#define POSITIONKIT_H
 
 #include <QObject>
 #include <QtPositioning>
 
 #include "qgspoint.h"
 
-#include "qgis_quick.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickcoordinatetransformer.h"
+
+#include "mapsettings.h"
+#include "coordinatetransformer.h"
 
 /**
  * \ingroup quick
@@ -37,7 +37,7 @@
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickPositionKit : public QObject
+class  PositionKit : public QObject
 {
     Q_OBJECT
 
@@ -93,7 +93,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     /**
      * GPS position and accuracy is simulated (not real from GPS sensor). Default FALSE (use real GPS)
      *
-     * This is a readonly property. To change to simulated position, see QgsQuickPositionKit::simulatePositionLongLatRad
+     * This is a readonly property. To change to simulated position, see PositionKit::simulatePositionLongLatRad
      */
     Q_PROPERTY( bool isSimulated READ isSimulated NOTIFY isSimulatedChanged )
 
@@ -102,7 +102,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      *
      * This is a readonly property.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Uses of GPS and simulated position and sets its parameters
@@ -122,24 +122,24 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
 
   public:
     //! Creates new position kit
-    explicit QgsQuickPositionKit( QObject *parent = nullptr );
+    explicit PositionKit( QObject *parent = nullptr );
 
-    //! \copydoc QgsQuickPositionKit::position
+    //! \copydoc PositionKit::position
     bool hasPosition() const;
 
-    //! \copydoc QgsQuickPositionKit::position
+    //! \copydoc PositionKit::position
     QgsPoint position() const;
 
-    //! \copydoc QgsQuickPositionKit::projectedPosition
+    //! \copydoc PositionKit::projectedPosition
     QgsPoint projectedPosition() const;
 
-    //! \copydoc QgsQuickPositionKit::screenPosition
+    //! \copydoc PositionKit::screenPosition
     QPointF screenPosition() const;
 
-    //! \copydoc QgsQuickPositionKit::accuracy
+    //! \copydoc PositionKit::accuracy
     double accuracy() const;
 
-    //! \copydoc QgsQuickPositionKit::screenAccuracy
+    //! \copydoc PositionKit::screenAccuracy
     double screenAccuracy() const;
 
     /**
@@ -147,22 +147,22 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
      */
     QgsUnitTypes::DistanceUnit accuracyUnits() const;
 
-    //! \copydoc QgsQuickPositionKit::direction
+    //! \copydoc PositionKit::direction
     double direction() const;
 
-    //! \copydoc QgsQuickPositionKit::isSimulated
+    //! \copydoc PositionKit::isSimulated
     bool isSimulated() const;
 
-    //! \copydoc QgsQuickPositionKit::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    //! \copydoc PositionKit::mapSettings
+    void setMapSettings( MapSettings *mapSettings );
 
-    //! \copydoc QgsQuickPositionKit::mapSettings
-    QgsQuickMapSettings *mapSettings() const;
+    //! \copydoc PositionKit::mapSettings
+    MapSettings *mapSettings() const;
 
-    //! \copydoc QgsQuickPositionKit::simulatePositionLongLatRad
+    //! \copydoc PositionKit::simulatePositionLongLatRad
     QVector<double> simulatePositionLongLatRad() const;
 
-    //! \copydoc QgsQuickPositionKit::simulatePositionLongLatRad
+    //! \copydoc PositionKit::simulatePositionLongLatRad
     void setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad );
 
     /**
@@ -197,37 +197,37 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     Q_INVOKABLE void useGpsLocation();
 
   signals:
-    //! \copydoc QgsQuickPositionKit::position
+    //! \copydoc PositionKit::position
     void positionChanged();
 
-    //! \copydoc QgsQuickPositionKit::projectedPosition
+    //! \copydoc PositionKit::projectedPosition
     void projectedPositionChanged();
 
-    //! \copydoc QgsQuickPositionKit::screenPosition
+    //! \copydoc PositionKit::screenPosition
     void screenPositionChanged();
 
     //! hasPosition changed
     void hasPositionChanged();
 
-    //! \copydoc QgsQuickPositionKit::accuracy
+    //! \copydoc PositionKit::accuracy
     double accuracyChanged() const;
 
-    //! \copydoc QgsQuickPositionKit::screenAccuracy
+    //! \copydoc PositionKit::screenAccuracy
     double screenAccuracyChanged() const;
 
-    //! \copydoc QgsQuickPositionKit::accuracyUnits
+    //! \copydoc PositionKit::accuracyUnits
     Q_INVOKABLE QString accuracyUnitsChanged() const;
 
-    //! \copydoc QgsQuickPositionKit::direction
+    //! \copydoc PositionKit::direction
     double directionChanged() const;
 
-    //! \copydoc QgsQuickPositionKit::isSimulated
+    //! \copydoc PositionKit::isSimulated
     void isSimulatedChanged();
 
-    //! \copydoc QgsQuickPositionKit::mapSettings
+    //! \copydoc PositionKit::mapSettings
     void mapSettingsChanged();
 
-    //! \copydoc QgsQuickPositionKit::simulatePositionLongLatRad
+    //! \copydoc PositionKit::simulatePositionLongLatRad
     void simulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
 
     //! Emitted when the internal source of GPS location data has been replaced.
@@ -261,7 +261,7 @@ class QUICK_EXPORT QgsQuickPositionKit : public QObject
     QVector<double> mSimulatePositionLongLatRad;
     std::unique_ptr<QGeoPositionInfoSource> mSource;
 
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    MapSettings *mMapSettings = nullptr; // not owned
 };
 
-#endif // QGSQUICKPOSITIONKIT_H
+#endif // POSITIONKIT_H

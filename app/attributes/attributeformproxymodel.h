@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributeformproxymodel.h
+ attributeformproxymodel.h
   --------------------------------------
   Date                 : 20.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,13 +13,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKATTRIBUTEFORMPROXYMODEL_H
-#define QGSQUICKATTRIBUTEFORMPROXYMODEL_H
+#ifndef ATTRIBUTEFORMPROXYMODEL_H
+#define ATTRIBUTEFORMPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
-#include "qgis_quick.h"
 
-class QgsQuickAttributeFormModel;
+
+class AttributeFormModel;
 
 /**
  * \ingroup quick
@@ -28,15 +28,15 @@ class QgsQuickAttributeFormModel;
  *
  * \since QGIS 3.22
  */
-class QUICK_EXPORT QgsQuickAttributeFormProxyModel : public QSortFilterProxyModel
+class  AttributeFormProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
   public:
-    QgsQuickAttributeFormProxyModel( QObject *parent = nullptr );
-    ~QgsQuickAttributeFormProxyModel() override;
+    AttributeFormProxyModel( QObject *parent = nullptr );
+    ~AttributeFormProxyModel() override;
 
     bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
 };
 
 
-#endif // QGSQUICKATTRIBUTEFORMPROXYMODEL_H
+#endif // ATTRIBUTEFORMPROXYMODEL_H

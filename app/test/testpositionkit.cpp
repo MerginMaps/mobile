@@ -20,10 +20,10 @@
 #include "qgstest.h"
 #include "qgis.h"
 
-#include "qgsquickpositionkit.h"
-#include "qgsquicksimulatedpositionsource.h"
+#include "positionkit.h"
+#include "simulatedpositionsource.h"
 
-class TestQgsQuickPositionKit: public QObject
+class TestPositionKit: public QObject
 {
     Q_OBJECT
   private slots:
@@ -33,10 +33,10 @@ class TestQgsQuickPositionKit: public QObject
     void simulated_position();
 
   private:
-    QgsQuickPositionKit positionKit;
+    PositionKit positionKit;
 };
 
-void TestQgsQuickPositionKit::simulated_position()
+void TestPositionKit::simulated_position()
 {
   QVERIFY( !positionKit.isSimulated() );
   positionKit.useSimulatedLocation( -92.36, 38.93, -1 );
@@ -55,5 +55,5 @@ void TestQgsQuickPositionKit::simulated_position()
   QVERIFY( !positionKit.isSimulated() );
 }
 
-QGSTEST_MAIN( TestQgsQuickPositionKit )
-#include "testqgsquickpositionkit.moc"
+QGSTEST_MAIN( TestPositionKit )
+#include "testpositionkit.moc"

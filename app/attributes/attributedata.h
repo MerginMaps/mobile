@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickattributedata.h
+ attributedata.h
   --------------------------------------
   Date                 : 22.4.2021
   Copyright            : (C) 2021 by Peter Petrik
@@ -13,10 +13,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKATTRIBUTEDATA_H
-#define QGSQUICKATTRIBUTEDATA_H
+#ifndef ATTRIBUTEDATA_H
+#define ATTRIBUTEDATA_H
 
-#include "qgis_quick.h"
+
 #include <QString>
 #include <QVariant>
 #include <QVector>
@@ -30,7 +30,7 @@
 #include "qgsexpression.h"
 #include "qgsfield.h"
 
-class QUICK_EXPORT QgsQuickFormItem
+class  FormItem
 {
     Q_GADGET
 
@@ -44,12 +44,12 @@ class QUICK_EXPORT QgsQuickFormItem
     };
     Q_ENUMS( FormItemType )
 
-    QgsQuickFormItem(
+    FormItem(
       const QUuid &id,
       const QgsField &field,
       const QString &groupName,
       int parentTabId,
-      QgsQuickFormItem::FormItemType type,
+      FormItem::FormItemType type,
       const QString &name,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
@@ -59,7 +59,7 @@ class QUICK_EXPORT QgsQuickFormItem
     );
 
 
-    QgsQuickFormItem::FormItemType type() const;
+    FormItem::FormItemType type() const;
     QString name() const;
     bool isEditable() const;
     QString editorWidgetType() const;
@@ -98,7 +98,7 @@ class QUICK_EXPORT QgsQuickFormItem
     const QgsField mField;
     const QString mGroupName; //empty for no group, group/tab name if widget is in container
     const int mParentTabId;
-    const QgsQuickFormItem::FormItemType mType;
+    const FormItem::FormItemType mType;
     const QString mName;
     const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
@@ -112,10 +112,10 @@ class QUICK_EXPORT QgsQuickFormItem
     QVariant mOriginalValue; // original unmodified value
 };
 
-class QUICK_EXPORT QgsQuickTabItem
+class  TabItem
 {
   public:
-    QgsQuickTabItem( const int &id,
+    TabItem( const int &id,
                      const QString &name,
                      const QVector<QUuid> &formItems,
                      const QgsExpression &visibilityExpression
@@ -139,4 +139,4 @@ class QUICK_EXPORT QgsQuickTabItem
     bool mVisible = false;
 };
 
-#endif // QGSQUICKATTRIBUTEDATA_H
+#endif // ATTRIBUTEDATA_H

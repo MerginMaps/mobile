@@ -13,16 +13,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKFEATUREHIGHLIGHT_H
-#define QGSQUICKFEATUREHIGHLIGHT_H
+#ifndef FEATUREHIGHLIGHT_H
+#define FEATUREHIGHLIGHT_H
 
 #include <QQuickItem>
 
-#include "qgsquickfeaturelayerpair.h"
-#include "qgis_quick.h"
-#include "qgsquickmaptransform.h"
+#include "featurelayerpair.h"
 
-class QgsQuickMapSettings;
+#include "maptransform.h"
+
+class MapSettings;
 
 /**
  * \ingroup quick
@@ -36,19 +36,19 @@ class QgsQuickMapSettings;
  *
  * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickFeatureHighlight : public QQuickItem
+class  FeatureHighlight : public QQuickItem
 {
     Q_OBJECT
 
     /**
      * Associated map settings. Should be initialized from QML component before the first use.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Feature to highlight
      */
-    Q_PROPERTY( QgsQuickFeatureLayerPair featureLayerPair MEMBER mFeatureLayerPair NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( FeatureLayerPair featureLayerPair MEMBER mFeatureLayerPair NOTIFY featureLayerPairChanged )
 
     /**
      * Color of the highlighted geometry (feature).
@@ -66,19 +66,19 @@ class QUICK_EXPORT QgsQuickFeatureHighlight : public QQuickItem
 
   public:
     //! Creates a new feature highlight
-    explicit QgsQuickFeatureHighlight( QQuickItem *parent = nullptr );
+    explicit FeatureHighlight( QQuickItem *parent = nullptr );
 
   signals:
-    //! \copydoc QgsQuickFeatureHighlight::featureLayerPair
+    //! \copydoc FeatureHighlight::featureLayerPair
     void featureLayerPairChanged();
 
-    //! \copydoc QgsQuickFeatureHighlight::color
+    //! \copydoc FeatureHighlight::color
     void colorChanged();
 
-    //! \copydoc QgsQuickFeatureHighlight::width
+    //! \copydoc FeatureHighlight::width
     void widthChanged();
 
-    //! \copydoc QgsQuickFeatureHighlight::mapSettings
+    //! \copydoc FeatureHighlight::mapSettings
     void mapSettingsChanged();
 
   private slots:
@@ -91,9 +91,9 @@ class QUICK_EXPORT QgsQuickFeatureHighlight : public QQuickItem
     QColor mColor = Qt::yellow;
     bool mDirty = false;
     float mWidth = 20;
-    QgsQuickFeatureLayerPair mFeatureLayerPair;
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
-    QgsQuickMapTransform mTransform;
+    FeatureLayerPair mFeatureLayerPair;
+    MapSettings *mMapSettings = nullptr; // not owned
+    MapTransform mTransform;
 };
 
-#endif // QGSQUICKFEATUREHIGHLIGHT_H
+#endif // FEATUREHIGHLIGHT_H

@@ -20,7 +20,7 @@
 #include "iosviewdelegate.h"
 #include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-#include "qgsquickpositionkit.h"
+#include "positionkit.h"
 #include "compass.h"
 
 #import <ImageIO/CGImageSource.h>
@@ -120,7 +120,7 @@ static NSString *generateImagePath( NSString *targetDir )
   return imagePath;
 }
 
-static NSMutableDictionary *getGPSData( QgsQuickPositionKit *positionKit, Compass *compass )
+static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compass )
 {
   NSMutableDictionary *gpsDict = [[NSMutableDictionary alloc]init];
   if ( positionKit )

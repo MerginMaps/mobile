@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickphotopanel.qml
+ photopanel.qml
   --------------------------------------
   Date                 : Dec 2017
   Copyright            : (C) 2017 by Viktor Sklencar
@@ -19,7 +19,7 @@ import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtMultimedia 5.8
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 Drawer {
   // Capture path
@@ -35,11 +35,11 @@ Drawer {
   property color borderColor: "black"
 
   // icons:
-  property var captureButtonIcon: QgsQuick.Utils.getThemeIcon("ic_camera_alt_border")
-  property var confirmButtonIcon: QgsQuick.Utils.getThemeIcon("ic_check_black")
-  property var cancelButtonIcon: QgsQuick.Utils.getThemeIcon("ic_clear_black")
-  property var backButtonSource: QgsQuick.Utils.getThemeIcon("ic_back")
-  property real imageButtonSize: 45 * QgsQuick.Utils.dp
+  property var captureButtonIcon: Utils.getThemeIcon("ic_camera_alt_border")
+  property var confirmButtonIcon: Utils.getThemeIcon("ic_check_black")
+  property var cancelButtonIcon: Utils.getThemeIcon("ic_clear_black")
+  property var backButtonSource: Utils.getThemeIcon("ic_back")
+  property real imageButtonSize: 45 * Utils.dp
   property real buttonSize: imageButtonSize * 1.2
   property var buttonsPosition
 
@@ -49,7 +49,7 @@ Drawer {
     captureItem.saveImage = false
     photoPreview.visible = false
     if (camera.imageCapture.capturedImagePath != "") {
-      QgsQuick.Utils.removeFile(camera.imageCapture.capturedImagePath)
+      Utils.removeFile(camera.imageCapture.capturedImagePath)
     }
   }
 
@@ -86,7 +86,7 @@ Drawer {
     Component.onDestruction: {
       if (!captureItem && camera.imageCapture.capturedImagePath != ""){
         captureItem.saveImage = false
-        QgsQuick.Utils.removeFile(camera.imageCapture.capturedImagePath)
+        Utils.removeFile(camera.imageCapture.capturedImagePath)
       }
       captureItem.saveImage = false
     }
@@ -164,7 +164,7 @@ Drawer {
         id: cancelButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.Utils.dp
+        property int borderWidth: 5 * Utils.dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -195,7 +195,7 @@ Drawer {
         id: confirmButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.Utils.dp
+        property int borderWidth: 5 * Utils.dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -230,7 +230,7 @@ Drawer {
     Item {
       id: backButton
 
-      property int borderWidth: 50 * QgsQuick.Utils.dp
+      property int borderWidth: 50 * Utils.dp
       width: imageButtonSize * 1.5
       height: width
       antialiasing: true

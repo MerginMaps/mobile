@@ -18,7 +18,7 @@
 
 #include <QObject>
 #include "iosimagepicker.h"
-#include "qgsquickpositionkit.h"
+#include "positionkit.h"
 #include "compass.h"
 
 class IosUtils: public QObject
@@ -27,7 +27,7 @@ class IosUtils: public QObject
 
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( IOSImagePicker *mImagePicker READ imagePicker )
-    Q_PROPERTY( QgsQuickPositionKit *positionKit MEMBER mPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( PositionKit *positionKit MEMBER mPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( Compass *compass MEMBER mCompass NOTIFY compassChanged )
 
   public:
@@ -46,7 +46,7 @@ class IosUtils: public QObject
 
   private:
     IOSImagePicker *mImagePicker = nullptr;
-    QgsQuickPositionKit *mPositionKit = nullptr;
+    PositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.

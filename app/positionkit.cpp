@@ -1,5 +1,5 @@
 /***************************************************************************
-  qgsquickpositionkit.cpp
+  positionkit.cpp
   --------------------------------------
   Date                 : Dec. 2017
   Copyright            : (C) 2017 Peter Petrik
@@ -19,22 +19,22 @@
 #include "qgslogger.h"
 #include "qgsmessagelog.h"
 
-#include "qgsquickpositionkit.h"
-#include "qgsquickutils.h"
-#include "qgsquicksimulatedpositionsource.h"
+#include "positionkit.h"
+#include "utils.h"
+#include "simulatedpositionsource.h"
 
-QgsQuickPositionKit::QgsQuickPositionKit( QObject *parent )
+PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
   connect( this,
-           &QgsQuickPositionKit::simulatePositionLongLatRadChanged,
+           &PositionKit::simulatePositionLongLatRadChanged,
            this,
-           &QgsQuickPositionKit::onSimulatePositionLongLatRadChanged );
+           &PositionKit::onSimulatePositionLongLatRadChanged );
 
   useGpsLocation();
 }
 
-QGeoPositionInfoSource  *QgsQuickPositionKit::gpsSource()
+QGeoPositionInfoSource  *PositionKit::gpsSource()
 {
   // this should give us "true" position source
   // on Linux it comes from Geoclue library
@@ -44,7 +44,7 @@ QGeoPositionInfoSource  *QgsQuickPositionKit::gpsSource()
     QgsMessageLog::logMessage( QStringLiteral( "%1 (%2)" )
                                .arg( tr( "Unable to create default GPS Position Source" ) )
                                .arg( QString::number( ( long )source->error() ) )
-                               , QStringLiteral( "QgsQuick" )
+                               , QStringLiteral( "" )
                                , Qgis::Warning );
     return nullptr;
   }
@@ -54,24 +54,24 @@ QGeoPositionInfoSource  *QgsQuickPositionKit::gpsSource()
   }
 }
 
-QGeoPositionInfoSource  *QgsQuickPositionKit::simulatedSource( double longitude, double latitude, double radius )
+QGeoPositionInfoSource  *PositionKit::simulatedSource( double longitude, double latitude, double radius )
 {
-  return new QgsQuickSimulatedPositionSource( this, longitude, latitude, radius );
+  return new SimulatedPositionSource( this, longitude, latitude, radius );
 }
 
-QGeoPositionInfoSource *QgsQuickPositionKit::source() const
+QGeoPositionInfoSource *PositionKit::source() const
 {
   return mSource.get();
 }
 
-void QgsQuickPositionKit::useSimulatedLocation( double longitude, double latitude, double radius )
+void PositionKit::useSimulatedLocation( double longitude, double latitude, double radius )
 {
   std::unique_ptr<QGeoPositionInfoSource> source( simulatedSource( longitude, latitude, radius ) );
   mIsSimulated = true;
   replacePositionSource( source.release() );
 }
 
-void QgsQuickPositionKit::updateScreenPosition()
+void PositionKit::updateScreenPosition()
 {
   if ( !mMapSettings )
     return;
@@ -84,7 +84,7 @@ void QgsQuickPositionKit::updateScreenPosition()
   }
 }
 
-void QgsQuickPositionKit::updateScreenAccuracy()
+void PositionKit::updateScreenAccuracy()
 {
   if ( !mMapSettings )
     return;
@@ -97,14 +97,14 @@ void QgsQuickPositionKit::updateScreenAccuracy()
   }
 }
 
-void QgsQuickPositionKit::useGpsLocation()
+void PositionKit::useGpsLocation()
 {
   QGeoPositionInfoSource *source = gpsSource();
   mIsSimulated = false;
   replacePositionSource( source );
 }
 
-void QgsQuickPositionKit::replacePositionSource( QGeoPositionInfoSource *source )
+void PositionKit::replacePositionSource( QGeoPositionInfoSource *source )
 {
   if ( mSource.get() == source )
     return;
@@ -119,8 +119,8 @@ void QgsQuickPositionKit::replacePositionSource( QGeoPositionInfoSource *source 
 
   if ( mSource )
   {
-    connect( mSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &QgsQuickPositionKit::onPositionUpdated );
-    connect( mSource.get(), &QGeoPositionInfoSource::updateTimeout, this,  &QgsQuickPositionKit::onUpdateTimeout );
+    connect( mSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &PositionKit::onPositionUpdated );
+    connect( mSource.get(), &QGeoPositionInfoSource::updateTimeout, this,  &PositionKit::onUpdateTimeout );
 
     mSource->startUpdates();
 
@@ -128,18 +128,18 @@ void QgsQuickPositionKit::replacePositionSource( QGeoPositionInfoSource *source 
   }
 }
 
-QgsQuickMapSettings *QgsQuickPositionKit::mapSettings() const
+MapSettings *PositionKit::mapSettings() const
 {
   return mMapSettings;
 }
 
-void QgsQuickPositionKit::updateProjectedPosition()
+void PositionKit::updateProjectedPosition()
 {
   if ( !mMapSettings )
     return;
 
   QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
-  QgsPointXY projectedPositionXY = QgsQuickUtils::transformPoint(
+  QgsPointXY projectedPositionXY = Utils::transformPoint(
                                      positionCRS(),
                                      mMapSettings->destinationCrs(),
                                      mMapSettings->transformContext(),
@@ -156,7 +156,7 @@ void QgsQuickPositionKit::updateProjectedPosition()
   }
 }
 
-void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
+void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
 {
   bool hasPosition = info.coordinate().isValid();
   if ( hasPosition != mHasPosition )
@@ -204,7 +204,7 @@ void QgsQuickPositionKit::onPositionUpdated( const QGeoPositionInfo &info )
   onMapSettingsUpdated();
 }
 
-void QgsQuickPositionKit::onMapSettingsUpdated()
+void PositionKit::onMapSettingsUpdated()
 {
   updateProjectedPosition();
 
@@ -212,7 +212,7 @@ void QgsQuickPositionKit::onMapSettingsUpdated()
   updateScreenPosition();
 }
 
-void QgsQuickPositionKit::onSimulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad )
+void PositionKit::onSimulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad )
 {
   if ( simulatePositionLongLatRad.size() > 2 )
   {
@@ -229,14 +229,14 @@ void QgsQuickPositionKit::onSimulatePositionLongLatRadChanged( QVector<double> s
   }
 }
 
-double QgsQuickPositionKit::calculateScreenAccuracy()
+double PositionKit::calculateScreenAccuracy()
 {
   if ( !mMapSettings )
     return 2.0;
 
   if ( accuracy() > 0 )
   {
-    double scpm = QgsQuickUtils::screenUnitsToMeters( mMapSettings, 1 );
+    double scpm = Utils::screenUnitsToMeters( mMapSettings, 1 );
     if ( scpm > 0 )
       return 2 * ( accuracy() / scpm );
     else
@@ -245,7 +245,7 @@ double QgsQuickPositionKit::calculateScreenAccuracy()
   return 2.0;
 }
 
-void QgsQuickPositionKit::onUpdateTimeout()
+void PositionKit::onUpdateTimeout()
 {
   if ( mHasPosition )
   {
@@ -254,68 +254,68 @@ void QgsQuickPositionKit::onUpdateTimeout()
   }
 }
 
-QPointF QgsQuickPositionKit::screenPosition() const
+QPointF PositionKit::screenPosition() const
 {
   return mScreenPosition;
 }
 
-double QgsQuickPositionKit::screenAccuracy() const
+double PositionKit::screenAccuracy() const
 {
   return mScreenAccuracy;
 }
 
-QVector<double> QgsQuickPositionKit::simulatePositionLongLatRad() const
+QVector<double> PositionKit::simulatePositionLongLatRad() const
 {
   return mSimulatePositionLongLatRad;
 }
 
-void QgsQuickPositionKit::setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad )
+void PositionKit::setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad )
 {
   mSimulatePositionLongLatRad = simulatePositionLongLatRad;
   emit simulatePositionLongLatRadChanged( simulatePositionLongLatRad );
 }
 
-QgsCoordinateReferenceSystem QgsQuickPositionKit::positionCRS() const
+QgsCoordinateReferenceSystem PositionKit::positionCRS() const
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 }
 
-QgsPoint QgsQuickPositionKit::projectedPosition() const
+QgsPoint PositionKit::projectedPosition() const
 {
   return mProjectedPosition;
 }
 
-bool QgsQuickPositionKit::hasPosition() const
+bool PositionKit::hasPosition() const
 {
   return mHasPosition;
 }
 
-QgsPoint QgsQuickPositionKit::position() const
+QgsPoint PositionKit::position() const
 {
   return mPosition;
 }
 
-double QgsQuickPositionKit::accuracy() const
+double PositionKit::accuracy() const
 {
   return mAccuracy;
 }
 
-QgsUnitTypes::DistanceUnit QgsQuickPositionKit::accuracyUnits() const
+QgsUnitTypes::DistanceUnit PositionKit::accuracyUnits() const
 {
   return QgsUnitTypes::DistanceMeters;
 }
 
-double QgsQuickPositionKit::direction() const
+double PositionKit::direction() const
 {
   return mDirection;
 }
 
-bool QgsQuickPositionKit::isSimulated() const
+bool PositionKit::isSimulated() const
 {
   return mIsSimulated;
 }
 
-void QgsQuickPositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+void PositionKit::setMapSettings( MapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -329,12 +329,12 @@ void QgsQuickPositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
 
   if ( mMapSettings )
   {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &QgsQuickPositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::extentChanged, this, &PositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::destinationCrsChanged, this, &PositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::mapUnitsPerPixelChanged, this, &PositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::visibleExtentChanged, this, &PositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::outputSizeChanged, this, &PositionKit::onMapSettingsUpdated );
+    connect( mMapSettings, &MapSettings::outputDpiChanged, this, &PositionKit::onMapSettingsUpdated );
   }
 
   emit mapSettingsChanged();

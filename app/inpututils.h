@@ -19,9 +19,9 @@
 #include "inputhelp.h"
 #include "merginapi.h"
 #include "androidutils.h"
-#include "qgsquickfeaturelayerpair.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickpositionkit.h"
+#include "featurelayerpair.h"
+#include "mapsettings.h"
+#include "positionkit.h"
 #include "qgis.h"
 
 class InputUtils: public QObject
@@ -37,15 +37,15 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE void setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, MapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
-    // (in theory this data should be directly available from QgsQuick.MapTransform
+    // (in theory this data should be directly available from .MapTransform
     // but they are not currently, so this is a workaround we need for display of markers)
 
-    Q_INVOKABLE double mapSettingsScale( QgsQuickMapSettings *ms );
-    Q_INVOKABLE double mapSettingsOffsetX( QgsQuickMapSettings *ms );
-    Q_INVOKABLE double mapSettingsOffsetY( QgsQuickMapSettings *ms );
+    Q_INVOKABLE double mapSettingsScale( MapSettings *ms );
+    Q_INVOKABLE double mapSettingsOffsetX( MapSettings *ms );
+    Q_INVOKABLE double mapSettingsOffsetY( MapSettings *ms );
 
     /**
      * Extract geometry coordinates from the given feature.
@@ -62,7 +62,7 @@ class InputUtils: public QObject
      *
      * If the layer's CRS is not the same as map CRS, the geometry will be first transformed to map CRS.
      */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const FeatureLayerPair &pair, MapSettings *mapSettings );
 
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
@@ -79,10 +79,10 @@ class InputUtils: public QObject
 
     /**
      * Returns speed from positionKit's QGeoPositionInfo.
-     * \param QgsQuickPositionKit positionKit.
+     * \param PositionKit positionKit.
      * \result The ground speed, in meters/sec.
      */
-    Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
+    Q_INVOKABLE qreal groundSpeedFromSource( PositionKit *positionKit );
 
     /**
      * Converts bytes to  human readable size (e.g. 1GB, 500MB)
