@@ -7,6 +7,10 @@ Build and run Input on various platforms:
 - [Android](./android.md)
 - [Windows](./win.md)
 
+Code structure:
+
+- [Code](./code/README.md)
+
 Other topics:
 - [Translations](./translations.md)
 - [Publishing](./publishing.md)

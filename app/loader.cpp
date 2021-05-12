@@ -202,81 +202,6 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   mapSettings->setExtent( extent );
 }
 
-QString Loader::featureTitle( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  QgsExpression expr( pair.layer()->displayExpression() );
-  return expr.evaluate( &context ).toString();
-}
-
-QString Loader::mapTipHtml( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  return QgsExpression::replaceExpressionText( pair.layer()->mapTipTemplate(), &context );
-}
-
-QString Loader::mapTipType( QgsQuickFeatureLayerPair pair )
-{
-  // Stripping extra CR char to unify Windows lines with Unix.
-  QString mapTip = pair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
-  if ( mapTip.startsWith( "# image\n" ) )
-    return "image";
-  else if ( mapTip.startsWith( "# fields\n" ) || mapTip.isEmpty() )
-    return "fields";
-  else
-    return "html";
-}
-
-QString Loader::mapTipImage( QgsQuickFeatureLayerPair pair )
-{
-  QgsExpressionContext context( globalProjectLayerScopes( pair.layer() ) );
-  context.setFeature( pair.feature() );
-  QString mapTip = pair.layer()->mapTipTemplate();
-  QStringList lst = mapTip.split( '\n' ); // first line is "# image"
-  if ( lst.count() >= 2 )
-    return QgsExpression::replaceExpressionText( lst[1], &context );
-  else
-    return QString();
-}
-
-QStringList Loader::mapTipFields( QgsQuickFeatureLayerPair pair )
-{
-  QString mapTip = pair.layer()->mapTipTemplate();
-  QStringList lst;
-  const QgsFields fields = pair.layer()->fields();
-  const int LIMIT = 3;  // max. 3 fields can fit in the preview
-
-  if ( mapTip.isEmpty() )
-  {
-    // user has not provided any map tip - let's use first two fields to show
-    // at least something.
-    QString featureTitleExpression = pair.layer()->displayExpression();
-    for ( QgsField field : fields )
-    {
-      if ( featureTitleExpression != field.name() )
-        lst << field.displayName();  // yes, using alias, not the original field name
-      if ( lst.count() == LIMIT )
-        break;
-    }
-  }
-  else
-  {
-    // user has specified "# fields" on the first line and then each next line is a field name
-    QStringList lines = mapTip.split( '\n' );
-    for ( int i = 1; i < lines.count(); ++i ) // starting from index to avoid first line with "# fields"
-    {
-      int index = fields.indexFromName( lines[i] );
-      if ( index >= 0 )
-        lst << fields[index].displayName();  // yes, using alias, not the original field name
-      if ( lst.count() == LIMIT )
-        break;
-    }
-  }
-  return lst;
-}
-
 bool Loader::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
@@ -337,15 +262,7 @@ void Loader::appAboutToQuit()
   CoreUtils::log( "Input", "Application has quit" );
 }
 
-QList<QgsExpressionContextScope *> Loader::globalProjectLayerScopes( QgsMapLayer *layer )
-{
-  // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
-  QList<QgsExpressionContextScope *> scopes;
-  scopes << QgsExpressionContextUtils::globalScope();
-  scopes << QgsExpressionContextUtils::projectScope( mProject );
-  scopes << QgsExpressionContextUtils::layerScope( layer );
-  return scopes;
-}
+
 
 void Loader::setActiveLayer( QString layerName ) const
 {

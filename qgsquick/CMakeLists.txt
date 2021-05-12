@@ -350,4 +350,15 @@ ENDIF (WIN32)
 SET(QMLPLUGINDUMP_FOUND FALSE)
 #############################################################
 # add original CMakeLists
-ADD_SUBDIRECTORY(from_qgis)
+ADD_SUBDIRECTORY(from_qgis/quickgui)
+
+IF(ENABLE_TESTS)
+    ENABLE_TESTING()
+    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR_MINE}/from_qgis)
+    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR_MINE}/from_qgis/quickgui)
+    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR_MINE}/from_qgis/quickgui/attributes)
+    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/from_qgis/quickgui)
+    SET (TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/from_qgis/testdata")
+    ADD_DEFINITIONS(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
+    ADD_SUBDIRECTORY(from_qgis/tests/quickgui)
+ENDIF (ENABLE_TESTS)

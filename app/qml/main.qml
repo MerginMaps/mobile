@@ -426,15 +426,11 @@ ApplicationWindow {
         onRecordingChanged: {
             __loader.recording = digitizing.recording
         }
-    }
 
-    // Highlighting a new feature while digitizing
-    Connections {
-        target: digitizing.recordingFeatureModel
         onFeatureLayerPairChanged: {
             if (digitizing.recording) {
                 digitizingHighlight.visible = true
-                digitizingHighlight.featureLayerPair = digitizing.recordingFeatureModel.featureLayerPair
+                digitizingHighlight.featureLayerPair = digitizing.featureLayerPair
             }
         }
     }

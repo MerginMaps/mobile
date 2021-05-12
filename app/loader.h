@@ -51,11 +51,6 @@ class Loader: public QObject
 
     Q_INVOKABLE bool load( const QString &filePath );
     Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
-    Q_INVOKABLE QString featureTitle( QgsQuickFeatureLayerPair pair );
-    Q_INVOKABLE QString mapTipHtml( QgsQuickFeatureLayerPair pair );
-    Q_INVOKABLE QString mapTipType( QgsQuickFeatureLayerPair pair );
-    Q_INVOKABLE QString mapTipImage( QgsQuickFeatureLayerPair pair );
-    Q_INVOKABLE QStringList mapTipFields( QgsQuickFeatureLayerPair pair );
     Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
     Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
@@ -121,7 +116,7 @@ class Loader: public QObject
   private:
     QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
 
-    QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
+
     QgsProject *mProject = nullptr;
     QgsQuickPositionKit *mPositionKit = nullptr;
     bool mRecording = false;

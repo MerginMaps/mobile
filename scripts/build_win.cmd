@@ -142,7 +142,7 @@ xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y
 rem QgsQuick
 xcopy %STAGE_PATH_QGSQUICK%\bin\qgis_quick.dll %STAGE_PATH%\ /Y
 robocopy %STAGE_PATH_QGSQUICK%\qml %STAGE_PATH%\qml /E
-robocopy %REPO_PATH%\qgsquick/from_qgis/images %STAGE_PATH%\images\QgsQuick /E
+robocopy %REPO_PATH%\qgsquick\from_qgis\quickgui\images %STAGE_PATH%\images\QgsQuick /E
 
 rem system
 xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\*.dll %STAGE_PATH%\ /Y

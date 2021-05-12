@@ -169,7 +169,7 @@ QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsCon
 {
 
   QgsFields fields;
-  for ( const FieldConfiguration fc : fieldsConfig )
+  for ( const FieldConfiguration &fc : fieldsConfig )
   {
     QString type = widgetToType( fc.widgetType );
     QVariant::Type qtype = parseType( type );

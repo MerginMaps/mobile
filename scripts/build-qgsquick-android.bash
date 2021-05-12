@@ -82,6 +82,6 @@ make -j${CORES} VERBOSE=1
 make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
 
 mkdir -p ${INSTALL_DIR_QGSQUICK}/images
-cp ${SOURCE_DIR}/qgsquick/from_qgis/plugin/qgsquickplugin.h ${INSTALL_DIR_QGSQUICK}/include
-cp -R ${SOURCE_DIR}/qgsquick/from_qgis/images ${INSTALL_DIR_QGSQUICK}/images/QgsQuick
+cp ${SOURCE_DIR}/qgsquick/from_qgis/quickgui/plugin/qgsquickplugin.h ${INSTALL_DIR_QGSQUICK}/include
+cp -R ${SOURCE_DIR}/qgsquick/from_qgis/quickgui/images ${INSTALL_DIR_QGSQUICK}/images/QgsQuick
 

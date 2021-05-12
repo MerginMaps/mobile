@@ -13,18 +13,13 @@ import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Item {
     id: previewPanel
     property real rowHeight: InputStyle.rowHeight
-    property QgsQuick.AttributeFormModel model
+    property AttributePreviewController controller
 
-    property alias titleBorder: titleBorder
-    property string title: ""
-    property string mapTipType: ""
-    property string mapTipImage: ""
-    property string mapTipHtml: ""
-    property variant previewFields: []
     property bool isReadOnly
 
     signal contentClicked()
@@ -62,7 +57,7 @@ Item {
                         id: titleText
                         height: parent.height
                         width: parent.width - rowHeight
-                        text: previewPanel.title
+                        text: controller.title
                         font.pixelSize: InputStyle.fontPixelSizeTitle
                         color: InputStyle.fontColor
                         font.bold: true
@@ -122,15 +117,22 @@ Item {
                 // we have three options what will be in the preview content: html content, image or field values
 
                 Text {
-                    visible: mapTipType == 'html'
-                    text: mapTipHtml
+                    visible: controller.type == AttributePreviewController.Empty
+                    text: qsTr("No map tip available.")
+                    anchors.fill: parent
+                    anchors.topMargin: InputStyle.panelMargin
+                }
+
+                Text {
+                    visible: controller.type == AttributePreviewController.HTML
+                    text: controller.html
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                 }
 
                 Image {
-                    visible: mapTipType == 'image'
-                    source: mapTipImage
+                    visible: controller.type == AttributePreviewController.Image
+                    source: controller.photo
                     sourceSize: Qt.size(width, height)
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
@@ -138,41 +140,34 @@ Item {
                 }
 
                 ListView {
-                    visible: mapTipType == 'fields'
-                    model: previewPanel.model
+                    visible: controller.type == AttributePreviewController.Fields
+                    model: controller.fieldModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                     spacing: 2 * QgsQuick.Utils.dp
                     interactive: false
 
-                    delegate: Item {
+                    delegate: Row {
                         id: root
+                        spacing: InputStyle.panelMargin
                         width: parent.width
-                        height:previewFields.indexOf(Name) >= 0 ? previewPanel.rowHeight/2 : 0
-                        visible: height
 
-                        Text {
-                            id: fieldName
-                            text: Name
-                            width: root.width/2
-                            height: root.height
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            color: InputStyle.fontColorBright
-                            elide: Text.ElideRight
-                            anchors.rightMargin: InputStyle.panelMargin
-                        }
+                          Text {
+                              id: fieldName
+                              text: Name
+                              width: root.width/2
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
+                              color: InputStyle.fontColorBright
+                              elide: Text.ElideRight
+                          }
 
-                        Text {
-                            id: text2
-                            text: AttributeValue ? AttributeValue : ""
-                            anchors.left: fieldName.right
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            anchors.top: parent.top
-                            height: root.height
-                            font.pixelSize: InputStyle.fontPixelSizeNormal
-                            color: InputStyle.fontColor
-                            elide: Text.ElideRight
+                          Text {
+                              id: fieldValue
+                              text: Value ? Value : ""
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
+                              color: InputStyle.fontColor
+                              elide: Text.ElideRight
+
                         }
                     }
                 }

@@ -12,6 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import lc 1.0
 
 Drawer {
 
@@ -25,21 +26,21 @@ Drawer {
     signal panelClosed()
 
     property alias formState: featureForm.state
-    property alias feature: attributeModel.featureLayerPair
-    property alias currentAttributeModel: attributeModel
+    property alias feature: attributeController.featureLayerPair
 
     function saveFeatureGeom() {
         featureForm.save()
     }
 
     function reload() {
-      // order matters!
-      attributeFormModel.forceClean();
-      attributeModel.forceClean();
+      attributeController.reset()
+      featureForm.reset()
+      rememberAttributesController.reset()
+      attributePreviewController.reset()
     }
 
     function onAboutToClose() {
-      if (featureForm.hasAnyChanges())  {
+      if (attributeController.hasAnyChanges)  {
         saveChangesDialog.open()
       } else {
         featurePanel.visible = false
@@ -56,6 +57,21 @@ Drawer {
 
     Behavior on height {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+    }
+
+    QgsQuick.RememberAttributesController {
+      id: rememberAttributesController
+      rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+    }
+
+    QgsQuick.AttributeController {
+      id: attributeController
+      rememberAttributesController: rememberAttributesController
+    }
+
+    AttributePreviewController {
+      id: attributePreviewController
+      project: __loader.project
     }
 
     Item {
@@ -96,24 +112,17 @@ Drawer {
 
     function show_panel(feature, formState, panelState) {
         featurePanel.feature = feature
+        attributePreviewController.featureLayerPair = feature
         featurePanel.formState = formState
         featurePanel.visible = true
         featurePanel.isReadOnly = feature.layer.readOnly
         backHandler.focus = true
-
-        if (panelState === "preview") {
-            previewPanel.title = __loader.featureTitle(feature)
-            previewPanel.mapTipType = __loader.mapTipType(feature)
-            previewPanel.mapTipHtml = __loader.mapTipHtml(feature)
-            previewPanel.mapTipImage = __loader.mapTipImage(feature)
-            previewPanel.previewFields = __loader.mapTipFields(feature)
-        }
         stateManager.state = panelState
     }
 
     PreviewPanel {
       id: previewPanel
-      model: featureForm.model
+      controller: attributePreviewController
       height: featurePanel.previewHeight
       width: parent.width
       visible: false
@@ -156,7 +165,7 @@ Drawer {
                 id: saveButtonText
                 text: qsTr("Save")
                 visible: featureForm.state === "Edit" || featureForm.state === "Add"
-                enabled: featureForm.model.constraintsHardValid
+                enabled: featureForm.controller.constraintsHardValid
                 color: enabled ? InputStyle.highlightColor : "red"
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 height: header.rowHeight
@@ -175,38 +184,18 @@ Drawer {
 
         }
 
-        // TODO currently disabled since supporting photos is not yet implemented
-        Rectangle {
-            id: photoContainer
-            height: 0
-            visible: false
-            width: parent.width
-            anchors.top: header.bottom
-            color: InputStyle.panelBackground2
-
-            Text {
-                id: backButtonText
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: qsTr("No photos added.")
-                color: InputStyle.clrPanelMain
-                font.pixelSize: InputStyle.fontPixelSizeNormal
-            }
-        }
-
         QgsQuick.FeatureForm {
             id: featureForm
             visible: true
 
             width: parent.width
-            height: parent.height - header.height - photoContainer.height - toolbar.height
-            anchors.top: photoContainer.bottom
+            height: parent.height - header.height - toolbar.height
+            anchors.top: header.bottom
             anchors.bottom: toolbar.top
             externalResourceHandler: externalResourceBundle.handler
             importDataHandler: codeReaderHandler.handler
-            toolbarVisible: false
-            allowRememberAttribute: __appSettings.reuseLastEnteredValues
+            controller: attributeController
+            project: featurePanel.project
             style: QgsQuick.FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
@@ -288,14 +277,7 @@ Drawer {
                 }
               }
 
-            model: QgsQuick.AttributeFormModel {
-                id: attributeFormModel
-                attributeModel: QgsQuick.AttributeModel {
-                    id: attributeModel
-                }
-            }
 
-            project: featurePanel.project
             onSaved: {
                 featurePanel.panelClosed()
                 featurePanel.visible = false
