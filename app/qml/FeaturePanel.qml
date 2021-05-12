@@ -36,6 +36,7 @@ Drawer {
       attributeController.reset()
       featureForm.reset()
       rememberAttributesController.reset()
+      attributePreviewController.reset()
     }
 
     function onAboutToClose() {

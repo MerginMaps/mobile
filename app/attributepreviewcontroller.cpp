@@ -101,9 +101,10 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
       int index = fields.indexFromName( lines[i] );
       if ( index >= 0 )
       {
+        const QString val = mFeatureLayerPair.feature().attribute( index ).toString();
         const QPair<QString, QString> item = qMakePair(
                                                fields[index].displayName(),
-                                               mFeatureLayerPair.feature().attribute( fields[index].name() ).toString()
+                                               val
                                              );
 
         lst.append( item );
@@ -161,6 +162,11 @@ AttributePreviewController::AttributePreviewController( QObject *parent )
   : QObject( parent )
   , mFieldModel( new AttributePreviewModel() )
 {
+}
+
+void AttributePreviewController::reset()
+{
+  setFeatureLayerPair( QgsQuickFeatureLayerPair() );
 }
 
 AttributePreviewController::~AttributePreviewController() = default;

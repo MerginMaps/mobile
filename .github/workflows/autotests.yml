@@ -131,6 +131,11 @@ jobs:
           cd build-Input/
           ./Input.app/Contents/MacOS/Input --testUtils
 
+      - name: run forms tests
+        run: |
+          cd build-Input/
+          ./Input.app/Contents/MacOS/Input --testForms
+
       - name: run mergin api tests
         run: |
           cd build-Input/

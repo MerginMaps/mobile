@@ -65,6 +65,7 @@
 #include "test/testmerginapi.h"
 #include "test/testlinks.h"
 #include "test/testutilsfunctions.h"
+#include "test/testforms.h"
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
 #endif
@@ -306,15 +307,17 @@ int main( int argc, char *argv[] )
   bool IS_PURCHASING_TEST = false;
   bool IS_LINKS_TEST = false;
   bool IS_UTILS_TEST = false;
+  bool IS_FORMS_TEST = false;
   for ( int i = 0; i < argc; ++i )
   {
     if ( std::string( argv[i] ) == "--testMerginApi" ) IS_MERGIN_API_TEST = true;
     if ( std::string( argv[i] ) == "--testPurchasing" ) IS_PURCHASING_TEST = true;
     if ( std::string( argv[i] ) == "--testLinks" ) IS_LINKS_TEST = true;
+    if ( std::string( argv[i] ) == "--testForms" ) IS_FORMS_TEST = true;
     if ( std::string( argv[i] ) == "--testUtils" ) IS_UTILS_TEST = true;
   }
-  Q_ASSERT( !( IS_MERGIN_API_TEST && IS_PURCHASING_TEST && IS_LINKS_TEST && IS_UTILS_TEST ) );
-  bool IS_TEST = IS_PURCHASING_TEST || IS_MERGIN_API_TEST || IS_LINKS_TEST || IS_UTILS_TEST;
+  Q_ASSERT( !( IS_MERGIN_API_TEST && IS_PURCHASING_TEST && IS_LINKS_TEST && IS_UTILS_TEST && IS_FORMS_TEST ) );
+  bool IS_TEST = IS_PURCHASING_TEST || IS_MERGIN_API_TEST || IS_LINKS_TEST || IS_UTILS_TEST || IS_FORMS_TEST;
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -444,6 +447,11 @@ int main( int argc, char *argv[] )
     {
       TestUtilsFunctions utilsTest;
       nFailed = QTest::qExec( &utilsTest, args.count(), args.data() );
+    }
+    else if ( IS_FORMS_TEST )
+    {
+      TestForms formsTest;
+      nFailed = QTest::qExec( &formsTest, args.count(), args.data() );
     }
 #if not defined APPLE_PURCHASING
     else if ( IS_PURCHASING_TEST )

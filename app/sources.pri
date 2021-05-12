@@ -65,7 +65,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmerginapi.cpp \
       test/testingpurchasingbackend.cpp \
       test/testpurchasing.cpp \
-      test/testlinks.cpp
+      test/testlinks.cpp \
+      test/testforms.cpp
 
   HEADERS += \
       test/testutils.h \
@@ -73,7 +74,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmerginapi.h \
       test/testingpurchasingbackend.h \
       test/testpurchasing.h \
-      test/testlinks.h
+      test/testlinks.h \
+      test/testforms.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

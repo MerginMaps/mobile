@@ -121,6 +121,9 @@ class AttributePreviewController: public QObject
     AttributePreviewController( QObject *parent = nullptr );
     ~AttributePreviewController() override;
 
+    //! Restore clean/initial state: no layer, no feature!
+    Q_INVOKABLE void reset();
+
     void setFeatureLayerPair( const QgsQuickFeatureLayerPair &pair );
     QgsQuickFeatureLayerPair featureLayerPair() const;
     void setProject( QgsProject *project );
