@@ -5,16 +5,13 @@
 SOURCE_DIR=/usr/src/input
 if [[ -z ${BUILD_FOLDER+x} ]]; then
     BUILD_DIR=${SOURCE_DIR}/build-docker
-    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/build-docker-quick
 else
     BUILD_DIR=${SOURCE_DIR}/${BUILD_FOLDER}
-    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/${BUILD_FOLDER}-quick
 fi
 if [[ -z ${ARCH+x} ]]; then
     ARCH=armeabi-v7a
 fi
 INSTALL_DIR=${BUILD_DIR}/out
-INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
 QT_ANDROID=${QT_ANDROID_BASE}/android
 CORES=$(cat /proc/cpuinfo | grep processor | wc -l)
 STAGE_PATH=/home/input-sdk/${ARCH}
@@ -60,40 +57,6 @@ echo "CORES ${CORES}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
 echo "API: $ANDROIDAPI"
 
-######################
-# QGS QUICK
-mkdir -p ${BUILD_DIR_QGSQUICK}
-pushd ${BUILD_DIR_QGSQUICK}
-
-export ANDROID_NDK=$ANDROID_NDK_ROOT
-
-cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DANDROID_LINKER_FLAGS=$ANDROID_CMAKE_LINKER_FLAGS \
-    -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
-    -DCMAKE_CXX_FLAGS_RELEASE=-g0 \
-    -DCMAKE_FIND_ROOT_PATH:PATH="${ANDROID_NDK_ROOT};${QT_ANDROID};$STAGE_PATH" \
-    -DANDROID_ABI=${ARCH} \
-    -DANDROID_NDK=${ANDROID_NDK_ROOT} \
-    -DANDROID_NATIVE_API_LEVEL=$ANDROIDAPI \
-    -DANDROID=ON \
-    -DANDROID_STL=c++_shared \
-    -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR_QGSQUICK} \
-    -DCMAKE_PREFIX_PATH=$QT_ANDROID \
-    -DFORCE_STATIC_LIBS=FALSE \
-    -DUSE_QGIS_BUILD_DIR=FALSE \
-    -DENABLE_QT5=ON \
-    -DQGIS_INSTALL_PATH=$STAGE_PATH \
-    -DANDROID_INPUT_SDK_PATH=$STAGE_PATH \
-    -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
-  ${SOURCE_DIR}/qgsquick
-
-make -j ${CORES} VERBOSE=1
-make install INSTALL_ROOT=${INSTALL_DIR_QGSQUICK}
-
-mkdir -p ${INSTALL_DIR_QGSQUICK}/images
-cp ${SOURCE_DIR}/qgsquick/from_qgis/quickgui/plugin/qgsquickplugin.h ${INSTALL_DIR_QGSQUICK}/include
-cp -R ${SOURCE_DIR}/qgsquick/from_qgis/quickgui/images ${INSTALL_DIR_QGSQUICK}/images/QgsQuick
 ######################
 # Input
 

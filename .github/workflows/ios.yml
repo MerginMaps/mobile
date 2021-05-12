@@ -84,51 +84,6 @@ jobs:
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
           cp $DOWNLOAD_DIR/scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
 
-      - name: build QgsQuick
-        run: |
-          export QGSQUICK_DIR=`pwd`/qgsquick
-          ls ${QGSQUICK_DIR}
-
-          mkdir -p ../build-QgsQuick
-          mkdir -p ../install-QgsQuick
-          mkdir -p ../install-QgsQuick/images/QgsQuick
-
-          SYSROOT="$(xcrun --sdk iphoneos --show-sdk-path)"
-          echo "SYSROOT: $SYSROOT"
-
-          cd ../build-QgsQuick
-          export STAGE_PATH=/opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage/arm64
-          export PATH=${STAGE_PATH}/bin:$PATH
-
-          cmake \
-            -DENABLE_VISIBILITY=0 \
-            -DARCHS=arm64 \
-            -DENABLE_QT5=ON \
-            -DPLATFORM=OS \
-            -DENABLE_ARC=0 \
-            -DENABLE_BITCODE=0 \
-            -DCMAKE_TOOLCHAIN_FILE=${STAGE_PATH}/tools/ios.toolchain.cmake \
-            -DDEPLOYMENT_TARGET=${IOS_MIN_SDK_VERSION} \
-            -DQT_PATH=/opt/Qt/${QT_VERSION}/ios \
-            -DFORCE_STATIC_LIBS=TRUE \
-            -DCMAKE_INSTALL_PREFIX=../install-QgsQuick \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="/opt/Qt/${QT_VERSION}/ios\;${STAGE_PATH}" \
-            -DQGIS_INSTALL_PATH=${STAGE_PATH} \
-            -DUSE_QGIS_BUILD_DIR=FALSE \
-            -DQGIS_CMAKE_PATH=${STAGE_PATH}/cmake \
-            -DIOS_INPUT_SDK_PATH=${STAGE_PATH} \
-            -DIOS_SYSROOT_PATH=${SYSROOT} \
-            -DIOS=TRUE \
-            ${QGSQUICK_DIR}
-
-          make -j $(sysctl -n hw.ncpu) VERBOSE=1
-          make install
-
-          cp -v from_qgis/quickgui/qgis_quick.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
-          cp -v ${QGSQUICK_DIR}/from_qgis/quickgui/plugin/qgsquickplugin.h ../install-QgsQuick/frameworks/qgis_quick.framework/Headers/
-          cp -v ${QGSQUICK_DIR}/from_qgis/quickgui/images/* ../install-QgsQuick/images/QgsQuick/
-
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`

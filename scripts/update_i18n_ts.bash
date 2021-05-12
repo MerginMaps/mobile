@@ -8,11 +8,6 @@ LUPDATE_PARAMS="-extensions qml,cpp,hpp,h,ui,c -ts"
 
 echo "update_18n_ts.bash QT_DIST_DIR"
 
-if [ ! -f "$DIR/../qgsquick/from_qgis/quickgui/qgsquickutils.cpp" ]; then
-  echo "Missing $DIR/qgsquick/from_qgis/quickgui/qgsquickutils.cpp!"
-  exit 1;
-fi
-
 QT_DIR=$1
 QT_DIR=`realpath $QT_DIR`
 if [ ! -f "$QT_DIR/translations/qt_fr.qm" ]; then
@@ -25,10 +20,9 @@ export PATH=$QT_DIR/bin:$PATH
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
 INPUT_TS="$INPUT_TS ./input_en.ts"
-QUICKQUI_DIR=`realpath --relative-to=$I18N_DIR $DIR/../qgsquick/from_qgis/quickgui`
 INPUT_DIR=../
 
-lupdate -noobsolete $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
+lupdate -noobsolete $INPUT_DIR $LUPDATE_PARAMS $INPUT_TS
 
 export PATH=$OLD_PATH
 echo "update i18n done"
