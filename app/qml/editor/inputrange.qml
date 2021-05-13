@@ -64,9 +64,10 @@ Item {
       property int multiplier: {
         var m = 1;
         while (fieldItem.step * m < 1) {
-          m +=1
+          m *=10
         }
-        m
+        var precision = fieldItem.precision === 0 ? 1 : Math.pow(10, spinbox.precision)
+        Math.max(m, precision)
       }
       property int precision: fieldItem.precision
       property int intValue: fieldItem.parent.value * multiplier
@@ -149,7 +150,7 @@ Item {
                   font.pixelSize: spinbox.font.pixelSize * 2
                   font.bold: true
                   fontSizeMode: Text.Fit
-                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  color: fieldItem.enabled && spinbox.value > spinbox.from ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
                   leftPadding: customStyle.fields.sideMargin
                   horizontalAlignment: Text.AlignLeft
                   verticalAlignment: Text.AlignVCenter
@@ -170,7 +171,7 @@ Item {
                   font.pixelSize: spinbox.font.pixelSize * 2
                   font.bold: true
                   fontSizeMode: Text.Fit
-                  color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+                  color: fieldItem.enabled && spinbox.value < spinbox.to ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
                   anchors.right: parent.right
                   rightPadding: customStyle.fields.sideMargin
                   horizontalAlignment: Text.AlignRight
