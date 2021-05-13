@@ -10,6 +10,7 @@
 #include "inputtests.h"
 
 #include <QTest>
+#include <qDebug>
 
 #include "test/testmerginapi.h"
 #include "test/testlinks.h"
@@ -77,11 +78,11 @@ int InputTests::runTest() const
   if ( !mApi || !mPurchasing || !mInputUtils )
   {
     nFailed = 1000;
-    qdebug() << "input tests not initialized";
+    qDebug() << "input tests not initialized";
     return nFailed;
   }
 
-  qdebug() << "requested to run" << mTestRequested;
+  qDebug() << "requested to run" << mTestRequested;
   if ( mTestRequested == "--testMerginApi" )
   {
     TestMerginApi merginApiTest( mApi );
@@ -111,7 +112,7 @@ int InputTests::runTest() const
 #endif
   else
   {
-    qdebug() << "invalid test requested" << mTestRequested;
+    qDebug() << "invalid test requested" << mTestRequested;
     nFailed = 1001;
   }
 
