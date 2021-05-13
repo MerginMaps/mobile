@@ -324,7 +324,7 @@ Drawer {
           //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
           onButtonClicked: {
               if (clickedButton === StandardButton.Ok) {
-                featureForm.model.attributeModel.deleteFeature()
+                attributeController.deleteFeature()
                 visible = false
                 featureForm.canceled()
               }
