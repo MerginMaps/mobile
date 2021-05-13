@@ -21,13 +21,21 @@ import QgsQuick 0.1 as QgsQuick
 Item {
   signal valueChanged(var value, bool isNull)
 
+  readonly property int max_range: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
+
   property string widgetStyle: config["Style"] ? config["Style"] : "SpinBox"
   property int precision: config["Precision"]
-  property real from: config["Min"]
-  property real to: config["Max"]
+  property real from: getRange(config["Min"], -max_range)
+  property real to: getRange(config["Max"], max_range)
   property real step: config["Step"] ? config["Step"] : 1
   property var locale: Qt.locale()
   property string suffix: config["Suffix"] ? config["Suffix"] : ""
+
+   function getRange(rangeValue, defaultRange) {
+     if (rangeValue && rangeValue >= -max_range && rangeValue <= max_range)
+       return rangeValue
+     else return defaultRange/spinbox.multiplier
+   }
 
   id: fieldItem
   enabled: !readOnly
@@ -53,16 +61,22 @@ Item {
 
     // SpinBox
     SpinBox {
-      property int multiplier: fieldItem.precision === 0 ? 1 : Math.pow(10, spinbox.precision)
+      property int multiplier: {
+        var m = 1;
+        while (fieldItem.step * m < 1) {
+          m +=1
+        }
+        m
+      }
       property int precision: fieldItem.precision
       property int intValue: fieldItem.parent.value * multiplier
 
       id: spinbox
       locale: fieldItem.locale
-      from: fieldItem.from
+      from: fieldItem.from * multiplier
       value: intValue
       to: fieldItem.to * multiplier
-      stepSize: fieldItem.step * multiplier
+      stepSize:fieldItem.step * multiplier
       width: parent.width
       height: parent.height
       editable: true
@@ -118,7 +132,6 @@ Item {
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
         readOnly: !spinbox.editable
-        validator: spinbox.validator
         inputMethodHints: Qt.ImhFormattedNumbersOnly
       }
 
