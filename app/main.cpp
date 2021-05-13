@@ -287,7 +287,7 @@ int main( int argc, char *argv[] )
 
 #ifdef INPUT_TEST
   InputTests tests;
-  tests.parseArgs(argc, argv);
+  tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -386,7 +386,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init(ma.get(), purchasing.get(), &iu);
+    tests.init( ma.get(), purchasing.get(), &iu );
     return tests.runTest();
   }
 #endif

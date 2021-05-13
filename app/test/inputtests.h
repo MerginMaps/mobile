@@ -23,7 +23,7 @@ class InputTests
     InputTests();
     ~InputTests();
 
-    void parseArgs(int argc, char *argv[]);
+    void parseArgs( int argc, char *argv[] );
 
     bool testingRequested() const;
 

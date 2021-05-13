@@ -23,27 +23,30 @@ InputTests::InputTests() = default;
 
 InputTests::~InputTests() = default;
 
-void InputTests::parseArgs(int argc, char *argv[]) {
+void InputTests::parseArgs( int argc, char *argv[] )
+{
   // use command line args we got, but filter out "--test*" that's recognized by us but not by QTest framework
   // (command line args may be used to filter function names that should be executed)
   for ( int i = 0; i < argc; ++i )
   {
-    QString arg(argv[i]);
-    if ( arg.startsWith("--test") )
+    QString arg( argv[i] );
+    if ( arg.startsWith( "--test" ) )
     {
       mTestRequested = arg;
-      break;
-    } else {
+    }
+    else
+    {
       mTestArgs << argv[i];
     }
   }
 }
 
-bool InputTests::testingRequested() const {
+bool InputTests::testingRequested() const
+{
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init(MerginApi* api, Purchasing* purchasing, InputUtils* utils)
+void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils )
 {
   mApi = api;
   mPurchasing = purchasing;
@@ -67,8 +70,18 @@ QString InputTests::initTestingDir()
   return testProjectsDir.canonicalPath();
 }
 
-int InputTests::runTest() const {
+int InputTests::runTest() const
+{
   int nFailed = 0;
+
+  if ( !mApi || !mPurchasing || !mInputUtils )
+  {
+    nFailed = 1000;
+    qdebug() << "input tests not initialized";
+    return nFailed;
+  }
+
+  qdebug() << "requested to run" << mTestRequested;
   if ( mTestRequested == "--testMerginApi" )
   {
     TestMerginApi merginApiTest( mApi );
@@ -93,9 +106,14 @@ int InputTests::runTest() const {
   else if ( mTestRequested == "--testPurchasing" )
   {
     TestPurchasing purchasingTest( mApi, mPurchasing );
-    nFailed += QTest::qExec( &purchasingTest, mTestArgs );
+    nFailed = QTest::qExec( &purchasingTest, mTestArgs );
   }
 #endif
+  else
+  {
+    qdebug() << "invalid test requested" << mTestRequested;
+    nFailed = 1001;
+  }
 
   return nFailed;
 }
