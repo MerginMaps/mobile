@@ -96,7 +96,7 @@ void TestAttributePreviewController::testPreviewForms()
   QCOMPARE( controller.type(), AttributePreviewController::Empty );
 
   // Set Layer without any definition
-  QgsQuickFeatureLayerPair pair( f1, layer );
+  FeatureLayerPair pair( f1, layer );
   controller.setFeatureLayerPair( pair );
   QCOMPARE( controller.type(), AttributePreviewController::Fields );
   QCOMPARE( controller.title(), "one" );
@@ -109,7 +109,7 @@ void TestAttributePreviewController::testPreviewForms()
   QCOMPARE( controller.fieldModel()->data( controller.fieldModel()->index( 1, 0 ), AttributePreviewModel::Value ), 1 );
 
   // Set other feature from the same layer
-  QgsQuickFeatureLayerPair pair2( f2, layer );
+  FeatureLayerPair pair2( f2, layer );
   controller.setFeatureLayerPair( pair2 );
   QCOMPARE( controller.title(), "two" );
   QCOMPARE( controller.type(), AttributePreviewController::Fields );
@@ -121,7 +121,7 @@ void TestAttributePreviewController::testPreviewForms()
   QCOMPARE( controller.fieldModel()->data( controller.fieldModel()->index( 1, 0 ), AttributePreviewModel::Value ), 2 );
 
   // Set layer with the fields definition
-  QgsQuickFeatureLayerPair pair3( fields1, layerFields );
+  FeatureLayerPair pair3( fields1, layerFields );
   controller.setFeatureLayerPair( pair3 );
   QCOMPARE( controller.title(), "f_one" );
   QCOMPARE( controller.type(), AttributePreviewController::Fields );
@@ -134,14 +134,14 @@ void TestAttributePreviewController::testPreviewForms()
   QCOMPARE( controller.fieldModel()->data( controller.fieldModel()->index( 1, 0 ), AttributePreviewModel::Value ), "f_three" );
 
   // Set layer with the HTML definition
-  QgsQuickFeatureLayerPair pair4( h1, layerHtml );
+  FeatureLayerPair pair4( h1, layerHtml );
   controller.setFeatureLayerPair( pair4 );
   QCOMPARE( controller.title(), "h_one" );
   QCOMPARE( controller.type(), AttributePreviewController::HTML );
   QCOMPARE( controller.html(), "<div>HELLO</div>" );
 
   // Set layer with the photo definition
-  QgsQuickFeatureLayerPair pair5( p1, layerPhoto );
+  FeatureLayerPair pair5( p1, layerPhoto );
   controller.setFeatureLayerPair( pair5 );
   QCOMPARE( controller.type(), AttributePreviewController::Photo );
   QCOMPARE( controller.photo(), "photo_relative_path" );

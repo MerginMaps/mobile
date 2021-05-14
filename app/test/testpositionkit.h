@@ -12,7 +12,7 @@
 #ifndef TESTPOSITIONKIT_H
 #define TESTPOSITIONKIT_H
 
-#include "qgsquickpositionkit.h"
+#include "positionkit.h"
 
 class TestPositionKit: public QObject
 {
@@ -24,7 +24,7 @@ class TestPositionKit: public QObject
     void simulated_position();
 
   private:
-    QgsQuickPositionKit positionKit;
+    PositionKit positionKit;
 };
 
 #endif // TESTPOSITIONKIT_H

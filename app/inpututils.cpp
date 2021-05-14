@@ -9,14 +9,17 @@
 
 #include "inpututils.h"
 
+#include <QWindow>
+#include <QScreen>
+#include <QApplication>
+
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-
-#include "utils.h"
-#include "maptransform.h"
+#include "qgsquickutils.h"
+#include "qgsquickmaptransform.h"
 #include "inputexpressionfunctions.h"
 #include "coreutils.h"
 #include "qgis.h"
@@ -31,8 +34,8 @@
 #include "qgsdatetimefieldformatter.h"
 
 #include "featurelayerpair.h"
-#include "mapsettings.h"
-#include "utils.h"
+#include "qgsquickmapsettings.h"
+#include "qgsquickutils.h"
 #include "qgsunittypes.h"
 
 #include <Qt>
@@ -188,7 +191,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   return INVALID_DATETIME_STR;
 }
 
-void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, MapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
 
   if ( !mapSettings )
@@ -257,19 +260,19 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( MapSettings *ms )
+double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
 {
   if ( !ms ) return 1;
   return 1 / ms->mapUnitsPerPixel();
 }
 
-double InputUtils::mapSettingsOffsetX( MapSettings *ms )
+double InputUtils::mapSettingsOffsetX( QgsQuickMapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().xMinimum();
 }
 
-double InputUtils::mapSettingsOffsetY( MapSettings *ms )
+double InputUtils::mapSettingsOffsetY( QgsQuickMapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().yMaximum();
@@ -341,7 +344,7 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
 }
 
 
-QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, MapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !pair.isValid() )
     return QVector<double>();
@@ -617,7 +620,7 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
   return srcPoint;
 }
 
-double InputUtils::screenUnitsToMeters( MapSettings *mapSettings, int baseLengthPixels )
+double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
 {
   if ( mapSettings == nullptr ) return 0.0;
 
@@ -888,7 +891,7 @@ QString InputUtils::dumpScreenInfo() const
     msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
     msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
     msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-    msg += tr( "screen density: %1" ).arg( mScreenDensity );
+    msg += tr( "screen density: %1" ).arg( QgsQuickUtils().screenDensity() );
   }
   else
   {
@@ -900,9 +903,9 @@ QString InputUtils::dumpScreenInfo() const
 QVariantMap InputUtils::createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature )
 {
   QVariantMap valueMap;
-  QgsValueRelationFieldFormatter::ValueRelationCache cache = QgsValueRelationFieldFormatter::createCache( config, formFeature );
+  const QgsValueRelationFieldFormatter::ValueRelationCache cache = QgsValueRelationFieldFormatter::createCache( config, formFeature );
 
-  for ( const QgsValueRelationFieldFormatter::ValueRelationItem &item : qgis::as_const( cache ) )
+  for ( const QgsValueRelationFieldFormatter::ValueRelationItem &item : cache )
   {
     valueMap.insert( item.key.toString(), item.value );
   }

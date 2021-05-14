@@ -30,7 +30,7 @@ void TestRememberAttributesController::cleanup()
 
 void TestRememberAttributesController::noFeatureTest()
 {
-  QgsQuickRememberAttributesController controller;
+  RememberAttributesController controller;
 
 
   QCOMPARE( controller.rememberValuesAllowed(), false );
@@ -45,7 +45,7 @@ void TestRememberAttributesController::noFeatureTest()
 
 void TestRememberAttributesController::storedFeatureTest()
 {
-  QgsQuickRememberAttributesController controller;
+  RememberAttributesController controller;
   controller.setRememberValuesAllowed( true );
 
   std::unique_ptr<QgsVectorLayer> layer(
@@ -79,9 +79,9 @@ void TestRememberAttributesController::storedFeatureTest()
 
   layer2->dataProvider()->addFeatures( QgsFeatureList() << f2 << f3 );
 
-  QgsQuickFeatureLayerPair pair( f1, layer.get() );
-  QgsQuickFeatureLayerPair pair2( f2, layer2.get() );
-  QgsQuickFeatureLayerPair pair22( f3, layer2.get() );
+  FeatureLayerPair pair( f1, layer.get() );
+  FeatureLayerPair pair2( f2, layer2.get() );
+  FeatureLayerPair pair22( f3, layer2.get() );
 
   // one feature is stored, but user does not want to use any stored values
   controller.storeFeature( pair );

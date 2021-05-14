@@ -19,7 +19,7 @@
 #include <QObject>
 #include <QVariantMap>
 
-class QgsQuickPositionKit;
+class PositionKit;
 class Compass;
 
 /**
@@ -42,7 +42,7 @@ class IOSImagePicker : public QObject
     * \param position - object to get GPS EXIF data from
     * \param compass - object to get GPS direction for EXIF data
     */
-    Q_INVOKABLE void callCamera( const QString  &targetDir, QgsQuickPositionKit *positionKit, Compass *compass );
+    Q_INVOKABLE void callCamera( const QString  &targetDir, PositionKit *positionKit, Compass *compass );
 
     /**
      * Calls the objective-c function to read EXIF metadata.
@@ -51,8 +51,8 @@ class IOSImagePicker : public QObject
 
     QString targetDir() const;
     void setTargetDir( const QString &targetDir );
-    void setPositionKit( QgsQuickPositionKit *positionKit );
-    QgsQuickPositionKit *positionKit() const;
+    void setPositionKit( PositionKit *positionKit );
+    PositionKit *positionKit() const;
 
     Compass *compass() const;
     void setCompass( Compass *compass );
@@ -72,7 +72,7 @@ class IOSImagePicker : public QObject
 
   private:
     QString mTargetDir;
-    QgsQuickPositionKit *mPositionKit = nullptr;
+    PositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
 
     /**

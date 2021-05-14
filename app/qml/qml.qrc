@@ -81,7 +81,5 @@
         <file>FeatureForm.qml</file>
         <file>FeatureFormStyling.qml</file>
         <file>PhotoPanel.qml</file>
-        <file>PositionMarker.qml</file>
-        <file>ScaleBar.qml</file>
     </qresource>
 </RCC>

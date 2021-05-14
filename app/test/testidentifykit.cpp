@@ -46,7 +46,7 @@ void TestIdentifyKit::identifyOne()
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -69,7 +69,7 @@ void TestIdentifyKit::identifyOne()
 
   // exactly matches f1 point
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF() );
+  FeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF() );
   QVERIFY( identifiedFeature.isValid() );
   QVERIFY( identifiedFeature.feature().geometry().asPoint() == point );
 }
@@ -94,7 +94,7 @@ void TestIdentifyKit::identifyOneDefinedVector()
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -117,7 +117,7 @@ void TestIdentifyKit::identifyOneDefinedVector()
   tempLayer2->dataProvider()->addFeatures( QgsFeatureList() << f2 );
 
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF(), tempLayer2 );
+  FeatureLayerPair identifiedFeature = kit.identifyOne( screenPoint.toQPointF(), tempLayer2 );
   QVERIFY( identifiedFeature.isValid() );
   QVERIFY( identifiedFeature.feature().geometry().asPoint() == point2 );
 
@@ -140,7 +140,7 @@ void TestIdentifyKit::identifyInRadius()
   ms->setOutputSize( QSize( 1000, 500 ) );
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
-  QgsQuickIdentifyKit kit;
+  IdentifyKit kit;
   kit.setMapSettings( ms );
 
   double pointX = -31.208;
@@ -161,7 +161,7 @@ void TestIdentifyKit::identifyInRadius()
 
   kit.setSearchRadiusMm( 1.0 );
   QgsPointXY screenPoint( 1954.0, 554.0 );
-  QgsQuickFeatureLayerPairs res = kit.identify( screenPoint.toQPointF() );
+  FeatureLayerPairs res = kit.identify( screenPoint.toQPointF() );
   QVERIFY( res.size() == 1 );
 
   kit.setSearchRadiusMm( 100.0 );

@@ -19,7 +19,7 @@
 
 SimulatedPositionSource::SimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius )
   : QGeoPositionInfoSource( parent )
-  , mTimer( qgis::make_unique< QTimer >() )
+  , mTimer( new QTimer() )
   , mFlightRadius( flightRadius )
   , mLongitude( longitude )
   , mLatitude( latitude )

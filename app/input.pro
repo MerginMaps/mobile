@@ -1,5 +1,6 @@
 TEMPLATE = app
 TARGET = Input
+CONFIG += c++17
 
 include(config.pri)
 include(version.pri)
