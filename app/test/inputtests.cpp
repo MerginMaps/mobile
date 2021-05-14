@@ -91,7 +91,7 @@ int InputTests::runTest() const
   else if ( mTestRequested == "--testLinks" )
   {
     TestLinks linksTest( mApi, mInputUtils );
-    nFailed = QTest::qExec( &linksTest, mTestArgs.count() );
+    nFailed = QTest::qExec( &linksTest, mTestArgs );
   }
   else if ( mTestRequested == "--testUtils" )
   {
