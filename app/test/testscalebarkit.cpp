@@ -23,6 +23,7 @@
 #include "qgsquickmapcanvasmap.h"
 #include "qgsquickscalebarkit.h"
 
+#include "testutils.h"
 
 void TestScaleBarKit::updateScaleBar()
 {
@@ -39,11 +40,11 @@ void TestScaleBarKit::updateScaleBar()
 
   QgsQuickScaleBarKit kit;
   kit.setMapSettings( ms );
-  QVERIFY( kit.units() == QString( "km" ) );
-  QVERIFY( kit.distance() == 50 );
+  QCOMPARE( kit.units(), "cm" );
+  COMPARENEAR( kit.distance(), 50, 1 );
 
   qreal scale = 0.005;
   canvas.zoom( extent.center().toQPointF(), scale );
-  QVERIFY( kit.units() == QString( "m" ) );
-  QVERIFY( kit.distance() == 200 );
+  QCOMPARE( kit.units(), "mm" );
+  COMPARENEAR( kit.distance(), 2, 1e-4 );
 }

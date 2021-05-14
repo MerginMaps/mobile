@@ -28,7 +28,7 @@ CONFIG(debug, debug|release) {
 
 contains(DEFINES, INPUT_TEST) {
   TEST_DATA_DIR="$$PWD/../test/test_data"
-  DEFINES += "TEST_DATA_DIR=\\\"$${TEST_DATA_DIR}}\\\""
+  DEFINES += "TEST_DATA_DIR=\\\"$${TEST_DATA_DIR}\\\""
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
