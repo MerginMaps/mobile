@@ -23,14 +23,14 @@ namespace TestUtils
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \
-do {\
+  do {\
     if (!QTest::compare_helper((qAbs(actual - expected) <= epsilon), \
-                               QString{"Compared values are not the same in respect to epsilon %1"} \
-                                    .arg(epsilon).toLocal8Bit().constData(), \
-                               QTest::toString(actual), \
-                               QTest::toString(expected), \
-                               #actual, #expected, __FILE__, __LINE__)) \
-        return;\
-} while (false)
+    QString{"Compared values are not the same in respect to epsilon %1"} \
+  .arg(epsilon).toLocal8Bit().constData(), \
+  QTest::toString(actual), \
+  QTest::toString(expected), \
+  #actual, #expected, __FILE__, __LINE__)) \
+    return;\
+  } while (false)
 
 #endif // TESTUTILS_H
