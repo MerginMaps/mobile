@@ -37,7 +37,10 @@ echo "The QGIS and INPUT copy QUICKGUI differs? $DIFFERS"
 
 ######### FORCE update
 echo "update qgsquick"
-rm -rf $QGSQUICK_INPUT_DIR/*
+rm -f $QGSQUICK_INPUT_DIR/qgsquick*.cpp
+rm -f $QGSQUICK_INPUT_DIR/qgsquick*.h
+rm -f $QGSQUICK_INPUT_DIR/plugin/*.qml
+
 rsync -zavh \
       --exclude="*.prepare" \
       --exclude="*.sortinc" \

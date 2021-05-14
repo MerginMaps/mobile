@@ -20,7 +20,10 @@ fi
 
 # COPY
 echo "update qgsquick"
-rm -rf $QGSQUICK_QGIS_DIR/*
+rm -f $QGSQUICK_QGIS_DIR/qgsquick*.cpp
+rm -f $QGSQUICK_QGIS_DIR/qgsquick*.h
+rm -f $QGSQUICK_QGIS_DIR/plugin/*.qml
+
 rsync -zavh \
       --exclude="*.prepare" \
       --exclude="*.sortinc" \
