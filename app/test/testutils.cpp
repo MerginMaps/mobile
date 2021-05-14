@@ -29,3 +29,9 @@ void TestUtils::mergin_auth( QString &apiRoot, QString &username, QString &passw
   // let's make sure we do not mess with the public instance
   Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
 }
+
+QString TestUtils::testDataDir()
+{
+  QString dataDir( TEST_DATA_DIR );
+  return dataDir;
+}

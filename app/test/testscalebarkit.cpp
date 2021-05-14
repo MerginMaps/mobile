@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickscalebarkit.cpp.cpp
+     testscalebarkit.cpp
      --------------------------------------
   Date                 : May 2018
   Copyright            : (C) 2018 by Viktor Sklencar
@@ -12,30 +12,19 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "testscalebarkit.h"
+
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 
 #include "qgsapplication.h"
-#include "qgstest.h"
-#include "qgis.h"
-
 #include "qgsquickutils.h"
 #include "qgsquickmapcanvasmap.h"
 #include "qgsquickscalebarkit.h"
 
 
-class TestQgsQuickScaleBarKit: public QObject
-{
-    Q_OBJECT
-  private slots:
-    void init() {} // will be called before each testfunction is executed.
-    void cleanup() {} // will be called after every testfunction.
-
-    void updateScaleBar(); // test text of scalebar after update.
-};
-
-void TestQgsQuickScaleBarKit::updateScaleBar()
+void TestScaleBarKit::updateScaleBar()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
@@ -58,6 +47,3 @@ void TestQgsQuickScaleBarKit::updateScaleBar()
   QVERIFY( kit.units() == QString( "m" ) );
   QVERIFY( kit.distance() == 200 );
 }
-
-QGSTEST_MAIN( TestQgsQuickScaleBarKit )
-#include "testqgsquickscalebarkit.moc"

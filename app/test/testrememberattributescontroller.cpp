@@ -1,10 +1,4 @@
 /***************************************************************************
-     testqgsquickrememberattributescontroller.cpp
-     --------------------------------------------
-  Date                 : May 2021
-  Copyright            : (C) 2021 by Peter Petrik
-  Email                : zilolv at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,40 +6,29 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "testrememberattributescontroller.h"
+
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <memory>
 
 #include "qgsapplication.h"
-#include "qgstest.h"
-#include "qgis.h"
 #include "qgsvectorlayer.h"
 
 #include "qgsquickfeaturelayerpair.h"
 #include "qgsquickrememberattributescontroller.h"
 
-class TestQgsQuickRememberAttributesController: public QObject
-{
-    Q_OBJECT
-  private slots:
-    void init(); // will be called before each testfunction is executed.
-    void cleanup(); // will be called after every testfunction.
-
-    void noFeatureTest();
-    void storedFeatureTest();
-};
-
-void TestQgsQuickRememberAttributesController::init()
+void TestRememberAttributesController::init()
 {
 }
 
-void TestQgsQuickRememberAttributesController::cleanup()
+void TestRememberAttributesController::cleanup()
 {
 }
 
 
-void TestQgsQuickRememberAttributesController::noFeatureTest()
+void TestRememberAttributesController::noFeatureTest()
 {
   QgsQuickRememberAttributesController controller;
 
@@ -60,7 +43,7 @@ void TestQgsQuickRememberAttributesController::noFeatureTest()
 
 }
 
-void TestQgsQuickRememberAttributesController::storedFeatureTest()
+void TestRememberAttributesController::storedFeatureTest()
 {
   QgsQuickRememberAttributesController controller;
   controller.setRememberValuesAllowed( true );
@@ -162,6 +145,3 @@ void TestQgsQuickRememberAttributesController::storedFeatureTest()
   QCOMPARE( controller.shouldRememberValue( layer2.get(), 1 ), false );
   QCOMPARE( controller.rememberedValue( layer2.get(), 1, val ), false );
 }
-
-QGSTEST_MAIN( TestQgsQuickRememberAttributesController )
-#include "testqgsquickrememberattributescontroller.moc"

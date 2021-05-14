@@ -1,10 +1,4 @@
 /***************************************************************************
-     testqgsquickattributecontroller.cpp
-     --------------------------------------
-  Date                 : May 2021
-  Copyright            : (C) 2021 by Peter Petrik
-  Email                : zilolv at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,14 +6,17 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+#include "testattributecontroller.h"
+
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <memory>
 
+#include "testutils.h"
+
 #include "qgsapplication.h"
-#include "qgstest.h"
-#include "qgis.h"
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
 
@@ -29,28 +26,17 @@
 #include "qgsquickattributeformproxymodel.h"
 #include "qgsquickattributeformmodel.h"
 
-class TestQgsQuickAttributeController: public QObject
-{
-    Q_OBJECT
-  private slots:
-    void init(); // will be called before each testfunction is executed.
-    void cleanup(); // will be called after every testfunction.
 
-    void noFields();
-    void twoFieldsAutoLayout();
-    void twoTabsDragAndDropLayout();
-};
-
-void TestQgsQuickAttributeController::init()
+void TestAttributeController::init()
 {
 }
 
-void TestQgsQuickAttributeController::cleanup()
+void TestAttributeController::cleanup()
 {
 }
 
 
-void TestQgsQuickAttributeController::noFields()
+void TestAttributeController::noFields()
 {
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( QStringLiteral( "Point" ),
@@ -85,7 +71,7 @@ void TestQgsQuickAttributeController::noFields()
   QCOMPARE( formItems.size(), 0 );
 }
 
-void TestQgsQuickAttributeController::twoFieldsAutoLayout()
+void TestAttributeController::twoFieldsAutoLayout()
 {
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string&field=fldint:integer" ),
@@ -130,11 +116,11 @@ void TestQgsQuickAttributeController::twoFieldsAutoLayout()
   QCOMPARE( item2->isVisible(), true );
 }
 
-void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
+void TestAttributeController::twoTabsDragAndDropLayout()
 {
-  QString dataDir( TEST_DATA_DIR );  // defined in CMakeLists.txt
-  QString planesVectorFile = dataDir + "/points.shp";
-  QString qmlStyle = dataDir + "/SimpleTabsForPlanesLayer.qml";
+  QString dataDir = TestUtils::testDataDir();
+  QString planesVectorFile = dataDir + "/planes/points.shp";
+  QString qmlStyle = dataDir + "/planes/SimpleTabsForPlanesLayer.qml";
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( planesVectorFile )
   );
@@ -248,7 +234,3 @@ void TestQgsQuickAttributeController::twoTabsDragAndDropLayout()
     QCOMPARE( item3->isVisible(), true );
   }
 }
-
-
-QGSTEST_MAIN( TestQgsQuickAttributeController )
-#include "testqgsquickattributecontroller.moc"

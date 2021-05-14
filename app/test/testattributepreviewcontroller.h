@@ -7,18 +7,18 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTFORMS_H
-#define TESTFORMS_H
+#ifndef TESTATTRIBUTEPREVIEWCONTROLLER_H
+#define TESTATTRIBUTEPREVIEWCONTROLLER_H
 
 #include <QTest>
 #include <QObject>
 
-class TestForms: public QObject
+class TestAttributePreviewController: public QObject
 {
     Q_OBJECT
   public:
-    explicit TestForms( );
-    ~TestForms() override;
+    explicit TestAttributePreviewController( );
+    ~TestAttributePreviewController() override;
 
   private slots:
 
@@ -31,4 +31,4 @@ class TestForms: public QObject
   private:
 };
 
-#endif // TESTFORMS_H
+#endif // TESTATTRIBUTEPREVIEWCONTROLLER_H

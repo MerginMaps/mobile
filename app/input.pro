@@ -26,5 +26,10 @@ CONFIG(debug, debug|release) {
   DEFINES += "QGIS_QUICK_EXPAND_TEST_DATA"
 }
 
+contains(DEFINES, INPUT_TEST) {
+  TEST_DATA_DIR="$$PWD/../test/test_data"
+  DEFINES += "TEST_DATA_DIR=\\\"$${TEST_DATA_DIR}}\\\""
+}
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $${QGSQUICK_QML_DIR}

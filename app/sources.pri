@@ -67,7 +67,12 @@ contains(DEFINES, INPUT_TEST) {
       test/testingpurchasingbackend.cpp \
       test/testpurchasing.cpp \
       test/testlinks.cpp \
-      test/testforms.cpp
+      test/testattributepreviewcontroller.cpp \
+      test/testattributecontroller.cpp \
+      test/testidentifykit.cpp \
+      test/testpositionkit.cpp \
+      test/testrememberattributescontroller.cpp \
+      test/testscalebarkit.cpp
 
   HEADERS += \
       test/inputtests.h \
@@ -76,8 +81,13 @@ contains(DEFINES, INPUT_TEST) {
       test/testmerginapi.h \
       test/testingpurchasingbackend.h \
       test/testpurchasing.h \
+      test/testpositionkit.h \
       test/testlinks.h \
-      test/testforms.h
+      test/testattributepreviewcontroller.h \
+      test/testattributecontroller.h \
+      test/testidentifykit.h \
+      test/testrememberattributescontroller.h \
+      test/testscalebarkit.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

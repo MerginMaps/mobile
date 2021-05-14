@@ -12,14 +12,14 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+#include "testidentifykit.h"
+
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 
 #include "qgsapplication.h"
-#include "qgstest.h"
-#include "qgis.h"
-
 #include "qgsvectorlayer.h"
 #include "qgsfeature.h"
 #include "qgsgeometry.h"
@@ -29,19 +29,7 @@
 #include "qgsquickidentifykit.h"
 
 
-class TestQgsQuickScaleBarKit: public QObject
-{
-    Q_OBJECT
-  private slots:
-    void init() {} // will be called before each testfunction is executed.
-    void cleanup() {} // will be called after every testfunction.
-
-    void identifyOne(); // tests identifyOne function without given layer
-    void identifyOneDefinedVector(); // tests identifyOne function with given layer
-    void identifyInRadius();
-};
-
-void TestQgsQuickScaleBarKit::identifyOne()
+void TestIdentifyKit::identifyOne()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
@@ -86,7 +74,7 @@ void TestQgsQuickScaleBarKit::identifyOne()
   QVERIFY( identifiedFeature.feature().geometry().asPoint() == point );
 }
 
-void TestQgsQuickScaleBarKit::identifyOneDefinedVector()
+void TestIdentifyKit::identifyOneDefinedVector()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
@@ -135,7 +123,7 @@ void TestQgsQuickScaleBarKit::identifyOneDefinedVector()
 
 }
 
-void TestQgsQuickScaleBarKit::identifyInRadius()
+void TestIdentifyKit::identifyInRadius()
 {
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
@@ -180,6 +168,3 @@ void TestQgsQuickScaleBarKit::identifyInRadius()
   res = kit.identify( screenPoint.toQPointF() );
   QVERIFY( res.size() == 2 );
 }
-
-QGSTEST_MAIN( TestQgsQuickScaleBarKit )
-#include "testqgsquickidentifykit.moc"
