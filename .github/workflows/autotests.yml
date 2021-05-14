@@ -83,7 +83,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Debug \
             -DQGIS_MAC_DEPS_DIR=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage \
             -DCMAKE_PREFIX_PATH=/opt/Qt/${QT_VERSION}/clang_64 \
-            -DENABLE_TESTS=TRUE  \
+            -DENABLE_TESTS=FALSE  \
             -DFORCE_STATIC_LIBS=FALSE \
             -DUSE_QGIS_BUILD_DIR=FALSE \
             -DQGIS_INSTALL_PATH=/opt/INPUT/input-sdk-mac-$SDK_VERSION/stage/mac \
@@ -113,38 +113,10 @@ jobs:
           install_name_tool -add_rpath /opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/lib Input.app/Contents/MacOS/Input
           install_name_tool -add_rpath ${QGSQUICK_INSTALL}/frameworks Input.app/Contents/MacOS/Input
 
-      - name: run qgsquick tests
-        run: |
-          cd build-QgsQuick/
-          export DYLD_INSERT_LIBRARIES=/opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/lib/libsqlite3.dylib
-          export QGSQUICK_BUILD_QML_DIR=/Users/runner/work/input/input/install-QgsQuick
-          export QGIS_PREFIX_PATH=/opt/INPUT/input-sdk-mac-${SDK_VERSION}/stage/mac/QGIS.app/Contents/MacOS
-          ctest -VV --output-on-failure
-
-      - name: run help links tests
+      - name: run tests
         run: |
           cd build-Input/
-          ./Input.app/Contents/MacOS/Input --testLinks
-
-      - name: run utils functions tests
-        run: |
-          cd build-Input/
-          ./Input.app/Contents/MacOS/Input --testUtils
-
-      - name: run forms tests
-        run: |
-          cd build-Input/
-          ./Input.app/Contents/MacOS/Input --testForms
-
-      - name: run mergin api tests
-        run: |
-          cd build-Input/
-          ./Input.app/Contents/MacOS/Input --testMerginApi
-
-      - name: run purchasing tests
-        run: |
-          cd build-Input/
-          ./Input.app/Contents/MacOS/Input --testPurchasing
+          ../input/scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
 
       - name: build lcov summary
         run: |

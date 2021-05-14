@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "testforms.h"
+#include "testattributepreviewcontroller.h"
 
 #include "qgsvectorlayer.h"
 #include "qgsfeature.h"
@@ -16,24 +16,24 @@
 
 #include "attributepreviewcontroller.h"
 
-TestForms::TestForms()
+TestAttributePreviewController::TestAttributePreviewController()
 {
 
 }
 
-TestForms::~TestForms() = default;
+TestAttributePreviewController::~TestAttributePreviewController() = default;
 
-void TestForms::initTestCase()
+void TestAttributePreviewController::initTestCase()
 {
 
 }
 
-void TestForms::cleanupTestCase()
+void TestAttributePreviewController::cleanupTestCase()
 {
 
 }
 
-void TestForms::testPreviewForms()
+void TestAttributePreviewController::testPreviewForms()
 {
   // Prepare Layers!
   QgsVectorLayer *layer =

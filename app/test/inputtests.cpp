@@ -10,12 +10,18 @@
 #include "inputtests.h"
 
 #include <QTest>
-#include <qDebug>
+#include <QDebug>
 
 #include "test/testmerginapi.h"
 #include "test/testlinks.h"
 #include "test/testutilsfunctions.h"
-#include "test/testforms.h"
+#include "test/testattributepreviewcontroller.h"
+#include "test/testattributecontroller.h"
+#include "test/testidentifykit.h"
+#include "test/testpositionkit.h"
+#include "test/testrememberattributescontroller.h"
+#include "test/testscalebarkit.h"
+
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
 #endif
@@ -98,10 +104,35 @@ int InputTests::runTest() const
     TestUtilsFunctions utilsTest;
     nFailed = QTest::qExec( &utilsTest, mTestArgs );
   }
-  else if ( mTestRequested == "--testForms" )
+  else if ( mTestRequested == "--testAttributePreviewController" )
   {
-    TestForms formsTest;
+    TestAttributePreviewController formsTest;
     nFailed = QTest::qExec( &formsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testAttributeController" )
+  {
+    TestAttributeController formsTest;
+    nFailed = QTest::qExec( &formsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testIdentifyKit" )
+  {
+    TestIdentifyKit ikTest;
+    nFailed = QTest::qExec( &ikTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testPositionKit" )
+  {
+    TestPositionKit pkTest;
+    nFailed = QTest::qExec( &pkTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testRememberAttributesController" )
+  {
+    TestRememberAttributesController racTest;
+    nFailed = QTest::qExec( &racTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testScaleBarKit" )
+  {
+    TestScaleBarKit sbkTest;
+    nFailed = QTest::qExec( &sbkTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )
@@ -115,6 +146,14 @@ int InputTests::runTest() const
     qDebug() << "invalid test requested" << mTestRequested;
     nFailed = 1001;
   }
+
+  /*
+   * WARNING:
+   *
+   * when you are adding new test here in the list, add
+   * it also to scripts/run_all_tests.bash
+   *
+   */
 
   return nFailed;
 }
