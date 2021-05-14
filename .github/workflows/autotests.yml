@@ -70,7 +70,6 @@ jobs:
 
       - name: build Input
         run: |
-          QGSQUICK_INSTALL=`pwd`/install-QgsQuick
           cp input/scripts/ci/config.pri input/app/config.pri
 
           mkdir -p build-Input

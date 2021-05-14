@@ -35,7 +35,7 @@ ScaleBarKit::ScaleBarKit( QObject *parent )
   connect( this, &ScaleBarKit::preferredWidthChanged, this, &ScaleBarKit::updateScaleBar );
 }
 
-void ScaleBarKit::setMapSettings(QgsQuickMapSettings* mapSettings )
+void ScaleBarKit::setMapSettings( QgsQuickMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -86,8 +86,8 @@ void ScaleBarKit::updateScaleBar()
   double dist;
   QgsUnitTypes::DistanceUnit distUnits;
   InputUtils().humanReadableDistance( distInMeters, QgsUnitTypes::DistanceMeters,
-                                 mSystemOfMeasurement,
-                                 dist, distUnits );
+                                      mSystemOfMeasurement,
+                                      dist, distUnits );
 
   mUnits = QgsUnitTypes::toAbbreviatedString( distUnits );
 

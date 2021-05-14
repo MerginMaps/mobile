@@ -597,9 +597,9 @@ QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 }
 
 QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-                                  const QgsCoordinateReferenceSystem &destCrs,
-                                  const QgsCoordinateTransformContext &context,
-                                  const QgsPointXY &srcPoint )
+                                       const QgsCoordinateReferenceSystem &destCrs,
+                                       const QgsCoordinateTransformContext &context,
+                                       const QgsPointXY &srcPoint )
 {
   try
   {
@@ -725,9 +725,9 @@ QString InputUtils::formatPoint(
 }
 
 QString InputUtils::formatDistance( double distance,
-                               QgsUnitTypes::DistanceUnit units,
-                               int decimals,
-                               QgsUnitTypes::SystemOfMeasurement destSystem )
+                                    QgsUnitTypes::DistanceUnit units,
+                                    int decimals,
+                                    QgsUnitTypes::SystemOfMeasurement destSystem )
 {
   double destDistance;
   QgsUnitTypes::DistanceUnit destUnits;
@@ -740,8 +740,8 @@ QString InputUtils::formatDistance( double distance,
 }
 
 void InputUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::DistanceUnit srcUnits,
-                                   QgsUnitTypes::SystemOfMeasurement destSystem,
-                                   double &destDistance, QgsUnitTypes::DistanceUnit &destUnits )
+                                        QgsUnitTypes::SystemOfMeasurement destSystem,
+                                        double &destDistance, QgsUnitTypes::DistanceUnit &destUnits )
 {
   if ( ( destSystem == QgsUnitTypes::MetricSystem ) || ( destSystem == QgsUnitTypes::UnknownSystem ) )
   {
@@ -762,9 +762,9 @@ void InputUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::Distan
 }
 
 void InputUtils::formatToMetricDistance( double srcDistance,
-                                    QgsUnitTypes::DistanceUnit srcUnits,
-                                    double &destDistance,
-                                    QgsUnitTypes::DistanceUnit &destUnits )
+    QgsUnitTypes::DistanceUnit srcUnits,
+    double &destDistance,
+    QgsUnitTypes::DistanceUnit &destUnits )
 {
   double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceMillimeters );
   if ( dist < 0 )
@@ -803,9 +803,9 @@ void InputUtils::formatToMetricDistance( double srcDistance,
 }
 
 void InputUtils::formatToImperialDistance( double srcDistance,
-                                      QgsUnitTypes::DistanceUnit srcUnits,
-                                      double &destDistance,
-                                      QgsUnitTypes::DistanceUnit &destUnits )
+    QgsUnitTypes::DistanceUnit srcUnits,
+    double &destDistance,
+    QgsUnitTypes::DistanceUnit &destUnits )
 {
   double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
   if ( dist < 0 )
@@ -837,9 +837,9 @@ void InputUtils::formatToImperialDistance( double srcDistance,
 }
 
 void InputUtils::formatToUSCSDistance( double srcDistance,
-                                  QgsUnitTypes::DistanceUnit srcUnits,
-                                  double &destDistance,
-                                  QgsUnitTypes::DistanceUnit &destUnits )
+                                       QgsUnitTypes::DistanceUnit srcUnits,
+                                       double &destDistance,
+                                       QgsUnitTypes::DistanceUnit &destUnits )
 {
   double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
   if ( dist < 0 )

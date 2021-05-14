@@ -30,12 +30,12 @@ IdentifyKit::IdentifyKit( QObject *parent )
 {
 }
 
-QgsQuickMapSettings* IdentifyKit::mapSettings() const
+QgsQuickMapSettings *IdentifyKit::mapSettings() const
 {
   return mMapSettings;
 }
 
-void IdentifyKit::setMapSettings(QgsQuickMapSettings* mapSettings )
+void IdentifyKit::setMapSettings( QgsQuickMapSettings *mapSettings )
 {
   if ( mapSettings == mMapSettings )
     return;
