@@ -284,7 +284,7 @@ ApplicationWindow {
       height: parent.height - mainPanel.height
       width: parent.width
       z: zMapCanvas
-      minimumStartDragDistance: 5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+      minimumStartDragDistance: 5 * QgsQuick.Utils.dp
 
       mapSettings.project: __loader.project
 
@@ -323,18 +323,18 @@ ApplicationWindow {
         mapSettings: mapCanvas.mapSettings
 
         lineColor: Qt.rgba(1,0.2,0.2,1)
-        lineWidth: 6 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        lineWidth: 6 * QgsQuick.Utils.dp
 
         fillColor: Qt.rgba(1,0.2,0.2,InputStyle.lowHighlightOpacity)
 
-        outlinePenWidth: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        outlinePenWidth: 1 * QgsQuick.Utils.dp
         outlineColor: "white"
 
         markerType: "image"
         markerImageSource: "qrc:/marker.svg"
-        markerWidth: 60 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-        markerHeight: 70 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-        markerAnchorY: 48 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        markerWidth: 60 * QgsQuick.Utils.dp
+        markerHeight: 70 * QgsQuick.Utils.dp
+        markerAnchorY: 48 * QgsQuick.Utils.dp
 
         // enable anti-aliasing to make the higlight look nicer
         // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
@@ -572,7 +572,7 @@ ApplicationWindow {
         height: InputStyle.scaleBarHeight
         y: window.height - height - mainPanel.height - InputStyle.panelMargin
         mapSettings: mapCanvas.mapSettings
-        preferredWidth: Math.min(window.width, 180 * QgsQuick.QgsQuick.QgsQuick.Utils.dp)
+        preferredWidth: Math.min(window.width, 180 * QgsQuick.Utils.dp)
         z: zToolkits
         anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -655,8 +655,8 @@ ApplicationWindow {
     Notification {
         id: popup
         text: ""
-        width: 400 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-        height: 160 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        width: 400 * QgsQuick.Utils.dp
+        height: 160 * QgsQuick.Utils.dp
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         z: zPanel + 1000 // the most top
@@ -769,7 +769,7 @@ ApplicationWindow {
         id: loadingIndicator
         visible: false
         width: parent.width
-        height: 7 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        height: 7 * QgsQuick.Utils.dp
         z: zPanel + 1000 // the most top
     }
 

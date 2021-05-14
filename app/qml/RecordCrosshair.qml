@@ -13,7 +13,7 @@ import lc 1.0
 
 Item {    
     id: root
-    property real size: 100 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real size: 100 * QgsQuick.Utils.dp
 
     Image {
         anchors.centerIn: parent

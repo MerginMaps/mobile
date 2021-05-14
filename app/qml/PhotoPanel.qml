@@ -39,7 +39,7 @@ Drawer {
   property var confirmButtonIcon: Utils.getThemeIcon("ic_check_black")
   property var cancelButtonIcon: Utils.getThemeIcon("ic_clear_black")
   property var backButtonSource: Utils.getThemeIcon("ic_back")
-  property real imageButtonSize: 45 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+  property real imageButtonSize: 45 * QgsQuick.Utils.dp
   property real buttonSize: imageButtonSize * 1.2
   property var buttonsPosition
 
@@ -164,7 +164,7 @@ Drawer {
         id: cancelButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        property int borderWidth: 5 * QgsQuick.Utils.dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -195,7 +195,7 @@ Drawer {
         id: confirmButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        property int borderWidth: 5 * QgsQuick.Utils.dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -230,7 +230,7 @@ Drawer {
     Item {
       id: backButton
 
-      property int borderWidth: 50 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+      property int borderWidth: 50 * QgsQuick.Utils.dp
       width: imageButtonSize * 1.5
       height: width
       antialiasing: true

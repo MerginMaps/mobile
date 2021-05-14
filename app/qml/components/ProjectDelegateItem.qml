@@ -40,7 +40,7 @@ Rectangle {
                             else if (!projectIsValid) return InputStyle.panelBackgroundDark
                             else return InputStyle.activeButtonColorOrange
   property real iconSize: height * 0.3
-  property real borderWidth: 1 * QgsQuick.QgsQuick.QgsQuick.QgsQuick.Utils.dp
+  property real borderWidth: 1 * QgsQuick.Utils.dp
   property real menuItemHeight: height * 0.8
 
   property real viewContentY: 0
@@ -308,7 +308,7 @@ Rectangle {
   Menu {
     id: contextMenu
 
-    width: Math.min( root.width, 300 * QgsQuick.QgsQuick.QgsQuick.QgsQuick.Utils.dp )
+    width: Math.min( root.width, 300 * QgsQuick.Utils.dp )
     leftMargin: Math.max( root.width - width, 0 )
     z: 100
 

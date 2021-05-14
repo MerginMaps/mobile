@@ -696,7 +696,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
 
 const QUrl InputUtils::getEditorComponentSource( const QString &widgetName )
 {
-  QString path( "%1.qml" );
+  QString path( "input%1.qml" );
   QStringList supportedWidgets = { QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),

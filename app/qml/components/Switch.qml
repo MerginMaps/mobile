@@ -12,7 +12,7 @@ T.Switch {
 
     signal switchChecked( bool isChecked )
 
-    implicitHeight: 60 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    implicitHeight: 60 * QgsQuick.Utils.dp
     implicitWidth: 2 * height
 
     indicator: Rectangle {
@@ -28,7 +28,7 @@ T.Switch {
         height: parent.height * 0.66
         width: height
 
-        radius: 20 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        radius: 20 * QgsQuick.Utils.dp
         color: control.handleColor
 
         Behavior on x {
@@ -38,7 +38,7 @@ T.Switch {
     }
 
     background: Rectangle {
-        radius: 20 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        radius: 20 * QgsQuick.Utils.dp
         color: control.isReadOnly || !control.checked ? control.bgndColorInactive : control.bgndColorActive
     }
 

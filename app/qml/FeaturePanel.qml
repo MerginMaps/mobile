@@ -204,14 +204,14 @@ Drawer {
                 property QtObject group: QtObject {
                   property color backgroundColor: InputStyle.panelBackgroundLight
                   property color marginColor: InputStyle.panelBackgroundDark
-                  property real leftMargin: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-                  property real rightMargin: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-                  property real topMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-                  property real bottomMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-                  property real height: 64 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real leftMargin: 0 * QgsQuick.Utils.dp
+                  property real rightMargin: 0 * QgsQuick.Utils.dp
+                  property real topMargin: 1 * QgsQuick.Utils.dp
+                  property real bottomMargin: 1 * QgsQuick.Utils.dp
+                  property real height: 64 * QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
                   property int spacing: InputStyle.formSpacing
-                  property int fontPixelSize: 24 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property int fontPixelSize: 24 * QgsQuick.Utils.dp
                 }
 
                 property QtObject tabs: QtObject {
@@ -226,7 +226,7 @@ Drawer {
                   property real buttonHeight: height
                   property real spacing: 0
                   property int tabLabelPointSize: 12
-                  property real borderWidth: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real borderWidth: 1 * QgsQuick.Utils.dp
                   property color borderColor: InputStyle.labelColor
                 }
 
@@ -240,7 +240,7 @@ Drawer {
                   property color backgroundColor: "transparent"
                   property color backgroundColorInvalid: "#bdc3c7"
                   property color activeButtonColor: InputStyle.activeButtonColor
-                  property real size: 80 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real size: 80 * QgsQuick.Utils.dp
                 }
 
                   property QtObject fields: QtObject {
@@ -250,9 +250,9 @@ Drawer {
                     property color activeColor: InputStyle.fontColor
                     property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
-                    property real cornerRadius: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                    property real cornerRadius: 8 * QgsQuick.Utils.dp
                     property real height: InputStyle.fieldHeight
-                    property int fontPixelSize: 22 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                    property int fontPixelSize: 22 * QgsQuick.Utils.dp
                     property real sideMargin: InputStyle.innerFieldMargin
                     property real outerMargin: InputStyle.outerFieldMargin
                     property int fontPointSize: 15

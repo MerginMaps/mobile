@@ -68,7 +68,7 @@ ComboBox {
   }
 
   background: Item {
-    implicitWidth: 120 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    implicitWidth: 120 * QgsQuick.Utils.dp
     implicitHeight: comboBox.height * 0.8
 
     Rectangle {

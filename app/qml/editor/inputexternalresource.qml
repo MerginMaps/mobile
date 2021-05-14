@@ -63,7 +63,7 @@ Item {
   property var notAvailableImageIcon: customStyle.icons.notAvailable
   property var backIcon: customStyle.icons.back
   property real iconSize:  customStyle.fields.height
-  property real textMargin: QgsQuick.QgsQuick.QgsQuick.Utils.dp * 10
+  property real textMargin: QgsQuick.Utils.dp * 10
   /**
    * 0 - Relative path disabled
    * 1 - Relative path to project
@@ -89,7 +89,7 @@ Item {
     }
 
     if (expression) {
-      Utils.evaluateExpression(featurePair, activeProject, expression)
+      InputUtils.evaluateExpression(featurePair, activeProject, expression)
     } else {
       config["DefaultRoot"] ? config["DefaultRoot"] : homePath
     }
@@ -197,7 +197,7 @@ Item {
           fieldItem.state = "notAvailable"
           return ""
         }
-        else if (image.currentValue && Utils.fileExists(absolutePath)) {
+        else if (image.currentValue && __inputUtils.fileExists(absolutePath)) {
           fieldItem.state = "valid"
           return "file://" + absolutePath
         }
@@ -290,7 +290,7 @@ Item {
 
           height: parent.height * 0.7
           color: customStyle.fields.fontColor
-          width: 1.5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+          width: 1.5 * QgsQuick.Utils.dp
           anchors.centerIn: parent
         }
       }

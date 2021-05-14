@@ -29,7 +29,7 @@ Item {
 
   ColumnLayout {
     anchors.fill: parent
-    spacing: 2 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    spacing: 2 * QgsQuick.Utils.dp
 
     Item {
       id: iconContainer

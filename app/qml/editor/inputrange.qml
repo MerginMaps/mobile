@@ -42,7 +42,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     border.color: customStyle.fields.normalColor
-    border.width: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    border.width: 1 * QgsQuick.Utils.dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
@@ -71,7 +71,7 @@ Item {
       background: Rectangle {
         anchors.fill: parent
         border.color: customStyle.fields.normalColor
-        border.width: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        border.width: 1 * QgsQuick.Utils.dp
         color: customStyle.fields.backgroundColor
         radius: customStyle.fields.cornerRadius
       }
@@ -178,7 +178,7 @@ Item {
       horizontalAlignment: Text.AlignLeft
       font.pointSize: customStyle.fields.fontPointSize
       color: customStyle.fields.fontColor
-      padding: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+      padding: 10 * QgsQuick.Utils.dp
       leftPadding: customStyle.fields.sideMargin
     }
 
@@ -207,7 +207,7 @@ Item {
         implicitHeight: slider.height * 0.1
         width: slider.availableWidth
         height: implicitHeight
-        radius: 2 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        radius: 2 * QgsQuick.Utils.dp
         color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
       }
 

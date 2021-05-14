@@ -26,10 +26,10 @@ Item {
   property var preSelectedIds: []
 
   ListView {
-    topMargin: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    topMargin: 10 * QgsQuick.Utils.dp
     implicitHeight: parent.height
     implicitWidth: parent.width
-    spacing: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    spacing: 8 * QgsQuick.Utils.dp
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
     model: featuresModel
@@ -37,7 +37,7 @@ Item {
     delegate: Rectangle {
       id: itemContainer
       width: parent.width
-      height: 50 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+      height: 50 * QgsQuick.Utils.dp
 
       MouseArea {
         anchors.fill: parent
@@ -69,15 +69,15 @@ Item {
           id: checkboxContainer
           visible: allowMultiselect
           height: itemContainer.height
-          width: 40 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+          width: 40 * QgsQuick.Utils.dp
 
           LeftCheckBox {
             id: checkboxItem
             anchors.margins: (parent.height / 4)
             anchors.centerIn: parent
             baseColor: InputStyle.panelBackgroundDarker
-            height: 40 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-            width: 40 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+            height: 40 * QgsQuick.Utils.dp
+            width: 40 * QgsQuick.Utils.dp
 
             onCheckboxClicked: root.featureToggled( model.FeatureId, buttonState )
           }
@@ -86,14 +86,14 @@ Item {
         Item {
           id: iconContainer
           height: itemContainer.height
-          width: checkboxContainer.visible ? 30 * QgsQuick.QgsQuick.QgsQuick.Utils.dp : 60 * Utils.dp
+          width: checkboxContainer.visible ? 30 * QgsQuick.Utils.dp : 60 * QgsQuick.Utils.dp
 
           Image {
             id: icon
             anchors.centerIn: parent
-            anchors.leftMargin: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+            anchors.leftMargin: 10 * QgsQuick.Utils.dp
             source: __loader.loadIconFromFeature( model.Feature )
-            width: 30 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+            width: 30 * QgsQuick.Utils.dp
             height: width
             sourceSize.width: width
             sourceSize.height: height

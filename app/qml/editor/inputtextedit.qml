@@ -41,8 +41,8 @@ Item {
   TextField {
     id: textField
     height: textArea.height == 0 ? customStyle.fields.height : 0
-    topPadding: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    bottomPadding: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    topPadding: 10 * QgsQuick.Utils.dp
+    bottomPadding: 10 * QgsQuick.Utils.dp
     leftPadding: customStyle.fields.sideMargin
     rightPadding: textField.leftPadding + (importDataBtn.visible ? importDataBtn.width : 0)
     visible: height !== 0
@@ -115,7 +115,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       anchors.rightMargin: customStyle.fields.sideMargin
 
-      property int borderWidth: 50 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+      property int borderWidth: 50 * QgsQuick.Utils.dp
       width: fieldItem.iconSize
       height: width
       antialiasing: true

@@ -17,7 +17,7 @@ Item {
     height: width
 
     property int size: width / 2
-    property int border: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property int border: 10 * QgsQuick.Utils.dp
     property bool recording: false
     property color color: InputStyle.clrPanelMain
 

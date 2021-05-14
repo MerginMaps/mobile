@@ -25,14 +25,14 @@ QtObject {
   property QtObject group: QtObject {
     property color backgroundColor: "lightGray"
     property color marginColor: "black"
-    property real leftMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    property real rightMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    property real topMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    property real bottomMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    property real height: 64 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real leftMargin: 1 * QgsQuick.Utils.dp
+    property real rightMargin: 1 * QgsQuick.Utils.dp
+    property real topMargin: 1 * QgsQuick.Utils.dp
+    property real bottomMargin: 1 * QgsQuick.Utils.dp
+    property real height: 64 * QgsQuick.Utils.dp
     property color fontColor: "black"
-    property int spacing: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-    property int fontPixelSize: 24 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property int spacing: 10 * QgsQuick.Utils.dp
+    property int fontPixelSize: 24 * QgsQuick.Utils.dp
   }
 
   property QtObject tabs: QtObject {
@@ -43,11 +43,11 @@ QtObject {
     property color normalBackgroundColor: "#FFFFFF"
     property color activeBackgroundColor: "#4CAF50"
     property color disabledBackgroundColor: "#999999"
-    property real height: 48 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real height: 48 * QgsQuick.Utils.dp
     property real buttonHeight: height * 0.8
     property real spacing: 0
     property int tabLabelPointSize: 14
-    property real borderWidth: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real borderWidth: 0 * QgsQuick.Utils.dp
     property color borderColor: "#999999"
   }
 
@@ -61,7 +61,7 @@ QtObject {
     property color backgroundColor: "transparent"
     property color backgroundColorInvalid: "#bdc3c7"
     property color activeButtonColor: "black"
-    property real size: 80 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real size: 80 * QgsQuick.Utils.dp
   }
 
     property QtObject fields: QtObject {
@@ -71,11 +71,11 @@ QtObject {
       property color activeColor: "#1B5E20"
       property color attentionColor: "red"
       property color normalColor: "#4CAF50"
-      property real height: 48 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-      property real cornerRadius: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-      property int fontPixelSize: 48 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-      property real sideMargin: 12 * QgsQuick.QgsQuick.QgsQuick.Utils.dp // left or right margin for a field's content
-      property real outerMargin: 20 * QgsQuick.QgsQuick.QgsQuick.Utils.dp // left or right margin for a whole field component
+      property real height: 48 * QgsQuick.Utils.dp
+      property real cornerRadius: 0 * QgsQuick.Utils.dp
+      property int fontPixelSize: 48 * QgsQuick.Utils.dp
+      property real sideMargin: 12 * QgsQuick.Utils.dp // left or right margin for a field's content
+      property real outerMargin: 20 * QgsQuick.Utils.dp // left or right margin for a whole field component
       property int fontPointSize: 16
       property int labelPointSize: 14
     }

@@ -69,8 +69,8 @@ Item {
                 font.pointSize: customStyle.fields.fontPointSize
                 color: customStyle.fields.fontColor
                 padding: 0
-                topPadding: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-                bottomPadding: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                topPadding: 10 * QgsQuick.Utils.dp
+                bottomPadding: 10 * QgsQuick.Utils.dp
                 leftPadding: customStyle.fields.sideMargin
                 background: Rectangle {
                     radius: customStyle.fields.cornerRadius

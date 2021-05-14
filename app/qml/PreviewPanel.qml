@@ -144,7 +144,7 @@ Item {
                     model: controller.fieldModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
-                    spacing: 2 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                    spacing: 2 * QgsQuick.Utils.dp
                     interactive: false
 
                     delegate: Row {

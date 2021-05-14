@@ -70,20 +70,18 @@
         <file>components/CheckboxComponent.qml</file>
         <file>components/Switch.qml</file>
         <file>components/IconTextItem.qml</file>
-        <file>editor/editorwidgetcombobox.qml</file>
-        <file>editor/checkbox.qml</file>
-        <file>editor/datetime.qml</file>
-        <file>editor/externalresource.qml</file>
-        <file>editor/textedit.qml</file>
-        <file>editor/range.qml</file>
-        <file>editor/valuemap.qml</file>
-        <file>editor/valuerelation.qml</file>
-        <file>featureform.qml</file>
-        <file>featureformstyling.qml</file>
-        <file>mapcanvas.qml</file>
-        <file>messagelog.qml</file>
-        <file>photopanel.qml</file>
-        <file>positionmarker.qml</file>
-        <file>scalebar.qml</file>
+        <file>editor/inputeditorwidgetcombobox.qml</file>
+        <file>editor/inputcheckbox.qml</file>
+        <file>editor/inputdatetime.qml</file>
+        <file>editor/inputexternalresource.qml</file>
+        <file>editor/inputtextedit.qml</file>
+        <file>editor/inputrange.qml</file>
+        <file>editor/inputvaluemap.qml</file>
+        <file>editor/inputvaluerelation.qml</file>
+        <file>FeatureForm.qml</file>
+        <file>FeatureFormStyling.qml</file>
+        <file>PhotoPanel.qml</file>
+        <file>PositionMarker.qml</file>
+        <file>ScaleBar.qml</file>
     </qresource>
 </RCC>

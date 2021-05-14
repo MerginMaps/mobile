@@ -211,7 +211,7 @@ Item {
           id: borderLine
           color: InputStyle.panelBackground2
           width: delegateItem.width
-          height: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+          height: 1 * QgsQuick.Utils.dp
           anchors.bottom: parent.bottom
         }
       }

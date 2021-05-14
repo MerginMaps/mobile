@@ -147,7 +147,7 @@ Item {
   /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
-  property var loadWidgetFn: Utils.getEditorComponentSource
+  property var loadWidgetFn: InputUtils.getEditorComponentSource
 
   /**
    * Predefined form styling
@@ -258,8 +258,8 @@ Item {
           TabButton {
             id: tabButton
             text: Name
-            leftPadding: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
-            rightPadding: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+            leftPadding: 8 * QgsQuick.Utils.dp
+            rightPadding: 8 * QgsQuick.Utils.dp
             anchors.bottom: parent.bottom
 
             width: leftPadding + rightPadding
@@ -560,7 +560,7 @@ Item {
         id: rememberCheckboxContainer
         visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
 
-        implicitWidth: visible ? 35 * QgsQuick.QgsQuick.QgsQuick.Utils.dp : 0
+        implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height
 
         anchors {
@@ -573,7 +573,7 @@ Item {
           visible: rememberCheckboxContainer.visible
           baseColor: form.style.checkboxComponent.baseColor
 
-          implicitWidth: 40 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+          implicitWidth: 40 * QgsQuick.Utils.dp
           implicitHeight: width
           y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
           x: (parent.width + form.style.fields.outerMargin) / 7

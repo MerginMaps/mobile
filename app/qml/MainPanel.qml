@@ -232,7 +232,7 @@ Item {
         title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        width: parent.width < 300 * QgsQuick.QgsQuick.QgsQuick.Utils.dp ? parent.width : 300 * Utils.dp
+        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * Utils.dp
         closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
 
         MenuItem {
