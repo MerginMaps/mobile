@@ -20,7 +20,7 @@
 #include <QQuickWindow>
 #include <QLocale>
 #ifdef INPUT_TEST
-#include <QTest>
+#include "test/inputtests.h"
 #endif
 #include <qqml.h>
 #include <qgsmessagelog.h>
@@ -60,16 +60,6 @@
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
 #include "project.h"
-
-#ifdef INPUT_TEST
-#include "test/testmerginapi.h"
-#include "test/testlinks.h"
-#include "test/testutilsfunctions.h"
-#include "test/testforms.h"
-#if not defined APPLE_PURCHASING
-#include "test/testpurchasing.h"
-#endif
-#endif
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
@@ -247,13 +237,6 @@ void initDeclarative()
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 }
 
-#ifdef INPUT_TEST
-void initTestDeclarative()
-{
-  qRegisterMetaType<MerginProjectsList>( "MerginProjectsList" );
-}
-#endif
-
 void addQmlImportPath( QQmlEngine &engine )
 {
   // This adds a runtime qml directory containing QgsQuick plugin
@@ -303,21 +286,8 @@ int main( int argc, char *argv[] )
   }
 
 #ifdef INPUT_TEST
-  bool IS_MERGIN_API_TEST = false;
-  bool IS_PURCHASING_TEST = false;
-  bool IS_LINKS_TEST = false;
-  bool IS_UTILS_TEST = false;
-  bool IS_FORMS_TEST = false;
-  for ( int i = 0; i < argc; ++i )
-  {
-    if ( std::string( argv[i] ) == "--testMerginApi" ) IS_MERGIN_API_TEST = true;
-    if ( std::string( argv[i] ) == "--testPurchasing" ) IS_PURCHASING_TEST = true;
-    if ( std::string( argv[i] ) == "--testLinks" ) IS_LINKS_TEST = true;
-    if ( std::string( argv[i] ) == "--testForms" ) IS_FORMS_TEST = true;
-    if ( std::string( argv[i] ) == "--testUtils" ) IS_UTILS_TEST = true;
-  }
-  Q_ASSERT( !( IS_MERGIN_API_TEST && IS_PURCHASING_TEST && IS_LINKS_TEST && IS_UTILS_TEST && IS_FORMS_TEST ) );
-  bool IS_TEST = IS_PURCHASING_TEST || IS_MERGIN_API_TEST || IS_LINKS_TEST || IS_UTILS_TEST || IS_FORMS_TEST;
+  InputTests tests;
+  tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
@@ -330,16 +300,9 @@ int main( int argc, char *argv[] )
   QString projectDir = dataDir + "/projects";
 
 #ifdef INPUT_TEST
-  if ( IS_TEST )
+  if ( tests.testingRequested() )
   {
-    // override the path where local projects are stored
-    // and wipe the temporary projects dir if it already exists
-    QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
-    QDir testProjectsDir( testDataDir.path() + "/../temp_projects" );
-    if ( testProjectsDir.exists() )
-      testProjectsDir.removeRecursively();
-    QDir( testDataDir.path() + "/.." ).mkpath( "temp_projects" );
-    projectDir = testProjectsDir.canonicalPath();
+    projectDir = tests.initTestingDir();
   }
 #endif
 
@@ -420,47 +383,11 @@ int main( int argc, char *argv[] )
   }
 
 #ifdef INPUT_TEST
-  if ( IS_TEST )
+  if ( tests.testingRequested() )
   {
-    initTestDeclarative();
-    // use command line args we got, but filter out "--test*" that's recognized by us but not by QTest framework
-    // (command line args may be used to filter function names that should be executed)
-    QVector<char *> args;
-    for ( int i = 0; i < argc; ++i )
-    {
-      if ( !QString( argv[i] ).startsWith( "--test" ) )
-        args << argv[i];
-    }
-
-    int nFailed = 0;
-    if ( IS_MERGIN_API_TEST )
-    {
-      TestMerginApi merginApiTest( ma.get() );
-      nFailed = QTest::qExec( &merginApiTest, args.count(), args.data() );
-    }
-    else if ( IS_LINKS_TEST )
-    {
-      TestLinks linksTest( ma.get(), &iu );
-      nFailed = QTest::qExec( &linksTest, args.count(), args.data() );
-    }
-    else if ( IS_UTILS_TEST )
-    {
-      TestUtilsFunctions utilsTest;
-      nFailed = QTest::qExec( &utilsTest, args.count(), args.data() );
-    }
-    else if ( IS_FORMS_TEST )
-    {
-      TestForms formsTest;
-      nFailed = QTest::qExec( &formsTest, args.count(), args.data() );
-    }
-#if not defined APPLE_PURCHASING
-    else if ( IS_PURCHASING_TEST )
-    {
-      TestPurchasing purchasingTest( ma.get(), purchasing.get() );
-      nFailed += QTest::qExec( &purchasingTest, args.count(), args.data() );
-    }
-#endif
-    return nFailed;
+    tests.initTestDeclarative();
+    tests.init( ma.get(), purchasing.get(), &iu );
+    return tests.runTest();
   }
 #endif
 

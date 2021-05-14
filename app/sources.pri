@@ -60,6 +60,7 @@ contains(DEFINES, INPUT_TEST) {
    }
 
   SOURCES += \
+      test/inputtests.cpp \
       test/testutils.cpp \
       test/testutilsfunctions.cpp \
       test/testmerginapi.cpp \
@@ -69,6 +70,7 @@ contains(DEFINES, INPUT_TEST) {
       test/testforms.cpp
 
   HEADERS += \
+      test/inputtests.h \
       test/testutils.h \
       test/testutilsfunctions.h \
       test/testmerginapi.h \
