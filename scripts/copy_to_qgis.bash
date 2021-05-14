@@ -33,6 +33,7 @@ rsync -zavh \
       --exclude="*.qrc" \
       --exclude="*.pri" \
       --exclude="qgis_quick.h" \
+      --exclude="ios" \
       $QGSQUICK_INPUT_DIR/ $QGSQUICK_QGIS_DIR
 
 # EXIT
