@@ -67,6 +67,7 @@
 #include "qgsvectorlayer.h"
 #include "qgsunittypes.h"
 
+#include "rememberattributescontroller.h"
 #include "attributecontroller.h"
 #include "attributedata.h"
 #include "attributeformmodel.h"
@@ -88,11 +89,7 @@
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
 #include "project.h"
-
-#include "qgsquickutils.h"
 #include "qgsproject.h"
-
-#include "qgsquickutils.h"
 
 
 #ifndef NDEBUG
@@ -571,7 +568,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // Add some data for debugging
-  qDebug() << QgsQuickUtils().dumpScreenInfo();
+  qDebug() << iu.dumpScreenInfo();
   qDebug() << "data directory: " << dataDir;
   qDebug() <<  "All up and running";
 
