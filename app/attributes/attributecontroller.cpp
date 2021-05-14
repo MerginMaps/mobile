@@ -399,7 +399,7 @@ bool AttributeController::recalculateDefaultValues(
                                      mFeatureLayerPair.layer()->name(),
                                      field.name(),
                                      exp.parserErrorString() ),
-                                   QStringLiteral( "" ),
+                                   QStringLiteral( "Input" ),
                                    Qgis::Warning );
 
       QVariant value = exp.evaluate( &expressionContext );
@@ -409,7 +409,7 @@ bool AttributeController::recalculateDefaultValues(
                                      mFeatureLayerPair.layer()->name(),
                                      field.name(),
                                      exp.evalErrorString() ),
-                                   QStringLiteral( "" ),
+                                   QStringLiteral( "Input" ),
                                    Qgis::Warning );
       else
       {
@@ -663,7 +663,7 @@ bool AttributeController::deleteFeature()
 
   if ( !isDeleted )
     QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
-                               QStringLiteral( "" ),
+                               QStringLiteral( "Input" ),
                                Qgis::Warning );
   else
   {
@@ -684,7 +684,7 @@ bool AttributeController::create()
   if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
   {
     QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                               QStringLiteral( "" ),
+                               QStringLiteral( "Input" ),
                                Qgis::Critical );
 
   }
@@ -712,7 +712,7 @@ bool AttributeController::save()
   QgsFeature feat = mFeatureLayerPair.feature();
   if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
     QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                               QStringLiteral( "" ),
+                               QStringLiteral( "Input" ),
                                Qgis::Warning );
 
   // This calls lower-level I/O functions which shouldn't be used
@@ -726,7 +726,7 @@ bool AttributeController::save()
       setFeatureLayerPair( FeatureLayerPair( feat, mFeatureLayerPair.layer() ) );
     else
       QgsMessageLog::logMessage( tr( "Feature %1 could not be fetched after commit" ).arg( mFeatureLayerPair.feature().id() ),
-                                 QStringLiteral( "" ),
+                                 QStringLiteral( "Input" ),
                                  Qgis::Warning );
   }
   return rv;
@@ -743,7 +743,7 @@ bool AttributeController::startEditing()
   if ( !mFeatureLayerPair.layer()->startEditing() )
   {
     QgsMessageLog::logMessage( tr( "Cannot start editing" ),
-                               QStringLiteral( "" ),
+                               QStringLiteral( "Input" ),
                                Qgis::Warning );
     return false;
   }
@@ -760,7 +760,7 @@ bool AttributeController::commit()
   if ( !mFeatureLayerPair.layer()->commitChanges() )
   {
     QgsMessageLog::logMessage( tr( "Could not save changes. Rolling back." ),
-                               QStringLiteral( "" ),
+                               QStringLiteral( "Input" ),
                                Qgis::Critical );
     mFeatureLayerPair.layer()->rollBack();
     return false;
