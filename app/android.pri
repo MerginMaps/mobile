@@ -19,33 +19,9 @@ android {
       error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
     }
 
-    isEmpty(QGSQUICK_INSTALL_PATH) {
-      error("Missing QGSQUICK_INSTALL_PATH")
-    }
-
     INCLUDEPATH += $${QGIS_INCLUDE_DIR}
     LIBS += -L$${QGIS_LIB_DIR}
     LIBS += -lqgis_core_$${ANDROID_TARGET_ARCH}
-
-    # using installed QGSQUICK
-    QGSQUICK_LIB_DIR = $${QGSQUICK_INSTALL_PATH}/lib
-    QGSQUICK_INCLUDE_DIR = $${QGSQUICK_INSTALL_PATH}/include
-    exists($${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so) {
-      message("Building from QGIS: $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
-    } else {
-      error("Missing QGIS Quick library in $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so")
-    }
-
-    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
-    exists($${QGSQUICK_QML_DIR}/QgsQuick/qmldir) {
-      message("Building from QgsQuick plugin: $${QGSQUICK_QML_DIR}/QgsQuick")
-    } else {
-      error("Missing QgsQuick plugin in $${QGSQUICK_QML_DIR}/QgsQuick")
-    }
-
-    INCLUDEPATH += $${QGSQUICK_INCLUDE_DIR}
-    LIBS += -L$${QGSQUICK_LIB_DIR}
-    LIBS += -lqgis_quick_$${ANDROID_TARGET_ARCH}
 
     # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
@@ -114,7 +90,6 @@ android {
         $${QGIS_LIB_DIR}/libwfsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libwmsprovider_$${ANDROID_TARGET_ARCH}.so \
         $${QGIS_LIB_DIR}/libZXing.so \
-        $${QGSQUICK_LIB_DIR}/libqgis_quick_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5Sensors_$${ANDROID_TARGET_ARCH}.so \
@@ -123,6 +98,4 @@ android {
         $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
         $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so
-
-    ANDROID_EXTRA_PLUGINS += $${QGSQUICK_QML_DIR}
 }

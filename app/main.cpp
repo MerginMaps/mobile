@@ -56,6 +56,31 @@
 #include "inputexpressionfunctions.h"
 #include "compass.h"
 #include "attributepreviewcontroller.h"
+#include "qgsfeature.h"
+#include "qgslogger.h"
+#include "qgsmaplayer.h"
+#include "qgsmessagelog.h"
+#include "qgspointxy.h"
+#include "qgsproject.h"
+#include "qgsrelationmanager.h"
+#include "qgscoordinatetransformcontext.h"
+#include "qgsvectorlayer.h"
+#include "qgsunittypes.h"
+
+#include "attributeformmodel.h"
+#include "attributeformmodelbase.h"
+#include "attributemodel.h"
+#include "featurehighlight.h"
+#include "qgsquickcoordinatetransformer.h"
+#include "identifykit.h"
+#include "featurelayerpair.h"
+#include "qgsquickmapcanvasmap.h"
+#include "qgsquickmapsettings.h"
+#include "qgsquickmaptransform.h"
+#include "positionkit.h"
+#include "scalebarkit.h"
+#include "qgsquickutils.h"
+#include "featureslistmodel.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -63,6 +88,9 @@
 
 #include "qgsquickutils.h"
 #include "qgsproject.h"
+
+#include "qgsquickutils.h"
+
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -209,6 +237,13 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
+static QObject *_utilsProvider( QQmlEngine *engine, QJSEngine *scriptEngine )
+{
+  Q_UNUSED( engine )
+  Q_UNUSED( scriptEngine )
+  return new QgsQuickUtils();  // the object will be owned by QML engine and destroyed by the engine on exit
+}
+
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -235,6 +270,45 @@ void initDeclarative()
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
+  qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
+
+  qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
+  qRegisterMetaType< QgsAttributes > ( "QgsAttributes" );
+  qRegisterMetaType< QgsCoordinateReferenceSystem >( "QgsCoordinateReferenceSystem" );
+  qRegisterMetaType< QgsCoordinateTransformContext >( "QgsCoordinateTransformContext" );
+  qRegisterMetaType< QgsFeature > ( "QgsFeature" );
+  qRegisterMetaType< QgsFeatureId > ( "QgsFeatureId" );
+  qRegisterMetaType< QgsPoint >( "QgsPoint" );
+  qRegisterMetaType< QgsPointXY >( "QgsPointXY" );
+  qRegisterMetaType< QgsUnitTypes::SystemOfMeasurement >( "QgsUnitTypes::SystemOfMeasurement" );
+  qRegisterMetaType< QgsUnitTypes::DistanceUnit >( "QgsUnitTypes::DistanceUnit" );
+  qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
+  qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
+  qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+
+  qmlRegisterUncreatableType< QgsUnitTypes >( "lc", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
+  qmlRegisterType< QgsProject >( "lc", 0, 1, "Project" );
+
+  qmlRegisterUncreatableType< FormItem >( "lc", 0, 1, "FormItemType", "Only enums from QgsQuickFormItem can be used" );
+  qmlRegisterType< QgsProject >( "lc", 0, 1, "Project" );
+  qmlRegisterUncreatableType< AttributeFormModel >( "lc", 0, 1, "AttributeFormModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 0, 1, "AttributeFormProxyModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabModel >( "lc", 0, 1, "AttributeTabModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabProxyModel >( "lc", 0, 1, "AttributeTabProxyModel", "Created by AttributeController" );
+  qmlRegisterType< AttributeController >( "lc", 0, 1, "AttributeController" );
+  qmlRegisterType< RememberAttributesController >( "lc", 0, 1, "RememberAttributesController" );
+  qmlRegisterType< FeatureHighlight >( "lc", 0, 1, "FeatureHighlight" );
+  qmlRegisterType< IdentifyKit >( "lc", 0, 1, "IdentifyKit" );
+  qmlRegisterType< PositionKit >( "lc", 0, 1, "PositionKit" );
+  qmlRegisterType< ScaleBarKit >( "lc", 0, 1, "ScaleBarKit" );
+  qmlRegisterType< QgsVectorLayer >( "lc", 0, 1, "VectorLayer" );
+  qmlRegisterType< FeaturesListModel >( "lc", 0, 1, "FeaturesListModel" );
+
+  qmlRegisterType< QgsQuickMapCanvasMap >( "QgsQuick", 0, 1, "MapCanvasMap" );
+  qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
+  qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
+  qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
+  qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
 }
 
 void addQmlImportPath( QQmlEngine &engine )

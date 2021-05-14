@@ -10,7 +10,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-import QgsQuick 0.1 as QgsQuick
+
 import "."  // import InputStyle singleton
 import lc 1.0
 
@@ -59,12 +59,12 @@ Drawer {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
-    QgsQuick.RememberAttributesController {
+    RememberAttributesController {
       id: rememberAttributesController
       rememberValuesAllowed: __appSettings.reuseLastEnteredValues
     }
 
-    QgsQuick.AttributeController {
+    AttributeController {
       id: attributeController
       rememberAttributesController: rememberAttributesController
     }
@@ -184,7 +184,7 @@ Drawer {
 
         }
 
-        QgsQuick.FeatureForm {
+        FeatureForm {
             id: featureForm
             visible: true
 
@@ -196,7 +196,7 @@ Drawer {
             importDataHandler: codeReaderHandler.handler
             controller: attributeController
             project: featurePanel.project
-            style: QgsQuick.FeatureFormStyling {
+            style: FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
                 property real titleLabelPointSize: 16
@@ -204,14 +204,14 @@ Drawer {
                 property QtObject group: QtObject {
                   property color backgroundColor: InputStyle.panelBackgroundLight
                   property color marginColor: InputStyle.panelBackgroundDark
-                  property real leftMargin: 0 * QgsQuick.Utils.dp
-                  property real rightMargin: 0 * QgsQuick.Utils.dp
-                  property real topMargin: 1 * QgsQuick.Utils.dp
-                  property real bottomMargin: 1 * QgsQuick.Utils.dp
-                  property real height: 64 * QgsQuick.Utils.dp
+                  property real leftMargin: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real rightMargin: 0 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real topMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real bottomMargin: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+                  property real height: 64 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                   property color fontColor: InputStyle.fontColor
                   property int spacing: InputStyle.formSpacing
-                  property int fontPixelSize: 24 * QgsQuick.Utils.dp
+                  property int fontPixelSize: 24 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                 }
 
                 property QtObject tabs: QtObject {
@@ -226,7 +226,7 @@ Drawer {
                   property real buttonHeight: height
                   property real spacing: 0
                   property int tabLabelPointSize: 12
-                  property real borderWidth: 1 * QgsQuick.Utils.dp
+                  property real borderWidth: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                   property color borderColor: InputStyle.labelColor
                 }
 
@@ -240,7 +240,7 @@ Drawer {
                   property color backgroundColor: "transparent"
                   property color backgroundColorInvalid: "#bdc3c7"
                   property color activeButtonColor: InputStyle.activeButtonColor
-                  property real size: 80 * QgsQuick.Utils.dp
+                  property real size: 80 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                 }
 
                   property QtObject fields: QtObject {
@@ -250,9 +250,9 @@ Drawer {
                     property color activeColor: InputStyle.fontColor
                     property color attentionColor: "#aa0000"
                     property color normalColor: InputStyle.panelBackgroundLight
-                    property real cornerRadius: 8 * QgsQuick.Utils.dp
+                    property real cornerRadius: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                     property real height: InputStyle.fieldHeight
-                    property int fontPixelSize: 22 * QgsQuick.Utils.dp
+                    property int fontPixelSize: 22 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
                     property real sideMargin: InputStyle.innerFieldMargin
                     property real outerMargin: InputStyle.outerFieldMargin
                     property int fontPointSize: 15
@@ -263,9 +263,9 @@ Drawer {
                   property var camera: InputStyle.cameraIcon
                   property var remove: InputStyle.removeIcon
                   property var gallery:InputStyle.galleryIcon
-                  property var brokenImage: QgsQuick.Utils.getThemeIcon("ic_broken_image_black")
-                  property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
-                  property var today: QgsQuick.Utils.getThemeIcon("ic_today")
+                  property var brokenImage: Utils.getThemeIcon("ic_broken_image_black")
+                  property var notAvailable: Utils.getThemeIcon("ic_photo_notavailable_white")
+                  property var today: Utils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
                   property var combobox: InputStyle.comboboxIcon
                   property var valueRelationMore: InputStyle.valueRelationIcon
@@ -324,7 +324,7 @@ Drawer {
           //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
           onButtonClicked: {
               if (clickedButton === StandardButton.Ok) {
-                attributeController.deleteFeature()
+                featureForm.model.attributeModel.deleteFeature()
                 visible = false
                 featureForm.canceled()
               }

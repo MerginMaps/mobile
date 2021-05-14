@@ -20,11 +20,11 @@
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
 
-#include "qgsquickattributecontroller.h"
-#include "qgsquickattributetabproxymodel.h"
-#include "qgsquickattributetabmodel.h"
-#include "qgsquickattributeformproxymodel.h"
-#include "qgsquickattributeformmodel.h"
+#include "attributecontroller.h"
+#include "attributetabproxymodel.h"
+#include "attributetabmodel.h"
+#include "attributeformproxymodel.h"
+#include "attributeformmodel.h"
 
 
 void TestAttributeController::init()

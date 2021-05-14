@@ -9,7 +9,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QgsQuick 0.1 as QgsQuick
+
 import "."  // import InputStyle singleton
 
 Item {
@@ -17,14 +17,14 @@ Item {
     property alias mapSettings: scaleBarKit.mapSettings
     property alias preferredWidth: scaleBarKit.preferredWidth
 
-    QgsQuick.ScaleBarKit {
+    ScaleBarKit {
         id: scaleBarKit
     }
 
     property color barColor: InputStyle.fontColor
     property string barText: scaleBarKit.distance + " " + scaleBarKit.units
     property int barWidth: scaleBarKit.width
-    property int lineWidth: 2 * QgsQuick.Utils.dp
+    property int lineWidth: 2 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
     width: barWidth
 
@@ -39,7 +39,7 @@ Item {
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: 5 * QgsQuick.Utils.dp
+        anchors.leftMargin: 5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
         anchors.rightMargin: anchors.leftMargin
 
         Text {

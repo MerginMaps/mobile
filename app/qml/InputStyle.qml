@@ -10,7 +10,7 @@
 pragma Singleton
 import QtQuick 2.0
 
-import QgsQuick 0.1 as QgsQuick
+
 
 QtObject {
 
@@ -38,9 +38,9 @@ QtObject {
 
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 
-    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20 * rado2Lutra
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 24 * rado2Lutra
-    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 28 * rado2Lutra
+    property real fontPixelSizeSmall: QgsQuick.QgsQuick.QgsQuick.Utils.dp * 20 * rado2Lutra
+    property real fontPixelSizeNormal: QgsQuick.QgsQuick.QgsQuick.Utils.dp * 24 * rado2Lutra
+    property real fontPixelSizeTitle: QgsQuick.QgsQuick.QgsQuick.Utils.dp * 28 * rado2Lutra
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
@@ -50,17 +50,17 @@ QtObject {
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2
 
-    property real panelSpacing: QgsQuick.Utils.dp * 5
-    property real shadowVerticalOffset: -2 * QgsQuick.Utils.dp
-    property real shadowRadius: 8 * QgsQuick.Utils.dp
+    property real panelSpacing: QgsQuick.QgsQuick.QgsQuick.Utils.dp * 5
+    property real shadowVerticalOffset: -2 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real shadowRadius: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
     property real shadowSamples: 12
     property real panelOpacity: 1
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
-    property real cornerRadius: 8 * QgsQuick.Utils.dp
-    property real innerFieldMargin: 10 * QgsQuick.Utils.dp  // TODO rename fieldMargin
-    property real outerFieldMargin: 20 * QgsQuick.Utils.dp  // TODO change for PanelMargin
-    property real formSpacing: 10 * QgsQuick.Utils.dp
+    property real cornerRadius: 8 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+    property real innerFieldMargin: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp  // TODO rename fieldMargin
+    property real outerFieldMargin: 20 * QgsQuick.QgsQuick.QgsQuick.Utils.dp  // TODO change for PanelMargin
+    property real formSpacing: 10 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
     property real refWidth: 640
     property real refHeight: 1136
@@ -99,9 +99,9 @@ QtObject {
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
 
-    // Scaling function using QgsQuick screenDensity and deviceRatio
+    // Scaling function using screenDensity and deviceRatio
     property var scale: function scale(size) {
-        return size * QgsQuick.Utils.dp
+        return size * QgsQuick.QgsQuick.QgsQuick.Utils.dp
     }
 
     // Scaling function for fonts using deviceRatio

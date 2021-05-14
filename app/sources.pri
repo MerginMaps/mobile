@@ -1,5 +1,20 @@
 SOURCES += \
-attributepreviewcontroller.cpp \
+attributes/attributecontroller.cpp \
+attributes/attributedata.cpp \
+attributes/attributeformmodel.cpp \
+attributes/attributeformproxymodel.cpp \
+attributes/attributepreviewcontroller.cpp \
+attributes/attributetabmodel.cpp \
+attributes/attributetabproxymodel.cpp \
+attributes/rememberattributescontroller.cpp \
+featurelayerpair.cpp \
+featurehighlight.cpp \
+highlightsgnode.cpp \
+identifykit.cpp \
+positionkit.cpp \
+scalebarkit.cpp \
+simulatedpositionsource.cpp \
+featureslistmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -24,10 +39,25 @@ codefilter.cpp \
 qrdecoder.cpp \
 projectsmodel.cpp \
 projectsproxymodel.cpp \
-compass.cpp \
+compass.cpp
 
 HEADERS += \
-attributepreviewcontroller.h \
+attributes/attributecontroller.h \
+attributes/attributedata.h \
+attributes/attributeformmodel.h \
+attributes/attributeformproxymodel.h \
+attributes/attributepreviewcontroller.h \
+attributes/attributetabmodel.h \
+attributes/attributetabproxymodel.h \
+attributes/rememberattributescontroller.h \
+highlightsgnode.h \
+featurelayerpair.h \
+featurehighlight.h \
+identifykit.h \
+positionkit.h \
+scalebarkit.h \
+simulatedpositionsource.h \
+featureslistmodel.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
@@ -51,7 +81,7 @@ codefilter.h \
 qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \
-compass.h \
+compass.h
 
 contains(DEFINES, INPUT_TEST) {
 
@@ -104,7 +134,7 @@ RESOURCES += \
     fonts/fonts.qrc \
     i18n/input_i18n.qrc
 
-TRANSLATIONS = $$files(i18n/*.ts)
+TRANSLATIONS += $$files(i18n/*.ts)
 
 # this makes the manifest visible from Qt Creator
 DISTFILES += \

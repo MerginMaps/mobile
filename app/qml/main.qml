@@ -12,14 +12,13 @@ import QtQuick.Controls 2.2
 
 // Required for iOS to get rid of "module "QtMultimedia" is not installed".
 // It looks like static QT plugins are not copied to the distribution
-// bundle if they are only referenced from QgsQuick
 import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
 
 
 import QtQuick.Dialogs 1.1
-import QgsQuick 0.1 as QgsQuick
+
 import lc 1.0
 
 ApplicationWindow {
@@ -279,19 +278,20 @@ ApplicationWindow {
         console.log("Completed Running!")
     }
 
-    QgsQuick.MapCanvas {
+    MapCanvas {
       id: mapCanvas
 
       height: parent.height - mainPanel.height
       width: parent.width
       z: zMapCanvas
+      minimumStartDragDistance: 5 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
       mapSettings.project: __loader.project
 
-      QgsQuick.IdentifyKit {
+      IdentifyKit {
         id: identifyKit
         mapSettings: mapCanvas.mapSettings
-        identifyMode: QgsQuick.IdentifyKit.TopDownAll
+        identifyMode: IdentifyKit.TopDownAll
       }
 
       onIsRenderingChanged: {
@@ -323,18 +323,18 @@ ApplicationWindow {
         mapSettings: mapCanvas.mapSettings
 
         lineColor: Qt.rgba(1,0.2,0.2,1)
-        lineWidth: 6 * QgsQuick.Utils.dp
+        lineWidth: 6 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
         fillColor: Qt.rgba(1,0.2,0.2,InputStyle.lowHighlightOpacity)
 
-        outlinePenWidth: 1 * QgsQuick.Utils.dp
+        outlinePenWidth: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
         outlineColor: "white"
 
         markerType: "image"
         markerImageSource: "qrc:/marker.svg"
-        markerWidth: 60 * QgsQuick.Utils.dp
-        markerHeight: 70 * QgsQuick.Utils.dp
-        markerAnchorY: 48 * QgsQuick.Utils.dp
+        markerWidth: 60 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        markerHeight: 70 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        markerAnchorY: 48 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
         // enable anti-aliasing to make the higlight look nicer
         // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
@@ -374,7 +374,7 @@ ApplicationWindow {
 
     Item {
         anchors.fill: mapCanvas
-        transform: QgsQuick.MapTransform {
+        transform: MapTransform {
             mapSettings: mapCanvas.mapSettings
         }
         z: zMapCanvas + 1  // make sure items from here are on top of the Z-order
@@ -398,7 +398,7 @@ ApplicationWindow {
     }
 	
     // Position Kit and Marker
-    QgsQuick.PositionKit {
+    PositionKit {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
       simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
@@ -572,7 +572,7 @@ ApplicationWindow {
         height: InputStyle.scaleBarHeight
         y: window.height - height - mainPanel.height - InputStyle.panelMargin
         mapSettings: mapCanvas.mapSettings
-        preferredWidth: Math.min(window.width, 180 * QgsQuick.Utils.dp)
+        preferredWidth: Math.min(window.width, 180 * QgsQuick.QgsQuick.QgsQuick.Utils.dp)
         z: zToolkits
         anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -655,8 +655,8 @@ ApplicationWindow {
     Notification {
         id: popup
         text: ""
-        width: 400 * QgsQuick.Utils.dp
-        height: 160 * QgsQuick.Utils.dp
+        width: 400 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
+        height: 160 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         z: zPanel + 1000 // the most top
@@ -769,7 +769,7 @@ ApplicationWindow {
         id: loadingIndicator
         visible: false
         width: parent.width
-        height: 7 * QgsQuick.Utils.dp
+        height: 7 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
         z: zPanel + 1000 // the most top
     }
 

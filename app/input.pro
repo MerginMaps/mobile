@@ -16,8 +16,12 @@ include(macx.pri)
 include(win32.pri)
 include(sources.pri)
 include($$PWD/../core/core.pri)
+include($$PWD/../qgsquick/qgsquick.pri)
 
-INCLUDEPATH += $$PWD/../core
+INCLUDEPATH += \
+  $$PWD/../core \
+  $$PWD/../qgsquick \
+  $$PWD/attributes
 
 DEFINES += INPUT_APP
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"
@@ -30,6 +34,3 @@ contains(DEFINES, INPUT_TEST) {
   TEST_DATA_DIR="$$PWD/../test/test_data"
   DEFINES += "TEST_DATA_DIR=\\\"$${TEST_DATA_DIR}\\\""
 }
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH = $${QGSQUICK_QML_DIR}

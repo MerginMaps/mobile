@@ -12,7 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import lc 1.0
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   id: statusPanel
@@ -211,7 +211,7 @@ Item {
           id: borderLine
           color: InputStyle.panelBackground2
           width: delegateItem.width
-          height: 1 * QgsQuick.Utils.dp
+          height: 1 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
           anchors.bottom: parent.bottom
         }
       }

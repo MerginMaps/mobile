@@ -88,12 +88,12 @@ qreal PositionDirection::direction() const
   return mDirection;
 }
 
-QgsQuickPositionKit *PositionDirection::positionKit() const
+PositionKit *PositionDirection::positionKit() const
 {
   return mPositionKit;
 }
 
-void PositionDirection::setPositionKit( QgsQuickPositionKit *positionKit )
+void PositionDirection::setPositionKit( PositionKit *positionKit )
 {
   mPositionKit = positionKit;
 }

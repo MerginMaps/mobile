@@ -15,7 +15,7 @@
 #include <QOrientationSensor>
 #include <QCompass>
 
-#include "qgsquickpositionkit.h"
+#include "positionkit.h"
 #include "compass.h"
 
 
@@ -31,7 +31,7 @@ class PositionDirection : public QObject
     Q_OBJECT
 
     Q_PROPERTY( qreal direction READ direction NOTIFY directionChanged )
-    Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
     Q_PROPERTY( bool hasDirection READ hasDirection NOTIFY hasDirectionChanged )
 
@@ -40,8 +40,8 @@ class PositionDirection : public QObject
 
     qreal direction() const;
 
-    QgsQuickPositionKit *positionKit() const;
-    void setPositionKit( QgsQuickPositionKit *positionKit );
+    PositionKit *positionKit() const;
+    void setPositionKit( PositionKit *positionKit );
 
     bool hasDirection() const;
     void setHasDirection( bool hasDirection );
@@ -60,7 +60,7 @@ class PositionDirection : public QObject
   private:
     qreal mDirection = Compass::MIN_INVALID_DIRECTION;
     bool mHasDirection = false;
-    QgsQuickPositionKit *mPositionKit = nullptr;
+    PositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
     QTimer mTimer;
     const qreal mUpdateMinAngleDelta = 3; //! in degrees.

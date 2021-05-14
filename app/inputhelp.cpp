@@ -16,7 +16,7 @@
 #include "inpututils.h"
 #include "coreutils.h"
 
-#include "qgsquickutils.h"
+#include "inpututils.h"
 
 #include <QNetworkReply>
 #include <QSysInfo>
@@ -148,7 +148,7 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
     retLines.push_back( QStringLiteral( "%1Mergin User Profile not available. To include it, open you Profile Page in InputApp%2" ).arg( isHtml ? "<b>" : "" ).arg( isHtml ? "</b>" : "" ) );
   }
   retLines.push_back( QStringLiteral( "Screen Info:" ) );
-  retLines.append( QgsQuickUtils().dumpScreenInfo().split( "\n" ).toVector() );
+  retLines.append( InputUtils().dumpScreenInfo().split( "\n" ).toVector() );
   retLines.push_back( QStringLiteral( "------------------------------------------" ) );
   return retLines;
 }
