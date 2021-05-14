@@ -19,7 +19,7 @@ import QtGraphicalEffects 1.0
 
 
 /**
- * ComboBox for QGIS Attribute Form - used by alueMap and alueRelation
+ * ComboBox for QGIS Attribute Form - used by valueMap and valueRelation
  * Do not use directly from Application QML
  */
 ComboBox {

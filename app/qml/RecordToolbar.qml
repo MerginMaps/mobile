@@ -12,7 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
-
+import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 import "./components"
 import lc 1.0
@@ -35,7 +35,7 @@ Item {
     property bool manualRecordig: false
     property bool extraPanelVisible: true
 
-    property VectorLayer activeVectorLayer: __activeLayer.vectorLayer
+    property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.vectorLayer
     property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
     property string activeLayerIcon: __loader.loadIconFromLayer( activeVectorLayer )
 

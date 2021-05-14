@@ -11,7 +11,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
-
+import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 
 Item {
@@ -232,7 +232,7 @@ Item {
         title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * Utils.dp
+        width: parent.width < 300 * QgsQuick.Utils.dp ? parent.width : 300 * QgsQuick.Utils.dp
         closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
 
         MenuItem {

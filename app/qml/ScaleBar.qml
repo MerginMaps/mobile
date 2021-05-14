@@ -11,6 +11,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 import "."  // import InputStyle singleton
+import QgsQuick 0.1 as QgsQuick
+import lc 1.0
 
 Item {
     id: scaleBar

@@ -10,7 +10,7 @@
 import QtQuick 2.11
 import QtQuick.Shapes 1.11
 
-
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   id: highlight
@@ -43,7 +43,7 @@ Item {
   property bool hasPolygon: false
 
   // for transformation of the highlight to the correct location on the map
-  property MapSettings mapSettings
+  property QgsQuick.MapSettings mapSettings
 
   property bool recordingInProgress: false
   property color guideLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )

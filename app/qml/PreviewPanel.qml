@@ -11,7 +11,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-
+import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 import lc 1.0
 

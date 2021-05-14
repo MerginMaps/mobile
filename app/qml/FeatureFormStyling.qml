@@ -15,7 +15,7 @@
 
 import QtQuick 2.0
 
-
+import QgsQuick 0.1 as QgsQuick
 
 QtObject {
   property color backgroundColor: "white"
@@ -81,16 +81,16 @@ QtObject {
     }
 
   property QtObject icons: QtObject {
-    property var camera: Utils.getThemeIcon("ic_camera")
-    property var remove: Utils.getThemeIcon("ic_delete_forever_white")
-    property var gallery: Utils.getThemeIcon("ic_gallery")
-    property var brokenImage: Utils.getThemeIcon("ic_broken_image_black")
-    property var notAvailable: Utils.getThemeIcon("ic_photo_notavailable_white")
-    property var today: Utils.getThemeIcon("ic_today")
-    property var back: Utils.getThemeIcon("ic_back")
-    property var importData: Utils.getThemeIcon("ic_camera")
-    property var combobox: Utils.getThemeIcon("ic_angle_down")
-    property var valueRelationMore: Utils.getThemeIcon("ic_angle_right")
+    property var camera: __inputUtils.getThemeIcon("ic_camera")
+    property var remove: __inputUtils.getThemeIcon("ic_delete_forever_white")
+    property var gallery: __inputUtils.getThemeIcon("ic_gallery")
+    property var brokenImage: __inputUtils.getThemeIcon("ic_broken_image_black")
+    property var notAvailable: __inputUtils.getThemeIcon("ic_photo_notavailable_white")
+    property var today: __inputUtils.getThemeIcon("ic_today")
+    property var back: __inputUtils.getThemeIcon("ic_back")
+    property var importData: __inputUtils.getThemeIcon("ic_camera")
+    property var combobox: __inputUtils.getThemeIcon("ic_angle_down")
+    property var valueRelationMore: __inputUtils.getThemeIcon("ic_angle_right")
   }
 
   property QtObject checkboxComponent: QtObject {

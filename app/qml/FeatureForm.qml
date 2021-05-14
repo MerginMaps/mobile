@@ -1,10 +1,4 @@
 /***************************************************************************
- featureform.qml
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Matthias Kuhn
-  Email                : matthias@opengis.ch
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +14,8 @@ import QtQml 2.2
 
 // We use calendar in datetime widget that is not yet implemented in Controls 2.2
 import QtQuick.Controls 1.4 as Controls1
-
-
+import QgsQuick 0.1 as QgsQuick
+import lc 1.0
 
 Item {
   /**
@@ -137,7 +131,7 @@ Item {
   /**
    * Active project.
    */
-  property Project project
+  property QgsQuick.Project project
 
   /**
    * Controller
@@ -147,7 +141,7 @@ Item {
   /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
-  property var loadWidgetFn: InputUtils.getEditorComponentSource
+  property var loadWidgetFn: __inputUtils.getEditorComponentSource
 
   /**
    * Predefined form styling

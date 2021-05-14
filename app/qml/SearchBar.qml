@@ -10,6 +10,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
+import QgsQuick 0.1 as QgsQuick
 
 Rectangle {
   id: root

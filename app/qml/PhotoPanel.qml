@@ -19,7 +19,7 @@ import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtMultimedia 5.8
 import QtGraphicalEffects 1.0
-
+import QgsQuick 0.1 as QgsQuick
 
 Drawer {
   // Capture path
@@ -35,10 +35,10 @@ Drawer {
   property color borderColor: "black"
 
   // icons:
-  property var captureButtonIcon: Utils.getThemeIcon("ic_camera_alt_border")
-  property var confirmButtonIcon: Utils.getThemeIcon("ic_check_black")
-  property var cancelButtonIcon: Utils.getThemeIcon("ic_clear_black")
-  property var backButtonSource: Utils.getThemeIcon("ic_back")
+  property var captureButtonIcon: __inputUtils.getThemeIcon("ic_camera_alt_border")
+  property var confirmButtonIcon: __inputUtils.getThemeIcon("ic_check_black")
+  property var cancelButtonIcon: __inputUtils.getThemeIcon("ic_clear_black")
+  property var backButtonSource: __inputUtils.getThemeIcon("ic_back")
   property real imageButtonSize: 45 * QgsQuick.Utils.dp
   property real buttonSize: imageButtonSize * 1.2
   property var buttonsPosition
@@ -49,7 +49,7 @@ Drawer {
     captureItem.saveImage = false
     photoPreview.visible = false
     if (camera.imageCapture.capturedImagePath != "") {
-      Utils.removeFile(camera.imageCapture.capturedImagePath)
+      __inputUtils.removeFile(camera.imageCapture.capturedImagePath)
     }
   }
 

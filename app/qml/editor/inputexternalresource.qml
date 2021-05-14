@@ -89,7 +89,7 @@ Item {
     }
 
     if (expression) {
-      InputUtils.evaluateExpression(featurePair, activeProject, expression)
+      __inputUtils.evaluateExpression(featurePair, activeProject, expression)
     } else {
       config["DefaultRoot"] ? config["DefaultRoot"] : homePath
     }
@@ -121,7 +121,7 @@ Item {
   function showDefaultPanel() {
     if (!photoCapturePanelLoader.item) {
       // Load the photo capture panel if not loaded yet
-      photoCapturePanelLoader.setSource("photopanel.qml")
+      photoCapturePanelLoader.setSource("PhotoPanel.qml")
       photoCapturePanelLoader.item.height = window.height
       photoCapturePanelLoader.item.width = window.width
       photoCapturePanelLoader.item.edge = Qt.RightEdge

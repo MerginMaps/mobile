@@ -67,9 +67,12 @@
 #include "qgsvectorlayer.h"
 #include "qgsunittypes.h"
 
+#include "attributecontroller.h"
+#include "attributedata.h"
 #include "attributeformmodel.h"
-#include "attributeformmodelbase.h"
-#include "attributemodel.h"
+#include "attributeformproxymodel.h"
+#include "attributetabmodel.h"
+#include "attributetabproxymodel.h"
 #include "featurehighlight.h"
 #include "qgsquickcoordinatetransformer.h"
 #include "identifykit.h"
@@ -286,11 +289,8 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
 
-  qmlRegisterUncreatableType< QgsUnitTypes >( "lc", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
-  qmlRegisterType< QgsProject >( "lc", 0, 1, "Project" );
-
+  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterUncreatableType< FormItem >( "lc", 0, 1, "FormItemType", "Only enums from QgsQuickFormItem can be used" );
-  qmlRegisterType< QgsProject >( "lc", 0, 1, "Project" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 0, 1, "AttributeFormModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 0, 1, "AttributeFormProxyModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeTabModel >( "lc", 0, 1, "AttributeTabModel", "Created by AttributeController" );
@@ -301,8 +301,9 @@ void initDeclarative()
   qmlRegisterType< IdentifyKit >( "lc", 0, 1, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 0, 1, "PositionKit" );
   qmlRegisterType< ScaleBarKit >( "lc", 0, 1, "ScaleBarKit" );
-  qmlRegisterType< QgsVectorLayer >( "lc", 0, 1, "VectorLayer" );
   qmlRegisterType< FeaturesListModel >( "lc", 0, 1, "FeaturesListModel" );
+  qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
+  qmlRegisterType< QgsProject >( "QgsQuick", 0, 1, "Project" );
 
   qmlRegisterType< QgsQuickMapCanvasMap >( "QgsQuick", 0, 1, "MapCanvasMap" );
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );

@@ -18,7 +18,7 @@ import QtPositioning 5.8
 
 
 import QtQuick.Dialogs 1.1
-
+import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 ApplicationWindow {
@@ -278,13 +278,12 @@ ApplicationWindow {
         console.log("Completed Running!")
     }
 
-    MapCanvas {
+    QgsQuick.MapCanvas {
       id: mapCanvas
 
       height: parent.height - mainPanel.height
       width: parent.width
       z: zMapCanvas
-      minimumStartDragDistance: 5 * QgsQuick.Utils.dp
 
       mapSettings.project: __loader.project
 

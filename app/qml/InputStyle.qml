@@ -10,7 +10,7 @@
 pragma Singleton
 import QtQuick 2.0
 
-
+import QgsQuick 0.1 as QgsQuick
 
 QtObject {
 
@@ -99,7 +99,7 @@ QtObject {
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
 
-    // Scaling function using screenDensity and deviceRatio
+    // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
         return size * QgsQuick.Utils.dp
     }

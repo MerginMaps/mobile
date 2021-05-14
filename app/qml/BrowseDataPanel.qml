@@ -11,7 +11,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import lc 1.0
 
-
+import QgsQuick 0.1 as QgsQuick
 /*
  * BrowseDataPanel should stay a logic component, please do not combine UI here
  */

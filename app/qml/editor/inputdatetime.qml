@@ -51,8 +51,8 @@ Item {
     ColumnLayout {
         id: main
         property var currentValue: value
-        property bool fieldIsDate: Utils.fieldType( field ) === 'QDate'
-        property var typeFromFieldFormat: Utils.dateTimeFieldFormat( config['field_format'] )
+        property bool fieldIsDate: __inputUtils.fieldType( field ) === 'QDate'
+        property var typeFromFieldFormat: __inputUtils.dateTimeFieldFormat( config['field_format'] )
         property var rowHeight: customStyle.fields.height * 0.75
 
         anchors { right: parent.right; left: parent.left }

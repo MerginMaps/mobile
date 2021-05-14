@@ -12,6 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 
 import "."  // import InputStyle singleton
+import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Drawer {
@@ -263,9 +264,9 @@ Drawer {
                   property var camera: InputStyle.cameraIcon
                   property var remove: InputStyle.removeIcon
                   property var gallery:InputStyle.galleryIcon
-                  property var brokenImage: Utils.getThemeIcon("ic_broken_image_black")
-                  property var notAvailable: Utils.getThemeIcon("ic_photo_notavailable_white")
-                  property var today: Utils.getThemeIcon("ic_today")
+                  property var brokenImage: __inputUtils.getThemeIcon("ic_broken_image_black")
+                  property var notAvailable: __inputUtils.getThemeIcon("ic_photo_notavailable_white")
+                  property var today: __inputUtils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
                   property var combobox: InputStyle.comboboxIcon
                   property var valueRelationMore: InputStyle.valueRelationIcon
@@ -324,7 +325,7 @@ Drawer {
           //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
           onButtonClicked: {
               if (clickedButton === StandardButton.Ok) {
-                featureForm.model.attributeModel.deleteFeature()
+                attributeController.deleteFeature()
                 visible = false
                 featureForm.canceled()
               }
