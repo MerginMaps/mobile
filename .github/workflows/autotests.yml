@@ -116,7 +116,7 @@ jobs:
       - name: run tests
         run: |
           cd build-Input/
-          ../scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
+          ../input/scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
 
       - name: build lcov summary
         run: |
