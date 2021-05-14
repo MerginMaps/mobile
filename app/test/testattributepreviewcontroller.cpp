@@ -11,7 +11,7 @@
 
 #include "qgsvectorlayer.h"
 #include "qgsfeature.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 #include "qgsproject.h"
 
 #include "attributepreviewcontroller.h"

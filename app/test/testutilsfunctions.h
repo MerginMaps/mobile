@@ -17,7 +17,7 @@ class TestUtilsFunctions: public QObject
 {
     Q_OBJECT
   public:
-    TestUtilsFunctions() = default;
+    TestUtilsFunctions( InputUtils *utils );
     ~TestUtilsFunctions() = default;
 
   private slots:
@@ -34,6 +34,8 @@ class TestUtilsFunctions: public QObject
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
+
+    InputUtils *mUtils;
 };
 
 #endif // TESTUTILSFUNCTIONS_H

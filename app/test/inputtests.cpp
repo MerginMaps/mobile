@@ -101,7 +101,7 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testUtils" )
   {
-    TestUtilsFunctions utilsTest;
+    TestUtilsFunctions utilsTest( mInputUtils );
     nFailed = QTest::qExec( &utilsTest, mTestArgs );
   }
   else if ( mTestRequested == "--testAttributePreviewController" )

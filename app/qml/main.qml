@@ -374,7 +374,7 @@ ApplicationWindow {
 
     Item {
         anchors.fill: mapCanvas
-        transform: MapTransform {
+        transform: QgsQuick.MapTransform {
             mapSettings: mapCanvas.mapSettings
         }
         z: zMapCanvas + 1  // make sure items from here are on top of the Z-order

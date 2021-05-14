@@ -57,7 +57,7 @@ Item {
   property real markerCircleSize: 15 * QgsQuick.QgsQuick.QgsQuick.Utils.dp
 
   // transform used by line/path
-  property MapTransform mapTransform: MapTransform {
+  property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
     mapSettings: highlight.mapSettings
   }
 

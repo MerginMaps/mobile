@@ -21,7 +21,7 @@
 #include "qgsapplication.h"
 #include "qgsquickutils.h"
 #include "qgsquickmapcanvasmap.h"
-#include "qgsquickscalebarkit.h"
+#include "scalebarkit.h"
 
 #include "testutils.h"
 

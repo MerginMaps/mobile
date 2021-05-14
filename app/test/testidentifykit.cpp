@@ -26,7 +26,7 @@
 #include "qgsvectordataprovider.h"
 
 #include "qgsquickmapcanvasmap.h"
-#include "qgsquickidentifykit.h"
+#include "identifykit.h"
 
 
 void TestIdentifyKit::identifyOne()

@@ -16,8 +16,8 @@
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"
 
-#include "qgsquickfeaturelayerpair.h"
-#include "qgsquickrememberattributescontroller.h"
+#include "featurelayerpair.h"
+#include "rememberattributescontroller.h"
 
 void TestRememberAttributesController::init()
 {
