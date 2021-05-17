@@ -15,9 +15,9 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+import QgsQuick 0.1 as QgsQuick
 
 /**
  * Text Edit for QGIS Attribute Form

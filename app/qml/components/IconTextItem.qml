@@ -16,7 +16,7 @@
 import QtQuick 2.5
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
-
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   property real iconSize

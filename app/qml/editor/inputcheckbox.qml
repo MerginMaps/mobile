@@ -15,7 +15,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-
+import "../components"
 
 /**
  * Checkbox for QGIS Attribute Form
@@ -68,7 +68,7 @@ Item {
       leftPadding: customStyle.fields.sideMargin
     }
 
-    SwitchComponent {
+    Switch {
       id: switchComp
 
       property var currentValue: value

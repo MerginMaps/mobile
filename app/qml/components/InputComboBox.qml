@@ -1,10 +1,4 @@
 /***************************************************************************
- combobox.qml
-  --------------------------------------
-  Date                 : 2017
-  Copyright            : (C) 2017 by Matthias Kuhn
-  Email                : matthias@opengis.ch
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -16,10 +10,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-
+import QgsQuick 0.1 as QgsQuick
 
 /**
- * ComboBox for QGIS Attribute Form - used by valueMap and valueRelation
+ * ComboBox used by valueMap and valueRelation
  * Do not use directly from Application QML
  */
 ComboBox {

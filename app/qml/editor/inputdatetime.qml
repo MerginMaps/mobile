@@ -18,6 +18,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4 as Controls1
 import QtGraphicalEffects 1.0
+import QgsQuick 0.1 as QgsQuick
 
 
 /**

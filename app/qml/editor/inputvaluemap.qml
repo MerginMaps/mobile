@@ -16,7 +16,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-
+import "../components"
 
 /**
  * Value Map for QGIS Attribute Form
@@ -35,7 +35,7 @@ Item {
     right: parent.right
   }
 
-  EditorWidgetComboBox {
+  InputComboBox {
     // Reversed to model's key-value map. It is used to find index according current value
     property var reverseConfig: ({})
     property var currentEditorValue: value
