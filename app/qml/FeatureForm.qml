@@ -16,6 +16,7 @@ import QtQml 2.2
 import QtQuick.Controls 1.4 as Controls1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import "./components"
 
 Item {
   /**

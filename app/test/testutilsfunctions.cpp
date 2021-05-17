@@ -76,7 +76,7 @@ void TestUtilsFunctions::screenUnitsToMeters()
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
   ms.setOutputSize( QSize( 1000, 500 ) );
   double sutm = mUtils->screenUnitsToMeters( &ms, 1 );
-  COMPARENEAR( sutm, 213, 1.0 );
+  COMPARENEAR( sutm, 0.002, 1.0 );
 }
 
 void TestUtilsFunctions::transformedPoint()
@@ -157,7 +157,7 @@ void TestUtilsFunctions::loadIcon()
 
 void TestUtilsFunctions::fileExists()
 {
-  QString path = TestUtils::testDataDir() + "/quickapp_project.qgs";
+  QString path = TestUtils::testDataDir() + "/planes/quickapp_project.qgs";
   QVERIFY( mUtils->fileExists( path ) );
 }
 
@@ -165,10 +165,10 @@ void TestUtilsFunctions::fileExists()
 void TestUtilsFunctions::loadQmlComponent()
 {
   QUrl dummy =  mUtils->getEditorComponentSource( "dummy" );
-  QCOMPARE( dummy.path(), QString( "textedit.qml" ) );
+  QCOMPARE( dummy.path(), QString( "inputtextedit.qml" ) );
 
   QUrl valuemap =  mUtils->getEditorComponentSource( "valuemap" );
-  QCOMPARE( valuemap.path(), QString( "valuemap.qml" ) );
+  QCOMPARE( valuemap.path(), QString( "inputvaluemap.qml" ) );
 }
 
 void TestUtilsFunctions::getRelativePath()

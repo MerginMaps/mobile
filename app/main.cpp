@@ -115,10 +115,6 @@
 #include "loader.h"
 #include "appsettings.h"
 
-#ifdef Q_OS_IOS
-#include "qgsquickplugin.h"
-#endif
-
 static QString getDataDir()
 {
 #ifdef QGIS_QUICK_DATA_PATH
@@ -251,7 +247,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
-  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
+  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "InputLoader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -286,19 +282,19 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
 
-  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
-  qmlRegisterUncreatableType< FormItem >( "lc", 0, 1, "FormItemType", "Only enums from QgsQuickFormItem can be used" );
-  qmlRegisterUncreatableType< AttributeFormModel >( "lc", 0, 1, "AttributeFormModel", "Created by AttributeController" );
-  qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 0, 1, "AttributeFormProxyModel", "Created by AttributeController" );
-  qmlRegisterUncreatableType< AttributeTabModel >( "lc", 0, 1, "AttributeTabModel", "Created by AttributeController" );
-  qmlRegisterUncreatableType< AttributeTabProxyModel >( "lc", 0, 1, "AttributeTabProxyModel", "Created by AttributeController" );
-  qmlRegisterType< AttributeController >( "lc", 0, 1, "AttributeController" );
-  qmlRegisterType< RememberAttributesController >( "lc", 0, 1, "RememberAttributesController" );
-  qmlRegisterType< FeatureHighlight >( "lc", 0, 1, "FeatureHighlight" );
-  qmlRegisterType< IdentifyKit >( "lc", 0, 1, "IdentifyKit" );
-  qmlRegisterType< PositionKit >( "lc", 0, 1, "PositionKit" );
-  qmlRegisterType< ScaleBarKit >( "lc", 0, 1, "ScaleBarKit" );
-  qmlRegisterType< FeaturesListModel >( "lc", 0, 1, "FeaturesListModel" );
+  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
+  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItemType", "Only enums from QgsQuickFormItem can be used" );
+  qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabModel >( "lc", 1, 0, "AttributeTabModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabProxyModel >( "lc", 1, 0, "AttributeTabProxyModel", "Created by AttributeController" );
+  qmlRegisterType< AttributeController >( "lc", 1, 0, "AttributeController" );
+  qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
+  qmlRegisterType< FeatureHighlight >( "lc", 1, 0, "FeatureHighlight" );
+  qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
+  qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
+  qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
+  qmlRegisterType< FeaturesListModel >( "lc", 1, 0, "FeaturesListModel" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
   qmlRegisterType< QgsProject >( "QgsQuick", 0, 1, "Project" );
 
@@ -475,12 +471,6 @@ int main( int argc, char *argv[] )
       qDebug() << "Loaded font" << font;
   }
   app.setFont( QFont( "Lato" ) );
-
-#ifdef Q_OS_IOS
-  // REQUIRED FOR IOS  - to load QgsQuick C++ classes
-  QgsQuickPlugin plugin;
-  plugin.registerTypes( "QgsQuick" );
-#endif
 
   QQmlEngine engine;
   addQmlImportPath( engine );

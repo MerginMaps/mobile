@@ -15,8 +15,6 @@ import QtQuick.Controls 2.2
 import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
-
-
 import QtQuick.Dialogs 1.1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
