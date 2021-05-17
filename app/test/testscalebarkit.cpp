@@ -21,7 +21,7 @@
 #include "qgsapplication.h"
 #include "qgsquickutils.h"
 #include "qgsquickmapcanvasmap.h"
-#include "qgsquickscalebarkit.h"
+#include "scalebarkit.h"
 
 #include "testutils.h"
 
@@ -38,7 +38,7 @@ void TestScaleBarKit::updateScaleBar()
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
 
-  QgsQuickScaleBarKit kit;
+  ScaleBarKit kit;
   kit.setMapSettings( ms );
   QCOMPARE( kit.units(), "cm" );
   COMPARENEAR( kit.distance(), 50, 1 );

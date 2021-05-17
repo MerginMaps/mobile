@@ -56,13 +56,41 @@
 #include "inputexpressionfunctions.h"
 #include "compass.h"
 #include "attributepreviewcontroller.h"
+#include "qgsfeature.h"
+#include "qgslogger.h"
+#include "qgsmaplayer.h"
+#include "qgsmessagelog.h"
+#include "qgspointxy.h"
+#include "qgsproject.h"
+#include "qgsrelationmanager.h"
+#include "qgscoordinatetransformcontext.h"
+#include "qgsvectorlayer.h"
+#include "qgsunittypes.h"
+
+#include "rememberattributescontroller.h"
+#include "attributecontroller.h"
+#include "attributedata.h"
+#include "attributeformmodel.h"
+#include "attributeformproxymodel.h"
+#include "attributetabmodel.h"
+#include "attributetabproxymodel.h"
+#include "featurehighlight.h"
+#include "qgsquickcoordinatetransformer.h"
+#include "identifykit.h"
+#include "featurelayerpair.h"
+#include "qgsquickmapcanvasmap.h"
+#include "qgsquickmapsettings.h"
+#include "qgsquickmaptransform.h"
+#include "positionkit.h"
+#include "scalebarkit.h"
+#include "qgsquickutils.h"
+#include "featureslistmodel.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
 #include "project.h"
-
-#include "qgsquickutils.h"
 #include "qgsproject.h"
+
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -86,10 +114,6 @@
 #include "qgsapplication.h"
 #include "loader.h"
 #include "appsettings.h"
-
-#ifdef Q_OS_IOS
-#include "qgsquickplugin.h"
-#endif
 
 static QString getDataDir()
 {
@@ -209,6 +233,13 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
+static QObject *_utilsProvider( QQmlEngine *engine, QJSEngine *scriptEngine )
+{
+  Q_UNUSED( engine )
+  Q_UNUSED( scriptEngine )
+  return new QgsQuickUtils();  // the object will be owned by QML engine and destroyed by the engine on exit
+}
+
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -216,7 +247,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
-  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "Loader", "" );
+  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "InputLoader", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -235,6 +266,46 @@ void initDeclarative()
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
+  qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
+
+  qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
+  qRegisterMetaType< QgsAttributes > ( "QgsAttributes" );
+  qRegisterMetaType< QgsCoordinateReferenceSystem >( "QgsCoordinateReferenceSystem" );
+  qRegisterMetaType< QgsCoordinateTransformContext >( "QgsCoordinateTransformContext" );
+  qRegisterMetaType< QgsFeature > ( "QgsFeature" );
+  qRegisterMetaType< QgsFeatureId > ( "QgsFeatureId" );
+  qRegisterMetaType< QgsPoint >( "QgsPoint" );
+  qRegisterMetaType< QgsPointXY >( "QgsPointXY" );
+  qRegisterMetaType< QgsUnitTypes::SystemOfMeasurement >( "QgsUnitTypes::SystemOfMeasurement" );
+  qRegisterMetaType< QgsUnitTypes::DistanceUnit >( "QgsUnitTypes::DistanceUnit" );
+  qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
+  qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
+  qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+
+  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItemType", "Only enums from FormItem can be used" );
+  qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabModel >( "lc", 1, 0, "AttributeTabModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< AttributeTabProxyModel >( "lc", 1, 0, "AttributeTabProxyModel", "Created by AttributeController" );
+  qmlRegisterType< AttributeController >( "lc", 1, 0, "AttributeController" );
+  qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
+  qmlRegisterType< FeatureHighlight >( "lc", 1, 0, "FeatureHighlight" );
+  qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
+  qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
+  qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
+  qmlRegisterType< FeaturesListModel >( "lc", 1, 0, "FeaturesListModel" );
+
+  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
+  qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
+  qmlRegisterType< QgsProject >( "QgsQuick", 0, 1, "Project" );
+  qmlRegisterType< QgsQuickMapCanvasMap >( "QgsQuick", 0, 1, "MapCanvasMap" );
+  qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
+  qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
+  qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
+  qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
+
+  qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
+
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -404,12 +475,6 @@ int main( int argc, char *argv[] )
   }
   app.setFont( QFont( "Lato" ) );
 
-#ifdef Q_OS_IOS
-  // REQUIRED FOR IOS  - to load QgsQuick C++ classes
-  QgsQuickPlugin plugin;
-  plugin.registerTypes( "QgsQuick" );
-#endif
-
   QQmlEngine engine;
   addQmlImportPath( engine );
   initDeclarative();
@@ -496,7 +561,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // Add some data for debugging
-  qDebug() << QgsQuickUtils().dumpScreenInfo();
+  qDebug() << iu.dumpScreenInfo();
   qDebug() << "data directory: " << dataDir;
   qDebug() <<  "All up and running";
 

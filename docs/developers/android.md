@@ -25,9 +25,6 @@ Requirements Android:
 How to compile Android:
 
   1. edit `config.pri` file with your paths (Qt, Qt Android, Qgis, Geodiff)
-  2. copy and edit `scripts/build-qgsquick-android.bash` with your paths
-  3. run the script (it will build qgsquick in input source directory)
-  4. add variable `QGSQUICK_INSTALL_PATH` with path to builded qgsquick into `config.pri` android section
 
 Generally check input-sdk requirements and also Dockerfile how it is build in CI
 
@@ -58,5 +55,5 @@ You need to set few env variables:
 
 Run:
 ```
-input --test
+./scripts/run_all_tests.bash input
 ```

@@ -14,8 +14,6 @@ robocopy %INPUT_SDK_DIR%\cmake\qgis %INPUT_SDK_DIR%\cmake\cmake /E /NFL
 set ROOT_DIR=C:\projects\input\x86_64
 set STAGE_PATH=%ROOT_DIR%\stage
 set BUILD_PATH=%ROOT_DIR%\build
-set STAGE_PATH_QGSQUICK=%ROOT_DIR%\stage-qgsquick
-set BUILD_PATH_QGSQUICK=%ROOT_DIR%\build-qgsquick
 
 set RESULT_FILE=%ROOT_DIR%\inputapp-win-x86_64.exe
 set REPO_PATH=%ROOT_DIR%\repo\input
@@ -27,8 +25,6 @@ if not exist %ROOT_DIR% mkdir %ROOT_DIR%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 if not exist %STAGE_PATH%  mkdir %STAGE_PATH%
 IF NOT EXIST %REPO_PATH% (echo INPUT REPO not cloned & goto error)
-if not exist %BUILD_PATH_QGSQUICK% mkdir %BUILD_PATH_QGSQUICK%
-if not exist %STAGE_PATH_QGSQUICK%  mkdir %STAGE_PATH_QGSQUICK%
 
 set CMAKE=C:\Program Files\CMake\bin
 set CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
@@ -55,26 +51,6 @@ set LIB=%LIB%;%PF86%\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64
 set INCLUDE=%INPUT_SDK_DIR%\apps\Qt5\include;%INPUT_SDK_DIR%\include
 set INCLUDE=%INCLUDE%;%VS14ROOT%\VC\include;%PF86%\Windows Kits\8.1\Include\um;%PF86%\Windows Kits\8.1\Include\shared
 set INCLUDE=%INCLUDE%;%PF86%\Windows Kits\10\Include\10.0.18362.0\ucrt
-
-rem QGSQUICK
-cd %BUILD_PATH_QGSQUICK%
-cmake -G %CMAKE_GENERATOR% ^
- -DCMAKE_SYSTEM_VERSION=8.1 ^
- -DCMAKE_INSTALL_PREFIX=%STAGE_PATH_QGSQUICK% ^
- -DCMAKE_BUILD_TYPE=Release ^
- -DCMAKE_PREFIX_PATH=%INPUT_SDK_DIR%\apps\Qt5% ^
- -DENABLE_TESTS=FALSE ^
- -DFORCE_STATIC_LIBS=FALSE ^
- -DUSE_QGIS_BUILD_DIR=FALSE ^
- -DQGIS_INSTALL_PATH=%INPUT_SDK_DIR% ^
- -DQGIS_CMAKE_PATH=%INPUT_SDK_DIR%\cmake\qgis ^
- -DCMAKE_DISABLE_FIND_PACKAGE_QtQmlTools=TRUE ^
- %REPO_PATH%\qgsquick
-
-cmake --build . --config Release --target install
-
-IF %ERRORLEVEL% NEQ 0 (echo unable to compile & goto error)
-IF NOT EXIST "%STAGE_PATH_QGSQUICK%\lib\qgis_quick.lib" goto error
 
 cd %BUILD_PATH%
 qmake CONFIG+=release %REPO_PATH%\app
@@ -138,11 +114,6 @@ xcopy %INPUT_SDK_DIR%\bin\szip.dll %STAGE_PATH%\ /Y
 
 rem qgis providers
 xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y 
-
-rem QgsQuick
-xcopy %STAGE_PATH_QGSQUICK%\bin\qgis_quick.dll %STAGE_PATH%\ /Y
-robocopy %STAGE_PATH_QGSQUICK%\qml %STAGE_PATH%\qml /E
-robocopy %REPO_PATH%\qgsquick\from_qgis\quickgui\images %STAGE_PATH%\images\QgsQuick /E
 
 rem system
 xcopy %VS14ROOT%\VC\redist\x64\Microsoft.VC140.CRT\*.dll %STAGE_PATH%\ /Y

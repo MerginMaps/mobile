@@ -31,7 +31,7 @@ void IOSImagePicker::showImagePicker( const QString  &targetDir )
 #endif
 }
 
-void IOSImagePicker::callCamera( const QString &targetDir, QgsQuickPositionKit *positionKit, Compass *compass )
+void IOSImagePicker::callCamera( const QString &targetDir, PositionKit *positionKit, Compass *compass )
 {
 #ifdef Q_OS_IOS
   setTargetDir( targetDir );
@@ -56,7 +56,7 @@ void IOSImagePicker::setTargetDir( const QString &targetDir )
   emit targetDirChanged();
 }
 
-void IOSImagePicker::setPositionKit( QgsQuickPositionKit *positionKit )
+void IOSImagePicker::setPositionKit( PositionKit *positionKit )
 {
   mPositionKit = positionKit;
   emit positionKitChanged();
@@ -86,7 +86,7 @@ void IOSImagePicker::setCompass( Compass *compass )
   emit compassChanged();
 }
 
-QgsQuickPositionKit *IOSImagePicker::positionKit() const
+PositionKit *IOSImagePicker::positionKit() const
 {
   return mPositionKit;
 }

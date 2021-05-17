@@ -9,16 +9,34 @@
 
 #include "inpututils.h"
 
+#include <QWindow>
+#include <QScreen>
+#include <QApplication>
+
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-
 #include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
 #include "inputexpressionfunctions.h"
 #include "coreutils.h"
+#include "qgis.h"
+#include "qgscoordinatereferencesystem.h"
+#include "qgscoordinatetransform.h"
+#include "qgsdistancearea.h"
+#include "qgslogger.h"
+#include "qgsvectorlayer.h"
+#include "qgsfeature.h"
+#include "qgsapplication.h"
+#include "qgsvaluerelationfieldformatter.h"
+#include "qgsdatetimefieldformatter.h"
+
+#include "featurelayerpair.h"
+#include "qgsquickmapsettings.h"
+#include "qgsquickutils.h"
+#include "qgsunittypes.h"
 
 #include <Qt>
 #include <QDir>
@@ -173,7 +191,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   return INVALID_DATETIME_STR;
 }
 
-void InputUtils::setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
 
   if ( !mapSettings )
@@ -326,7 +344,7 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
 }
 
 
-QVector<double> InputUtils::extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !pair.isValid() )
     return QVector<double>();
@@ -542,7 +560,7 @@ void InputUtils::showNotification( const QString &message )
   emit showNotificationRequested( message );
 }
 
-qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
+qreal InputUtils::groundSpeedFromSource( PositionKit *positionKit )
 {
   if ( positionKit == nullptr ) return 0;
 
@@ -556,4 +574,391 @@ qreal InputUtils::groundSpeedFromSource( QgsQuickPositionKit *positionKit )
 double InputUtils::ratherZeroThanNaN( double d )
 {
   return ( isnan( d ) ) ? 0.0 : d;
+}
+
+/**
+ * Makes QgsCoordinateReferenceSystem::fromEpsgId accessible for QML components
+ */
+QgsCoordinateReferenceSystem InputUtils::coordinateReferenceSystemFromEpsgId( long epsg )
+{
+  return QgsCoordinateReferenceSystem::fromEpsgId( epsg );
+}
+
+QgsPointXY InputUtils::pointXY( double x, double y )
+{
+  return QgsPointXY( x, y );
+}
+
+QgsPoint InputUtils::point( double x, double y, double z, double m )
+{
+  return QgsPoint( x, y, z, m );
+}
+
+QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
+{
+  return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
+}
+
+QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                       const QgsCoordinateReferenceSystem &destCrs,
+                                       const QgsCoordinateTransformContext &context,
+                                       const QgsPointXY &srcPoint )
+{
+  try
+  {
+    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    if ( ct.isValid() )
+    {
+      const QgsPointXY pt = ct.transform( srcPoint );
+      return pt;
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    Q_UNUSED( cse )
+  }
+  return srcPoint;
+}
+
+double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
+{
+  if ( mapSettings == nullptr ) return 0.0;
+
+  QgsDistanceArea mDistanceArea;
+  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  mDistanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
+
+  // calculate the geographic distance from the central point of extent
+  // to the specified number of points on the right side
+  QSize s = mapSettings->outputSize();
+  QPoint pointCenter( s.width() / 2, s.height() / 2 );
+  QgsPointXY p1 = mapSettings->screenToCoordinate( pointCenter );
+  QgsPointXY p2 = mapSettings->screenToCoordinate( pointCenter + QPoint( baseLengthPixels, 0 ) );
+  return mDistanceArea.measureLine( p1, p2 );
+}
+
+bool InputUtils::fileExists( const QString &path )
+{
+  QFileInfo check_file( path );
+  // check if file exists and if yes: Is it really a file and no directory?
+  return ( check_file.exists() && check_file.isFile() );
+}
+
+QString InputUtils::getRelativePath( const QString &path, const QString &prefixPath )
+{
+  QString modPath = path;
+  QString filePrefix( "file://" );
+
+  if ( path.startsWith( filePrefix ) )
+  {
+    modPath = modPath.replace( filePrefix, QString() );
+  }
+
+  if ( prefixPath.isEmpty() ) return modPath;
+
+  // Do not use a canonical path for non-existing path
+  if ( !QFileInfo( path ).exists() )
+  {
+    if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath ) )
+    {
+      return modPath.replace( prefixPath, QString() );
+    }
+  }
+  else
+  {
+    QDir absoluteDir( modPath );
+    QDir prefixDir( prefixPath );
+    QString canonicalPath = absoluteDir.canonicalPath();
+    QString prefixCanonicalPath = prefixDir.canonicalPath() + "/";
+
+    if ( prefixCanonicalPath.length() > 1 && canonicalPath.startsWith( prefixCanonicalPath ) )
+    {
+      return canonicalPath.replace( prefixCanonicalPath, QString() );
+    }
+  }
+
+  return QString();
+}
+
+void InputUtils::logMessage( const QString &message, const QString &tag, Qgis::MessageLevel level )
+{
+  QgsMessageLog::logMessage( message, tag, level );
+}
+
+FeatureLayerPair InputUtils::featureFactory( const QgsFeature &feature, QgsVectorLayer *layer )
+{
+  return FeatureLayerPair( feature, layer );
+}
+
+const QUrl InputUtils::getThemeIcon( const QString &name )
+{
+  QString path = QStringLiteral( "qrc:/%1.svg" ).arg( name );
+  QgsDebugMsg( QStringLiteral( "Using icon %1 from %2" ).arg( name, path ) );
+  return QUrl( path );
+}
+
+const QUrl InputUtils::getEditorComponentSource( const QString &widgetName )
+{
+  QString path( "input%1.qml" );
+  QStringList supportedWidgets = { QStringLiteral( "textedit" ),
+                                   QStringLiteral( "valuemap" ),
+                                   QStringLiteral( "valuerelation" ),
+                                   QStringLiteral( "checkbox" ),
+                                   QStringLiteral( "externalresource" ),
+                                   QStringLiteral( "datetime" ),
+                                   QStringLiteral( "range" )
+                                 };
+  if ( supportedWidgets.contains( widgetName ) )
+  {
+    return QUrl( path.arg( widgetName ) );
+  }
+  else
+  {
+    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+  }
+}
+
+QString InputUtils::formatPoint(
+  const QgsPoint &point,
+  QgsCoordinateFormatter::Format format,
+  int decimals,
+  QgsCoordinateFormatter::FormatFlags flags )
+{
+  return QgsCoordinateFormatter::format( point, format, decimals, flags );
+}
+
+QString InputUtils::formatDistance( double distance,
+                                    QgsUnitTypes::DistanceUnit units,
+                                    int decimals,
+                                    QgsUnitTypes::SystemOfMeasurement destSystem )
+{
+  double destDistance;
+  QgsUnitTypes::DistanceUnit destUnits;
+
+  humanReadableDistance( distance, units, destSystem, destDistance, destUnits );
+
+  return QStringLiteral( "%1 %2" )
+         .arg( QString::number( destDistance, 'f', decimals ) )
+         .arg( QgsUnitTypes::toAbbreviatedString( destUnits ) );
+}
+
+void InputUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::DistanceUnit srcUnits,
+                                        QgsUnitTypes::SystemOfMeasurement destSystem,
+                                        double &destDistance, QgsUnitTypes::DistanceUnit &destUnits )
+{
+  if ( ( destSystem == QgsUnitTypes::MetricSystem ) || ( destSystem == QgsUnitTypes::UnknownSystem ) )
+  {
+    return formatToMetricDistance( srcDistance, srcUnits, destDistance, destUnits );
+  }
+  else if ( destSystem == QgsUnitTypes::ImperialSystem )
+  {
+    return formatToImperialDistance( srcDistance, srcUnits, destDistance, destUnits );
+  }
+  else if ( destSystem == QgsUnitTypes::USCSSystem )
+  {
+    return formatToUSCSDistance( srcDistance, srcUnits, destDistance, destUnits );
+  }
+  else
+  {
+    Q_ASSERT( false ); //should never happen
+  }
+}
+
+void InputUtils::formatToMetricDistance( double srcDistance,
+    QgsUnitTypes::DistanceUnit srcUnits,
+    double &destDistance,
+    QgsUnitTypes::DistanceUnit &destUnits )
+{
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceMillimeters );
+  if ( dist < 0 )
+  {
+    destDistance = 0;
+    destUnits = QgsUnitTypes::DistanceMillimeters;
+    return;
+  }
+
+  double mmToKm = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceKilometers, QgsUnitTypes::DistanceMillimeters );
+  if ( dist > mmToKm )
+  {
+    destDistance = dist / mmToKm;
+    destUnits = QgsUnitTypes::DistanceKilometers;
+    return;
+  }
+
+  double mmToM = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMeters, QgsUnitTypes::DistanceMillimeters );
+  if ( dist > mmToM )
+  {
+    destDistance = dist / mmToM;
+    destUnits = QgsUnitTypes::DistanceMeters;
+    return;
+  }
+
+  double mmToCm = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceCentimeters, QgsUnitTypes::DistanceMillimeters );
+  if ( dist > mmToCm )
+  {
+    destDistance = dist / mmToCm;
+    destUnits = QgsUnitTypes::DistanceCentimeters;
+    return;
+  }
+
+  destDistance = dist;
+  destUnits = QgsUnitTypes::DistanceMillimeters;
+}
+
+void InputUtils::formatToImperialDistance( double srcDistance,
+    QgsUnitTypes::DistanceUnit srcUnits,
+    double &destDistance,
+    QgsUnitTypes::DistanceUnit &destUnits )
+{
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
+  if ( dist < 0 )
+  {
+    destDistance = 0;
+    destUnits = QgsUnitTypes::DistanceFeet;
+    return;
+  }
+
+  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMiles, QgsUnitTypes::DistanceFeet );
+  if ( dist > feetToMile )
+  {
+    destDistance = dist / feetToMile;
+    destUnits = QgsUnitTypes::DistanceMiles;
+    return;
+  }
+
+  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceYards, QgsUnitTypes::DistanceFeet );
+  if ( dist > feetToYard )
+  {
+    destDistance = dist / feetToYard;
+    destUnits = QgsUnitTypes::DistanceYards;
+    return;
+  }
+
+  destDistance = dist;
+  destUnits = QgsUnitTypes::DistanceFeet;
+  return;
+}
+
+void InputUtils::formatToUSCSDistance( double srcDistance,
+                                       QgsUnitTypes::DistanceUnit srcUnits,
+                                       double &destDistance,
+                                       QgsUnitTypes::DistanceUnit &destUnits )
+{
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
+  if ( dist < 0 )
+  {
+    destDistance = 0;
+    destUnits = QgsUnitTypes::DistanceFeet;
+    return;
+  }
+
+  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceNauticalMiles, QgsUnitTypes::DistanceFeet );
+  if ( dist > feetToMile )
+  {
+    destDistance = dist / feetToMile;
+    destUnits = QgsUnitTypes::DistanceNauticalMiles;
+    return;
+  }
+
+  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceYards, QgsUnitTypes::DistanceFeet );
+  if ( dist > feetToYard )
+  {
+    destDistance = dist / feetToYard;
+    destUnits = QgsUnitTypes::DistanceYards;
+    return;
+  }
+
+  destDistance = dist;
+  destUnits = QgsUnitTypes::DistanceFeet;
+  return;
+}
+
+QString InputUtils::dumpScreenInfo() const
+{
+  QString msg;
+  // take the first top level window
+  const QWindowList windows = QGuiApplication::topLevelWindows();
+  if ( !windows.isEmpty() )
+  {
+    QScreen *screen = windows.at( 0 )->screen();
+    double dpiX = screen->physicalDotsPerInchX();
+    double dpiY = screen->physicalDotsPerInchY();
+    int height = screen->geometry().height();
+    int width = screen->geometry().width();
+    double sizeX = static_cast<double>( width ) / dpiX * 25.4;
+    double sizeY = static_cast<double>( height ) / dpiY * 25.4;
+
+    msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
+    msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
+    msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
+    msg += tr( "screen density: %1" ).arg( QgsQuickUtils().screenDensity() );
+  }
+  else
+  {
+    msg += QLatin1String( "screen info: application is not initialized!" );
+  }
+  return msg;
+}
+
+QVariantMap InputUtils::createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature )
+{
+  QVariantMap valueMap;
+  const QgsValueRelationFieldFormatter::ValueRelationCache cache = QgsValueRelationFieldFormatter::createCache( config, formFeature );
+
+  for ( const QgsValueRelationFieldFormatter::ValueRelationItem &item : cache )
+  {
+    valueMap.insert( item.key.toString(), item.value );
+  }
+  return valueMap;
+}
+
+QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression )
+{
+  QList<QgsExpressionContextScope *> scopes;
+  scopes << QgsExpressionContextUtils::globalScope();
+  scopes << QgsExpressionContextUtils::projectScope( activeProject );
+  scopes << QgsExpressionContextUtils::layerScope( pair.layer() );
+
+  QgsExpressionContext context( scopes );
+  context.setFeature( pair.feature() );
+  QgsExpression expr( expression );
+  return expr.evaluate( &context ).toString();
+}
+
+void InputUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior )
+{
+  QgsFeatureIds qgsFids;
+  for ( const int &fid : fids )
+    qgsFids << fid;
+  layer->selectByIds( qgsFids, behavior );
+}
+
+QString InputUtils::fieldType( const QgsField &field )
+{
+  return QVariant( field.type() ).typeName();
+}
+
+QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
+{
+  if ( QgsDateTimeFieldFormatter::DATE_FORMAT == fieldFormat )
+  {
+    return QString( "Date" );
+  }
+  else if ( QgsDateTimeFieldFormatter::TIME_FORMAT == fieldFormat )
+  {
+    return QString( "Time" );
+  }
+  else if ( QgsDateTimeFieldFormatter::DATETIME_FORMAT == fieldFormat )
+  {
+    return QString( "Date Time" );
+  }
+  else
+  {
+    return QString( "Date Time" );
+  }
+}
+
+QModelIndex InputUtils::invalidIndex()
+{
+  return QModelIndex();
 }

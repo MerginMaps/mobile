@@ -67,5 +67,4 @@ QGIS_VERSION_MAJOR <builded qgis major version, e. g. 3>
 QGIS_VERSION_MINOR <builded qgis minor version, e. g. 17> 
 QGIS_VERSION_PATCH <builded qgis patch version, e. g. 0> 
 ```
-11. Build QgsQuick
-12. Compile Input and run
+11. Compile Input and run

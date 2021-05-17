@@ -125,7 +125,7 @@ Item {
     }
   }
 
-  QgsQuick.FeaturesListModel {
+  FeaturesListModel {
     id: featuresListModel
   }
 }

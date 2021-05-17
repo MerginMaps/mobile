@@ -22,19 +22,6 @@ ios {
     LIBS += -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
     LIBS += -framework qgis_core
 
-    # QgsQuick
-    QGSQUICK_QML_DIR = $${QGSQUICK_INSTALL_PATH}/qml
-    QGSQUICK_QUICK_FRAMEWORK = $${QGSQUICK_INSTALL_PATH}/frameworks/qgis_quick.framework
-
-    exists($${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick) {
-      message("Building from QGSQUICK: $${QGSQUICK_INSTALL_PATH}")
-    } else {
-      error("Missing qgis_quick Framework in $${QGSQUICK_QUICK_FRAMEWORK}/qgis_quick")
-    }
-    INCLUDEPATH += $${QGSQUICK_QUICK_FRAMEWORK}/Headers
-    LIBS += -F$${QGSQUICK_INSTALL_PATH}/frameworks
-    LIBS += -framework qgis_quick
-
     # Geodiff
     INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
     LIBS += -L$${GEODIFF_LIB_DIR}
@@ -54,7 +41,6 @@ ios {
     QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-shorten-64-to-32
 
     QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
-    QGSQUICK_IMAGE_DIR = $${QGSQUICK_INSTALL_PATH}/images/QgsQuick
 
     CONFIG -= bitcode
     CONFIG += static
@@ -64,17 +50,13 @@ ios {
     QTPLUGIN += qios
 
     LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
-    LIBS += -L$${QGSQUICK_QML_DIR}/QgsQuick/ -L$${QGSQUICK_INSTALL_PATH}/frameworks
-    LIBS += -lqgis_quick_plugin
     LIBS += -lwmsprovider_a -lpostgresprovider_a
     LIBS += -lqt5keychain -lqca-qt5
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
     LIBS += -ltasn1 -lzip -lbz2 -lproj
-    LIBS += -lspatialindex -lgeos -lprotobuf-lite -lexpat -lfreexl -liconv
-
-    RESOURCES += $$QGSQUICK_QML_DIR/QgsQuick/qgsquick.qrc
-    RESOURCES += $$QGSQUICK_IMAGE_DIR/images.qrc
+    LIBS += -lspatialindex -lgeos -lgeos_c
+    LIBS += -lprotobuf-lite -lexpat -lfreexl -liconv
 
     QMAKE_RPATHDIR += @executable_path/../Frameworks
     QMAKE_INFO_PLIST = ios/Info.plist

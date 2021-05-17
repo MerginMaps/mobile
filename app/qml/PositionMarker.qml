@@ -11,14 +11,15 @@ import QtQuick 2.3
 import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 import "."
 import lc 1.0
+import QgsQuick 0.1 as QgsQuick
 
 Item {
     id: positionMarker
     property int size: InputStyle.rowHeightHeader/2
-    property QgsQuick.PositionKit positionKit
+    property PositionKit positionKit
     property Compass compass
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true

@@ -16,31 +16,51 @@
 #include <QObject>
 #include <QtGlobal>
 #include <QUuid>
+#include <QObject>
+#include <QString>
+#include <QUrl>
+#include <QtPositioning/QGeoCoordinate>
+#include <QModelIndex>
+
+#include <limits>
+
 #include "inputhelp.h"
 #include "merginapi.h"
 #include "androidutils.h"
-#include "qgsquickfeaturelayerpair.h"
+#include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
-#include "qgsquickpositionkit.h"
+#include "positionkit.h"
 #include "qgis.h"
+#include "qgsexpressioncontextutils.h"
+#include "qgsmessagelog.h"
+#include "qgspoint.h"
+#include "qgspointxy.h"
+#include "qgsunittypes.h"
+#include "qgsquickmapsettings.h"
+#include "featurelayerpair.h"
+#include "qgscoordinateformatter.h"
+
+
+class QgsFeature;
+class QgsVectorLayer;
+class QgsCoordinateReferenceSystem;
 
 class InputUtils: public QObject
 {
     Q_OBJECT
   public:
     explicit InputUtils( QObject *parent = nullptr );
-    ~InputUtils() = default;
+    ~InputUtils() override = default;
 
-    Q_INVOKABLE bool removeFile( const QString &filePath );
     Q_INVOKABLE static bool copyFile( const QString &srcPath, const QString &dstPath );
 
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE void setExtentToFeature( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
-    // (in theory this data should be directly available from QgsQuick.MapTransform
+    // (in theory this data should be directly available from .MapTransform
     // but they are not currently, so this is a workaround we need for display of markers)
 
     Q_INVOKABLE double mapSettingsScale( QgsQuickMapSettings *ms );
@@ -62,7 +82,7 @@ class InputUtils: public QObject
      *
      * If the layer's CRS is not the same as map CRS, the geometry will be first transformed to map CRS.
      */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsQuickFeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
@@ -79,10 +99,10 @@ class InputUtils: public QObject
 
     /**
      * Returns speed from positionKit's QGeoPositionInfo.
-     * \param QgsQuickPositionKit positionKit.
+     * \param PositionKit positionKit.
      * \result The ground speed, in meters/sec.
      */
-    Q_INVOKABLE qreal groundSpeedFromSource( QgsQuickPositionKit *positionKit );
+    Q_INVOKABLE qreal groundSpeedFromSource( PositionKit *positionKit );
 
     /**
      * Converts bytes to  human readable size (e.g. 1GB, 500MB)
@@ -137,6 +157,183 @@ class InputUtils: public QObject
      */
     static QString formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax = QDateTime::currentDateTimeUtc() );
 
+    /**
+      * Creates crs from epsg code in QML
+      */
+    Q_INVOKABLE static QgsCoordinateReferenceSystem coordinateReferenceSystemFromEpsgId( long epsg );
+
+    /**
+      * Creates QgsPointXY in QML
+      */
+    Q_INVOKABLE static QgsPointXY pointXY( double x, double y );
+
+    /**
+      * Creates QgsPoint in QML
+      */
+    Q_INVOKABLE static QgsPoint point( double x, double y, double z = std::numeric_limits<double>::quiet_NaN(), double m = std::numeric_limits<double>::quiet_NaN() );
+
+    /**
+      * Converts QGeoCoordinate to QgsPoint
+      */
+    Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );
+
+    /**
+      * Transforms point between different crs from QML
+      */
+    Q_INVOKABLE static QgsPointXY transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+        const QgsCoordinateReferenceSystem &destCrs,
+        const QgsCoordinateTransformContext &context,
+        const QgsPointXY &srcPoint );
+
+    /**
+      * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
+      */
+    Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );
+
+    /**
+      * Returns whether file on path exists
+      */
+    Q_INVOKABLE static bool fileExists( const QString &path );
+
+    /**
+     * Returns relative path of the file to given prefixPath. If prefixPath does not match a path parameter,
+     * returns an empty string. If a path starts with "file://", this prefix is ignored.
+     * \param path Absolute path to file
+     * \param prefixPath
+     */
+    Q_INVOKABLE static QString getRelativePath( const QString &path, const QString &prefixPath );
+
+    /**
+      * Log message in QgsMessageLog
+      */
+    Q_INVOKABLE static void logMessage( const QString &message,
+                                        const QString &tag = QString( "" ),
+                                        Qgis::MessageLevel level = Qgis::Warning );
+
+    /**
+      * FeatureLayerPair factory for tuple of QgsFeature and QgsVectorLayer used in QgsQUick library.
+      * \param feature QgsFeature linked to new Feature instance.
+      * \param layer QgsVectorLayer which the feature belongs to, optional.
+      */
+    Q_INVOKABLE static FeatureLayerPair featureFactory( const QgsFeature &feature, QgsVectorLayer *layer = nullptr );
+
+    /**
+      * Returns QUrl to image from library's /images folder.
+      */
+    Q_INVOKABLE static const QUrl getThemeIcon( const QString &name );
+
+    /**
+      * Returns url to field editor component for a feature form.
+      * If the widgetName does not match any supported widget, text edit is returned.
+      * \param widgetName name of the attribute field widget
+      */
+    Q_INVOKABLE static const QUrl getEditorComponentSource( const QString &widgetName );
+
+    /**
+     * \copydoc QgsCoordinateFormatter::format()
+     */
+    Q_INVOKABLE static QString formatPoint(
+      const QgsPoint &point,
+      QgsCoordinateFormatter::Format format = QgsCoordinateFormatter::FormatPair,
+      int decimals = 3,
+      QgsCoordinateFormatter::FormatFlags flags = QgsCoordinateFormatter::FlagDegreesUseStringSuffix );
+
+    /**
+      * Converts distance to human readable distance
+      *
+      * This is useful for scalebar texts or output of the GPS accuracy
+      *
+      * The resulting units are determined automatically,
+      * based on requested system of measurement.
+      * e.g. 1222.234 m is converted to 1.2 km
+      *
+      * \param distance distance in units
+      * \param units units of dist
+      * \param decimals decimal to use
+      * \param destSystem system of measurement of the result
+      * \returns string represetation of dist in desired destSystem. For distance less than 0, 0 is returned.
+      */
+    Q_INVOKABLE static QString formatDistance( double distance,
+        QgsUnitTypes::DistanceUnit units,
+        int decimals,
+        QgsUnitTypes::SystemOfMeasurement destSystem = QgsUnitTypes::MetricSystem );
+
+    /**
+      * Deletes file from a given path.
+      *
+      * \param filePath Absolute path to file
+      * \returns bool TRUE, if removal was successful, otherwise FALSE.
+      */
+    Q_INVOKABLE static bool removeFile( const QString &filePath );
+
+    /**
+      * Converts distance to human readable distance in destination system of measurement
+      *
+      * \sa Utils::formatDistance()
+      *
+      * \param srcDistance distance in units
+      * \param srcUnits units of dist
+      * \param destSystem system of measurement of the result
+      * \param destDistance output: distance if desired system of measurement
+      * \param destUnits output: unit of destDistance
+      */
+    static void humanReadableDistance( double srcDistance,
+                                       QgsUnitTypes::DistanceUnit srcUnits,
+                                       QgsUnitTypes::SystemOfMeasurement destSystem,
+                                       double &destDistance,
+                                       QgsUnitTypes::DistanceUnit &destUnits );
+
+    //! Returns a string with information about screen size and resolution - useful for debugging
+    QString dumpScreenInfo() const;
+
+    /**
+     * Creates a cache for a value relation field.
+     * This can be used to keep the value map in the local memory
+     * if doing multiple lookups in a loop.
+     * \param config The widget configuration
+     * \param formFeature The feature currently being edited with current attribute values
+     * \return A kvp list of values for the widget
+     */
+    Q_INVOKABLE static QVariantMap createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature = QgsFeature() );
+
+    /**
+     * Evaluates expression.
+     * \param pair Used to define a context scope.
+     * \param activeProject Used to define a context scope.
+     * \param expression
+     * \return Evaluated expression
+     */
+    Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
+
+    /**
+     * Selects features in a layer
+     * This method is required since QML cannot perform the conversion of a feature ID to a QgsFeatureId (i.e. a qint64)
+     * \param layer the vector layer
+     * \param fids the list of feature IDs
+     * \param behavior the selection behavior
+     */
+    Q_INVOKABLE static void selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior = QgsVectorLayer::SetSelection );
+
+
+    /**
+    * Returns the QVariant typeName of a \a field.
+    * This is a stable identifier (compared to the provider field name).
+    * \param field QgsField
+    */
+    Q_INVOKABLE static QString fieldType( const QgsField &field );
+
+
+    /**
+    * Returns field format's name for given string representing field format defined in QgsDateTimeFieldFormatter.
+    * \param fieldFormat string representing formats from QgsDateTimeFieldFormatter.
+    */
+    Q_INVOKABLE static QString dateTimeFieldFormat( const QString &fieldFormat );
+
+    /**
+     * \brief invalidIndex returns invalid index
+     */
+    Q_INVOKABLE static QModelIndex invalidIndex();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
@@ -144,6 +341,21 @@ class InputUtils: public QObject
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
   private:
+
+    static void formatToMetricDistance( double srcDistance,
+                                        QgsUnitTypes::DistanceUnit srcUnits,
+                                        double &destDistance,
+                                        QgsUnitTypes::DistanceUnit &destUnits );
+
+    static void formatToImperialDistance( double srcDistance,
+                                          QgsUnitTypes::DistanceUnit srcUnits,
+                                          double &destDistance,
+                                          QgsUnitTypes::DistanceUnit &destUnits );
+
+    static void formatToUSCSDistance( double srcDistance,
+                                      QgsUnitTypes::DistanceUnit srcUnits,
+                                      double &destDistance,
+                                      QgsUnitTypes::DistanceUnit &destUnits );
 
     // on iOS the names from gallery pickers are like
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG

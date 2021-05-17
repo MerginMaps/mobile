@@ -19,18 +19,20 @@
 
 #include <QObject>
 #include "qgsproject.h"
-#include "qgsquickutils.h"
-#include "qgsquickpositionkit.h"
+#include "inpututils.h"
+#include "positionkit.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
 #include "layersproxymodel.h"
 
+class QgsQuickMapSettings;
+
 class Loader: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
-    Q_PROPERTY( QgsQuickPositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
@@ -43,8 +45,8 @@ class Loader: public QObject
 
     QgsProject *project();
 
-    QgsQuickPositionKit *positionKit() const { return mPositionKit; }
-    void setPositionKit( QgsQuickPositionKit *kit );
+    PositionKit *positionKit() const { return mPositionKit; }
+    void setPositionKit( PositionKit *kit );
 
     bool isRecording() const { return mRecording; }
     void setRecording( bool isRecording );
@@ -118,7 +120,7 @@ class Loader: public QObject
 
 
     QgsProject *mProject = nullptr;
-    QgsQuickPositionKit *mPositionKit = nullptr;
+    PositionKit *mPositionKit = nullptr;
     bool mRecording = false;
 
     MapThemesModel &mMapThemeModel;

@@ -10,8 +10,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-import QgsQuick 0.1 as QgsQuick
+
 import "."  // import InputStyle singleton
+import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Drawer {
@@ -59,12 +60,12 @@ Drawer {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
-    QgsQuick.RememberAttributesController {
+    RememberAttributesController {
       id: rememberAttributesController
       rememberValuesAllowed: __appSettings.reuseLastEnteredValues
     }
 
-    QgsQuick.AttributeController {
+    AttributeController {
       id: attributeController
       rememberAttributesController: rememberAttributesController
     }
@@ -184,7 +185,7 @@ Drawer {
 
         }
 
-        QgsQuick.FeatureForm {
+        FeatureForm {
             id: featureForm
             visible: true
 
@@ -196,7 +197,7 @@ Drawer {
             importDataHandler: codeReaderHandler.handler
             controller: attributeController
             project: featurePanel.project
-            style: QgsQuick.FeatureFormStyling {
+            style: FeatureFormStyling {
                 property color backgroundColor: "white"
                 property real backgroundOpacity: 1
                 property real titleLabelPointSize: 16
@@ -263,9 +264,9 @@ Drawer {
                   property var camera: InputStyle.cameraIcon
                   property var remove: InputStyle.removeIcon
                   property var gallery:InputStyle.galleryIcon
-                  property var brokenImage: QgsQuick.Utils.getThemeIcon("ic_broken_image_black")
-                  property var notAvailable: QgsQuick.Utils.getThemeIcon("ic_photo_notavailable_white")
-                  property var today: QgsQuick.Utils.getThemeIcon("ic_today")
+                  property var brokenImage: __inputUtils.getThemeIcon("ic_broken_image_black")
+                  property var notAvailable: __inputUtils.getThemeIcon("ic_photo_notavailable_white")
+                  property var today: __inputUtils.getThemeIcon("ic_today")
                   property var back: InputStyle.backIcon
                   property var combobox: InputStyle.comboboxIcon
                   property var valueRelationMore: InputStyle.valueRelationIcon

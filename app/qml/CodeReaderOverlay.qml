@@ -9,7 +9,7 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
-import QgsQuick 0.1 as QgsQuick
+
 
 Item {
   id: root

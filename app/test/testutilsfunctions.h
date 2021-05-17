@@ -17,13 +17,25 @@ class TestUtilsFunctions: public QObject
 {
     Q_OBJECT
   public:
-    TestUtilsFunctions() = default;
+    TestUtilsFunctions( InputUtils *utils );
     ~TestUtilsFunctions() = default;
+
   private slots:
     void testFormatDuration();
+    void dump_screen_info();
+    void screenUnitsToMeters();
+    void transformedPoint();
+    void formatPoint();
+    void formatDistance();
+    void loadIcon();
+    void fileExists();
+    void loadQmlComponent();
+    void getRelativePath();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
+
+    InputUtils *mUtils;
 };
 
 #endif // TESTUTILSFUNCTIONS_H

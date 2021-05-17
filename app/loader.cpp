@@ -21,6 +21,7 @@
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
+#include "qgsquickmapsettings.h"
 
 #if VERSION_INT >= 30500
 // this header only exists in QGIS >= 3.6
@@ -53,7 +54,7 @@ QgsProject *Loader::project()
   return mProject;
 }
 
-void Loader::setPositionKit( QgsQuickPositionKit *kit )
+void Loader::setPositionKit( PositionKit *kit )
 {
   mPositionKit = kit;
   emit positionKitChanged();

@@ -19,8 +19,8 @@
 #include <QDesktopWidget>
 
 #include "qgsapplication.h"
-#include "qgsquickpositionkit.h"
-#include "qgsquicksimulatedpositionsource.h"
+#include "positionkit.h"
+#include "simulatedpositionsource.h"
 
 #include "testutils.h"
 

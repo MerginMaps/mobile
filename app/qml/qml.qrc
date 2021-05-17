@@ -56,6 +56,7 @@
         <file>Banner.qml</file>
         <file>ProjectListPage.qml</file>
         <file>ProjectWizardPage.qml</file>
+        <file>StorageLimitDialog.qml</file>
         <file>components/DelegateButton.qml</file>
         <file>components/FieldRow.qml</file>
         <file>components/InputTextField.qml</file>
@@ -66,6 +67,19 @@
         <file>components/ProjectDelegateItem.qml</file>
         <file>components/ProjectList.qml</file>
         <file>components/RichTextBlock.qml</file>
-        <file>StorageLimitDialog.qml</file>
+        <file>components/CheckboxComponent.qml</file>
+        <file>components/Switch.qml</file>
+        <file>components/IconTextItem.qml</file>
+        <file>editor/inputeditorwidgetcombobox.qml</file>
+        <file>editor/inputcheckbox.qml</file>
+        <file>editor/inputdatetime.qml</file>
+        <file>editor/inputexternalresource.qml</file>
+        <file>editor/inputtextedit.qml</file>
+        <file>editor/inputrange.qml</file>
+        <file>editor/inputvaluemap.qml</file>
+        <file>editor/inputvaluerelation.qml</file>
+        <file>FeatureForm.qml</file>
+        <file>FeatureFormStyling.qml</file>
+        <file>PhotoPanel.qml</file>
     </qresource>
 </RCC>
