@@ -282,8 +282,7 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
 
-  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
-  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItemType", "Only enums from QgsQuickFormItem can be used" );
+  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItemType", "Only enums from FormItem can be used" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeTabModel >( "lc", 1, 0, "AttributeTabModel", "Created by AttributeController" );
@@ -295,14 +294,18 @@ void initDeclarative()
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< FeaturesListModel >( "lc", 1, 0, "FeaturesListModel" );
+
+  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
   qmlRegisterType< QgsProject >( "QgsQuick", 0, 1, "Project" );
-
   qmlRegisterType< QgsQuickMapCanvasMap >( "QgsQuick", 0, 1, "MapCanvasMap" );
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
   qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
+
+  qmlRegisterType(QUrl("qrc:/qgsquickmapcanvas.qml"),"QgsQuick",0,1,"MapCanvas");
+
 }
 
 void addQmlImportPath( QQmlEngine &engine )
