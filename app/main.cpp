@@ -304,7 +304,7 @@ void initDeclarative()
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
   qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
 
-  qmlRegisterType(QUrl("qrc:/qgsquickmapcanvas.qml"),"QgsQuick",0,1,"MapCanvas");
+  qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 
 }
 
