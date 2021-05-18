@@ -17,7 +17,8 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
-
+import QgsQuick 0.1 as QgsQuick
+import "../components"
 
 /**
  * External Resource (Photo capture) for QGIS Attribute Form
@@ -121,7 +122,7 @@ Item {
   function showDefaultPanel() {
     if (!photoCapturePanelLoader.item) {
       // Load the photo capture panel if not loaded yet
-      photoCapturePanelLoader.setSource("PhotoPanel.qml")
+      photoCapturePanelLoader.setSource("qrc:/PhotoPanel.qml")
       photoCapturePanelLoader.item.height = window.height
       photoCapturePanelLoader.item.width = window.width
       photoCapturePanelLoader.item.edge = Qt.RightEdge
