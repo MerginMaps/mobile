@@ -38,6 +38,8 @@
           $${QGIS_SRC_DIR}/src/core/project \
           $${QGIS_SRC_DIR}/src/core/vector \
           $${QGIS_SRC_DIR}/src/core/editform \
+          $${QGIS_SRC_DIR}/src/core/proj \
+          $${QGIS_SRC_DIR}/src/core/settings \
           $${QGIS_SRC_DIR}/external/nlohmann \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core

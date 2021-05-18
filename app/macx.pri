@@ -35,6 +35,8 @@ macx:!android {
           $${QGIS_SRC_DIR}/src/core/scalebar \
           $${QGIS_SRC_DIR}/src/core/symbology \
           $${QGIS_SRC_DIR}/src/core/textrenderer \
+          $${QGIS_SRC_DIR}/src/core/proj \
+          $${QGIS_SRC_DIR}/src/core/settings \
           $${QGIS_BUILD_DIR} \
           $${QGIS_BUILD_DIR}/src/core
     }
