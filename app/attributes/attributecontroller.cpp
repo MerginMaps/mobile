@@ -459,7 +459,7 @@ void AttributeController::recalculateDerivedItems( )
   const int LIMIT = 3;
   int tryNumber = 0;
   bool anyValueChanged = true;
-  while ( anyValueChanged || tryNumber < LIMIT )
+  while ( anyValueChanged && tryNumber < LIMIT )
   {
     anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext );
     ++tryNumber;
