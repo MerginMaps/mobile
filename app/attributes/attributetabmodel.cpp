@@ -32,6 +32,7 @@ QHash<int, QByteArray> AttributeTabModel::roleNames() const
   QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
   roles[AttributeTabModel::Name]  = QByteArray( "Name" );
   roles[AttributeTabModel::Visible] = QByteArray( "Visible" );
+  roles[AttributeTabModel::TabIndex] = QByteArray( "TabIndex" );
   return roles;
 }
 
@@ -60,6 +61,8 @@ QVariant AttributeTabModel::data( const QModelIndex &index, int role ) const
       return item->name();
     case AttributeTabModel::Visible:
       return item->isVisible();
+    case AttributeTabModel::TabIndex:
+      return item->tabIndex();
     default:
       return QVariant();
   }

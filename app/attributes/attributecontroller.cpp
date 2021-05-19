@@ -459,7 +459,7 @@ void AttributeController::recalculateDerivedItems( )
   const int LIMIT = 3;
   int tryNumber = 0;
   bool anyValueChanged = true;
-  while ( anyValueChanged || tryNumber < LIMIT )
+  while ( anyValueChanged && tryNumber < LIMIT )
   {
     anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext );
     ++tryNumber;
@@ -480,7 +480,9 @@ void AttributeController::recalculateDerivedItems( )
       exp.prepare( &expressionContext );
       bool visible = true;
       if ( exp.isValid() )
-        exp.evaluate( &expressionContext ).toInt();
+      {
+        visible = exp.evaluate( &expressionContext ).toBool();
+      }
 
       if ( item->isVisible() != visible )
       {

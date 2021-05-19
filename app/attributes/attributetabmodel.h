@@ -41,7 +41,8 @@ class  AttributeTabModel : public QAbstractListModel
     enum AttributeTabRoles
     {
       Name = Qt::UserRole + 1, //!< Tab name
-      Visible //!< Tab visible
+      Visible, //!< Tab visible
+      TabIndex //!< Tab id ~ index
     };
 
     Q_ENUM( AttributeTabRoles )

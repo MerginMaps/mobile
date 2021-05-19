@@ -309,7 +309,7 @@ Item {
 
         Item {
           id: formPage
-          property int currentIndex: index
+          property int tabIndex: model.TabIndex
 
           // The main form content area
           Rectangle {
@@ -367,8 +367,7 @@ Item {
               onReset: content.contentY = 0
             }
 
-
-            model: swipeViewRepeater.model.attributeFormProxyModel(formPage.currentIndex)
+            model: swipeViewRepeater.model.attributeFormProxyModel(formPage.tabIndex)
 
            delegate: fieldItem
 
