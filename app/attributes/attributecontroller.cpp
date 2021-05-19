@@ -480,7 +480,9 @@ void AttributeController::recalculateDerivedItems( )
       exp.prepare( &expressionContext );
       bool visible = true;
       if ( exp.isValid() )
-        exp.evaluate( &expressionContext ).toInt();
+      {
+        visible = exp.evaluate( &expressionContext ).toBool();
+      }
 
       if ( item->isVisible() != visible )
       {
