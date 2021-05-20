@@ -155,7 +155,6 @@ bool DigitizingController::useGpsPoint() const
 void DigitizingController::setUseGpsPoint( bool useGpsPoint )
 {
   mUseGpsPoint = useGpsPoint;
-  qDebug() << "DIGITIZNF CONTROLLER" << mUseGpsPoint << useGpsPoint;
   emit useGpsPointChanged();
 }
 

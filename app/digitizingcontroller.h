@@ -30,7 +30,7 @@ class DigitizingController : public QObject
     Q_PROPERTY( bool manualRecording READ manualRecording WRITE setManualRecording NOTIFY manualRecordingChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
-     //! Used to get extended expression context while creating a new feature.
+    //! Used to get extended expression context while creating a new feature.
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
     //! If True, recorded point is from GPS and contains z-coord

@@ -100,6 +100,7 @@ ApplicationWindow {
           digitizingHighlight.featureLayerPair = pair
           digitizingHighlight.visible = true
         }
+
         featurePanel.show_panel( pair, "Add", "form" )
       }
 
@@ -235,6 +236,7 @@ ApplicationWindow {
         // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
         digitizing.useGpsPoint = useGpsPoint
       }
+
       digitizingHighlight.positionChanged()
     }
 
@@ -267,21 +269,12 @@ ApplicationWindow {
         __iosUtils.compass = compass
         __variablesManager.compass = compass
         __variablesManager.positionKit = positionKit
-        __variablesManager.useGpsPoint = digitizing.useGpsPoint
 
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
         console.log("Completed Running!")
-    }
-
-    // TODO @vsklencar
-    Connections {
-      target: __variablesManager
-      onUseGpsPointChanged: {
-        console.log("VARSMANAGER$%ˆ&*&ˆ%$#$%ˆ&", __variablesManager.useGpsPoint)
-      }
     }
 
     QgsQuick.MapCanvas {
@@ -428,10 +421,6 @@ ApplicationWindow {
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
         variablesManager: __variablesManager
-
-        Component.onCompleted: {
-          console.log("DIGCtrll", digitizing.variablesManager, __variablesManager)
-        }
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
