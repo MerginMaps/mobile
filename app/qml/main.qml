@@ -100,12 +100,10 @@ ApplicationWindow {
           digitizingHighlight.featureLayerPair = pair
           digitizingHighlight.visible = true
         }
-
         featurePanel.show_panel( pair, "Add", "form" )
       }
 
       stateManager.state = "view"
-      digitizing.useGpsPoint = false
     }
 
 
@@ -237,7 +235,6 @@ ApplicationWindow {
         // sets previous useGpsPoint value, because setCenter triggers extentChanged signal which changes this property
         digitizing.useGpsPoint = useGpsPoint
       }
-
       digitizingHighlight.positionChanged()
     }
 
@@ -268,12 +265,23 @@ ApplicationWindow {
         __loader.mapSettings = mapCanvas.mapSettings
         __iosUtils.positionKit = positionKit
         __iosUtils.compass = compass
+        __variablesManager.compass = compass
+        __variablesManager.positionKit = positionKit
+        __variablesManager.useGpsPoint = digitizing.useGpsPoint
 
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
         console.log("Completed Running!")
+    }
+
+    // TODO @vsklencar
+    Connections {
+      target: __variablesManager
+      onUseGpsPointChanged: {
+        console.log("VARSMANAGER$%ˆ&*&ˆ%$#$%ˆ&", __variablesManager.useGpsPoint)
+      }
     }
 
     QgsQuick.MapCanvas {
@@ -419,6 +427,11 @@ ApplicationWindow {
         layer: recordToolbar.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
+        variablesManager: __variablesManager
+
+        Component.onCompleted: {
+          console.log("DIGCtrll", digitizing.variablesManager, __variablesManager)
+        }
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
@@ -430,6 +443,8 @@ ApplicationWindow {
                 digitizingHighlight.featureLayerPair = digitizing.featureLayerPair
             }
         }
+
+        onUseGpsPointChanged: __variablesManager.useGpsPoint = digitizing.useGpsPoint
     }
 
     MainPanel {

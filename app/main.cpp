@@ -427,8 +427,7 @@ int main( int argc, char *argv[] )
   Loader loader( mtm, as, al );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
-
-  InputUtils::registerInputExpressionFunctions();
+  vm->registerInputExpressionFunctions();
 
   // Connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
@@ -500,6 +499,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
+  engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );

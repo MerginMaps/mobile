@@ -13,6 +13,8 @@
 #include <QObject>
 #include "merginapi.h"
 #include "qgsproject.h"
+#include "positionkit.h"
+#include "compass.h"
 
 class MerginApi;
 
@@ -21,10 +23,36 @@ class MerginApi;
  */
 class VariablesManager : public QObject
 {
+    Q_OBJECT
+    //! Source of QGeoPositionInfo.
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+    //! Source of direction
+    Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
+    //! If true, position information matches with feauteLayerPair.
+    Q_PROPERTY( bool useGpsPoint READ useGpsPoint WRITE setUseGpsPoint NOTIFY useGpsPointChanged )
+
   public:
     VariablesManager( MerginApi *merginApi, QObject *parent = nullptr );
+    ~VariablesManager() = default;
 
     void removeMerginProjectVariables( QgsProject *project );
+    //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
+    void registerInputExpressionFunctions();
+    QgsExpressionContextScope *positionScope();
+
+    PositionKit *positionKit() const;
+    void setPositionKit( PositionKit *positionKit );
+
+    Compass *compass() const;
+    void setCompass( Compass *compass );
+
+    bool useGpsPoint() const;
+    void setUseGpsPoint( bool useGpsPoint );
+
+  signals:
+    void positionKitChanged();
+    void compassChanged();
+    void useGpsPointChanged();
 
   public slots:
     void merginProjectChanged( QgsProject *project );
@@ -37,8 +65,13 @@ class VariablesManager : public QObject
   private:
     MerginApi *mMerginApi = nullptr;
     QgsProject *mCurrentProject = nullptr;
+    PositionKit *mPositionKit = nullptr; // not owned
+    Compass *mCompass = nullptr; // not owned
+    bool mUseGpsPoint;
 
     void setProjectVariables();
+    void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );
+    QVariant getGeoPositionAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute );
 };
 
 #endif // VARIABLESMANAGER_H

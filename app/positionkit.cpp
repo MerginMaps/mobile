@@ -64,6 +64,14 @@ QGeoPositionInfoSource *PositionKit::source() const
   return mSource.get();
 }
 
+QGeoPositionInfo PositionKit::lastKnownPosition() const
+{
+  if ( source() )
+    return source()->lastKnownPosition();
+  else
+    return QGeoPositionInfo();
+}
+
 void PositionKit::useSimulatedLocation( double longitude, double latitude, double radius )
 {
   std::unique_ptr<QGeoPositionInfoSource> source( simulatedSource( longitude, latitude, radius ) );

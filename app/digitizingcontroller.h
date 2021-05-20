@@ -18,6 +18,7 @@
 #include "qgsquickmapsettings.h"
 #include "positionkit.h"
 #include "featurelayerpair.h"
+#include "variablesmanager.h"
 
 class DigitizingController : public QObject
 {
@@ -29,6 +30,8 @@ class DigitizingController : public QObject
     Q_PROPERTY( bool manualRecording READ manualRecording WRITE setManualRecording NOTIFY manualRecordingChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+     //! Used to get extended expression context while creating a new feature.
+    Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
     //! If True, recorded point is from GPS and contains z-coord
     Q_PROPERTY( bool useGpsPoint MEMBER mUseGpsPoint NOTIFY useGpsPointChanged )
@@ -81,11 +84,15 @@ class DigitizingController : public QObject
     bool useGpsPoint() const;
     void setUseGpsPoint( bool useGpsPoint );
 
+    VariablesManager *variablesManager() const;
+    void setVariablesManager( VariablesManager *variablesManager );
+
   signals:
     void layerChanged();
     void recordingChanged();
     void manualRecordingChanged();
     void positionKitChanged();
+    void variablesManagerChanged();
     void recordingFeatureModelChanged();
     void mapSettingsChanged();
     void lineRecordingIntervalChanged();
@@ -109,6 +116,7 @@ class DigitizingController : public QObject
     QVector<QgsPoint> mRecordedPoints;  //!< for recording of linestrings, point's coord in layer CRS
     FeatureLayerPair mFeatureLayerPair; //!< to be used for highlight of feature being recorded
     QgsQuickMapSettings *mMapSettings = nullptr;
+    VariablesManager *mVariablesManager = nullptr;
     int mLineRecordingInterval = 3; // in seconds
     QDateTime mLastTimeRecorded;
     bool mUseGpsPoint = false;

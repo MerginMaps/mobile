@@ -136,6 +136,17 @@ bool DigitizingController::hasEnoughPoints() const
   return true;
 }
 
+VariablesManager *DigitizingController::variablesManager() const
+{
+  return mVariablesManager;
+}
+
+void DigitizingController::setVariablesManager( VariablesManager *variablesManager )
+{
+  mVariablesManager = variablesManager;
+  emit variablesManagerChanged();
+}
+
 bool DigitizingController::useGpsPoint() const
 {
   return mUseGpsPoint;
@@ -144,6 +155,7 @@ bool DigitizingController::useGpsPoint() const
 void DigitizingController::setUseGpsPoint( bool useGpsPoint )
 {
   mUseGpsPoint = useGpsPoint;
+  qDebug() << "DIGITIZNF CONTROLLER" << mUseGpsPoint << useGpsPoint;
   emit useGpsPointChanged();
 }
 
@@ -205,6 +217,8 @@ FeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry
 {
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  if ( mVariablesManager )
+    context << mVariablesManager->positionScope();
   QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geometry, attrs.toMap(), &context );
 
   return FeatureLayerPair( feat, featureLayerPair().layer() );
