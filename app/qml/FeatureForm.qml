@@ -256,6 +256,7 @@ Item {
             leftPadding: 8 * QgsQuick.Utils.dp
             rightPadding: 8 * QgsQuick.Utils.dp
             anchors.bottom: parent.bottom
+            focusPolicy: Qt.NoFocus
 
             width: leftPadding + rightPadding
             height: form.style.tabs.buttonHeight
@@ -491,6 +492,7 @@ Item {
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           active: widget !== 'Hidden'
+          Keys.forwardTo: backHandler
 
           source: {
             if ( widget !== undefined )
