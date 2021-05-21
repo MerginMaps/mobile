@@ -106,8 +106,11 @@ VariablesManager *AttributeController::variablesManager() const
 
 void AttributeController::setVariablesManager( VariablesManager *variablesManager )
 {
-  mVariablesManager = variablesManager;
-  emit variablesManagerChanged();
+  if ( mVariablesManager != variablesManager )
+  {
+    mVariablesManager = variablesManager;
+    emit variablesManagerChanged();
+  }
 }
 
 RememberAttributesController *AttributeController::rememberAttributesController() const

@@ -24,6 +24,8 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
   QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
+VariablesManager::~VariablesManager() = default;
+
 void VariablesManager::removeMerginProjectVariables( QgsProject *project )
 {
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_name" ) );
@@ -42,7 +44,7 @@ void VariablesManager::registerInputExpressionFunctions()
 
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
-  QgsExpressionContextScope *scope = new QgsExpressionContextScope( QObject::tr( "Position" ) );
+  QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
   QGeoPositionInfo geoInfo = mPositionKit->lastKnownPosition();
   const QgsGeometry point = QgsGeometry( new QgsPoint( geoInfo.coordinate().longitude(), geoInfo.coordinate().latitude(), geoInfo.coordinate().altitude() ) );
 
@@ -88,8 +90,11 @@ bool VariablesManager::useGpsPoint() const
 
 void VariablesManager::setUseGpsPoint( bool useGpsPoint )
 {
-  mUseGpsPoint = useGpsPoint;
-  emit useGpsPointChanged();
+  if ( mUseGpsPoint != useGpsPoint )
+  {
+    mUseGpsPoint = useGpsPoint;
+    emit useGpsPointChanged();
+  }
 }
 
 Compass *VariablesManager::compass() const
@@ -99,8 +104,11 @@ Compass *VariablesManager::compass() const
 
 void VariablesManager::setCompass( Compass *compass )
 {
-  mCompass = compass;
-  emit compassChanged();
+  if ( mCompass != compass )
+  {
+    mCompass = compass;
+    emit compassChanged();
+  }
 }
 
 PositionKit *VariablesManager::positionKit() const
@@ -110,8 +118,11 @@ PositionKit *VariablesManager::positionKit() const
 
 void VariablesManager::setPositionKit( PositionKit *positionKit )
 {
-  mPositionKit = positionKit;
-  emit positionKitChanged();
+  if ( mPositionKit != positionKit )
+  {
+    mPositionKit = positionKit;
+    emit positionKitChanged();
+  }
 }
 
 void VariablesManager::merginProjectChanged( QgsProject *project )
@@ -162,10 +173,9 @@ void VariablesManager::addPositionVariable( QgsExpressionContextScope *scope, co
 
 QVariant VariablesManager::getGeoPositionAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute )
 {
-  double value = std::numeric_limits< double >::quiet_NaN();
   if ( info.hasAttribute( attribute ) )
   {
-    value = info.attribute( attribute );
+    qreal value = info.attribute( attribute );
     return QString::number( value, 'f', 2 );
   }
   else

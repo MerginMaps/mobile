@@ -433,6 +433,8 @@ ApplicationWindow {
             }
         }
 
+        //Component.onCompleted: __variablesManager.useGpsPoint = digitizing.useGpsPoint
+
         onUseGpsPointChanged: __variablesManager.useGpsPoint = digitizing.useGpsPoint
     }
 

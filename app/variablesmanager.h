@@ -28,12 +28,15 @@ class VariablesManager : public QObject
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
     //! Source of direction
     Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
-    //! If true, position information matches with feauteLayerPair.
+    /**
+     * Property binded with DigitizingController::useGpsPoint. If true, the DigitizingController has used current position to create or edit geometry
+     * for a feature. Therefore current position information matches geometry for that feature.
+     **/
     Q_PROPERTY( bool useGpsPoint READ useGpsPoint WRITE setUseGpsPoint NOTIFY useGpsPointChanged )
 
   public:
     VariablesManager( MerginApi *merginApi, QObject *parent = nullptr );
-    ~VariablesManager() = default;
+    ~VariablesManager() override;
 
     void removeMerginProjectVariables( QgsProject *project );
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
@@ -67,7 +70,7 @@ class VariablesManager : public QObject
     QgsProject *mCurrentProject = nullptr;
     PositionKit *mPositionKit = nullptr; // not owned
     Compass *mCompass = nullptr; // not owned
-    bool mUseGpsPoint;
+    bool mUseGpsPoint = false;
 
     void setProjectVariables();
     void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );

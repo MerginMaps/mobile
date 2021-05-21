@@ -71,7 +71,7 @@ class  AttributeController : public QObject
 
     Q_PROPERTY( RememberAttributesController *rememberAttributesController READ rememberAttributesController WRITE setRememberAttributesController NOTIFY rememberAttributesChanged )
 
-    //! Used to get extended expression context while attributes are updated.
+    //! Returns extended expression context for attributes evaluation.
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
 
     //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values

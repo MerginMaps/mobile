@@ -143,8 +143,11 @@ VariablesManager *DigitizingController::variablesManager() const
 
 void DigitizingController::setVariablesManager( VariablesManager *variablesManager )
 {
-  mVariablesManager = variablesManager;
-  emit variablesManagerChanged();
+  if ( mVariablesManager != variablesManager )
+  {
+    mVariablesManager = variablesManager;
+    emit variablesManagerChanged();
+  }
 }
 
 bool DigitizingController::useGpsPoint() const
