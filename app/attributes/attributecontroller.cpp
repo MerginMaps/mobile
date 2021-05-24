@@ -581,8 +581,9 @@ void AttributeController::recalculateDerivedItems( )
   }
 
   // Check if we have any changes
+  bool anyChanges = isNewFeature();
+  if ( !anyChanges )
   {
-    bool anyChanges = false;
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
@@ -598,8 +599,8 @@ void AttributeController::recalculateDerivedItems( )
 
       ++formItemsIterator;
     }
-    setHasAnyChanges( anyChanges );
   }
+  setHasAnyChanges( anyChanges );
 
   // Emit all signals
   QSet<QUuid>::const_iterator i = changedFormItems.constBegin();
