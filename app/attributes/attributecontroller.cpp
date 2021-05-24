@@ -277,18 +277,11 @@ void AttributeController::updateOnLayerChange()
       {
         if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
         {
-          mHasTabs = true;
-          break;
-        }
-      }
-
-      if ( mHasTabs )
-      {
-        for ( QgsAttributeEditorElement *element : root->children() )
-        {
-          if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
+          if ( !container->isGroupBox() )
           {
-            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
+            mHasTabs = true;
+
             if ( container->columnCount() > 1 )
             {
               qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
@@ -296,13 +289,10 @@ void AttributeController::updateOnLayerChange()
             }
             createTab( container );
           }
-          else
-          {
-            qDebug() << "element in tab layout that is not part of any tab. Ignoring!";
-          }
         }
       }
-      else
+
+      if ( !mHasTabs )
       {
         createTab( root );
       }
