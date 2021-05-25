@@ -83,23 +83,77 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="110"/>
+        <location filename="../androidutils.cpp" line="113"/>
         <source>Storage permission is permanently denied, please allow it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="114"/>
+        <location filename="../androidutils.cpp" line="117"/>
         <source>Input needs a storage permission in order to manipulate or download a project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="132"/>
+        <location filename="../androidutils.cpp" line="135"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="136"/>
+        <location filename="../androidutils.cpp" line="139"/>
         <source>We need a camera permission in order to take a photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AttributeController</name>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="402"/>
+        <source>Default value expression for %1:%2 has parser error: %3</source>
+        <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="412"/>
+        <source>Default value expression for %1:%2 has evaluation error: %3</source>
+        <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="423"/>
+        <location filename="../attributes/attributecontroller.cpp" line="869"/>
+        <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
+        <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="675"/>
+        <source>Cannot delete feature</source>
+        <translation type="unfinished">Cannot delete feature</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="696"/>
+        <source>Feature could not be added</source>
+        <translation type="unfinished">Feature could not be added</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="724"/>
+        <source>Cannot update feature</source>
+        <translation type="unfinished">Cannot update feature</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="738"/>
+        <source>Feature %1 could not be fetched after commit</source>
+        <translation type="unfinished">Feature %1 could not be fetched after commit</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="755"/>
+        <source>Cannot start editing</source>
+        <translation type="unfinished">Cannot start editing</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="772"/>
+        <source>Could not save changes. Rolling back.</source>
+        <translation type="unfinished">Could not save changes. Rolling back.</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="870"/>
+        <source>Value %1 is not compatible with field type %2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -116,12 +170,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="124"/>
+        <location filename="../qml/AuthPanel.qml" line="129"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="128"/>
+        <location filename="../qml/AuthPanel.qml" line="133"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -200,44 +254,52 @@
     </message>
 </context>
 <context>
+    <name>FeatureForm</name>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="173"/>
+        <source>Constraints not valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="178"/>
+        <source>Note: soft constraints were not met</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FeaturePanel</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="147"/>
+        <location filename="../qml/FeaturePanel.qml" line="158"/>
         <source>Edit Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="147"/>
+        <location filename="../qml/FeaturePanel.qml" line="158"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="157"/>
+        <location filename="../qml/FeaturePanel.qml" line="168"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="192"/>
-        <source>No photos added.</source>
-        <translation>No photos added.</translation>
-    </message>
-    <message>
-        <location filename="../qml/FeaturePanel.qml" line="337"/>
+        <location filename="../qml/FeaturePanel.qml" line="321"/>
         <source>Delete feature</source>
         <translation>Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="338"/>
+        <location filename="../qml/FeaturePanel.qml" line="322"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="358"/>
+        <location filename="../qml/FeaturePanel.qml" line="342"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="359"/>
+        <location filename="../qml/FeaturePanel.qml" line="343"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,6 +373,102 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>InputUtils</name>
+    <message>
+        <location filename="../inpututils.cpp" line="153"/>
+        <source>just now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="158"/>
+        <source>%1 minutes ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="158"/>
+        <source>%1 minute ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="163"/>
+        <source>%1 hours ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="163"/>
+        <source>%1 hour ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="172"/>
+        <source>%1 days ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="172"/>
+        <source>%1 day ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="177"/>
+        <source>%1 weeks ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="177"/>
+        <source>%1 week ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="182"/>
+        <source>%1 months ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="182"/>
+        <source>%1 month ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="187"/>
+        <source>%1 years ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="187"/>
+        <source>%1 year ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="882"/>
+        <source>screen resolution: %1x%2 px
+</source>
+        <translation type="unfinished">screen resolution: %1x%2 px
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="883"/>
+        <source>screen DPI: %1x%2
+</source>
+        <translation type="unfinished">screen DPI: %1x%2
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="884"/>
+        <source>screen size: %1x%2 mm
+</source>
+        <translation type="unfinished">screen size: %1x%2 mm
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="885"/>
+        <source>screen density: %1</source>
+        <translation type="unfinished">screen density: %1</translation>
+    </message>
+</context>
+<context>
     <name>LogPanel</name>
     <message>
         <location filename="../qml/LogPanel.qml" line="51"/>
@@ -331,27 +489,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="55"/>
+        <location filename="../qml/LoginForm.qml" line="70"/>
         <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="98"/>
+        <location filename="../qml/LoginForm.qml" line="113"/>
         <source>Username</source>
         <translation type="unfinished">Username</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="141"/>
+        <location filename="../qml/LoginForm.qml" line="157"/>
         <source>Sign in</source>
         <translation type="unfinished">Sign in</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="211"/>
+        <location filename="../qml/LoginForm.qml" line="223"/>
         <source>Sign up for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="237"/>
+        <location filename="../qml/LoginForm.qml" line="245"/>
         <source>Forgot password?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -442,6 +600,22 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/components/PasswordField.qml" line="15"/>
         <source>Password</source>
         <translation type="unfinished">Password</translation>
+    </message>
+</context>
+<context>
+    <name>PositionKit</name>
+    <message>
+        <location filename="../positionkit.cpp" line="45"/>
+        <source>Unable to create default GPS Position Source</source>
+        <translation type="unfinished">Unable to create deafult GPS Position Source</translation>
+    </message>
+</context>
+<context>
+    <name>PreviewPanel</name>
+    <message>
+        <location filename="../qml/PreviewPanel.qml" line="121"/>
+        <source>No map tip available.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -653,6 +827,15 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>ProjectsModel</name>
+    <message>
+        <location filename="../projectsmodel.cpp" line="90"/>
+        <location filename="../projectsmodel.cpp" line="94"/>
+        <source>Updated %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Purchasing</name>
     <message>
         <location filename="../purchasing.cpp" line="519"/>
@@ -704,77 +887,22 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>QgsQuickAttributeFormModelBase</name>
+    <name>QObject</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="290"/>
+        <location filename="../attributes/attributecontroller.cpp" line="186"/>
         <source>Not NULL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="295"/>
+        <location filename="../attributes/attributecontroller.cpp" line="191"/>
         <source>Unique</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>QgsQuickAttributeModel</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="194"/>
-        <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
-        <translation>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="195"/>
-        <source>Value %1 is not compatible with field type %2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="238"/>
-        <source>Cannot update feature</source>
-        <translation>Cannot update feature</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="252"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>Feature %1 could not be fetched after commit</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="275"/>
-        <source>Cannot delete feature</source>
-        <translation>Cannot delete feature</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="375"/>
-        <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>Default value expression for %1:%2 has parser error: %3</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="333"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="385"/>
-        <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>Default value expression for %1:%2 has evaluation error: %3</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="410"/>
-        <source>Feature could not be added</source>
-        <translation>Feature could not be added</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="435"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>Could not save changes. Rolling back.</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="455"/>
-        <source>Cannot start editing</source>
-        <translation>Cannot start editing</translation>
-    </message>
-</context>
-<context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapcanvasmap.cpp" line="155"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="156"/>
         <source>Rendering</source>
         <translation>Rendering</translation>
     </message>
@@ -782,47 +910,10 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapsettings.cpp" line="206"/>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapsettings.cpp" line="226"/>
+        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Map Canvas rotation is not supported. Resetting from %1 to 0.</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickPositionKit</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickpositionkit.cpp" line="45"/>
-        <source>Unable to create default GPS Position Source</source>
-        <translation>Unable to create deafult GPS Position Source</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickUtils</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>screen resolution: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>screen DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="362"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>screen size: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="363"/>
-        <source>screen density: %1</source>
-        <translation>screen density: %1</translation>
     </message>
 </context>
 <context>
@@ -1044,131 +1135,93 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>inputdatetime</name>
     <message>
-        <location filename="../qml/main.qml" line="98"/>
-        <source>Recorded feature is not valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="459"/>
-        <source>GPS auto-center mode on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="459"/>
-        <source>GPS auto-center mode off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="475"/>
-        <source>No editable layers found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="491"/>
-        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="524"/>
-        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="682"/>
-        <source>Communication error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="688"/>
-        <source>PROJ Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qgsquickdatetime</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="43"/>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="85"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="44"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="86"/>
         <source>(no date)</source>
-        <translation>(no date)</translation>
+        <translation type="unfinished">(no date)</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="229"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="230"/>
         <source>Hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="253"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="254"/>
         <source>Minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="276"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="277"/>
         <source>Seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="298"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="299"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>qgsquickexternalresource</name>
+    <name>inputexternalresource</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="262"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="263"/>
         <source>Take a photo</source>
-        <translation>Take a photo</translation>
+        <translation type="unfinished">Take a photo</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="304"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="305"/>
         <source>From gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="325"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="326"/>
         <source>Image is not available: </source>
-        <translation>Image is not available: </translation>
+        <translation type="unfinished">Image is not available: </translation>
     </message>
 </context>
 <context>
-    <name>qgsquickfeatureform</name>
+    <name>main</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="204"/>
-        <source>Constraints not valid</source>
+        <location filename="../qml/main.qml" line="95"/>
+        <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="209"/>
-        <source>Note: soft constraints were not met</source>
+        <location filename="../qml/main.qml" line="458"/>
+        <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="713"/>
-        <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Add feature on &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="458"/>
+        <source>GPS auto-center mode off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="715"/>
-        <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Edit feature on &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="474"/>
+        <source>No editable layers found.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="717"/>
-        <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>View feature on &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="490"/>
+        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="757"/>
-        <source>Delete feature</source>
-        <translation>Delete feature</translation>
+        <location filename="../qml/main.qml" line="523"/>
+        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="758"/>
-        <source>Really delete this feature?</source>
-        <translation>Really delete this feature?</translation>
+        <location filename="../qml/main.qml" line="681"/>
+        <source>Communication error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="687"/>
+        <source>PROJ Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
