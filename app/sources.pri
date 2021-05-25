@@ -102,7 +102,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testidentifykit.cpp \
       test/testpositionkit.cpp \
       test/testrememberattributescontroller.cpp \
-      test/testscalebarkit.cpp
+      test/testscalebarkit.cpp \
+      test/testvariablesmanager.cpp \
 
   HEADERS += \
       test/inputtests.h \
@@ -117,7 +118,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testattributecontroller.h \
       test/testidentifykit.h \
       test/testrememberattributescontroller.h \
-      test/testscalebarkit.h
+      test/testscalebarkit.h \
+      test/testvariablesmanager.h \
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

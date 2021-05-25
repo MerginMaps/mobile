@@ -456,7 +456,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), purchasing.get(), &iu );
+    tests.init( ma.get(), purchasing.get(), &iu, vm.get() );
     return tests.runTest();
   }
 #endif

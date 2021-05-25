@@ -21,6 +21,7 @@
 #include "test/testpositionkit.h"
 #include "test/testrememberattributescontroller.h"
 #include "test/testscalebarkit.h"
+#include "test/testvariablesmanager.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -53,11 +54,12 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils )
+void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager )
 {
   mApi = api;
   mPurchasing = purchasing;
   mInputUtils = utils;
+  mVariablesManager = varManager;
 }
 
 void InputTests::initTestDeclarative()
@@ -133,6 +135,11 @@ int InputTests::runTest() const
   {
     TestScaleBarKit sbkTest;
     nFailed = QTest::qExec( &sbkTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testVariablesManager" )
+  {
+    TestVariablesManager vmTest( mVariablesManager );
+    nFailed = QTest::qExec( &vmTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )
