@@ -32,6 +32,7 @@
 #include "qgseditformconfig.h"
 #include "qgsexpressioncontext.h"
 #include "qgsattributeeditorcontainer.h"
+#include "variablesmanager.h"
 
 class AttributeFormModel;
 class AttributeFormProxyModel;
@@ -69,6 +70,9 @@ class  AttributeController : public QObject
     Q_PROPERTY( bool hasAnyChanges READ hasAnyChanges NOTIFY hasAnyChangesChanged )
 
     Q_PROPERTY( RememberAttributesController *rememberAttributesController READ rememberAttributesController WRITE setRememberAttributesController NOTIFY rememberAttributesChanged )
+
+    //! Returns extended expression context for attributes evaluation.
+    Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
 
     //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values
     Q_PROPERTY( bool constraintsHardValid READ constraintsHardValid NOTIFY constraintsHardValidChanged )
@@ -121,6 +125,9 @@ class  AttributeController : public QObject
     RememberAttributesController *rememberAttributesController() const;
     void setRememberAttributesController( RememberAttributesController *rememberAttributes );
 
+    VariablesManager *variablesManager() const;
+    void setVariablesManager( VariablesManager *variablesManager );
+
   signals:
     void hasAnyChangesChanged();
     void rememberAttributesChanged();
@@ -129,6 +136,7 @@ class  AttributeController : public QObject
     void constraintsHardValidChanged();
     void constraintsSoftValidChanged();
     void hasTabsChanged();
+    void variablesManagerChanged();
 
     void formDataChangedFailed( const QString &msg );
     void formDataChanged( QUuid uuid );
@@ -176,6 +184,7 @@ class  AttributeController : public QObject
     QVector<std::shared_ptr<TabItem>> mTabItems; // order of tabs by tab row number
 
     RememberAttributesController *mRememberAttributesController = nullptr; // not owned
+    VariablesManager *mVariablesManager = nullptr; // not owned
 
 };
 #endif // ATTRIBUTECONTROLLER_H

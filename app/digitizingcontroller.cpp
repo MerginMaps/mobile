@@ -136,6 +136,20 @@ bool DigitizingController::hasEnoughPoints() const
   return true;
 }
 
+VariablesManager *DigitizingController::variablesManager() const
+{
+  return mVariablesManager;
+}
+
+void DigitizingController::setVariablesManager( VariablesManager *variablesManager )
+{
+  if ( mVariablesManager != variablesManager )
+  {
+    mVariablesManager = variablesManager;
+    emit variablesManagerChanged();
+  }
+}
+
 bool DigitizingController::useGpsPoint() const
 {
   return mUseGpsPoint;
@@ -205,6 +219,8 @@ FeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry
 {
   QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
   QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  if ( mVariablesManager )
+    context << mVariablesManager->positionScope();
   QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geometry, attrs.toMap(), &context );
 
   return FeatureLayerPair( feat, featureLayerPair().layer() );

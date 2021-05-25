@@ -68,6 +68,7 @@ Drawer {
     AttributeController {
       id: attributeController
       rememberAttributesController: rememberAttributesController
+      variablesManager: __variablesManager
     }
 
     AttributePreviewController {

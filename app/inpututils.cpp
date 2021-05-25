@@ -20,7 +20,6 @@
 #include "qgsvectorlayer.h"
 #include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
-#include "inputexpressionfunctions.h"
 #include "coreutils.h"
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"
@@ -233,14 +232,6 @@ double InputUtils::convertCoordinateString( const QString &rationalValue )
 
   double result = degrees + minutes / 60 + seconds / 3600;
   return result;
-}
-
-void InputUtils::registerInputExpressionFunctions()
-{
-  QgsExpression::registerFunction( new ReadExif() );
-  QgsExpression::registerFunction( new ReadExifImgDirection() );
-  QgsExpression::registerFunction( new ReadExifLongitude() );
-  QgsExpression::registerFunction( new ReadExifLatitude() );
 }
 
 double InputUtils::convertRationalNumber( const QString &rationalValue )

@@ -99,6 +99,20 @@ QgsAttributeEditorContainer *AttributeController::autoLayoutTabContainer() const
   return root.release();
 }
 
+VariablesManager *AttributeController::variablesManager() const
+{
+  return mVariablesManager;
+}
+
+void AttributeController::setVariablesManager( VariablesManager *variablesManager )
+{
+  if ( mVariablesManager != variablesManager )
+  {
+    mVariablesManager = variablesManager;
+    emit variablesManagerChanged();
+  }
+}
+
 RememberAttributesController *AttributeController::rememberAttributesController() const
 {
   return mRememberAttributesController;
@@ -440,6 +454,9 @@ void AttributeController::recalculateDerivedItems( )
   // Create context
   QgsFields fields = mFeatureLayerPair.feature().fields();
   QgsExpressionContext expressionContext = layer->createExpressionContext();
+  if ( mVariablesManager )
+    expressionContext << mVariablesManager->positionScope();
+
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 

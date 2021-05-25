@@ -105,7 +105,6 @@ ApplicationWindow {
       }
 
       stateManager.state = "view"
-      digitizing.useGpsPoint = false
     }
 
 
@@ -268,6 +267,8 @@ ApplicationWindow {
         __loader.mapSettings = mapCanvas.mapSettings
         __iosUtils.positionKit = positionKit
         __iosUtils.compass = compass
+        __variablesManager.compass = compass
+        __variablesManager.positionKit = positionKit
 
         // get focus when any project is active, otherwise let focus to merginprojectpanel
         if ( __appSettings.activeProject )
@@ -419,6 +420,7 @@ ApplicationWindow {
         layer: recordToolbar.activeVectorLayer
         lineRecordingInterval: __appSettings.lineRecordingInterval
         mapSettings: mapCanvas.mapSettings
+        variablesManager: __variablesManager
 
         onRecordingChanged: {
             __loader.recording = digitizing.recording
@@ -430,6 +432,10 @@ ApplicationWindow {
                 digitizingHighlight.featureLayerPair = digitizing.featureLayerPair
             }
         }
+
+        //Component.onCompleted: __variablesManager.useGpsPoint = digitizing.useGpsPoint
+
+        onUseGpsPointChanged: __variablesManager.useGpsPoint = digitizing.useGpsPoint
     }
 
     MainPanel {

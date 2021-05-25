@@ -168,6 +168,11 @@ class PositionKit : public QObject
     QGeoPositionInfoSource *source() const;
 
     /**
+     * Returns last known QGeoPositionInfo of the source.
+     */
+    QGeoPositionInfo lastKnownPosition() const;
+
+    /**
      * Coordinate reference system of position - WGS84 (constant)
      */
     Q_INVOKABLE QgsCoordinateReferenceSystem positionCRS() const;
