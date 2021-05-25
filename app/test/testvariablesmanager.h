@@ -26,7 +26,6 @@ class TestVariablesManager: public QObject
     void cleanup(); // will be called after every testfunction.
 
     void positionVariables();
-    void exifFunctions();
   private:
     VariablesManager *mVariablesManager;
     void evaluateExpression( const QString &expStr, const QString &expectedValue, const QgsExpressionContext *context );
