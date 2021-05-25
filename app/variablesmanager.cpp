@@ -44,8 +44,13 @@ void VariablesManager::registerInputExpressionFunctions()
 
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
-  QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
   QGeoPositionInfo geoInfo = mPositionKit->lastKnownPosition();
+  return positionScope( geoInfo, compass()->direction(), mUseGpsPoint );
+}
+
+QgsExpressionContextScope *VariablesManager::positionScope( const QGeoPositionInfo &geoInfo, const double direction, bool useGpsPoint )
+{
+  QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
   const QgsGeometry point = QgsGeometry( new QgsPoint( geoInfo.coordinate().longitude(), geoInfo.coordinate().latitude(), geoInfo.coordinate().altitude() ) );
 
   addPositionVariable( scope, QStringLiteral( "coordinate" ), QVariant::fromValue<QgsGeometry>( point ) );
@@ -54,12 +59,12 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "altitude" ), geoInfo.coordinate().altitude() );
   addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::HorizontalAccuracy ) );
   addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::VerticalAccuracy ) );
-  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::GroundSpeed ) );
-  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::VerticalSpeed ) );
+  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::GroundSpeed ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::VerticalSpeed ) );
   addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::MagneticVariation ) );
   addPositionVariable( scope, QStringLiteral( "timestamp" ), geoInfo.timestamp() );
-  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( mCompass->direction() ) ) % 360 );
-  addPositionVariable( scope, QStringLiteral( "from_gps" ), mUseGpsPoint );
+  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
+  addPositionVariable( scope, QStringLiteral( "from_gps" ), useGpsPoint );
 
   return scope;
 }
