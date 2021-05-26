@@ -370,7 +370,7 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems();
+  recalculateDerivedItems( false );
 }
 
 bool AttributeController::isNewFeature() const
@@ -380,7 +380,8 @@ bool AttributeController::isNewFeature() const
 
 bool AttributeController::recalculateDefaultValues(
   QSet<QUuid> &changedFormItems,
-  QgsExpressionContext &expressionContext
+  QgsExpressionContext &expressionContext,
+  bool isFormValueChange
 )
 {
   bool hasChanges = false;
@@ -392,7 +393,7 @@ bool AttributeController::recalculateDefaultValues(
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
     bool shouldApplyDefaultValue =
       !defaultDefinition.expression().isEmpty() &&
-      ( isNewFeature() || defaultDefinition.applyOnUpdate() );
+      ( isNewFeature() || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) );
 
     if ( shouldApplyDefaultValue )
     {
@@ -440,7 +441,7 @@ bool AttributeController::recalculateDefaultValues(
   return hasChanges;
 }
 
-void AttributeController::recalculateDerivedItems( )
+void AttributeController::recalculateDerivedItems( bool isFormValueChange )
 {
   QSet<QUuid> changedFormItems;
 
@@ -468,7 +469,7 @@ void AttributeController::recalculateDerivedItems( )
   bool anyValueChanged = true;
   while ( anyValueChanged && tryNumber < LIMIT )
   {
-    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext );
+    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange );
     ++tryNumber;
   }
   if ( anyValueChanged )
@@ -877,7 +878,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( id );
-      recalculateDerivedItems();
+      recalculateDerivedItems( true );
     }
     return true;
   }

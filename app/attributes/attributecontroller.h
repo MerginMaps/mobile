@@ -156,9 +156,14 @@ class  AttributeController : public QObject
     void updateOnFeatureChange();
     bool isNewFeature() const;
 
-    // visibility & constrains & default vals
-    void recalculateDerivedItems();
-    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
+    /**
+     * Recalculates visibility & constrains & default values
+     * Note that reevaluate default values is needed only when an attribnute has changed.
+     * Evaluation of default values for a new feature is done in digitizing controller when a feature is created.
+     * @param isFormValueChange True if recalculation has to be done after an attribute has changed (called by setFormValue function).
+     */
+    void recalculateDerivedItems( bool isFormValueChange );
+    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange );
 
     // generate tab
     void createTab( QgsAttributeEditorContainer *container );
