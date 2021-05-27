@@ -191,6 +191,9 @@ void AttributeController::flatten(
           descriptions << QObject::tr( "Unique" );
         }
 
+        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
+                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
+
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
           std::shared_ptr<FormItem>(
@@ -201,7 +204,7 @@ void AttributeController::flatten(
               parentTabRow,
               FormItem::Field,
               layer->attributeDisplayName( fieldIndex ),
-              !layer->editFormConfig().readOnly( fieldIndex ),
+              !isReadOnly,
               layer->editorWidgetSetup( fieldIndex ),
               fieldIndex,
               field.constraints(),
@@ -370,7 +373,7 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems( false );
+  recalculateDerivedItems( false, isNewFeature() );
 }
 
 bool AttributeController::isNewFeature() const
@@ -381,7 +384,8 @@ bool AttributeController::isNewFeature() const
 bool AttributeController::recalculateDefaultValues(
   QSet<QUuid> &changedFormItems,
   QgsExpressionContext &expressionContext,
-  bool isFormValueChange
+  bool isFormValueChange,
+  bool isFirstUpdateOfNewFeature
 )
 {
   bool hasChanges = false;
@@ -391,9 +395,10 @@ bool AttributeController::recalculateDefaultValues(
     std::shared_ptr<FormItem> item = formItemsIterator.value();
     const QgsField field = item->field();
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
+
     bool shouldApplyDefaultValue =
       !defaultDefinition.expression().isEmpty() &&
-      ( isNewFeature() || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) );
+      ( isFirstUpdateOfNewFeature || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) );
 
     if ( shouldApplyDefaultValue )
     {
@@ -441,7 +446,7 @@ bool AttributeController::recalculateDefaultValues(
   return hasChanges;
 }
 
-void AttributeController::recalculateDerivedItems( bool isFormValueChange )
+void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool isFirstUpdateOfNewFeature )
 {
   QSet<QUuid> changedFormItems;
 
@@ -469,7 +474,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange )
   bool anyValueChanged = true;
   while ( anyValueChanged && tryNumber < LIMIT )
   {
-    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange );
+    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
     ++tryNumber;
   }
   if ( anyValueChanged )
@@ -878,7 +883,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( id );
-      recalculateDerivedItems( true );
+      recalculateDerivedItems( true, false );
     }
     return true;
   }

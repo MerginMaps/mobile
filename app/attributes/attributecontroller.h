@@ -162,8 +162,8 @@ class  AttributeController : public QObject
      * Evaluation of default values for a new feature is done in digitizing controller when a feature is created.
      * @param isFormValueChange True if recalculation has to be done after an attribute has changed (called by setFormValue function).
      */
-    void recalculateDerivedItems( bool isFormValueChange );
-    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange );
+    void recalculateDerivedItems( bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
+    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
 
     // generate tab
     void createTab( QgsAttributeEditorContainer *container );
