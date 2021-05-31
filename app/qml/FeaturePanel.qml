@@ -33,6 +33,10 @@ Drawer {
         featureForm.save()
     }
 
+    function isNewFeature() {
+      return attributeController.isNewFeature()
+    }
+
     function reload() {
       attributeController.reset()
       featureForm.reset()

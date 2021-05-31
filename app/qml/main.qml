@@ -131,10 +131,20 @@ ApplicationWindow {
         }
         else if (digitizing.hasPointGeometry(layer)) {
             var recordedPoint = getRecordedPoint()
+            var newFormState = "Edit"
             featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
-            featurePanel.saveFeatureGeom()
+
+            if (featurePanel.isNewFeature()) {
+              digitizingHighlight.featureLayerPair = featurePanel.feature
+              digitizingHighlight.visible = true
+              newFormState = "Add"
+            } else {
+              // save only existing feature
+              featurePanel.saveFeatureGeom()
+            }
+
             stateManager.state = "view"
-            featurePanel.show_panel(featurePanel.feature, "Edit", "form")
+            featurePanel.show_panel(featurePanel.feature, newFormState, "form")
         }
     }
 

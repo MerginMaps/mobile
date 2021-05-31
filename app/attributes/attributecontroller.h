@@ -103,6 +103,7 @@ class  AttributeController : public QObject
     Q_INVOKABLE bool deleteFeature();
     Q_INVOKABLE bool create();
     Q_INVOKABLE bool save();
+    Q_INVOKABLE bool isNewFeature() const;
 
     int tabCount() const;
 
@@ -154,7 +155,6 @@ class  AttributeController : public QObject
 
     void updateOnLayerChange();
     void updateOnFeatureChange();
-    bool isNewFeature() const;
 
     /**
      * Recalculates visibility & constrains & default values
