@@ -106,53 +106,53 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="402"/>
+        <location filename="../attributes/attributecontroller.cpp" line="408"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="412"/>
+        <location filename="../attributes/attributecontroller.cpp" line="418"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="423"/>
-        <location filename="../attributes/attributecontroller.cpp" line="869"/>
+        <location filename="../attributes/attributecontroller.cpp" line="429"/>
+        <location filename="../attributes/attributecontroller.cpp" line="875"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="675"/>
+        <location filename="../attributes/attributecontroller.cpp" line="681"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="696"/>
+        <location filename="../attributes/attributecontroller.cpp" line="702"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="724"/>
+        <location filename="../attributes/attributecontroller.cpp" line="730"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="738"/>
+        <location filename="../attributes/attributecontroller.cpp" line="744"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation type="unfinished">Feature %1 could not be fetched after commit</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="755"/>
+        <location filename="../attributes/attributecontroller.cpp" line="761"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="772"/>
+        <location filename="../attributes/attributecontroller.cpp" line="778"/>
         <source>Could not save changes. Rolling back.</source>
         <translation type="unfinished">Could not save changes. Rolling back.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="870"/>
+        <location filename="../attributes/attributecontroller.cpp" line="876"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,37 +269,37 @@
 <context>
     <name>FeaturePanel</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="158"/>
+        <location filename="../qml/FeaturePanel.qml" line="162"/>
         <source>Edit Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="158"/>
+        <location filename="../qml/FeaturePanel.qml" line="162"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="168"/>
+        <location filename="../qml/FeaturePanel.qml" line="172"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="321"/>
+        <location filename="../qml/FeaturePanel.qml" line="325"/>
         <source>Delete feature</source>
         <translation>Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="322"/>
+        <location filename="../qml/FeaturePanel.qml" line="326"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="342"/>
+        <location filename="../qml/FeaturePanel.qml" line="346"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="343"/>
+        <location filename="../qml/FeaturePanel.qml" line="347"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1189,37 +1189,37 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="458"/>
+        <location filename="../qml/main.qml" line="468"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="458"/>
+        <location filename="../qml/main.qml" line="468"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="474"/>
+        <location filename="../qml/main.qml" line="484"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="490"/>
+        <location filename="../qml/main.qml" line="500"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="523"/>
+        <location filename="../qml/main.qml" line="533"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="681"/>
+        <location filename="../qml/main.qml" line="691"/>
         <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="687"/>
+        <location filename="../qml/main.qml" line="697"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
