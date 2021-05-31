@@ -529,7 +529,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
   }
 }
 
-void MerginApi::uploadProject( const QString &projectNamespace, const QString &projectName )
+void MerginApi::uploadProject( const QString &projectNamespace, const QString &projectName, bool isInitialUpload )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
@@ -544,6 +544,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyUploadProjectInfo = reply;
+    mTransactionalStatus[projectFullName].isInitialUpload = isInitialUpload;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -746,7 +747,7 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
   CoreUtils::log( "create " + projectFullName, QStringLiteral( "Requesting project creation: " ) + url.toString() );
 }
 
-void MerginApi::deleteProject( const QString &projectNamespace, const QString &projectName )
+void MerginApi::deleteProject( const QString &projectNamespace, const QString &projectName, bool informUser )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -760,7 +761,7 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   QNetworkReply *reply = mManager.deleteResource( request );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::deleteProjectFinished );
+  connect( reply, &QNetworkReply::finished, this, [this, informUser]() { this->deleteProjectFinished( informUser );} );
   CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Requesting project deletion: " ) + url.toString() );
 }
 
@@ -800,7 +801,7 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
-          uploadProject( projectNamespace, projectName );
+          uploadProject( projectNamespace, projectName, true );
         }
       }
     }
@@ -816,7 +817,7 @@ void MerginApi::createProjectFinished()
   r->deleteLater();
 }
 
-void MerginApi::deleteProjectFinished()
+void MerginApi::deleteProjectFinished( bool informUser )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -827,7 +828,9 @@ void MerginApi::deleteProjectFinished()
   {
     CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Success" ) );
 
-    emit notify( QStringLiteral( "Project deleted" ) );
+    if ( informUser )
+      emit notify( QStringLiteral( "Project deleted" ) );
+
     emit serverProjectDeleted( projectFullName, true );
   }
   else
@@ -1175,7 +1178,7 @@ void MerginApi::migrateProjectToMergin( const QString &projectName, const QStrin
   }
 }
 
-void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const QString &projectName )
+void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser )
 {
   // Remove mergin folder
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
@@ -1190,7 +1193,9 @@ void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const 
   mLocalProjects.updateNamespace( projectInfo.projectDir, "" );
   mLocalProjects.updateLocalVersion( projectInfo.projectDir, -1 );
 
-  emit notify( tr( "Project detached from Mergin" ) );
+  if ( informUser )
+    emit notify( tr( "Project detached from Mergin" ) );
+
   emit projectDetached( projectFullName );
 }
 
@@ -1617,6 +1622,16 @@ void MerginApi::uploadStartReplyFinished()
         uploadSize += f.size;
       }
       emit storageLimitReached( uploadSize );
+
+      // remove project if it was first time sync - migration
+      if ( transaction.isInitialUpload )
+      {
+        QString projectNamespace, projectName;
+        extractProjectName( projectFullName, projectNamespace, projectName );
+
+        detachProjectFromMergin( projectNamespace, projectName, false );
+        deleteProject( projectNamespace, projectName, false );
+      }
     }
     else
     {

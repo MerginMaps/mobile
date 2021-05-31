@@ -499,6 +499,7 @@ void ProjectsModel::onProjectDetachedFromMergin( const QString &projectFullName 
   if ( proj )
   {
     proj->mergin.reset();
+    proj->local->projectNamespace = "";
     QModelIndex editIndex = index( mProjects.indexOf( proj ) );
 
     emit dataChanged( editIndex, editIndex );
