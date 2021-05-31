@@ -161,6 +161,7 @@ struct TransactionStatus
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool updateBeforeUpload = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
+  bool isInitialUpload = false; //! true when we are first time uploading the project - migration to Mergin
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -242,7 +243,7 @@ class MerginApi: public QObject
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
      */
-    Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName );
+    Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName, bool isInitialUpload = false );
 
     /**
      * Sends non-blocking POST request to the server to cancel uploading of a project with a given name.
@@ -309,7 +310,7 @@ class MerginApi: public QObject
     * \param projectNamespace Project namespace that will be detached from Mergin
     * \param projectName Project name that will be detached from Mergin
     */
-    Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName );
+    Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser = true );
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
@@ -345,7 +346,7 @@ class MerginApi: public QObject
     * \param projectNamespace
     * \param projectName
     */
-    void deleteProject( const QString &projectNamespace, const QString &projectName );
+    void deleteProject( const QString &projectNamespace, const QString &projectName, bool informUser = true );
 
     LocalProject getLocalProject( const QString &projectFullName );
 
@@ -447,7 +448,7 @@ class MerginApi: public QObject
     void getSubscriptionInfoFinished();
     void saveAuthData();
     void createProjectFinished();
-    void deleteProjectFinished();
+    void deleteProjectFinished( bool informUser = true );
     void authorizeFinished();
     void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
     void pingMerginReplyFinished();
