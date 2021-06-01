@@ -131,7 +131,7 @@ Item {
                 }
 
                 Image {
-                    visible: controller.type == AttributePreviewController.Image
+                    visible: controller.type == AttributePreviewController.Photo
                     source: controller.photo
                     sourceSize: Qt.size(width, height)
                     fillMode: Image.PreserveAspectFit
