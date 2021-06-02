@@ -685,7 +685,7 @@ void MerginApi::getSubscriptionInfo()
   }
 
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "v1/user/" );
+  QString urlString = mApiRoot + QStringLiteral( "v1/user/service" );
   QUrl url( urlString );
   request.setUrl( url );
 
