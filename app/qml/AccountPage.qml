@@ -250,7 +250,7 @@ Page {
 
     // /////////////////
     // Footer
-    Column {
+    Item {
       id: footer
       height: InputStyle.rowHeight
       width: parent.width
@@ -279,12 +279,6 @@ Page {
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideRight
         }
-      }
-
-      Item {
-        id: spacer2
-        height: InputStyle.fontPixelSizeTitle
-        width:parent.width
       }
     }
   }
