@@ -44,11 +44,8 @@ void MerginSubscriptionInfo::clear()
 
 void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
 {
-  // parse service data
-  QJsonObject serviceObj = docObj.value( QStringLiteral( "service" ) ).toObject();
-
   // parse service.subscription data
-  QJsonObject subscriptionObj = serviceObj.value( QStringLiteral( "subscription" ) ).toObject();
+  QJsonObject subscriptionObj = docObj.value( QStringLiteral( "subscription" ) ).toObject();
   if ( subscriptionObj.isEmpty() )
   {
     // only free plan is assigned, subscription data is not present in JSON
@@ -96,7 +93,7 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
   }
 
   // parse service.plan data
-  QJsonObject planObj = serviceObj.value( QStringLiteral( "plan" ) ).toObject();
+  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
   mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
   mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
 
