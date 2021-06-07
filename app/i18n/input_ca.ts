@@ -81,24 +81,78 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="110"/>
+        <location filename="../androidutils.cpp" line="113"/>
         <source>Storage permission is permanently denied, please allow it in settings</source>
         <translation>El permís d&apos;emmagatzematge s&apos;ha denegat permanentment. Autoritzeu-lo a la configuració</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="114"/>
+        <location filename="../androidutils.cpp" line="117"/>
         <source>Input needs a storage permission in order to manipulate or download a project</source>
         <translation>Input necessita permís d&apos;emmagatzematge per tal de manipular o descarregar un projecte</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="132"/>
+        <location filename="../androidutils.cpp" line="135"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>El permís per emprar la càmera s&apos;ha denegat permanentment, autoritzeu-lo a la configuració</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="136"/>
+        <location filename="../androidutils.cpp" line="139"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Necessitem permís per la càmera per tal de fer una foto</translation>
+    </message>
+</context>
+<context>
+    <name>AttributeController</name>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="408"/>
+        <source>Default value expression for %1:%2 has parser error: %3</source>
+        <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;analitzador: %3 </translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="418"/>
+        <source>Default value expression for %1:%2 has evaluation error: %3</source>
+        <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;avaluació: %3 </translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="429"/>
+        <location filename="../attributes/attributecontroller.cpp" line="875"/>
+        <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
+        <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir en un valor compatible per al camp %2(%3).</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="681"/>
+        <source>Cannot delete feature</source>
+        <translation>No es pot esborrar la característica</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="702"/>
+        <source>Feature could not be added</source>
+        <translation>La característica no es pot afegir</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="730"/>
+        <source>Cannot update feature</source>
+        <translation>No es pot actualitzar la característica</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="744"/>
+        <source>Feature %1 could not be fetched after commit</source>
+        <translation>La característica %1 no es pot recuperar després del lliurament</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="761"/>
+        <source>Cannot start editing</source>
+        <translation>No es pot començar a editar</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="778"/>
+        <source>Could not save changes. Rolling back.</source>
+        <translation>No es pot desar els canvis. Tornant enrere.</translation>
+    </message>
+    <message>
+        <location filename="../attributes/attributecontroller.cpp" line="876"/>
+        <source>Value %1 is not compatible with field type %2.</source>
+        <translation>El valor %1 no és compatible amb el tipus de camp %2.</translation>
     </message>
 </context>
 <context>
@@ -114,12 +168,12 @@
         <translation>Registre</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="124"/>
+        <location filename="../qml/AuthPanel.qml" line="129"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation>Si us plau actualitzeu Input per fer servir les darreres funcionalitats de Mergin.</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="128"/>
+        <location filename="../qml/AuthPanel.qml" line="133"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>Mergin no està disponible - si us plau torneu a provar-ho més tard.</translation>
     </message>
@@ -198,44 +252,52 @@
     </message>
 </context>
 <context>
+    <name>FeatureForm</name>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="173"/>
+        <source>Constraints not valid</source>
+        <translation>Restriccions no vàlides</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="178"/>
+        <source>Note: soft constraints were not met</source>
+        <translation>Nota: les restriccions suaus no s&apos;han complert</translation>
+    </message>
+</context>
+<context>
     <name>FeaturePanel</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="147"/>
+        <location filename="../qml/FeaturePanel.qml" line="162"/>
         <source>Edit Feature</source>
         <translation>Editar característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="147"/>
+        <location filename="../qml/FeaturePanel.qml" line="162"/>
         <source>Feature</source>
         <translation>Característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="157"/>
+        <location filename="../qml/FeaturePanel.qml" line="172"/>
         <source>Save</source>
         <translation>Desar</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="192"/>
-        <source>No photos added.</source>
-        <translation>Cap fotografia afegida.</translation>
-    </message>
-    <message>
-        <location filename="../qml/FeaturePanel.qml" line="337"/>
+        <location filename="../qml/FeaturePanel.qml" line="325"/>
         <source>Delete feature</source>
         <translation>Esborrar característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="338"/>
+        <location filename="../qml/FeaturePanel.qml" line="326"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Segur que voleu esborrar aquesta característica?</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="358"/>
+        <location filename="../qml/FeaturePanel.qml" line="346"/>
         <source>Unsaved changes</source>
         <translation>Canvis sense desar</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="359"/>
+        <location filename="../qml/FeaturePanel.qml" line="347"/>
         <source>Do you want to save changes?</source>
         <translation>Voleu desar els canvis?</translation>
     </message>
@@ -310,6 +372,102 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
+    <name>InputUtils</name>
+    <message>
+        <location filename="../inpututils.cpp" line="153"/>
+        <source>just now</source>
+        <translation>ara mateix</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="158"/>
+        <source>%1 minutes ago</source>
+        <translation>ara fa %1 minuts</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="158"/>
+        <source>%1 minute ago</source>
+        <translation>ara fa %1 minut</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="163"/>
+        <source>%1 hours ago</source>
+        <translation>ara fa %1 hores</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="163"/>
+        <source>%1 hour ago</source>
+        <translation>ara fa %1 hora</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="172"/>
+        <source>%1 days ago</source>
+        <translation>ara fa %1 dies</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="172"/>
+        <source>%1 day ago</source>
+        <translation>ara fa %1 dia</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="177"/>
+        <source>%1 weeks ago</source>
+        <translation>ara fa %1 setmanes</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="177"/>
+        <source>%1 week ago</source>
+        <translation>ara fa %1 setmana</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="182"/>
+        <source>%1 months ago</source>
+        <translation>ara fa %1 mesos</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="182"/>
+        <source>%1 month ago</source>
+        <translation>ara fa %1 mes</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="187"/>
+        <source>%1 years ago</source>
+        <translation>ara fa %1 anys</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="187"/>
+        <source>%1 year ago</source>
+        <translation>ara fa %1 any</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="882"/>
+        <source>screen resolution: %1x%2 px
+</source>
+        <translation>resolució de pantalla: %1x%2 px
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="883"/>
+        <source>screen DPI: %1x%2
+</source>
+        <translation>DPI de pantalla: %1x%2
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="884"/>
+        <source>screen size: %1x%2 mm
+</source>
+        <translation>mida de pantalla: %1x%2 mm
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="885"/>
+        <source>screen density: %1</source>
+        <translation>densitat de pantalla: %1</translation>
+    </message>
+</context>
+<context>
     <name>LogPanel</name>
     <message>
         <location filename="../qml/LogPanel.qml" line="51"/>
@@ -330,27 +488,27 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="55"/>
+        <location filename="../qml/LoginForm.qml" line="70"/>
         <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
         <translation>%1Mergin%2 proporciona una sincronització basada en el núvol entre el mòbil i l&apos;escriptori. Utilitzeu-ho també per compartir els vostres projectes amb altres persones i treballar col·laborativament. </translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="98"/>
+        <location filename="../qml/LoginForm.qml" line="113"/>
         <source>Username</source>
         <translation>Nom d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="141"/>
+        <location filename="../qml/LoginForm.qml" line="157"/>
         <source>Sign in</source>
         <translation>Iniciar sessió</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="211"/>
+        <location filename="../qml/LoginForm.qml" line="223"/>
         <source>Sign up for free</source>
         <translation>Registra&apos;t gratuitament </translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="237"/>
+        <location filename="../qml/LoginForm.qml" line="245"/>
         <source>Forgot password?</source>
         <translation>Has oblidat la contrasenya? </translation>
     </message>
@@ -441,6 +599,22 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../qml/components/PasswordField.qml" line="15"/>
         <source>Password</source>
         <translation>Contrasenya</translation>
+    </message>
+</context>
+<context>
+    <name>PositionKit</name>
+    <message>
+        <location filename="../positionkit.cpp" line="45"/>
+        <source>Unable to create default GPS Position Source</source>
+        <translation>No es pot crear la font de posició GPS predeterminada </translation>
+    </message>
+</context>
+<context>
+    <name>PreviewPanel</name>
+    <message>
+        <location filename="../qml/PreviewPanel.qml" line="121"/>
+        <source>No map tip available.</source>
+        <translation>No hi ha cap consell de mapa disponible.</translation>
     </message>
 </context>
 <context>
@@ -653,6 +827,15 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
+    <name>ProjectsModel</name>
+    <message>
+        <location filename="../projectsmodel.cpp" line="90"/>
+        <location filename="../projectsmodel.cpp" line="94"/>
+        <source>Updated %1</source>
+        <translation>Actualitzat %1</translation>
+    </message>
+</context>
+<context>
     <name>Purchasing</name>
     <message>
         <location filename="../purchasing.cpp" line="519"/>
@@ -704,77 +887,22 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
-    <name>QgsQuickAttributeFormModelBase</name>
+    <name>QObject</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="290"/>
+        <location filename="../attributes/attributecontroller.cpp" line="186"/>
         <source>Not NULL</source>
         <translation>No NULL</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributeformmodelbase.cpp" line="295"/>
+        <location filename="../attributes/attributecontroller.cpp" line="191"/>
         <source>Unique</source>
         <translation>Únic</translation>
     </message>
 </context>
 <context>
-    <name>QgsQuickAttributeModel</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="194"/>
-        <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
-        <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir a un valor compatible per al camp %2(%3).</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="195"/>
-        <source>Value %1 is not compatible with field type %2.</source>
-        <translation>El valor %1 no és compatible amb el tipus de camp %2.</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="238"/>
-        <source>Cannot update feature</source>
-        <translation>No es pot actualitzar la característica</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="252"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>No s&apos;ha pogut obtenir la característica %1 després de consignada</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="275"/>
-        <source>Cannot delete feature</source>
-        <translation>No es pot esborrar la característica</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="323"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="375"/>
-        <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>L&apos;expressió de valor predeterminat per a %1:%2 retorna un error d&apos;anàlisi: %3</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="333"/>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="385"/>
-        <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>L&apos;expressió de valor predeterminat per a %1:%2 retorna un error d&apos;avaluació: %3</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="410"/>
-        <source>Feature could not be added</source>
-        <translation>No s&apos;ha pogut afegir la característica</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="435"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>Impossible desar canvis. Tornant enrere.</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/attributes/qgsquickattributemodel.cpp" line="455"/>
-        <source>Cannot start editing</source>
-        <translation>Impossible començar a editar</translation>
-    </message>
-</context>
-<context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapcanvasmap.cpp" line="155"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="156"/>
         <source>Rendering</source>
         <translation>Renderitzant</translation>
     </message>
@@ -782,47 +910,10 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>QgsQuickMapSettings</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapsettings.cpp" line="206"/>
-        <location filename="../../qgsquick/from_qgis/qgsquickmapsettings.cpp" line="226"/>
+        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="206"/>
+        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>No es pot rotar la base del mapa. Restablint de %1 a 0.</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickPositionKit</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickpositionkit.cpp" line="45"/>
-        <source>Unable to create default GPS Position Source</source>
-        <translation>Impossible crear la font de posició GPS per defecte</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickUtils</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="360"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>resolució de pantalla: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="361"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>DPI pantalla: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="362"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>dimensions de pantalla: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../../qgsquick/from_qgis/qgsquickutils.cpp" line="363"/>
-        <source>screen density: %1</source>
-        <translation>densitat de pantalla: %1</translation>
     </message>
 </context>
 <context>
@@ -972,7 +1063,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Dades per sincronitzar: %1.</translation>
+        <translation>Dades per sincronitzar: %1 </translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
@@ -1044,131 +1135,93 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>inputdatetime</name>
     <message>
-        <location filename="../qml/main.qml" line="98"/>
-        <source>Recorded feature is not valid</source>
-        <translation>La característica enregistrada no és vàlida</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="459"/>
-        <source>GPS auto-center mode on</source>
-        <translation>Mode autocentrat del GPS activat</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="459"/>
-        <source>GPS auto-center mode off</source>
-        <translation>Mode autocentrat del GPS desactivat</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="475"/>
-        <source>No editable layers found.</source>
-        <translation>No s&apos;ha trobat cap nivell editable.</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="491"/>
-        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Precisió de posició GPS baixa (%1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos de tenir una bona vista del cel.</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="524"/>
-        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPS no disponible.%1Proveu de permetre la ubicació del GPS a la configuració del dispositiu.</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="682"/>
-        <source>Communication error</source>
-        <translation>Error de comunicació</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="688"/>
-        <source>PROJ Error</source>
-        <translation>Error de PROJ</translation>
-    </message>
-</context>
-<context>
-    <name>qgsquickdatetime</name>
-    <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="43"/>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="85"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="44"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="86"/>
         <source>(no date)</source>
-        <translation>(sense data)</translation>
+        <translation>(no data)</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="229"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="230"/>
         <source>Hours</source>
         <translation>Hores</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="253"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="254"/>
         <source>Minutes</source>
         <translation>Minuts</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="276"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="277"/>
         <source>Seconds</source>
         <translation>Segons</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickdatetime.qml" line="298"/>
+        <location filename="../qml/editor/inputdatetime.qml" line="299"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
 </context>
 <context>
-    <name>qgsquickexternalresource</name>
+    <name>inputexternalresource</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="262"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="263"/>
         <source>Take a photo</source>
         <translation>Fes una foto</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="304"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="305"/>
         <source>From gallery</source>
         <translation>Des de la galeria</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/editor/qgsquickexternalresource.qml" line="325"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="326"/>
         <source>Image is not available: </source>
         <translation>Imatge no disponible:</translation>
     </message>
 </context>
 <context>
-    <name>qgsquickfeatureform</name>
+    <name>main</name>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="204"/>
-        <source>Constraints not valid</source>
-        <translation>Les restriccions no són vàlides </translation>
+        <location filename="../qml/main.qml" line="95"/>
+        <source>Recorded feature is not valid</source>
+        <translation>La característica enregistrada no és vàlida</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="209"/>
-        <source>Note: soft constraints were not met</source>
-        <translation>Nota: les restriccions de programari no s&apos;han complert </translation>
+        <location filename="../qml/main.qml" line="468"/>
+        <source>GPS auto-center mode on</source>
+        <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="713"/>
-        <source>Add feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Afegir característica a &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="468"/>
+        <source>GPS auto-center mode off</source>
+        <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="715"/>
-        <source>Edit feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Editar característica a &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="484"/>
+        <source>No editable layers found.</source>
+        <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="717"/>
-        <source>View feature on &lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Veure característica a &lt;i&gt;%1&lt;/i&gt;</translation>
+        <location filename="../qml/main.qml" line="500"/>
+        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
+        <translation>Precisió de posició GPS baixa (%1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos de tenir una bona vista del cel.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="757"/>
-        <source>Delete feature</source>
-        <translation>Esborrar característica</translation>
+        <location filename="../qml/main.qml" line="533"/>
+        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
+        <translation>GPS no disponible.%1Proveu de permetre la ubicació del GPS a la configuració del dispositiu.</translation>
     </message>
     <message>
-        <location filename="../../qgsquick/from_qgis/plugin/qgsquickfeatureform.qml" line="758"/>
-        <source>Really delete this feature?</source>
-        <translation>Voleu suprimir aquesta característica?</translation>
+        <location filename="../qml/main.qml" line="691"/>
+        <source>Communication error</source>
+        <translation>Error de comunicació</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="697"/>
+        <source>PROJ Error</source>
+        <translation>Error de PROJ</translation>
     </message>
 </context>
 </TS>
