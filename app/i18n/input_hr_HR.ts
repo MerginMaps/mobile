@@ -380,64 +380,64 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inpututils.cpp" line="158"/>
         <source>%1 minutes ago</source>
-        <translation>Prije %1 minuta</translation>
+        <translation>prije %1 minuta</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="158"/>
         <source>%1 minute ago</source>
-        <translation>Prije %1 minute</translation>
+        <translation>prije %1 minute</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="163"/>
         <source>%1 hours ago</source>
-        <translation>Prije %1 sati</translation>
+        <translation>prije %1 sati</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="163"/>
         <source>%1 hour ago</source>
-        <translation>Prije %1 sata</translation>
+        <translation>prije %1 sata</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="167"/>
         <location filename="../inpututils.cpp" line="172"/>
         <source>%1 days ago</source>
-        <translation>Prije %1 dana</translation>
+        <translation>prije %1 dana</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="167"/>
         <location filename="../inpututils.cpp" line="172"/>
         <source>%1 day ago</source>
-        <translation>Prije %1 dana</translation>
+        <translation>prije %1 dana</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="177"/>
         <source>%1 weeks ago</source>
-        <translation>Prije %1 tjedana</translation>
+        <translation>prije %1 tjedana</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="177"/>
         <source>%1 week ago</source>
-        <translation>Prije %1 tjedna</translation>
+        <translation>prije %1 tjedna</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="182"/>
         <source>%1 months ago</source>
-        <translation>Prije %1 mjeseci</translation>
+        <translation>prije %1 mjeseci</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="182"/>
         <source>%1 month ago</source>
-        <translation>Prije %1 mjeseca</translation>
+        <translation>prije %1 mjeseca</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="187"/>
         <source>%1 years ago</source>
-        <translation>Prije %1 godina</translation>
+        <translation>prije %1 godina</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="187"/>
         <source>%1 year ago</source>
-        <translation>Prije %1 godine</translation>
+        <translation>prije %1 godine</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="882"/>
@@ -748,7 +748,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="349"/>
         <source>Home</source>
-        <translation>Početna stranica</translation>
+        <translation>Naslovnica</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="371"/>
@@ -758,7 +758,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="395"/>
         <source>Shared with me</source>
-        <translation>Podijeljeno samnom</translation>
+        <translation>Podijeljeno</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="395"/>
