@@ -69,7 +69,7 @@ ApplicationWindow {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                __loader.setActiveLayer( featurePanel.feature.layer.name )
+                __loader.setActiveLayer( featurePanel.feature.layer )
                 updateRecordToolbar()
 
                 var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
