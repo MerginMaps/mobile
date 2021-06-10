@@ -32,7 +32,7 @@ Item {
   property string suffix: config["Suffix"] ? config["Suffix"] : ""
 
    function getRange(rangeValue, defaultRange) {
-     if (rangeValue && rangeValue >= -max_range && rangeValue <= max_range)
+     if ( typeof rangeValue !== undefined && rangeValue >= -max_range && rangeValue <= max_range)
        return rangeValue
      else return defaultRange/spinbox.multiplier
    }
