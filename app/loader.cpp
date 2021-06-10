@@ -107,7 +107,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     res = mProject->read( filePath );
     mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mProject );
-    setActiveLayer( mAppSettings.defaultLayer() );
+    setActiveLayerByName( mAppSettings.defaultLayer() );
     setMapSettingsLayers();
 
     emit projectReloaded( mProject );
@@ -265,7 +265,7 @@ void Loader::appAboutToQuit()
 
 
 
-void Loader::setActiveLayer( QString layerName ) const
+void Loader::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )
   {
