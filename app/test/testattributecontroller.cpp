@@ -234,3 +234,67 @@ void TestAttributeController::twoTabsDragAndDropLayout()
     QCOMPARE( item3->isVisible(), true );
   }
 }
+
+void TestAttributeController::twoGroupsDragAndDropLayout()
+{
+  QString dataDir = TestUtils::testDataDir();
+  QString planesVectorFile = dataDir + "/planes/points.shp";
+  QString qmlStyle = dataDir + "/planes/SimpleGroupsForPlanesLayer.qml";
+  std::unique_ptr<QgsVectorLayer> layer(
+    new QgsVectorLayer( planesVectorFile )
+  );
+  QVERIFY( layer && layer->isValid() );
+  QCOMPARE( layer->featureCount(), 17 );
+
+  bool res;
+  layer->loadNamedStyle( qmlStyle, res,  false );
+  QVERIFY( res );
+
+  QgsFeature f1 = layer->getFeature( 0 );
+  QVERIFY( f1.isValid() );
+
+  AttributeController controller;
+  FeatureLayerPair pair( f1, layer.get() );
+  controller.setFeatureLayerPair( pair );
+
+  // we dont have tabs, only groups
+  QVERIFY( !controller.hasTabs() );
+  // Has single default tab
+  QVERIFY( controller.tabCount() == 1 );
+}
+
+void TestAttributeController::tabsAndFieldsMixed()
+{
+  QString dataDir = TestUtils::testDataDir();
+  QString planesVectorFile = dataDir + "/planes/points.shp";
+  QString qmlStyle = dataDir + "/planes/MixedTabsFieldsForPlanesLayer.qml";
+  std::unique_ptr<QgsVectorLayer> layer(
+    new QgsVectorLayer( planesVectorFile )
+  );
+  QVERIFY( layer && layer->isValid() );
+  QCOMPARE( layer->featureCount(), 17 );
+
+  bool res;
+  layer->loadNamedStyle( qmlStyle, res,  false );
+  QVERIFY( res );
+
+  QgsFeature f1 = layer->getFeature( 0 );
+  QVERIFY( f1.isValid() );
+
+  AttributeController controller;
+  FeatureLayerPair pair( f1, layer.get() );
+  controller.setFeatureLayerPair( pair );
+
+  // Mixed tabs and fields => tabs are ignored
+  QVERIFY( !controller.hasTabs() );
+  // Has single default tab
+  QVERIFY( controller.tabCount() == 1 );
+
+  const TabItem *tabItem = controller.tabItem( 0 );
+  Q_ASSERT( tabItem );
+  QCOMPARE( tabItem->tabIndex(), 0 );
+  QCOMPARE( tabItem->name(), "" );
+  QCOMPARE( tabItem->isVisible(), true );
+  const QVector<QUuid> formItems = tabItem->formItems();
+  QCOMPARE( formItems.size(), 6 );
+}

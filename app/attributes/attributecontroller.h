@@ -177,6 +177,14 @@ class  AttributeController : public QObject
     // Generates fake root tab for auto-layout
     QgsAttributeEditorContainer *autoLayoutTabContainer() const;
 
+    /**
+     * Checks if ALL first level elements of given container are type of QgsAttributeEditorElement::AeTypeContainer.
+     * Therefore if AeFields are mixed with AeContainers elements, tabs setting is ignored since embedded tabs are not supported.
+     * @param container Suppose to be the root of attributeEditor container.
+     * @return True if all container's elements are type of AeContainer.
+     */
+    bool evaluateHasTabs( QgsAttributeEditorContainer *container );
+
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
     bool mHasAnyChanges = false;

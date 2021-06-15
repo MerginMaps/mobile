@@ -99,6 +99,17 @@ QgsAttributeEditorContainer *AttributeController::autoLayoutTabContainer() const
   return root.release();
 }
 
+bool AttributeController::evaluateHasTabs( QgsAttributeEditorContainer *container )
+{
+  bool hasTabs = !container->children().isEmpty();
+  for ( QgsAttributeEditorElement *element : container->children() )
+  {
+    QgsAttributeEditorContainer *elemContainer = static_cast<QgsAttributeEditorContainer *>( element );
+    hasTabs = hasTabs && element->type() == QgsAttributeEditorElement::AeTypeContainer && !elemContainer->isGroupBox();
+  }
+  return hasTabs;
+}
+
 VariablesManager *AttributeController::variablesManager() const
 {
   return mVariablesManager;
@@ -290,15 +301,14 @@ void AttributeController::updateOnLayerChange()
         root->setColumnCount( 1 );
       }
 
+      mHasTabs = evaluateHasTabs( root );
       for ( QgsAttributeEditorElement *element : root->children() )
       {
         if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
         {
           QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-          if ( !container->isGroupBox() )
+          if ( !container->isGroupBox() && mHasTabs )
           {
-            mHasTabs = true;
-
             if ( container->columnCount() > 1 )
             {
               qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
