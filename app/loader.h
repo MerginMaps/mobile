@@ -65,7 +65,7 @@ class Loader: public QObject
     /**
      * setActiveLayer sets active layer from layer name
      */
-    Q_INVOKABLE void setActiveLayer( QString layerName ) const;
+    void setActiveLayerByName( QString layerName ) const;
 
     /**
      * setActiveLayer sets active layer from layer
