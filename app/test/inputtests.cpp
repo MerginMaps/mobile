@@ -22,6 +22,7 @@
 #include "test/testrememberattributescontroller.h"
 #include "test/testscalebarkit.h"
 #include "test/testvariablesmanager.h"
+#include "test/testformeditors.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -140,6 +141,11 @@ int InputTests::runTest() const
   {
     TestVariablesManager vmTest( mVariablesManager );
     nFailed = QTest::qExec( &vmTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testFormEditors" )
+  {
+    TestFormEditors edTest;
+    nFailed = QTest::qExec( &edTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )

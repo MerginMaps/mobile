@@ -92,6 +92,8 @@ QtObject {
     property var importData: __inputUtils.getThemeIcon("ic_camera")
     property var combobox: __inputUtils.getThemeIcon("ic_angle_down")
     property var valueRelationMore: __inputUtils.getThemeIcon("ic_angle_right")
+    property var minus: __inputUtils.getThemeIcon("minus")
+    property var plus: __inputUtils.getThemeIcon("plus-big")
   }
 
   property QtObject checkboxComponent: QtObject {

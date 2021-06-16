@@ -688,9 +688,26 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getEditorComponentSource( const QString &widgetName )
+const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config )
 {
   QString path( "editor/input%1.qml" );
+
+  if ( widgetName == QStringLiteral( "range" ) )
+  {
+    if ( config.contains( "Style" ) )
+    {
+      if ( config["Style"] == QStringLiteral( "Slider" ) )
+      {
+        return QUrl( path.arg( QLatin1String( "rangeslider" ) ) );
+      }
+      else if ( config["Style"] == QStringLiteral( "SpinBox" ) )
+      {
+        return QUrl( path.arg( QLatin1String( "rangeeditable" ) ) );
+      }
+    }
+    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+  }
+
   QStringList supportedWidgets = { QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),

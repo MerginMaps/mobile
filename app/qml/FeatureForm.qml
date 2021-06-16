@@ -492,6 +492,7 @@ Item {
           property var featurePair: form.controller.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
+          property var labelAlias: Name
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           property var associatedRelation: Relation
@@ -501,7 +502,7 @@ Item {
 
           source: {
             if ( widget !== undefined )
-               return form.loadWidgetFn(widget.toLowerCase())
+               return form.loadWidgetFn(widget.toLowerCase(), config)
             else return ''
           }
         }

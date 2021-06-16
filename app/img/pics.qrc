@@ -71,5 +71,7 @@
         <file>ic_back.svg</file>
         <file>ic_angle_right.svg</file>
         <file>ic_angle_down.svg</file>
+        <file>plus-big.svg</file>
+        <file>minus.svg</file>
     </qresource>
 </RCC>
