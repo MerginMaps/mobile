@@ -80,7 +80,7 @@ QString InputHelp::howToSetupProj() const
 
 QString InputHelp::merginTermsLink() const
 {
-  return QStringLiteral( "https://public.cloudmergin.com/assets/mergin_terms_of_service.pdf" );
+  return QStringLiteral( "https://public.cloudmergin.com/assets/tos.html" );
 }
 
 bool InputHelp::submitReportPending() const
