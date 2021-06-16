@@ -37,7 +37,6 @@ class ProjectWizard : public QObject
     void notify( const QString &message );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
-    QgsEditorWidgetSetup getEditorWidget( QgsField const &field, const QString &widgetType );
     QgsFields createFields( const QList<FieldConfiguration> fieldsConfig ) const;
     QgsSingleSymbolRenderer *surveyLayerRenderer();
     QVariant::Type parseType( const QString &type ) const;

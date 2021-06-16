@@ -334,6 +334,15 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QModelIndex invalidIndex();
 
+    /**
+     * Returns widget setup according the field type - supports only basic types.
+     * Note that external widget cannot be guessed from type since its the very same as text.
+     * @param field QgsField
+     * @return QgsEditorWidgetSetup for given field.
+     */
+    static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field );
+    static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

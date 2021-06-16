@@ -27,6 +27,7 @@
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
 #include "qgsmessagelog.h"
+#include "inpututils.h"
 
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
@@ -97,6 +98,17 @@ QgsAttributeEditorContainer *AttributeController::autoLayoutTabContainer() const
     root->addChildElement( field );
   }
   return root.release();
+}
+
+QgsEditorWidgetSetup AttributeController::getEditorWidgetSetup( QgsVectorLayer *layer, int fieldIndex ) const
+{
+  QgsEditorWidgetSetup setup = layer->editorWidgetSetup( fieldIndex );
+  if ( setup.type().isEmpty() )
+  {
+    QgsField field = layer->fields().at( fieldIndex );
+    return InputUtils::getEditorWidgetSetup( field );
+  }
+  return setup;
 }
 
 bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
@@ -222,7 +234,7 @@ void AttributeController::flatten(
               FormItem::Field,
               layer->attributeDisplayName( fieldIndex ),
               !isReadOnly,
-              layer->editorWidgetSetup( fieldIndex ),
+              getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               field.constraints(),
               parentVisibilityExpressions // field doesn't have visibility expression itself

@@ -176,6 +176,8 @@ class  AttributeController : public QObject
 
     // Generates fake root tab for auto-layout
     QgsAttributeEditorContainer *autoLayoutTabContainer() const;
+    //! Returns editor widget setup according params. If is empty, returns a default setup according field's type.
+    QgsEditorWidgetSetup getEditorWidgetSetup( QgsVectorLayer *layer, int fieldIndex ) const;
 
     /**
      * Checks if tab layout is allowed for given container. Function is not recursive and checks only first level elements.
