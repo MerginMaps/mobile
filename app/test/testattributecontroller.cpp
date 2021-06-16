@@ -261,6 +261,19 @@ void TestAttributeController::twoGroupsDragAndDropLayout()
   QVERIFY( !controller.hasTabs() );
   // Has single default tab
   QVERIFY( controller.tabCount() == 1 );
+  const TabItem *tabItem = controller.tabItem( 0 );
+  QVERIFY( tabItem );
+  QVERIFY( tabItem->name().isEmpty() );
+
+  QSet<QString> groupNames;
+  const QVector<QUuid> formItems = tabItem->formItems();
+  for ( const QUuid &itemId : formItems )
+  {
+    const FormItem *item = controller.formItem( itemId );
+    QVERIFY( item );
+    groupNames.insert( item->groupName() );
+  }
+  QCOMPARE( groupNames.size(), 2 );
 }
 
 void TestAttributeController::tabsAndFieldsMixed()

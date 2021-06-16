@@ -99,15 +99,21 @@ QgsAttributeEditorContainer *AttributeController::autoLayoutTabContainer() const
   return root.release();
 }
 
-bool AttributeController::evaluateHasTabs( QgsAttributeEditorContainer *container )
+bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
 {
-  bool hasTabs = !container->children().isEmpty();
   for ( QgsAttributeEditorElement *element : container->children() )
   {
-    QgsAttributeEditorContainer *elemContainer = static_cast<QgsAttributeEditorContainer *>( element );
-    hasTabs = hasTabs && element->type() == QgsAttributeEditorElement::AeTypeContainer && !elemContainer->isGroupBox();
+    if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+    {
+      QgsAttributeEditorContainer *elemContainer = static_cast<QgsAttributeEditorContainer *>( element );
+      if ( elemContainer->isGroupBox() )
+        return false;
+    }
+    else
+      return false;
   }
-  return hasTabs;
+
+  return !container->children().isEmpty();
 }
 
 VariablesManager *AttributeController::variablesManager() const
@@ -301,14 +307,14 @@ void AttributeController::updateOnLayerChange()
         root->setColumnCount( 1 );
       }
 
-      mHasTabs = evaluateHasTabs( root );
-      for ( QgsAttributeEditorElement *element : root->children() )
+      mHasTabs = allowTabs( root );
+      if ( mHasTabs )
       {
-        if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+        for ( QgsAttributeEditorElement *element : root->children() )
         {
-          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-          if ( !container->isGroupBox() && mHasTabs )
+          if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
           {
+            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
             if ( container->columnCount() > 1 )
             {
               qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
@@ -318,8 +324,7 @@ void AttributeController::updateOnLayerChange()
           }
         }
       }
-
-      if ( !mHasTabs )
+      else
       {
         createTab( root );
       }

@@ -178,12 +178,11 @@ class  AttributeController : public QObject
     QgsAttributeEditorContainer *autoLayoutTabContainer() const;
 
     /**
-     * Checks if ALL first level elements of given container are type of QgsAttributeEditorElement::AeTypeContainer.
-     * Therefore if AeFields are mixed with AeContainers elements, tabs setting is ignored since embedded tabs are not supported.
+     * Checks if tab layout is allowed for given container. Function is not recursive and checks only first level elements.
      * @param container Suppose to be the root of attributeEditor container.
-     * @return True if all container's elements are type of AeContainer.
+     * @return True if there are only tabs and all other elements are within tabs, otherwise false.
      */
-    bool evaluateHasTabs( QgsAttributeEditorContainer *container );
+    bool allowTabs( QgsAttributeEditorContainer *container );
 
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
