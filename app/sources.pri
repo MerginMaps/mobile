@@ -1,5 +1,4 @@
 SOURCES += \
-editor/inputnumbervalidator.cpp \
 editor/rangewidgethelper.cpp \
 attributes/attributecontroller.cpp \
 attributes/attributedata.cpp \
@@ -45,7 +44,6 @@ compass.cpp \
 relationfeaturesmodel.cpp
 
 HEADERS += \
-editor/inputnumbervalidator.h \
 editor/rangewidgethelper.h \
 attributes/attributecontroller.h \
 attributes/attributedata.h \

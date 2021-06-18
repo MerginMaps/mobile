@@ -156,6 +156,23 @@ void FormItem::setConstraintHardValid( bool constraintHardValid )
   mConstraintHardValid = constraintHardValid;
 }
 
+FormItem::FormItemState FormItem::state() const
+{
+  return mState;
+}
+
+void FormItem::setState( FormItemState state )
+{
+  // We are currently using the state only for numeric fields,
+  // thus we here check for field type. We can use this functionality
+  // in future for other fields too, however, now we do not want
+  // to break working features, since this could prohibit user from saving the form
+  if ( mField.isNumeric() || mEditorWidgetSetup.type() == QStringLiteral( "Range" ) )
+  {
+    mState = state;
+  }
+}
+
 bool FormItem::isVisible() const
 {
   return mVisible;

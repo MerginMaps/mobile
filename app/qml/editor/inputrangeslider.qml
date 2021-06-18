@@ -28,7 +28,6 @@ Item {
 
   readonly property int max_range: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
 
-//  property string widgetStyle: config["Style"] ? config["Style"] : "SpinBox"
   property int precision: config["Precision"]
   property real from: getRange(config["Min"], -max_range)
   property real to: getRange(config["Max"], max_range)

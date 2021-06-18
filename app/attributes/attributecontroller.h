@@ -80,6 +80,10 @@ class  AttributeController : public QObject
     //! Returns TRUE if all soft constraints defined on fields are satisfied with the current attribute values
     Q_PROPERTY( bool constraintsSoftValid READ constraintsSoftValid NOTIFY constraintsSoftValidChanged )
 
+    //! Returns TRUE if all hard constraints are satisfied and all fields have valid state.
+    //! Validity of a field depends on its type, f.e. numeric field is valid when input is convertible to number and number is in correct min/max range
+    Q_PROPERTY( bool featureCanBeSaved READ featureCanBeSaved NOTIFY featureCanBeSavedChanged )
+
   public:
     AttributeController( QObject *parent = nullptr );
     ~AttributeController() override;
@@ -94,6 +98,7 @@ class  AttributeController : public QObject
 
     bool constraintsHardValid() const;
     bool constraintsSoftValid() const;
+    bool featureCanBeSaved();
     bool hasTabs() const;
     bool hasAnyChanges() const;
 
@@ -138,9 +143,10 @@ class  AttributeController : public QObject
     void constraintsSoftValidChanged();
     void hasTabsChanged();
     void variablesManagerChanged();
+    void featureCanBeSavedChanged();
 
     void formDataChangedFailed( const QString &msg );
-    void formDataChanged( QUuid uuid );
+    void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
   private:
     void clearAll();

@@ -660,6 +660,31 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
+  // evaluate if numbers are in correct range
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
+
+      if ( item->editorWidgetType() == QStringLiteral( "Range" ) && !value.isNull() )
+      {
+        double min = item->editorWidgetConfig()["Min"].toDouble();
+        double max = item->editorWidgetConfig()["Max"].toDouble();
+        double val = featureLayerPair().feature().attribute( item->fieldIndex() ).toDouble();
+
+        if ( !( min <= val && val <= max ) )
+        {
+          item->setState( FormItem::NumberOutOfRange );
+          changedFormItems << item->id();
+        }
+      }
+      ++formItemsIterator;
+    }
+    emit featureCanBeSavedChanged();
+  }
+
   // Check if we have any changes
   bool anyChanges = isNewFeature();
   if ( !anyChanges )
@@ -699,6 +724,25 @@ bool AttributeController::constraintsHardValid() const
 bool AttributeController::constraintsSoftValid() const
 {
   return mConstraintsSoftValid;
+}
+
+bool AttributeController::featureCanBeSaved()
+{
+  bool allFieldsAreValid = true;
+
+  // loop over items and see if there is someone with invalid state
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->state() != FormItem::Valid )
+    {
+      allFieldsAreValid = false;
+    }
+    ++formItemsIterator;
+  }
+
+  return mConstraintsHardValid && allFieldsAreValid;
 }
 
 bool AttributeController::hasTabs() const
@@ -942,14 +986,26 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
         QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
         QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
         QgsMessageLog::logMessage( msg );
-        if ( !val.isNull() )
+
+        if ( value.toBool() )
         {
-          emit formDataChangedFailed( userFriendlyMsg );
+          item->setState( FormItem::InvalidInput );
+          emit formDataChanged( id, { AttributeFormModel::FieldState } );
+
+//          I vote for removing this toast message. It did not work with recent versions and nobody seems to care
+//          so I would just remove it
+//          It was added for QR code, we can add similar message like this min/max range instead
+//          emit formDataChangedFailed( userFriendlyMsg );
+
+          emit featureCanBeSavedChanged();
         }
         return false;
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+      item->setState( FormItem::Valid );
+
       emit formDataChanged( id );
+      emit featureCanBeSavedChanged();
       recalculateDerivedItems( true, false );
     }
     return true;
@@ -958,7 +1014,6 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   {
     return false;
   }
-
 }
 
 QVariant AttributeController::formValue( int fieldIndex ) const

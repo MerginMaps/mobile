@@ -21,7 +21,6 @@ Item {
   signal valueChanged( var value, bool isNull )
 
   property var locale: Qt.locale()
-  property real parentValue: fieldItem.parent.value ? fieldItem.parent.value : 0
 
   function toNumber( localeString ) {
     try {
@@ -127,29 +126,20 @@ Item {
 
             Layout.minimumWidth: parent.width / 2
             Layout.maximumWidth: parent.width - suffixContainer.width
+
+            // The following line is unfortunatelly causing Layout polish loop, needs to be fixed
             Layout.preferredWidth: parent.width / 2 + numberInput.contentWidth * 0.38
 
             TextInput {
               id: numberInput
 
-              onTextEdited: {
-                console.log( "Text edited to: ", text )
-//                valueChanged( text, text === "" )
-              }
-
-              onEditingFinished: {
-                console.log( "Text editing finished with text: ", text )
-              }
+              onEditingFinished: valueChanged( toNumber( numberInput.displayText ), numberInput.displayText === "" )
 
               anchors.fill: parent
 
-              validator: helper.validator
-              text: {
-                console.log("is composing? ", inputMethodComposing)
-                fieldItem.parent.value ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', helper.precision ) : ""
-              }
+              text: fieldItem.parent.value ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', helper.precision ) : ""
 
-              inputMethodHints: Qt.ImhFormattedNumbersOnly
+              inputMethodHints: helper.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly
               font.pointSize: customStyle.fields.fontPointSize
               color: customStyle.fields.fontColor
               selectionColor: customStyle.fields.fontColor
@@ -160,29 +150,22 @@ Item {
 
               clip: true
             }
-
-//            Rectangle{
-//              anchors.fill: parent
-//              color: "blue"
-//              opacity: .3
-//            }
           }
 
           Item {
             id: suffixContainer
 
-            property bool shouldShowSuffix: helper.suffix !== "" && numberInput.text !== ""
-
             Layout.preferredHeight: parent.height
             Layout.maximumHeight: parent.height
             Layout.fillWidth: true
             Layout.minimumWidth: suffix.paintedWidth
-            visible: shouldShowSuffix
 
             Text {
               id: suffix
 
               text: helper.suffix
+
+              visible: helper.suffix !== "" && numberInput.text !== ""
 
               anchors.fill: parent
               horizontalAlignment: Qt.AlignLeft
@@ -245,12 +228,6 @@ Item {
           // on press and hold behavior can be used from here:
           // https://github.com/mburakov/qt5/blob/master/qtquickcontrols/src/controls/SpinBox.qml#L306
         }
-
-//        Rectangle {
-//          color: "green"
-//          opacity: .3
-//          anchors.fill: parent
-//        }
       }
     }
   }

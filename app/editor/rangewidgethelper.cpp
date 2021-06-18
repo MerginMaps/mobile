@@ -38,18 +38,10 @@ int RangeWidgetHelper::precision() const
   return mPrecision;
 }
 
-InputNumberValidator *RangeWidgetHelper::validator() const
-{
-  return mValidator.get();
-}
-
 void RangeWidgetHelper::setup()
 {
   // read the config and set bounds, suffix, step and validator
   if ( mWidgetConfig.empty() || mWidgetConfig["Style"] != "SpinBox" ) return;
-
-  double min = mWidgetConfig["Min"].toDouble();
-  double max = mWidgetConfig["Max"].toDouble();
 
   if ( mWidgetConfig.contains( "Precision" ) )
   {
@@ -68,10 +60,7 @@ void RangeWidgetHelper::setup()
   // https://github.com/qgis/QGIS/blob/master/src/gui/editorwidgets/qgsdoublespinbox.cpp
   if ( mWidgetConfig.contains( "Step" ) )
   {
-    mStep = qMax( mWidgetConfig["Step"].toDouble(), qPow( 10.0, 0.0 - mPrecision) );
+    mStep = qMax( mWidgetConfig["Step"].toDouble(), qPow( 10.0, 0.0 - mPrecision ) );
     emit stepChanged( mStep );
   }
-
-  mValidator.reset( new InputNumberValidator( min, max, mPrecision ) );
-  emit validatorChanged( mValidator.get() );
 }

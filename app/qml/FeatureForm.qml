@@ -376,6 +376,11 @@ Item {
               opacity: 1
               height: form.style.group.spacing
             }
+
+            footer: Rectangle {
+              opacity: 1
+              height: 2 * form.style.group.spacing
+            }
           }
         }
       }
@@ -445,6 +450,29 @@ Item {
 
         Label {
           id: constraintDescriptionLabel
+
+          property string constraintText: {
+            if ( FieldState === FormItem.NumberOutOfRange )
+              return qsTr( 'Number is outside of specified range' )
+            else if ( FieldState === FormItem.InvalidInput )
+              return qsTr( 'Value is not valid' )
+
+            if ( ConstraintDescription )
+              return ConstraintDescription
+
+            return ''
+          }
+
+          property bool shouldShowConstraintText: {
+            if ( ( !ConstraintHardValid || !ConstraintSoftValid ) && !!ConstraintDescription )
+              return true
+
+            if ( FieldState !== FormItem.Valid )
+              return true
+
+            return false
+          }
+
           anchors {
             left: parent.left
             right: parent.right
@@ -452,8 +480,8 @@ Item {
             leftMargin: form.style.fields.sideMargin
           }
 
-          text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
-          visible: (!ConstraintHardValid || !ConstraintSoftValid) && !!ConstraintDescription
+          text: constraintText
+          visible: shouldShowConstraintText
           height: visible ? undefined : 0
           wrapMode: Text.WordWrap
           color: form.style.constraint.descriptionColor
@@ -540,7 +568,7 @@ Item {
 
         Connections {
           target: form.controller
-          onFormDataChangedFailed: notify(message)
+          onFormDataChangedFailed: notify(msg)
         }
 
         Connections {

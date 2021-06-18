@@ -45,7 +45,14 @@ class  FormItem
     };
     Q_ENUMS( FormItemType )
 
-    //! Constructor for field items
+    enum FormItemState
+    {
+      Valid = 1,
+      InvalidInput,     // did not pass convertCompatible check
+      NumberOutOfRange  // number is out of min/max range
+    };
+    Q_ENUMS( FormItemState )
+
     FormItem(
       const QUuid &id,
       const QgsField &field,
@@ -97,6 +104,9 @@ class  FormItem
     bool constraintHardValid() const;
     void setConstraintHardValid( bool constraintHardValid );
 
+    FormItemState state() const;
+    void setState( FormItemState state );
+
     bool isVisible() const;
     void setVisible( bool visible );
 
@@ -118,6 +128,7 @@ class  FormItem
     void setOriginalValue( const QVariant &originalValue );
 
     QgsRelation relation() const;
+    QString fieldError() const;
 
   private:
 
@@ -135,6 +146,7 @@ class  FormItem
 
     bool mConstraintSoftValid = false;
     bool mConstraintHardValid = false;
+    FormItemState mState = FormItemState::Valid;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
 

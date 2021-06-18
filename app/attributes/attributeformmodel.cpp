@@ -82,18 +82,20 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->constraintDescription();
     case Relation:
       return QVariant::fromValue( item->relation() );
+    case FieldState:
+      return item->state();
     default:
       return QVariant();
   }
 }
 
-void AttributeFormModel::onFormDataChanged( const QUuid id )
+void AttributeFormModel::onFormDataChanged( const QUuid id, const QVector<int> roles )
 {
   const int row = mData.indexOf( id );
   if ( rowIsValid( row ) )
   {
     const QModelIndex modelIndex = index( row, 0 );
-    emit dataChanged( modelIndex, modelIndex );
+    emit dataChanged( modelIndex, modelIndex, roles );
   }
 }
 
@@ -121,6 +123,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[RememberValue] = QByteArray( "RememberValue" );
   roles[AttributeFormModel::Field] = QByteArray( "Field" );
   roles[AttributeFormModel::Group] = QByteArray( "Group" );
+  roles[FieldState] = QByteArray( "FieldState" );
   roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
   roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
   roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );

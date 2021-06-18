@@ -54,6 +54,7 @@ class  AttributeFormModel : public QAbstractListModel
       RememberValue, //!< Remember value (whether to remember the value)
       Field, //!< Field
       FieldIndex, //!< Index
+      FieldState, //!< State of the field, Valid, InvalidInput,..
       Group, //!< Group name
       Visible, //!< Field visible
       ConstraintSoftValid, //! Constraint soft valid
@@ -71,7 +72,7 @@ class  AttributeFormModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
   public slots:
-    void onFormDataChanged( const QUuid id );
+    void onFormDataChanged( const QUuid id, QVector<int> roles );
     void onFeatureChanged();
 
   private:

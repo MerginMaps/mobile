@@ -171,7 +171,7 @@ Drawer {
                 id: saveButtonText
                 text: qsTr("Save")
                 visible: featureForm.state === "Edit" || featureForm.state === "Add"
-                enabled: featureForm.controller.constraintsHardValid
+                enabled: featureForm.controller.featureCanBeSaved
                 color: enabled ? InputStyle.highlightColor : "red"
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 height: header.rowHeight

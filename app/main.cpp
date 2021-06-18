@@ -284,7 +284,7 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
 
-  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItemType", "Only enums from FormItem can be used" );
+  qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItem", "Only enums from FormItem can be used" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeTabModel >( "lc", 1, 0, "AttributeTabModel", "Created by AttributeController" );
@@ -299,7 +299,6 @@ void initDeclarative()
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
 
   qmlRegisterType< RangeWidgetHelper >( "lc", 1, 0, "RangeWidgetHelper" );
-  qmlRegisterUncreatableType< InputNumberValidator >( "lc", 1, 0, "InputNumberValidator", "Validator can not be instantiated" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
