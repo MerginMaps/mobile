@@ -728,8 +728,6 @@ bool AttributeController::constraintsSoftValid() const
 
 bool AttributeController::featureCanBeSaved()
 {
-  bool allFieldsAreValid = true;
-
   // loop over items and see if there is someone with invalid state
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
@@ -737,12 +735,12 @@ bool AttributeController::featureCanBeSaved()
     std::shared_ptr<FormItem> item = formItemsIterator.value();
     if ( item->state() != FormItem::Valid )
     {
-      allFieldsAreValid = false;
+      return false;
     }
     ++formItemsIterator;
   }
 
-  return mConstraintsHardValid && allFieldsAreValid;
+  return mConstraintsHardValid;
 }
 
 bool AttributeController::hasTabs() const

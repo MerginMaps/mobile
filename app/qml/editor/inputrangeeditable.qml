@@ -226,7 +226,7 @@ Item {
           }
 
           // on press and hold behavior can be used from here:
-          // https://github.com/mburakov/qt5/blob/master/qtquickcontrols/src/controls/SpinBox.qml#L306
+          // https://github.com/mburakov/qt5/blob/93bfa3874c10f6cb5aa376f24363513ba8264117/qtquickcontrols/src/controls/SpinBox.qml#L306-L309
         }
       }
     }
