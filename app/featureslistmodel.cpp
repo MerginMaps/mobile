@@ -216,18 +216,24 @@ void FeaturesListModel::setupValueRelation( const QVariantMap &config )
 
   QgsVectorLayer *layer = QgsValueRelationFieldFormatter::resolveLayer( config, QgsProject::instance() );
 
-  if ( layer )
+  if ( layer && layer->fields().size() != 0 )
   {
     // save key and value field
     QgsFields fields = layer->fields();
 
-    setKeyField( fields.field( config.value( QStringLiteral( "Key" ) ).toString() ).name() );
-    setFeatureTitleField( fields.field( config.value( QStringLiteral( "Value" ) ).toString() ).name() );
+    QString keyFieldName = config.value( QStringLiteral( "Key" ) ).toString();
+    QString valueFieldName = config.value( QStringLiteral( "Value" ) ).toString();
 
-    // store value relation filter expression
-    setFilterExpression( config.value( QStringLiteral( "FilterExpression" ) ).toString() );
+    if ( fields.indexOf( keyFieldName ) >= 0 && fields.indexOf( valueFieldName ) >= 0 )
+    {
+      setKeyField( keyFieldName );
+      setFeatureTitleField( valueFieldName );
 
-    loadFeaturesFromLayer( layer );
+      // store value relation filter expression
+      setFilterExpression( config.value( QStringLiteral( "FilterExpression" ) ).toString() );
+
+      loadFeaturesFromLayer( layer );
+    }
   }
 
   endResetModel();
