@@ -99,6 +99,23 @@ QgsAttributeEditorContainer *AttributeController::autoLayoutTabContainer() const
   return root.release();
 }
 
+bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
+{
+  for ( QgsAttributeEditorElement *element : container->children() )
+  {
+    if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+    {
+      QgsAttributeEditorContainer *elemContainer = static_cast<QgsAttributeEditorContainer *>( element );
+      if ( elemContainer->isGroupBox() )
+        return false;
+    }
+    else
+      return false;
+  }
+
+  return !container->children().isEmpty();
+}
+
 VariablesManager *AttributeController::variablesManager() const
 {
   return mVariablesManager;
@@ -290,15 +307,14 @@ void AttributeController::updateOnLayerChange()
         root->setColumnCount( 1 );
       }
 
-      for ( QgsAttributeEditorElement *element : root->children() )
+      mHasTabs = allowTabs( root );
+      if ( mHasTabs )
       {
-        if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+        for ( QgsAttributeEditorElement *element : root->children() )
         {
-          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-          if ( !container->isGroupBox() )
+          if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
           {
-            mHasTabs = true;
-
+            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
             if ( container->columnCount() > 1 )
             {
               qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
@@ -308,8 +324,7 @@ void AttributeController::updateOnLayerChange()
           }
         }
       }
-
-      if ( !mHasTabs )
+      else
       {
         createTab( root );
       }

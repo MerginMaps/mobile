@@ -177,6 +177,13 @@ class  AttributeController : public QObject
     // Generates fake root tab for auto-layout
     QgsAttributeEditorContainer *autoLayoutTabContainer() const;
 
+    /**
+     * Checks if tab layout is allowed for given container. Function is not recursive and checks only first level elements.
+     * @param container Suppose to be the root of attributeEditor container.
+     * @return True if there are only tabs and all other elements are within tabs, otherwise false.
+     */
+    bool allowTabs( QgsAttributeEditorContainer *container );
+
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
     bool mHasAnyChanges = false;
