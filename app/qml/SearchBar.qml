@@ -43,6 +43,12 @@ Rectangle {
     searchTextChanged("")
   }
 
+  onVisibleChanged: {
+    // On Android, due to a Qt bug, we need to call deactivate again on page close to clear text search and focus
+    if ( !visible && __androidUtils.isAndroid )
+      root.deactivate()
+  }
+
   Timer {
     id: searchTimer
     interval: emitInterval
