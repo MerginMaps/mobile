@@ -668,7 +668,10 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       std::shared_ptr<FormItem> item = formItemsIterator.value();
       QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
 
-      if ( item->editorWidgetType() == QStringLiteral( "Range" ) && !value.isNull() )
+      bool isRangeEditable = item->editorWidgetType() == QStringLiteral( "Range" ) &&
+          item->editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
+
+      if ( isRangeEditable && !value.isNull() )
       {
         double min = item->editorWidgetConfig()["Min"].toDouble();
         double max = item->editorWidgetConfig()["Max"].toDouble();
@@ -680,6 +683,13 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
           changedFormItems << item->id();
         }
       }
+
+      if ( !isFormValueChange ) // reset state for new feature layer pair
+      {
+        item->setState( FormItem::ValidValue );
+        changedFormItems << item->id();
+      }
+
       ++formItemsIterator;
     }
     emit fieldValuesValidChanged();

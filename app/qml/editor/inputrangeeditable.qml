@@ -101,8 +101,11 @@ Item {
           onClicked: {
             let v = toNumber( numberInput.displayText )
 
-            v -= helper.step
-            valueChanged( v.toFixed( helper.precision ), false )
+            if ( !Number.isNaN(v) )
+            {
+              v -= helper.step
+              valueChanged( v.toFixed( helper.precision ), false )
+            }
           }
         }
       }
@@ -133,7 +136,18 @@ Item {
             TextInput {
               id: numberInput
 
-              onEditingFinished: valueChanged( toNumber( numberInput.displayText ), numberInput.displayText === "" )
+              onEditingFinished: {
+                let v = toNumber( numberInput.displayText )
+
+                if ( Number.isNaN( v ) )
+                {
+                  valueChanged( numberInput.displayText, numberInput.displayText === "" )
+                }
+                else
+                {
+                  valueChanged( v, numberInput.displayText === "" )
+                }
+              }
 
               anchors.fill: parent
 
@@ -221,8 +235,11 @@ Item {
           onClicked: {
             let v = toNumber( numberInput.displayText )
 
-            v += helper.step
-            valueChanged( v.toFixed( helper.precision ), false )
+            if ( !Number.isNaN( v ) )
+            {
+              v += helper.step
+              valueChanged( v.toFixed( helper.precision ), false )
+            }
           }
 
           // on press and hold behavior can be used from here:
