@@ -44,6 +44,18 @@ cd ..
 ```
 > To speed up compilation time install [Ninja build system](https://ninja-build.org/) and add `-GNinja` to cmake arguments 
 
+5. Download and compile ZXing https://github.com/nu-book/zxing-cpp
+```
+mkdir build-ZXING
+cd build-ZXING
+cmake \
+  -DBUILD_EXAMPLES=OFF \
+  -DBUILD_BLACKBOX_TESTS=OFF \
+  -DBUILD_SHARED_LIBS=ON \
+  -DBUILD_UNIT_TESTS=OFF \
+  ../../zxing-cpp 
+```
+
 5. Install whole bunch of packages
 
 ```bash
@@ -52,6 +64,6 @@ sudo apt-get install qml-module-qt-labs-*
 sudo apt install sqlite3
 ```
 
-6. Copy `app/config.pri.default` to `app/config.pri` and edit it so that it points to your `~/Projects/quick` folder for geodiff/qgis
-7. Open `app/input.pro` in Qt Creator (Navigate to `File > Open File or Project...` and select `input.pro` file)
-8. Compile Input and run
+6. Copy `app/config.pri.default` to `app/config.pri` and edit it so that it points to your build folders for geodiff, qgis and zxing. You need to set build and include directories and path to `gdal.h`
+8. Open `app/input.pro` in Qt Creator (Navigate to `File > Open File or Project...` and select `input.pro` file)
+9. Compile Input and run
