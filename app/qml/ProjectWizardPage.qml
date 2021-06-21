@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
 
+import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"

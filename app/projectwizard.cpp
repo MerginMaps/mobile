@@ -8,6 +8,7 @@
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
 #include <qgsmarkersymbollayer.h>
+#include "inpututils.h"
 
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
@@ -62,7 +63,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   for ( int i = 0; i < l->fields().count(); ++i )
   {
     QgsField f = l->fields().at( i );
-    QgsEditorWidgetSetup setup = getEditorWidget( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
+    QgsEditorWidgetSetup setup = InputUtils::getEditorWidgetSetup( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
     l->setEditorWidgetSetup( i, setup );
   }
   l->setRenderer( surveyLayerRenderer() );
@@ -120,49 +121,6 @@ void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
   mapcanvasNode.setAttribute( QStringLiteral( "annotationsVisible" ), false );
   qgisNode.appendChild( mapcanvasNode );
   mSettings->writeXml( mapcanvasNode, doc );
-}
-
-QgsEditorWidgetSetup ProjectWizard::getEditorWidget( const QgsField &field, const QString &widgetType )
-{
-  if ( field.name() == QStringLiteral( "fid" ) )
-    return QgsEditorWidgetSetup( QStringLiteral( "Hidden" ), QVariantMap() );
-
-  if ( widgetType.isEmpty() )
-  {
-    return QgsEditorWidgetSetup( QStringLiteral( "TextEdit" ), QVariantMap() );
-  }
-  else
-  {
-    QVariantMap config;
-    if ( widgetType == QStringLiteral( "TextEdit" ) )
-    {
-      config.insert( QStringLiteral( "isMultiline" ), false );
-      config.insert( QStringLiteral( "UseHtml" ), false );
-    }
-    else if ( widgetType == QStringLiteral( "DateTime" ) )
-    {
-      config.insert( QStringLiteral( "field_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
-      config.insert( QStringLiteral( "display_format" ), QgsDateTimeFieldFormatter::DATETIME_FORMAT );
-    }
-    else if ( widgetType == QStringLiteral( "Range" ) )
-    {
-      config.insert( QStringLiteral( "Style" ), QStringLiteral( "SpinBox" ) );
-      config.insert( QStringLiteral( "Precision" ), QStringLiteral( "0" ) );
-      config.insert( QStringLiteral( "Min" ), QString::number( INT_MIN ) );
-      config.insert( QStringLiteral( "Max" ), QString::number( INT_MAX ) );
-      config.insert( QStringLiteral( "Step" ), 1 );
-    }
-    else if ( widgetType == QStringLiteral( "ExternalResource" ) )
-    {
-      config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "1" ) );
-      config.insert( QStringLiteral( "StorageMode" ), QStringLiteral( "0" ) );
-      config.insert( QStringLiteral( "PropertyCollection" ), QVariantMap() );
-      QgsPropertyCollection collection;
-      config.insert( QStringLiteral( "PropertyCollection" ), collection.toVariant( QgsPropertiesDefinition() ) );
-    }
-
-    return QgsEditorWidgetSetup( widgetType, config );
-  }
 }
 
 QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsConfig ) const
