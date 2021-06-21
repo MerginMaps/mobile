@@ -988,10 +988,14 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
         if ( value.toBool() )
         {
           item->setState( FormItem::InvalidValue );
-          emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
-
-          emit fieldValuesValidChanged();
         }
+        else
+        {
+          item->setState( FormItem::ValidValue ); // this is empty field ~ NULL value
+        }
+
+        emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
+        emit fieldValuesValidChanged();
         return false;
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
@@ -1000,6 +1004,12 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
       emit formDataChanged( id );
       emit fieldValuesValidChanged();
       recalculateDerivedItems( true, false );
+    }
+    else
+    {
+      item->setState( FormItem::ValidValue );
+      emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
+      emit fieldValuesValidChanged();
     }
     return true;
   }
