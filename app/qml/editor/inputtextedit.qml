@@ -51,7 +51,7 @@ Item {
     font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
 
-    text: value || ''
+    text: value !== undefined ? value : ''
     inputMethodHints: field.isNumeric || widget === 'Range' ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
     // Make sure we do not input more characters than allowed for strings

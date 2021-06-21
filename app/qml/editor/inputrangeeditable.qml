@@ -151,7 +151,7 @@ Item {
 
               anchors.fill: parent
 
-              text: fieldItem.parent.value ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', helper.precision ) : ""
+              text: fieldItem.parent.value !== undefined ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', helper.precision ) : ""
 
               inputMethodHints: helper.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly
               font.pointSize: customStyle.fields.fontPointSize
