@@ -16,6 +16,7 @@
 #include "featureslistmodel.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgslogger.h"
+#include "coreutils.h"
 
 FeaturesListModel::FeaturesListModel( QObject *parent )
   : QAbstractListModel( parent ),
@@ -234,7 +235,11 @@ void FeaturesListModel::setupValueRelation( const QVariantMap &config )
 
       loadFeaturesFromLayer( layer );
     }
+    else
+      CoreUtils::log( QStringLiteral( "FeaturesListModel" ), QStringLiteral( "Missing referenced fields for value relations." ) );
   }
+  else
+    CoreUtils::log( QStringLiteral( "FeaturesListModel" ), QStringLiteral( "Missing referenced table for value relations." ) );
 
   endResetModel();
 }
