@@ -3,7 +3,7 @@
 Warnings: please change Qt and QGIS-Deps version according to your actual versions
 
 1. Check qgis/QGIS INSTALL for Linux on QGIS project github
-2. Download and install Qt
+2. Download and install Qt (currently used version is 5.14)
 3. Download geodiff, compile geodiff
 ```
 mkdir build-geodiff-Desktop
@@ -44,27 +44,26 @@ cd ..
 ```
 > To speed up compilation time install [Ninja build system](https://ninja-build.org/) and add `-GNinja` to cmake arguments 
 
+5. Download and compile ZXing https://github.com/nu-book/zxing-cpp
+```
+mkdir build-ZXING
+cd build-ZXING
+cmake \
+  -DBUILD_EXAMPLES=OFF \
+  -DBUILD_BLACKBOX_TESTS=OFF \
+  -DBUILD_SHARED_LIBS=ON \
+  -DBUILD_UNIT_TESTS=OFF \
+  ../../zxing-cpp 
+```
+
 5. Install whole bunch of packages
 
 ```bash
-sudo apt-get install -y qtpositioning5-dev qml-module-qtmultimedia qml-module-qtpositioning qml-module-qtqml-models2 qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-shapes qml-module-qtquick-controls qtquickcontrols2-5-dev libqt5sensors5-dev
+sudo apt-get install -y qtpositioning5-dev qml-module-qtmultimedia qml-module-qtpositioning qml-module-qtqml-models2 qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-shapes qml-module-qtquick-controls qtquickcontrols2-5-dev libqt5sensors5-dev qtmultimedia5-dev
 sudo apt-get install qml-module-qt-labs-*
 sudo apt install sqlite3
 ```
 
-6. Copy `app/config.pri.default` to `app/config.pri` and edit it so that it points to your `~/Projects/quick` folder for geodiff/qgis
-7. Open `app/input.pro` in Qt Creator
-8. Add project `qgsquick/CMakeLists.txt` to Qt Creator
-9. Open settings for project `qgsquick`
-10. Set build environment variables:
-```
-USE_QGIS_BUILD_DIR TRUE
-QGIS_BUILD_DIR <path to qgis build>
-QGIS_CMAKE_PATH <path to qgis source dir>/cmake
-QGIS_SRC_DIR <path to qgis source dir>
-
-QGIS_VERSION_MAJOR <builded qgis major version, e. g. 3> 
-QGIS_VERSION_MINOR <builded qgis minor version, e. g. 17> 
-QGIS_VERSION_PATCH <builded qgis patch version, e. g. 0> 
-```
-11. Compile Input and run
+6. Copy `app/config.pri.default` to `app/config.pri` and edit it so that it points to your build folders for geodiff, qgis and zxing. You need to set build and include directories and path to `gdal.h`
+8. Open `app/input.pro` in Qt Creator (Navigate to `File > Open File or Project...` and select `input.pro` file)
+9. Compile Input and run
