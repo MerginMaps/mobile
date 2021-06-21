@@ -82,8 +82,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->constraintDescription();
     case Relation:
       return QVariant::fromValue( item->relation() );
-    case FieldState:
-      return item->state();
+    case ValueValidity:
+      return item->valueState();
     default:
       return QVariant();
   }
@@ -123,7 +123,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[RememberValue] = QByteArray( "RememberValue" );
   roles[AttributeFormModel::Field] = QByteArray( "Field" );
   roles[AttributeFormModel::Group] = QByteArray( "Group" );
-  roles[FieldState] = QByteArray( "FieldState" );
+  roles[ValueValidity] = QByteArray( "ValueValidity" );
   roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
   roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
   roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );

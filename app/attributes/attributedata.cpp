@@ -156,12 +156,12 @@ void FormItem::setConstraintHardValid( bool constraintHardValid )
   mConstraintHardValid = constraintHardValid;
 }
 
-FormItem::FormItemState FormItem::state() const
+FormItem::ValueState FormItem::valueState() const
 {
   return mState;
 }
 
-void FormItem::setState( FormItemState state )
+void FormItem::setState( ValueState state )
 {
   // We are currently using the state only for numeric fields,
   // thus we here check for field type. We can use this functionality

@@ -676,13 +676,13 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
         if ( !( min <= val && val <= max ) )
         {
-          item->setState( FormItem::NumberOutOfRange );
+          item->setState( FormItem::ValueOutOfRange );
           changedFormItems << item->id();
         }
       }
       ++formItemsIterator;
     }
-    emit featureCanBeSavedChanged();
+    emit fieldValuesValidChanged();
   }
 
   // Check if we have any changes
@@ -726,21 +726,21 @@ bool AttributeController::constraintsSoftValid() const
   return mConstraintsSoftValid;
 }
 
-bool AttributeController::featureCanBeSaved()
+bool AttributeController::fieldValuesValid()
 {
-  // loop over items and see if there is someone with invalid state
+  // loop over items and see if there is a field with invalid state
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
-    if ( item->state() != FormItem::Valid )
+    if ( item->valueState() != FormItem::ValidValue )
     {
       return false;
     }
     ++formItemsIterator;
   }
 
-  return mConstraintsHardValid;
+  return true;
 }
 
 bool AttributeController::hasTabs() const
@@ -987,23 +987,18 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
 
         if ( value.toBool() )
         {
-          item->setState( FormItem::InvalidInput );
-          emit formDataChanged( id, { AttributeFormModel::FieldState } );
+          item->setState( FormItem::InvalidValue );
+          emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
 
-//          I vote for removing this toast message. It did not work with recent versions and nobody seems to care
-//          so I would just remove it
-//          It was added for QR code, we can add similar message like this min/max range instead
-//          emit formDataChangedFailed( userFriendlyMsg );
-
-          emit featureCanBeSavedChanged();
+          emit fieldValuesValidChanged();
         }
         return false;
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-      item->setState( FormItem::Valid );
+      item->setState( FormItem::ValidValue );
 
       emit formDataChanged( id );
-      emit featureCanBeSavedChanged();
+      emit fieldValuesValidChanged();
       recalculateDerivedItems( true, false );
     }
     return true;

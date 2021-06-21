@@ -45,13 +45,13 @@ class  FormItem
     };
     Q_ENUMS( FormItemType )
 
-    enum FormItemState
+    enum ValueState
     {
-      Valid = 1,
-      InvalidInput,     // did not pass convertCompatible check
-      NumberOutOfRange  // number is out of min/max range
+      ValidValue = 1,
+      InvalidValue,     // did not pass convertCompatible check
+      ValueOutOfRange  // number is out of min/max range
     };
-    Q_ENUMS( FormItemState )
+    Q_ENUMS( ValueState )
 
     FormItem(
       const QUuid &id,
@@ -104,8 +104,8 @@ class  FormItem
     bool constraintHardValid() const;
     void setConstraintHardValid( bool constraintHardValid );
 
-    FormItemState state() const;
-    void setState( FormItemState state );
+    ValueState valueState() const;
+    void setState( ValueState state );
 
     bool isVisible() const;
     void setVisible( bool visible );
@@ -146,7 +146,7 @@ class  FormItem
 
     bool mConstraintSoftValid = false;
     bool mConstraintHardValid = false;
-    FormItemState mState = FormItemState::Valid;
+    ValueState mState = ValueState::ValidValue;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
 

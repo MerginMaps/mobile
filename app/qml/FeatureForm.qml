@@ -428,7 +428,7 @@ Item {
 
       Item {
         id: labelPlaceholder
-        height: fieldLabel.height + constraintDescriptionLabel.height + form.style.fields.sideMargin
+        height: fieldLabel.height + fieldHelperText.height + form.style.fields.sideMargin
         anchors {
           left: parent.left
           right: parent.right
@@ -449,12 +449,12 @@ Item {
         }
 
         Label {
-          id: constraintDescriptionLabel
+          id: fieldHelperText
 
           property string constraintText: {
-            if ( FieldState === FormItem.NumberOutOfRange )
+            if ( ValueValidity === FormItem.ValueOutOfRange )
               return qsTr( 'Number is outside of specified range' )
-            else if ( FieldState === FormItem.InvalidInput )
+            else if ( ValueValidity === FormItem.InvalidValue )
               return qsTr( 'Value is not valid' )
 
             if ( ConstraintDescription )
@@ -467,7 +467,7 @@ Item {
             if ( ( !ConstraintHardValid || !ConstraintSoftValid ) && !!ConstraintDescription )
               return true
 
-            if ( FieldState !== FormItem.Valid )
+            if ( ValueValidity !== FormItem.ValidValue )
               return true
 
             return false
@@ -564,11 +564,6 @@ Item {
               attributeEditorLoader.item.featureLayerPairChanged()
             }
           }
-        }
-
-        Connections {
-          target: form.controller
-          onFormDataChangedFailed: notify(msg)
         }
 
         Connections {
