@@ -102,7 +102,7 @@ Item {
         radius: customStyle.fields.cornerRadius
     }
 
-    onEditingFinished: {
+    onTextChanged: {
         valueChanged( text, text === undefined )
       }
     }
