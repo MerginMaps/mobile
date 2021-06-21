@@ -8,9 +8,15 @@
  ***************************************************************************/
 
 #include "testformeditors.h"
+#include "testutils.h"
+#include "attributecontroller.h"
+#include "featurelayerpair.h"
+#include "attributedata.h"
 
 #include <QtTest/QtTest>
 #include <memory>
+
+#include "qgsvectorlayer.h"
 
 void TestFormEditors::init()
 {
@@ -20,323 +26,133 @@ void TestFormEditors::cleanup()
 {
 }
 
-void TestFormEditors::testDoublesValidation()
+void TestFormEditors::testNumericFields()
 {
-//  std::unique_ptr<InputNumberValidator> validator = std::unique_ptr<InputNumberValidator>( new InputNumberValidator() );
+  QString dataDir = TestUtils::testDataDir();
+  QString planesVectorFile = dataDir + "/planes/points.shp";
+  QString qmlStyle = dataDir + "/planes/PlanesNumericFields.qml";
+  std::unique_ptr<QgsVectorLayer> layer(
+    new QgsVectorLayer( planesVectorFile )
+  );
+  QVERIFY( layer && layer->isValid() );
 
-//  // let's test with en_US locale, we will test others later
-//  // spec: https://lh.2xlibre.net/locale/en_US/
-//  QLocale enLocale = QLocale( "en_US" );
-//  validator->setLocale( enLocale );
+  bool res;
+  layer->loadNamedStyle( qmlStyle, res,  false );
+  QVERIFY( res );
 
-//  double bottom, top, decimals;
+  AttributeController controller;
+  QgsFeature f1( layer->dataProvider()->fields(), 1 );
 
-//  // let's start with simple range <-100;100>, 2 decimal places
-//  bottom = -100;
-//  top = 100;
-//  decimals = 2;
+  FeatureLayerPair pair( f1, layer.get() );
+  controller.setFeatureLayerPair( pair );
 
-//  validator->setRange( bottom, top, decimals );
+  const TabItem *tabItem = controller.tabItem( 0 );
+  const QVector<QUuid> formItems = tabItem->formItems();
 
-//  // combinations of input
-//  QList<QPair<QString, QValidator::State>> combinations =
-//  {
-//    {"0", QValidator::Acceptable},
-//    {"0.01", QValidator::Acceptable},
-//    {"0.5", QValidator::Acceptable},
-//    {"10", QValidator::Acceptable},
-//    {"50.53", QValidator::Acceptable},
-//    {"100", QValidator::Acceptable},
-//    {"100.", QValidator::Acceptable},
-//    {"100.0", QValidator::Acceptable},
-//    {"-10", QValidator::Acceptable},
-//    {"-50.", QValidator::Acceptable},
-//    {"-100", QValidator::Acceptable},
-//    {"-100.", QValidator::Acceptable},
-//    {"-100.0", QValidator::Acceptable},
-//    {"-50.53", QValidator::Acceptable},
+  // find field uuids
+  QUuid headingFieldId, importanceFieldId, pilotsFieldId, cabinCrewFieldId, staffFieldId;
 
-//    {"0.001", QValidator::Invalid},
-//    {"-101", QValidator::Invalid},
-//    {"-1000000", QValidator::Invalid},
-//    {"101", QValidator::Invalid},
-//    {"10000000", QValidator::Invalid},
-//    {"50.523", QValidator::Invalid},
-//    {"-50.523", QValidator::Invalid},
+  for ( auto uuid: formItems )
+  {
+    const FormItem* xitem = controller.formItem( uuid );
+    if ( xitem->name() == "Heading" )
+      headingFieldId = xitem->id();
+    else if ( xitem->name() == "Importance" )
+      importanceFieldId = xitem->id();
+    else if ( xitem->name() == "Pilots" )
+      pilotsFieldId = xitem->id();
+    else if ( xitem->name() == "Cabin Crew" )
+      cabinCrewFieldId = xitem->id();
+    else if ( xitem->name() == "Staff" )
+      staffFieldId = xitem->id();
+  }
 
-//    {"", QValidator::Intermediate},
-//    {"-", QValidator::Intermediate},
-//  };
+  for ( auto id: { headingFieldId, importanceFieldId, pilotsFieldId, cabinCrewFieldId, staffFieldId } )
+  {
+    const FormItem *item = controller.formItem( id );
+    QVERIFY( item );
+  }
 
-//  int npos = 0; // start, not used during validation
+  // let's test with en_US locale,
+  // spec: https://lh.2xlibre.net/locale/en_US/
+  QLocale enLocale = QLocale( "en_US" );
+  QLocale::setDefault( enLocale );
 
-//  for ( auto &c : combinations )
-//  {
-//    qDebug() << c.first;
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
+  struct combination
+  {
+    QString value;
+    QUuid fieldUuid;
+    FormItem::ValueState expectedValueState;
+    bool expectedSuccess;
+  };
 
-//  // only positive numbers, starting at zero: <0; 10.50>, 2 decimal places
-//  bottom = 0;
-//  top = 10.5;
-//  decimals = 2;
+  QList<combination> combinations =
+  {
+    // field "Heading", Int, range <100; 1000>, range editable
+    {"", headingFieldId, FormItem::ValidValue, false}, // because field can be null, but we do not yet handle null values
+    {"1", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"-1", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"10", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"-10", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"-100", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"100", headingFieldId, FormItem::ValidValue, true},
+    {"100h", headingFieldId, FormItem::InvalidValue, false},
+    {"100", headingFieldId, FormItem::ValidValue, true},
+    {"1000", headingFieldId, FormItem::ValidValue, true},
+//    {"1000,5", headingFieldId, FormItem::InvalidValue, false}, // currently decimals are accepted and are being rounded up
+    {"1001", headingFieldId, FormItem::ValueOutOfRange, true},
 
-//  validator->setRange( bottom, top, decimals );
+    // field "Importance", Real, range <-100.00; 100.00>, step:0.01, precision: 2, range editable
+    {"", importanceFieldId, FormItem::ValidValue, false},
+    {"0", importanceFieldId, FormItem::ValidValue, true},
+    {"-1.00", importanceFieldId, FormItem::ValidValue, true},
+    {"100.00", importanceFieldId, FormItem::ValidValue, true},
+    {"100.002", importanceFieldId, FormItem::ValueOutOfRange, true},
+    {"100.002fdsa", importanceFieldId, FormItem::InvalidValue, false},
+    {"100.,.,.,", importanceFieldId, FormItem::InvalidValue, false},
+    {"1 000", importanceFieldId, FormItem::InvalidValue, false},
+    {"15,2", importanceFieldId, FormItem::ValueOutOfRange, true},
 
-//  combinations =
-//  {
-//    {"0", QValidator::Acceptable},
-//    {"0.00", QValidator::Acceptable},
-//    {"0.01", QValidator::Acceptable},
-//    {"5", QValidator::Acceptable},
-//    {"10", QValidator::Acceptable},
-//    {"10.35", QValidator::Acceptable},
-//    {"10.50", QValidator::Acceptable},
+    // field "Pilots", Int, range <-1000; -100>, range editable
+    {"", pilotsFieldId, FormItem::ValidValue, false}, // because field can be null
+    {"-100", pilotsFieldId, FormItem::ValidValue, true},
+    {"-1000", pilotsFieldId, FormItem::ValidValue, true},
+    {"0", pilotsFieldId, FormItem::ValueOutOfRange, true},
+    {"150", pilotsFieldId, FormItem::ValueOutOfRange, true},
+    {"-1001", pilotsFieldId, FormItem::ValueOutOfRange, true},
+    {"-51216354321435", pilotsFieldId, FormItem::InvalidValue, false},
+    {"--100", pilotsFieldId, FormItem::InvalidValue, false},
+    {"--100fsda", pilotsFieldId, FormItem::InvalidValue, false},
+    {"-100", pilotsFieldId, FormItem::ValidValue, true},
 
-//    {"0.001", QValidator::Invalid},
-//    {"5.001", QValidator::Invalid},
-//    {"10.51", QValidator::Invalid},
-//    {"11", QValidator::Invalid},
-//    {"10000", QValidator::Invalid},
-//    {"-", QValidator::Invalid},
-//    {"-0.01", QValidator::Invalid},
-//    {"-5", QValidator::Invalid},
-//    {"-11", QValidator::Invalid},
-//    {"-10000", QValidator::Invalid}
+    // field "Cabin Crew", Int, no limit, range editable
+    {"", cabinCrewFieldId, FormItem::ValidValue, false}, // because field can be null
+    {"-100", cabinCrewFieldId, FormItem::ValidValue, true},
+    {"-1000", cabinCrewFieldId, FormItem::ValidValue, true},
+    {"-2147483647", cabinCrewFieldId, FormItem::ValidValue, true}, // int limit from QGIS
+    {"2147483647", cabinCrewFieldId, FormItem::ValidValue, true}, // int limit from QGIS
+    {"214748364799", cabinCrewFieldId, FormItem::InvalidValue, false},
+    {"-214748364799", cabinCrewFieldId, FormItem::InvalidValue, false},
+    {"-214748-", cabinCrewFieldId, FormItem::InvalidValue, false},
 
-//  };
+    // field "Staff", Int, no limit, range slider
+    {"", staffFieldId, FormItem::ValidValue, false}, // because field can be null
+    {"10", staffFieldId, FormItem::ValidValue, true},
+    {"-10", staffFieldId, FormItem::ValidValue, true},
+    // QML Slider does not allow to enter values higher or lower than specified range
+  };
 
-//  for ( auto &c : combinations )
-//  {
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
+  // compare results
+  for ( const auto &c: combinations )
+  {
+    bool res = controller.setFormValue( c.fieldUuid, c.value );
+    QCOMPARE( res, c.expectedSuccess );
 
-//  // only positive numbers, not starting at zero: <100.050; 1000>, 3 decimal places
-//  bottom = 100.050;
-//  top = 1000;
-//  decimals = 3;
+    const FormItem *item = controller.formItem( c.fieldUuid );
+    QCOMPARE( item->valueState(), c.expectedValueState );
+    // In future when we will store invalid value, we can also check if c.value is the same as value in featureLayerPair
+  }
 
-//  validator->setRange( bottom, top, decimals );
-
-//  combinations =
-//  {
-//    {"100.050", QValidator::Acceptable},
-//    {"100.05", QValidator::Acceptable},
-//    {"100.1", QValidator::Acceptable},
-//    {"101", QValidator::Acceptable},
-//    {"530.321", QValidator::Acceptable},
-//    {"452.2", QValidator::Acceptable},
-//    {"1000", QValidator::Acceptable},
-//    {"500.", QValidator::Acceptable},
-//    {"1000.000", QValidator::Acceptable},
-
-//    {"0.000", QValidator::Invalid},
-//    {"0.01", QValidator::Invalid},
-//    {"0.5", QValidator::Invalid},
-//    {"50.", QValidator::Invalid},
-//    {"50.1", QValidator::Invalid},
-//    {"50.53", QValidator::Invalid},
-//    {"50.531", QValidator::Invalid},
-//    {"100.049", QValidator::Invalid},
-//    {"100.0501", QValidator::Invalid},
-//    {"500.5314", QValidator::Invalid},
-//    {"1000.001", QValidator::Invalid},
-//    {"1001", QValidator::Invalid},
-//    {"10000000", QValidator::Invalid},
-//    {"-", QValidator::Invalid},
-//    {"-101", QValidator::Invalid},
-//    {"-50.523", QValidator::Invalid},
-//    {"-520", QValidator::Invalid},
-//    {"-1000000", QValidator::Invalid},
-
-//    {"0", QValidator::Intermediate},
-//    {"10", QValidator::Intermediate},
-//    {"50", QValidator::Intermediate},
-//    {"100.", QValidator::Intermediate},
-//    {"100.0", QValidator::Intermediate}
-//  };
-
-//  for ( auto &c : combinations )
-//  {
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
-
-//  // only negative numbers, not starting at zero: <-200; -100>, 4 decimal places
-//  bottom = -200;
-//  top = -100;
-//  decimals = 4;
-
-//  validator->setRange( bottom, top, decimals );
-
-//  combinations =
-//  {
-//    {"-200.0000", QValidator::Acceptable},
-//    {"-200.00", QValidator::Acceptable},
-//    {"-200", QValidator::Acceptable},
-//    {"-199", QValidator::Acceptable},
-//    {"-150.", QValidator::Acceptable},
-//    {"-150.1", QValidator::Acceptable},
-//    {"-100.0001", QValidator::Acceptable},
-//    {"-100.0", QValidator::Acceptable},
-//    {"-100", QValidator::Acceptable},
-
-//    {"-12.", QValidator::Invalid},
-//    {"-99.9999", QValidator::Invalid},
-//    {"-200.001", QValidator::Invalid},
-//    {"-150.00010", QValidator::Invalid},
-//    {"0", QValidator::Invalid},
-//    {"0.", QValidator::Invalid},
-//    {"5", QValidator::Invalid},
-//    {"150.1", QValidator::Invalid},
-
-//    {"-", QValidator::Intermediate},
-//    {"-1", QValidator::Intermediate},
-//    {"-50", QValidator::Intermediate},
-//    {"-99", QValidator::Intermediate},
-//    {"-99.9", QValidator::Intermediate}, // this should be invalid, there is no way to get to the 100, but it needs more hacks
-//  };
-
-//  for ( auto &c : combinations )
-//  {
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
-}
-
-void TestFormEditors::testIntValidation()
-{
-//  std::unique_ptr<InputNumberValidator> validator = std::unique_ptr<InputNumberValidator>( new InputNumberValidator() );
-
-//  QLocale enLocale = QLocale( "en_US" );
-//  validator->setLocale( enLocale );
-
-//  double bottom, top, decimals;
-
-//  // <-100;100>
-//  bottom = -100;
-//  top = 100;
-//  decimals = 0; // will stay zero for the rest of the test, this is integer test
-
-//  validator->setRange( bottom, top, decimals );
-
-//  // combinations of input
-//  QList<QPair<QString, QValidator::State>> combinations =
-//  {
-//    {"0", QValidator::Acceptable},
-//    {"5", QValidator::Acceptable},
-//    {"10", QValidator::Acceptable},
-//    {"100", QValidator::Acceptable},
-//    {"-10", QValidator::Acceptable},
-//    {"-100", QValidator::Acceptable},
-
-//    {".", QValidator::Invalid},
-//    {"0.", QValidator::Invalid},
-//    {"0.01", QValidator::Invalid},
-//    {"50.523", QValidator::Invalid},
-//    {"101", QValidator::Invalid},
-//    {"10000000", QValidator::Invalid},
-//    {"-101", QValidator::Invalid},
-//    {"-1000000", QValidator::Invalid},
-//    {"-50.523", QValidator::Invalid},
-
-//    {"", QValidator::Intermediate},
-//    {"-", QValidator::Intermediate}
-//  };
-
-//  int npos = 0; // start, not used during validation
-
-//  for ( auto &c : combinations )
-//  {
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
-
-//  // range without zero <10; 200>, to test intermediate values
-//  bottom = 10;
-//  top = 200;
-
-//  validator->setRange( bottom, top, decimals );
-
-//  // combinations of input
-//  combinations =
-//  {
-//    {"10", QValidator::Acceptable},
-//    {"100", QValidator::Acceptable},
-//    {"200", QValidator::Acceptable},
-
-//    {"-", QValidator::Invalid},
-//    {".", QValidator::Invalid},
-//    {"0.", QValidator::Invalid},
-//    {"0.01", QValidator::Invalid},
-//    {"5.", QValidator::Invalid},
-//    {"10.", QValidator::Invalid},
-//    {"50.5", QValidator::Invalid},
-//    {"10000000", QValidator::Invalid},
-//    {"-50.523", QValidator::Invalid},
-
-//    {"1", QValidator::Intermediate},
-//    {"5", QValidator::Intermediate},
-//    {"9", QValidator::Intermediate}
-//  };
-
-//  for ( auto &c : combinations )
-//  {
-//    QCOMPARE( validator->validate( c.first, npos ), c.second );
-//  }
-}
-
-void TestFormEditors::testDifferentLocalesForNumberValidation()
-{
-//  struct combination
-//  {
-//    QString value;
-//    QString localeString;
-//    QValidator::State expectedState;
-//  };
-
-//  std::unique_ptr<InputNumberValidator> validator = std::unique_ptr<InputNumberValidator>( new InputNumberValidator() );
-
-//  double bottom, top, decimals;
-
-//  // we will test more complicated range <100.050; 10,000.500> with 3 decimal places
-//  bottom = 100.050;
-//  top = 10000.500;
-//  decimals = 3;
-
-//  validator->setRange( bottom, top, decimals );
-
-//  // combinations of input values and locales in form : {{<input>, <locale>} <output state>}
-//  // we are testing 4 different locales: de_DE, sk_SK, en_US and de_CH
-//  // all have different rule for decimal point and thousand separator characters
-//  QList<combination> combinations =
-//  {
-//    {"1,000.50", "en_US", QValidator::Acceptable},
-//    {"1.000,50", "de_DE", QValidator::Acceptable},
-//    {"1000,50", "sk_SK", QValidator::Acceptable},
-
-//    // Swiss are using ’ in combination with . for money values. Qt, however, seems not to use it
-//    // spec: https://lh.2xlibre.net/locale/de_CH/
-//    // {"1’000.50", "de_CH", QValidator::Acceptable},
-//    // simple dot is used instead
-//    {"1000.50", "de_CH", QValidator::Acceptable},
-//    {"200,", "de_DE", QValidator::Acceptable},
-//    {"200,", "sk_SK", QValidator::Acceptable},
-//    {"2.000,", "de_DE", QValidator::Acceptable},
-
-//    // QGIS accepts both comma and dot as decimal point char no matter the locale, but not both of them
-//    {"1.00,", "en_US", QValidator::Invalid},
-//    {"1,000.50", "de_DE", QValidator::Invalid},
-//    {"1000,5001", "de_CH", QValidator::Invalid},
-
-//    {"100.", "en_US", QValidator::Intermediate},
-//    {"100,", "de_DE", QValidator::Intermediate},
-//    {"100,", "sk_SK", QValidator::Intermediate},
-//    {"100.", "de_CH", QValidator::Intermediate},
-//  };
-
-//  int npos = 0; // start, not used during validation
-
-//  for ( auto &c : combinations )
-//  {
-//    validator->setLocale( c.localeString );
-//    QCOMPARE( validator->validate( c.value, npos ), c.expectedState );
-//  }
+  // field "Cabin Crew" stayed with invalid input, check controller flag of values validity
+  QCOMPARE( controller.fieldValuesValid(), false );
 }
