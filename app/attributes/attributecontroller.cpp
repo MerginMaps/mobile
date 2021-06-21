@@ -669,7 +669,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
 
       bool isRangeEditable = item->editorWidgetType() == QStringLiteral( "Range" ) &&
-          item->editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
+                             item->editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
 
       if ( isRangeEditable && !value.isNull() )
       {

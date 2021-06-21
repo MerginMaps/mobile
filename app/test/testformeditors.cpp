@@ -52,9 +52,9 @@ void TestFormEditors::testNumericFields()
   // find field uuids
   QUuid headingFieldId, importanceFieldId, pilotsFieldId, cabinCrewFieldId, staffFieldId;
 
-  for ( auto uuid: formItems )
+  for ( auto uuid : formItems )
   {
-    const FormItem* xitem = controller.formItem( uuid );
+    const FormItem *xitem = controller.formItem( uuid );
     if ( xitem->name() == "Heading" )
       headingFieldId = xitem->id();
     else if ( xitem->name() == "Importance" )
@@ -67,7 +67,7 @@ void TestFormEditors::testNumericFields()
       staffFieldId = xitem->id();
   }
 
-  for ( auto id: { headingFieldId, importanceFieldId, pilotsFieldId, cabinCrewFieldId, staffFieldId } )
+  for ( auto id : { headingFieldId, importanceFieldId, pilotsFieldId, cabinCrewFieldId, staffFieldId } )
   {
     const FormItem *item = controller.formItem( id );
     QVERIFY( item );
@@ -143,7 +143,7 @@ void TestFormEditors::testNumericFields()
   };
 
   // compare results
-  for ( const auto &c: combinations )
+  for ( const auto &c : combinations )
   {
     bool res = controller.setFormValue( c.fieldUuid, c.value );
     QCOMPARE( res, c.expectedSuccess );
