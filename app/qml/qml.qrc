@@ -71,6 +71,7 @@
         <file>components/Switch.qml</file>
         <file>components/IconTextItem.qml</file>
         <file>components/InputComboBox.qml</file>
+        <file>editor/inputrelation.qml</file>
         <file>editor/inputcheckbox.qml</file>
         <file>editor/inputdatetime.qml</file>
         <file>editor/inputexternalresource.qml</file>

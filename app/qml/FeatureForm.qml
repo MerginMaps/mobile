@@ -407,9 +407,12 @@ Item {
 
     Item {
       id: fieldContainer
-      visible: Type === FormItemType.Field
+
+      property bool shouldBeVisible: Type === FormItemType.Field || Type === FormItemType.Relation
+
+      visible: shouldBeVisible
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
-      height: Type === FormItemType.Field ? childrenRect.height : 0
+      height: shouldBeVisible ? childrenRect.height : 0
 
       anchors {
         left: parent.left
@@ -491,6 +494,8 @@ Item {
           property var customWidget: form.customWidgetCallback
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
+          property var associatedRelation: Relation
+
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler
 
@@ -522,6 +527,12 @@ Item {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
             {
               attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
+            }
+          }
+          onFeatureLayerPairChanged: {
+            if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
+            {
+              attributeEditorLoader.item.featureLayerPairChanged()
             }
           }
         }
