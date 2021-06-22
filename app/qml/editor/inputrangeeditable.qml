@@ -131,7 +131,8 @@ Item {
             Layout.maximumWidth: parent.width - suffixContainer.width
 
             // The following line is unfortunatelly causing Layout polish loop, needs to be fixed
-            Layout.preferredWidth: parent.width / 2 + numberInput.contentWidth * 0.38
+//            Layout.preferredWidth: parent.width / 2 + numberInput.contentWidth * 0.38
+            Layout.preferredWidth: parent.width / 2
 
             TextInput {
               id: numberInput
