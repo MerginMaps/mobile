@@ -40,7 +40,37 @@ FormItem::FormItem(
   , mFieldIndex( fieldIndex )
   , mConstraints( contraints )
   , mVisibilityExpression( visibilityExpression )
+  , mRelation( QgsRelation() ) // no relation for type field
 {
+}
+
+FormItem::FormItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  FormItem::FormItemType type,
+  const QString &name,
+  const QgsRelation &relation
+)
+  : mId( id )
+  , mField( QgsField() )
+  , mGroupName( groupName )
+  , mParentTabId( parentTabId )
+  , mType( type )
+  , mName( name )
+
+    // ---- not used for relation
+  , mIsEditable( true )
+  , mEditorWidgetSetup( QgsEditorWidgetSetup() )
+  , mFieldIndex( -1 )
+  , mConstraints( QgsFieldConstraints() )
+  , mVisibilityExpression( QgsExpression() )
+    // ----
+
+  , mRelation( relation )
+{
+  mConstraintHardValid = true;
+  mConstraintSoftValid = true;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -60,6 +90,9 @@ bool FormItem::isEditable() const
 
 QString FormItem::editorWidgetType() const
 {
+  if ( mType == FormItem::Relation )
+    return "relation";
+
   return mEditorWidgetSetup.type();
 }
 
@@ -146,6 +179,11 @@ QVariant FormItem::originalValue() const
 void FormItem::setOriginalValue( const QVariant &originalValue )
 {
   mOriginalValue = originalValue;
+}
+
+QgsRelation FormItem::relation() const
+{
+  return mRelation;
 }
 
 

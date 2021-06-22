@@ -24,10 +24,13 @@
 #include <QSet>
 #include "qgsvectorlayer.h"
 #include "qgsattributeeditorfield.h"
+#include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsrelation.h"
 #include "qgsmessagelog.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
@@ -249,8 +252,39 @@ void AttributeController::flatten(
       }
 
       case QgsAttributeEditorElement::AeTypeRelation:
-        // todo
+      {
+        QUuid widgetUuid = QUuid::createUuid();
+
+        QgsAttributeEditorRelation *relationField = static_cast<QgsAttributeEditorRelation *>( element );
+        QgsRelation relation = relationField->relation();
+
+        bool isNmRelation = layer->editFormConfig().widgetConfig( relation.id() )["nm-rel"].toBool();
+        if ( isNmRelation )
+        {
+          CoreUtils::log( "Relations", "Nm relations are not supported" );
+          continue;
+        }
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        const QString label = relationField->label();
+
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            new FormItem(
+              widgetUuid,
+              groupName,
+              parentTabRow,
+              FormItem::Relation,
+              label,
+              relation
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+        items.append( widgetUuid );
+
         break;
+      }
 
       case QgsAttributeEditorElement::AeTypeInvalid:
         // todo
@@ -570,16 +604,19 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       while ( formItemsIterator != mFormItems.end() )
       {
         std::shared_ptr<FormItem> item = formItemsIterator.value();
-        QStringList errors;
-        bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
-        if ( hardConstraintSatisfied != item->constraintHardValid() )
+        if ( item->type() == FormItem::Field )
         {
-          item->setConstraintHardValid( hardConstraintSatisfied );
-          changedFormItems << item->id();
-        }
-        if ( !hardConstraintSatisfied )
-        {
-          allConstraintsHardValid = false;
+          QStringList errors;
+          bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
+          if ( hardConstraintSatisfied != item->constraintHardValid() )
+          {
+            item->setConstraintHardValid( hardConstraintSatisfied );
+            changedFormItems << item->id();
+          }
+          if ( !hardConstraintSatisfied )
+          {
+            allConstraintsHardValid = false;
+          }
         }
         ++formItemsIterator;
       }
@@ -599,16 +636,19 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       while ( formItemsIterator != mFormItems.end() )
       {
         std::shared_ptr<FormItem> item = formItemsIterator.value();
-        QStringList errors;
-        bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
-        if ( softConstraintSatisfied != item->constraintSoftValid() )
+        if ( item->type() == FormItem::Field )
         {
-          item->setConstraintSoftValid( softConstraintSatisfied );
-          changedFormItems << item->id();
-        }
-        if ( !softConstraintSatisfied )
-        {
-          allConstraintsSoftValid = false;
+          QStringList errors;
+          bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
+          if ( softConstraintSatisfied != item->constraintSoftValid() )
+          {
+            item->setConstraintSoftValid( softConstraintSatisfied );
+            changedFormItems << item->id();
+          }
+          if ( !softConstraintSatisfied )
+          {
+            allConstraintsSoftValid = false;
+          }
         }
         ++formItemsIterator;
       }

@@ -58,7 +58,8 @@ class  AttributeFormModel : public QAbstractListModel
       Visible, //!< Field visible
       ConstraintSoftValid, //! Constraint soft valid
       ConstraintHardValid, //! Constraint hard valid
-      ConstraintDescription //!< Constraint description
+      ConstraintDescription, //!< Constraint description
+      Relation //!< QgsRelation instance for this item, empty if it is not a relation
     };
 
     Q_ENUM( AttributeFormRoles )

@@ -28,6 +28,7 @@
 #include "qgsfieldconstraints.h"
 #include "qgseditorwidgetsetup.h"
 #include "qgsexpression.h"
+#include "qgsrelation.h"
 #include "qgsfield.h"
 
 class  FormItem
@@ -44,6 +45,7 @@ class  FormItem
     };
     Q_ENUMS( FormItemType )
 
+    //! Constructor for field items
     FormItem(
       const QUuid &id,
       const QgsField &field,
@@ -58,6 +60,15 @@ class  FormItem
       const QgsExpression &visibilityExpression
     );
 
+    //! Contructor for relation items
+    FormItem(
+      const QUuid &id,
+      const QString &groupName,
+      int parentTabId,
+      FormItem::FormItemType type,
+      const QString &name,
+      const QgsRelation &relation
+    );
 
     FormItem::FormItemType type() const;
     QString name() const;
@@ -92,6 +103,8 @@ class  FormItem
     QVariant originalValue() const;
     void setOriginalValue( const QVariant &originalValue );
 
+    QgsRelation relation() const;
+
   private:
 
     const QUuid mId;
@@ -110,6 +123,8 @@ class  FormItem
     bool mConstraintHardValid = false;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
+
+    const QgsRelation mRelation; // empty if type is field
 };
 
 class  TabItem

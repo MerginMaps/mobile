@@ -39,7 +39,8 @@ codefilter.cpp \
 qrdecoder.cpp \
 projectsmodel.cpp \
 projectsproxymodel.cpp \
-compass.cpp
+compass.cpp \
+relationfeaturesmodel.cpp
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -81,7 +82,8 @@ codefilter.h \
 qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \
-compass.h
+compass.h \
+relationfeaturesmodel.h
 
 contains(DEFINES, INPUT_TEST) {
 
