@@ -65,12 +65,12 @@ FormItem::FormItem(
   , mFieldIndex( -1 )
   , mConstraints( QgsFieldConstraints() )
   , mVisibilityExpression( QgsExpression() )
+  , mConstraintSoftValid( true )
+  , mConstraintHardValid( true )
     // ----
 
   , mRelation( relation )
 {
-  mConstraintHardValid = true;
-  mConstraintSoftValid = true;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -91,7 +91,7 @@ bool FormItem::isEditable() const
 QString FormItem::editorWidgetType() const
 {
   if ( mType == FormItem::Relation )
-    return "relation";
+    return QStringLiteral( "relation" );
 
   return mEditorWidgetSetup.type();
 }

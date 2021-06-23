@@ -134,10 +134,7 @@ Item {
         },
         State {
           name: "page"
-//          PropertyChanges {
-//            target: object
-
-//          }
+          // TODO: page state
         }
       ]
 

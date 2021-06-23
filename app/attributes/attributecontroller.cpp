@@ -256,9 +256,9 @@ void AttributeController::flatten(
         QUuid widgetUuid = QUuid::createUuid();
 
         QgsAttributeEditorRelation *relationField = static_cast<QgsAttributeEditorRelation *>( element );
-        QgsRelation relation = relationField->relation();
+        QgsRelation associatedRelation = relationField->relation();
 
-        bool isNmRelation = layer->editFormConfig().widgetConfig( relation.id() )["nm-rel"].toBool();
+        bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )["nm-rel"].toBool();
         if ( isNmRelation )
         {
           CoreUtils::log( "Relations", "Nm relations are not supported" );
@@ -276,7 +276,7 @@ void AttributeController::flatten(
               parentTabRow,
               FormItem::Relation,
               label,
-              relation
+              associatedRelation
             )
           );
 
