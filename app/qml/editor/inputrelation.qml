@@ -94,12 +94,12 @@ Item {
     right: parent.right
   }
 
-  height: childrenRect.height
+  height: content.height
 
   Item {
     id: content
 
-    height: childrenRect.height
+    height: mode === "text" ? textModeContainer.height : photoModeContainer.height
     anchors {
       left: parent.left
       right: parent.right
@@ -115,6 +115,10 @@ Item {
           PropertyChanges {
             target: noOfFeaturesText
             visible: true
+          }
+          PropertyChanges {
+            target: textModeContainer
+            height: customStyle.fields.height
           }
         },
         State {
