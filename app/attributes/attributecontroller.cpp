@@ -229,7 +229,7 @@ void AttributeController::flatten(
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
           std::shared_ptr<FormItem>(
-            new FormItem(
+            FormItem::createFieldItem(
               fieldUuid,
               field,
               groupName,
@@ -258,7 +258,7 @@ void AttributeController::flatten(
         QgsAttributeEditorRelation *relationField = static_cast<QgsAttributeEditorRelation *>( element );
         QgsRelation associatedRelation = relationField->relation();
 
-        bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )["nm-rel"].toBool();
+        bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )[QStringLiteral( "nm-rel" )].toBool();
         if ( isNmRelation )
         {
           CoreUtils::log( "Relations", "Nm relations are not supported" );
@@ -270,7 +270,7 @@ void AttributeController::flatten(
 
         std::shared_ptr<FormItem> formItemData =
           std::shared_ptr<FormItem>(
-            new FormItem(
+            FormItem::createRelationItem(
               widgetUuid,
               groupName,
               parentTabRow,

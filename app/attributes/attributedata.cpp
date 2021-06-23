@@ -27,7 +27,8 @@ FormItem::FormItem(
   const QgsEditorWidgetSetup &editorWidgetSetup,
   int fieldIndex,
   const QgsFieldConstraints &contraints,
-  const QgsExpression &visibilityExpression
+  const QgsExpression &visibilityExpression,
+  const QgsRelation &relation
 )
   : mId( id )
   , mField( field )
@@ -40,37 +41,66 @@ FormItem::FormItem(
   , mFieldIndex( fieldIndex )
   , mConstraints( contraints )
   , mVisibilityExpression( visibilityExpression )
-  , mRelation( QgsRelation() ) // no relation for type field
+  , mRelation( relation ) // no relation for type field
 {
 }
 
-FormItem::FormItem(
+FormItem *FormItem::createFieldItem(
+  const QUuid &id,
+  const QgsField &field,
+  const QString &groupName,
+  int parentTabId,
+  FormItemType type,
+  const QString &name,
+  bool isEditable,
+  const QgsEditorWidgetSetup
+  &editorWidgetSetup,
+  int fieldIndex,
+  const QgsFieldConstraints &contraints,
+  const QgsExpression &visibilityExpression
+)
+{
+  return new FormItem(
+           id,
+           field,
+           groupName,
+           parentTabId,
+           type,
+           name,
+           isEditable,
+           editorWidgetSetup,
+           fieldIndex,
+           contraints,
+           visibilityExpression
+         );
+}
+
+FormItem *FormItem::createRelationItem(
   const QUuid &id,
   const QString &groupName,
   int parentTabId,
-  FormItem::FormItemType type,
+  FormItemType type,
   const QString &name,
   const QgsRelation &relation
 )
-  : mId( id )
-  , mField( QgsField() )
-  , mGroupName( groupName )
-  , mParentTabId( parentTabId )
-  , mType( type )
-  , mName( name )
-
-    // ---- not used for relation
-  , mIsEditable( true )
-  , mEditorWidgetSetup( QgsEditorWidgetSetup() )
-  , mFieldIndex( -1 )
-  , mConstraints( QgsFieldConstraints() )
-  , mVisibilityExpression( QgsExpression() )
-  , mConstraintSoftValid( true )
-  , mConstraintHardValid( true )
-    // ----
-
-  , mRelation( relation )
 {
+  FormItem *item = new FormItem(
+    id,
+    QgsField(),
+    groupName,
+    parentTabId,
+    type,
+    name,
+    true,
+    QgsEditorWidgetSetup(),
+    -1,
+    QgsFieldConstraints(),
+    QgsExpression(),
+    relation
+  );
+  item->setConstraintHardValid( true );
+  item->setConstraintSoftValid( true );
+  return item;
 }
 
 FormItem::FormItemType FormItem::type() const

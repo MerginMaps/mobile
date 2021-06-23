@@ -57,11 +57,25 @@ class  FormItem
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsFieldConstraints &contraints,
+      const QgsExpression &visibilityExpression,
+      const QgsRelation &relation = QgsRelation()
+    );
+
+    static FormItem *createFieldItem(
+      const QUuid &id,
+      const QgsField &field,
+      const QString &groupName,
+      int parentTabId,
+      FormItem::FormItemType type,
+      const QString &name,
+      bool isEditable,
+      const QgsEditorWidgetSetup &editorWidgetSetup,
+      int fieldIndex,
+      const QgsFieldConstraints &contraints,
       const QgsExpression &visibilityExpression
     );
 
-    //! Contructor for relation items
-    FormItem(
+    static FormItem *createRelationItem(
       const QUuid &id,
       const QString &groupName,
       int parentTabId,

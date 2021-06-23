@@ -253,7 +253,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onReleased: console.log("opening", model.FeatureId)
+        // ToDo: show feature form: onReleased
       }
     }
   }
