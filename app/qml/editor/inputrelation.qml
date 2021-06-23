@@ -109,8 +109,6 @@ Item {
     Rectangle {
       id: textModeContainer
 
-      Component.onCompleted: delegateModel.update()
-
       states: [
         State {
           name: "initial"
@@ -177,21 +175,19 @@ Item {
           if ( textModeContainer.state === "initial" )
             textModeContainer.state = "expanded"
           else if ( textModeContainer.state === "expanded" && root.canOpenFeaturesPage )
-            textModeContrainer.state = "page"
+            textModeContainer.state = "page"
         }
       }
 
       Flow {
-        id: view
+        id: flowItemView
 
         anchors.fill: parent
         anchors.margins: customStyle.fields.sideMargin
 
         spacing: customStyle.group.spacing
 
-        Repeater {
-          model: delegateModel
-        }
+        Repeater { model: delegateModel; }
       }
     }
 
@@ -212,7 +208,7 @@ Item {
     Item {
       id: textDelegateContainer
 
-      property real maximumWidth: view.width
+      property real maximumWidth: flowItemView.width
       property bool isVisible: {
         // figure out which row am I from Y
         if ( y === 0 ) return true
