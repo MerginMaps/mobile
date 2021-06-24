@@ -178,7 +178,7 @@ class  FeaturesListModel : public QAbstractListModel
     //! Signal emitted when current feature has changed
     void currentFeatureChanged( QgsFeature feature );
 
-  private:
+  protected:
 
     //! Sets maximum limit and filter expression for request.
     void setupFeatureRequest( QgsFeatureRequest &request );
@@ -187,7 +187,7 @@ class  FeaturesListModel : public QAbstractListModel
     void loadFeaturesFromLayer( QgsVectorLayer *layer = nullptr );
 
     //! Empty data when resetting model
-    void emptyData();
+    virtual void emptyData();
 
     //! Builds feature title in list
     QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
@@ -225,6 +225,7 @@ class  FeaturesListModel : public QAbstractListModel
 
     //! Field that represents field used as a feature title, if not set, display expression is used
     QString mFeatureTitleField;
+
 };
 
 #endif // FEATURESMODEL_H

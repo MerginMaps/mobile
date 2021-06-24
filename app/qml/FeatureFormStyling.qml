@@ -67,6 +67,7 @@ QtObject {
     property QtObject fields: QtObject {
       property color fontColor: "black"
       property color backgroundColor: "lightGray"
+      property color backgroundColorDark: InputStyle.panelBackgroundDark
       property color backgroundColorInactive: "lightGray"
       property color activeColor: "#1B5E20"
       property color attentionColor: "red"
@@ -95,5 +96,9 @@ QtObject {
 
   property QtObject checkboxComponent: QtObject {
     property color baseColor: "black"
+  }
+
+  property QtObject relationComponent: QtObject {
+    property real textDelegateHeight: fields.height * 0.8
   }
 }

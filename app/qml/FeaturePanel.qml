@@ -251,6 +251,8 @@ Drawer {
 
                   property QtObject fields: QtObject {
                     property color backgroundColor: InputStyle.panelBackgroundLight
+                    property color backgroundColorDark: InputStyle.panelBackgroundDark
+                    property color backgroundColorDarker: InputStyle.panelBackgroundDarker
                     property color backgroundColorInactive: "grey"
                     property color fontColor: InputStyle.fontColor
                     property color activeColor: InputStyle.fontColor

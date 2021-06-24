@@ -697,7 +697,8 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName )
                                    QStringLiteral( "checkbox" ),
                                    QStringLiteral( "externalresource" ),
                                    QStringLiteral( "datetime" ),
-                                   QStringLiteral( "range" )
+                                   QStringLiteral( "range" ),
+                                   QStringLiteral( "relation" )
                                  };
   if ( supportedWidgets.contains( widgetName ) )
   {

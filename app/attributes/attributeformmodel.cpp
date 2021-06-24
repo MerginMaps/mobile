@@ -80,6 +80,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->constraintHardValid();
     case ConstraintDescription:
       return item->constraintDescription();
+    case Relation:
+      return QVariant::fromValue( item->relation() );
     default:
       return QVariant();
   }
@@ -122,6 +124,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
   roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
   roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );
+  roles[Relation] = QByteArray( "Relation" );
 
   return roles;
 }

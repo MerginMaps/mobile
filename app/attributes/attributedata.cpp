@@ -27,7 +27,8 @@ FormItem::FormItem(
   const QgsEditorWidgetSetup &editorWidgetSetup,
   int fieldIndex,
   const QgsFieldConstraints &contraints,
-  const QgsExpression &visibilityExpression
+  const QgsExpression &visibilityExpression,
+  const QgsRelation &relation
 )
   : mId( id )
   , mField( field )
@@ -40,7 +41,66 @@ FormItem::FormItem(
   , mFieldIndex( fieldIndex )
   , mConstraints( contraints )
   , mVisibilityExpression( visibilityExpression )
+  , mRelation( relation ) // no relation for type field
 {
+}
+
+FormItem *FormItem::createFieldItem(
+  const QUuid &id,
+  const QgsField &field,
+  const QString &groupName,
+  int parentTabId,
+  FormItemType type,
+  const QString &name,
+  bool isEditable,
+  const QgsEditorWidgetSetup
+  &editorWidgetSetup,
+  int fieldIndex,
+  const QgsFieldConstraints &contraints,
+  const QgsExpression &visibilityExpression
+)
+{
+  return new FormItem(
+           id,
+           field,
+           groupName,
+           parentTabId,
+           type,
+           name,
+           isEditable,
+           editorWidgetSetup,
+           fieldIndex,
+           contraints,
+           visibilityExpression
+         );
+}
+
+FormItem *FormItem::createRelationItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  FormItemType type,
+  const QString &name,
+  const QgsRelation &relation
+)
+{
+  FormItem *item = new FormItem(
+    id,
+    QgsField(),
+    groupName,
+    parentTabId,
+    type,
+    name,
+    true,
+    QgsEditorWidgetSetup(),
+    -1,
+    QgsFieldConstraints(),
+    QgsExpression(),
+    relation
+  );
+  item->setConstraintHardValid( true );
+  item->setConstraintSoftValid( true );
+  return item;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -60,6 +120,9 @@ bool FormItem::isEditable() const
 
 QString FormItem::editorWidgetType() const
 {
+  if ( mType == FormItem::Relation )
+    return QStringLiteral( "relation" );
+
   return mEditorWidgetSetup.type();
 }
 
@@ -146,6 +209,11 @@ QVariant FormItem::originalValue() const
 void FormItem::setOriginalValue( const QVariant &originalValue )
 {
   mOriginalValue = originalValue;
+}
+
+QgsRelation FormItem::relation() const
+{
+  return mRelation;
 }
 
 
