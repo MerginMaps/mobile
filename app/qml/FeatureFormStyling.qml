@@ -23,36 +23,36 @@ QtObject {
   property real titleLabelPointSize: 16
 
   property QtObject group: QtObject {
-    property color backgroundColor: "lightGray"
-    property color marginColor: "black"
-    property real leftMargin: 1 * QgsQuick.Utils.dp
-    property real rightMargin: 1 * QgsQuick.Utils.dp
+    property color backgroundColor: InputStyle.panelBackgroundLight
+    property color marginColor: InputStyle.panelBackgroundDark
+    property real leftMargin: 0 * QgsQuick.Utils.dp
+    property real rightMargin: 0 * QgsQuick.Utils.dp
     property real topMargin: 1 * QgsQuick.Utils.dp
     property real bottomMargin: 1 * QgsQuick.Utils.dp
     property real height: 64 * QgsQuick.Utils.dp
-    property color fontColor: "black"
-    property int spacing: 10 * QgsQuick.Utils.dp
+    property color fontColor: InputStyle.fontColor
+    property int spacing: InputStyle.formSpacing
     property int fontPixelSize: 24 * QgsQuick.Utils.dp
   }
 
   property QtObject tabs: QtObject {
-    property color normalColor: "#4CAF50"
-    property color activeColor: "#1B5E20"
-    property color disabledColor: "#FFFFFF"
-    property color backgroundColor: "#999999"
-    property color normalBackgroundColor: "#FFFFFF"
-    property color activeBackgroundColor: "#4CAF50"
-    property color disabledBackgroundColor: "#999999"
-    property real height: 48 * QgsQuick.Utils.dp
-    property real buttonHeight: height * 0.8
+    property color normalColor: InputStyle.fontColor
+    property color activeColor: InputStyle.fontColor
+    property color disabledColor: InputStyle.fontColor
+    property color backgroundColor: InputStyle.panelBackgroundLight
+    property color normalBackgroundColor: InputStyle.panelBackgroundLight
+    property color activeBackgroundColor: InputStyle.panelBackgroundLight
+    property color disabledBackgroundColor: InputStyle.panelBackgroundDark
+    property real height: InputStyle.rowHeight * 0.9
+    property real buttonHeight: height
     property real spacing: 0
-    property int tabLabelPointSize: 14
-    property real borderWidth: 0 * QgsQuick.Utils.dp
-    property color borderColor: "#999999"
+    property int tabLabelPointSize: 12
+    property real borderWidth: 1 * QgsQuick.Utils.dp
+    property color borderColor: InputStyle.labelColor
   }
 
   property QtObject constraint: QtObject {
-    property color validColor: "black"
+    property color validColor: InputStyle.labelColor
     property color invalidColor: "#c0392b"
     property color descriptionColor: "#e67e22"
   }
@@ -60,44 +60,45 @@ QtObject {
   property QtObject toolbutton: QtObject {
     property color backgroundColor: "transparent"
     property color backgroundColorInvalid: "#bdc3c7"
-    property color activeButtonColor: "black"
+    property color activeButtonColor: InputStyle.activeButtonColor
     property real size: 80 * QgsQuick.Utils.dp
   }
 
-    property QtObject fields: QtObject {
-      property color fontColor: "black"
-      property color backgroundColor: "lightGray"
-      property color backgroundColorDark: InputStyle.panelBackgroundDark
-      property color backgroundColorInactive: "lightGray"
-      property color activeColor: "#1B5E20"
-      property color attentionColor: "red"
-      property color normalColor: "#4CAF50"
-      property real height: 48 * QgsQuick.Utils.dp
-      property real cornerRadius: 0 * QgsQuick.Utils.dp
-      property int fontPixelSize: 48 * QgsQuick.Utils.dp
-      property real sideMargin: 12 * QgsQuick.Utils.dp // left or right margin for a field's content
-      property real outerMargin: 20 * QgsQuick.Utils.dp // left or right margin for a whole field component
-      property int fontPointSize: 16
-      property int labelPointSize: 14
-    }
+  property QtObject fields: QtObject {
+    property color backgroundColor: InputStyle.panelBackgroundLight
+    property color backgroundColorDark: InputStyle.panelBackgroundDark
+    property color backgroundColorDarker: InputStyle.panelBackgroundDarker
+    property color backgroundColorInactive: "grey"
+    property color fontColor: InputStyle.fontColor
+    property color activeColor: InputStyle.fontColor
+    property color attentionColor: "#aa0000"
+    property color normalColor: InputStyle.panelBackgroundLight
+    property real cornerRadius: 8 * QgsQuick.Utils.dp
+    property real height: InputStyle.fieldHeight
+    property int fontPixelSize: 22 * QgsQuick.Utils.dp
+    property real sideMargin: InputStyle.innerFieldMargin
+    property real outerMargin: InputStyle.outerFieldMargin
+    property int fontPointSize: 15
+    property int labelPointSize: 12
+  }
 
   property QtObject icons: QtObject {
-    property var camera: __inputUtils.getThemeIcon("ic_camera")
-    property var remove: __inputUtils.getThemeIcon("ic_delete_forever_white")
-    property var gallery: __inputUtils.getThemeIcon("ic_gallery")
+    property var camera: InputStyle.cameraIcon
+    property var remove: InputStyle.removeIcon
+    property var gallery:InputStyle.galleryIcon
     property var brokenImage: __inputUtils.getThemeIcon("ic_broken_image_black")
     property var notAvailable: __inputUtils.getThemeIcon("ic_photo_notavailable_white")
     property var today: __inputUtils.getThemeIcon("ic_today")
-    property var back: __inputUtils.getThemeIcon("ic_back")
-    property var importData: __inputUtils.getThemeIcon("ic_camera")
-    property var combobox: __inputUtils.getThemeIcon("ic_angle_down")
-    property var valueRelationMore: __inputUtils.getThemeIcon("ic_angle_right")
+    property var back: InputStyle.backIcon
+    property var combobox: InputStyle.comboboxIcon
+    property var valueRelationMore: InputStyle.valueRelationIcon
+    property var importData: InputStyle.qrCodeIcon
     property var minus: __inputUtils.getThemeIcon("minus")
     property var plus: __inputUtils.getThemeIcon("plus-big")
   }
 
   property QtObject checkboxComponent: QtObject {
-    property color baseColor: "black"
+    property color baseColor: InputStyle.panelBackgroundDarker
   }
 
   property QtObject relationComponent: QtObject {
