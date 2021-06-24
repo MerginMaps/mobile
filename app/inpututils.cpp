@@ -690,7 +690,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
 
 const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config )
 {
-  QString path( "editor/input%1.qml" );
+  QString path( "../editor/input%1.qml" );
 
   if ( widgetName == QStringLiteral( "range" ) )
   {

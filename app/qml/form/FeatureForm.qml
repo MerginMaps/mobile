@@ -16,7 +16,7 @@ import QtQml 2.2
 import QtQuick.Controls 1.4 as Controls1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "./components"
+import "../components"
 
 Item {
   /**
@@ -202,6 +202,14 @@ Item {
      * be restored.
      */
     signal reset
+  }
+
+  StackView {
+    id: formView
+
+    anchors.fill: parent
+
+    initialItem: container
   }
 
   Rectangle {

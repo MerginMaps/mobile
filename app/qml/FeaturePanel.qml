@@ -12,6 +12,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 
 import "."  // import InputStyle singleton
+import "./form"
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 

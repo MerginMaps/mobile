@@ -13,9 +13,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.14
 
 import QgsQuick 0.1 as QgsQuick
+import ".."
 
 QtObject {
   property color backgroundColor: "white"

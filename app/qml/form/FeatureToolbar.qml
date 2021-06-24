@@ -9,7 +9,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import "."  // import InputStyle singleton
+import ".."  // import InputStyle singleton
 
 Item {
     property int itemSize: toolbar.height * 0.8
