@@ -227,7 +227,7 @@ class InputUtils: public QObject
       * If the widgetName does not match any supported widget, text edit is returned.
       * \param widgetName name of the attribute field widget
       */
-    Q_INVOKABLE static const QUrl getEditorComponentSource( const QString &widgetName );
+    Q_INVOKABLE static const QUrl getEditorComponentSource( const QString &widgetName, const QVariantMap &config = QVariantMap() );
 
     /**
      * \copydoc QgsCoordinateFormatter::format()

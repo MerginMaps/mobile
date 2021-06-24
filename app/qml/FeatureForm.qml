@@ -376,6 +376,11 @@ Item {
               opacity: 1
               height: form.style.group.spacing
             }
+
+            footer: Rectangle {
+              opacity: 1
+              height: 2 * form.style.group.spacing
+            }
           }
         }
       }
@@ -408,7 +413,7 @@ Item {
     Item {
       id: fieldContainer
 
-      property bool shouldBeVisible: Type === FormItemType.Field || Type === FormItemType.Relation
+      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation
 
       visible: shouldBeVisible
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
@@ -423,7 +428,7 @@ Item {
 
       Item {
         id: labelPlaceholder
-        height: fieldLabel.height + constraintDescriptionLabel.height + form.style.fields.sideMargin
+        height: fieldLabel.height + fieldHelperText.height + form.style.fields.sideMargin
         anchors {
           left: parent.left
           right: parent.right
@@ -444,7 +449,30 @@ Item {
         }
 
         Label {
-          id: constraintDescriptionLabel
+          id: fieldHelperText
+
+          property string helperText: {
+            if ( ValueValidity === FormItem.ValueOutOfRange )
+              return qsTr( 'Number is outside of specified range' )
+            else if ( ValueValidity === FormItem.InvalidValue )
+              return qsTr( 'Value is not valid' )
+
+            if ( ConstraintDescription )
+              return ConstraintDescription
+
+            return ''
+          }
+
+          property bool shouldShowhelperText: {
+            if ( ( !ConstraintHardValid || !ConstraintSoftValid ) && !!ConstraintDescription )
+              return true
+
+            if ( ValueValidity !== FormItem.ValidValue )
+              return true
+
+            return false
+          }
+
           anchors {
             left: parent.left
             right: parent.right
@@ -452,8 +480,8 @@ Item {
             leftMargin: form.style.fields.sideMargin
           }
 
-          text: ConstraintDescription ? qsTr(ConstraintDescription) : ''
-          visible: (!ConstraintHardValid || !ConstraintSoftValid) && !!ConstraintDescription
+          text: helperText
+          visible: shouldShowhelperText
           height: visible ? undefined : 0
           wrapMode: Text.WordWrap
           color: form.style.constraint.descriptionColor
@@ -492,6 +520,7 @@ Item {
           property var featurePair: form.controller.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
+          property var labelAlias: Name
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           property var associatedRelation: Relation
@@ -501,7 +530,7 @@ Item {
 
           source: {
             if ( widget !== undefined )
-               return form.loadWidgetFn(widget.toLowerCase())
+               return form.loadWidgetFn(widget.toLowerCase(), config)
             else return ''
           }
         }
@@ -535,11 +564,6 @@ Item {
               attributeEditorLoader.item.featureLayerPairChanged()
             }
           }
-        }
-
-        Connections {
-          target: form.controller
-          onFormDataChangedFailed: notify(message)
         }
 
         Connections {

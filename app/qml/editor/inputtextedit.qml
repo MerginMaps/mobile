@@ -51,8 +51,8 @@ Item {
     font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
 
-    text: value || ''
-    inputMethodHints: field.isNumeric || widget == 'Range' ? field.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly : Qt.ImhNone
+    text: value !== undefined ? value : ''
+    inputMethodHints: field.isNumeric || widget === 'Range' ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
     // Make sure we do not input more characters than allowed for strings
     states: [
@@ -74,7 +74,7 @@ Item {
         radius: customStyle.fields.cornerRadius
     }
 
-    onTextChanged: {
+    onEditingFinished: {
       valueChanged( text, text === undefined )
     }
   }

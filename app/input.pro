@@ -22,7 +22,8 @@ include($$PWD/../qgsquick/qgsquick.pri)
 INCLUDEPATH += \
   $$PWD/../core \
   $$PWD/../qgsquick \
-  $$PWD/attributes
+  $$PWD/attributes \
+  $$PWD/editor
 
 DEFINES += INPUT_APP
 DEFINES += "QGIS_QUICK_DATA_PATH=$${QGIS_QUICK_DATA_PATH}"

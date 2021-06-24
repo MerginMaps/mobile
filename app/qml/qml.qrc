@@ -76,11 +76,12 @@
         <file>editor/inputdatetime.qml</file>
         <file>editor/inputexternalresource.qml</file>
         <file>editor/inputtextedit.qml</file>
-        <file>editor/inputrange.qml</file>
+        <file>editor/inputrangeslider.qml</file>
         <file>editor/inputvaluemap.qml</file>
         <file>editor/inputvaluerelation.qml</file>
         <file>FeatureForm.qml</file>
         <file>FeatureFormStyling.qml</file>
         <file>PhotoPanel.qml</file>
+        <file>editor/inputrangeeditable.qml</file>
     </qresource>
 </RCC>

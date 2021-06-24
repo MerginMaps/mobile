@@ -171,7 +171,7 @@ Drawer {
                 id: saveButtonText
                 text: qsTr("Save")
                 visible: featureForm.state === "Edit" || featureForm.state === "Add"
-                enabled: featureForm.controller.constraintsHardValid
+                enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
                 color: enabled ? InputStyle.highlightColor : "red"
                 font.pixelSize: InputStyle.fontPixelSizeNormal
                 height: header.rowHeight
@@ -278,6 +278,8 @@ Drawer {
                   property var combobox: InputStyle.comboboxIcon
                   property var valueRelationMore: InputStyle.valueRelationIcon
                   property var importData: InputStyle.qrCodeIcon
+                  property var minus: __inputUtils.getThemeIcon("minus")
+                  property var plus: __inputUtils.getThemeIcon("plus-big")
                 }
 
               property QtObject checkboxComponent: QtObject {

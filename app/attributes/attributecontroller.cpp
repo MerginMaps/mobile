@@ -660,6 +660,41 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
+  // Evaluate field values validity
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
+
+      bool isRangeEditable = item->editorWidgetType() == QStringLiteral( "Range" ) &&
+                             item->editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
+
+      if ( isRangeEditable && !value.isNull() )
+      {
+        double min = item->editorWidgetConfig()[QStringLiteral( "Min" )].toDouble();
+        double max = item->editorWidgetConfig()[QStringLiteral( "Max" )].toDouble();
+        double val = featureLayerPair().feature().attribute( item->fieldIndex() ).toDouble();
+
+        if ( !( min <= val && val <= max ) )
+        {
+          item->setState( FormItem::ValueOutOfRange );
+          changedFormItems << item->id();
+        }
+      }
+
+      if ( !isFormValueChange ) // reset state for new feature layer pair
+      {
+        item->setState( FormItem::ValidValue );
+        changedFormItems << item->id();
+      }
+
+      ++formItemsIterator;
+    }
+    updateFieldValuesValidity();
+  }
+
   // Check if we have any changes
   bool anyChanges = isNewFeature();
   if ( !anyChanges )
@@ -699,6 +734,11 @@ bool AttributeController::constraintsHardValid() const
 bool AttributeController::constraintsSoftValid() const
 {
   return mConstraintsSoftValid;
+}
+
+bool AttributeController::fieldValuesValid() const
+{
+  return mFieldValuesValid;
 }
 
 bool AttributeController::hasTabs() const
@@ -868,6 +908,33 @@ void AttributeController::setHasAnyChanges( bool hasChanges )
   }
 }
 
+void AttributeController::updateFieldValuesValidity()
+{
+  // loop over items and see if there is a field with invalid state
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->valueState() != FormItem::ValidValue )
+    {
+      setFieldValuesValid( false );
+      return;
+    }
+    ++formItemsIterator;
+  }
+
+  setFieldValuesValid( true );
+}
+
+void AttributeController::setFieldValuesValid( bool valid )
+{
+  if ( valid != mFieldValuesValid )
+  {
+    mFieldValuesValid = valid;
+    emit fieldValuesValidChanged();
+  }
+}
+
 bool AttributeController::isValidFormId( const QUuid &id ) const
 {
   return mFormItems.contains( id );
@@ -942,15 +1009,33 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
         QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
         QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
         QgsMessageLog::logMessage( msg );
-        if ( !val.isNull() )
+
+        if ( value.toBool() )
         {
-          emit formDataChangedFailed( userFriendlyMsg );
+          item->setState( FormItem::InvalidValue );
+          setFieldValuesValid( false );
         }
+        else
+        {
+          item->setState( FormItem::ValidValue ); // this is empty field ~ NULL value
+          updateFieldValuesValidity();
+        }
+
+        emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
         return false;
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+      item->setState( FormItem::ValidValue );
+
       emit formDataChanged( id );
+      updateFieldValuesValidity();
       recalculateDerivedItems( true, false );
+    }
+    else
+    {
+      item->setState( FormItem::ValidValue );
+      emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
+      updateFieldValuesValidity();
     }
     return true;
   }
@@ -958,7 +1043,6 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   {
     return false;
   }
-
 }
 
 QVariant AttributeController::formValue( int fieldIndex ) const
