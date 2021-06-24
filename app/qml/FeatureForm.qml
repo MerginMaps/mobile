@@ -413,7 +413,7 @@ Item {
     Item {
       id: fieldContainer
 
-      property bool shouldBeVisible: Type === FormItemType.Field || Type === FormItemType.Relation
+      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation
 
       visible: shouldBeVisible
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
