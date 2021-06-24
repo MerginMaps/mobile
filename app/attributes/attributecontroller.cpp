@@ -673,8 +673,8 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
       if ( isRangeEditable && !value.isNull() )
       {
-        double min = item->editorWidgetConfig()["Min"].toDouble();
-        double max = item->editorWidgetConfig()["Max"].toDouble();
+        double min = item->editorWidgetConfig()[QStringLiteral( "Min" )].toDouble();
+        double max = item->editorWidgetConfig()[QStringLiteral( "Max" )].toDouble();
         double val = featureLayerPair().feature().attribute( item->fieldIndex() ).toDouble();
 
         if ( !( min <= val && val <= max ) )

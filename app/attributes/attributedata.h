@@ -31,7 +31,7 @@
 #include "qgsrelation.h"
 #include "qgsfield.h"
 
-class  FormItem
+class FormItem
 {
     Q_GADGET
 

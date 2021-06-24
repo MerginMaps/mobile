@@ -80,8 +80,10 @@ class  AttributeController : public QObject
     //! Returns TRUE if all soft constraints defined on fields are satisfied with the current attribute values
     Q_PROPERTY( bool constraintsSoftValid READ constraintsSoftValid NOTIFY constraintsSoftValidChanged )
 
-    //! Returns TRUE if all fields have valid state.
-    //! Validity of a field depends on its type, f.e. numeric field is valid when input is convertible to number and number is in correct min/max range
+    /**
+     *  Returns TRUE if all fields have valid state.
+     *  Validity of a field depends on its type, f.e. numeric field is valid when input is convertible to number and number is in correct min/max range
+     */
     Q_PROPERTY( bool fieldValuesValid READ fieldValuesValid NOTIFY fieldValuesValidChanged )
 
   public:

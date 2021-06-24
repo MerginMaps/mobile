@@ -451,7 +451,7 @@ Item {
         Label {
           id: fieldHelperText
 
-          property string constraintText: {
+          property string helperText: {
             if ( ValueValidity === FormItem.ValueOutOfRange )
               return qsTr( 'Number is outside of specified range' )
             else if ( ValueValidity === FormItem.InvalidValue )
@@ -463,7 +463,7 @@ Item {
             return ''
           }
 
-          property bool shouldShowConstraintText: {
+          property bool shouldShowhelperText: {
             if ( ( !ConstraintHardValid || !ConstraintSoftValid ) && !!ConstraintDescription )
               return true
 
@@ -480,8 +480,8 @@ Item {
             leftMargin: form.style.fields.sideMargin
           }
 
-          text: constraintText
-          visible: shouldShowConstraintText
+          text: helperText
+          visible: shouldShowhelperText
           height: visible ? undefined : 0
           wrapMode: Text.WordWrap
           color: form.style.constraint.descriptionColor
