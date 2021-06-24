@@ -660,7 +660,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
-  // evaluate if numbers are in correct range
+  // Evaluate field values validity
   {
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
@@ -692,7 +692,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
       ++formItemsIterator;
     }
-    emit fieldValuesValidChanged();
+    updateFieldValuesValidity();
   }
 
   // Check if we have any changes
@@ -736,21 +736,9 @@ bool AttributeController::constraintsSoftValid() const
   return mConstraintsSoftValid;
 }
 
-bool AttributeController::fieldValuesValid()
+bool AttributeController::fieldValuesValid() const
 {
-  // loop over items and see if there is a field with invalid state
-  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-  while ( formItemsIterator != mFormItems.end() )
-  {
-    std::shared_ptr<FormItem> item = formItemsIterator.value();
-    if ( item->valueState() != FormItem::ValidValue )
-    {
-      return false;
-    }
-    ++formItemsIterator;
-  }
-
-  return true;
+  return mFieldValuesValid;
 }
 
 bool AttributeController::hasTabs() const
@@ -920,6 +908,33 @@ void AttributeController::setHasAnyChanges( bool hasChanges )
   }
 }
 
+void AttributeController::updateFieldValuesValidity()
+{
+  // loop over items and see if there is a field with invalid state
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->valueState() != FormItem::ValidValue )
+    {
+      setFieldValuesValid( false );
+      return;
+    }
+    ++formItemsIterator;
+  }
+
+  setFieldValuesValid( true );
+}
+
+void AttributeController::setFieldValuesValid( bool valid )
+{
+  if ( valid != mFieldValuesValid )
+  {
+    mFieldValuesValid = valid;
+    emit fieldValuesValidChanged();
+  }
+}
+
 bool AttributeController::isValidFormId( const QUuid &id ) const
 {
   return mFormItems.contains( id );
@@ -998,28 +1013,29 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
         if ( value.toBool() )
         {
           item->setState( FormItem::InvalidValue );
+          setFieldValuesValid( false );
         }
         else
         {
           item->setState( FormItem::ValidValue ); // this is empty field ~ NULL value
+          updateFieldValuesValidity();
         }
 
         emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
-        emit fieldValuesValidChanged();
         return false;
       }
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       item->setState( FormItem::ValidValue );
 
       emit formDataChanged( id );
-      emit fieldValuesValidChanged();
+      updateFieldValuesValidity();
       recalculateDerivedItems( true, false );
     }
     else
     {
       item->setState( FormItem::ValidValue );
       emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
-      emit fieldValuesValidChanged();
+      updateFieldValuesValidity();
     }
     return true;
   }

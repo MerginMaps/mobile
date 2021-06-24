@@ -100,7 +100,7 @@ class  AttributeController : public QObject
 
     bool constraintsHardValid() const;
     bool constraintsSoftValid() const;
-    bool fieldValuesValid();
+    bool fieldValuesValid() const;
     bool hasTabs() const;
     bool hasAnyChanges() const;
 
@@ -153,6 +153,8 @@ class  AttributeController : public QObject
     void clearAll();
 
     void setHasAnyChanges( bool hasChanges );
+    void updateFieldValuesValidity();
+    void setFieldValuesValid( bool valid );
 
     bool isValidTabId( int id ) const;
     bool isValidFormId( const QUuid &id ) const;
@@ -195,6 +197,7 @@ class  AttributeController : public QObject
 
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
+    bool mFieldValuesValid = false;
     bool mHasAnyChanges = false;
     bool mHasTabs = false;
 
