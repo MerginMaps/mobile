@@ -7,19 +7,19 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import ".."  // import InputStyle singleton
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import ".."
 
 Item {
+    id: toolbar
+
     property int itemSize: toolbar.height * 0.8
     property bool isFeaturePoint: false
 
     signal editClicked()
     signal deleteClicked()
     signal editGeometryClicked()
-
-    id: toolbar
 
     states: [
         State {
@@ -62,7 +62,7 @@ Item {
 
                 onActivated: {
                     toolbar.editClicked()
-                    toolbar.state="Edit"
+//                    toolbar.state="Edit"
                 }
             }
         }

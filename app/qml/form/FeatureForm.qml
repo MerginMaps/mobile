@@ -28,11 +28,6 @@ Item {
    */
   signal canceled
 
-  /**
-   * When any notification message has to be shown.
-   */
-  signal notify(var message)
-
    /**
     * A handler for extra events in externalSourceWidget.
     */
@@ -134,10 +129,20 @@ Item {
    */
   property QgsQuick.Project project
 
+  RememberAttributesController {
+    id: rememberAttributesController
+    rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+  }
+
   /**
    * Controller
    */
-  property AttributeController controller
+  property AttributeController controller: AttributeController {
+    id: attributeController
+
+    rememberAttributesController: rememberAttributesController
+    variablesManager: __variablesManager
+  }
 
   /**
    * The function used for a component loader to find qml edit widget components used in form.

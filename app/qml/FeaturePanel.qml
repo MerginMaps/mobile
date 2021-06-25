@@ -12,291 +12,173 @@ import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 
 import "."  // import InputStyle singleton
-import "./form"
+import "./form" as Forms
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
-Drawer {
+Item {
+  id: root
 
-    property var mapSettings
-    property var project
-    property real panelHeight
-    property real previewHeight
-    property bool isReadOnly
+  /*
+   * FeaturePanel component is responsible for entire feature form, both preview and fullscreen form
+   */
 
-    signal editGeometryClicked()
-    signal panelClosed()
+  property var project
+  property var activeFeatureLayerPair
 
-    property alias formState: featureForm.state
-    property alias feature: attributeController.featureLayerPair
+  property int openedFormsCount: formsStack.depth
 
-    function saveFeatureGeom() {
-        featureForm.save()
+  function openForm( pair, pairState, openPreview ) {
+
+    if ( openPreview ) {
+      // push to the stackview component with such thing
+      formsStack.push()
     }
 
-    function isNewFeature() {
-      return attributeController.isNewFeature()
-    }
+    // push to the stackview component that does not need preview
+    formsStack.push()
+  }
 
-    function reload() {
-      attributeController.reset()
-      featureForm.reset()
-      rememberAttributesController.reset()
-      attributePreviewController.reset()
-    }
+  StackView {
+    id: formsStack
 
-    function onAboutToClose() {
-      if (attributeController.hasAnyChanges)  {
-        saveChangesDialog.open()
-      } else {
-        featurePanel.visible = false
-      }
-    }
+    anchors.fill: parent
 
-    id: featurePanel
-    visible: false
-    modal: false
-    interactive: previewPanel.visible
-    dragMargin: 0 // prevents opening the drawer by dragging.
-    edge: Qt.BottomEdge
-    closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
+    initialItem: Item{}
+  }
 
-    Behavior on height {
-        PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
-    }
+  Component {
+    id: formComponent // I am featureform and preview
 
-    RememberAttributesController {
-      id: rememberAttributesController
-      rememberValuesAllowed: __appSettings.reuseLastEnteredValues
-    }
+    Drawer {
 
-    AttributeController {
-      id: attributeController
-      rememberAttributesController: rememberAttributesController
-      variablesManager: __variablesManager
-    }
+    //    property var mapSettings
+        property var project
+        property real panelHeight
+        property real previewHeight
+        property bool isReadOnly
 
-    AttributePreviewController {
-      id: attributePreviewController
-      project: __loader.project
-    }
+        signal editGeometryClicked()
+        signal panelClosed()
 
-    Item {
-      id: backHandler
-      focus: true
-      Keys.onReleased: {
-        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          featurePanel.onAboutToClose()
+        property alias formState: featureForm.state
+        property alias feature: attributeController.featureLayerPair
+
+        function saveFeatureGeom() {
+            featureForm.save()
         }
-      }
-    }
 
-    background: Rectangle {
-        id: stateManager
-        color: InputStyle.clrPanelMain
+        function isNewFeature() {
+          return attributeController.isNewFeature()
+        }
 
-        state: "preview"
-        states: [
-            State {
-                name: "preview"
-                PropertyChanges { target: featurePanel; height: featurePanel.previewHeight }
-                PropertyChanges { target: formContainer; visible: false }
-                PropertyChanges { target: previewPanel; visible: true }
-            }
-            ,State {
-                name: "form"
-                PropertyChanges { target: featurePanel; height: featurePanel.panelHeight }
-                PropertyChanges { target: formContainer; visible: true }
-                PropertyChanges { target: previewPanel; visible: false }
-            }
-        ]
+        function reload() {
+          attributeController.reset()
+          featureForm.reset()
+          rememberAttributesController.reset()
+          attributePreviewController.reset()
+        }
 
-    }
+        function onAboutToClose() {
+          if (attributeController.hasAnyChanges)  {
+            saveChangesDialog.open()
+          } else {
+            featurePanel.visible = false
+          }
+        }
 
-    onClosed: {
-        stateManager.state = "preview"
-    }
-
-    function show_panel(feature, formState, panelState) {
-        featurePanel.feature = feature
-        attributePreviewController.featureLayerPair = feature
-        featurePanel.formState = formState
-        featurePanel.visible = true
-        featurePanel.isReadOnly = feature.layer.readOnly
-        backHandler.focus = true
-        stateManager.state = panelState
-    }
-
-    PreviewPanel {
-      id: previewPanel
-      controller: attributePreviewController
-      height: featurePanel.previewHeight
-      width: parent.width
-      visible: false
-      isReadOnly: featurePanel.isReadOnly
-      x: 0
-      y: 0
-      onContentClicked: {
-          stateManager.state = "form"
-      }
-
-      onEditClicked: {
-          stateManager.state = "form"
-          featurePanel.formState = "Edit"
-      }
-    }
-
-
-    Item {
-        id: formContainer
-        width: featurePanel.width
-        height: featurePanel.height
+        id: featurePanel
         visible: false
+        modal: false
+        interactive: previewPanel.visible
+        dragMargin: 0 // prevents opening the drawer by dragging.
+        edge: Qt.BottomEdge
+        closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
-        PanelHeader {
-            id: header
-            height: InputStyle.rowHeightHeader
-            width: parent.width
+        Behavior on height {
+            PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+        }
+
+        RememberAttributesController {
+          id: rememberAttributesController
+          rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+        }
+
+        AttributeController {
+          id: attributeController
+          rememberAttributesController: rememberAttributesController
+          variablesManager: __variablesManager
+        }
+
+        AttributePreviewController {
+          id: attributePreviewController
+          project: __loader.project
+        }
+
+        Item {
+          id: backHandler
+          focus: true
+          Keys.onReleased: {
+            if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+              featurePanel.onAboutToClose()
+            }
+          }
+        }
+
+        background: Rectangle {
+            id: stateManager
             color: InputStyle.clrPanelMain
-            fontBtnColor: InputStyle.highlightColor
-            rowHeight: InputStyle.rowHeightHeader
-            titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
-            backIconVisible: !saveButtonText.visible
-            backTextVisible: saveButtonText.visible
 
-            onBack: {
-              featurePanel.close()
-            }
-
-            Text {
-                id: saveButtonText
-                text: qsTr("Save")
-                visible: featureForm.state === "Edit" || featureForm.state === "Add"
-                enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
-                color: enabled ? InputStyle.highlightColor : "red"
-                font.pixelSize: InputStyle.fontPixelSizeNormal
-                height: header.rowHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.top: parent.top
-                anchors.rightMargin: InputStyle.panelMargin // same as back button
-
-                MouseArea {
-                  anchors.fill: parent
-                  onClicked: featureForm.save()
+            state: "preview"
+            states: [
+                State {
+                    name: "preview"
+                    PropertyChanges { target: featurePanel; height: featurePanel.previewHeight }
+                    PropertyChanges { target: formContainer; visible: false }
+                    PropertyChanges { target: previewPanel; visible: true }
                 }
-            }
+                ,State {
+                    name: "form"
+                    PropertyChanges { target: featurePanel; height: featurePanel.panelHeight }
+                    PropertyChanges { target: formContainer; visible: true }
+                    PropertyChanges { target: previewPanel; visible: false }
+                }
+            ]
 
         }
 
-        FeatureForm {
-            id: featureForm
-            visible: true
-
-            width: parent.width
-            height: parent.height - header.height - toolbar.height
-            anchors.top: header.bottom
-            anchors.bottom: toolbar.top
-            externalResourceHandler: externalResourceBundle.handler
-            importDataHandler: codeReaderHandler.handler
-            controller: attributeController
-            project: featurePanel.project
-
-
-            onSaved: {
-                featurePanel.panelClosed()
-                featurePanel.visible = false
-            }
-            onCanceled: {
-              featurePanel.panelClosed()
-              featurePanel.visible = false
-            }
-
-            onStateChanged: {
-                toolbar.state = featureForm.state
-            }
-
-            onNotify: __inputUtils.showNotificationRequested(message)
-
-            customWidgetCallback: valueRelationWidget.handler
+        onClosed: {
+            stateManager.state = "preview"
         }
 
-        FeatureToolbar {
-            id: toolbar
-            width: parent.width
-            height: InputStyle.rowHeightHeader
-            y: parent.height - height
-            state: featurePanel.formState
-            visible: !featurePanel.isReadOnly
-            isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
-
-            onEditClicked: featureForm.state = "Edit"
-            onDeleteClicked: deleteDialog.visible = true
-            onEditGeometryClicked: {
-                featurePanel.editGeometryClicked()
-            }
+        function show_panel(feature, formState, panelState) {
+            featurePanel.feature = feature
+            attributePreviewController.featureLayerPair = feature
+            featurePanel.formState = formState
+            featurePanel.visible = true
+            featurePanel.isReadOnly = feature.layer.readOnly
+            backHandler.focus = true
+            stateManager.state = panelState
         }
 
-
-        MessageDialog {
-          id: deleteDialog
+        Forms.PreviewPanel {
+          id: previewPanel
+          controller: attributePreviewController
+          height: featurePanel.previewHeight
+          width: parent.width
           visible: false
-          title: qsTr( "Delete feature" )
-          text: qsTr( "Are you sure you want to delete this feature?" )
-          icon: StandardIcon.Warning
-          standardButtons: StandardButton.Ok | StandardButton.Cancel
-
-          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-          onButtonClicked: {
-              if (clickedButton === StandardButton.Ok) {
-                attributeController.deleteFeature()
-                visible = false
-                featureForm.canceled()
-              }
-              else if (clickedButton === StandardButton.Cancel) {
-                visible = false
-              }
+          isReadOnly: featurePanel.isReadOnly
+          x: 0
+          y: 0
+          onContentClicked: {
+              stateManager.state = "form"
           }
-        }
 
-        MessageDialog {
-          id: saveChangesDialog
-          visible: false
-          title: qsTr( "Unsaved changes" )
-          text: qsTr( "Do you want to save changes?" )
-          icon: StandardIcon.Warning
-          standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
-
-          //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-          onButtonClicked: {
-              if (clickedButton === StandardButton.Yes) {
-                featureForm.save()
-              }
-              else if (clickedButton === StandardButton.No) {
-                featureForm.canceled()
-              }
-              else if (clickedButton === StandardButton.Cancel) {
-                // Do nothing
-              }
-              visible = false
+          onEditClicked: {
+              stateManager.state = "form"
+              featurePanel.formState = "Edit"
           }
         }
     }
-
-    ExternalResourceBundle {
-      id: externalResourceBundle
-    }
-
-    ValueRelationWidget {
-      id: valueRelationWidget
-
-      onWidgetClosed: backHandler.forceActiveFocus()
-    }
-
-    CodeReaderHandler {
-      id: codeReaderHandler
-    }
-
+  }
 }

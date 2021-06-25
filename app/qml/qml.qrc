@@ -11,7 +11,6 @@
         <file>SettingsPanel.qml</file>
         <file>MapThemePanel.qml</file>
         <file>Notification.qml</file>
-        <file>PreviewPanel.qml</file>
         <file>MainPanelButton.qml</file>
         <file>RoundIndicator.qml</file>
         <file>PanelHeader.qml</file>
@@ -83,7 +82,10 @@
         <file>form/FeatureForm.qml</file>
         <file>form/FeatureFormStyling.qml</file>
         <file>form/FeatureToolbar.qml</file>
+        <file>form/PreviewPanel.qml</file>
         <file>form/EditorDelegate.qml</file>
         <file>form/RelationDelegate.qml</file>
+        <file>form/FormWrapper.qml</file>
+        <file>form/FeatureFormPage.qml</file>
     </qresource>
 </RCC>

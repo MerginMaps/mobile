@@ -8,7 +8,21 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtQuick.Controls 2.14
 
-Item {
+Drawer {
 
+  // it is a drawer
+
+  // property parent feature layer pair
+  // property feature layer pair
+
+  // signal to open form for existing feature
+  // signal to create new feature in specific layer
+
+  // builds models
+
+  // Preview
+
+  // FeatureForm
 }

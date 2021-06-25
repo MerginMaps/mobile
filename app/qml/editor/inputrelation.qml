@@ -46,6 +46,8 @@ Item {
     onModelReset: root.linkedFeaturesCount = rowCount()
   }
 
+  Component.onCompleted: console.log( "Stack view?", StackView.view )
+
   DelegateModel {
     id: delegateModel
     /*
