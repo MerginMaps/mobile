@@ -77,6 +77,15 @@ Item {
     onEditingFinished: {
       valueChanged( text, text === undefined )
     }
+
+    //! Commit value if has changed when widget gets out of the FeatureForm (ListView) viewport
+    Component.onDestruction: {
+      if ( textField.activeFocus ) {
+        if ( value !== textField.text ) {
+          valueChanged( textField.text, textField.text === undefined )
+        }
+      }
+    }
   }
 
   TextArea {
@@ -102,8 +111,17 @@ Item {
         radius: customStyle.fields.cornerRadius
     }
 
-    onTextChanged: {
+    onEditingFinished: {
         valueChanged( text, text === undefined )
+      }
+    }
+
+    //! Commit value if has changed when widget gets out of the FeatureForm (ListView) viewport
+    Component.onDestruction: {
+      if ( textArea.activeFocus ) {
+        if ( value !== textArea.text ) {
+          valueChanged( textArea.text, textArea.text === undefined )
+        }
       }
     }
 
