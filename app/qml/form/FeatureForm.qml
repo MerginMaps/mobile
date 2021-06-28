@@ -144,6 +144,8 @@ Item {
     variablesManager: __variablesManager
   }
 
+  property var extraView
+
   /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
@@ -537,6 +539,7 @@ Item {
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           property var associatedRelation: Relation
+          property var formView: extraView
 
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler

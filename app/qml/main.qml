@@ -65,14 +65,15 @@ ApplicationWindow {
             }
             else if (stateManager.state === "edit") {
                 recordToolbar.focus = true
-                featurePanel.visible = false
+                formController.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                __loader.setActiveLayer( featurePanel.feature.layer )
+                let pair = formController.getFeaturePair()
+                __loader.setActiveLayer( pair.layer )
                 updateRecordToolbar()
 
-                var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
+                var screenPos = digitizing.pointFeatureMapCoordinates( pair )
                 mapCanvas.mapSettings.setCenter(screenPos);
 
                 browseDataPanel.clearStackAndClose()
@@ -101,7 +102,7 @@ ApplicationWindow {
           digitizingHighlight.visible = true
         }
 
-        featurePanel.show_panel( pair, "Add", "form" )
+        formController.openForm( pair, "Add", "form" )
       }
 
       stateManager.state = "view"
@@ -119,32 +120,35 @@ ApplicationWindow {
     }
 
     function editFeature() {
-        var layer = featurePanel.feature.layer
-        if (!layer)
+        var pair = formController.getFeaturePair()
+        if (!pair || !pair.layer)
         {
             // nothing to do with no active layer
             return
         }
 
+        let layer = pair.layer
         if (digitizing.hasLineGeometry(layer)) {
             // TODO
         }
         else if (digitizing.hasPointGeometry(layer)) {
             var recordedPoint = getRecordedPoint()
             var newFormState = "Edit"
-            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
+            let featurePair = digitizing.changePointGeometry(formController.getFeaturePair(), recordedPoint, digitizing.useGpsPoint)
+            formController.setFeaturePair( featurePair )
 
-            if (featurePanel.isNewFeature()) {
-              digitizingHighlight.featureLayerPair = featurePanel.feature
+            if ( formController.isNewFeature() ) {
+              digitizingHighlight.featureLayerPair = featurePair
               digitizingHighlight.visible = true
               newFormState = "Add"
             } else {
               // save only existing feature
-              featurePanel.saveFeatureGeom()
+              formController.save()
             }
 
             stateManager.state = "view"
-            featurePanel.show_panel(featurePanel.feature, newFormState, "form")
+            // go back to visible
+//            formController.openForm(formController.feature, newFormState, "form")
         }
     }
 
@@ -226,17 +230,17 @@ ApplicationWindow {
 
       // update extent to fit feature above preview panel
       if ( shouldUpdateExtent ) {
-          let panelOffsetRatio = featurePanel.previewHeight/window.height
+          let panelOffsetRatio = formController.previewHeight/window.height
           __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
       }
 
       if ( hasGeometry ) {
         highlight.featureLayerPair = feature
         highlight.visible = true
-        featurePanel.show_panel( feature, "ReadOnly", "preview" )
+        formController.openForm( feature, "ReadOnly", "preview" )
       }
       else
-        featurePanel.show_panel( feature, "ReadOnly", "form" )
+        formController.openForm( feature, "ReadOnly", "form" )
     }
 
     function updatePosition() {
@@ -284,6 +288,14 @@ ApplicationWindow {
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
+        if ( !__androidUtils.isAndroid )
+        {
+          window.width = 423
+          window.height = 601
+          window.x = 1100
+          window.y = 266
+        }
+
         console.log("Completed Running!")
     }
 
@@ -315,9 +327,10 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
 
         if (res.valid) {
-          selectFeature(res, ( mouse.y > window.height - featurePanel.previewHeight ) )
-        } else if (featurePanel.visible) { // closes feature/preview panel when there is nothing to show
-          featurePanel.visible = false
+          let shouldUpdateExtent = mouse.y > window.height - formController.previewHeight
+          selectFeature( res, shouldUpdateExtent )
+        } else if (formController.visible) { // closes feature/preview panel when there is nothing to show
+          formController.visible = false
         }
       }
     }
@@ -409,7 +422,7 @@ ApplicationWindow {
     PositionKit {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
-      simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
+      simulatePositionLongLatRad: __use_simulated_position ? [17.130032, 48.130725, 0] : []
       onScreenPositionChanged: updatePosition()
     }
 
@@ -547,7 +560,8 @@ ApplicationWindow {
 
         onCancelClicked: {
             if (stateManager.state === "edit") {
-                featurePanel.show_panel(featurePanel.feature, "Edit", "form")
+              // go back to visible
+//                formController.openForm(formController.feature, "Edit", "form")
             }
             stateManager.state = "view"
             digitizingHighlight.visible = false
@@ -737,15 +751,15 @@ ApplicationWindow {
         }
     }
 
-    FeaturePanel {
-        id: featurePanel
+    FormController {
+        id: formController
+
         height: window.height
         width: window.width
-        mapSettings: mapCanvas.mapSettings
-        panelHeight: window.height
         previewHeight: window.height/3
+
         project: __loader.project
-        z: 0 // to featureform editors be visible
+//        z: 0 // to featureform editors be visible
 
         onVisibleChanged: {
             if ( !visible ) {
@@ -757,22 +771,22 @@ ApplicationWindow {
                 else mainPanel.focus = true
               }
             }
-            else featurePanel.forceActiveFocus()
+            else formController.forceActiveFocus()
         }
 
-        onEditGeometryClicked: {
-            stateManager.state = "edit"
-        }
+//        onEditGeometryClicked: {
+//            stateManager.state = "edit"
+//        }
 
-        onPanelClosed: {
-          updateBrowseDataPanel()
-        }
+//        onPanelClosed: {
+//          updateBrowseDataPanel()
+//        }
     }
 
     Connections {
         target: __loader
         onProjectWillBeReloaded: {
-            featurePanel.reload()
+            formController.reload()
         }
     }
 

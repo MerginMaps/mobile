@@ -10,19 +10,98 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-Drawer {
+import lc 1.0
+import ".."
 
-  // it is a drawer
+Item {
+  id: root
 
-  // property parent feature layer pair
-  // property feature layer pair
+  property var featureLayerPair
+  property var parentFeatureLayerPair
+  property var project
+  property string startingState // preview or form
+  property string formState // add, edit or ReadOnly
 
-  // signal to open form for existing feature
-  // signal to create new feature in specific layer
+  property real previewHeight
+  property real panelHeight
 
-  // builds models
+  property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
 
-  // Preview
+  signal createFeature( var layer )
 
-  // FeatureForm
+  Drawer {
+    id: drawer
+
+    Item {
+      id: statesManager
+
+      state: root.startingState
+      states: [
+        State {
+          name: "preview"
+          PropertyChanges { target: drawer; height: root.previewHeight }
+          PropertyChanges { target: drawer; interactive: true }
+          PropertyChanges { target: formContainer; visible: false }
+          PropertyChanges { target: previewPanel; visible: true }
+        },
+        State {
+          name: "form"
+          PropertyChanges { target: drawer; height: root.height }
+          PropertyChanges { target: drawer; interactive: false }
+          PropertyChanges { target: formContainer; visible: true }
+          PropertyChanges { target: previewPanel; visible: false }
+        }
+      ]
+
+      onStateChanged: {
+        if (state === "preview")
+          drawer.open()
+      }
+    }
+
+    Behavior on height {
+      PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+    }
+
+    background: Rectangle {
+      color: InputStyle.clrPanelMain
+    }
+
+    width: parent.width
+    z: 0
+    modal: false
+    dragMargin: 0 // prevents opening the drawer by dragging.
+    edge: Qt.BottomEdge
+    closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
+
+    PreviewPanel {
+      id: previewPanel
+
+      isReadOnly: root.isReadOnly
+      controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
+
+      height: root.previewHeight
+      width: root.width
+
+      onContentClicked: {
+        statesManager.state = "form"
+      }
+
+      onEditClicked: {
+        statesManager.state = "form"
+        formContainer.formState = "Edit"
+      }
+    }
+
+    FeatureFormPage {
+      id: formContainer
+
+      project: root.project
+      featureLayerPair: root.featureLayerPair
+      parentFeatureLayerPair: root.parentFeatureLayerPair
+      formState: root.formState
+
+      anchors.fill: parent
+    }
+  }
 }

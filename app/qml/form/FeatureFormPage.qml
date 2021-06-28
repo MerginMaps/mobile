@@ -21,15 +21,15 @@ Item {
   property var project
   property var featureLayerPair
   property var parentFeatureLayerPair
-  property bool readOnly
+  property string formState
 
   signal openNewForm( var i, var myParent )
   signal close()
   signal editGeometryClicked()
 
-  function openItem( item ) {
-    formStackView.push( item )
-  }
+//  function openItem( item ) {
+//    formStackView.push( item )
+//  }
 
   StackView {
     id: formStackView
@@ -66,7 +66,7 @@ Item {
         color: InputStyle.clrPanelMain
         fontBtnColor: InputStyle.highlightColor
 
-        titleText: featurePanel.formState === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
+        titleText: featureForm.state === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
 
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
@@ -104,6 +104,20 @@ Item {
         }
       }
 
+      Item {
+        id: backHandler
+        focus: true
+        Keys.onReleased: {
+          if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            if ( featureForm.controller.hasAnyChanges )  {
+              saveChangesDialog.open()
+            } else {
+              root.close()
+            }
+          }
+        }
+      }
+
       // content
       FeatureForm {
         id: featureForm
@@ -123,10 +137,19 @@ Item {
 
 
         project: root.project
-        controller: attributeController
+
+        controller: AttributeController {
+          featureLayerPair: root.featureLayerPair
+          variablesManager: __variablesManager
+
+          rememberAttributesController: RememberAttributesController {
+            rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+          }
+        }
 
         importDataHandler: codeReaderHandler.handler
         externalResourceHandler: externalResourceBundle.handler
+        state: root.formState
 
         onSaved: root.close()
 //        {
@@ -145,6 +168,9 @@ Item {
 //        }
 
         customWidgetCallback: valueRelationWidget.handler
+
+        extraView: formPage.StackView.view
+        Component.onCompleted: console.log( "Stack view?", formPage.StackView.view )
       }
 
       footer: FeatureToolbar {
@@ -154,11 +180,11 @@ Item {
         height: InputStyle.rowHeightHeader
 //        y: parent.height - height
 
-        state: featurePanel.formState
+        state: featureForm.state
 
         visible: !root.readOnly
-        isFeaturePoint: digitizing.hasPointGeometry( root.featureLayerPair.layer )
-//        isFeaturePoint: featurePanel.feature.layer && digitizing.hasPointGeometry(featurePanel.feature.layer)
+//        isFeaturePoint: digitizing.hasPointGeometry( root.featureLayerPair.layer )
+        isFeaturePoint: root.featureLayerPair.layer && digitizing.hasPointGeometry( root.featureLayerPair.layer )
 
         onEditClicked: featureForm.state = "Edit"
         onDeleteClicked: deleteDialog.visible = true
@@ -168,9 +194,9 @@ Item {
         }
       }
 
-
       MessageDialog {
         id: deleteDialog
+
         visible: false
         title: qsTr( "Delete feature" )
         text: qsTr( "Are you sure you want to delete this feature?" )
@@ -180,7 +206,8 @@ Item {
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
           if ( clickedButton === StandardButton.Ok ) {
-            featureForm.delete()
+            featureForm.controller.deleteFeature()
+            featureForm.canceled()
 //            visible = false
 //            featureForm.canceled()
           }
@@ -191,6 +218,7 @@ Item {
 
       MessageDialog {
         id: saveChangesDialog
+
         visible: false
         title: qsTr( "Unsaved changes" )
         text: qsTr( "Do you want to save changes?" )
