@@ -129,22 +129,15 @@ Item {
    */
   property QgsQuick.Project project
 
-  RememberAttributesController {
-    id: rememberAttributesController
-    rememberValuesAllowed: __appSettings.reuseLastEnteredValues
-  }
-
   /**
    * Controller
    */
-  property AttributeController controller: AttributeController {
-    id: attributeController
+  property AttributeController controller
 
-    rememberAttributesController: rememberAttributesController
-    variablesManager: __variablesManager
-  }
-
-  property var extraView
+  /**
+   * View for extra components like value relation page, relations page, etc.
+   */
+  property StackView extraView
 
   /**
    * The function used for a component loader to find qml edit widget components used in form.

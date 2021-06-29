@@ -65,7 +65,6 @@ ApplicationWindow {
             }
             else if (stateManager.state === "edit") {
                 recordToolbar.focus = true
-                formController.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
@@ -141,14 +140,14 @@ ApplicationWindow {
               digitizingHighlight.featureLayerPair = featurePair
               digitizingHighlight.visible = true
               newFormState = "Add"
-            } else {
+            }
+            else {
               // save only existing feature
-              formController.save()
+              formController.updateFeatureGeometry()
             }
 
             stateManager.state = "view"
-            // go back to visible
-//            formController.openForm(formController.feature, newFormState, "form")
+            formController.geometryEditingFinished( newFormState )
         }
     }
 
@@ -329,8 +328,8 @@ ApplicationWindow {
         if (res.valid) {
           let shouldUpdateExtent = mouse.y > window.height - formController.previewHeight
           selectFeature( res, shouldUpdateExtent )
-        } else if (formController.visible) { // closes feature/preview panel when there is nothing to show
-          formController.visible = false
+        } else { // closes feature/preview panel when there is nothing to show
+          formController.closeDrawer()
         }
       }
     }
@@ -560,7 +559,7 @@ ApplicationWindow {
 
         onCancelClicked: {
             if (stateManager.state === "edit") {
-              // go back to visible
+              formController.geometryEditingFinished( "Edit" )
 //                formController.openForm(formController.feature, "Edit", "form")
             }
             stateManager.state = "view"
@@ -759,28 +758,22 @@ ApplicationWindow {
         previewHeight: window.height/3
 
         project: __loader.project
-//        z: 0 // to featureform editors be visible
 
-        onVisibleChanged: {
-            if ( !visible ) {
-                digitizingHighlight.visible = false
-                highlight.visible = false
-
-              if (stateManager.state !== "edit") {
-                if ( browseDataPanel.visible ) browseDataPanel.focus = true
-                else mainPanel.focus = true
-              }
-            }
-            else formController.forceActiveFocus()
+        onEditGeometry: {
+          stateManager.state = "edit"
         }
 
-//        onEditGeometryClicked: {
-//            stateManager.state = "edit"
-//        }
+        onClosed: {
+          if (stateManager.state !== "edit") {
+            updateBrowseDataPanel()
 
-//        onPanelClosed: {
-//          updateBrowseDataPanel()
-//        }
+            digitizingHighlight.visible = false
+            highlight.visible = false
+
+            if ( browseDataPanel.visible ) browseDataPanel.focus = true
+            else mainPanel.focus = true
+          }
+        }
     }
 
     Connections {

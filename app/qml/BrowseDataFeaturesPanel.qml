@@ -20,6 +20,7 @@ Item {
 
   property bool layerHasGeometry: true
   property bool allowMultiselect: false
+  property bool allowSearch: true
   property string layerName: ""
   property var featuresModel: null
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
@@ -84,6 +85,7 @@ Item {
     SearchBar {
       id: searchBar
 
+      visible: root.allowSearch
       allowTimer: true
       onSearchTextChanged: {
         root.searchTextChanged( text )
@@ -93,8 +95,8 @@ Item {
     BrowseDataView {
       id: browseDataView
       width: parent.width
-      height: parent.height - searchBar.height
-      y: searchBar.height
+      height: allowSearch? parent.height - searchBar.height : parent.height
+      y: allowSearch ? searchBar.height : 0
       clip: true
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel

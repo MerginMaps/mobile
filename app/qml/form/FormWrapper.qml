@@ -19,8 +19,8 @@ Item {
   property var featureLayerPair
   property var parentFeatureLayerPair
   property var project
-  property string startingState // preview or form
   property string formState // add, edit or ReadOnly
+  property alias panelState: statesManager.state
 
   property real previewHeight
   property real panelHeight
@@ -28,14 +28,27 @@ Item {
   property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
 
   signal createFeature( var layer )
+  signal closeDrawer()
+  signal editGeometry( var pair )
+  signal closed()
+
+  function updateFeatureGeometry() {
+    formContainer.updateFeatureGeometry()
+  }
+
+  function isNewFeature() {
+    return formContainer.isNewFeature()
+  }
+
+  onCloseDrawer: drawer.close()
 
   Drawer {
     id: drawer
 
-    Item {
+    StateGroup {
       id: statesManager
 
-      state: root.startingState
+      state: root.panelState
       states: [
         State {
           name: "preview"
@@ -49,22 +62,37 @@ Item {
           PropertyChanges { target: drawer; height: root.height }
           PropertyChanges { target: drawer; interactive: false }
           PropertyChanges { target: formContainer; visible: true }
+          PropertyChanges { target: formContainer; focus: true }
           PropertyChanges { target: previewPanel; visible: false }
+        },
+        State {
+          name: "editingGeometry"
+          PropertyChanges { target: formContainer; visible: false }
+          PropertyChanges { target: previewPanel; visible: false }
+          PropertyChanges { target: drawer; visible: false }
+        },
+        State {
+          name: "closed"
         }
       ]
 
       onStateChanged: {
-        if (state === "preview")
-          drawer.open()
+        switch( state ) {
+          case "form":
+          case "preview":
+            drawer.open();
+            break;
+          case "editingGeometry":
+            root.editGeometry( root.featureLayerPair );
+            break;
+          case "closed":
+            root.closed()
+        }
       }
     }
 
     Behavior on height {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
-    }
-
-    background: Rectangle {
-      color: InputStyle.clrPanelMain
     }
 
     width: parent.width
@@ -73,6 +101,8 @@ Item {
     dragMargin: 0 // prevents opening the drawer by dragging.
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
+
+    onClosed: statesManager.state = "closed"
 
     PreviewPanel {
       id: previewPanel
@@ -83,13 +113,10 @@ Item {
       height: root.previewHeight
       width: root.width
 
-      onContentClicked: {
-        statesManager.state = "form"
-      }
-
+      onContentClicked: root.panelState = "form"
       onEditClicked: {
-        statesManager.state = "form"
-        formContainer.formState = "Edit"
+        root.panelState = "form"
+        root.formState = "Edit"
       }
     }
 
@@ -102,6 +129,9 @@ Item {
       formState: root.formState
 
       anchors.fill: parent
+
+      onClose: root.panelState = "closed"
+      onEditGeometryClicked: root.panelState = "editingGeometry"
     }
   }
 }

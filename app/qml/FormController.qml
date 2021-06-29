@@ -27,16 +27,28 @@ Item {
 
   property int activeFormIndex: 0
 
+  signal editGeometry()
+  signal closed()
+
   function openForm( pair, formState, panelState ) {
-    let props = {
-      featureLayerPair: pair,
-      startingState: panelState,
-      formState: formState
+    if ( formsStack.depth === 0 )
+    {
+      let props = {
+        featureLayerPair: pair,
+        formState: formState,
+        panelState: panelState
+      }
+
+      var latest = formsStack.push( formComponent, props)
     }
-
-    root.visible = true
-
-    let latest = formsStack.push( formComponent, props)
+    else
+    {
+      latest = formsStack.get( 0 )
+      latest.featureLayerPair = pair
+      latest.formState = formState
+      latest.panelState = panelState
+    }
+    root.activeFormIndex = latest.StackView.index
   }
 
   function setFeaturePair( pair ) {
@@ -54,43 +66,58 @@ Item {
   }
 
   function reload() {
-    // TODO: REMOVE EVERYTHING ~ CLEAR STACK
-    formsStack.clear()
-//    attributeController.reset()
-//    featureForm.reset()
-//    rememberAttributesController.reset()
-//    attributePreviewController.reset()
+    formsStack.clear() // removes all objects due to Qt parent system
   }
-
-//  function show_panel(feature, formState, panelState) {
-//      featurePanel.feature = feature
-//      attributePreviewController.featureLayerPair = feature
-//      featurePanel.formState = formState
-//      featurePanel.visible = true
-//      featurePanel.isReadOnly = feature.layer.readOnly
-//      backHandler.focus = true
-//      stateManager.state = panelState
-//  }
 
   function isNewFeature() {
-//    return attributeController.isNewFeature()
     if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
       let form = formsStack.get( activeFormIndex )
-//      return form.isNewFeature()
-      return true
+      return form.isNewFeature()
     }
-    return null
   }
 
-  function save() {
+  function updateFeatureGeometry() {
     if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
       let form = formsStack.get( activeFormIndex )
-//      form.save()
+      form.updateFeatureGeometry( activeFormIndex )
     }
+  }
+
+  function geometryEditingFinished( formState ) {
+    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
+      let form = formsStack.get( activeFormIndex )
+      form.formState = formState
+      form.panelState = "form"
+    }
+  }
+
+  function geometryEditingStarted( formIndex ) {
+    activeFormIndex = formIndex
+    hide()
+    editGeometry()
+  }
+
+  function closeDrawer() {
+    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
+      let form = formsStack.get( activeFormIndex )
+      form.closeDrawer()
+    }
+  }
+
+  function hide() {
+    root.visible = false
+    formsStack.visible = false
   }
 
   StackView {
     id: formsStack
+
+    function popOneOrClose() {
+      formsStack.pop()
+
+      if ( formsStack.depth <= 1 )
+        root.closed() // this is the top most form, we want to keep it instantiated, just invisible
+    }
 
     anchors.fill: parent
   }
@@ -102,8 +129,15 @@ Item {
       id: wrapper
 
       project: root.project
+
       previewHeight: root.previewHeight
+
+      onClosed: formsStack.popOneOrClose()
+      onEditGeometry: root.geometryEditingStarted( StackView.index )
+
+      onCreateFeature: {
+        // TODO
+      }
     }
   }
 }
-

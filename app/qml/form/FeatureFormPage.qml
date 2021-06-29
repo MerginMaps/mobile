@@ -27,9 +27,21 @@ Item {
   signal close()
   signal editGeometryClicked()
 
-//  function openItem( item ) {
-//    formStackView.push( item )
-//  }
+  function updateFeatureGeometry() {
+    let f = formStackView.get( 0 )
+
+    if ( f ) {
+      f.form.controller.save()
+    }
+  }
+
+  function isNewFeature() {
+    let f = formStackView.get( 0 )
+
+    if ( f ) {
+      return f.form.controller.isNewFeature()
+    }
+  }
 
   StackView {
     id: formStackView
@@ -41,7 +53,7 @@ Item {
      * should be pushed to this view.
      *
      * View is attached to Feature Form,
-     * so fields can push their components to it
+     * so editors can push their components to it
      */
 
     anchors.fill: parent
@@ -55,14 +67,15 @@ Item {
     Page {
       id: formPage
 
-      anchors.fill: parent
+      property alias form: featureForm
 
       header: PanelHeader {
         id: header
 
+        Component.onCompleted: backHandler.forceActiveFocus()
+
         height: InputStyle.rowHeightHeader
         rowHeight: InputStyle.rowHeightHeader
-//        width: parent.width
         color: InputStyle.clrPanelMain
         fontBtnColor: InputStyle.highlightColor
 
@@ -72,9 +85,6 @@ Item {
         backTextVisible: saveButtonText.visible
 
         onBack: root.close()
-//        {
-//          featurePanel.close()
-//        }
 
         Text {
           id: saveButtonText
@@ -111,7 +121,8 @@ Item {
           if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
             if ( featureForm.controller.hasAnyChanges )  {
               saveChangesDialog.open()
-            } else {
+            }
+            else {
               root.close()
             }
           }
@@ -123,18 +134,6 @@ Item {
         id: featureForm
 
         anchors.fill: parent
-
-//        anchors {
-//          left: parent.right
-//          right: parent.right
-//        }
-
-//        width: parent.width
-//        height: parent.height - header.height - toolbar.height
-
-//        anchors.top: header.bottom
-//        anchors.bottom: toolbar.top
-
 
         project: root.project
 
@@ -152,46 +151,25 @@ Item {
         state: root.formState
 
         onSaved: root.close()
-//        {
-//          featurePanel.panelClosed()
-//          featurePanel.visible = false
-//        }
-
         onCanceled: root.close()
-//        {
-//          featurePanel.panelClosed()
-//          featurePanel.visible = false
-//        }
-
-//        onStateChanged: {
-//          toolbar.state = featureForm.state
-//        }
-
-        customWidgetCallback: valueRelationWidget.handler
 
         extraView: formPage.StackView.view
-        Component.onCompleted: console.log( "Stack view?", formPage.StackView.view )
+        customWidgetCallback: valueRelationWidget.handler
       }
 
       footer: FeatureToolbar {
         id: toolbar
 
-//        width: parent.width
         height: InputStyle.rowHeightHeader
-//        y: parent.height - height
 
         state: featureForm.state
 
         visible: !root.readOnly
-//        isFeaturePoint: digitizing.hasPointGeometry( root.featureLayerPair.layer )
-        isFeaturePoint: root.featureLayerPair.layer && digitizing.hasPointGeometry( root.featureLayerPair.layer )
+        isFeaturePoint: digitizing.hasPointGeometry( root.featureLayerPair.layer )
 
-        onEditClicked: featureForm.state = "Edit"
+        onEditClicked: root.formState = "Edit"
         onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: {
-//          featurePanel.editGeometryClicked()
-          root.editGeometryClicked()
-        }
+        onEditGeometryClicked: root.editGeometryClicked()
       }
 
       MessageDialog {
@@ -208,8 +186,7 @@ Item {
           if ( clickedButton === StandardButton.Ok ) {
             featureForm.controller.deleteFeature()
             featureForm.canceled()
-//            visible = false
-//            featureForm.canceled()
+            root.close()
           }
 
           visible = false
@@ -247,6 +224,7 @@ Item {
       ValueRelationWidget {
         id: valueRelationWidget
 
+        extraView: formPage.StackView.view
         onWidgetClosed: featureForm.forceActiveFocus()
       }
 

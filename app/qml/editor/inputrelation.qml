@@ -13,6 +13,7 @@ import QtQml.Models 2.14
 
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import ".."
 
 Item {
   id: root
@@ -26,7 +27,6 @@ Item {
    */
   property string mode: "text"
   property int linkedFeaturesCount: rmodel.rowCount()
-  property bool canOpenFeaturesPage: false // if the advanced page for relations should be shown
 
   signal valueChanged( var value, bool isNull )
   signal featureLayerPairChanged()
@@ -45,8 +45,6 @@ Item {
 
     onModelReset: root.linkedFeaturesCount = rowCount()
   }
-
-  Component.onCompleted: console.log( "Stack view?", StackView.view )
 
   DelegateModel {
     id: delegateModel
@@ -136,7 +134,12 @@ Item {
         },
         State {
           name: "page"
-          // TODO: page state
+          StateChangeScript {
+            script: {
+              let page = root.parent.formView.push( relationsPageComponent, { featuresModel: rmodel } )
+              page.forceActiveFocus()
+            }
+          }
         }
       ]
 
@@ -177,7 +180,7 @@ Item {
         onClicked: {
           if ( textModeContainer.state === "initial" )
             textModeContainer.state = "expanded"
-          else if ( textModeContainer.state === "expanded" && root.canOpenFeaturesPage )
+          else if ( textModeContainer.state === "expanded" )
             textModeContainer.state = "page"
         }
       }
@@ -265,6 +268,32 @@ Item {
 
     Item {
       // todo: photo panel delegate
+    }
+  }
+
+  Component {
+    id: relationsPageComponent
+
+    BrowseDataFeaturesPanel {
+      id: relationsPage
+
+      pageTitle: qsTr( "Linked features" )
+      allowSearch: false //TODO search
+
+      onBackButtonClicked: {
+        root.parent.formView.pop()
+        textModeContainer.state = "expanded"
+      }
+
+//      onFeatureClicked: //TODO
+
+      Keys.onReleased: {
+        if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+          event.accepted = true
+          root.parent.formView.pop()
+          textModeContainer.state = "expanded"
+        }
+      }
     }
   }
 }
