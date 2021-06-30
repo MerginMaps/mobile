@@ -114,6 +114,28 @@ QgsEditorWidgetSetup AttributeController::getEditorWidgetSetup( QgsVectorLayer *
   return setup;
 }
 
+void AttributeController::prefillRelationReferenceField()
+{
+  if ( !mParentFeatureLayerPair.isValid() || !mLinkedRelation.isValid() )
+    return;
+
+  const QList<QgsRelation::FieldPair> fieldPairs = mLinkedRelation.fieldPairs();
+  for ( const QgsRelation::FieldPair &fieldPair : fieldPairs )
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> itemData = formItemsIterator.value();
+      if ( itemData->field().name() == fieldPair.referencingField() )
+      {
+        setFormValue( itemData->id(), mParentFeatureLayerPair.feature().id() );
+        emit formDataChanged( itemData->id() );
+      }
+      ++formItemsIterator;
+    }
+  }
+}
+
 bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
 {
   for ( QgsAttributeEditorElement *element : container->children() )
@@ -1055,4 +1077,36 @@ QVariant AttributeController::formValue( int fieldIndex ) const
     return QVariant();
 
   return mFeatureLayerPair.feature().attribute( fieldIndex );
+}
+
+const FeatureLayerPair &AttributeController::parentFeatureLayerPair() const
+{
+  return mParentFeatureLayerPair;
+}
+
+void AttributeController::setParentFeatureLayerPair( const FeatureLayerPair &newParentFeatureLayerPair )
+{
+  if ( mParentFeatureLayerPair == newParentFeatureLayerPair )
+    return;
+
+  mParentFeatureLayerPair = newParentFeatureLayerPair;
+  emit parentFeatureLayerPairChanged();
+
+  prefillRelationReferenceField();
+}
+
+const QgsRelation &AttributeController::linkedRelation() const
+{
+  return mLinkedRelation;
+}
+
+void AttributeController::setLinkedRelation( const QgsRelation &newLinkedRelation )
+{
+  if ( mLinkedRelation.id() == newLinkedRelation.id() )
+    return;
+
+  mLinkedRelation = newLinkedRelation;
+  emit linkedRelationChanged();
+
+  prefillRelationReferenceField();
 }

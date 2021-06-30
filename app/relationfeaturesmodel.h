@@ -29,7 +29,7 @@ class RelationFeaturesModel : public FeaturesListModel
   public:
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
-    virtual ~RelationFeaturesModel() {};
+    virtual ~RelationFeaturesModel();
 
     void setup(); // will be override
     void populate(); // will be override
@@ -39,6 +39,9 @@ class RelationFeaturesModel : public FeaturesListModel
 
     FeatureLayerPair parentFeatureLayerPair() const;
     QgsRelation relation() const;
+
+public slots:
+    void onChildLayerChanged();
 
   signals:
     void parentFeatureLayerPairChanged( FeatureLayerPair pair );

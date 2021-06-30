@@ -748,6 +748,7 @@ ApplicationWindow {
         width: window.width
         previewHeight: window.height/3
 
+        digitizingController: digitizing
         project: __loader.project
 
         onEditGeometry: {

@@ -65,6 +65,7 @@ class  FeaturesListModel : public QAbstractListModel
       FeatureTitle = Qt::UserRole + 1,
       FeatureId,
       Feature,
+      FeaturePair,
       Description, //! secondary text in list view
       KeyColumn, //! key in value relation
       FoundPair //! pair of attribute and its value by which the feature was found, empty if search expression is empty

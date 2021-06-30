@@ -16,9 +16,13 @@ import ".."
 Item {
   id: root
 
-  property var featureLayerPair
-  property var parentFeatureLayerPair
   property var project
+  property var featureLayerPair
+
+  // for child features in relation:
+  property var linkedRelation
+  property var parentFeatureLayerPair
+
   property alias formState: formContainer.formState // add, edit or ReadOnly
   property alias panelState: statesManager.state
 
@@ -27,10 +31,11 @@ Item {
 
   property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
 
-  signal createFeature( var layer )
+  signal closed()
   signal closeDrawer()
   signal editGeometry( var pair )
-  signal closed()
+  signal openLinkedFeature( var linkedFeature )
+  signal createLinkedFeature( var parentFeature, var relation )
 
   function updateFeatureGeometry() {
     formContainer.updateFeatureGeometry()
@@ -123,15 +128,20 @@ Item {
     FeatureFormPage {
       id: formContainer
 
+      anchors.fill: parent
+
       project: root.project
       featureLayerPair: root.featureLayerPair
-      parentFeatureLayerPair: root.parentFeatureLayerPair
-      formState: root.formState
 
-      anchors.fill: parent
+      linkedRelation: root.linkedRelation
+      parentFeatureLayerPair: root.parentFeatureLayerPair
+
+      formState: root.formState
 
       onClose: root.panelState = "closed"
       onEditGeometryClicked: root.panelState = "editingGeometry"
+      onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
+      onCreateLinkedFeature: root.createLinkedFeature( parentFeature, relation )
     }
   }
 }

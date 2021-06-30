@@ -8,15 +8,25 @@
  ***************************************************************************/
 
 #include "relationfeaturesmodel.h"
+#include "qgsvectorlayer.h"
 
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
   : FeaturesListModel( parent )
 {
 }
 
+RelationFeaturesModel::~RelationFeaturesModel()
+{
+  QObject::disconnect( mRelation.referencingLayer(), nullptr, nullptr, nullptr );
+}
+
 void RelationFeaturesModel::setup()
 {
-  emptyData();
+  if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
+    return;
+
+  QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::onChildLayerChanged );
+  populate();
 }
 
 void RelationFeaturesModel::populate()
@@ -36,6 +46,7 @@ void RelationFeaturesModel::populate()
   }
 
   endResetModel();
+  emit featuresCountChanged( mFeatures.count() );
 }
 
 void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
@@ -45,7 +56,7 @@ void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
     mParentFeatureLayerPair = pair;
     emit parentFeatureLayerPairChanged( mParentFeatureLayerPair );
 
-    populate();
+    setup();
   }
 }
 
@@ -56,7 +67,7 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
     mRelation = relation;
     emit relationChanged( mRelation );
 
-    populate();
+    setup();
   }
 }
 
@@ -68,4 +79,9 @@ FeatureLayerPair RelationFeaturesModel::parentFeatureLayerPair() const
 QgsRelation RelationFeaturesModel::relation() const
 {
   return mRelation;
+}
+
+void RelationFeaturesModel::onChildLayerChanged()
+{
+  populate();
 }

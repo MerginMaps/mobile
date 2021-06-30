@@ -76,6 +76,7 @@ QVariant FeaturesListModel::data( const QModelIndex &index, int role ) const
     case FeatureTitle: return featureTitle( pair );
     case FeatureId: return QVariant( pair.feature().id() );
     case Feature: return QVariant::fromValue<QgsFeature>( pair.feature() );
+    case FeaturePair: return QVariant::fromValue<FeatureLayerPair>( pair );
     case Description: return QVariant( QString( "Feature ID %1" ).arg( pair.feature().id() ) );
     case KeyColumn: return mKeyField.isEmpty() ? QVariant() : pair.feature().attribute( mKeyField );
     case FoundPair: return foundPair( pair );
@@ -275,6 +276,7 @@ QHash<int, QByteArray> FeaturesListModel::roleNames() const
   roleNames[FeatureTitle] = QStringLiteral( "FeatureTitle" ).toLatin1();
   roleNames[FeatureId] = QStringLiteral( "FeatureId" ).toLatin1();
   roleNames[Feature] = QStringLiteral( "Feature" ).toLatin1();
+  roleNames[FeaturePair] = QStringLiteral( "FeaturePair" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[FoundPair] = QStringLiteral( "FoundPair" ).toLatin1();
   roleNames[KeyColumn] = QStringLiteral( "KeyColumn" ).toLatin1();

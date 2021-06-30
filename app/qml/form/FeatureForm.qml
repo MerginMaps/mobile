@@ -28,6 +28,10 @@ Item {
    */
   signal canceled
 
+  signal openLinkedFeature( var linkedFeature )
+
+  signal createLinkedFeature( var parentFeature, var relation )
+
    /**
     * A handler for extra events in externalSourceWidget.
     */
@@ -556,6 +560,21 @@ Item {
           ignoreUnknownSignals: true
           onImportDataRequested: {
            importDataHandler.importData(attributeEditorLoader.item)
+          }
+
+          onOpenLinkedFeature: {
+            form.openLinkedFeature( linkedFeature )
+          }
+
+          onCreateLinkedFeature: {
+            if ( form.state === "Add" ) {
+              // parent feature do not have a valid ID yet, we first need to save it and acquire ID
+              // TODO
+            }
+            else if ( form.state === "Edit" ) {
+              // parent feature in this case already have valid id, so we can open new form
+              form.createLinkedFeature( parentFeature, relation )
+            }
           }
         }
 
