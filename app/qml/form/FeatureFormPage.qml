@@ -155,6 +155,11 @@ Item {
 
         extraView: formPage.StackView.view
         customWidgetCallback: valueRelationWidget.handler
+
+        Connections {
+          target: root
+          onFormStateChanged: featureForm.state = root.formState
+        }
       }
 
       footer: FeatureToolbar {

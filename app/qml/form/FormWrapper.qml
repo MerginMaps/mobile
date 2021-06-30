@@ -19,7 +19,7 @@ Item {
   property var featureLayerPair
   property var parentFeatureLayerPair
   property var project
-  property string formState // add, edit or ReadOnly
+  property alias formState: formContainer.formState // add, edit or ReadOnly
   property alias panelState: statesManager.state
 
   property real previewHeight
@@ -116,7 +116,7 @@ Item {
       onContentClicked: root.panelState = "form"
       onEditClicked: {
         root.panelState = "form"
-        root.formState = "Edit"
+        formContainer.formState = "Edit"
       }
     }
 
