@@ -564,6 +564,9 @@ Item {
           onFormDataChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
             {
+              if ( roles.length === 1 && roles[0] === AttributeFormModel.ValueValidity )
+                return // do not propagate data changed when this is only value validity, it would lead to infinite loop
+
               attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
             }
           }
