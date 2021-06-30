@@ -62,7 +62,6 @@ Item {
 
                 onActivated: {
                     toolbar.editClicked()
-//                    toolbar.state="Edit"
                 }
             }
         }

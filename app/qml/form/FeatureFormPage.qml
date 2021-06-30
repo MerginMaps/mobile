@@ -96,7 +96,7 @@ Item {
 
           enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
 
-          color: enabled ? InputStyle.highlightColor : "red"
+          color: enabled ? InputStyle.highlightColor : InputStyle.invalidButtonColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
           verticalAlignment: Text.AlignVCenter
