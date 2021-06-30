@@ -83,8 +83,6 @@
         <file>form/FeatureFormStyling.qml</file>
         <file>form/FeatureToolbar.qml</file>
         <file>form/PreviewPanel.qml</file>
-        <file>form/EditorDelegate.qml</file>
-        <file>form/RelationDelegate.qml</file>
         <file>form/FormWrapper.qml</file>
         <file>form/FeatureFormPage.qml</file>
     </qresource>
