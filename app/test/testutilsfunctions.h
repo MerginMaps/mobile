@@ -31,6 +31,8 @@ class TestUtilsFunctions: public QObject
     void fileExists();
     void loadQmlComponent();
     void getRelativePath();
+    void resolvePhotoPath();
+    void resolveTargetDir();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

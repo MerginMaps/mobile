@@ -195,6 +195,30 @@ class InputUtils: public QObject
       */
     Q_INVOKABLE static bool fileExists( const QString &path );
 
+    // TODO
+    Q_INVOKABLE static QString resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+
+    /**
+     * This evaluates the "default path" with the following order:
+     * 1. evaluate default path expression if defined,
+     * 2. use default path value if not empty,
+     * 3. use project home folder
+     */
+    Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+
+
+    // TODO homerpath first param
+    Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir );
+
+
+    /**
+     * Returns absolute path of the file for given path and its prefix. If prefixPath is empty,
+     * returns given path.
+     * \param path (Relative) path to file,
+     * \param prefixPath Empty or prefix for given path to abtain absolute path.
+     */
+    Q_INVOKABLE static QString getAbsolutePath( const QString &path, const QString &prefixPath );
+
     /**
      * Returns relative path of the file to given prefixPath. If prefixPath does not match a path parameter,
      * returns an empty string. If a path starts with "file://", this prefix is ignored.

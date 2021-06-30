@@ -18,22 +18,18 @@ import ".."
 Item {
   id: root
 
-  property real iconSize: 15
-
-  /**
-   * Property mode sets how the relation widget will look like, there are two options:
-   * - text: features from child layer are placed on grid (cell displayed as rectangle) with display string
-   * - photo: list horizontal/verical of photos
-   */
-  property string mode: "text"
   property int linkedFeaturesCount: rmodel.rowCount()
+  property bool canOpenFeaturesPage: false // if the advanced page for relations should be shown
+  property real expandedHeight: customStyle.fields.height * 3 // three rows
 
   signal valueChanged( var value, bool isNull )
   signal featureLayerPairChanged()
 
   onFeatureLayerPairChanged: {
     // new feature layer pair, revert state and update delegate model
-    textModeContainer.state = "initial"
+    if (rmodel.isTextType) {
+      textModeContainer.state = "initial"
+    }
     delegateModel.update()
   }
 
@@ -42,6 +38,7 @@ Item {
 
     relation: associatedRelation
     parentFeatureLayerPair: featurePair
+    homePath: activeProject.homePath
 
     onModelReset: root.linkedFeaturesCount = rowCount()
   }
@@ -99,7 +96,7 @@ Item {
   Item {
     id: content
 
-    height: mode === "text" ? textModeContainer.height : photoModeContainer.height
+    height: rmodel.isTextType ? textModeContainer.height : photoModeContainer.height
     anchors {
       left: parent.left
       right: parent.right
@@ -125,7 +122,7 @@ Item {
           name: "expanded"
           PropertyChanges {
             target: textModeContainer
-            height: customStyle.fields.height * 3 // three rows
+            height: root.expandedHeight //customStyle.fields.height * 3 // three rows
           }
           PropertyChanges {
             target: noOfFeaturesText
@@ -153,7 +150,7 @@ Item {
 
       onStateChanged: delegateModel.update()
 
-      visible: mode === "text"
+      visible: rmodel.isTextType
       height: customStyle.fields.height
       width: parent.width
       state: "initial"
@@ -198,13 +195,30 @@ Item {
     }
 
     // Photo Mode Widget
-    Item {
+    Rectangle {
       id: photoModeContainer
 
-      visible: mode === "photo"
-      anchors.fill: parent
+      visible: !rmodel.isTextType
+      height: expandedHeight
+      width: parent.width
 
-      // todo: photo panel widget
+      border.color: customStyle.fields.normalColor
+      border.width: 1 * QgsQuick.Utils.dp
+      color: customStyle.fields.backgroundColor
+      radius: customStyle.fields.cornerRadius
+
+      ListView {
+        height: expandedHeight
+        width: parent.width
+        anchors.margins: customStyle.fields.sideMargin
+        anchors.fill: parent
+        spacing: customStyle.group.spacing
+        orientation: ListView.Horizontal
+        clip: true
+
+        model: rmodel
+        delegate: photoDelegate
+      }
     }
   }
 
@@ -267,7 +281,40 @@ Item {
     id: photoDelegate
 
     Item {
-      // todo: photo panel delegate
+      height: expandedHeight
+      width: height
+
+      Image {
+        id: image
+
+        anchors.fill: parent
+        sourceSize.width: image.width
+        sourceSize.height: image.height
+        source: {
+          let absolutePath = model.PhotoPath
+
+          if (image.status === Image.Error) {
+            customStyle.icons.brokenImage
+          }
+          else if (absolutePath !== '' && __inputUtils.fileExists(absolutePath)) {
+            "file://" + absolutePath
+          }
+          else if (absolutePath === '' || absolutePath === undefined) {
+            customStyle.icons.notAvailable
+          } else {
+            customStyle.icons.brokenImage
+          }
+        }
+        mipmap: true
+        fillMode: Image.PreserveAspectFit
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: console.log("TODO: Image clicked -> show form")
+        onPressAndHold:console.log("TODO: Image pressed and hold -> show preview")
+      }
+
     }
   }
 

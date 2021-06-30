@@ -60,8 +60,6 @@ Item {
   property var cameraIcon: customStyle.icons.camera
   property var deleteIcon: customStyle.icons.remove
   property var galleryIcon: customStyle.icons.gallery
-  property var brokenImageIcon: customStyle.icons.brokenImage
-  property var notAvailableImageIcon: customStyle.icons.notAvailable
   property var backIcon: customStyle.icons.back
   property real iconSize:  customStyle.fields.height
   property real textMargin: QgsQuick.Utils.dp * 10
@@ -78,33 +76,10 @@ Item {
    * 2. use default path value if not empty,
    * 3. use project home folder
    */
-  property string targetDir: {
-    var expression = undefined
-    var collection = config["PropertyCollection"]
-    var props = collection["properties"]
-    if (props) {
-      if(props["propertyRootPath"]) {
-        var rootPathProps = props["propertyRootPath"]
-        expression = rootPathProps["expression"]
-      }
-    }
+  property string targetDir: __inputUtils.resolveTargetDir(homePath, config, featurePair, activeProject)
 
-    if (expression) {
-      __inputUtils.evaluateExpression(featurePair, activeProject, expression)
-    } else {
-      config["DefaultRoot"] ? config["DefaultRoot"] : homePath
-    }
-  }
-  property string prefixToRelativePath: {
-    if (relativeStorageMode === 1 ) {
-      return homePath
-    } else if (relativeStorageMode === 2 ) {
-      return targetDir
-    }
+  property string prefixToRelativePath: __inputUtils.resolvePrefixForRelativePath(relativeStorageMode, homePath, targetDir)
 
-    // Prefix for absolute paths is empty
-    return ""
-  }
   // Meant to be use with the save callback - stores image source
   property string sourceToDelete
 
@@ -113,10 +88,6 @@ Item {
   }
   function callbackOnCancel() {
     externalResourceHandler.onFormCanceled(fieldItem)
-  }
-
-  function getAbsolutePath(prefix, pathFromValue) {
-    return (prefix) ? prefix + "/" + pathFromValue : pathFromValue
   }
 
   function showDefaultPanel() {
@@ -185,7 +156,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: externalResourceHandler.previewImage(getAbsolutePath(prefixToRelativePath, image.currentValue))
+        onClicked: externalResourceHandler.previewImage( getAbsolutePath( prefixToRelativePath, image.currentValue ) )
       }
 
       onCurrentValueChanged: {
@@ -193,7 +164,7 @@ Item {
       }
 
       function getSource() {
-        var absolutePath = getAbsolutePath(prefixToRelativePath, image.currentValue)
+        var absolutePath = __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath )
         if (image.status === Image.Error) {
           fieldItem.state = "notAvailable"
           return ""
@@ -223,7 +194,7 @@ Item {
     anchors.bottom: imageContainer.bottom
     anchors.margins: buttonsContainer.itemHeight/4
 
-    onClicked: externalResourceHandler.removeImage(fieldItem, getAbsolutePath(prefixToRelativePath, image.currentValue))
+    onClicked: externalResourceHandler.removeImage( fieldItem, __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
 
     background: Image {
       id: deleteIcon
