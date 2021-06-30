@@ -98,17 +98,17 @@ Item {
     }
   }
 
+  function closeDrawer() {
+    let form = _getActiveForm()
+
+    if ( form )
+      form.closeDrawer()
+  }
+
   function geometryEditingStarted( formIndex ) {
     activeFormIndex = formIndex
     hide()
     editGeometry()
-  }
-
-  function closeDrawer() {
-    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
-      form.closeDrawer()
-    }
   }
 
   function reload() {
