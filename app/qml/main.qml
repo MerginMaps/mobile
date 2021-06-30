@@ -65,14 +65,14 @@ ApplicationWindow {
             }
             else if (stateManager.state === "edit") {
                 recordToolbar.focus = true
-                featurePanel.visible = false
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                __loader.setActiveLayer( featurePanel.feature.layer )
+                let pair = formsStackManager.getFeaturePair()
+                __loader.setActiveLayer( pair.layer )
                 updateRecordToolbar()
 
-                var screenPos = digitizing.pointFeatureMapCoordinates( featurePanel.feature )
+                var screenPos = digitizing.pointFeatureMapCoordinates( pair )
                 mapCanvas.mapSettings.setCenter(screenPos);
 
                 browseDataPanel.clearStackAndClose()
@@ -101,7 +101,7 @@ ApplicationWindow {
           digitizingHighlight.visible = true
         }
 
-        featurePanel.show_panel( pair, "Add", "form" )
+        formsStackManager.openForm( pair, "Add", "form" )
       }
 
       stateManager.state = "view"
@@ -119,32 +119,35 @@ ApplicationWindow {
     }
 
     function editFeature() {
-        var layer = featurePanel.feature.layer
-        if (!layer)
+        var pair = formsStackManager.getFeaturePair()
+        if (!pair || !pair.layer)
         {
             // nothing to do with no active layer
             return
         }
 
+        let layer = pair.layer
         if (digitizing.hasLineGeometry(layer)) {
             // TODO
         }
         else if (digitizing.hasPointGeometry(layer)) {
             var recordedPoint = getRecordedPoint()
             var newFormState = "Edit"
-            featurePanel.feature = digitizing.changePointGeometry(featurePanel.feature, recordedPoint, digitizing.useGpsPoint)
+            let featurePair = digitizing.changePointGeometry(formsStackManager.getFeaturePair(), recordedPoint, digitizing.useGpsPoint)
+            formsStackManager.setFeaturePair( featurePair )
 
-            if (featurePanel.isNewFeature()) {
-              digitizingHighlight.featureLayerPair = featurePanel.feature
+            if ( formsStackManager.isNewFeature() ) {
+              digitizingHighlight.featureLayerPair = featurePair
               digitizingHighlight.visible = true
               newFormState = "Add"
-            } else {
+            }
+            else {
               // save only existing feature
-              featurePanel.saveFeatureGeom()
+              formsStackManager.updateFeatureGeometry()
             }
 
             stateManager.state = "view"
-            featurePanel.show_panel(featurePanel.feature, newFormState, "form")
+            formsStackManager.geometryEditingFinished( newFormState )
         }
     }
 
@@ -226,17 +229,17 @@ ApplicationWindow {
 
       // update extent to fit feature above preview panel
       if ( shouldUpdateExtent ) {
-          let panelOffsetRatio = featurePanel.previewHeight/window.height
+          let panelOffsetRatio = formsStackManager.previewHeight/window.height
           __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
       }
 
       if ( hasGeometry ) {
         highlight.featureLayerPair = feature
         highlight.visible = true
-        featurePanel.show_panel( feature, "ReadOnly", "preview" )
+        formsStackManager.openForm( feature, "ReadOnly", "preview" )
       }
       else
-        featurePanel.show_panel( feature, "ReadOnly", "form" )
+        formsStackManager.openForm( feature, "ReadOnly", "form" )
     }
 
     function updatePosition() {
@@ -315,9 +318,10 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
 
         if (res.valid) {
-          selectFeature(res, ( mouse.y > window.height - featurePanel.previewHeight ) )
-        } else if (featurePanel.visible) { // closes feature/preview panel when there is nothing to show
-          featurePanel.visible = false
+          let shouldUpdateExtent = mouse.y > window.height - formsStackManager.previewHeight
+          selectFeature( res, shouldUpdateExtent )
+        } else { // closes feature/preview panel when there is nothing to show
+          formsStackManager.closeDrawer()
         }
       }
     }
@@ -547,7 +551,7 @@ ApplicationWindow {
 
         onCancelClicked: {
             if (stateManager.state === "edit") {
-                featurePanel.show_panel(featurePanel.feature, "Edit", "form")
+              formsStackManager.geometryEditingFinished( "Edit" )
             }
             stateManager.state = "view"
             digitizingHighlight.visible = false
@@ -737,42 +741,36 @@ ApplicationWindow {
         }
     }
 
-    FeaturePanel {
-        id: featurePanel
+    FormsStackManager {
+        id: formsStackManager
+
         height: window.height
         width: window.width
-        mapSettings: mapCanvas.mapSettings
-        panelHeight: window.height
         previewHeight: window.height/3
+
         project: __loader.project
-        z: 0 // to featureform editors be visible
 
-        onVisibleChanged: {
-            if ( !visible ) {
-                digitizingHighlight.visible = false
-                highlight.visible = false
-
-              if (stateManager.state !== "edit") {
-                if ( browseDataPanel.visible ) browseDataPanel.focus = true
-                else mainPanel.focus = true
-              }
-            }
-            else featurePanel.forceActiveFocus()
+        onEditGeometry: {
+          stateManager.state = "edit"
         }
 
-        onEditGeometryClicked: {
-            stateManager.state = "edit"
-        }
+        onClosed: {
+          if (stateManager.state !== "edit") {
+            updateBrowseDataPanel()
 
-        onPanelClosed: {
-          updateBrowseDataPanel()
+            digitizingHighlight.visible = false
+            highlight.visible = false
+
+            if ( browseDataPanel.visible ) browseDataPanel.focus = true
+            else mainPanel.focus = true
+          }
         }
     }
 
     Connections {
         target: __loader
         onProjectWillBeReloaded: {
-            featurePanel.reload()
+            formsStackManager.reload()
         }
     }
 

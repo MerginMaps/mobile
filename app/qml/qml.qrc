@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>ActiveLayerPanel.qml</file>
-        <file>FeaturePanel.qml</file>
+        <file>FormsStackManager.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>
         <file>RecordBtn.qml</file>
@@ -11,14 +11,12 @@
         <file>SettingsPanel.qml</file>
         <file>MapThemePanel.qml</file>
         <file>Notification.qml</file>
-        <file>PreviewPanel.qml</file>
         <file>MainPanelButton.qml</file>
         <file>RoundIndicator.qml</file>
         <file>PanelHeader.qml</file>
         <file>PanelItem.qml</file>
         <file>ExtendedMenuItem.qml</file>
         <file>PanelTabButton.qml</file>
-        <file>FeatureToolbar.qml</file>
         <file>PositionMarker.qml</file>
         <file>Shadow.qml</file>
         <file>NumberSpin.qml</file>
@@ -54,6 +52,7 @@
         <file>CodeReaderHandler.qml</file>
         <file>CodeReaderOverlay.qml</file>
         <file>Banner.qml</file>
+        <file>PhotoPanel.qml</file>
         <file>ProjectListPage.qml</file>
         <file>ProjectWizardPage.qml</file>
         <file>StorageLimitDialog.qml</file>
@@ -76,12 +75,15 @@
         <file>editor/inputdatetime.qml</file>
         <file>editor/inputexternalresource.qml</file>
         <file>editor/inputtextedit.qml</file>
+        <file>editor/inputrangeeditable.qml</file>
         <file>editor/inputrangeslider.qml</file>
         <file>editor/inputvaluemap.qml</file>
         <file>editor/inputvaluerelation.qml</file>
-        <file>FeatureForm.qml</file>
-        <file>FeatureFormStyling.qml</file>
-        <file>PhotoPanel.qml</file>
-        <file>editor/inputrangeeditable.qml</file>
+        <file>form/FeatureForm.qml</file>
+        <file>form/FeatureFormStyling.qml</file>
+        <file>form/FeatureToolbar.qml</file>
+        <file>form/PreviewPanel.qml</file>
+        <file>form/FormWrapper.qml</file>
+        <file>form/FeatureFormPage.qml</file>
     </qresource>
 </RCC>

@@ -16,7 +16,7 @@ import QtQml 2.2
 import QtQuick.Controls 1.4 as Controls1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "./components"
+import "../components"
 
 Item {
   /**
@@ -27,11 +27,6 @@ Item {
    * When the form is about to be closed by closeButton or deleting a feature.
    */
   signal canceled
-
-  /**
-   * When any notification message has to be shown.
-   */
-  signal notify(var message)
 
    /**
     * A handler for extra events in externalSourceWidget.
@@ -140,6 +135,11 @@ Item {
   property AttributeController controller
 
   /**
+   * View for extra components like value relation page, relations page, etc.
+   */
+  property StackView extraView
+
+  /**
    * The function used for a component loader to find qml edit widget components used in form.
    */
   property var loadWidgetFn: __inputUtils.getEditorComponentSource
@@ -202,6 +202,14 @@ Item {
      * be restored.
      */
     signal reset
+  }
+
+  StackView {
+    id: formView
+
+    anchors.fill: parent
+
+    initialItem: container
   }
 
   Rectangle {
@@ -524,6 +532,7 @@ Item {
           property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           property var associatedRelation: Relation
+          property var formView: extraView
 
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler
@@ -555,6 +564,9 @@ Item {
           onFormDataChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
             {
+              if ( roles.length === 1 && roles[0] === AttributeFormModel.ValueValidity )
+                return // do not propagate data changed when this is only value validity, it would lead to infinite loop
+
               attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
             }
           }

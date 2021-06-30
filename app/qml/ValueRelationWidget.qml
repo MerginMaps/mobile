@@ -5,6 +5,7 @@ Item {
   signal widgetClosed()
 
   property alias handler: valueRelationHandler
+  property StackView extraView
 
   QtObject {
     id: valueRelationHandler
@@ -26,7 +27,7 @@ Item {
         selectedFeatures = selectedFeatures.map( id => Number(id) ) // ids can be of string type, convert them to number
       }
 
-      valueRelationLayoutStack.push(componentValueRelationPage, {
+      extraView.push(componentValueRelationPage, {
                                       featuresModel: valueRelationModel,
                                       pageTitle: itemWidget.fieldName,
                                       allowMultiselect: itemWidget.allowMultipleValues,
@@ -39,23 +40,9 @@ Item {
     }
   }
 
-  StackView {
-    // this stackview can be moved to FeatureForm when we will create multiple instances of feature form
-    id: valueRelationLayoutStack
-    anchors.fill: parent
-    focus: true
-
-    Keys.onReleased: {
-      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-        event.accepted = true;
-        closeValueRelationPage()
-      }
-    }
-  }
-
   function closeValueRelationPage() {
     valueRelationWidget.widgetClosed()
-    valueRelationLayoutStack.clear()
+    extraView.pop()
   }
 
   id: valueRelationWidget
@@ -66,7 +53,6 @@ Item {
 
     BrowseDataFeaturesPanel {
       id: valueRelationPage
-      anchors.fill: parent
 
       onBackButtonClicked: {
         deactivateSearch()

@@ -165,10 +165,10 @@ void TestUtilsFunctions::fileExists()
 void TestUtilsFunctions::loadQmlComponent()
 {
   QUrl dummy =  mUtils->getEditorComponentSource( "dummy" );
-  QCOMPARE( dummy.path(), QString( "editor/inputtextedit.qml" ) );
+  QCOMPARE( dummy.path(), QString( "../editor/inputtextedit.qml" ) );
 
   QUrl valuemap =  mUtils->getEditorComponentSource( "valuemap" );
-  QCOMPARE( valuemap.path(), QString( "editor/inputvaluemap.qml" ) );
+  QCOMPARE( valuemap.path(), QString( "../editor/inputvaluemap.qml" ) );
 }
 
 void TestUtilsFunctions::getRelativePath()
