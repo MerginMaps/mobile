@@ -287,14 +287,6 @@ ApplicationWindow {
         if ( __appSettings.activeProject )
           mainPanel.forceActiveFocus()
 
-        if ( !__androidUtils.isAndroid )
-        {
-          window.width = 423
-          window.height = 601
-          window.x = 1100
-          window.y = 266
-        }
-
         console.log("Completed Running!")
     }
 
@@ -421,7 +413,7 @@ ApplicationWindow {
     PositionKit {
       id: positionKit
       mapSettings: mapCanvas.mapSettings
-      simulatePositionLongLatRad: __use_simulated_position ? [17.130032, 48.130725, 0] : []
+      simulatePositionLongLatRad: __use_simulated_position ? [-2.9207148, 51.3624998, 0.05] : []
       onScreenPositionChanged: updatePosition()
     }
 
@@ -560,7 +552,6 @@ ApplicationWindow {
         onCancelClicked: {
             if (stateManager.state === "edit") {
               formController.geometryEditingFinished( "Edit" )
-//                formController.openForm(formController.feature, "Edit", "form")
             }
             stateManager.state = "view"
             digitizingHighlight.visible = false
