@@ -68,7 +68,7 @@ ApplicationWindow {
                 recordToolbar.visible = true
                 recordToolbar.extraPanelVisible = false
 
-                let pair = formController.getFeaturePair()
+                let pair = formsStackManager.getFeaturePair()
                 __loader.setActiveLayer( pair.layer )
                 updateRecordToolbar()
 
@@ -101,7 +101,7 @@ ApplicationWindow {
           digitizingHighlight.visible = true
         }
 
-        formController.openForm( pair, "Add", "form" )
+        formsStackManager.openForm( pair, "Add", "form" )
       }
 
       stateManager.state = "view"
@@ -119,7 +119,7 @@ ApplicationWindow {
     }
 
     function editFeature() {
-        var pair = formController.getFeaturePair()
+        var pair = formsStackManager.getFeaturePair()
         if (!pair || !pair.layer)
         {
             // nothing to do with no active layer
@@ -133,21 +133,21 @@ ApplicationWindow {
         else if (digitizing.hasPointGeometry(layer)) {
             var recordedPoint = getRecordedPoint()
             var newFormState = "Edit"
-            let featurePair = digitizing.changePointGeometry(formController.getFeaturePair(), recordedPoint, digitizing.useGpsPoint)
-            formController.setFeaturePair( featurePair )
+            let featurePair = digitizing.changePointGeometry(formsStackManager.getFeaturePair(), recordedPoint, digitizing.useGpsPoint)
+            formsStackManager.setFeaturePair( featurePair )
 
-            if ( formController.isNewFeature() ) {
+            if ( formsStackManager.isNewFeature() ) {
               digitizingHighlight.featureLayerPair = featurePair
               digitizingHighlight.visible = true
               newFormState = "Add"
             }
             else {
               // save only existing feature
-              formController.updateFeatureGeometry()
+              formsStackManager.updateFeatureGeometry()
             }
 
             stateManager.state = "view"
-            formController.geometryEditingFinished( newFormState )
+            formsStackManager.geometryEditingFinished( newFormState )
         }
     }
 
@@ -229,17 +229,17 @@ ApplicationWindow {
 
       // update extent to fit feature above preview panel
       if ( shouldUpdateExtent ) {
-          let panelOffsetRatio = formController.previewHeight/window.height
+          let panelOffsetRatio = formsStackManager.previewHeight/window.height
           __inputUtils.setExtentToFeature( feature, mapCanvas.mapSettings, panelOffsetRatio )
       }
 
       if ( hasGeometry ) {
         highlight.featureLayerPair = feature
         highlight.visible = true
-        formController.openForm( feature, "ReadOnly", "preview" )
+        formsStackManager.openForm( feature, "ReadOnly", "preview" )
       }
       else
-        formController.openForm( feature, "ReadOnly", "form" )
+        formsStackManager.openForm( feature, "ReadOnly", "form" )
     }
 
     function updatePosition() {
@@ -318,10 +318,10 @@ ApplicationWindow {
         var res = identifyKit.identifyOne(screenPoint);
 
         if (res.valid) {
-          let shouldUpdateExtent = mouse.y > window.height - formController.previewHeight
+          let shouldUpdateExtent = mouse.y > window.height - formsStackManager.previewHeight
           selectFeature( res, shouldUpdateExtent )
         } else { // closes feature/preview panel when there is nothing to show
-          formController.closeDrawer()
+          formsStackManager.closeDrawer()
         }
       }
     }
@@ -551,7 +551,7 @@ ApplicationWindow {
 
         onCancelClicked: {
             if (stateManager.state === "edit") {
-              formController.geometryEditingFinished( "Edit" )
+              formsStackManager.geometryEditingFinished( "Edit" )
             }
             stateManager.state = "view"
             digitizingHighlight.visible = false
@@ -741,8 +741,8 @@ ApplicationWindow {
         }
     }
 
-    FormController {
-        id: formController
+    FormsStackManager {
+        id: formsStackManager
 
         height: window.height
         width: window.width
@@ -770,7 +770,7 @@ ApplicationWindow {
     Connections {
         target: __loader
         onProjectWillBeReloaded: {
-            formController.reload()
+            formsStackManager.reload()
         }
     }
 

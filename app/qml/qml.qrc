@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>ActiveLayerPanel.qml</file>
-        <file>FormController.qml</file>
+        <file>FormsStackManager.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>
         <file>RecordBtn.qml</file>

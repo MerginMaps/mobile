@@ -19,7 +19,9 @@ Item {
   id: root
 
   /*
-   * FeaturePanel component is responsible for entire feature form, both preview and fullscreen form
+   * FormsStackManager component is responsible for viewing feature forms, both preview and fullscreen form
+   * It contains a stackview where instances of FormWrapper are pushed. Latest form is not destroyed, but reused
+   * for next feature to reduce a cost of initializing form and AttributeController each time user selects feature.
    */
 
   property var project
@@ -51,41 +53,46 @@ Item {
     root.activeFormIndex = latest.StackView.index
   }
 
-  function setFeaturePair( pair ) {
+  function _getActiveForm() {
     if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
-      form.featureLayerPair = pair
+      return formsStack.get( activeFormIndex )
     }
+    else console.error( "FormsStackManager: Opted for invalid form index" )
+    return null
+  }
+
+  function setFeaturePair( pair ) {
+    let form = _getActiveForm()
+
+    if ( form )
+      form.featureLayerPair = pair
   }
 
   function getFeaturePair() {
-    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
-      return form.featureLayerPair
-    }
-  }
+    let form = _getActiveForm()
 
-  function reload() {
-    formsStack.clear() // removes all objects due to Qt parent system
+    if ( form )
+      return form.featureLayerPair
   }
 
   function isNewFeature() {
-    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
+    let form = _getActiveForm()
+
+    if ( form )
       return form.isNewFeature()
-    }
   }
 
   function updateFeatureGeometry() {
-    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
+    let form = _getActiveForm()
+
+    if ( form )
       form.updateFeatureGeometry( activeFormIndex )
-    }
   }
 
   function geometryEditingFinished( formState ) {
-    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
-      let form = formsStack.get( activeFormIndex )
+    let form = _getActiveForm()
+
+    if ( form ) {
       form.formState = formState
       form.panelState = "form"
     }
@@ -102,6 +109,10 @@ Item {
       let form = formsStack.get( activeFormIndex )
       form.closeDrawer()
     }
+  }
+
+  function reload() {
+    formsStack.clear() // removes all objects due to Qt parent system
   }
 
   function hide() {
