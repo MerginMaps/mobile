@@ -14,6 +14,7 @@
 #include "qgsapplication.h"
 #include "qgscoordinatereferencesystem.h"
 #include "qgscoordinatetransformcontext.h"
+#include "qgsproject.h"
 #include "qgspoint.h"
 #include "qgspointxy.h"
 #include "qgis.h"
@@ -193,4 +194,77 @@ void TestUtilsFunctions::getRelativePath()
 
   QString relativePath5 =  mUtils->getRelativePath( path2, QStringLiteral( "" ) );
   QCOMPARE( path2, relativePath5 );
+}
+
+void TestUtilsFunctions::resolvePhotoPath()
+{
+  QString homePath = TestUtils::testDataDir();
+  QString imagePath( "photos/IMG001.jpg" ); // can be not existing image
+  QVariantMap config;
+  // prepare project to be able evaluate expression
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" );
+  FeatureLayerPair pair; // Can be dummy pair
+
+  // Case 1: absolute path + empty default path
+  config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "0" ) );
+
+  QString result1 = mUtils->resolvePath( imagePath, homePath, config, pair, QgsProject::instance() );
+  QString expected1( imagePath );
+  QCOMPARE( result1, expected1 );
+  config.clear();
+
+  // Case 2: relative to project path + empty default path
+  config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "1" ) );
+
+  QString result2 = mUtils->resolvePath( imagePath, homePath, config, pair, QgsProject::instance() );
+  QString expected2 = QStringLiteral( "%1/%2" ).arg( homePath ).arg( imagePath );
+  QCOMPARE( result2, expected2 );
+  config.clear();
+
+  // Case 3: relative to default path + default path: @project_home + '/photos'
+  config.insert( QStringLiteral( "RelativeStorage" ), QStringLiteral( "2" ) );
+
+  QString result3 = mUtils->resolvePath( imagePath, homePath, config, pair, QgsProject::instance() );
+  QString expected3 = QStringLiteral( "%1/%2" ).arg( homePath ).arg( imagePath );
+  QCOMPARE( result3, expected3 );
+
+}
+
+void TestUtilsFunctions::resolveTargetDir()
+{
+  QString homePath = TestUtils::testDataDir();
+  QString DEFAULT_ROOT( "DEFAULT/ROOT/PATH" ); // can be not existing path
+
+  QgsProject *activeProject = nullptr;
+  QVariantMap config;
+
+  // prepare project to be able evaluate expression
+  QString projectDir = homePath + "/planes";
+  QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" );
+  FeatureLayerPair pair; // Can be dummy pair
+
+  // case 1: empty config, no expression
+  QString resultDir = mUtils->resolveTargetDir( homePath, config, pair, activeProject );
+  QCOMPARE( resultDir, homePath );
+
+  // case 2: defined default root config, no expression
+  config.insert( QStringLiteral( "DefaultRoot" ), DEFAULT_ROOT );
+  QString resultDir2 = mUtils->resolveTargetDir( homePath, config, pair, activeProject );
+  QCOMPARE( resultDir2, DEFAULT_ROOT );
+  config.clear();
+
+  // case 3: defined expression in config->"PropertyCollection" -> "properties" -> "propertyRootPath" -> "expression"
+  QString expression( "@project_home + '/photos'" );
+  QMap<QString, QVariant> propertyRootPath;
+  QMap<QString, QVariant> props;
+  QMap<QString, QVariant> collection;
+
+  propertyRootPath.insert( QStringLiteral( "expression" ), QVariant( expression ) );
+  props.insert( QStringLiteral( "propertyRootPath" ), propertyRootPath );
+  collection.insert( QStringLiteral( "properties" ), props );
+  config.insert( QStringLiteral( "PropertyCollection" ), collection );
+
+  QString resultDir3 = mUtils->resolveTargetDir( homePath, config, pair, QgsProject::instance() );
+  QCOMPARE( resultDir3, QStringLiteral( "%1/photos" ).arg( projectDir ) );
 }

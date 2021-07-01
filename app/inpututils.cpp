@@ -636,6 +636,68 @@ bool InputUtils::fileExists( const QString &path )
   return ( check_file.exists() && check_file.isFile() );
 }
 
+QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject )
+{
+  QString expression;
+  QMap<QString, QVariant> collection = config.value( QStringLiteral( "PropertyCollection" ) ).toMap();
+  QMap<QString, QVariant> props = collection.value( QStringLiteral( "properties" ) ).toMap();
+
+  if ( !props.isEmpty() )
+  {
+    QMap<QString, QVariant> propertyRootPath = props.value( QStringLiteral( "propertyRootPath" ) ).toMap();
+    expression = propertyRootPath.value( QStringLiteral( "expression" ), QString() ).toString();
+  }
+
+  if ( !expression.isEmpty() )
+  {
+    return evaluateExpression( pair, activeProject, expression );
+  }
+  else
+  {
+    QString defaultRoot = config.value( QStringLiteral( "DefaultRoot" ) ).toString();
+    if ( defaultRoot.isEmpty() )
+    {
+      return homePath;
+    }
+    else
+    {
+      return defaultRoot;
+    }
+  }
+
+
+}
+
+QString InputUtils::resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir )
+{
+  if ( relativeStorageMode == 1 )
+  {
+    return homePath;
+  }
+  else if ( relativeStorageMode == 2 )
+  {
+    return targetDir;
+  }
+  else
+  {
+    return QString();
+  }
+}
+
+QString InputUtils::getAbsolutePath( const QString &path, const QString &prefixPath )
+{
+  return ( prefixPath.isEmpty() ) ? path : QStringLiteral( "%1/%2" ).arg( prefixPath ).arg( path );
+}
+
+QString InputUtils::resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject )
+{
+  int relativeStorageMode = config.value( QStringLiteral( "RelativeStorage" ) ).toInt();
+  QString targetDir = resolveTargetDir( homePath, config, pair, activeProject );
+  QString prefixToRelativePath = resolvePrefixForRelativePath( relativeStorageMode, homePath, targetDir );
+
+  return getAbsolutePath( path, prefixToRelativePath );
+}
+
 QString InputUtils::getRelativePath( const QString &path, const QString &prefixPath )
 {
   QString modPath = path;

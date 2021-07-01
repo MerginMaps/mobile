@@ -110,7 +110,7 @@ Item {
         property var imageSelected: function imageSelected(imagePath) {
           var filename = __inputUtils.getFileName(imagePath)
           //! final absolute location of an image.
-          var absolutePath  = externalResourceHandler.itemWidget.getAbsolutePath(externalResourceHandler.itemWidget.targetDir, filename)
+          var absolutePath = __inputUtils.getAbsolutePath( filename, externalResourceHandler.itemWidget.targetDir )
 
           if (!__inputUtils.fileExists(absolutePath)) {
             var success = __inputUtils.copyFile(imagePath, absolutePath)

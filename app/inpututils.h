@@ -196,6 +196,46 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool fileExists( const QString &path );
 
     /**
+     * Returns working path to load the image from QML.
+     * @param path Path of an image - either relative or absolute
+     * @param homePath Project path
+     * @param config Field widget's config
+     * @param pair FeatureLayerPair - needed for expression evaluation
+     * @param activeProject QgsProject - needed for expression evaluation
+     * @return Path to the image
+     */
+    Q_INVOKABLE static QString resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+
+    /**
+     * This evaluates the "default path" with the following order:
+     * 1. evaluate default path expression if defined,
+     * 2. use default path value if not empty,
+     * 3. use project home folder
+     */
+    Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+
+
+    /**
+     * Function used for resolving path of an image for a field with ExternalResource widget type.
+     * Returns prefix which has to be added to the field's value to obtain working path to load the image from QML.
+     * @param relativeStorageMode: 0 - Relative path disabled; 1 - Relative path to project;
+     * 2 - Relative path to defaultRoot defined in the config - Default path field in the widget configuration form
+     * @param homePath Project path
+     * @param targetDir Default path in the widget configuration
+     * @return Returns either homePath, targetDir or empty QString according relativeStorageMode that is configurable in field widget's config
+     */
+    Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir );
+
+
+    /**
+     * Returns absolute path of the file for given path and its prefix. If prefixPath is empty,
+     * returns given path.
+     * \param path (Relative) path to file,
+     * \param prefixPath Empty or prefix for given path to abtain absolute path.
+     */
+    Q_INVOKABLE static QString getAbsolutePath( const QString &path, const QString &prefixPath );
+
+    /**
      * Returns relative path of the file to given prefixPath. If prefixPath does not match a path parameter,
      * returns an empty string. If a path starts with "file://", this prefix is ignored.
      * \param path Absolute path to file
