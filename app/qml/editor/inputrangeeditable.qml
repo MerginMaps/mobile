@@ -68,7 +68,7 @@ Item {
       Item {
         id: minusSign
 
-        enabled: toNumber( numberInput.displayText ) - config["Step"] >= config["Min"]
+        enabled: toNumber( numberInput.displayText ) - fieldItem.step >= config["Min"]
 
         Layout.preferredHeight: parent.height
         Layout.maximumHeight: parent.height
