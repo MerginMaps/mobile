@@ -23,14 +23,21 @@ Item {
    * When feature in the form is saved.
    */
   signal saved
+
   /**
    * When the form is about to be closed by closeButton or deleting a feature.
    */
   signal canceled
 
+  /**
+   * Signal emited when relation editor requests to open child feature form
+   */
   signal openLinkedFeature( var linkedFeature )
 
-  signal createLinkedFeature( var parentFeature, var relation )
+  /**
+   * Signal emited when relation editor requests to create child feature and open its form
+   */
+  signal createLinkedFeature( var parentController, var relation )
 
    /**
     * A handler for extra events in externalSourceWidget.
@@ -183,16 +190,30 @@ Item {
     }
 
     parent.focus = true
-    if ( form.state === "Add" ) {
-      controller.create()
-      state = "Edit"
+
+    if ( __inputUtils.isFeatureIdValid( controller.featureLayerPair.feature.id ) ) {
+      controller.save()
     }
     else
     {
-      controller.save()
+      controller.create()
+      state = "Edit"
     }
 
     saved()
+  }
+
+  function cancel() {
+    // remove feature if we are in "Add" mode and it already has valid ID
+    // it was saved to prefill relation reference field in child layer
+    let featureId = form.controller.featureLayerPair.feature.id
+    let shouldRemoveFeature = form.state === "Add" && __inputUtils.isFeatureIdValid( featureId )
+
+    if ( shouldRemoveFeature ) {
+      form.controller.deleteFeature()
+    }
+
+    canceled()
   }
 
   /**
@@ -567,13 +588,16 @@ Item {
           }
 
           onCreateLinkedFeature: {
-            if ( form.state === "Add" ) {
-              // parent feature do not have a valid ID yet, we first need to save it and acquire ID
-              // TODO
-            }
-            else if ( form.state === "Edit" ) {
+            let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
+
+            if ( parentHasValidId ) {
               // parent feature in this case already have valid id, so we can open new form
-              form.createLinkedFeature( parentFeature, relation )
+              form.createLinkedFeature( form.controller, relation )
+            }
+            else {
+              // parent feature do not have a valid ID yet, we need to save it and acquire ID
+              form.controller.acquireId()
+              form.createLinkedFeature( form.controller, relation )
             }
           }
         }

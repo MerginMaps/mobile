@@ -269,6 +269,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
+  qRegisterMetaType< AttributeController * >( "AttributeController*" );
 
   qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
   qRegisterMetaType< QgsAttributes > ( "QgsAttributes" );

@@ -335,6 +335,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static QModelIndex invalidIndex();
 
     /**
+     * Returns if provided Id is valid ( >0 )
+     */
+    Q_INVOKABLE static bool isFeatureIdValid( qint64 featureId );
+
+    /**
      * Returns widget setup according the field type - supports only basic types.
      * Note that external widget cannot be guessed from type since its the very same as text.
      * @param field QgsField

@@ -22,14 +22,14 @@ Item {
   property var featureLayerPair
 
   property var linkedRelation
-  property var parentFeatureLayerPair
+  property var parentController
 
   property string formState
 
   signal close()
   signal editGeometryClicked()
   signal openLinkedFeature( var linkedFeature )
-  signal createLinkedFeature( var parentFeature, var relation )
+  signal createLinkedFeature( var parentController, var relation )
 
   function updateFeatureGeometry() {
     let f = formStackView.get( 0 )
@@ -88,7 +88,7 @@ Item {
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
 
-        onBack: root.close()
+        onBack: featureForm.cancel()
 
         Text {
           id: saveButtonText
@@ -157,7 +157,7 @@ Item {
         onSaved: root.close()
         onCanceled: root.close()
         onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-        onCreateLinkedFeature: root.createLinkedFeature( parentFeature, relation )
+        onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
         extraView: formPage.StackView.view
         customWidgetCallback: valueRelationWidget.handler
@@ -166,9 +166,10 @@ Item {
           target: root
           onFormStateChanged: featureForm.state = root.formState
         }
+
         Component.onCompleted: {
-          if ( root.parentFeatureLayerPair && root.linkedRelation ) {
-            featureForm.controller.parentFeatureLayerPair = root.parentFeatureLayerPair
+          if ( root.parentController && root.linkedRelation ) {
+            featureForm.controller.parentController = root.parentController
             featureForm.controller.linkedRelation = root.linkedRelation
           }
         }

@@ -40,7 +40,7 @@ class RelationFeaturesModel : public FeaturesListModel
     FeatureLayerPair parentFeatureLayerPair() const;
     QgsRelation relation() const;
 
-public slots:
+  public slots:
     void onChildLayerChanged();
 
   signals:

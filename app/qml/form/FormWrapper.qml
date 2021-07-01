@@ -21,7 +21,7 @@ Item {
 
   // for child features in relation:
   property var linkedRelation
-  property var parentFeatureLayerPair
+  property var parentController
 
   property alias formState: formContainer.formState // add, edit or ReadOnly
   property alias panelState: statesManager.state
@@ -35,7 +35,7 @@ Item {
   signal closeDrawer()
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
-  signal createLinkedFeature( var parentFeature, var relation )
+  signal createLinkedFeature( var parentController, var relation )
 
   function updateFeatureGeometry() {
     formContainer.updateFeatureGeometry()
@@ -134,14 +134,14 @@ Item {
       featureLayerPair: root.featureLayerPair
 
       linkedRelation: root.linkedRelation
-      parentFeatureLayerPair: root.parentFeatureLayerPair
+      parentController: root.parentController
 
       formState: root.formState
 
       onClose: root.panelState = "closed"
       onEditGeometryClicked: root.panelState = "editingGeometry"
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeature( parentFeature, relation )
+      onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
     }
   }
 }

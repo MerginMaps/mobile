@@ -36,6 +36,7 @@
 #include "qgsquickmapsettings.h"
 #include "qgsquickutils.h"
 #include "qgsunittypes.h"
+#include "qgsfeatureid.h"
 
 #include <Qt>
 #include <QDir>
@@ -1025,4 +1026,9 @@ QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
 QModelIndex InputUtils::invalidIndex()
 {
   return QModelIndex();
+}
+
+bool InputUtils::isFeatureIdValid( qint64 featureId )
+{
+  return !FID_IS_NEW( featureId ) && !FID_IS_NULL( featureId );
 }

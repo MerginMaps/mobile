@@ -87,14 +87,14 @@ class  AttributeController : public QObject
     Q_PROPERTY( bool fieldValuesValid READ fieldValuesValid NOTIFY fieldValuesValidChanged )
 
     /**
-     * If featureLayerPair is a child feature in relation, it will have associated parent featureLayerPair saved in this property
-     * parent together with linkedRelation is used to automatically prefill fields containing foreign key to parent table
+     * If the featureLayerPair in this controller is a child feature in relation, it will have associated parent AttributeController saved in this property.
+     * parent together with linkedRelation is used to automatically prefill fields containing foreign key to parent table (relation reference fields)
      */
-    Q_PROPERTY( FeatureLayerPair parentFeatureLayerPair READ parentFeatureLayerPair WRITE setParentFeatureLayerPair NOTIFY parentFeatureLayerPairChanged )
+    Q_PROPERTY( AttributeController *parentController READ parentController WRITE setParentController NOTIFY parentControllerChanged )
 
     /**
      * If featureLayerPair is a child feature in relation, it will have associated relation saved in this property
-     * see parentFeatureLayerPair documentation for more info
+     * see parentController documentation for more info
      */
     Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
 
@@ -123,6 +123,7 @@ class  AttributeController : public QObject
     Q_INVOKABLE bool create();
     Q_INVOKABLE bool save();
     Q_INVOKABLE bool isNewFeature() const;
+    Q_INVOKABLE void acquireId();
 
     int tabCount() const;
 
@@ -148,11 +149,14 @@ class  AttributeController : public QObject
     VariablesManager *variablesManager() const;
     void setVariablesManager( VariablesManager *variablesManager );
 
-    const FeatureLayerPair& parentFeatureLayerPair() const;
-    void setParentFeatureLayerPair( const FeatureLayerPair &newParentFeatureLayerPair );
+    AttributeController *parentController() const;
+    void setParentController( AttributeController *newParentController );
 
-    const QgsRelation& linkedRelation() const;
+    const QgsRelation &linkedRelation() const;
     void setLinkedRelation( const QgsRelation &newLinkedRelation );
+
+  public slots:
+    void onFeatureAdded( QgsFeatureId newFeatureId );
 
   signals:
     void hasAnyChangesChanged();
@@ -164,11 +168,13 @@ class  AttributeController : public QObject
     void hasTabsChanged();
     void variablesManagerChanged();
     void fieldValuesValidChanged();
-    void parentFeatureLayerPairChanged();
+    void parentControllerChanged();
     void linkedRelationChanged();
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
+    void featureIdChanged();
+
   private:
     void clearAll();
 
@@ -233,7 +239,7 @@ class  AttributeController : public QObject
     RememberAttributesController *mRememberAttributesController = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
 
-    FeatureLayerPair mParentFeatureLayerPair;
+    AttributeController *mParentController = nullptr; // not owned
     QgsRelation mLinkedRelation;
 };
 #endif // ATTRIBUTECONTROLLER_H

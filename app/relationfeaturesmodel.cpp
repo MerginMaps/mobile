@@ -17,7 +17,6 @@ RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
 
 RelationFeaturesModel::~RelationFeaturesModel()
 {
-  QObject::disconnect( mRelation.referencingLayer(), nullptr, nullptr, nullptr );
 }
 
 void RelationFeaturesModel::setup()

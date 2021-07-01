@@ -132,14 +132,14 @@ Item {
     root.activeFormIndex = latest.StackView.index
   }
 
-  function createLinkedFeature( parentFeature, relation ) {
+  function createLinkedFeature( parentController, relation ) {
     let newFeaturePair = digitizingController.featureWithoutGeometry( relation.referencingLayer )
 
     let props = {
       featureLayerPair: newFeaturePair,
       formState: "Add",
       panelState: "form",
-      parentFeatureLayerPair: parentFeature,
+      parentController: parentController,
       linkedRelation: relation
     }
 
@@ -173,7 +173,7 @@ Item {
       onClosed: formsStack.popOneOrClose()
       onEditGeometry: root.geometryEditingStarted( StackView.index )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeature( parentFeature, relation )
+      onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
     }
   }
 }
