@@ -20,12 +20,16 @@ Item {
 
   property var project
   property var featureLayerPair
-  property var parentFeatureLayerPair
+
+  property var linkedRelation
+  property var parentController
+
   property string formState
 
-  signal openNewForm( var i, var myParent )
   signal close()
   signal editGeometryClicked()
+  signal openLinkedFeature( var linkedFeature )
+  signal createLinkedFeature( var parentController, var relation )
 
   function updateFeatureGeometry() {
     let f = formStackView.get( 0 )
@@ -59,6 +63,11 @@ Item {
     anchors.fill: parent
 
     initialItem: formPageComponent
+    focus: true
+
+    onCurrentItemChanged: {
+      currentItem.forceActiveFocus()
+    }
   }
 
   Component {
@@ -72,7 +81,6 @@ Item {
       header: PanelHeader {
         id: header
 
-        Component.onCompleted: backHandler.forceActiveFocus()
 
         height: InputStyle.rowHeightHeader
         rowHeight: InputStyle.rowHeightHeader
@@ -84,7 +92,7 @@ Item {
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
 
-        onBack: root.close()
+        onBack: featureForm.cancel()
 
         Text {
           id: saveButtonText
@@ -125,7 +133,13 @@ Item {
             else {
               root.close()
             }
+            event.accepted = true;
           }
+        }
+
+        onVisibleChanged: {
+          if ( visible )
+            backHandler.forceActiveFocus()
         }
       }
 
@@ -152,6 +166,8 @@ Item {
 
         onSaved: root.close()
         onCanceled: root.close()
+        onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
+        onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
         extraView: formPage.StackView.view
         customWidgetCallback: valueRelationWidget.handler
@@ -159,6 +175,13 @@ Item {
         Connections {
           target: root
           onFormStateChanged: featureForm.state = root.formState
+        }
+
+        Component.onCompleted: {
+          if ( root.parentController && root.linkedRelation ) {
+            featureForm.controller.parentController = root.parentController
+            featureForm.controller.linkedRelation = root.linkedRelation
+          }
         }
       }
 

@@ -114,6 +114,29 @@ QgsEditorWidgetSetup AttributeController::getEditorWidgetSetup( QgsVectorLayer *
   return setup;
 }
 
+void AttributeController::prefillRelationReferenceField()
+{
+  if ( !mParentController || !mLinkedRelation.isValid() )
+    return;
+
+  const QList<QgsRelation::FieldPair> fieldPairs = mLinkedRelation.fieldPairs();
+  for ( const QgsRelation::FieldPair &fieldPair : fieldPairs )
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> itemData = formItemsIterator.value();
+      if ( itemData->field().name() == fieldPair.referencingField() )
+      {
+        setFormValue( itemData->id(), mParentController->featureLayerPair().feature().id() );
+        emit formDataChanged( itemData->id() );
+        break;
+      }
+      ++formItemsIterator;
+    }
+  }
+}
+
 bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
 {
   for ( QgsAttributeEditorElement *element : container->children() )
@@ -440,6 +463,26 @@ void AttributeController::updateOnFeatureChange()
 bool AttributeController::isNewFeature() const
 {
   return FID_IS_NULL( mFeatureLayerPair.feature().id() );
+}
+
+void AttributeController::acquireId()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
+  startEditing();
+  QgsFeature feat = mFeatureLayerPair.feature();
+  if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+  {
+    QgsMessageLog::logMessage( tr( "acquireId: feature could not be added" ),
+                               QStringLiteral( "Input" ),
+                               Qgis::Critical );
+
+  }
+
+  connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  commit();
+  disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
 bool AttributeController::recalculateDefaultValues(
@@ -811,7 +854,10 @@ bool AttributeController::create()
                                Qgis::Critical );
 
   }
+  connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   commit();
+  disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+
 
   if ( mRememberAttributesController )
   {
@@ -1055,4 +1101,49 @@ QVariant AttributeController::formValue( int fieldIndex ) const
     return QVariant();
 
   return mFeatureLayerPair.feature().attribute( fieldIndex );
+}
+
+AttributeController *AttributeController::parentController() const
+{
+  return mParentController;
+}
+
+void AttributeController::setParentController( AttributeController *newParentController )
+{
+  if ( !newParentController || mParentController == newParentController )
+    return;
+
+  mParentController = newParentController;
+  emit parentControllerChanged();
+
+  prefillRelationReferenceField();
+
+  if ( mParentController )
+  {
+    // When parent's feature Id is changed, we want to update the relation reference field
+    connect( mParentController, &AttributeController::featureIdChanged, this, &AttributeController::prefillRelationReferenceField );
+  }
+}
+
+const QgsRelation &AttributeController::linkedRelation() const
+{
+  return mLinkedRelation;
+}
+
+void AttributeController::setLinkedRelation( const QgsRelation &newLinkedRelation )
+{
+  if ( mLinkedRelation.id() == newLinkedRelation.id() )
+    return;
+
+  mLinkedRelation = newLinkedRelation;
+  emit linkedRelationChanged();
+
+  prefillRelationReferenceField();
+}
+
+void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
+{
+  QgsFeature f = mFeatureLayerPair.layer()->getFeature( newFeatureId );
+  setFeatureLayerPair( FeatureLayerPair( f, mFeatureLayerPair.layer() ) );
+  emit featureIdChanged();
 }

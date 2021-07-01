@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "relationfeaturesmodel.h"
+#include "qgsvectorlayer.h"
 #include "inpututils.h"
 
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
@@ -43,7 +44,11 @@ QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 
 void RelationFeaturesModel::setup()
 {
-  emptyData();
+  if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
+    return;
+
+  QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::onChildLayerChanged );
+  populate();
 }
 
 void RelationFeaturesModel::populate()
@@ -63,6 +68,7 @@ void RelationFeaturesModel::populate()
   }
 
   endResetModel();
+  emit featuresCountChanged( mFeatures.count() );
 
   setIsTextType( photoFieldIndex( mRelation.referencingLayer() ) == -1 );
 }
@@ -74,7 +80,7 @@ void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
     mParentFeatureLayerPair = pair;
     emit parentFeatureLayerPairChanged( mParentFeatureLayerPair );
 
-    populate();
+    setup();
   }
 }
 
@@ -85,7 +91,7 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
     mRelation = relation;
     emit relationChanged( mRelation );
 
-    populate();
+    setup();
   }
 }
 
@@ -97,6 +103,11 @@ FeatureLayerPair RelationFeaturesModel::parentFeatureLayerPair() const
 QgsRelation RelationFeaturesModel::relation() const
 {
   return mRelation;
+}
+
+void RelationFeaturesModel::onChildLayerChanged()
+{
+  populate();
 }
 
 QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featurePair ) const

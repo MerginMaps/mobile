@@ -215,15 +215,18 @@ QgsGeometry DigitizingController::getPointGeometry( const QgsPoint &point, bool 
   return geom;
 }
 
-FeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry &geometry )
+FeatureLayerPair DigitizingController::createFeatureLayerPair( const QgsGeometry &geometry, QgsVectorLayer *layer )
 {
-  QgsAttributes attrs( featureLayerPair().layer()->fields().count() );
-  QgsExpressionContext context = featureLayerPair().layer()->createExpressionContext();
+  if ( layer == nullptr || !layer->isValid() )
+    layer = featureLayerPair().layer();
+
+  QgsAttributes attrs( layer->fields().count() );
+  QgsExpressionContext context = layer->createExpressionContext();
   if ( mVariablesManager )
     context << mVariablesManager->positionScope();
-  QgsFeature feat = QgsVectorLayerUtils::createFeature( featureLayerPair().layer(), geometry, attrs.toMap(), &context );
+  QgsFeature feat = QgsVectorLayerUtils::createFeature( layer, geometry, attrs.toMap(), &context );
 
-  return FeatureLayerPair( feat, featureLayerPair().layer() );
+  return FeatureLayerPair( feat, layer );
 }
 
 FeatureLayerPair DigitizingController::pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint )
@@ -311,9 +314,9 @@ FeatureLayerPair DigitizingController::lineOrPolygonFeature()
   return createFeatureLayerPair( geom );
 }
 
-FeatureLayerPair DigitizingController::featureWithoutGeometry()
+FeatureLayerPair DigitizingController::featureWithoutGeometry( QgsVectorLayer *layer )
 {
-  return createFeatureLayerPair( QgsGeometry() );
+  return createFeatureLayerPair( QgsGeometry(), layer );
 }
 
 QgsPoint DigitizingController::pointFeatureMapCoordinates( FeatureLayerPair pair )

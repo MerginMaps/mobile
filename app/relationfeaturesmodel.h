@@ -30,7 +30,7 @@ class RelationFeaturesModel : public FeaturesListModel
     Q_PROPERTY( FeatureLayerPair parentFeatureLayerPair READ parentFeatureLayerPair WRITE setParentFeatureLayerPair NOTIFY parentFeatureLayerPairChanged )
 
     /**
-     * Flag to distinquash what data type suppose to be displayed. By default text data type is expected, otherwise image.
+     * Flag to distinguish what data type suppose to be displayed. By default text data type is expected, otherwise image.
      * Property is set to False only if there is any photo field (see more: RelationFeaturesModel::photoFieldIndex)
      */
     Q_PROPERTY( bool isTextType READ isTextType WRITE setIsTextType NOTIFY isTextTypeChanged )
@@ -43,7 +43,6 @@ class RelationFeaturesModel : public FeaturesListModel
       PhotoPath = Qt::UserRole + 100,
     };
     Q_ENUM( relationModelRoles );
-
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
     virtual ~RelationFeaturesModel() {};
@@ -66,6 +65,10 @@ class RelationFeaturesModel : public FeaturesListModel
 
     bool isTextType() const;
     void setIsTextType( bool isTextType );
+
+  public slots:
+    void onChildLayerChanged();
+
 
   signals:
     void parentFeatureLayerPairChanged( FeatureLayerPair pair );

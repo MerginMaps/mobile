@@ -19,11 +19,13 @@ Item {
   id: root
 
   property int linkedFeaturesCount: rmodel.rowCount()
-  property bool canOpenFeaturesPage: false // if the advanced page for relations should be shown
   property real expandedHeight: customStyle.fields.height * 3 // three rows
 
   signal valueChanged( var value, bool isNull )
   signal featureLayerPairChanged()
+
+  signal openLinkedFeature( var linkedFeature )
+  signal createLinkedFeature( var parentFeature, var relation )
 
   onFeatureLayerPairChanged: {
     // new feature layer pair, revert state and update delegate model
@@ -41,6 +43,8 @@ Item {
     homePath: activeProject.homePath
 
     onModelReset: root.linkedFeaturesCount = rowCount()
+
+    onFeaturesCountChanged: delegateModel.update()
   }
 
   DelegateModel {
@@ -52,9 +56,6 @@ Item {
     property var filterAcceptsItem: function( item ) {
       if ( textModeContainer.state === "initial" ) {
         return false
-      }
-      else if ( textModeContainer.state === "expanded" ) {
-        return true
       }
       return true
     }
@@ -272,7 +273,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        // ToDo: show feature form: onReleased
+        onClicked: root.openLinkedFeature( model.FeaturePair )
       }
     }
   }
@@ -311,8 +312,8 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: console.log("TODO: Image clicked -> show form")
-        onPressAndHold:console.log("TODO: Image pressed and hold -> show preview")
+        onClicked: root.openLinkedFeature( model.FeaturePair )
+        // TODO onPressAndHold
       }
 
     }
@@ -326,13 +327,20 @@ Item {
 
       pageTitle: qsTr( "Linked features" )
       allowSearch: false //TODO search
+      layerHasGeometry: false
+      toolbarVisible: !root.parent.readOnly
+      focus: true
 
       onBackButtonClicked: {
         root.parent.formView.pop()
         textModeContainer.state = "expanded"
       }
 
-//      onFeatureClicked: //TODO
+      onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+      onFeatureClicked: {
+        let clickedFeature = featuresModel.attributeFromValue( FeaturesListModel.FeatureId, featureIds, FeaturesListModel.FeaturePair)
+        root.openLinkedFeature( clickedFeature )
+      }
 
       Keys.onReleased: {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {

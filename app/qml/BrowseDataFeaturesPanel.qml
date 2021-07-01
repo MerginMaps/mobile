@@ -19,6 +19,7 @@ Item {
   signal searchTextChanged( string text )
 
   property bool layerHasGeometry: true
+  property bool toolbarVisible: true
   property bool allowMultiselect: false
   property bool allowSearch: true
   property string layerName: ""
@@ -109,7 +110,7 @@ Item {
 
     footer: BrowseDataToolbar {
       id: browseDataToolbar
-      visible: !layerHasGeometry || allowMultiselect
+      visible: toolbarVisible && ( !layerHasGeometry || allowMultiselect )
       addButtonVisible: !layerHasGeometry
       doneButtonVisible: allowMultiselect
 

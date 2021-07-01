@@ -26,6 +26,7 @@ Item {
 
   property var project
   property real previewHeight
+  property DigitizingController digitizingController
 
   property int activeFormIndex: 0
 
@@ -41,7 +42,7 @@ Item {
         panelState: panelState
       }
 
-      var latest = formsStack.push( formComponent, props)
+      var latest = formsStack.push( formComponent, props )
     }
     else
     {
@@ -120,6 +121,32 @@ Item {
     formsStack.visible = false
   }
 
+  function openLinkedFeature( linkedFeature ) {
+    let props = {
+      featureLayerPair: linkedFeature,
+      formState: "ReadOnly",
+      panelState: "form"
+    }
+
+    let latest = formsStack.push( formComponent, props )
+    root.activeFormIndex = latest.StackView.index
+  }
+
+  function createLinkedFeature( parentController, relation ) {
+    let newFeaturePair = digitizingController.featureWithoutGeometry( relation.referencingLayer )
+
+    let props = {
+      featureLayerPair: newFeaturePair,
+      formState: "Add",
+      panelState: "form",
+      parentController: parentController,
+      linkedRelation: relation
+    }
+
+    let latest = formsStack.push( formComponent, props )
+    root.activeFormIndex = latest.StackView.index
+  }
+
   StackView {
     id: formsStack
 
@@ -129,6 +156,8 @@ Item {
       if ( formsStack.depth <= 1 )
         root.closed() // this is the top most form, we want to keep it instantiated, just invisible
     }
+
+    focus: true
 
     anchors.fill: parent
   }
@@ -145,10 +174,8 @@ Item {
 
       onClosed: formsStack.popOneOrClose()
       onEditGeometry: root.geometryEditingStarted( StackView.index )
-
-      onCreateFeature: {
-        // TODO
-      }
+      onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
+      onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
     }
   }
 }

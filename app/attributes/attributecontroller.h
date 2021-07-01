@@ -86,6 +86,18 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( bool fieldValuesValid READ fieldValuesValid NOTIFY fieldValuesValidChanged )
 
+    /**
+     * If the featureLayerPair in this controller is a child feature in relation, it will have associated parent AttributeController saved in this property.
+     * parent together with linkedRelation is used to automatically prefill fields containing foreign key to parent table (relation reference fields)
+     */
+    Q_PROPERTY( AttributeController *parentController READ parentController WRITE setParentController NOTIFY parentControllerChanged )
+
+    /**
+     * If featureLayerPair is a child feature in relation, it will have associated relation saved in this property
+     * see parentController documentation for more info
+     */
+    Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
+
   public:
     AttributeController( QObject *parent = nullptr );
     ~AttributeController() override;
@@ -111,6 +123,7 @@ class  AttributeController : public QObject
     Q_INVOKABLE bool create();
     Q_INVOKABLE bool save();
     Q_INVOKABLE bool isNewFeature() const;
+    Q_INVOKABLE void acquireId();
 
     int tabCount() const;
 
@@ -136,6 +149,15 @@ class  AttributeController : public QObject
     VariablesManager *variablesManager() const;
     void setVariablesManager( VariablesManager *variablesManager );
 
+    AttributeController *parentController() const;
+    void setParentController( AttributeController *newParentController );
+
+    const QgsRelation &linkedRelation() const;
+    void setLinkedRelation( const QgsRelation &newLinkedRelation );
+
+  public slots:
+    void onFeatureAdded( QgsFeatureId newFeatureId );
+
   signals:
     void hasAnyChangesChanged();
     void rememberAttributesChanged();
@@ -146,9 +168,13 @@ class  AttributeController : public QObject
     void hasTabsChanged();
     void variablesManagerChanged();
     void fieldValuesValidChanged();
+    void parentControllerChanged();
+    void linkedRelationChanged();
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
+    void featureIdChanged();
+
   private:
     void clearAll();
 
@@ -188,6 +214,9 @@ class  AttributeController : public QObject
     //! Returns editor widget setup according params. If is empty, returns a default setup according field's type.
     QgsEditorWidgetSetup getEditorWidgetSetup( QgsVectorLayer *layer, int fieldIndex ) const;
 
+    //! Fills up relation reference (foreign key) field with parent id
+    void prefillRelationReferenceField();
+
     /**
      * Checks if tab layout is allowed for given container. Function is not recursive and checks only first level elements.
      * @param container Suppose to be the root of attributeEditor container.
@@ -210,5 +239,7 @@ class  AttributeController : public QObject
     RememberAttributesController *mRememberAttributesController = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
 
+    AttributeController *mParentController = nullptr; // not owned
+    QgsRelation mLinkedRelation;
 };
 #endif // ATTRIBUTECONTROLLER_H

@@ -56,8 +56,8 @@ class DigitizingController : public QObject
     Q_INVOKABLE FeatureLayerPair pointFeatureFromPoint( const QgsPoint &point, bool isGpsPoint );
     //! Creates a new QgsFeature with line/polygon geometry from the points stored since the start of recording
     Q_INVOKABLE FeatureLayerPair lineOrPolygonFeature();
-    //! Creates a new QgsFeature without geometry
-    Q_INVOKABLE FeatureLayerPair featureWithoutGeometry();
+    //! Creates a new QgsFeature without geometry in layer. If layer is null, it creates the feature on currently edited layer
+    Q_INVOKABLE FeatureLayerPair featureWithoutGeometry( QgsVectorLayer *layer = nullptr );
     //! Returns (point geom) featurePair coords in map coordinates.
     Q_INVOKABLE QgsPoint pointFeatureMapCoordinates( FeatureLayerPair pair );
     //! Changes point geometry of given pair according given point.
@@ -72,7 +72,7 @@ class DigitizingController : public QObject
 
     std::unique_ptr<QgsPoint> getLayerPoint( const QgsPoint &point, bool isGpsPoint );
     QgsGeometry getPointGeometry( const QgsPoint &point, bool isGpsPoint );
-    FeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry );
+    FeatureLayerPair createFeatureLayerPair( const QgsGeometry &geometry, QgsVectorLayer *layer = nullptr );
 
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
