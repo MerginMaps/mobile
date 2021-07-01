@@ -21,6 +21,12 @@ Item {
   signal valueChanged( var value, bool isNull )
 
   property var locale: Qt.locale()
+  property real precision: config['Precision'] ? config['Precision'] : 0
+  property string suffix: config['Suffix'] ? config['Suffix'] : ''
+  // don't ever use a step smaller than would be visible in the widget
+  // i.e. if showing 2 decimals, smallest increment will be 0.01
+  // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
+  property real step: Math.max(config["Step"], Math.pow( 10.0, 0.0 - precision ))
 
   function toNumber( localeString ) {
     try {
@@ -31,12 +37,6 @@ Item {
     }
 
     return d
-  }
-
-  RangeWidgetHelper {
-    id: helper
-
-    widgetConfig: config
   }
 
   enabled: !readOnly
@@ -68,7 +68,7 @@ Item {
       Item {
         id: minusSign
 
-        enabled: toNumber( numberInput.displayText ) - helper.step >= config["Min"]
+        enabled: toNumber( numberInput.displayText ) - config["Step"] >= config["Min"]
 
         Layout.preferredHeight: parent.height
         Layout.maximumHeight: parent.height
@@ -103,8 +103,8 @@ Item {
 
             if ( !Number.isNaN(v) )
             {
-              v -= helper.step
-              valueChanged( v.toFixed( helper.precision ), false )
+              v -= fieldItem.step
+              valueChanged( v.toFixed( fieldItem.precision ), false )
             }
           }
         }
@@ -152,9 +152,9 @@ Item {
 
               anchors.fill: parent
 
-              text: fieldItem.parent.value !== undefined ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', helper.precision ) : ""
+              text: fieldItem.parent.value !== undefined ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', fieldItem.precision ) : ""
 
-              inputMethodHints: helper.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly
+              inputMethodHints: fieldItem.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly
               font.pointSize: customStyle.fields.fontPointSize
               color: customStyle.fields.fontColor
               selectionColor: customStyle.fields.fontColor
@@ -178,9 +178,9 @@ Item {
             Text {
               id: suffix
 
-              text: helper.suffix
+              text: fieldItem.suffix
 
-              visible: helper.suffix !== "" && numberInput.text !== ""
+              visible: fieldItem.suffix !== "" && numberInput.text !== ""
 
               anchors.fill: parent
               horizontalAlignment: Qt.AlignLeft
@@ -203,7 +203,7 @@ Item {
       Item {
         id: plusSign
 
-        enabled: toNumber( numberInput.displayText ) + helper.step <= config["Max"]
+        enabled: toNumber( numberInput.displayText ) + fieldItem.step <= config["Max"]
 
         Layout.preferredHeight: parent.height
         Layout.maximumHeight: parent.height
@@ -238,8 +238,8 @@ Item {
 
             if ( !Number.isNaN( v ) )
             {
-              v += helper.step
-              valueChanged( v.toFixed( helper.precision ), false )
+              v += fieldItem.step
+              valueChanged( v.toFixed( fieldItem.precision ), false )
             }
           }
 

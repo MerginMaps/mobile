@@ -1,5 +1,4 @@
 SOURCES += \
-editor/rangewidgethelper.cpp \
 attributes/attributecontroller.cpp \
 attributes/attributedata.cpp \
 attributes/attributeformmodel.cpp \
@@ -44,7 +43,6 @@ compass.cpp \
 relationfeaturesmodel.cpp
 
 HEADERS += \
-editor/rangewidgethelper.h \
 attributes/attributecontroller.h \
 attributes/attributedata.h \
 attributes/attributeformmodel.h \
