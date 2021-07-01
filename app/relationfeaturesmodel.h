@@ -77,7 +77,7 @@ class RelationFeaturesModel : public FeaturesListModel
     QVariant relationPhotoPath( const FeatureLayerPair &featurePair ) const;
 
     /**
-     * Searches and returns first index of photo field - either field is type of 'ExternalResource' or field name contains IMAGE_FIELD_KEYWORD.
+     * Searches and returns first index of photo field if the field is type of 'ExternalResource'.
      * @param layer Referencing layer of the relation.
      * @return Index of photo field, otherwise -1 if not found any.
      */
@@ -87,8 +87,6 @@ class RelationFeaturesModel : public FeaturesListModel
     FeatureLayerPair mParentFeatureLayerPair; // parent feature (with relation widget in form)
     QString mHomePath;
     bool mIsTextType = true;
-
-    const QString IMAGE_FIELD_KEYWORD = QStringLiteral( "photo" );
 };
 
 #endif // RELATIONFEATURESMODEL_H

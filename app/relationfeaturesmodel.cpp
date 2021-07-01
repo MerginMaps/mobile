@@ -104,7 +104,6 @@ QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featu
   // Feature title used to get path of the referenced image.
   QString path = featureTitle( featurePair ).toString();
 
-  QgsAttributeList refFields = mRelation.referencedFields();
   int fieldIndex = photoFieldIndex( featurePair.layer() );
   QgsEditorWidgetSetup setup = featurePair.layer()->editorWidgetSetup( fieldIndex );
   QVariantMap config = setup.config();
@@ -120,12 +119,6 @@ int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const
   QgsFields fields = layer->fields();
   for ( int i = 0; i < fields.size(); i++ )
   {
-    // Lets try keyword
-    if ( fields.at( i ).name().contains( IMAGE_FIELD_KEYWORD ) )
-    {
-      return i;
-    }
-
     // Lets try by widget type
     QgsEditorWidgetSetup setup = layer->editorWidgetSetup( i );
     QVariantMap config = setup.config();
