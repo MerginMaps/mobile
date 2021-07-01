@@ -156,7 +156,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: externalResourceHandler.previewImage( getAbsolutePath( prefixToRelativePath, image.currentValue ) )
+        onClicked: externalResourceHandler.previewImage( __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
       }
 
       onCurrentValueChanged: {
