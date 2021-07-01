@@ -375,7 +375,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QModelIndex invalidIndex();
 
     /**
-     * Returns if provided Id is valid ( >0 )
+     * Returns if provided Id is valid ( >= 0 )
      */
     Q_INVOKABLE static bool isFeatureIdValid( qint64 featureId );
 
