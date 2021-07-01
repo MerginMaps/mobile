@@ -157,6 +157,8 @@ Item {
         root.closed() // this is the top most form, we want to keep it instantiated, just invisible
     }
 
+    focus: true
+
     anchors.fill: parent
   }
 

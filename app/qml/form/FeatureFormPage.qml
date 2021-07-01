@@ -63,6 +63,11 @@ Item {
     anchors.fill: parent
 
     initialItem: formPageComponent
+    focus: true
+
+    onCurrentItemChanged: {
+      currentItem.forceActiveFocus()
+    }
   }
 
   Component {
@@ -76,7 +81,6 @@ Item {
       header: PanelHeader {
         id: header
 
-        Component.onCompleted: backHandler.forceActiveFocus()
 
         height: InputStyle.rowHeightHeader
         rowHeight: InputStyle.rowHeightHeader
@@ -129,7 +133,13 @@ Item {
             else {
               root.close()
             }
+            event.accepted = true;
           }
+        }
+
+        onVisibleChanged: {
+          if ( visible )
+            backHandler.forceActiveFocus()
         }
       }
 

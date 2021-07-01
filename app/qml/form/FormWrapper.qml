@@ -67,7 +67,6 @@ Item {
           PropertyChanges { target: drawer; height: root.height }
           PropertyChanges { target: drawer; interactive: false }
           PropertyChanges { target: formContainer; visible: true }
-          PropertyChanges { target: formContainer; focus: true }
           PropertyChanges { target: previewPanel; visible: false }
         },
         State {
