@@ -10,7 +10,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="152"/>
+        <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Vaša pretplata je otkazana %1</translation>
     </message>
@@ -20,47 +20,47 @@
         <translation>Moj račun</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="124"/>
+        <location filename="../qml/AccountPage.qml" line="132"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>Vaša pretplata neće biti produžena nakon %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="133"/>
+        <location filename="../qml/AccountPage.qml" line="141"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Molimo ispravite %1postavke naplate%2 što prije</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="143"/>
+        <location filename="../qml/AccountPage.qml" line="151"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Vaš slijedeći račun iznosi %1 na dan %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="177"/>
+        <location filename="../qml/AccountPage.qml" line="185"/>
         <source>Using %1 / %2</source>
         <translation>Iskorišteno %1/%2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Manage Subscription</source>
         <translation>Upravljanje pretplatom</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Working...</source>
         <translation>Radim...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Subscription plans</source>
         <translation>Plan pretplate</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="231"/>
+        <location filename="../qml/AccountPage.qml" line="239"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>Možete također %1obnoviti%2 vašu kupnju</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="250"/>
+        <location filename="../qml/AccountPage.qml" line="263"/>
         <source>Sign out</source>
         <translation>Odjava</translation>
     </message>
@@ -104,53 +104,53 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="408"/>
+        <location filename="../attributes/attributecontroller.cpp" line="469"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="418"/>
+        <location filename="../attributes/attributecontroller.cpp" line="479"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="429"/>
-        <location filename="../attributes/attributecontroller.cpp" line="875"/>
+        <location filename="../attributes/attributecontroller.cpp" line="490"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1009"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="681"/>
+        <location filename="../attributes/attributecontroller.cpp" line="788"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="702"/>
+        <location filename="../attributes/attributecontroller.cpp" line="809"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="730"/>
+        <location filename="../attributes/attributecontroller.cpp" line="837"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="744"/>
+        <location filename="../attributes/attributecontroller.cpp" line="851"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Objekt %1 nije mogao biti dohvaćen nakon izvršenja</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="761"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="778"/>
+        <location filename="../attributes/attributecontroller.cpp" line="885"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Nije bilo moguće spremiti promjene. Povratak stanja.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="876"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1010"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation>Vrijednost %1 nije odgovarajuća sa tipom podatka za polje %2.</translation>
     </message>
@@ -263,6 +263,16 @@
         <source>Note: soft constraints were not met</source>
         <translation>Bilješka: Blaga ograničenja nisu ispunjena</translation>
     </message>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="456"/>
+        <source>Number is outside of specified range</source>
+        <translation>Broj je izvan određenog raspona</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeatureForm.qml" line="458"/>
+        <source>Value is not valid</source>
+        <translation>Vrijednost nije valjana</translation>
+    </message>
 </context>
 <context>
     <name>FeaturePanel</name>
@@ -282,22 +292,22 @@
         <translation>Spremi</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="325"/>
+        <location filename="../qml/FeaturePanel.qml" line="329"/>
         <source>Delete feature</source>
         <translation>Izbriši objekt</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="326"/>
+        <location filename="../qml/FeaturePanel.qml" line="330"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Zaista izbrisati ovaj objekt?</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="346"/>
+        <location filename="../qml/FeaturePanel.qml" line="350"/>
         <source>Unsaved changes</source>
         <translation>Nespremljene izmjene</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="347"/>
+        <location filename="../qml/FeaturePanel.qml" line="351"/>
         <source>Do you want to save changes?</source>
         <translation>Želite li spremiti izmjene?</translation>
     </message>
@@ -440,28 +450,28 @@ Won&apos;t be added to the project.</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="882"/>
+        <location filename="../inpututils.cpp" line="955"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="883"/>
+        <location filename="../inpututils.cpp" line="956"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="884"/>
+        <location filename="../inpututils.cpp" line="957"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="885"/>
+        <location filename="../inpututils.cpp" line="958"/>
         <source>screen density: %1</source>
         <translation>gustoća zaslona: %1</translation>
     </message>
@@ -787,7 +797,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="105"/>
+        <location filename="../projectwizard.cpp" line="106"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 stvoren</translation>
     </message>
@@ -795,32 +805,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizardPage</name>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="52"/>
         <source>Create Project</source>
         <translation>Stvori projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="77"/>
         <source>Project name</source>
         <translation>Naziv projekta</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="92"/>
         <source>Fields</source>
         <translation>Polja</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="126"/>
         <source>Add field</source>
         <translation>Dodaj polje</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="167"/>
         <source>Create project</source>
         <translation>Stvori projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="173"/>
         <source>Empty project name</source>
         <translation>Naziv praznog projekta</translation>
     </message>
@@ -888,12 +898,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="186"/>
+        <location filename="../attributes/attributecontroller.cpp" line="218"/>
         <source>Not NULL</source>
         <translation>Nije NULL</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="191"/>
+        <location filename="../attributes/attributecontroller.cpp" line="223"/>
         <source>Unique</source>
         <translation>Jedinstven</translation>
     </message>
@@ -974,7 +984,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../qml/SearchBar.qml" line="67"/>
+        <location filename="../qml/SearchBar.qml" line="73"/>
         <source>SEARCH</source>
         <translation>TRAŽI</translation>
     </message>
@@ -1181,6 +1191,15 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>inputrelation</name>
+    <message numerus="yes">
+        <location filename="../qml/editor/inputrelation.qml" line="170"/>
+        <source>%n linked feature(s)</source>
+        <comment>Shows how many features are linked via relations</comment>
+        <translation><numerusform>%n povezani objekt</numerusform><numerusform>%n povezana objekta</numerusform><numerusform>%n povezanih objekata</numerusform></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="95"/>
@@ -1188,37 +1207,37 @@ Won&apos;t be added to the project.</source>
         <translation>Snimljeni objekt nije ispravan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="466"/>
         <source>GPS auto-center mode on</source>
         <translation>Način GPS autocentriranja uključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="466"/>
         <source>GPS auto-center mode off</source>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="484"/>
+        <location filename="../qml/main.qml" line="482"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="500"/>
+        <location filename="../qml/main.qml" line="498"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Niska preciznost GPS pozicije (%1 m)&lt;br&gt;&lt;br&gt;Molimo osigurajte dobru vidljivost neba.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="533"/>
+        <location filename="../qml/main.qml" line="531"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS trenutno nije dostupan.%1Pokušajte omogućiti GPS lokaciju u postavkama Vašeg uređaja.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="691"/>
+        <location filename="../qml/main.qml" line="689"/>
         <source>Communication error</source>
         <translation>Greška u komunikaciji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="697"/>
+        <location filename="../qml/main.qml" line="695"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
