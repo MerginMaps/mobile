@@ -85,5 +85,8 @@
         <file>form/PreviewPanel.qml</file>
         <file>form/FormWrapper.qml</file>
         <file>form/FeatureFormPage.qml</file>
+        <file>editor/RelationTextDelegate.qml</file>
+        <file>editor/RelationPhotoDelegate.qml</file>
+        <file>editor/RelationPhotoFooterDelegate.qml</file>
     </qresource>
 </RCC>

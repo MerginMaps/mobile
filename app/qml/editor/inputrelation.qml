@@ -10,6 +10,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml.Models 2.14
+import QtQuick.Layouts 1.14
 
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
@@ -18,8 +19,7 @@ import ".."
 Item {
   id: root
 
-  property int linkedFeaturesCount: rmodel.rowCount()
-  property real expandedHeight: customStyle.fields.height * 3 // three rows
+  property real widgetHeight: customStyle.fields.height * 3 // three rows
 
   signal valueChanged( var value, bool isNull )
   signal featureLayerPairChanged()
@@ -29,9 +29,6 @@ Item {
 
   onFeatureLayerPairChanged: {
     // new feature layer pair, revert state and update delegate model
-    if (rmodel.isTextType) {
-      textModeContainer.state = "initial"
-    }
     delegateModel.update()
   }
 
@@ -41,8 +38,6 @@ Item {
     relation: associatedRelation
     parentFeatureLayerPair: featurePair
     homePath: activeProject.homePath
-
-    onModelReset: root.linkedFeaturesCount = rowCount()
 
     onFeaturesCountChanged: delegateModel.update()
   }
@@ -54,9 +49,6 @@ Item {
      */
 
     property var filterAcceptsItem: function( item ) {
-      if ( textModeContainer.state === "initial" ) {
-        return false
-      }
       return true
     }
 
@@ -65,6 +57,7 @@ Item {
       if (items.count > 0) {
         items.setGroups(0, items.count, "items");
       }
+      textModeContainer.invisibleItemsCounter = 0
 
       for ( var i = 0; i < items.count; ++i ) {
         var item = items.get( i );
@@ -75,7 +68,13 @@ Item {
     }
 
     model: rmodel
-    delegate: textDelegate
+    delegate: RelationTextDelegate {
+      firstLinesMaxWidth: flowItemView.width
+      lastLineMaxWidth: flowItemView.width / 2
+
+      onClicked: root.openLinkedFeature( feature )
+      onSetInvisible: textModeContainer.invisibleItemsCounter++
+    }
 
     groups: DelegateModelGroup {
       id: visibleItems
@@ -107,28 +106,13 @@ Item {
     Rectangle {
       id: textModeContainer
 
+      property real fullLineWidth: flowItemView.width // full line width - first lines
+      property real lastLineShorterWidth: flowItemView.width - addChildButton.width - ( showMoreButton.visible ? showMoreButton.width : 0 )
+      property int invisibleItemsCounter: 0
+
       states: [
         State {
           name: "initial"
-          PropertyChanges {
-            target: noOfFeaturesText
-            visible: true
-          }
-          PropertyChanges {
-            target: textModeContainer
-            height: customStyle.fields.height
-          }
-        },
-        State {
-          name: "expanded"
-          PropertyChanges {
-            target: textModeContainer
-            height: root.expandedHeight //customStyle.fields.height * 3 // three rows
-          }
-          PropertyChanges {
-            target: noOfFeaturesText
-            visible: false
-          }
         },
         State {
           name: "page"
@@ -141,44 +125,25 @@ Item {
         }
       ]
 
-      transitions: [
-        Transition {
-          from: "initial"
-          to: "expanded"
-          animations: NumberAnimation { property: "height"; duration: 100 }
-        }
-      ]
-
       onStateChanged: delegateModel.update()
 
       visible: rmodel.isTextType
-      height: customStyle.fields.height
+      height: root.widgetHeight
       width: parent.width
       state: "initial"
+
+      Layout.maximumHeight: root.widgetHeight
+      Layout.minimumHeight: customStyle.fields.height
 
       border.color: customStyle.fields.normalColor
       border.width: 1 * QgsQuick.Utils.dp
       color: customStyle.fields.backgroundColor
       radius: customStyle.fields.cornerRadius
 
-      Text {
-        id: noOfFeaturesText
-
-        anchors.fill: parent
-        font.pointSize: customStyle.fields.fontPointSize
-        color: customStyle.fields.fontColor
-        horizontalAlignment: Qt.AlignHCenter
-        verticalAlignment: Qt.AlignVCenter
-
-        text: qsTr( "%n linked feature(s)", "Shows how many features are linked via relations", root.linkedFeaturesCount )
-      }
-
       MouseArea {
         anchors.fill: parent
         onClicked: {
           if ( textModeContainer.state === "initial" )
-            textModeContainer.state = "expanded"
-          else if ( textModeContainer.state === "expanded" )
             textModeContainer.state = "page"
         }
       }
@@ -189,9 +154,45 @@ Item {
         anchors.fill: parent
         anchors.margins: customStyle.fields.sideMargin
 
-        spacing: customStyle.group.spacing
+        spacing: customStyle.relationComponent.flowSpacing
 
         Repeater { model: delegateModel; }
+
+        RelationTextDelegate {
+          id: showMoreButton
+
+          isVisible: textModeContainer.invisibleItemsCounter > 0
+          text: qsTr( "... %1 more" ).arg( textModeContainer.invisibleItemsCounter )
+
+          firstLinesMaxWidth: textModeContainer.fullLineWidth
+          lastLineMaxWidth: firstLinesMaxWidth
+
+          backgroundContent.color: customStyle.relationComponent.tagBackgroundColorButton
+          backgroundContent.border.color: customStyle.relationComponent.tagBorderColorButton
+          textContent.color: customStyle.relationComponent.tagTextColor
+
+          onClicked: textModeContainer.state = "page"
+        }
+
+        RelationTextDelegate {
+          id: addChildButton
+
+          text: qsTr( "+ Add" )
+          isVisible: !root.parent.readOnly
+
+          backgroundContent.color: customStyle.relationComponent.tagBackgroundColorButtonAlt
+          backgroundContent.border.color: customStyle.relationComponent.tagBorderColorButton
+          textContent.color: customStyle.relationComponent.tagTextColorButton
+
+          firstLinesMaxWidth: textModeContainer.fullLineWidth
+          lastLineMaxWidth: firstLinesMaxWidth
+
+          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+        }
+      }
+
+      Component.onCompleted: {
+        delegateModel.update()
       }
     }
 
@@ -200,7 +201,7 @@ Item {
       id: photoModeContainer
 
       visible: !rmodel.isTextType
-      height: expandedHeight
+      height: widgetHeight
       width: parent.width
 
       border.color: customStyle.fields.normalColor
@@ -209,7 +210,7 @@ Item {
       radius: customStyle.fields.cornerRadius
 
       ListView {
-        height: expandedHeight
+        height: widgetHeight
         width: parent.width
         anchors.margins: customStyle.fields.sideMargin
         anchors.fill: parent
@@ -218,104 +219,15 @@ Item {
         clip: true
 
         model: rmodel
-        delegate: photoDelegate
-      }
-    }
-  }
+        delegate: RelationPhotoDelegate {
+          onClicked: root.openLinkedFeature( feature )
+        }
 
-  Component {
-    id: textDelegate
-
-    Item {
-      id: textDelegateContainer
-
-      property real maximumWidth: flowItemView.width
-      property bool isVisible: {
-        // figure out which row am I from Y
-        if ( y === 0 ) return true
-        else if ( y < 3 * height ) return true
-        else return false
-      }
-
-      height: customStyle.relationComponent.textDelegateHeight
-      width: childrenRect.width > maximumWidth ? maximumWidth : childrenRect.width
-
-      visible: isVisible
-
-      Rectangle {
-        id: textDelegateContent
-
-        property real requestedWidth: txt.paintedWidth + 10 * QgsQuick.Utils.dp
-
-        height: parent.height
-        width: requestedWidth > parent.maximumWidth ? parent.maximumWidth : requestedWidth
-
-        color: customStyle.fields.backgroundColorDark
-        radius: customStyle.fields.cornerRadius
-        border.color: customStyle.fields.backgroundColorDarker
-        border.width: 2 * QgsQuick.Utils.dp
-
-        Text {
-          id: txt
-
-          text: model.FeatureTitle
-
-          width: parent.width
-          height: parent.height
-          horizontalAlignment: Qt.AlignHCenter
-          verticalAlignment: Qt.AlignVCenter
-
-          font.pointSize: customStyle.fields.fontPointSize
-          color: customStyle.fields.fontColor
-          clip: true
+        footer: RelationPhotoFooterDelegate {
+          isReadOnly: root.parent.readOnly
+          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
         }
       }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.openLinkedFeature( model.FeaturePair )
-      }
-    }
-  }
-
-  Component {
-    id: photoDelegate
-
-    Item {
-      height: expandedHeight
-      width: height
-
-      Image {
-        id: image
-
-        anchors.fill: parent
-        sourceSize.width: image.width
-        sourceSize.height: image.height
-        source: {
-          let absolutePath = model.PhotoPath
-
-          if (image.status === Image.Error) {
-            customStyle.icons.brokenImage
-          }
-          else if (absolutePath !== '' && __inputUtils.fileExists(absolutePath)) {
-            "file://" + absolutePath
-          }
-          else if (absolutePath === '' || absolutePath === undefined) {
-            customStyle.icons.notAvailable
-          } else {
-            customStyle.icons.brokenImage
-          }
-        }
-        mipmap: true
-        fillMode: Image.PreserveAspectFit
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.openLinkedFeature( model.FeaturePair )
-        // TODO onPressAndHold
-      }
-
     }
   }
 
@@ -333,7 +245,7 @@ Item {
 
       onBackButtonClicked: {
         root.parent.formView.pop()
-        textModeContainer.state = "expanded"
+        textModeContainer.state = "initial"
       }
 
       onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
@@ -346,7 +258,7 @@ Item {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.parent.formView.pop()
-          textModeContainer.state = "expanded"
+          textModeContainer.state = "initial"
         }
       }
     }

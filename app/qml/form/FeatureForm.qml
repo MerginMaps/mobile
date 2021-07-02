@@ -527,7 +527,11 @@ Item {
       Item {
         id: placeholder
         height: childrenRect.height
-        anchors { left: parent.left; right: rememberCheckboxContainer.left; top: labelPlaceholder.bottom }
+        anchors {
+          left: parent.left
+          right: rememberCheckboxContainer.left
+          top: labelPlaceholder.bottom
+        }
 
 
         Loader {
@@ -644,7 +648,7 @@ Item {
 
       Item {
         id: rememberCheckboxContainer
-        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden"
+        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden" && Type === FormItem.Field
 
         implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height
