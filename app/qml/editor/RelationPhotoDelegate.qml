@@ -48,10 +48,7 @@ Item {
       else if (absolutePath !== '' && __inputUtils.fileExists(absolutePath)) {
         "file://" + absolutePath
       }
-      else if (absolutePath === '' || absolutePath === undefined) {
-        image.imageValid = false
-        customStyle.icons.notAvailable
-      } else {
+      else {
         image.imageValid = false
         customStyle.icons.notAvailable
       }
