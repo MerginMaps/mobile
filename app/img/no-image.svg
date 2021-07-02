@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="image-slash.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8">
+    <linearGradient
+       id="linearGradient2303"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop2301" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient853"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.016;"
+         offset="0"
+         id="stop851" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="1.3037281"
+     inkscape:cx="352.1397"
+     inkscape:cy="221.66663"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <!-- Font Awesome Free 5.15.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) -->
+  <path
+     d="M 96.669922 64 L 98.710938 66.441406 L 292.43359 235.56641 L 343.51367 184.48438 C 348.20067 179.79837 355.79834 179.79836 360.48438 184.48438 L 448 272 L 448 371.37695 L 506.44336 422.40039 C 509.98351 415.71253 512 408.09404 512 400 L 512 112 C 512 85.49 490.51 64 464 64 L 96.669922 64 z M 11.533203 80.822266 C 4.3525747 89.210848 0 100.09174 0 112 L 0 400 C 0 426.51 21.49 448 48 448 L 429.85547 448 L 356.94531 384 L 64 384 L 64 336 L 135.51367 264.48438 C 140.20067 259.79836 147.79837 259.79836 152.48438 264.48438 L 208 320 L 243.54492 284.45508 L 157.36523 208.80664 C 147.19169 222.85325 130.66992 232 112 232 C 81.072 232 56 206.928 56 176 C 56 159.9462 62.766032 145.4795 73.589844 135.26953 L 11.533203 80.822266 z "
+     id="path2" />
+  <path
+     sodipodi:nodetypes="ccccccccc"
+     inkscape:connector-curvature="0"
+     d="M 472.63161,471.27306 17.381532,73.31749 C 11.98705,68.57505 10.667252,60.01331 14.436746,54.19209 L 28.096819,33.11766 c 3.769486,-5.82123 11.210362,-6.69148 16.612651,-1.9404 l 455.25027,397.95566 c 5.39435,4.7424 6.71412,13.30417 2.94465,19.12544 l -13.66019,21.07446 c -3.76953,5.8212 -11.21073,6.68296 -16.61259,1.94024 z"
+     id="path849"
+     style="fill:#000000;fill-opacity:0.928;fill-rule:nonzero;stroke-width:0.61700535" />
+</svg>

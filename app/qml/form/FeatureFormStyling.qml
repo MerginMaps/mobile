@@ -81,8 +81,8 @@ QtObject {
     property var camera: InputStyle.cameraIcon
     property var remove: InputStyle.removeIcon
     property var gallery:InputStyle.galleryIcon
-    property var brokenImage: __inputUtils.getThemeIcon("ic_broken_image_black")
-    property var notAvailable: __inputUtils.getThemeIcon("ic_photo_notavailable_white")
+    property var brokenImage: __inputUtils.getThemeIcon("no-image")
+    property var notAvailable: __inputUtils.getThemeIcon("no-image")
     property var today: __inputUtils.getThemeIcon("ic_today")
     property var back: InputStyle.backIcon
     property var combobox: InputStyle.comboboxIcon
@@ -98,5 +98,26 @@ QtObject {
 
   property QtObject relationComponent: QtObject {
     property real textDelegateHeight: fields.height * 0.8
+    property int flowSpacing: 8 * QgsQuick.Utils.dp
+
+    // photo mode
+    property color photoBorderColor: InputStyle.darkGreen
+    property color photoBorderColorButton: InputStyle.darkOrange
+    property color iconColor: InputStyle.darkGreen
+    property color iconColorButton: InputStyle.darkOrange
+    property color textColorButton: InputStyle.darkOrange
+    property real photoBorderWidth: 2 * QgsQuick.Utils.dp
+
+    // tag cloud (text mode)
+    property color tagBackgroundColor: InputStyle.darkGreen
+    property color tagBackgroundColorButton: InputStyle.darkOrange
+    property color tagBackgroundColorButtonAlt: InputStyle.panelBackgroundLight
+    property color tagBorderColor: InputStyle.darkGreen
+    property color tagBorderColorButton: InputStyle.darkOrange
+    property color tagTextColor: InputStyle.panelBackgroundLight
+    property color tagTextColorButton: InputStyle.darkOrange
+    property real tagBorderWidth: 2 * QgsQuick.Utils.dp
+    property real tagRadius: 10 * QgsQuick.Utils.dp
+    property real tagInnerSpacing: 30 * QgsQuick.Utils.dp
   }
 }
