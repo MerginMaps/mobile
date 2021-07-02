@@ -162,7 +162,7 @@ Item {
           id: showMoreButton
 
           isVisible: textModeContainer.invisibleItemsCounter > 0
-          text: qsTr( "... %1 more" ).arg( textModeContainer.invisibleItemsCounter )
+          text: qsTr( "%1 more" ).arg( textModeContainer.invisibleItemsCounter )
 
           firstLinesMaxWidth: textModeContainer.fullLineWidth
           lastLineMaxWidth: firstLinesMaxWidth
