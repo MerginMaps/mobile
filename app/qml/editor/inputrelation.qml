@@ -177,7 +177,7 @@ Item {
         RelationTextDelegate {
           id: addChildButton
 
-          text: qsTr( "+ Add" )
+          text: "+ " + qsTr( "Add" )
           isVisible: !root.parent.readOnly
 
           backgroundContent.color: customStyle.relationComponent.tagBackgroundColorButtonAlt
