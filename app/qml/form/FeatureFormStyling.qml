@@ -81,7 +81,6 @@ QtObject {
     property var camera: InputStyle.cameraIcon
     property var remove: InputStyle.removeIcon
     property var gallery:InputStyle.galleryIcon
-    property var brokenImage: __inputUtils.getThemeIcon("no-image")
     property var notAvailable: __inputUtils.getThemeIcon("no-image")
     property var today: __inputUtils.getThemeIcon("ic_today")
     property var back: InputStyle.backIcon
