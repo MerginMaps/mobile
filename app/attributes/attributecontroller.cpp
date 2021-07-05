@@ -474,7 +474,7 @@ void AttributeController::acquireId()
   QgsFeature feat = mFeatureLayerPair.feature();
   if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
   {
-    QgsMessageLog::logMessage( tr( "acquireId: feature could not be added" ),
+    QgsMessageLog::logMessage( tr( "Feature could not be added" ),
                                QStringLiteral( "Input" ),
                                Qgis::Critical );
 

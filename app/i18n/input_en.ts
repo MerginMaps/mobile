@@ -106,53 +106,54 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="469"/>
+        <location filename="../attributes/attributecontroller.cpp" line="512"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="479"/>
+        <location filename="../attributes/attributecontroller.cpp" line="522"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="490"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1009"/>
+        <location filename="../attributes/attributecontroller.cpp" line="533"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1055"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="831"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="477"/>
+        <location filename="../attributes/attributecontroller.cpp" line="852"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="837"/>
+        <location filename="../attributes/attributecontroller.cpp" line="883"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="851"/>
+        <location filename="../attributes/attributecontroller.cpp" line="897"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation type="unfinished">Feature %1 could not be fetched after commit</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
+        <location filename="../attributes/attributecontroller.cpp" line="914"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="885"/>
+        <location filename="../attributes/attributecontroller.cpp" line="931"/>
         <source>Could not save changes. Rolling back.</source>
         <translation type="unfinished">Could not save changes. Rolling back.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1010"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1056"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,7 +192,7 @@
 <context>
     <name>BrowseDataFeaturesPanel</name>
     <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="61"/>
+        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="63"/>
         <source>Showing only the first %1 features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -256,60 +257,60 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="173"/>
+        <location filename="../qml/form/FeatureForm.qml" line="184"/>
         <source>Constraints not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="189"/>
         <source>Note: soft constraints were not met</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="456"/>
+        <location filename="../qml/form/FeatureForm.qml" line="489"/>
         <source>Number is outside of specified range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="458"/>
+        <location filename="../qml/form/FeatureForm.qml" line="491"/>
         <source>Value is not valid</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>FeaturePanel</name>
+    <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="162"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
         <source>Edit Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="162"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="172"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="100"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="329"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Delete feature</source>
-        <translation>Delete feature</translation>
+        <translation type="unfinished">Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="330"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="350"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="351"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="229"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,17 +318,17 @@
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="60"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="60"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="83"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="82"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="99"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="98"/>
         <source>Edit geometry</source>
         <translation>Edit geometry</translation>
     </message>
@@ -385,95 +386,95 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="153"/>
+        <location filename="../inpututils.cpp" line="154"/>
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="159"/>
         <source>%1 minutes ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="159"/>
         <source>%1 minute ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="164"/>
         <source>%1 hours ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="164"/>
         <source>%1 hour ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 days ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 day ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="178"/>
         <source>%1 weeks ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="178"/>
         <source>%1 week ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>%1 months ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>%1 month ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 years ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 year ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="955"/>
+        <location filename="../inpututils.cpp" line="1018"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="956"/>
+        <location filename="../inpututils.cpp" line="1019"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="957"/>
+        <location filename="../inpututils.cpp" line="1020"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="958"/>
+        <location filename="../inpututils.cpp" line="1021"/>
         <source>screen density: %1</source>
         <translation type="unfinished">screen density: %1</translation>
     </message>
@@ -623,7 +624,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/PreviewPanel.qml" line="121"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="121"/>
         <source>No map tip available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -798,7 +799,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="106"/>
+        <location filename="../projectwizard.cpp" line="115"/>
         <source>Project %1 created</source>
         <translation type="unfinished"></translation>
     </message>
@@ -899,12 +900,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="218"/>
+        <location filename="../attributes/attributecontroller.cpp" line="241"/>
         <source>Not NULL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="223"/>
+        <location filename="../attributes/attributecontroller.cpp" line="246"/>
         <source>Unique</source>
         <translation type="unfinished"></translation>
     </message>
@@ -980,6 +981,14 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/RegistrationForm.qml" line="236"/>
         <source>Sign up</source>
         <translation type="unfinished">Sign up</translation>
+    </message>
+</context>
+<context>
+    <name>RelationPhotoFooterDelegate</name>
+    <message>
+        <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="95"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1176,31 +1185,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="263"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
         <source>Take a photo</source>
         <translation type="unfinished">Take a photo</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="305"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
         <source>From gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="326"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
         <source>Image is not available: </source>
         <translation type="unfinished">Image is not available: </translation>
     </message>
 </context>
 <context>
     <name>inputrelation</name>
-    <message numerus="yes">
-        <location filename="../qml/editor/inputrelation.qml" line="170"/>
-        <source>%n linked feature(s)</source>
-        <comment>Shows how many features are linked via relations</comment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="165"/>
+        <source>%1 more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="180"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="240"/>
+        <source>Linked features</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1211,37 +1226,37 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="466"/>
+        <location filename="../qml/main.qml" line="470"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="466"/>
+        <location filename="../qml/main.qml" line="470"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="482"/>
+        <location filename="../qml/main.qml" line="486"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="498"/>
+        <location filename="../qml/main.qml" line="502"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="531"/>
+        <location filename="../qml/main.qml" line="535"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="689"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="695"/>
+        <location filename="../qml/main.qml" line="699"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
