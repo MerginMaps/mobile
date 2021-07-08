@@ -10,7 +10,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="152"/>
+        <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>La vostra subscripció ha estat cancel·lada per %1</translation>
     </message>
@@ -20,47 +20,47 @@
         <translation>El meu compte</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="124"/>
+        <location filename="../qml/AccountPage.qml" line="132"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>La vostra subscripció no es renovarà després de %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="133"/>
+        <location filename="../qml/AccountPage.qml" line="141"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Si us plau actualitzeu les vostres %1dades de facturació%2 quan abans millor</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="143"/>
+        <location filename="../qml/AccountPage.qml" line="151"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>La propera factura serà de %1 el %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="177"/>
+        <location filename="../qml/AccountPage.qml" line="185"/>
         <source>Using %1 / %2</source>
         <translation>Utilitzant %1 / %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Manage Subscription</source>
         <translation>Gestionar la subscripció</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Working...</source>
         <translation>Treballant...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="203"/>
         <source>Subscription plans</source>
         <translation>Opcions de subscripció </translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="231"/>
+        <location filename="../qml/AccountPage.qml" line="239"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>També podeu %1recuperar%2 les vostres compres</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="250"/>
+        <location filename="../qml/AccountPage.qml" line="263"/>
         <source>Sign out</source>
         <translation>Tanca sessió</translation>
     </message>
@@ -104,53 +104,54 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="408"/>
+        <location filename="../attributes/attributecontroller.cpp" line="512"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;analitzador: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="418"/>
+        <location filename="../attributes/attributecontroller.cpp" line="522"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;avaluació: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="429"/>
-        <location filename="../attributes/attributecontroller.cpp" line="875"/>
+        <location filename="../attributes/attributecontroller.cpp" line="533"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1055"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir en un valor compatible per al camp %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="681"/>
+        <location filename="../attributes/attributecontroller.cpp" line="831"/>
         <source>Cannot delete feature</source>
         <translation>No es pot esborrar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="702"/>
+        <location filename="../attributes/attributecontroller.cpp" line="477"/>
+        <location filename="../attributes/attributecontroller.cpp" line="852"/>
         <source>Feature could not be added</source>
         <translation>La característica no es pot afegir</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="730"/>
+        <location filename="../attributes/attributecontroller.cpp" line="883"/>
         <source>Cannot update feature</source>
         <translation>No es pot actualitzar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="744"/>
+        <location filename="../attributes/attributecontroller.cpp" line="897"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>La característica %1 no es pot recuperar després del lliurament</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="761"/>
+        <location filename="../attributes/attributecontroller.cpp" line="914"/>
         <source>Cannot start editing</source>
         <translation>No es pot començar a editar</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="778"/>
+        <location filename="../attributes/attributecontroller.cpp" line="931"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>No es pot desar els canvis. Tornant enrere.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="876"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1056"/>
         <source>Value %1 is not compatible with field type %2.</source>
         <translation>El valor %1 no és compatible amb el tipus de camp %2.</translation>
     </message>
@@ -189,7 +190,7 @@
 <context>
     <name>BrowseDataFeaturesPanel</name>
     <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="61"/>
+        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="63"/>
         <source>Showing only the first %1 features</source>
         <translation>Mostrant només les primeres %1 funcionalitats</translation>
     </message>
@@ -254,50 +255,60 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="173"/>
+        <location filename="../qml/form/FeatureForm.qml" line="184"/>
         <source>Constraints not valid</source>
         <translation>Restriccions no vàlides</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="189"/>
         <source>Note: soft constraints were not met</source>
         <translation>Nota: les restriccions suaus no s&apos;han complert</translation>
     </message>
+    <message>
+        <location filename="../qml/form/FeatureForm.qml" line="489"/>
+        <source>Number is outside of specified range</source>
+        <translation>El número està fora de l&apos;interval especificat</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureForm.qml" line="491"/>
+        <source>Value is not valid</source>
+        <translation>El valor no és vàlid</translation>
+    </message>
 </context>
 <context>
-    <name>FeaturePanel</name>
+    <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="162"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
         <source>Edit Feature</source>
         <translation>Editar característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="162"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
         <source>Feature</source>
         <translation>Característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="172"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="100"/>
         <source>Save</source>
-        <translation>Desar</translation>
+        <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="325"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Delete feature</source>
         <translation>Esborrar característica</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="326"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>Segur que voleu esborrar aquesta característica?</translation>
+        <translation>Esteu segur que voleu esborrar aquesta característica?</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="346"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
         <source>Unsaved changes</source>
-        <translation>Canvis sense desar</translation>
+        <translation>Canivs sense desar</translation>
     </message>
     <message>
-        <location filename="../qml/FeaturePanel.qml" line="347"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="229"/>
         <source>Do you want to save changes?</source>
         <translation>Voleu desar els canvis?</translation>
     </message>
@@ -305,17 +316,17 @@
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="60"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="60"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="83"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="82"/>
         <source>Delete</source>
         <translation>Esborrar</translation>
     </message>
     <message>
-        <location filename="../qml/FeatureToolbar.qml" line="99"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="98"/>
         <source>Edit geometry</source>
         <translation>Editar geometria</translation>
     </message>
@@ -374,95 +385,95 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="153"/>
+        <location filename="../inpututils.cpp" line="154"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="159"/>
         <source>%1 minutes ago</source>
         <translation>ara fa %1 minuts</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="159"/>
         <source>%1 minute ago</source>
         <translation>ara fa %1 minut</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="164"/>
         <source>%1 hours ago</source>
         <translation>ara fa %1 hores</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="164"/>
         <source>%1 hour ago</source>
         <translation>ara fa %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 days ago</source>
         <translation>ara fa %1 dies</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 day ago</source>
         <translation>ara fa %1 dia</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="178"/>
         <source>%1 weeks ago</source>
         <translation>ara fa %1 setmanes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="178"/>
         <source>%1 week ago</source>
         <translation>ara fa %1 setmana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>%1 months ago</source>
         <translation>ara fa %1 mesos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>%1 month ago</source>
         <translation>ara fa %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 years ago</source>
         <translation>ara fa %1 anys</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 year ago</source>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="882"/>
+        <location filename="../inpututils.cpp" line="1018"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="883"/>
+        <location filename="../inpututils.cpp" line="1019"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="884"/>
+        <location filename="../inpututils.cpp" line="1020"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="885"/>
+        <location filename="../inpututils.cpp" line="1021"/>
         <source>screen density: %1</source>
         <translation>densitat de pantalla: %1</translation>
     </message>
@@ -612,7 +623,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/PreviewPanel.qml" line="121"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="121"/>
         <source>No map tip available.</source>
         <translation>No hi ha cap consell de mapa disponible.</translation>
     </message>
@@ -788,7 +799,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="105"/>
+        <location filename="../projectwizard.cpp" line="115"/>
         <source>Project %1 created</source>
         <translation>Projecte %1 creat</translation>
     </message>
@@ -796,32 +807,32 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectWizardPage</name>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="52"/>
         <source>Create Project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="77"/>
         <source>Project name</source>
         <translation>Nom del projecte</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="92"/>
         <source>Fields</source>
         <translation>Camps</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="126"/>
         <source>Add field</source>
         <translation>Afegir camp</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="167"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="173"/>
         <source>Empty project name</source>
         <translation>Nom de projecte buit</translation>
     </message>
@@ -889,12 +900,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="186"/>
+        <location filename="../attributes/attributecontroller.cpp" line="241"/>
         <source>Not NULL</source>
         <translation>No NULL</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="191"/>
+        <location filename="../attributes/attributecontroller.cpp" line="246"/>
         <source>Unique</source>
         <translation>Únic</translation>
     </message>
@@ -973,9 +984,17 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
+    <name>RelationPhotoFooterDelegate</name>
+    <message>
+        <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="95"/>
+        <source>Add</source>
+        <translation>Afegir</translation>
+    </message>
+</context>
+<context>
     <name>SearchBar</name>
     <message>
-        <location filename="../qml/SearchBar.qml" line="67"/>
+        <location filename="../qml/SearchBar.qml" line="73"/>
         <source>SEARCH</source>
         <translation>CERCA</translation>
     </message>
@@ -1166,19 +1185,37 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="263"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
         <source>Take a photo</source>
         <translation>Fes una foto</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="305"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
         <source>From gallery</source>
         <translation>Des de la galeria</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="326"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
         <source>Image is not available: </source>
         <translation>Imatge no disponible:</translation>
+    </message>
+</context>
+<context>
+    <name>inputrelation</name>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="165"/>
+        <source>%1 more</source>
+        <translation>%1 més</translation>
+    </message>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="180"/>
+        <source>Add</source>
+        <translation>Afegir</translation>
+    </message>
+    <message>
+        <location filename="../qml/editor/inputrelation.qml" line="240"/>
+        <source>Linked features</source>
+        <translation>Característiques enllaçades</translation>
     </message>
 </context>
 <context>
@@ -1189,37 +1226,37 @@ No s&apos;afegirà al projecte.</translation>
         <translation>La característica enregistrada no és vàlida</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="470"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="468"/>
+        <location filename="../qml/main.qml" line="470"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="484"/>
+        <location filename="../qml/main.qml" line="486"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="500"/>
+        <location filename="../qml/main.qml" line="502"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Precisió de posició GPS baixa (%1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos de tenir una bona vista del cel.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="533"/>
+        <location filename="../qml/main.qml" line="535"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS no disponible.%1Proveu de permetre la ubicació del GPS a la configuració del dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="691"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Communication error</source>
         <translation>Error de comunicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="697"/>
+        <location filename="../qml/main.qml" line="699"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
