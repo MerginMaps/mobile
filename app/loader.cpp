@@ -31,16 +31,17 @@
 
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-Loader::Loader(
-  MapThemesModel &mapThemeModel
-  , AppSettings &appSettings
-  , ActiveLayer &activeLayer
-  , QObject *parent ) :
+Loader::Loader( MapThemesModel &mapThemeModel
+                , AppSettings &appSettings
+                , ActiveLayer &activeLayer
+                , LayersProxyModel &recordingLayerPM
+                , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
+  , mRecordingLayerPM( recordingLayerPM )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -107,7 +108,13 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     res = mProject->read( filePath );
     mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mProject );
-    setActiveLayerByName( mAppSettings.defaultLayer() );
+
+    QgsVectorLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
+    if ( defaultLayer )
+      setActiveLayer( defaultLayer );
+    else
+      setActiveLayer( mRecordingLayerPM.firstUsableLayer() );
+
     setMapSettingsLayers();
 
     emit projectReloaded( mProject );

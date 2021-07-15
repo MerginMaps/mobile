@@ -145,6 +145,22 @@ QgsVectorLayer *LayersProxyModel::layerFromLayerId( QString layerId ) const
   return nullptr;
 }
 
+QgsVectorLayer *LayersProxyModel::layerFromLayerName( const QString &layerName ) const
+{
+  QList<QgsMapLayer *> filteredLayers = layers();
+
+  for ( int i = 0; i < filteredLayers.count(); i++ )
+  {
+    if ( filteredLayers.at( i )->name() == layerName )
+    {
+      QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( filteredLayers.at( i ) );
+      if ( layer )
+        return layer;
+    }
+  }
+  return nullptr;
+}
+
 QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
 {
   return sourceModel()->data( index, role );

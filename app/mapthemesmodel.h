@@ -70,7 +70,6 @@ class MapThemesModel : public QAbstractListModel
   signals:
     void mapThemesReloaded();
     void mapThemeChanged( const QString &name );
-    void reloadLayers();
     void activeThemeIndexChanged();
 
   private:

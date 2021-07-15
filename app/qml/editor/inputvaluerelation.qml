@@ -91,7 +91,6 @@ Item {
   function dataUpdated( feature ) {
     if ( !isReadOnly ) {
       vrModel.currentFeature = feature
-      updateField()
       combobox.popup.close()
     }
   }
