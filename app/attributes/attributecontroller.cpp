@@ -539,6 +539,8 @@ bool AttributeController::recalculateDefaultValues(
           if ( val != oldVal )
           {
             mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+            // Update also expression context after an attribute change
+            expressionContext.setFeature( featureLayerPair().featureRef() );
             changedFormItems.insert( item->id() );
             hasChanges = true;
           }
