@@ -1,5 +1,8 @@
 name: QgsQuick
 on: [push]
+env:
+  QGIS_COMMIT_HASH: 1d17bf5bd35d7872f53c8e1c8b0a1e371616bf07
+
 jobs:
   qgsquick_up_to_date:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
@@ -11,7 +14,7 @@ jobs:
         run: |
           git clone https://github.com/qgis/QGIS.git --depth 1
           cd QGIS
-          git fetch --depth 1 origin 1d17bf5bd35d7872f53c8e1c8b0a1e371616bf07
+          git fetch --depth 1 origin ${QGIS_COMMIT_HASH}
           git checkout FETCH_HEAD
           cd ..
 
