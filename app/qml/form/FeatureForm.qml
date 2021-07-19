@@ -197,7 +197,6 @@ Item {
     else
     {
       controller.create()
-      state = "Edit"
     }
 
     saved()

@@ -45,7 +45,7 @@ QString InputHelp::privacyPolicyLink() const
 
 QString InputHelp::merginSubscriptionDetailsLink() const
 {
-  return merginHelpRoot + "/subscription";
+  return merginHelpRoot + "/subscriptions";
 }
 
 QString InputHelp::howToEnableDigitizingLink() const
