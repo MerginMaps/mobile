@@ -10,6 +10,10 @@ jobs:
       - name: download qgis
         run: |
           git clone https://github.com/qgis/QGIS.git --depth 1
+          cd QGIS
+          git fetch --depth 1 origin 1d17bf5bd35d7872f53c8e1c8b0a1e371616bf07
+          git checkout FETCH_HEAD
+          cd ..
 
       - name: run check the qgsquick is up-to-date
         run: |
