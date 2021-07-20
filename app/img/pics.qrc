@@ -72,5 +72,6 @@
         <file>plus-big.svg</file>
         <file>minus.svg</file>
         <file>no-image.svg</file>
+        <file>link-rotated.svg</file>
     </qresource>
 </RCC>
