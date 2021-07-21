@@ -15,38 +15,47 @@
 #include "qgsproject.h"
 #include "featureslistmodel.h"
 
+/**
+ * \brief The RelationReferenceFeaturesModel class serve as a helper class for relation reference widget.
+ * It is a subclass of FeaturesListModel so it is a model containing features from parent layer of the relation reference.
+ * Config and Project must be provided in order for this model to work.
+ */
 class RelationReferenceFeaturesModel : public FeaturesListModel
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  Q_PROPERTY( QVariantMap config WRITE setConfig NOTIFY configChanged )
-  Q_PROPERTY( QgsProject *project WRITE setProject NOTIFY projectChanged )
-  Q_PROPERTY( bool allowNull READ allowNull NOTIFY allowNullChanged )
+    //! widget's config
+    Q_PROPERTY( QVariantMap config WRITE setConfig NOTIFY configChanged )
+    //! active projec
+    Q_PROPERTY( QgsProject *project WRITE setProject NOTIFY projectChanged )
+    //! states if the relation widget allows Null (from relation configuration)
+    Q_PROPERTY( bool allowNull READ allowNull NOTIFY allowNullChanged )
 
-public:
+  public:
 
-  explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
-  virtual ~RelationReferenceFeaturesModel() {};
+    explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
+    virtual ~RelationReferenceFeaturesModel() {};
 
-  bool allowNull() const;
+    bool allowNull() const;
 
-  void setConfig( QVariantMap config );
-  void setProject( QgsProject *project );
+    void setConfig( QVariantMap config );
+    void setProject( QgsProject *project );
 
-  void setup();
+    //! Reads config and with project instance queries all features from parent layer. Emits populated signal after loading features.
+    void setup();
 
-signals:
-  void configChanged( QVariantMap config );
-  void projectChanged( QgsProject *project );
-  void allowNullChanged( bool allowNull );
-  void populated();
+  signals:
+    void configChanged( QVariantMap config );
+    void projectChanged( QgsProject *project );
+    void allowNullChanged( bool allowNull );
+    void populated();
 
-private:
+  private:
 
-  QString mFeatureTitle;
-  QVariantMap mConfig;
-  QgsProject *mProject = nullptr;
-  bool mAllowNull;
+    QString mFeatureTitle;
+    QVariantMap mConfig;
+    QgsProject *mProject = nullptr;
+    bool mAllowNull;
 };
 
 #endif // RELATIONREFERENCEFEATURESMODEL_H
