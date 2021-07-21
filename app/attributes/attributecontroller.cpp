@@ -729,6 +729,12 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         }
       }
 
+      if ( !isFormValueChange ) // reset state for new feature layer pair
+      {
+        item->setState( FormItem::ValidValue );
+        changedFormItems << item->id();
+      }
+
       ++formItemsIterator;
     }
     updateFieldValuesValidity();
