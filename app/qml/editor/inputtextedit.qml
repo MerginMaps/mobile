@@ -29,6 +29,7 @@ Item {
   signal importDataRequested()
   property var rowHeight: customStyle.fields.height * 0.75
   property real iconSize: rowHeight
+  property bool submitOnEditingFinished: field.isNumeric
 
   id: fieldItem
   enabled: !readOnly
@@ -75,7 +76,15 @@ Item {
     }
 
     onEditingFinished: {
-      valueChanged( text, text === undefined )
+      if (fieldItem.submitOnEditingFinished) {
+        valueChanged( text, text === undefined )
+      }
+    }
+
+    onTextChanged: {
+      if (!fieldItem.submitOnEditingFinished) {
+        valueChanged( text, text === undefined )
+      }
     }
 
     //! Commit value if has changed when widget gets out of the FeatureForm (ListView) viewport
@@ -112,17 +121,17 @@ Item {
     }
 
     onEditingFinished: {
+      if (fieldItem.submitOnEditingFinished) {
         valueChanged( text, text === undefined )
       }
     }
 
-    //! Commit value if has changed when widget gets out of the FeatureForm (ListView) viewport
-    Component.onDestruction: {
-      if ( textArea.activeFocus ) {
-        if ( value !== textArea.text ) {
-          valueChanged( textArea.text, textArea.text === undefined )
-        }
+    onTextChanged: {
+      if (!fieldItem.submitOnEditingFinished) {
+        valueChanged( text, text === undefined )
       }
+    }
+
     }
 
     // Icon

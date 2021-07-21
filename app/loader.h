@@ -41,6 +41,7 @@ class Loader: public QObject
       MapThemesModel &mapThemeModel
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
+      , LayersProxyModel &recordingLayerPM
       , QObject *parent = nullptr );
 
     QgsProject *project();
@@ -70,7 +71,7 @@ class Loader: public QObject
     /**
      * setActiveLayer sets active layer from layer
      */
-    Q_INVOKABLE void setActiveLayer( QgsMapLayer *layerName ) const;
+    Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
 
     //! A File on this path represents a project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
@@ -126,6 +127,7 @@ class Loader: public QObject
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
+    LayersProxyModel &mRecordingLayerPM;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
     /**

@@ -38,6 +38,8 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_INVOKABLE QModelIndex indexFromLayerId( QString layerId ) const;
     Q_INVOKABLE QgsVectorLayer *layerFromLayerId( QString layerId ) const;
 
+    QgsVectorLayer *layerFromLayerName( const QString &layerName ) const;
+
     //! Helper method to get data from source model to skip converting indexes
     Q_INVOKABLE QVariant getData( QModelIndex index, int role ) const;
 

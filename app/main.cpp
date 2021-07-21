@@ -429,7 +429,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  Loader loader( mtm, as, al );
+  Loader loader( mtm, as, al, recordingLpm );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
