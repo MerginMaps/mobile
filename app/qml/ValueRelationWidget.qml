@@ -31,6 +31,7 @@ Item {
                                       featuresModel: valueRelationModel,
                                       pageTitle: itemWidget.fieldName,
                                       allowMultiselect: itemWidget.allowMultipleValues,
+                                      toolbarVisible: itemWidget.allowMultipleValues,
                                       selectedFeatures: selectedFeatures
                                     })
     }
@@ -53,6 +54,8 @@ Item {
 
     BrowseDataFeaturesPanel {
       id: valueRelationPage
+
+      toolbarButtons: ["done"]
 
       onBackButtonClicked: {
         deactivateSearch()

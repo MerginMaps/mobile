@@ -92,9 +92,9 @@ AbstractEditor {
 
       pageTitle: qsTr( "Changing link" )
       allowSearch: false
-      layerHasGeometry: false
-      toolbarVisible: !root.parent.readOnly
       focus: true
+      toolbarButtons: ["unlink"]
+      toolbarVisible: rModel.allowNull
 
       onBackButtonClicked: {
         root.parent.formView.pop()
@@ -102,6 +102,11 @@ AbstractEditor {
 
       onFeatureClicked: {
         root.valueChanged( featureIds, false )
+        root.parent.formView.pop()
+      }
+
+      onUnlinkClicked: {
+        root.valueChanged( undefined, true )
         root.parent.formView.pop()
       }
 
