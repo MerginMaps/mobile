@@ -25,9 +25,9 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
     Q_OBJECT
 
     //! widget's config
-    Q_PROPERTY( QVariantMap config WRITE setConfig NOTIFY configChanged )
+    Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
     //! active projec
-    Q_PROPERTY( QgsProject *project WRITE setProject NOTIFY projectChanged )
+    Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
     //! states if the relation widget allows Null (from relation configuration)
     Q_PROPERTY( bool allowNull READ allowNull NOTIFY allowNullChanged )
 
@@ -36,6 +36,8 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
     explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
     virtual ~RelationReferenceFeaturesModel() {};
 
+    QVariantMap config() const;
+    QgsProject *project() const;
     bool allowNull() const;
 
     void setConfig( QVariantMap config );

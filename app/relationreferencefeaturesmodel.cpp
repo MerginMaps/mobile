@@ -14,6 +14,16 @@ RelationReferenceFeaturesModel::RelationReferenceFeaturesModel( QObject *parent 
 {
 }
 
+QVariantMap RelationReferenceFeaturesModel::config() const
+{
+  return mConfig;
+}
+
+QgsProject *RelationReferenceFeaturesModel::project() const
+{
+  return mProject;
+}
+
 bool RelationReferenceFeaturesModel::allowNull() const
 {
   return mAllowNull;
