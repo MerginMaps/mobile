@@ -63,10 +63,10 @@ Item {
     let layerName = __browseDataLayersModel.getData( modelIndex, LayersModel.LayerNameRole )
 
     browseDataLayout.push( browseDataFeaturesPanel, {
-                            layerHasGeometry: hasGeometry,
+                            toolbarVisible: !hasGeometry,
                             layerName: layerName,
                             featuresModel: featuresListModel
-                          } )
+                          })
   }
 
   function searchTextEdited( text ) {
@@ -109,6 +109,8 @@ Item {
 
     BrowseDataFeaturesPanel {
       id: dataFeaturesPanel
+
+      toolbarButtons: ["add"]
       onBackButtonClicked: popOnePageOrClose()
       onFeatureClicked: {
         let featurePair = featuresListModel.featureLayerPair( featureIds )

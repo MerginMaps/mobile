@@ -13,13 +13,15 @@ import QtQuick.Controls 2.12
 Item {
   id: root
 
-  signal backButtonClicked()
   signal featureClicked( var featureIds )
   signal addFeatureClicked()
+  signal unlinkClicked()
+  signal backButtonClicked()
   signal searchTextChanged( string text )
 
-  property bool layerHasGeometry: true
   property bool toolbarVisible: true
+  property var toolbarButtons: [] // pass button names in list, see currently supported buttons below in toolbar
+
   property bool allowMultiselect: false
   property bool allowSearch: true
   property string layerName: ""
@@ -110,12 +112,16 @@ Item {
 
     footer: BrowseDataToolbar {
       id: browseDataToolbar
-      visible: toolbarVisible && ( !layerHasGeometry || allowMultiselect )
-      addButtonVisible: !layerHasGeometry
-      doneButtonVisible: allowMultiselect
+
+      visible: root.toolbarVisible
+
+      addButtonVisible: root.toolbarButtons.includes("add")
+      doneButtonVisible: root.toolbarButtons.includes("done")
+      unlinkButtonVisible: root.toolbarButtons.includes("unlink")
 
       onAddButtonClicked: addFeatureClicked()
       onDoneButtonClicked: root.featureClicked( root.selectedFeatures )
+      onUnlinkButtonClicked: root.unlinkClicked()
     }
   }
 }

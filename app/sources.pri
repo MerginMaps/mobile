@@ -40,7 +40,8 @@ qrdecoder.cpp \
 projectsmodel.cpp \
 projectsproxymodel.cpp \
 compass.cpp \
-relationfeaturesmodel.cpp
+relationfeaturesmodel.cpp \
+relationreferencefeaturesmodel.cpp
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -83,7 +84,8 @@ qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \
 compass.h \
-relationfeaturesmodel.h
+relationfeaturesmodel.h \
+relationreferencefeaturesmodel.h
 
 contains(DEFINES, INPUT_TEST) {
 
