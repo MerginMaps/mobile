@@ -88,5 +88,7 @@
         <file>editor/RelationTextDelegate.qml</file>
         <file>editor/RelationPhotoDelegate.qml</file>
         <file>editor/RelationPhotoFooterDelegate.qml</file>
+        <file>editor/inputrelationreference.qml</file>
+        <file>editor/AbstractEditor.qml</file>
     </qresource>
 </RCC>

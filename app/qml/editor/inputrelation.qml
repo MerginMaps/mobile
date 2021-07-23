@@ -239,7 +239,7 @@ Item {
 
       pageTitle: qsTr( "Linked features" )
       allowSearch: false //TODO search
-      layerHasGeometry: false
+      toolbarButtons: ["add"]
       toolbarVisible: !root.parent.readOnly
       focus: true
 

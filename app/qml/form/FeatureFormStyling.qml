@@ -89,6 +89,8 @@ QtObject {
     property var importData: InputStyle.qrCodeIcon
     property var minus: __inputUtils.getThemeIcon("minus")
     property var plus: __inputUtils.getThemeIcon("plus-big")
+    property string relationsLink: InputStyle.linkIcon
+    property string relationsUnlink: InputStyle.unlinkIcon
   }
 
   property QtObject checkboxComponent: QtObject {

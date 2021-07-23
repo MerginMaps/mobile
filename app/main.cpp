@@ -86,6 +86,7 @@
 #include "qgsquickutils.h"
 #include "featureslistmodel.h"
 #include "relationfeaturesmodel.h"
+#include "relationreferencefeaturesmodel.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -299,6 +300,7 @@ void initDeclarative()
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< FeaturesListModel >( "lc", 1, 0, "FeaturesListModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
+  qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );

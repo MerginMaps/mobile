@@ -15,9 +15,11 @@ Item {
 
   signal addButtonClicked()
   signal doneButtonClicked()
+  signal unlinkButtonClicked()
 
   property bool addButtonVisible: false
   property bool doneButtonVisible: false
+  property bool unlinkButtonVisible: false
 
   id: root
 
@@ -68,6 +70,22 @@ Item {
           imageSource: "check.svg"
           onActivated: {
             doneButtonClicked()
+          }
+        }
+      }
+
+      Item {
+        height: parent.height
+        Layout.fillWidth: true
+        visible: unlinkButtonVisible
+
+        MainPanelButton {
+          id: unlinkButton
+          width: root.height * 0.8
+          text: qsTr("Remove link")
+          imageSource: InputStyle.unlinkIcon
+          onActivated: {
+            unlinkButtonClicked()
           }
         }
       }

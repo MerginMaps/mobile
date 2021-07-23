@@ -94,6 +94,8 @@ QtObject {
     property var downloadIcon: "qrc:download.svg"
     property var stopIcon: "qrc:stop.svg"
     property var moreMenuIcon: "qrc:/more_menu.svg"
+    property string linkIcon: "qrc:/link-rotated.svg"
+    property string unlinkIcon: "qrc:/unlink.svg"
 
     property var vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property var vectorLineIcon: "qrc:/mIconLineLayer.svg"
