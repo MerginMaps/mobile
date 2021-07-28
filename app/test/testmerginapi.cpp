@@ -1065,7 +1065,7 @@ void TestMerginApi::testDiffUpload()
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
 
-  // replace gpkg with a ne w version with a modified geometry
+  // replace gpkg with a new version with a modified geometry
   QFile::remove( projectDir + "/base.gpkg" );
   QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg" );
 
