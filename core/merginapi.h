@@ -172,6 +172,13 @@ typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
+//! MerginConfig stored in .mergin-config.json
+struct MerginConfig
+{
+  bool selectiveSyncEnabled = false;
+  QString selectiveSyncDir;
+};
+
 class MerginApi: public QObject
 {
     Q_OBJECT
@@ -315,6 +322,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
+    static const QString sMerginConfigFile;
     static const QString sDefaultApiRoot;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
@@ -379,6 +387,9 @@ class MerginApi: public QObject
     Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
+    static bool excludeFromSync( const QString &filePath, const MerginConfig &config );
+    static MerginConfig parseMerginConfig( const QString &projectDir );
+
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
 
@@ -419,6 +430,7 @@ class MerginApi: public QObject
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
     void subscriptionInfoChanged();
+    void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
@@ -563,6 +575,7 @@ class MerginApi: public QObject
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;
+    static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
