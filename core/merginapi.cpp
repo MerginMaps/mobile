@@ -29,10 +29,10 @@
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
-const QString MerginApi::sMerginConfigFile = QStringLiteral( "/.mergin-config.json" );
+const QString MerginApi::sMerginConfigFile = QStringLiteral( "/mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
-const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "JPEG" << "png";
+const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 
@@ -285,13 +285,13 @@ MerginConfig MerginApi::parseMerginConfig( const QString &projectDir )
     }
     else
     {
-      qDebug() << "MerginConfig: invalid content!";
+      qDebug() << "MerginConfig: Invalid content of the config file!";
     }
 
   }
   else
   {
-    qDebug() << "MerginConfig: cannot read a config file!";
+    qDebug() << "MerginConfig: Project does not contain a config file.";
   }
 
   return config;
@@ -1998,10 +1998,6 @@ void MerginApi::uploadInfoReplyFinished()
     QList<MerginFile> diffFiles;
     for ( QString filePath : transaction.diff.localAdded )
     {
-      // filter out files from selective sync
-      if ( excludeFromSync( filePath, merginConfig ) )
-        continue;
-
       MerginFile merginFile = findFile( filePath, localFiles );
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       addedMerginFiles.append( merginFile );
@@ -2655,14 +2651,14 @@ bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &co
   if ( config.selectiveSyncEnabled )
   {
     QFileInfo info( filePath );
-    bool isImage = sIgnoreImageExtensions.contains( info.suffix() );
+    bool isExcludedFormat = sIgnoreImageExtensions.contains( info.suffix().toLower() );
     if ( config.selectiveSyncDir.isEmpty() )
     {
-      return isImage;
+      return isExcludedFormat;
     }
     else
     {
-      return info.absoluteFilePath().startsWith( config.selectiveSyncDir ) && isImage;
+      return info.absoluteFilePath().startsWith( config.selectiveSyncDir ) && isExcludedFormat;
     }
   }
   return false;

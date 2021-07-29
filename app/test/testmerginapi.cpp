@@ -1543,7 +1543,7 @@ void TestMerginApi::testSelectiveSync()
 
   // Create photo files
   QDir dir;
-  QString photoPath( projectDir + "/do_not_upload" );
+  QString photoPath( projectDir + "/subdir" );
   if ( !dir.exists( photoPath ) )
     dir.mkpath( photoPath );
 
@@ -1555,10 +1555,10 @@ void TestMerginApi::testSelectiveSync()
 
   // Download the project and copy mergin config file containing selective sync properties
   downloadRemoteProject( mApiExtra, mUsername, projectName );
-  QString configFilePathExtra( projectDirExtra + "/.mergin-config.json" );
+  QString configFilePathExtra( projectDirExtra + "/mergin-config.json" );
   QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePathExtra ) );
 
-  // Sync event 1
+  // Sync event 1:
   // Client 1 uploads images
   uploadRemoteProject( mApi, mUsername, projectName );
   // Download project and check
@@ -1567,21 +1567,21 @@ void TestMerginApi::testSelectiveSync()
   QFile fileExtra( projectDirExtra + "/photo.jpg" );
   QVERIFY( !fileExtra.exists() );
 
-  QFile fileExtra1( projectDirExtra + "/do_not_upload/photo.jpg" );
+  QFile fileExtra1( projectDirExtra + "/subdir/photo.jpg" );
   QVERIFY( !fileExtra1.exists() );
 
   // Sync event 2:
-  // Client 2: upload an image
-  QString configFilePath( projectDir + "/.mergin-config.json" );
+  // Client 2 uploads an image
+  QString configFilePath( projectDir + "/mergin-config.json" );
   QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePath ) );
 
   QFile fileExtra2( projectDirExtra + "/" + "photoExtra.png" );
   fileExtra2.open( QIODevice::WriteOnly );
 
-  // Client  2 uploads a new image
+  // Client 2 uploads a new image
   uploadRemoteProject( mApiExtra, mUsername, projectName );
 
-  // Client 1: sync without Client 2 new image and without removing own images.
+  // Client 1 syncs without Client 2's new image and without removing own images.
   downloadRemoteProject( mApi, mUsername, projectName );
 
   QVERIFY( file.exists() );
@@ -1639,7 +1639,10 @@ void TestMerginApi::testExludeFromSync()
 
   QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/not-existing.jpg", config ) );
   QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.png", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.PNG", config ) );
   QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.jpg", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.JPG", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.jpeg", config ) );
   QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.JPEG", config ) );
   QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/subdir/image.jpg", config ) );
 
