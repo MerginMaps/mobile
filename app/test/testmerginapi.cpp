@@ -108,7 +108,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSync" );
 
-  deleteLocalDir( mApi->projectsPath() + "/testExludeFromSync" );
+  deleteLocalDir( mApi, "testExcludeFromSync" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -1609,10 +1609,10 @@ void TestMerginApi::testRegister()
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
 }
 
-void TestMerginApi::testExludeFromSync()
+void TestMerginApi::testExcludeFromSync()
 {
   // Set selective sync directory
-  QString selectiveSyncDir( mApi->projectsPath() + "/testExludeFromSync" );
+  QString selectiveSyncDir( mApi->projectsPath() + "/testExcludeFromSync" );
 
   QList<QString> testFiles =
   {
@@ -1705,9 +1705,9 @@ void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNa
   api->localProjectsManager().removeLocalProject( project.id() );
 }
 
-void TestMerginApi::deleteLocalDir( const QString &dirPath )
+void TestMerginApi::deleteLocalDir( MerginApi *api, const QString &dirPath )
 {
-  QDir dir( dirPath );
+  QDir dir( api->projectsPath() + "/" + dirPath );
   QVERIFY( dir.removeRecursively() );
 }
 

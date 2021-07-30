@@ -387,6 +387,17 @@ class MerginApi: public QObject
     Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
+
+    /**
+     * Performs checks and returns if a given file is excluded from the sync.
+     * If selective-sync-enabled is true, it checks if a file extension is from exlcudeSync extension list.
+     * If selective-sync-dir is defined, additionally checks, if the file is located in selective-sync-dir or in its subdir,
+     * otherwise a project dir is considered as selective-sync-dir and therefore the path check is redundant
+     * (since given filePath is relative to the project dir.).
+     * @param filePath Relative path of a file to project directory.
+     * @param config MerginConfig parsed from JSON, selective-sync properties are read from it.
+     * @return True, if a file at given filePath suppose to be excluded from sync.
+     */
     static bool excludeFromSync( const QString &filePath, const MerginConfig &config );
     static MerginConfig parseMerginConfig( const QString &projectDir );
 

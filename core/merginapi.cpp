@@ -285,7 +285,7 @@ MerginConfig MerginApi::parseMerginConfig( const QString &projectDir )
     }
     else
     {
-      qDebug() << "MerginConfig: Invalid content of the config file!";
+      CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Invalid content of the config file!" ) );
     }
 
   }
@@ -1820,7 +1820,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName, const QByteA
   transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
   CoreUtils::log( "pull " + projectFullName, transaction.diff.dump() );
 
-  MerginConfig merginConfig = parseMerginConfig( transaction.projectDir );
+  const MerginConfig merginConfig = parseMerginConfig( transaction.projectDir );
 
   for ( QString filePath : transaction.diff.remoteAdded )
   {
@@ -2652,6 +2652,7 @@ bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &co
   {
     QFileInfo info( filePath );
     bool isExcludedFormat = sIgnoreImageExtensions.contains( info.suffix().toLower() );
+
     if ( config.selectiveSyncDir.isEmpty() )
     {
       return isExcludedFormat;
