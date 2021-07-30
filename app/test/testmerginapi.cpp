@@ -106,6 +106,9 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateProjectAndSync" );
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSync" );
+
+  deleteLocalDir( mApi, "testExcludeFromSync" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -1524,6 +1527,69 @@ void TestMerginApi::testMigrateDetachProject()
   QVERIFY( !QFileInfo::exists( projectDir + "/.mergin/" ) );
 }
 
+void TestMerginApi::testSelectiveSync()
+{
+  // Case: Clients have following configuration: selective sync on, selective-sync-dir empty (project dir by default)
+  // Action 1: Client 1 uploads some images and Client 2 sync without downloading the images
+  // Action 2: Client 2 uploads an image and do not remove not-synced images. Client 1 syncs without downloading the image, still having own images.
+
+  // Create a project
+  QString projectName = "testSelectiveSync";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPath( projectDir + "/subdir" );
+  if ( !dir.exists( photoPath ) )
+    dir.mkpath( photoPath );
+
+  QFile file( projectDir + "/" + "photo.jpg" );
+  file.open( QIODevice::WriteOnly );
+
+  QFile file1( photoPath + "/" + "photo.jpg" );
+  file1.open( QIODevice::WriteOnly );
+
+  // Download the project and copy mergin config file containing selective sync properties
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QString configFilePathExtra( projectDirExtra + "/mergin-config.json" );
+  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePathExtra ) );
+
+  // Sync event 1:
+  // Client 1 uploads images
+  uploadRemoteProject( mApi, mUsername, projectName );
+  // Download project and check
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  QFile fileExtra( projectDirExtra + "/photo.jpg" );
+  QVERIFY( !fileExtra.exists() );
+
+  QFile fileExtra1( projectDirExtra + "/subdir/photo.jpg" );
+  QVERIFY( !fileExtra1.exists() );
+
+  // Sync event 2:
+  // Client 2 uploads an image
+  QString configFilePath( projectDir + "/mergin-config.json" );
+  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePath ) );
+
+  QFile fileExtra2( projectDirExtra + "/" + "photoExtra.png" );
+  fileExtra2.open( QIODevice::WriteOnly );
+
+  // Client 2 uploads a new image
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // Client 1 syncs without Client 2's new image and without removing own images.
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QVERIFY( file.exists() );
+  QVERIFY( file1.exists() );
+  QFile file2( projectDir + "/" + "photoExtra.png" );
+  QVERIFY( !file2.exists() );
+}
+
 void TestMerginApi::testRegister()
 {
   QString password = mApi->userAuth()->password();
@@ -1541,6 +1607,51 @@ void TestMerginApi::testRegister()
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   mApi->registerUser( username, email, password, password, true );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+}
+
+void TestMerginApi::testExcludeFromSync()
+{
+  // Set selective sync directory
+  QString selectiveSyncDir( mApi->projectsPath() + "/testExcludeFromSync" );
+
+  QList<QString> testFiles =
+  {
+    selectiveSyncDir + "/data.gpkg",
+    selectiveSyncDir + "/image.png",
+    selectiveSyncDir + "/image.jpg",
+    selectiveSyncDir + "/image.HEIF",
+    selectiveSyncDir + "/subdir/image.jpg"
+  };
+
+  for ( QString path : testFiles )
+  {
+    QFile file( path );
+    file.open( QIODevice::WriteOnly );
+  }
+
+  MerginConfig config;
+  config.selectiveSyncEnabled = true;
+  config.selectiveSyncDir = selectiveSyncDir;
+
+  QVERIFY( !mApi->excludeFromSync( selectiveSyncDir, config ) );
+  QVERIFY( !mApi->excludeFromSync( selectiveSyncDir + "/data.gpkg", config ) );
+  QVERIFY( !mApi->excludeFromSync( selectiveSyncDir + "/not-existing.file", config ) );
+
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/not-existing.jpg", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.png", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.PNG", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.jpg", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.JPG", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.jpeg", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.JPEG", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/subdir/image.jpg", config ) );
+
+  config.selectiveSyncDir = selectiveSyncDir + "/subdir";
+  QVERIFY( !mApi->excludeFromSync( selectiveSyncDir + "/image.jpg", config ) );
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/subdir/image.jpg", config ) );
+
+  config.selectiveSyncDir.clear();
+  QVERIFY( mApi->excludeFromSync( selectiveSyncDir + "/image.jpg", config ) );
 }
 
 //////// HELPER FUNCTIONS ////////
@@ -1590,10 +1701,14 @@ void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNa
   LocalProject project = api->getLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QVERIFY( project.isValid() );
   QVERIFY( project.projectDir.startsWith( api->projectsPath() ) );  // just to make sure we don't delete something wrong (-:
-//  QDir projectDir( project.projectDir );
-//  projectDir.removeRecursively();
 
   api->localProjectsManager().removeLocalProject( project.id() );
+}
+
+void TestMerginApi::deleteLocalDir( MerginApi *api, const QString &dirPath )
+{
+  QDir dir( api->projectsPath() + "/" + dirPath );
+  QVERIFY( dir.removeRecursively() );
 }
 
 void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
