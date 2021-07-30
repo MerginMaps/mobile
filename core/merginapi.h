@@ -172,6 +172,13 @@ typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
+//! MerginConfig stored in .mergin-config.json
+struct MerginConfig
+{
+  bool selectiveSyncEnabled = false;
+  QString selectiveSyncDir;
+};
+
 class MerginApi: public QObject
 {
     Q_OBJECT
@@ -315,6 +322,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
+    static const QString sMerginConfigFile;
     static const QString sDefaultApiRoot;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
@@ -379,6 +387,20 @@ class MerginApi: public QObject
     Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
+
+    /**
+     * Performs checks and returns if a given file is excluded from the sync.
+     * If selective-sync-enabled is true, it checks if a file extension is from exlcudeSync extension list.
+     * If selective-sync-dir is defined, additionally checks, if the file is located in selective-sync-dir or in its subdir,
+     * otherwise a project dir is considered as selective-sync-dir and therefore the path check is redundant
+     * (since given filePath is relative to the project dir.).
+     * @param filePath Relative path of a file to project directory.
+     * @param config MerginConfig parsed from JSON, selective-sync properties are read from it.
+     * @return True, if a file at given filePath suppose to be excluded from sync.
+     */
+    static bool excludeFromSync( const QString &filePath, const MerginConfig &config );
+    static MerginConfig parseMerginConfig( const QString &projectDir );
+
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
 
@@ -419,6 +441,7 @@ class MerginApi: public QObject
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
     void subscriptionInfoChanged();
+    void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     //! Emitted when started to upload chunks (useful for unit testing)
@@ -563,6 +586,7 @@ class MerginApi: public QObject
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;
+    static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;

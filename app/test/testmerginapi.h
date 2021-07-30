@@ -66,8 +66,12 @@ class TestMerginApi: public QObject
     void testMigrateProject();
     void testMigrateProjectAndSync();
     void testMigrateDetachProject();
+    void testSelectiveSync();
 
     void testRegister();
+
+    // mergin functions
+    void testExcludeFromSync();
 
   private:
     MerginApi *mApi;
@@ -98,6 +102,9 @@ class TestMerginApi: public QObject
 
     //! Deletes a project from the local drive
     void deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+
+    //! Recursively deletes directory and its content.
+    void deleteLocalDir( MerginApi *api, const QString &dirPath );
 
     //! Write all of "data" as the content to the given filename
     void writeFileContent( const QString &filename, const QByteArray &data );
