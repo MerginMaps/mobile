@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 
 import QgsQuick 0.1 as QgsQuick
+import "./components"
 
 Item {
   id: root

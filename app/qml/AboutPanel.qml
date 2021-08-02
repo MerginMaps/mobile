@@ -15,6 +15,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 
 Page {
   id: root
@@ -83,7 +84,7 @@ Page {
 
       Image {
         id: inputLogo
-        source: "input.svg"
+        source: InputStyle.inputLogo
         width: content.width / 2
         sourceSize.width: width
         anchors.horizontalCenter: parent.horizontalCenter
@@ -128,7 +129,7 @@ Page {
 
     Image {
       id: lutraLogo
-      source: "lutra_logo.svg"
+      source: InputStyle.lutraLogo
       width: inputLogo.width / 2
       sourceSize.width: width
       anchors.horizontalCenter: parent.horizontalCenter

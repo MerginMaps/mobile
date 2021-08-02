@@ -10,10 +10,10 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-import "."
-import "./form" as Forms
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import "./form" as Forms
+import "."
 
 Item {
   id: root
@@ -26,12 +26,13 @@ Item {
 
   property var project
   property real previewHeight
-  property DigitizingController digitizingController
 
   property int activeFormIndex: 0
 
-  signal editGeometry()
   signal closed()
+  signal createLinkedFeatureRequested( var parentController, var relation )
+
+  // TODO: (next PR) remove unused functions
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -83,22 +84,6 @@ Item {
       return form.isNewFeature()
   }
 
-  function updateFeatureGeometry() {
-    let form = _getActiveForm()
-
-    if ( form )
-      form.updateFeatureGeometry( activeFormIndex )
-  }
-
-  function geometryEditingFinished( formState ) {
-    let form = _getActiveForm()
-
-    if ( form ) {
-      form.formState = formState
-      form.panelState = "form"
-    }
-  }
-
   function closeDrawer() {
     let form = _getActiveForm()
 
@@ -106,14 +91,8 @@ Item {
       form.closeDrawer()
   }
 
-  function geometryEditingStarted( formIndex ) {
-    activeFormIndex = formIndex
-    hide()
-    editGeometry()
-  }
-
   function reload() {
-    formsStack.clear() // removes all objects due to Qt parent system
+    formsStack.clear() // removes all objects thanks to Qt parent system
   }
 
   function hide() {
@@ -132,11 +111,9 @@ Item {
     root.activeFormIndex = latest.StackView.index
   }
 
-  function createLinkedFeature( parentController, relation ) {
-    let newFeaturePair = digitizingController.featureWithoutGeometry( relation.referencingLayer )
-
+  function addLinkedFeature( newPair, parentController, relation ) {
     let props = {
-      featureLayerPair: newFeaturePair,
+      featureLayerPair: newPair,
       formState: "Add",
       panelState: "form",
       parentController: parentController,
@@ -173,9 +150,8 @@ Item {
       previewHeight: root.previewHeight
 
       onClosed: formsStack.popOneOrClose()
-      onEditGeometry: root.geometryEditingStarted( StackView.index )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
+      onCreateLinkedFeature: root.createLinkedFeatureRequested( parentController, relation )
     }
   }
 }

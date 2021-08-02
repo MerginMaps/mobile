@@ -14,6 +14,8 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 
+import "./components"
+
 Item {
   id: statusPanel
   property real rowHeight: InputStyle.rowHeight * 1.2

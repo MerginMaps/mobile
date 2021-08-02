@@ -77,8 +77,8 @@ Item {
   }
 
   function crosshairPoint() {
-    let crosshairCoord = Qt.point( mapCanvas.width/2, mapCanvas.height/2 )
-    crosshairCoord = mapCanvas.mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
+    let crosshairCoord = Qt.point( highlight.width / 2, highlight.height / 2 )
+    crosshairCoord = mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
 
     return crosshairCoord
   }
@@ -218,6 +218,11 @@ Item {
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
+
+  // enable anti-aliasing to make the higlight look nicer
+  // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
+  layer.enabled: true
+  layer.samples: 4
 
   Component {
     id: componentMarker

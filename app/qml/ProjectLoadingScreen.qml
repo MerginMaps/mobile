@@ -20,7 +20,7 @@ Item {
   Image {
     id: logo
     anchors.centerIn: parent
-    source: "input.svg"
+    source: InputStyle.inputLogo
     width: parent.width/2
     sourceSize.height: 0
     fillMode: Image.PreserveAspectFit

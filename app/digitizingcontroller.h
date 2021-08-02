@@ -103,8 +103,6 @@ class DigitizingController : public QObject
   private:
     void fixZ( QgsPoint &point ) const; // add/remove Z coordinate based on layer wkb type
     QgsCoordinateTransform transformer() const;
-    FeatureLayerPair lineFeature();
-    FeatureLayerPair polygonFeature();
     bool hasEnoughPoints() const;
 
     bool mRecording = false;

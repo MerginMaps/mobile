@@ -10,6 +10,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import ".."
+import "../components"
 
 Item {
     id: toolbar

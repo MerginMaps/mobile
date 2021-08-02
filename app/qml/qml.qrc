@@ -1,52 +1,37 @@
 <RCC>
     <qresource prefix="/">
-        <file>ActiveLayerPanel.qml</file>
         <file>FormsStackManager.qml</file>
         <file>main.qml</file>
         <file>MainPanel.qml</file>
         <file>RecordBtn.qml</file>
-        <file>ScaleBar.qml</file>
         <file>InputStyle.qml</file>
         <file>qmldir</file>
         <file>SettingsPanel.qml</file>
         <file>MapThemePanel.qml</file>
         <file>Notification.qml</file>
-        <file>MainPanelButton.qml</file>
         <file>RoundIndicator.qml</file>
-        <file>PanelHeader.qml</file>
         <file>PanelItem.qml</file>
-        <file>ExtendedMenuItem.qml</file>
         <file>PanelTabButton.qml</file>
-        <file>PositionMarker.qml</file>
-        <file>Shadow.qml</file>
         <file>NumberSpin.qml</file>
         <file>AuthPanel.qml</file>
         <file>ExternalResourceBundle.qml</file>
-        <file>RecordToolbar.qml</file>
-        <file>RecordCrosshair.qml</file>
         <file>AboutPanel.qml</file>
         <file>ProjectPanel.qml</file>
         <file>AccountPage.qml</file>
-        <file>Highlight.qml</file>
-        <file>LoadingIndicator.qml</file>
         <file>ProjectLoadingScreen.qml</file>
         <file>ProjectStatusPanel.qml</file>
         <file>RegistrationForm.qml</file>
         <file>LoginForm.qml</file>
-        <file>LeftCheckBox.qml</file>
         <file>BrowseDataPanel.qml</file>
         <file>BrowseDataFeaturesPanel.qml</file>
         <file>BrowseDataLayersPanel.qml</file>
         <file>BrowseDataView.qml</file>
-        <file>LayerList.qml</file>
         <file>SubscribePage.qml</file>
-        <file>TextWithIcon.qml</file>
         <file>CircularProgressBar.qml</file>
         <file>BrowseDataToolbar.qml</file>
         <file>SearchBar.qml</file>
         <file>SubscribePlanItem.qml</file>
         <file>ValueRelationWidget.qml</file>
-        <file>TextHyperlink.qml</file>
         <file>LogPanel.qml</file>
         <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
@@ -70,6 +55,14 @@
         <file>components/Switch.qml</file>
         <file>components/IconTextItem.qml</file>
         <file>components/InputComboBox.qml</file>
+        <file>components/LayerList.qml</file>
+        <file>components/PanelHeader.qml</file>
+        <file>components/Shadow.qml</file>
+        <file>components/MainPanelButton.qml</file>
+        <file>components/ExtendedMenuItem.qml</file>
+        <file>components/TextHyperlink.qml</file>
+        <file>components/LeftCheckBox.qml</file>
+        <file>components/TextWithIcon.qml</file>
         <file>editor/inputrelation.qml</file>
         <file>editor/inputcheckbox.qml</file>
         <file>editor/inputdatetime.qml</file>
@@ -79,16 +72,24 @@
         <file>editor/inputrangeslider.qml</file>
         <file>editor/inputvaluemap.qml</file>
         <file>editor/inputvaluerelation.qml</file>
+        <file>editor/inputrelationreference.qml</file>
+        <file>editor/AbstractEditor.qml</file>
+        <file>editor/RelationTextDelegate.qml</file>
+        <file>editor/RelationPhotoDelegate.qml</file>
+        <file>editor/RelationPhotoFooterDelegate.qml</file>
         <file>form/FeatureForm.qml</file>
         <file>form/FeatureFormStyling.qml</file>
         <file>form/FeatureToolbar.qml</file>
         <file>form/PreviewPanel.qml</file>
         <file>form/FormWrapper.qml</file>
         <file>form/FeatureFormPage.qml</file>
-        <file>editor/RelationTextDelegate.qml</file>
-        <file>editor/RelationPhotoDelegate.qml</file>
-        <file>editor/RelationPhotoFooterDelegate.qml</file>
-        <file>editor/inputrelationreference.qml</file>
-        <file>editor/AbstractEditor.qml</file>
+        <file>map/MapWrapper.qml</file>
+        <file>map/PositionMarker.qml</file>
+        <file>map/Highlight.qml</file>
+        <file>map/LoadingIndicator.qml</file>
+        <file>map/ActiveLayerPanel.qml</file>
+        <file>map/RecordToolbar.qml</file>
+        <file>map/RecordCrosshair.qml</file>
+        <file>map/ScaleBar.qml</file>
     </qresource>
 </RCC>

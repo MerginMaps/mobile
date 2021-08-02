@@ -16,6 +16,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "."
+import "./components"
 
 // import InputStyle singleton
 Item {

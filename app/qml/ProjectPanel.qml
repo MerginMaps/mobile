@@ -25,6 +25,7 @@ Item {
 
   signal openProjectRequested( string projectId, string projectPath )
   signal resetView() // resets view to state as when panel is opened
+  signal closed()
 
   function openPanel() {
     root.visible = true
@@ -34,6 +35,7 @@ Item {
   function hidePanel() {
     root.visible = false
     stackView.clearStackAndClose()
+    root.closed()
   }
 
   function manageSubscriptionPlans() {
@@ -83,8 +85,7 @@ Item {
           stackView.currentItem.back()
         }
         else if (root.activeProjectPath) {
-          stackView.clearStackAndClose()
-          root.visible = false
+          root.hidePanel()
         }
       }
     }
@@ -347,7 +348,7 @@ Item {
             id: localProjectsInnerBtn
 
             text: qsTr("Home")
-            imageSource: "home.svg"
+            imageSource: InputStyle.homeIcon
             width: pageFooter.itemSize
 
             handleClicks: false
@@ -369,7 +370,7 @@ Item {
             id: createdProjectsInnerBtn
 
             text: qsTr("My projects")
-            imageSource: "account.svg"
+            imageSource: InputStyle.accountIcon
             width: pageFooter.itemSize
 
             handleClicks: false
@@ -390,7 +391,7 @@ Item {
           MainPanelButton {
             id: sharedProjectsInnerBtn
 
-            imageSource: "account-multi.svg"
+            imageSource: InputStyle.accountMultiIcon
             width: pageFooter.itemSize
             text: parent.width > sharedProjectsInnerBtn.width * 2 ? qsTr("Shared with me") : qsTr("Shared")
 
@@ -413,7 +414,7 @@ Item {
             id: publicProjectsInnerBtn
 
             text: qsTr("Explore")
-            imageSource: "explore.svg"
+            imageSource: InputStyle.exploreIcon
             width: pageFooter.itemSize
 
             handleClicks: false
