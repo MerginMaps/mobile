@@ -81,28 +81,38 @@ QtObject {
     property string tableIcon: "qrc:/table.svg"
     property string uploadIcon: "qrc:/cloud-upload.svg"
     property string detachIcon: "qrc:/unlink.svg"
+    property string eyeIcon: "qrc:/eye.svg"
+    property string eyeSlashIcon: "qrc:/eye-slash.svg"
+
     property string valueRelationIcon: "qrc:/value_relation_open.svg"
     property string comboboxIcon: "qrc:/combobox.svg"
     property string qrCodeIcon: "qrc:/qrcode.svg"
+
     property string exclamationIcon: "qrc:/exclamation-circle.svg"
-    property string syncIcon: "qrc:sync.svg"
-    property string downloadIcon: "qrc:download.svg"
-    property string stopIcon: "qrc:stop.svg"
+    property string exclamationTriangleIcon: "qrc:/exclamation-triangle-solid.svg"
+    property string syncIcon: "qrc:/sync.svg"
+    property string downloadIcon: "qrc:/download.svg"
+    property string stopIcon: "qrc:/stop.svg"
+
     property string moreMenuIcon: "qrc:/more_menu.svg"
     property string mapMarkerIcon: "qrc:/marker.svg"
+
     property string projectIcon: "qrc:/project.svg"
     property string zoomToProjectIcon: "qrc:/zoom_to_project.svg"
     property string mapThemesIcon: "qrc:/map_styles.svg"
     property string settingsIcon: "qrc:/settings.svg"
+
     property string gpsDirectionIcon: "qrc:/gps_direction.svg"
     property string gpsMarkerPositionIcon: "qrc:/gps_marker_position.svg"
     property string gpsMarkerNoPositionIcon: "qrc:/gps_marker_no_position.svg"
+    property string gpsFixedIcon: "qrc:/ic_gps_fixed_48px.svg"
+    property string gpsNotFixedIcon: "qrc:/ic_gps_not_fixed_48px.svg"
+
     property string vectorPointIcon: "qrc:/mIconPointLayer.svg"
     property string vectorLineIcon: "qrc:/mIconLineLayer.svg"
     property string vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
+
     property string crosshairIcon: "qrc:/crosshair.svg"
-    property string gpsFixedIcon: "qrc:/ic_gps_fixed_48px.svg"
-    property string gpsNotFixedIcon: "qrc:/ic_gps_not_fixed_48px.svg"
     property string undoIcon: "qrc:/undo.svg"
     property string merginColorIcon: "qrc:/mergin_color.svg"
     property string accountIcon: "qrc:/account.svg"
@@ -110,6 +120,11 @@ QtObject {
     property string envelopeIcon: "qrc:/envelope-solid.svg"
     property string homeIcon: "qrc:/home.svg"
     property string exploreIcon: "qrc:/explore.svg"
+    property string todayIcon: "qrc:/ic_today.svg"
+    property string databaseIcon: "qrc:/database-solid.svg"
+    property string lockIcon: "qrc:/lock.svg"
+    property string searchIcon: "qrc:/search.svg"
+
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"
 

@@ -92,7 +92,7 @@ Item {
       root.notify( qsTr( "Recorded feature is not valid" ) )
       root.recordingCanceled()
     }
-    root.state = "View"
+    root.state = "view"
   }
 
   function addRecordPoint() {
@@ -102,7 +102,7 @@ Item {
     let isUsingGPS = _digitizingController.useGpsPoint
     let hasAssignedValidPair = root.featurePairToEdit && root.featurePairToEdit.valid
 
-    if ( root.state === "RecordFeature" ) {
+    if ( root.state === "recordFeature" ) {
       if ( isPointGeometry ) {
         let newPair = _digitizingController.pointFeatureFromPoint( recordedPoint, isUsingGPS )
         processRecordedPair( newPair )
@@ -114,14 +114,14 @@ Item {
 
       _digitizingController.addRecordPoint( recordedPoint, isUsingGPS )
     }
-    else if ( root.state === "EditGeometry" ) {
+    else if ( root.state === "editGeometry" ) {
       if ( isPointGeometry && hasAssignedValidPair ) {
         let changed = _digitizingController.changePointGeometry( root.featurePairToEdit, recordedPoint, isUsingGPS )
         root.editingFinished( changed )
         return
       }
     }
-    else if ( root.state === "AddGeometry" ) {
+    else if ( root.state === "addGeometry" ) {
       if ( isPointGeometry ) {
         if ( !hasAssignedValidPair ) return
 
@@ -165,53 +165,38 @@ Item {
 
   states: [
     State {
-      name: "View"
-      PropertyChanges {
-        target: root
-        isInRecordState: false
-      }
+      name: "view"
+      PropertyChanges { target: root; isInRecordState: false }
     },
     State {
-      name: "RecordFeature"
-      PropertyChanges {
-        target: root
-        isInRecordState: true
-      }
+      name: "recordFeature"
+      PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "EditGeometry" // of existing feature
-      PropertyChanges {
-        target: root
-        isInRecordState: true
-      }
+      name: "editGeometry" // of existing feature
+      PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "AddGeometry" // to existing feature
-      PropertyChanges {
-        target: root
-        isInRecordState: true
-      }
+      name: "addGeometry" // to existing feature
+      PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "Inactive" // covered by other element
-      PropertyChanges {
-        target: root
-        isInRecordState: false
-      }
+      name: "inactive" // covered by other element
+      PropertyChanges { target: root; isInRecordState: false }
     }
   ]
 
   onStateChanged: {
     switch ( state ) {
-      case "RecordFeature": {
+      case "recordFeature": {
         root.centerToPosition()
         break
       }
-      case "AddGeometry":
-      case "EditGeometry": {
+      case "addGeometry":
+      case "editGeometry": {
         break
       }
-      case "View": {
+      case "view": {
         if ( _digitizingHighlight.visible )
           _digitizingHighlight.visible = false
 
@@ -220,20 +205,26 @@ Item {
 
         break
       }
-      case "Inactive": {
+      case "inactive": {
         break
       }
     }
   }
 
-  state: "View"
+  state: "view"
+
+  Rectangle {
+    // background
+    color: InputStyle.clrPanelMain
+    anchors.fill: parent
+  }
 
   QgsQuick.MapCanvas {
     id: _map
 
     height: root.height
     width: root.width
-    visible: root.state !== "Inactive"
+    visible: root.state !== "inactive"
 
     mapSettings.project: __loader.project
 
@@ -248,7 +239,6 @@ Item {
 
     onClicked: {
       if ( !root.isInRecordState ) {
-        //       mapCanvas.forceActiveFocus()
         let screenPoint = Qt.point( mouse.x, mouse.y )
         let pair = _identifyKit.identifyOne( screenPoint )
 
@@ -297,7 +287,7 @@ Item {
 
     states: [
       State {
-        name: "Good"
+        name: "good"
         when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy < __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
@@ -305,7 +295,7 @@ Item {
         }
       },
       State {
-        name: "Low" // below accuracy tolerance
+        name: "low" // below accuracy tolerance
         when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy > __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
@@ -313,7 +303,7 @@ Item {
         }
       },
       State {
-        name: "Unavailable"
+        name: "unavailable"
         when: _positionKit.accuracy <= 0
         PropertyChanges {
           target: _gpsState
@@ -326,7 +316,7 @@ Item {
   LoadingIndicator {
     id: _loadingIndicator
 
-    visible: root.state !== "Inactive"
+    visible: root.state !== "inactive"
     width: _map.width
     height: InputStyle.mapLoadingIndicatorHeight
   }
@@ -425,7 +415,7 @@ Item {
     id: _gpsAccuracyBanner
 
     property bool shouldShowAccuracyWarning: {
-      let isLowAccuracy = _gpsState.state === "Low" || _gpsState.state === "Unavailable"
+      let isLowAccuracy = _gpsState.state === "low" || _gpsState.state === "unavailable"
       let isBannerAllowed = __appSettings.gpsAccuracyWarning
       let isRecording = root.isInRecordState
       let isUsingPosition = _digitizingController.useGpsPoint || !_digitizingController.manualRecording
@@ -443,7 +433,7 @@ Item {
 
     text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
     .arg( __inputUtils.formatNumber( _positionKit.accuracy ) )
-    link: "https://help.inputapp.io/howto/gps_accuracy"
+    link: __inputHelp.gpsAccuracyHelpLink
 
     showWarning: shouldShowAccuracyWarning
   }
@@ -465,7 +455,7 @@ Item {
     height: InputStyle.rowHeightHeader + ( ( extraPanelVisible ) ? extraPanelHeight : 0)
     y: extraPanelVisible ? parent.height - extraPanelHeight : parent.height
 
-    visible: root.state === "RecordFeature"
+    visible: root.state === "recordFeature"
 
     gpsIndicatorColor: _gpsState.indicatorColor
     activeVectorLayer: __activeLayer.vectorLayer
@@ -483,7 +473,7 @@ Item {
     onAddClicked: root.addRecordPoint()
 
     onGpsSwitchClicked: {
-      if ( _gpsState.state === "Unavailable" ) {
+      if ( _gpsState.state === "unavailable" ) {
         showMessage( qsTr( "GPS currently unavailable.%1Try to allow GPS Location in your device settings." ).arg( "\n" ) )
         return
       }
@@ -505,18 +495,18 @@ Item {
     }
 
     onCancelClicked: {
-      root.state = "View"
+      root.state = "view"
       root.recordingCanceled()
     }
 
     onRemovePointClicked: _digitizingController.removeLastPoint()
 
     onStopRecordingClicked: {
-      if ( root.state === "RecordFeature" ) {
+      if ( root.state === "recordFeature" ) {
         var newPair = _digitizingController.lineOrPolygonFeature();
         root.processRecordedPair( newPair )
       }
-      else if ( root.state === "AddGeometry" ) {
+      else if ( root.state === "addGeometry" ) {
 
       }
     }

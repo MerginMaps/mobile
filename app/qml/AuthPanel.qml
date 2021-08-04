@@ -172,7 +172,7 @@ Item {
             id: iconLink
             anchors.fill: parent
             anchors.margins: parent.height * 0.25
-            source: merginLink.enabled ? 'check.svg' : InputStyle.editIcon
+            source: merginLink.enabled ? InputStyle.checkIcon : InputStyle.editIcon
             sourceSize.width: width
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit

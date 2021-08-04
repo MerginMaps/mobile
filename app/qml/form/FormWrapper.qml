@@ -106,7 +106,7 @@ Item {
       onContentClicked: root.panelState = "form"
       onEditClicked: {
         root.panelState = "form"
-        formContainer.formState = "Edit"
+        formContainer.formState = "edit"
       }
     }
 

@@ -80,7 +80,7 @@ Item {
         color: InputStyle.clrPanelMain
         fontBtnColor: InputStyle.highlightColor
 
-        titleText: featureForm.state === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
+        titleText: featureForm.state === "edit" ? qsTr("Edit Feature") : qsTr("Feature")
 
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
@@ -93,7 +93,7 @@ Item {
           text: qsTr("Save")
 
           height: header.rowHeight
-          visible: featureForm.state === "Edit" || featureForm.state === "Add"
+          visible: featureForm.state === "edit" || featureForm.state === "add"
 
           enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
 
@@ -188,7 +188,7 @@ Item {
         visible: !root.readOnly
         isFeaturePoint: __inputUtils.geometryFromLayer( root.featureLayerPair.layer ) === "point"
 
-        onEditClicked: root.formState = "Edit"
+        onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
         onEditGeometryClicked: root.editGeometryClicked()
       }

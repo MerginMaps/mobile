@@ -33,37 +33,37 @@ Item {
 
     TextWithIcon {
       width: parent.width
-      source: 'info.svg'
+      source: InputStyle.infoIcon
       text: "Mergin " + root.name + " " + qsTr("Plan")
     }
 
     TextWithIcon {
       width: parent.width
-      source: 'ic_today.svg'
+      source: InputStyle.todayIcon
       text: hasPlan ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
-      source: 'database-solid.svg'
+      source: InputStyle.databaseIcon
       text: hasPlan ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
-      source: 'account-multi.svg'
+      source: InputStyle.accountMultiIcon
       text: qsTr("Unlimited collaborators")
     }
 
     TextWithIcon {
       width: parent.width
-      source: 'project.svg'
+      source: InputStyle.projectIcon
       text: qsTr("Unlimited projects")
     }
 
     TextWithIcon {
       width: parent.width
-      source: 'envelope-solid.svg'
+      source: InputStyle.envelopeIcon
       text: qsTr("Email support")
     }
 

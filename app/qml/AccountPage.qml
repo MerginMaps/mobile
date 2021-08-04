@@ -90,7 +90,7 @@ Page {
               Image {
                 id: userIcon
                 anchors.centerIn: parent
-                source: 'account.svg'
+                source: InputStyle.accountIcon
                 height: parent.height * 0.8
                 width: height
                 sourceSize.width: width
@@ -109,27 +109,27 @@ Page {
 
       TextWithIcon {
         width: parent.width
-        source: 'account.svg'
+        source: InputStyle.accountIcon
         text: root.username
       }
 
       TextWithIcon {
         width: parent.width
-        source: 'envelope-solid.svg'
+        source: InputStyle.envelopeIcon
         text: root.email
       }
 
       TextWithIcon {
         visible: root.apiSupportsSubscriptions
         width: parent.width
-        source: 'edit.svg'
+        source: InputStyle.editIcon
         text: root.planAlias
       }
 
       TextWithIcon {
         visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
         width: parent.width
-        source: 'info.svg'
+        source: InputStyle.infoIcon
         text: qsTr("Your subscription will not auto-renew after %1")
               .arg(root.subscriptionsTimestamp)
       }
@@ -137,7 +137,7 @@ Page {
       TextWithIcon {
         visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
         width: parent.width
-        source: 'exclamation-triangle-solid.svg'
+        source: InputStyle.exclamationTriangleIcon
         onLinkActivated: Qt.openUrlExternally(link)
         text: qsTr("Please update your %1billing details%2 as soon as possible")
                 .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
@@ -148,7 +148,7 @@ Page {
       TextWithIcon {
         visible: root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
         width: parent.width
-        source: 'ic_today.svg'
+        source: InputStyle.todayIcon
         text: qsTr("Your next bill will be for %1 on %2")
         .arg(root.nextBillPrice)
         .arg(root.subscriptionsTimestamp)
@@ -157,7 +157,7 @@ Page {
       TextWithIcon {
         visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
         width: parent.width
-        source: 'ic_today.svg'
+        source: InputStyle.todayIcon
         text: qsTr("Your subscription was cancelled on %1")
               .arg(root.subscriptionsTimestamp)
       }

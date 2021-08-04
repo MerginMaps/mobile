@@ -198,7 +198,7 @@ Item {
               id: userIcon
 
               anchors.centerIn: avatarImage
-              source: 'account.svg'
+              source: InputStyle.accountIcon
               height: avatarImage.height * 0.8
               width: height
               sourceSize.width: width

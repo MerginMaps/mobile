@@ -24,17 +24,17 @@ Item {
 
     states: [
         State {
-            name: "Edit"
+            name: "edit"
             PropertyChanges { target: editRow; visible: true }
             PropertyChanges { target: readOnlyRow; visible: false }
         }
         ,State {
-            name: "Add"
+            name: "add"
             PropertyChanges { target: editRow; visible: true }
             PropertyChanges { target: readOnlyRow; visible: false }
         }
         ,State {
-            name: "ReadOnly"
+            name: "readOnly"
             PropertyChanges { target: editRow; visible: false }
             PropertyChanges { target: readOnlyRow; visible: true }
         }

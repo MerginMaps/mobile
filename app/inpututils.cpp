@@ -856,7 +856,7 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
       case QgsWkbTypes::PointGeometry: return QStringLiteral( "point" );
       case QgsWkbTypes::LineGeometry: return QStringLiteral( "linestring" );
       case QgsWkbTypes::PolygonGeometry: return QStringLiteral( "polygon" );
-      case QgsWkbTypes::NullGeometry: return QStringLiteral( "noGeo" );
+      case QgsWkbTypes::NullGeometry: return QStringLiteral( "nullGeo" );
       default: return QString();
     }
   }

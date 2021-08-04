@@ -103,7 +103,7 @@ Item {
   function openLinkedFeature( linkedFeature ) {
     let props = {
       featureLayerPair: linkedFeature,
-      formState: "ReadOnly",
+      formState: "readOnly",
       panelState: "form"
     }
 
@@ -114,7 +114,7 @@ Item {
   function addLinkedFeature( newPair, parentController, relation ) {
     let props = {
       featureLayerPair: newPair,
-      formState: "Add",
+      formState: "add",
       panelState: "form",
       parentController: parentController,
       linkedRelation: relation

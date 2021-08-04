@@ -50,14 +50,14 @@ ApplicationWindow {
         onStateChanged: {
             if ( stateManager.state === "view" ) {
               projectPanel.hidePanel()
-              map.state = "View"
+              map.state = "view"
             }
             else if ( stateManager.state === "record" ) {
-              map.state = "RecordFeature"
+              map.state = "recordFeature"
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
-              map.state = "Inactive"
+              map.state = "inactive"
             }
         }
     }
@@ -85,12 +85,12 @@ ApplicationWindow {
       let hasNullGeometry = pair.feature.geometry.isNull
 
       if ( hasNullGeometry ) {
-        formsStackManager.openForm( pair, "ReadOnly", "form" )
+        formsStackManager.openForm( pair, "readOnly", "form" )
       }
       else if ( pair.valid ) {
         map.centerToPair( pair, true )
         map.highlightPair( pair )
-        formsStackManager.openForm( pair, "ReadOnly", "preview")
+        formsStackManager.openForm( pair, "readOnly", "preview")
       }
     }
 
@@ -126,12 +126,11 @@ ApplicationWindow {
       width: window.width
       previewPanelHeight: formsStackManager.previewHeight
 
-      onFeatureIdentified: formsStackManager.openForm( pair, "ReadOnly", "preview" )
+      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" )
       onNothingIdentified: formsStackManager.closeDrawer()
 
-      onRecordingStarted: console.log( "Recording started" )
       onRecordingFinished: {
-        formsStackManager.openForm( pair, "Add", "form" )
+        formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"
         map.highlightPair( pair )
       }
@@ -170,7 +169,7 @@ ApplicationWindow {
             __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
             showMessage( __appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
         }
-        onOpenSettingsClicked: settingsPanel.visible = true // todo: set state
+        onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
           if ( __appSettings.autoCenterMapChecked ) {
             mainPanel.myLocationHold()
@@ -238,8 +237,8 @@ ApplicationWindow {
       onFeatureSelectRequested: selectFeature( pair )
 
       onCreateFeatureRequested: {
-        digitizing.layer = selectedLayer
-        recordFeature( false )
+        let newPair = map.createFeature( selectedLayer )
+        formsStackManager.openForm( newPair, "add", "form" )
       }
 
       onVisibleChanged: {

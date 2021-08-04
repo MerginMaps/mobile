@@ -90,7 +90,7 @@ Rectangle {
             height: fieldHeight
             width: fieldHeight
             anchors.fill: parent
-            source: 'account.svg'
+            source: InputStyle.accountIcon
             sourceSize.width: width
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit
