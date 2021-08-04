@@ -35,11 +35,13 @@ Item {
   signal recordingFinished( var pair )
   signal recordingCanceled()
 
-  signal editingStarted()
-  signal editingFinished( var pair )
+  signal editingGeometryStarted()
+  signal editingGeometryFinished( var pair )
+  signal editingGeometryCanceled()
 
   signal addingGeometryStarted()
   signal addingGeometryFinished( var pair )
+  signal addingGeometryCanceled()
 
   signal notify( string message )
 
@@ -117,7 +119,8 @@ Item {
     else if ( root.state === "editGeometry" ) {
       if ( isPointGeometry && hasAssignedValidPair ) {
         let changed = _digitizingController.changePointGeometry( root.featurePairToEdit, recordedPoint, isUsingGPS )
-        root.editingFinished( changed )
+        _digitizingHighlight.featureLayerPair = changed
+        root.editingGeometryFinished( changed )
         return
       }
     }
@@ -192,13 +195,23 @@ Item {
         root.centerToPosition()
         break
       }
-      case "addGeometry":
+      case "addGeometry": {
+        root.addingGeometryStarted()
+        break
+      }
       case "editGeometry": {
+        __loader.setActiveLayer( root.featurePairToEdit.layer )
+        _digitizingHighlight.featureLayerPair = root.featurePairToEdit
+        _digitizingHighlight.visible = true
+        root.editingGeometryStarted()
         break
       }
       case "view": {
         if ( _digitizingHighlight.visible )
           _digitizingHighlight.visible = false
+
+        if ( _highlightIdentified.visible )
+          _highlightIdentified.visible = false
 
         if ( _digitizingController.recording )
           _digitizingController.stopRecording()
@@ -455,7 +468,8 @@ Item {
     height: InputStyle.rowHeightHeader + ( ( extraPanelVisible ) ? extraPanelHeight : 0)
     y: extraPanelVisible ? parent.height - extraPanelHeight : parent.height
 
-    visible: root.state === "recordFeature"
+    visible: root.isInRecordState
+    extraPanelVisible: root.state === "recordFeature"
 
     gpsIndicatorColor: _gpsState.indicatorColor
     activeVectorLayer: __activeLayer.vectorLayer
@@ -495,8 +509,14 @@ Item {
     }
 
     onCancelClicked: {
+      if ( root.state === "recordFeature" )
+        root.recordingCanceled()
+      else if ( root.state === "editGeometry" )
+        root.editingGeometryCanceled()
+      else if ( root.state === "addGeometry" )
+        root.addingGeometryCanceled()
+
       root.state = "view"
-      root.recordingCanceled()
     }
 
     onRemovePointClicked: _digitizingController.removeLastPoint()

@@ -32,11 +32,11 @@ Item {
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
 
-  function isNewFeature() {
+  function updateFeatureGeometry() {
     let f = formStackView.get( 0 )
 
     if ( f ) {
-      return f.form.controller.isNewFeature()
+      f.form.controller.save()
     }
   }
 

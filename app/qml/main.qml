@@ -41,6 +41,9 @@ ApplicationWindow {
             State {
                 name: "record"
             },
+            State {
+                name: "edit"
+            },
             // Listing projects
             State {
                 name: "projects"
@@ -54,6 +57,9 @@ ApplicationWindow {
             }
             else if ( stateManager.state === "record" ) {
               map.state = "recordFeature"
+            }
+            else if ( stateManager.state === "edit" ) {
+              map.state = "editGeometry"
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
@@ -128,6 +134,16 @@ ApplicationWindow {
 
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" )
       onNothingIdentified: formsStackManager.closeDrawer()
+
+      onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
+      onEditingGeometryFinished: {
+        formsStackManager.geometryEditingFinished( pair )
+        stateManager.state = "view"
+      }
+      onEditingGeometryCanceled: {
+        formsStackManager.geometryEditingFinished( null, false )
+        stateManager.state = "view"
+      }
 
       onRecordingFinished: {
         formsStackManager.openForm( pair, "add", "form" )
@@ -301,6 +317,12 @@ ApplicationWindow {
       onCreateLinkedFeatureRequested: {
         let newPair = map.createFeature( relation.referencingLayer )
         formsStackManager.addLinkedFeature( newPair, parentController, relation )
+      }
+
+      onEditGeometryRequested: {
+        map.featurePairToEdit = pair
+        map.centerToPair( pair )
+        stateManager.state = "edit"
       }
 
       onClosed: {

@@ -32,15 +32,21 @@ Item {
   property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
 
   signal closed()
-  signal closeDrawer()
+  signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
 
-  function isNewFeature() {
-    return formContainer.isNewFeature()
+  function updateFeatureGeometry() {
+    formContainer.updateFeatureGeometry()
   }
 
-  onCloseDrawer: drawer.close()
+  function openDrawer() {
+    root.panelState = "form"
+  }
+
+  function closeDrawer() {
+    drawer.close()
+  }
 
   Drawer {
     id: drawer
@@ -66,6 +72,9 @@ Item {
         },
         State {
           name: "closed"
+        },
+        State {
+          name: "editGeometry"
         }
       ]
 
@@ -76,7 +85,10 @@ Item {
             drawer.open();
             break;
           case "closed":
-            root.closed()
+            root.closed();
+            break;
+          case "editGeometry":
+            break;
         }
       }
     }
@@ -92,7 +104,10 @@ Item {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
-    onClosed: statesManager.state = "closed"
+    onClosed: {
+      if ( statesManager.state !== "editGeometry" )
+        statesManager.state = "closed"
+    }
 
     PreviewPanel {
       id: previewPanel
@@ -124,7 +139,10 @@ Item {
       formState: root.formState
 
       onClose: root.panelState = "closed"
-      onEditGeometryClicked: console.log( "NOT IMPLEMENTED" )
+      onEditGeometryClicked: {
+        root.editGeometry( root.featureLayerPair )
+        root.panelState = "editGeometry"
+      }
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
     }
