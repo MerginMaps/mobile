@@ -11,9 +11,10 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.3
 
-import ".."
-import lc 1.0
 import QgsQuick 0.1 as QgsQuick
+import lc 1.0
+import ".."
+import "../components"
 
 Item {
   id: root
@@ -30,14 +31,6 @@ Item {
   signal editGeometryClicked()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
-
-  function updateFeatureGeometry() {
-    let f = formStackView.get( 0 )
-
-    if ( f ) {
-      f.form.controller.save()
-    }
-  }
 
   function isNewFeature() {
     let f = formStackView.get( 0 )
@@ -87,7 +80,7 @@ Item {
         color: InputStyle.clrPanelMain
         fontBtnColor: InputStyle.highlightColor
 
-        titleText: featureForm.state === "Edit" ? qsTr("Edit Feature") : qsTr("Feature")
+        titleText: featureForm.state === "edit" ? qsTr("Edit Feature") : qsTr("Feature")
 
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
@@ -100,7 +93,7 @@ Item {
           text: qsTr("Save")
 
           height: header.rowHeight
-          visible: featureForm.state === "Edit" || featureForm.state === "Add"
+          visible: featureForm.state === "edit" || featureForm.state === "add"
 
           enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
 
@@ -193,9 +186,9 @@ Item {
         state: featureForm.state
 
         visible: !root.readOnly
-        isFeaturePoint: digitizing.hasPointGeometry( root.featureLayerPair.layer )
+        isFeaturePoint: __inputUtils.geometryFromLayer( root.featureLayerPair.layer ) === "point"
 
-        onEditClicked: root.formState = "Edit"
+        onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
         onEditGeometryClicked: root.editGeometryClicked()
       }

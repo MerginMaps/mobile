@@ -13,6 +13,8 @@ import QtQuick.Layouts 1.3
 import QtMultimedia 5.13
 import lc 1.0
 
+import "./components"
+
 Drawer {
   id: codeReader
   palette.dark: InputStyle.fontColor // changes busy indicator color

@@ -7,15 +7,16 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 
-import "."  // import InputStyle singleton
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import ".."  // import InputStyle singleton
 
 Item {
     id: scaleBar
+
     property alias mapSettings: scaleBarKit.mapSettings
     property alias preferredWidth: scaleBarKit.preferredWidth
 

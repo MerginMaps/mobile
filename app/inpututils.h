@@ -380,6 +380,12 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isFeatureIdValid( qint64 featureId );
 
     /**
+     * \brief setupMapSettings sets visible layers and transform context for map settings based on project
+     * \return map settings with layers and transform context set
+     */
+    Q_INVOKABLE static QgsQuickMapSettings *setupMapSettings( QgsProject *project, QgsQuickMapSettings *settings );
+
+    /**
      * Returns widget setup according the field type - supports only basic types.
      * Note that external widget cannot be guessed from type since its the very same as text.
      * @param field QgsField
@@ -387,6 +393,9 @@ class InputUtils: public QObject
      */
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field );
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType );
+
+    // Returns geometry type in form that qml understands
+    Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

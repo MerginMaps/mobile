@@ -55,7 +55,7 @@ Dialog {
     TextWithIcon {
       width: parent.width
       height: root.fieldHeight
-      source: 'sync.svg'
+      source: InputStyle.syncIcon
       text: qsTr("Data to sync: %1").arg(__inputUtils.bytesToHumanSize(
                                            uploadSize))
     }
@@ -91,7 +91,7 @@ Dialog {
     TextWithIcon {
       width: parent.width
       height: root.fieldHeight
-      source: 'edit.svg'
+      source: InputStyle.editIcon
       text: qsTr("Plan: %1").arg(planAlias)
       visible: __merginApi.apiSupportsSubscriptions
     }

@@ -12,7 +12,7 @@ import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtGraphicalEffects 1.0
 
-import "."
+import ".."
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 
@@ -48,7 +48,7 @@ Item {
 
     Image {
         id: direction
-        source: "gps_direction.svg"
+        source: InputStyle.gpsDirectionIcon
         fillMode: Image.PreserveAspectFit
         rotation: positionDirection.direction
         transformOrigin: Item.Bottom
@@ -64,7 +64,7 @@ Item {
 
     Image {
         id: navigation
-        source: positionKit.hasPosition ? "gps_marker_position.svg" : "gps_marker_no_position.svg"
+        source: positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
         fillMode: Image.PreserveAspectFit
         width: positionMarker.size
         height: width

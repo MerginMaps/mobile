@@ -40,16 +40,16 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
         QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
         switch ( type )
         {
-          case QgsWkbTypes::GeometryType::PointGeometry: return "mIconPointLayer.svg";
-          case QgsWkbTypes::GeometryType::LineGeometry: return "mIconLineLayer.svg";
-          case QgsWkbTypes::GeometryType::PolygonGeometry: return "mIconPolygonLayer.svg";
+          case QgsWkbTypes::GeometryType::PointGeometry: return QStringLiteral( "qrc:/mIconPointLayer.svg" );
+          case QgsWkbTypes::GeometryType::LineGeometry: return QStringLiteral( "qrc:/mIconLineLayer.svg" );
+          case QgsWkbTypes::GeometryType::PolygonGeometry: return QStringLiteral( "qrc:/mIconPolygonLayer.svg" );
 
           case QgsWkbTypes::GeometryType::UnknownGeometry: // fall through
-          case QgsWkbTypes::GeometryType::NullGeometry: return "mIconTableLayer.svg";
+          case QgsWkbTypes::GeometryType::NullGeometry: return QStringLiteral( "qrc:/mIconTableLayer.svg" );
         }
         return QVariant();
       }
-      else return "mIconRaster.svg";
+      else return QStringLiteral( "qrc:/mIconRaster.svg" );
     }
     case LayerIdRole: return layer->id();
   }

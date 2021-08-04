@@ -7,17 +7,20 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.1
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import QtQuick.Dialogs 1.3
+import QtQuick.Layouts 1.14
+import QtGraphicalEffects 1.14
+
 import QgsQuick 0.1 as QgsQuick
-import "."  // import InputStyle singleton
-import "./components"
 import lc 1.0
+import ".."
+import "../components"
 
 Item {
+    id: root
+
     signal addClicked
     signal cancelClicked
     signal gpsSwitchClicked
@@ -32,14 +35,13 @@ Item {
     property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
-    property bool manualRecordig: false
+    property bool manualRecording: false
     property bool extraPanelVisible: true
 
     property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.vectorLayer
     property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
     property string activeLayerIcon: __loader.loadIconFromLayer( activeVectorLayer )
 
-    id: root
     onClose: visible = false
     focus: true
 
@@ -87,7 +89,7 @@ Item {
                 id: gpsSwitchBtn
                 width: root.itemSize
                 text: qsTr("GPS")
-                imageSource: "ic_gps_fixed_48px.svg"
+                imageSource: InputStyle.gpsFixedIcon
                 onActivated: root.gpsSwitchClicked()
                 onActivatedOnHold: root.manualRecordingClicked()
 
@@ -110,8 +112,8 @@ Item {
                 id: removePointButton
                 width: root.itemSize
                 text: qsTr("Undo")
-                imageSource: "undo.svg"
-                enabled: manualRecordig
+                imageSource: InputStyle.undoIcon
+                enabled: manualRecording
 
                 onActivated: root.removePointClicked()
             }
@@ -126,7 +128,7 @@ Item {
                 width: root.itemSize
                 text: qsTr("Add Point")
                 imageSource: InputStyle.plusIcon
-                enabled: manualRecordig
+                enabled: manualRecording
 
                 onActivated: root.addClicked()
             }
@@ -141,7 +143,7 @@ Item {
                 id: finishButton
                 width: root.itemSize
                 text: qsTr("Done")
-                imageSource: "check.svg"
+                imageSource: InputStyle.checkIcon
 
                 onActivated: root.stopRecordingClicked()
             }
@@ -155,7 +157,7 @@ Item {
                 id: cancelButton
                 width: root.itemSize
                 text: qsTr("Cancel")
-                imageSource: "no.svg"
+                imageSource: InputStyle.noIcon
 
                 onActivated: root.cancelClicked()
             }

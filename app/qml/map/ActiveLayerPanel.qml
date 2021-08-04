@@ -7,11 +7,14 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import lc 1.0
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import QgsQuick 0.1 as QgsQuick
-import "."  // import InputStyle singleton
+import lc 1.0
+
+import ".."
+import "../components" as Components
 
 Drawer {
     property string activeLayerId: __activeLayer.layerId
@@ -41,7 +44,7 @@ Drawer {
       }
     }
 
-    PanelHeader {
+    Components.PanelHeader {
       id: header
       height: InputStyle.rowHeightHeader
       width: parent.width
@@ -51,10 +54,10 @@ Drawer {
       onBack: layerPanel.close()
       withBackButton: true
       layer.enabled: true
-      layer.effect: Shadow {}
+      layer.effect: Components.Shadow {}
     }
 
-    LayerList {
+    Components.LayerList {
         height: layerPanel.height - header.height
         width: parent.width
         y: header.height
@@ -70,7 +73,7 @@ Drawer {
         borderWidth: 1
 
         onListItemClicked: {
-          activeLayerChangeRequested( layerId )
+          __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
           layerPanel.visible = false
         }
     }

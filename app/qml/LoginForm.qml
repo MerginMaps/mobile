@@ -55,7 +55,7 @@ Rectangle {
       anchors.bottom: parent.bottom
 
       Image {
-        source: "mergin_color.svg"
+        source: InputStyle.merginColorIcon
         height: fieldHeight
         sourceSize.height: height
         anchors.horizontalCenter: parent.horizontalCenter
@@ -90,7 +90,7 @@ Rectangle {
             height: fieldHeight
             width: fieldHeight
             anchors.fill: parent
-            source: 'account.svg'
+            source: InputStyle.accountIcon
             sourceSize.width: width
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit
@@ -200,7 +200,7 @@ Rectangle {
             anchors.centerIn: parent
             width: parent.width * 0.75
             height: width
-            source: "sync.svg"
+            source: InputStyle.syncIcon
             sourceSize.width: width
             sourceSize.height: height
             visible: source

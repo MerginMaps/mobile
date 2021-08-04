@@ -9,7 +9,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import "."  // import InputStyle singleton
+import ".."  // import InputStyle singleton
 
 Text {
     width: parent.width

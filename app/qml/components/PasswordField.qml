@@ -26,7 +26,7 @@ Row {
       height: root.height
       width: root.height
       anchors.fill: parent
-      source: '../lock.svg'
+      source: InputStyle.lockIcon
       sourceSize.width: width
       sourceSize.height: height
       fillMode: Image.PreserveAspectFit
@@ -70,7 +70,7 @@ Row {
       height: root.height
       width: root.height
       anchors.fill: parent
-      source: password.echoMode === TextInput.Normal ? '../eye-slash.svg' : '../eye.svg'
+      source: password.echoMode === TextInput.Normal ? InputStyle.eyeSlashIcon : InputStyle.eyeIcon
       sourceSize.width: width
       sourceSize.height: height
       fillMode: Image.PreserveAspectFit

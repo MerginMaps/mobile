@@ -11,6 +11,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "."  // import InputStyle singleton
+import "./components"
 
 Rectangle {
   id: root
@@ -67,7 +68,7 @@ Rectangle {
     id: merginLogo
     anchors.top: header.bottom
     antialiasing: true
-    source: 'mergin_color.svg'
+    source: InputStyle.merginColorIcon
     height: InputStyle.rowHeightHeader
     width: parent.width
     sourceSize.width: width
