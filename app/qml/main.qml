@@ -37,12 +37,9 @@ ApplicationWindow {
             State {
                 name: "view"
             },
-            // When a user is in recording session - creating a new feature.
+            // When a user is in recording session - creating new features, editing geometries..
             State {
                 name: "record"
-            },
-            State {
-                name: "edit"
             },
             // Listing projects
             State {
@@ -57,9 +54,6 @@ ApplicationWindow {
             }
             else if ( stateManager.state === "record" ) {
               map.state = "recordFeature"
-            }
-            else if ( stateManager.state === "edit" ) {
-              map.state = "editGeometry"
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
@@ -135,6 +129,13 @@ ApplicationWindow {
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" )
       onNothingIdentified: formsStackManager.closeDrawer()
 
+      onRecordingFinished: {
+        formsStackManager.openForm( pair, "add", "form" )
+        stateManager.state = "view"
+        map.highlightPair( pair )
+      }
+      onRecordingCanceled: stateManager.state = "view"
+
       onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
       onEditingGeometryFinished: {
         formsStackManager.geometryEditingFinished( pair )
@@ -145,12 +146,15 @@ ApplicationWindow {
         stateManager.state = "view"
       }
 
-      onRecordingFinished: {
-        formsStackManager.openForm( pair, "add", "form" )
+      onRecordInLayerFeatureStarted: formsStackManager.recordInLayerStarted()
+      onRecordInLayerFeatureFinished: {
+        formsStackManager.recordInLayerFinished( pair )
         stateManager.state = "view"
-        map.highlightPair( pair )
       }
-      onRecordingCanceled: stateManager.state = "view"
+      onRecordInLayerFeatureCanceled: {
+        formsStackManager.recordInLayerFinished( null, false )
+        stateManager.state = "view"
+      }
 
       onNotify: showMessage( message )
 
@@ -310,19 +314,30 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      previewHeight: window.height/3
+      previewHeight: window.height / 3
 
       project: __loader.project
 
       onCreateLinkedFeatureRequested: {
-        let newPair = map.createFeature( relation.referencingLayer )
-        formsStackManager.addLinkedFeature( newPair, parentController, relation )
+        let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
+
+        if ( isNoGeoLayer ) {
+          let newPair = map.createFeature( targetLayer )
+          recordInLayerFinished( newPair, true )
+        }
+        else { // we will record geometry
+          stateManager.state = "record"
+          map.targetLayerToUse = targetLayer
+          map.state = "recordInLayerFeature"
+          map.centerToPair( parentPair )
+        }
       }
 
       onEditGeometryRequested: {
+        stateManager.state = "record"
         map.featurePairToEdit = pair
         map.centerToPair( pair )
-        stateManager.state = "edit"
+        map.state = "editGeometry"
       }
 
       onClosed: {

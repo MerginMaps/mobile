@@ -27,11 +27,11 @@ Item {
   property var project
   property real previewHeight
 
-  property int activeFormIndex: 0
+  property int activeFormIndex: formsStack.depth - 1
 
   signal closed()
   signal editGeometryRequested( var pair )
-  signal createLinkedFeatureRequested( var parentController, var relation )
+  signal createLinkedFeatureRequested( var targetLayer, var parentPair )
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -51,7 +51,6 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
-    root.activeFormIndex = latest.StackView.index
   }
 
   function _getActiveForm() {
@@ -81,7 +80,6 @@ Item {
     }
 
     let latest = formsStack.push( formComponent, props )
-    root.activeFormIndex = latest.StackView.index
   }
 
   function addLinkedFeature( newPair, parentController, relation ) {
@@ -94,10 +92,9 @@ Item {
     }
 
     let latest = formsStack.push( formComponent, props )
-    root.activeFormIndex = latest.StackView.index
   }
 
-  function applyOnForms( func, args ) {
+  function applyOnForms( func ) {
     if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
       console.error( "FormsStackManager: Invalid active index" )
       return
@@ -105,26 +102,18 @@ Item {
 
     for ( let i = 0; i <= root.activeFormIndex; i++ ) {
       let form = formsStack.get( i )
-      if ( form )
-        func( form, args )
+      func( form )
     }
   }
 
   function geometryEditingStarted() {
     // close form drawers so that user can see map
-    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
-      console.error( "FormsStackManager: Invalid active index" )
-      return
-    }
-
-    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
-      let form = formsStack.get( i )
-
+    applyOnForms( ( form ) => {
       if ( form && typeof form.closeDrawer === "function" ) {
-        form.panelState = "editGeometry"
+        form.panelState = "hidden"
         form.closeDrawer()
       }
-    }
+    })
   }
 
   function geometryEditingFinished( pair, success = true ) {
@@ -145,6 +134,41 @@ Item {
         form.openDrawer()
       }
     }
+  }
+
+  function recordInLayerStarted() {
+    // close form drawers so that user can see map
+    applyOnForms( ( form ) => {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
+  }
+
+  function recordInLayerFinished( pair, success = true ) {
+    // open form drawers back and push new form in the end
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      var form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        form.openDrawer()
+      }
+    }
+
+    // now add the new feature
+    if ( success ) {
+      addLinkedFeature( pair, form.controllerToApply, form.relationToApply )
+    }
+
+    // remove stored properties
+    form.relationToApply = null
+    form.controllerToApply = null
   }
 
   StackView {
@@ -173,13 +197,13 @@ Item {
       previewHeight: root.previewHeight
 
       onClosed: {
-        if ( panelState !== "editGeometry" ) {
+        if ( panelState !== "hidden" ) {
           formsStack.popOneOrClose()
         }
       }
       onEditGeometry: root.editGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeatureRequested( parentController, relation )
+      onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
     }
   }
 }
