@@ -9,7 +9,7 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
-
+import "./components"
 
 Item {
 
@@ -51,7 +51,7 @@ Item {
           id: addButton
           width: root.height * 0.8
           text: qsTr("Add Feature")
-          imageSource: "plus.svg"
+          imageSource: InputStyle.plusIcon
           onActivated: {
             addButtonClicked()
           }
@@ -67,7 +67,7 @@ Item {
           id: doneButton
           width: root.height * 0.8
           text: qsTr("Done")
-          imageSource: "check.svg"
+          imageSource: InputStyle.checkIcon
           onActivated: {
             doneButtonClicked()
           }

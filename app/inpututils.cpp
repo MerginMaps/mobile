@@ -31,6 +31,7 @@
 #include "qgsapplication.h"
 #include "qgsvaluerelationfieldformatter.h"
 #include "qgsdatetimefieldformatter.h"
+#include "qgslayertree.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -846,6 +847,22 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
   }
 }
 
+QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
+{
+  if ( layer )
+  {
+    switch ( layer->geometryType() )
+    {
+      case QgsWkbTypes::PointGeometry: return QStringLiteral( "point" );
+      case QgsWkbTypes::LineGeometry: return QStringLiteral( "linestring" );
+      case QgsWkbTypes::PolygonGeometry: return QStringLiteral( "polygon" );
+      case QgsWkbTypes::NullGeometry: return QStringLiteral( "nullGeo" );
+      default: return QString();
+    }
+  }
+  return QString();
+}
+
 QString InputUtils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,
@@ -1094,4 +1111,33 @@ QModelIndex InputUtils::invalidIndex()
 bool InputUtils::isFeatureIdValid( qint64 featureId )
 {
   return !FID_IS_NEW( featureId ) && !FID_IS_NULL( featureId );
+}
+
+QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuickMapSettings *settings )
+{
+  if ( !project || !settings )
+  {
+    return nullptr;
+  }
+
+  QgsLayerTree *root = project->layerTreeRoot();
+
+  // Get list of all visible and valid layers in the project
+  QList< QgsMapLayer * > allLayers;
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  {
+    if ( nodeLayer->isVisible() )
+    {
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer && layer->isValid() )
+      {
+        allLayers << layer;
+      }
+    }
+  }
+
+  settings->setLayers( allLayers );
+  settings->setTransformContext( project->transformContext() );
+
+  return settings;
 }

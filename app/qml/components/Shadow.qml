@@ -7,20 +7,17 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QgsQuick 0.1 as QgsQuick
-import lc 1.0
+import QtQuick 2.0
+import QtGraphicalEffects 1.0
+import ".."  // import InputStyle singleton
 
-Item {    
-    id: root
-    property real size: 100 * QgsQuick.Utils.dp
+DropShadow {
+    id: shadow
+    horizontalOffset: 0
+    verticalOffset: InputStyle.shadowVerticalOffset
+    radius: InputStyle.shadowRadius
+    samples: InputStyle.shadowSamples
+    color: "grey"
+    transparentBorder: true
 
-    Image {
-        anchors.centerIn: parent
-        height: root.size
-        width: height
-        source: "crosshair.svg"
-        sourceSize.width: width
-        sourceSize.height: height
-    }
 }

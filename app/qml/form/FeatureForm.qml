@@ -164,13 +164,13 @@ Item {
 
   states: [
     State {
-      name: "ReadOnly"
+      name: "readOnly"
     },
     State {
-      name: "Edit"
+      name: "edit"
     },
     State {
-      name: "Add"
+      name: "add"
     }
   ]
 
@@ -203,10 +203,10 @@ Item {
   }
 
   function cancel() {
-    // remove feature if we are in "Add" mode and it already has valid ID
+    // remove feature if we are in "add" mode and it already has valid ID
     // it was saved to prefill relation reference field in child layer
     let featureId = form.controller.featureLayerPair.feature.id
-    let shouldRemoveFeature = form.state === "Add" && __inputUtils.isFeatureIdValid( featureId )
+    let shouldRemoveFeature = form.state === "add" && __inputUtils.isFeatureIdValid( featureId )
 
     if ( shouldRemoveFeature ) {
       form.controller.deleteFeature()
@@ -552,7 +552,7 @@ Item {
           property var homePath: form.project ? form.project.homePath : ""
           property var customStyle: form.style
           property var externalResourceHandler: form.externalResourceHandler
-          property bool readOnly: form.state == "ReadOnly" || !AttributeEditable
+          property bool readOnly: form.state == "readOnly" || !AttributeEditable
           property var featurePair: form.controller.featureLayerPair
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
@@ -647,7 +647,7 @@ Item {
 
       Item {
         id: rememberCheckboxContainer
-        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "Add" && EditorWidget !== "Hidden" && Type === FormItem.Field
+        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "add" && EditorWidget !== "Hidden" && Type === FormItem.Field
 
         implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
         implicitHeight: placeholder.height

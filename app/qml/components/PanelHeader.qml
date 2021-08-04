@@ -9,7 +9,7 @@
 
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
-import "."  // import InputStyle singleton
+import ".."  // import InputStyle singleton
 
 Rectangle {
     id: header
@@ -38,7 +38,7 @@ Rectangle {
             id: image
             height: backIconVisible ? InputStyle.fontPixelSizeNormal : 0
             width: height
-            source: "back.svg"
+            source: InputStyle.backIcon
             sourceSize.width: width
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit

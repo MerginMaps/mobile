@@ -7,12 +7,13 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 
 Drawer {
 
@@ -95,7 +96,7 @@ Drawer {
                 id: item
                 panelMargin: InputStyle.panelMargin
                 contentText: name
-                imageSource: "map_styles.svg"
+                imageSource: InputStyle.mapThemesIcon
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
                 highlight: __mapThemesModel.activeThemeIndex === index

@@ -78,6 +78,11 @@ QString InputHelp::howToSetupProj() const
   return inputHelpRoot + "/howto/proj";
 }
 
+QString InputHelp::gpsAccuracyHelpLink() const
+{
+  return inputHelpRoot + "/howto/gps_accuracy";
+}
+
 QString InputHelp::merginTermsLink() const
 {
   return QStringLiteral( "https://public.cloudmergin.com/assets/tos.html" );

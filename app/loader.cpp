@@ -234,9 +234,9 @@ void Loader::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
 
-  // if active layer is no longer visible, reset it
+  // if active layer is no longer visible
   if ( !layerVisible( mActiveLayer.layer() ) )
-    setActiveLayer( nullptr );
+    setActiveLayer( mRecordingLayerPM.firstUsableLayer() );
 
   setMapSettingsLayers();
 }

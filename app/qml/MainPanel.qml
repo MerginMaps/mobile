@@ -13,12 +13,13 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
+import "./components"
 
 Item {
     signal openProjectClicked()
     signal myLocationClicked()
     signal myLocationHold()
-    signal addFeatureClicked()
+    signal recordClicked()
     signal openMapThemesClicked()
     signal openBrowseDataClicked()
     signal openSettingsClicked()
@@ -59,7 +60,7 @@ Item {
                 id: openProjectBtn
                 width: mainPanel.itemSize
                 text: qsTr("Projects")
-                imageSource: "project.svg"
+                imageSource: InputStyle.projectIcon
 
                 onActivated: {
                   rootMenu.close()
@@ -79,8 +80,8 @@ Item {
                 width: mainPanel.itemSize
 
                 text: qsTr("GPS")
-                imageSource: "ic_gps_fixed_48px.svg"
-                imageSource2: "ic_gps_not_fixed_48px.svg"
+                imageSource: InputStyle.gpsFixedIcon
+                imageSource2: InputStyle.gpsNotFixedIcon
                 imageSourceCondition: __appSettings.autoCenterMapChecked
 
                 onActivated: {
@@ -125,7 +126,7 @@ Item {
 
                 onActivated: {
                   rootMenu.close()
-                  mainPanel.addFeatureClicked()
+                  mainPanel.recordClicked()
                 }
             }
         }
@@ -141,7 +142,7 @@ Item {
                 id: zoomToProjectBtn
                 width: mainPanel.itemSize
                 text: qsTr("Zoom to project")
-                imageSource: "zoom_to_project.svg"
+                imageSource: InputStyle.zoomToProjectIcon
 
                 onActivated: {
                   rootMenu.close()
@@ -160,7 +161,7 @@ Item {
                 id: browseDataBtn
                 width: mainPanel.itemSize
                 text: qsTr("Browse data")
-                imageSource: "table.svg"
+                imageSource: InputStyle.tableIcon
 
                 onActivated: {
                   rootMenu.close()
@@ -180,7 +181,7 @@ Item {
                 id: mapThemesBtn
                 width: mainPanel.itemSize
                 text: qsTr("Map themes")
-                imageSource: "map_styles.svg"
+                imageSource: InputStyle.mapThemesIcon
                 onActivated: {
                   rootMenu.close()
                   mainPanel.openMapThemesClicked()
@@ -200,7 +201,7 @@ Item {
                 id: settingsBtn
                 width: mainPanel.itemSize
                 text: qsTr("Settings")
-                imageSource: "settings.svg"
+                imageSource: InputStyle.settingsIcon
                 onActivated: {
                   rootMenu.close()
                   mainPanel.openSettingsClicked()
@@ -217,7 +218,7 @@ Item {
               id: menuBtn
               width: mainPanel.itemSize
               text: qsTr("More")
-              imageSource: "more_menu.svg"
+              imageSource: InputStyle.moreMenuIcon
 
               onActivated: {
                 if ( !rootMenu.visible ) rootMenu.open()
@@ -245,7 +246,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Projects")
-                imageSource: "project.svg"
+                imageSource: InputStyle.projectIcon
             }
 
             onClicked: {
@@ -264,7 +265,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("GPS")
-                imageSource: __appSettings.autoCenterMapChecked ? "ic_gps_fixed_48px.svg" : "ic_gps_not_fixed_48px.svg"
+                imageSource: __appSettings.autoCenterMapChecked ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
 
                 RoundIndicator {
                     width: parent.height/4
@@ -320,7 +321,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Zoom to project")
-                imageSource: "zoom_to_project.svg"
+                imageSource: InputStyle.zoomToProjectIcon
             }
 
             onClicked: {
@@ -339,7 +340,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Browse features")
-                imageSource: "table.svg"
+                imageSource: InputStyle.tableIcon
             }
 
             onClicked: {
@@ -358,7 +359,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Map themes")
-                imageSource: "map_styles.svg"
+                imageSource: InputStyle.mapThemesIcon
             }
 
             onClicked: {
@@ -377,7 +378,7 @@ Item {
                 rowHeight: parent.height
                 width: parent.width
                 contentText: qsTr("Settings")
-                imageSource: "settings.svg"
+                imageSource: InputStyle.settingsIcon
             }
 
             onClicked: {

@@ -7,17 +7,25 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
-import QtGraphicalEffects 1.0
-import "."  // import InputStyle singleton
+import QtQuick 2.14
 
-DropShadow {
-    id: shadow
-    horizontalOffset: 0
-    verticalOffset: InputStyle.shadowVerticalOffset
-    radius: InputStyle.shadowRadius
-    samples: InputStyle.shadowSamples
-    color: "grey"
-    transparentBorder: true
+import QgsQuick 0.1 as QgsQuick
+import lc 1.0
+import ".."
 
+Item {    
+    id: root
+
+    property real size: 100 * QgsQuick.Utils.dp
+
+    property point center: Qt.point( root.width / 2, root.height / 2 )
+
+    Image {
+        anchors.centerIn: parent
+        height: root.size
+        width: height
+        source: InputStyle.crosshairIcon
+        sourceSize.width: width
+        sourceSize.height: height
+    }
 }

@@ -103,7 +103,7 @@ Rectangle {
       
       Image {
         id: cancelSearchBtn
-        source: searchField.displayText ? "no.svg" : "search.svg"
+        source: searchField.displayText ? InputStyle.noIcon : InputStyle.searchIcon
         width: root.iconSize
         height: width
         sourceSize.width: width

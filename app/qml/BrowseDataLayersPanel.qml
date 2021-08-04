@@ -11,6 +11,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import "./components"
 
 Item {
   id: root

@@ -23,7 +23,7 @@ Item {
         id: imageDecrease
         height: root.height
         width: height
-        source: "back.svg"
+        source: InputStyle.backIcon
         sourceSize.width: width
         sourceSize.height: height
         fillMode: Image.PreserveAspectFit
@@ -52,7 +52,7 @@ Item {
         height: root.height
         width: height
         anchors.left: valueText.right
-        source: "back.svg"
+        source: InputStyle.backIcon
         rotation: 180
         sourceSize.width: width
         sourceSize.height: height

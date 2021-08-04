@@ -33,13 +33,8 @@ Item {
 
   signal closed()
   signal closeDrawer()
-  signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
-
-  function updateFeatureGeometry() {
-    formContainer.updateFeatureGeometry()
-  }
 
   function isNewFeature() {
     return formContainer.isNewFeature()
@@ -70,12 +65,6 @@ Item {
           PropertyChanges { target: previewPanel; visible: false }
         },
         State {
-          name: "editingGeometry"
-          PropertyChanges { target: formContainer; visible: false }
-          PropertyChanges { target: previewPanel; visible: false }
-          PropertyChanges { target: drawer; visible: false }
-        },
-        State {
           name: "closed"
         }
       ]
@@ -85,9 +74,6 @@ Item {
           case "form":
           case "preview":
             drawer.open();
-            break;
-          case "editingGeometry":
-            root.editGeometry( root.featureLayerPair );
             break;
           case "closed":
             root.closed()
@@ -120,7 +106,7 @@ Item {
       onContentClicked: root.panelState = "form"
       onEditClicked: {
         root.panelState = "form"
-        formContainer.formState = "Edit"
+        formContainer.formState = "edit"
       }
     }
 
@@ -138,7 +124,7 @@ Item {
       formState: root.formState
 
       onClose: root.panelState = "closed"
-      onEditGeometryClicked: root.panelState = "editingGeometry"
+      onEditGeometryClicked: console.log( "NOT IMPLEMENTED" )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
     }
