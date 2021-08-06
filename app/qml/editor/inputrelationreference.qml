@@ -18,6 +18,8 @@ import ".."
 AbstractEditor {
   id: root
 
+  property var parentValue: root.parent.value
+
   signal valueChanged( var value, bool isNull )
   signal openLinkedFeature( var linkedFeature )
 
@@ -36,7 +38,7 @@ AbstractEditor {
     page.forceActiveFocus()
   }
 
-  onValueChanged: title.text = rModel.attributeFromValue( FeaturesListModel.FeatureId, value, FeaturesListModel.FeatureTitle ) || ""
+  onParentValueChanged: title.text = rModel.attributeFromValue( FeaturesListModel.FeatureId, value, FeaturesListModel.FeatureTitle ) || ""
 
   RelationReferenceFeaturesModel {
     id: rModel
