@@ -19,9 +19,14 @@ Item {
   property var project
   property var featureLayerPair
 
-  // for child features in relation:
+  // child features in relations need to have these set in order to prefill their foreign keys
   property var linkedRelation
   property var parentController
+
+  // intermediate store for properties that will be assigned to linked feature when it is created.
+  // these properties are set only while future linked feature is beign digitized
+  property var relationToApply
+  property var controllerToApply
 
   property alias formState: formContainer.formState // add, edit or ReadOnly
   property alias panelState: statesManager.state
@@ -32,15 +37,21 @@ Item {
   property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
 
   signal closed()
-  signal closeDrawer()
+  signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
-  signal createLinkedFeature( var parentController, var relation )
+  signal createLinkedFeature( var targetLayer, var parentPair )
 
-  function isNewFeature() {
-    return formContainer.isNewFeature()
+  function updateFeatureGeometry() {
+    formContainer.updateFeatureGeometry()
   }
 
-  onCloseDrawer: drawer.close()
+  function openDrawer() {
+    root.panelState = "form"
+  }
+
+  function closeDrawer() {
+    drawer.close()
+  }
 
   Drawer {
     id: drawer
@@ -66,6 +77,11 @@ Item {
         },
         State {
           name: "closed"
+        },
+        State {
+          // state used to hide form when using map (editing geometry / adding linked features).
+          // form is still instantiated and will be visible when map editing is finished
+          name: "hidden"
         }
       ]
 
@@ -76,7 +92,8 @@ Item {
             drawer.open();
             break;
           case "closed":
-            root.closed()
+            root.closed();
+            break;
         }
       }
     }
@@ -92,7 +109,10 @@ Item {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
-    onClosed: statesManager.state = "closed"
+    onClosed: {
+      if ( statesManager.state !== "hidden" )
+        statesManager.state = "closed"
+    }
 
     PreviewPanel {
       id: previewPanel
@@ -124,9 +144,16 @@ Item {
       formState: root.formState
 
       onClose: root.panelState = "closed"
-      onEditGeometryClicked: console.log( "NOT IMPLEMENTED" )
+      onEditGeometryClicked: {
+        root.panelState = "hidden"
+        root.editGeometry( root.featureLayerPair )
+      }
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
+      onCreateLinkedFeature: {
+        root.controllerToApply = parentController
+        root.relationToApply = relation
+        root.createLinkedFeature( relation.referencingLayer, root.featureLayerPair )
+      }
     }
   }
 }

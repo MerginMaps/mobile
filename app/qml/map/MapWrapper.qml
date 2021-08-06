@@ -18,6 +18,7 @@ Item {
   id: root
 
   property var featurePairToEdit // we are editing geometry of this feature layer pair
+  property var targetLayerToUse // layer used in digitizing when recording in specific layer
   property real previewPanelHeight
 
   readonly property alias gpsIndicatorColor: _gpsState.indicatorColor
@@ -35,11 +36,13 @@ Item {
   signal recordingFinished( var pair )
   signal recordingCanceled()
 
-  signal editingStarted()
-  signal editingFinished( var pair )
+  signal editingGeometryStarted()
+  signal editingGeometryFinished( var pair )
+  signal editingGeometryCanceled()
 
-  signal addingGeometryStarted()
-  signal addingGeometryFinished( var pair )
+  signal recordInLayerFeatureStarted()
+  signal recordInLayerFeatureFinished( var pair )
+  signal recordInLayerFeatureCanceled()
 
   signal notify( string message )
 
@@ -86,11 +89,21 @@ Item {
 
   function processRecordedPair( pair ) {
     if ( _digitizingController.isPairValid( pair ) ) {
-      root.recordingFinished( pair )
+      if ( root.state === "recordFeature" ) {
+        root.recordingFinished( pair )
+      }
+      else {
+        root.recordInLayerFeatureFinished( pair )
+      }
     }
     else {
       root.notify( qsTr( "Recorded feature is not valid" ) )
-      root.recordingCanceled()
+      if ( root.state === "recordFeature" ) {
+        root.recordingCanceled()
+      }
+      else {
+        root.recordInLayerFeatureCanceled()
+      }
     }
     root.state = "view"
   }
@@ -102,7 +115,7 @@ Item {
     let isUsingGPS = _digitizingController.useGpsPoint
     let hasAssignedValidPair = root.featurePairToEdit && root.featurePairToEdit.valid
 
-    if ( root.state === "recordFeature" ) {
+    if ( root.state === "recordFeature" || root.state === "recordInLayerFeature" ) {
       if ( isPointGeometry ) {
         let newPair = _digitizingController.pointFeatureFromPoint( recordedPoint, isUsingGPS )
         processRecordedPair( newPair )
@@ -117,21 +130,10 @@ Item {
     else if ( root.state === "editGeometry" ) {
       if ( isPointGeometry && hasAssignedValidPair ) {
         let changed = _digitizingController.changePointGeometry( root.featurePairToEdit, recordedPoint, isUsingGPS )
-        root.editingFinished( changed )
+        _digitizingHighlight.featureLayerPair = changed
+        root.editingGeometryFinished( changed )
         return
       }
-    }
-    else if ( root.state === "addGeometry" ) {
-      if ( isPointGeometry ) {
-        if ( !hasAssignedValidPair ) return
-
-        let changed = _digitizingController.changePointGeometry( root.featurePairToEdit, recordedPoint, isUsingGPS )
-        root.addingGeometryFinished( changed )
-        return
-      }
-
-      // adding line/polygon geometry
-      _digitizingController.addRecordPoint( recordedPoint, isUsingGPS )
     }
   }
 
@@ -173,11 +175,13 @@ Item {
       PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "editGeometry" // of existing feature
+      // recording feature in specific layer without option to change the digitized layer.
+      // can be used to create linked features in relations, value relations and browse data
+      name: "recordInLayerFeature"
       PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "addGeometry" // to existing feature
+      name: "editGeometry" // of existing feature
       PropertyChanges { target: root; isInRecordState: true }
     },
     State {
@@ -192,13 +196,24 @@ Item {
         root.centerToPosition()
         break
       }
-      case "addGeometry":
+      case "recordInLayerFeature": {
+        __loader.setActiveLayer( root.targetLayerToUse )
+        root.recordInLayerFeatureStarted()
+        break
+      }
       case "editGeometry": {
+        __loader.setActiveLayer( root.featurePairToEdit.layer )
+        _digitizingHighlight.featureLayerPair = root.featurePairToEdit
+        _digitizingHighlight.visible = true
+        root.editingGeometryStarted()
         break
       }
       case "view": {
         if ( _digitizingHighlight.visible )
           _digitizingHighlight.visible = false
+
+        if ( _highlightIdentified.visible )
+          _highlightIdentified.visible = false
 
         if ( _digitizingController.recording )
           _digitizingController.stopRecording()
@@ -455,7 +470,8 @@ Item {
     height: InputStyle.rowHeightHeader + ( ( extraPanelVisible ) ? extraPanelHeight : 0)
     y: extraPanelVisible ? parent.height - extraPanelHeight : parent.height
 
-    visible: root.state === "recordFeature"
+    visible: root.isInRecordState
+    extraPanelVisible: root.state === "recordFeature"
 
     gpsIndicatorColor: _gpsState.indicatorColor
     activeVectorLayer: __activeLayer.vectorLayer
@@ -495,19 +511,22 @@ Item {
     }
 
     onCancelClicked: {
+      if ( root.state === "recordFeature" )
+        root.recordingCanceled()
+      else if ( root.state === "editGeometry" )
+        root.editingGeometryCanceled()
+      else if ( root.state === "recordInLayerFeature" )
+        root.recordInLayerFeatureCanceled()
+
       root.state = "view"
-      root.recordingCanceled()
     }
 
     onRemovePointClicked: _digitizingController.removeLastPoint()
 
     onStopRecordingClicked: {
-      if ( root.state === "recordFeature" ) {
+      if ( root.state === "recordFeature" || root.state === "recordInLayerFeature" ) {
         var newPair = _digitizingController.lineOrPolygonFeature();
         root.processRecordedPair( newPair )
-      }
-      else if ( root.state === "addGeometry" ) {
-
       }
     }
 

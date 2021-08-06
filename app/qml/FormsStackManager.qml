@@ -27,12 +27,11 @@ Item {
   property var project
   property real previewHeight
 
-  property int activeFormIndex: 0
+  property int activeFormIndex: formsStack.depth - 1
 
   signal closed()
-  signal createLinkedFeatureRequested( var parentController, var relation )
-
-  // TODO: (next PR) remove unused functions
+  signal editGeometryRequested( var pair )
+  signal createLinkedFeatureRequested( var targetLayer, var parentPair )
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -52,7 +51,6 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
-    root.activeFormIndex = latest.StackView.index
   }
 
   function _getActiveForm() {
@@ -61,27 +59,6 @@ Item {
     }
     else console.error( "FormsStackManager: Opted for invalid form index" )
     return null
-  }
-
-  function setFeaturePair( pair ) {
-    let form = _getActiveForm()
-
-    if ( form )
-      form.featureLayerPair = pair
-  }
-
-  function getFeaturePair() {
-    let form = _getActiveForm()
-
-    if ( form )
-      return form.featureLayerPair
-  }
-
-  function isNewFeature() {
-    let form = _getActiveForm()
-
-    if ( form )
-      return form.isNewFeature()
   }
 
   function closeDrawer() {
@@ -95,11 +72,6 @@ Item {
     formsStack.clear() // removes all objects thanks to Qt parent system
   }
 
-  function hide() {
-    root.visible = false
-    formsStack.visible = false
-  }
-
   function openLinkedFeature( linkedFeature ) {
     let props = {
       featureLayerPair: linkedFeature,
@@ -108,7 +80,6 @@ Item {
     }
 
     let latest = formsStack.push( formComponent, props )
-    root.activeFormIndex = latest.StackView.index
   }
 
   function addLinkedFeature( newPair, parentController, relation ) {
@@ -121,7 +92,83 @@ Item {
     }
 
     let latest = formsStack.push( formComponent, props )
-    root.activeFormIndex = latest.StackView.index
+  }
+
+  function applyOnForms( func ) {
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+      func( form )
+    }
+  }
+
+  function geometryEditingStarted() {
+    // close form drawers so that user can see map
+    applyOnForms( ( form ) => {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
+  }
+
+  function geometryEditingFinished( pair, success = true ) {
+    // open form drawers back
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        if ( success && i === root.activeFormIndex ) {
+          form.featureLayerPair = pair
+          form.updateFeatureGeometry()
+        }
+        form.openDrawer()
+      }
+    }
+  }
+
+  function recordInLayerStarted() {
+    // close form drawers so that user can see map
+    applyOnForms( ( form ) => {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
+  }
+
+  function recordInLayerFinished( pair, success = true ) {
+    // open form drawers back and push new form in the end
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      var form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        form.openDrawer()
+      }
+    }
+
+    // now add the new feature
+    if ( success ) {
+      addLinkedFeature( pair, form.controllerToApply, form.relationToApply )
+    }
+
+    // remove stored properties
+    form.relationToApply = null
+    form.controllerToApply = null
   }
 
   StackView {
@@ -149,9 +196,14 @@ Item {
 
       previewHeight: root.previewHeight
 
-      onClosed: formsStack.popOneOrClose()
+      onClosed: {
+        if ( panelState !== "hidden" ) {
+          formsStack.popOneOrClose()
+        }
+      }
+      onEditGeometry: root.editGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeatureRequested( parentController, relation )
+      onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
     }
   }
 }

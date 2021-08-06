@@ -37,7 +37,7 @@ ApplicationWindow {
             State {
                 name: "view"
             },
-            // When a user is in recording session - creating a new feature.
+            // When a user is in recording session - creating new features, editing geometries..
             State {
                 name: "record"
             },
@@ -135,6 +135,26 @@ ApplicationWindow {
         map.highlightPair( pair )
       }
       onRecordingCanceled: stateManager.state = "view"
+
+      onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
+      onEditingGeometryFinished: {
+        formsStackManager.geometryEditingFinished( pair )
+        stateManager.state = "view"
+      }
+      onEditingGeometryCanceled: {
+        formsStackManager.geometryEditingFinished( null, false )
+        stateManager.state = "view"
+      }
+
+      onRecordInLayerFeatureStarted: formsStackManager.recordInLayerStarted()
+      onRecordInLayerFeatureFinished: {
+        formsStackManager.recordInLayerFinished( pair )
+        stateManager.state = "view"
+      }
+      onRecordInLayerFeatureCanceled: {
+        formsStackManager.recordInLayerFinished( null, false )
+        stateManager.state = "view"
+      }
 
       onNotify: showMessage( message )
 
@@ -294,13 +314,30 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      previewHeight: window.height/3
+      previewHeight: window.height / 3
 
       project: __loader.project
 
       onCreateLinkedFeatureRequested: {
-        let newPair = map.createFeature( relation.referencingLayer )
-        formsStackManager.addLinkedFeature( newPair, parentController, relation )
+        let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
+
+        if ( isNoGeoLayer ) {
+          let newPair = map.createFeature( targetLayer )
+          recordInLayerFinished( newPair, true )
+        }
+        else { // we will record geometry
+          stateManager.state = "record"
+          map.targetLayerToUse = targetLayer
+          map.state = "recordInLayerFeature"
+          map.centerToPair( parentPair )
+        }
+      }
+
+      onEditGeometryRequested: {
+        stateManager.state = "record"
+        map.featurePairToEdit = pair
+        map.centerToPair( pair )
+        map.state = "editGeometry"
       }
 
       onClosed: {
