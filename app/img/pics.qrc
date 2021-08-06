@@ -73,5 +73,6 @@
         <file>minus.svg</file>
         <file>no-image.svg</file>
         <file>link-rotated.svg</file>
+        <file>loadingindicator.svg</file>
     </qresource>
 </RCC>
