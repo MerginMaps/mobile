@@ -45,7 +45,15 @@ Item {
       if ( root.projectModelType === ProjectsModel.LocalProjectsModel )
         listview.footer = addProjectButtonComponent
       else
-        listview.footer = fetchMoreButtonComponent
+        listview.footer = loadingSpinnerComponent
+    }
+
+    onAtYEndChanged: {
+      if ( atYEnd ) { // user reached end of the list
+        if ( controllerModel.hasMoreProjects && !controllerModel.isLoading ) {
+          controllerModel.fetchAnotherPage( viewModel.searchExpression )
+        }
+      }
     }
 
     anchors.fill: parent
@@ -116,15 +124,11 @@ Item {
   }
 
   Component {
-    id: fetchMoreButtonComponent
+    id: loadingSpinnerComponent
 
-    DelegateButton {
-      width: parent.width
-      height: visible ? InputStyle.rowHeight : 0
-      text: qsTr( "Fetch more" )
-
-      visible: controllerModel.hasMoreProjects
-      onClicked: controllerModel.fetchAnotherPage( viewModel.searchExpression )
+    LoadingSpinner {
+      x: parent.width / 2 - width / 2
+      running: controllerModel.isLoading
     }
   }
 
