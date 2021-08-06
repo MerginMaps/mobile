@@ -91,5 +91,6 @@
         <file>map/RecordToolbar.qml</file>
         <file>map/ScaleBar.qml</file>
         <file>qmldir</file>
+        <file>components/LoadingSpinner.qml</file>
     </qresource>
 </RCC>
