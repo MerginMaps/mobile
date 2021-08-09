@@ -36,9 +36,7 @@ Rectangle {
   property color secondaryColor: InputStyle.fontColor
   property real itemMargin: InputStyle.panelMargin
 
-  property color iconColor: if (root.highlight) return root.primaryColor
-                            else if (!projectIsValid) return InputStyle.panelBackgroundDark
-                            else return InputStyle.activeButtonColorOrange
+  property color iconColor: root.highlight ? root.primaryColor : InputStyle.activeButtonColorOrange
   property real iconSize: height * 0.3
   property real borderWidth: 1 * QgsQuick.Utils.dp
   property real menuItemHeight: height * 0.8
@@ -80,8 +78,7 @@ Rectangle {
     if ( projectIsMergin && projectIsLocal )
     {
       if ( ( projectStatus === ProjectStatus.OutOfDate ||
-             projectStatus === ProjectStatus.Modified ) &&
-             projectIsValid )
+             projectStatus === ProjectStatus.Modified ) )
         return "sync,changes,remove"
 
       return "changes,remove"
@@ -223,7 +220,7 @@ Rectangle {
 
       property string iconSource: getStatusIcon()
 
-      visible: projectIsValid && iconSource !== ""
+      visible: iconSource !== ""
       Layout.preferredWidth: root.height
       height: root.height
 
@@ -247,7 +244,6 @@ Rectangle {
 
       MouseArea {
         anchors.fill: parent
-        enabled: projectIsValid
         onClicked: {
           if ( projectRemoteError ) {
             __inputUtils.showNotification( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
