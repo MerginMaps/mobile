@@ -76,8 +76,21 @@ ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Projec
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromCachedJson( metadataFilePath );
     ProjectDiff diff = MerginApi::compareProjectFiles( serverProject.files, serverProject.files, localFiles, project->local->projectDir );
 
-    if ( !diff.localAdded.isEmpty() || !diff.localDeleted.isEmpty() || !diff.localUpdated.isEmpty() )
+    if ( !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() )
       return ProjectStatus::Modified;
+    else if ( !diff.localDeleted.isEmpty() )
+    {
+      // photos that are not downloaded due to a selective sync are marked as deleted
+      // and thus would set the project state as modified. Therefore, we need to check
+      // if there is any file from localDeleted that is not included in selectiveSync
+      MerginConfig config = MerginConfig::fromFile( project->local->projectDir );
+
+      for ( QString file : diff.localDeleted )
+      {
+        if ( !MerginApi::excludeFromSync( file, config ) )
+          return ProjectStatus::Modified;
+      }
+    }
   }
 
   // Version is lower than latest one, last sync also before updated
