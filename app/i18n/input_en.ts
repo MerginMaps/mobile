@@ -192,7 +192,7 @@
 <context>
     <name>BrowseDataFeaturesPanel</name>
     <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="65"/>
+        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
         <source>Showing only the first %1 features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -213,14 +213,19 @@
 <context>
     <name>BrowseDataToolbar</name>
     <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="51"/>
+        <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
         <source>Add Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="67"/>
+        <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
         <source>Done</source>
         <translation type="unfinished">Done</translation>
+    </message>
+    <message>
+        <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -355,12 +360,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="189"/>
+        <location filename="../inputhelp.cpp" line="194"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="199"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -453,28 +458,28 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1035"/>
+        <location filename="../inpututils.cpp" line="1036"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1036"/>
+        <location filename="../inpututils.cpp" line="1037"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1037"/>
+        <location filename="../inpututils.cpp" line="1038"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1038"/>
+        <location filename="../inpututils.cpp" line="1039"/>
         <source>screen density: %1</source>
         <translation type="unfinished">screen density: %1</translation>
     </message>
@@ -600,18 +605,18 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="66"/>
-        <location filename="../qml/map/MapWrapper.qml" line="487"/>
+        <location filename="../qml/map/MapWrapper.qml" line="69"/>
+        <location filename="../qml/map/MapWrapper.qml" line="493"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="92"/>
+        <location filename="../qml/map/MapWrapper.qml" line="100"/>
         <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="444"/>
+        <location filename="../qml/map/MapWrapper.qml" line="449"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -651,32 +656,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="99"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
         <source>Synchronize project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="104"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
         <source>Local changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="109"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
         <source>Remove from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="114"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
         <source>Upload to Mergin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="119"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
         <source>Download from Mergin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="253"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="249"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -684,74 +689,69 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="124"/>
-        <source>Fetch more</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="137"/>
-        <location filename="../qml/components/ProjectList.qml" line="218"/>
+        <location filename="../qml/components/ProjectList.qml" line="141"/>
+        <location filename="../qml/components/ProjectList.qml" line="222"/>
         <source>Create project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="157"/>
+        <location filename="../qml/components/ProjectList.qml" line="161"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="193"/>
+        <location filename="../qml/components/ProjectList.qml" line="197"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="209"/>
+        <location filename="../qml/components/ProjectList.qml" line="213"/>
         <source>You can also create new project by clicking button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>Unable to get the list of projects.</source>
         <translation type="unfinished">Unable to get the list of projects.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>No projects found!</source>
         <translation type="unfinished">No projects found!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="269"/>
+        <location filename="../qml/components/ProjectList.qml" line="273"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="301"/>
         <source>Remove project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="302"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="328"/>
+        <location filename="../qml/components/ProjectList.qml" line="332"/>
         <source>Download project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="329"/>
+        <location filename="../qml/components/ProjectList.qml" line="333"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="345"/>
+        <location filename="../qml/components/ProjectList.qml" line="349"/>
         <source>Input needs to be restarted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="346"/>
+        <location filename="../qml/components/ProjectList.qml" line="350"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1238,34 +1238,42 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>inputrelationreference</name>
+    <message>
+        <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
+        <source>Changing link</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="171"/>
+        <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="171"/>
+        <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="185"/>
+        <location filename="../qml/main.qml" line="204"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="364"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="307"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
