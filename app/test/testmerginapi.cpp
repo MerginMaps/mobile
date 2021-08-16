@@ -1558,6 +1558,9 @@ void TestMerginApi::testSelectiveSync()
   QString configFilePathExtra( projectDirExtra + "/mergin-config.json" );
   QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePathExtra ) );
 
+  // Upload config file
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
   // Sync event 1:
   // Client 1 uploads images
   uploadRemoteProject( mApi, mUsername, projectName );
@@ -1572,8 +1575,6 @@ void TestMerginApi::testSelectiveSync()
 
   // Sync event 2:
   // Client 2 uploads an image
-  QString configFilePath( projectDir + "/mergin-config.json" );
-  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-project-dir.json", configFilePath ) );
 
   QFile fileExtra2( projectDirExtra + "/" + "photoExtra.png" );
   fileExtra2.open( QIODevice::WriteOnly );
