@@ -132,6 +132,15 @@ struct UpdateTask
   QList<DownloadQueueItem> data;  //!< list of chunks / list of diffs to apply
 };
 
+//! MerginConfig stored in .mergin-config.json
+struct MerginConfig
+{
+  bool selectiveSyncEnabled = false;
+  QString selectiveSyncDir;
+
+  static MerginConfig fromJson( const QByteArray &data, const QString &projectDir );
+  static MerginConfig fromFile( const QString &projectDir );
+};
 
 struct TransactionStatus
 {
@@ -166,18 +175,13 @@ struct TransactionStatus
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
   ProjectDiff diff;
+
+  MerginConfig config; //!< defines additional behavior of the transaction such as selective sync
 };
 
 typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
-
-//! MerginConfig stored in .mergin-config.json
-struct MerginConfig
-{
-  bool selectiveSyncEnabled = false;
-  QString selectiveSyncDir;
-};
 
 class MerginApi: public QObject
 {
@@ -399,7 +403,6 @@ class MerginApi: public QObject
      * @return True, if a file at given filePath suppose to be excluded from sync.
      */
     static bool excludeFromSync( const QString &filePath, const MerginConfig &config );
-    static MerginConfig parseMerginConfig( const QString &projectDir );
 
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
@@ -459,6 +462,7 @@ class MerginApi: public QObject
     // Pull slots
     void updateInfoReplyFinished();
     void downloadItemReplyFinished();
+    void cacheServerConfig();
 
     // Push slots
     void uploadStartReplyFinished();
@@ -555,7 +559,11 @@ class MerginApi: public QObject
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
     void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
 
-    void startProjectUpdate( const QString &projectFullName, const QByteArray &data );
+    void prepareProjectUpdate( const QString &projectFullName, const QByteArray &data );
+
+    void startProjectUpdate( const QString &projectFullName );
+
+    void requestServerConfig( const QString &projectFullName );
 
     //! Starts download request of another item
     void downloadNextItem( const QString &projectFullName );
