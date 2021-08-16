@@ -326,7 +326,7 @@ void MerginApi::downloadItemReplyFinished()
 
     finishProjectSync( projectFullName, false );
 
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
+    emit networkErrorOccurred( QStringLiteral(), QStringLiteral( "Mergin API error: downloadFile" ) );
   }
 }
 
@@ -1153,7 +1153,8 @@ QString MerginApi::extractServerErrorMsg( const QByteArray &data )
   }
   else
   {
-    serverMsg = data;
+    // take only first 1000 bytes of the message ~ there are situations when data is an unclosed string that would eat the whole log memory
+    serverMsg = data.mid( 0, 1000 );
   }
 
   return serverMsg;
