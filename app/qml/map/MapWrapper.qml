@@ -298,12 +298,12 @@ Item {
   StateGroup {
     id: _gpsState
 
-    property color indicatorColor
+    property color indicatorColor: InputStyle.softRed
 
     states: [
       State {
         name: "good"
-        when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy < __appSettings.gpsAccuracyTolerance )
+        when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy <= __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softGreen
