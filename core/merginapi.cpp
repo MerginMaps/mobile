@@ -2709,15 +2709,19 @@ bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &co
   if ( config.selectiveSyncEnabled )
   {
     QFileInfo info( filePath );
+
     bool isExcludedFormat = sIgnoreImageExtensions.contains( info.suffix().toLower() );
+
+    if ( !isExcludedFormat )
+      return false;
 
     if ( config.selectiveSyncDir.isEmpty() )
     {
-      return isExcludedFormat;
+      return true; // we are ignoring photos in the entire project
     }
-    else
+    else if ( filePath.startsWith( config.selectiveSyncDir ) )
     {
-      return info.absoluteFilePath().startsWith( config.selectiveSyncDir ) && isExcludedFormat;
+      return true; // we are ignoring photo in subfolder
     }
   }
   return false;
@@ -2772,13 +2776,7 @@ MerginConfig MerginConfig::fromJson( const QByteArray &data, const QString &proj
   {
     QJsonObject docObj = doc.object();
     config.selectiveSyncEnabled = docObj.value( QStringLiteral( "input-selective-sync" ) ).toBool( false );
-    QString selectiveSyncDir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
-
-    if ( !selectiveSyncDir.isEmpty() )
-    {
-      QDir rootDir( projectDir );
-      config.selectiveSyncDir = rootDir.canonicalPath() + "/" + selectiveSyncDir;
-    }
+    config.selectiveSyncDir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
   }
   else
   {
