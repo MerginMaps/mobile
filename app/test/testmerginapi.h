@@ -67,6 +67,8 @@ class TestMerginApi: public QObject
     void testMigrateProjectAndSync();
     void testMigrateDetachProject();
     void testSelectiveSync();
+    void testSelectiveSyncSubfolder();
+    void testAddSelectiveSyncToExistingProject();
 
     void testRegister();
 

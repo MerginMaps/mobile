@@ -107,6 +107,8 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateProjectAndSync" );
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSync" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncSubfolder" );
+  deleteRemoteProject( mApiExtra, mUsername, "testAddSelectiveSyncToExistingProject" );
 
   deleteLocalDir( mApi, "testExcludeFromSync" );
 }
@@ -1589,6 +1591,161 @@ void TestMerginApi::testSelectiveSync()
   QVERIFY( file1.exists() );
   QFile file2( projectDir + "/" + "photoExtra.png" );
   QVERIFY( !file2.exists() );
+}
+
+void TestMerginApi::testSelectiveSyncSubfolder()
+{
+  /*
+   * Case: Downloading project with config.
+   *
+   * We have following scenario:
+   * {
+   *   "input-selective-sync": true,
+   *   "input-selective-sync-dir": "photos" // having subfolder
+   * }
+   *
+   * Action 1: Client 1 creates project with mergin-config and uploads some images,
+   *           Client 2 should sync without downloading the images.
+   * Action 2: Client 2 uploads two images, one in "photos" subdirectory and second in project root.
+   *           Client 1 should sync without downloading the image in "photos" subdirectory and should still have own images
+   *           (they should not be deleted even though Client 2 did not have them when syncing)
+   */
+
+  // Create a project
+  QString projectName = "testSelectiveSyncSubfolder";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPath( projectDir + "/photos" );
+  if ( !dir.exists( photoPath ) )
+    dir.mkpath( photoPath );
+
+  QFile file( photoPath + "/" + "photoA.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPath + "/" + "photoB.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  // Add mergin-config.json to the project
+  QString configFilePath( projectDir + "/mergin-config.json" );
+  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-subfolder.json", configFilePath ) );
+
+  // Upload project
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // Client 2 in Action 1: should download project without images in subfolder "photos"
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  QString photoPathExtra( projectDirExtra + "/photos" );
+
+  QFile fileExtra( photoPathExtra + "/" + "photoA.jpg" );
+  QVERIFY( !fileExtra.exists() );
+
+  QFile fileExtra1( photoPathExtra + "/" + "photoB.png" );
+  QVERIFY( !fileExtra1.exists() );
+
+  // ----
+  // Action 2
+  // ----
+
+  // Client 2 adds 2 images, one to project root, another to "photos" subfolder
+  QDir photoDirExtra( photoPathExtra );
+  if ( !photoDirExtra.exists() ) // if the subfolder contained only photos, it was not even created in Client 2
+    photoDirExtra.mkpath( photoPathExtra );
+
+  QFile extraFile( photoPathExtra + "/" + "photoC.jpg" );
+  extraFile.open( QIODevice::WriteOnly );
+  extraFile.close();
+
+  QFile extraRootFile( projectDirExtra + "/" + "photoD.png" );
+  extraRootFile.open( QIODevice::WriteOnly );
+  extraRootFile.close();
+
+  // Client 2 uploads, Client 1 downloads
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Check existence of "photoD" in root and not existence of photoC in "photos"
+  QFile fileExtra2( photoPath + "/" + "photoC.jpg" );
+  QVERIFY( !fileExtra2.exists() );
+
+  QFile fileExtra3( projectDir + "/" + "photoD.png" );
+  QVERIFY( fileExtra3.exists() );
+
+  // Check that photos were not deleted for Client 1
+  QFile file2( photoPath + "/" + "photoA.jpg" );
+  QVERIFY( file2.exists() );
+
+  QFile file3( photoPath + "/" + "photoB.png" );
+  QVERIFY( file2.exists() );
+}
+
+void TestMerginApi::testAddSelectiveSyncToExistingProject()
+{
+  /*
+   * Case: Have a project with photos without mergin config, add it when both clients are using project already to simulate
+   *       users that add mergin config to existing projects.
+   *
+   * Procedure: Create project with photos, sync it to both clients, then let Client 1 add mergin config together with several
+   *            pictures and see if the new pictures are NOT synced.
+   */
+
+  // Create a project
+  QString projectName = "testAddSelectiveSyncToExistingProject";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPath( projectDir + "/photos" );
+  if ( !dir.exists( photoPath ) )
+    dir.mkpath( photoPath );
+
+  QFile file( photoPath + "/" + "photoA.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPath + "/" + "photoB.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  // Sync project for both clients, Client 2 should have both pictures
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  QString photoPathExtra( projectDirExtra + "/photos" );
+
+  QFile fileExtra( photoPathExtra + "/" + "photoA.jpg" );
+  QVERIFY( fileExtra.exists() );
+
+  QFile fileExtra1( photoPathExtra + "/" + "photoB.png" );
+  QVERIFY( fileExtra1.exists() );
+
+  // Add mergin-config.json to the project together with another image
+  QString configFilePath( projectDir + "/mergin-config.json" );
+  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-subfolder.json", configFilePath ) );
+
+  QFile file2( photoPath + "/" + "photoC.png" );
+  file2.open( QIODevice::WriteOnly );
+  file2.close();
+
+  // Sync project for both clients
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // With mergin-config, "photoC" should not exist for Client 2
+  QFile fileExtra2( photoPathExtra + "/" + "photoC.png" );
+  QVERIFY( !fileExtra2.exists() );
 }
 
 void TestMerginApi::testRegister()
