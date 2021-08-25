@@ -82,7 +82,7 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
   insertIntoItems( projectDiff.localAdded, ProjectChangelogStatus::Added, projectDir );
   insertIntoItems( projectDiff.localDeleted, ProjectChangelogStatus::Deleted, projectDir );
 
-  for ( QString file : projectDiff.localUpdated )
+  for ( const QString &file : projectDiff.localUpdated )
   {
     if ( MerginApi::isFileDiffable( file ) )
     {
@@ -129,13 +129,24 @@ bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
   if ( !projectInfo.projectDir.isEmpty() )
   {
     ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
-    if ( diff.localAdded.isEmpty() && diff.localUpdated.isEmpty() && diff.localDeleted.isEmpty() )
-      return false;
-    else
+
+    // photos that are not downloaded due to a selective sync would be shown as deleted
+    QSet<QString> locallyDeletedFiles;
+    MerginConfig config = MerginConfig::fromFile( projectInfo.projectDir );
+
+    for ( const QString &file : diff.localDeleted )
     {
-      infoProjectUpdated( diff, projectInfo.projectDir );
-      return true;
+      if ( !MerginApi::excludeFromSync( file, config ) )
+        locallyDeletedFiles << file;
     }
+    diff.localDeleted = locallyDeletedFiles;
+
+    bool hasLocalChanges = !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty();
+
+    if ( hasLocalChanges )
+      infoProjectUpdated( diff, projectInfo.projectDir );
+
+    return hasLocalChanges;
   }
   return false;
 }
