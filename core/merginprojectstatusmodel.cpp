@@ -130,17 +130,6 @@ bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
   {
     ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
 
-    // photos that are not downloaded due to a selective sync would be shown as deleted
-    QSet<QString> locallyDeletedFiles;
-    MerginConfig config = MerginConfig::fromFile( projectInfo.projectDir );
-
-    for ( const QString &file : diff.localDeleted )
-    {
-      if ( !MerginApi::excludeFromSync( file, config ) )
-        locallyDeletedFiles << file;
-    }
-    diff.localDeleted = locallyDeletedFiles;
-
     bool hasLocalChanges = !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty();
 
     if ( hasLocalChanges )

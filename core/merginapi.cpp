@@ -230,6 +230,16 @@ bool MerginApi::hasProjecFileExtension( const QString filePath )
   return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
 }
 
+bool MerginApi::apiSupportsSelectiveSync() const
+{
+  return mApiSupportsSelectiveSync;
+}
+
+void MerginApi::setApiSupportsSelectiveSync( bool newApiSupportsSelectiveSync )
+{
+  mApiSupportsSelectiveSync = newApiSupportsSelectiveSync;
+}
+
 bool MerginApi::apiSupportsSubscriptions() const
 {
   return mApiSupportsSubscriptions;
@@ -346,12 +356,12 @@ void MerginApi::cacheServerConfig()
     QByteArray data = r->readAll();
 
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Downloaded mergin config (%1 bytes)" ).arg( data.size() ) );
-    transaction.config = MerginConfig::fromJson( data, transaction.projectDir );
+    transaction.config = MerginConfig::fromJson( data );
 
     transaction.replyDownloadItem->deleteLater();
     transaction.replyDownloadItem = nullptr;
 
-    startProjectUpdate( projectFullName );
+    prepareDownloadConfig( projectFullName );
   }
   else
   {
@@ -366,12 +376,11 @@ void MerginApi::cacheServerConfig()
     transaction.replyDownloadItem = nullptr;
 
     // get rid of the temporary download dir where we may have left some downloaded files
-    QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
+    CoreUtils::removeDir( getTempProjectDir( projectFullName ) );
 
     if ( transaction.firstTimeDownload )
     {
-      Q_ASSERT( !transaction.projectDir.isEmpty() );
-      QDir( transaction.projectDir ).removeRecursively();
+      CoreUtils::removeDir( transaction.projectDir );
     }
 
     finishProjectSync( projectFullName, false );
@@ -570,6 +579,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyProjectInfo = reply;
+    mTransactionalStatus[projectFullName].configAllowed = mApiSupportsSelectiveSync;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -597,6 +607,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyUploadProjectInfo = reply;
     mTransactionalStatus[projectFullName].isInitialUpload = isInitialUpload;
+    mTransactionalStatus[projectFullName].configAllowed = mApiSupportsSelectiveSync;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -1171,7 +1182,9 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
-  return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir );
+  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+
+  return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -1822,22 +1835,15 @@ void MerginApi::prepareProjectUpdate( const QString &projectFullName, const QByt
 
   Q_ASSERT( !transaction.projectDir.isEmpty() );  // that would mean we do not have entry -> fail getting local files
 
-  QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
   MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
   MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
 
-  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Updating from version %1 to version %2" )
-                  .arg( oldServerProject.version ).arg( serverProject.version ) );
-
   transaction.projectMetadata = data;
   transaction.version = serverProject.version;
-  transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
-  CoreUtils::log( "pull " + projectFullName, transaction.diff.dump() );
 
-  bool serverContainsConfig = !serverProject.fileInfo( sMerginConfigFile ).path.isEmpty();
-  if ( serverContainsConfig )
+  if ( transaction.configAllowed )
   {
-    requestServerConfig( projectFullName );
+    prepareDownloadConfig( projectFullName );
   }
   else
   {
@@ -1850,16 +1856,27 @@ void MerginApi::startProjectUpdate( const QString &projectFullName )
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
   MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( transaction.projectMetadata );
+  MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
+  MerginConfig oldTransactionConfig = MerginConfig::fromFile( transaction.projectDir + "/" + sMerginConfigFile );
+
+  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Updating from version %1 to version %2" )
+                  .arg( oldServerProject.version ).arg( serverProject.version ) );
+
+  transaction.diff = compareProjectFiles(
+                       oldServerProject.files,
+                       serverProject.files,
+                       localFiles,
+                       transaction.projectDir,
+                       transaction.configAllowed,
+                       transaction.config,
+                       oldTransactionConfig );
+
+  CoreUtils::log( "pull " + projectFullName, transaction.diff.dump() );
 
   for ( QString filePath : transaction.diff.remoteAdded )
   {
-    if ( transaction.config.selectiveSyncEnabled )
-    {
-      if ( excludeFromSync( filePath, transaction.config ) ) // filter out files from selective sync
-        continue;
-    }
-
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.updateTasks << UpdateTask( UpdateTask::Copy, filePath, items );
@@ -1911,12 +1928,6 @@ void MerginApi::startProjectUpdate( const QString &projectFullName )
   // schedule removed files to be deleted
   for ( QString filePath : transaction.diff.remoteDeleted )
   {
-    if ( transaction.config.selectiveSyncEnabled )
-    {
-      if ( excludeFromSync( filePath, transaction.config ) ) // filter out files from selective sync
-        continue;
-    }
-
     transaction.updateTasks << UpdateTask( UpdateTask::Delete, filePath, QList<DownloadQueueItem>() );
   }
 
@@ -1940,6 +1951,97 @@ void MerginApi::startProjectUpdate( const QString &projectFullName )
 
   emit pullFilesStarted();
   downloadNextItem( projectFullName );
+}
+
+void MerginApi::prepareDownloadConfig( const QString &projectFullName )
+{
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  MerginProjectMetadata newServerVersion = MerginProjectMetadata::fromJson( transaction.projectMetadata );
+
+  const auto res = std::find_if( newServerVersion.files.begin(), newServerVersion.files.end(), []( const MerginFile & file )
+  {
+    return file.path == sMerginConfigFile;
+  } );
+  bool serverContainsConfig = res != newServerVersion.files.end();
+
+  if ( serverContainsConfig )
+  {
+    if ( !transaction.config.isValid )
+    {
+      // we should have server config but we do not have it yet
+      return requestServerConfig( projectFullName );
+    }
+  }
+
+  MerginProjectMetadata oldServerVersion = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
+
+  const auto resOld = std::find_if( oldServerVersion.files.begin(), oldServerVersion.files.end(), []( const MerginFile & file )
+  {
+    return file.path == sMerginConfigFile;
+  } );
+
+  bool previousVersionContainedConfig = ( resOld != oldServerVersion.files.end() ) && !transaction.firstTimeDownload;
+
+  if ( serverContainsConfig && previousVersionContainedConfig )
+  {
+    // config was there, check if there are changes
+    QString newChk = newServerVersion.fileInfo( sMerginConfigFile ).checksum;
+    QString oldChk = oldServerVersion.fileInfo( sMerginConfigFile ).checksum;
+
+    if ( newChk == oldChk )
+    {
+      // config files are the same
+    }
+    else
+    {
+      // config was changed, but what changed?
+      MerginConfig oldConfig = MerginConfig::fromFile( transaction.projectDir + "/" + MerginApi::sMerginConfigFile );
+
+      if ( oldConfig.selectiveSyncEnabled != transaction.config.selectiveSyncEnabled )
+      {
+        // selective sync was enabled/disabled
+        if ( transaction.config.selectiveSyncEnabled )
+        {
+          CoreUtils::log( "MerginConfig", "Selective sync has been enabled" );
+        }
+        else
+        {
+          CoreUtils::log( "MerginConfig", "Selective sync has been disabled, downloading missing files." );
+          transaction.config.downloadMissingFiles = true;
+        }
+      }
+      else if ( oldConfig.selectiveSyncDir != transaction.config.selectiveSyncDir )
+      {
+        CoreUtils::log( "MerginConfig", "Selective sync directory has changed, downloading missing files." );
+        transaction.config.downloadMissingFiles = true;
+      }
+      else
+      {
+        CoreUtils::log( "MerginConfig", "Unknown change in config file, continuing with latest version." );
+      }
+    }
+  }
+  else if ( serverContainsConfig )
+  {
+    CoreUtils::log( "MerginConfig", "Detected new config file." );
+  }
+  else if ( previousVersionContainedConfig ) // and current does not
+  {
+    CoreUtils::log( "MerginConfig", "Config file was removed, downloading missing files." );
+    transaction.config.downloadMissingFiles = true;
+  }
+  else // no config in last versions
+  {
+    // update like without config
+    transaction.configAllowed = false;
+    transaction.config.isValid = false;
+
+    // if it would be possible to add mergin-config locally, it needs to be checked here
+  }
+
+  startProjectUpdate( projectFullName );
 }
 
 void MerginApi::requestServerConfig( const QString &projectFullName )
@@ -2042,9 +2144,22 @@ void MerginApi::uploadInfoReplyFinished()
 
     QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-    transaction.config = MerginConfig::fromFile( transaction.projectDir );
 
-    transaction.diff = compareProjectFiles( oldServerProject.files, serverProject.files, localFiles, transaction.projectDir );
+    // Cache mergin-config, since we are on the most recent version, it is sufficient to just read the local version
+    if ( transaction.configAllowed )
+    {
+      transaction.config = MerginConfig::fromFile( transaction.projectDir + "/" + MerginApi::sMerginConfigFile );
+    }
+
+    transaction.diff = compareProjectFiles(
+                         oldServerProject.files,
+                         serverProject.files,
+                         localFiles,
+                         transaction.projectDir,
+                         transaction.configAllowed,
+                         transaction.config
+                       );
+
     CoreUtils::log( "push " + projectFullName, transaction.diff.dump() );
 
     // TODO: make sure there are no remote files to add/update/remove nor conflicts
@@ -2099,14 +2214,9 @@ void MerginApi::uploadInfoReplyFinished()
 
       updatedMerginFiles.append( merginFile );
     }
+
     for ( QString filePath : transaction.diff.localDeleted )
     {
-      if ( transaction.config.selectiveSyncEnabled )
-      {
-        if ( excludeFromSync( filePath, transaction.config ) ) // filter out files from selective sync
-          continue;
-      }
-
       MerginFile merginFile = findFile( filePath, serverProject.files );
       deletedMerginFiles.append( merginFile );
     }
@@ -2326,7 +2436,15 @@ void MerginApi::getSubscriptionInfoFinished()
   r->deleteLater();
 }
 
-ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir )
+ProjectDiff MerginApi::compareProjectFiles(
+  const QList<MerginFile> &oldServerFiles,
+  const QList<MerginFile> &newServerFiles,
+  const QList<MerginFile> &localFiles,
+  const QString &projectDir,
+  bool allowConfig,
+  const MerginConfig &config,
+  const MerginConfig &lastSyncConfig
+)
 {
   ProjectDiff diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
@@ -2359,7 +2477,7 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
       if ( chkOld == chkLocal )
       {
         // R-D
-        diff.remoteDeleted << filePath;
+        diff.remoteDeleted << filePath; // here (ak si to nikdy nemal, ani to nemaz) -> skusim to bez toho
       }
       else
       {
@@ -2451,7 +2569,27 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
       if ( oldServerFilesMap.value( file.path ).checksum == file.checksum )
       {
         // L-D
-        diff.localDeleted << file.path;
+        if ( allowConfig )
+        {
+          bool shouldBeExcludedFromSync = MerginApi::excludeFromSync( file.path, config );
+          if ( shouldBeExcludedFromSync )
+          {
+            continue;
+          }
+
+          // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
+          bool previouslyIgnoredButShouldDownload = \
+              config.downloadMissingFiles &&
+              lastSyncConfig.isValid &&
+              MerginApi::excludeFromSync( file.path, lastSyncConfig );
+
+          if ( previouslyIgnoredButShouldDownload )
+          {
+            diff.remoteAdded << file.path;
+            continue;
+          }
+        }
+        diff.localDeleted << file.path; // here (nechceme oznacit fotky, ktore nemame lokalne, za vymazane, su na serveri)
       }
       else
       {
@@ -2462,7 +2600,14 @@ ProjectDiff MerginApi::compareProjectFiles( const QList<MerginFile> &oldServerFi
     else
     {
       // R-A
-      diff.remoteAdded << file.path;
+      if ( allowConfig )
+      {
+        if ( MerginApi::excludeFromSync( file.path, config ) )
+        {
+          continue;
+        }
+      }
+      diff.remoteAdded << file.path; // here (nechceme stiahnut fotky, ktore ignorujeme a pridal ich niekto iny)
     }
 
     if ( hasOldServer )
@@ -2706,7 +2851,7 @@ bool MerginApi::isInIgnore( const QFileInfo &info )
 
 bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &config )
 {
-  if ( config.selectiveSyncEnabled )
+  if ( config.isValid && config.selectiveSyncEnabled )
   {
     QFileInfo info( filePath );
 
@@ -2765,43 +2910,4 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, i
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
-}
-
-MerginConfig MerginConfig::fromJson( const QByteArray &data, const QString &projectDir )
-{
-  QJsonDocument doc = QJsonDocument::fromJson( data );
-  MerginConfig config;
-
-  if ( doc.isObject() )
-  {
-    QJsonObject docObj = doc.object();
-    config.selectiveSyncEnabled = docObj.value( QStringLiteral( "input-selective-sync" ) ).toBool( false );
-    config.selectiveSyncDir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
-  }
-  else
-  {
-    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Invalid content of the config file!" ) );
-  }
-
-  return config;
-}
-
-MerginConfig MerginConfig::fromFile( const QString &projectDir )
-{
-  QString configFilePath( projectDir + "/" + MerginApi::sMerginConfigFile );
-
-  MerginConfig config;
-  QFile file( configFilePath );
-
-  if ( file.open( QIODevice::ReadOnly ) )
-  {
-    QByteArray data = file.readAll();
-    config = MerginConfig::fromJson( data, projectDir );
-  }
-  else
-  {
-    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Project does not contain a config file" ) );
-  }
-
-  return config;
 }
