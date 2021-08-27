@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "merginprojectmetadata.h"
+#include "coreutils.h"
 
 #include <QDebug>
 #include <QJsonArray>
@@ -141,4 +142,42 @@ MerginFile MerginProjectMetadata::fileInfo( const QString &filePath ) const
   }
   qDebug() << "requested fileInfo() for non-existant file! " << filePath;
   return MerginFile();
+}
+
+MerginConfig MerginConfig::fromJson( const QByteArray &data )
+{
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  MerginConfig config;
+
+  if ( doc.isObject() )
+  {
+    QJsonObject docObj = doc.object();
+    config.selectiveSyncEnabled = docObj.value( QStringLiteral( "input-selective-sync" ) ).toBool( false );
+    config.selectiveSyncDir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
+    config.isValid = true;
+  }
+  else
+  {
+    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Invalid content of a config file!" ) );
+  }
+
+  return config;
+}
+
+MerginConfig MerginConfig::fromFile( const QString &filePath )
+{
+  MerginConfig config;
+  QFile file( filePath );
+
+  if ( file.open( QIODevice::ReadOnly ) )
+  {
+    QByteArray data = file.readAll();
+    config = MerginConfig::fromJson( data );
+  }
+  else
+  {
+    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Project does not contain a config file on path: %1" ).arg( filePath ) );
+  }
+
+  return config;
 }

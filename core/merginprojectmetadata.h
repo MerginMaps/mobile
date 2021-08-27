@@ -42,6 +42,17 @@ struct MerginFile
   static MerginFile fromJsonObject( const QJsonObject &merginFileInfo );
 };
 
+//! MerginConfig stored in .mergin-config.json, describing optional sync behavior
+struct MerginConfig
+{
+  bool selectiveSyncEnabled = false;
+  QString selectiveSyncDir;
+  bool isValid = false;
+  bool downloadMissingFiles = false; //!< indicates that this sync must download all files that are missing (excluding selective dir), because config was removed/changed
+
+  static MerginConfig fromJson( const QByteArray &data );
+  static MerginConfig fromFile( const QString &projectDir );
+};
 
 //! Metadata read from project info reply or read from cached local .mergin.json file
 struct MerginProjectMetadata

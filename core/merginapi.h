@@ -132,16 +132,6 @@ struct UpdateTask
   QList<DownloadQueueItem> data;  //!< list of chunks / list of diffs to apply
 };
 
-//! MerginConfig stored in .mergin-config.json
-struct MerginConfig
-{
-  bool selectiveSyncEnabled = false;
-  QString selectiveSyncDir;
-
-  static MerginConfig fromJson( const QByteArray &data, const QString &projectDir );
-  static MerginConfig fromFile( const QString &projectDir );
-};
-
 struct TransactionStatus
 {
   qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
@@ -176,7 +166,8 @@ struct TransactionStatus
 
   ProjectDiff diff;
 
-  MerginConfig config; //!< defines additional behavior of the transaction such as selective sync
+  bool configAllowed = false; //!< if true, seeks for mergin-config and alters synchronization process based on it
+  MerginConfig config; //!< defines additional behavior of the transaction (e.g. selective sync)
 };
 
 typedef QHash<QString, TransactionStatus> Transactions;
@@ -191,6 +182,8 @@ class MerginApi: public QObject
     Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
+    // apiSupportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
+    Q_PROPERTY( bool apiSupportsSelectiveSync READ apiSupportsSelectiveSync NOTIFY apiSupportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
 
   public:
@@ -252,7 +245,8 @@ class MerginApi: public QObject
      * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
-     * \param projectName  Project's name used in request.
+     * \param projectName Project's name used in request.
+     * \param isInitialUpload indicates if this is first upload of the project (project creation)
      */
     Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName, bool isInitialUpload = false );
 
@@ -373,9 +367,22 @@ class MerginApi: public QObject
      * The function assigns each of the files to the kind of change that happened to it.
      * Files that have not been changed are not present in the final diff.
      *
+     * Optionally, it is possible to set "allowConfig" to true, which enables to alter synchronization logic. Selective sync
+     * is one option, it ignores changes (adding / removing) to files in specified folder. These files are only uploaded to server.
+     * "lastSyncConfig" represents config used during last synchronization. It is used to find files that needs to be downloaded
+     *  after changes in "config"
+     *
      * Without the three sources it is possible to miss some of the updates that need to be handled (e.g. conflicts)
      */
-    static ProjectDiff compareProjectFiles( const QList<MerginFile> &oldServerFiles, const QList<MerginFile> &newServerFiles, const QList<MerginFile> &localFiles, const QString &projectDir );
+    static ProjectDiff compareProjectFiles(
+      const QList<MerginFile> &oldServerFiles,
+      const QList<MerginFile> &newServerFiles,
+      const QList<MerginFile> &localFiles,
+      const QString &projectDir,
+      bool allowConfig = false,
+      const MerginConfig &config = MerginConfig(),
+      const MerginConfig &lastSyncConfig = MerginConfig()
+    );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
@@ -416,8 +423,12 @@ class MerginApi: public QObject
     */
     static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
-  signals:
+    bool apiSupportsSelectiveSync() const;
+    void setApiSupportsSelectiveSync( bool newApiSupportsSelectiveSync );
+
+signals:
     void apiSupportsSubscriptionsChanged();
+    void apiSupportsSelectiveSyncChanged();
 
     void listProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
@@ -563,6 +574,8 @@ class MerginApi: public QObject
 
     void startProjectUpdate( const QString &projectFullName );
 
+    //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project update
+    void prepareDownloadConfig( const QString &projectFullName );
     void requestServerConfig( const QString &projectFullName );
 
     //! Starts download request of another item
@@ -599,6 +612,7 @@ class MerginApi: public QObject
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
+    bool mApiSupportsSelectiveSync = true;
 
     static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
