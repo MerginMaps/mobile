@@ -108,7 +108,10 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSync" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncSubfolder" );
-  deleteRemoteProject( mApiExtra, mUsername, "testAddSelectiveSyncToExistingProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncAddConfigToExistingProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncRemoveConfig" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncChangeSyncFolder" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncDisabledInConfig" );
 
   deleteLocalDir( mApi, "testExcludeFromSync" );
 }
@@ -1687,7 +1690,7 @@ void TestMerginApi::testSelectiveSyncSubfolder()
   QVERIFY( file2.exists() );
 }
 
-void TestMerginApi::testAddSelectiveSyncToExistingProject()
+void TestMerginApi::testSelectiveSyncAddConfigToExistingProject()
 {
   /*
    * Case: Have a project with photos without mergin config, add it when both clients are using project already to simulate
@@ -1698,7 +1701,7 @@ void TestMerginApi::testAddSelectiveSyncToExistingProject()
    */
 
   // Create a project
-  QString projectName = "testAddSelectiveSyncToExistingProject";
+  QString projectName = "testSelectiveSyncAddConfigToExistingProject";
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
 
@@ -1748,6 +1751,436 @@ void TestMerginApi::testAddSelectiveSyncToExistingProject()
   QVERIFY( !fileExtra2.exists() );
 }
 
+void TestMerginApi::testSelectiveSyncRemoveConfig()
+{
+  /*
+   * Case: Remove mergin-config from an existing project with photos.
+   *
+   * We will create another API client that will serve as a server mirror, it will not use selective sync,
+   * but will simulate as if someone manipulated project from browser via Mergin
+   */
+
+  QString serverMirrorDataPath = mApi->projectsPath() + "/" + "serverMirror";
+  QDir serverMirrorDataDir( serverMirrorDataPath );
+  if ( !serverMirrorDataDir.exists() )
+    serverMirrorDataDir.mkpath( serverMirrorDataPath );
+
+  LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
+  MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
+  serverMirror->setApiSupportsSelectiveSync( false );
+
+  // Create a project with photos and mergin-config
+  QString projectName = "testSelectiveSyncRemoveConfig";
+
+  QString projectClient1 = mApi->projectsPath() + "/" + projectName;
+  QString projectClient2 = mApiExtra->projectsPath() + "/" + projectName;
+  QString projectServer = serverMirror->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPathClient1( projectClient1 + "/photos" );
+  if ( !dir.exists( photoPathClient1 ) )
+    dir.mkpath( photoPathClient1 );
+
+  QFile file( photoPathClient1 + "/" + "photoA.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPathClient1 + "/" + "photoB.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  QString configFilePath = projectServer + "/" + "mergin-config.json";
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "photos" }
+  } ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  QString photoPathClient2( projectClient2 + "/photos" );
+
+  QFile fileExtra( photoPathClient2 + "/" + "photoA.jpg" );
+  QVERIFY( !fileExtra.exists() );
+
+  QFile fileExtra1( photoPathClient2 + "/" + "photoB.png" );
+  QVERIFY( !fileExtra1.exists() );
+
+  // Client 2 adds another picture
+  QDir photoDirExtra( photoPathClient2 );
+  if ( !photoDirExtra.exists() )
+    photoDirExtra.mkpath( photoPathClient2 );
+
+  QFile file2( photoPathClient2 + "/" + "photoC.png" );
+  file2.open( QIODevice::WriteOnly );
+  file2.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // Let's remove mergin config
+  InputUtils::removeFile( configFilePath );
+  QVERIFY( !InputUtils::fileExists( configFilePath ) );
+
+  // Sync removed config
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName ); // download back to apply the changes -> should download photos
+
+  QFile fextra( photoPathClient2 + "/" + "photoC2-extra.png" );
+  fextra.open( QIODevice::WriteOnly );
+  fextra.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QString photoPathServer = serverMirrorDataPath + "/" + projectName + "/" + "photos";
+
+  // check that all clients have all photos
+  QStringList photos;
+  photos << "photoA.jpg" << "photoB.png" << "photoC.png" << "photoC2-extra.png";
+  for ( const QString &photo : photos )
+  {
+    QFile photo1( photoPathClient1 + "/" + photo );
+    QFile photo2( photoPathClient2 + "/" + photo );
+    QFile photo3( photoPathServer + "/" + photo );
+
+    QVERIFY( photo1.exists() );
+    QVERIFY( photo2.exists() );
+    QVERIFY( photo3.exists() );
+  }
+
+  delete serverMirror;
+  delete serverMirrorProjects;
+}
+
+void TestMerginApi::testSelectiveSyncDisabledInConfig()
+{
+  /*
+   * Case: Disable selective sync in mergin-config in an existing project with photos and selective sync previously enabled.
+   *
+   * We will create another API client that will serve as a server mirror, it will not use selective sync,
+   * but will simulate as if someone manipulated project from browser via Mergin
+   */
+  QString serverMirrorDataPath = mApi->projectsPath() + "/" + "serverMirror";
+  QDir serverMirrorDataDir( serverMirrorDataPath );
+  if ( !serverMirrorDataDir.exists() )
+    serverMirrorDataDir.mkpath( serverMirrorDataPath );
+
+  LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
+  MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
+  serverMirror->setApiSupportsSelectiveSync( false );
+
+  // Create a project with photos and mergin-config
+  QString projectName = "testSelectiveSyncDisabledInConfig";
+
+  QString projectClient1 = mApi->projectsPath() + "/" + projectName;
+  QString projectClient2 = mApiExtra->projectsPath() + "/" + projectName;
+  QString projectServer = serverMirror->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPathClient1( projectClient1 + "/" + "photos" );
+  if ( !dir.exists( photoPathClient1 ) )
+    dir.mkpath( photoPathClient1 );
+
+  QFile file( photoPathClient1 + "/" + "photoA.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPathClient1 + "/" + "photoB.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  QString configFilePath = projectServer + "/" + "mergin-config.json";
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "photos" }
+  } ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  QString photoPathClient2( projectClient2 + "/photos" );
+
+  QFile fileExtra( photoPathClient2 + "/" + "photoA.jpg" );
+  QVERIFY( !fileExtra.exists() );
+
+  QFile fileExtra1( photoPathClient2 + "/" + "photoB.png" );
+  QVERIFY( !fileExtra1.exists() );
+
+  QDir photoDirExtra( photoPathClient2 );
+  if ( !photoDirExtra.exists() )
+    photoDirExtra.mkpath( photoPathClient2 );
+
+  // simulate some traffic, let both clients create few photos several times (so that project has longer history)
+  for ( int i : { 1, 2, 3, 4, 5 } )
+  {
+    QFile f1( photoPathClient1 + "/" + QString( "photoC1-%1.png" ).arg( i ) );
+    f1.open( QIODevice::WriteOnly );
+    f1.close();
+
+    QFile f2( photoPathClient2 + "/" + QString( "photoC2-%1.png" ).arg( i ) );
+    f2.open( QIODevice::WriteOnly );
+    f2.close();
+
+    uploadRemoteProject( mApiExtra, mUsername, projectName );
+    uploadRemoteProject( mApi, mUsername, projectName );
+  }
+
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // Let's disable selective sync
+  InputUtils::removeFile( configFilePath );
+  QVERIFY( !InputUtils::fileExists( configFilePath ) );
+
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", false },
+    { "input-selective-sync-dir", "photos" }
+  } ) );
+
+  // Sync changed config
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName ); // download back to apply the changes -> should download photos
+
+  QFile fextra( photoPathClient2 + "/" + "photoC2-extra.png" );
+  fextra.open( QIODevice::WriteOnly );
+  fextra.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // check that all clients have photos
+  QStringList photos;
+  photos << "photoA.jpg" << "photoB.png" << "photoC1-5.png" << "photoC2-3.png" << "photoC2-extra.png";
+  for ( const QString &photo : photos )
+  {
+    QFile photo1( photoPathClient1 + "/" + photo );
+    QFile photo2( photoPathClient2 + "/" + photo );
+
+    QVERIFY( photo1.exists() );
+    QVERIFY( photo2.exists() );
+  }
+
+  // allow sync again and see if photos will no longer be downloaded
+  InputUtils::removeFile( configFilePath );
+  QVERIFY( !InputUtils::fileExists( configFilePath ) );
+
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "photos" }
+  } ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+
+  QFile f( photoPathClient2 + "/" + "photoC2-should-not-download.png" );
+  f.open( QIODevice::WriteOnly );
+  f.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // File should be on server mirror and should not be on client 1
+  QFile fverify( serverMirrorDataPath + "/" + projectName + "/" + "photos" + "/" + "photoC2-should-not-download.png" );
+  QVERIFY( fverify.exists() );
+
+  QFile fverify2( photoPathClient1 + "/" + "photoC2-should-not-download.png" );
+  QVERIFY( !fverify2.exists() );
+
+  delete serverMirror;
+  delete serverMirrorProjects;
+}
+
+void TestMerginApi::testSelectiveSyncChangeSyncFolder()
+{
+  /*
+   * Case: Change selective sync folder in mergin-config in an existing project with photos and selective sync enabled.
+   *
+   * We will create another API client that will serve as a server mirror, it will not use selective sync,
+   * but will simulate as if someone manipulated project from browser via Mergin
+   */
+  QString serverMirrorDataPath = mApi->projectsPath() + "/" + "serverMirror";
+  QDir serverMirrorDataDir( serverMirrorDataPath );
+  if ( !serverMirrorDataDir.exists() )
+    serverMirrorDataDir.mkpath( serverMirrorDataPath );
+
+  LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
+  MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
+  serverMirror->setApiSupportsSelectiveSync( false );
+
+  // Create a project with photos and mergin-config
+  QString projectName = "testSelectiveSyncChangeSyncFolder";
+
+  QString projectClient1 = mApi->projectsPath() + "/" + projectName;
+  QString projectClient2 = mApiExtra->projectsPath() + "/" + projectName;
+  QString projectServer = serverMirror->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPathClient1( projectClient1 + "/" + "photos" );
+  if ( !dir.exists( photoPathClient1 ) )
+    dir.mkpath( photoPathClient1 );
+
+  QFile file( photoPathClient1 + "/" + "photoC1-A.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPathClient1 + "/" + "photoC1-B.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  QString configFilePath = projectServer + "/" + "mergin-config.json";
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "" }
+  } ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // client 2 adds photos to project root, client 1 to photos subfolder
+  QString photoPathClient2( projectClient2 );
+
+  QFile fileExtra( photoPathClient2 + "/" + "photoC1-A.jpg" );
+  QVERIFY( !fileExtra.exists() );
+
+  QFile fileExtra1( photoPathClient2 + "/" + "photoC1-B.png" );
+  QVERIFY( !fileExtra1.exists() );
+
+  QDir photoDirExtra( photoPathClient2 );
+  if ( !photoDirExtra.exists() )
+    photoDirExtra.mkpath( photoPathClient2 );
+
+  // simulate some traffic, let both clients create few photos several times (so that project has longer history)
+  for ( int i : { 1, 2, 3, 4, 5 } )
+  {
+    QFile f1( photoPathClient1 + "/" + QString( "photoC1-%1.png" ).arg( i ) );
+    f1.open( QIODevice::WriteOnly );
+    f1.close();
+
+    QFile f2( photoPathClient2 + "/" + QString( "photoC2-%1.png" ).arg( i ) );
+    f2.open( QIODevice::WriteOnly );
+    f2.close();
+
+    uploadRemoteProject( mApiExtra, mUsername, projectName );
+    uploadRemoteProject( mApi, mUsername, projectName );
+  }
+
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // Let's change selective sync folder only to photos subfolder
+  InputUtils::removeFile( configFilePath );
+  QVERIFY( !InputUtils::fileExists( configFilePath ) );
+
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "photos" }
+  } ) );
+
+  // Sync changed config
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+
+  // Client 1 should now download all missing files from project root directory
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  QFile fextra( photoPathClient2 + "/" + "photoC2-extra.png" );
+  fextra.open( QIODevice::WriteOnly );
+  fextra.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  /*
+   * Check that:
+   *  1) Client 1 have all photos created by Client 2 (in project root)
+   *  2) Client 2 do not have any photo in "photos" subfolder
+   *  3) All photos are on the server mirror
+   */
+
+  QString serverMirrorProjectPath = serverMirrorDataPath + "/" + projectName;
+
+  QStringList photosInRoot, photosInSubfolder;
+  photosInRoot << "photoC2-1.png" << "photoC2-5.png" << "photoC2-extra.png";
+  photosInSubfolder << "photoC1-A.jpg" << "photoC1-B.png" << "photoC1-1.png" << "photoC1-5.png";
+
+  for ( const QString &photo : photosInRoot )
+  {
+    QFile f1( projectClient1 + "/" + photo );
+    QFile f2( serverMirrorProjectPath + "/" + photo );
+
+    QVERIFY( f1.exists() );
+    QVERIFY( f2.exists() );
+  }
+
+  for ( const QString &photo : photosInSubfolder )
+  {
+    QFile f1( serverMirrorProjectPath + "/" + "photos" + "/" + photo );
+    QFile f2( photoPathClient2 + "/" + "photos" + "/" + photo );
+
+    QVERIFY( f1.exists() );
+    QVERIFY( !f2.exists() );
+  }
+
+  // change sync folder back to project root to see if photos in root will no longer be downloaded for Client 1
+  InputUtils::removeFile( configFilePath );
+  QVERIFY( !InputUtils::fileExists( configFilePath ) );
+
+  QVERIFY( createJsonFile( configFilePath,
+  {
+    { "input-selective-sync", true },
+    { "input-selective-sync-dir", "" }
+  } ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+
+  QFile f( photoPathClient2 + "/" + "photoC2-should-not-download.png" );
+  f.open( QIODevice::WriteOnly );
+  f.close();
+
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // File should be on server mirror and should not be on client 1
+  QFile fverify( serverMirrorProjectPath + "/" + "photoC2-should-not-download.png" );
+  QVERIFY( fverify.exists() );
+
+  QFile fverify2( projectClient1 + "/" + "photoC2-should-not-download.png" );
+  QVERIFY( !fverify2.exists() );
+
+  delete serverMirror;
+  delete serverMirrorProjects;
+}
+
 void TestMerginApi::testRegister()
 {
   QString password = mApi->userAuth()->password();
@@ -1790,6 +2223,7 @@ void TestMerginApi::testExcludeFromSync()
   MerginConfig config;
   config.selectiveSyncEnabled = true;
   config.selectiveSyncDir = selectiveSyncDir;
+  config.isValid = true;
 
   QVERIFY( !mApi->excludeFromSync( selectiveSyncDir, config ) );
   QVERIFY( !mApi->excludeFromSync( selectiveSyncDir + "/data.gpkg", config ) );
@@ -1923,6 +2357,18 @@ void TestMerginApi::createLocalProject( const QString projectDir )
   bool r0 = QFile::copy( mTestDataPath + "/diff_project/base.gpkg", projectDir + "/base.gpkg" );
 
   QVERIFY( r0 );
+}
+
+bool TestMerginApi::createJsonFile( const QString &path, const QVariantMap &params )
+{
+  QJsonObject json = QJsonObject::fromVariantMap( params );
+  QJsonDocument doc( json );
+  QByteArray data = doc.toJson();
+
+  writeFileContent( path, data );
+
+  QFile config( path );
+  return config.exists();
 }
 
 void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes modelType )
