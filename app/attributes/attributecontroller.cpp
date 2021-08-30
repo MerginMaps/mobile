@@ -289,7 +289,11 @@ void AttributeController::flatten(
         }
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
-        const QString label = relationField->label();
+        QString label = relationField->label();
+        if ( label.isEmpty() )
+        {
+          label = associatedRelation.name();
+        }
 
         std::shared_ptr<FormItem> formItemData =
           std::shared_ptr<FormItem>(
