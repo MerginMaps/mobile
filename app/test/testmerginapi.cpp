@@ -1767,7 +1767,7 @@ void TestMerginApi::testSelectiveSyncRemoveConfig()
 
   LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
   MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
-  serverMirror->setApiSupportsSelectiveSync( false );
+  serverMirror->setSupportsSelectiveSync( false );
 
   // Create a project with photos and mergin-config
   QString projectName = "testSelectiveSyncRemoveConfig";
@@ -1878,7 +1878,7 @@ void TestMerginApi::testSelectiveSyncDisabledInConfig()
 
   LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
   MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
-  serverMirror->setApiSupportsSelectiveSync( false );
+  serverMirror->setSupportsSelectiveSync( false );
 
   // Create a project with photos and mergin-config
   QString projectName = "testSelectiveSyncDisabledInConfig";
@@ -2026,7 +2026,7 @@ void TestMerginApi::testSelectiveSyncChangeSyncFolder()
 
   LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
   MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
-  serverMirror->setApiSupportsSelectiveSync( false );
+  serverMirror->setSupportsSelectiveSync( false );
 
   // Create a project with photos and mergin-config
   QString projectName = "testSelectiveSyncChangeSyncFolder";

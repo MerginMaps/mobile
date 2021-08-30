@@ -230,14 +230,14 @@ bool MerginApi::hasProjecFileExtension( const QString filePath )
   return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
 }
 
-bool MerginApi::apiSupportsSelectiveSync() const
+bool MerginApi::supportsSelectiveSync() const
 {
-  return mApiSupportsSelectiveSync;
+  return mSupportsSelectiveSync;
 }
 
-void MerginApi::setApiSupportsSelectiveSync( bool newApiSupportsSelectiveSync )
+void MerginApi::setSupportsSelectiveSync( bool supportsSelectiveSync )
 {
-  mApiSupportsSelectiveSync = newApiSupportsSelectiveSync;
+  mSupportsSelectiveSync = supportsSelectiveSync;
 }
 
 bool MerginApi::apiSupportsSubscriptions() const
@@ -579,7 +579,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyProjectInfo = reply;
-    mTransactionalStatus[projectFullName].configAllowed = mApiSupportsSelectiveSync;
+    mTransactionalStatus[projectFullName].configAllowed = mSupportsSelectiveSync;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -607,7 +607,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyUploadProjectInfo = reply;
     mTransactionalStatus[projectFullName].isInitialUpload = isInitialUpload;
-    mTransactionalStatus[projectFullName].configAllowed = mApiSupportsSelectiveSync;
+    mTransactionalStatus[projectFullName].configAllowed = mSupportsSelectiveSync;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -2477,7 +2477,7 @@ ProjectDiff MerginApi::compareProjectFiles(
       if ( chkOld == chkLocal )
       {
         // R-D
-        diff.remoteDeleted << filePath; // here (ak si to nikdy nemal, ani to nemaz) -> skusim to bez toho
+        diff.remoteDeleted << filePath;
       }
       else
       {
@@ -2589,7 +2589,7 @@ ProjectDiff MerginApi::compareProjectFiles(
             continue;
           }
         }
-        diff.localDeleted << file.path; // here (nechceme oznacit fotky, ktore nemame lokalne, za vymazane, su na serveri)
+        diff.localDeleted << file.path;
       }
       else
       {
@@ -2607,7 +2607,7 @@ ProjectDiff MerginApi::compareProjectFiles(
           continue;
         }
       }
-      diff.remoteAdded << file.path; // here (nechceme stiahnut fotky, ktore ignorujeme a pridal ich niekto iny)
+      diff.remoteAdded << file.path;
     }
 
     if ( hasOldServer )

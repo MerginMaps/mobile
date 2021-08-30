@@ -182,8 +182,8 @@ class MerginApi: public QObject
     Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
-    // apiSupportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
-    Q_PROPERTY( bool apiSupportsSelectiveSync READ apiSupportsSelectiveSync NOTIFY apiSupportsSelectiveSyncChanged )
+    // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
+    Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
 
   public:
@@ -423,12 +423,12 @@ class MerginApi: public QObject
     */
     static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
-    bool apiSupportsSelectiveSync() const;
-    void setApiSupportsSelectiveSync( bool newApiSupportsSelectiveSync );
+    bool supportsSelectiveSync() const;
+    void setSupportsSelectiveSync( bool supportsSelectiveSync );
 
   signals:
     void apiSupportsSubscriptionsChanged();
-    void apiSupportsSelectiveSyncChanged();
+    void supportsSelectiveSyncChanged();
 
     void listProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
@@ -612,7 +612,7 @@ class MerginApi: public QObject
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
-    bool mApiSupportsSelectiveSync = true;
+    bool mSupportsSelectiveSync = true;
 
     static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
