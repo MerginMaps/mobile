@@ -68,7 +68,10 @@ class TestMerginApi: public QObject
     void testMigrateDetachProject();
     void testSelectiveSync();
     void testSelectiveSyncSubfolder();
-    void testAddSelectiveSyncToExistingProject();
+    void testSelectiveSyncAddConfigToExistingProject();
+    void testSelectiveSyncRemoveConfig();
+    void testSelectiveSyncDisabledInConfig();
+    void testSelectiveSyncChangeSyncFolder();
 
     void testRegister();
 
@@ -115,6 +118,9 @@ class TestMerginApi: public QObject
 
     //! Creates local project in given project directory
     void createLocalProject( const QString projectDir );
+
+    //! Creates json file based on params in path. Returns true is successful, false otherwise
+    bool createJsonFile( const QString &path, const QVariantMap &params );
 
     void refreshProjectsModel( const ProjectsModel::ProjectModelTypes modelType = ProjectsModel::LocalProjectsModel );
 };

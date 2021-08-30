@@ -426,7 +426,7 @@ class MerginApi: public QObject
     bool apiSupportsSelectiveSync() const;
     void setApiSupportsSelectiveSync( bool newApiSupportsSelectiveSync );
 
-signals:
+  signals:
     void apiSupportsSubscriptionsChanged();
     void apiSupportsSelectiveSyncChanged();
 

@@ -18,7 +18,7 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testAttributePreviewController
 NFAILURES=$(($NFAILURES+$?))
 
-$INPUT_EXECUTABLE --testMerginApi
+$INPUT_EXECUTABLE --testMerginApi -maxwarnings 0
 NFAILURES=$(($NFAILURES+$?))
 
 $INPUT_EXECUTABLE --testPurchasing
