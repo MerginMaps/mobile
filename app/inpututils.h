@@ -392,7 +392,7 @@ class InputUtils: public QObject
      * @return QgsEditorWidgetSetup for given field.
      */
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field );
-    static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType );
+    static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType, const QVariantMap &additionalArgs = QVariantMap() );
 
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );

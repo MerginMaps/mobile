@@ -181,6 +181,7 @@ class  AttributeController : public QObject
     void setHasAnyChanges( bool hasChanges );
     void updateFieldValuesValidity();
     void setFieldValuesValid( bool valid );
+    void discoverRelations( QgsAttributeEditorContainer *container );
 
     bool isValidTabId( int id ) const;
     bool isValidFormId( const QUuid &id ) const;

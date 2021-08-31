@@ -804,7 +804,7 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
     return getEditorWidgetSetup( field, QStringLiteral( "TextEdit" ) );
 }
 
-const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &field, const QString &widgetType )
+const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &field, const QString &widgetType, const QVariantMap &additionalArgs )
 {
   if ( field.name() == QStringLiteral( "fid" ) )
     return QgsEditorWidgetSetup( QStringLiteral( "Hidden" ), QVariantMap() );
@@ -816,6 +816,8 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
   else
   {
     QVariantMap config;
+    config = config.unite( additionalArgs );
+
     if ( widgetType == QStringLiteral( "TextEdit" ) )
     {
       config.insert( QStringLiteral( "isMultiline" ), false );
@@ -841,6 +843,10 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
       config.insert( QStringLiteral( "PropertyCollection" ), QVariantMap() );
       QgsPropertyCollection collection;
       config.insert( QStringLiteral( "PropertyCollection" ), collection.toVariant( QgsPropertiesDefinition() ) );
+    }
+    else if ( widgetType == QStringLiteral( "RelationReference" ) )
+    {
+      config.insert( QStringLiteral( "AllowNULL" ), true );
     }
 
     return QgsEditorWidgetSetup( widgetType, config );
