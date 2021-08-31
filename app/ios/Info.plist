@@ -43,17 +43,18 @@
 		<string>en</string>
 		<string>es</string>
 		<string>fr</string>
-        <string>de</string>
-        <string>it</string>
-        <string>pl</string>
-        <string>pt_PT</string>
-        <string>hr_HR</string>
-        <string>ca</string>
-        <string>ar</string>
-        <string>tr</string>
-        <string>sk</string>
-        <string>ja_JP</string>
-        <string>af_ZA</string>
+		<string>zh_CN</string>
+        	<string>de</string>
+       		<string>it</string>
+        	<string>pl</string>
+        	<string>pt_PT</string>
+        	<string>hr_HR</string>
+        	<string>ca</string>
+        	<string>ar</string>
+        	<string>tr</string>
+        	<string>sk</string>
+        	<string>ja_JP</string>
+        	<string>af_ZA</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
