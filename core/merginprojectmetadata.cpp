@@ -174,10 +174,6 @@ MerginConfig MerginConfig::fromFile( const QString &filePath )
     QByteArray data = file.readAll();
     config = MerginConfig::fromJson( data );
   }
-  else
-  {
-    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Project does not contain a config file on path: %1" ).arg( filePath ) );
-  }
 
   return config;
 }
