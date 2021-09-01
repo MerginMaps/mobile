@@ -361,7 +361,7 @@ void MerginApi::cacheServerConfig()
     transaction.replyDownloadItem->deleteLater();
     transaction.replyDownloadItem = nullptr;
 
-    prepareDownloadConfig( projectFullName );
+    prepareDownloadConfig( projectFullName, true );
   }
   else
   {
@@ -1953,7 +1953,7 @@ void MerginApi::startProjectUpdate( const QString &projectFullName )
   downloadNextItem( projectFullName );
 }
 
-void MerginApi::prepareDownloadConfig( const QString &projectFullName )
+void MerginApi::prepareDownloadConfig( const QString &projectFullName, bool downloaded )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -1968,7 +1968,7 @@ void MerginApi::prepareDownloadConfig( const QString &projectFullName )
 
   if ( serverContainsConfig )
   {
-    if ( !transaction.config.isValid )
+    if ( !downloaded )
     {
       // we should have server config but we do not have it yet
       return requestServerConfig( projectFullName );
@@ -1984,7 +1984,13 @@ void MerginApi::prepareDownloadConfig( const QString &projectFullName )
 
   bool previousVersionContainedConfig = ( resOld != oldServerVersion.files.end() ) && !transaction.firstTimeDownload;
 
-  if ( serverContainsConfig && previousVersionContainedConfig )
+  if ( !transaction.config.isValid )
+  {
+      // if transaction is not valid, consider it as deleted
+      transaction.config.downloadMissingFiles = true;
+      CoreUtils::log( "MerginConfig", "Config has invalid structure, continuing as if project had no config" );
+  }
+  else if ( serverContainsConfig && previousVersionContainedConfig )
   {
     // config was there, check if there are changes
     QString newChk = newServerVersion.fileInfo( sMerginConfigFile ).checksum;
