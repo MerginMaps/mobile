@@ -112,6 +112,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncRemoveConfig" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncChangeSyncFolder" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncDisabledInConfig" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncCorruptedFormat" );
 
   deleteLocalDir( mApi, "testExcludeFromSync" );
 }
@@ -2179,6 +2180,68 @@ void TestMerginApi::testSelectiveSyncChangeSyncFolder()
 
   delete serverMirror;
   delete serverMirrorProjects;
+}
+
+void TestMerginApi::testSelectiveSyncCorruptedFormat()
+{
+
+  /*
+   * Case: Test what happens when someone uploads not valid config file (not valid json)
+   *
+   * We will create another API client that will serve as a server mirror, it will not use selective sync,
+   * but will simulate as if someone manipulated project from browser via Mergin
+   */
+  QString serverMirrorDataPath = mApi->projectsPath() + "/" + "serverMirror";
+  QDir serverMirrorDataDir( serverMirrorDataPath );
+  if ( !serverMirrorDataDir.exists() )
+    serverMirrorDataDir.mkpath( serverMirrorDataPath );
+
+  LocalProjectsManager *serverMirrorProjects = new LocalProjectsManager( serverMirrorDataPath + "/" );
+  MerginApi *serverMirror = new MerginApi( *serverMirrorProjects, this );
+  serverMirror->setSupportsSelectiveSync( false );
+
+  // Create a project with photos and mergin-config
+  QString projectName = "testSelectiveSyncCorruptedFormat";
+
+  QString projectClient1 = mApi->projectsPath() + "/" + projectName;
+  QString projectClient2 = mApiExtra->projectsPath() + "/" + projectName;
+  QString projectServer = serverMirror->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // Create photo files
+  QDir dir;
+  QString photoPathClient1( projectClient1 + "/" + "photos" );
+  if ( !dir.exists( photoPathClient1 ) )
+    dir.mkpath( photoPathClient1 );
+
+  QFile file( photoPathClient1 + "/" + "photoC1-A.jpg" );
+  file.open( QIODevice::WriteOnly );
+  file.close();
+
+  QFile file1( photoPathClient1 + "/" + "photoC1-B.png" );
+  file1.open( QIODevice::WriteOnly );
+  file1.close();
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( serverMirror, mUsername, projectName );
+
+  // add corrupted config file
+  QString configFilePath = projectServer + "/" + "mergin-config.json";
+  QVERIFY( QFile::copy( mTestDataPath + "/mergin-config-corrupted.json", configFilePath ) );
+
+  uploadRemoteProject( serverMirror, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // client 2 should have all photos from client 1
+  QString photoPathClient2( projectClient2 + "/" + "photos" );
+
+  QFile fileExtra( photoPathClient2 + "/" + "photoC1-A.jpg" );
+  QVERIFY( fileExtra.exists() );
+
+  QFile fileExtra1( photoPathClient2 + "/" + "photoC1-B.png" );
+  QVERIFY( fileExtra1.exists() );
 }
 
 void TestMerginApi::testRegister()

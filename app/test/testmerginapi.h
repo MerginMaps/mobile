@@ -72,6 +72,7 @@ class TestMerginApi: public QObject
     void testSelectiveSyncRemoveConfig();
     void testSelectiveSyncDisabledInConfig();
     void testSelectiveSyncChangeSyncFolder();
+    void testSelectiveSyncCorruptedFormat();
 
     void testRegister();
 

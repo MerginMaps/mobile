@@ -575,7 +575,7 @@ class MerginApi: public QObject
     void startProjectUpdate( const QString &projectFullName );
 
     //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project update
-    void prepareDownloadConfig( const QString &projectFullName );
+    void prepareDownloadConfig( const QString &projectFullName, bool downloaded = false );
     void requestServerConfig( const QString &projectFullName );
 
     //! Starts download request of another item
