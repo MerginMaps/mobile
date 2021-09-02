@@ -769,7 +769,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="128"/>
         <source>No Changes</source>
-        <translation>不更改</translation>
+        <translation>未更改</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="153"/>
@@ -807,7 +807,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="27"/>
         <source>No Changes</source>
-        <translation>不更改</translation>
+        <translation>未更改</translation>
     </message>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="43"/>
@@ -862,7 +862,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../projectsmodel.cpp" line="90"/>
         <location filename="../projectsmodel.cpp" line="94"/>
         <source>Updated %1</source>
-        <translation>已更新 1%</translation>
+        <translation>1%前已同步</translation>
     </message>
 </context>
 <context>
