@@ -19,6 +19,7 @@
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
 #include "rememberattributescontroller.h"
+#include "fieldvalidator.h"
 
 #include <QDebug>
 #include <QSet>
@@ -650,9 +651,9 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
-  // Evaluate Hard Constrains
+  // Evaluate form items value state - hard/soft constraints, value validity
   {
-    bool allConstraintsHardValid = true;
+    bool allValuesValid = true;
     {
       QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
       while ( formItemsIterator != mFormItems.end() )
@@ -660,94 +661,96 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         std::shared_ptr<FormItem> item = formItemsIterator.value();
         if ( item->type() == FormItem::Field )
         {
-          QStringList errors;
-          bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
-          if ( hardConstraintSatisfied != item->constraintHardValid() )
+          FieldValidator::FieldValueState newValueState = FieldValidator::validate( featureLayerPair(), *item );
+
+          if ( newValueState != FieldValidator::ValidValue )
           {
-            item->setConstraintHardValid( hardConstraintSatisfied );
+            // TODO: mark this field as invalid in the QSET
+
+            if ( FieldValidator::stateToImportance( newValueState ) == FieldValidator::Error )
+              allValuesValid = false;
+          }
+
+          if ( newValueState != item->fieldValueState() )
+          {
+            item->setFieldValueState( newValueState );
             changedFormItems << item->id();
           }
-          if ( !hardConstraintSatisfied )
-          {
-            allConstraintsHardValid = false;
-          }
+
+//          QStringList errors;
+//          bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
+//          if ( hardConstraintSatisfied != item->constraintHardValid() )
+//          {
+//            item->setConstraintHardValid( hardConstraintSatisfied );
+//            changedFormItems << item->id();
+//          }
+//          if ( !hardConstraintSatisfied )
+//          {
+//            allConstraintsHardValid = false;
+//          }
         }
         ++formItemsIterator;
       }
     }
-    if ( allConstraintsHardValid != constraintsHardValid() )
+    if ( allValuesValid != fieldValuesValid() )
     {
-      mConstraintsHardValid = allConstraintsHardValid;
-      emit constraintsHardValidChanged();
+      mFieldValuesValid = allValuesValid;
+      emit fieldValuesValidChanged();
     }
   }
 
   // Evaluate Soft Constrains
-  {
-    bool allConstraintsSoftValid = true;
-    {
-      QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-      while ( formItemsIterator != mFormItems.end() )
-      {
-        std::shared_ptr<FormItem> item = formItemsIterator.value();
-        if ( item->type() == FormItem::Field )
-        {
-          QStringList errors;
-          bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
-          if ( softConstraintSatisfied != item->constraintSoftValid() )
-          {
-            item->setConstraintSoftValid( softConstraintSatisfied );
-            changedFormItems << item->id();
-          }
-          if ( !softConstraintSatisfied )
-          {
-            allConstraintsSoftValid = false;
-          }
-        }
-        ++formItemsIterator;
-      }
-    }
-    if ( allConstraintsSoftValid != constraintsSoftValid() )
-    {
-      mConstraintsSoftValid = allConstraintsSoftValid;
-      emit constraintsSoftValidChanged();
-    }
-  }
+//  {
+//    bool allConstraintsSoftValid = true;
+//    {
+//      QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+//      while ( formItemsIterator != mFormItems.end() )
+//      {
+//        std::shared_ptr<FormItem> item = formItemsIterator.value();
+//        if ( item->type() == FormItem::Field )
+//        {
+//          QStringList errors;
+//          bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( layer,  featureLayerPair().feature(), item->fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
+//          if ( softConstraintSatisfied != item->constraintSoftValid() )
+//          {
+//            item->setConstraintSoftValid( softConstraintSatisfied );
+//            changedFormItems << item->id();
+//          }
+//          if ( !softConstraintSatisfied )
+//          {
+//            allConstraintsSoftValid = false;
+//          }
+//        }
+//        ++formItemsIterator;
+//      }
+//    }
+//    if ( allConstraintsSoftValid != constraintsSoftValid() )
+//    {
+//      mConstraintsSoftValid = allConstraintsSoftValid;
+//      emit constraintsSoftValidChanged();
+//    }
+//  }
 
   // Evaluate field values validity
-  {
-    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-    while ( formItemsIterator != mFormItems.end() )
-    {
-      std::shared_ptr<FormItem> item = formItemsIterator.value();
-      QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
+//  {
+//    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+//    while ( formItemsIterator != mFormItems.end() )
+//    {
+//      std::shared_ptr<FormItem> item = formItemsIterator.value();
+//      QVariant value = featureLayerPair().feature().attribute( item->fieldIndex() );
 
-      bool isRangeEditable = item->editorWidgetType() == QStringLiteral( "Range" ) &&
-                             item->editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
 
-      if ( isRangeEditable && !value.isNull() )
-      {
-        double min = item->editorWidgetConfig()[QStringLiteral( "Min" )].toDouble();
-        double max = item->editorWidgetConfig()[QStringLiteral( "Max" )].toDouble();
-        double val = featureLayerPair().feature().attribute( item->fieldIndex() ).toDouble();
 
-        if ( !( min <= val && val <= max ) )
-        {
-          item->setState( FormItem::ValueOutOfRange );
-          changedFormItems << item->id();
-        }
-      }
+//      if ( !isFormValueChange ) // reset state for new feature layer pair
+//      {
+//        item->setState( FormItem::ValidValue );
+//        changedFormItems << item->id();
+//      }
 
-      if ( !isFormValueChange ) // reset state for new feature layer pair
-      {
-        item->setState( FormItem::ValidValue );
-        changedFormItems << item->id();
-      }
-
-      ++formItemsIterator;
-    }
-    updateFieldValuesValidity();
-  }
+//      ++formItemsIterator;
+//    }
+//    updateFieldValuesValidity();
+//  }
 
   // Check if we have any changes
   bool anyChanges = isNewFeature();
@@ -965,32 +968,32 @@ void AttributeController::setHasAnyChanges( bool hasChanges )
   }
 }
 
-void AttributeController::updateFieldValuesValidity()
-{
-  // loop over items and see if there is a field with invalid state
-  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-  while ( formItemsIterator != mFormItems.end() )
-  {
-    std::shared_ptr<FormItem> item = formItemsIterator.value();
-    if ( item->valueState() != FormItem::ValidValue )
-    {
-      setFieldValuesValid( false );
-      return;
-    }
-    ++formItemsIterator;
-  }
+//void AttributeController::updateFieldValuesValidity()
+//{
+//  // loop over items and see if there is a field with invalid state
+//  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+//  while ( formItemsIterator != mFormItems.end() )
+//  {
+//    std::shared_ptr<FormItem> item = formItemsIterator.value();
+//    if ( item->valueState() != FormItem::ValidValue )
+//    {
+//      setFieldValuesValid( false );
+//      return;
+//    }
+//    ++formItemsIterator;
+//  }
 
-  setFieldValuesValid( true );
-}
+//  setFieldValuesValid( true );
+//}
 
-void AttributeController::setFieldValuesValid( bool valid )
-{
-  if ( valid != mFieldValuesValid )
-  {
-    mFieldValuesValid = valid;
-    emit fieldValuesValidChanged();
-  }
-}
+//void AttributeController::setFieldValuesValid( bool valid )
+//{
+//  if ( valid != mFieldValuesValid )
+//  {
+//    mFieldValuesValid = valid;
+//    emit fieldValuesValidChanged();
+//  }
+//}
 
 void AttributeController::discoverRelations( QgsAttributeEditorContainer *container )
 {
@@ -1109,43 +1112,44 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   {
     std::shared_ptr<FormItem> item = mFormItems[id];
     QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
+
     if ( value != oldVal )
     {
-      QVariant val( value );
-      const QgsField fld = item->field();
-      if ( !fld.convertCompatible( val ) )
-      {
-        QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-        QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
-        QgsMessageLog::logMessage( msg );
+//      QVariant val( value );
+//      const QgsField fld = item->field();
+//      if ( !fld.convertCompatible( val ) )
+//      {
+//        QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), fld.name(), fld.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+//        QString userFriendlyMsg( tr( "Value %1 is not compatible with field type %2." ).arg( value.toString(), fld.typeName() ) );
+//        QgsMessageLog::logMessage( msg );
 
-        if ( value.toBool() )
-        {
-          item->setState( FormItem::InvalidValue );
-          setFieldValuesValid( false );
-        }
-        else
-        {
-          item->setState( FormItem::ValidValue ); // this is empty field ~ NULL value
-          updateFieldValuesValidity();
-        }
+//        if ( value.toBool() )
+//        {
+//          item->setState( FormItem::InvalidValue );
+//          setFieldValuesValid( false );
+//        }
+//        else
+//        {
+//          item->setState( FormItem::ValidValue ); // this is empty field ~ NULL value
+//          updateFieldValuesValidity();
+//        }
 
-        emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
-        return false;
-      }
-      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-      item->setState( FormItem::ValidValue );
+//        emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
+//        return false;
+//      }
+      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
+//      item->setState( FormItem::ValidValue );
 
-      emit formDataChanged( id );
-      updateFieldValuesValidity();
+//      emit formDataChanged( id );
+//      updateFieldValuesValidity();
       recalculateDerivedItems( true, false );
     }
-    else
-    {
-      item->setState( FormItem::ValidValue );
-      emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
-      updateFieldValuesValidity();
-    }
+//    else
+//    {
+//      item->setState( FormItem::ValidValue );
+//      emit formDataChanged( id, { AttributeFormModel::ValueValidity } );
+//      updateFieldValuesValidity();
+//    }
     return true;
   }
   else

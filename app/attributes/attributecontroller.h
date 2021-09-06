@@ -179,8 +179,8 @@ class  AttributeController : public QObject
     void clearAll();
 
     void setHasAnyChanges( bool hasChanges );
-    void updateFieldValuesValidity();
-    void setFieldValuesValid( bool valid );
+//    void updateFieldValuesValidity();
+//    void setFieldValuesValid( bool valid );
     void discoverRelations( QgsAttributeEditorContainer *container );
 
     bool isValidTabId( int id ) const;

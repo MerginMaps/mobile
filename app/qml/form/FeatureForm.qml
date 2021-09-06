@@ -472,7 +472,7 @@ Item {
           id: fieldLabel
 
           text: Name
-          color: ConstraintSoftValid && ConstraintHardValid ? form.style.constraint.validColor : form.style.constraint.invalidColor
+          color: FieldValueDescriptionImportance === FieldValidator.Info ? form.style.constraint.validColor : form.style.constraint.invalidColor
           leftPadding: form.style.fields.sideMargin
           font.pointSize: form.style.fields.labelPointSize
           horizontalAlignment: Text.AlignLeft
@@ -483,27 +483,8 @@ Item {
         Label {
           id: fieldHelperText
 
-          property string helperText: {
-            if ( ValueValidity === FormItem.ValueOutOfRange )
-              return qsTr( 'Number is outside of specified range' )
-            else if ( ValueValidity === FormItem.InvalidValue )
-              return qsTr( 'Value is not valid' )
-
-            if ( ConstraintDescription )
-              return ConstraintDescription
-
-            return ''
-          }
-
-          property bool shouldShowhelperText: {
-            if ( ( !ConstraintHardValid || !ConstraintSoftValid ) && !!ConstraintDescription )
-              return true
-
-            if ( ValueValidity !== FormItem.ValidValue )
-              return true
-
-            return false
-          }
+          property string helperText: FieldValueDescription
+          property bool shouldShowhelperText: FieldValueDescriptionImportance === FieldValidator.Error
 
           anchors {
             left: parent.left
@@ -545,10 +526,10 @@ Item {
           property var config: EditorWidgetConfig
           property var widget: EditorWidget
           property var field: Field
-          property var constraintHardValid: ConstraintHardValid
-          property var constraintSoftValid: ConstraintSoftValid
-          property bool constraintsHardValid: form.controller.constraintsHardValid
-          property bool constraintsSoftValid: form.controller.constraintsSoftValid
+//          property var constraintHardValid: ConstraintHardValid
+//          property var constraintSoftValid: ConstraintSoftValid
+//          property bool constraintsHardValid: form.controller.constraintsHardValid
+//          property bool constraintsSoftValid: form.controller.constraintsSoftValid
           property var homePath: form.project ? form.project.homePath : ""
           property var customStyle: form.style
           property var externalResourceHandler: form.externalResourceHandler

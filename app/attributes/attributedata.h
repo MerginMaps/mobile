@@ -31,6 +31,8 @@
 #include "qgsrelation.h"
 #include "qgsfield.h"
 
+#include "fieldvalidator.h"
+
 class FormItem
 {
     Q_GADGET
@@ -44,14 +46,6 @@ class FormItem
       Field,
     };
     Q_ENUMS( FormItemType )
-
-    enum ValueState
-    {
-      ValidValue = 1,
-      InvalidValue,     // did not pass convertCompatible check
-      ValueOutOfRange  // number is out of min/max range
-    };
-    Q_ENUMS( ValueState )
 
     FormItem(
       const QUuid &id,
@@ -104,8 +98,8 @@ class FormItem
     bool constraintHardValid() const;
     void setConstraintHardValid( bool constraintHardValid );
 
-    ValueState valueState() const;
-    void setState( ValueState state );
+    FieldValidator::FieldValueState fieldValueState() const;
+    void setFieldValueState( FieldValidator::FieldValueState state );
 
     bool isVisible() const;
     void setVisible( bool visible );
@@ -146,7 +140,7 @@ class FormItem
 
     bool mConstraintSoftValid = false;
     bool mConstraintHardValid = false;
-    ValueState mState = ValueState::ValidValue;
+    FieldValidator::FieldValueState mState = FieldValidator::ValidValue;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
 
