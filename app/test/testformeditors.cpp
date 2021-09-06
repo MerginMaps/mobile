@@ -12,6 +12,7 @@
 #include "attributecontroller.h"
 #include "featurelayerpair.h"
 #include "attributedata.h"
+#include "fieldvalidator.h"
 
 #include <QtTest/QtTest>
 #include <memory>
@@ -83,63 +84,63 @@ void TestFormEditors::testNumericFields()
   {
     QString value;
     QUuid fieldUuid;
-    FormItem::ValueState expectedValueState;
+    FieldValidator::FieldValueState expectedValueState;
     bool expectedSuccess;
   };
 
   QList<combination> combinations =
   {
     // field "Heading", Int, range <100; 1000>, range editable
-    {"", headingFieldId, FormItem::ValidValue, false}, // because field can be null, but we do not yet handle null values
-    {"1", headingFieldId, FormItem::ValueOutOfRange, true},
-    {"-1", headingFieldId, FormItem::ValueOutOfRange, true},
-    {"10", headingFieldId, FormItem::ValueOutOfRange, true},
-    {"-10", headingFieldId, FormItem::ValueOutOfRange, true},
-    {"-100", headingFieldId, FormItem::ValueOutOfRange, true},
-    {"100", headingFieldId, FormItem::ValidValue, true},
-    {"100h", headingFieldId, FormItem::InvalidValue, false},
-    {"100", headingFieldId, FormItem::ValidValue, true},
-    {"1000", headingFieldId, FormItem::ValidValue, true},
-//    {"1000,5", headingFieldId, FormItem::InvalidValue, false}, // currently decimals are accepted and are being rounded up
-    {"1001", headingFieldId, FormItem::ValueOutOfRange, true},
+    {"", headingFieldId, FieldValidator::ValidValue, false}, // because field can be null, but we do not yet handle null values
+    {"1", headingFieldId, FieldValidator::ValueOutOfRange, true},
+    {"-1", headingFieldId, FieldValidator::ValueOutOfRange, true},
+    {"10", headingFieldId, FieldValidator::ValueOutOfRange, true},
+    {"-10", headingFieldId, FieldValidator::ValueOutOfRange, true},
+    {"-100", headingFieldId, FieldValidator::ValueOutOfRange, true},
+    {"100", headingFieldId, FieldValidator::ValidValue, true},
+    {"100h", headingFieldId, FieldValidator::InvalidValue, false},
+    {"100", headingFieldId, FieldValidator::ValidValue, true},
+    {"1000", headingFieldId, FieldValidator::ValidValue, true},
+//    {"1000,5", headingFieldId, FieldValidator::InvalidValue, false}, // currently decimals are accepted and are being rounded up
+    {"1001", headingFieldId, FieldValidator::ValueOutOfRange, true},
 
     // field "Importance", Real, range <-100.00; 100.00>, step:0.01, precision: 2, range editable
-    {"", importanceFieldId, FormItem::ValidValue, false},
-    {"0", importanceFieldId, FormItem::ValidValue, true},
-    {"-1.00", importanceFieldId, FormItem::ValidValue, true},
-    {"100.00", importanceFieldId, FormItem::ValidValue, true},
-    {"100.002", importanceFieldId, FormItem::ValueOutOfRange, true},
-    {"100.002fdsa", importanceFieldId, FormItem::InvalidValue, false},
-    {"100.,.,.,", importanceFieldId, FormItem::InvalidValue, false},
-    {"1 000", importanceFieldId, FormItem::InvalidValue, false},
-    {"15,2", importanceFieldId, FormItem::ValueOutOfRange, true},
+    {"", importanceFieldId, FieldValidator::ValidValue, false},
+    {"0", importanceFieldId, FieldValidator::ValidValue, true},
+    {"-1.00", importanceFieldId, FieldValidator::ValidValue, true},
+    {"100.00", importanceFieldId, FieldValidator::ValidValue, true},
+    {"100.002", importanceFieldId, FieldValidator::ValueOutOfRange, true},
+    {"100.002fdsa", importanceFieldId, FieldValidator::InvalidValue, false},
+    {"100.,.,.,", importanceFieldId, FieldValidator::InvalidValue, false},
+    {"1 000", importanceFieldId, FieldValidator::InvalidValue, false},
+    {"15,2", importanceFieldId, FieldValidator::ValueOutOfRange, true},
 
     // field "Pilots", Int, range <-1000; -100>, range editable
-    {"", pilotsFieldId, FormItem::ValidValue, false}, // because field can be null
-    {"-100", pilotsFieldId, FormItem::ValidValue, true},
-    {"-1000", pilotsFieldId, FormItem::ValidValue, true},
-    {"0", pilotsFieldId, FormItem::ValueOutOfRange, true},
-    {"150", pilotsFieldId, FormItem::ValueOutOfRange, true},
-    {"-1001", pilotsFieldId, FormItem::ValueOutOfRange, true},
-    {"-51216354321435", pilotsFieldId, FormItem::InvalidValue, false},
-    {"--100", pilotsFieldId, FormItem::InvalidValue, false},
-    {"--100fsda", pilotsFieldId, FormItem::InvalidValue, false},
-    {"-100", pilotsFieldId, FormItem::ValidValue, true},
+    {"", pilotsFieldId, FieldValidator::ValidValue, false}, // because field can be null
+    {"-100", pilotsFieldId, FieldValidator::ValidValue, true},
+    {"-1000", pilotsFieldId, FieldValidator::ValidValue, true},
+    {"0", pilotsFieldId, FieldValidator::ValueOutOfRange, true},
+    {"150", pilotsFieldId, FieldValidator::ValueOutOfRange, true},
+    {"-1001", pilotsFieldId, FieldValidator::ValueOutOfRange, true},
+    {"-51216354321435", pilotsFieldId, FieldValidator::InvalidValue, false},
+    {"--100", pilotsFieldId, FieldValidator::InvalidValue, false},
+    {"--100fsda", pilotsFieldId, FieldValidator::InvalidValue, false},
+    {"-100", pilotsFieldId, FieldValidator::ValidValue, true},
 
     // field "Cabin Crew", Int, no limit, range editable
-    {"", cabinCrewFieldId, FormItem::ValidValue, false}, // because field can be null
-    {"-100", cabinCrewFieldId, FormItem::ValidValue, true},
-    {"-1000", cabinCrewFieldId, FormItem::ValidValue, true},
-    {"-2147483647", cabinCrewFieldId, FormItem::ValidValue, true}, // int limit from QGIS
-    {"2147483647", cabinCrewFieldId, FormItem::ValidValue, true}, // int limit from QGIS
-    {"214748364799", cabinCrewFieldId, FormItem::InvalidValue, false},
-    {"-214748364799", cabinCrewFieldId, FormItem::InvalidValue, false},
-    {"-214748-", cabinCrewFieldId, FormItem::InvalidValue, false},
+    {"", cabinCrewFieldId, FieldValidator::ValidValue, false}, // because field can be null
+    {"-100", cabinCrewFieldId, FieldValidator::ValidValue, true},
+    {"-1000", cabinCrewFieldId, FieldValidator::ValidValue, true},
+    {"-2147483647", cabinCrewFieldId, FieldValidator::ValidValue, true}, // int limit from QGIS
+    {"2147483647", cabinCrewFieldId, FieldValidator::ValidValue, true}, // int limit from QGIS
+    {"214748364799", cabinCrewFieldId, FieldValidator::InvalidValue, false},
+    {"-214748364799", cabinCrewFieldId, FieldValidator::InvalidValue, false},
+    {"-214748-", cabinCrewFieldId, FieldValidator::InvalidValue, false},
 
     // field "Staff", Int, no limit, range slider
-    {"", staffFieldId, FormItem::ValidValue, false}, // because field can be null
-    {"10", staffFieldId, FormItem::ValidValue, true},
-    {"-10", staffFieldId, FormItem::ValidValue, true},
+    {"", staffFieldId, FieldValidator::ValidValue, false}, // because field can be null
+    {"10", staffFieldId, FieldValidator::ValidValue, true},
+    {"-10", staffFieldId, FieldValidator::ValidValue, true},
     // QML Slider does not allow to enter values higher or lower than specified range
   };
 
@@ -150,7 +151,7 @@ void TestFormEditors::testNumericFields()
     QCOMPARE( res, c.expectedSuccess );
 
     const FormItem *item = controller.formItem( c.fieldUuid );
-    QCOMPARE( item->valueState(), c.expectedValueState );
+    QCOMPARE( item->fieldValueState(), c.expectedValueState );
     // In future when we will store invalid value, we can also check if c.value is the same as value in featureLayerPair
   }
 

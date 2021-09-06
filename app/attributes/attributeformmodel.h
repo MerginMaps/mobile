@@ -54,12 +54,14 @@ class  AttributeFormModel : public QAbstractListModel
       RememberValue, //!< Remember value (whether to remember the value)
       Field, //!< Field
       FieldIndex, //!< Index
-      ValueValidity, //!< Indicates state of current value, whether valid, invalid or outside of range
+//      ValueValidity, //!< Indicates state of current value, whether valid, invalid or outside of range
       Group, //!< Group name
       Visible, //!< Field visible
-      ConstraintSoftValid, //! Constraint soft valid
-      ConstraintHardValid, //! Constraint hard valid
-      ConstraintDescription, //!< Constraint description
+//      ConstraintSoftValid, //! Constraint soft valid
+//      ConstraintHardValid, //! Constraint hard valid
+//      ConstraintDescription, //!< Constraint description
+      FieldValueDescription,
+      FieldValueDescriptionImportance,
       Relation //!< QgsRelation instance for this item, empty if it is not a relation
     };
 

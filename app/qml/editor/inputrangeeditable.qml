@@ -137,7 +137,7 @@ Item {
             TextInput {
               id: numberInput
 
-              onEditingFinished: {
+              onTextEdited: {
                 let v = toNumber( numberInput.displayText )
 
                 if ( Number.isNaN( v ) )

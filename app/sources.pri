@@ -7,6 +7,7 @@ attributes/attributepreviewcontroller.cpp \
 attributes/attributetabmodel.cpp \
 attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
+attributes/fieldvalidator.cpp \
 featurelayerpair.cpp \
 featurehighlight.cpp \
 highlightsgnode.cpp \
@@ -52,6 +53,7 @@ attributes/attributepreviewcontroller.h \
 attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
+attributes/fieldvalidator.h \
 highlightsgnode.h \
 featurelayerpair.h \
 featurehighlight.h \

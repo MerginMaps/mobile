@@ -74,16 +74,20 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->groupName();
     case Visible:
       return item->isVisible();
-    case ConstraintSoftValid:
-      return item->constraintSoftValid();
-    case ConstraintHardValid:
-      return item->constraintHardValid();
-    case ConstraintDescription:
-      return item->constraintDescription();
+//    case ConstraintSoftValid:
+//      return item->constraintSoftValid();
+//    case ConstraintHardValid:
+//      return item->constraintHardValid();
+//    case ConstraintDescription:
+//      return item->constraintDescription();
+    case FieldValueDescription:
+      return FieldValidator::stateToString( item->fieldValueState() );
+    case FieldValueDescriptionImportance:
+      return FieldValidator::stateToImportance( item->fieldValueState() );
     case Relation:
       return QVariant::fromValue( item->relation() );
-    case ValueValidity:
-      return item->valueState();
+//    case ValueValidity:
+//      return item->fieldValueState();
     default:
       return QVariant();
   }
@@ -123,10 +127,12 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[RememberValue] = QByteArray( "RememberValue" );
   roles[AttributeFormModel::Field] = QByteArray( "Field" );
   roles[AttributeFormModel::Group] = QByteArray( "Group" );
-  roles[ValueValidity] = QByteArray( "ValueValidity" );
-  roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
-  roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
-  roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );
+//  roles[ValueValidity] = QByteArray( "ValueValidity" );
+//  roles[ConstraintHardValid] = QByteArray( "ConstraintHardValid" );
+//  roles[ConstraintSoftValid] = QByteArray( "ConstraintSoftValid" );
+//  roles[ConstraintDescription] = QByteArray( "ConstraintDescription" );
+  roles[FieldValueDescription] = QByteArray( "FieldValueDescription" );
+  roles[FieldValueDescriptionImportance] = QByteArray( "FieldValueDescriptionImportance" );
   roles[Relation] = QByteArray( "Relation" );
 
   return roles;

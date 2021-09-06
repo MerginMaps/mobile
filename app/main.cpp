@@ -87,6 +87,7 @@
 #include "featureslistmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
+#include "fieldvalidator.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -292,6 +293,7 @@ void initDeclarative()
   qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeTabModel >( "lc", 1, 0, "AttributeTabModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeTabProxyModel >( "lc", 1, 0, "AttributeTabProxyModel", "Created by AttributeController" );
+  qmlRegisterUncreatableType< FieldValidator >( "lc", 1, 0, "FieldValidator", "Only enums from FieldValidator can be used" );
   qmlRegisterType< AttributeController >( "lc", 1, 0, "AttributeController" );
   qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
   qmlRegisterType< FeatureHighlight >( "lc", 1, 0, "FeatureHighlight" );
