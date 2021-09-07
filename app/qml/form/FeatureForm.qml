@@ -459,8 +459,10 @@ Item {
       }
 
       Item {
-        id: labelPlaceholder
-        height: fieldLabel.height + fieldHelperText.height + form.style.fields.sideMargin
+        id: fieldLabelContainer
+
+        height: fieldLabel.height + fieldValidationText.height + form.style.fields.sideMargin
+
         anchors {
           left: parent.left
           right: parent.right
@@ -472,7 +474,7 @@ Item {
           id: fieldLabel
 
           text: Name
-          color: FieldValueDescriptionImportance === FieldValidator.Info ? form.style.constraint.validColor : form.style.constraint.invalidColor
+          color: form.style.constraint.validColor
           leftPadding: form.style.fields.sideMargin
           font.pointSize: form.style.fields.labelPointSize
           horizontalAlignment: Text.AlignLeft
@@ -481,10 +483,7 @@ Item {
         }
 
         Label {
-          id: fieldHelperText
-
-          property string helperText: FieldValueDescription
-          property bool shouldShowhelperText: FieldValueDescriptionImportance === FieldValidator.Error
+          id: fieldValidationText
 
           anchors {
             left: parent.left
@@ -493,15 +492,14 @@ Item {
             leftMargin: form.style.fields.sideMargin
           }
 
-          text: helperText
-          visible: shouldShowhelperText
+          text: ValidationMessage
+          visible: ValidationMessage // show if there is something
           height: visible ? undefined : 0
           wrapMode: Text.WordWrap
-          color: form.style.constraint.descriptionColor
+          color: ValidationMessageLevel === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
         }
-
       }
 
       Item {
@@ -510,7 +508,7 @@ Item {
         anchors {
           left: parent.left
           right: rememberCheckboxContainer.left
-          top: labelPlaceholder.bottom
+          top: fieldLabelContainer.bottom
         }
 
 
@@ -634,7 +632,7 @@ Item {
         implicitHeight: placeholder.height
 
         anchors {
-          top: labelPlaceholder.bottom
+          top: fieldLabelContainer.bottom
           right: parent.right
         }
 

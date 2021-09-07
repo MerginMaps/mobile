@@ -57,7 +57,6 @@ class FormItem
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
-      const QgsFieldConstraints &contraints,
       const QgsExpression &visibilityExpression,
       const QgsRelation &relation = QgsRelation()
     );
@@ -72,7 +71,6 @@ class FormItem
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
-      const QgsFieldConstraints &contraints,
       const QgsExpression &visibilityExpression
     );
 
@@ -92,19 +90,14 @@ class FormItem
     QVariantMap editorWidgetConfig() const;
     int fieldIndex() const;
 
-    bool constraintSoftValid() const;
-    void setConstraintSoftValid( bool constraintSoftValid );
+    QString validationMessage() const;
+    void setValidationMessage( QString message );
 
-    bool constraintHardValid() const;
-    void setConstraintHardValid( bool constraintHardValid );
-
-    FieldValidator::FieldValueState fieldValueState() const;
-    void setFieldValueState( FieldValidator::FieldValueState state );
+    FieldValidator::ValidationMessageLevel validationMessageLevel() const;
+    void setValidationMessageLevel( FieldValidator::ValidationMessageLevel level );
 
     bool isVisible() const;
     void setVisible( bool visible );
-
-    QString constraintDescription() const;
 
     QUuid id() const;
 
@@ -135,12 +128,10 @@ class FormItem
     const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;
-    const QgsFieldConstraints mConstraints;
     const QgsExpression mVisibilityExpression;
 
-    bool mConstraintSoftValid = false;
-    bool mConstraintHardValid = false;
-    FieldValidator::FieldValueState mState = FieldValidator::ValidValue;
+    QString mValidationMessage;
+    FieldValidator::ValidationMessageLevel mValidationMessageLevel = FieldValidator::Info;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
 

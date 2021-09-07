@@ -138,6 +138,7 @@ Item {
               id: numberInput
 
               onTextEdited: {
+                console.log("Text edited", text)
                 let v = toNumber( numberInput.displayText )
 
                 if ( Number.isNaN( v ) )
@@ -149,6 +150,9 @@ Item {
                   valueChanged( v, numberInput.displayText === "" )
                 }
               }
+
+              onTextChanged: console.log("Text changed", text)
+              onDisplayTextChanged: console.log("Display text", displayText)
 
               anchors.fill: parent
 

@@ -29,7 +29,6 @@ Item {
   signal importDataRequested()
   property var rowHeight: customStyle.fields.height * 0.75
   property real iconSize: rowHeight
-  property bool submitOnEditingFinished: field.isNumeric
 
   id: fieldItem
   enabled: !readOnly
@@ -75,26 +74,22 @@ Item {
         radius: customStyle.fields.cornerRadius
     }
 
-    onEditingFinished: {
-      if (fieldItem.submitOnEditingFinished) {
-        valueChanged( text, text === undefined )
-      }
-    }
-
     onTextChanged: {
-      if (!fieldItem.submitOnEditingFinished) {
-        valueChanged( text, text === undefined )
-      }
+      console.log("Text changed", text)
+      valueChanged( text, text === undefined )
     }
+    onTextEdited: console.log("Text edited", text)
+
+    onDisplayTextChanged: console.log("Display text changed ", displayText)
 
     //! Commit value if has changed when widget gets out of the FeatureForm (ListView) viewport
-    Component.onDestruction: {
-      if ( textField.activeFocus ) {
-        if ( value !== textField.text ) {
-          valueChanged( textField.text, textField.text === undefined )
-        }
-      }
-    }
+//    Component.onDestruction: {
+//      if ( textField.activeFocus ) {
+//        if ( value !== textField.text ) {
+//          valueChanged( textField.text, textField.text === undefined )
+//        }
+//      }
+//    }
   }
 
   TextArea {
@@ -120,16 +115,11 @@ Item {
         radius: customStyle.fields.cornerRadius
     }
 
-    onEditingFinished: {
-      if (fieldItem.submitOnEditingFinished) {
-        valueChanged( text, text === undefined )
-      }
-    }
+    onEditingFinished: console.log("Editing finished")
 
     onTextChanged: {
-      if (!fieldItem.submitOnEditingFinished) {
+      console.log("text ")
         valueChanged( text, text === undefined )
-      }
     }
 
     }
