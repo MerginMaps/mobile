@@ -26,7 +26,6 @@ FormItem::FormItem(
   bool isEditable,
   const QgsEditorWidgetSetup &editorWidgetSetup,
   int fieldIndex,
-  const QgsFieldConstraints &contraints,
   const QgsExpression &visibilityExpression,
   const QgsRelation &relation
 )
@@ -39,7 +38,6 @@ FormItem::FormItem(
   , mIsEditable( isEditable )
   , mEditorWidgetSetup( editorWidgetSetup )
   , mFieldIndex( fieldIndex )
-  , mConstraints( contraints )
   , mVisibilityExpression( visibilityExpression )
   , mRelation( relation ) // no relation for type field
 {
@@ -56,7 +54,6 @@ FormItem *FormItem::createFieldItem(
   const QgsEditorWidgetSetup
   &editorWidgetSetup,
   int fieldIndex,
-  const QgsFieldConstraints &contraints,
   const QgsExpression &visibilityExpression
 )
 {
@@ -70,7 +67,6 @@ FormItem *FormItem::createFieldItem(
            isEditable,
            editorWidgetSetup,
            fieldIndex,
-           contraints,
            visibilityExpression
          );
 }
@@ -94,12 +90,9 @@ FormItem *FormItem::createRelationItem(
     true,
     QgsEditorWidgetSetup(),
     -1,
-    QgsFieldConstraints(),
     QgsExpression(),
     relation
   );
-  item->setConstraintHardValid( true );
-  item->setConstraintSoftValid( true );
   return item;
 }
 
@@ -136,34 +129,24 @@ int FormItem::fieldIndex() const
   return mFieldIndex;
 }
 
-bool FormItem::constraintSoftValid() const
+QString FormItem::validationMessage() const
 {
-  return mConstraintSoftValid;
+  return mValidationMessage;
 }
 
-void FormItem::setConstraintSoftValid( bool constraintSoftValid )
+void FormItem::setValidationMessage( QString message )
 {
-  mConstraintSoftValid = constraintSoftValid;
+  mValidationMessage = message;
 }
 
-bool FormItem::constraintHardValid() const
+FieldValidator::ValidationMessageLevel FormItem::validationMessageLevel() const
 {
-  return mConstraintHardValid;
+  return mValidationMessageLevel;
 }
 
-void FormItem::setConstraintHardValid( bool constraintHardValid )
+void FormItem::setValidationMessageLevel( FieldValidator::ValidationMessageLevel level )
 {
-  mConstraintHardValid = constraintHardValid;
-}
-
-FieldValidator::FieldValueState FormItem::fieldValueState() const
-{
-  return mState;
-}
-
-void FormItem::setFieldValueState( FieldValidator::FieldValueState state )
-{
-  mState = state;
+  mValidationMessageLevel = level;
 }
 
 bool FormItem::isVisible() const
@@ -174,11 +157,6 @@ bool FormItem::isVisible() const
 void FormItem::setVisible( bool visible )
 {
   mVisible = visible;
-}
-
-QString FormItem::constraintDescription() const
-{
-  return mConstraints.constraintDescription();
 }
 
 QUuid FormItem::id() const

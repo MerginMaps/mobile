@@ -74,17 +74,8 @@ class  AttributeController : public QObject
     //! Returns extended expression context for attributes evaluation.
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
 
-    //! Returns TRUE if all hard constraints defined on fields are satisfied with the current attribute values
-    Q_PROPERTY( bool constraintsHardValid READ constraintsHardValid NOTIFY constraintsHardValidChanged )
-
-    //! Returns TRUE if all soft constraints defined on fields are satisfied with the current attribute values
-    Q_PROPERTY( bool constraintsSoftValid READ constraintsSoftValid NOTIFY constraintsSoftValidChanged )
-
-    /**
-     *  Returns TRUE if all fields have valid state.
-     *  Validity of a field depends on its type, f.e. numeric field is valid when input is convertible to number and number is in correct min/max range
-     */
-    Q_PROPERTY( bool fieldValuesValid READ fieldValuesValid NOTIFY fieldValuesValidChanged )
+    //! Returns TRUE if any field do not pass necessary validation, false otherwise
+    Q_PROPERTY( bool hasValidationErrors READ hasValidationErrors NOTIFY hasValidationErrorsChanged )
 
     /**
      * If the featureLayerPair in this controller is a child feature in relation, it will have associated parent AttributeController saved in this property.
@@ -112,7 +103,7 @@ class  AttributeController : public QObject
 
     bool constraintsHardValid() const;
     bool constraintsSoftValid() const;
-    bool fieldValuesValid() const;
+    bool hasValidationErrors() const;
     bool hasTabs() const;
     bool hasAnyChanges() const;
 
@@ -167,7 +158,7 @@ class  AttributeController : public QObject
     void constraintsSoftValidChanged();
     void hasTabsChanged();
     void variablesManagerChanged();
-    void fieldValuesValidChanged();
+    void hasValidationErrorsChanged();
     void parentControllerChanged();
     void linkedRelationChanged();
 
@@ -179,8 +170,7 @@ class  AttributeController : public QObject
     void clearAll();
 
     void setHasAnyChanges( bool hasChanges );
-//    void updateFieldValuesValidity();
-//    void setFieldValuesValid( bool valid );
+    void setHasValidationErrors( bool hasErrors );
     void discoverRelations( QgsAttributeEditorContainer *container );
 
     bool isValidTabId( int id ) const;
@@ -227,7 +217,7 @@ class  AttributeController : public QObject
 
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
-    bool mFieldValuesValid = false;
+    bool mHasValidationErrors = false;
     bool mHasAnyChanges = false;
     bool mHasTabs = false;
 

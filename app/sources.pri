@@ -54,6 +54,7 @@ attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
+appresources.h \
 highlightsgnode.h \
 featurelayerpair.h \
 featurehighlight.h \
