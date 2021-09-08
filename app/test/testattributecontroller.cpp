@@ -25,6 +25,7 @@
 #include "attributetabmodel.h"
 #include "attributeformproxymodel.h"
 #include "attributeformmodel.h"
+#include "appresources.h"
 
 
 void TestAttributeController::init()
@@ -310,4 +311,123 @@ void TestAttributeController::tabsAndFieldsMixed()
   QCOMPARE( tabItem->isVisible(), true );
   const QVector<QUuid> formItems = tabItem->formItems();
   QCOMPARE( formItems.size(), 6 );
+}
+
+void TestAttributeController::testValidationMessages()
+{
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectName = "quickapp_project.qgs";
+
+  QString layersDb = projectDir + "/constraint-layers.gpkg";
+  std::unique_ptr<QgsVectorLayer> sectorsLayer(
+    new QgsVectorLayer( layersDb + "|layername=FlySector" )
+  );
+
+  QVERIFY( sectorsLayer && sectorsLayer->isValid() );
+
+  QgsFeature feat( sectorsLayer->dataProvider()->fields() );
+  FeatureLayerPair pair( feat, sectorsLayer.get() );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  /* Attributes:
+   *  - fid
+   *  - Name(txt)           Not NULL - SOFT
+   *  - Size(real)          Not NULL - HARD <0; 10000>
+   *  - SectorId(int)       Unique - SOFT <-100; 1000>
+   *  - Occupied(bool)      Expression, must be TRUE - HARD
+   *  - DateTime(datetime)  Not NULL - HARD
+   *  - LastEdit(date)      Not NULL - HARD (custom date format)
+   *  - Hash(big int)       Unique - HARD
+   *  - Code(txt)           Length limit 5
+   */
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 9 );
+
+  struct testunit
+  {
+    QUuid id;
+    QVariant value;
+    QString expectedValidationMessage;
+    FieldValidator::ValidationMessageLevel expectedValidationMessageLevel;
+  };
+
+  namespace V = Resources::Texts::Validation;
+
+  QList<testunit> testunits
+  {
+    // Attribute - Name
+    { items.at( 1 ), "", V::softNotNullFailed, FieldValidator::Warning  },
+    { items.at( 1 ), "A", "", FieldValidator::Info },
+    { items.at( 1 ), "", V::softNotNullFailed, FieldValidator::Warning },
+    { items.at( 1 ), "abcsd fsdkajf nsa ", "", FieldValidator::Info },
+
+    // Attribute - Size
+    { items.at( 2 ), "", V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 2 ), "1", "", FieldValidator::Info },
+    { items.at( 2 ), "1a", V::numberValidationFailed, FieldValidator::Error },
+    { items.at( 2 ), "10001", V::numberUpperBoundReached.arg( 10000 ), FieldValidator::Error },
+    { items.at( 2 ), "-1", V::numberLowerBoundReached.arg( 0 ), FieldValidator::Error },
+    { items.at( 2 ), "150", "", FieldValidator::Info },
+
+    // Attribute - SectorId
+    { items.at( 3 ), "1", "", FieldValidator::Info },
+    { items.at( 3 ), "-100", "", FieldValidator::Info },
+    { items.at( 3 ), "13", V::softUniqueFailed, FieldValidator::Warning }, // there should already be feature with such value
+    { items.at( 3 ), "14", "", FieldValidator::Info },
+    { items.at( 3 ), "14sad", V::numberValidationFailed, FieldValidator::Error },
+    { items.at( 3 ), "14", "", FieldValidator::Info },
+
+    // Attribute - Occupied
+    // we currently do not support expression contraints
+
+    // Attribute - DateTime
+    // TODO: test datetime?
+
+    // Attribute - LastEdit
+    // TODO: test date?
+
+    // Attribute - Hash
+    { items.at( 7 ), "", "", FieldValidator::Info },
+    { items.at( 7 ), "1", V::hardUniqueFailed, FieldValidator::Error },
+    { items.at( 7 ), "", "", FieldValidator::Info },
+    { items.at( 7 ), "2", "", FieldValidator::Info },
+
+    // Attribute - Code
+    { items.at( 8 ), "", "", FieldValidator::Info },
+    { items.at( 8 ), "f", "", FieldValidator::Info },
+    { items.at( 8 ), "fi", "", FieldValidator::Info },
+    { items.at( 8 ), "five ", "", FieldValidator::Info },
+    { items.at( 8 ), "five chars limit", V::textTooLong.arg( 5 ), FieldValidator::Error },
+    { items.at( 8 ), "five ", "", FieldValidator::Info }
+  };
+
+  for ( const testunit &unit : testunits )
+  {
+    const FormItem *item = controller.formItem( unit.id );
+    controller.setFormValue( unit.id, unit.value );
+
+    QCOMPARE( item->validationMessage(), unit.expectedValidationMessage );
+    QCOMPARE( item->validationMessageLevel(), unit.expectedValidationMessageLevel );
+  }
+
+  QCOMPARE( controller.hasValidationErrors(), true );
+
+  // invalidate some attribute and check if hasValidationErrors responds correctly
+  controller.setFormValue( items.at( 8 ), "five chars limit" );
+  QCOMPARE( controller.hasValidationErrors(), false );
+
+  controller.setFormValue( items.at( 8 ), "five " );
+  QCOMPARE( controller.hasValidationErrors(), true );
+
+  // Try assigning different features and values to see if the state is reseted
+  QgsFeature feat2( sectorsLayer->dataProvider()->fields() );
+  FeatureLayerPair pair2( feat2, sectorsLayer.get() );
+
+  controller.setFeatureLayerPair( pair2 );
+
+  QCOMPARE( controller.hasValidationErrors(), true );
 }
