@@ -48,6 +48,7 @@
         <file>components/InputTextField.qml</file>
         <file>components/LayerList.qml</file>
         <file>components/LeftCheckBox.qml</file>
+        <file>components/LoadingSpinner.qml</file>
         <file>components/MainPanelButton.qml</file>
         <file>components/PanelHeader.qml</file>
         <file>components/PasswordField.qml</file>
@@ -68,11 +69,13 @@
         <file>editor/inputcheckbox.qml</file>
         <file>editor/inputdatetime.qml</file>
         <file>editor/inputexternalresource.qml</file>
+        <file>editor/inputqrcodereader.qml</file>
         <file>editor/inputrangeeditable.qml</file>
         <file>editor/inputrangeslider.qml</file>
         <file>editor/inputrelation.qml</file>
         <file>editor/inputrelationreference.qml</file>
         <file>editor/inputtextedit.qml</file>
+        <file>editor/inputtexteditmultiline.qml</file>
         <file>editor/inputvaluemap.qml</file>
         <file>editor/inputvaluerelation.qml</file>
         <file>form/FeatureForm.qml</file>
@@ -91,6 +94,5 @@
         <file>map/RecordToolbar.qml</file>
         <file>map/ScaleBar.qml</file>
         <file>qmldir</file>
-        <file>components/LoadingSpinner.qml</file>
     </qresource>
 </RCC>

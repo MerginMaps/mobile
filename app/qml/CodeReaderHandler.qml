@@ -25,18 +25,6 @@ Item {
     property var itemWidget
 
     /**
-     * Suppose to set `supportsDataImport` variable of a feature form. If true, field supports QR code reader.
-     * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
-     */
-    property var supportsDataImport: function supportsDataImport(name) {
-      if (!!name && name.toLowerCase().includes("qrcode")) {
-        return true
-      } else {
-        return false
-      }
-    }
-
-    /**
      * Invokes QR scaner and seves reference to the caller (widget) to save the value afterwards.
      * NOTE: Not supported for WIN yet
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
@@ -59,8 +47,8 @@ Item {
      * Suppose to be called after `importData` function as a callback to set the value to the widget.
      * \param value new current valaue to be set for a widget.
      */
-    property var setValue: function setValue(value) {
-      codeReaderHandler.itemWidget.valueChanged(value, value === "" || value === null)
+    property var setValue: function setValue( value ) {
+      codeReaderHandler.itemWidget.editorValueChanged( value, value === "" || value === null )
     }
   }
 

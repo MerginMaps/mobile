@@ -95,7 +95,7 @@ Item {
           height: header.rowHeight
           visible: featureForm.state === "edit" || featureForm.state === "add"
 
-          enabled: featureForm.controller.fieldValuesValid && featureForm.controller.constraintsHardValid
+          enabled: !featureForm.controller.hasValidationErrors
 
           color: enabled ? InputStyle.highlightColor : InputStyle.invalidButtonColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
