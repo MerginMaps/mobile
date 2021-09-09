@@ -266,8 +266,10 @@ class InputUtils: public QObject
       * Returns url to field editor component for a feature form.
       * If the widgetName does not match any supported widget, text edit is returned.
       * \param widgetName name of the attribute field widget
+      * \param config map coming from QGIS describing this field
+      * \param field qgsfield instance of this field
       */
-    Q_INVOKABLE static const QUrl getEditorComponentSource( const QString &widgetName, const QVariantMap &config = QVariantMap() );
+    Q_INVOKABLE static const QUrl getEditorComponentSource( const QString &widgetName, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField() );
 
     /**
      * \copydoc QgsCoordinateFormatter::format()

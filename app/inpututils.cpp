@@ -752,7 +752,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config )
+const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config, const QgsField &field )
 {
   QString path( "../editor/input%1.qml" );
 
@@ -768,6 +768,20 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
       {
         return QUrl( path.arg( QLatin1String( "rangeeditable" ) ) );
       }
+    }
+    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+  }
+
+  if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
+  {
+    return QUrl( path.arg( QStringLiteral( "qrcodereader" ) ) );
+  }
+
+  if ( widgetName == QStringLiteral( "textedit" ) )
+  {
+    if ( config.value( "IsMultiline" ).toBool() )
+    {
+      return QUrl( path.arg( QStringLiteral( "texteditmultiline" ) ) );
     }
     return QUrl( path.arg( QLatin1String( "textedit" ) ) );
   }

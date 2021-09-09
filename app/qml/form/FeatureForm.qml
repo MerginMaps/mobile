@@ -117,12 +117,6 @@ Item {
   property var importDataHandler: QtObject {
 
     /**
-     * Suppose to set `supportsDataImport` variable of a feature form. If true, enables to set data by this handler.
-     * \param name "Name" property of field item. Expecting alias if defined, otherwise field name.
-     */
-    property var supportsDataImport: function supportsDataImport(name) { return false }
-
-    /**
      * Suppose to be called to invoke a component to set data automatically (e.g. code scanner, sensor).
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */
@@ -511,23 +505,16 @@ Item {
           top: fieldLabelContainer.bottom
         }
 
-
         Loader {
           id: attributeEditorLoader
 
           height: childrenRect.height
           anchors { left: parent.left; right: parent.right }
 
-          signal dataHasChanged() // to propagate signal to valuerelation model from model
-
           property var value: AttributeValue
           property var config: EditorWidgetConfig
           property var widget: EditorWidget
           property var field: Field
-//          property var constraintHardValid: ConstraintHardValid
-//          property var constraintSoftValid: ConstraintSoftValid
-//          property bool constraintsHardValid: form.controller.constraintsHardValid
-//          property bool constraintsSoftValid: form.controller.constraintsSoftValid
           property var homePath: form.project ? form.project.homePath : ""
           property var customStyle: form.style
           property var externalResourceHandler: form.externalResourceHandler
@@ -536,7 +523,6 @@ Item {
           property var activeProject: form.project
           property var customWidget: form.customWidgetCallback
           property var labelAlias: Name
-          property bool supportsDataImport: importDataHandler.supportsDataImport(Name)
 
           property var associatedRelation: Relation
           property var formView: extraView
@@ -546,21 +532,28 @@ Item {
 
           source: {
             if ( widget !== undefined )
-               return form.loadWidgetFn(widget.toLowerCase(), config)
+               return form.loadWidgetFn( widget.toLowerCase(), config, field )
             else return ''
           }
         }
 
         Connections {
           target: attributeEditorLoader.item
+          ignoreUnknownSignals: true
+
           onValueChanged: {
+            if ( isNull )
+              console.log( "$$: It is null indeed" )
             AttributeValue = isNull ? undefined : value
           }
-        }
 
-        Connections {
-          target: attributeEditorLoader.item
-          ignoreUnknownSignals: true
+          onEditorValueChanged: {
+            if ( isNull )
+              console.log( "$$: It is null indeed" )
+
+            AttributeValue = isNull ? undefined : newValue
+          }
+
           onImportDataRequested: {
            importDataHandler.importData(attributeEditorLoader.item)
           }
@@ -606,16 +599,13 @@ Item {
         Connections {
           target: form
           ignoreUnknownSignals: true
+
           onSaved: {
             if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnSave === "function") {
               attributeEditorLoader.item.callbackOnSave()
             }
           }
-        }
 
-        Connections {
-          target: form
-          ignoreUnknownSignals: true
           onCanceled: {
             if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
               attributeEditorLoader.item.callbackOnCancel()
