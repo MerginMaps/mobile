@@ -24,6 +24,7 @@ namespace Resources {
       const QString numberValidationFailed = QObject::tr( "Value must be a number" );
       const QString numberUpperBoundReached = QObject::tr( "Value must be lower than %1" );
       const QString numberLowerBoundReached = QObject::tr( "Value must be higher than %1" );
+      const QString numberExceedingVariableLimits = QObject::tr( "Value is too large" );
 
       const QString textTooLong = QObject::tr( "Can not be longer than %1 characters" );
 

@@ -88,13 +88,13 @@ Item {
   }
 
   // Called when data in different fields are changed.
-  function dataUpdated( feature ) {
-    if ( !isReadOnly ) {
-      vrModel.currentFeature = feature
-      updateField()
-      combobox.popup.close()
-    }
-  }
+//  function dataUpdated( feature ) {
+//    if ( !isReadOnly ) {
+//      vrModel.currentFeature = feature
+//      updateField()
+//      combobox.popup.close()
+//    }
+//  }
 
   /**
     * in order to get values as

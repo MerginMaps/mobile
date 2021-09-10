@@ -640,7 +640,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   // Evaluate form items value state - hard/soft constraints, value validity
   {
-    bool allValuesValid = true;
+    bool containsValidationError = false;
     {
       QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
       while ( formItemsIterator != mFormItems.end() )
@@ -655,7 +655,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
           if ( !valid && valueMessageLevel == FieldValidator::Error )
           {
-            allValuesValid = false;
+            containsValidationError = true;
           }
 
           if ( valueMessage != item->validationMessage() )
@@ -669,7 +669,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         ++formItemsIterator;
       }
     }
-    setHasValidationErrors( allValuesValid );
+    setHasValidationErrors( containsValidationError );
   }
 
   // Check if we have any changes
@@ -1012,13 +1012,13 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   if ( isValidFormId( id ) )
   {
     std::shared_ptr<FormItem> item = mFormItems[id];
-    QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
 
-    if ( value != oldVal )
-    {
-      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
-      recalculateDerivedItems( true, false );
-    }
+    mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
+
+    QVariant newVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
+
+    recalculateDerivedItems( true, false );
+
     return true;
   }
   else
