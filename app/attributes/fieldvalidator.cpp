@@ -43,7 +43,7 @@ bool FieldValidator::validate( const FeatureLayerPair &pair, const FormItem &ite
   {
     valueIsValid = validateNumericField( item, value, validationMessage, level );
   }
-  else if ( item.editorWidgetType() == QStringLiteral( "Text" ) )
+  else if ( item.editorWidgetType() == QStringLiteral( "TextEdit" ) )
   {
     valueIsValid = validateTextField( item, value, validationMessage, level );
   }
@@ -61,15 +61,17 @@ bool FieldValidator::validate( const FeatureLayerPair &pair, const FormItem &ite
   bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
   if ( !hardConstraintSatisfied )
   {
-    validationMessage = constructConstraintValidationMessage( item, true );
+    validationMessage = constructConstraintValidationMessage( item );
     level = Error;
     return false;
   }
 
+  errors.clear();
+
   bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
   if ( !softConstraintSatisfied )
   {
-    validationMessage = constructConstraintValidationMessage( item, false );
+    validationMessage = constructConstraintValidationMessage( item );
     level = Warning;
     return false;
   }
@@ -81,6 +83,14 @@ bool FieldValidator::validateTextField( const FormItem &item, QVariant &value, Q
 {
   const QgsField field = item.field();
 
+  if ( !field.convertCompatible( value ) )
+  {
+    validationMessage = Resources::Texts::Validation::genericValidationFailed;
+    level = Error;
+    return false;
+  }
+
+  // Check if the text is not too long for the field
   if ( field.length() > 0 )
   {
     const int vLength = value.toString().length();
@@ -99,18 +109,29 @@ bool FieldValidator::validateNumericField( const FormItem &item, QVariant &value
 {
   const QgsField field = item.field();
 
-  // First check if the value is a number
-  if ( !field.convertCompatible( value ) ) // TODO: when value is null, return true
+  if ( value.isNull() )
   {
-    validationMessage = Resources::Texts::Validation::numberValidationFailed;
+    return true;
+  }
+
+  QString errorMessage;
+
+  if ( !field.convertCompatible( value, &errorMessage ) )
+  {
+    if ( errorMessage.contains( QStringLiteral( "too large" ) ) )
+    {
+      validationMessage = Resources::Texts::Validation::numberExceedingVariableLimits;
+    }
+    else
+    {
+      validationMessage = Resources::Texts::Validation::numberValidationFailed;
+    }
     level = Error;
     return false;
   }
 
-  // TODO: you might also want to check if length of the value is not higher than field length (if this is text)
-
   bool isRangeEditable = item.editorWidgetType() == QStringLiteral( "Range" ) &&
-                         item.editorWidgetConfig()[QStringLiteral( "Style" )] == QStringLiteral( "SpinBox" );
+                         item.editorWidgetConfig().value( QStringLiteral( "Style" ) ) == QStringLiteral( "SpinBox" );
 
   // Check min/max range
   if ( isRangeEditable )
@@ -140,7 +161,6 @@ bool FieldValidator::validateGenericField( const FormItem &item, QVariant &value
 {
   const QgsField field = item.field();
 
-  // First check if the value is a number
   if ( !field.convertCompatible( value ) )
   {
     validationMessage = Resources::Texts::Validation::genericValidationFailed;
@@ -151,43 +171,40 @@ bool FieldValidator::validateGenericField( const FormItem &item, QVariant &value
   return true;
 }
 
-QString FieldValidator::constructConstraintValidationMessage( const FormItem &item, bool isHardConstraint )
+QString FieldValidator::constructConstraintValidationMessage( const FormItem &item )
 {
   const QgsField field = item.field();
   QStringList validationMessages;
 
   if ( field.constraints().constraints() & QgsFieldConstraints::ConstraintUnique )
   {
-    QString uniqueMsg;
+    QgsFieldConstraints::ConstraintStrength strength = field.constraints().constraintStrength( QgsFieldConstraints::ConstraintUnique );
 
-    if ( isHardConstraint )
+    if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      uniqueMsg = Resources::Texts::Validation::hardUniqueFailed;
+      validationMessages << Resources::Texts::Validation::hardUniqueFailed;
     }
-    else // is soft
+    else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      uniqueMsg = Resources::Texts::Validation::softUniqueFailed;
+      validationMessages << Resources::Texts::Validation::softUniqueFailed;
     }
-    validationMessages << uniqueMsg;
   }
 
   if ( field.constraints().constraints() & QgsFieldConstraints::ConstraintNotNull )
   {
-    QString notNullMsg;
+    QgsFieldConstraints::ConstraintStrength strength = field.constraints().constraintStrength( QgsFieldConstraints::ConstraintNotNull );
 
-    if ( isHardConstraint )
+    if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      notNullMsg = Resources::Texts::Validation::hardNotNullFailed;
+      validationMessages << Resources::Texts::Validation::hardNotNullFailed;
     }
-    else // is soft
+    else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      notNullMsg = Resources::Texts::Validation::softNotNullFailed;
+      validationMessages << Resources::Texts::Validation::softNotNullFailed;
     }
-    validationMessages << notNullMsg;
   }
 
-  QString expression = field.constraints().constraintExpression();
-  if ( !expression.isEmpty() )
+  if ( !field.constraints().constraintDescription().isEmpty() )
   {
     // Let's show something only if constraint description is provided
     validationMessages << field.constraints().constraintDescription();

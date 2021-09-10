@@ -22,9 +22,9 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Item {
-  id: fieldItem
+  id: root
 
-  signal valueChanged(var value, bool isNull)
+  /*required*/ property var parentValue: parent.value
 
   readonly property int max_range: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
 
@@ -34,6 +34,8 @@ Item {
   property real step: config["Step"] ? config["Step"] : 1
   property var locale: Qt.locale()
   property string suffix: config["Suffix"] ? config["Suffix"] : ""
+
+  signal editorValueChanged( var newValue, bool isNull )
 
   function getRange(rangeValue, defaultRange) {
     if ( typeof rangeValue !== 'undefined' && rangeValue >= -max_range && rangeValue <= max_range )
@@ -74,11 +76,12 @@ Item {
 
         Layout.preferredWidth: rowLayout.width / 3
         Layout.maximumWidth: rowLayout.width / 3
-        Layout.preferredHeight: fieldItem.height
-        Layout.maximumHeight: fieldItem.height
+        Layout.preferredHeight: root.height
+        Layout.maximumHeight: root.height
 
         elide: Text.ElideRight
-        text: Number(slider.value).toFixed(precision).toLocaleString(fieldItem.locale) + fieldItem.suffix
+        text: Number( slider.value ).toFixed( precision ).toLocaleString( root.locale ) + root.suffix
+
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
         font.pointSize: customStyle.fields.fontPointSize
@@ -90,21 +93,17 @@ Item {
       Slider {
         id: slider
 
-        to: fieldItem.to
-        from: fieldItem.from
-        stepSize: fieldItem.step
-        value: fieldItem.parent.value ? fieldItem.parent.value : 0
+        to: root.to
+        from: root.from
+        stepSize: root.step
+        value: root.parent.value ? root.parent.value : 0
 
         Layout.fillWidth: true
-        Layout.maximumHeight: fieldItem.height
-        Layout.preferredHeight: fieldItem.height
+        Layout.maximumHeight: root.height
+        Layout.preferredHeight: root.height
         rightPadding: customStyle.fields.sideMargin
 
-        onValueChanged: {
-          if (visible) {
-            fieldItem.valueChanged( slider.value, false )
-          }
-        }
+        onValueChanged: root.editorValueChanged( slider.value, false )
 
         background: Rectangle {
           x: slider.leftPadding
@@ -113,7 +112,7 @@ Item {
           height: slider.height * 0.1
           radius: 2 * QgsQuick.Utils.dp
 
-          color: fieldItem.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
+          color: root.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
         }
 
         handle: Rectangle {

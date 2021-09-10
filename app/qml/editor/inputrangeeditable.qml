@@ -16,7 +16,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Item {
-  id: fieldItem
+  id: root
 
   signal valueChanged( var value, bool isNull )
 
@@ -68,7 +68,7 @@ Item {
       Item {
         id: minusSign
 
-        enabled: toNumber( numberInput.displayText ) - fieldItem.step >= config["Min"]
+        enabled: toNumber( numberInput.text ) - root.step >= config["Min"]
 
         Layout.preferredHeight: parent.height
         Layout.maximumHeight: parent.height
@@ -99,12 +99,12 @@ Item {
           y: -(0.1 * height)
 
           onClicked: {
-            let v = toNumber( numberInput.displayText )
+            let v = toNumber( numberInput.text )
 
             if ( !Number.isNaN(v) )
             {
-              v -= fieldItem.step
-              valueChanged( v.toFixed( fieldItem.precision ), false )
+              v -= root.step
+              valueChanged( v.toFixed( root.precision ), false )
             }
           }
         }
@@ -138,27 +138,24 @@ Item {
               id: numberInput
 
               onTextEdited: {
-                console.log("Text edited", text)
-                let v = toNumber( numberInput.displayText )
+//                let v = toNumber( numberInput.text )
 
-                if ( Number.isNaN( v ) )
-                {
-                  valueChanged( numberInput.displayText, numberInput.displayText === "" )
-                }
-                else
-                {
-                  valueChanged( v, numberInput.displayText === "" )
-                }
+//                if ( Number.isNaN( v ) )
+//                {
+//                  valueChanged( numberInput.text, numberInput.text === "" )
+//                }
+//                else
+//                {
+//                  valueChanged( v, numberInput.text === "" )
+//                }
+                root.valueChanged( text, text === "" )
               }
-
-              onTextChanged: console.log("Text changed", text)
-              onDisplayTextChanged: console.log("Display text", displayText)
 
               anchors.fill: parent
 
-              text: fieldItem.parent.value !== undefined ? Number( fieldItem.parent.value ).toLocaleString( locale, 'f', fieldItem.precision ) : ""
+              text: root.parent.value !== undefined ? root.parent.value : ""
 
-              inputMethodHints: fieldItem.precision === 0 ? Qt.ImhDigitsOnly : Qt.ImhFormattedNumbersOnly
+              inputMethodHints: Qt.ImhFormattedNumbersOnly
               font.pointSize: customStyle.fields.fontPointSize
               color: customStyle.fields.fontColor
               selectionColor: customStyle.fields.fontColor
@@ -182,9 +179,9 @@ Item {
             Text {
               id: suffix
 
-              text: fieldItem.suffix
+              text: root.suffix
 
-              visible: fieldItem.suffix !== "" && numberInput.text !== ""
+              visible: root.suffix !== "" && numberInput.text !== ""
 
               anchors.fill: parent
               horizontalAlignment: Qt.AlignLeft
@@ -207,7 +204,7 @@ Item {
       Item {
         id: plusSign
 
-        enabled: toNumber( numberInput.displayText ) + fieldItem.step <= config["Max"]
+        enabled: toNumber( numberInput.text ) + root.step <= config["Max"]
 
         Layout.preferredHeight: parent.height
         Layout.maximumHeight: parent.height
@@ -238,12 +235,12 @@ Item {
           y: -(0.1 * height)
 
           onClicked: {
-            let v = toNumber( numberInput.displayText )
+            let v = toNumber( numberInput.text )
 
             if ( !Number.isNaN( v ) )
             {
-              v += fieldItem.step
-              valueChanged( v.toFixed( fieldItem.precision ), false )
+              v += root.step
+              valueChanged( v.toFixed( root.precision ), false )
             }
           }
 

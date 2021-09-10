@@ -173,14 +173,10 @@ Item {
   }
 
   function save() {
-    if ( !controller.constraintsHardValid )
+    if ( controller.hasValidationErrors )
     {
-      console.log( qsTr( 'Constraints not valid') )
+      console.log( qsTr( 'Can not save the form, there are validation errors' ) )
       return
-    }
-    else if ( !controller.constraintsSoftValid )
-    {
-      console.log( qsTr( 'Note: soft constraints were not met') )
     }
 
     parent.focus = true
@@ -488,11 +484,20 @@ Item {
 
           text: ValidationMessage
           visible: ValidationMessage // show if there is something
-          height: visible ? undefined : 0
+          height: visible ? paintedHeight : 0
           wrapMode: Text.WordWrap
+          opacity: visible ? 1 : 0
           color: ValidationMessageLevel === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
+
+          Behavior on height {
+            NumberAnimation { duration: 100 }
+          }
+
+          Behavior on opacity {
+            NumberAnimation { duration: 100 }
+          }
         }
       }
 
@@ -580,13 +585,12 @@ Item {
         Connections {
           target: form.controller
           onFormDataChanged: {
-            if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
-            {
-              if ( roles.length === 1 && roles[0] === AttributeFormModel.ValueValidity )
-                return // do not propagate data changed when this is only value validity, it would lead to infinite loop
+            // TODO: This should not be needed for value relations anymore, double check that!
+//            if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
+//            {
 
-              attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
-            }
+//              attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
+//            }
           }
           onFeatureLayerPairChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )

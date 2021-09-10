@@ -14,8 +14,8 @@ import QtGraphicalEffects 1.14
 AbstractEditor {
   id: root
 
-  /*required*/ property var parentValue: parent.value
   /*required*/ property var config: parent.config
+  /*required*/ property var parentValue: parent.value
   /*required*/ property bool isReadOnly: parent.readOnly
 
   signal editorValueChanged( var newValue, bool isNull )
