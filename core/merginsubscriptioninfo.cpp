@@ -44,6 +44,24 @@ void MerginSubscriptionInfo::clear()
 
 void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
 {
+  // parse service.plan data
+  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+  mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
+  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+
+  MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
+  if ( planProvider != mPlanProvider )
+  {
+    mPlanProvider = planProvider;
+    emit planProviderChanged();
+  }
+  QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
+  if ( planProductId !=  mPlanProductId )
+  {
+    mPlanProductId = planProductId;
+    emit planProductIdChanged();
+  }
+
   // parse service.subscription data
   QJsonObject subscriptionObj = docObj.value( QStringLiteral( "subscription" ) ).toObject();
   if ( subscriptionObj.isEmpty() )
@@ -54,7 +72,6 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
   else
   {
     // user has subscription
-
     mNextBillPrice = subscriptionObj.value( QStringLiteral( "next_bill_price" ) ).toString();
     QString nextPaymentDate = subscriptionObj.value( QStringLiteral( "next_payment" ) ).toString();
     QString validUntil = subscriptionObj.value( QStringLiteral( "valid_until" ) ).toString();
@@ -90,25 +107,6 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
     {
       mSubscriptionStatus = MerginSubscriptionStatus::CanceledSubscription;
     }
-  }
-
-  // parse service.plan data
-  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
-  mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
-  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
-
-
-  MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
-  if ( planProvider != mPlanProvider )
-  {
-    mPlanProvider = planProvider;
-    emit planProviderChanged();
-  }
-  QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
-  if ( planProductId !=  mPlanProductId )
-  {
-    mPlanProductId = planProductId;
-    emit planProductIdChanged();
   }
 
   emit subscriptionInfoChanged();
