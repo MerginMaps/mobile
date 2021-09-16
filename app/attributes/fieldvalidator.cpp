@@ -16,6 +16,7 @@
 #include "qgsvectorlayerutils.h"
 
 #include "qdebug.h"
+#include <QRegularExpression>
 
 FieldValidator::FieldValidator( QObject *parent ) :
   QObject( parent )
@@ -61,7 +62,7 @@ bool FieldValidator::validate( const FeatureLayerPair &pair, const FormItem &ite
   bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
   if ( !hardConstraintSatisfied )
   {
-    validationMessage = constructConstraintValidationMessage( item );
+    validationMessage = constructConstraintValidationMessage( item, errors );
     level = Error;
     return false;
   }
@@ -71,7 +72,7 @@ bool FieldValidator::validate( const FeatureLayerPair &pair, const FormItem &ite
   bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
   if ( !softConstraintSatisfied )
   {
-    validationMessage = constructConstraintValidationMessage( item );
+    validationMessage = constructConstraintValidationMessage( item, errors );
     level = Warning;
     return false;
   }
@@ -171,28 +172,18 @@ bool FieldValidator::validateGenericField( const FormItem &item, QVariant &value
   return true;
 }
 
-QString FieldValidator::constructConstraintValidationMessage( const FormItem &item )
+QString FieldValidator::constructConstraintValidationMessage( const FormItem &item, const QStringList &unmetConstraints )
 {
   const QgsField field = item.field();
+  QgsFieldConstraints fldCons = field.constraints();
   QStringList validationMessages;
 
-  if ( field.constraints().constraints() & QgsFieldConstraints::ConstraintUnique )
-  {
-    QgsFieldConstraints::ConstraintStrength strength = field.constraints().constraintStrength( QgsFieldConstraints::ConstraintUnique );
+  bool hasNotNullConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintNotNull;
+  bool notNullViolated = unmetConstraints.contains( QStringLiteral( "value is NULL" ) );
 
-    if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
-    {
-      validationMessages << Resources::Texts::Validation::hardUniqueFailed;
-    }
-    else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
-    {
-      validationMessages << Resources::Texts::Validation::softUniqueFailed;
-    }
-  }
-
-  if ( field.constraints().constraints() & QgsFieldConstraints::ConstraintNotNull )
+  if ( hasNotNullConstraint && notNullViolated )
   {
-    QgsFieldConstraints::ConstraintStrength strength = field.constraints().constraintStrength( QgsFieldConstraints::ConstraintNotNull );
+    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintNotNull );
 
     if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
@@ -204,15 +195,51 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
     }
   }
 
-  if ( !field.constraints().constraintDescription().isEmpty() )
+  bool hasUniqueConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintUnique;
+  bool uniqueViolated = unmetConstraints.contains( QStringLiteral( "value is not unique" ) );
+
+  if ( hasUniqueConstraint && uniqueViolated )
   {
-    // Let's show something only if constraint description is provided
-    validationMessages << field.constraints().constraintDescription();
+    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintUnique );
+
+    if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
+    {
+      validationMessages << Resources::Texts::Validation::hardUniqueFailed;
+    }
+    else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
+    {
+      validationMessages << Resources::Texts::Validation::softUniqueFailed;
+    }
+  }
+
+  bool hasExpressionConstrain = fldCons.constraints() & QgsFieldConstraints::ConstraintExpression;
+  bool expressionViolated = unmetConstraints.filter( QRegularExpression( "(parser error|evaluation error|check failed)" ) ).size() > 0;
+
+  if ( hasExpressionConstrain && expressionViolated )
+  {
+    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintExpression );
+    bool containsDescription = !fldCons.constraintDescription().isEmpty();
+
+    if ( containsDescription )
+    {
+      validationMessages << fldCons.constraintDescription();
+    }
+    else
+    {
+      if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
+      {
+        validationMessages << Resources::Texts::Validation::hardExpressionFailed;
+      }
+      else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
+      {
+        validationMessages << Resources::Texts::Validation::softExpressionFailed;
+      }
+    }
   }
 
   if ( validationMessages.size() )
   {
-    return validationMessages.join( QStringLiteral( "\n" ) );
+    return validationMessages.join( QStringLiteral( "\n" ) ); // each message on new line
   }
 
   return QString();

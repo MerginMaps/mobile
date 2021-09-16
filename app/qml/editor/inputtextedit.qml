@@ -60,9 +60,8 @@ AbstractEditor {
       color: customStyle.fields.backgroundColor
     }
 
-    onTextEdited: {
-      console.log( "$$: Sending text:", text )
-      editorValueChanged( text, text === "" )
-    }
+    onTextEdited: editorValueChanged( text, text === "" )
+
+    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
   }
 }

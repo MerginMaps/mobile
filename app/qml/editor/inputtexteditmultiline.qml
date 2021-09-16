@@ -43,5 +43,7 @@ AbstractEditor {
     onLinkActivated: Qt.openUrlExternally( link )
 
     onTextChanged: root.editorValueChanged( text, text === "" )
+
+    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
   }
 }
