@@ -51,7 +51,7 @@ class FieldValidator : public QObject
     // TODO: what other editors can we validate? value relations maybe?
 
   private:
-    static QString constructConstraintValidationMessage( const FormItem &item );
+    static QString constructConstraintValidationMessage( const FormItem &item, const QStringList &unmetConstraints );
 };
 
 #endif // FIELDVALIDATOR_H
