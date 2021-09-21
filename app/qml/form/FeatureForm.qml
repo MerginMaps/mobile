@@ -81,7 +81,7 @@ Item {
           */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
           itemWidget.image.source = prefixToRelativePath + "/" + value
-          itemWidget.valueChanged(value, value === "" || value === null)
+          itemWidget.editorValueChanged(value, value === "" || value === null)
         }
     }
 
@@ -176,6 +176,9 @@ Item {
     if ( controller.hasValidationErrors )
     {
       console.log( qsTr( 'Can not save the form, there are validation errors' ) )
+      __inputUtils.showNotification( qsTr( 'Feature could not be saved, please check all required fields' ) )
+
+      // In future we could navigate user to a field that contains validation error
       return
     }
 
@@ -517,6 +520,7 @@ Item {
           anchors { left: parent.left; right: parent.right }
 
           property var value: AttributeValue
+          property bool valueIsNull: AttributeValueIsNull
           property var config: EditorWidgetConfig
           property var widget: EditorWidget
           property var field: Field
@@ -532,6 +536,8 @@ Item {
           property var associatedRelation: Relation
           property var formView: extraView
 
+          onLoaded: initialized = true
+
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler
 
@@ -546,16 +552,7 @@ Item {
           target: attributeEditorLoader.item
           ignoreUnknownSignals: true
 
-          onValueChanged: {
-            if ( isNull )
-              console.log( "$$: It is null indeed" )
-            AttributeValue = isNull ? undefined : value
-          }
-
           onEditorValueChanged: {
-            if ( isNull )
-              console.log( "$$: It is null indeed" )
-
             AttributeValue = isNull ? undefined : newValue
           }
 
@@ -584,14 +581,7 @@ Item {
 
         Connections {
           target: form.controller
-          onFormDataChanged: {
-            // TODO: This should not be needed for value relations anymore, double check that!
-//            if ( attributeEditorLoader.item && attributeEditorLoader.item.dataUpdated )
-//            {
 
-//              attributeEditorLoader.item.dataUpdated( form.controller.featureLayerPair.feature )
-//            }
-          }
           onFeatureLayerPairChanged: {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
             {

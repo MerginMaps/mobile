@@ -54,7 +54,7 @@ import "../components"
  * relative to project path |  image path - project home path |   photos/img0001.jpg
  */
 Item {
-  signal valueChanged(var value, bool isNull)
+  signal editorValueChanged(var newValue, bool isNull)
 
   property var image: image
   property var cameraIcon: customStyle.icons.camera

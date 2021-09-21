@@ -82,7 +82,7 @@ Item {
               imageDeleteDialog.imagePath = imagePath
               imageDeleteDialog.open()
             } else {
-              itemWidget.valueChanged("", false)
+              itemWidget.editorValueChanged("", false)
             }
         }
 
@@ -98,7 +98,7 @@ Item {
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
           if (value) {
             var newCurrentValue = __inputUtils.getRelativePath(value, prefixToRelativePath)
-            itemWidget.valueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
+            itemWidget.editorValueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }
         }
 
@@ -208,11 +208,11 @@ Item {
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
-            externalResourceHandler.itemWidget.valueChanged("", false)
+            externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false
         }
         onNo: {
-            externalResourceHandler.itemWidget.valueChanged("", false)
+            externalResourceHandler.itemWidget.editorValueChanged("", false)
             // visible = false called afterwards when onReject
         }
         onRejected: {

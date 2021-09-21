@@ -26,7 +26,7 @@ import "../components"
  * Do not use directly from Application QML
  */
 Item {
-  signal valueChanged( var value, bool isNull )
+  signal editorValueChanged( var newValue, bool isNull )
 
   property var fieldName: field.name
   property bool allowMultipleValues: config['AllowMulti']
@@ -73,11 +73,11 @@ Item {
       let keys = featureIds.map( id => vrModel.attributeFromValue( FeaturesListModel.FeatureId, id, FeaturesListModel.KeyColumn ) )
       let valueList = '{' + keys.join(',') + '}'
 
-      valueChanged(valueList, isNull)
+      editorValueChanged(valueList, isNull)
     }
 
     else {
-      valueChanged(
+      editorValueChanged(
             vrModel.attributeFromValue(
               FeaturesListModel.FeatureId,
               featureIds,
@@ -233,7 +233,7 @@ Item {
      * No need to set currentIndex manually since it is done in onWidgetValueChanged update function
      */
     onItemClicked: {
-      valueChanged( vrModel.attributeFromValue( FeaturesListModel.FeatureId, index, FeaturesListModel.KeyColumn ), false )
+      editorValueChanged( vrModel.attributeFromValue( FeaturesListModel.FeatureId, index, FeaturesListModel.KeyColumn ), false )
     }
   }
 }

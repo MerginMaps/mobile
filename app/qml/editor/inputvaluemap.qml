@@ -24,7 +24,7 @@ import "../components"
  * Do not use directly from Application QML
  */
 Item {
-  signal valueChanged(var value, bool isNull)
+  signal editorValueChanged(var newValue, bool isNull)
   property bool isReadOnly: readOnly
 
   id: fieldItem
@@ -83,7 +83,7 @@ Item {
     onCurrentTextChanged: {
       var currentMap = config['map'].length ? config['map'][currentIndex] : config['map']
       if (currentMap)
-        valueChanged(currentMap[currentText], false)
+        editorValueChanged(currentMap[currentText], false)
     }
 
     // Workaround to get a signal when the value has changed
