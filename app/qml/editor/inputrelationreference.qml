@@ -20,7 +20,7 @@ AbstractEditor {
 
   property var parentValue: root.parent.value
 
-  signal valueChanged( var value, bool isNull )
+  signal editorValueChanged( var newValue, bool isNull )
   signal openLinkedFeature( var linkedFeature )
 
   onContentClicked: {
@@ -103,12 +103,12 @@ AbstractEditor {
       }
 
       onFeatureClicked: {
-        root.valueChanged( featureIds, false )
+        root.editorValueChanged( featureIds, false )
         root.parent.formView.pop()
       }
 
       onUnlinkClicked: {
-        root.valueChanged( undefined, true )
+        root.editorValueChanged( undefined, true )
         root.parent.formView.pop()
       }
 

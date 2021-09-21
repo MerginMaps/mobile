@@ -30,7 +30,7 @@ Item {
   property string booleanEnum: "1" // QMetaType::Bool Enum of Qvariant::Type
   property bool isReadOnly: readOnly
 
-  signal valueChanged( var value, bool isNull )
+  signal editorValueChanged( var newValue, bool isNull )
 
   function getConfigValue(configValue, defaultValue) {
     if (!configValue && field.type + "" === fieldItem.booleanEnum) {
@@ -86,7 +86,7 @@ Item {
       checked: value === fieldItem.checkedState
 
       onSwitchChecked: {
-        valueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
+        editorValueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
       }
 
       // Workaround to get a signal when the value has changed

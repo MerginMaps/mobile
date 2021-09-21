@@ -27,7 +27,7 @@ import QgsQuick 0.1 as QgsQuick
  * Do not use directly from Application QML
  */
 Item {
-    signal valueChanged(var value, bool isNull)
+    signal editorValueChanged(var newValues, bool isNull)
     property real iconSize:  fieldItem.height * 0.75
 
     id: fieldItem
@@ -148,7 +148,7 @@ Item {
                     onClicked: {
                       var newDate = new Date()
                       var newValue = field.isDateOrTime ? newDate : Qt.formatDateTime(newDate, config['field_format'])
-                      valueChanged(newValue, false)
+                      editorValueChanged(newValue, false)
                     }
                 }
             }
@@ -310,7 +310,7 @@ Item {
                           }
 
                           var newValue = field.isDateOrTime ? newDate : Qt.formatDateTime(newDate, config['field_format'])
-                          valueChanged(newValue, newValue === undefined)
+                          editorValueChanged(newValue, newValue === undefined)
                           popup.close()
                       }
                   }

@@ -544,6 +544,31 @@ bool AttributeController::recalculateDefaultValues(
         }
       }
     }
+
+    if ( isFirstUpdateOfNewFeature )
+    {
+      // check if item is a slider, if so and it does not have default value,
+      // set it's initial value from NULL to zero or minimum
+      bool isSlider = item->editorWidgetType() == QStringLiteral( "Range" ) &&
+                      item->editorWidgetConfig().value( QStringLiteral( "Style" ) ) == QStringLiteral( "Slider" );
+      bool hasDefaultValueDefinition = !defaultDefinition.expression().isEmpty();
+
+      if ( isSlider && !hasDefaultValueDefinition )
+      {
+        double min = item->editorWidgetConfig().value( "Min" ).toDouble();
+        double max = item->editorWidgetConfig().value( "Max" ).toDouble();
+        double valueToSet = 0;
+
+        if ( !( min <= valueToSet && valueToSet <= max ) )
+        {
+          valueToSet = qMin( min, max );
+        }
+
+        mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), valueToSet );
+        changedFormItems.insert( item->id() );
+      }
+    }
+
     ++formItemsIterator;
   }
   return hasChanges;
@@ -648,22 +673,21 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         std::shared_ptr<FormItem> item = formItemsIterator.value();
         if ( item->type() == FormItem::Field )
         {
-          QString valueMessage;
-          FieldValidator::ValidationMessageLevel valueMessageLevel;
+          QString validationMessage;
+          FieldValidator::ValidationMessageLevel validationMessageLevel;
 
-          bool valid = FieldValidator::validate( featureLayerPair(), *item, valueMessage, valueMessageLevel );
+          bool valid = FieldValidator::validate( featureLayerPair(), *item, validationMessage, validationMessageLevel );
 
-          if ( !valid && valueMessageLevel == FieldValidator::Error )
+          if ( !valid && validationMessageLevel == FieldValidator::Error )
           {
             containsValidationError = true;
           }
 
-          if ( valueMessage != item->validationMessage() )
-            // DNC: this is the place where I would rather use enums or some other kind of check instead of string comparison
+          if ( validationMessage != item->validationMessage() )
           {
-            item->setValidationMessage( valueMessage );
-            item->setValidationMessageLevel( valueMessageLevel );
-            changedFormItems << item->id();
+            item->setValidationMessage( validationMessage );
+            item->setValidationMessageLevel( validationMessageLevel );
+            changedFormItems.insert( item->id() );
           }
         }
         ++formItemsIterator;
@@ -1015,10 +1039,9 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
 
     mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
 
-    QVariant newVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
+    emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
 
     recalculateDerivedItems( true, false );
-
     return true;
   }
   else

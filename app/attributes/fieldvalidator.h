@@ -48,7 +48,6 @@ class FieldValidator : public QObject
     static bool validateTextField( const FormItem &item, QVariant &value, QString &validationMessage, ValidationMessageLevel &level );
     static bool validateNumericField( const FormItem &item, QVariant &value, QString &validationMessage, ValidationMessageLevel &level );
     static bool validateGenericField( const FormItem &item, QVariant &value, QString &validationMessage, ValidationMessageLevel &level );
-    // TODO: what other editors can we validate? value relations maybe?
 
   private:
     static QString constructConstraintValidationMessage( const FormItem &item, const QStringList &unmetConstraints );

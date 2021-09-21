@@ -15,8 +15,8 @@
 #include "qgsfield.h"
 #include "qgsvectorlayerutils.h"
 
-#include "qdebug.h"
 #include <QRegularExpression>
+#include <QLocale>
 
 FieldValidator::FieldValidator( QObject *parent ) :
   QObject( parent )
@@ -117,6 +117,8 @@ bool FieldValidator::validateNumericField( const FormItem &item, QVariant &value
 
   QString errorMessage;
 
+  bool containsDecimals = value.toString().contains( QLocale().decimalPoint() ) || value.toString().contains( "." );
+
   if ( !field.convertCompatible( value, &errorMessage ) )
   {
     if ( errorMessage.contains( QStringLiteral( "too large" ) ) )
@@ -125,8 +127,19 @@ bool FieldValidator::validateNumericField( const FormItem &item, QVariant &value
     }
     else
     {
-      validationMessage = Resources::Texts::Validation::numberValidationFailed;
+      validationMessage = Resources::Texts::Validation::numberInvalid;
     }
+
+    level = Error;
+    return false;
+  }
+  else if ( containsDecimals && field.type() != QVariant::Type::Double )
+  {
+    /* ConverCompatible check passes for doubles written into int fields,
+     * however, the value would not be saved and would get replaced by zero,
+     * so we need to handle it here and set invalid state for such input.
+     */
+    validationMessage = Resources::Texts::Validation::numberMustBeInt;
     level = Error;
     return false;
   }
@@ -139,7 +152,7 @@ bool FieldValidator::validateNumericField( const FormItem &item, QVariant &value
   {
     double min = item.editorWidgetConfig().value( "Min" ).toDouble();
     double max = item.editorWidgetConfig().value( "Max" ).toDouble();
-    double val = value.toDouble(); // TODO: is this good conversion to double?
+    double val = value.toDouble();
 
     if ( val < min )
     {

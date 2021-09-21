@@ -21,7 +21,6 @@ Item {
 
   property real widgetHeight: customStyle.fields.height * 3 // three rows
 
-  signal valueChanged( var value, bool isNull )
   signal featureLayerPairChanged()
 
   signal openLinkedFeature( var linkedFeature )

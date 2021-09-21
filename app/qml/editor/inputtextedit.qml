@@ -20,6 +20,7 @@ AbstractEditor {
   id: root
 
   /*required*/ property var parentValue: parent.value
+  /*required*/ property bool parentValueIsNull: parent.valueIsNull
   /*required*/ property bool isReadOnly: parent.readOnly
 
   signal editorValueChanged( var newValue, bool isNull )
@@ -39,7 +40,7 @@ AbstractEditor {
     font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
 
-    text: root.parentValue !== undefined ? root.parentValue : ''
+    text: root.parentValue === undefined || root.parentValueIsNull ? '' : root.parentValue
     inputMethodHints: field.isNumeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
     states: [
@@ -60,7 +61,15 @@ AbstractEditor {
       color: customStyle.fields.backgroundColor
     }
 
-    onTextEdited: editorValueChanged( text, text === "" )
+    onTextEdited: {
+      let val = text
+      if ( field.isNumeric )
+      {
+        val = val.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot and remove spaces
+      }
+
+      editorValueChanged( val, val === "" )
+    }
 
     onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
   }

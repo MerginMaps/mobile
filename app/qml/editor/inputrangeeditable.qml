@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,239 +15,154 @@ import QtGraphicalEffects 1.14
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
-Item {
+
+AbstractEditor {
   id: root
 
-  signal valueChanged( var value, bool isNull )
+  /*required*/ property var parentValue: parent.value
+  /*required*/ property bool parentValueIsNull: parent.valueIsNull
+  /*required*/ property bool isReadOnly: parent.readOnly
 
   property var locale: Qt.locale()
   property real precision: config['Precision'] ? config['Precision'] : 0
   property string suffix: config['Suffix'] ? config['Suffix'] : ''
+
   // don't ever use a step smaller than would be visible in the widget
   // i.e. if showing 2 decimals, smallest increment will be 0.01
   // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
   property real step: Math.max(config["Step"], Math.pow( 10.0, 0.0 - precision ))
 
-  function toNumber( localeString ) {
-    try {
-      var d = Number.fromLocaleString( locale, localeString )
-    }
-    catch ( error ) {
-      d = Number( localeString )
-    }
+  signal editorValueChanged( var newValue, bool isNull )
 
-    return d
-  }
+  enabled: !isReadOnly
 
-  enabled: !readOnly
-  height: customStyle.fields.height
+  leftAction: Item {
+    id: minusSign
 
-  anchors {
-    left: parent.left
-    right: parent.right
-  }
-
-  // background
-  Rectangle {
     anchors.fill: parent
-    border.color: customStyle.fields.normalColor
-    border.width: 1 * QgsQuick.Utils.dp
-    color: customStyle.fields.backgroundColor
-    radius: customStyle.fields.cornerRadius
+    enabled: Number( numberInput.text ) - root.step >= config["Min"]
+
+    Image {
+      id: imgMinus
+
+      anchors.centerIn: parent
+
+      width: parent.width / 3
+      sourceSize.width: parent.width / 3
+
+      source: customStyle.icons.minus
+    }
+
+    ColorOverlay {
+      source: imgMinus
+      color: minusSign.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+      anchors.fill: imgMinus
+    }
   }
 
-  Item {
+  onLeftActionClicked: {
+    if ( minusSign.enabled )
+    {
+      let decremented = Number( numberInput.text ) - root.step
+      root.editorValueChanged( decremented.toFixed( root.precision ), false )
+    }
+  }
+
+  content: Item {
     id: contentContainer
 
     anchors.fill: parent
 
-    RowLayout {
+    Row {
+      id: inputAndSuffixContainer
 
-      anchors.fill: parent
+      x: parent.width / 2 - width / 2
 
-      Item {
-        id: minusSign
+      width: numberInput.contentWidth + suffix.contentWidth > parent.width ? parent.width : numberInput.contentWidth + suffix.contentWidth
 
-        enabled: toNumber( numberInput.text ) - root.step >= config["Min"]
+      height: parent.height
 
-        Layout.preferredHeight: parent.height
-        Layout.maximumHeight: parent.height
-        Layout.preferredWidth: parent.height
-        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+      TextInput {
+        id: numberInput
 
-        Image {
-          id: imgMinus
-
-          anchors.centerIn: parent
-
-          width: parent.width / 3
-          sourceSize.width: parent.width / 3
-
-          source: customStyle.icons.minus
+        onTextEdited: {
+          let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
+          root.editorValueChanged( val, val  === "" )
         }
 
-        ColorOverlay {
-          source: imgMinus
-          color: minusSign.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
-          anchors.fill: imgMinus
-        }
+        text: root.parentValue === undefined || root.parentValueIsNull ? "" : root.parentValue
 
-        MouseArea {
-          width: parent.width * 1.3
-          height: parent.width * 1.3
-          x: -(0.1 * width)
-          y: -(0.1 * height)
+        height: parent.height
+        width: contentWidth < ( parent.width - suffix.width ) ? contentWidth : parent.width - suffix.width
 
-          onClicked: {
-            let v = toNumber( numberInput.text )
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-            if ( !Number.isNaN(v) )
-            {
-              v -= root.step
-              valueChanged( v.toFixed( root.precision ), false )
-            }
-          }
-        }
+        font.pointSize: customStyle.fields.fontPointSize
+        color: customStyle.fields.fontColor
+        selectionColor: customStyle.fields.fontColor
+        selectedTextColor: "#ffffff"
+
+        horizontalAlignment: Qt.AlignRight
+        verticalAlignment: Qt.AlignVCenter
+
+        clip: true
       }
 
-      Item {
-        id: valueAndSuffixContainer
+      Text {
+        id: suffix
 
-        Layout.preferredHeight: parent.height
-        Layout.maximumHeight: parent.height
-        Layout.fillWidth: true
+        text: root.suffix
 
-        RowLayout {
+        visible: root.suffix !== "" && numberInput.text !== ""
 
-          anchors.fill: parent
+        height: parent.height
+        width: paintedWidth
+        horizontalAlignment: Qt.AlignLeft
+        verticalAlignment: Qt.AlignVCenter
 
-          Item {
-            id: valueInputContainer
-
-            Layout.preferredHeight: parent.height
-            Layout.maximumHeight: parent.height
-
-            Layout.minimumWidth: parent.width / 2
-            Layout.maximumWidth: parent.width - suffixContainer.width
-
-            // The following line is unfortunatelly causing Layout polish loop, needs to be fixed
-//            Layout.preferredWidth: parent.width / 2 + numberInput.contentWidth * 0.38
-            Layout.preferredWidth: parent.width / 2
-
-            TextInput {
-              id: numberInput
-
-              onTextEdited: {
-//                let v = toNumber( numberInput.text )
-
-//                if ( Number.isNaN( v ) )
-//                {
-//                  valueChanged( numberInput.text, numberInput.text === "" )
-//                }
-//                else
-//                {
-//                  valueChanged( v, numberInput.text === "" )
-//                }
-                root.valueChanged( text, text === "" )
-              }
-
-              anchors.fill: parent
-
-              text: root.parent.value !== undefined ? root.parent.value : ""
-
-              inputMethodHints: Qt.ImhFormattedNumbersOnly
-              font.pointSize: customStyle.fields.fontPointSize
-              color: customStyle.fields.fontColor
-              selectionColor: customStyle.fields.fontColor
-              selectedTextColor: "#ffffff"
-
-              horizontalAlignment: Qt.AlignRight
-              verticalAlignment: Qt.AlignVCenter
-
-              clip: true
-            }
-          }
-
-          Item {
-            id: suffixContainer
-
-            Layout.preferredHeight: parent.height
-            Layout.maximumHeight: parent.height
-            Layout.fillWidth: true
-            Layout.minimumWidth: suffix.paintedWidth
-
-            Text {
-              id: suffix
-
-              text: root.suffix
-
-              visible: root.suffix !== "" && numberInput.text !== ""
-
-              anchors.fill: parent
-              horizontalAlignment: Qt.AlignLeft
-              verticalAlignment: Qt.AlignVCenter
-
-              color: customStyle.fields.fontColor
-              font.pointSize: customStyle.fields.fontPointSize
-            }
-
-            MouseArea {
-              anchors.fill: parent
-
-              // pass focus to number editor, suffix is not editable
-              onClicked: numberInput.forceActiveFocus()
-            }
-          }
-        }
-      }
-
-      Item {
-        id: plusSign
-
-        enabled: toNumber( numberInput.text ) + root.step <= config["Max"]
-
-        Layout.preferredHeight: parent.height
-        Layout.maximumHeight: parent.height
-        Layout.preferredWidth: parent.height
-        Layout.alignment: Qt.AlignRight | Qt.AlignTop
-
-        Image {
-          id: imgPlus
-
-          anchors.centerIn: parent
-
-          width: parent.width / 3
-          sourceSize.width: parent.width / 3
-
-          source: customStyle.icons.plus
-        }
-
-        ColorOverlay {
-          source: imgPlus
-          color: plusSign.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
-          anchors.fill: imgPlus
-        }
-
-        MouseArea {
-          width: parent.width * 1.3
-          height: parent.width * 1.3
-          x: -(0.1 * width)
-          y: -(0.1 * height)
-
-          onClicked: {
-            let v = toNumber( numberInput.text )
-
-            if ( !Number.isNaN( v ) )
-            {
-              v += root.step
-              valueChanged( v.toFixed( root.precision ), false )
-            }
-          }
-
-          // on press and hold behavior can be used from here:
-          // https://github.com/mburakov/qt5/blob/93bfa3874c10f6cb5aa376f24363513ba8264117/qtquickcontrols/src/controls/SpinBox.qml#L306-L309
-        }
+        color: customStyle.fields.fontColor
+        font.pointSize: customStyle.fields.fontPointSize
       }
     }
+  }
+
+  onContentClicked: {
+    numberInput.forceActiveFocus()
+  }
+
+  rightAction: Item {
+    id: plusSign
+
+    anchors.fill: parent
+
+    enabled: Number( numberInput.text ) + root.step <= config["Max"]
+
+    Image {
+      id: imgPlus
+
+      anchors.centerIn: parent
+
+      width: parent.width / 3
+      sourceSize.width: parent.width / 3
+
+      source: customStyle.icons.plus
+    }
+
+    ColorOverlay {
+      source: imgPlus
+      color: plusSign.enabled ? customStyle.fields.fontColor : customStyle.toolbutton.backgroundColorInvalid
+      anchors.fill: imgPlus
+    }
+  }
+
+  onRightActionClicked: {
+    if ( plusSign.enabled )
+    {
+      let incremented = Number( numberInput.text ) + root.step
+      root.editorValueChanged( incremented.toFixed( root.precision ), false )
+    }
+
+    // on press and hold behavior can be used from here:
+    // https://github.com/mburakov/qt5/blob/93bfa3874c10f6cb5aa376f24363513ba8264117/qtquickcontrols/src/controls/SpinBox.qml#L306-L309
   }
 }
