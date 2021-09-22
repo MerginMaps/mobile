@@ -27,7 +27,7 @@ import QgsQuick 0.1 as QgsQuick
  * Do not use directly from Application QML
  */
 Item {
-    signal editorValueChanged(var newValues, bool isNull)
+    signal editorValueChanged(var newValue, bool isNull)
     property real iconSize:  fieldItem.height * 0.75
 
     id: fieldItem
