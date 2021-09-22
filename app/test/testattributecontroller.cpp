@@ -25,7 +25,6 @@
 #include "attributetabmodel.h"
 #include "attributeformproxymodel.h"
 #include "attributeformmodel.h"
-#include "appresources.h"
 
 
 void TestAttributeController::init()
@@ -318,15 +317,16 @@ void TestAttributeController::testValidationMessages()
   QString projectDir = TestUtils::testDataDir() + "/planes";
   QString projectName = "quickapp_project.qgs";
 
-  QString layersDb = projectDir + "/constraint-layers.gpkg";
-  std::unique_ptr<QgsVectorLayer> sectorsLayer(
-    new QgsVectorLayer( layersDb + "|layername=FlySector" )
-  );
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
 
-  QVERIFY( sectorsLayer && sectorsLayer->isValid() );
+  QgsMapLayer *sectorL = QgsProject::instance()->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
+  QgsVectorLayer *flySectorLayer = static_cast<QgsVectorLayer *>( sectorL );
 
-  QgsFeature feat( sectorsLayer->dataProvider()->fields() );
-  FeatureLayerPair pair( feat, sectorsLayer.get() );
+  QVERIFY( flySectorLayer && flySectorLayer->isValid() );
+
+  QgsFeature feat( flySectorLayer->dataProvider()->fields() );
+  feat.setValid( true ); // empty feature is by default invalid
+  FeatureLayerPair pair( feat, flySectorLayer );
 
   AttributeController controller;
   controller.setFeatureLayerPair( pair );
@@ -343,6 +343,9 @@ void TestAttributeController::testValidationMessages()
    *  - Code(txt)           Length limit 5
    */
 
+  // there are HARD constraints, so controller should already have validation errors
+  QCOMPARE( controller.hasValidationErrors(), true );
+
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
   QCOMPARE( items.size(), 9 );
@@ -352,80 +355,85 @@ void TestAttributeController::testValidationMessages()
     QUuid id;
     QVariant value;
     QString expectedValidationMessage;
-    FieldValidator::ValidationMessageLevel expectedValidationMessageLevel;
+    FieldValidator::ValidationStatus expectedValidationStatus;
   };
 
-  namespace V = Resources::Texts::Validation;
+  namespace V = ValidationTexts;
 
   QList<testunit> testunits
   {
-    // Attribute - Name
-    { items.at( 1 ), "", V::softNotNullFailed, FieldValidator::Warning  },
-    { items.at( 1 ), "A", "", FieldValidator::Info },
-    { items.at( 1 ), "", V::softNotNullFailed, FieldValidator::Warning },
-    { items.at( 1 ), "abcsd fsdkajf nsa ", "", FieldValidator::Info },
+    // Attribute - Name Not NULL - SOFT
+    { items.at( 1 ), QVariant(), V::softNotNullFailed, FieldValidator::Warning  },
+    { items.at( 1 ), QStringLiteral( "A" ), "", FieldValidator::Valid },
+    { items.at( 1 ), QVariant( QString() ), V::softNotNullFailed, FieldValidator::Warning },
+    { items.at( 1 ), "abcsd fsdkajf nsa ", "", FieldValidator::Valid },
 
-    // Attribute - Size
-    { items.at( 2 ), "", V::hardNotNullFailed, FieldValidator::Error },
-    { items.at( 2 ), "1", "", FieldValidator::Info },
-    { items.at( 2 ), "1a", V::numberValidationFailed, FieldValidator::Error },
+    // Attribute - Size Not NULL - HARD <0; 10000>
+    { items.at( 2 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 2 ), "1", "", FieldValidator::Valid },
+    { items.at( 2 ), "1a", V::numberInvalid, FieldValidator::Error },
     { items.at( 2 ), "10001", V::numberUpperBoundReached.arg( 10000 ), FieldValidator::Error },
     { items.at( 2 ), "-1", V::numberLowerBoundReached.arg( 0 ), FieldValidator::Error },
-    { items.at( 2 ), "150", "", FieldValidator::Info },
+    { items.at( 2 ), "150", "", FieldValidator::Valid },
 
-    // Attribute - SectorId
-    { items.at( 3 ), "1", "", FieldValidator::Info },
-    { items.at( 3 ), "-100", "", FieldValidator::Info },
+    // Attribute - SectorId Unique - SOFT <-100; 1000>
+    { items.at( 3 ), "1", "", FieldValidator::Valid },
+    { items.at( 3 ), "-100", "", FieldValidator::Valid },
     { items.at( 3 ), "13", V::softUniqueFailed, FieldValidator::Warning }, // there should already be feature with such value
-    { items.at( 3 ), "14", "", FieldValidator::Info },
-    { items.at( 3 ), "14sad", V::numberValidationFailed, FieldValidator::Error },
-    { items.at( 3 ), "14", "", FieldValidator::Info },
+    { items.at( 3 ), "14", "", FieldValidator::Valid },
+    { items.at( 3 ), "14sad", V::numberInvalid, FieldValidator::Error },
+    { items.at( 3 ), "14", "", FieldValidator::Valid },
 
-    // Attribute - Occupied
-    // we currently do not support expression contraints
+    // Attribute - Occupied Expression, must be TRUE - HARD, expression descriptionn: 'Must be true'
+    { items.at( 4 ), false, QStringLiteral( "Must be true" ), FieldValidator::Error },
+    { items.at( 4 ), true, "", FieldValidator::Valid },
 
-    // Attribute - DateTime
-    // TODO: test datetime?
+    // Attribure - DateTime(datetime) Not NULL - HARD, format: yyyy-MM-dd HH:mm:ss (default)
+    { items.at( 5 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 5 ), QVariant( QDateTime::fromString( "2020-03-10 10:40:30", "yyyy-MM-dd HH:mm:ss" ) ), "", FieldValidator::Valid },
 
-    // Attribute - LastEdit
-    // TODO: test date?
+    // Attribure - LastEdit(date) Not NULL - HARD, format: dd-MM-yyyy (custom)
+    { items.at( 6 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 6 ), QVariant( QDateTime::fromString( "29-10-1998", "dd-MM-yyyy" ) ), "", FieldValidator::Valid },
 
-    // Attribute - Hash
-    { items.at( 7 ), "", "", FieldValidator::Info },
+    // Attribute - Hash Unique - HARD
+    { items.at( 7 ), QVariant(), "", FieldValidator::Valid },
     { items.at( 7 ), "1", V::hardUniqueFailed, FieldValidator::Error },
-    { items.at( 7 ), "", "", FieldValidator::Info },
-    { items.at( 7 ), "2", "", FieldValidator::Info },
+    { items.at( 7 ), QVariant(), "", FieldValidator::Valid },
+    { items.at( 7 ), "2", "", FieldValidator::Valid },
 
-    // Attribute - Code
-    { items.at( 8 ), "", "", FieldValidator::Info },
-    { items.at( 8 ), "f", "", FieldValidator::Info },
-    { items.at( 8 ), "fi", "", FieldValidator::Info },
-    { items.at( 8 ), "five ", "", FieldValidator::Info },
+    // Attribute - Code Length limit 5
+    { items.at( 8 ), "", "", FieldValidator::Valid },
+    { items.at( 8 ), "f", "", FieldValidator::Valid },
+    { items.at( 8 ), "fi", "", FieldValidator::Valid },
+    { items.at( 8 ), "five ", "", FieldValidator::Valid },
     { items.at( 8 ), "five chars limit", V::textTooLong.arg( 5 ), FieldValidator::Error },
-    { items.at( 8 ), "five ", "", FieldValidator::Info }
+    { items.at( 8 ), "five ", "", FieldValidator::Valid }
   };
 
   for ( const testunit &unit : testunits )
   {
     const FormItem *item = controller.formItem( unit.id );
+
     controller.setFormValue( unit.id, unit.value );
 
     QCOMPARE( item->validationMessage(), unit.expectedValidationMessage );
-    QCOMPARE( item->validationMessageLevel(), unit.expectedValidationMessageLevel );
+    QCOMPARE( item->validationStatus(), unit.expectedValidationStatus );
   }
 
-  QCOMPARE( controller.hasValidationErrors(), true );
+  QCOMPARE( controller.hasValidationErrors(), false );
 
   // invalidate some attribute and check if hasValidationErrors responds correctly
   controller.setFormValue( items.at( 8 ), "five chars limit" );
-  QCOMPARE( controller.hasValidationErrors(), false );
-
-  controller.setFormValue( items.at( 8 ), "five " );
   QCOMPARE( controller.hasValidationErrors(), true );
 
+  controller.setFormValue( items.at( 8 ), "five " );
+  QCOMPARE( controller.hasValidationErrors(), false );
+
   // Try assigning different features and values to see if the state is reseted
-  QgsFeature feat2( sectorsLayer->dataProvider()->fields() );
-  FeatureLayerPair pair2( feat2, sectorsLayer.get() );
+  QgsFeature feat2( flySectorLayer->dataProvider()->fields() );
+  feat2.setValid( true );
+  FeatureLayerPair pair2( feat2, flySectorLayer );
 
   controller.setFeatureLayerPair( pair2 );
 
