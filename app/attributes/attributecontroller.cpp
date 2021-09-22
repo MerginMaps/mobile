@@ -81,9 +81,8 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
       emit hasTabsChanged();
     }
     emit featureLayerPairChanged();
-    emit constraintsHardValidChanged();
-    emit constraintsSoftValidChanged();
     emit hasAnyChangesChanged();
+    emit hasValidationErrorsChanged();
   }
 }
 
@@ -344,7 +343,7 @@ void AttributeController::clearAll()
 {
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new AttributeTabProxyModel() );
-  mHasValidationErrors = false;
+  setHasValidationErrors( false );
   mFormItems.clear();
   mTabItems.clear();
   mHasTabs = false;
