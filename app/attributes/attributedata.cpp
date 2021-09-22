@@ -139,14 +139,14 @@ void FormItem::setValidationMessage( QString message )
   mValidationMessage = message;
 }
 
-FieldValidator::ValidationMessageLevel FormItem::validationMessageLevel() const
+FieldValidator::ValidationStatus FormItem::validationStatus() const
 {
-  return mValidationMessageLevel;
+  return mValidationStatus;
 }
 
-void FormItem::setValidationMessageLevel( FieldValidator::ValidationMessageLevel level )
+void FormItem::setValidationStatus( FieldValidator::ValidationStatus status )
 {
-  mValidationMessageLevel = level;
+  mValidationStatus = status;
 }
 
 bool FormItem::isVisible() const

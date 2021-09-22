@@ -490,7 +490,7 @@ Item {
           height: visible ? paintedHeight : 0
           wrapMode: Text.WordWrap
           opacity: visible ? 1 : 0
-          color: ValidationMessageLevel === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
+          color: ValidationStatus === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
 
@@ -535,8 +535,6 @@ Item {
 
           property var associatedRelation: Relation
           property var formView: extraView
-
-          onLoaded: initialized = true
 
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler

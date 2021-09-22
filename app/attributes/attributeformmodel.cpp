@@ -78,8 +78,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->isVisible();
     case ValidationMessage:
       return item->validationMessage();
-    case ValidationMessageLevel:
-      return item->validationMessageLevel();
+    case ValidationStatus:
+      return item->validationStatus();
     case Relation:
       return QVariant::fromValue( item->relation() );
     default:
@@ -123,7 +123,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[AttributeFormModel::Field] = QByteArray( "Field" );
   roles[AttributeFormModel::Group] = QByteArray( "Group" );
   roles[ValidationMessage] = QByteArray( "ValidationMessage" );
-  roles[ValidationMessageLevel] = QByteArray( "ValidationMessageLevel" );
+  roles[ValidationStatus] = QByteArray( "ValidationStatus" );
   roles[Relation] = QByteArray( "Relation" );
 
   return roles;
