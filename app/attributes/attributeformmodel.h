@@ -58,7 +58,7 @@ class  AttributeFormModel : public QAbstractListModel
       Group, //!< Group name
       Visible, //!< Field visible
       ValidationMessage,
-      ValidationMessageLevel,
+      ValidationStatus,
       Relation //!< QgsRelation instance for this item, empty if it is not a relation
     };
 

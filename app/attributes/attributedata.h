@@ -93,8 +93,8 @@ class FormItem
     QString validationMessage() const;
     void setValidationMessage( QString message );
 
-    FieldValidator::ValidationMessageLevel validationMessageLevel() const;
-    void setValidationMessageLevel( FieldValidator::ValidationMessageLevel level );
+    FieldValidator::ValidationStatus validationStatus() const;
+    void setValidationStatus( FieldValidator::ValidationStatus status );
 
     bool isVisible() const;
     void setVisible( bool visible );
@@ -131,7 +131,7 @@ class FormItem
     const QgsExpression mVisibilityExpression;
 
     QString mValidationMessage;
-    FieldValidator::ValidationMessageLevel mValidationMessageLevel = FieldValidator::Info;
+    FieldValidator::ValidationStatus mValidationStatus = FieldValidator::Valid;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
 

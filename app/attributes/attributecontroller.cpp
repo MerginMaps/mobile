@@ -344,8 +344,7 @@ void AttributeController::clearAll()
 {
   mAttributeFormProxyModelForTabItem.clear();
   mAttributeTabProxyModel.reset( new AttributeTabProxyModel() );
-  mConstraintsHardValid = false;
-  mConstraintsSoftValid = false;
+  mHasValidationErrors = false;
   mFormItems.clear();
   mTabItems.clear();
   mHasTabs = false;
@@ -674,19 +673,19 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         if ( item->type() == FormItem::Field )
         {
           QString validationMessage;
-          FieldValidator::ValidationMessageLevel validationMessageLevel;
+          FieldValidator::ValidationStatus validationStatus;
 
-          bool valid = FieldValidator::validate( featureLayerPair(), *item, validationMessage, validationMessageLevel );
+          validationStatus = FieldValidator::validate( featureLayerPair(), *item, validationMessage );
 
-          if ( !valid && validationMessageLevel == FieldValidator::Error )
+          if ( validationStatus == FieldValidator::Error )
           {
             containsValidationError = true;
           }
 
           if ( validationMessage != item->validationMessage() )
           {
+            item->setValidationStatus( validationStatus );
             item->setValidationMessage( validationMessage );
-            item->setValidationMessageLevel( validationMessageLevel );
             changedFormItems.insert( item->id() );
           }
         }
@@ -725,16 +724,6 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     emit formDataChanged( *i );
     ++i;
   }
-}
-
-bool AttributeController::constraintsHardValid() const
-{
-  return mConstraintsHardValid;
-}
-
-bool AttributeController::constraintsSoftValid() const
-{
-  return mConstraintsSoftValid;
 }
 
 bool AttributeController::hasValidationErrors() const
