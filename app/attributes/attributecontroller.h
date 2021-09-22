@@ -154,8 +154,6 @@ class  AttributeController : public QObject
     void rememberAttributesChanged();
     void featureLayerPairChanged();
     void attributeTabProxyModelChanged();
-    void constraintsHardValidChanged();
-    void constraintsSoftValidChanged();
     void hasTabsChanged();
     void variablesManagerChanged();
     void hasValidationErrorsChanged();
