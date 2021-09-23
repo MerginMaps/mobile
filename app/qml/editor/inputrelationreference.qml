@@ -24,7 +24,7 @@ AbstractEditor {
   signal openLinkedFeature( var linkedFeature )
 
   onContentClicked: {
-    let featurePair = rModel.attributeFromValue( FeaturesListModel.FeatureId, root.parent.value, FeaturesListModel.FeaturePair )
+    let featurePair = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeaturePair )
 
     if ( featurePair == null || !featurePair.valid ) return
 
@@ -38,7 +38,7 @@ AbstractEditor {
     page.forceActiveFocus()
   }
 
-  onParentValueChanged: title.text = rModel.attributeFromValue( FeaturesListModel.FeatureId, value, FeaturesListModel.FeatureTitle ) || ""
+  onParentValueChanged: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeatureTitle ) || ""
 
   RelationReferenceFeaturesModel {
     id: rModel
@@ -46,9 +46,7 @@ AbstractEditor {
     config: root.parent.config
     project: root.parent.activeProject
 
-    onPopulated: {
-      title.text = rModel.attributeFromValue( FeaturesListModel.FeatureId, root.parent.value, FeaturesListModel.FeatureTitle ) || ""
-    }
+    onPopulated: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeatureTitle ) || ""
   }
 
   content: Text {
@@ -103,7 +101,8 @@ AbstractEditor {
       }
 
       onFeatureClicked: {
-        root.editorValueChanged( featureIds, false )
+        let fk = rModel.foreignKeyFromAttribute( FeaturesListModel.FeatureId, featureIds )
+        root.editorValueChanged( fk, false )
         root.parent.formView.pop()
       }
 

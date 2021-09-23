@@ -26,7 +26,7 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
 
     //! widget's config
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
-    //! active projec
+    //! active project
     Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
     //! states if the relation widget allows Null (from relation configuration)
     Q_PROPERTY( bool allowNull READ allowNull NOTIFY allowNullChanged )
@@ -35,6 +35,12 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
 
     explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
     virtual ~RelationReferenceFeaturesModel() {};
+
+    //! Returns foreign key of feature that matches given role with attributeValue
+    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesListModel::modelRoles fromAttribute, const QVariant &attributeValue );
+
+    //! Returns role value from feature with fkValue in foreign key
+    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesListModel::modelRoles expectedAttribute );
 
     QVariantMap config() const;
     QgsProject *project() const;
@@ -55,6 +61,7 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
   private:
 
     QString mFeatureTitle;
+    QString mPrimaryKeyField; // primary key field of referenced layer
     QVariantMap mConfig;
     QgsProject *mProject = nullptr;
     bool mAllowNull;
