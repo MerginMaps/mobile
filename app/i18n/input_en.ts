@@ -106,56 +106,50 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="512"/>
+        <location filename="../attributes/attributecontroller.cpp" line="507"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="522"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="533"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1057"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="833"/>
+        <location filename="../attributes/attributecontroller.cpp" line="777"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="477"/>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="472"/>
+        <location filename="../attributes/attributecontroller.cpp" line="798"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="885"/>
+        <location filename="../attributes/attributecontroller.cpp" line="829"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="899"/>
+        <location filename="../attributes/attributecontroller.cpp" line="843"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation type="unfinished">Feature %1 could not be fetched after commit</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="916"/>
+        <location filename="../attributes/attributecontroller.cpp" line="860"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="933"/>
+        <location filename="../attributes/attributecontroller.cpp" line="877"/>
         <source>Could not save changes. Rolling back.</source>
         <translation type="unfinished">Could not save changes. Rolling back.</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1058"/>
-        <source>Value %1 is not compatible with field type %2.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -262,23 +256,13 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="184"/>
-        <source>Constraints not valid</source>
+        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <source>Can not save the form, there are validation errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="189"/>
-        <source>Note: soft constraints were not met</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="488"/>
-        <source>Number is outside of specified range</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="490"/>
-        <source>Value is not valid</source>
+        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -300,22 +284,22 @@
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Delete feature</source>
         <translation type="unfinished">Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="201"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="222"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -458,28 +442,28 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1036"/>
+        <location filename="../inpututils.cpp" line="1056"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1037"/>
+        <location filename="../inpututils.cpp" line="1057"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1038"/>
+        <location filename="../inpututils.cpp" line="1058"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1039"/>
+        <location filename="../inpututils.cpp" line="1059"/>
         <source>screen density: %1</source>
         <translation type="unfinished">screen density: %1</translation>
     </message>
@@ -919,13 +903,64 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="241"/>
-        <source>Not NULL</source>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <source>Value must be a number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="246"/>
-        <source>Unique</source>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <source>Value must be lower than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <source>Value must be higher than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <source>Value is too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <source>Field can not contain decimal places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <source>Field should not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <source>Field must not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <source>Value should be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <source>Value must be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <source>Not a valid value</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1222,17 +1257,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="165"/>
+        <location filename="../qml/editor/inputrelation.qml" line="164"/>
         <source>%1 more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="180"/>
+        <location filename="../qml/editor/inputrelation.qml" line="179"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="240"/>
+        <location filename="../qml/editor/inputrelation.qml" line="239"/>
         <source>Linked features</source>
         <translation type="unfinished"></translation>
     </message>
