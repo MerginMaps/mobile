@@ -60,10 +60,10 @@ bool FeatureLayerPair::hasValidGeometry() const
 {
   Q_ASSERT( mLayer );
 
-  if ( !mFeature.hasGeometry() )
-    return false;
+  if ( !mFeature.hasGeometry() && !mLayer->isSpatial() )
+    return true;
 
-  if ( mFeature.geometry().type() != mLayer->geometryType() )
+  if ( !mFeature.hasGeometry() || mFeature.geometry().type() != mLayer->geometryType() )
     return false;
 
   return true;
