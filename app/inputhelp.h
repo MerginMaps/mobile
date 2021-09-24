@@ -23,6 +23,8 @@ class InputHelp: public QObject
 
     Q_PROPERTY( QString privacyPolicyLink READ privacyPolicyLink NOTIFY linkChanged )
     Q_PROPERTY( QString helpRootLink READ helpRootLink )
+    Q_PROPERTY( QString inputWebLink READ inputWebLink NOTIFY linkChanged )
+    Q_PROPERTY( QString merginWebLink READ merginWebLink NOTIFY merginLinkChanged )
     Q_PROPERTY( QString merginSubscriptionDetailsLink READ merginSubscriptionDetailsLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableDigitizingLink READ howToEnableDigitizingLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableBrowsingDataLink READ howToEnableBrowsingDataLink NOTIFY linkChanged )
@@ -37,6 +39,7 @@ class InputHelp: public QObject
 
   signals:
     void linkChanged();
+    void merginLinkChanged();
     void submitReportPendingChanged();
 
   public slots:
@@ -46,6 +49,8 @@ class InputHelp: public QObject
     explicit InputHelp( MerginApi *merginApi, InputUtils *utils );
 
     QString helpRootLink() const;
+    QString inputWebLink() const;
+    QString merginWebLink() const;
     QString privacyPolicyLink() const;
     QString merginSubscriptionDetailsLink() const;
     QString howToEnableDigitizingLink() const;

@@ -212,7 +212,7 @@ Rectangle {
         height: fieldHeight
         width: registerForm.width
         text: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
-              .arg("<a href='"+__merginApi.apiRoot + "assets/tos.html'>")
+              .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
               .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
               .arg("</a>")
       }

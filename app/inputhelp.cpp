@@ -21,71 +21,93 @@
 #include <QNetworkReply>
 #include <QSysInfo>
 
-const QString inputHelpRoot = "https://help.inputapp.io";
-const QString merginHelpRoot = "https://help.cloudmergin.com";
+const QString inputHelpRoot = QStringLiteral( "https://help.inputapp.io" );
+const QString merginHelpRoot = QStringLiteral( "https://help.cloudmergin.com" );
 const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QString helpDeskMail = QStringLiteral( "info@lutraconsulting.co.uk" );
+const QString inputWeb = QStringLiteral( "https://inputapp.io" );
+
+const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
+const QString utmTagSubscription = QStringLiteral( "?utm_source=input-subs&utm_medium=subs&utm_campaign=input" );
+const QString utmTagOther = QStringLiteral( "?utm_source=input-other&utm_medium=other&utm_campaign=input" );
 
 InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
   mMerginApi( merginApi ),
   mInputUtils( utils )
 {
+  connect( mMerginApi, &MerginApi::apiRootChanged, this, &InputHelp::merginLinkChanged );
+
   emit linkChanged();
 }
 
 QString InputHelp::helpRootLink() const
 {
-  return inputHelpRoot;
+  return inputHelpRoot + utmTagHelp;
+}
+
+QString InputHelp::inputWebLink() const
+{
+  return inputWeb + utmTagOther;
+}
+
+QString InputHelp::merginWebLink() const
+{
+  if ( !mMerginApi || mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  {
+    return mMerginApi->apiRoot(); // UTM tags are included only for production server
+  }
+
+  return MerginApi::defaultApiRoot() + utmTagOther;
 }
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return inputHelpRoot + "/privacy";
+  return inputHelpRoot + "/privacy" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const
 {
-  return merginHelpRoot + "/subscriptions";
+  return merginHelpRoot + "/subscriptions" + utmTagSubscription;
 }
 
 QString InputHelp::howToEnableDigitizingLink() const
 {
-  return inputHelpRoot + "/howto/enable_digitizing";
+  return inputHelpRoot + "/howto/enable_digitizing" + utmTagHelp;
 }
 
 QString InputHelp::howToEnableBrowsingDataLink() const
 {
-  return inputHelpRoot + "/howto/enable_browsing";
+  return inputHelpRoot + "/howto/enable_browsing" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupThemesLink() const
 {
-  return inputHelpRoot + "/howto/setup_themes";
+  return inputHelpRoot + "/howto/setup_themes" + utmTagHelp;
 }
 
 QString InputHelp::howToCreateNewProjectLink() const
 {
-  return inputHelpRoot + "/howto/project_config";
+  return inputHelpRoot + "/howto/project_config" + utmTagHelp;
 }
 
 QString InputHelp::howToDownloadProjectLink() const
 {
-  return inputHelpRoot + "/howto/data_sync";
+  return inputHelpRoot + "/howto/data_sync" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupProj() const
 {
-  return inputHelpRoot + "/howto/proj";
+  return inputHelpRoot + "/howto/proj" + utmTagHelp;
 }
 
 QString InputHelp::gpsAccuracyHelpLink() const
 {
-  return inputHelpRoot + "/howto/gps_accuracy";
+  return inputHelpRoot + "/howto/gps_accuracy" + utmTagHelp;
 }
 
 QString InputHelp::merginTermsLink() const
 {
-  return QStringLiteral( "https://public.cloudmergin.com/assets/tos.html" );
+  return MerginApi::defaultApiRoot() + "assets/tos.html" + utmTagOther;
 }
 
 bool InputHelp::submitReportPending() const
