@@ -13,6 +13,8 @@
 #include "featurelayerpair.h"
 #include "attributedata.h"
 #include "fieldvalidator.h"
+#include "relationfeaturesmodel.h"
+#include "relationreferencefeaturesmodel.h"
 
 #include <QtTest/QtTest>
 #include <memory>
@@ -166,6 +168,200 @@ void TestFormEditors::testNumericFields()
   controller.setFormValue( cabinCrewFieldId, "100" );
 
   QCOMPARE( controller.hasValidationErrors(), false );
+}
+
+void TestFormEditors::testRelationsEditor()
+{
+  /* Test project: project_relations
+   * It has 2 relations set up:
+   *
+   * |Layer Main|    has many      |Layer Sub|     has many      |Layer Subsub|
+   * |  point   |                  | no geo  |                   |   no geo   |
+   */
+  QString projectDir = TestUtils::testDataDir() + "/project_relations";
+  QString projectName = "proj.qgz";
+
+  QSignalSpy spy( QgsProject::instance()->relationManager(), &QgsRelationManager::relationsLoaded );
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+  QCOMPARE( spy.count(), 1 );
+
+  QgsMapLayer *mainL = QgsProject::instance()->mapLayersByName( QStringLiteral( "main" ) ).at( 0 );
+  QgsVectorLayer *mainLayer = static_cast<QgsVectorLayer *>( mainL );
+
+  QVERIFY( mainLayer && mainLayer->isValid() );
+
+  QgsMapLayer *subL = QgsProject::instance()->mapLayersByName( QStringLiteral( "sub" ) ).at( 0 );
+  QgsVectorLayer *subLayer = static_cast<QgsVectorLayer *>( subL );
+
+  QVERIFY( subLayer && subLayer->isValid() );
+
+  QgsMapLayer *subsubL = QgsProject::instance()->mapLayersByName( QStringLiteral( "subsub" ) ).at( 0 );
+  QgsVectorLayer *subsubLayer = static_cast<QgsVectorLayer *>( subsubL );
+
+  QVERIFY( subsubLayer && subsubLayer->isValid() );
+
+  AttributeController mainController, subController, subsubController;
+
+  QgsFeature mainFeature = mainLayer->getFeature( 1 );
+  FeatureLayerPair mainPair( mainFeature, mainLayer );
+  mainController.setFeatureLayerPair( mainPair  );
+
+  // check if formItem has correct relation set
+  const TabItem *mainTab = mainController.tabItem( 0 );
+  QVector<QUuid> mainItems = mainTab->formItems();
+
+  QCOMPARE( mainItems.count(), 4 ); // fid, name, uuid, relation
+
+  const FormItem *mainRelation = mainController.formItem( mainItems.at( 3 ) ); // last one should be relation
+
+  QCOMPARE( mainRelation->relation().id(), QStringLiteral( "sub_c0a8dd_mainFK_main_2ceda_pk" ) );
+  QCOMPARE( mainRelation->name(), QStringLiteral( "mainsub" ) );
+
+  // test relation features model - should fetch one feature
+  RelationFeaturesModel mainRelationModel;
+  mainRelationModel.setRelation( mainRelation->relation() );
+  mainRelationModel.setParentFeatureLayerPair( mainPair );
+
+  int featuresCount = mainRelationModel.rowCount();
+  QVERIFY( featuresCount > 0 );
+
+  FeatureLayerPair subTempPair = mainRelationModel.featureLayerPair( 1 );
+
+  QCOMPARE( subTempPair.feature().attribute( QStringLiteral( "Name" ) ), QStringLiteral( "SubFirst" ) );
+
+  // let's add new feature to sublayer and see if the mainRelationModel reflects that
+  QgsFeature newSubFeature( subLayer->dataProvider()->fields() );
+  FeatureLayerPair newSubPair( newSubFeature, subLayer );
+
+  subController.setFeatureLayerPair( newSubPair );
+  subController.setParentController( &mainController );
+  subController.setLinkedRelation( mainRelation->relation() );
+
+  newSubPair = subController.featureLayerPair();
+
+  // check if relation reference field has been prefilled with parent uuid
+  QVariant parentPk = mainFeature.attribute( QStringLiteral( "pk" ) );
+  QVariant childFk = newSubPair.feature().attribute( QStringLiteral( "mainFK" ) );
+
+  QCOMPARE( childFk, parentPk );
+
+  subLayer->startEditing();
+
+  QVERIFY( subLayer->addFeature( newSubPair.featureRef() ) );
+  QVERIFY( subLayer->commitChanges() );
+
+  int newFeaturesCount = mainRelationModel.rowCount();
+  QCOMPARE( newFeaturesCount, featuresCount + 1 ); // we have added one feature
+
+  // remove last feature and check count again
+
+  subLayer->startEditing();
+
+  QList<QgsFeatureId> ids = subLayer->allFeatureIds().values();
+  QVERIFY( ids.count() > 1 );
+
+  QVERIFY( subLayer->deleteFeature( ids[0] ) );
+  QVERIFY( subLayer->commitChanges() );
+
+  int reducedFeaturesCount = mainRelationModel.rowCount();
+  QCOMPARE( reducedFeaturesCount, featuresCount );
+
+  // check relation in sublayer
+  QgsFeature subFeature = subLayer->getFeature( 1 );
+  FeatureLayerPair subPair( subFeature, subLayer );
+  subController.setFeatureLayerPair( subPair  );
+
+  // check if formItem has correct relation set
+  const TabItem *subTab = subController.tabItem( 0 );
+  QVector<QUuid> subItems = subTab->formItems();
+
+  QCOMPARE( subItems.count(), 5 ); // fid, name, uuid(foreign key), uuid(primary key), relation
+
+  const FormItem *subRelation = subController.formItem( subItems.at( 4 ) ); // last one should be relation
+
+  QCOMPARE( subRelation->relation().id(), QStringLiteral( "subsub_64f_subFK_sub_c0a8dd_pk" ) );
+  // relation does not have a name, nor field has alias, name of the field should thus be set to referencing layer name
+  QCOMPARE( subRelation->name(), QStringLiteral( "subsub" ) );
+
+  RelationFeaturesModel subRelationModel;
+  subRelationModel.setRelation( subRelation->relation() );
+  subRelationModel.setParentFeatureLayerPair( subPair );
+
+  featuresCount = mainRelationModel.rowCount();
+  QVERIFY( featuresCount > 0 );
+}
+
+void TestFormEditors::testRelationsReferenceEditor()
+{
+  /* Test project: project_relations
+   * It has 2 relations set up:
+   *
+   * |Layer Main|    has many      |Layer Sub|     has many      |Layer Subsub|
+   * |  point   |                  | no geo  |                   |   no geo   |
+   */
+  QString projectDir = TestUtils::testDataDir() + "/project_relations";
+  QString projectName = "proj.qgz";
+
+  QSignalSpy spy( QgsProject::instance()->relationManager(), &QgsRelationManager::relationsLoaded );
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+  QCOMPARE( spy.count(), 1 );
+
+  QgsMapLayer *mainL = QgsProject::instance()->mapLayersByName( QStringLiteral( "main" ) ).at( 0 );
+  QgsVectorLayer *mainLayer = static_cast<QgsVectorLayer *>( mainL );
+
+  QVERIFY( mainLayer && mainLayer->isValid() );
+
+  QgsMapLayer *subL = QgsProject::instance()->mapLayersByName( QStringLiteral( "sub" ) ).at( 0 );
+  QgsVectorLayer *subLayer = static_cast<QgsVectorLayer *>( subL );
+
+  QVERIFY( subLayer && subLayer->isValid() );
+
+  QgsMapLayer *subsubL = QgsProject::instance()->mapLayersByName( QStringLiteral( "subsub" ) ).at( 0 );
+  QgsVectorLayer *subsubLayer = static_cast<QgsVectorLayer *>( subsubL );
+
+  QVERIFY( subsubLayer && subsubLayer->isValid() );
+
+  AttributeController mainController, subController, subsubController;
+
+  QgsFeature subFeature = subLayer->getFeature( 1 );
+  FeatureLayerPair subPair( subFeature, subLayer );
+  subController.setFeatureLayerPair( subPair );
+
+  const TabItem *subTab = subController.tabItem( 0 );
+  QVector<QUuid> subItems = subTab->formItems();
+
+  const FormItem *subRelationRef = subController.formItem( subItems.at( 2 ) ); // relation ref
+  QCOMPARE( subRelationRef->editorWidgetType(), QStringLiteral( "RelationReference" ) );
+
+  // We want to test if relation reference models are filled with correct data
+  RelationReferenceFeaturesModel subRelationRefModel;
+  subRelationRefModel.setConfig( subRelationRef->editorWidgetConfig() );
+  subRelationRefModel.setProject( QgsProject::instance() );
+
+  QgsFeature parentFeat = mainLayer->getFeature( 1 ); // this is parent feature
+  QVariant fk = subRelationRefModel.foreignKeyFromAttribute( FeaturesListModel::FeatureId, parentFeat.id() );
+
+  QCOMPARE( fk, parentFeat.attribute( "pk" ) );
+
+  // Now the same for subsubLayer
+  QgsFeature subsubFeature = subsubLayer->getFeature( 1 );
+  FeatureLayerPair subsubPair( subsubFeature, subsubLayer );
+  subsubController.setFeatureLayerPair( subsubPair );
+
+  const TabItem *subsubTab = subsubController.tabItem( 0 );
+  QVector<QUuid> subsubItems = subsubTab->formItems();
+
+  const FormItem *subsubRelationRef = subsubController.formItem( subsubItems.at( 2 ) ); // relation ref
+  QCOMPARE( subsubRelationRef->editorWidgetType(), QStringLiteral( "RelationReference" ) );
+
+  RelationReferenceFeaturesModel subsubRelationRefModel;
+  subsubRelationRefModel.setConfig( subsubRelationRef->editorWidgetConfig() );
+  subsubRelationRefModel.setProject( QgsProject::instance() );
+
+  QgsFeature parentSubFeat = subLayer->getFeature( 1 ); // this is parent feature
+  QVariant subsubFk = subRelationRefModel.foreignKeyFromAttribute( FeaturesListModel::FeatureId, parentSubFeat.id() );
+
+  QCOMPARE( subsubFk, parentSubFeat.attribute( "pk" ) );
 }
 
 void TestFormEditors::testRelationsWidgetPresence()

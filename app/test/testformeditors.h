@@ -20,6 +20,8 @@ class TestFormEditors : public QObject
     void cleanup(); // will be called after every testfunction.
 
     void testNumericFields();
+    void testRelationsEditor();
+    void testRelationsReferenceEditor();
     void testRelationsWidgetPresence();
 };
 
