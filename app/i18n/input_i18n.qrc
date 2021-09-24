@@ -14,6 +14,7 @@
     <file>input_es.qm</file> 
     <file>input_tr.qm</file> 
     <file>input_en.qm</file> 
+    <file>input_zh.qm</file> 
     <file>input_fr.qm</file> 
     <file>input_nl.qm</file> 
   </qresource> 
