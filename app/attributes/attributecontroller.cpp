@@ -130,7 +130,6 @@ void AttributeController::prefillRelationReferenceField()
       {
         QVariant fk = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
         setFormValue( itemData->id(), fk );
-        emit formDataChanged( itemData->id() );
         break;
       }
       ++formItemsIterator;
@@ -281,6 +280,10 @@ void AttributeController::flatten(
         if ( label.isEmpty() )
         {
           label = associatedRelation.name();
+          if ( label.isEmpty() ) // relation name can be empty
+          {
+            label = associatedRelation.referencingLayer()->name();
+          }
         }
 
         std::shared_ptr<FormItem> formItemData =

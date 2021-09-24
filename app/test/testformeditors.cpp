@@ -204,7 +204,7 @@ void TestFormEditors::testRelationsEditor()
 
   QgsFeature mainFeature = mainLayer->getFeature( 1 );
   FeatureLayerPair mainPair( mainFeature, mainLayer );
-  mainController.setFeatureLayerPair( mainPair  );
+  mainController.setFeatureLayerPair( mainPair );
 
   // check if formItem has correct relation set
   const TabItem *mainTab = mainController.tabItem( 0 );
@@ -269,7 +269,7 @@ void TestFormEditors::testRelationsEditor()
   // check relation in sublayer
   QgsFeature subFeature = subLayer->getFeature( 1 );
   FeatureLayerPair subPair( subFeature, subLayer );
-  subController.setFeatureLayerPair( subPair  );
+  subController.setFeatureLayerPair( subPair );
 
   // check if formItem has correct relation set
   const TabItem *subTab = subController.tabItem( 0 );
