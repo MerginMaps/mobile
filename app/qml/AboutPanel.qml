@@ -20,7 +20,6 @@ import "./components"
 Page {
   id: root
 
-  property string inputLink: "https://inputapp.io/"
   property real fieldHeight: InputStyle.rowHeight
   property real panelMargin: fieldHeight / 4
   property color fontColor: "white"
@@ -102,13 +101,13 @@ Page {
         width: content.width - 2 * root.panelMargin
         height: fieldHeight * 0.7
         anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: Qt.openUrlExternally(root.inputLink)
+        onClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
         background: Rectangle {
           color: InputStyle.fontColor
         }
 
         contentItem: Text {
-          text: root.inputLink
+          text: __inputHelp.inputWebLink.split( '?' )[0] // do not show utm tags
           font.pixelSize: InputStyle.fontPixelSizeNormal
           color: InputStyle.highlightColor
           horizontalAlignment: Text.AlignHCenter

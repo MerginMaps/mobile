@@ -48,6 +48,11 @@ class TestLinks: public QObject
     void initTestCase() {}
     void cleanupTestCase() {}
 
+    void testInputWebLink()
+    {
+      _run( mHelp.inputWebLink() );
+    }
+
     void testPrivacyPolicy()
     {
       _run( mHelp.privacyPolicyLink() );

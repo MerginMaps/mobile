@@ -68,7 +68,7 @@ Rectangle {
         height: 2 * fieldHeight
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
-                  .arg("<a href='" + __merginApi.apiRoot + "'>")
+                  .arg("<a href='" + __inputHelp.merginWebLink + "'>")
                   .arg("</a>")
       }
 
