@@ -225,7 +225,8 @@ void TestFormEditors::testRelationsEditor()
   int featuresCount = mainRelationModel.rowCount();
   QVERIFY( featuresCount > 0 );
 
-  FeatureLayerPair subTempPair = mainRelationModel.featureLayerPair( 1 );
+  QModelIndex featIdx = mainRelationModel.index( 0 );
+  FeatureLayerPair subTempPair = mainRelationModel.data( featIdx, FeaturesListModel::FeaturePair ).value<FeatureLayerPair>();
 
   QCOMPARE( subTempPair.feature().attribute( QStringLiteral( "Name" ) ), QStringLiteral( "SubFirst" ) );
 
@@ -246,9 +247,15 @@ void TestFormEditors::testRelationsEditor()
   QCOMPARE( childFk, parentPk );
 
   subLayer->startEditing();
-
   QVERIFY( subLayer->addFeature( newSubPair.featureRef() ) );
+
+  // catch feature id
+  QSignalSpy catchFeatureIdSpy( subLayer, &QgsVectorLayer::featureAdded );
+
   QVERIFY( subLayer->commitChanges() );
+
+  QCOMPARE( catchFeatureIdSpy.count(), 1 );
+  QgsFeatureId addedFeatureId = catchFeatureIdSpy.takeFirst().at( 0 ).value<QgsFeatureId>();
 
   int newFeaturesCount = mainRelationModel.rowCount();
   QCOMPARE( newFeaturesCount, featuresCount + 1 ); // we have added one feature
@@ -260,7 +267,7 @@ void TestFormEditors::testRelationsEditor()
   QList<QgsFeatureId> ids = subLayer->allFeatureIds().values();
   QVERIFY( ids.count() > 1 );
 
-  QVERIFY( subLayer->deleteFeature( ids[0] ) );
+  QVERIFY( subLayer->deleteFeature( addedFeatureId ) );
   QVERIFY( subLayer->commitChanges() );
 
   int reducedFeaturesCount = mainRelationModel.rowCount();
