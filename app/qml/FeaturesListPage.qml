@@ -30,9 +30,7 @@ Item {
   property var featuresModel: null
   property var preselectedFeatures: []
 
-  property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
-  property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
-  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresCount + ")" : ""
+  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresModel.layerFeaturesCount() + ")" : ""
 
   function finishSelection( featureIds )
   {
@@ -55,8 +53,11 @@ Item {
   ]
 
   Component.onCompleted: {
-    if ( featuresCount > featuresLimit )
-      __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresLimit ) )
+    if ( featuresModel )
+    {
+      if ( featuresModel.layerFeaturesCount() > featuresModel.featuresLimit )
+        __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresModel.featuresLimit ) )
+    }
   }
 
   Page {

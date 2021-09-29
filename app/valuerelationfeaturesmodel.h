@@ -33,7 +33,7 @@ class ValueRelationFeaturesModel : public FeaturesModel
 
     Q_INVOKABLE QVariant convertToKey( const QVariant &id );
     Q_INVOKABLE QVariant convertToQgisType( const QVariantList &featureIds ); // feature id -> key
-    Q_INVOKABLE QVariant convertFromQgisType( QVariant qgsValue, FeaturesModel::modelRoles ); // key -> other role (feature id/title)
+    Q_INVOKABLE QVariant convertFromQgisType( QVariant qgsValue, FeaturesModel::ModelRoles ); // key -> other role (feature id/title)
 
     FeatureLayerPair pair() const;
     void setPair( const FeatureLayerPair &newPair );

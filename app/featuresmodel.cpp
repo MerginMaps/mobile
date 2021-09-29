@@ -17,8 +17,6 @@ FeaturesModel::FeaturesModel( QObject *parent )
   : QAbstractListModel( parent ),
     mLayer( nullptr )
 {
-  // avoid dangling pointers to mLayer when switching projects
-  QObject::connect( QgsProject::instance(), &QgsProject::cleared, this, &FeaturesModel::reset );
 }
 
 FeaturesModel::~FeaturesModel() = default;
@@ -40,8 +38,6 @@ void FeaturesModel::populate()
     {
       mFeatures << FeatureLayerPair( f, mLayer );
     }
-
-    emit featuresCountChanged( mFeatures.count() );
 
     endResetModel();
   }
@@ -185,6 +181,16 @@ void FeaturesModel::reloadFeatures()
   populate();
 }
 
+int FeaturesModel::layerFeaturesCount() const
+{
+  if ( mLayer && mLayer->isValid() )
+  {
+    return mLayer->dataProvider()->featureCount();
+  }
+
+  return 0;
+}
+
 QHash<int, QByteArray> FeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
@@ -231,11 +237,6 @@ void FeaturesModel::reset()
   mSearchExpression.clear();
 }
 
-int FeaturesModel::featuresCount() const
-{
-  return mFeatures.count();
-}
-
 QString FeaturesModel::searchExpression() const
 {
   return mSearchExpression;
@@ -261,17 +262,23 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
 {
   if ( mLayer != newLayer )
   {
+    if ( mLayer )
+    {
+      disconnect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+    }
+
     mLayer = newLayer;
     emit layerChanged( mLayer );
+
+    if ( mLayer )
+    {
+      // avoid dangling pointers to mLayer when switching projects
+      connect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+    }
   }
 }
 
 QgsVectorLayer *FeaturesModel::layer() const
 {
   return mLayer;
-}
-
-int FeaturesModel::layerFeaturesCount() const
-{
-  return mLayerFeaturesCount;
 }
