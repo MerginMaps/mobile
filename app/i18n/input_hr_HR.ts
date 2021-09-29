@@ -104,56 +104,50 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="512"/>
+        <location filename="../attributes/attributecontroller.cpp" line="507"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="522"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="533"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1057"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="833"/>
+        <location filename="../attributes/attributecontroller.cpp" line="777"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="477"/>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="472"/>
+        <location filename="../attributes/attributecontroller.cpp" line="798"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="885"/>
+        <location filename="../attributes/attributecontroller.cpp" line="829"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="899"/>
+        <location filename="../attributes/attributecontroller.cpp" line="843"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Objekt %1 nije mogao biti dohvaćen nakon izvršenja</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="916"/>
+        <location filename="../attributes/attributecontroller.cpp" line="860"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="933"/>
+        <location filename="../attributes/attributecontroller.cpp" line="877"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Nije bilo moguće spremiti promjene. Povratak stanja.</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1058"/>
-        <source>Value %1 is not compatible with field type %2.</source>
-        <translation>Vrijednost %1 nije odgovarajuća sa tipom podatka za polje %2.</translation>
     </message>
 </context>
 <context>
@@ -260,24 +254,14 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="184"/>
-        <source>Constraints not valid</source>
-        <translation>Ograničenja nisu ispravna</translation>
+        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <source>Can not save the form, there are validation errors</source>
+        <translation>Obrazac nije spremljen, postoje greške u validaciji</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="189"/>
-        <source>Note: soft constraints were not met</source>
-        <translation>Bilješka: Blaga ograničenja nisu ispunjena</translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="488"/>
-        <source>Number is outside of specified range</source>
-        <translation>Broj je izvan određenog raspona</translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="490"/>
-        <source>Value is not valid</source>
-        <translation>Vrijednost nije valjana</translation>
+        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <source>Feature could not be saved, please check all required fields</source>
+        <translation>Objekt nije mogao biti spremljen, molimo provjerite sva obavezna polje</translation>
     </message>
 </context>
 <context>
@@ -298,22 +282,22 @@
         <translation>Spremi</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Delete feature</source>
         <translation>Izbriši objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="201"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Jeste li sigurni da želite izbrisati ovaj objekt?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Unsaved changes</source>
         <translation>Nespremljene promjene</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="222"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
         <source>Do you want to save changes?</source>
         <translation>Želiš li spremiti promjene?</translation>
     </message>
@@ -456,28 +440,28 @@ Won&apos;t be added to the project.</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1036"/>
+        <location filename="../inpututils.cpp" line="1056"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1037"/>
+        <location filename="../inpututils.cpp" line="1057"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1038"/>
+        <location filename="../inpututils.cpp" line="1058"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1039"/>
+        <location filename="../inpututils.cpp" line="1059"/>
         <source>screen density: %1</source>
         <translation>gustoća zaslona: %1</translation>
     </message>
@@ -611,7 +595,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="100"/>
         <source>Recorded feature is not valid</source>
-        <translation>Snimljeni objekt nije ispravan</translation>
+        <translation>Snimljeni objekt nije valjan</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="449"/>
@@ -918,14 +902,65 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="241"/>
-        <source>Not NULL</source>
-        <translation>Nije NULL</translation>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <source>Value must be a number</source>
+        <translation>Vrijednost mora biti broj</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="246"/>
-        <source>Unique</source>
-        <translation>Jedinstven</translation>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <source>Value must be lower than %1</source>
+        <translation>Vrijednost mora biti manja od %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <source>Value must be higher than %1</source>
+        <translation>Vrijednost mora biti veća od %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <source>Value is too large</source>
+        <translation>Vrijednost je prevelika</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <source>Field can not contain decimal places</source>
+        <translation>Polje ne može sadržavati decimalna mjesta</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation>Ne može biti duže od %1 znakova</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <source>Field should not be empty</source>
+        <translation>Polje ne bi smjelo bii prazno</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <source>Field must not be empty</source>
+        <translation>Polje ne smije biti prazno</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <source>Value should be unique</source>
+        <translation>Vrijednost bi trebala biti jedinstvena</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <source>Value must be unique</source>
+        <translation>Vrijednost mora biti jedinstvena</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation>Nije zadovoljeno ograničenje QGIS izraza</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <source>Not a valid value</source>
+        <translation>Vrijednost nije valjana</translation>
     </message>
 </context>
 <context>
@@ -1221,17 +1256,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="165"/>
+        <location filename="../qml/editor/inputrelation.qml" line="164"/>
         <source>%1 more</source>
         <translation>%1 više</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="180"/>
+        <location filename="../qml/editor/inputrelation.qml" line="179"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="240"/>
+        <location filename="../qml/editor/inputrelation.qml" line="239"/>
         <source>Linked features</source>
         <translation>Povezanih objekata</translation>
     </message>
