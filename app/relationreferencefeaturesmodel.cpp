@@ -16,7 +16,7 @@ RelationReferenceFeaturesModel::RelationReferenceFeaturesModel( QObject *parent 
 {
 }
 
-QVariant RelationReferenceFeaturesModel::foreignKeyFromAttribute( FeaturesModel::modelRoles fromAttribute, const QVariant &attributeValue )
+QVariant RelationReferenceFeaturesModel::foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue )
 {
   if ( mPrimaryKeyField.isEmpty() )
     return QVariant();
@@ -33,7 +33,7 @@ QVariant RelationReferenceFeaturesModel::foreignKeyFromAttribute( FeaturesModel:
   return QVariant();
 }
 
-QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::modelRoles expectedAttribute )
+QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute )
 {
   if ( mPrimaryKeyField.isEmpty() )
     return QVariant();

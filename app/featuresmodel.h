@@ -15,6 +15,7 @@
 #include "featurelayerpair.h"
 
 /**
+ * FeaturesModel class fetches features from layer and provides them via Qt Model's interface
  */
 class FeaturesModel : public QAbstractListModel
 {
@@ -22,36 +23,27 @@ class FeaturesModel : public QAbstractListModel
 
     Q_PROPERTY( QgsVectorLayer *layer READ layer WRITE setLayer NOTIFY layerChanged )
 
-    //! Read only property holding number of fetched features from layer
-    Q_PROPERTY( int featuresCount READ featuresCount NOTIFY featuresCountChanged )
-
-    /**
-     * Read only property holding true number of features in layer - not only requested features
-     * Changing search expression does not result in changing this number, only layer change
-     */
-    Q_PROPERTY( int layerFeaturesCount READ layerFeaturesCount NOTIFY layerFeaturesCountChanged )
-
     /**
      * Search expression represents a filter used when querying for data in current layer.
      * Changing this property results in reloading features from layer with new search expression.
      */
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
 
-    //! Read only property limiting maximum number of features that can be fetched
+    // Limits maximum number of features that will be fetched from layer
     Q_PROPERTY( int featuresLimit READ featuresLimit NOTIFY featuresLimitChanged )
 
   public:
 
-    enum modelRoles
+    enum ModelRoles
     {
       FeatureTitle = Qt::UserRole + 10,
       FeatureId,
       Feature,
       FeaturePair,
-      Description, //! secondary text in list view
-      SearchResult //! pair of attribute and its value by which the feature was found, empty if search expression is empty
+      Description, // secondary text in list view
+      SearchResult // pair of attribute and its value by which the feature was found, empty if search expression is empty
     };
-    Q_ENUM( modelRoles );
+    Q_ENUM( ModelRoles );
 
     explicit FeaturesModel( QObject *parent = nullptr );
     virtual ~FeaturesModel();
@@ -65,6 +57,9 @@ class FeaturesModel : public QAbstractListModel
      */
     Q_INVOKABLE void reloadFeatures();
 
+    // Returns number of features in layer (property). Can be different number than rowCount() due to a searchExpression
+    Q_INVOKABLE int layerFeaturesCount() const;
+
     /**
      * \brief rowFromRoleValue finds feature with requested role and value, returns its row
      * \param role to find from modelRoles
@@ -76,18 +71,16 @@ class FeaturesModel : public QAbstractListModel
 
     /**
      * \brief convertRoleValue helpful method to get value of a different role for a feature specified with another role and its value
-     * \param role role to find from modelRoles
-     * \param value value to find
-     * \param requestedRole a role whose value is returned
+     * \param fromRole role to find from modelRoles
+     * \param fromValue value to find
+     * \param toRole a role whose value is returned
      * \return If feature is found by role and value, method returns value for requested role. Returns empty QVariant if no feature is found. If more features
      * match requested role and value, value for first is returned.
      */
     Q_INVOKABLE QVariant convertRoleValue( const int fromRole, const QVariant &fromValue, const int toRole ) const;
 
     int featuresLimit() const;
-    int featuresCount() const;
     QgsVectorLayer *layer() const;
-    int layerFeaturesCount() const;
     QString searchExpression() const;
 
     void setSearchExpression( const QString &searchExpression );
@@ -95,11 +88,9 @@ class FeaturesModel : public QAbstractListModel
 
   signals:
 
-    void featuresCountChanged( int featuresCount );
     void featuresLimitChanged( int featuresLimit );
     void searchExpressionChanged( const QString &searchExpression );
     void layerChanged( QgsVectorLayer *layer );
-    void layerFeaturesCountChanged( int );
 
   protected:
 
@@ -122,5 +113,4 @@ class FeaturesModel : public QAbstractListModel
     FeatureLayerPairs mFeatures;
     QString mSearchExpression;
     QgsVectorLayer *mLayer = nullptr;
-    int mLayerFeaturesCount;
 };

@@ -788,12 +788,12 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
 
   if ( widgetName == QStringLiteral( "valuerelation" ) )
   {
-    QgsMapLayer *referencedLayer = QgsProject::instance()->mapLayer( config.value( "Layer" ).toString() );
-    QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( referencedLayer );
+    const QgsMapLayer *referencedLayer = QgsProject::instance()->mapLayer( config.value( "Layer" ).toString() );
+    const QgsVectorLayer *layer = qobject_cast<const QgsVectorLayer *>( referencedLayer );
 
     if ( layer )
     {
-      int featuresCount = layer->allFeatureIds().count();
+      int featuresCount = layer->dataProvider()->featureCount();
       if ( featuresCount > 4 )
         return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
     }

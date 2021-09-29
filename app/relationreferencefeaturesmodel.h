@@ -37,10 +37,10 @@ class RelationReferenceFeaturesModel : public FeaturesModel
     ~RelationReferenceFeaturesModel() {};
 
     //! Returns foreign key of feature that matches given role with attributeValue
-    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesModel::modelRoles fromAttribute, const QVariant &attributeValue );
+    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue );
 
     //! Returns role value from feature with fkValue in foreign key
-    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::modelRoles expectedAttribute );
+    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute );
 
     QVariantMap config() const;
     QgsProject *project() const;

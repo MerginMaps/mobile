@@ -114,7 +114,7 @@ QVariant ValueRelationFeaturesModel::convertToQgisType( const QVariantList &feat
   return qgsFormat;
 }
 
-QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, modelRoles toRole )
+QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, ModelRoles toRole )
 {
   QStringList keyList;
 
