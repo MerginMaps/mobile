@@ -26,63 +26,12 @@ Item {
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 
-  onFeatureLayerPairChanged: {
-    // new feature layer pair, revert state and update delegate model
-    delegateModel.update()
-  }
-
   RelationFeaturesModel {
     id: rmodel
 
     relation: associatedRelation
     parentFeatureLayerPair: featurePair
     homePath: activeProject.homePath
-
-    onFeaturesCountChanged: delegateModel.update()
-  }
-
-  DelegateModel {
-    id: delegateModel
-    /*
-     * Inspired by https://martin.rpdev.net/2019/01/15/using-delegatemodel-in-qml-for-sorting-and-filtering.html
-     */
-
-    property var filterAcceptsItem: function( item ) {
-      return true
-    }
-
-    function update() {
-      // reset all items to default (invisible) group
-      if (items.count > 0) {
-        items.setGroups(0, items.count, "items");
-      }
-      textModeContainer.invisibleItemsCounter = 0
-
-      for ( var i = 0; i < items.count; ++i ) {
-        var item = items.get( i );
-        if ( filterAcceptsItem( item.model ) ) {
-          item.inVisible = true;
-        }
-      }
-    }
-
-    model: rmodel
-    delegate: RelationTextDelegate {
-      firstLinesMaxWidth: flowItemView.width
-      lastLineMaxWidth: flowItemView.width / 2
-
-      onClicked: root.openLinkedFeature( feature )
-      onSetInvisible: textModeContainer.invisibleItemsCounter++
-    }
-
-    groups: DelegateModelGroup {
-      id: visibleItems
-
-      name: "visible"
-      includeByDefault: false
-    }
-
-    filterOnGroup: "visible"
   }
 
   anchors {
@@ -124,8 +73,6 @@ Item {
         }
       ]
 
-      onStateChanged: delegateModel.update()
-
       visible: rmodel.isTextType
       height: root.widgetHeight
       width: parent.width
@@ -155,7 +102,16 @@ Item {
 
         spacing: customStyle.relationComponent.flowSpacing
 
-        Repeater { model: delegateModel; }
+        Repeater {
+          model: rmodel
+          delegate: RelationTextDelegate {
+            firstLinesMaxWidth: flowItemView.width
+            lastLineMaxWidth: flowItemView.width / 2
+
+            onClicked: root.openLinkedFeature( feature )
+            onSetInvisible: textModeContainer.invisibleItemsCounter++
+          }
+        }
 
         RelationTextDelegate {
           id: showMoreButton
@@ -188,10 +144,6 @@ Item {
 
           onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
         }
-      }
-
-      Component.onCompleted: {
-        delegateModel.update()
       }
     }
 
@@ -233,7 +185,7 @@ Item {
   Component {
     id: relationsPageComponent
 
-    BrowseDataFeaturesPanel {
+    FeaturesListPage {
       id: relationsPage
 
       pageTitle: qsTr( "Linked features" )
@@ -248,8 +200,8 @@ Item {
       }
 
       onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-      onFeatureClicked: {
-        let clickedFeature = featuresModel.attributeFromValue( FeaturesListModel.FeatureId, featureIds, FeaturesListModel.FeaturePair)
+      onSelectionFinished: {
+        let clickedFeature = featuresModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
         root.openLinkedFeature( clickedFeature )
       }
 

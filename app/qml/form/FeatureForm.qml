@@ -86,32 +86,6 @@ Item {
     }
 
   /**
-   * Support for custom callback on events happening in widgets
-   */
-  property var customWidgetCallback: QtObject {
-
-    /**
-     * Called when user clicks on valuerelation widget and combobox shall open
-     * \param widget valuerelation widget for specific field to send valueChanged signal.
-     * \param valueRelationModel model of type FeaturesListModel bears features of related layer.
-     */
-    property var valueRelationOpened: function valueRelationOpened( widget, valueRelationModel ) {}
-
-    /**
-     * Called when field for value relation is created, by default it returns value "combobox".
-     * Return value of this function sets corresponding widget type. Currently accepted values are:
-     *    - combobox -> QML combobox component.
-     *    - textfield -> custom text widget that shows only title of selected feature in value relation
-     *                   and calls function "valueRelationOpened" when it is clicked.
-     * \param widget valuerelation widget for specific field to send valueChanged signal.
-     * \param valueRelationModel model of type FeaturesListModel bears features of related layer.
-     */
-    property var getTypeOfWidget: function getTypeOfWidget( widget, valueRelationModel ) {
-      return "combobox"
-    }
-  }
-
-  /**
    * A handler for extra events for a TextEdit widget .
    */
   property var importDataHandler: QtObject {
@@ -521,20 +495,23 @@ Item {
 
           property var value: AttributeValue
           property bool valueIsNull: AttributeValueIsNull
-          property var config: EditorWidgetConfig
-          property var widget: EditorWidget
-          property var field: Field
-          property var homePath: form.project ? form.project.homePath : ""
-          property var customStyle: form.style
-          property var externalResourceHandler: form.externalResourceHandler
-          property bool readOnly: form.state == "readOnly" || !AttributeEditable
-          property var featurePair: form.controller.featureLayerPair
-          property var activeProject: form.project
-          property var customWidget: form.customWidgetCallback
-          property var labelAlias: Name
 
+          property var field: Field
+          property var widget: EditorWidget
+          property var config: EditorWidgetConfig
+
+          property var homePath: form.project ? form.project.homePath : ""
+          property var externalResourceHandler: form.externalResourceHandler
+
+          property var customStyle: form.style
+          property bool readOnly: form.state === "readOnly" || !AttributeEditable
+
+          property var labelAlias: Name
+          property var activeProject: form.project
           property var associatedRelation: Relation
-          property var formView: extraView
+          property var featurePair: form.controller.featureLayerPair
+
+          property var formView: extraView //! passes StackView to editor, so that editors can show fullpage views (VR page, camera,..)
 
           active: widget !== 'Hidden'
           Keys.forwardTo: backHandler
@@ -584,6 +561,13 @@ Item {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
             {
               attributeEditorLoader.item.featureLayerPairChanged()
+            }
+          }
+
+          onFormRecalculated: {
+            if ( attributeEditorLoader.item && attributeEditorLoader.item.reload )
+            {
+              attributeEditorLoader.item.reload()
             }
           }
         }

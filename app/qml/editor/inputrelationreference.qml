@@ -24,7 +24,7 @@ AbstractEditor {
   signal openLinkedFeature( var linkedFeature )
 
   onContentClicked: {
-    let featurePair = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeaturePair )
+    let featurePair = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeaturePair )
 
     if ( featurePair == null || !featurePair.valid ) return
 
@@ -38,7 +38,7 @@ AbstractEditor {
     page.forceActiveFocus()
   }
 
-  onParentValueChanged: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeatureTitle ) || ""
+  onParentValueChanged: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
 
   RelationReferenceFeaturesModel {
     id: rModel
@@ -46,7 +46,7 @@ AbstractEditor {
     config: root.parent.config
     project: root.parent.activeProject
 
-    onPopulated: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesListModel.FeatureTitle ) || ""
+    onModelReset: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
   }
 
   content: Text {
@@ -56,6 +56,7 @@ AbstractEditor {
 
       anchors.fill: parent
       color: customStyle.fields.fontColor
+      leftPadding: customStyle.fields.sideMargins
       font.pointSize: customStyle.fields.fontPointSize
 
       horizontalAlignment: Text.AlignLeft
@@ -87,7 +88,7 @@ AbstractEditor {
   Component {
     id: parentFeaturesPageComponent
 
-    BrowseDataFeaturesPanel {
+    FeaturesListPage {
       id: parentFeaturesPage
 
       pageTitle: qsTr( "Changing link" )
@@ -100,8 +101,8 @@ AbstractEditor {
         root.parent.formView.pop()
       }
 
-      onFeatureClicked: {
-        let fk = rModel.foreignKeyFromAttribute( FeaturesListModel.FeatureId, featureIds )
+      onSelectionFinished: {
+        let fk = rModel.foreignKeyFromAttribute( FeaturesModel.FeatureId, featureIds )
         root.editorValueChanged( fk, false )
         root.parent.formView.pop()
       }

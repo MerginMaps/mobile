@@ -19,12 +19,24 @@ Item {
   id: root
 
   signal featureClicked( var featureId )
-  signal featureToggled( var featureId, var toggleState )
 
   property bool showAdditionalInfo: false
   property bool allowMultiselect: false
   property var featuresModel: null
-  property var preSelectedIds: []
+
+  property var selectedFeatures: [] // in/out property, contains list of selected feature ids
+
+  function toggleFeature( fid )
+  {
+    if ( selectedFeatures.indexOf( fid ) === -1 )
+    {
+      root.selectedFeatures.push( fid )
+    }
+    else
+    {
+      root.selectedFeatures = root.selectedFeatures.filter( _id => _id !== fid )
+    }
+  }
 
   ListView {
     topMargin: 10 * QgsQuick.Utils.dp
@@ -44,22 +56,17 @@ Item {
         anchors.fill: parent
         propagateComposedEvents: false
         onClicked: {
-
           if ( allowMultiselect ) {
             checkboxItem.toggle()
-            root.featureToggled( model.FeatureId, checkboxItem.checkState )
+            root.toggleFeature( model.FeatureId )
           }
           else root.featureClicked( model.FeatureId )
-
         }
       }
 
-      Component.onCompleted: { // mark all preselected features
-        if ( Array.isArray( preSelectedIds ) ) {
-          if ( preSelectedIds.includes( model.FeatureId ) ) {
-            checkboxItem.checkState = Qt.Checked
-          }
-        }
+      Component.onCompleted: { // toggle preselected features
+        if ( root.selectedFeatures.includes( model.FeatureId ) )
+          checkboxItem.checkState = Qt.Checked
       }
 
       RowLayout {
@@ -80,7 +87,7 @@ Item {
             height: 40 * QgsQuick.Utils.dp
             width: 40 * QgsQuick.Utils.dp
 
-            onCheckboxClicked: root.featureToggled( model.FeatureId, buttonState )
+            onCheckboxClicked: root.toggleFeature( model.FeatureId )
           }
         }
 
@@ -122,7 +129,7 @@ Item {
           Text {
             id: descriptionText
             height: textContainer.height/2
-            text: showAdditionalInfo ? model.Description + ", " + model.FoundPair : model.Description
+            text: showAdditionalInfo ? model.Description + ", " + model.SearchResult : model.Description
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left

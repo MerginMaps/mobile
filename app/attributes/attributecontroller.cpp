@@ -727,6 +727,9 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     emit formDataChanged( *i );
     ++i;
   }
+
+  if ( anyChanges )
+    emit formRecalculated();
 }
 
 bool AttributeController::hasValidationErrors() const

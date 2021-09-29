@@ -161,7 +161,6 @@ Item {
         onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
         extraView: formPage.StackView.view
-        customWidgetCallback: valueRelationWidget.handler
 
         Connections {
           target: root
@@ -238,13 +237,6 @@ Item {
 
       ExternalResourceBundle {
         id: externalResourceBundle
-      }
-
-      ValueRelationWidget {
-        id: valueRelationWidget
-
-        extraView: formPage.StackView.view
-        onWidgetClosed: featureForm.forceActiveFocus()
       }
 
       CodeReaderHandler {
