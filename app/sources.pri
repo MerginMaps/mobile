@@ -43,7 +43,7 @@ compass.cpp \
 featuresmodel.cpp \
 relationfeaturesmodel.cpp \
 relationreferencefeaturesmodel.cpp \
-valuerelationfeaturesmodel.cpp \
+valuerelationfeaturesmodel.cpp
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -113,6 +113,7 @@ contains(DEFINES, INPUT_TEST) {
       test/testscalebarkit.cpp \
       test/testvariablesmanager.cpp \
       test/testformeditors.cpp \
+      test/testmodels.cpp
 
   HEADERS += \
       test/inputtests.h \
@@ -130,6 +131,7 @@ contains(DEFINES, INPUT_TEST) {
       test/testscalebarkit.h \
       test/testvariablesmanager.h \
       test/testformeditors.h \
+      test/testmodels.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

@@ -7,12 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTFORMEDITORS_H
-#define TESTFORMEDITORS_H
+#pragma once
 
 #include <QObject>
 
-class TestFormEditors : public QObject
+class TestModels : public QObject
 {
     Q_OBJECT
 
@@ -20,11 +19,6 @@ class TestFormEditors : public QObject
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
-    void testNumericFields();
-    void testRelationsEditor();
-    void testRelationsReferenceEditor();
-    void testRelationsWidgetPresence();
-    void testValueRelationsEditor();
+    void testFeaturesModel();
 };
 
-#endif // TESTFORMEDITORS_H
