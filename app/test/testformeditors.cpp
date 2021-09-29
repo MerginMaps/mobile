@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,6 +15,7 @@
 #include "fieldvalidator.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
+#include "valuerelationfeaturesmodel.h"
 
 #include <QtTest/QtTest>
 #include <memory>
@@ -226,7 +227,7 @@ void TestFormEditors::testRelationsEditor()
   QVERIFY( featuresCount > 0 );
 
   QModelIndex featIdx = mainRelationModel.index( 0 );
-  FeatureLayerPair subTempPair = mainRelationModel.data( featIdx, FeaturesListModel::FeaturePair ).value<FeatureLayerPair>();
+  FeatureLayerPair subTempPair = mainRelationModel.data( featIdx, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
 
   QCOMPARE( subTempPair.feature().attribute( QStringLiteral( "Name" ) ), QStringLiteral( "SubFirst" ) );
 
@@ -346,7 +347,7 @@ void TestFormEditors::testRelationsReferenceEditor()
   subRelationRefModel.setProject( QgsProject::instance() );
 
   QgsFeature parentFeat = mainLayer->getFeature( 1 ); // this is parent feature
-  QVariant fk = subRelationRefModel.foreignKeyFromAttribute( FeaturesListModel::FeatureId, parentFeat.id() );
+  QVariant fk = subRelationRefModel.foreignKeyFromAttribute( FeaturesModel::FeatureId, parentFeat.id() );
 
   QCOMPARE( fk, parentFeat.attribute( "pk" ) );
 
@@ -366,7 +367,7 @@ void TestFormEditors::testRelationsReferenceEditor()
   subsubRelationRefModel.setProject( QgsProject::instance() );
 
   QgsFeature parentSubFeat = subLayer->getFeature( 1 ); // this is parent feature
-  QVariant subsubFk = subRelationRefModel.foreignKeyFromAttribute( FeaturesListModel::FeatureId, parentSubFeat.id() );
+  QVariant subsubFk = subRelationRefModel.foreignKeyFromAttribute( FeaturesModel::FeatureId, parentSubFeat.id() );
 
   QCOMPARE( subsubFk, parentSubFeat.attribute( "pk" ) );
 }
@@ -440,4 +441,117 @@ void TestFormEditors::testRelationsWidgetPresence()
 
   QVERIFY( relationsCount == 0 );
   QVERIFY( relationReferencesCount == 1 );
+}
+
+void TestFormEditors::testValueRelationsEditor()
+{
+  /* Test project: project_value_relations
+   * It has value relations sets up followingly:
+   *
+   *  - Main Layer has VR to:
+   *    - sub layer
+   *    - subsub layer ( with filter expression that subsub is categorized based on sub )
+   *    - another layer ( key is not fid, but textual )
+   */
+
+  QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
+  QString projectName = "proj.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *mainL = QgsProject::instance()->mapLayersByName( QStringLiteral( "main" ) ).at( 0 );
+  QgsVectorLayer *mainLayer = static_cast<QgsVectorLayer *>( mainL );
+
+  QVERIFY( mainLayer && mainLayer->isValid() );
+
+  QgsMapLayer *subL = QgsProject::instance()->mapLayersByName( QStringLiteral( "sub" ) ).at( 0 );
+  QgsVectorLayer *subLayer = static_cast<QgsVectorLayer *>( subL );
+
+  QVERIFY( subLayer && subLayer->isValid() );
+
+  QgsMapLayer *subsubL = QgsProject::instance()->mapLayersByName( QStringLiteral( "subsub" ) ).at( 0 );
+  QgsVectorLayer *subsubLayer = static_cast<QgsVectorLayer *>( subsubL );
+
+  QVERIFY( subsubLayer && subsubLayer->isValid() );
+
+  QgsMapLayer *anotherL = QgsProject::instance()->mapLayersByName( QStringLiteral( "another" ) ).at( 0 );
+  QgsVectorLayer *anotherLayer = static_cast<QgsVectorLayer *>( anotherL );
+
+  QVERIFY( anotherLayer && anotherLayer->isValid() );
+
+  // test ValueRelationsFeaturesModel, see if it contains correct data for existing features
+
+  QgsFeature f = mainLayer->getFeature( 1 );
+  FeatureLayerPair pair( f, mainLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  QVector<QUuid> items = tab->formItems();
+
+  QVERIFY( items.length() == 5 );
+
+  // order: 0 - fid, 1 - Name, 2 - subfk, 3 - anotherfk, 4 - subsubfk
+
+  // ------- FIELD SubFK
+
+  const FormItem *subFkItem = controller.formItem( items.at( 2 ) );
+
+  ValueRelationFeaturesModel subVRModel;
+  subVRModel.setConfig( subFkItem->editorWidgetConfig() );
+  subVRModel.setPair( pair );
+
+  QCOMPARE( subVRModel.rowCount(), subLayer->dataProvider()->featureCount() );
+  QCOMPARE( subVRModel.layer()->id(), subLayer->id() );
+
+  // ------- FIELD SubSubFK
+
+  const FormItem *subsubFkItem = controller.formItem( items.at( 4 ) );
+
+  ValueRelationFeaturesModel subsubVRModel;
+  subsubVRModel.setConfig( subsubFkItem->editorWidgetConfig() );
+  subsubVRModel.setPair( pair );
+
+  QCOMPARE( subsubVRModel.rowCount(), 2 ); // due to a filter expression
+  QCOMPARE( subsubVRModel.layer()->id(), subsubLayer->id() );
+
+  // test setup of filter expression
+  QgsFeatureRequest request;
+  subsubVRModel.setupFeatureRequest( request );
+
+  QVERIFY( !request.filterExpression()->operator QString().isEmpty() );
+  QVERIFY( request.filterExpression()->isValid() );
+
+  // test filter expression in combination with search
+  subsubVRModel.setSearchExpression( QStringLiteral( "2" ) );
+
+  QCOMPARE( subsubVRModel.rowCount(), 1 );
+
+  // test title field on result
+  QModelIndex index = subsubVRModel.index( 0, 0 );
+  FeatureLayerPair tempPair = subsubVRModel.data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
+
+  QCOMPARE( subsubVRModel.featureTitle( tempPair ), QStringLiteral( "A2" ) );
+
+  // ------- FIELD AnotherFK
+
+  const FormItem *anotherFkItem = controller.formItem( items.at( 3 ) );
+
+  ValueRelationFeaturesModel anotherVRModel;
+  anotherVRModel.setConfig( anotherFkItem->editorWidgetConfig() );
+  anotherVRModel.setPair( pair );
+
+  QCOMPARE( anotherVRModel.rowCount(), anotherLayer->dataProvider()->featureCount() );
+  QCOMPARE( anotherVRModel.layer()->id(), anotherLayer->id() );
+
+  // test invalidate call and conversion functions
+
+  QSignalSpy invalidateSignal( &anotherVRModel, &ValueRelationFeaturesModel::invalidate );
+
+  QVariant response = anotherVRModel.convertFromQgisType( QStringLiteral( "{100,101}" ), FeaturesModel::FeatureTitle );
+  QCOMPARE( invalidateSignal.count(), 1 );
+
+  response = anotherVRModel.convertFromQgisType( QStringLiteral( "{B,C}" ), FeaturesModel::FeatureId );
+  QCOMPARE( response, QVariant( QVariantList( { 2, 3 } ) ) ); // QVariantList inside QVariant because internal JS<->C++ QVariant conversions
 }

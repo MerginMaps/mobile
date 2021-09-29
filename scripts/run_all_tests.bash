@@ -45,6 +45,9 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testFormEditors
 NFAILURES=$(($NFAILURES+$?))
 
+$INPUT_EXECUTABLE --testModels
+NFAILURES=$(($NFAILURES+$?))
+
 echo "Total $NFAILURES failures found in testing"
 
 exit $NFAILURES

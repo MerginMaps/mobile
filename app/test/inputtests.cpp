@@ -23,6 +23,7 @@
 #include "test/testscalebarkit.h"
 #include "test/testvariablesmanager.h"
 #include "test/testformeditors.h"
+#include "test/testmodels.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -146,6 +147,11 @@ int InputTests::runTest() const
   {
     TestFormEditors edTest;
     nFailed = QTest::qExec( &edTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testModels" )
+  {
+    TestModels modelsTest;
+    nFailed = QTest::qExec( &modelsTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )
