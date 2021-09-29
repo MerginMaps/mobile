@@ -10,14 +10,14 @@
 #ifndef RELATIONFEATURESMODEL_H
 #define RELATIONFEATURESMODEL_H
 
-#include "featureslistmodel.h"
+#include "featuresmodel.h"
 #include "featurelayerpair.h"
 
 #include "qgsrelation.h"
 
 #include <QObject>
 
-class RelationFeaturesModel : public FeaturesListModel
+class RelationFeaturesModel : public FeaturesModel
 {
     Q_OBJECT
 
@@ -37,7 +37,6 @@ class RelationFeaturesModel : public FeaturesListModel
 
   public:
 
-    //! Roles for RelationFeaturesListModel
     enum relationModelRoles
     {
       PhotoPath = Qt::UserRole + 100,
@@ -45,14 +44,13 @@ class RelationFeaturesModel : public FeaturesListModel
     Q_ENUM( relationModelRoles );
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
-    virtual ~RelationFeaturesModel() {};
+    ~RelationFeaturesModel() {};
 
-    // QAbstractItemModel interface
     QVariant data( const QModelIndex &index, int role ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void setup(); // will be override
-    void populate(); // will be override
+    void setup() override;
+    void setupFeatureRequest( QgsFeatureRequest &request ) override;
 
     void setParentFeatureLayerPair( FeatureLayerPair pair );
     void setRelation( QgsRelation relation );
@@ -65,10 +63,6 @@ class RelationFeaturesModel : public FeaturesListModel
 
     bool isTextType() const;
     void setIsTextType( bool isTextType );
-
-  public slots:
-    void onChildLayerChanged();
-
 
   signals:
     void parentFeatureLayerPairChanged( FeatureLayerPair pair );

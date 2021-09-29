@@ -13,14 +13,14 @@
 #include <QObject>
 
 #include "qgsproject.h"
-#include "featureslistmodel.h"
+#include "featuresmodel.h"
 
 /**
  * \brief The RelationReferenceFeaturesModel class serve as a helper class for relation reference widget.
- * It is a subclass of FeaturesListModel so it is a model containing features from parent layer of the relation reference.
+ * It is a subclass of FeaturesModel so it is a model containing features from parent layer of the relation reference.
  * Config and Project must be provided in order for this model to work.
  */
-class RelationReferenceFeaturesModel : public FeaturesListModel
+class RelationReferenceFeaturesModel : public FeaturesModel
 {
     Q_OBJECT
 
@@ -34,13 +34,13 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
   public:
 
     explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
-    virtual ~RelationReferenceFeaturesModel() {};
+    ~RelationReferenceFeaturesModel() {};
 
     //! Returns foreign key of feature that matches given role with attributeValue
-    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesListModel::modelRoles fromAttribute, const QVariant &attributeValue );
+    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesModel::modelRoles fromAttribute, const QVariant &attributeValue );
 
     //! Returns role value from feature with fkValue in foreign key
-    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesListModel::modelRoles expectedAttribute );
+    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::modelRoles expectedAttribute );
 
     QVariantMap config() const;
     QgsProject *project() const;
@@ -50,13 +50,12 @@ class RelationReferenceFeaturesModel : public FeaturesListModel
     void setProject( QgsProject *project );
 
     //! Reads config and with project instance queries all features from parent layer. Emits populated signal after loading features.
-    void setup();
+    void setup() override;
 
   signals:
     void configChanged( QVariantMap config );
     void projectChanged( QgsProject *project );
     void allowNullChanged( bool allowNull );
-    void populated();
 
   private:
 

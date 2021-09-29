@@ -11,15 +11,17 @@
 #include "qgsvectorlayer.h"
 #include "inpututils.h"
 
+#include "qgsproject.h"
+
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
-  : FeaturesListModel( parent )
+  : FeaturesModel( parent )
 {
 }
 
 QVariant RelationFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
-  if ( row < 0 || row >= mFeatures.count() )
+  if ( row < 0 || row >= FeaturesModel::rowCount() )
     return QVariant();
 
   if ( !index.isValid() )
@@ -27,16 +29,16 @@ QVariant RelationFeaturesModel::data( const QModelIndex &index, int role ) const
 
   if ( role == PhotoPath )
   {
-    const FeatureLayerPair pair = mFeatures.at( index.row() );
+    const FeatureLayerPair pair = FeaturesModel::data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
     return relationPhotoPath( pair );
   }
   else
-    return FeaturesListModel::data( index, role );
+    return FeaturesModel::data( index, role );
 }
 
 QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 {
-  QHash<int, QByteArray> roles = FeaturesListModel::roleNames();
+  QHash<int, QByteArray> roles = FeaturesModel::roleNames();
   roles[PhotoPath] = QStringLiteral( "PhotoPath" ).toLatin1();
 
   return roles;
@@ -47,30 +49,20 @@ void RelationFeaturesModel::setup()
   if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
     return;
 
-  QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::onChildLayerChanged );
+  setIsTextType( photoFieldIndex( mRelation.referencingLayer() ) == -1 );
+
+  QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
+
+  FeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
 }
 
-void RelationFeaturesModel::populate()
+void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
-  if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
-    return;
+  FeaturesModel::setupFeatureRequest( request );
 
-  beginResetModel();
-  mFeatures.clear();
-
-  QgsFeatureIterator it = mRelation.getRelatedFeatures( mParentFeatureLayerPair.feature() );
-  QgsFeature feat;
-
-  while ( it.nextFeature( feat ) )
-  {
-    mFeatures << FeatureLayerPair( feat, mRelation.referencingLayer() );
-  }
-
-  endResetModel();
-  emit featuresCountChanged( mFeatures.count() );
-
-  setIsTextType( photoFieldIndex( mRelation.referencingLayer() ) == -1 );
+  QgsFeatureRequest e = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
+  request.combineFilterExpression( e.filterExpression()->operator QString() );
 }
 
 void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
@@ -105,11 +97,6 @@ QgsRelation RelationFeaturesModel::relation() const
   return mRelation;
 }
 
-void RelationFeaturesModel::onChildLayerChanged()
-{
-  populate();
-}
-
 QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featurePair ) const
 {
   // Feature title used to get path of the referenced image.
@@ -132,7 +119,6 @@ int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const
   {
     // Lets try by widget type
     QgsEditorWidgetSetup setup = layer->editorWidgetSetup( i );
-    QVariantMap config = setup.config();
     if ( setup.type() == QStringLiteral( "ExternalResource" ) )
     {
       return i;

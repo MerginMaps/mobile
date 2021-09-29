@@ -84,10 +84,11 @@
 #include "positionkit.h"
 #include "scalebarkit.h"
 #include "qgsquickutils.h"
-#include "featureslistmodel.h"
+#include "featuresmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
+#include "valuerelationfeaturesmodel.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -270,6 +271,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
+  qRegisterMetaType< FeatureLayerPair * >( "FeatureLayerPair*" );
   qRegisterMetaType< AttributeController * >( "AttributeController*" );
 
   qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
@@ -300,8 +302,9 @@ void initDeclarative()
   qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
-  qmlRegisterType< FeaturesListModel >( "lc", 1, 0, "FeaturesListModel" );
+  qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
+  qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );

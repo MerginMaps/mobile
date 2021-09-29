@@ -15,40 +15,32 @@ import "./components"
 Item {
   id: root
 
-  signal featureClicked( var featureIds )
   signal addFeatureClicked()
   signal unlinkClicked()
   signal backButtonClicked()
-  signal searchTextChanged( string text )
+  signal selectionFinished( var featureIds )
 
   property bool toolbarVisible: true
   property var toolbarButtons: [] // pass button names in list, see currently supported buttons below in toolbar
 
-  property bool allowMultiselect: false
   property bool allowSearch: true
-  property string layerName: ""
+  property bool allowMultiselect: false
+  property bool resetAfterSelection: true
+
   property var featuresModel: null
+  property var preselectedFeatures: []
+
   property int featuresCount: featuresModel ? featuresModel.featuresCount : 0
   property int featuresLimit: featuresModel ? featuresModel.featuresLimit : 0
-  property string pageTitle: layerName + " (" + featuresCount + ")"
-  property var selectedFeatures: []
+  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresCount + ")" : ""
 
-  property var deactivateSearch: function deactivateSearch() {
-    searchBar.deactivate()
-  }
-
-  function featureToggled( featureId, toggleState ) {
-    if ( !Array.isArray( selectedFeatures ) )
-      selectedFeatures = []
-    if ( toggleState === Qt.Checked )
+  function finishSelection( featureIds )
+  {
+    if ( resetAfterSelection )
     {
-      selectedFeatures.push( featureId )
+      searchBar.deactivate()
     }
-    else if ( toggleState === Qt.Unchecked )
-    {
-      selectedFeatures = selectedFeatures.filter( _id => _id !== featureId )
-    }
-    browseDataView.preSelectedIds = selectedFeatures // update checkboxes when search changes
+    selectionFinished( featureIds )
   }
 
   states: [
@@ -69,14 +61,26 @@ Item {
 
   Page {
     id: featuresPage
+
     anchors.fill: parent
+
+    Keys.onReleased: {
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        event.accepted = true;
+        deactivateSearch()
+        root.backButtonClicked()
+      }
+    }
 
     header: PanelHeader {
       id: featuresPageHeader
-      height: InputStyle.rowHeightHeader
+
       width: parent.width
+      height: InputStyle.rowHeightHeader
+
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
+
       titleText: pageTitle
       
       onBack: {
@@ -92,27 +96,28 @@ Item {
 
       visible: root.allowSearch
       allowTimer: true
-      onSearchTextChanged: {
-        root.searchTextChanged( text )
-      }
+      onSearchTextChanged: root.featuresModel.searchExpression = text
     }
 
-    BrowseDataView {
-      id: browseDataView
+    FeaturesList {
+      id: listview
+
       width: parent.width
       height: allowSearch? parent.height - searchBar.height : parent.height
+
       y: allowSearch ? searchBar.height : 0
+
       clip: true
+
       showAdditionalInfo: root.state == "search"
       featuresModel: root.featuresModel
       allowMultiselect: root.allowMultiselect
-      preSelectedIds: selectedFeatures
+      selectedFeatures: root.preselectedFeatures
 
-      onFeatureClicked: root.featureClicked( featureId )
-      onFeatureToggled: root.featureToggled( featureId, toggleState )
+      onFeatureClicked: root.finishSelection( featureId )
     }
 
-    footer: BrowseDataToolbar {
+    footer: FeaturesListPageToolbar {
       id: browseDataToolbar
 
       visible: root.toolbarVisible
@@ -122,7 +127,7 @@ Item {
       unlinkButtonVisible: root.toolbarButtons.includes("unlink")
 
       onAddButtonClicked: addFeatureClicked()
-      onDoneButtonClicked: root.featureClicked( root.selectedFeatures )
+      onDoneButtonClicked: root.finishSelection( listview.selectedFeatures )
       onUnlinkButtonClicked: root.unlinkClicked()
     }
   }

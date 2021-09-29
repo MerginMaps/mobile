@@ -24,11 +24,6 @@ Item {
   signal featureSelectRequested( var pair )
   signal createFeatureRequested()
 
-  onSelectedLayerChanged: {
-    if ( selectedLayer )
-      featuresListModel.populateFromLayer( selectedLayer )
-  }
-
   onFocusChanged: { // pass focus to stackview
     browseDataLayout.focus = true
   }
@@ -51,26 +46,18 @@ Item {
     else clearStackAndClose()
   }
 
-  function loadFeaturesFromLayerIndex( layerId ) {
+  function setSelectedLayer( layerId ) {
     let layer = __browseDataLayersModel.layerFromLayerId( layerId )
-
     selectedLayer = layer
   }
 
-  function pushFeaturesPanelWithParams( layerId ) {
-    let modelIndex = __browseDataLayersModel.indexFromLayerId( layerId )
-    let hasGeometry = __browseDataLayersModel.getData( modelIndex, LayersModel.HasGeometryRole )
-    let layerName = __browseDataLayersModel.getData( modelIndex, LayersModel.LayerNameRole )
-
-    browseDataLayout.push( browseDataFeaturesPanel, {
-                            toolbarVisible: !hasGeometry,
-                            layerName: layerName,
-                            featuresModel: featuresListModel
-                          })
-  }
-
-  function searchTextEdited( text ) {
-    featuresListModel.searchExpression = text
+  function pushFeaturesListPage() {
+    let geometry = __inputUtils.geometryFromLayer( root.selectedLayer )
+    browseDataLayout.push( featuresListComponent, {
+                            toolbarVisible: geometry === "nullGeo",
+                            resetAfterSelection: geometry !== "nullGeo"
+                          } )
+    featuresListModel.reloadFeatures()
   }
 
   StackView {
@@ -98,36 +85,38 @@ Item {
     BrowseDataLayersPanel {
       onBackButtonClicked: popOnePageOrClose()
       onLayerClicked: {
-        loadFeaturesFromLayerIndex( layerId )
-        pushFeaturesPanelWithParams( layerId )
+        setSelectedLayer( layerId )
+        pushFeaturesListPage()
       }
     }
   }
 
   Component {
-    id: browseDataFeaturesPanel
+    id: featuresListComponent
 
-    BrowseDataFeaturesPanel {
-      id: dataFeaturesPanel
+    FeaturesListPage {
+      id: featuresListPage
+
+      featuresModel: featuresListModel
 
       toolbarButtons: ["add"]
       onBackButtonClicked: popOnePageOrClose()
-      onFeatureClicked: {
-        let featurePair = featuresListModel.featureLayerPair( featureIds )
+      onSelectionFinished: {
+        let featurePair = featuresListModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
 
         if ( !featurePair.feature.geometry.isNull ) {
           clearStackAndClose() // close view if feature has geometry
-          deactivateSearch()
         }
 
         root.featureSelectRequested( featurePair )
       }
       onAddFeatureClicked: createFeatureRequested()
-      onSearchTextChanged: searchTextEdited( text )
     }
   }
 
-  FeaturesListModel {
+  FeaturesModel {
     id: featuresListModel
+
+    layer: root.selectedLayer
   }
 }

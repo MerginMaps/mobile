@@ -15,7 +15,6 @@ identifykit.cpp \
 positionkit.cpp \
 scalebarkit.cpp \
 simulatedpositionsource.cpp \
-featureslistmodel.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -41,8 +40,10 @@ qrdecoder.cpp \
 projectsmodel.cpp \
 projectsproxymodel.cpp \
 compass.cpp \
+featuresmodel.cpp \
 relationfeaturesmodel.cpp \
-relationreferencefeaturesmodel.cpp
+relationreferencefeaturesmodel.cpp \
+valuerelationfeaturesmodel.cpp \
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -61,7 +62,6 @@ identifykit.h \
 positionkit.h \
 scalebarkit.h \
 simulatedpositionsource.h \
-featureslistmodel.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
@@ -86,8 +86,10 @@ qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \
 compass.h \
+featuresmodel.h \
 relationfeaturesmodel.h \
-relationreferencefeaturesmodel.h
+relationreferencefeaturesmodel.h \
+valuerelationfeaturesmodel.h
 
 contains(DEFINES, INPUT_TEST) {
 

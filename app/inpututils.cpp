@@ -786,6 +786,26 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     return QUrl( path.arg( QLatin1String( "textedit" ) ) );
   }
 
+  if ( widgetName == QStringLiteral( "valuerelation" ) )
+  {
+    QgsMapLayer *referencedLayer = QgsProject::instance()->mapLayer( config.value( "Layer" ).toString() );
+    QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( referencedLayer );
+
+    if ( layer )
+    {
+      int featuresCount = layer->allFeatureIds().count();
+      if ( featuresCount > 4 )
+        return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
+    }
+
+    if ( config.value( "AllowMulti" ).toBool() )
+    {
+      return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
+    }
+
+    return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
+  }
+
   QStringList supportedWidgets = { QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),

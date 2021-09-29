@@ -4,16 +4,16 @@
         <file>AccountPage.qml</file>
         <file>AuthPanel.qml</file>
         <file>Banner.qml</file>
-        <file>BrowseDataFeaturesPanel.qml</file>
         <file>BrowseDataLayersPanel.qml</file>
         <file>BrowseDataPanel.qml</file>
-        <file>BrowseDataToolbar.qml</file>
-        <file>BrowseDataView.qml</file>
         <file>CircularProgressBar.qml</file>
         <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
         <file>CodeReaderOverlay.qml</file>
         <file>ExternalResourceBundle.qml</file>
+        <file>FeaturesList.qml</file>
+        <file>FeaturesListPage.qml</file>
+        <file>FeaturesListPageToolbar.qml</file>
         <file>FormsStackManager.qml</file>
         <file>InputStyle.qml</file>
         <file>LogPanel.qml</file>
@@ -38,7 +38,6 @@
         <file>StorageLimitDialog.qml</file>
         <file>SubscribePage.qml</file>
         <file>SubscribePlanItem.qml</file>
-        <file>ValueRelationWidget.qml</file>
         <file>components/CheckboxComponent.qml</file>
         <file>components/DelegateButton.qml</file>
         <file>components/ExtendedMenuItem.qml</file>
@@ -77,7 +76,8 @@
         <file>editor/inputtextedit.qml</file>
         <file>editor/inputtexteditmultiline.qml</file>
         <file>editor/inputvaluemap.qml</file>
-        <file>editor/inputvaluerelation.qml</file>
+        <file>editor/inputvaluerelationcombobox.qml</file>
+        <file>editor/inputvaluerelationpage.qml</file>
         <file>form/FeatureForm.qml</file>
         <file>form/FeatureFormPage.qml</file>
         <file>form/FeatureFormStyling.qml</file>

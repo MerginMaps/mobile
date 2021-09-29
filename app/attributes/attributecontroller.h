@@ -162,6 +162,7 @@ class  AttributeController : public QObject
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
+    void formRecalculated();
     void featureIdChanged();
 
   private:
