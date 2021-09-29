@@ -90,7 +90,7 @@ AbstractEditor {
     BrowseDataFeaturesPanel {
       id: parentFeaturesPage
 
-      pageTitle: qsTr( "Changing link" )
+      pageTitle: qsTr( "Change link" )
       allowSearch: false
       focus: true
       toolbarButtons: ["unlink"]
