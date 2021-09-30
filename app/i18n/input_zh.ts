@@ -4,7 +4,7 @@
     <message>
         <location filename="../qml/AboutPanel.qml" line="123"/>
         <source>Developed by</source>
-        <translation>Developed by</translation>
+        <translation>开发者</translation>
     </message>
 </context>
 <context>
@@ -12,57 +12,57 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="161"/>
         <source>Your subscription was cancelled on %1</source>
-        <translation>Your subscription was cancelled on %1</translation>
+        <translation>你的订阅已于%1取消</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="49"/>
         <source>My Account</source>
-        <translation>My Account</translation>
+        <translation>我的账户</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="133"/>
         <source>Your subscription will not auto-renew after %1</source>
-        <translation>Your subscription will not auto-renew after %1</translation>
+        <translation>您的自动订阅将在%1取消</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="142"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
-        <translation>Please update your %1billing details%2 as soon as possible</translation>
+        <translation>请尽快更新您的%1账单详情%2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="152"/>
         <source>Your next bill will be for %1 on %2</source>
-        <translation>Your next bill will be for %1 on %2</translation>
+        <translation>您将在%2支付下一笔账单%1 </translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="186"/>
         <source>Using %1 / %2</source>
-        <translation>Using %1 / %2</translation>
+        <translation>云空间已使用 %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Manage Subscription</source>
-        <translation>Manage Subscription</translation>
+        <translation>订阅管理</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Working...</source>
-        <translation>Working...</translation>
+        <translation>处理中······</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Subscription plans</source>
-        <translation>Subscription plans</translation>
+        <translation>订阅计划</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="240"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>You can also %1restore%2 your purchases</translation>
+        <translation>您可以%1恢复%2您的购买</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="264"/>
         <source>Sign out</source>
-        <translation>Sign out</translation>
+        <translation>退出账号</translation>
     </message>
 </context>
 <context>
@@ -70,12 +70,12 @@
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="53"/>
         <source>Choose Active Layer</source>
-        <translation>Choose Active Layer</translation>
+        <translation>选择活动图层</translation>
     </message>
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="65"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
-        <translation>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</translation>
+        <translation>在项目中找不到任何可编辑的图层。请参阅%1如何在项目中启用数字化%2。</translation>
     </message>
 </context>
 <context>
@@ -83,22 +83,22 @@
     <message>
         <location filename="../androidutils.cpp" line="113"/>
         <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>Storage permission is permanently denied, please allow it in settings</translation>
+        <translation>存储权限被永久拒绝，请在设置中设为允许</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="117"/>
         <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>Input needs a storage permission in order to manipulate or download a project</translation>
+        <translation>Input软件需要存储权限，用来保存数据及下载项目</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="135"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation>Camera permission is permanently denied, please allow it in settings</translation>
+        <translation>相机权限被永久拒绝，请在设置中设为允许</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="139"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>We need a camera permission in order to take a photo</translation>
+        <translation>我们需要相机权限，用来拍照</translation>
     </message>
 </context>
 <context>
@@ -106,48 +106,48 @@
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="507"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>Default value expression for %1:%2 has parser error: %3</translation>
+        <translation>默认值表达式%1:%2解析错误: %3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="517"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>Default value expression for %1:%2 has evaluation error: %3</translation>
+        <translation>默认值表达式%1:%2计算错误: %3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
-        <translation>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
+        <translation>值“%1” %4不能转为字段%2(%3)的兼容值</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="777"/>
         <source>Cannot delete feature</source>
-        <translation>Cannot delete feature</translation>
+        <translation>删除要素失败</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="472"/>
         <location filename="../attributes/attributecontroller.cpp" line="798"/>
         <source>Feature could not be added</source>
-        <translation>Feature could not be added</translation>
+        <translation>增加要素失败</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="829"/>
         <source>Cannot update feature</source>
-        <translation>Cannot update feature</translation>
+        <translation>更新要素失败</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="843"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Feature %1 could not be fetched after commit</translation>
+        <translation>要素%1在提交后无法获取</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="860"/>
         <source>Cannot start editing</source>
-        <translation>Cannot start editing</translation>
+        <translation>不能开始编辑</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="877"/>
         <source>Could not save changes. Rolling back.</source>
-        <translation>Could not save changes. Rolling back.</translation>
+        <translation>修改保存失败，回滚中。</translation>
     </message>
 </context>
 <context>
@@ -155,22 +155,22 @@
     <message>
         <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Login</source>
-        <translation>Login</translation>
+        <translation>登录</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Register</source>
-        <translation>Register</translation>
+        <translation>注册</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="130"/>
         <source>Please update Input to use the latest Mergin features.</source>
-        <translation>Please update Input to use the latest Mergin features.</translation>
+        <translation>请更新Input软件，以使用最新的Mergin功能。</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="134"/>
         <source>Mergin is currently unavailable - please try again later.</source>
-        <translation>Mergin is currently unavailable - please try again later.</translation>
+        <translation>Mergin目前不可用，请稍后再试。</translation>
     </message>
 </context>
 <context>
@@ -178,7 +178,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="74"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos;&gt;Learn more&lt;/a&gt;</source>
-        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos;&gt;Learn more&lt;/a&gt;</translation>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos;&gt;了解更多&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -186,7 +186,7 @@
     <message>
         <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
         <source>Showing only the first %1 features</source>
-        <translation>Showing only the first %1 features</translation>
+        <translation>仅显示前%1 的要素</translation>
     </message>
 </context>
 <context>
@@ -194,12 +194,12 @@
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
         <source>Layers</source>
-        <translation>Layers</translation>
+        <translation>图层</translation>
     </message>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</translation>
+        <translation>没有配置可以显示要素的图层。请参阅%1如何配置项目%2。</translation>
     </message>
 </context>
 <context>
@@ -207,17 +207,17 @@
     <message>
         <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation>Add Feature</translation>
+        <translation>增加要素</translation>
     </message>
     <message>
         <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
         <source>Done</source>
-        <translation>Done</translation>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
         <source>Remove link</source>
-        <translation>Remove link</translation>
+        <translation>移除连接</translation>
     </message>
 </context>
 <context>
@@ -225,7 +225,7 @@
     <message>
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
-        <translation>Scan code</translation>
+        <translation>扫描二维码</translation>
     </message>
 </context>
 <context>
@@ -233,22 +233,22 @@
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
         <source>Open Image</source>
-        <translation>Open Image</translation>
+        <translation>打开栅格影像</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
         <source>Image files (*.gif *.png *.jpg)</source>
-        <translation>Image files (*.gif *.png *.jpg)</translation>
+        <translation>栅格影像文件(*.gif *.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
         <source>Remove photo reference</source>
-        <translation>Remove photo reference</translation>
+        <translation>移除参考照片</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
         <source>Also permanently delete photo from device?</source>
-        <translation>Also permanently delete photo from device?</translation>
+        <translation>同时永久删除设备上的照片</translation>
     </message>
 </context>
 <context>
@@ -256,12 +256,12 @@
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="178"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation>Can not save the form, there are validation errors</translation>
+        <translation>值类型验证错误，保存失败</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="179"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>Feature could not be saved, please check all required fields</translation>
+        <translation>要素保存失败，请检查所有字段的内容是否合规</translation>
     </message>
 </context>
 <context>
@@ -269,37 +269,37 @@
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Edit Feature</source>
-        <translation>Edit Feature</translation>
+        <translation>编辑要素</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Feature</source>
-        <translation>Feature</translation>
+        <translation>要素</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
         <source>Save</source>
-        <translation>Save</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Delete feature</source>
-        <translation>Delete feature</translation>
+        <translation>删除要素</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>Are you sure you want to delete this feature?</translation>
+        <translation>您确定要删除此要素吗？</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Unsaved changes</source>
-        <translation>Unsaved changes</translation>
+        <translation>修改未保存</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
         <source>Do you want to save changes?</source>
-        <translation>Do you want to save changes?</translation>
+        <translation>您确定要保存修改吗？</translation>
     </message>
 </context>
 <context>
@@ -307,17 +307,17 @@
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="61"/>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="83"/>
         <source>Delete</source>
-        <translation>Delete</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
-        <translation>Edit geometry</translation>
+        <translation>编辑几何图形</translation>
     </message>
 </context>
 <context>
@@ -325,19 +325,19 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="16"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Please fill a name of previous field before adding a new field.</translation>
+        <translation>在添加新字段之前，请填写上一个字段的名称。</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="20"/>
         <source>Field %1 already exists.</source>
-        <translation>Field %1 already exists.</translation>
+        <translation>字段%1已存在。</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="118"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Field %1 already exists. 
-Won&apos;t be added to the project.</translation>
+        <translation>%1字段已存在，
+添加到项目失败。</translation>
     </message>
 </context>
 <context>
@@ -345,12 +345,12 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../inputhelp.cpp" line="194"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
-        <translation>Report submitted.%1Please contact us on%1%2</translation>
+        <translation>报告已提交。%1请联系我们%1%2</translation>
     </message>
     <message>
         <location filename="../inputhelp.cpp" line="199"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
-        <translation>Failed to submit report.%1Please check your internet connection.</translation>
+        <translation>未能提交报告。%1请检查您的网络连接。</translation>
     </message>
 </context>
 <context>
@@ -358,17 +358,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
-        <translation>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</translation>
+        <translation>缺少必要的PROJ投影信息%1。对于新下载的项目，请重新启动Input。</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
-        <translation>Error creating custom PROJ operation. For newly downloaded project please restart Input.</translation>
+        <translation>创建自定义PROJ操作时出错。对于新下载的项目，请重新启动Input。</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
-        <translation>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</translation>
+        <translation>缺少必要的PROJ投影信息%1。对于新下载的项目，请重新启动Input。</translation>
     </message>
 </context>
 <context>
@@ -376,95 +376,95 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../inpututils.cpp" line="155"/>
         <source>just now</source>
-        <translation>just now</translation>
+        <translation>刚刚</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="160"/>
         <source>%1 minutes ago</source>
-        <translation>%1 minutes ago</translation>
+        <translation>%1分钟前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="160"/>
         <source>%1 minute ago</source>
-        <translation>%1 minute ago</translation>
+        <translation>%1分钟前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="165"/>
         <source>%1 hours ago</source>
-        <translation>%1 hours ago</translation>
+        <translation>%1小时前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="165"/>
         <source>%1 hour ago</source>
-        <translation>%1 hour ago</translation>
+        <translation>%1小时前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="169"/>
         <location filename="../inpututils.cpp" line="174"/>
         <source>%1 days ago</source>
-        <translation>%1 days ago</translation>
+        <translation>%1天前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="169"/>
         <location filename="../inpututils.cpp" line="174"/>
         <source>%1 day ago</source>
-        <translation>%1 day ago</translation>
+        <translation>%1天前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="179"/>
         <source>%1 weeks ago</source>
-        <translation>%1 weeks ago</translation>
+        <translation>%1周前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="179"/>
         <source>%1 week ago</source>
-        <translation>%1 week ago</translation>
+        <translation>%1周前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="184"/>
         <source>%1 months ago</source>
-        <translation>%1 months ago</translation>
+        <translation>%1月前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="184"/>
         <source>%1 month ago</source>
-        <translation>%1 month ago</translation>
+        <translation>%1月前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="189"/>
         <source>%1 years ago</source>
-        <translation>%1 years ago</translation>
+        <translation>%1年前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="189"/>
         <source>%1 year ago</source>
-        <translation>%1 year ago</translation>
+        <translation>%1年前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1056"/>
         <source>screen resolution: %1x%2 px
 </source>
-        <translation>screen resolution: %1x%2 px
+        <translation>屏幕分率: %1x%2 px
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1057"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>screen DPI: %1x%2
+        <translation>屏幕DPI: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1058"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation>screen size: %1x%2 mm
+        <translation>屏幕尺寸: %1x%2 mm
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1059"/>
         <source>screen density: %1</source>
-        <translation>screen density: %1</translation>
+        <translation>屏幕密度: %1</translation>
     </message>
 </context>
 <context>
@@ -472,17 +472,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/LogPanel.qml" line="51"/>
         <source>Diagnostic Log</source>
-        <translation>Diagnostic Log</translation>
+        <translation>诊断日志</translation>
     </message>
     <message>
         <location filename="../qml/LogPanel.qml" line="87"/>
         <source>Sending...</source>
-        <translation>Sending...</translation>
+        <translation>发送中······</translation>
     </message>
     <message>
         <location filename="../qml/LogPanel.qml" line="87"/>
         <source>Send to Developers</source>
-        <translation>Send to Developers</translation>
+        <translation>发送给开发者</translation>
     </message>
 </context>
 <context>
@@ -490,27 +490,27 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
         <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</translation>
+        <translation>%1Mergin%2在您的移动设备和桌面设备之间提供云同步，也可以使用它与伙伴们共享您的项目并协同工作。</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
         <source>Username</source>
-        <translation>Username</translation>
+        <translation>用户名</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="157"/>
         <source>Sign in</source>
-        <translation>Sign in</translation>
+        <translation>登录</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="223"/>
         <source>Sign up for free</source>
-        <translation>Sign up for free</translation>
+        <translation>免费注册</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="245"/>
         <source>Forgot password?</source>
-        <translation>Forgot password?</translation>
+        <translation>忘记密码</translation>
     </message>
 </context>
 <context>
@@ -519,7 +519,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../qml/MainPanel.qml" line="62"/>
         <location filename="../qml/MainPanel.qml" line="248"/>
         <source>Projects</source>
-        <translation>Projects</translation>
+        <translation>项目</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
@@ -531,45 +531,45 @@ Won&apos;t be added to the project.</translation>
         <location filename="../qml/MainPanel.qml" line="116"/>
         <location filename="../qml/MainPanel.qml" line="296"/>
         <source>Record</source>
-        <translation>Record</translation>
+        <translation>记录</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="144"/>
         <location filename="../qml/MainPanel.qml" line="323"/>
         <source>Zoom to project</source>
-        <translation>Zoom to project</translation>
+        <translation>缩放到项目</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="163"/>
         <source>Browse data</source>
-        <translation>Browse data</translation>
+        <translation>浏览数据</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="183"/>
         <location filename="../qml/MainPanel.qml" line="361"/>
         <source>Map themes</source>
-        <translation>Map themes</translation>
+        <translation>地图主题</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="203"/>
         <location filename="../qml/MainPanel.qml" line="380"/>
         <source>Settings</source>
-        <translation>Settings</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="220"/>
         <source>More</source>
-        <translation>More</translation>
+        <translation>更多</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="233"/>
         <source>Menu</source>
-        <translation>Menu</translation>
+        <translation>菜单</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="342"/>
         <source>Browse features</source>
-        <translation>Browse features</translation>
+        <translation>浏览图层</translation>
     </message>
 </context>
 <context>
@@ -577,12 +577,12 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="45"/>
         <source>Map Themes</source>
-        <translation>Map Themes</translation>
+        <translation>地图主题</translation>
     </message>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="70"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
-        <translation>Project has no themes defined. See %1how to setup themes%2.</translation>
+        <translation>项目没有定义主题，请参阅%1如何配置主题%2。</translation>
     </message>
 </context>
 <context>
@@ -591,17 +591,17 @@ Won&apos;t be added to the project.</translation>
         <location filename="../qml/map/MapWrapper.qml" line="69"/>
         <location filename="../qml/map/MapWrapper.qml" line="493"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</translation>
+        <translation>GPS当前不可用。%1尝试在您设备中允许 GPS 定位。</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="100"/>
         <source>Recorded feature is not valid</source>
-        <translation>Recorded feature is not valid</translation>
+        <translation>记录的要素无效</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="449"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</translation>
+        <translation>GPS 定位精度低 (%1 m)&lt;br&gt;&lt;br&gt;请确保您有良好的对天视野。</translation>
     </message>
 </context>
 <context>
@@ -609,7 +609,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/components/PanelHeader.qml" line="20"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -617,7 +617,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/components/PasswordField.qml" line="15"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>密码</translation>
     </message>
 </context>
 <context>
@@ -625,7 +625,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../positionkit.cpp" line="45"/>
         <source>Unable to create default GPS Position Source</source>
-        <translation>Unable to create deafult GPS Position Source</translation>
+        <translation>无法创建默认GPS位置信息</translation>
     </message>
 </context>
 <context>
@@ -633,7 +633,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/form/PreviewPanel.qml" line="123"/>
         <source>No map tip available.</source>
-        <translation>No map tip available.</translation>
+        <translation>没有可用的地图提示。</translation>
     </message>
 </context>
 <context>
@@ -641,32 +641,32 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
         <source>Synchronize project</source>
-        <translation>Synchronize project</translation>
+        <translation>同步项目</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
         <source>Local changes</source>
-        <translation>Local changes</translation>
+        <translation>本地修改差异</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
         <source>Remove from device</source>
-        <translation>Remove from device</translation>
+        <translation>从设备中删除</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
         <source>Upload to Mergin</source>
-        <translation>Upload to Mergin</translation>
+        <translation>上传到Mergin</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
         <source>Download from Mergin</source>
-        <translation>Download from Mergin</translation>
+        <translation>从Mergin下载</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="249"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
-        <translation>Could not synchronize project, please make sure you are logged in and have sufficient rights.</translation>
+        <translation>同步项目失败，请确认您已登录并拥有足够的权限。</translation>
     </message>
 </context>
 <context>
@@ -675,69 +675,69 @@ Won&apos;t be added to the project.</translation>
         <location filename="../qml/components/ProjectList.qml" line="141"/>
         <location filename="../qml/components/ProjectList.qml" line="222"/>
         <source>Create project</source>
-        <translation>Create project</translation>
+        <translation>创建项目</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="161"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input needs a storage permission, %1click to grant it%2 and then restart application.</translation>
+        <translation>Input需要存储权限，%1单击授予它权限%2，然后重新启动应用程序。</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="197"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</translation>
+        <translation>没有下载的项目。%1学习%2如何创建项目%3并%4将它们%3下载到您的设备上。</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="213"/>
         <source>You can also create new project by clicking button below.</source>
-        <translation>You can also create new project by clicking button below.</translation>
+        <translation>您还可以通过单击下面的按钮创建新项目。</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>Unable to get the list of projects.</source>
-        <translation>Unable to get the list of projects.</translation>
+        <translation>无法获得项目列表。</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>No projects found!</source>
-        <translation>No projects found!</translation>
+        <translation>没有发现项目！</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="273"/>
         <source>Retry</source>
-        <translation>Retry</translation>
+        <translation>再试一次</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="301"/>
         <source>Remove project</source>
-        <translation>Remove project</translation>
+        <translation>删除项目</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="302"/>
         <source>Any unsynchronized changes will be lost.</source>
-        <translation>Any unsynchronized changes will be lost.</translation>
+        <translation>任何未同步的修改都将丢失。</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="332"/>
         <source>Download project</source>
-        <translation>Download project</translation>
+        <translation>下载项目</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="333"/>
         <source>Would you like to download the project
  %1 ?</source>
-        <translation>Would you like to download the project
- %1 ?</translation>
+        <translation>你想下载这个项目吗
+%1 ?</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="349"/>
         <source>Input needs to be restarted</source>
-        <translation>Input needs to be restarted</translation>
+        <translation>Input需要重新启动</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="350"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</translation>
+        <translation>在授予存储权限后应用修改，需要重新启动Input。单击关闭并再次打开Input。</translation>
     </message>
 </context>
 <context>
@@ -745,7 +745,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
         <source>Opening project ...</source>
-        <translation>Opening project ...</translation>
+        <translation>打开项目中······</translation>
     </message>
 </context>
 <context>
@@ -753,37 +753,37 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="128"/>
         <source>No Changes</source>
-        <translation>No Changes</translation>
+        <translation>未修改</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="153"/>
         <source>Projects</source>
-        <translation>Projects</translation>
+        <translation>项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="350"/>
         <source>Home</source>
-        <translation>Home</translation>
+        <translation>本地项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="372"/>
         <source>My projects</source>
-        <translation>My projects</translation>
+        <translation>我的项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="396"/>
         <source>Shared with me</source>
-        <translation>Shared with me</translation>
+        <translation>伙伴项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="396"/>
         <source>Shared</source>
-        <translation>Shared</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="416"/>
         <source>Explore</source>
-        <translation>Explore</translation>
+        <translation>公开项目</translation>
     </message>
 </context>
 <context>
@@ -791,12 +791,12 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="27"/>
         <source>No Changes</source>
-        <translation>No Changes</translation>
+        <translation>未修改</translation>
     </message>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="43"/>
         <source>Project Status</source>
-        <translation>Project Status</translation>
+        <translation>项目状态</translation>
     </message>
 </context>
 <context>
@@ -804,7 +804,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="115"/>
         <source>Project %1 created</source>
-        <translation>Project %1 created</translation>
+        <translation>项目“%1”已创建</translation>
     </message>
 </context>
 <context>
@@ -812,32 +812,32 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="52"/>
         <source>Create Project</source>
-        <translation>Create Project</translation>
+        <translation>创建项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="77"/>
         <source>Project name</source>
-        <translation>Project name</translation>
+        <translation>项目名称</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="92"/>
         <source>Fields</source>
-        <translation>Fields</translation>
+        <translation>字段</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="126"/>
         <source>Add field</source>
-        <translation>Add field</translation>
+        <translation>新增字段</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="167"/>
         <source>Create project</source>
-        <translation>Create project</translation>
+        <translation>创建项目</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="173"/>
         <source>Empty project name</source>
-        <translation>Empty project name</translation>
+        <translation>项目名称为空</translation>
     </message>
 </context>
 <context>
@@ -846,7 +846,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../projectsmodel.cpp" line="90"/>
         <location filename="../projectsmodel.cpp" line="94"/>
         <source>Updated %1</source>
-        <translation>Updated %1</translation>
+        <translation>%1前已同步</translation>
     </message>
 </context>
 <context>
@@ -854,27 +854,27 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../purchasing.cpp" line="519"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
-        <translation>Failed to process payment details.%1Subscription is not purchased.</translation>
+        <translation>未能处理付款详情。%1未购买订阅。</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="527"/>
         <source>Successfully restored your subscription</source>
-        <translation>Successfully restored your subscription</translation>
+        <translation>恢复订阅成功</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="529"/>
         <source>Successfully purchased subscription</source>
-        <translation>Successfully purchased subscription</translation>
+        <translation>购买订阅成功</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="541"/>
         <source>Failed to purchase subscription</source>
-        <translation>Failed to purchase subscription</translation>
+        <translation>购买订阅失败</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="539"/>
         <source>Unable to restore your subscription</source>
-        <translation>Unable to restore your subscription</translation>
+        <translation>恢复订阅失败</translation>
     </message>
 </context>
 <context>
@@ -882,22 +882,22 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../purchasing.cpp" line="119"/>
         <source>Monthly subscription</source>
-        <translation>Monthly subscription</translation>
+        <translation>按月订阅</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="123"/>
         <source>Annual subscription</source>
-        <translation>Annual subscription</translation>
+        <translation>按季订阅</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="128"/>
         <source>month</source>
-        <translation>month</translation>
+        <translation>月</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="132"/>
         <source>year</source>
-        <translation>year</translation>
+        <translation>年</translation>
     </message>
 </context>
 <context>
@@ -905,63 +905,63 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
-        <translation>Value must be a number</translation>
+        <translation>值类型必须为数值</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
-        <translation>Value must be lower than %1</translation>
+        <translation>值必须 ≤ %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
-        <translation>Value must be higher than %1</translation>
+        <translation>值必须 ≥ %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
-        <translation>Value is too large</translation>
+        <translation>值过大</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
-        <translation>Field can not contain decimal places</translation>
+        <translation>字段的值不能含小数</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
-        <translation>Can not be longer than %1 characters</translation>
+        <translation>字符串不能超过%1个字符</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
-        <translation>Field should not be empty</translation>
+        <translation>可空字段</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
-        <translation>Field must not be empty</translation>
+        <translation>非空字段</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
-        <translation>Value should be unique</translation>
+        <translation>字段的值应该唯一</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
-        <translation>Value must be unique</translation>
+        <translation>字段的值必须唯一</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation>Unmet QGIS expression constraint</translation>
+        <translation>不满足QGIS表达式约束条件</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
-        <translation>Not a valid value</translation>
+        <translation>无效值</translation>
     </message>
 </context>
 <context>
@@ -969,7 +969,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="156"/>
         <source>Rendering</source>
-        <translation>Rendering</translation>
+        <translation>渲染</translation>
     </message>
 </context>
 <context>
@@ -978,7 +978,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="206"/>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="226"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Map Canvas rotation is not supported. Resetting from %1 to 0.</translation>
+        <translation>不支持地图画布旋转。从%1重置为0。</translation>
     </message>
 </context>
 <context>
@@ -991,22 +991,22 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="114"/>
         <source>Undo</source>
-        <translation>Undo</translation>
+        <translation>撤消</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="129"/>
         <source>Add Point</source>
-        <translation>Add Point</translation>
+        <translation>加点</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="145"/>
         <source>Done</source>
-        <translation>Done</translation>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="159"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -1014,7 +1014,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="92"/>
         <source>Username</source>
-        <translation>Username</translation>
+        <translation>用户名</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="147"/>
@@ -1024,17 +1024,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="189"/>
         <source>Confirm password</source>
-        <translation>Confirm password</translation>
+        <translation>密码确认</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="214"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</translation>
+        <translation>我接受Mergin%1的条款、条件%3和%2隐私政策%3</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="236"/>
         <source>Sign up</source>
-        <translation>Sign up</translation>
+        <translation>注册</translation>
     </message>
 </context>
 <context>
@@ -1042,7 +1042,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="95"/>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>增加</translation>
     </message>
 </context>
 <context>
@@ -1050,7 +1050,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/SearchBar.qml" line="73"/>
         <source>SEARCH</source>
-        <translation>SEARCH</translation>
+        <translation>搜索</translation>
     </message>
 </context>
 <context>
@@ -1058,72 +1058,72 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="62"/>
         <source>Settings</source>
-        <translation>Settings</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="87"/>
         <source>GPS</source>
-        <translation>GPS</translation>
+        <translation>GPS相关</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="95"/>
         <source>Follow GPS with map</source>
-        <translation>Follow GPS with map</translation>
+        <translation>地图跟随GPS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="114"/>
         <source>GPS accuracy</source>
-        <translation>GPS accuracy</translation>
+        <translation>GPS精度</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="169"/>
         <source>Accuracy threshold</source>
-        <translation>Accuracy threshold</translation>
+        <translation>定位精度阈值</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="187"/>
         <source>Show accuracy warning</source>
-        <translation>Show accuracy warning</translation>
+        <translation>显示精度警告</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="205"/>
         <source>Recording</source>
-        <translation>Recording</translation>
+        <translation>记录相关</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="212"/>
         <source>Line rec. interval</source>
-        <translation>Line rec. interval</translation>
+        <translation>GPS采样时间间隔</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="234"/>
         <source>Reuse last value option</source>
-        <translation>Reuse last value option</translation>
+        <translation>重用最后输入的值</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="258"/>
         <source>About</source>
-        <translation>About</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="267"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="276"/>
         <source>Privacy policy</source>
-        <translation>Privacy policy</translation>
+        <translation>隐私政策</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="285"/>
         <source>Mergin terms of service</source>
-        <translation>Mergin terms of service</translation>
+        <translation>Mergin服务条款</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="294"/>
         <source>Diagnostic log</source>
-        <translation>Diagnostic log</translation>
+        <translation>诊断日志</translation>
     </message>
 </context>
 <context>
@@ -1131,32 +1131,32 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="19"/>
         <source>You have reached a data limit</source>
-        <translation>You have reached a data limit</translation>
+        <translation>您已达到数据限制</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Data to sync: %1</translation>
+        <translation>数据正在同步: %1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
         <source>Using %1 / %2</source>
-        <translation>Using %1 / %2</translation>
+        <translation>已使用 %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="95"/>
         <source>Plan: %1</source>
-        <translation>Plan: %1</translation>
+        <translation>订阅计划：%1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="108"/>
         <source>Manage subscriptions</source>
-        <translation>Manage subscriptions</translation>
+        <translation>管理订阅</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="124"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -1164,24 +1164,24 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/SubscribePage.qml" line="61"/>
         <source>Subscribe</source>
-        <translation>Subscribe</translation>
+        <translation>申请</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePage.qml" line="96"/>
         <location filename="../qml/SubscribePage.qml" line="138"/>
         <source>Individual</source>
-        <translation>Individual</translation>
+        <translation>个人</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePage.qml" line="113"/>
         <location filename="../qml/SubscribePage.qml" line="147"/>
         <source>Professional</source>
-        <translation>Professional</translation>
+        <translation>专家</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePage.qml" line="163"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</translation>
+        <translation>您的Mergin订阅计划将自动续订。您可以随时取消或修改。%1了解更多%2</translation>
     </message>
 </context>
 <context>
@@ -1189,22 +1189,22 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="37"/>
         <source>Plan</source>
-        <translation>Plan</translation>
+        <translation>订阅计划</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="55"/>
         <source>Unlimited collaborators</source>
-        <translation>Unlimited collaborators</translation>
+        <translation>伙伴数量无限</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="61"/>
         <source>Unlimited projects</source>
-        <translation>Unlimited projects</translation>
+        <translation>项目数量无限</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="67"/>
         <source>Email support</source>
-        <translation>Email support</translation>
+        <translation>Email支持</translation>
     </message>
 </context>
 <context>
@@ -1218,17 +1218,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/editor/inputdatetime.qml" line="230"/>
         <source>Hours</source>
-        <translation>Hours</translation>
+        <translation>时</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputdatetime.qml" line="254"/>
         <source>Minutes</source>
-        <translation>Minutes</translation>
+        <translation>分</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputdatetime.qml" line="277"/>
         <source>Seconds</source>
-        <translation>Seconds</translation>
+        <translation>秒</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputdatetime.qml" line="299"/>
@@ -1241,17 +1241,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
         <source>Take a photo</source>
-        <translation>Take a photo</translation>
+        <translation>拍照</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
         <source>From gallery</source>
-        <translation>From gallery</translation>
+        <translation>从相册</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
         <source>Image is not available: </source>
-        <translation>Image is not available: </translation>
+        <translation>图像不可用：</translation>
     </message>
 </context>
 <context>
@@ -1259,17 +1259,17 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="164"/>
         <source>%1 more</source>
-        <translation>%1 more</translation>
+        <translation>%1更多</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="179"/>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>新增</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="239"/>
         <source>Linked features</source>
-        <translation>Linked features</translation>
+        <translation>连接要素</translation>
     </message>
 </context>
 <context>
@@ -1277,7 +1277,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
         <source>Changing link</source>
-        <translation>Changing link</translation>
+        <translation>更换连接</translation>
     </message>
 </context>
 <context>
@@ -1285,32 +1285,32 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode on</source>
-        <translation>GPS auto-center mode on</translation>
+        <translation>开启GPS自动中心模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode off</source>
-        <translation>GPS auto-center mode off</translation>
+        <translation>关闭GPS自动中心模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="204"/>
         <source>No editable layers found.</source>
-        <translation>No editable layers found.</translation>
+        <translation>找不到可编辑的图层。</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="364"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation>Failed to communicate with Mergin.%1Try improving your network connection.</translation>
+        <translation>与Mergin通讯失败。%1尝试改进您的网络连接。</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="301"/>
         <source>Communication error</source>
-        <translation>Communication error</translation>
+        <translation>通讯错误</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="307"/>
         <source>PROJ Error</source>
-        <translation>PROJ Error</translation>
+        <translation>PROJ错误</translation>
     </message>
 </context>
 </TS>
