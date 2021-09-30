@@ -29,7 +29,11 @@ AbstractEditor {
 
   function reload()
   {
-    vrModel.pair = root.featureLayerPair
+    if ( !root.isReadOnly )
+    {
+      vrModel.pair = root.featureLayerPair
+      setText()
+    }
   }
 
   function setText()
@@ -51,7 +55,10 @@ AbstractEditor {
     obj.forceActiveFocus()
   }
 
-  onParentValueChanged: setText()
+  onParentValueChanged: {
+    vrModel.pair = root.featureLayerPair
+    setText()
+  }
 
   onRightActionClicked: pushVrPage()
   onContentClicked: pushVrPage()
@@ -64,9 +71,12 @@ AbstractEditor {
     config: root.fieldConfig
     pair: root.featureLayerPair
 
-    onInvalidate: root.editorValueChanged( "", true )
-
-    onModelReset: setText()
+    onInvalidate: {
+      if ( !root.isReadOnly )
+      {
+        root.editorValueChanged( "", true )
+      }
+    }
   }
 
   content: Text {
