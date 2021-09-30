@@ -7,13 +7,18 @@
  *                                                                         *
  ***************************************************************************/
 
-#pragma once
+#ifndef VALUERELATIONFEATURESMODEL_H
+#define VALUERELATIONFEATURESMODEL_H
 
 #include "featuresmodel.h"
 #include "featurelayerpair.h"
 
 #include <QObject>
 
+/**
+ * ValueRelationFeaturesModel class lists features from a specific layer regarding to a filterExpression of value relations.
+ * It is used as a model in ValueRelations QML editors.
+ */
 class ValueRelationFeaturesModel : public FeaturesModel
 {
     Q_OBJECT
@@ -57,3 +62,5 @@ class ValueRelationFeaturesModel : public FeaturesModel
     QString mTitleField;
     QString mFilterExpression;
 };
+
+#endif // VALUERELATIONFEATURESMODEL_H

@@ -7,7 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#pragma once
+#ifndef TESTMODELS_H
+#define TESTMODELS_H
 
 #include <QObject>
 
@@ -22,3 +23,4 @@ class TestModels : public QObject
     void testFeaturesModel();
 };
 
+#endif // TESTMODELS_H

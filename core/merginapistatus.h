@@ -9,7 +9,6 @@
 
 #ifndef MERGINAPISTATUS_H
 #define MERGINAPISTATUS_H
-#pragma once
 
 #include <QObject>
 

@@ -9,7 +9,6 @@
 
 #ifndef MERGINSUBSCRIPTIONTYPE_H
 #define MERGINSUBSCRIPTIONTYPE_H
-#pragma once
 
 #include <QObject>
 #include <QString>
