@@ -42,6 +42,8 @@ For more information on how to use the app, see [Documentation](https://help.inp
 - Software developer? Code and prepare a pull request. We will help you with setup of the development environment and answer your questions.
 - Donate or [subscribe](https://public.cloudmergin.com) to the Mergin cloud service to help us maintain the project.
 
+<div><img align="left" width="45" height="45" src="https://raw.githubusercontent.com/MerginMaps/docs/main/src/.vuepress/public/slack.svg"><a href="https://merginmaps.com/community/join">Join our community chat</a><br/>and ask questions!</div>
+
 ## Features
 
 Input features touch optimised GUI components based on Qt Quick (based on QGIS core library).  
