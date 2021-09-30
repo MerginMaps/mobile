@@ -17,6 +17,10 @@
 
 #include <QObject>
 
+/**
+ * RelationFeaturesModel class lists features from a specific layer based on provided QgsRelation.
+ * It is used as a model in Relation QML editors and offers helpful methods for manipulation with features.
+ */
 class RelationFeaturesModel : public FeaturesModel
 {
     Q_OBJECT

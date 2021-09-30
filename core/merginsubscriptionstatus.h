@@ -9,7 +9,6 @@
 
 #ifndef MERGINSUBSCRIPTIONSTATUS_H
 #define MERGINSUBSCRIPTIONSTATUS_H
-#pragma once
 
 #include <QObject>
 

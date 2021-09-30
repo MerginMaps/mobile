@@ -7,7 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#pragma once
+#ifndef FEATURESMODEL_H
+#define FEATURESMODEL_H
 
 #include <QAbstractListModel>
 
@@ -114,3 +115,5 @@ class FeaturesModel : public QAbstractListModel
     QString mSearchExpression;
     QgsVectorLayer *mLayer = nullptr;
 };
+
+#endif // FEATURESMODEL_H
