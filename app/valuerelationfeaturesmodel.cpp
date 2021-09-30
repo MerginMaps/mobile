@@ -44,7 +44,7 @@ void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request
 
 void ValueRelationFeaturesModel::setup()
 {
-  if ( mConfig.isEmpty() || !mPair.isValid() )
+  if ( mConfig.isEmpty() )
     return;
 
   QgsVectorLayer *layer = QgsValueRelationFieldFormatter::resolveLayer( mConfig, QgsProject::instance() );
@@ -65,7 +65,6 @@ void ValueRelationFeaturesModel::setup()
       FeaturesModel::setLayer( layer );
 
       mAllowMulti = mConfig.value( QStringLiteral( "AllowMulti" ) ).toBool();
-      populate();
     }
     else
       CoreUtils::log( QStringLiteral( "ValueRelations" ), QStringLiteral( "Missing referenced fields for value relations." ) );
@@ -175,7 +174,10 @@ void ValueRelationFeaturesModel::setPair( const FeatureLayerPair &newPair )
   mPair = newPair;
   emit pairChanged( mPair );
 
-  setup();
+  if ( !mConfig.isEmpty() ) // setup already run
+  {
+    populate();
+  }
 }
 
 QVariantMap ValueRelationFeaturesModel::config() const

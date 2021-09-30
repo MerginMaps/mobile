@@ -23,7 +23,11 @@ AbstractEditor {
 
   function reload() // called from FeatureForm when form is recalculated
   {
-    vrModel.pair = root.featureLayerPair
+    if ( !root.isReadOnly )
+    {
+      vrModel.pair = root.featureLayerPair
+      setIndex()
+    }
   }
 
   function setIndex()
@@ -42,7 +46,10 @@ AbstractEditor {
     combobox.popup.close() //  combobox might still be opened
   }
 
-  onParentValueChanged: setIndex()
+  onParentValueChanged: {
+    vrModel.pair = root.featureLayerPair
+    setIndex()
+  }
 
   enabled: !isReadOnly
 
@@ -52,9 +59,12 @@ AbstractEditor {
     config: root.fieldConfig
     pair: root.featureLayerPair
 
-    onInvalidate: root.editorValueChanged( "", true )
-
-    onModelReset: setIndex()
+    onInvalidate: {
+      if ( !root.isReadOnly )
+      {
+        root.editorValueChanged( "", true )
+      }
+    }
   }
 
   content: InputComboBox {
