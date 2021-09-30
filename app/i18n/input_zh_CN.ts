@@ -4,7 +4,7 @@
     <message>
         <location filename="../qml/AboutPanel.qml" line="123"/>
         <source>Developed by</source>
-        <translation>开发者</translation>
+        <translation>开发团队</translation>
     </message>
 </context>
 <context>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="877"/>
         <source>Could not save changes. Rolling back.</source>
-        <translation>保存修改失败，回滚中。</translation>
+        <translation>修改保存失败，回滚中。</translation>
     </message>
 </context>
 <context>
@@ -294,7 +294,7 @@
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Unsaved changes</source>
-        <translation>未保存修改</translation>
+        <translation>修改未保存</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
@@ -846,7 +846,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../projectsmodel.cpp" line="90"/>
         <location filename="../projectsmodel.cpp" line="94"/>
         <source>Updated %1</source>
-        <translation>1%前已同步</translation>
+        <translation>%1前已同步</translation>
     </message>
 </context>
 <context>
@@ -1285,12 +1285,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode on</source>
-        <translation>开启GPS自动中心模式</translation>
+        <translation>开启GPS位置居中模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode off</source>
-        <translation>关闭GPS自动中心模式</translation>
+        <translation>关闭GPS位置居中模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="204"/>
