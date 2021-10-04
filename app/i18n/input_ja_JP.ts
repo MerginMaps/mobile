@@ -10,57 +10,57 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="160"/>
+        <location filename="../qml/AccountPage.qml" line="161"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>サブスクリプションは %1 でキャンセルされました</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="48"/>
+        <location filename="../qml/AccountPage.qml" line="49"/>
         <source>My Account</source>
         <translation>マイアカウント</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="132"/>
+        <location filename="../qml/AccountPage.qml" line="133"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>サブスクリプションは %1 を過ぎても自動更新されません</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="141"/>
+        <location filename="../qml/AccountPage.qml" line="142"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>できるだけ早く %1支払いの詳細%2 についてアップデートしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="151"/>
+        <location filename="../qml/AccountPage.qml" line="152"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>次の %1 の請求は %2 に行われます。</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="185"/>
+        <location filename="../qml/AccountPage.qml" line="186"/>
         <source>Using %1 / %2</source>
         <translation>%1 / %2  利用中</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Manage Subscription</source>
         <translation>サブスクリプションの管理</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Working...</source>
         <translation>作業中...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="204"/>
         <source>Subscription plans</source>
         <translation>サブスクリプションプラン</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="239"/>
+        <location filename="../qml/AccountPage.qml" line="240"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>購入したサブスクリプションを %1復元%2 することができます。</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="263"/>
+        <location filename="../qml/AccountPage.qml" line="264"/>
         <source>Sign out</source>
         <translation>サインアウト</translation>
     </message>
@@ -68,12 +68,12 @@
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/ActiveLayerPanel.qml" line="50"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="53"/>
         <source>Choose Active Layer</source>
         <translation>アクティブレイヤを選択</translation>
     </message>
     <message>
-        <location filename="../qml/ActiveLayerPanel.qml" line="62"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="65"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>プロジェクトに編集可能なレイヤがありません。%1プロジェクトでデジタイズを有効にする方法%2 をご覧ください。</translation>
     </message>
@@ -104,77 +104,71 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="512"/>
+        <location filename="../attributes/attributecontroller.cpp" line="511"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2 のデフォルト値の式の変換でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="522"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2 のデフォルト値の式の評価でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="533"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1055"/>
+        <location filename="../attributes/attributecontroller.cpp" line="532"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>値 &quot;%1&quot; %4 はフィールド%2(%3)のための互換値に変換できませんでした。</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="831"/>
+        <location filename="../attributes/attributecontroller.cpp" line="784"/>
         <source>Cannot delete feature</source>
         <translation>地物を削除できません</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="477"/>
-        <location filename="../attributes/attributecontroller.cpp" line="852"/>
+        <location filename="../attributes/attributecontroller.cpp" line="476"/>
+        <location filename="../attributes/attributecontroller.cpp" line="805"/>
         <source>Feature could not be added</source>
         <translation>地物を追加できませんでした</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="883"/>
+        <location filename="../attributes/attributecontroller.cpp" line="836"/>
         <source>Cannot update feature</source>
         <translation>地物を更新できません</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="897"/>
+        <location filename="../attributes/attributecontroller.cpp" line="850"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>コミット後に地物 %1 を取得できませんでした</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="914"/>
+        <location filename="../attributes/attributecontroller.cpp" line="867"/>
         <source>Cannot start editing</source>
         <translation>編集を開始できません</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="931"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>変更を保存できませんでした。ロールバックします。</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1056"/>
-        <source>Value %1 is not compatible with field type %2.</source>
-        <translation>値 %1 フィールドタイプ %2と互換性がありません。</translation>
     </message>
 </context>
 <context>
     <name>AuthPanel</name>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="79"/>
+        <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Login</source>
         <translation>ログイン</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="79"/>
+        <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Register</source>
         <translation>登録</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="129"/>
+        <location filename="../qml/AuthPanel.qml" line="130"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation>最新のMerginの機能を使用するためにInputをアップデートしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="133"/>
+        <location filename="../qml/AuthPanel.qml" line="134"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>現在Merginは利用できません - 後で再度試して下さい.</translation>
     </message>
@@ -188,43 +182,22 @@
     </message>
 </context>
 <context>
-    <name>BrowseDataFeaturesPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="63"/>
-        <source>Showing only the first %1 features</source>
-        <translation>最初の %1 個の地物を表示しています</translation>
-    </message>
-</context>
-<context>
     <name>BrowseDataLayersPanel</name>
     <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="31"/>
+        <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
         <source>Layers</source>
         <translation>レイヤ</translation>
     </message>
     <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="46"/>
+        <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation>地物が閲覧できるように設定されたレイヤがありません.  %1 でプロジェクトの設定方法を参照して下さい %2.</translation>
     </message>
 </context>
 <context>
-    <name>BrowseDataToolbar</name>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="51"/>
-        <source>Add Feature</source>
-        <translation>地物の追加</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="67"/>
-        <source>Done</source>
-        <translation>完了</translation>
-    </message>
-</context>
-<context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="60"/>
+        <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>コードをスキャン</translation>
     </message>
@@ -255,60 +228,50 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="184"/>
-        <source>Constraints not valid</source>
-        <translation>制約は有効ではありません</translation>
+        <location filename="../qml/form/FeatureForm.qml" line="152"/>
+        <source>Can not save the form, there are validation errors</source>
+        <translation>フォームを保存できません。入力エラーがあります。</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="189"/>
-        <source>Note: soft constraints were not met</source>
-        <translation>注：ソフトな制約が満たされませんでした</translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="489"/>
-        <source>Number is outside of specified range</source>
-        <translation>数値が規定の範囲外です</translation>
-    </message>
-    <message>
-        <location filename="../qml/form/FeatureForm.qml" line="491"/>
-        <source>Value is not valid</source>
-        <translation>値は有効ではありません</translation>
+        <location filename="../qml/form/FeatureForm.qml" line="153"/>
+        <source>Feature could not be saved, please check all required fields</source>
+        <translation>地物を保存できません。入力必須項目全てを確認してください。</translation>
     </message>
 </context>
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Edit Feature</source>
         <translation>地物の編集</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="90"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Feature</source>
         <translation>地物</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="100"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>地物の削除</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>本当にこの地物を削除しますか?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>保存されていない変更</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="229"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>変更内容を保存しますか？</translation>
     </message>
@@ -316,19 +279,45 @@
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="60"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="61"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="82"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="83"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="98"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>地物の編集</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPage</name>
+    <message>
+        <location filename="../qml/FeaturesListPage.qml" line="59"/>
+        <source>Showing only the first %1 features</source>
+        <translation>最初の %1 個の地物を表示しています</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageToolbar</name>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
+        <source>Add Feature</source>
+        <translation>地物の追加</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
+        <source>Done</source>
+        <translation>完了</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation>リンクを削除</translation>
     </message>
 </context>
 <context>
@@ -354,12 +343,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="189"/>
+        <location filename="../inputhelp.cpp" line="216"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>リポートは送信されました。%1次のアドレスに連絡してください：%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="221"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>リポートの送信に失敗しました。%1インターネット接続を確認してください。</translation>
     </message>
@@ -385,95 +374,95 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="154"/>
+        <location filename="../inpututils.cpp" line="155"/>
         <source>just now</source>
         <translation>たった今</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="159"/>
+        <location filename="../inpututils.cpp" line="160"/>
         <source>%1 minutes ago</source>
         <translation>%1 分前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="159"/>
+        <location filename="../inpututils.cpp" line="160"/>
         <source>%1 minute ago</source>
         <translation>%1 分前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="164"/>
+        <location filename="../inpututils.cpp" line="165"/>
         <source>%1 hours ago</source>
         <translation>%1 時間前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="164"/>
+        <location filename="../inpututils.cpp" line="165"/>
         <source>%1 hour ago</source>
         <translation>%1 時間前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="168"/>
-        <location filename="../inpututils.cpp" line="173"/>
+        <location filename="../inpututils.cpp" line="169"/>
+        <location filename="../inpututils.cpp" line="174"/>
         <source>%1 days ago</source>
         <translation>%1 日前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="168"/>
-        <location filename="../inpututils.cpp" line="173"/>
+        <location filename="../inpututils.cpp" line="169"/>
+        <location filename="../inpututils.cpp" line="174"/>
         <source>%1 day ago</source>
         <translation>%1 日前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="178"/>
+        <location filename="../inpututils.cpp" line="179"/>
         <source>%1 weeks ago</source>
         <translation>%1 週間前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="178"/>
+        <location filename="../inpututils.cpp" line="179"/>
         <source>%1 week ago</source>
         <translation>%1 週間前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="184"/>
         <source>%1 months ago</source>
         <translation>%1 ヶ月前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="184"/>
         <source>%1 month ago</source>
         <translation>%1 ヶ月前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 years ago</source>
         <translation>%1 年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 year ago</source>
         <translation>%1 年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1018"/>
+        <location filename="../inpututils.cpp" line="1076"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>スクリーン解像度: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1019"/>
+        <location filename="../inpututils.cpp" line="1077"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>スクリーンDPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1020"/>
+        <location filename="../inpututils.cpp" line="1078"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>スクリーンサイズ: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1021"/>
+        <location filename="../inpututils.cpp" line="1079"/>
         <source>screen density: %1</source>
         <translation>スクリーン密度: %1</translation>
     </message>
@@ -527,58 +516,58 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="61"/>
-        <location filename="../qml/MainPanel.qml" line="247"/>
+        <location filename="../qml/MainPanel.qml" line="62"/>
+        <location filename="../qml/MainPanel.qml" line="248"/>
         <source>Projects</source>
         <translation>プロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="81"/>
-        <location filename="../qml/MainPanel.qml" line="266"/>
+        <location filename="../qml/MainPanel.qml" line="82"/>
+        <location filename="../qml/MainPanel.qml" line="267"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="115"/>
-        <location filename="../qml/MainPanel.qml" line="295"/>
+        <location filename="../qml/MainPanel.qml" line="116"/>
+        <location filename="../qml/MainPanel.qml" line="296"/>
         <source>Record</source>
         <translation>記録</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="143"/>
-        <location filename="../qml/MainPanel.qml" line="322"/>
+        <location filename="../qml/MainPanel.qml" line="144"/>
+        <location filename="../qml/MainPanel.qml" line="323"/>
         <source>Zoom to project</source>
         <translation>プロジェクトにズーム</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="162"/>
+        <location filename="../qml/MainPanel.qml" line="163"/>
         <source>Browse data</source>
         <translation>データの閲覧</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="182"/>
-        <location filename="../qml/MainPanel.qml" line="360"/>
+        <location filename="../qml/MainPanel.qml" line="183"/>
+        <location filename="../qml/MainPanel.qml" line="361"/>
         <source>Map themes</source>
         <translation>地図テーマ</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="202"/>
-        <location filename="../qml/MainPanel.qml" line="379"/>
+        <location filename="../qml/MainPanel.qml" line="203"/>
+        <location filename="../qml/MainPanel.qml" line="380"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="219"/>
+        <location filename="../qml/MainPanel.qml" line="220"/>
         <source>More</source>
         <translation>さらに</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="232"/>
+        <location filename="../qml/MainPanel.qml" line="233"/>
         <source>Menu</source>
         <translation>メニュー</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="341"/>
+        <location filename="../qml/MainPanel.qml" line="342"/>
         <source>Browse features</source>
         <translation>地物の閲覧</translation>
     </message>
@@ -586,20 +575,39 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapThemePanel</name>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="44"/>
+        <location filename="../qml/MapThemePanel.qml" line="45"/>
         <source>Map Themes</source>
         <translation>地図テーマ</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="69"/>
+        <location filename="../qml/MapThemePanel.qml" line="70"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>プロジェクトに定義されたテーマがありません。%1テーマのセットアップの仕方%2をご覧ください。</translation>
     </message>
 </context>
 <context>
+    <name>MapWrapper</name>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="69"/>
+        <location filename="../qml/map/MapWrapper.qml" line="493"/>
+        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
+        <translation>GPSは現在使用できません。%1デバイスの設定でGPSロケーションを許可してください。</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="100"/>
+        <source>Recorded feature is not valid</source>
+        <translation>記録された地物は有効ではありません</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="449"/>
+        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
+        <translation>GPSの位置精度が低いです (%1 m)&lt;br&gt;&lt;br&gt;空の見晴らしの良いところで使用してください。</translation>
+    </message>
+</context>
+<context>
     <name>PanelHeader</name>
     <message>
-        <location filename="../qml/PanelHeader.qml" line="20"/>
+        <location filename="../qml/components/PanelHeader.qml" line="20"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -623,7 +631,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="121"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="123"/>
         <source>No map tip available.</source>
         <translation>マップチップはありません</translation>
     </message>
@@ -631,32 +639,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="99"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
         <source>Synchronize project</source>
         <translation>プロジェクトを同期</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="104"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
         <source>Local changes</source>
         <translation>ローカルの変更</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="109"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="106"/>
         <source>Remove from device</source>
         <translation>デバイスから削除</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="114"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="111"/>
         <source>Upload to Mergin</source>
         <translation>Merginにアップロード</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="119"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="116"/>
         <source>Download from Mergin</source>
         <translation>Merginからダウンロード</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="253"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="249"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>プロジェクトを同期できませんでした。十分な権限を持ってログインしているか確認してください。</translation>
     </message>
@@ -664,75 +672,70 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="124"/>
-        <source>Fetch more</source>
-        <translation>もっと取得</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="137"/>
-        <location filename="../qml/components/ProjectList.qml" line="218"/>
+        <location filename="../qml/components/ProjectList.qml" line="141"/>
+        <location filename="../qml/components/ProjectList.qml" line="222"/>
         <source>Create project</source>
         <translation>プロジェクトを作成</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="157"/>
+        <location filename="../qml/components/ProjectList.qml" line="161"/>
         <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
         <translation>Inputはストレージへのアクセス許可が必要です。 %1クリックして許可し、%2 アプリを再起動します。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="193"/>
+        <location filename="../qml/components/ProjectList.qml" line="197"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>ダウンロードされたプロジェクトはありません。%2プロジェクトの作り方%3 とデバイスへの %4ダウンロードの方法%3 を%1学びましょう。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="209"/>
+        <location filename="../qml/components/ProjectList.qml" line="213"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>下のボタンをクリックして、新しいプロジェクトを作成することもできます。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>Unable to get the list of projects.</source>
         <translation>プロジェクトのリストを取得できません</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="238"/>
+        <location filename="../qml/components/ProjectList.qml" line="242"/>
         <source>No projects found!</source>
         <translation>プロジェクトが見つかりません!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="269"/>
+        <location filename="../qml/components/ProjectList.qml" line="273"/>
         <source>Retry</source>
         <translation>リトライ</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="301"/>
         <source>Remove project</source>
         <translation>プロジェクトを削除</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="302"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>同期されていない変更は失われます。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="328"/>
+        <location filename="../qml/components/ProjectList.qml" line="332"/>
         <source>Download project</source>
         <translation>プロジェクトをダウンロード</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="329"/>
+        <location filename="../qml/components/ProjectList.qml" line="333"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>プロジェクトをダウンロードしますか
  %1 ?</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="345"/>
+        <location filename="../qml/components/ProjectList.qml" line="349"/>
         <source>Input needs to be restarted</source>
         <translation>Inputは再起動が必要です</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="346"/>
+        <location filename="../qml/components/ProjectList.qml" line="350"/>
         <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
         <translation>ストレージへの許可を与えた後に変更を適用するには、Inputを再起動する必要があります。閉じるをクリックして、再度Inputを開きます。</translation>
     </message>
@@ -748,37 +751,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="127"/>
+        <location filename="../qml/ProjectPanel.qml" line="128"/>
         <source>No Changes</source>
         <translation>変更はありません</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="152"/>
+        <location filename="../qml/ProjectPanel.qml" line="153"/>
         <source>Projects</source>
         <translation>プロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="349"/>
+        <location filename="../qml/ProjectPanel.qml" line="350"/>
         <source>Home</source>
         <translation>ホーム</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="371"/>
+        <location filename="../qml/ProjectPanel.qml" line="372"/>
         <source>My projects</source>
         <translation>プロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="395"/>
+        <location filename="../qml/ProjectPanel.qml" line="396"/>
         <source>Shared with me</source>
         <translation>共有プロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="395"/>
+        <location filename="../qml/ProjectPanel.qml" line="396"/>
         <source>Shared</source>
         <translation>共有</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="415"/>
+        <location filename="../qml/ProjectPanel.qml" line="416"/>
         <source>Explore</source>
         <translation>探す</translation>
     </message>
@@ -786,12 +789,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectStatusPanel</name>
     <message>
-        <location filename="../qml/ProjectStatusPanel.qml" line="25"/>
+        <location filename="../qml/ProjectStatusPanel.qml" line="27"/>
         <source>No Changes</source>
         <translation>変更はありません</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectStatusPanel.qml" line="41"/>
+        <location filename="../qml/ProjectStatusPanel.qml" line="43"/>
         <source>Project Status</source>
         <translation>プロジェクトのステータス</translation>
     </message>
@@ -900,14 +903,65 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="241"/>
-        <source>Not NULL</source>
-        <translation>非NULL</translation>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <source>Value must be a number</source>
+        <translation>値は数値である必要があります</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="246"/>
-        <source>Unique</source>
-        <translation>ユニーク</translation>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <source>Value must be lower than %1</source>
+        <translation>値は %1 よりも小さい必要があります</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <source>Value must be higher than %1</source>
+        <translation>値は %1 よりも大きい必要があります</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <source>Value is too large</source>
+        <translation>値が大きすぎます</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <source>Field can not contain decimal places</source>
+        <translation>フィールドには小数点以下を含めることはできません</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation>%1 文字以下である必要があります</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <source>Field should not be empty</source>
+        <translation>フィールドが未入力です</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <source>Field must not be empty</source>
+        <translation>フィールドは必須項目です</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <source>Value should be unique</source>
+        <translation>値はユニークである必要があります</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <source>Value must be unique</source>
+        <translation>値はユニークでなければなりません</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation>QGIS式の制約を満たしていません</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <source>Not a valid value</source>
+        <translation>有効な値ではありません</translation>
     </message>
 </context>
 <context>
@@ -930,27 +984,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>RecordToolbar</name>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="89"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="91"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="112"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="114"/>
         <source>Undo</source>
         <translation>実行取り消し</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="127"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="129"/>
         <source>Add Point</source>
         <translation>点の追加</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="143"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="145"/>
         <source>Done</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../qml/RecordToolbar.qml" line="157"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="159"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -1108,24 +1162,24 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SubscribePage</name>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="60"/>
+        <location filename="../qml/SubscribePage.qml" line="61"/>
         <source>Subscribe</source>
         <translation>サブスクライブ</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="95"/>
-        <location filename="../qml/SubscribePage.qml" line="137"/>
+        <location filename="../qml/SubscribePage.qml" line="96"/>
+        <location filename="../qml/SubscribePage.qml" line="138"/>
         <source>Individual</source>
         <translation>個人</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="112"/>
-        <location filename="../qml/SubscribePage.qml" line="146"/>
+        <location filename="../qml/SubscribePage.qml" line="113"/>
+        <location filename="../qml/SubscribePage.qml" line="147"/>
         <source>Professional</source>
         <translation>プロフェッショナル</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="162"/>
+        <location filename="../qml/SubscribePage.qml" line="163"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Merginのサブスクリプションのプランは自動で更新されます。いつでもキャンセルできます。 %1詳細を見る%2</translation>
     </message>
@@ -1133,22 +1187,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SubscribePlanItem</name>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="36"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="37"/>
         <source>Plan</source>
         <translation>プラン</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="54"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="55"/>
         <source>Unlimited collaborators</source>
         <translation>無制限の共同作業者</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="60"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="61"/>
         <source>Unlimited projects</source>
         <translation>無制限のプロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="66"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="67"/>
         <source>Email support</source>
         <translation>電子メールサポート</translation>
     </message>
@@ -1203,60 +1257,66 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="165"/>
+        <location filename="../qml/editor/inputrelation.qml" line="120"/>
         <source>%1 more</source>
-        <translation>さらに %1 </translation>
+        <translation>さらに %1</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="180"/>
+        <location filename="../qml/editor/inputrelation.qml" line="135"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="240"/>
+        <location filename="../qml/editor/inputrelation.qml" line="191"/>
         <source>Linked features</source>
         <translation>リンクされた地物</translation>
     </message>
 </context>
 <context>
+    <name>inputrelationreference</name>
+    <message>
+        <location filename="../qml/editor/inputrelationreference.qml" line="94"/>
+        <source>Change link</source>
+        <translation>リンクを変更</translation>
+    </message>
+</context>
+<context>
+    <name>inputvaluerelationpage</name>
+    <message>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <source>Features</source>
+        <translation>地物</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="95"/>
-        <source>Recorded feature is not valid</source>
-        <translation>記録された地物は有効ではありません</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="470"/>
+        <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS自動センターモードをON</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="470"/>
+        <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS自動センターモードをOFF</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="486"/>
+        <location filename="../qml/main.qml" line="204"/>
         <source>No editable layers found.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="502"/>
-        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>GPSの位置精度が低いです (%1 m)&lt;br&gt;&lt;br&gt;空の見晴らしの良いところで使用してください。</translation>
+        <location filename="../qml/main.qml" line="364"/>
+        <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
+        <translation>Merginとの通信に失敗しました。%1 インターネット状況の確認をしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="535"/>
-        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPSは現在使用できません。%1デバイスの設定でGPSロケーションを許可してください。</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="693"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>Communication error</source>
         <translation>通信エラー</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="699"/>
+        <location filename="../qml/main.qml" line="307"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
