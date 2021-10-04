@@ -2,7 +2,7 @@
 <context>
     <name>AboutPanel</name>
     <message>
-        <location filename="../qml/AboutPanel.qml" line="123"/>
+        <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
         <translation>Sviluppato da</translation>
     </message>
@@ -104,48 +104,48 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="507"/>
+        <location filename="../attributes/attributecontroller.cpp" line="511"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Il valore predefinito dell&apos;espressione %1:%2 ha un errore di valutazione: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Il valore predefinito dell&apos;espressione %1:%2 ha un errore di valutazione: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="532"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Il valore &quot;%1&quot; %4non può essere convertito in un valore compatibile per il campo %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="777"/>
+        <location filename="../attributes/attributecontroller.cpp" line="784"/>
         <source>Cannot delete feature</source>
         <translation>Impossibile eliminare l&apos;elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="472"/>
-        <location filename="../attributes/attributecontroller.cpp" line="798"/>
+        <location filename="../attributes/attributecontroller.cpp" line="476"/>
+        <location filename="../attributes/attributecontroller.cpp" line="805"/>
         <source>Feature could not be added</source>
         <translation>Impossibile aggiungere l&apos;elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="829"/>
+        <location filename="../attributes/attributecontroller.cpp" line="836"/>
         <source>Cannot update feature</source>
         <translation>Impossibile aggiornare l&apos;elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="843"/>
+        <location filename="../attributes/attributecontroller.cpp" line="850"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Impossibile recuperare l&apos;elemento %1 dopo il salvataggio</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="860"/>
+        <location filename="../attributes/attributecontroller.cpp" line="867"/>
         <source>Cannot start editing</source>
         <translation>Impossibile avviare le modifiche</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="877"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Impossibile salvare le modifiche. Ripristino.</translation>
     </message>
@@ -182,14 +182,6 @@
     </message>
 </context>
 <context>
-    <name>BrowseDataFeaturesPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
-        <source>Showing only the first %1 features</source>
-        <translation>Mostra solo i primi %1 elementi</translation>
-    </message>
-</context>
-<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -200,24 +192,6 @@
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation>Non è stato configurato nessun layer per consentire di esplorarne gli elementi. Vedi %1come modificare il tuo progetto%2.</translation>
-    </message>
-</context>
-<context>
-    <name>BrowseDataToolbar</name>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
-        <source>Add Feature</source>
-        <translation>Aggiungi elemento</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
-        <source>Done</source>
-        <translation>Fatto</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
-        <source>Remove link</source>
-        <translation>Rimuovi collegamento</translation>
     </message>
 </context>
 <context>
@@ -254,12 +228,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="152"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Impossibile salvare il modulo, ci sono errori di validazione</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <location filename="../qml/form/FeatureForm.qml" line="153"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>L&apos;elemento non può essere salvato, controlla tutti i campi richiesti</translation>
     </message>
@@ -282,22 +256,22 @@
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>Elimina elemento</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Sei sicuro di voler cancellare questo elemento?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>Modifiche non salvate</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>Vuoi salvare le modifiche?</translation>
     </message>
@@ -318,6 +292,32 @@
         <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>Modifica geometria</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPage</name>
+    <message>
+        <location filename="../qml/FeaturesListPage.qml" line="59"/>
+        <source>Showing only the first %1 features</source>
+        <translation>Mostra solo i primi %1 elementi</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageToolbar</name>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
+        <source>Add Feature</source>
+        <translation>Aggiungi elemento</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
+        <source>Done</source>
+        <translation>Fatto</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation>Rimuovi collegamento</translation>
     </message>
 </context>
 <context>
@@ -343,12 +343,12 @@ Non verrà aggiunto al progetto.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="216"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Report inviato.%1Per favore contattaci su%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="199"/>
+        <location filename="../inputhelp.cpp" line="221"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Impossibile inviare il report.%1Per favore controlla la tua connessione a Internet.</translation>
     </message>
@@ -441,28 +441,28 @@ Non verrà aggiunto al progetto.</translation>
         <translation>%1 anno fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1056"/>
+        <location filename="../inpututils.cpp" line="1076"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>risoluzione dello schermo: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1057"/>
+        <location filename="../inpututils.cpp" line="1077"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI dello schermo: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1058"/>
+        <location filename="../inpututils.cpp" line="1078"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>dimensioni dello schermo: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1059"/>
+        <location filename="../inpututils.cpp" line="1079"/>
         <source>screen density: %1</source>
         <translation>densità dello schermo: %1</translation>
     </message>
@@ -1257,17 +1257,17 @@ Non verrà aggiunto al progetto.</translation>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="164"/>
+        <location filename="../qml/editor/inputrelation.qml" line="120"/>
         <source>%1 more</source>
         <translation>%1 in più</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="179"/>
+        <location filename="../qml/editor/inputrelation.qml" line="135"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="239"/>
+        <location filename="../qml/editor/inputrelation.qml" line="191"/>
         <source>Linked features</source>
         <translation>Elementi collegati</translation>
     </message>
@@ -1275,9 +1275,17 @@ Non verrà aggiunto al progetto.</translation>
 <context>
     <name>inputrelationreference</name>
     <message>
-        <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
-        <source>Changing link</source>
+        <location filename="../qml/editor/inputrelationreference.qml" line="94"/>
+        <source>Change link</source>
         <translation>Cambio link</translation>
+    </message>
+</context>
+<context>
+    <name>inputvaluerelationpage</name>
+    <message>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <source>Features</source>
+        <translation>Elementi</translation>
     </message>
 </context>
 <context>
