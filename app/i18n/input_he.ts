@@ -2,7 +2,7 @@
 <context>
     <name>AboutPanel</name>
     <message>
-        <location filename="../qml/AboutPanel.qml" line="123"/>
+        <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
         <translation>פותח על ידי</translation>
     </message>
@@ -104,48 +104,48 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="507"/>
+        <location filename="../attributes/attributecontroller.cpp" line="511"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>לערך ביטוי ברירת המחדל  עבור %1:%2 קיימת שגיאת ניתוח: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>לערך ביטוי ברירת המחדל עבור %1:%2 קיימת שגיאת הערכה: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="532"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>לא ניתן להמיר את הערך &quot;%1&quot; %4 לערך מתאים עבור שדה %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="777"/>
+        <location filename="../attributes/attributecontroller.cpp" line="784"/>
         <source>Cannot delete feature</source>
         <translation>לא ניתן למחוק את הרשומה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="472"/>
-        <location filename="../attributes/attributecontroller.cpp" line="798"/>
+        <location filename="../attributes/attributecontroller.cpp" line="476"/>
+        <location filename="../attributes/attributecontroller.cpp" line="805"/>
         <source>Feature could not be added</source>
         <translation>לא ניתן להוסיף את הרשומה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="829"/>
+        <location filename="../attributes/attributecontroller.cpp" line="836"/>
         <source>Cannot update feature</source>
         <translation>לא ניתן לעדכן את הרשומה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="843"/>
+        <location filename="../attributes/attributecontroller.cpp" line="850"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>רשומה %1 לא ניתנת לגישה לאחר ביצוע הכתיבה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="860"/>
+        <location filename="../attributes/attributecontroller.cpp" line="867"/>
         <source>Cannot start editing</source>
         <translation>לא ניתן להתחיל בעריכה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="877"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>לא ניתן לשמור את השינויים. מחזיר את השכבה למצבה הקודם.</translation>
     </message>
@@ -182,14 +182,6 @@
     </message>
 </context>
 <context>
-    <name>BrowseDataFeaturesPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
-        <source>Showing only the first %1 features</source>
-        <translation>מוצגות רק ה%1 ישויות הראשונות</translation>
-    </message>
-</context>
-<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -200,24 +192,6 @@
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation>אין שכבות אשר הוגדרה בהן אפשרות הצפייה בישויות. ניתן לפנות למדריך בנושא: %1איך לערוך את הפרויקט שלכם%2.</translation>
-    </message>
-</context>
-<context>
-    <name>BrowseDataToolbar</name>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
-        <source>Add Feature</source>
-        <translation>הוספת ישות</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
-        <source>Done</source>
-        <translation>בוצע</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
-        <source>Remove link</source>
-        <translation>הסר קישור</translation>
     </message>
 </context>
 <context>
@@ -254,12 +228,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="152"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>לא ניתן לשמור את הטופס, ישנן שגיאות אימות</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <location filename="../qml/form/FeatureForm.qml" line="153"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>לא ניתן לשמור את הישות, נא לבדוק את כל השדות הנדרשים</translation>
     </message>
@@ -282,22 +256,22 @@
         <translation>שמירה</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>מחיקת רשומה</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>האם את\ה בטוח\ה שברצונך למחוק את הישות?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>שינויים שלא נשמרו</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>האם לשמור את השינויים?</translation>
     </message>
@@ -318,6 +292,32 @@
         <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>עריכת גיאומטריה</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPage</name>
+    <message>
+        <location filename="../qml/FeaturesListPage.qml" line="59"/>
+        <source>Showing only the first %1 features</source>
+        <translation>מוצגות רק ה%1 ישויות הראשונות</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageToolbar</name>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
+        <source>Add Feature</source>
+        <translation>הוספת ישות</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
+        <source>Done</source>
+        <translation>בוצע</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation>הסר קישור</translation>
     </message>
 </context>
 <context>
@@ -343,12 +343,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="216"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>הדיווח נשלח.%1נא ליצור איתנו קשר ב%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="199"/>
+        <location filename="../inputhelp.cpp" line="221"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>שליחת הדיווח נכשלה.%1יש לבדוק את חיבורכם לאינטרנט.</translation>
     </message>
@@ -441,28 +441,28 @@ Won&apos;t be added to the project.</source>
         <translation>לפני שנה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1056"/>
+        <location filename="../inpututils.cpp" line="1076"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>רזולוצית מסך: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1057"/>
+        <location filename="../inpututils.cpp" line="1077"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI מסך: %1x%2 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1058"/>
+        <location filename="../inpututils.cpp" line="1078"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>גודל מסך: %1x%2 מ&quot;מ
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1059"/>
+        <location filename="../inpututils.cpp" line="1079"/>
         <source>screen density: %1</source>
         <translation>צפיפות מסך: %1</translation>
     </message>
@@ -783,7 +783,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="416"/>
         <source>Explore</source>
-        <translation>חקור</translation>
+        <translation>גלו עוד</translation>
     </message>
 </context>
 <context>
@@ -1257,17 +1257,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="164"/>
+        <location filename="../qml/editor/inputrelation.qml" line="120"/>
         <source>%1 more</source>
         <translation>עוד %1</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="179"/>
+        <location filename="../qml/editor/inputrelation.qml" line="135"/>
         <source>Add</source>
         <translation>הוספה</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="239"/>
+        <location filename="../qml/editor/inputrelation.qml" line="191"/>
         <source>Linked features</source>
         <translation>ישויות מקושרות</translation>
     </message>
@@ -1275,9 +1275,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelationreference</name>
     <message>
-        <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
-        <source>Changing link</source>
-        <translation>משנה קישור</translation>
+        <location filename="../qml/editor/inputrelationreference.qml" line="94"/>
+        <source>Change link</source>
+        <translation>שינוי קישור</translation>
+    </message>
+</context>
+<context>
+    <name>inputvaluerelationpage</name>
+    <message>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <source>Features</source>
+        <translation>ישויות</translation>
     </message>
 </context>
 <context>
