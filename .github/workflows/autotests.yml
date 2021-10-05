@@ -12,7 +12,7 @@ env:
 jobs:
   tests:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-latest
+    runs-on: macos-10.15
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
@@ -100,4 +100,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build-Input/coverage.info
-

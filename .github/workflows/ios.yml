@@ -12,7 +12,7 @@ env:
 jobs:
   ios_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-latest
+    runs-on: macos-10.15
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
