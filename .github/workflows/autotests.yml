@@ -4,9 +4,10 @@ env:
   TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
   TEST_API_USERNAME: test_inputapp
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
-  QT_VERSION: 5.14.2
-  QGIS_DEPS_VERSION: 0.7.0
-  SDK_HASH: 4pyvtxsrcaebkfk
+  QT_VERSION: 5.15.2
+  QGIS_DEPS_VERSION: 0.9
+  QGIS_DEPS_VERSION_FULL: 0.9.0
+  SDK_HASH: 6gnjb7zma4t3xwc
   SDK_VERSION: 9
 
 jobs:
@@ -61,12 +62,12 @@ jobs:
       - name: download qgis-deps
         run: |
           ROOT=`pwd`
-          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION_FULL}.tar.gz
           sudo mkdir -p /opt/QGIS
           sudo chown -R $USER /opt/QGIS
           mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
           cd /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
-          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION}.tar.gz
+          tar -xvzf $ROOT/qgis-deps-${QGIS_DEPS_VERSION_FULL}.tar.gz
 
       - name: build Input
         run: |
