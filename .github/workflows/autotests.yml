@@ -52,7 +52,7 @@ jobs:
       - name: download qt
         run: |
           ROOT=`pwd`
-          wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz
+          wget https://qgis.org/downloads/macos/deps/qt-${QT_VERSION}.tar.gz --tries=3
           sudo mkdir -p /opt/Qt
           sudo chown -R $USER /opt/Qt
           mkdir -p /opt/Qt/${QT_VERSION}/clang_64
@@ -62,7 +62,7 @@ jobs:
       - name: download qgis-deps
         run: |
           ROOT=`pwd`
-          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION_FULL}.tar.gz
+          wget https://qgis.org/downloads/macos/deps/qgis-deps-${QGIS_DEPS_VERSION_FULL}.tar.gz --tries=3
           sudo mkdir -p /opt/QGIS
           sudo chown -R $USER /opt/QGIS
           mkdir -p /opt/QGIS/qgis-deps-${QGIS_DEPS_VERSION}/stage/
