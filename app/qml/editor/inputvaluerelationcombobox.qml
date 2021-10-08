@@ -78,7 +78,7 @@ AbstractEditor {
     model: vrModel
 
     onItemClicked: {
-      editorValueChanged( vrModel.convertToKey( index ), false )
+      editorValueChanged( vrModel.convertToKey( index.toString() ), false )
     }
   }
 }
