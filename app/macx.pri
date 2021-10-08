@@ -64,6 +64,7 @@ macx:!android {
     INCLUDEPATH += $${PROJ_INCLUDE_DIR}
     LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
+    DEFINES += "PROJ_VERSION_MAJOR=8"
 
     # ZXing
     INCLUDEPATH += $${ZXING_INCLUDE_DIR}

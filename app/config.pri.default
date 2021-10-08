@@ -64,11 +64,11 @@ macx:!android {
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/Applications/include
   GEODIFF_LIB_DIR = $${BASE_DIR}/Applications/lib
 
-  PROJ_INCLUDE_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/include
-  PROJ_LIB_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/lib
+  PROJ_INCLUDE_DIR = /opt/QGIS/qgis-deps-0.9/stage/include
+  PROJ_LIB_DIR = /opt/QGIS/qgis-deps-0.9/stage/lib
 
-  ZXING_INCLUDE_DIR=/opt/QGIS/qgis-deps-0.6.0/stage/include
-  ZXING_LIB_DIR=/opt/QGIS/qgis-deps-0.6.0/stage/lib
+  ZXING_INCLUDE_DIR=/opt/QGIS/qgis-deps-0.9/stage/include
+  ZXING_LIB_DIR=/opt/QGIS/qgis-deps-0.9/stage/lib
 }
 
 ios {
