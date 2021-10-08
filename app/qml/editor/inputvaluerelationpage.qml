@@ -134,10 +134,17 @@ AbstractEditor {
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0
+
+          if ( !isNull )
+          {
+            featureIds = featureIds.map( x => x.toString() )
+          }
+
           root.editorValueChanged( vrModel.convertToQgisType( featureIds ), isNull )
         }
         else
         {
+          featureIds = featureIds.toString()
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
         }
         root.stackView.pop()
