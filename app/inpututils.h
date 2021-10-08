@@ -109,10 +109,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
-    Q_INVOKABLE bool hasStoragePermission();
-
-    Q_INVOKABLE bool acquireStoragePermission();
-
     Q_INVOKABLE bool acquireCameraPermission();
 
     Q_INVOKABLE void quitApp();

@@ -59,7 +59,6 @@ Item {
     anchors.fill: parent
     clip: true
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
-    visible: !storagePermissionText.visible
 
     // Proxy model with source projects model
     model: ProjectsProxyModel {
@@ -105,14 +104,7 @@ Item {
           downloadProjectDialog.open()
         }
       }
-      onSyncRequested: {
-        if ( __inputUtils.hasStoragePermission() ) {
-          controllerModel.syncProject( projectId )
-        }
-        else if ( __inputUtils.acquireStoragePermission() ) {
-          restartAppDialog.open()
-        }
-      }
+      onSyncRequested: controllerModel.syncProject( projectId )
       onMigrateRequested: controllerModel.migrateProject( projectId )
       onRemoveRequested: {
         removeDialog.relatedProjectId = projectId
@@ -141,40 +133,14 @@ Item {
       text: qsTr("Create project")
       visible: listview.count > 0
 
-      onClicked: {
-        if ( __inputUtils.hasStoragePermission() ) {
-          stackView.push(projectWizardComp)
-        }
-        else if ( __inputUtils.acquireStoragePermission() ) {
-          restartAppDialog.open()
-        }
-      }
+      onClicked: stackView.push(projectWizardComp)
     }
-  }
-
-  RichTextBlock {
-    id: storagePermissionText
-
-    anchors.fill: parent
-
-    text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
-          qsTr("Input needs a storage permission, %1click to grant it%2 and then restart application.")
-    .arg("<a href='missingPermission'>")
-    .arg("</a>")
-
-    onLinkActivated: {
-      if ( __inputUtils.acquireStoragePermission() ) {
-        restartAppDialog.open()
-      }
-    }
-    visible: !__inputUtils.hasStoragePermission() && !reloadList.visible
   }
 
   Item {
     id: noLocalProjectsMessageContainer
 
     visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
-             !storagePermissionText.visible &&
              projectModelType === ProjectsModel.LocalProjectsModel &&
              root.searchText === "" &&
              !controllerModel.isLoading
@@ -220,14 +186,7 @@ Item {
         Layout.fillWidth: true
 
         text: qsTr( "Create project" )
-        onClicked: {
-          if ( __inputUtils.hasStoragePermission() ) {
-            stackView.push(projectWizardComp)
-          }
-          else if ( __inputUtils.acquireStoragePermission() ) {
-            restartAppDialog.open()
-          }
-        }
+        onClicked: stackView.push(projectWizardComp)
       }
     }
   }
@@ -333,24 +292,6 @@ Item {
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     icon: StandardIcon.Question
     standardButtons: StandardButton.Yes | StandardButton.No
-    onYes: {
-      if ( __inputUtils.hasStoragePermission() ) {
-        controllerModel.syncProject( relatedProjectId )
-      }
-      else if ( __inputUtils.acquireStoragePermission() ) {
-        restartAppDialog.open()
-      }
-    }
-  }
-
-  MessageDialog {
-    id: restartAppDialog
-
-    title: qsTr( "Input needs to be restarted" )
-    text: qsTr( "To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again." )
-    icon: StandardIcon.Warning
-    visible: false
-    standardButtons: StandardButton.Close
-    onRejected: __inputUtils.quitApp()
+    onYes: controllerModel.syncProject( relatedProjectId )
   }
 }

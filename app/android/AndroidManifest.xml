@@ -81,7 +81,7 @@
         </provider>
 
     </application>
-    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="29"/>
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -90,7 +90,6 @@
 
     <!-- Storage permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- Access internet permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -98,6 +97,7 @@
 
     <!-- Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <!-- Camera permissions -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -107,4 +107,3 @@
     <!-- %%INSERT_FEATURES -->
 
 </manifest>
-

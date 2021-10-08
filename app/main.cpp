@@ -125,25 +125,7 @@ static QString getDataDir()
   QString dataPathRaw( STR( QGIS_QUICK_DATA_PATH ) );
 
 #ifdef ANDROID
-  QFileInfo extDir( "/sdcard/" );
-  if ( extDir.isDir() && extDir.isWritable() )
-  {
-    // seems that this directory transposes to the latter one in case there is no sdcard attached
-    dataPathRaw = extDir.path() + "/" + dataPathRaw;
-  }
-  else
-  {
-    qDebug() << "extDir: " << extDir.path() << " not writable";
-
-    QStringList split = QDir::homePath().split( "/" ); // something like /data/user/0/uk.co.lutraconsulting/files
-    // TODO support active user from QDir::homePath()
-    QFileInfo usrDir( "/storage/emulated/" + split[2] + "/" );
-    dataPathRaw = usrDir.path() + "/" + dataPathRaw;
-    if ( !( usrDir.isDir() && usrDir.isWritable() ) )
-    {
-      qDebug() << "usrDir: " << usrDir.path() << " not writable";
-    }
-  }
+  dataPathRaw = AndroidUtils::externalStorageAppFolder();
 #endif
 
 #ifdef Q_OS_IOS
@@ -374,10 +356,6 @@ int main( int argc, char *argv[] )
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
-  // Require permissions before accessing data folder
-#ifdef ANDROID
-  AndroidUtils::requirePermissions();
-#endif
   // Set/Get enviroment
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";

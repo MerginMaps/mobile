@@ -413,24 +413,6 @@ QString InputUtils::bytesToHumanSize( double bytes )
   }
 }
 
-bool InputUtils::hasStoragePermission()
-{
-  if ( appPlatform() == QStringLiteral( "android" ) )
-  {
-    return mAndroidUtils->checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" );
-  }
-  return true;
-}
-
-bool InputUtils::acquireStoragePermission()
-{
-  if ( appPlatform() == QStringLiteral( "android" ) )
-  {
-    return mAndroidUtils->requestStoragePermission();
-  }
-  return true;
-}
-
 bool InputUtils::acquireCameraPermission()
 {
   if ( appPlatform() == QStringLiteral( "android" ) )

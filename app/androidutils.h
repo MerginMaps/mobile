@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,10 +29,11 @@ class AndroidUtils: public QObject
     explicit AndroidUtils( QObject *parent = nullptr );
 
     bool isAndroid() const;
-    bool checkPermission( const QString &permissionString );
 
-    static void requirePermissions();
-    static bool checkAndAcquirePermissions( const QString &permissionString );
+    bool checkAndAcquirePermissions( const QString &permissionString );
+
+    static bool copyLegacyAppFolder();
+    static QString externalStorageAppFolder();
 
     /**
      * Reads EXIF and returns value for given parameters.
@@ -42,8 +43,9 @@ class AndroidUtils: public QObject
      */
     static QString readExif( const QString &filePath, const QString &tag );
 
-    Q_INVOKABLE bool requestStoragePermission();
+    bool requestStoragePermission();
     bool requestCameraPermission();
+    bool requestMediaLocationPermission();
 
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,

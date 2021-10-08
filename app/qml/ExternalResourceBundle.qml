@@ -112,7 +112,7 @@ Item {
           //! final absolute location of an image.
           var absolutePath = __inputUtils.getAbsolutePath( filename, externalResourceHandler.itemWidget.targetDir )
 
-          if (!__inputUtils.fileExists(absolutePath)) {
+          if (!__inputUtils.fileExists(absolutePath)) { // we need to copy it!
             var success = __inputUtils.copyFile(imagePath, absolutePath)
             if (!success)
             {

@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,6 +14,11 @@
 #include <QAndroidJniObject>
 #include <QAndroidJniEnvironment>
 #include <QDebug>
+#include <QFileInfo>
+#include <QDir>
+#include <QStandardPaths>
+
+#include "coreutils.h"
 #endif
 
 AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
@@ -47,12 +52,6 @@ bool AndroidUtils::isAndroid() const
 #endif
 }
 
-//! https://stackoverflow.com/questions/35973235/android-permission-denial-starting-intent-with-revoked-permission-android-perms
-void AndroidUtils::requirePermissions()
-{
-  checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" );
-}
-
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 {
 #ifdef ANDROID
@@ -73,6 +72,24 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
   return true;
 }
 
+QString AndroidUtils::externalStorageAppFolder()
+{
+#ifdef ANDROID
+  // AppDataLocation returns two paths, first is internal app storage and the second is external storage
+  QStringList paths = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation );
+  if ( paths.size() != 2 )
+  {
+    // universe explodes
+    CoreUtils::log( "StorageException", "Path from QStandardPaths do not include external storage!" );
+    exit( EXIT_FAILURE );
+  }
+
+  return paths.at( 1 );
+#endif
+
+  return QString();
+}
+
 QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID
@@ -91,30 +108,50 @@ QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 #endif
 }
 
-bool AndroidUtils::checkPermission( const QString &permissionString )
+bool AndroidUtils::copyLegacyAppFolder() // <== THIS IS WIP, WILL BE IN NEXT MILESTONE
 {
 #ifdef ANDROID
-  return QtAndroid::checkPermission( permissionString ) == QtAndroid::PermissionResult::Granted;
-#else
-  Q_UNUSED( permissionString )
-  return true;
+  QString dataPathRaw = QStringLiteral( "INPUT" );
+  QFileInfo extDir( "/sdcard/" );
+  if ( extDir.isDir() && extDir.isWritable() )
+  {
+    // seems that this directory transposes to the latter one in case there is no sdcard attached
+    dataPathRaw = extDir.path() + "/" + dataPathRaw;
+    QDir d( dataPathRaw );
+    return true;
+  }
+  else
+  {
+    qDebug() << "extDir: " << extDir.path() << " not writable";
+
+    QStringList split = QDir::homePath().split( "/" ); // something like /data/user/0/uk.co.lutraconsulting/files
+
+    QFileInfo usrDir( "/storage/emulated/" + split[2] + "/" );
+    dataPathRaw = usrDir.path() + "/" + dataPathRaw;
+    if ( !( usrDir.isDir() && usrDir.isWritable() ) )
+    {
+      qDebug() << "usrDir: " << usrDir.path() << " not writable";
+    }
+    return true;
+  }
 #endif
+  return false;
 }
 
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
 
-  if ( !checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
+  if ( !checkAndAcquirePermissions( "android.permission.READ_EXTERNAL_STORAGE" ) )
   {
-    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
+    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.READ_EXTERNAL_STORAGE" ) )
     {
       // permanently denied permission, user needs to go to settings to allow permission
-      showToast( tr( "Storage permission is permanently denied, please allow it in settings" ) );
+      showToast( tr( "Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery" ) );
     }
     else
     {
-      showToast( tr( "Input needs a storage permission in order to manipulate or download a project" ) );
+      showToast( tr( "Input needs a storage permission in order to load pictures from gallery" ) );
     }
     return false;
   }
@@ -144,9 +181,28 @@ bool AndroidUtils::requestCameraPermission()
   return true;
 }
 
+bool AndroidUtils::requestMediaLocationPermission()
+{
+#ifdef ANDROID
+  // ACCESS_MEDIA_LOCATION is a runtime permission without UI dialog (User do not need to click anything to grant it, it is granted automatically)
+  return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+#endif
+  return true;
+}
+
 void AndroidUtils::callImagePicker()
 {
 #ifdef ANDROID
+
+  if ( !requestStoragePermission() )
+  {
+    return;
+  }
+
+  // request media location permission to be able to read EXIF metadata from gallery image
+  // it is not a mandatory permission, so continue even if it is rejected
+  requestMediaLocationPermission();
+
   QAndroidJniObject ACTION_PICK = QAndroidJniObject::getStaticObjectField( "android/content/Intent", "ACTION_PICK", "Ljava/lang/String;" );
   QAndroidJniObject EXTERNAL_CONTENT_URI = QAndroidJniObject::getStaticObjectField( "android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;" );
 
@@ -168,6 +224,10 @@ void AndroidUtils::callCamera( const QString &targetPath )
   {
     return;
   }
+
+  // request media location permission to be able to read EXIF metadata from captured image
+  // it is not a mandatory permission, so continue even if it is rejected
+  requestMediaLocationPermission();
 
   const QString IMAGE_CAPTURE_ACTION = QString( "android.media.action.IMAGE_CAPTURE" );
 
