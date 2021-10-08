@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -553,5 +553,15 @@ void TestFormEditors::testValueRelationsEditor()
   QCOMPARE( invalidateSignal.count(), 1 );
 
   response = anotherVRModel.convertFromQgisType( QStringLiteral( "{B,C}" ), FeaturesModel::FeatureId );
-  QCOMPARE( response, QVariant( QVariantList( { 2, 3 } ) ) ); // QVariantList inside QVariant because internal JS<->C++ QVariant conversions
+  QCOMPARE( response, QVariant( QVariantList( { 2, 3 } ) ) ); // QVariantList inside QVariant because of internal JS<->C++ QVariant conversions
+
+  // ------ Test big FID numbers (> 1000000), due to a scientific notations in toString methods
+  QCOMPARE( subVRModel.convertToKey( 4 ), "4" );
+
+  controller.setFormValue( subFkItem->id(), subVRModel.convertToKey( 4 ) );
+  subsubVRModel.setPair( controller.featureLayerPair() );
+  subsubVRModel.setSearchExpression( "" );
+
+  QgsFeature bigF = subsubLayer->getFeature( 100000000 );
+  QCOMPARE( subsubVRModel.convertToKey( bigF.id() ), bigF.id() );
 }
