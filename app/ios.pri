@@ -55,7 +55,7 @@ ios {
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
     LIBS += -ltasn1 -lzip -lbz2 -lproj
-    LIBS += -lspatialindex -lgeos -lgeos_c
+    LIBS += -lspatialindex -lgeos -lgeos_c -lsqlite3
     LIBS += -lprotobuf-lite -lexpat -lfreexl -liconv
 
     QMAKE_RPATHDIR += @executable_path/../Frameworks
