@@ -130,8 +130,8 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
       @try
       {
         const QgsPoint position = positionKit->position();
-        [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
-        [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+        [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+        [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
         [gpsDict setValue:position.x() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
         [gpsDict setValue:position.y() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
         [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
