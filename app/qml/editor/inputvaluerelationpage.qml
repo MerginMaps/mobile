@@ -137,6 +137,8 @@ AbstractEditor {
 
           if ( !isNull )
           {
+            // We need to convert feature id to string prior to sending it to C++ in order to
+            // avoid conversion to scientific notation.
             featureIds = featureIds.map( x => x.toString() )
           }
 
@@ -144,7 +146,10 @@ AbstractEditor {
         }
         else
         {
+          // We need to convert feature id to string prior to sending it to C++ in order to
+          // avoid conversion to scientific notation.
           featureIds = featureIds.toString()
+
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
         }
         root.stackView.pop()

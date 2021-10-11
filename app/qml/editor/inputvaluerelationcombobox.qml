@@ -78,7 +78,10 @@ AbstractEditor {
     model: vrModel
 
     onItemClicked: {
-      editorValueChanged( vrModel.convertToKey( index.toString() ), false )
+      // We need to convert feature id to string prior to sending it to C++ in order to
+      // avoid conversion to scientific notation.
+      let fid = index.toString()
+      editorValueChanged( vrModel.convertToKey( fid ), false )
     }
   }
 }
