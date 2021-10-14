@@ -2,7 +2,7 @@
 <context>
     <name>AboutPanel</name>
     <message>
-        <location filename="../qml/AboutPanel.qml" line="123"/>
+        <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
         <translation>开发者</translation>
     </message>
@@ -104,48 +104,48 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="507"/>
+        <location filename="../attributes/attributecontroller.cpp" line="511"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>默认值表达式%1:%2解析错误: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>默认值表达式%1:%2计算错误: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="532"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>值“%1” %4不能转为字段%2(%3)的兼容值</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="777"/>
+        <location filename="../attributes/attributecontroller.cpp" line="784"/>
         <source>Cannot delete feature</source>
         <translation>删除要素失败</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="472"/>
-        <location filename="../attributes/attributecontroller.cpp" line="798"/>
+        <location filename="../attributes/attributecontroller.cpp" line="476"/>
+        <location filename="../attributes/attributecontroller.cpp" line="805"/>
         <source>Feature could not be added</source>
         <translation>增加要素失败</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="829"/>
+        <location filename="../attributes/attributecontroller.cpp" line="836"/>
         <source>Cannot update feature</source>
         <translation>更新要素失败</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="843"/>
+        <location filename="../attributes/attributecontroller.cpp" line="850"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>要素%1在提交后无法获取</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="860"/>
+        <location filename="../attributes/attributecontroller.cpp" line="867"/>
         <source>Cannot start editing</source>
         <translation>不能开始编辑</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="877"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>修改保存失败，回滚中。</translation>
     </message>
@@ -182,14 +182,6 @@
     </message>
 </context>
 <context>
-    <name>BrowseDataFeaturesPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
-        <source>Showing only the first %1 features</source>
-        <translation>仅显示前%1 的要素</translation>
-    </message>
-</context>
-<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -200,24 +192,6 @@
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation>没有配置可以显示要素的图层。请参阅%1如何配置项目%2。</translation>
-    </message>
-</context>
-<context>
-    <name>BrowseDataToolbar</name>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
-        <source>Add Feature</source>
-        <translation>增加要素</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
-        <source>Done</source>
-        <translation>完成</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
-        <source>Remove link</source>
-        <translation>移除连接</translation>
     </message>
 </context>
 <context>
@@ -254,12 +228,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="152"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>值类型验证错误，保存失败</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <location filename="../qml/form/FeatureForm.qml" line="153"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>要素保存失败，请检查所有字段的内容是否合规</translation>
     </message>
@@ -282,22 +256,22 @@
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>删除要素</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>您确定要删除此要素吗？</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>修改未保存</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>您确定要保存修改吗？</translation>
     </message>
@@ -318,6 +292,32 @@
         <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>编辑几何图形</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPage</name>
+    <message>
+        <location filename="../qml/FeaturesListPage.qml" line="59"/>
+        <source>Showing only the first %1 features</source>
+        <translation>仅显示前%1个要素</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageToolbar</name>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
+        <source>Add Feature</source>
+        <translation>新增要素</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
+        <source>Done</source>
+        <translation>完成</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation>移除连接</translation>
     </message>
 </context>
 <context>
@@ -343,12 +343,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="216"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>报告已提交。%1请联系我们%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="199"/>
+        <location filename="../inputhelp.cpp" line="221"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>未能提交报告。%1请检查您的网络连接。</translation>
     </message>
@@ -441,28 +441,28 @@ Won&apos;t be added to the project.</source>
         <translation>%1年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1056"/>
+        <location filename="../inpututils.cpp" line="1076"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>屏幕分率: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1057"/>
+        <location filename="../inpututils.cpp" line="1077"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>屏幕DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1058"/>
+        <location filename="../inpututils.cpp" line="1078"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>屏幕尺寸: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1059"/>
+        <location filename="../inpututils.cpp" line="1079"/>
         <source>screen density: %1</source>
         <translation>屏幕密度: %1</translation>
     </message>
@@ -641,7 +641,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="96"/>
         <source>Synchronize project</source>
-        <translation>同步项目</translation>
+        <translation>同步项目差分</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="101"/>
@@ -796,7 +796,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="43"/>
         <source>Project Status</source>
-        <translation>项目状态</translation>
+        <translation>项目差分状态</translation>
     </message>
 </context>
 <context>
@@ -804,7 +804,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../projectwizard.cpp" line="115"/>
         <source>Project %1 created</source>
-        <translation>项目“%1”已创建</translation>
+        <translation>项目《%1》已创建</translation>
     </message>
 </context>
 <context>
@@ -846,7 +846,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../projectsmodel.cpp" line="90"/>
         <location filename="../projectsmodel.cpp" line="94"/>
         <source>Updated %1</source>
-        <translation>%1前已同步</translation>
+        <translation>%1已同步</translation>
     </message>
 </context>
 <context>
@@ -1257,17 +1257,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="164"/>
+        <location filename="../qml/editor/inputrelation.qml" line="120"/>
         <source>%1 more</source>
         <translation>%1更多</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="179"/>
+        <location filename="../qml/editor/inputrelation.qml" line="135"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="239"/>
+        <location filename="../qml/editor/inputrelation.qml" line="191"/>
         <source>Linked features</source>
         <translation>连接要素</translation>
     </message>
@@ -1275,9 +1275,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputrelationreference</name>
     <message>
-        <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
-        <source>Changing link</source>
-        <translation>更换连接</translation>
+        <location filename="../qml/editor/inputrelationreference.qml" line="94"/>
+        <source>Change link</source>
+        <translation>修改连接</translation>
+    </message>
+</context>
+<context>
+    <name>inputvaluerelationpage</name>
+    <message>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <source>Features</source>
+        <translation>要素</translation>
     </message>
 </context>
 <context>
@@ -1285,12 +1293,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode on</source>
-        <translation>开启GPS自动中心模式</translation>
+        <translation>开启GPS位置居中模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="190"/>
         <source>GPS auto-center mode off</source>
-        <translation>关闭GPS自动中心模式</translation>
+        <translation>关闭GPS位置居中模式</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="204"/>
