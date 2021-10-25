@@ -12,3 +12,4 @@ app/android/assets/qgis-data/proj_custom/
 app/android/assets/qgis-data/projects/
 *.gpkg-wal
 *.gpkg-shm
+Input_keystore.keystore

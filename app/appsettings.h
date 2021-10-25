@@ -26,6 +26,8 @@ class AppSettings: public QObject
     Q_PROPERTY( int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
     Q_PROPERTY( bool gpsAccuracyWarning READ gpsAccuracyWarning WRITE setGpsAccuracyWarning NOTIFY gpsAccuracyWarningChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
+    Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
+    Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setlegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -58,6 +60,12 @@ class AppSettings: public QObject
     bool gpsAccuracyWarning() const;
     void setGpsAccuracyWarning( bool gpsAccuracyWarning );
 
+    QString appVersion() const;
+    void setAppVersion( const QString &newAppVersion );
+
+    bool legacyFolderMigrated();
+    void setlegacyFolderMigrated( bool hasBeenMigrated );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -71,6 +79,8 @@ class AppSettings: public QObject
     void lineRecordingIntervalChanged();
 
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
+    void legacyFolderMigratedChanged( bool legacyFolderMigrated );
+    void appVersionChanged( const QString &version );
 
   private:
     // Projects path
@@ -85,6 +95,15 @@ class AppSettings: public QObject
     bool mGpsAccuracyWarning = true;
     // Digitizing period in seconds
     int mLineRecordingInterval = 3;
+    // Application version, helps to differentiate if this is a:
+    //  1. first run of application (value is null)
+    //  2. update of application (value is different from actual version)
+    //  3. normal run (value is the same as actual version)
+    // these checks are possible to do during startup (in main.cpp), last
+    QString mAppVersion;
+    // signalizes if application has already successfully migrated legacy Android folder
+    // this flag can be removed in future (prob. jan 2022), all users should have app version higher than 1.0.2 at that time
+    bool mLegacyFolderMigrated;
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;
@@ -96,7 +115,6 @@ class AppSettings: public QObject
 
     void setValue( const QString &key, const QVariant &value );
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
-
 };
 
 #endif // APPSETTINGS_H

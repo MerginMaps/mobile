@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,8 +17,14 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
+#include <QStorageInfo>
+
+#include <QtConcurrent>
+#include <QFuture>
 
 #include "coreutils.h"
+#include "inpututils.h"
+#include "appsettings.h"
 #endif
 
 AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
@@ -108,34 +114,158 @@ QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 #endif
 }
 
-bool AndroidUtils::copyLegacyAppFolder() // <== THIS IS WIP, WILL BE IN NEXT MILESTONE
+bool AndroidUtils::findLegacyFolder( QString &legacyFolderPath )
 {
 #ifdef ANDROID
+  legacyFolderPath = QStringLiteral();
   QString dataPathRaw = QStringLiteral( "INPUT" );
+
   QFileInfo extDir( "/sdcard/" );
   if ( extDir.isDir() && extDir.isWritable() )
   {
     // seems that this directory transposes to the latter one in case there is no sdcard attached
     dataPathRaw = extDir.path() + "/" + dataPathRaw;
     QDir d( dataPathRaw );
-    return true;
+    if ( d.exists() )
+    {
+      legacyFolderPath = dataPathRaw;
+      return true;
+    }
   }
   else
   {
-    qDebug() << "extDir: " << extDir.path() << " not writable";
+    CoreUtils::log( "$$: Migration", "Ext path " + extDir.path() + " is not readable!" );
 
     QStringList split = QDir::homePath().split( "/" ); // something like /data/user/0/uk.co.lutraconsulting/files
 
     QFileInfo usrDir( "/storage/emulated/" + split[2] + "/" );
     dataPathRaw = usrDir.path() + "/" + dataPathRaw;
-    if ( !( usrDir.isDir() && usrDir.isWritable() ) )
+
+    if ( usrDir.isDir() && usrDir.isWritable() )
     {
-      qDebug() << "usrDir: " << usrDir.path() << " not writable";
+      QDir d( dataPathRaw );
+      if ( d.exists() )
+      {
+        legacyFolderPath = dataPathRaw;
+        return true;
+      }
     }
-    return true;
   }
+#else
+  Q_UNUSED( legacyFolderPath );
 #endif
   return false;
+}
+
+void AndroidUtils::migrateLegacyProjects( const QString &legacyFolder, const QString &scopedStorageFolder )
+{
+#ifdef ANDROID
+  QString legacyFolderProjects = legacyFolder + QStringLiteral( "/projects" );
+  QString scopedStorageProjects = scopedStorageFolder + QStringLiteral( "/projects" );
+
+  CoreUtils::log( "LegacyFolderMigration", "Starting copy from:" + legacyFolderProjects +  " to:" +  scopedStorageProjects );
+
+  QDir legacyProjectsDir( legacyFolderProjects );
+  QStringList projectsToCopy = legacyProjectsDir.entryList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Hidden );
+
+  int cnt = 0;
+
+  emit migrationStarted( projectsToCopy.count() );
+  emit migrationProgressed( cnt );
+
+  for ( const QString &project : projectsToCopy )
+  {
+    bool copyResult = InputUtils::cpDir( legacyFolderProjects + "/" + project, scopedStorageProjects + "/" + project );
+    if ( !copyResult )
+    {
+      CoreUtils::log( "LegacyFolderMigration", "Could not copy project" + project + "!" );
+      emit migrationFinished( false );
+      return;
+    }
+
+    emit migrationProgressed( ++cnt );
+  }
+
+  // Final step: rename legacy folder to indicate that projects were successfully migrated
+  QDir legacyFolderDir( legacyFolder );
+  bool renameSuccessful = legacyFolderDir.rename( legacyFolder, legacyFolder + QStringLiteral( "_migrated" ) );
+  if ( !renameSuccessful )
+  {
+    CoreUtils::log( "LegacyFolderMigration", "Rename not successful, but data are copied" );
+    // Even though the folder is not renamed, it is copied, hence do not copy it again in future
+    emit migrationFinished( true );
+    return;
+  }
+
+  emit migrationFinished( true );
+#endif
+}
+
+void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool demoProjectsCopiedThisRun )
+{
+#ifdef ANDROID
+  // Step 1: already migrated? - do not copy
+  if ( appsettings->legacyFolderMigrated() )
+  {
+    CoreUtils::log( "LegacyFolderMigration", "Ignoring legacy folder logic, already migrated!" );
+    return;
+  }
+
+  // Step 2: is this first run of application (after install or reset of all data)? - do not copy
+  if ( demoProjectsCopiedThisRun )
+  {
+    CoreUtils::log( "LegacyFolderMigration", "Ignoring legacy folder logic, just installed or removed app data!" );
+    appsettings->setlegacyFolderMigrated( true );
+    return;
+  }
+
+  // Step 3: make sure we have a WRITE permission to storage
+  // this check should not be that important since previous app versions could not run without this permission - all updated
+  // versions will thus have it granted. Anyways..
+  if ( QtAndroid::checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" ) != QtAndroid::PermissionResult::Granted )
+  {
+    if ( !checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
+    {
+      showToast( tr( "Without storage permission you will not be able to access previous projects" ) );
+      CoreUtils::log( "LegacyFolderMigration", "Storage permission not granted after rationale, leaving!" );
+      return;
+    }
+    CoreUtils::log( "LegacyFolderMigration", "Storage permission granted after rationale, continuing!" );
+  }
+
+  // Step 4: check existence of legacy folder
+  QString legacyFolderPath;
+  bool containsLegacyFolder = findLegacyFolder( legacyFolderPath );
+
+  if ( !containsLegacyFolder )
+  {
+    appsettings->setlegacyFolderMigrated( true );
+    CoreUtils::log( "LegacyFolderMigration", "Could not find legacy folder" );
+    return;
+  }
+
+  // Step 5: is there enough space to copy the folder?
+  // https://doc.qt.io/qt-5/qstorageinfo.html
+  QDir legacyDir( legacyFolderPath );
+  QStorageInfo storage( legacyDir );
+
+  qint64 freeSpace = storage.bytesAvailable();
+  qint64 neededSpace = InputUtils::dirSize( legacyFolderPath );
+
+  if ( freeSpace < neededSpace )
+  {
+    emit notEnoughSpaceLeftToMigrate( InputUtils::bytesToHumanSize( neededSpace ) );
+    CoreUtils::log( "LegacyFolderMigration", "Device does not have enough space to copy the folder, needed: " + \
+                    InputUtils::bytesToHumanSize( neededSpace ) + \
+                    " free space: " + InputUtils::bytesToHumanSize( freeSpace ) );
+    return;
+  }
+
+  //  Step 6: finally, let's copy the projects folder, project after project
+  QtConcurrent::run( this, &AndroidUtils::migrateLegacyProjects, legacyFolderPath, externalStorageAppFolder() );
+
+  CoreUtils::log( "LegacyFolderMigration", "Data migration has been sent to other thread!" );
+#endif
 }
 
 bool AndroidUtils::requestStoragePermission()

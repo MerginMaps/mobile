@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -367,6 +367,12 @@ int main( int argc, char *argv[] )
   }
 #endif
 
+  QDir projectsDirectory( projectDir );
+  if ( !projectsDirectory.exists() )
+  {
+    projectsDirectory.mkpath( projectDir );
+  }
+
   CoreUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
 
@@ -390,11 +396,14 @@ int main( int argc, char *argv[] )
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
+  bool hasLoadedDemoProjects = false;
+
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
+    hasLoadedDemoProjects = true;
   }
 
   // Create Input classes
@@ -559,6 +568,23 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
+
+  // Android scoped storage migration logic
+#ifdef ANDROID
+  QObject::connect( &au, &AndroidUtils::migrationFinished, [ &localProjectsManager, &as ]( bool success )
+  {
+    if ( success )
+    {
+      localProjectsManager.reloadDataDir();
+    }
+    as.setlegacyFolderMigrated( true );
+  } );
+
+  au.handleLegacyFolderMigration( &as, hasLoadedDemoProjects );
+#endif
+
+  // save app version to settings
+  as.setAppVersion( version );
 
   int ret = EXIT_FAILURE;
   try

@@ -20,6 +20,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 import "./map"
+import "./misc"
 
 ApplicationWindow {
     id: window
@@ -406,5 +407,12 @@ ApplicationWindow {
         onProjectWillBeReloaded: {
             formsStackManager.reload()
         }
+    }
+
+    LegacyFolderMigration {
+      id: lfm
+
+      z: 1000 // unfortunatelly we need this hack because some parts of application still sets z coord
+      anchors.fill: parent
     }
 }

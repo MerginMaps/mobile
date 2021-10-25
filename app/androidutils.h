@@ -17,6 +17,8 @@
 #endif
 #include <QObject>
 
+class AppSettings;
+
 class AndroidUtils: public QObject
 #ifdef ANDROID
   , QAndroidActivityResultReceiver
@@ -32,7 +34,6 @@ class AndroidUtils: public QObject
 
     bool checkAndAcquirePermissions( const QString &permissionString );
 
-    static bool copyLegacyAppFolder();
     static QString externalStorageAppFolder();
 
     /**
@@ -46,6 +47,13 @@ class AndroidUtils: public QObject
     bool requestStoragePermission();
     bool requestCameraPermission();
     bool requestMediaLocationPermission();
+
+    // Copies legacy app folder INPUT from external storage to app specific folder based on several rules.
+    // Returns true if migration has been done, false otherwise
+    void handleLegacyFolderMigration( AppSettings *appsettings, bool demoProjectsCopiedThisRun );
+
+    bool findLegacyFolder( QString &legacyFolderPath );
+    void migrateLegacyProjects( const QString &from, const QString &to );
 
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
@@ -63,12 +71,17 @@ class AndroidUtils: public QObject
   signals:
     void imageSelected( QString imagePath );
 
+    void migrationFinished( bool success );
+    void migrationProgressed( int progress );
+    void migrationStarted( int numOfProjectsToCopy );
+    void notEnoughSpaceLeftToMigrate( QString neededSpace );
+
   public slots:
     void showToast( QString message );
 
   private:
-    bool mIsAndroid;
 
+    bool mIsAndroid;
 };
 
 #endif // ANDROIDUTILS_H
