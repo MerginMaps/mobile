@@ -21,3 +21,7 @@
 # Form validation:
 
 ![](media/form-validation.png)
+
+# (Android) Legacy folder migration:
+
+![](media/legacymigration.png)
