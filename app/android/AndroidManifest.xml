@@ -97,6 +97,10 @@
 
     <!-- Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Android considers EXIF data as sensitive (since they contain user's location), so we need to opt for permission ACCESS_MEDIA_LOCATION.
+    Even though it is a runtime permission (one need to opt for it in code),
+    it has no GUI element (is granted automatically without user's input, user do not see anything). -->
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <!-- Camera permissions -->

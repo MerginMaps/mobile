@@ -100,7 +100,7 @@ Item {
       }
 
       Text {
-        text: qsTr( "We are working on important update, please do not close the application" )
+        text: qsTr( "We are working on an important update, please do not close the application" )
 
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor

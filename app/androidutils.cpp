@@ -83,14 +83,15 @@ QString AndroidUtils::externalStorageAppFolder()
 #ifdef ANDROID
   // AppDataLocation returns two paths, first is internal app storage and the second is external storage
   QStringList paths = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation );
-  if ( paths.size() != 2 )
+  if ( paths.size() > 1 )
   {
-    // universe explodes
-    CoreUtils::log( "StorageException", "Path from QStandardPaths do not include external storage!" );
-    exit( EXIT_FAILURE );
+    return paths.at( 1 );
   }
-
-  return paths.at( 1 );
+  else
+  {
+    CoreUtils::log( "StorageException", "Path from QStandardPaths do not include external storage!! Using path: " + paths.at( 0 ) );
+    return paths.at( 0 );
+  }
 #endif
 
   return QString();
@@ -215,7 +216,7 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
   if ( demoProjectsCopiedThisRun )
   {
     CoreUtils::log( "LegacyFolderMigration", "Ignoring legacy folder logic, just installed or removed app data!" );
-    appsettings->setlegacyFolderMigrated( true );
+    appsettings->setLegacyFolderMigrated( true );
     return;
   }
 
@@ -239,7 +240,7 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
 
   if ( !containsLegacyFolder )
   {
-    appsettings->setlegacyFolderMigrated( true );
+    appsettings->setLegacyFolderMigrated( true );
     CoreUtils::log( "LegacyFolderMigration", "Could not find legacy folder" );
     return;
   }

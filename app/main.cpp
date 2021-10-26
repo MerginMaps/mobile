@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -577,7 +577,7 @@ int main( int argc, char *argv[] )
     {
       localProjectsManager.reloadDataDir();
     }
-    as.setlegacyFolderMigrated( true );
+    as.setLegacyFolderMigrated( true );
   } );
 
   au.handleLegacyFolderMigration( &as, hasLoadedDemoProjects );

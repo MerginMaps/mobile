@@ -24,6 +24,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
+  bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -35,6 +36,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setLineRecordingInterval( lineRecordingInterval );
   setReuseLastEnteredValues( reuseLastEnteredValues );
   setAppVersion( savedAppVersion );
+  setLegacyFolderMigrated( legacyFolderMigrated );
 }
 
 QString AppSettings::defaultLayer() const
@@ -201,11 +203,10 @@ void AppSettings::setAppVersion( const QString &newAppVersion )
 
 bool AppSettings::legacyFolderMigrated()
 {
-  // no need to cache value in constructor, will be read only once
-  return value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
+  return mLegacyFolderMigrated;
 }
 
-void AppSettings::setlegacyFolderMigrated( bool hasBeenMigrated )
+void AppSettings::setLegacyFolderMigrated( bool hasBeenMigrated )
 {
   if ( mLegacyFolderMigrated == hasBeenMigrated )
     return;
