@@ -199,6 +199,9 @@ void AndroidUtils::migrateLegacyProjects( const QString &legacyFolder, const QSt
   }
 
   emit migrationFinished( true );
+#else
+  Q_UNUSED( legacyFolder );
+  Q_UNUSED( scopedStorageFolder );
 #endif
 }
 
@@ -266,6 +269,9 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
   QtConcurrent::run( this, &AndroidUtils::migrateLegacyProjects, legacyFolderPath, externalStorageAppFolder() );
 
   CoreUtils::log( "LegacyFolderMigration", "Data migration has been sent to other thread!" );
+#else
+  Q_UNUSED( appsettings );
+  Q_UNUSED( demoProjectsCopiedThisRun );
 #endif
 }
 
