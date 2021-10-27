@@ -33,6 +33,7 @@ class TestUtilsFunctions: public QObject
     void getRelativePath();
     void resolvePhotoPath();
     void resolveTargetDir();
+    void testDirSize();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

@@ -125,25 +125,7 @@ static QString getDataDir()
   QString dataPathRaw( STR( QGIS_QUICK_DATA_PATH ) );
 
 #ifdef ANDROID
-  QFileInfo extDir( "/sdcard/" );
-  if ( extDir.isDir() && extDir.isWritable() )
-  {
-    // seems that this directory transposes to the latter one in case there is no sdcard attached
-    dataPathRaw = extDir.path() + "/" + dataPathRaw;
-  }
-  else
-  {
-    qDebug() << "extDir: " << extDir.path() << " not writable";
-
-    QStringList split = QDir::homePath().split( "/" ); // something like /data/user/0/uk.co.lutraconsulting/files
-    // TODO support active user from QDir::homePath()
-    QFileInfo usrDir( "/storage/emulated/" + split[2] + "/" );
-    dataPathRaw = usrDir.path() + "/" + dataPathRaw;
-    if ( !( usrDir.isDir() && usrDir.isWritable() ) )
-    {
-      qDebug() << "usrDir: " << usrDir.path() << " not writable";
-    }
-  }
+  dataPathRaw = AndroidUtils::externalStorageAppFolder();
 #endif
 
 #ifdef Q_OS_IOS
@@ -374,10 +356,6 @@ int main( int argc, char *argv[] )
 #endif
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
-  // Require permissions before accessing data folder
-#ifdef ANDROID
-  AndroidUtils::requirePermissions();
-#endif
   // Set/Get enviroment
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
@@ -388,6 +366,12 @@ int main( int argc, char *argv[] )
     projectDir = tests.initTestingDir();
   }
 #endif
+
+  QDir projectsDirectory( projectDir );
+  if ( !projectsDirectory.exists() )
+  {
+    projectsDirectory.mkpath( projectDir );
+  }
 
   CoreUtils::setLogFilename( projectDir + "/.logs" );
   setEnvironmentQgisPrefixPath();
@@ -412,11 +396,14 @@ int main( int argc, char *argv[] )
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
+  bool hasLoadedDemoProjects = false;
+
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
+    hasLoadedDemoProjects = true;
   }
 
   // Create Input classes
@@ -581,6 +568,23 @@ int main( int argc, char *argv[] )
 #ifdef ANDROID
   QtAndroid::hideSplashScreen();
 #endif
+
+  // Android scoped storage migration logic
+#ifdef ANDROID
+  QObject::connect( &au, &AndroidUtils::migrationFinished, [ &localProjectsManager, &as ]( bool success )
+  {
+    if ( success )
+    {
+      localProjectsManager.reloadDataDir();
+    }
+    as.setLegacyFolderMigrated( true );
+  } );
+
+  au.handleLegacyFolderMigration( &as, hasLoadedDemoProjects );
+#endif
+
+  // save app version to settings
+  as.setAppVersion( version );
 
   int ret = EXIT_FAILURE;
   try

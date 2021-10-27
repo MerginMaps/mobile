@@ -268,3 +268,59 @@ void TestUtilsFunctions::resolveTargetDir()
   QString resultDir3 = mUtils->resolveTargetDir( homePath, config, pair, QgsProject::instance() );
   QCOMPARE( resultDir3, QStringLiteral( "%1/photos" ).arg( projectDir ) );
 }
+
+void TestUtilsFunctions::testDirSize()
+{
+  // create some test data in tmp with non ascii characters
+  QString tempFolder = QDir::tempPath();
+
+  QString project = tempFolder + QStringLiteral( "/input-project" );
+  qint64 dirSize;
+
+  dirSize = mUtils->dirSize( project );
+  QCOMPARE( dirSize, 0 );
+
+  QString subfolder = project + QStringLiteral( "/sub/sub/ž" );
+  QDir subfolderDir( subfolder );
+  subfolderDir.mkpath( subfolder );
+
+  QFile file1( subfolder + QStringLiteral( "/testfile1-žriebä" ) );
+  file1.open( QIODevice::WriteOnly );
+
+  file1.write( "Loreem" );
+  file1.close();
+
+  qint64 newDirSize = mUtils->dirSize( project );
+
+  QVERIFY( newDirSize > dirSize );
+
+  // add hidden folder and file and see if size gets bigger
+  QString hiddenFolder = project + QStringLiteral( "/.hide" );
+  QDir hiddenFolderDir( hiddenFolder );
+  hiddenFolderDir.mkpath( hiddenFolder );
+
+  QFile file2( hiddenFolder + QStringLiteral( "/.mergin" ) );
+  file2.open( QIODevice::WriteOnly );
+
+  file2.write( "Loreem" );
+  file2.close();
+
+  dirSize = newDirSize;
+  newDirSize = mUtils->dirSize( project );
+
+  QVERIFY( newDirSize > dirSize );
+
+  // test not existing folders
+  dirSize = mUtils->dirSize( tempFolder + QStringLiteral( "/notexistingfilesfolder_input" ) );
+  QCOMPARE( dirSize, 0 );
+
+  // try to pass files - should ignore it and return 0
+  QFile file3( tempFolder + QStringLiteral( "/.mergin" ) );
+  file3.open( QIODevice::WriteOnly );
+
+  file3.write( "Loreem" );
+  file3.close();
+
+  dirSize = mUtils->dirSize( tempFolder + QStringLiteral( "/.mergin" ) );
+  QCOMPARE( dirSize, 0 );
+}

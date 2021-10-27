@@ -23,6 +23,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool gpsAccuracyWarning = settings.value( "gpsAccuracyWarning", true ).toBool();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
+  QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
+  bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -33,6 +35,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAccuracyWarning( gpsAccuracyWarning );
   setLineRecordingInterval( lineRecordingInterval );
   setReuseLastEnteredValues( reuseLastEnteredValues );
+  setAppVersion( savedAppVersion );
+  setLegacyFolderMigrated( legacyFolderMigrated );
 }
 
 QString AppSettings::defaultLayer() const
@@ -181,6 +185,37 @@ void AppSettings::setGpsAccuracyWarning( bool gpsAccuracyWarning )
     emit gpsAccuracyWarningChanged();
   }
 }
+
+QString AppSettings::appVersion() const
+{
+  return mAppVersion;
+}
+
+void AppSettings::setAppVersion( const QString &newAppVersion )
+{
+  if ( mAppVersion == newAppVersion )
+    return;
+
+  mAppVersion = newAppVersion;
+  setValue( QStringLiteral( "appVersion" ), newAppVersion );
+  emit appVersionChanged( mAppVersion );
+}
+
+bool AppSettings::legacyFolderMigrated()
+{
+  return mLegacyFolderMigrated;
+}
+
+void AppSettings::setLegacyFolderMigrated( bool hasBeenMigrated )
+{
+  if ( mLegacyFolderMigrated == hasBeenMigrated )
+    return;
+
+  mLegacyFolderMigrated = hasBeenMigrated;
+  setValue( QStringLiteral( "legacyFolderMigrated" ), hasBeenMigrated );
+  emit legacyFolderMigratedChanged( mLegacyFolderMigrated );
+}
+
 
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {

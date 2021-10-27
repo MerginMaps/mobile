@@ -9,7 +9,7 @@
                  android:label="-- %%INSERT_APP_NAME%% --"
                  android:icon="@mipmap/ic_input"
                  android:extractNativeLibs="true"
-                 android:requestLegacyExternalStorage="true">
+                 android:requestLegacyExternalStorage="true"> <!-- Will be removed after legacy folder migration -->
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:name="uk.co.lutraconsulting.InputActivity"
                   android:label="Input"
@@ -81,7 +81,7 @@
         </provider>
 
     </application>
-    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="29"/>
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="29"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -89,8 +89,7 @@
     <!-- <insert double percentage signs to automatically insert permissions from Qt>INSERT_PERMISSIONS -->
 
     <!-- Storage permissions -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- Will be replaced to READ after legacy folder migration -->
 
     <!-- Access internet permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -98,6 +97,11 @@
 
     <!-- Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Android considers EXIF data as sensitive (since they contain user's location), so we need to opt for permission ACCESS_MEDIA_LOCATION.
+    Even though it is a runtime permission (one need to opt for it in code),
+    it has no GUI element (is granted automatically without user's input, user do not see anything). -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <!-- Camera permissions -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -107,4 +111,3 @@
     <!-- %%INSERT_FEATURES -->
 
 </manifest>
-

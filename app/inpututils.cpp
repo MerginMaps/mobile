@@ -413,24 +413,6 @@ QString InputUtils::bytesToHumanSize( double bytes )
   }
 }
 
-bool InputUtils::hasStoragePermission()
-{
-  if ( appPlatform() == QStringLiteral( "android" ) )
-  {
-    return mAndroidUtils->checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" );
-  }
-  return true;
-}
-
-bool InputUtils::acquireStoragePermission()
-{
-  if ( appPlatform() == QStringLiteral( "android" ) )
-  {
-    return mAndroidUtils->requestStoragePermission();
-  }
-  return true;
-}
-
 bool InputUtils::acquireCameraPermission()
 {
   if ( appPlatform() == QStringLiteral( "android" ) )
@@ -531,6 +513,35 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
   }
   return result;
+}
+
+// https://stackoverflow.com/a/47854799/7875594
+qint64 InputUtils::dirSize( const QString &path )
+{
+  qint64 size = 0;
+  QDir dir( path );
+
+  if ( !dir.exists() )
+  {
+    return size;
+  }
+
+  QStringList subFiles = dir.entryList( QDir::Files | QDir::Hidden );
+
+  for ( QString filePath : subFiles )
+  {
+    QFileInfo fi( dir, filePath );
+    size += fi.size();
+  }
+
+  // add size of child directories recursively
+  QStringList subDirs = dir.entryList( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
+
+  for ( QString subDirPath : subDirs )
+  {
+    size += dirSize( path + QDir::separator() + subDirPath );
+  }
+  return size;
 }
 
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )

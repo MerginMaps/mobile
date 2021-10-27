@@ -94,5 +94,6 @@
         <file>map/RecordToolbar.qml</file>
         <file>map/ScaleBar.qml</file>
         <file>qmldir</file>
+        <file>misc/LegacyFolderMigration.qml</file>
     </qresource>
 </RCC>

@@ -109,10 +109,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
-    Q_INVOKABLE bool hasStoragePermission();
-
-    Q_INVOKABLE bool acquireStoragePermission();
-
     Q_INVOKABLE bool acquireCameraPermission();
 
     Q_INVOKABLE void quitApp();
@@ -125,6 +121,9 @@ class InputUtils: public QObject
      * \result True if operation was fully successful otherwise false.
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
+
+    // Returns size of directory in bytes, 0 if path does not exist
+    static qint64 dirSize( const QString &path );
 
     static QString filesToString( QList<MerginFile> files );
 

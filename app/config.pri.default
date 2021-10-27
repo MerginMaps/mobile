@@ -10,11 +10,8 @@ android {
   INPUT_SDK_STAGE_DIR = $${INPUT_SDK_DIR}/stage
   QGIS_INSTALL_PATH = $${INPUT_SDK_STAGE_DIR}/$$ANDROID_TARGET_ARCH
 
-  # Relative path within Android internal storage which will be used for storage of data
-  # (user's Input projects and also QGIS and PROJ data files). Normally this does not need adjusting.
-  #
-  # Within the device we try to use /sdcard/${QGIS_QUICK_DATA_PATH} and if it is not writable,
-  # we would use /storage/emulated/0/${QGIS_QUICK_DATA_PATH} (user home path)
+  # Definition needed by QGIS_QUICK to work properly.
+  # The value is NOT used to find app folder
   QGIS_QUICK_DATA_PATH = INPUT
 
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
