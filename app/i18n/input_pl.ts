@@ -2,7 +2,7 @@
 <context>
     <name>AboutPanel</name>
     <message>
-        <location filename="../qml/AboutPanel.qml" line="123"/>
+        <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
         <translation>Rozwijany przez</translation>
     </message>
@@ -81,22 +81,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="113"/>
-        <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>Uprawnienia aplikacji do zapisywania danych są trwale cofnięte, proszę zezwolić na zapis danych w ustawieniach</translation>
+        <location filename="../androidutils.cpp" line="233"/>
+        <source>Without storage permission you will not be able to access previous projects</source>
+        <translation>Bez uprawnień dostępu do plików nie będzie można uzyskać dostępu do wcześniejszych projektów.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="117"/>
-        <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>Input wymaga zezwolenia na zapis danych aby mógł ściągnąć pliki projektu i je modyfikować</translation>
+        <location filename="../androidutils.cpp" line="287"/>
+        <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
+        <translation>Uprawnienia dostępu do plików zostały trwale wycofane. Proszę zezwolić na dostęp do plików w ustawieniach, aby móc ładować obrazy z galerii</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="135"/>
+        <location filename="../androidutils.cpp" line="291"/>
+        <source>Input needs a storage permission in order to load pictures from gallery</source>
+        <translation>Ładowanie obrazów z galerii w Input wymaga uprawnień dostępu do plików</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Aplikacja nie ma uprawnień do korzystania z aparatu, proszę na to zezwolić w ustawieniach</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="139"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Uprawnienia do korzystania z aparatu są konieczne do robienia zdjęć</translation>
     </message>
@@ -104,48 +109,48 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="507"/>
+        <location filename="../attributes/attributecontroller.cpp" line="511"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Wyrażenie wartości domyślnej dla %1:%2 ma błąd składni: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Wyrażenie wartości domyślnej dla %1:%2 zwraca błąd obliczeń: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="532"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Nie można skonwertować &quot;%1&quot; %4 do typu odpowiedniego dla pola %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="777"/>
+        <location filename="../attributes/attributecontroller.cpp" line="784"/>
         <source>Cannot delete feature</source>
         <translation>Nie można usunąć obiektu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="472"/>
-        <location filename="../attributes/attributecontroller.cpp" line="798"/>
+        <location filename="../attributes/attributecontroller.cpp" line="476"/>
+        <location filename="../attributes/attributecontroller.cpp" line="805"/>
         <source>Feature could not be added</source>
         <translation>Nie można dodać obiektu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="829"/>
+        <location filename="../attributes/attributecontroller.cpp" line="836"/>
         <source>Cannot update feature</source>
         <translation>Nie można zaktualizować obiektu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="843"/>
+        <location filename="../attributes/attributecontroller.cpp" line="850"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Nie można pobrać obiektu %1 po przesłaniu zmian</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="860"/>
+        <location filename="../attributes/attributecontroller.cpp" line="867"/>
         <source>Cannot start editing</source>
         <translation>Nie można rozpocząć edycji</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="877"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Could not save changes. Rolling back.</source>
         <translation>Nie można zapisać zmian. Wycofuję zmiany.</translation>
     </message>
@@ -182,14 +187,6 @@
     </message>
 </context>
 <context>
-    <name>BrowseDataFeaturesPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataFeaturesPanel.qml" line="67"/>
-        <source>Showing only the first %1 features</source>
-        <translation>Liczba pokazywanych obiektów: %1</translation>
-    </message>
-</context>
-<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -200,24 +197,6 @@
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
         <translation>Żadna z warstw nie została skonfigurowana do przeglądania jej obiektów. Zobacz %1jak zmodyfikować swój projekt%2.</translation>
-    </message>
-</context>
-<context>
-    <name>BrowseDataToolbar</name>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="53"/>
-        <source>Add Feature</source>
-        <translation>Dodaj obiekt</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="69"/>
-        <source>Done</source>
-        <translation>Zakończ</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataToolbar.qml" line="85"/>
-        <source>Remove link</source>
-        <translation>Usuń link</translation>
     </message>
 </context>
 <context>
@@ -254,12 +233,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="178"/>
+        <location filename="../qml/form/FeatureForm.qml" line="152"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Nie można zapisać formularza ze względu na błędy walidacji</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="179"/>
+        <location filename="../qml/form/FeatureForm.qml" line="153"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Nie można zapisać obiektu, sprawdź wymagane pola</translation>
     </message>
@@ -282,22 +261,22 @@
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>Usuń obiekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Czy jesteś pewny, że chcesz usunąć ten obiekt?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>Niezapisane zmiany</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>Czy chcesz zapisać zmiany?</translation>
     </message>
@@ -318,6 +297,32 @@
         <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
         <source>Edit geometry</source>
         <translation>Edytuj geometrię</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPage</name>
+    <message>
+        <location filename="../qml/FeaturesListPage.qml" line="59"/>
+        <source>Showing only the first %1 features</source>
+        <translation>Pokazano jedynie %1 obiektów</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageToolbar</name>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
+        <source>Add Feature</source>
+        <translation>Dodaj obiekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
+        <source>Done</source>
+        <translation>Zakończ</translation>
+    </message>
+    <message>
+        <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
+        <source>Remove link</source>
+        <translation>Usuń link</translation>
     </message>
 </context>
 <context>
@@ -343,12 +348,12 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="194"/>
+        <location filename="../inputhelp.cpp" line="216"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Raport przesłany.%1Skontaktuj się z nami%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="199"/>
+        <location filename="../inputhelp.cpp" line="221"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Przekazanie raportu nie powiodło się.%1Proszę sprawdzić swoje połączenie sieciowe.</translation>
     </message>
@@ -441,30 +446,63 @@ Nie będzie ono dodane do projektu.</translation>
         <translation>%1 rok temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1056"/>
+        <location filename="../inpututils.cpp" line="1087"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozdzielczość ekranu: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1057"/>
+        <location filename="../inpututils.cpp" line="1088"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI ekranu: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1058"/>
+        <location filename="../inpututils.cpp" line="1089"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>rozmiar ekranu: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1059"/>
+        <location filename="../inpututils.cpp" line="1090"/>
         <source>screen density: %1</source>
         <translation>gęstość ekranu: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LegacyFolderMigration</name>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
+        <source>Insufficient space left on device</source>
+        <translation>Zbyt mało miejsca w pamięci urządzenia</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
+        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
+        <translation>Brakuje wolnego miejsca na twoim urządzeniu. Potrzeba %1, aby przeglądać twoje projekty. Usuń zbędne pliki i spróbuj ponownie lub kliknij Pomoc, aby zobaczyć, jak można rozwiązać ten problem inaczej. </translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <source>An error occured during update</source>
+        <translation>W czasie aktualizacji wystąpił błąd</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
+        <translation>W czasie wykonywania aktualizacji wystąpił błąd. Nie będzie  można teraz przeglądać projektów. Kliknij Pomoc, aby dowiedzieć się, jak rozwiązać ten problem.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <source>We are working on an important update, please do not close the application</source>
+        <translation>Wykonywana jest ważna aktualizacja. Proszę nie zamykać aplikacji.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <source>%1/%2</source>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -672,72 +710,57 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="141"/>
-        <location filename="../qml/components/ProjectList.qml" line="222"/>
+        <location filename="../qml/components/ProjectList.qml" line="133"/>
+        <location filename="../qml/components/ProjectList.qml" line="188"/>
         <source>Create project</source>
         <translation>Utwórz projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="161"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input wymaga zezwolenia na zapis danych, %1kliknij, aby nadać te uprawnienia%2 i zrestartuj aplikację.</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="197"/>
+        <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Nie ma pobranych projektów.%1Zobacz %2jak tworzyć projekty%3 i %4pobierać je%3 na twoje urządzenie.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="213"/>
+        <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>Możesz też utworzyć nowy projekt klikając poniższy przycisk.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nie można pobrać listy projektów.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>No projects found!</source>
         <translation>Nie ma żadnych projektów!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="273"/>
+        <location filename="../qml/components/ProjectList.qml" line="232"/>
         <source>Retry</source>
         <translation>Ponów</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="301"/>
+        <location filename="../qml/components/ProjectList.qml" line="260"/>
         <source>Remove project</source>
         <translation>Usuń projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="302"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Wszystkie niezsynchronizowane zmiany zostaną utracone.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="332"/>
+        <location filename="../qml/components/ProjectList.qml" line="291"/>
         <source>Download project</source>
         <translation>Pobierz projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="333"/>
+        <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Czy chcesz pobrać ten projekt
  %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="349"/>
-        <source>Input needs to be restarted</source>
-        <translation>Należy zrestartować Input</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="350"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Po zmianie uprawnień do zapisu danych Input musi zostać zrestartowany, aby zmiany te zostały uwzględnione. Naciśnij Zamknij i uruchom Input powtórnie.</translation>
     </message>
 </context>
 <context>
@@ -1257,17 +1280,17 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="164"/>
+        <location filename="../qml/editor/inputrelation.qml" line="120"/>
         <source>%1 more</source>
         <translation>%1 więcej</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="179"/>
+        <location filename="../qml/editor/inputrelation.qml" line="135"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="239"/>
+        <location filename="../qml/editor/inputrelation.qml" line="191"/>
         <source>Linked features</source>
         <translation>Powiązane obiekty</translation>
     </message>
@@ -1275,40 +1298,48 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>inputrelationreference</name>
     <message>
-        <location filename="../qml/editor/inputrelationreference.qml" line="95"/>
-        <source>Changing link</source>
-        <translation>Zmiana powiązania</translation>
+        <location filename="../qml/editor/inputrelationreference.qml" line="94"/>
+        <source>Change link</source>
+        <translation>Zmień powiązanie</translation>
+    </message>
+</context>
+<context>
+    <name>inputvaluerelationpage</name>
+    <message>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <source>Features</source>
+        <translation>Obiekty</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode on</source>
         <translation>Tryb autocentrowania GPS jest włączony</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode off</source>
         <translation>Tryb autocentrowania GPS jest wyłączony</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="205"/>
         <source>No editable layers found.</source>
         <translation>Nie znaleziono warstw do edycji.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="364"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Błąd połączenia z Mergin.%1Sprawdź swoje połączenie sieciowe.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Communication error</source>
         <translation>Błąd komunikacji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>PROJ Error</source>
         <translation>Błąd PROJ</translation>
     </message>
