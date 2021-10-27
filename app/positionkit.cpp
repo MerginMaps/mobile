@@ -105,6 +105,15 @@ void PositionKit::updateScreenAccuracy()
   }
 }
 
+void PositionKit::setProjectedPosition( const QgsPoint &projectedPosition )
+{
+  if ( projectedPosition != mProjectedPosition )
+  {
+    mProjectedPosition = projectedPosition;
+    emit projectedPositionChanged();
+  }
+}
+
 void PositionKit::useGpsLocation()
 {
   QGeoPositionInfoSource *source = gpsSource();
@@ -146,21 +155,25 @@ void PositionKit::updateProjectedPosition()
   if ( !mMapSettings )
     return;
 
-  QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
-  QgsPointXY projectedPositionXY = InputUtils::transformPoint(
-                                     positionCRS(),
-                                     mMapSettings->destinationCrs(),
-                                     mMapSettings->transformContext(),
-                                     srcPoint
-                                   );
-
-  QgsPoint projectedPosition( projectedPositionXY );
-  projectedPosition.addZValue( mPosition.z() );
-
-  if ( projectedPosition != mProjectedPosition )
+  // During startup, GPS position might not be available so we do not transform empty points.
+  if ( mPosition.isEmpty() )
   {
-    mProjectedPosition = projectedPosition;
-    emit projectedPositionChanged();
+    setProjectedPosition( QgsPoint() );
+  }
+  else
+  {
+    QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
+    QgsPointXY projectedPositionXY = InputUtils::transformPoint(
+                                       positionCRS(),
+                                       mMapSettings->destinationCrs(),
+                                       mMapSettings->transformContext(),
+                                       srcPoint
+                                     );
+
+    QgsPoint projectedPosition( projectedPositionXY );
+    projectedPosition.addZValue( mPosition.z() );
+
+    setProjectedPosition( projectedPosition );
   }
 }
 

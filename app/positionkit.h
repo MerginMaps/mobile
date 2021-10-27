@@ -248,6 +248,8 @@ class PositionKit : public QObject
     void updateScreenPosition();
     void updateScreenAccuracy();
 
+    void setProjectedPosition( const QgsPoint &projectedPosition );
+
     QGeoPositionInfoSource *gpsSource();
     QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
 
