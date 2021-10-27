@@ -83,27 +83,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="229"/>
+        <location filename="../androidutils.cpp" line="233"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="280"/>
+        <location filename="../androidutils.cpp" line="287"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="284"/>
+        <location filename="../androidutils.cpp" line="291"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="302"/>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="306"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -497,7 +497,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
-        <source>We are working on important update, please do not close the application</source>
+        <source>We are working on an important update, please do not close the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -825,7 +825,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="116"/>
+        <location filename="../projectwizard.cpp" line="115"/>
         <source>Project %1 created</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1314,32 +1314,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="212"/>
+        <location filename="../qml/main.qml" line="205"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="372"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
