@@ -12,7 +12,7 @@ echo "Qt 6 install path: " $Qt6_DIR
 FORMATTER = which $Qt6_DIR/bin/qmlformat
 
 if [ $? -ne 0 ]; then
-	echo "[!] qmlformat not found." >&2
+	echo "[!] qmlformat not found." >&2 # TODO: fix action not able to find formatter!
 	exit 1
 fi
 
