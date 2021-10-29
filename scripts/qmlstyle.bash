@@ -6,10 +6,10 @@
 
 echo "QML STYLE CHECK STARTED"
 
-echo "Qt 6 install path: " $Qt6_Dir
+echo "Qt 6 install path: " $Qt6_DIR
 
 # bin dir should be added to path already
-FORMATTER = $(which qmlformat)
+FORMATTER = which $Qt6_DIR/bin/qmlformat
 
 if [ $? -ne 0 ]; then
 	echo "[!] qmlformat not found." >&2
