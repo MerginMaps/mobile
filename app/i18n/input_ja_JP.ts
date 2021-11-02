@@ -81,22 +81,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="113"/>
-        <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>ストレージへのアクセス権限がありません。アクセス許可を設定してください。</translation>
+        <location filename="../androidutils.cpp" line="233"/>
+        <source>Without storage permission you will not be able to access previous projects</source>
+        <translation>ストレージの許可がないと、過去のプロジェクトにアクセスできません</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="117"/>
-        <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>プロジェクトを操作したりダウンロードしたりするには、Inputにストレージへのアクセス許可が必要です。</translation>
+        <location filename="../androidutils.cpp" line="287"/>
+        <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
+        <translation>ストレージへのアクセス権限がありません。ギャラリーから写真を読み込むためにアクセスを許可してください</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="135"/>
+        <location filename="../androidutils.cpp" line="291"/>
+        <source>Input needs a storage permission in order to load pictures from gallery</source>
+        <translation>Inputはギャラリーから写真を読み込むためにストレージへのアクセス権限が必要です</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>カメラへのアクセス権限がありません。アクセス許可を設定してください。</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="139"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>写真を撮影するためにカメラへのアクセス権限が必要です。</translation>
     </message>
@@ -441,30 +446,63 @@ Won&apos;t be added to the project.</source>
         <translation>%1 年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1076"/>
+        <location filename="../inpututils.cpp" line="1087"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>スクリーン解像度: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1077"/>
+        <location filename="../inpututils.cpp" line="1088"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>スクリーンDPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1078"/>
+        <location filename="../inpututils.cpp" line="1089"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>スクリーンサイズ: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1079"/>
+        <location filename="../inpututils.cpp" line="1090"/>
         <source>screen density: %1</source>
         <translation>スクリーン密度: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LegacyFolderMigration</name>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
+        <source>Insufficient space left on device</source>
+        <translation>デバイスに十分な空き容量がありません</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
+        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
+        <translation>デバイスの空き容量が不足しています。プロジェクトを表示するには %1 の空き容量が必要です。何らかのファイルを削除してから戻ってくるか、「ヘルプ」をクリックして、この問題を解決する他の方法を確認してください。</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <source>An error occured during update</source>
+        <translation>アップデート中にエラーが発生しました</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
+        <translation>アップデートの適用中にデバイスに問題が発生しました。プロジェクトを見ることができなくなります。「ヘルプ」をクリックすると、この問題を解決する方法が表示されます。</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <source>We are working on an important update, please do not close the application</source>
+        <translation>重要なアップデートを行っていますので、アプリを閉じないでください</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <source>%1/%2</source>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -672,72 +710,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="141"/>
-        <location filename="../qml/components/ProjectList.qml" line="222"/>
+        <location filename="../qml/components/ProjectList.qml" line="133"/>
+        <location filename="../qml/components/ProjectList.qml" line="188"/>
         <source>Create project</source>
         <translation>プロジェクトを作成</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="161"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Inputはストレージへのアクセス許可が必要です。 %1クリックして許可し、%2 アプリを再起動します。</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="197"/>
+        <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>ダウンロードされたプロジェクトはありません。%2プロジェクトの作り方%3 とデバイスへの %4ダウンロードの方法%3 を%1学びましょう。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="213"/>
+        <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>下のボタンをクリックして、新しいプロジェクトを作成することもできます。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
         <translation>プロジェクトのリストを取得できません</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>No projects found!</source>
         <translation>プロジェクトが見つかりません!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="273"/>
+        <location filename="../qml/components/ProjectList.qml" line="232"/>
         <source>Retry</source>
         <translation>リトライ</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="301"/>
+        <location filename="../qml/components/ProjectList.qml" line="260"/>
         <source>Remove project</source>
         <translation>プロジェクトを削除</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="302"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>同期されていない変更は失われます。</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="332"/>
+        <location filename="../qml/components/ProjectList.qml" line="291"/>
         <source>Download project</source>
         <translation>プロジェクトをダウンロード</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="333"/>
+        <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>プロジェクトをダウンロードしますか
  %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="349"/>
-        <source>Input needs to be restarted</source>
-        <translation>Inputは再起動が必要です</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="350"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>ストレージへの許可を与えた後に変更を適用するには、Inputを再起動する必要があります。閉じるをクリックして、再度Inputを開きます。</translation>
     </message>
 </context>
 <context>
@@ -1291,32 +1314,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS自動センターモードをON</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS自動センターモードをOFF</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="205"/>
         <source>No editable layers found.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="364"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Merginとの通信に失敗しました。%1 インターネット状況の確認をしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Communication error</source>
         <translation>通信エラー</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
