@@ -81,22 +81,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="113"/>
-        <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>הרשאת הגישה לאחסון במכשיר נדחתה לצמיתות, נא לאפשר גישה בהגדרות המכשיר.</translation>
+        <location filename="../androidutils.cpp" line="233"/>
+        <source>Without storage permission you will not be able to access previous projects</source>
+        <translation>ללא הרשאת אחסון לא תוכלו לגשת לפרוייקטים קודמים</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="117"/>
-        <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>Input צריך הרשאת גישה לאחסון על מנת לערוך או להוריד פרויקט.</translation>
+        <location filename="../androidutils.cpp" line="287"/>
+        <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
+        <translation>הרשאת הגישה לאחסון במכשיר נדחתה לצמיתות, נא לאפשר גישה בהגדרות המכשיר על מנת לטעון תמונות מהגלריה.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="135"/>
+        <location filename="../androidutils.cpp" line="291"/>
+        <source>Input needs a storage permission in order to load pictures from gallery</source>
+        <translation>Input צריך הרשאת גישה לאחסון על מנת לטעון תמונות מהגלריה.</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>הרשאת הגישה למצלמה נדחתה לצמיתות, נא לאפשר גישה בהגדרות המכשיר.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="139"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>אנחנו צריכים הרשאות גישה למצלמה על מנת לצלם תמונה</translation>
     </message>
@@ -441,30 +446,63 @@ Won&apos;t be added to the project.</source>
         <translation>לפני שנה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1076"/>
+        <location filename="../inpututils.cpp" line="1087"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>רזולוצית מסך: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1077"/>
+        <location filename="../inpututils.cpp" line="1088"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI מסך: %1x%2 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1078"/>
+        <location filename="../inpututils.cpp" line="1089"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>גודל מסך: %1x%2 מ&quot;מ
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1079"/>
+        <location filename="../inpututils.cpp" line="1090"/>
         <source>screen density: %1</source>
         <translation>צפיפות מסך: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LegacyFolderMigration</name>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
+        <source>Insufficient space left on device</source>
+        <translation>לא נשאר מספיק מקום במכשיר</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
+        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
+        <translation>למכשירך אוזל המקום, נדרש %1 של מקום פנוי על לראות את הפרוייקטים שלך. הסירו מספר קבצים וחזרו או לחצו על עזרה על מנת לראות פתרונות נוספים לתקלה זו.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <source>An error occured during update</source>
+        <translation>התרחשה תקלה בעת העדכון</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
+        <translation>מכשירך נתקל בתקלה בעת ביצוע עדכון. לא ניתן להציג את הפרוייקטים שלך. לחצו על עזרה על מנת לראות כיצד לפתור את התקלה.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <source>We are working on an important update, please do not close the application</source>
+        <translation>אנו עובדים על עדכון חשוב, נא לא לסגור את האפליקציה</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <source>%1/%2</source>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -672,72 +710,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="141"/>
-        <location filename="../qml/components/ProjectList.qml" line="222"/>
+        <location filename="../qml/components/ProjectList.qml" line="133"/>
+        <location filename="../qml/components/ProjectList.qml" line="188"/>
         <source>Create project</source>
         <translation>יצירת פרוייקט</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="161"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input צריכה הרשאת גישה לאחסון המכשיר, %1לחצו על מנת לאפשר את ההרשאה%2 והפעילו מחדש את האפליקציה.</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="197"/>
+        <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>לא נמצאו פרויקטים שהורדו למכשיר.%1למדו %2כיצד ליצור פרויקטים%3 ו%4להוריד אותם%3 למכשירכם.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="213"/>
+        <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>אתם יכולים ליצור פרויקטים חדשים גם על ידי לחיצה על הכפתור מטה.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
         <translation>לא ניתן להשיג את רשימת הפרויקטים.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>No projects found!</source>
         <translation>לא נמצאו פרויקטים!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="273"/>
+        <location filename="../qml/components/ProjectList.qml" line="232"/>
         <source>Retry</source>
         <translation>נסה שוב</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="301"/>
+        <location filename="../qml/components/ProjectList.qml" line="260"/>
         <source>Remove project</source>
         <translation>הסרת פרויקט</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="302"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>כל השינויים שלא סונכרנו יאבדו.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="332"/>
+        <location filename="../qml/components/ProjectList.qml" line="291"/>
         <source>Download project</source>
         <translation>הורדת פרויקט</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="333"/>
+        <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>האם ברצונכם להוריד את הפרויקט
 %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="349"/>
-        <source>Input needs to be restarted</source>
-        <translation>יש להפעיל מחדש את Input</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="350"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>על מנת להחיל שינויים אחרי מתן הרשאות אחסון, נדרש להפעיל מחדש את Input. לחצו על סגירה ופתחו את Input מחדש.</translation>
     </message>
 </context>
 <context>
@@ -1291,32 +1314,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode on</source>
         <translation>מצב מרכוז GPS אוטומטי פעיל</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode off</source>
         <translation>מצב מרכוז GPS אוטומטי כבוי</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="205"/>
         <source>No editable layers found.</source>
         <translation>לא נמצאו שכבות שניתנות לעריכה.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="364"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>תקלה בתקשורת עם Mergin.%1 נסו לשפר את חיבור הרשת.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Communication error</source>
         <translation>תקלת תקשורת</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>PROJ Error</source>
         <translation>תקלת PROJ</translation>
     </message>
