@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,6 +65,7 @@ void ValueRelationFeaturesModel::setup()
       FeaturesModel::setLayer( layer );
 
       mAllowMulti = mConfig.value( QStringLiteral( "AllowMulti" ) ).toBool();
+      mIsInitialized = true;
     }
     else
       CoreUtils::log( QStringLiteral( "ValueRelations" ), QStringLiteral( "Missing referenced fields for value relations." ) );
@@ -79,6 +80,7 @@ void ValueRelationFeaturesModel::reset()
   mTitleField.clear();
   mPair = FeatureLayerPair();
   mConfig = QVariantMap();
+  mIsInitialized = false;
   FeaturesModel::reset();
 }
 
@@ -100,6 +102,11 @@ QVariant ValueRelationFeaturesModel::convertToKey( const QVariant &id )
 
 QVariant ValueRelationFeaturesModel::convertToQgisType( const QVariantList &featureIds )
 {
+  if ( !mIsInitialized )
+  {
+    return QVariant();
+  }
+
   QVariant qgsFormat;
 
   QStringList keys;
@@ -115,6 +122,11 @@ QVariant ValueRelationFeaturesModel::convertToQgisType( const QVariantList &feat
 
 QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, ModelRoles toRole )
 {
+  if ( !mIsInitialized )
+  {
+    return QVariant();
+  }
+
   QStringList keyList;
 
   if ( mAllowMulti )
@@ -174,7 +186,7 @@ void ValueRelationFeaturesModel::setPair( const FeatureLayerPair &newPair )
   mPair = newPair;
   emit pairChanged( mPair );
 
-  if ( !mConfig.isEmpty() ) // setup already run
+  if ( mIsInitialized )
   {
     populate();
   }

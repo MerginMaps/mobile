@@ -61,6 +61,8 @@ class ValueRelationFeaturesModel : public FeaturesModel
     QString mKeyField;
     QString mTitleField;
     QString mFilterExpression;
+
+    bool mIsInitialized = false; // model successfully read config and is ready to use
 };
 
 #endif // VALUERELATIONFEATURESMODEL_H

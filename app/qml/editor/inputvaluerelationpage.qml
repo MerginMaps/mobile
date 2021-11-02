@@ -18,6 +18,7 @@ AbstractEditor {
   id: root
 
   /*required*/ property var parentValue: root.parent.value
+  /*required*/ property bool parentValueIsNull: root.parent.valueIsNull
   /*required*/ property var fieldConfig: root.parent.config
   /*required*/ property var featureLayerPair: root.parent.featurePair
   /*required*/ property bool isReadOnly: root.parent.readOnly
@@ -72,10 +73,15 @@ AbstractEditor {
     pair: root.featureLayerPair
 
     onInvalidate: {
-      if ( !root.isReadOnly )
+      if ( root.parentValueIsNull )
       {
-        root.editorValueChanged( "", true )
+        return // ignore invalidate signal if value is already NULL
       }
+      if ( root.isReadOnly )
+      {
+        return // ignore invalidate signal if form is not in edit mode
+      }
+      root.editorValueChanged( "", true )
     }
   }
 
