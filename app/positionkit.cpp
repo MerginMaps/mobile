@@ -34,7 +34,7 @@ PositionKit::PositionKit( QObject *parent )
   useGpsLocation();
 }
 
-QGeoPositionInfoSource  *PositionKit::gpsSource()
+QGeoPositionInfoSource *PositionKit::gpsSource()
 {
   // this should give us "true" position source
   // on Linux it comes from Geoclue library

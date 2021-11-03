@@ -49,6 +49,8 @@ QtObject {
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
     property real fieldHeight: scale(54)
+    property real mapBtnHeight: scale(40)
+    property real smallGap: scale(25)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2

@@ -96,5 +96,6 @@
         <file>qmldir</file>
         <file>misc/LegacyFolderMigration.qml</file>
         <file>misc/AttentionBanner.qml</file>
+        <file>components/MapFloatButton.qml</file>
     </qresource>
 </RCC>

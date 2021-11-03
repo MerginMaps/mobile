@@ -13,6 +13,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 import ".."
+import "../components"
 
 Item {
   id: root
@@ -341,10 +342,12 @@ Item {
 
     mapSettings: _map.mapSettings
 
-    y: _map.height - height - InputStyle.panelMargin
     height: InputStyle.scaleBarHeight
     preferredWidth: Math.min( window.width, 180 * QgsQuick.Utils.dp )
+
     anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: parent.top
+    anchors.topMargin: InputStyle.smallGap
   }
 
   Highlight {
@@ -453,6 +456,34 @@ Item {
     showWarning: shouldShowAccuracyWarning
   }
 
+  MapFloatButton {
+    id: _accuracyButton
+
+    text: __inputUtils.formatNumber( _positionKit.accuracy, 2 ) + " m"
+    maxWidth: parent.width / 2
+
+    anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
+    anchors.bottomMargin: InputStyle.smallGap
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    visible: root.state !== "inactive"
+  }
+
+  MapFloatButton {
+    id: _activeLayerButton
+
+    text: __activeLayer.layerName
+    maxWidth: parent.width * 0.8
+
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: InputStyle.smallGap
+    anchors.horizontalCenter: _accuracyButton.horizontalCenter
+
+    visible: root.state === "recordFeature"
+
+    onClicked: _activeLayerPanel.openPanel()
+  }
+
   ActiveLayerPanel {
     id: _activeLayerPanel
 
@@ -467,16 +498,14 @@ Item {
     id: _recordToolbar
 
     width: parent.width
-    height: InputStyle.rowHeightHeader + ( ( extraPanelVisible ) ? extraPanelHeight : 0)
-    y: extraPanelVisible ? parent.height - extraPanelHeight : parent.height
+    height: InputStyle.rowHeightHeader
+    y: parent.height
 
     visible: root.isInRecordState
-    extraPanelVisible: root.state === "recordFeature"
 
     gpsIndicatorColor: _gpsState.indicatorColor
-    activeVectorLayer: __activeLayer.vectorLayer
     manualRecording: _digitizingController.manualRecording
-    pointLayerSelected: __activeLayer.vectorLayer ? _digitizingController.hasPointGeometry( activeVectorLayer ) : false
+    pointLayerSelected: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "point"
 
     // reset manualRecording after opening
     onVisibleChanged: {
@@ -529,8 +558,6 @@ Item {
         root.processRecordedPair( newPair )
       }
     }
-
-    onLayerLabelClicked: _activeLayerPanel.openPanel()
   }
 
   Connections {
