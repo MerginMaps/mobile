@@ -4,23 +4,7 @@ Warnings: please change Qt and QGIS-Deps version according to your actual versio
 
 1. Check qgis/QGIS INSTALL for MacOS on QGIS project github
 2. Download and install Qt and QGIS-Mac-Deps from https://qgis.org/downloads/macos/deps
-3. Download geodiff, compile geodiff with SQLITE3 from QGIS-Deps
-```
-mkdir build-geodiff-Desktop
-cd build-geodiff-Desktop
-cmake \
-  -DCMAKE_BUILD_TYPE=Debug \
-  -DWITH_INTERNAL_SQLITE3:BOOL=FALSE \
-  -DSQLite3_ROOT:PATH=/opt/QGIS/qgis-deps-0.5.3/stage \
-  -DENABLE_TESTS=FALSE \
-  -DBUILD_TOOLS=OFF \
-  -DCMAKE_INSTALL_PREFIX=~/Projects/quick/Applications \
-  -GNinja -DCMAKE_MAKE_PROGRAM=/usr/local/bin/ninja \
-  ../geodiff/geodiff
- 
-ninja
-cd ..
-```
+3. Download / build Input-SDK for your desired target platform (macos/android/ios)
 
 4. Compile QGIS 
 ```
@@ -51,13 +35,11 @@ ninja
 cd ..
 ```
 
-5. Change config.pri to point to your `~/Projects/quick` folder for geodiff/qgis
+5. Copy config.pri.default to config.pri and change paths of target platforms to point to SDK folder's / QGIS build folder (for macos desktop)
 6. Open Input in Qt Creator
 7. Compile and run
-8. in Run environment, you may need to:
+8. in Run environment, you may need to set:
 ```
-DYLD_FRAMEWORK_PATH=/Users/peter/Projects/quick/build-Desktop/build-geodiff:/opt/Qt/5.14.2/clang_64/lib:/Users/peter/Projects/quick/build-Desktop/build-qgsquick/output/lib
-DYLD_INSERT_LIBRARIES=/opt/QGIS/qgis-deps-0.6.0/stage/lib/libsqlite3.dylib
-DYLD_FALLBACK_LIBRARY_PATH=...
+DYLD_FALLBACK_LIBRARY_PATH=/opt/INPUT/input-sdk-qt-5.15.2-deps-0.9-mac-9/lib
 ```
 
