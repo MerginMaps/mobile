@@ -8,50 +8,47 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import ".."
 
 Item {
   id: root
 
+  property string titleText
   property string text
-  property double maxWidth
 
-  signal clicked()
+  height: InputStyle.rowHeight
 
-  height: InputStyle.mapBtnHeight
-  width: childrenRect.width
+  Column {
 
-  Rectangle {
-    id: rect
+    anchors.fill: parent
 
-    height: parent.height
+    leftPadding: InputStyle.formSpacing
+    topPadding: InputStyle.formSpacing
 
-    implicitWidth: Math.min( txt.implicitWidth + InputStyle.smallGap, root.maxWidth )
+    Label {
+      id: title
 
-    radius: InputStyle.cornerRadius
-    color: InputStyle.panelBackgroundLight
+      text: root.titleText
 
-    Text {
-      id: txt
+      color: InputStyle.labelColor
 
-      height: parent.height
-
-      text: root.text
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
-
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: InputStyle.fontColor
-
-      horizontalAlignment: Text.AlignHCenter
+      font.pointSize: InputStyle.fontPointSizeSmall
+      horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter
-
-      anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: root.clicked()
+    Label {
+      id: txt
+
+      text: root.text
+
+      font.pointSize: InputStyle.fontPointSizeNormal
+      color: InputStyle.fontColor
+
+      horizontalAlignment: Text.AlignLeft
+      verticalAlignment: Text.AlignVCenter
     }
   }
 }

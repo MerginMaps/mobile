@@ -73,6 +73,13 @@ class PositionKit : public QObject
     Q_PROPERTY( double accuracy READ accuracy NOTIFY accuracyChanged )
 
     /**
+     * GPS vertical accuracy in accuracyUnits, -1 if not available.
+     *
+     * This is a readonly property.
+     */
+    Q_PROPERTY( double verticalAccuracy READ verticalAccuracy NOTIFY verticalAccuracyChanged )
+
+    /**
      * Screen horizontal accuracy, 2 if not available or resolution is too small.
      *
      * This is a readonly property.
@@ -85,6 +92,20 @@ class PositionKit : public QObject
      * This is a readonly property.
      */
     Q_PROPERTY( double direction READ direction NOTIFY directionChanged )
+
+    /**
+     * GPS calculated ground speed in km/h
+     *
+     * This is a readonly property.
+     */
+    Q_PROPERTY( double speed READ speed NOTIFY speedChanged )
+
+    /**
+     * Timestamp of last acquired GPS position
+     *
+     * This is a readonly property.
+     */
+    Q_PROPERTY( QDateTime lastGPSRead READ lastGPSRead NOTIFY lastGPSReadChanged )
 
     /**
      * GPS position and accuracy is simulated (not real from GPS sensor). Default FALSE (use real GPS)
@@ -116,6 +137,19 @@ class PositionKit : public QObject
      */
     Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
 
+    /**
+     * Internal source of GPS satellite data.
+     * Allows start/stop of its services or access properties.
+     * Source is not available in simulated mode.
+     */
+    Q_PROPERTY( QGeoSatelliteInfoSource *satelliteSource READ satelliteSource NOTIFY satelliteSourceChanged )
+
+    // How many satellites is device using.
+    Q_PROPERTY( int usedSatellitesCount READ usedSatellitesCount NOTIFY usedSatellitesCountChanged )
+
+    // How many satellites are in view.
+    Q_PROPERTY( int satellitesInViewCount READ satellitesInViewCount NOTIFY satellitesInViewCountChanged )
+
   public:
     //! Creates new position kit
     explicit PositionKit( QObject *parent = nullptr );
@@ -135,6 +169,8 @@ class PositionKit : public QObject
     //! \copydoc PositionKit::accuracy
     double accuracy() const;
 
+    double verticalAccuracy() const;
+
     //! \copydoc PositionKit::screenAccuracy
     double screenAccuracy() const;
 
@@ -145,6 +181,8 @@ class PositionKit : public QObject
 
     //! \copydoc PositionKit::direction
     double direction() const;
+
+    double speed() const;
 
     //! \copydoc PositionKit::isSimulated
     bool isSimulated() const;
@@ -192,10 +230,24 @@ class PositionKit : public QObject
      */
     Q_INVOKABLE void useSimulatedLocation( double longitude, double latitude, double radius );
 
+    // Starts receiving updates from GPS sources
+    void startUpdates();
+
+    // Stops receiving updates from GPS sources
+    void stopUpdates();
+
     /**
      * Use real GPS source (not simulated)
      */
     Q_INVOKABLE void useGpsLocation();
+
+    const QDateTime &lastGPSRead() const;
+
+    QGeoSatelliteInfoSource *satelliteSource() const;
+
+    int satellitesInViewCount() const;
+
+    int usedSatellitesCount() const;
 
   signals:
     //! \copydoc PositionKit::position
@@ -213,6 +265,8 @@ class PositionKit : public QObject
     //! \copydoc PositionKit::accuracy
     double accuracyChanged() const;
 
+    double verticalAccuracyChanged( double verticalAccuracy );
+
     //! \copydoc PositionKit::screenAccuracy
     double screenAccuracyChanged() const;
 
@@ -221,6 +275,8 @@ class PositionKit : public QObject
 
     //! \copydoc PositionKit::direction
     double directionChanged() const;
+
+    double speedChanged( double speed );
 
     //! \copydoc PositionKit::isSimulated
     void isSimulatedChanged();
@@ -234,14 +290,26 @@ class PositionKit : public QObject
     //! Emitted when the internal source of GPS location data has been replaced.
     void sourceChanged();
 
+    void lastGPSReadChanged( const QDateTime &lastread );
+
+    void satelliteSourceChanged();
+
+    void satellitesInViewCountChanged( int );
+
+    void usedSatellitesCountChanged( int );
+
   private slots:
     void onPositionUpdated( const QGeoPositionInfo &info );
     void onMapSettingsUpdated();
     void onUpdateTimeout();
     void onSimulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
 
+    void numberOfUsedSatellitesChanged( const QList<QGeoSatelliteInfo> &list );
+    void numberOfSatellitesInViewChanged( const QList<QGeoSatelliteInfo> &list );
+
   private:
     void replacePositionSource( QGeoPositionInfoSource *source );
+    void replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource );
     QString calculateStatusLabel();
     double calculateScreenAccuracy();
     void updateProjectedPosition();
@@ -249,20 +317,30 @@ class PositionKit : public QObject
     void updateScreenAccuracy();
 
     void setProjectedPosition( const QgsPoint &projectedPosition );
+    void setVerticalAccuracy( double vaccuracy );
+    void setSpeed( double speedInMS );
+    void setLastGPSRead( const QDateTime &timestamp );
 
     QGeoPositionInfoSource *gpsSource();
+    QGeoSatelliteInfoSource *gpsSatellitesSource();
     QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
 
     QgsPoint mPosition;
     QgsPoint mProjectedPosition;
     QPointF mScreenPosition;
     double mAccuracy = -1;
+    double mVerticalAccuracy = -1;
     double mScreenAccuracy = 2;
     double mDirection = -1;
+    double mSpeed = -1;
     bool mHasPosition = false;
     bool mIsSimulated = false;
+    QDateTime mLastGPSRead;
     QVector<double> mSimulatePositionLongLatRad;
     std::unique_ptr<QGeoPositionInfoSource> mSource;
+    std::unique_ptr<QGeoSatelliteInfoSource> mSatelliteSource;
+    int mSatellitesInViewCount = 0;
+    int mUsedSatellitesCount = 0;
 
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
 };

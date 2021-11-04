@@ -47,6 +47,8 @@ Item {
 
   signal notify( string message )
 
+  signal accuracyButtonClicked()
+
   function centerToPair( pair, considerFormPreview = false ) {
     if ( considerFormPreview )
       var previewPanelHeightRatio = previewPanelHeight / _map.height
@@ -467,6 +469,8 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
 
     visible: root.state !== "inactive"
+
+    onClicked: accuracyButtonClicked()
   }
 
   MapFloatButton {

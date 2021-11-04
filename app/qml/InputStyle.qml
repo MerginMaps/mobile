@@ -45,6 +45,9 @@ QtObject {
     property real fontPixelSizeNormal: QgsQuick.Utils.dp * 24 * rado2Lutra
     property real fontPixelSizeTitle: QgsQuick.Utils.dp * 28 * rado2Lutra
 
+    property int fontPointSizeSmall: 12
+    property int fontPointSizeNormal: 15
+
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)

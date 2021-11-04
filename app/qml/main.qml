@@ -158,6 +158,7 @@ ApplicationWindow {
       }
 
       onNotify: showMessage( message )
+      onAccuracyButtonClicked: gpsDataPageLoader.active = true
 
       Component.onCompleted: {
         __loader.positionKit = map.positionKit
@@ -266,6 +267,30 @@ ApplicationWindow {
         if ( !browseDataPanel.visible )
           mainPanel.forceActiveFocus()
       }
+    }
+
+    Component {
+      id: gpsDataPageComponent
+
+      GpsDataPage {
+        id: gpsDataPage
+
+        onBack: gpsDataPageLoader.active = false
+
+        positionKit: map.positionKit
+        compass: map.compass
+
+        height: window.height
+        width: window.width
+      }
+    }
+
+    Loader {
+      id: gpsDataPageLoader
+
+      asynchronous: true
+      active: false
+      sourceComponent: gpsDataPageComponent
     }
 
     MapThemePanel {
