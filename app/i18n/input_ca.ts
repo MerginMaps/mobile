@@ -81,22 +81,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="113"/>
-        <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>El permís d&apos;emmagatzematge s&apos;ha denegat permanentment. Autoritzeu-lo a la configuració</translation>
+        <location filename="../androidutils.cpp" line="233"/>
+        <source>Without storage permission you will not be able to access previous projects</source>
+        <translation>Sense permís d&apos;emmagatzematge no podreu accedir als projectes anteriors</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="117"/>
-        <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>Input necessita permís d&apos;emmagatzematge per tal de manipular o descarregar un projecte</translation>
+        <location filename="../androidutils.cpp" line="287"/>
+        <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
+        <translation>El permís d&apos;emmagatzematge està denegat permanentment. Permeteu-lo a la configuració per carregar imatges de la galeria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="135"/>
+        <location filename="../androidutils.cpp" line="291"/>
+        <source>Input needs a storage permission in order to load pictures from gallery</source>
+        <translation>Input necessita permís d&apos;emmagatzematge per carregar imatges de la galeria </translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>El permís per emprar la càmera s&apos;ha denegat permanentment, autoritzeu-lo a la configuració</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="139"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Necessitem permís per la càmera per tal de fer una foto</translation>
     </message>
@@ -441,30 +446,63 @@ No s&apos;afegirà al projecte.</translation>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1076"/>
+        <location filename="../inpututils.cpp" line="1087"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1077"/>
+        <location filename="../inpututils.cpp" line="1088"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1078"/>
+        <location filename="../inpututils.cpp" line="1089"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1079"/>
+        <location filename="../inpututils.cpp" line="1090"/>
         <source>screen density: %1</source>
         <translation>densitat de pantalla: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LegacyFolderMigration</name>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
+        <source>Insufficient space left on device</source>
+        <translation>No queda prou espai al dispositiu</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
+        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
+        <translation>El vostre dispositiu s&apos;està quedant sense espai, necessiteu %1 d&apos;espai lliure per veure els vostres projectes. Esborreu alguns arxius i torneu-ho a provar o feu clic a Ajuda per veure altres maneres de resoldre aquest problema.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <source>An error occured during update</source>
+        <translation>S&apos;ha produït un error durant l&apos;actualització</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
+        <translation>El vostre dispositiu ha patit un problema durant una actualització. No podreu veure els vostres projectes. Feu clic a Ajuda per veure com resoldre aquest problema.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <source>We are working on an important update, please do not close the application</source>
+        <translation>Estem treballant en una actualització important, no tanqueu l&apos;aplicació</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <source>%1/%2</source>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -672,72 +710,57 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="141"/>
-        <location filename="../qml/components/ProjectList.qml" line="222"/>
+        <location filename="../qml/components/ProjectList.qml" line="133"/>
+        <location filename="../qml/components/ProjectList.qml" line="188"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="161"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input necessita permis d&apos;emmagatzematge, %1clic per concedir%2 i llavors reinicia l&apos;aplicació.</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="197"/>
+        <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>No s&apos;ha trobat projectes descarregats. %1Apren %2com crear projectes%3 i %4descarregar-los%3 al dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="213"/>
+        <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>També pots crear un nou projecte fent clic al botó següent.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
         <translation>No s&apos;ha pogut obtenir la llista de projectes.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>No projects found!</source>
         <translation>No  s&apos;ha trobat cap projecte!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="273"/>
+        <location filename="../qml/components/ProjectList.qml" line="232"/>
         <source>Retry</source>
         <translation>Provar de nou</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="301"/>
+        <location filename="../qml/components/ProjectList.qml" line="260"/>
         <source>Remove project</source>
         <translation>Eliminar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="302"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Es perdran tots els canvis no sincronitzats.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="332"/>
+        <location filename="../qml/components/ProjectList.qml" line="291"/>
         <source>Download project</source>
         <translation>Descarregar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="333"/>
+        <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Voleu descarregar el projecte
 %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="349"/>
-        <source>Input needs to be restarted</source>
-        <translation>Cal reiniciar Input</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="350"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Cal reiniciar Input per fer efectius els canvis després de concedir el permís d&apos;emmagatzematge. Fes clic a Tanca i obre de nou Input.</translation>
     </message>
 </context>
 <context>
@@ -1291,32 +1314,32 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="191"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="205"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="364"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Communication error</source>
         <translation>Error de comunicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
