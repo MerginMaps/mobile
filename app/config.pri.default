@@ -35,10 +35,11 @@ unix:!macx:!android {
 
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
 
+  # if not found on host elsewhere GEODIFF_INCLUDE_DIR should point to repo dir, e.g. geodiff/src
   GEODIFF_INCLUDE_DIR = $${BASE_DIR}/include
   GEODIFF_LIB_DIR = $${BASE_DIR}/lib
 
-  PROJ_INCLUDE_DIR = $${BASE_DIR}/include
+  #PROJ_INCLUDE_DIR = $${BASE_DIR}/include
   PROJ_LIB_DIR = $${BASE_DIR}/lib
 
   ZXING_INCLUDE_DIR = $${BASE_DIR}/include

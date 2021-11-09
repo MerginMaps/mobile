@@ -14,11 +14,11 @@ cmake \
   -DENABLE_TESTS=FALSE \
   -DBUILD_TOOLS=OFF \
   ../../geodiff/geodiff
- 
+
 make -j<num of cores; best to use num of cores - 1>
 cd ..
 ```
-4. Compile QGIS 
+4. Compile QGIS
 ```
 mkdir build-QGIS-Desktop
 cd build-QGIS-Desktop
@@ -42,9 +42,9 @@ cmake \
 make -j<num of cores; best to use num of cores - 1>
 cd ..
 ```
-> To speed up compilation time install [Ninja build system](https://ninja-build.org/) and add `-GNinja` to cmake arguments 
+> To speed up compilation time install [Ninja build system](https://ninja-build.org/) and add `-GNinja` to cmake arguments
 
-5. Download and compile ZXing https://github.com/nu-book/zxing-cpp
+5. Download and compile ZXing https://github.com/nu-book/zxing-cpp (v1.1.1)
 ```
 mkdir build-ZXING
 cd build-ZXING
@@ -53,7 +53,11 @@ cmake \
   -DBUILD_BLACKBOX_TESTS=OFF \
   -DBUILD_SHARED_LIBS=ON \
   -DBUILD_UNIT_TESTS=OFF \
-  ../../zxing-cpp 
+  -DCMAKE_INSTALL_PREFIX=`pwd`/install \
+  ../../zxing-cpp
+
+make -j<num of cores; best to use num of cores - 1>
+make install
 ```
 
 5. Install whole bunch of packages
