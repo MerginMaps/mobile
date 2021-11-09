@@ -30,6 +30,8 @@
           $${QGIS_SRC_DIR}/src/core/layout \
           $${QGIS_SRC_DIR}/src/core/locator \
           $${QGIS_SRC_DIR}/src/core/metadata \
+          $${QGIS_SRC_DIR}/src/core/providers \
+          $${QGIS_SRC_DIR}/src/core/maprenderer \
           $${QGIS_SRC_DIR}/src/core/providers/memory \
           $${QGIS_SRC_DIR}/src/core/raster \
           $${QGIS_SRC_DIR}/src/core/scalebar \
