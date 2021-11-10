@@ -168,14 +168,22 @@ Item {
             width: parent.width
             text: qsTr("Accuracy threshold")
 
-            NumberSpin {
-              value: __appSettings.gpsAccuracyTolerance
-              suffix: " m"
+            MouseArea {
+              anchors.fill: parent
+              onClicked: inputField.getFocus()
+            }
+
+            NumberInputField {
+              id: inputField
+
+              number: __appSettings.gpsAccuracyTolerance
               onValueChanged: __appSettings.gpsAccuracyTolerance = value
-              height: InputStyle.fontPixelSizeNormal
-              rowHeight: parent.height
-              anchors.verticalCenter: parent.verticalCenter
-              width: height * 6
+
+              suffix: " m"
+
+              height: parent.height
+              width: height * 3
+
               anchors.right: parent.right
               anchors.rightMargin: InputStyle.panelMargin
             }

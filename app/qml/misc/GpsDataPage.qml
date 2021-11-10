@@ -18,16 +18,8 @@ Page {
   id: root
 
   property var positionKit
-  property var compass
 
   signal back()
-
-  PositionDirection {
-    id: positionDirection
-
-    compass: root.compass
-    positionKit: root.positionKit
-  }
 
   header: PanelHeader {
 
@@ -68,7 +60,12 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Coordinates (lon, lat)" )
-        text: root.positionKit.position.x + ", " + root.positionKit.position.y
+        text: {
+          if ( !root.positionKit.position || !root.positionKit.position.x ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+          __inputUtils.degreesString( root.positionKit.position )
+        }
       }
 
       TextRowWithTitle {
@@ -77,7 +74,12 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Project coordinates (x, y)" )
-        text: root.positionKit.projectedPosition.x + ", " + root.positionKit.projectedPosition.y
+        text: {
+          if ( !root.positionKit.projectedPosition || !root.positionKit.projectedPosition.x ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
+          }
+          __inputUtils.formatNumber( root.positionKit.projectedPosition.x, 3 )  + ", " + __inputUtils.formatNumber( root.positionKit.projectedPosition.y, 3 )
+        }
       }
 
       TextRowWithTitle {
@@ -86,7 +88,12 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Altitude" )
-        text: root.positionKit.position.z
+        text: {
+          if ( !root.positionKit.position || !root.positionKit.position.z ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+          __inputUtils.formatNumber( root.positionKit.position.z, 2 ) + " m"
+        }
       }
 
       TextRowWithTitle {
@@ -95,7 +102,12 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Accuracy (horizontal, vertical)" )
-        text: root.positionKit.accuracy + ", " + root.positionKit.verticalAccuracy
+        text: {
+          if ( !root.positionKit.position || !root.positionKit.position.x ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+          __inputUtils.formatNumber( root.positionKit.accuracy, 3 ) + " m, " + __inputUtils.formatNumber( root.positionKit.verticalAccuracy, 3 ) + " m"
+        }
       }
 
       TextRowWithTitle {
@@ -113,43 +125,7 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Speed" )
-        text: root.positionKit.speed < 0 ? qsTr( "No data from GPS" ) : root.positionKit.speed + " km/h"
-      }
-
-      TextRowWithTitle {
-        id: bearing
-
-        width: parent.width
-
-        titleText: qsTr( "Bearing (from GPS)" )
-        text: root.positionKit.direction < 0 ? qsTr( "No data from GPS" ) : root.positionKit.direction + " deg"
-      }
-
-      TextRowWithTitle {
-        id: bearingPositionDirection
-
-        width: parent.width
-
-        titleText: qsTr( "Bearing (from position direction)" )
-        text: positionDirection.direction + " deg"
-      }
-
-      TextRowWithTitle {
-        id: bearingCompass
-
-        width: parent.width
-
-        titleText: qsTr( "Bearing (from internal compass)" )
-        text: root.compass.reading ? root.compass.reading.azimuth + " deg" : qsTr( "Compass unavailable" )
-      }
-
-      TextRowWithTitle {
-        id: compassCalibration
-
-        width: parent.width
-
-        titleText: qsTr( "Compass calibration level" )
-        text: root.compass.reading ? root.compass.reading.calibrationLevel * 100 + "%" : qsTr( "Compass unavailable" )
+        text: root.positionKit.speed < 0 ? qsTr( "Loading data from GPS" ) : __inputUtils.formatNumber( root.positionKit.speed, 2 ) + " km/h"
       }
 
       TextRowWithTitle {
@@ -158,7 +134,7 @@ Page {
         width: parent.width
 
         titleText: qsTr( "Last fix" )
-        text: root.positionKit.lastGPSRead ? root.positionKit.lastGPSRead.toLocaleString( Qt.locale() ) : qsTr( "Date not available" )
+        text: root.positionKit.lastGPSRead ? root.positionKit.lastGPSRead.toLocaleTimeString( Qt.locale() ) : qsTr( "Date not available" )
       }
     }
   }

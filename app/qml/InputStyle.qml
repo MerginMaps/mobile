@@ -48,12 +48,15 @@ QtObject {
     property int fontPointSizeSmall: 12
     property int fontPointSizeNormal: 15
 
+    property int borderSize: scale(1)
+
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
     property real smallGap: scale(25)
+    property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2

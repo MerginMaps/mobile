@@ -13,8 +13,8 @@ import ".."
 Item {
   id: root
 
-  property string text
   property double maxWidth
+  property alias content: contentContainer.children
 
   signal clicked()
 
@@ -26,26 +26,22 @@ Item {
 
     height: parent.height
 
-    implicitWidth: Math.min( txt.implicitWidth + InputStyle.smallGap, root.maxWidth )
+    border.width: InputStyle.borderSize
+    border.color: InputStyle.darkGreen
+
+    implicitWidth: Math.min( contentContainer.childrenRect.width + InputStyle.smallGap, root.maxWidth )
 
     radius: InputStyle.cornerRadius
     color: InputStyle.panelBackgroundLight
 
-    Text {
-      id: txt
+    layer.enabled: true
+    layer.effect: Shadow { verticalOffset: 5; horizontalOffset: 5 }
+
+    Item {
+      id: contentContainer
+      // component placeholder, component passed via content property will be child of this element
 
       height: parent.height
-
-      text: root.text
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
-
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      color: InputStyle.fontColor
-
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-
       anchors.horizontalCenter: parent.horizontalCenter
     }
 

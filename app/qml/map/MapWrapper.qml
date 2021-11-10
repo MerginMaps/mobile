@@ -461,22 +461,61 @@ Item {
   MapFloatButton {
     id: _accuracyButton
 
-    text: __inputUtils.formatNumber( _positionKit.accuracy, 2 ) + " m"
+    property int accuracyPrecision: _positionKit.accuracy > 1 ? 1 : 2
+
+    onClicked: accuracyButtonClicked()
+
     maxWidth: parent.width / 2
 
     anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
     anchors.bottomMargin: InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
-    visible: root.state !== "inactive"
+    visible: root.state !== "inactive" && _gpsState.state !== "unavailable"
 
-    onClicked: accuracyButtonClicked()
+    content: Item {
+
+      implicitWidth: acctext.implicitWidth + indicator.width + InputStyle.tinyGap
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Text {
+        id: acctext
+
+        text: __inputUtils.formatNumber( _positionKit.accuracy, _accuracyButton.accuracyPrecision ) + " m"
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+
+        height: parent.height
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+      }
+
+      RoundIndicator {
+        id: indicator
+
+        width: parent.height / 4
+        height: width
+        anchors.left: acctext.right
+        anchors.leftMargin: InputStyle.tinyGap
+        anchors.topMargin: InputStyle.tinyGap
+        anchors.top: parent.top
+        color: _gpsState.indicatorColor
+      }
+    }
   }
 
   MapFloatButton {
     id: _activeLayerButton
 
-    text: __activeLayer.layerName
+    onClicked: _activeLayerPanel.openPanel()
+
     maxWidth: parent.width * 0.8
 
     anchors.bottom: parent.bottom
@@ -485,7 +524,46 @@ Item {
 
     visible: root.state === "recordFeature"
 
-    onClicked: _activeLayerPanel.openPanel()
+    content: Item {
+
+      implicitWidth: layername.implicitWidth + layericon.width + InputStyle.tinyGap
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: layericon
+
+        iconSize: parent.height / 2
+        source: __loader.loadIconFromLayer( __activeLayer.layer )
+
+        anchors.verticalCenter: parent.verticalCenter
+      }
+
+      Text {
+        id: layername
+
+        text: __activeLayer.layerName
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+
+        height: parent.height
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        leftPadding: height / 3 // small gap between layer icon and layer name
+
+        anchors {
+          left: layericon.right
+          right: parent.right
+          verticalCenter: parent.verticalCenter
+        }
+      }
+    }
   }
 
   ActiveLayerPanel {

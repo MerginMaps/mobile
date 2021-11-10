@@ -236,6 +236,16 @@ double InputUtils::convertCoordinateString( const QString &rationalValue )
   return result;
 }
 
+QString InputUtils::degreesString( const QgsPoint &point )
+{
+  if ( point.isEmpty() )
+  {
+    return QStringLiteral();
+  }
+
+  return QGeoCoordinate( point.x(), point.y() ).toString( QGeoCoordinate::DegreesMinutesSecondsWithHemisphere );
+}
+
 double InputUtils::convertRationalNumber( const QString &rationalValue )
 {
   if ( rationalValue.isEmpty() )

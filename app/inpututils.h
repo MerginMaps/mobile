@@ -144,6 +144,9 @@ class InputUtils: public QObject
      */
     static double convertCoordinateString( const QString &rationalValue );
 
+    /** Formats coordinates from point into degrees format with minutes, seconds and hemisphere */
+    Q_INVOKABLE static QString degreesString( const QgsPoint &point );
+
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     static void registerInputExpressionFunctions();
 

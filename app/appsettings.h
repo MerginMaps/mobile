@@ -23,7 +23,7 @@ class AppSettings: public QObject
     Q_PROPERTY( QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged )
     Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
-    Q_PROPERTY( int gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
+    Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
     Q_PROPERTY( bool gpsAccuracyWarning READ gpsAccuracyWarning WRITE setGpsAccuracyWarning NOTIFY gpsAccuracyWarningChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
     Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
@@ -46,8 +46,8 @@ class AppSettings: public QObject
     bool autoCenterMapChecked();
     void setAutoCenterMapChecked( const bool value );
 
-    int gpsAccuracyTolerance() const;
-    void setGpsAccuracyTolerance( int gpsAccuracyTolerance );
+    double gpsAccuracyTolerance() const;
+    void setGpsAccuracyTolerance( double gpsAccuracyTolerance );
 
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
@@ -90,7 +90,7 @@ class AppSettings: public QObject
     // flag for following GPS position
     bool mAutoCenterMapChecked = false;
     // used in GPS signal indicator
-    int mGpsAccuracyTolerance = -1;
+    double mGpsAccuracyTolerance = -1;
     // flag for showing accuracy warning if is above tolerance
     bool mGpsAccuracyWarning = true;
     // Digitizing period in seconds

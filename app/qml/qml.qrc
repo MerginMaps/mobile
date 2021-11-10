@@ -99,5 +99,6 @@
         <file>components/MapFloatButton.qml</file>
         <file>misc/GpsDataPage.qml</file>
         <file>components/TextRowWithTitle.qml</file>
+        <file>components/NumberInputField.qml</file>
     </qresource>
 </RCC>
