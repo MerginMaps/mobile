@@ -29,6 +29,7 @@ void TestPositionKit::simulated_position()
   QVERIFY( !positionKit.isSimulated() );
   positionKit.useSimulatedLocation( -92.36, 38.93, -1 );
   QVERIFY( positionKit.isSimulated() );
+  QVERIFY( !positionKit.satelliteSource() ); // satellite source should be NULL in this case
 
   QVERIFY( positionKit.hasPosition() );
   COMPARENEAR( positionKit.position().y(), 38.93, 1e-4 );
