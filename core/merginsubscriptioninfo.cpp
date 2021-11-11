@@ -111,6 +111,8 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
     emit planProductIdChanged();
   }
 
+  // check if some user action is required
+  mActionRequired = docObj.value( QStringLiteral( "action_required" ) ).toBool();
   emit subscriptionInfoChanged();
 }
 
@@ -166,4 +168,9 @@ int MerginSubscriptionInfo::subscriptionStatus() const
 QString MerginSubscriptionInfo::subscriptionTimestamp() const
 {
   return mSubscriptionTimestamp;
+}
+
+bool MerginSubscriptionInfo::actionRequired() const
+{
+  return mActionRequired;
 }

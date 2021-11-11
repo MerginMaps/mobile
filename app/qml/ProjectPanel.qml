@@ -29,7 +29,8 @@ Item {
 
   function openPanel() {
     root.visible = true
-    stackView.visible = true
+    stackView.visible = true  
+    getServiceInfo() // ensure attention banner status is refreshed
   }
 
   function hidePanel() {
@@ -43,6 +44,12 @@ Item {
       stackView.push( subscribePanelComp)
     } else {
       Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+    }
+  }
+
+  function getServiceInfo() {
+    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
+        __merginApi.getSubscriptionInfo()
     }
   }
 

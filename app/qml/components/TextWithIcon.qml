@@ -21,6 +21,7 @@ Row {
   property color bgColor: "white"
   property color fontColor: InputStyle.fontColor
   property color iconColor: InputStyle.fontColor
+  property color linkColor: InputStyle.highlightColor
 
   property alias textItem: textItem
 
@@ -59,7 +60,7 @@ Row {
     font.pixelSize: InputStyle.fontPixelSizeNormal
     onLinkActivated: root.linkActivated(link)
     color: root.fontColor
-    text: "<style>a:link { color: " + InputStyle.highlightColor
+    text: "<style>a:link { color: " + root.linkColor
           + "; text-decoration: underline; }</style>" + root.text
     textFormat: Text.RichText
     wrapMode: Text.WordWrap

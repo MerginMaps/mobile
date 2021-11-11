@@ -30,6 +30,8 @@ const QString inputWeb = QStringLiteral( "https://inputapp.io" );
 const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
 const QString utmTagSubscription = QStringLiteral( "?utm_source=input-subs&utm_medium=subs&utm_campaign=input" );
 const QString utmTagOther = QStringLiteral( "?utm_source=input-other&utm_medium=other&utm_campaign=input" );
+const QString utmTagAttention = QStringLiteral( "?utm_source=input-app&utm_medium=attention-required" );
+
 
 InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
   mMerginApi( merginApi ),
@@ -58,6 +60,16 @@ QString InputHelp::merginWebLink() const
   }
 
   return MerginApi::defaultApiRoot() + utmTagOther;
+}
+
+QString InputHelp::merginDashboardLink() const
+{
+  if ( !mMerginApi || mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  {
+    return mMerginApi->apiRoot() + "dashboard";  // UTM tags are included only for production server
+  }
+
+  return MerginApi::defaultApiRoot() + "dashboard" + utmTagAttention;
 }
 
 QString InputHelp::privacyPolicyLink() const

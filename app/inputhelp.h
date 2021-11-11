@@ -25,6 +25,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString helpRootLink READ helpRootLink )
     Q_PROPERTY( QString inputWebLink READ inputWebLink NOTIFY linkChanged )
     Q_PROPERTY( QString merginWebLink READ merginWebLink NOTIFY merginLinkChanged )
+    Q_PROPERTY( QString merginDashboardLink READ merginDashboardLink NOTIFY merginLinkChanged )
     Q_PROPERTY( QString merginSubscriptionDetailsLink READ merginSubscriptionDetailsLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableDigitizingLink READ howToEnableDigitizingLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableBrowsingDataLink READ howToEnableBrowsingDataLink NOTIFY linkChanged )
@@ -51,6 +52,7 @@ class InputHelp: public QObject
     QString helpRootLink() const;
     QString inputWebLink() const;
     QString merginWebLink() const;
+    QString merginDashboardLink() const;
     QString privacyPolicyLink() const;
     QString merginSubscriptionDetailsLink() const;
     QString howToEnableDigitizingLink() const;

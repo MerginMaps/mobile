@@ -28,6 +28,7 @@ class MerginSubscriptionInfo: public QObject
     Q_PROPERTY( QString subscriptionTimestamp READ subscriptionTimestamp NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString nextBillPrice READ nextBillPrice NOTIFY subscriptionInfoChanged ) // in Bytes
     Q_PROPERTY( bool ownsActiveSubscription READ ownsActiveSubscription NOTIFY subscriptionInfoChanged )
+    Q_PROPERTY( bool actionRequired READ actionRequired NOTIFY subscriptionInfoChanged )
 
   public:
     explicit MerginSubscriptionInfo( QObject *parent = nullptr );
@@ -50,6 +51,7 @@ class MerginSubscriptionInfo: public QObject
     void setLocalizedPrice( const QString &price );
     void setFromJson( QJsonObject docObj );
     void setSubscriptionInfoFromJson( QJsonObject docObj );
+    bool actionRequired() const;
 
   signals:
     void subscriptionInfoChanged();
@@ -66,6 +68,7 @@ class MerginSubscriptionInfo: public QObject
     QString mNextBillPrice;
     MerginSubscriptionStatus::SubscriptionStatus mSubscriptionStatus = MerginSubscriptionStatus::FreeSubscription;
     QString mSubscriptionTimestamp;
+    bool mActionRequired = false;
 };
 
 #endif // MERGINSUBSCRIPTIONINFO_H

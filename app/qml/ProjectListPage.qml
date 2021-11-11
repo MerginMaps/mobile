@@ -17,7 +17,7 @@ Item {
 
   property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
-
+  property bool actionRequired: __merginApi.subscriptionInfo.actionRequired
   property alias list: projectlist
 
   signal openProjectRequested( string projectId, string projectFilePath )
@@ -28,14 +28,46 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
+  Rectangle {
+      id: attentionBanner
+      color: '#ff4f4f'
+      height: InputStyle.rowHeight
+      visible: parent.actionRequired
+
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+
+      TextWithIcon {
+          width: parent.width
+          fontColor: 'white'
+          bgColor: '#ff4f4f'
+          iconColor: 'white'
+          linkColor: 'white'
+          source: InputStyle.exclamationTriangleIcon
+          text: qsTr("Your attention is required. Please visit the %1Mergin dashboard%2.")
+                    .arg("<a href='" + __inputHelp.merginDashboardLink + "'>")
+                    .arg("</a>")
+
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
+      }
+  }
+
+
+
   SearchBar {
     id: searchBar
 
     anchors {
-      top: parent.top
+      top: parent.actionRequired ? attentionBanner.bottom : parent.top
       left: parent.left
       right: parent.right
-      bottom: projectlist.top
     }
 
     allowTimer: true
