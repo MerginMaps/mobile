@@ -1131,7 +1131,7 @@ QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject
   return expr.evaluate( &context ).toString();
 }
 
-void InputUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior )
+void InputUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, Qgis::SelectBehavior behavior )
 {
   QgsFeatureIds qgsFids;
   for ( const int &fid : fids )

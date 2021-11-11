@@ -16,6 +16,7 @@
 #include <memory>
 
 #include "qgsvectorlayer.h"
+#include "qgscoordinatetransform.h"
 
 #include "featurehighlight.h"
 #include "qgsquickmapsettings.h"

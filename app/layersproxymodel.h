@@ -15,6 +15,7 @@
 
 #include "qgsmaplayer.h"
 #include "qgsmaplayerproxymodel.h"
+#include "qgsvectorlayer.h"
 
 #include "layersmodel.h"
 

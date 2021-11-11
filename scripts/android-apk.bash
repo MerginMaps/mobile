@@ -1,23 +1,10 @@
 #!/bin/bash
 
-# This is intended to be run within a lutraconsulting/input-sdk docker container.
 
-SOURCE_DIR=/usr/src/input
-if [[ -z ${BUILD_FOLDER+x} ]]; then
-    BUILD_DIR=${SOURCE_DIR}/build-docker
-    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/build-docker-quick
-else
-    BUILD_DIR=${SOURCE_DIR}/${BUILD_FOLDER}
-    BUILD_DIR_QGSQUICK=${SOURCE_DIR}/${BUILD_FOLDER}-quick
-fi
-if [[ -z ${ARCH+x} ]]; then
-    ARCH=armeabi-v7a
-fi
+BUILD_DIR=`pwd`/input
+BUILD_DIR_QGSQUICK=`pwd`/qgis-quick
 INSTALL_DIR=${BUILD_DIR}/out
 INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
-QT_ANDROID=${QT_ANDROID_BASE}/android
-CORES=$(cat /proc/cpuinfo | grep processor | wc -l)
-STAGE_PATH=/home/input-sdk/${ARCH}
 
 set -e
 
@@ -34,7 +21,7 @@ then
 fi
 
 # TODO take from input-sdk?
-export ANDROIDAPI=23
+# export ANDROIDAPI=23
 if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
   export TOOLCHAIN_SHORT_PREFIX=arm-linux-androideabi
   export TOOLCHAIN_PREFIX=arm-linux-androideabi
@@ -52,9 +39,9 @@ fi
 # PRINT ENV
 
 echo "INSTALL_DIR: ${INSTALL_DIR}"
+echo "SOURCE_DIR: ${SOURCE_DIR}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
-echo "CORES ${CORES}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
 echo "API: $ANDROIDAPI"
 
@@ -70,29 +57,26 @@ ln -s ${BUILD_DIR}/.gradle /root/.gradle
 
 pushd ${BUILD_DIR}
 cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
-${QT_ANDROID}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
+${QT_BASE}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
 ${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
 make -j ${CORES}
 make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"
-    ${QT_ANDROID}/bin/androiddeployqt \
-	    --sign ${SOURCE_DIR}/Input_keystore.keystore input \
-	    --storepass ${INPUTKEYSTORE_STOREPASS} \
-	    --keypass ${INPUTKEYSTORE_STOREPASS} \
-      --input ${BUILD_DIR}/android-Input-deployment-settings.json \
-	    --output ${INSTALL_DIR} \
-	    --deployment bundled \
-	    --gradle
+    ${QT_BASE}/bin/androiddeployqt \
+        --sign ${SOURCE_DIR}/Input_keystore.keystore input \
+        --storepass ${INPUTKEYSTORE_STOREPASS} \
+        --keypass ${INPUTKEYSTORE_STOREPASS} \
+        --input ${BUILD_DIR}/android-Input-deployment-settings.json \
+        --output ${INSTALL_DIR} \
+        --deployment bundled \
+        --gradle
 else
     echo "building debug"
-    ${QT_ANDROID}/bin/androiddeployqt \
-      --input ${BUILD_DIR}/android-Input-deployment-settings.json \
-	    --output ${INSTALL_DIR} \
-	    --deployment bundled \
-	    --gradle
+    ${QT_BASE}/bin/androiddeployqt \
+        --input ${BUILD_DIR}/android-Input-deployment-settings.json \
+        --output ${INSTALL_DIR} \
+        --deployment bundled \
+        --gradle
 fi
-
-chown -R $(stat -c "%u" .):$(stat -c "%u" .) .
-popd

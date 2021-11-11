@@ -1,7 +1,16 @@
 name: QgsQuick
-on: [push]
+on:
+  push:
+    paths:
+    - 'qgsquick/**'
+    - 'scripts/**'
+
+  release:
+    types:
+      - published
+      
 env:
-  QGIS_COMMIT_HASH: 1d17bf5bd35d7872f53c8e1c8b0a1e371616bf07
+  QGIS_COMMIT_HASH: a559212bbda3af37300c17997b826751318299cd
 
 jobs:
   qgsquick_up_to_date:

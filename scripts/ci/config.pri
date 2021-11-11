@@ -2,7 +2,7 @@ android {
   # To build for android you need OSGeo libraries
   OSGEO4A_DIR = /home/input-sdk
   OSGEO4A_STAGE_DIR = $${OSGEO4A_DIR}
-  QGIS_INSTALL_PATH = $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH
+  QGIS_INSTALL_PATH = $${OSGEO4A_STAGE_DIR}/$${QT_ARCH}
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
   # we try to use it as /sdcard/path and if not writable, use /storage/emulated/0/path (user home path)
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
@@ -36,7 +36,9 @@ ios {
 }
 
 macx:!android {
-  QGIS_INSTALL_PATH = /opt/INPUT/input-sdk-mac-$$(SDK_VERSION)/stage/mac
+  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13.0
+  
+  QGIS_INSTALL_PATH = /Users/runner/work/input/input-sdk/build/mac/stage/mac
   QGIS_QUICK_DATA_PATH = /Users/runner/work/input/input/input/app/android/assets/qgis-data
   GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
   GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
