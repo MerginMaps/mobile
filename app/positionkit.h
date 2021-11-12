@@ -339,8 +339,8 @@ class PositionKit : public QObject
     QVector<double> mSimulatePositionLongLatRad;
     std::unique_ptr<QGeoPositionInfoSource> mSource;
     std::unique_ptr<QGeoSatelliteInfoSource> mSatelliteSource;
-    int mSatellitesInViewCount = 0;
-    int mUsedSatellitesCount = 0;
+    int mSatellitesInViewCount = -1;
+    int mUsedSatellitesCount = -1;
 
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
 };

@@ -9,15 +9,19 @@
 
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtQuick.Layouts 1.14
 
 import "../components"
-import lc 1.0
 import ".."
+import lc 1.0
 
 Page {
   id: root
 
   property var positionKit
+  property string coordinatesInDegrees: __inputUtils.degreesString( root.positionKit.position )
+
+  property real cellWidth: root.width * 0.4
 
   signal back()
 
@@ -47,49 +51,114 @@ Page {
       color: InputStyle.clrPanelMain
     }
 
-    Column {
+    GridLayout {
+      id: gridItem
 
-      anchors.fill: parent
+      columns: 2
 
-      leftPadding: InputStyle.formSpacing
-      topPadding: InputStyle.formSpacing
+      anchors {
+        fill: parent
+        leftMargin: 2 * InputStyle.formSpacing
+        rightMargin: InputStyle.formSpacing
+        topMargin: InputStyle.formSpacings
+      }
 
       TextRowWithTitle {
-        id: coordinates
+        id: longitude
 
-        width: parent.width
+        Layout.fillWidth: true
 
-        titleText: qsTr( "Coordinates (lon, lat)" )
+        titleText: qsTr( "Longitude" )
         text: {
-          if ( !root.positionKit.position || !root.positionKit.position.x ) {
+          if ( root.positionKit.position.isEmpty ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
-          __inputUtils.degreesString( root.positionKit.position )
+          root.coordinatesInDegrees.split(", ")[0]
         }
       }
 
       TextRowWithTitle {
-        id: projectCoordinates
+        id: latitude
 
-        width: parent.width
+        Layout.fillWidth: true
 
-        titleText: qsTr( "Project coordinates (x, y)" )
+        titleText: qsTr( "Latitude" )
         text: {
-          if ( !root.positionKit.projectedPosition || !root.positionKit.projectedPosition.x ) {
+          if ( root.positionKit.position.isEmpty ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+          root.coordinatesInDegrees.split(", ")[1]
+        }
+      }
+
+      TextRowWithTitle {
+        id: projectX
+
+        Layout.fillWidth: true
+
+        titleText: qsTr( "X" )
+        text: {
+          if ( root.positionKit.projectedPosition.isEmpty ) {
             return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
           }
-          __inputUtils.formatNumber( root.positionKit.projectedPosition.x, 3 )  + ", " + __inputUtils.formatNumber( root.positionKit.projectedPosition.y, 3 )
+          __inputUtils.formatNumber( root.positionKit.projectedPosition.x, 2 )
+        }
+      }
+
+      TextRowWithTitle {
+        id: projectY
+
+        Layout.fillWidth: true
+
+        titleText: qsTr( "Y" )
+        text: {
+          if ( root.positionKit.projectedPosition.isEmpty ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
+          }
+          __inputUtils.formatNumber( root.positionKit.projectedPosition.y, 2 )
+        }
+      }
+
+      TextRowWithTitle {
+        id: horizontalAccuracy
+
+        Layout.fillWidth: true
+
+        titleText: qsTr( "Horizontal accuracy" )
+        text: {
+          if ( root.positionKit.position.isEmpty ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+
+          root.positionKit.accuracy < 0 ? qsTr( "N/A" ) : ( __inputUtils.formatNumber( root.positionKit.accuracy, 2 ) + " m" )
+        }
+      }
+
+      TextRowWithTitle {
+        id: verticalAccuracy
+
+        Layout.fillWidth: true
+
+        titleText: qsTr( "Vertical accuracy" )
+        text: {
+          if ( root.positionKit.position.isEmpty ) {
+            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+          }
+
+          root.positionKit.verticalAccuracy < 0 ? qsTr( "N/A" ) : __inputUtils.formatNumber( root.positionKit.verticalAccuracy, 2 ) + " m"
         }
       }
 
       TextRowWithTitle {
         id: altitude
 
-        width: parent.width
+        Layout.fillWidth: true
+        Layout.row: 3
+        Layout.column: 0
 
         titleText: qsTr( "Altitude" )
         text: {
-          if ( !root.positionKit.position || !root.positionKit.position.z ) {
+          if ( root.positionKit.position.isEmpty ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
           __inputUtils.formatNumber( root.positionKit.position.z, 2 ) + " m"
@@ -97,32 +166,29 @@ Page {
       }
 
       TextRowWithTitle {
-        id: accuracy
-
-        width: parent.width
-
-        titleText: qsTr( "Accuracy (horizontal, vertical)" )
-        text: {
-          if ( !root.positionKit.position || !root.positionKit.position.x ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
-          }
-          __inputUtils.formatNumber( root.positionKit.accuracy, 3 ) + " m, " + __inputUtils.formatNumber( root.positionKit.verticalAccuracy, 3 ) + " m"
-        }
-      }
-
-      TextRowWithTitle {
         id: sattelites
 
-        width: parent.width
+        Layout.fillWidth: true
+        Layout.row: 4
+        Layout.column: 0
 
         titleText: qsTr( "Satellites (in use/view)" )
-        text: root.positionKit.usedSatellitesCount + "/" + root.positionKit.satellitesInViewCount
+        text: {
+          if ( root.positionKit.usedSatellitesCount < 0 || root.positionKit.satellitesInViewCount < 0 )
+          {
+            return qsTr( "Loading data from GPS" )
+          }
+
+          root.positionKit.usedSatellitesCount + "/" + root.positionKit.satellitesInViewCount
+        }
       }
 
       TextRowWithTitle {
         id: speed
 
-        width: parent.width
+        Layout.fillWidth: true
+        Layout.row: 5
+        Layout.column: 0
 
         titleText: qsTr( "Speed" )
         text: root.positionKit.speed < 0 ? qsTr( "Loading data from GPS" ) : __inputUtils.formatNumber( root.positionKit.speed, 2 ) + " km/h"
@@ -131,7 +197,9 @@ Page {
       TextRowWithTitle {
         id: lastFix
 
-        width: parent.width
+        Layout.fillWidth: true
+        Layout.row: 6
+        Layout.column: 0
 
         titleText: qsTr( "Last fix" )
         text: root.positionKit.lastGPSRead ? root.positionKit.lastGPSRead.toLocaleTimeString( Qt.locale() ) : qsTr( "Date not available" )

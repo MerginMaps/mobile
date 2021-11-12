@@ -243,7 +243,7 @@ QString InputUtils::degreesString( const QgsPoint &point )
     return QStringLiteral();
   }
 
-  return QGeoCoordinate( point.x(), point.y() ).toString( QGeoCoordinate::DegreesMinutesSecondsWithHemisphere );
+  return QGeoCoordinate( point.x(), point.y() ).toString( QGeoCoordinate::DegreesMinutesWithHemisphere );
 }
 
 double InputUtils::convertRationalNumber( const QString &rationalValue )
