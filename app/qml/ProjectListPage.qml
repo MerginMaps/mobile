@@ -11,13 +11,13 @@ import QtQuick 2.12
 import lc 1.0
 
 import "./components"
+import "./misc"
 
 Item {
   id: root
 
   property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
-  property bool actionRequired: __merginApi.subscriptionInfo.actionRequired
   property alias list: projectlist
 
   signal openProjectRequested( string projectId, string projectFilePath )
@@ -28,44 +28,20 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
-  Rectangle {
-      id: attentionBanner
-      color: '#ff4f4f'
-      height: InputStyle.rowHeight
-      visible: parent.actionRequired
-
-      anchors {
-        top: parent.top
-        left: parent.left
-        right: parent.right
-      }
-
-      TextWithIcon {
-          width: parent.width
-          fontColor: 'white'
-          bgColor: '#ff4f4f'
-          iconColor: 'white'
-          linkColor: 'white'
-          source: InputStyle.exclamationTriangleIcon
-          text: qsTr("Your attention is required. Please visit the %1Mergin dashboard%2.")
-                    .arg("<a href='" + __inputHelp.merginDashboardLink + "'>")
-                    .arg("</a>")
-
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
-      }
+  AttentionBanner {
+    id: attentionBanner
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
   }
-
-
 
   SearchBar {
     id: searchBar
 
     anchors {
-      top: parent.actionRequired ? attentionBanner.bottom : parent.top
+      top: (__merginApi.subscriptionInfo && __merginApi.subscriptionInfo.actionRequired) ? attentionBanner.bottom : parent.top
       left: parent.left
       right: parent.right
     }

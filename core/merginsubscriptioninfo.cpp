@@ -112,7 +112,12 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
   }
 
   // check if some user action is required
-  mActionRequired = docObj.value( QStringLiteral( "action_required" ) ).toBool();
+  bool isActionRequired = docObj.value( QStringLiteral( "action_required" ) ).toBool();
+  if ( isActionRequired != mActionRequired )
+  {
+    mActionRequired = isActionRequired;
+  }
+
   emit subscriptionInfoChanged();
 }
 

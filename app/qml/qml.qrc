@@ -95,5 +95,6 @@
         <file>map/ScaleBar.qml</file>
         <file>qmldir</file>
         <file>misc/LegacyFolderMigration.qml</file>
+        <file>misc/AttentionBanner.qml</file>
     </qresource>
 </RCC>
