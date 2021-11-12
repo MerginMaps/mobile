@@ -30,6 +30,7 @@ Item {
 
   AttentionBanner {
     id: attentionBanner
+    visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
     anchors {
       top: parent.top
       left: parent.left
@@ -41,7 +42,7 @@ Item {
     id: searchBar
 
     anchors {
-      top: (__merginApi.subscriptionInfo && __merginApi.subscriptionInfo.actionRequired) ? attentionBanner.bottom : parent.top
+      top: attentionBanner.visible ? attentionBanner.bottom : parent.top
       left: parent.left
       right: parent.right
     }
