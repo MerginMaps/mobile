@@ -29,7 +29,11 @@ Item {
 
     onTextEdited: {
       let value = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot and remove whitespaces
-      root.valueChanged( Number( value ) )
+
+      if ( !isNaN( value ) ) // do not emit when value is not a number
+      {
+        root.valueChanged( Number( value ) )
+      }
     }
 
     onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text

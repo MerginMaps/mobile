@@ -25,6 +25,15 @@ Page {
 
   signal back()
 
+  focus: true
+
+  Keys.onReleased: {
+    if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+      event.accepted = true
+      root.back()
+    }
+  }
+
   header: PanelHeader {
 
     titleText: qsTr( "GPS info" )

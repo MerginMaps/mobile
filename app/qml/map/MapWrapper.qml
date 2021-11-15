@@ -543,7 +543,9 @@ Item {
       Text {
         id: layername
 
-        text: __activeLayer.layerName
+        property real maxTextWidth: _activeLayerButton.maxWidth - ( layericon.width + InputStyle.tinyGap + leftPadding ) // used offsets
+
+        text: textmetrics.elidedText
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 
@@ -556,6 +558,15 @@ Item {
         verticalAlignment: Text.AlignVCenter
 
         leftPadding: height / 3 // small gap between layer icon and layer name
+
+        TextMetrics { // element holding metrics about printed text to be able to scale text without binding loops
+          id: textmetrics
+
+          font: layername.font
+          text: __activeLayer.layerName
+          elide: layername.elide
+          elideWidth: layername.maxTextWidth
+        }
 
         anchors {
           left: layericon.right

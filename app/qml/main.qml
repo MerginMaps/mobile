@@ -158,7 +158,10 @@ ApplicationWindow {
       }
 
       onNotify: showMessage( message )
-      onAccuracyButtonClicked: gpsDataPageLoader.active = true
+      onAccuracyButtonClicked: {
+        gpsDataPageLoader.active = true
+        gpsDataPageLoader.focus = true
+      }
 
       Component.onCompleted: {
         __loader.positionKit = map.positionKit

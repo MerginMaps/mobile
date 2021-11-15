@@ -29,7 +29,7 @@ Item {
     border.width: InputStyle.borderSize
     border.color: InputStyle.darkGreen
 
-    implicitWidth: Math.min( contentContainer.childrenRect.width + InputStyle.smallGap, root.maxWidth )
+    implicitWidth: Math.min( contentContainer.childrenRect.width, root.maxWidth ) + InputStyle.smallGap
 
     radius: InputStyle.cornerRadius
     color: InputStyle.panelBackgroundLight
