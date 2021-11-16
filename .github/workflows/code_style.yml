@@ -1,7 +1,7 @@
 name: Code Layout
 on: [push]
 env:
-  QT_VERSION: 6.2.0
+  QT_VERSION: 6.2.1
 jobs:
   code_style_cpp:
     name: C++ code convention check
@@ -24,14 +24,20 @@ jobs:
     runs-on: macos-latest
     needs: code_style_cpp # Run when cpp is finished to save some time if cpp would fail
     steps:
-
-    # Cache qt
-      - name: Cache Qt
+      - name: Cache Qt # use actions/cache
         id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
+
+    # Cache qt
+      # - name: Cache Qt
+      #   id: cache-qt
+      #   uses: pat-s/always-upload-cache@v2.1.5
+      #   with:
+      #     path: ${{ github.workspace }}/Qt
+      #     key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
 
       - name: Install Qt6
         uses: jurplel/install-qt-action@v2 # automatically chooses mac desktop based on env
@@ -44,6 +50,5 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run style check
-        run: |
-          echo "PATH=$PATH:${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin" >> $GITHUB_ENV
-          ./scripts/format_qml.bash
+        run: ./scripts/format_qml.bash ${Qt6_DIR}/bin/qmlformat
+          # echo "PATH=$PATH:${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin" >> $GITHUB_ENV

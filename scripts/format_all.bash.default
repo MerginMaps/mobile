@@ -12,7 +12,7 @@ cd $DIR
 
 # Set path to qmlformat. It is included in Qt desktop.
 # We need the one from Qt version 6.2 or higher!
-QMLFORMAT="" # something like <Qt install dir>/6.2+/<desktop>/bin
+QMLFORMAT="" # something like <Qt install dir>/6.2+/<desktop>/bin/qmlformat
 
 which ${QMLFORMAT}
 
