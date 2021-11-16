@@ -41,7 +41,7 @@ echo "Starting to format QML files"
 
 RETURN=0
 
-FILES=`find ../app ../qgsquick -name \*.qml* -print | grep "editor" | grep "text"`
+FILES=`find ../app ../qgsquick -name \*.qml* -print`
 
 # --indent-width 2: use 2 spaces to indent
 # --normalize: reorder properties, includes and childs in components
