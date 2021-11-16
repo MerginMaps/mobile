@@ -25,23 +25,25 @@ jobs:
     needs: code_style_cpp # Run when cpp is finished to save some time if cpp would fail
     steps:
 
-    # Cache qt
-      # - name: Cache Qt
-      #   id: cache-qt
-      #   uses: pat-s/always-upload-cache@v2.1.5
-      #   with:
-      #     path: ${{ github.workspace }}/Qt
-      #     key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
+    Cache qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
 
       - name: Install Qt6
         uses: jurplel/install-qt-action@v2 # automatically chooses mac desktop based on env
         with:
           version: ${{ env.QT_VERSION }}
-          dir: ${{ github.workspace }}/Qt6
-          # cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           setup-python: false
 
       - uses: actions/checkout@v2
 
       - name: Run style check
-        run: ./scripts/format_qml.bash
+        run: |
+          Path=$PATH:${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin
+          ./scripts/format_qml.bash

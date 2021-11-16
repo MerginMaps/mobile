@@ -17,7 +17,6 @@ if [ $# -eq 0 ]; then
     fi
 
     FORMATTER=`which qmlformat`
-    echo $FORMATTER
 else
     FORMATTER=`which $1`
 
