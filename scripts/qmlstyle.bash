@@ -9,7 +9,8 @@ echo "QML STYLE CHECK STARTED"
 echo "Qt 6 install path: " $Qt6_DIR
 
 # bin dir should be added to path already
-FORMATTER = which $Qt6_DIR/bin/qmlformat
+which qmlformat
+env
 
 if [ $? -ne 0 ]; then
 	echo "[!] qmlformat not found." >&2 # TODO: fix action not able to find formatter!

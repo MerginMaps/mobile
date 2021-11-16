@@ -1,5 +1,7 @@
 name: Code Layout
 on: [push]
+env:
+  QT_VERSION: 6.2.0
 jobs:
   code_style_cpp:
     name: C++ code convention check
@@ -23,18 +25,19 @@ jobs:
     needs: code_style_cpp # Run when cpp is finished to save some time if cpp would fail
     steps:
 
-      # - name: Cache Qt
-      #   id: cache-qt
-      #   uses: actions/cache@v1  # not v2!
-      #   with:
-      #     path: ${{ runner.workspace }}
-      #     key: ${{ runner.os }}-QtCache
+    # Cache qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
 
       - name: Install Qt6
         uses: jurplel/install-qt-action@v2 # automatically chooses mac desktop based on env
         with:
-          version: 6.2.0
-          # cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          version: ${{ env.QT_VERSION }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           setup-python: false
 
       - uses: actions/checkout@v2
