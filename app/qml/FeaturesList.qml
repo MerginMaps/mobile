@@ -34,7 +34,7 @@ Item {
     }
     else
     {
-      root.selectedFeatures = root.selectedFeatures.filter( _id => _id !== fid )
+      root.selectedFeatures = root.selectedFeatures.filter( function (_id) { return _id !== fid } )
     }
   }
 

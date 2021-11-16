@@ -108,7 +108,7 @@ Item {
 
   function geometryEditingStarted() {
     // close form drawers so that user can see map
-    applyOnForms( ( form ) => {
+    applyOnForms( function ( form ) {
       if ( form && typeof form.closeDrawer === "function" ) {
         form.panelState = "hidden"
         form.closeDrawer()
@@ -138,7 +138,7 @@ Item {
 
   function recordInLayerStarted() {
     // close form drawers so that user can see map
-    applyOnForms( ( form ) => {
+    applyOnForms( function ( form ) {
       if ( form && typeof form.closeDrawer === "function" ) {
         form.panelState = "hidden"
         form.closeDrawer()

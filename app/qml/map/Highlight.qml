@@ -185,7 +185,7 @@ Item {
     }
 
     // reset shapes
-    markerItems = markerItems.map( marker => marker.destroy() )
+    markerItems = markerItems.map( function (marker) { return marker.destroy() } )
     if ( newLineElements.length === 0 )
       newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
     if ( newPolygonElements.length === 0 )
