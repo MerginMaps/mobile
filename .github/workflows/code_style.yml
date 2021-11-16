@@ -50,10 +50,4 @@ jobs:
           setup-python: false
 
       - name: Run style check
-        run: |
-          ls ${{ github.workspace }}
-          ls ${{ github.workspace }}/Qt
-          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
-          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin
-          ./input/scripts/format_qml.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin/qmlformat
+        run: ./input/scripts/format_qml.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin/qmlformat

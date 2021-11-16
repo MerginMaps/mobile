@@ -4,6 +4,12 @@
 
 echo "QML STYLE CHECK STARTED"
 
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=`pwd`
+cd $DIR
+
 FORMATTER=""
 
 if [ $# -eq 0 ]; then
@@ -59,5 +65,7 @@ for FILE in $FILES; do
        echo "Skipping $FILE" >&2
     fi
 done
+
+cd $PWD
 
 exit $RETURN
