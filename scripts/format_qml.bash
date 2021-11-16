@@ -43,7 +43,9 @@ echo "Starting to format QML files"
 
 RETURN=0
 
-FILES=`find ../app ../qgsquick -name "*.qml" | grep "editor" | grep "text"`
+FILES=`find ../app ../qgsquick -name "*.qml"`
+
+echo "Files to check ${FILES}"
 
 # --indent-width 2: use 2 spaces to indent
 # --normalize: reorder properties, includes and childs in components
@@ -65,6 +67,8 @@ for FILE in $FILES; do
        echo "Skipping $FILE" >&2
     fi
 done
+
+echo "Done checking QML files format"
 
 cd $PWD
 
