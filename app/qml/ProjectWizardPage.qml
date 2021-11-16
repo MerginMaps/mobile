@@ -3,59 +3,58 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
-import "./components"
+import "components"
+
 Item {
   id: projectWizardPanel
-
-  signal back
-
-  property real rowHeight: InputStyle.fieldHeight
-  property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
-  property real panelMargin: 10 * QgsQuick.Utils.dp
-
-  property ListModel widgetsModel: ListModel {}
+  property var fontColor: InputStyle.fontColor
 
   //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
   property bool isWidgetModelReady: {
-    var types = fieldsModel.supportedTypes()
+    var types = fieldsModel.supportedTypes();
     for (var prop in types) {
-      projectWizardPanel.widgetsModel.append({ "display": types[prop], "widget": prop })
+      projectWizardPanel.widgetsModel.append({
+          "display": types[prop],
+          "widget": prop
+        });
     }
-
-    true
+    true;
   }
+  property real panelMargin: 10 * QgsQuick.Utils.dp
+  property real rowHeight: InputStyle.fieldHeight
+  property ListModel widgetsModel: ListModel {
+  }
+
+  signal back
 
   FieldsModel {
     id: fieldsModel
-    onNotify: __inputUtils.showNotification(message)
     Component.onCompleted: fieldsModel.initModel()
+    onNotify: __inputUtils.showNotification(message)
   }
 
   // background
   Rectangle {
-    width: parent.width
-    height: parent.height
     color: projectWizardPanel.bgColor
+    height: parent.height
+    width: parent.width
   }
-
   PanelHeader {
     id: header
-    height: InputStyle.rowHeightHeader
-    width: projectWizardPanel.width
     color: InputStyle.clrPanelMain
+    height: InputStyle.rowHeightHeader
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Create Project")
+    width: projectWizardPanel.width
 
     onBack: {
-      projectWizardPanel.back()
+      projectWizardPanel.back();
     }
   }
-
   Item {
     height: projectWizardPanel.height - header.height - toolbar.height
     width: projectWizardPanel.width
@@ -63,76 +62,74 @@ Item {
 
     ColumnLayout {
       id: contentLayout
-      spacing: 0
       anchors.fill: parent
       anchors.leftMargin: InputStyle.outerFieldMargin
       anchors.rightMargin: InputStyle.outerFieldMargin
+      spacing: 0
 
       Label {
-        height: projectWizardPanel.rowheight
-        width: parent.width
         Layout.preferredHeight: projectWizardPanel.rowHeight
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-        text: qsTr("Project name")
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
+        height: projectWizardPanel.rowheight
+        horizontalAlignment: Text.AlignLeft
         leftPadding: InputStyle.innerFieldMargin
+        text: qsTr("Project name")
+        verticalAlignment: Text.AlignVCenter
+        width: parent.width
       }
-
       InputTextField {
         id: projectNameField
         height: projectWizardPanel.rowHeight
       }
-
       Label {
         id: attributesLabel
-        height: projectWizardPanel.rowheight
-        width: parent.width
-        text: qsTr("Fields")
+        Layout.preferredHeight: projectWizardPanel.rowHeight
         color: InputStyle.fontColor
         font.pixelSize: InputStyle.fontPixelSizeNormal
-        Layout.preferredHeight: projectWizardPanel.rowHeight
+        height: projectWizardPanel.rowheight
         horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
         leftPadding: InputStyle.innerFieldMargin
+        text: qsTr("Fields")
+        verticalAlignment: Text.AlignVCenter
+        width: parent.width
       }
-
       ListView {
         id: fieldList
-        model: fieldsModel
-        width: parent.width
-        Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.fillWidth: true
         clip: true
+        model: fieldsModel
         spacing: projectWizardPanel.rowHeight * 0.1 // same as delegateButton "margin"
+        width: parent.width
 
         delegate: FieldRow {
-          rowHeight: projectWizardPanel.rowHeight
-          height: rowHeight
-          width: contentLayout.width
           color: projectWizardPanel.fontColor
+          height: rowHeight
+          rowHeight: projectWizardPanel.rowHeight
           widgetList: projectWizardPanel.widgetsModel
+          width: contentLayout.width
 
           onRemoveClicked: fieldsModel.removeField(index)
         }
-
         footer: Item {
-            width: parent.width
-            height: projectWizardPanel.rowHeight + 2* (projectWizardPanel.rowHeight * 0.1)
+          height: projectWizardPanel.rowHeight + 2 * (projectWizardPanel.rowHeight * 0.1)
+          width: parent.width
+
           DelegateButton {
-              height: projectWizardPanel.rowHeight
-              width: parent.width
-              text: qsTr("Add field")
-              anchors.centerIn: parent
-              iconSource: InputStyle.plusIcon
-              onClicked: {
-                fieldsModel.addField("", "TextEdit")
-                if (fieldList.visible) {
-                  fieldList.positionViewAtEnd()
-                }
+            anchors.centerIn: parent
+            height: projectWizardPanel.rowHeight
+            iconSource: InputStyle.plusIcon
+            text: qsTr("Add field")
+            width: parent.width
+
+            onClicked: {
+              fieldsModel.addField("", "TextEdit");
+              if (fieldList.visible) {
+                fieldList.positionViewAtEnd();
               }
             }
+          }
         }
       }
     }
@@ -140,39 +137,41 @@ Item {
 
   // footer toolbar
   Rectangle {
+    id: toolbar
     property int itemSize: toolbar.height * 0.8
 
-    id: toolbar
-    height: InputStyle.rowHeightHeader
-    width: parent.width
     anchors.bottom: parent.bottom
     color: InputStyle.clrPanelBackground
+    height: InputStyle.rowHeightHeader
+    width: parent.width
 
     MouseArea {
       anchors.fill: parent
-      onClicked: {} // dont do anything, just do not let click event propagate
-    }
 
+      onClicked: {
+      } // dont do anything, just do not let click event propagate
+    }
     Row {
+      anchors.bottom: parent.bottom
       height: toolbar.height
       width: parent.width
-      anchors.bottom: parent.bottom
 
       Item {
-        width: parent.width / parent.children.length
         height: parent.height
+        width: parent.width / parent.children.length
+
         MainPanelButton {
           id: createProjectBtn
-          width: toolbar.itemSize
-          text: qsTr("Create project")
           faded: !projectNameField.displayText
           imageSource: InputStyle.checkIcon
+          text: qsTr("Create project")
+          width: toolbar.itemSize
 
           onActivated: {
             if (faded) {
-              __inputUtils.showNotification(qsTr("Empty project name"))
+              __inputUtils.showNotification(qsTr("Empty project name"));
             } else {
-              __projectWizard.createProject(projectNameField.displayText, fieldsModel )
+              __projectWizard.createProject(projectNameField.displayText, fieldsModel);
             }
           }
         }

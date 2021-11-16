@@ -6,94 +6,84 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml.Models 2.14
 import QtQuick.Layouts 1.14
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import ".."
+import "../"
 
 Item {
   id: root
-
-  signal contentClicked()
-  signal leftActionClicked()
-  signal rightActionClicked()
-
   property alias content: contentContainer.children
   property alias leftAction: leftActionContainer.children
   property alias rightAction: rightActionContainer.children
 
-  width: parent.width
   height: customStyle.fields.height
+  width: parent.width
 
-  Rectangle { // background
-    width: parent.width
-    height: parent.height
+  signal contentClicked
+  signal leftActionClicked
+  signal rightActionClicked
+
+  Rectangle {
     border.color: customStyle.fields.normalColor
     border.width: 1 * QgsQuick.Utils.dp
     color: customStyle.fields.backgroundColor
-    radius: customStyle.fields.cornerRadius
+    height: parent.height
+    radius: customStyle.fields.cornerRadius // background
+    width: parent.width
   }
-
   Item {
     id: rowlayout
-
     anchors {
       fill: parent
       leftMargin: customStyle.fields.sideMargin
       rightMargin: customStyle.fields.sideMargin
     }
-
     Item {
       id: leftActionContainer
-
       property bool actionAllowed: leftActionContainer.children.length > 1
 
       height: parent.height
       width: actionAllowed ? parent.height : 0
 
       MouseArea {
+        height: parent.height
         width: leftActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         x: leftActionContainer.actionAllowed ? parent.x - customStyle.fields.sideMargin : parent.x
-        height: parent.height
+
         onClicked: root.leftActionClicked()
       }
     }
-
     Item {
       id: contentContainer
-
-      y: leftActionContainer.y
-      x: leftActionContainer.width
-
       height: parent.height
-      width: parent.width - ( leftActionContainer.width + rightActionContainer.width )
+      width: parent.width - (leftActionContainer.width + rightActionContainer.width)
+      x: leftActionContainer.width
+      y: leftActionContainer.y
 
       MouseArea {
-        width: parent.width
         height: parent.height
+        width: parent.width
+
         onClicked: root.contentClicked()
       }
     }
-
     Item {
       id: rightActionContainer
-
       property bool actionAllowed: rightActionContainer.children.length > 1
-
-      y: contentContainer.y
-      x: contentContainer.x + contentContainer.width
 
       height: parent.height
       width: actionAllowed > 0 ? parent.height : 0
+      x: contentContainer.x + contentContainer.width
+      y: contentContainer.y
 
       MouseArea {
-        width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         height: parent.height
+        width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
+
         onClicked: root.rightActionClicked()
       }
     }

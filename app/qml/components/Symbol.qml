@@ -6,37 +6,34 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
-import "./.." // import InputStyle singleton
+import "../" // import InputStyle singleton
 
 Rectangle {
-
-  property real iconSize: InputStyle.rowHeight
-  property string source: ""
+  id: iconContainer
   property color bgColor: "transparent"
   property color fontColor: InputStyle.fontColor
+  property real iconSize: InputStyle.rowHeight
+  property string source: ""
 
-  id: iconContainer
+  color: iconContainer.bgColor
   height: iconContainer.iconSize
   width: iconContainer.iconSize
-  color: iconContainer.bgColor
 
   Image {
     id: icon
     anchors.centerIn: parent
-    source: iconContainer.source
-    width: iconContainer.iconSize
-    height: iconContainer.iconSize
-    sourceSize.width: width
-    sourceSize.height: height
     fillMode: Image.PreserveAspectFit
+    height: iconContainer.iconSize
+    source: iconContainer.source
+    sourceSize.height: height
+    sourceSize.width: width
+    width: iconContainer.iconSize
   }
-
   ColorOverlay {
     anchors.fill: icon
-    source: icon
     color: iconContainer.fontColor
+    source: icon
   }
 }

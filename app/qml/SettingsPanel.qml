@@ -12,69 +12,44 @@ import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
 import lc 1.0
 import "." // import InputStyle singleton
-import "./components"
+import "components"
 
 Item {
   id: root
-
-  visible: false
-  property real rowHeight: InputStyle.rowHeight
   property string defaultLayer: __appSettings.defaultLayer
   property color gpsIndicatorColor: InputStyle.softRed
+  property real rowHeight: InputStyle.rowHeight
+
+  visible: false
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-
+      event.accepted = true;
       if (stackview.depth > 1) {
         // hide about or log panel
-        stackview.pop(null)
+        stackview.pop(null);
       } else
-        root.visible = false
+        root.visible = false;
     }
   }
 
   StackView {
     id: stackview
-
     anchors.fill: parent
     initialItem: settingsContentComponent
   }
-
   Component {
     id: settingsContentComponent
-
     Page {
       id: settingsPanel
       padding: 0
 
-      background: Rectangle {
-        anchors.fill: parent
-        color: InputStyle.clrPanelMain
-      }
-
-      header: PanelHeader {
-        id: header
-        height: root.rowHeight
-        width: parent.width
-        color: InputStyle.clrPanelMain
-        rowHeight: InputStyle.rowHeightHeader
-        titleText: qsTr("Settings")
-
-        onBack: root.visible = false
-      }
-
       ScrollView {
         id: scrollPage
-        width: settingsPanel.width
-        height: settingsPanel.height - header.height
         contentWidth: availableWidth // to only scroll vertically
+        height: settingsPanel.height - header.height
         spacing: InputStyle.panelSpacing
-
-        background: Rectangle {
-          anchors.fill: parent
-          color: InputStyle.panelBackgroundDark
-        }
+        width: settingsPanel.width
 
         Column {
           id: settingListContent
@@ -83,165 +58,159 @@ Item {
 
           // Header "GPS"
           PanelItem {
+            bold: true
             color: InputStyle.panelBackgroundLight
             text: qsTr("GPS")
-            bold: true
           }
-
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
             color: InputStyle.clrPanelMain
+            height: root.rowHeight
             text: qsTr("Follow GPS with map")
+            width: parent.width
 
             SettingsSwitch {
               id: autoCenterMapSwitch
-
               checked: __appSettings.autoCenterMapChecked
+
               onCheckedChanged: __appSettings.autoCenterMapChecked = checked
             }
-
             MouseArea {
               anchors.fill: parent
+
               onClicked: autoCenterMapSwitch.toggle()
             }
           }
-
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
             color: InputStyle.clrPanelMain
+            height: root.rowHeight
             text: qsTr("GPS accuracy")
+            width: parent.width
 
             Row {
               id: widget
               property real indicatorSize: {
-                var size = height / 3
-                size % 2 === 0 ? size : size + 1
+                var size = height / 3;
+                size % 2 === 0 ? size : size + 1;
               }
-              width: indicatorSize * 4
-              anchors.top: parent.top
-              anchors.topMargin: 0
+
               anchors.bottom: parent.bottom
               anchors.bottomMargin: 0
               anchors.right: parent.right
               anchors.rightMargin: InputStyle.panelMargin
+              anchors.top: parent.top
+              anchors.topMargin: 0
               spacing: InputStyle.panelSpacing
+              width: indicatorSize * 4
 
               RoundIndicator {
-                width: widget.indicatorSize
-                height: width
                 anchors.margins: height / 3
+                anchors.verticalCenter: parent.verticalCenter
                 color: InputStyle.panelBackgroundLight
-                anchors.verticalCenter: parent.verticalCenter
+                height: width
                 visible: false // disabled due no manual GPS on/off support
-              }
-
-              RoundIndicator {
                 width: widget.indicatorSize
-                height: width
+              }
+              RoundIndicator {
+                anchors.verticalCenter: parent.verticalCenter
                 color: InputStyle.softRed
-                isActive: color === root.gpsIndicatorColor
-                anchors.verticalCenter: parent.verticalCenter
-              }
-
-              RoundIndicator {
-                width: widget.indicatorSize
                 height: width
+                isActive: color === root.gpsIndicatorColor
+                width: widget.indicatorSize
+              }
+              RoundIndicator {
+                anchors.verticalCenter: parent.verticalCenter
                 color: InputStyle.softOrange
-                isActive: color === root.gpsIndicatorColor
-                anchors.verticalCenter: parent.verticalCenter
-              }
-
-              RoundIndicator {
-                width: widget.indicatorSize
                 height: width
-                color: InputStyle.softGreen
                 isActive: color === root.gpsIndicatorColor
+                width: widget.indicatorSize
+              }
+              RoundIndicator {
                 anchors.verticalCenter: parent.verticalCenter
+                color: InputStyle.softGreen
+                height: width
+                isActive: color === root.gpsIndicatorColor
+                width: widget.indicatorSize
               }
             }
           }
-
           PanelItem {
             height: root.rowHeight
-            width: parent.width
             text: qsTr("Accuracy threshold")
+            width: parent.width
 
             NumberSpin {
-              value: __appSettings.gpsAccuracyTolerance
-              suffix: " m"
-              onValueChanged: __appSettings.gpsAccuracyTolerance = value
-              height: InputStyle.fontPixelSizeNormal
-              rowHeight: parent.height
-              anchors.verticalCenter: parent.verticalCenter
-              width: height * 6
               anchors.right: parent.right
               anchors.rightMargin: InputStyle.panelMargin
+              anchors.verticalCenter: parent.verticalCenter
+              height: InputStyle.fontPixelSizeNormal
+              rowHeight: parent.height
+              suffix: " m"
+              value: __appSettings.gpsAccuracyTolerance
+              width: height * 6
+
+              onValueChanged: __appSettings.gpsAccuracyTolerance = value
             }
           }
-
           PanelItem {
             height: settingsPanel.rowHeight
-            width: parent.width
             text: qsTr("Show accuracy warning")
+            width: parent.width
 
             SettingsSwitch {
               id: accuracyWarningSwitch
-
               checked: __appSettings.gpsAccuracyWarning
+
               onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
             }
-
             MouseArea {
               anchors.fill: parent
+
               onClicked: accuracyWarningSwitch.toggle()
             }
           }
 
           // Header "Recording"
           PanelItem {
+            bold: true
             color: InputStyle.panelBackgroundLight
             text: qsTr("Recording")
-            bold: true
           }
-
           PanelItem {
             height: root.rowHeight
-            width: parent.width
             text: qsTr("Line rec. interval")
+            width: parent.width
 
             NumberSpin {
               id: spinRecordingInterval
-              value: __appSettings.lineRecordingInterval
-              minValue: 1
-              maxValue: 30
-              suffix: " s"
-              onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
-              height: InputStyle.fontPixelSizeNormal
-              rowHeight: parent.height
-              anchors.verticalCenter: parent.verticalCenter
-              width: height * 6
               anchors.right: parent.right
               anchors.rightMargin: InputStyle.panelMargin
+              anchors.verticalCenter: parent.verticalCenter
+              height: InputStyle.fontPixelSizeNormal
+              maxValue: 30
+              minValue: 1
+              rowHeight: parent.height
+              suffix: " s"
+              value: __appSettings.lineRecordingInterval
+              width: height * 6
+
+              onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
             }
           }
-
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
             color: InputStyle.clrPanelMain
+            height: root.rowHeight
             text: qsTr("Reuse last value option")
+            width: parent.width
 
             SettingsSwitch {
               id: rememberValuesSwitch
-
               checked: __appSettings.reuseLastEnteredValues
+
               onCheckedChanged: __appSettings.reuseLastEnteredValues = checked
             }
-
             MouseArea {
               anchors.fill: parent
+
               onClicked: rememberValuesSwitch.toggle()
             }
           }
@@ -249,15 +218,17 @@ Item {
           // Delimeter
           PanelItem {
             color: InputStyle.panelBackgroundLight
-            text: ""
             height: root.rowHeight / 3
+            text: ""
           }
 
           // App info
           PanelItem {
             text: qsTr("About")
+
             MouseArea {
               anchors.fill: parent
+
               onClicked: stackview.push(aboutPanelComponent)
             }
           }
@@ -265,8 +236,10 @@ Item {
           // Help
           PanelItem {
             text: qsTr("Help")
+
             MouseArea {
               anchors.fill: parent
+
               onClicked: Qt.openUrlExternally(__inputHelp.helpRootLink)
             }
           }
@@ -274,8 +247,10 @@ Item {
           // Privacy Policy
           PanelItem {
             text: qsTr("Privacy policy")
+
             MouseArea {
               anchors.fill: parent
+
               onClicked: Qt.openUrlExternally(__inputHelp.privacyPolicyLink)
             }
           }
@@ -283,8 +258,10 @@ Item {
           // Terms of Service
           PanelItem {
             text: qsTr("Mergin terms of service")
+
             MouseArea {
               anchors.fill: parent
+
               onClicked: Qt.openUrlExternally(__inputHelp.merginTermsLink)
             }
           }
@@ -292,32 +269,51 @@ Item {
           // Debug/Logging
           PanelItem {
             text: qsTr("Diagnostic log")
+
             MouseArea {
               anchors.fill: parent
+
               onClicked: stackview.push(logPanelComponent, {
-                                          "text": __inputHelp.fullLog(true,
-                                                                      200000)
-                                        })
+                  "text": __inputHelp.fullLog(true, 200000)
+                })
             }
           }
         }
+
+        background: Rectangle {
+          anchors.fill: parent
+          color: InputStyle.panelBackgroundDark
+        }
+      }
+
+      background: Rectangle {
+        anchors.fill: parent
+        color: InputStyle.clrPanelMain
+      }
+      header: PanelHeader {
+        id: header
+        color: InputStyle.clrPanelMain
+        height: root.rowHeight
+        rowHeight: InputStyle.rowHeightHeader
+        titleText: qsTr("Settings")
+        width: parent.width
+
+        onBack: root.visible = false
       }
     }
   }
-
   Component {
     id: aboutPanelComponent
     AboutPanel {
-      onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
+      onClose: stackview.pop(null)
     }
   }
-
   Component {
     id: logPanelComponent
     LogPanel {
-      onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
+      onClose: stackview.pop(null)
     }
   }
 }

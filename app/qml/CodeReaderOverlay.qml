@@ -6,7 +6,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
@@ -18,77 +17,78 @@ Item {
   Item {
     id: captureZoneCorners
     anchors.centerIn: root
-    width: root.rectSize
     height: root.rectSize
+    width: root.rectSize
 
     GridLayout {
       columns: 2
-      width: root.rectSize
       height: root.rectSize
+      width: root.rectSize
 
       Repeater {
         model: [0, 1, 3, 2]
 
         delegate: Item {
-          property var length: 30  * QgsQuick.Utils.dp
-          property var borderWidth: 5 * QgsQuick.Utils.dp
+          id: cornerItem
           property var animationDuration: 1000
+          property var borderWidth: 5 * QgsQuick.Utils.dp
+          property var length: 30 * QgsQuick.Utils.dp
           property var primaryColor: InputStyle.fontColor
           property var secondaryColor: InputStyle.fontColorBright
 
-          id: cornerItem
           Layout.fillHeight: true
           Layout.fillWidth: true
           rotation: modelData * 90
 
           Rectangle {
+            color: InputStyle.fontColor
+            height: cornerItem.borderWidth
+            radius: width / 2
+            width: cornerItem.length
+
             anchors {
-              top: parent.top
               left: parent.left
+              top: parent.top
             }
 
-            width: cornerItem.length
-            height: cornerItem.borderWidth
-            color: InputStyle.fontColor
-            radius: width / 2
-
-            SequentialAnimation on color {
+            SequentialAnimation on color  {
               loops: Animation.Infinite
+
               ColorAnimation {
+                duration: cornerItem.animationDuration
                 from: cornerItem.primaryColor
                 to: cornerItem.secondaryColor
-                duration: cornerItem.animationDuration
               }
               ColorAnimation {
+                duration: cornerItem.animationDuration
                 from: cornerItem.secondaryColor
                 to: cornerItem.primaryColor
-                duration: cornerItem.animationDuration
               }
             }
           }
-
           Rectangle {
+            color: InputStyle.fontColor
+            height: cornerItem.length
+            radius: width / 2
+            width: cornerItem.borderWidth
+
             anchors {
-              top: parent.top
               left: parent.left
+              top: parent.top
             }
 
-            width: cornerItem.borderWidth
-            height: cornerItem.length
-            color: InputStyle.fontColor
-            radius: width / 2
-
-            SequentialAnimation on color {
+            SequentialAnimation on color  {
               loops: Animation.Infinite
+
               ColorAnimation {
+                duration: cornerItem.animationDuration
                 from: cornerItem.primaryColor
                 to: cornerItem.secondaryColor
-                duration: cornerItem.animationDuration
               }
               ColorAnimation {
+                duration: cornerItem.animationDuration
                 from: cornerItem.secondaryColor
                 to: cornerItem.primaryColor
-                duration: cornerItem.animationDuration
               }
             }
           }

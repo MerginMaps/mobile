@@ -6,88 +6,83 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
-import ".."  // import InputStyle singleton
+import "../"  // import InputStyle singleton
 
 Rectangle {
-    id: header
-    color: InputStyle.clrPanelMain
+  id: header
+  property bool backIconVisible: true
+  property string backText: qsTr("Cancel")
+  property bool backTextVisible: false
+  property color fontBtnColor: InputStyle.fontColorBright
+  property real rowHeight
+  property string titleText: ""
+  property bool withBackButton: true
 
-    property real rowHeight
-    property string titleText: ""
-    property string backText: qsTr("Cancel")
-    property bool withBackButton: true
-    property bool backTextVisible: false
-    property bool backIconVisible: true
-    property color fontBtnColor: InputStyle.fontColorBright
+  color: InputStyle.clrPanelMain
 
-    signal back()
+  signal back
 
-    Item {
-        id: backButton
-        height: header.rowHeight
-        width: height * 2
-        anchors.left: header.left
-        anchors.leftMargin: InputStyle.panelMargin
-        z: title.z + 1
-        visible: withBackButton
+  Item {
+    id: backButton
+    anchors.left: header.left
+    anchors.leftMargin: InputStyle.panelMargin
+    height: header.rowHeight
+    visible: withBackButton
+    width: height * 2
+    z: title.z + 1
 
-        Image {
-            id: image
-            height: backIconVisible ? InputStyle.fontPixelSizeNormal : 0
-            width: height
-            source: InputStyle.backIcon
-            sourceSize.width: width
-            sourceSize.height: height
-            fillMode: Image.PreserveAspectFit
-            anchors.bottomMargin: (parent.height - height)/2
-            anchors.topMargin: anchors.bottomMargin
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            visible: false
-        }
-
-        ColorOverlay {
-            anchors.fill: image
-            source: image
-            color: InputStyle.fontColorBright
-            visible: header.backIconVisible
-        }
-
-        Text {
-            id: backButtonText
-            text: header.backText
-            color: header.fontBtnColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            height: header.rowHeight
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-            anchors.left: image.right
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.top: parent.top
-            anchors.leftMargin: backIconVisible ? header.rowHeight/4 : 0
-            visible: backTextVisible
-        }
-
-        MouseArea {
-          anchors.fill: parent
-          anchors.leftMargin: -InputStyle.panelMargin
-          onClicked: back()
-        }
+    Image {
+      id: image
+      anchors.bottomMargin: (parent.height - height) / 2
+      anchors.left: parent.left
+      anchors.topMargin: anchors.bottomMargin
+      anchors.verticalCenter: parent.verticalCenter
+      fillMode: Image.PreserveAspectFit
+      height: backIconVisible ? InputStyle.fontPixelSizeNormal : 0
+      source: InputStyle.backIcon
+      sourceSize.height: height
+      sourceSize.width: width
+      visible: false
+      width: height
     }
-
+    ColorOverlay {
+      anchors.fill: image
+      color: InputStyle.fontColorBright
+      source: image
+      visible: header.backIconVisible
+    }
     Text {
-        id: title
-        anchors.fill: parent
-        text: header.titleText
-        color: InputStyle.fontColor
-        font.pixelSize: InputStyle.fontPixelSizeTitle
-        font.bold: true
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
+      id: backButtonText
+      anchors.bottom: parent.bottom
+      anchors.left: image.right
+      anchors.leftMargin: backIconVisible ? header.rowHeight / 4 : 0
+      anchors.right: parent.right
+      anchors.top: parent.top
+      color: header.fontBtnColor
+      font.pixelSize: InputStyle.fontPixelSizeNormal
+      height: header.rowHeight
+      horizontalAlignment: Text.AlignLeft
+      text: header.backText
+      verticalAlignment: Text.AlignVCenter
+      visible: backTextVisible
     }
+    MouseArea {
+      anchors.fill: parent
+      anchors.leftMargin: -InputStyle.panelMargin
 
+      onClicked: back()
+    }
+  }
+  Text {
+    id: title
+    anchors.fill: parent
+    color: InputStyle.fontColor
+    font.bold: true
+    font.pixelSize: InputStyle.fontPixelSizeTitle
+    horizontalAlignment: Text.AlignHCenter
+    text: header.titleText
+    verticalAlignment: Text.AlignVCenter
+  }
 }

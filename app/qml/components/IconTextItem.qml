@@ -12,20 +12,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.5
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 
 Item {
-  property real iconSize
+  id: root
   property color fontColor
   property real fontPointSize: root.iconSize * 0.75
+  property real iconSize
   property string iconSource
   property string labelText
-
-  id: root
 
   ColumnLayout {
     anchors.fill: parent
@@ -33,49 +31,42 @@ Item {
 
     Item {
       id: iconContainer
-
       Layout.fillHeight: true
       Layout.preferredHeight: root.height / 2
       Layout.preferredWidth: root.width
 
       Image {
         id: icon
-
-        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-
-        source: root.iconSource
-        width: root.iconSize
-        height: root.iconSize
-        sourceSize.width: width
-        sourceSize.height: height
+        anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit
+        height: root.iconSize
+        source: root.iconSource
+        sourceSize.height: height
+        sourceSize.width: width
+        width: root.iconSize
       }
-
       ColorOverlay {
         anchors.fill: icon
-        source: icon
         color: root.fontColor
+        source: icon
       }
     }
-
     Item {
       id: textContainer
-
       Layout.fillHeight: true
       Layout.preferredHeight: root.height / 2
       Layout.preferredWidth: root.width
 
       Text {
         id: text
-
-        text: root.labelText
-        font.pointSize: root.fontPointSize
-        width: parent.width
         color: root.fontColor
+        font.pointSize: root.fontPointSize
         horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
         maximumLineCount: 3
+        text: root.labelText
+        width: parent.width
+        wrapMode: Text.WordWrap
       }
     }
   }

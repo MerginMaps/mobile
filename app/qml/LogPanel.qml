@@ -6,15 +6,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-
 import "."  // import InputStyle singleton
-import "./components"
+import "components"
 
 Item {
   id: root
@@ -24,72 +22,67 @@ Item {
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
+      event.accepted = true;
+      close();
     }
   }
 
   Page {
     id: pane
-
-    width: parent.width
-    height: parent.height
-    anchors.verticalCenter: parent.verticalCenter
     anchors.horizontalCenter: parent.horizontalCenter
+    anchors.verticalCenter: parent.verticalCenter
     clip: true
+    height: parent.height
+    width: parent.width
+
+    Flickable {
+      id: flickableItem
+      anchors.horizontalCenter: parent.horizontalCenter
+      clip: true
+      contentHeight: txt.height
+      contentWidth: width
+      height: parent.height
+      maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+      width: root.width - InputStyle.panelMargin
+
+      Text {
+        id: txt
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        text: "<style>" + "a:link { color: " + InputStyle.highlightColor + "; text-decoration: underline; }" + "p.odd { color: " + InputStyle.fontColorBright + "; }" + "</style>" + root.text
+        textFormat: Text.RichText
+        width: parent.width
+        wrapMode: Text.WordWrap
+      }
+
+      ScrollBar.vertical: ScrollBar {
+      }
+    }
 
     background: Rectangle {
       color: "white"
     }
-
-    header: PanelHeader {
-      id: header
-      height: InputStyle.rowHeightHeader
-      width: parent.width
-      color: "white"
-      rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Diagnostic Log")
-
-      onBack: root.close()
-      withBackButton: true
-    }
-
-    Flickable {
-      id: flickableItem
-      clip: true
-      anchors.horizontalCenter: parent.horizontalCenter
-      width: root.width - InputStyle.panelMargin
-      height: parent.height
-      contentHeight: txt.height
-      contentWidth: width
-      maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
-
-      Text {
-        id: txt
-        text: "<style>" + "a:link { color: " + InputStyle.highlightColor
-              + "; text-decoration: underline; }" + "p.odd { color: "
-              + InputStyle.fontColorBright + "; }" + "</style>" + root.text
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
-        textFormat: Text.RichText
-        wrapMode: Text.WordWrap
-        width: parent.width
-      }
-
-      ScrollBar.vertical: ScrollBar { }
-    }
-
     footer: DelegateButton {
       id: sendButton
-
-      width: root.width
       height: InputStyle.rowHeightHeader
       text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send to Developers")
+      width: root.width
 
       onClicked: {
         if (!__inputHelp.submitReportPending)
-          __inputHelp.submitReport()
+          __inputHelp.submitReport();
       }
+    }
+    header: PanelHeader {
+      id: header
+      color: "white"
+      height: InputStyle.rowHeightHeader
+      rowHeight: InputStyle.rowHeightHeader
+      titleText: qsTr("Diagnostic Log")
+      width: parent.width
+      withBackButton: true
+
+      onBack: root.close()
     }
   }
 }

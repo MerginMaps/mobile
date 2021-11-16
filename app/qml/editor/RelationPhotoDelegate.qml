@@ -6,76 +6,65 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml.Models 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.14
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import ".."
+import "../"
 
 Item {
   id: root
-
-  signal clicked( var feature )
-
   height: parent.height
   width: height
 
+  signal clicked(var feature)
+
   Image {
     id: image
-
     property bool imageValid: true
 
     anchors.centerIn: parent
-    width: imageValid ? parent.width : parent.width * 0.4
-    height: imageValid ? parent.width : parent.width * 0.4
-    sourceSize.width: image.width
-    sourceSize.height: image.height
-    visible: imageValid
-
     autoTransform: true
+    fillMode: Image.PreserveAspectFit
+    height: imageValid ? parent.width : parent.width * 0.4
+    horizontalAlignment: Image.AlignHCenter
+    mipmap: true
     source: {
-      let absolutePath = model.PhotoPath
-
+      let absolutePath = model.PhotoPath;
       if (image.status === Image.Error) {
-        image.imageValid = false
-        customStyle.icons.notAvailable
-      }
-      else if (absolutePath !== '' && __inputUtils.fileExists(absolutePath)) {
-        "file://" + absolutePath
-      }
-      else {
-        image.imageValid = false
-        customStyle.icons.notAvailable
+        image.imageValid = false;
+        customStyle.icons.notAvailable;
+      } else if (absolutePath !== '' && __inputUtils.fileExists(absolutePath)) {
+        "file://" + absolutePath;
+      } else {
+        image.imageValid = false;
+        customStyle.icons.notAvailable;
       }
     }
-
-    horizontalAlignment: Image.AlignHCenter
+    sourceSize.height: image.height
+    sourceSize.width: image.width
     verticalAlignment: Image.AlignVCenter
-    mipmap: true
-    fillMode: Image.PreserveAspectFit
+    visible: imageValid
+    width: imageValid ? parent.width : parent.width * 0.4
   }
-
   ColorOverlay {
-    source: image.imageValid ? undefined : image
     anchors.fill: image.imageValid ? undefined : image
     color: customStyle.relationComponent.iconColor
+    source: image.imageValid ? undefined : image
   }
-
-  Rectangle { // border
+  Rectangle {
+    // border
     anchors.fill: parent
-
     border.color: customStyle.relationComponent.photoBorderColor
     border.width: customStyle.relationComponent.photoBorderWidth
     color: "transparent"
   }
-
   MouseArea {
     anchors.fill: parent
-    onClicked: root.clicked( model.FeaturePair )
+
+    onClicked: root.clicked(model.FeaturePair)
   }
 }

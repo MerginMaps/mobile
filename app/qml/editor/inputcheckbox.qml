@@ -12,7 +12,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import "../components"
@@ -24,74 +23,70 @@ import "../components"
  */
 Item {
   id: fieldItem
-
-  property var checkedState: getConfigValue(config['CheckedState'], true)
-  property var uncheckedState: getConfigValue(config['UncheckedState'], false)
   property string booleanEnum: "1" // QMetaType::Bool Enum of Qvariant::Type
+  property var checkedState: getConfigValue(config['CheckedState'], true)
   property bool isReadOnly: readOnly
-
-  signal editorValueChanged( var newValue, bool isNull )
-
-  function getConfigValue(configValue, defaultValue) {
-    if (!configValue && field.type + "" === fieldItem.booleanEnum) {
-      return defaultValue
-    } else return configValue
-  }
+  property var uncheckedState: getConfigValue(config['UncheckedState'], false)
 
   enabled: !readOnly
   height: childrenRect.height
-  anchors {
-    right: parent.right
-    left: parent.left
+
+  signal editorValueChanged(var newValue, bool isNull)
+  function getConfigValue(configValue, defaultValue) {
+    if (!configValue && field.type + "" === fieldItem.booleanEnum) {
+      return defaultValue;
+    } else
+      return configValue;
   }
 
+  anchors {
+    left: parent.left
+    right: parent.right
+  }
   Rectangle {
     id: fieldContainer
-    height: customStyle.fields.height
     color: customStyle.fields.backgroundColor
+    height: customStyle.fields.height
     radius: customStyle.fields.cornerRadius
-    anchors { right: parent.right; left: parent.left }
 
+    anchors {
+      left: parent.left
+      right: parent.right
+    }
     MouseArea {
       anchors.fill: parent
+
       onClicked: switchComp.toggle()
     }
-
     Text {
-      text: switchComp.checked ? fieldItem.checkedState : fieldItem.uncheckedState
-      font.pointSize: customStyle.fields.fontPointSize
-      color: customStyle.fields.fontColor
-      horizontalAlignment: Text.AlignLeft
-      verticalAlignment: Text.AlignVCenter
       anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
+      color: customStyle.fields.fontColor
+      font.pointSize: customStyle.fields.fontPointSize
+      horizontalAlignment: Text.AlignLeft
       leftPadding: customStyle.fields.sideMargin
+      text: switchComp.checked ? fieldItem.checkedState : fieldItem.uncheckedState
+      verticalAlignment: Text.AlignVCenter
     }
-
     Switch {
       id: switchComp
-
       property var currentValue: value
 
-      isReadOnly: fieldItem.isReadOnly
+      anchors.right: parent.right
+      anchors.rightMargin: customStyle.fields.sideMargin
+      anchors.verticalCenter: parent.verticalCenter
       bgndColorActive: customStyle.toolbutton.activeButtonColor
       bgndColorInactive: customStyle.toolbutton.backgroundColorInvalid
-
-      anchors.right: parent.right
-      anchors.verticalCenter: parent.verticalCenter
-      anchors.rightMargin: customStyle.fields.sideMargin
-
-      implicitHeight: fieldContainer.height * 0.6
-
       checked: value === fieldItem.checkedState
-
-      onSwitchChecked: {
-        editorValueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
-      }
+      implicitHeight: fieldContainer.height * 0.6
+      isReadOnly: fieldItem.isReadOnly
 
       // Workaround to get a signal when the value has changed
       onCurrentValueChanged: {
-        switchComp.checked = currentValue === fieldItem.checkedState
+        switchComp.checked = currentValue === fieldItem.checkedState;
+      }
+      onSwitchChecked: {
+        editorValueChanged(isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false);
       }
     }
   }

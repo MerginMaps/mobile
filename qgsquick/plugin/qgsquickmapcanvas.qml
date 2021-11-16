@@ -21,16 +21,9 @@ Item {
   id: mapArea
 
   /**
-   * The mapSettings property contains configuration for rendering of the map.
-   *
-   * It should be used as a primary source of map settings (and project) for
-   * all other components in the application.
-   *
-   * This is a readonly property.
-   *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * When the incrementalRendering property is set to true, the automatic refresh of map canvas during rendering is allowed.
    */
-  property alias mapSettings: mapCanvasWrapper.mapSettings
+  property alias incrementalRendering: mapCanvasWrapper.incrementalRendering
 
   /**
    * The isRendering property is set to true while a rendering job is pending for this map canvas map.
@@ -43,9 +36,16 @@ Item {
   property alias isRendering: mapCanvasWrapper.isRendering
 
   /**
-   * When the incrementalRendering property is set to true, the automatic refresh of map canvas during rendering is allowed.
+   * The mapSettings property contains configuration for rendering of the map.
+   *
+   * It should be used as a primary source of map settings (and project) for
+   * all other components in the application.
+   *
+   * This is a readonly property.
+   *
+   * See also QgsQuickMapCanvasMap::mapSettings
    */
-  property alias incrementalRendering: mapCanvasWrapper.incrementalRendering
+  property alias mapSettings: mapCanvasWrapper.mapSettings
 
   /**
    * What is the minimum distance (in pixels) in order to start dragging map
@@ -66,113 +66,92 @@ Item {
    * number of times.
    */
   function freeze(id) {
-    mapCanvasWrapper.__freezecount[id] = true
-    mapCanvasWrapper.freeze = true
+    mapCanvasWrapper.__freezecount[id] = true;
+    mapCanvasWrapper.freeze = true;
   }
-
   function unfreeze(id) {
-    delete mapCanvasWrapper.__freezecount[id]
-    mapCanvasWrapper.freeze = Object.keys(
-          mapCanvasWrapper.__freezecount).length !== 0
+    delete mapCanvasWrapper.__freezecount[id];
+    mapCanvasWrapper.freeze = Object.keys(mapCanvasWrapper.__freezecount).length !== 0;
   }
 
   QgsQuick.MapCanvasMap {
     id: mapCanvasWrapper
+    property var __freezecount: ({})
 
     anchors.fill: parent
-
-    property var __freezecount: ({
-
-                                 })
-
     freeze: false
   }
-
   PinchArea {
     id: pinchArea
-
     anchors.fill: parent
 
-    onPinchStarted: {
-      freeze('pinch')
-    }
-
-    onPinchUpdated: {
-      mapCanvasWrapper.zoom(pinch.center, pinch.previousScale / pinch.scale)
-      mapCanvasWrapper.pan(pinch.center, pinch.previousCenter)
-    }
-
     onPinchFinished: {
-      unfreeze('pinch')
-      mapCanvasWrapper.refresh()
+      unfreeze('pinch');
+      mapCanvasWrapper.refresh();
+    }
+    onPinchStarted: {
+      freeze('pinch');
+    }
+    onPinchUpdated: {
+      mapCanvasWrapper.zoom(pinch.center, pinch.previousScale / pinch.scale);
+      mapCanvasWrapper.pan(pinch.center, pinch.previousCenter);
     }
 
     MouseArea {
       id: mouseArea
-
+      property bool __dragging: false
       property point __initialPosition
       property point __lastPosition
-      property bool __dragging: false
 
       anchors.fill: parent
 
-      onDoubleClicked: {
-        var center = Qt.point(mouse.x, mouse.y)
-        mapCanvasWrapper.zoom(center, 0.8)
+      onCanceled: {
+        unfreezePanTimer.start();
       }
-
       onClicked: {
         if (mouse.button === Qt.RightButton) {
-          var center = Qt.point(mouse.x, mouse.y)
-          mapCanvasWrapper.zoom(center, 1.2)
+          var center = Qt.point(mouse.x, mouse.y);
+          mapCanvasWrapper.zoom(center, 1.2);
         } else {
-          var distance = Math.abs(mouse.x - __initialPosition.x) + Math.abs(
-                mouse.y - __initialPosition.y)
-
+          var distance = Math.abs(mouse.x - __initialPosition.x) + Math.abs(mouse.y - __initialPosition.y);
           if (distance < minimumStartDragDistance)
-            mapArea.clicked(mouse)
+            mapArea.clicked(mouse);
         }
       }
-
-      onPressed: {
-        __lastPosition = Qt.point(mouse.x, mouse.y)
-        __initialPosition = __lastPosition
-        __dragging = false
-        freeze('pan')
+      onDoubleClicked: {
+        var center = Qt.point(mouse.x, mouse.y);
+        mapCanvasWrapper.zoom(center, 0.8);
       }
-
-      onReleased: {
-        unfreeze('pan')
-      }
-
       onPositionChanged: {
         // are we far enough to start dragging map? (we want to avoid tiny map moves)
-        var distance = Math.abs(mouse.x - __initialPosition.x) + Math.abs(mouse.y - __initialPosition.y)
+        var distance = Math.abs(mouse.x - __initialPosition.x) + Math.abs(mouse.y - __initialPosition.y);
         if (distance >= minimumStartDragDistance)
-            __dragging = true
-
-        if (__dragging)
-        {
-            var currentPosition = Qt.point(mouse.x, mouse.y)
-            mapCanvasWrapper.pan(currentPosition, __lastPosition)
-            __lastPosition = currentPosition
+          __dragging = true;
+        if (__dragging) {
+          var currentPosition = Qt.point(mouse.x, mouse.y);
+          mapCanvasWrapper.pan(currentPosition, __lastPosition);
+          __lastPosition = currentPosition;
         }
       }
-
-      onCanceled: {
-        unfreezePanTimer.start()
+      onPressed: {
+        __lastPosition = Qt.point(mouse.x, mouse.y);
+        __initialPosition = __lastPosition;
+        __dragging = false;
+        freeze('pan');
       }
-
+      onReleased: {
+        unfreeze('pan');
+      }
       onWheel: {
-        mapCanvasWrapper.zoom(Qt.point(wheel.x, wheel.y),
-                              Math.pow(0.8, wheel.angleDelta.y / 60))
+        mapCanvasWrapper.zoom(Qt.point(wheel.x, wheel.y), Math.pow(0.8, wheel.angleDelta.y / 60));
       }
 
       Timer {
         id: unfreezePanTimer
         interval: 500
-        running: false
         repeat: false
+        running: false
+
         onTriggered: unfreeze('pan')
       }
     }

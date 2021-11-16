@@ -6,34 +6,33 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 
 Item {
-    id: gpsSignal
-    width: parent.height
-    height: width
-    property int size: width
-    property color color: InputStyle.softGreen
-    property bool isActive: false
+  id: gpsSignal
+  property color color: InputStyle.softGreen
+  property bool isActive: false
+  property int size: width
 
-    Rectangle {
-        anchors.centerIn: parent
-        width: gpsSignal.size
-        height: gpsSignal.size
-        color: gpsSignal.color
-        radius: width*0.5
-        antialiasing: true
-    }
+  height: width
+  width: parent.height
 
-    Rectangle {
-        id: activeIndicator
-        anchors.centerIn: parent
-        width: gpsSignal.size/2.0
-        height: gpsSignal.size/2.0
-        color: "white"
-        radius: width*0.5
-        antialiasing: true
-        visible: isActive
-    }
+  Rectangle {
+    anchors.centerIn: parent
+    antialiasing: true
+    color: gpsSignal.color
+    height: gpsSignal.size
+    radius: width * 0.5
+    width: gpsSignal.size
+  }
+  Rectangle {
+    id: activeIndicator
+    anchors.centerIn: parent
+    antialiasing: true
+    color: "white"
+    height: gpsSignal.size / 2.0
+    radius: width * 0.5
+    visible: isActive
+    width: gpsSignal.size / 2.0
+  }
 }

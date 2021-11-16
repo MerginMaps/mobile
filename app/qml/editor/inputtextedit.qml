@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -6,7 +6,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
@@ -15,62 +14,55 @@ import QtQuick.Controls 2.14
  * Requires various global properties set to function, see featureform Loader section
  * Do not use directly from Application QML
  */
-
 AbstractEditor {
   id: root
+  /*required*/
+  property bool isReadOnly: parent.readOnly
 
-  /*required*/ property var parentValue: parent.value
-  /*required*/ property bool parentValueIsNull: parent.valueIsNull
-  /*required*/ property bool isReadOnly: parent.readOnly
+  /*required*/
+  property var parentValue: parent.value
+  /*required*/
+  property bool parentValueIsNull: parent.valueIsNull
 
-  signal editorValueChanged( var newValue, bool isNull )
+  signal editorValueChanged(var newValue, bool isNull)
 
   content: TextField {
     id: textField
-
     anchors.fill: parent
-
-    topPadding: customStyle.fields.height * 0.25
     bottomPadding: customStyle.fields.height * 0.25
-    leftPadding: customStyle.fields.sideMargin
-    rightPadding: customStyle.fields.sideMargin
-
-    readOnly: root.isReadOnly
-
-    font.pointSize: customStyle.fields.fontPointSize
     color: customStyle.fields.fontColor
-
-    text: root.parentValue === undefined || root.parentValueIsNull ? '' : root.parentValue
+    font.pointSize: customStyle.fields.fontPointSize
     inputMethodHints: field.isNumeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
+    leftPadding: customStyle.fields.sideMargin
+    readOnly: root.isReadOnly
+    rightPadding: customStyle.fields.sideMargin
+    text: root.parentValue === undefined || root.parentValueIsNull ? '' : root.parentValue
+    topPadding: customStyle.fields.height * 0.25
 
-    states: [
-      State {
-        name: "limitedTextLengthState" // Make sure we do not input more characters than allowed for strings
-        when: ( !field.isNumeric ) && ( field.length > 0 )
-        PropertyChanges {
-          target: textField
-          maximumLength: field.length
-        }
+    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
+    onTextEdited: {
+      let val = text;
+      if (field.isNumeric) {
+        val = val.replace(",", ".").replace(/ /g, ''); // replace comma with dot and remove spaces
       }
-    ]
+      editorValueChanged(val, val === "");
+    }
 
     background: Rectangle {
       anchors.fill: parent
-
-      radius: customStyle.fields.cornerRadius
       color: customStyle.fields.backgroundColor
+      radius: customStyle.fields.cornerRadius
     }
+    states: [
+      State {
+        name: "limitedTextLengthState" // Make sure we do not input more characters than allowed for strings
+        when: (!field.isNumeric) && (field.length > 0)
 
-    onTextEdited: {
-      let val = text
-      if ( field.isNumeric )
-      {
-        val = val.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot and remove spaces
+        PropertyChanges {
+          maximumLength: field.length
+          target: textField
+        }
       }
-
-      editorValueChanged( val, val === "" )
-    }
-
-    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
+    ]
   }
 }

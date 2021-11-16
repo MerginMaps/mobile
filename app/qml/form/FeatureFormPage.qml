@@ -6,37 +6,30 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.3
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import ".."
+import "../"
 import "../components"
 
 Item {
   id: root
-
-  property var project
   property var featureLayerPair
-
+  property string formState
   property var linkedRelation
   property var parentController
+  property var project
 
-  property string formState
-
-  signal close()
-  signal editGeometryClicked()
-  signal openLinkedFeature( var linkedFeature )
-  signal createLinkedFeature( var parentController, var relation )
-
+  signal close
+  signal createLinkedFeature(var parentController, var relation)
+  signal editGeometryClicked
+  signal openLinkedFeature(var linkedFeature)
   function updateFeatureGeometry() {
-    let f = formStackView.get( 0 )
-
-    if ( f ) {
-      f.form.controller.save()
+    let f = formStackView.get(0);
+    if (f) {
+      f.form.controller.save();
     }
   }
 
@@ -52,95 +45,66 @@ Item {
      * View is attached to Feature Form,
      * so editors can push their components to it
      */
-
     anchors.fill: parent
-
-    initialItem: formPageComponent
     focus: true
+    initialItem: formPageComponent
 
     onCurrentItemChanged: {
-      currentItem.forceActiveFocus()
+      currentItem.forceActiveFocus();
     }
   }
-
   Component {
     id: formPageComponent
-
     Page {
       id: formPage
-
       property alias form: featureForm
-
-      header: PanelHeader {
-        id: header
-
-
-        height: InputStyle.rowHeightHeader
-        rowHeight: InputStyle.rowHeightHeader
-        color: InputStyle.clrPanelMain
-        fontBtnColor: InputStyle.highlightColor
-
-        titleText: featureForm.state === "edit" ? qsTr("Edit Feature") : qsTr("Feature")
-
-        backIconVisible: !saveButtonText.visible
-        backTextVisible: saveButtonText.visible
-
-        onBack: featureForm.cancel()
-
-        Text {
-          id: saveButtonText
-
-          text: qsTr("Save")
-
-          height: header.rowHeight
-          visible: featureForm.state === "edit" || featureForm.state === "add"
-
-          color: featureForm.controller.hasValidationErrors ? InputStyle.invalidButtonColor : InputStyle.highlightColor
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-
-          verticalAlignment: Text.AlignVCenter
-          horizontalAlignment: Text.AlignLeft
-
-          anchors.right: parent.right
-          anchors.bottom: parent.bottom
-          anchors.top: parent.top
-          anchors.rightMargin: InputStyle.panelMargin // same as back button
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: featureForm.save()
-          }
-        }
-      }
 
       Item {
         id: backHandler
         focus: true
+
         Keys.onReleased: {
           if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-            if ( featureForm.controller.hasAnyChanges )  {
-              saveChangesDialog.open()
-            }
-            else {
-              root.close()
+            if (featureForm.controller.hasAnyChanges) {
+              saveChangesDialog.open();
+            } else {
+              root.close();
             }
             event.accepted = true;
           }
         }
-
         onVisibleChanged: {
-          if ( visible )
-            backHandler.forceActiveFocus()
+          if (visible)
+            backHandler.forceActiveFocus();
         }
       }
 
       // content
       FeatureForm {
         id: featureForm
-
         anchors.fill: parent
-
+        externalResourceHandler: externalResourceBundle.handler
+        extraView: formPage.StackView.view
+        importDataHandler: codeReaderHandler.handler
         project: root.project
+        state: root.formState
+
+        Component.onCompleted: {
+          if (root.parentController && root.linkedRelation) {
+            featureForm.controller.parentController = root.parentController;
+            featureForm.controller.linkedRelation = root.linkedRelation;
+          }
+        }
+        onCanceled: root.close()
+        onCreateLinkedFeature: root.createLinkedFeature(parentController, relation)
+        onOpenLinkedFeature: root.openLinkedFeature(linkedFeature)
+        onSaved: root.close()
+
+        Connections {
+          target: root
+
+          onFormStateChanged: featureForm.state = root.formState
+        }
 
         controller: AttributeController {
           featureLayerPair: root.featureLayerPair
@@ -150,97 +114,96 @@ Item {
             rememberValuesAllowed: __appSettings.reuseLastEnteredValues
           }
         }
-
-        importDataHandler: codeReaderHandler.handler
-        externalResourceHandler: externalResourceBundle.handler
-        state: root.formState
-
-        onSaved: root.close()
-        onCanceled: root.close()
-        onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-        onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
-
-        extraView: formPage.StackView.view
-
-        Connections {
-          target: root
-          onFormStateChanged: featureForm.state = root.formState
-        }
-
-        Component.onCompleted: {
-          if ( root.parentController && root.linkedRelation ) {
-            featureForm.controller.parentController = root.parentController
-            featureForm.controller.linkedRelation = root.linkedRelation
-          }
-        }
       }
-
-      footer: FeatureToolbar {
-        id: toolbar
-
-        height: InputStyle.rowHeightHeader
-
-        state: featureForm.state
-
-        visible: !root.readOnly
-        isFeaturePoint: __inputUtils.geometryFromLayer( root.featureLayerPair.layer ) === "point"
-
-        onEditClicked: root.formState = "edit"
-        onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: root.editGeometryClicked()
-      }
-
       MessageDialog {
         id: deleteDialog
-
-        visible: false
-        title: qsTr( "Delete feature" )
-        text: qsTr( "Are you sure you want to delete this feature?" )
         icon: StandardIcon.Warning
         standardButtons: StandardButton.Ok | StandardButton.Cancel
+        text: qsTr("Are you sure you want to delete this feature?")
+        title: qsTr("Delete feature")
+        visible: false
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
-          if ( clickedButton === StandardButton.Ok ) {
-            featureForm.controller.deleteFeature()
-            featureForm.canceled()
-            root.close()
+          if (clickedButton === StandardButton.Ok) {
+            featureForm.controller.deleteFeature();
+            featureForm.canceled();
+            root.close();
           }
-
-          visible = false
+          visible = false;
         }
       }
-
       MessageDialog {
         id: saveChangesDialog
-
-        visible: false
-        title: qsTr( "Unsaved changes" )
-        text: qsTr( "Do you want to save changes?" )
         icon: StandardIcon.Warning
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        text: qsTr("Do you want to save changes?")
+        title: qsTr("Unsaved changes")
+        visible: false
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
           if (clickedButton === StandardButton.Yes) {
-            featureForm.save()
+            featureForm.save();
+          } else if (clickedButton === StandardButton.No) {
+            featureForm.canceled();
+          } else if (clickedButton === StandardButton.Cancel)
+          // Do nothing
+          {
           }
-          else if (clickedButton === StandardButton.No) {
-            featureForm.canceled()
-          }
-          else if (clickedButton === StandardButton.Cancel) {
-            // Do nothing
-          }
-          visible = false
+          visible = false;
         }
       }
-
       ExternalResourceBundle {
         id: externalResourceBundle
       }
-
       CodeReaderHandler {
         id: codeReaderHandler
+      }
+
+      footer: FeatureToolbar {
+        id: toolbar
+        height: InputStyle.rowHeightHeader
+        isFeaturePoint: __inputUtils.geometryFromLayer(root.featureLayerPair.layer) === "point"
+        state: featureForm.state
+        visible: !root.readOnly
+
+        onDeleteClicked: deleteDialog.visible = true
+        onEditClicked: root.formState = "edit"
+        onEditGeometryClicked: root.editGeometryClicked()
+      }
+      header: PanelHeader {
+        id: header
+        backIconVisible: !saveButtonText.visible
+        backTextVisible: saveButtonText.visible
+        color: InputStyle.clrPanelMain
+        fontBtnColor: InputStyle.highlightColor
+        height: InputStyle.rowHeightHeader
+        rowHeight: InputStyle.rowHeightHeader
+        titleText: featureForm.state === "edit" ? qsTr("Edit Feature") : qsTr("Feature")
+
+        onBack: featureForm.cancel()
+
+        Text {
+          id: saveButtonText
+          anchors.bottom: parent.bottom
+          anchors.right: parent.right
+          anchors.rightMargin: InputStyle.panelMargin // same as back button
+          anchors.top: parent.top
+          color: featureForm.controller.hasValidationErrors ? InputStyle.invalidButtonColor : InputStyle.highlightColor
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          height: header.rowHeight
+          horizontalAlignment: Text.AlignLeft
+          text: qsTr("Save")
+          verticalAlignment: Text.AlignVCenter
+          visible: featureForm.state === "edit" || featureForm.state === "add"
+
+          MouseArea {
+            anchors.fill: parent
+
+            onClicked: featureForm.save()
+          }
+        }
       }
     }
   }

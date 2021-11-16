@@ -6,75 +6,69 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-
-import ".."
+import "../"
 import "../components" as Components
 
 Drawer {
-    property string activeLayerId: __activeLayer.layerId
+  id: layerPanel
+  property string activeLayerId: __activeLayer.layerId
 
-    signal activeLayerChangeRequested( var layerId )
+  dragMargin: 0 // prevents opening the drawer by dragging.
+  interactive: false
+  modal: true
+  visible: false
 
-    function openPanel() {
-        layerPanel.visible = true
-    }
+  signal activeLayerChangeRequested(var layerId)
+  function openPanel() {
+    layerPanel.visible = true;
+  }
 
-    id: layerPanel
-    visible: false
-    modal: true
-    interactive: false
-    dragMargin: 0 // prevents opening the drawer by dragging.
+  Item {
+    focus: true
 
-    background: Rectangle {
-        color: InputStyle.clrPanelMain
-    }
-
-    Item {
-      focus: true
-      Keys.onReleased: {
-        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          layerPanel.close()
-        }
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        layerPanel.close();
       }
     }
+  }
+  Components.PanelHeader {
+    id: header
+    color: InputStyle.panelBackgroundLight
+    height: InputStyle.rowHeightHeader
+    layer.enabled: true
+    rowHeight: InputStyle.rowHeightHeader
+    titleText: qsTr("Choose Active Layer")
+    width: parent.width
+    withBackButton: true
 
-    Components.PanelHeader {
-      id: header
-      height: InputStyle.rowHeightHeader
-      width: parent.width
-      color: InputStyle.panelBackgroundLight
-      rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Choose Active Layer")
-      onBack: layerPanel.close()
-      withBackButton: true
-      layer.enabled: true
-      layer.effect: Components.Shadow {}
+    onBack: layerPanel.close()
+
+    layer.effect: Components.Shadow {
     }
+  }
+  Components.LayerList {
+    activeLayerId: layerPanel.activeLayerId
+    borderWidth: 1
+    cellHeight: InputStyle.rowHeight
+    cellWidth: width
+    height: layerPanel.height - header.height
+    model: __recordingLayersModel
+    noLayersText: qsTr("Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.").arg("<a href='" + __inputHelp.howToEnableDigitizingLink + "'>").arg("</a>")
+    width: parent.width
+    y: header.height
 
-    Components.LayerList {
-        height: layerPanel.height - header.height
-        width: parent.width
-        y: header.height
-        model: __recordingLayersModel
-        noLayersText: qsTr("Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.")
-                      .arg("<a href='"+ __inputHelp.howToEnableDigitizingLink +"'>")
-                      .arg("</a>")
-
-        activeLayerId: layerPanel.activeLayerId
-
-        cellWidth: width
-        cellHeight: InputStyle.rowHeight
-        borderWidth: 1
-
-        onListItemClicked: {
-          __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
-          layerPanel.visible = false
-        }
+    onListItemClicked: {
+      __loader.setActiveLayer(__recordingLayersModel.layerFromLayerId(layerId));
+      layerPanel.visible = false;
     }
+  }
+
+  background: Rectangle {
+    color: InputStyle.clrPanelMain
+  }
 }

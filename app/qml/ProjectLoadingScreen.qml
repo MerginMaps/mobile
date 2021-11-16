@@ -6,34 +6,29 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 Item {
-
   Rectangle {
     anchors.fill: parent
     color: InputStyle.fontColor
   }
-
   Image {
     id: logo
     anchors.centerIn: parent
-    source: InputStyle.inputLogo
-    width: parent.width/2
-    sourceSize.height: 0
     fillMode: Image.PreserveAspectFit
+    source: InputStyle.inputLogo
+    sourceSize.height: 0
     sourceSize.width: width
+    width: parent.width / 2
   }
-
   Text {
-    text: qsTr("Opening project ...")
-    anchors.verticalCenterOffset: parent.height/6
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
-    font.pixelSize: InputStyle.fontPixelSizeNormal
+    anchors.verticalCenterOffset: parent.height / 6
     color: "white"
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    text: qsTr("Opening project ...")
   }
-
 }

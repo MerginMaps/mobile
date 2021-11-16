@@ -6,62 +6,59 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import ".."  // import InputStyle singleton
+import "../"  // import InputStyle singleton
 
 Row {
-  spacing: 0
   id: root
-  property real fieldHeight: InputStyle.rowHeight
-  property string source: ""
-  property string text: ""
   property color bgColor: "white"
+  property real fieldHeight: InputStyle.rowHeight
   property color fontColor: InputStyle.fontColor
   property color iconColor: InputStyle.fontColor
-
+  property string source: ""
+  property string text: ""
   property alias textItem: textItem
+
+  spacing: 0
 
   signal linkActivated(string link)
 
   Rectangle {
     id: iconContainer
+    color: root.bgColor
     height: fieldHeight
     width: fieldHeight
-    color: root.bgColor
 
     Image {
-      anchors.margins: (fieldHeight / 4)
       id: icon
-      height: fieldHeight
-      width: fieldHeight
       anchors.fill: parent
-      source: root.source
-      sourceSize.width: width
-      sourceSize.height: height
+      anchors.margins: (fieldHeight / 4)
       fillMode: Image.PreserveAspectFit
+      height: fieldHeight
+      source: root.source
+      sourceSize.height: height
+      sourceSize.width: width
+      width: fieldHeight
     }
-
     ColorOverlay {
       anchors.fill: icon
-      source: icon
       color: root.iconColor
+      source: icon
     }
   }
-
   Text {
     id: textItem
-    width: parent.width - iconContainer.width
-    height: fieldHeight
-    verticalAlignment: Text.AlignVCenter
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    onLinkActivated: root.linkActivated(link)
     color: root.fontColor
-    text: "<style>a:link { color: " + InputStyle.highlightColor
-          + "; text-decoration: underline; }</style>" + root.text
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    height: fieldHeight
+    text: "<style>a:link { color: " + InputStyle.highlightColor + "; text-decoration: underline; }</style>" + root.text
     textFormat: Text.RichText
+    verticalAlignment: Text.AlignVCenter
+    width: parent.width - iconContainer.width
     wrapMode: Text.WordWrap
+
+    onLinkActivated: root.linkActivated(link)
   }
 }

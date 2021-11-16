@@ -6,104 +6,119 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-import ".."
+import "../"
 import "../components"
 
 Item {
-    id: toolbar
+  id: toolbar
+  property bool isFeaturePoint: false
+  property int itemSize: toolbar.height * 0.8
 
-    property int itemSize: toolbar.height * 0.8
-    property bool isFeaturePoint: false
+  signal deleteClicked
+  signal editClicked
+  signal editGeometryClicked
 
-    signal editClicked()
-    signal deleteClicked()
-    signal editGeometryClicked()
+  Rectangle {
+    anchors.fill: parent
+    color: InputStyle.clrPanelBackground
+  }
+  Row {
+    id: readOnlyRow
+    anchors.fill: parent
+    height: parent.height
+    width: parent.width
 
-    states: [
-        State {
-            name: "edit"
-            PropertyChanges { target: editRow; visible: true }
-            PropertyChanges { target: readOnlyRow; visible: false }
+    Item {
+      height: parent.height
+      width: parent.width / parent.children.length
+
+      MainPanelButton {
+        id: openProjectBtn
+        imageSource: InputStyle.editIcon
+        text: qsTr("Edit")
+        width: toolbar.itemSize
+
+        onActivated: {
+          toolbar.editClicked();
         }
-        ,State {
-            name: "add"
-            PropertyChanges { target: editRow; visible: true }
-            PropertyChanges { target: readOnlyRow; visible: false }
-        }
-        ,State {
-            name: "readOnly"
-            PropertyChanges { target: editRow; visible: false }
-            PropertyChanges { target: readOnlyRow; visible: true }
-        }
-    ]
-
-    Rectangle {
-        anchors.fill: parent
-        color: InputStyle.clrPanelBackground
+      }
     }
+  }
+  Row {
+    id: editRow
+    anchors.fill: parent
+    height: parent.height
+    width: parent.width
 
-    Row {
-        id: readOnlyRow
-        height: parent.height
-        width: parent.width
-        anchors.fill: parent
+    Item {
+      height: parent.height
+      width: parent.width / parent.children.length
 
-        Item {
-            width: parent.width/parent.children.length
-            height: parent.height
+      MainPanelButton {
+        imageSource: InputStyle.removeIcon
+        text: qsTr("Delete")
+        width: toolbar.itemSize
 
-            MainPanelButton {
-                id: openProjectBtn
-                width: toolbar.itemSize
-                text: qsTr("Edit")
-                imageSource: InputStyle.editIcon
-
-                onActivated: {
-                    toolbar.editClicked()
-                }
-            }
+        onActivated: {
+          toolbar.deleteClicked();
         }
+      }
     }
+    Item {
+      height: parent.height
+      width: parent.width / parent.children.length
 
-    Row {
-        id: editRow
-        height: parent.height
-        width: parent.width
-        anchors.fill: parent
+      MainPanelButton {
+        enabled: isFeaturePoint
+        imageSource: InputStyle.editIcon
+        text: qsTr("Edit geometry")
+        width: toolbar.itemSize
 
-        Item {
-            width: parent.width/parent.children.length
-            height: parent.height
-
-            MainPanelButton {
-                width: toolbar.itemSize
-                text: qsTr("Delete")
-                imageSource: InputStyle.removeIcon
-
-                onActivated: {
-                    toolbar.deleteClicked()
-                }
-            }
+        onActivated: {
+          toolbar.editGeometryClicked();
         }
-
-        Item {
-            width: parent.width/parent.children.length
-            height: parent.height
-
-            MainPanelButton {
-
-                width: toolbar.itemSize
-                text: qsTr("Edit geometry")
-                imageSource: InputStyle.editIcon
-                enabled: isFeaturePoint
-
-                onActivated: {
-                    toolbar.editGeometryClicked()
-                }
-            }
-        }
+      }
     }
+  }
+
+  states: [
+    State {
+      name: "edit"
+
+      PropertyChanges {
+        target: editRow
+        visible: true
+      }
+      PropertyChanges {
+        target: readOnlyRow
+        visible: false
+      }
+    },
+    State {
+      name: "add"
+
+      PropertyChanges {
+        target: editRow
+        visible: true
+      }
+      PropertyChanges {
+        target: readOnlyRow
+        visible: false
+      }
+    },
+    State {
+      name: "readOnly"
+
+      PropertyChanges {
+        target: editRow
+        visible: false
+      }
+      PropertyChanges {
+        target: readOnlyRow
+        visible: true
+      }
+    }
+  ]
 }

@@ -6,126 +6,117 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.12
-
-import "./components"
+import "components"
 
 Dialog {
-  property var uploadSize
-  property string titleText: qsTr("You have reached a data limit")
+  id: root
   property int diskUsage: __merginApi.userInfo.diskUsage
-  property int storageLimit: __merginApi.userInfo.storageLimit
-  property string planAlias: __merginApi.subscriptionInfo.planAlias
   property real fieldHeight: InputStyle.rowHeight
+  property string planAlias: __merginApi.subscriptionInfo.planAlias
+  property int storageLimit: __merginApi.userInfo.storageLimit
+  property string titleText: qsTr("You have reached a data limit")
+  property var uploadSize
+
+  anchors.centerIn: parent
+  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  margins: InputStyle.outerFieldMargin
+  modal: true
+  visible: false
 
   signal openSubscriptionPlans
 
-  id: root
-  visible: false
-  modal: true
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
   onAccepted: root.close()
-  anchors.centerIn: parent
-  margins: InputStyle.outerFieldMargin
 
   background: Rectangle {
     anchors.fill: parent
     color: "white"
   }
-
   contentItem: ColumnLayout {
     anchors.margins: InputStyle.outerFieldMargin
 
     Text {
       id: title
       anchors.topMargin: InputStyle.panelMargin
-      height: root.fieldHeight
-      text: root.titleText
       color: InputStyle.fontColor
-      font.pixelSize: InputStyle.fontPixelSizeTitle
       font.bold: true
-      verticalAlignment: Text.AlignVCenter
+      font.pixelSize: InputStyle.fontPixelSizeTitle
+      height: root.fieldHeight
       horizontalAlignment: Text.AlignHCenter
+      text: root.titleText
+      verticalAlignment: Text.AlignVCenter
     }
-
     TextWithIcon {
-      width: parent.width
       height: root.fieldHeight
       source: InputStyle.syncIcon
-      text: qsTr("Data to sync: %1").arg(__inputUtils.bytesToHumanSize(
-                                           uploadSize))
-    }
-
-    Row {
+      text: qsTr("Data to sync: %1").arg(__inputUtils.bytesToHumanSize(uploadSize))
       width: parent.width
+    }
+    Row {
       height: root.fieldHeight
+      width: parent.width
+
       Item {
-        width: root.fieldHeight
         height: root.fieldHeight
+        width: root.fieldHeight
 
         CircularProgressBar {
           id: storageIcon
-          width: parent.width * 0.6
           anchors.centerIn: parent
           height: width
           value: root.diskUsage / root.storageLimit
+          width: parent.width * 0.6
         }
       }
-
       Text {
         id: textItem
-        height: root.fieldHeight
-        verticalAlignment: Text.AlignVCenter
-        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
-        text: qsTr("Using %1 / %2").arg(__inputUtils.bytesToHumanSize(
-                                          diskUsage)).arg(
-                __inputUtils.bytesToHumanSize(storageLimit))
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        height: root.fieldHeight
+        text: qsTr("Using %1 / %2").arg(__inputUtils.bytesToHumanSize(diskUsage)).arg(__inputUtils.bytesToHumanSize(storageLimit))
+        verticalAlignment: Text.AlignVCenter
       }
     }
-
     TextWithIcon {
-      width: parent.width
       height: root.fieldHeight
       source: InputStyle.editIcon
       text: qsTr("Plan: %1").arg(planAlias)
       visible: __merginApi.apiSupportsSubscriptions
+      width: parent.width
     }
-
     Text {
       id: planLink
-      height: root.fieldHeight
       Layout.fillWidth: true
-      horizontalAlignment: Qt.AlignHCenter
-      verticalAlignment: Qt.AlignVCenter
+      color: InputStyle.fontColor
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.underline: true
-      color: InputStyle.fontColor
+      height: root.fieldHeight
+      horizontalAlignment: Qt.AlignHCenter
       text: qsTr("Manage subscriptions")
+      verticalAlignment: Qt.AlignVCenter
       visible: __merginApi.apiSupportsSubscriptions
 
       MouseArea {
         anchors.fill: parent
+
         onClicked: root.openSubscriptionPlans()
       }
     }
-
     Item {
       id: spacer
       height: InputStyle.fontPixelSizeTitle
       width: parent.width
     }
-
     DelegateButton {
-      text: qsTr("Cancel")
-      onClicked: root.close()
-      height: root.fieldHeight
-      width: parent.width
       Layout.fillWidth: true
+      height: root.fieldHeight
+      text: qsTr("Cancel")
+      width: parent.width
+
+      onClicked: root.close()
     }
   }
 }

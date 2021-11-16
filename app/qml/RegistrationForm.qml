@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,7 +15,7 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
-import "./components"
+import "components"
 
 /**
   * Body of the AuthPanel with the registration form - username, email, password, ...
@@ -27,234 +25,217 @@ Rectangle {
   color: root.bgColor
 
   function clean() {
-    registerName.text = ""
-    email.text = ""
-    passwordField.password.text = ""
-    passwordConfirmField.password.text = ""
-    acceptTOC.checked = false
+    registerName.text = "";
+    email.text = "";
+    passwordField.password.text = "";
+    passwordConfirmField.password.text = "";
+    acceptTOC.checked = false;
   }
 
   ScrollView {
-    width: registerForm.width
     height: registerForm.height
+    width: registerForm.width
 
-  Column {
-    id: columnLayout
-    spacing: root.panelMargin / 2
-    width: parent.width
-    anchors.bottom: parent.bottom
+    Column {
+      id: columnLayout
+      anchors.bottom: parent.bottom
+      spacing: root.panelMargin / 2
+      width: parent.width
 
-    Image {
-      source: InputStyle.merginColorIcon
-      height: fieldHeight
-      sourceSize.height: height
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    Row {
-      id: row
-      width: registerForm.width
-      height: fieldHeight
-      spacing: 0
-
-      Rectangle {
-        id: iconContainer
+      Image {
+        anchors.horizontalCenter: parent.horizontalCenter
         height: fieldHeight
-        width: fieldHeight
-        color: root.bgColor
+        source: InputStyle.merginColorIcon
+        sourceSize.height: height
+      }
+      Row {
+        id: row
+        height: fieldHeight
+        spacing: 0
+        width: registerForm.width
 
-        Image {
-          anchors.margins: root.panelMargin
-          id: icon
+        Rectangle {
+          id: iconContainer
+          color: root.bgColor
           height: fieldHeight
           width: fieldHeight
-          anchors.fill: parent
-          source: InputStyle.accountIcon
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
-        }
 
-        ColorOverlay {
-          anchors.fill: icon
-          source: icon
+          Image {
+            id: icon
+            anchors.fill: parent
+            anchors.margins: root.panelMargin
+            fillMode: Image.PreserveAspectFit
+            height: fieldHeight
+            source: InputStyle.accountIcon
+            sourceSize.height: height
+            sourceSize.width: width
+            width: fieldHeight
+          }
+          ColorOverlay {
+            anchors.fill: icon
+            color: root.fontColor
+            source: icon
+          }
+        }
+        TextField {
+          id: registerName
           color: root.fontColor
+          font.capitalization: Font.MixedCase
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          height: fieldHeight
+          inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+          placeholderText: qsTr("Username")
+          width: parent.width - iconContainer.width
+          x: iconContainer.width
+
+          background: Rectangle {
+            color: root.bgColor
+          }
         }
       }
-
-      TextField {
-        id: registerName
-        x: iconContainer.width
-        width: parent.width - iconContainer.width
-        height: fieldHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.fontColor
-        placeholderText: qsTr("Username")
-        font.capitalization: Font.MixedCase
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        background: Rectangle {
-          color: root.bgColor
-        }
-      }
-    }
-
-    Rectangle {
-      id: registerNameBorder
-      color: root.fontColor
-      y: registerName.height - height
-      height: 2 * QgsQuick.Utils.dp
-      opacity: registerName.focus ? 1 : 0.6
-      width: parent.width - fieldHeight / 2
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    Row {
-      width: registerForm.width
-      height: fieldHeight
-      spacing: 0
-
       Rectangle {
-        id: iconContainer4
+        id: registerNameBorder
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: root.fontColor
+        height: 2 * QgsQuick.Utils.dp
+        opacity: registerName.focus ? 1 : 0.6
+        width: parent.width - fieldHeight / 2
+        y: registerName.height - height
+      }
+      Row {
         height: fieldHeight
-        width: fieldHeight
-        color: root.bgColor
+        spacing: 0
+        width: registerForm.width
 
-        Image {
-          anchors.margins: (fieldHeight / 4)
-          id: icon4
+        Rectangle {
+          id: iconContainer4
+          color: root.bgColor
           height: fieldHeight
           width: fieldHeight
-          anchors.fill: parent
-          source: InputStyle.envelopeIcon
-          sourceSize.width: width
-          sourceSize.height: height
-          fillMode: Image.PreserveAspectFit
-        }
 
-        ColorOverlay {
-          anchors.fill: icon4
-          source: icon4
+          Image {
+            id: icon4
+            anchors.fill: parent
+            anchors.margins: (fieldHeight / 4)
+            fillMode: Image.PreserveAspectFit
+            height: fieldHeight
+            source: InputStyle.envelopeIcon
+            sourceSize.height: height
+            sourceSize.width: width
+            width: fieldHeight
+          }
+          ColorOverlay {
+            anchors.fill: icon4
+            color: root.fontColor
+            source: icon4
+          }
+        }
+        TextField {
+          id: email
           color: root.fontColor
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          height: fieldHeight
+          inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+          placeholderText: qsTr("Email")
+          width: parent.width - iconContainer.width
+
+          background: Rectangle {
+            color: root.bgColor
+          }
         }
       }
-
-      TextField {
-        id: email
-        width: parent.width - iconContainer.width
-        height: fieldHeight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: root.fontColor
-        placeholderText: qsTr("Email")
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-        background: Rectangle {
-          color: root.bgColor
-        }
+      Rectangle {
+        id: emailBorder
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: InputStyle.panelBackgroundDark
+        height: 2 * QgsQuick.Utils.dp
+        opacity: email.focus ? 1 : 0.6
+        width: registerForm.width - fieldHeight / 2
+        y: email.height - height
       }
-    }
-
-    Rectangle {
-      id: emailBorder
-      color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
-      y: email.height - height
-      opacity: email.focus ? 1 : 0.6
-      width: registerForm.width - fieldHeight / 2
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    PasswordField {
-      id: passwordField
-      width: registerForm.width
-      height: fieldHeight
-      fontColor: root.fontColor
-      bgColor: root.bgColor
-    }
-
-    Rectangle {
-      id: passBorder
-      color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
-      y: fieldHeight - height
-      opacity: passwordField.password.focus ? 1 : 0.6
-      width: registerForm.width - fieldHeight / 2
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    PasswordField {
-      id: passwordConfirmField
-      width: registerForm.width
-      height: fieldHeight
-      fontColor: root.fontColor
-      bgColor: root.bgColor
-      placeholderText:  qsTr('Confirm password')
-    }
-
-
-    Rectangle {
-      id: confirmPassBorder
-      color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
-      y: fieldHeight - height
-      opacity: passwordConfirmField.password.focus ? 1 : 0.6
-      width: registerForm.width - fieldHeight / 2
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    Row {
-      width: registerForm.width
-      height: fieldHeight
-      spacing: 0
-
-      LeftCheckBox {
-        id: acceptTOC
-        anchors.margins: (fieldHeight / 4)
-        baseColor: root.fontColor
+      PasswordField {
+        id: passwordField
+        bgColor: root.bgColor
+        fontColor: root.fontColor
         height: fieldHeight
         width: registerForm.width
-        text: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
-              .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
-              .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
-              .arg("</a>")
       }
-    }
+      Rectangle {
+        id: passBorder
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: InputStyle.panelBackgroundDark
+        height: 2 * QgsQuick.Utils.dp
+        opacity: passwordField.password.focus ? 1 : 0.6
+        width: registerForm.width - fieldHeight / 2
+        y: fieldHeight - height
+      }
+      PasswordField {
+        id: passwordConfirmField
+        bgColor: root.bgColor
+        fontColor: root.fontColor
+        height: fieldHeight
+        placeholderText: qsTr('Confirm password')
+        width: registerForm.width
+      }
+      Rectangle {
+        id: confirmPassBorder
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: InputStyle.panelBackgroundDark
+        height: 2 * QgsQuick.Utils.dp
+        opacity: passwordConfirmField.password.focus ? 1 : 0.6
+        width: registerForm.width - fieldHeight / 2
+        y: fieldHeight - height
+      }
+      Row {
+        height: fieldHeight
+        spacing: 0
+        width: registerForm.width
 
-    Rectangle {
-      id: acceptTOCBorder
-      color: InputStyle.panelBackgroundDark
-      height: 2 * QgsQuick.Utils.dp
-      y: acceptTOC.height - height
-      opacity: acceptTOC.focus ? 1 : 0.6
-      width: registerForm.width - fieldHeight / 2
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
+        LeftCheckBox {
+          id: acceptTOC
+          anchors.margins: (fieldHeight / 4)
+          baseColor: root.fontColor
+          height: fieldHeight
+          text: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3").arg("<a href='" + __inputHelp.merginTermsLink + "'>").arg("<a href='" + __inputHelp.privacyPolicyLink + "'>").arg("</a>")
+          width: registerForm.width
+        }
+      }
+      Rectangle {
+        id: acceptTOCBorder
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: InputStyle.panelBackgroundDark
+        height: 2 * QgsQuick.Utils.dp
+        opacity: acceptTOC.focus ? 1 : 0.6
+        width: registerForm.width - fieldHeight / 2
+        y: acceptTOC.height - height
+      }
+      Button {
+        id: registerButton
+        anchors.horizontalCenter: parent.horizontalCenter
+        enabled: !stackView.pending
+        font.pixelSize: InputStyle.fontPixelSizeTitle
+        height: fieldHeight
+        text: qsTr("Sign up")
+        width: registerForm.width - 2 * root.panelMargin
 
-    Button {
-      id: registerButton
-      enabled: !stackView.pending
-      width: registerForm.width - 2 * root.panelMargin
-      height: fieldHeight
-      text: qsTr("Sign up")
-      font.pixelSize: InputStyle.fontPixelSizeTitle
-      anchors.horizontalCenter: parent.horizontalCenter
-      onClicked: {
-        stackView.pending = true
-        __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
-                                 passwordConfirmField.password.text, acceptTOC.checked)
-      }
-      background: Rectangle {
-        color: InputStyle.highlightColor
-      }
+        onClicked: {
+          stackView.pending = true;
+          __merginApi.registerUser(registerName.text, email.text, passwordField.password.text, passwordConfirmField.password.text, acceptTOC.checked);
+        }
 
-      contentItem: Text {
-        text: registerButton.text
-        font: registerButton.font
-        opacity: enabled ? 1.0 : 0.3
-        color: root.bgColor
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+        background: Rectangle {
+          color: InputStyle.highlightColor
+        }
+        contentItem: Text {
+          color: root.bgColor
+          elide: Text.ElideRight
+          font: registerButton.font
+          horizontalAlignment: Text.AlignHCenter
+          opacity: enabled ? 1.0 : 0.3
+          text: registerButton.text
+          verticalAlignment: Text.AlignVCenter
+        }
       }
-    }
     }
   }
 }

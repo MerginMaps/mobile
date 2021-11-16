@@ -6,21 +6,17 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.6
 import QgsQuick 0.1 as QgsQuick
-
 import "." // import Components
 import "../" // import InputStyle
 
 Switch {
   id: switchComp
-
-  implicitHeight: parent.height * 0.45
-  anchors.verticalCenter: parent.verticalCenter
   anchors.right: parent.right
   anchors.rightMargin: InputStyle.panelMargin
-
+  anchors.verticalCenter: parent.verticalCenter
   bgndColorActive: InputStyle.softGreen
   bgndColorInactive: InputStyle.panelBackgroundDark
+  implicitHeight: parent.height * 0.45
 }

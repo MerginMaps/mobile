@@ -6,26 +6,22 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.14
-
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import ".."
+import "../"
 
-Item {    
-    id: root
+Item {
+  id: root
+  property point center: Qt.point(root.width / 2, root.height / 2)
+  property real size: 100 * QgsQuick.Utils.dp
 
-    property real size: 100 * QgsQuick.Utils.dp
-
-    property point center: Qt.point( root.width / 2, root.height / 2 )
-
-    Image {
-        anchors.centerIn: parent
-        height: root.size
-        width: height
-        source: InputStyle.crosshairIcon
-        sourceSize.width: width
-        sourceSize.height: height
-    }
+  Image {
+    anchors.centerIn: parent
+    height: root.size
+    source: InputStyle.crosshairIcon
+    sourceSize.height: height
+    sourceSize.width: width
+    width: height
+  }
 }

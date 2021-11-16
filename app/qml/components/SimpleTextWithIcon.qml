@@ -8,30 +8,29 @@
  ***************************************************************************/
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
-import "./.."
+import "../"
 
 Rectangle {
-  property color fontColor: "white"
-  property color bgColor: InputStyle.fontColorBright
-  property string text: ""
-  property string source: ""
-  property real fontPixelSize: InputStyle.fontPixelSizeNormal
-  property bool fontBold: false
-
-  property alias icon: icon
-
   id: root
+  property color bgColor: InputStyle.fontColorBright
+  property bool fontBold: false
+  property color fontColor: "white"
+  property real fontPixelSize: InputStyle.fontPixelSizeNormal
+  property alias icon: icon
+  property string source: ""
+  property string text: ""
+
   color: root.bgColor
 
   signal clicked
 
   MouseArea {
     anchors.fill: parent
+
     onClicked: {
-      root.clicked()
+      root.clicked();
     }
   }
-
   Row {
     anchors.centerIn: parent
     height: root.height
@@ -39,22 +38,21 @@ Rectangle {
 
     Symbol {
       id: icon
+      fontColor: root.fontColor
       height: !!source ? root.height : 0
-      width: height
       iconSize: height / 2
       source: root.source
-      fontColor: root.fontColor
+      width: height
     }
-
     Text {
       id: label
-      height: root.height
-      text: root.text
       color: root.fontColor
       font.bold: root.fontBold
       font.pixelSize: root.fontPixelSize
-      verticalAlignment: Text.AlignVCenter
+      height: root.height
       horizontalAlignment: Text.AlignHCenter
+      text: root.text
+      verticalAlignment: Text.AlignVCenter
     }
   }
 }

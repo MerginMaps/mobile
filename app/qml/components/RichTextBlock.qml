@@ -3,13 +3,12 @@ import "../"
 
 Text {
   id: root
-
-  textFormat: Text.RichText
   color: InputStyle.fontColor
-  font.pixelSize: InputStyle.fontPixelSizeNormal
   font.bold: true
-  verticalAlignment: Text.AlignVCenter
+  font.pixelSize: InputStyle.fontPixelSizeNormal
   horizontalAlignment: Text.AlignHCenter
+  padding: InputStyle.panelMargin / 2
+  textFormat: Text.RichText
+  verticalAlignment: Text.AlignVCenter
   wrapMode: Text.WordWrap
-  padding: InputStyle.panelMargin/2
 }

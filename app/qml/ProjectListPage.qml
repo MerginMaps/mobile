@@ -6,56 +6,48 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick 2.12
 import lc 1.0
-
-import "./components"
+import "components"
 
 Item {
   id: root
-
-  property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
-
   property alias list: projectlist
+  property int projectModelType: ProjectsModel.EmptyProjectsModel
 
-  signal openProjectRequested( string projectId, string projectFilePath )
-  signal showLocalChangesRequested( string projectId )
-
+  signal openProjectRequested(string projectId, string projectFilePath)
   function refreshProjectsList() {
-    searchBar.deactivate()
-    projectlist.refreshProjectList( searchBar.text )
+    searchBar.deactivate();
+    projectlist.refreshProjectList(searchBar.text);
   }
+  signal showLocalChangesRequested(string projectId)
 
   SearchBar {
     id: searchBar
+    allowTimer: true
 
     anchors {
-      top: parent.top
+      bottom: projectlist.top
       left: parent.left
       right: parent.right
-      bottom: projectlist.top
+      top: parent.top
     }
-
-    allowTimer: true
   }
-
   ProjectList {
     id: projectlist
-
-    projectModelType: root.projectModelType
     activeProjectId: root.activeProjectId
+    projectModelType: root.projectModelType
     searchText: searchBar.text
 
+    onOpenProjectRequested: root.openProjectRequested(projectId, projectFilePath)
+    onShowLocalChangesRequested: root.showLocalChangesRequested(projectId)
+
     anchors {
+      bottom: parent.bottom
       left: parent.left
       right: parent.right
       top: searchBar.bottom
-      bottom: parent.bottom
     }
-
-    onOpenProjectRequested: root.openProjectRequested( projectId, projectFilePath )
-    onShowLocalChangesRequested: root.showLocalChangesRequested( projectId )
   }
 }
