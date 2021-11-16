@@ -26,18 +26,19 @@ jobs:
     steps:
 
     # Cache qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
+      # - name: Cache Qt
+      #   id: cache-qt
+      #   uses: pat-s/always-upload-cache@v2.1.5
+      #   with:
+      #     path: ${{ github.workspace }}/Qt
+      #     key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-mac
 
       - name: Install Qt6
         uses: jurplel/install-qt-action@v2 # automatically chooses mac desktop based on env
         with:
           version: ${{ env.QT_VERSION }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          dir: ${{ github.workspace }}/Qt6
+          # cached: ${{ steps.cache-qt.outputs.cache-hit }}
           setup-python: false
 
       - uses: actions/checkout@v2

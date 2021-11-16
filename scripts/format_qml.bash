@@ -8,12 +8,16 @@ FORMATTER=""
 
 if [ $# -eq 0 ]; then
     # No arguments provided, need to look for qmlformat in path
-    FORMATTER=`which qmlformat`
+    env
+    which qmlformat
 
     if [ $? -ne 0 ]; then
     	echo "[!] qmlformat not found in PATH" >&2
     	exit 1
     fi
+
+    FORMATTER=`which qmlformat`
+    echo $FORMATTER
 else
     FORMATTER=`which $1`
 
