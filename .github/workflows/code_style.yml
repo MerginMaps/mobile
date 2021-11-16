@@ -45,5 +45,5 @@ jobs:
 
       - name: Run style check
         run: |
-          Path=$PATH:${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin
+          echo "PATH=$PATH:${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin" >> $GITHUB_ENV
           ./scripts/format_qml.bash
