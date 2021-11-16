@@ -1,7 +1,7 @@
 name: Code Layout
 on: [push]
 env:
-  QT_VERSION: 6.2.1
+  QT_VERSION: "6.2"
 jobs:
   code_style_cpp:
     name: C++ code convention check
