@@ -6,22 +6,22 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import "../"  // import InputStyle singleton
+import ".."  // import InputStyle singleton
 
 Text {
-  color: InputStyle.fontColor
-  font.bold: true
-  font.pixelSize: InputStyle.fontPixelSizeNormal
-  height: parent.height
-  horizontalAlignment: Qt.AlignHCenter
-  linkColor: InputStyle.highlightColor
-  text: "(no-text)"
-  textFormat: Text.StyledText
-  verticalAlignment: Qt.AlignVCenter
-  width: parent.width
-  wrapMode: Text.WordWrap
-
-  onLinkActivated: Qt.openUrlExternally(link)
+    width: parent.width
+    height: parent.height
+    color: InputStyle.fontColor
+    onLinkActivated: Qt.openUrlExternally(link)
+    textFormat: Text.StyledText
+    wrapMode: Text.WordWrap
+    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.bold: true
+    horizontalAlignment: Qt.AlignHCenter
+    verticalAlignment: Qt.AlignVCenter
+    text: "(no-text)"
+    linkColor: InputStyle.highlightColor
 }

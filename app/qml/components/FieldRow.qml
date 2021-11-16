@@ -5,41 +5,41 @@ import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.2
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "../" // import InputStyle singleton
+import "./.." // import InputStyle singleton
 
 Item {
   id: fieldDelegate
-  property color color: InputStyle.fontColor
-  property real iconSize: rowHeight * 0.4
-  property real rowHeight: InputStyle.rowHeightHeader
-  property var widgetList: []
-
   signal removeClicked(var index)
+
+  property real rowHeight: InputStyle.rowHeightHeader
+  property real iconSize: rowHeight * 0.4
+  property color color: InputStyle.fontColor
+  property var widgetList: []
 
   RowLayout {
     id: row
-    property real itemSize: (parent.width - imageBtn.width - (2 * row.spacing)) / 2
-
     height: fieldDelegate.rowHeight
-    spacing: InputStyle.panelSpacing
     width: fieldDelegate.width
+    spacing: InputStyle.panelSpacing
+    property real itemSize: (parent.width - imageBtn.width - (2* row.spacing)) / 2
 
     InputTextField {
       id: textField
+      color: fieldDelegate.color
       Layout.fillHeight: true
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
-      color: fieldDelegate.color
 
       Component.onCompleted: text = AttributeName
       onTextChanged: AttributeName = text
     }
+
     ComboBox {
       id: comboBox
+      height: row.height
       Layout.fillHeight: true
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
-      height: row.height
       model: widgetList
       textRole: "display"
       valueRole: "widget"
@@ -53,87 +53,87 @@ Item {
         propagateComposedEvents: true
 
         onClicked: mouse.accepted = false
-        onDoubleClicked: mouse.accepted = false
-        onPositionChanged: mouse.accepted = false
-        onPressAndHold: mouse.accepted = false
-        onPressed: {
-          forceActiveFocus();
-          mouse.accepted = false;
+        onPressed: { forceActiveFocus(); mouse.accepted = false; }
+        onReleased: mouse.accepted = false;
+        onDoubleClicked: mouse.accepted = false;
+        onPositionChanged: mouse.accepted = false;
+        onPressAndHold: mouse.accepted = false;
+      }
+
+      delegate: ItemDelegate {
+        width: comboBox.width
+        height: comboBox.height * 0.8
+        text: model.display.replace('&', "&&") // issue ampersand character showing up as underscore
+        font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        highlighted: comboBox.highlightedIndex === index
+        leftPadding: textField.leftPadding
+        onClicked: {
+          WidgetType = model.widget
+          comboBox.currentIndex = index
         }
-        onReleased: mouse.accepted = false
+      }
+
+      contentItem: Text {
+        height: comboBox.height * 0.8
+        text: comboBox.displayText
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+        leftPadding: textField.leftPadding
+        color: InputStyle.fontColor
       }
 
       background: Item {
         implicitHeight: comboBox.height * 0.8
 
         Rectangle {
-          id: backgroundRect
           anchors.fill: parent
+          id: backgroundRect
           border.color: comboBox.pressed ? InputStyle.fontColor : InputStyle.panelBackgroundLight
           border.width: comboBox.visualFocus ? 2 : 1
           color: InputStyle.panelBackgroundLight
           radius: InputStyle.cornerRadius
         }
       }
-      contentItem: Text {
-        color: InputStyle.fontColor
-        elide: Text.ElideRight
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        height: comboBox.height * 0.8
-        horizontalAlignment: Text.AlignLeft
-        leftPadding: textField.leftPadding
-        text: comboBox.displayText
-        verticalAlignment: Text.AlignVCenter
-      }
-      delegate: ItemDelegate {
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
-        height: comboBox.height * 0.8
-        highlighted: comboBox.highlightedIndex === index
-        leftPadding: textField.leftPadding
-        text: model.display.replace('&', "&&") // issue ampersand character showing up as underscore
-        width: comboBox.width
 
-        onClicked: {
-          WidgetType = model.widget;
-          comboBox.currentIndex = index;
-        }
-      }
       indicator: Item {
-        anchors.right: parent.right
         height: parent.height
+        anchors.right: parent.right
 
         Image {
           id: comboboxIndicatorIcon
+          source: InputStyle.comboboxIcon
+          height: fieldDelegate.iconSize
+          width: height / 2
           anchors.right: parent.right
           anchors.rightMargin: InputStyle.innerFieldMargin
           anchors.verticalCenter: parent.verticalCenter
-          autoTransform: true
           fillMode: Image.PreserveAspectFit
-          height: fieldDelegate.iconSize
-          source: InputStyle.comboboxIcon
+          autoTransform: true
           visible: false
-          width: height / 2
         }
+
         ColorOverlay {
           anchors.fill: comboboxIndicatorIcon
-          color: InputStyle.activeButtonColor
           source: comboboxIndicatorIcon
+          color: InputStyle.activeButtonColor
         }
       }
     }
+
     Symbol {
       id: imageBtn
+      height: fieldDelegate.height/2
       Layout.fillHeight: true
-      height: fieldDelegate.height / 2
-      iconSize: fieldDelegate.iconSize
       source: InputStyle.noIcon
+      iconSize: fieldDelegate.iconSize
 
       MouseArea {
         anchors.fill: parent
-
         onClicked: {
-          fieldDelegate.removeClicked(index);
+          fieldDelegate.removeClicked(index)
         }
       }
     }

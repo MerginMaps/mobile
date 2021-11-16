@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -6,170 +6,204 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "form" as Forms
+import "./form" as Forms
 import "."
 
 Item {
   id: root
-  property int activeFormIndex: formsStack.depth - 1
-  property real previewHeight
 
   /*
    * FormsStackManager component is responsible for viewing feature forms, both preview and fullscreen form
    * It contains a stackview where instances of FormWrapper are pushed. Latest form is not destroyed, but reused
    * for next feature to reduce a cost of initializing form and AttributeController each time user selects feature.
    */
+
   property var project
+  property real previewHeight
+
+  property int activeFormIndex: formsStack.depth - 1
+
+  signal closed()
+  signal editGeometryRequested( var pair )
+  signal createLinkedFeatureRequested( var targetLayer, var parentPair )
+
+  function openForm( pair, formState, panelState ) {
+    if ( formsStack.depth === 0 )
+    {
+      let props = {
+        featureLayerPair: pair,
+        formState: formState,
+        panelState: panelState
+      }
+
+      var latest = formsStack.push( formComponent, props )
+    }
+    else
+    {
+      latest = formsStack.get( 0 )
+      latest.featureLayerPair = pair
+      latest.formState = formState
+      latest.panelState = panelState
+    }
+  }
 
   function _getActiveForm() {
-    if (root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth) {
-      return formsStack.get(activeFormIndex);
-    } else
-      console.error("FormsStackManager: Opted for invalid form index");
-    return null;
-  }
-  function addLinkedFeature(newPair, parentController, relation) {
-    let props = {
-      "featureLayerPair": newPair,
-      "formState": "add",
-      "panelState": "form",
-      "parentController": parentController,
-      "linkedRelation": relation
-    };
-    let latest = formsStack.push(formComponent, props);
-  }
-  function applyOnForms(func) {
-    if (root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth) {
-      console.error("FormsStackManager: Invalid active index");
-      return;
+    if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
+      return formsStack.get( activeFormIndex )
     }
-    for (var i = 0; i <= root.activeFormIndex; i++) {
-      let form = formsStack.get(i);
-      func(form);
-    }
+    else console.error( "FormsStackManager: Opted for invalid form index" )
+    return null
   }
+
   function closeDrawer() {
-    let form = _getActiveForm();
-    if (form)
-      form.closeDrawer();
+    let form = _getActiveForm()
+
+    if ( form )
+      form.closeDrawer()
   }
-  signal closed
-  signal createLinkedFeatureRequested(var targetLayer, var parentPair)
-  signal editGeometryRequested(var pair)
-  function geometryEditingFinished(pair, success = true) {
-    // open form drawers back
-    if (root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth) {
-      console.error("FormsStackManager: Invalid active index");
-      return;
+
+  function reload() {
+    formsStack.clear() // removes all objects thanks to Qt parent system
+  }
+
+  function openLinkedFeature( linkedFeature ) {
+    let props = {
+      featureLayerPair: linkedFeature,
+      formState: "readOnly",
+      panelState: "form"
     }
-    for (var i = 0; i <= root.activeFormIndex; i++) {
-      let form = formsStack.get(i);
-      if (form && typeof form.openDrawer === "function") {
-        if (success && i === root.activeFormIndex) {
-          form.featureLayerPair = pair;
-          form.updateFeatureGeometry();
+
+    let latest = formsStack.push( formComponent, props )
+  }
+
+  function addLinkedFeature( newPair, parentController, relation ) {
+    let props = {
+      featureLayerPair: newPair,
+      formState: "add",
+      panelState: "form",
+      parentController: parentController,
+      linkedRelation: relation
+    }
+
+    let latest = formsStack.push( formComponent, props )
+  }
+
+  function applyOnForms( func ) {
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+      func( form )
+    }
+  }
+
+  function geometryEditingStarted() {
+    // close form drawers so that user can see map
+    applyOnForms( ( form ) => {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
+  }
+
+  function geometryEditingFinished( pair, success = true ) {
+    // open form drawers back
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        if ( success && i === root.activeFormIndex ) {
+          form.featureLayerPair = pair
+          form.updateFeatureGeometry()
         }
-        form.openDrawer();
+        form.openDrawer()
       }
     }
   }
-  function geometryEditingStarted() {
+
+  function recordInLayerStarted() {
     // close form drawers so that user can see map
-    applyOnForms(form =>
-        if (form && typeof form.closeDrawer === "function") {
-          form.panelState = "hidden";
-          form.closeDrawer();
-        }
-      });
+    applyOnForms( ( form ) => {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
   }
-  function openForm(pair, formState, panelState) {
-    if (formsStack.depth === 0) {
-      let props = {
-        "featureLayerPair": pair,
-        "formState": formState,
-        "panelState": panelState
-      };
-      var latest = formsStack.push(formComponent, props);
-    } else {
-      latest = formsStack.get(0);
-      latest.featureLayerPair = pair;
-      latest.formState = formState;
-      latest.panelState = panelState;
-    }
-  }
-  function openLinkedFeature(linkedFeature) {
-    let props = {
-      "featureLayerPair": linkedFeature,
-      "formState": "readOnly",
-      "panelState": "form"
-    };
-    let latest = formsStack.push(formComponent, props);
-  }
-  function recordInLayerFinished(pair, success = true) {
+
+  function recordInLayerFinished( pair, success = true ) {
     // open form drawers back and push new form in the end
-    if (root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth) {
-      console.error("FormsStackManager: Invalid active index");
-      return;
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
     }
-    for (var i = 0; i <= root.activeFormIndex; i++) {
-      var form = formsStack.get(i);
-      if (form && typeof form.openDrawer === "function") {
-        form.openDrawer();
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      var form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        form.openDrawer()
       }
     }
 
     // now add the new feature
-    if (success) {
-      addLinkedFeature(pair, form.controllerToApply, form.relationToApply);
+    if ( success ) {
+      addLinkedFeature( pair, form.controllerToApply, form.relationToApply )
     }
 
     // remove stored properties
-    form.relationToApply = null;
-    form.controllerToApply = null;
-  }
-  function recordInLayerStarted() {
-    // close form drawers so that user can see map
-    applyOnForms(form =>
-        if (form && typeof form.closeDrawer === "function") {
-          form.panelState = "hidden";
-          form.closeDrawer();
-        }
-      });
-  }
-  function reload() {
-    formsStack.clear(); // removes all objects thanks to Qt parent system
+    form.relationToApply = null
+    form.controllerToApply = null
   }
 
   StackView {
     id: formsStack
-    anchors.fill: parent
-    focus: true
 
     function popOneOrClose() {
-      formsStack.pop();
-      if (formsStack.depth <= 1)
-        root.closed(); // this is the top most form, we want to keep it instantiated, just invisible
+      formsStack.pop()
+
+      if ( formsStack.depth <= 1 )
+        root.closed() // this is the top most form, we want to keep it instantiated, just invisible
     }
+
+    focus: true
+
+    anchors.fill: parent
   }
+
   Component {
     id: formComponent
+
     Forms.FormWrapper {
       id: wrapper
-      previewHeight: root.previewHeight
+
       project: root.project
 
+      previewHeight: root.previewHeight
+
       onClosed: {
-        if (panelState !== "hidden") {
-          formsStack.popOneOrClose();
+        if ( panelState !== "hidden" ) {
+          formsStack.popOneOrClose()
         }
       }
-      onCreateLinkedFeature: root.createLinkedFeatureRequested(targetLayer, parentPair)
-      onEditGeometry: root.editGeometryRequested(pair)
-      onOpenLinkedFeature: root.openLinkedFeature(linkedFeature)
+      onEditGeometry: root.editGeometryRequested( pair )
+      onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
+      onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
     }
   }
 }

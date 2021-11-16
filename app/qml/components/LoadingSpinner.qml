@@ -6,22 +6,28 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.14
-import "../"
+
+import ".."
 
 Symbol {
   id: root
+
   property bool running: false
 
-  source: InputStyle.loadingIndicatorIcon
   visible: running
+  source: InputStyle.loadingIndicatorIcon
 
   RotationAnimation {
-    duration: 800
-    from: 0
-    loops: Animation.Infinite
-    running: root.running
     target: root
+
+    from: 0
     to: 360
+
+    duration: 800
+
+    running: root.running
+    loops: Animation.Infinite
   }
 }

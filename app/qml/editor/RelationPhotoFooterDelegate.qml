@@ -6,91 +6,108 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQml.Models 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.14
+
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-import "../"
+import ".."
 
 Item {
   id: root
+
   property bool isReadOnly: false
 
-  height: parent.height
-  visible: !isReadOnly
-  width: parent.height + spacingRect.width
+  signal clicked()
 
-  signal clicked
+  height: parent.height
+  width: parent.height + spacingRect.width
+  visible: !isReadOnly
 
   Row {
     height: parent.height
     width: parent.width
 
-    Rectangle {
-      // listview does not add space before footer, add it here
+    Rectangle { // listview does not add space before footer, add it here
       id: spacingRect
-      color: "transparent"
-      height: width
+
       width: customStyle.group.spacing
-    }
-    Rectangle {
-      border.color: customStyle.relationComponent.photoBorderColorButton
-      border.width: customStyle.relationComponent.photoBorderWidth
+      height: width
       color: "transparent"
-      height: root.height
+
+    }
+
+    Rectangle {
       width: root.width - spacingRect.width
+      height: root.height
+
+      border.width: customStyle.relationComponent.photoBorderWidth
+      border.color: customStyle.relationComponent.photoBorderColorButton
+      color: "transparent"
+
 
       Item {
-        anchors.centerIn: parent
-        height: parent.height / 2
         width: parent.width / 2
+        height: parent.height / 2
+
+        anchors.centerIn: parent
 
         Column {
           anchors.fill: parent
 
           Item {
             id: iconContainer
-            height: parent.height - textContainer.height
+
             width: parent.width
+            height: parent.height - textContainer.height
 
             Image {
               id: icon
-              fillMode: Image.PreserveAspectFit
-              height: parent.height
-              source: customStyle.icons.plus
-              sourceSize: Qt.size(width, height)
+
               width: parent.width
+              height: parent.height
+
+              sourceSize: Qt.size( width, height )
+
+              source: customStyle.icons.plus
+              fillMode: Image.PreserveAspectFit
             }
+
             ColorOverlay {
               anchors.fill: icon
-              color: customStyle.relationComponent.iconColorButton
               source: icon
+              color: customStyle.relationComponent.iconColorButton
             }
           }
+
           Item {
             id: textContainer
-            height: txt.paintedHeight
+
             width: parent.width
+            height: txt.paintedHeight
 
             Text {
               id: txt
+              text: qsTr( "Add" )
+
               anchors.centerIn: parent
-              clip: true
-              color: customStyle.relationComponent.textColorButton
+
               font.pointSize: customStyle.fields.labelPointSize
-              text: qsTr("Add")
+              color: customStyle.relationComponent.textColorButton
+              clip: true
             }
           }
         }
       }
     }
   }
+
   MouseArea {
     anchors.fill: parent
-
-    onClicked: root.clicked(model.FeaturePair)
+    onClicked: root.clicked( model.FeaturePair )
   }
 }

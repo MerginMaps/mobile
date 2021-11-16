@@ -12,6 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
@@ -23,70 +24,72 @@ import "../components"
  * Do not use directly from Application QML
  */
 Item {
-  id: fieldItem
+  signal editorValueChanged(var newValue, bool isNull)
   property bool isReadOnly: readOnly
 
+  id: fieldItem
   enabled: !readOnly
   height: customStyle.fields.height
-
-  signal editorValueChanged(var newValue, bool isNull)
-
   anchors {
     left: parent.left
     right: parent.right
   }
+
   InputComboBox {
-    property var currentEditorValue: value
     // Reversed to model's key-value map. It is used to find index according current value
     property var reverseConfig: ({})
+    property var currentEditorValue: value
 
     comboStyle: customStyle.fields
-    height: parent.height
-    iconSize: fieldItem.height * 0.50
-    readOnly: isReadOnly
     textRole: 'display'
+    height: parent.height
+    readOnly: isReadOnly
+    iconSize: fieldItem.height * 0.50
+    model: ListModel {
+      id: listModel
+    }
 
     Component.onCompleted: {
       var currentMap;
       var currentKey;
-      if (config['map']) {
-        if (config['map'].length) {
+
+      if( config['map'] )
+      {
+        if( config['map'].length )
+        {
           //it's a list (>=QGIS3.0)
-          for (var i = 0; i < config['map'].length; i++) {
-            currentMap = config['map'][i];
-            currentKey = Object.keys(currentMap)[0];
-            listModel.append({
-                "display": currentKey
-              });
+          for(var i=0; i<config['map'].length; i++)
+          {
+            currentMap = config['map'][i]
+            currentKey = Object.keys(currentMap)[0]
+            listModel.append( { display: currentKey } )
             reverseConfig[currentMap[currentKey]] = currentKey;
           }
-        } else {
+        }
+        else
+        {
           //it's a map (<=QGIS2.18)
-          currentMap = config['map'].length ? config['map'][currentIndex] : config['map'];
-          currentKey = Object.keys(currentMap)[0];
-          for (var key in config['map']) {
-            listModel.append({
-                "display": key
-              });
+          currentMap = config['map'].length ? config['map'][currentIndex] : config['map']
+          currentKey = Object.keys(currentMap)[0]
+          for(var key in config['map']) {
+            listModel.append( { display: key } )
             reverseConfig[config['map'][key]] = key;
           }
         }
       }
-      currentIndex = find(reverseConfig[value]);
+      currentIndex = find(reverseConfig[value])
+    }
+
+    onCurrentTextChanged: {
+      var currentMap = config['map'].length ? config['map'][currentIndex] : config['map']
+      if (currentMap)
+        editorValueChanged(currentMap[currentText], false)
     }
 
     // Workaround to get a signal when the value has changed
     onCurrentEditorValueChanged: {
-      currentIndex = find(reverseConfig[value]);
-    }
-    onCurrentTextChanged: {
-      var currentMap = config['map'].length ? config['map'][currentIndex] : config['map'];
-      if (currentMap)
-        editorValueChanged(currentMap[currentText], false);
+      currentIndex = find(reverseConfig[value])
     }
 
-    model: ListModel {
-      id: listModel
-    }
   }
 }

@@ -6,6 +6,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+
 import QtQuick 2.7
 import QtQuick.Controls.Styles 1.2
 import QtGraphicalEffects 1.0
@@ -15,70 +17,60 @@ import "."  // import InputStyle singleton
 ProgressBar {
   id: root
   property color bgColor: InputStyle.panelBackgroundDark
-  property real circleWidth: 8 * InputStyle.dp
   property color color: InputStyle.fontColor
+  property real circleWidth: 8 * InputStyle.dp
 
   background: Rectangle {
-    color: InputStyle.clrPanelMain
-    implicitHeight: root.height
-    implicitWidth: root.width
-  }
-  contentItem: Item {
-    id: contentRoot
-    height: root.height
-    width: root.width
-
-    Rectangle {
-      id: outerRing
-      anchors.centerIn: contentRoot
-      antialiasing: true
-      border.color: InputStyle.clrPanelMain
-      border.width: 1
-      color: InputStyle.panelBackgroundDark
-      height: width
-      radius: width / 2
-      width: root.width
-      z: 0
-
-      ConicalGradient {
-        anchors.fill: parent
-        source: outerRing
-
-        gradient: Gradient {
-          GradientStop {
-            color: InputStyle.fontColor
-            position: 0.00
-          }
-          GradientStop {
-            color: InputStyle.fontColor
-            position: root.value
-          }
-          GradientStop {
-            color: InputStyle.panelBackgroundDark
-            position: root.value + 1e-6
-          }
-          GradientStop {
-            color: InputStyle.panelBackgroundDark
-            position: 1.00
-          }
-        }
-      }
-
-      transform: Rotation {
-        angle: 90
-        origin.x: outerRing.radius
-        origin.y: outerRing.radius
-      }
-    }
-    Rectangle {
-      id: innerRing
-      anchors.centerIn: contentRoot
-      antialiasing: true
+      implicitWidth: root.width
+      implicitHeight: root.height
       color: InputStyle.clrPanelMain
-      height: width
-      radius: width / 2
-      width: root.width - 2 * root.circleWidth
-      z: 1
-    }
   }
+
+  contentItem: Item
+  {
+      id: contentRoot
+      width: root.width
+      height: root.height
+
+          Rectangle
+          {
+             id: outerRing
+             z: 0
+             width: root.width
+             height: width
+             anchors.centerIn: contentRoot
+             radius: width / 2
+             antialiasing: true
+             color: InputStyle.panelBackgroundDark
+             transform: Rotation { origin.x: outerRing.radius; origin.y: outerRing.radius; angle: 90}
+             border.color: InputStyle.clrPanelMain
+             border.width: 1
+
+             ConicalGradient
+             {
+                source: outerRing
+                anchors.fill: parent
+                gradient: Gradient
+                {
+                   GradientStop { position: 0.00; color: InputStyle.fontColor }
+                   GradientStop { position: root.value; color: InputStyle.fontColor }
+                   GradientStop { position: root.value + 1e-6; color: InputStyle.panelBackgroundDark  }
+                   GradientStop { position: 1.00; color: InputStyle.panelBackgroundDark }
+                }
+             }
+          }
+
+
+          Rectangle
+          {
+             id: innerRing
+             z: 1
+             anchors.centerIn: contentRoot
+             width: root.width - 2* root.circleWidth
+             height: width
+             radius: width / 2
+             color: InputStyle.clrPanelMain
+             antialiasing: true
+          }
+    }
 }

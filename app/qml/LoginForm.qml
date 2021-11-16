@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -14,236 +16,247 @@ import QtGraphicalEffects 1.0
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "." // import InputStyle singleton
-import "components"
+import "./components"
 
 /**
   * Body of the AuthPanel with the login form - username and password
   * Also has a link to switch to register form and forgot password link
   */
 Rectangle {
+  signal registrationRequested()
+
   id: loginForm
-  property color bgColor
-  property var fieldHeight
-  property color fontColor
-  property bool isKeyboardOpen: Qt.inputMethod.keyboardRectangle.height
   property real panelMargin
+  property color bgColor
+  property color fontColor
+  property var fieldHeight
+
+  property bool isKeyboardOpen: Qt.inputMethod.keyboardRectangle.height
+  onIsKeyboardOpenChanged: if (!isKeyboardOpen) {
+      if (loginName.focus)
+        loginName.focus = false
+      if (passwordField.password.focus)
+        passwordField.password.focus = false
+    }
 
   function clean() {
-    passwordField.password.text = "";
-    loginName.text = "";
-  }
-  signal registrationRequested
-
-  onIsKeyboardOpenChanged: if (!isKeyboardOpen) {
-    if (loginName.focus)
-      loginName.focus = false;
-    if (passwordField.password.focus)
-      passwordField.password.focus = false;
+    passwordField.password.text = ""
+    loginName.text = ""
   }
 
   ScrollView {
-    height: loginForm.height
     width: loginForm.width
+    height: loginForm.height
 
     Column {
       id: columnLayout
-      anchors.bottom: parent.bottom
       spacing: loginForm.panelMargin / 2
       width: loginForm.width
+      anchors.bottom: parent.bottom
 
       Image {
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: fieldHeight
         source: InputStyle.merginColorIcon
+        height: fieldHeight
         sourceSize.height: height
+        anchors.horizontalCenter: parent.horizontalCenter
       }
+
       TextHyperlink {
         id: merginInfo
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: 2 * fieldHeight
-        text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.").arg("<a href='" + __inputHelp.merginWebLink + "'>").arg("</a>")
-        visible: !loginName.activeFocus && !passwordField.password.activeFocus
         width: columnLayout.width
+        visible: !loginName.activeFocus && !passwordField.password.activeFocus
+        height: 2 * fieldHeight
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
+                  .arg("<a href='" + __inputHelp.merginWebLink + "'>")
+                  .arg("</a>")
       }
+
       Row {
         id: row
+        width: loginForm.width
         height: fieldHeight
         spacing: 0
-        width: loginForm.width
 
         Rectangle {
           id: iconContainer
-          color: loginForm.bgColor
           height: fieldHeight
           width: fieldHeight
+          color: loginForm.bgColor
 
           Image {
-            id: icon
-            anchors.fill: parent
             anchors.margins: loginForm.panelMargin
-            fillMode: Image.PreserveAspectFit
+            id: icon
             height: fieldHeight
-            source: InputStyle.accountIcon
-            sourceSize.height: height
-            sourceSize.width: width
             width: fieldHeight
+            anchors.fill: parent
+            source: InputStyle.accountIcon
+            sourceSize.width: width
+            sourceSize.height: height
+            fillMode: Image.PreserveAspectFit
           }
+
           ColorOverlay {
             anchors.fill: icon
-            color: loginForm.fontColor
             source: icon
+            color: loginForm.fontColor
           }
         }
+
         TextField {
           id: loginName
-          color: loginForm.fontColor
-          font.capitalization: Font.MixedCase
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-          height: fieldHeight
-          inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-          placeholderText: qsTr("Username")
-          width: parent.width - iconContainer.width
           x: iconContainer.width
-
-          onEditingFinished: focus = false
-
+          width: parent.width - iconContainer.width
+          height: fieldHeight
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          color: loginForm.fontColor
+          placeholderText: qsTr("Username")
+          font.capitalization: Font.MixedCase
+          inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
           background: Rectangle {
             color: loginForm.bgColor
           }
+          onEditingFinished: focus = false
         }
       }
+
       Rectangle {
         id: loginNameBorder
-        anchors.horizontalCenter: parent.horizontalCenter
         color: loginForm.fontColor
+        y: loginName.height - height
         height: 2 * QgsQuick.Utils.dp
         opacity: loginName.focus ? 1 : 0.6
         width: parent.width - fieldHeight / 2
-        y: loginName.height - height
+        anchors.horizontalCenter: parent.horizontalCenter
       }
+
+
       PasswordField {
         id: passwordField
-        bgColor: loginForm.bgColor
-        fontColor: loginForm.fontColor
-        height: fieldHeight
         width: loginForm.width
+        height: fieldHeight
+        fontColor: loginForm.fontColor
+        bgColor: loginForm.bgColor
       }
+
       Rectangle {
         id: passBorder
-        anchors.horizontalCenter: parent.horizontalCenter
         color: loginForm.fontColor
         height: 2 * QgsQuick.Utils.dp
+        y: fieldHeight - height
         opacity: passwordField.password.focus ? 1 : 0.6
         width: loginForm.width - fieldHeight / 2
-        y: fieldHeight - height
+        anchors.horizontalCenter: parent.horizontalCenter
       }
+
       Button {
         id: loginButton
-        anchors.horizontalCenter: parent.horizontalCenter
         enabled: !stackView.pending
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+        width: loginForm.width - 2 * loginForm.panelMargin
         height: loginForm.fieldHeight
         text: qsTr("Sign in")
-        width: loginForm.width - 2 * loginForm.panelMargin
-
+        font.pixelSize: InputStyle.fontPixelSizeTitle
+        anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
-          stackView.pending = true;
-          __merginApi.authorize(loginName.text, passwordField.password.text);
+          stackView.pending = true
+          __merginApi.authorize(loginName.text, passwordField.password.text)
         }
-
         background: Rectangle {
           color: InputStyle.highlightColor
         }
+
         contentItem: Text {
-          color: loginForm.bgColor
-          elide: Text.ElideRight
-          font: loginButton.font
-          horizontalAlignment: Text.AlignHCenter
-          opacity: enabled ? 1.0 : 0.3
           text: loginButton.text
+          font: loginButton.font
+          opacity: enabled ? 1.0 : 0.3
+          color: loginForm.bgColor
+          horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
       }
+
       Item {
-        height: fieldHeight / 2
         width: parent.width
+        height: fieldHeight / 2
 
         Button {
-          anchors.horizontalCenter: parent.horizontalCenter
-          height: parent.height
-          visible: __merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE || __merginApi.apiVersionStatus === MerginApiStatus.NOT_FOUND
           width: parent.height
-
-          onClicked: __merginApi.pingMergin()
-
-          Image {
-            id: image
-            anchors.centerIn: parent
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 0
-            fillMode: Image.PreserveAspectFit
-            height: width
-            source: InputStyle.syncIcon
-            sourceSize.height: height
-            sourceSize.width: width
-            visible: source
-            width: parent.width * 0.75
-          }
-          ColorOverlay {
-            anchors.fill: image
-            color: "white"
-            source: image
-          }
-
+          height: parent.height
+          anchors.horizontalCenter: parent.horizontalCenter
+          visible: __merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE
+                   || __merginApi.apiVersionStatus === MerginApiStatus.NOT_FOUND
           background: Rectangle {
             anchors.fill: parent
             color: InputStyle.fontColor
             radius: 2 * QgsQuick.Utils.dp
           }
+
+          onClicked: __merginApi.pingMergin()
+
+          Image {
+            id: image
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.centerIn: parent
+            width: parent.width * 0.75
+            height: width
+            source: InputStyle.syncIcon
+            sourceSize.width: width
+            sourceSize.height: height
+            visible: source
+            anchors.topMargin: 0
+            fillMode: Image.PreserveAspectFit
+          }
+
+          ColorOverlay {
+            anchors.fill: image
+            source: image
+            color: "white"
+          }
         }
       }
+
       Button {
         id: signUpButton
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        width: loginForm.width - 2 * loginForm.panelMargin
         height: fieldHeight * 0.7
         text: qsTr("Sign up for free")
-        width: loginForm.width - 2 * loginForm.panelMargin
-
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
         onClicked: loginForm.registrationRequested()
-
         background: Rectangle {
           color: loginForm.bgColor
         }
+
         contentItem: Text {
-          color: InputStyle.highlightColor
-          elide: Text.ElideRight
-          font: signUpButton.font
-          horizontalAlignment: Text.AlignHCenter
           text: signUpButton.text
+          font: signUpButton.font
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
       }
+
       Button {
         id: resetPasswordButton
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        width: loginForm.width - 2 * loginForm.panelMargin
         height: fieldHeight * 0.7
         text: qsTr("Forgot password?")
-        width: loginForm.width - 2 * loginForm.panelMargin
-
-        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl())
-
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl());
         background: Rectangle {
           color: loginForm.bgColor
         }
+
         contentItem: Text {
-          color: InputStyle.highlightColor
-          elide: Text.ElideRight
-          font: resetPasswordButton.font
-          horizontalAlignment: Text.AlignHCenter
           text: resetPasswordButton.text
+          font: resetPasswordButton.font
+          color: InputStyle.highlightColor
+          horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
       }
     }

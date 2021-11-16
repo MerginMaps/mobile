@@ -12,6 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtGraphicalEffects 1.0
@@ -53,23 +54,21 @@ import "../components"
  * relative to project path |  image path - project home path |   photos/img0001.jpg
  */
 Item {
-  id: fieldItem
-  property var backIcon: customStyle.icons.back
+  signal editorValueChanged(var newValue, bool isNull)
+
+  property var image: image
   property var cameraIcon: customStyle.icons.camera
   property var deleteIcon: customStyle.icons.remove
   property var galleryIcon: customStyle.icons.gallery
-  property real iconSize: customStyle.fields.height
-  property var image: image
-  property string prefixToRelativePath: __inputUtils.resolvePrefixForRelativePath(relativeStorageMode, homePath, targetDir)
+  property var backIcon: customStyle.icons.back
+  property real iconSize:  customStyle.fields.height
+  property real textMargin: QgsQuick.Utils.dp * 10
   /**
    * 0 - Relative path disabled
    * 1 - Relative path to project
    * 2 - Relative path to defaultRoot defined in the config - Default path field in the widget configuration form
    */
   property int relativeStorageMode: config["RelativeStorage"]
-
-  // Meant to be use with the save callback - stores image source
-  property string sourceToDelete
 
   /**
    * This evaluates the "default path" with the following order:
@@ -78,204 +77,41 @@ Item {
    * 3. use project home folder
    */
   property string targetDir: __inputUtils.resolveTargetDir(homePath, config, featurePair, activeProject)
-  property real textMargin: QgsQuick.Utils.dp * 10
 
-  enabled: true // its interactive widget
-  height: customStyle.fields.height * 3
+  property string prefixToRelativePath: __inputUtils.resolvePrefixForRelativePath(relativeStorageMode, homePath, targetDir)
 
-  function callbackOnCancel() {
-    externalResourceHandler.onFormCanceled(fieldItem);
-  }
+  // Meant to be use with the save callback - stores image source
+  property string sourceToDelete
+
   function callbackOnSave() {
-    externalResourceHandler.onFormSave(fieldItem);
+    externalResourceHandler.onFormSave(fieldItem)
   }
-  signal editorValueChanged(var newValue, bool isNull)
+  function callbackOnCancel() {
+    externalResourceHandler.onFormCanceled(fieldItem)
+  }
+
   function showDefaultPanel() {
     if (!photoCapturePanelLoader.item) {
       // Load the photo capture panel if not loaded yet
-      photoCapturePanelLoader.setSource("qrc:/PhotoPanel.qml");
-      photoCapturePanelLoader.item.height = window.height;
-      photoCapturePanelLoader.item.width = window.width;
-      photoCapturePanelLoader.item.edge = Qt.RightEdge;
-      photoCapturePanelLoader.item.imageButtonSize = fieldItem.iconSize;
-      photoCapturePanelLoader.item.backButtonSource = fieldItem.backIcon;
+      photoCapturePanelLoader.setSource("qrc:/PhotoPanel.qml")
+      photoCapturePanelLoader.item.height = window.height
+      photoCapturePanelLoader.item.width = window.width
+      photoCapturePanelLoader.item.edge = Qt.RightEdge
+      photoCapturePanelLoader.item.imageButtonSize = fieldItem.iconSize
+      photoCapturePanelLoader.item.backButtonSource = fieldItem.backIcon
     }
-    photoCapturePanelLoader.item.visible = true;
-    photoCapturePanelLoader.item.targetDir = targetDir;
-    photoCapturePanelLoader.item.prefixToRelativePath = prefixToRelativePath;
-    photoCapturePanelLoader.item.fieldItem = fieldItem;
+    photoCapturePanelLoader.item.visible = true
+    photoCapturePanelLoader.item.targetDir = targetDir
+    photoCapturePanelLoader.item.prefixToRelativePath = prefixToRelativePath
+    photoCapturePanelLoader.item.fieldItem = fieldItem
   }
 
+  id: fieldItem
+  enabled: true // its interactive widget
+  height: customStyle.fields.height * 3
   anchors {
     left: parent.left
     right: parent.right
-  }
-  Loader {
-    id: photoCapturePanelLoader
-  }
-  Connections {
-    target: photoCapturePanelLoader.item
-
-    onConfirmButtonClicked: externalResourceHandler.confirmImage(fieldItem, path, filename)
-  }
-  Rectangle {
-    id: imageContainer
-    color: customStyle.fields.backgroundColor
-    height: parent.height
-    radius: customStyle.fields.cornerRadius
-    width: parent.width
-
-    Image {
-      id: image
-      property var currentValue: value
-
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.verticalCenter: parent.verticalCenter
-      autoTransform: true
-      fillMode: Image.PreserveAspectFit
-      height: imageContainer.height
-      sourceSize.height: imageContainer.height
-      visible: fieldItem.state === "valid"
-
-      function getSource() {
-        var absolutePath = __inputUtils.getAbsolutePath(image.currentValue, prefixToRelativePath);
-        if (image.status === Image.Error) {
-          fieldItem.state = "notAvailable";
-          return "";
-        } else if (image.currentValue && __inputUtils.fileExists(absolutePath)) {
-          fieldItem.state = "valid";
-          return "file://" + absolutePath;
-        } else if (!image.currentValue) {
-          fieldItem.state = "notSet";
-          return "";
-        }
-        fieldItem.state = "notAvailable";
-        return "file://" + absolutePath;
-      }
-
-      onCurrentValueChanged: {
-        image.source = image.getSource();
-      }
-
-      MouseArea {
-        anchors.fill: parent
-
-        onClicked: externalResourceHandler.previewImage(__inputUtils.getAbsolutePath(image.currentValue, prefixToRelativePath))
-      }
-    }
-  }
-  Button {
-    id: deleteButton
-    anchors.bottom: imageContainer.bottom
-    anchors.margins: buttonsContainer.itemHeight / 4
-    anchors.right: imageContainer.right
-    height: width
-    padding: 0
-    visible: !readOnly && fieldItem.state !== "notSet"
-    width: buttonsContainer.itemHeight
-
-    onClicked: externalResourceHandler.removeImage(fieldItem, __inputUtils.getAbsolutePath(image.currentValue, prefixToRelativePath))
-
-    ColorOverlay {
-      anchors.fill: deleteIcon
-      color: customStyle.fields.attentionColor
-      source: deleteIcon
-    }
-
-    background: Image {
-      id: deleteIcon
-      fillMode: Image.PreserveAspectFit
-      height: deleteButton.height
-      source: fieldItem.deleteIcon
-      sourceSize.height: height
-      sourceSize.width: width
-      width: deleteButton.width
-    }
-  }
-  Item {
-    id: buttonsContainer
-    property real itemHeight: fieldItem.height * 0.2
-
-    anchors.centerIn: imageContainer
-    anchors.fill: imageContainer
-    anchors.margins: fieldItem.textMargin
-    visible: fieldItem.state === "notSet"
-
-    RowLayout {
-      anchors.fill: parent
-
-      IconTextItem {
-        id: photoButton
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: (parent.width - lineContainer.width) / 2
-        fontColor: customStyle.fields.fontColor
-        fontPointSize: customStyle.fields.fontPointSize
-        iconSize: buttonsContainer.itemHeight
-        iconSource: fieldItem.cameraIcon
-        labelText: qsTr("Take a photo")
-        visible: !readOnly && fieldItem.state !== " valid"
-
-        MouseArea {
-          anchors.fill: parent
-
-          onClicked: {
-            if (externalResourceHandler.capturePhoto) {
-              externalResourceHandler.capturePhoto(fieldItem);
-            } else {
-              showDefaultPanel();
-            }
-          }
-        }
-      }
-      Item {
-        id: lineContainer
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: line.width * 2
-        visible: !readOnly && fieldItem.state !== " valid"
-
-        Rectangle {
-          id: line
-          anchors.centerIn: parent
-          color: customStyle.fields.fontColor
-          height: parent.height * 0.7
-          width: 1.5 * QgsQuick.Utils.dp
-        }
-      }
-      IconTextItem {
-        id: browseButton
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: (parent.width - lineContainer.width) / 2
-        fontColor: customStyle.fields.fontColor
-        fontPointSize: customStyle.fields.fontPointSize
-        iconSize: buttonsContainer.itemHeight
-        iconSource: fieldItem.galleryIcon
-        labelText: qsTr("From gallery")
-        visible: !readOnly && fieldItem.state !== " valid"
-
-        MouseArea {
-          anchors.fill: parent
-
-          onClicked: externalResourceHandler.chooseImage(fieldItem)
-        }
-      }
-    }
-  }
-  Text {
-    id: text
-    anchors.leftMargin: buttonsContainer.itemHeight + fieldItem.textMargin
-    color: customStyle.fields.fontColor
-    elide: Text.ElideRight
-    font.pointSize: customStyle.fields.fontPointSize
-    height: parent.height
-    horizontalAlignment: Text.AlignHCenter
-    text: qsTr("Image is not available: ") + image.currentValue
-    verticalAlignment: Text.AlignVCenter
-    visible: fieldItem.state === "notAvailable"
-    width: imageContainer.width - 2 * fieldItem.textMargin
-    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
   }
 
   states: [
@@ -289,4 +125,183 @@ Item {
       name: "notAvailable"
     }
   ]
+
+  Loader {
+    id: photoCapturePanelLoader
+  }
+
+  Connections {
+    target: photoCapturePanelLoader.item
+    onConfirmButtonClicked: externalResourceHandler.confirmImage(fieldItem, path, filename)
+  }
+
+  Rectangle {
+    id: imageContainer
+    width: parent.width
+    height: parent.height
+    color: customStyle.fields.backgroundColor
+    radius: customStyle.fields.cornerRadius
+
+    Image {
+      property var currentValue: value
+
+      id: image
+      height: imageContainer.height
+      sourceSize.height: imageContainer.height
+      autoTransform: true
+      fillMode: Image.PreserveAspectFit
+      visible: fieldItem.state === "valid"
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: externalResourceHandler.previewImage( __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
+      }
+
+      onCurrentValueChanged: {
+        image.source = image.getSource()
+      }
+
+      function getSource() {
+        var absolutePath = __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath )
+        if (image.status === Image.Error) {
+          fieldItem.state = "notAvailable"
+          return ""
+        }
+        else if (image.currentValue && __inputUtils.fileExists(absolutePath)) {
+          fieldItem.state = "valid"
+          return "file://" + absolutePath
+        }
+        else if (!image.currentValue) {
+          fieldItem.state = "notSet"
+          return ""
+        }
+        fieldItem.state = "notAvailable"
+        return "file://" + absolutePath
+      }
+    }
+  }
+
+  Button {
+    id: deleteButton
+    visible: !readOnly && fieldItem.state !== "notSet"
+    width: buttonsContainer.itemHeight
+    height: width
+    padding: 0
+
+    anchors.right: imageContainer.right
+    anchors.bottom: imageContainer.bottom
+    anchors.margins: buttonsContainer.itemHeight/4
+
+    onClicked: externalResourceHandler.removeImage( fieldItem, __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
+
+    background: Image {
+      id: deleteIcon
+      source: fieldItem.deleteIcon
+      width: deleteButton.width
+      height: deleteButton.height
+      sourceSize.width: width
+      sourceSize.height: height
+      fillMode: Image.PreserveAspectFit
+    }
+
+    ColorOverlay {
+      anchors.fill: deleteIcon
+      source: deleteIcon
+      color: customStyle.fields.attentionColor
+    }
+  }
+
+  Item {
+    property real itemHeight: fieldItem.height * 0.2
+
+    id: buttonsContainer
+    anchors.centerIn: imageContainer
+    anchors.fill: imageContainer
+    anchors.margins: fieldItem.textMargin
+    visible: fieldItem.state === "notSet"
+
+    RowLayout {
+      anchors.fill: parent
+
+      IconTextItem {
+        id: photoButton
+        fontColor: customStyle.fields.fontColor
+        fontPointSize: customStyle.fields.fontPointSize
+        iconSource: fieldItem.cameraIcon
+        iconSize: buttonsContainer.itemHeight
+        labelText: qsTr("Take a photo")
+        visible: !readOnly && fieldItem.state !== " valid"
+
+        Layout.preferredHeight: parent.height
+        Layout.fillWidth: true
+        Layout.preferredWidth: ( parent.width - lineContainer.width ) / 2
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            if (externalResourceHandler.capturePhoto) {
+              externalResourceHandler.capturePhoto(fieldItem)
+            } else {
+              showDefaultPanel()
+            }
+          }
+        }
+      }
+
+      Item {
+        id: lineContainer
+        visible: !readOnly && fieldItem.state !== " valid"
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: line.width * 2
+
+        Rectangle {
+          id: line
+
+          height: parent.height * 0.7
+          color: customStyle.fields.fontColor
+          width: 1.5 * QgsQuick.Utils.dp
+          anchors.centerIn: parent
+        }
+      }
+
+      IconTextItem {
+        id: browseButton
+        fontColor: customStyle.fields.fontColor
+        fontPointSize: customStyle.fields.fontPointSize
+        iconSource: fieldItem.galleryIcon
+        iconSize: buttonsContainer.itemHeight
+        labelText: qsTr("From gallery")
+
+        visible: !readOnly && fieldItem.state !== " valid"
+
+        Layout.preferredHeight: parent.height
+        Layout.fillWidth: true
+        Layout.preferredWidth: ( parent.width - lineContainer.width ) / 2
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: externalResourceHandler.chooseImage(fieldItem)
+        }
+      }
+    }
+  }
+
+  Text {
+    id: text
+    height: parent.height
+    width: imageContainer.width - 2* fieldItem.textMargin
+    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+    text: qsTr("Image is not available: ") + image.currentValue
+    font.pointSize: customStyle.fields.fontPointSize
+    color: customStyle.fields.fontColor
+    anchors.leftMargin: buttonsContainer.itemHeight + fieldItem.textMargin
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    elide: Text.ElideRight
+    visible: fieldItem.state === "notAvailable"
+  }
+
 }

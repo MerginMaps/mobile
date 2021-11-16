@@ -12,18 +12,20 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.5
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
 import QgsQuick 0.1 as QgsQuick
 
 Item {
-  id: root
+  property real iconSize
   property color fontColor
   property real fontPointSize: root.iconSize * 0.75
-  property real iconSize
   property string iconSource
   property string labelText
+
+  id: root
 
   ColumnLayout {
     anchors.fill: parent
@@ -31,42 +33,49 @@ Item {
 
     Item {
       id: iconContainer
+
       Layout.fillHeight: true
       Layout.preferredHeight: root.height / 2
       Layout.preferredWidth: root.width
 
       Image {
         id: icon
-        anchors.bottom: parent.bottom
+
         anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.PreserveAspectFit
-        height: root.iconSize
+        anchors.bottom: parent.bottom
+
         source: root.iconSource
-        sourceSize.height: height
-        sourceSize.width: width
         width: root.iconSize
+        height: root.iconSize
+        sourceSize.width: width
+        sourceSize.height: height
+        fillMode: Image.PreserveAspectFit
       }
+
       ColorOverlay {
         anchors.fill: icon
-        color: root.fontColor
         source: icon
+        color: root.fontColor
       }
     }
+
     Item {
       id: textContainer
+
       Layout.fillHeight: true
       Layout.preferredHeight: root.height / 2
       Layout.preferredWidth: root.width
 
       Text {
         id: text
-        color: root.fontColor
-        font.pointSize: root.fontPointSize
-        horizontalAlignment: Text.AlignHCenter
-        maximumLineCount: 3
+
         text: root.labelText
+        font.pointSize: root.fontPointSize
         width: parent.width
+        color: root.fontColor
+        horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
+        maximumLineCount: 3
       }
     }
   }

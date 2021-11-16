@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  range.qml
   --------------------------------------
   Date                 : 2019
@@ -12,36 +12,40 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.14
+
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Item {
   id: root
-  property real from: getRange(config["Min"], -max_range)
-  property var locale: Qt.locale()
+
+  /*required*/ property var parentValue: parent.value
+
   readonly property int max_range: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
 
-  /*required*/
-  property var parentValue: parent.value
   property int precision: config["Precision"]
-  property real step: config["Step"] ? config["Step"] : 1
-  property string suffix: config["Suffix"] ? config["Suffix"] : ""
+  property real from: getRange(config["Min"], -max_range)
   property real to: getRange(config["Max"], max_range)
+  property real step: config["Step"] ? config["Step"] : 1
+  property var locale: Qt.locale()
+  property string suffix: config["Suffix"] ? config["Suffix"] : ""
+
+  signal editorValueChanged( var newValue, bool isNull )
+
+  function getRange(rangeValue, defaultRange) {
+    if ( typeof rangeValue !== 'undefined' && rangeValue >= -max_range && rangeValue <= max_range )
+      return rangeValue
+    else
+      return defaultRange
+  }
 
   enabled: !readOnly
   height: customStyle.fields.height
-
-  signal editorValueChanged(var newValue, bool isNull)
-  function getRange(rangeValue, defaultRange) {
-    if (typeof rangeValue !== 'undefined' && rangeValue >= -max_range && rangeValue <= max_range)
-      return rangeValue;
-    else
-      return defaultRange;
-  }
 
   anchors {
     left: parent.left
@@ -56,58 +60,72 @@ Item {
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
+
   Item {
     id: sliderContainer
+
     anchors.fill: parent
 
     RowLayout {
       id: rowLayout
+
       anchors.fill: parent
 
       Text {
         id: valueLabel
-        Layout.maximumHeight: root.height
+
+        Layout.preferredWidth: rowLayout.width / 3
         Layout.maximumWidth: rowLayout.width / 3
         Layout.preferredHeight: root.height
-        Layout.preferredWidth: rowLayout.width / 3
-        color: customStyle.fields.fontColor
+        Layout.maximumHeight: root.height
+
         elide: Text.ElideRight
-        font.pointSize: customStyle.fields.fontPointSize
-        horizontalAlignment: Text.AlignLeft
-        leftPadding: customStyle.fields.sideMargin
-        padding: 10 * QgsQuick.Utils.dp
-        text: Number(slider.value).toFixed(precision).toLocaleString(root.locale) + root.suffix
+        text: Number( slider.value ).toFixed( precision ).toLocaleString( root.locale ) + root.suffix
+
         verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignLeft
+        font.pointSize: customStyle.fields.fontPointSize
+        color: customStyle.fields.fontColor
+        padding: 10 * QgsQuick.Utils.dp
+        leftPadding: customStyle.fields.sideMargin
       }
+
       Slider {
         id: slider
+
+        to: root.to
+        from: root.from
+        stepSize: root.step
+        value: root.parent.value ? root.parent.value : 0
+
         Layout.fillWidth: true
         Layout.maximumHeight: root.height
         Layout.preferredHeight: root.height
-        from: root.from
         rightPadding: customStyle.fields.sideMargin
-        stepSize: root.step
-        to: root.to
-        value: root.parent.value ? root.parent.value : 0
 
-        onValueChanged: root.editorValueChanged(slider.value, false)
+        onValueChanged: root.editorValueChanged( slider.value, false )
 
         background: Rectangle {
-          color: root.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
-          height: slider.height * 0.1
-          radius: 2 * QgsQuick.Utils.dp
-          width: slider.availableWidth
           x: slider.leftPadding
           y: slider.topPadding + slider.availableHeight / 2 - height / 2
+          width: slider.availableWidth
+          height: slider.height * 0.1
+          radius: 2 * QgsQuick.Utils.dp
+
+          color: root.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
         }
+
         handle: Rectangle {
-          border.color: customStyle.fields.backgroundColorInactive
-          color: "white"
-          height: width
-          radius: height * 0.5
-          width: slider.height * 0.6 * 0.66 + (2 * border.width) // Similar to indicator SwitchWidget of CheckBox widget
           x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
           y: slider.topPadding + slider.availableHeight / 2 - height / 2
+
+          width: slider.height * 0.6 * 0.66 + (2 * border.width) // Similar to indicator SwitchWidget of CheckBox widget
+          height: width
+
+          radius: height * 0.5
+
+          color: "white"
+          border.color: customStyle.fields.backgroundColorInactive
         }
       }
     }

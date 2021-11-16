@@ -6,81 +6,91 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
+
 import QgsQuick 0.1 as QgsQuick
-import "components"
+import "./components"
 
 Item {
   id: root
+
+  signal featureClicked( var featureId )
+
+  property bool showAdditionalInfo: false
   property bool allowMultiselect: false
   property var featuresModel: null
-  property var selectedFeatures: [] // in/out property, contains list of selected feature ids
-  property bool showAdditionalInfo: false
 
-  signal featureClicked(var featureId)
-  function toggleFeature(fid) {
-    if (selectedFeatures.indexOf(fid) === -1) {
-      root.selectedFeatures.push(fid);
-    } else {
-      root.selectedFeatures = root.selectedFeatures.filter(_id => _id !== fid;);
+  property var selectedFeatures: [] // in/out property, contains list of selected feature ids
+
+  function toggleFeature( fid )
+  {
+    if ( selectedFeatures.indexOf( fid ) === -1 )
+    {
+      root.selectedFeatures.push( fid )
+    }
+    else
+    {
+      root.selectedFeatures = root.selectedFeatures.filter( _id => _id !== fid )
     }
   }
 
   ListView {
+    topMargin: 10 * QgsQuick.Utils.dp
     implicitHeight: parent.height
     implicitWidth: parent.width
-    maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
-    model: featuresModel
     spacing: 8 * QgsQuick.Utils.dp
-    topMargin: 10 * QgsQuick.Utils.dp
+    maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+
+    model: featuresModel
 
     delegate: Rectangle {
       id: itemContainer
-      height: 50 * QgsQuick.Utils.dp
       width: parent.width
-
-      Component.onCompleted: {
-        // toggle preselected features
-        if (root.selectedFeatures.includes(model.FeatureId))
-          checkboxItem.checkState = Qt.Checked;
-      }
+      height: 50 * QgsQuick.Utils.dp
 
       MouseArea {
         anchors.fill: parent
         propagateComposedEvents: false
-
         onClicked: {
-          if (allowMultiselect) {
-            checkboxItem.toggle();
-            root.toggleFeature(model.FeatureId);
-          } else
-            root.featureClicked(model.FeatureId);
+          if ( allowMultiselect ) {
+            checkboxItem.toggle()
+            root.toggleFeature( model.FeatureId )
+          }
+          else root.featureClicked( model.FeatureId )
         }
       }
+
+      Component.onCompleted: { // toggle preselected features
+        if ( root.selectedFeatures.includes( model.FeatureId ) )
+          checkboxItem.checkState = Qt.Checked
+      }
+
       RowLayout {
         id: layout
         anchors.fill: parent
 
         Item {
           id: checkboxContainer
-          height: itemContainer.height
           visible: allowMultiselect
+          height: itemContainer.height
           width: 40 * QgsQuick.Utils.dp
 
           LeftCheckBox {
             id: checkboxItem
-            anchors.centerIn: parent
             anchors.margins: (parent.height / 4)
+            anchors.centerIn: parent
             baseColor: InputStyle.panelBackgroundDarker
             height: 40 * QgsQuick.Utils.dp
             width: 40 * QgsQuick.Utils.dp
 
-            onCheckboxClicked: root.toggleFeature(model.FeatureId)
+            onCheckboxClicked: root.toggleFeature( model.FeatureId )
           }
         }
+
         Item {
           id: iconContainer
           height: itemContainer.height
@@ -90,43 +100,45 @@ Item {
             id: icon
             anchors.centerIn: parent
             anchors.leftMargin: 10 * QgsQuick.Utils.dp
-            fillMode: Image.PreserveAspectFit
-            height: width
-            source: __loader.loadIconFromFeature(model.Feature)
-            sourceSize.height: height
-            sourceSize.width: width
+            source: __loader.loadIconFromFeature( model.Feature )
             width: 30 * QgsQuick.Utils.dp
+            height: width
+            sourceSize.width: width
+            sourceSize.height: height
+            fillMode: Image.PreserveAspectFit
           }
         }
+
         Item {
           id: textContainer
-          Layout.fillWidth: true
           height: itemContainer.height
+          Layout.fillWidth: true
 
           Text {
             id: featureTitleText
-            color: InputStyle.fontColor
-            elide: Text.ElideRight
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            height: textContainer.height / 2
-            horizontalAlignment: Text.AlignLeft
             text: model.FeatureTitle
-            verticalAlignment: Text.AlignBottom
+            height: textContainer.height/2
             width: textContainer.width
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+            color: InputStyle.fontColor
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignBottom
+            elide: Text.ElideRight
           }
+
           Text {
             id: descriptionText
+            height: textContainer.height/2
+            text: showAdditionalInfo ? model.Description + ", " + model.SearchResult : model.Description
+            anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-            anchors.right: parent.right
             anchors.top: featureTitleText.bottom
-            color: InputStyle.panelBackgroundDark
-            elide: Text.ElideRight
             font.pixelSize: InputStyle.fontPixelSizeSmall
-            height: textContainer.height / 2
+            color: InputStyle.panelBackgroundDark
             horizontalAlignment: Text.AlignLeft
-            text: showAdditionalInfo ? model.Description + ", " + model.SearchResult : model.Description
             verticalAlignment: Text.AlignTop
+            elide: Text.ElideRight
           }
         }
       }

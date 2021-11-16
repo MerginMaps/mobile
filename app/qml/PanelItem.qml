@@ -6,47 +6,49 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.0
 import "."  // import InputStyle singleton
 
 Rectangle {
-  id: root
-  property bool bold: false
-  property string text: ""
-  property string text2: ""
+    id: root
+    height: InputStyle.rowHeight
+    width: parent.width
+    color: InputStyle.clrPanelMain
 
-  color: InputStyle.clrPanelMain
-  height: InputStyle.rowHeight
-  width: parent.width
+    property string text: ""
+    property string text2: ""
+    property bool bold: false
 
-  Text {
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    anchors.leftMargin: InputStyle.panelMargin
-    anchors.right: parent.right
-    anchors.top: parent.top
-    color: InputStyle.fontColor
-    elide: Text.ElideRight
-    font.bold: bold
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    horizontalAlignment: Text.AlignLeft
-    text: root.text
-    verticalAlignment: Text.AlignVCenter
-  }
-  Text {
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    anchors.leftMargin: InputStyle.panelMargin
-    anchors.right: parent.right
-    anchors.rightMargin: InputStyle.panelMargin
-    anchors.top: parent.top
-    color: InputStyle.fontColor
-    elide: Text.ElideRight
-    font.bold: bold
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    horizontalAlignment: Text.AlignRight
-    text: text2
-    verticalAlignment: Text.AlignVCenter
-    visible: text2
-  }
+    Text {
+        text: root.text
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: InputStyle.panelMargin
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        color: InputStyle.fontColor
+        font.bold: bold
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        elide: Text.ElideRight
+    }
+
+    Text {
+        text: text2
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: InputStyle.panelMargin
+        anchors.rightMargin: InputStyle.panelMargin
+        horizontalAlignment: Text.AlignRight
+        verticalAlignment: Text.AlignVCenter
+        color: InputStyle.fontColor
+        font.bold: bold
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        elide: Text.ElideRight
+        visible: text2
+    }
 }
