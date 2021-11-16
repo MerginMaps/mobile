@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Script formats all cpp and qml files - intended to be used locally.
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=`pwd`
+cd $DIR
+
+./format_cpp.bash
+
+# Set path to qmlformat. It is included in Qt desktop.
+# We need the one from Qt version 6.2 or higher!
+QMLFORMAT="" # something like <Qt install dir>/6.2+/<desktop>/bin
+
+which ${QMLFORMAT}
+
+if [ $? -ne 0 ]; then
+	echo "[!] qmlformat not found. Edit path in this script"
+	exit 1
+fi
+
+./format_qml.bash ${QMLFORMAT}
+
+cd $PWD

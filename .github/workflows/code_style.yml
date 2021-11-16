@@ -16,7 +16,7 @@ jobs:
 
       - name: Run astyle check
         run: |
-          ./scripts/check_all.bash
+          ./scripts/format_cpp.bash
 
   code_style_qml:
     name: QML code convention check
@@ -43,4 +43,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run style check
-        run: ./scripts/qmlstyle.bash
+        run: ./scripts/format_qml.bash
