@@ -4,8 +4,6 @@
 
 echo "QML STYLE CHECK STARTED"
 
-set -e
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=`pwd`
 cd $DIR
@@ -43,9 +41,7 @@ echo "Starting to format QML files"
 
 RETURN=0
 
-FILES=`find ../app ../qgsquick -name "*.qml"`
-
-echo "Files to check ${FILES}"
+FILES=`find ../app ../qgsquick -name \*.qml* -print | grep "editor" | grep "text"`
 
 # --indent-width 2: use 2 spaces to indent
 # --normalize: reorder properties, includes and childs in components
@@ -58,10 +54,11 @@ for FILE in $FILES; do
         if [ $? -ne 0 ]; then
             echo "Changed $FILE" >&2
             RETURN=1
+            diff -u $FILE $FILE.tmp >&2
             mv $FILE.tmp $FILE
         else
-            rm $FILE.tmp
             echo "Unchanged $FILE" >&2
+            rm $FILE.tmp
         fi
     else
        echo "Skipping $FILE" >&2
