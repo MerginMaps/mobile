@@ -62,6 +62,7 @@ Rectangle {
 
     TextWithIcon {
       id: content
+      height: banner.height
       Layout.fillWidth: true
       fontColor: banner.fontColor
       iconColor: banner.fontColor

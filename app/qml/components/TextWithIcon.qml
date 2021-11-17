@@ -28,7 +28,7 @@ Row {
 
   Rectangle {
     id: iconContainer
-    height: fieldHeight
+    height: root.height
     width: fieldHeight
     color: root.bgColor
 
@@ -54,7 +54,7 @@ Row {
   Text {
     id: textItem
     width: parent.width - iconContainer.width
-    height: fieldHeight
+    height: root.height
     verticalAlignment: Text.AlignVCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
     onLinkActivated: root.linkActivated(link)
