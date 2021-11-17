@@ -72,7 +72,7 @@ Rectangle {
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: "<style>a:link { color: " + banner.linkColor
             + "; text-decoration: underline; }</style>" +
-            qsTr("%1<br><a href='%2'>Learn more</a>").arg(banner.text).arg(banner.link)
+            qsTr("%1<br><a href='%2' style=\"color: darkblue;\">Learn more</a>").arg(banner.text).arg(banner.link)
 
       onLinkActivated: Qt.openUrlExternally(link)
     }
