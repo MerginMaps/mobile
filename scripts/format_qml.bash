@@ -57,7 +57,7 @@ echo "Starting to format QML files"
 
 RETURN=0
 
-FILES=`find ../app ../qgsquick -name \*.qml* -print | grep "editor" | grep "text"`
+FILES=`find ../app ../qgsquick -name \*.qml* -print`
 
 # <QMLFORMAT CODE>
 # --indent-width 2: use 2 spaces to indent
@@ -85,7 +85,7 @@ for FILE in $FILES; do
     fi
 done
 
-echo "Done checking QML files format"
+echo "Done checking QML files"
 
 cd $PWD
 
