@@ -16,8 +16,6 @@
 #include "qgsvectorlayer.h"
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
-#include <qgsmarkersymbollayer.h>
-#include <qgssymbol.h>
 #include <qgsmarkersymbol.h>
 #include "inpututils.h"
 
