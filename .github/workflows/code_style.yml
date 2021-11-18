@@ -25,29 +25,15 @@ jobs:
     name: QML code convention check
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
-    needs: code_style_cpp # Run when cpp is finished to save some time if cpp would fail
     steps:
 
-      - name: Checkout input
+      - name: Checkout app
         uses: actions/checkout@v2
         with:
           path: input
 
-    # Cache qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v4-${{ env.QT_VERSION }}-mac
-
-      - name: Install Qt6
-        uses: jurplel/install-qt-action@v2 # automatically chooses mac desktop based on env
-        with:
-          version: ${{ env.QT_VERSION }}
-          dir: ${{ github.workspace }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
-          setup-python: false
+      - name: Install deps
+        run: brew install martindelille/tap/qmlfmt
 
       - name: Run style check
-        run: ./input/scripts/format_qml.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/bin/qmlformat
+        run: ./input/scripts/format_qml.bash
