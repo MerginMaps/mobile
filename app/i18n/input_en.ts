@@ -349,12 +349,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="216"/>
+        <location filename="../inputhelp.cpp" line="228"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="221"/>
+        <location filename="../inputhelp.cpp" line="233"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -764,6 +764,14 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>ProjectListPage</name>
+    <message>
+        <location filename="../qml/ProjectListPage.qml" line="50"/>
+        <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ProjectLoadingScreen</name>
     <message>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
@@ -774,37 +782,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="128"/>
+        <location filename="../qml/ProjectPanel.qml" line="135"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="153"/>
+        <location filename="../qml/ProjectPanel.qml" line="160"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="350"/>
+        <location filename="../qml/ProjectPanel.qml" line="357"/>
         <source>Home</source>
         <translation type="unfinished">Home</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="372"/>
+        <location filename="../qml/ProjectPanel.qml" line="379"/>
         <source>My projects</source>
         <translation type="unfinished">My projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="396"/>
+        <location filename="../qml/ProjectPanel.qml" line="403"/>
         <source>Shared with me</source>
         <translation type="unfinished">Shared with me</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="396"/>
+        <location filename="../qml/ProjectPanel.qml" line="403"/>
         <source>Shared</source>
         <translation type="unfinished">Shared</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="416"/>
+        <location filename="../qml/ProjectPanel.qml" line="423"/>
         <source>Explore</source>
         <translation type="unfinished">Explore</translation>
     </message>
@@ -1306,7 +1314,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>

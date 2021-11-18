@@ -11,13 +11,13 @@ import QtQuick 2.12
 import lc 1.0
 
 import "./components"
+import "./misc"
 
 Item {
   id: root
 
   property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
-
   property alias list: projectlist
 
   signal openProjectRequested( string projectId, string projectFilePath )
@@ -28,14 +28,23 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
-  SearchBar {
-    id: searchBar
-
+  AttentionBanner {
+    id: attentionBanner
+    visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
     anchors {
       top: parent.top
       left: parent.left
       right: parent.right
-      bottom: projectlist.top
+    }
+  }
+
+  SearchBar {
+    id: searchBar
+
+    anchors {
+      top: attentionBanner.visible ? attentionBanner.bottom : parent.top
+      left: parent.left
+      right: parent.right
     }
 
     allowTimer: true
