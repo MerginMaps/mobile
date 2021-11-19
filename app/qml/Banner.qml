@@ -36,9 +36,11 @@ Rectangle {
   states: [
     State { name: "show"; when: banner.showWarning;
       PropertyChanges { target: banner; opacity: 1.0 }
+      PropertyChanges { target: banner; visible: true }
     },
     State { name: "fade"; when: !banner.showWarning;
       PropertyChanges { target: banner; opacity: 0.0 }
+      PropertyChanges { target: banner; visible: false }
     }
   ]
 

@@ -450,7 +450,7 @@ Item {
     .arg( __inputUtils.formatNumber( _positionKit.accuracy ) )
     link: __inputHelp.gpsAccuracyHelpLink
 
-    showWarning: true//shouldShowAccuracyWarning
+    showWarning: shouldShowAccuracyWarning
   }
 
   ActiveLayerPanel {
