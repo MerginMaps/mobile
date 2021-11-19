@@ -348,6 +348,31 @@ void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
 
   // recalculate projected/screen variables
   onMapSettingsUpdated();
+
+  // if position is simulated, simulate also that number of satellites changed
+  if ( mIsSimulated )
+  {
+    updateSimulatedSatellitesData();
+  }
+}
+
+void PositionKit::updateSimulatedSatellitesData()
+{
+  int rand = mPosition.x() * 10 + mPosition.y() * 10;
+  if ( rand < 0 )
+    rand *= -1;
+  rand = rand % 30; // have maximum of 30 satellites
+
+  int satellitesInView = rand;
+  int satellitesInUse = satellitesInView / 2;
+  if ( satellitesInUse < 0 )
+    satellitesInUse = 0;
+
+  QVector<QGeoSatelliteInfo> viewList( satellitesInView );
+  QVector<QGeoSatelliteInfo> useList( satellitesInUse );
+
+  numberOfSatellitesInViewChanged( viewList.toList() );
+  numberOfUsedSatellitesChanged( useList.toList() );
 }
 
 void PositionKit::onMapSettingsUpdated()
@@ -517,11 +542,6 @@ void PositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
 const QDateTime &PositionKit::lastGPSRead() const
 {
   return mLastGPSRead;
-}
-
-QGeoSatelliteInfoSource *PositionKit::satelliteSource() const
-{
-  return mSatelliteSource.get();
 }
 
 int PositionKit::satellitesInViewCount() const

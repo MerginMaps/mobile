@@ -137,13 +137,6 @@ class PositionKit : public QObject
      */
     Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
 
-    /**
-     * Internal source of GPS satellite data.
-     * Allows start/stop of its services or access properties.
-     * Source is not available in simulated mode.
-     */
-    Q_PROPERTY( QGeoSatelliteInfoSource *satelliteSource READ satelliteSource NOTIFY satelliteSourceChanged )
-
     // How many satellites is device using.
     Q_PROPERTY( int usedSatellitesCount READ usedSatellitesCount NOTIFY usedSatellitesCountChanged )
 
@@ -243,8 +236,6 @@ class PositionKit : public QObject
 
     const QDateTime &lastGPSRead() const;
 
-    QGeoSatelliteInfoSource *satelliteSource() const;
-
     int satellitesInViewCount() const;
 
     int usedSatellitesCount() const;
@@ -310,6 +301,7 @@ class PositionKit : public QObject
   private:
     void replacePositionSource( QGeoPositionInfoSource *source );
     void replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource );
+    void updateSimulatedSatellitesData();
     QString calculateStatusLabel();
     double calculateScreenAccuracy();
     void updateProjectedPosition();

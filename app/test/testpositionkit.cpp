@@ -29,11 +29,12 @@ void TestPositionKit::simulated_position()
   QVERIFY( !positionKit.isSimulated() );
   positionKit.useSimulatedLocation( -92.36, 38.93, -1 );
   QVERIFY( positionKit.isSimulated() );
-  QVERIFY( !positionKit.satelliteSource() ); // satellite source should be NULL in this case
 
   QVERIFY( positionKit.hasPosition() );
   COMPARENEAR( positionKit.position().y(), 38.93, 1e-4 );
   QVERIFY( positionKit.accuracy() > 0 );
+  QVERIFY( positionKit.satellitesInViewCount() >= 0 );
+  QVERIFY( positionKit.usedSatellitesCount() >= 0 );
 
   const QVector<double> newPosition( { 90.36, 33.93, -1 } );
   positionKit.setSimulatePositionLongLatRad( newPosition );
