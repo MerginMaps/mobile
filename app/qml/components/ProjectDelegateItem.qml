@@ -95,27 +95,27 @@ Rectangle {
       "sync": {
         "name": qsTr("Synchronize project"),
         "iconSource": InputStyle.syncIcon,
-        "callback": () => { root.syncRequested() }
+        "callback": function() { root.syncRequested() }
       },
       "changes": {
         "name": qsTr("Local changes"),
         "iconSource": InputStyle.infoIcon,
-        "callback": () => { root.showChangesRequested() }
+        "callback": function() { root.showChangesRequested() }
       },
       "remove": {
         "name": qsTr("Remove from device"),
         "iconSource": InputStyle.removeIcon,
-        "callback": () => { root.removeRequested() }
+        "callback": function() { root.removeRequested() }
       },
       "upload": {
         "name": qsTr("Upload to Mergin"),
         "iconSource": InputStyle.uploadIcon,
-        "callback": () => { root.migrateRequested() }
+        "callback": function() { root.migrateRequested() }
       },
       "download": {
         "name": qsTr("Download from Mergin"),
         "iconSource": InputStyle.downloadIcon,
-        "callback": () => { root.syncRequested() }
+        "callback": function() { root.syncRequested() }
       }
     }
 
@@ -126,7 +126,7 @@ Rectangle {
     while( contextMenu.count > 0 )
       contextMenu.takeItem( 0 );
 
-    items.forEach( item => { contextMenu.addItem(
+    items.forEach( function(item) { contextMenu.addItem(
                       menuItemComponent.createObject( contextMenu, itemsMap[item] ) )
                   })
     contextMenu.height = items.length * root.menuItemHeight

@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -145,7 +145,7 @@ AbstractEditor {
           {
             // We need to convert feature id to string prior to sending it to C++ in order to
             // avoid conversion to scientific notation.
-            featureIds = featureIds.map( x => x.toString() )
+            featureIds = featureIds.map( function(x) { return x.toString() } )
           }
 
           root.editorValueChanged( vrModel.convertToQgisType( featureIds ), isNull )
