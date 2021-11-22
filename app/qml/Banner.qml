@@ -36,16 +36,21 @@ Rectangle {
   states: [
     State { name: "show"; when: banner.showWarning;
       PropertyChanges { target: banner; opacity: 1.0 }
-      PropertyChanges { target: banner; visible: true }
     },
     State { name: "fade"; when: !banner.showWarning;
       PropertyChanges { target: banner; opacity: 0.0 }
-      PropertyChanges { target: banner; visible: false }
     }
   ]
 
   transitions: Transition {
     NumberAnimation { property: "opacity"; duration: 500 }
+    onRunningChanged:
+    {
+      if ( state == "show" && !running )
+        banner.visible = true;
+      if ( state == "fade" && !running )
+        banner.visible = false;
+    }
   }
 
   layer.enabled: true
