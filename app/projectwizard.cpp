@@ -19,8 +19,6 @@
 #include <qgsmarkersymbollayer.h>
 #include "inpututils.h"
 
-#include <qgsmarkersymbol.h>
-
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
