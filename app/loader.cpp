@@ -124,8 +124,8 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   QStringList invalidLayers;
   for ( QgsMapLayer *layer : layersMap.values() )
   {
-      if ( !layer->isValid() )
-          invalidLayers.push_back( layer->name() );
+    if ( !layer->isValid() )
+      invalidLayers.push_back( layer->name() );
   }
 
   flagFile.remove();
