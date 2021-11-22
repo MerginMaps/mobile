@@ -402,22 +402,17 @@ ApplicationWindow {
     Connections {
         target: __loader
         onLoadingStarted: projectLoadingScreen.visible = true
-        onLoadingFinished:
+        onLoadingFinished: projectLoadingScreen.visible = false
+        onLoadedInvalidLayer:
         {
-            projectLoadingScreen.visible = false;
-            if ( invalidLayers.length > 0 )
-            {
-                let warningMessage = qsTr( "WARNING: the following layers are invalid: " );
-                for ( let i = 0; i < invalidLayers.length - 1; ++i )
-                {
-                    warningMessage += qsTr( "'%1' " ).arg( invalidLayers[i] );
-                }
-                if ( invalidLayers.length > 1 )
-                    warningMessage += qsTr( "and '%1' " ).arg( invalidLayers[invalidLayers.length - 1] );
-                else
-                    warningMessage += qsTr( "'%1' " ).arg( invalidLayers[0] );
-                map.notify( warningMessage );
-            }
+            let warningMessage = qsTr( "WARNING: the following layers are invalid: " );
+            for ( let i = 0; i < invalidLayers.length - 1; ++i )
+                warningMessage += "'%1' ".arg( invalidLayers[i] );
+            if ( invalidLayers.length > 1 )
+                warningMessage += qsTr( "and" ) + " '%1' ".arg( invalidLayers[invalidLayers.length - 1] );
+            else
+                warningMessage += "'%1' ".arg( invalidLayers[0] );
+            map.notify( warningMessage );
         }
         onProjectReloaded: map.clear()
         onProjectWillBeReloaded: {
