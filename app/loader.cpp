@@ -120,9 +120,17 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mProject );
   }
 
+  QMap<QString, QgsMapLayer *> layersMap = mProject->mapLayers();
+  QStringList invalidLayers;
+  for ( QgsMapLayer *layer : layersMap.values() )
+  {
+      if ( !layer->isValid() )
+          invalidLayers.push_back( layer->name() );
+  }
+
   flagFile.remove();
   if ( !force )
-    emit loadingFinished();
+    emit loadingFinished( invalidLayers );
   return res;
 }
 
