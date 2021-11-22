@@ -130,7 +130,15 @@ bool Loader::forceLoad( const QString &filePath, bool force )
 
   flagFile.remove();
   if ( !force )
-    emit loadingFinished( invalidLayers );
+  {
+    emit loadingFinished();
+    if ( !invalidLayers.isEmpty() )
+    {
+      QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
+      CoreUtils::log( "project loading", message );
+      emit loadedInvalidLayer( invalidLayers );
+    }
+  }
   return res;
 }
 
