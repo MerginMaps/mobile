@@ -13,6 +13,7 @@ import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 import ".."
+import "../components"
 
 Item {
   id: root
@@ -45,6 +46,8 @@ Item {
   signal recordInLayerFeatureCanceled()
 
   signal notify( string message )
+
+  signal accuracyButtonClicked()
 
   function centerToPair( pair, considerFormPreview = false ) {
     if ( considerFormPreview )
@@ -341,10 +344,12 @@ Item {
 
     mapSettings: _map.mapSettings
 
-    y: _map.height - height - InputStyle.panelMargin
     height: InputStyle.scaleBarHeight
     preferredWidth: Math.min( window.width, 180 * QgsQuick.Utils.dp )
+
     anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: parent.top
+    anchors.topMargin: InputStyle.smallGap
   }
 
   Highlight {
@@ -453,6 +458,125 @@ Item {
     showWarning: shouldShowAccuracyWarning
   }
 
+  MapFloatButton {
+    id: _accuracyButton
+
+    property int accuracyPrecision: _positionKit.accuracy > 1 ? 1 : 2
+
+    onClicked: accuracyButtonClicked()
+
+    maxWidth: parent.width / 2
+
+    anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
+    anchors.bottomMargin: InputStyle.smallGap
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    visible: root.state !== "inactive" && _gpsState.state !== "unavailable"
+
+    content: Item {
+
+      implicitWidth: acctext.implicitWidth + indicator.width + InputStyle.tinyGap
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Text {
+        id: acctext
+
+        text: __inputUtils.formatNumber( _positionKit.accuracy, _accuracyButton.accuracyPrecision ) + " m"
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+
+        height: parent.height
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+      }
+
+      RoundIndicator {
+        id: indicator
+
+        width: parent.height / 4
+        height: width
+        anchors.left: acctext.right
+        anchors.leftMargin: InputStyle.tinyGap
+        anchors.topMargin: InputStyle.tinyGap
+        anchors.top: parent.top
+        color: _gpsState.indicatorColor
+      }
+    }
+  }
+
+  MapFloatButton {
+    id: _activeLayerButton
+
+    onClicked: _activeLayerPanel.openPanel()
+
+    maxWidth: parent.width * 0.8
+
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: InputStyle.smallGap
+    anchors.horizontalCenter: _accuracyButton.horizontalCenter
+
+    visible: root.state === "recordFeature"
+
+    content: Item {
+
+      implicitWidth: layername.implicitWidth + layericon.width + InputStyle.tinyGap
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: layericon
+
+        iconSize: parent.height / 2
+        source: __loader.loadIconFromLayer( __activeLayer.layer )
+
+        anchors.verticalCenter: parent.verticalCenter
+      }
+
+      Text {
+        id: layername
+
+        property real maxTextWidth: _activeLayerButton.maxWidth - ( layericon.width + InputStyle.tinyGap + leftPadding ) // used offsets
+
+        text: textmetrics.elidedText
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+
+        height: parent.height
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        leftPadding: height / 3 // small gap between layer icon and layer name
+
+        TextMetrics { // element holding metrics about printed text to be able to scale text without binding loops
+          id: textmetrics
+
+          font: layername.font
+          text: __activeLayer.layerName
+          elide: layername.elide
+          elideWidth: layername.maxTextWidth
+        }
+
+        anchors {
+          left: layericon.right
+          right: parent.right
+          verticalCenter: parent.verticalCenter
+        }
+      }
+    }
+  }
+
   ActiveLayerPanel {
     id: _activeLayerPanel
 
@@ -467,16 +591,14 @@ Item {
     id: _recordToolbar
 
     width: parent.width
-    height: InputStyle.rowHeightHeader + ( ( extraPanelVisible ) ? extraPanelHeight : 0)
-    y: extraPanelVisible ? parent.height - extraPanelHeight : parent.height
+    height: InputStyle.rowHeightHeader
+    y: parent.height
 
     visible: root.isInRecordState
-    extraPanelVisible: root.state === "recordFeature"
 
     gpsIndicatorColor: _gpsState.indicatorColor
-    activeVectorLayer: __activeLayer.vectorLayer
     manualRecording: _digitizingController.manualRecording
-    pointLayerSelected: __activeLayer.vectorLayer ? _digitizingController.hasPointGeometry( activeVectorLayer ) : false
+    pointLayerSelected: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "point"
 
     // reset manualRecording after opening
     onVisibleChanged: {
@@ -529,8 +651,6 @@ Item {
         root.processRecordedPair( newPair )
       }
     }
-
-    onLayerLabelClicked: _activeLayerPanel.openPanel()
   }
 
   Connections {

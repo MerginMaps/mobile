@@ -96,5 +96,9 @@
         <file>qmldir</file>
         <file>misc/LegacyFolderMigration.qml</file>
         <file>misc/AttentionBanner.qml</file>
+        <file>components/MapFloatButton.qml</file>
+        <file>misc/GpsDataPage.qml</file>
+        <file>components/TextRowWithTitle.qml</file>
+        <file>components/NumberInputField.qml</file>
     </qresource>
 </RCC>

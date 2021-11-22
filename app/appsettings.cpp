@@ -19,7 +19,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
-  int gpsTolerance = settings.value( "gpsTolerance", 10 ).toInt();
+  double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
   bool gpsAccuracyWarning = settings.value( "gpsAccuracyWarning", true ).toBool();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
@@ -114,12 +114,12 @@ QString AppSettings::defaultProjectName() const
   return QString( "" );
 }
 
-int AppSettings::gpsAccuracyTolerance() const
+double AppSettings::gpsAccuracyTolerance() const
 {
   return mGpsAccuracyTolerance;
 }
 
-void AppSettings::setGpsAccuracyTolerance( int value )
+void AppSettings::setGpsAccuracyTolerance( double value )
 {
   if ( mGpsAccuracyTolerance != value )
   {

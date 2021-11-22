@@ -22,6 +22,7 @@
 #include "positionkit.h"
 #include "inpututils.h"
 #include "simulatedpositionsource.h"
+#include "coreutils.h"
 
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
@@ -34,7 +35,7 @@ PositionKit::PositionKit( QObject *parent )
   useGpsLocation();
 }
 
-QGeoPositionInfoSource  *PositionKit::gpsSource()
+QGeoPositionInfoSource *PositionKit::gpsSource()
 {
   // this should give us "true" position source
   // on Linux it comes from Geoclue library
@@ -54,7 +55,21 @@ QGeoPositionInfoSource  *PositionKit::gpsSource()
   }
 }
 
-QGeoPositionInfoSource  *PositionKit::simulatedSource( double longitude, double latitude, double radius )
+QGeoSatelliteInfoSource *PositionKit::gpsSatellitesSource()
+{
+  std::unique_ptr<QGeoSatelliteInfoSource> source( QGeoSatelliteInfoSource::createDefaultSource( nullptr ) );
+  if ( ( !source ) || ( source->error() != QGeoSatelliteInfoSource::NoError ) )
+  {
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Unable to instantiate satellite info source" ) );
+    return nullptr;
+  }
+  else
+  {
+    return source.release();
+  }
+}
+
+QGeoPositionInfoSource *PositionKit::simulatedSource( double longitude, double latitude, double radius )
 {
   return new SimulatedPositionSource( this, longitude, latitude, radius );
 }
@@ -77,6 +92,37 @@ void PositionKit::useSimulatedLocation( double longitude, double latitude, doubl
   std::unique_ptr<QGeoPositionInfoSource> source( simulatedSource( longitude, latitude, radius ) );
   mIsSimulated = true;
   replacePositionSource( source.release() );
+  replaceSatelliteSource( nullptr );
+}
+
+void PositionKit::startUpdates()
+{
+  if ( !mIsSimulated )
+  {
+    if ( mSource )
+    {
+      mSource->startUpdates();
+    }
+    if ( mSatelliteSource )
+    {
+      mSatelliteSource->startUpdates();
+    }
+  }
+}
+
+void PositionKit::stopUpdates()
+{
+  if ( !mIsSimulated )
+  {
+    if ( mSource )
+    {
+      mSource->stopUpdates();
+    }
+    if ( mSatelliteSource )
+    {
+      mSatelliteSource->stopUpdates();
+    }
+  }
 }
 
 void PositionKit::updateScreenPosition()
@@ -114,11 +160,40 @@ void PositionKit::setProjectedPosition( const QgsPoint &projectedPosition )
   }
 }
 
+void PositionKit::setVerticalAccuracy( double vAccuracy )
+{
+  if ( !qgsDoubleNear( vAccuracy, mVerticalAccuracy ) )
+  {
+    mVerticalAccuracy = vAccuracy;
+    emit verticalAccuracyChanged( mVerticalAccuracy );
+  }
+}
+
+void PositionKit::setSpeed( double speed )
+{
+  if ( !qgsDoubleNear( speed, mSpeed ) )
+  {
+    mSpeed = speed;
+    emit speedChanged( mSpeed );
+  }
+}
+
+void PositionKit::setLastGPSRead( const QDateTime &timestamp )
+{
+  if ( mLastGPSRead != timestamp )
+  {
+    mLastGPSRead = timestamp;
+    emit lastGPSReadChanged( mLastGPSRead );
+  }
+}
+
 void PositionKit::useGpsLocation()
 {
   QGeoPositionInfoSource *source = gpsSource();
+  QGeoSatelliteInfoSource *satelliteSource = gpsSatellitesSource();
   mIsSimulated = false;
   replacePositionSource( source );
+  replaceSatelliteSource( satelliteSource );
 }
 
 void PositionKit::replacePositionSource( QGeoPositionInfoSource *source )
@@ -143,6 +218,33 @@ void PositionKit::replacePositionSource( QGeoPositionInfoSource *source )
 
     QgsDebugMsg( QStringLiteral( "Position source changed: %1" ).arg( mSource->sourceName() ) );
   }
+}
+
+void PositionKit::replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource )
+{
+  if ( mSatelliteSource.get() == satelliteSource )
+  {
+    return;
+  }
+
+  if ( mSatelliteSource )
+  {
+    mSatelliteSource->disconnect();
+  }
+
+  if ( !satelliteSource )
+  {
+    mSatelliteSource.reset();
+  }
+  else
+  {
+    mSatelliteSource.reset( satelliteSource );
+    connect( mSatelliteSource.get(), &QGeoSatelliteInfoSource::satellitesInViewUpdated, this, &PositionKit::numberOfSatellitesInViewChanged );
+    connect( mSatelliteSource.get(), &QGeoSatelliteInfoSource::satellitesInUseUpdated, this, &PositionKit::numberOfUsedSatellitesChanged );
+
+    mSatelliteSource->startUpdates();
+  }
+  emit satelliteSourceChanged();
 }
 
 QgsQuickMapSettings *PositionKit::mapSettings() const
@@ -197,7 +299,8 @@ void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
     mPosition = position;
     emit positionChanged();
   }
-  // calculate accuracy
+
+  // calculate horizontal accuracy
   double accuracy;
   if ( info.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) )
     accuracy = info.attribute( QGeoPositionInfo::HorizontalAccuracy );
@@ -208,6 +311,28 @@ void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
     mAccuracy = accuracy;
     emit accuracyChanged();
   }
+
+  // calculate vertical accuracy
+  double vAccuracy;
+  if ( info.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) )
+    vAccuracy = info.attribute( QGeoPositionInfo::VerticalAccuracy );
+  else
+    vAccuracy = -1;
+  setVerticalAccuracy( vAccuracy );
+
+  // calculate ground speed
+  double speed;
+  if ( info.hasAttribute( QGeoPositionInfo::GroundSpeed ) )
+  {
+    speed = info.attribute( QGeoPositionInfo::GroundSpeed );
+    // speed from QGeoPositionInfo is in m/s, convert it to km/h
+    speed = speed * 3.6;
+  }
+  else
+    speed = -1;
+  setSpeed( speed );
+
+  setLastGPSRead( info.timestamp() );
 
   // calculate direction
   double direction;
@@ -223,6 +348,31 @@ void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
 
   // recalculate projected/screen variables
   onMapSettingsUpdated();
+
+  // if position is simulated, simulate also that number of satellites changed
+  if ( mIsSimulated )
+  {
+    updateSimulatedSatellitesData();
+  }
+}
+
+void PositionKit::updateSimulatedSatellitesData()
+{
+  int rand = mPosition.x() * 10 + mPosition.y() * 10;
+  if ( rand < 0 )
+    rand *= -1;
+  rand = rand % 30; // have maximum of 30 satellites
+
+  int satellitesInView = rand;
+  int satellitesInUse = satellitesInView / 2;
+  if ( satellitesInUse < 0 )
+    satellitesInUse = 0;
+
+  QVector<QGeoSatelliteInfo> viewList( satellitesInView );
+  QVector<QGeoSatelliteInfo> useList( satellitesInUse );
+
+  numberOfSatellitesInViewChanged( viewList.toList() );
+  numberOfUsedSatellitesChanged( useList.toList() );
 }
 
 void PositionKit::onMapSettingsUpdated()
@@ -247,6 +397,24 @@ void PositionKit::onSimulatePositionLongLatRadChanged( QVector<double> simulateP
   {
     QgsDebugMsg( QStringLiteral( "Switching from simulated to GPS location" ) );
     useGpsLocation();
+  }
+}
+
+void PositionKit::numberOfUsedSatellitesChanged( const QList<QGeoSatelliteInfo> &list )
+{
+  if ( list.count() != mUsedSatellitesCount )
+  {
+    mUsedSatellitesCount = list.count();
+    emit usedSatellitesCountChanged( list.count() );
+  }
+}
+
+void PositionKit::numberOfSatellitesInViewChanged( const QList<QGeoSatelliteInfo> &list )
+{
+  if ( list.count() != mSatellitesInViewCount )
+  {
+    mSatellitesInViewCount = list.count();
+    emit satellitesInViewCountChanged( list.count() );
   }
 }
 
@@ -321,6 +489,11 @@ double PositionKit::accuracy() const
   return mAccuracy;
 }
 
+double PositionKit::verticalAccuracy() const
+{
+  return mVerticalAccuracy;
+}
+
 QgsUnitTypes::DistanceUnit PositionKit::accuracyUnits() const
 {
   return QgsUnitTypes::DistanceMeters;
@@ -329,6 +502,11 @@ QgsUnitTypes::DistanceUnit PositionKit::accuracyUnits() const
 double PositionKit::direction() const
 {
   return mDirection;
+}
+
+double PositionKit::speed() const
+{
+  return mSpeed;
 }
 
 bool PositionKit::isSimulated() const
@@ -359,4 +537,19 @@ void PositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   }
 
   emit mapSettingsChanged();
+}
+
+const QDateTime &PositionKit::lastGPSRead() const
+{
+  return mLastGPSRead;
+}
+
+int PositionKit::satellitesInViewCount() const
+{
+  return mSatellitesInViewCount;
+}
+
+int PositionKit::usedSatellitesCount() const
+{
+  return mUsedSatellitesCount;
 }

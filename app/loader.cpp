@@ -256,11 +256,11 @@ void Loader::appStateChanged( Qt::ApplicationState state )
   {
     if ( state == Qt::ApplicationActive )
     {
-      mPositionKit->source()->startUpdates();
+      mPositionKit->startUpdates();
     }
     else
     {
-      mPositionKit->source()->stopUpdates();
+      mPositionKit->stopUpdates();
     }
   }
 }

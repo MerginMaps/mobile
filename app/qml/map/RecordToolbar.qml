@@ -28,19 +28,12 @@ Item {
     signal stopRecordingClicked
     signal removePointClicked
     signal close
-    signal layerLabelClicked
 
     property int rowHeight: InputStyle.rowHeightHeader
-    property int extraPanelHeight: InputStyle.rowHeightHeader * 0.6
     property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
-    property bool extraPanelVisible: true
-
-    property QgsQuick.VectorLayer activeVectorLayer: __activeLayer.vectorLayer
-    property string activeLayerName: activeVectorLayer ? activeVectorLayer.name : ""
-    property string activeLayerIcon: __loader.loadIconFromLayer( activeVectorLayer )
 
     onClose: visible = false
     focus: true
@@ -61,19 +54,6 @@ Item {
           anchors.fill: parent
           onClicked: {} // dont do anything, just do not let click event propagate
         }
-    }
-
-    SimpleTextWithIcon {
-      id: extraPanel
-      height: extraPanelHeight
-      width: parent.width
-      color: InputStyle.fontColorBright
-      fontColor: "white"
-      fontPixelSize: InputStyle.fontPixelSizeSmall
-      visible: extraPanelVisible
-      source: root.activeLayerIcon
-      text: root.activeLayerName
-      onClicked: layerLabelClicked()
     }
 
     RowLayout {
