@@ -429,7 +429,23 @@ ApplicationWindow {
     Connections {
         target: __loader
         onLoadingStarted: projectLoadingScreen.visible = true
-        onLoadingFinished: projectLoadingScreen.visible = false
+        onLoadingFinished:
+        {
+            projectLoadingScreen.visible = false;
+            if ( invalidLayers.length > 0 )
+            {
+                let warningMessage = qsTr( "WARNING: the following layers are invalid: " );
+                for ( let i = 0; i < invalidLayers.length - 1; ++i )
+                {
+                    warningMessage += qsTr( "'%1' " ).arg( invalidLayers[i] );
+                }
+                if ( invalidLayers.length > 1 )
+                    warningMessage += qsTr( "and '%1' " ).arg( invalidLayers[invalidLayers.length - 1] );
+                else
+                    warningMessage += qsTr( "'%1' " ).arg( invalidLayers[0] );
+                map.notify( warningMessage );
+            }
+        }
         onProjectReloaded: map.clear()
         onProjectWillBeReloaded: {
             formsStackManager.reload()

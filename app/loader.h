@@ -106,7 +106,7 @@ class Loader: public QObject
     void recordingChanged();
 
     void loadingStarted();
-    void loadingFinished();
+    void loadingFinished( QStringList invalidLayers );
 
     void mapSettingsChanged();
 
