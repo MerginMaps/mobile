@@ -21,6 +21,7 @@ QtObject {
     property color activeButtonColor: "#006146"
     property color activeButtonColorOrange: "#FD9626"
     property color invalidButtonColor: "red"
+    property color learnMoreLinkColor: "darkblue"
 
     // Secondary colors
     property color clrPanelMain: "white"

@@ -44,6 +44,13 @@ Rectangle {
 
   transitions: Transition {
     NumberAnimation { property: "opacity"; duration: 500 }
+    onRunningChanged:
+    {
+      if ( state == "show" && !running )
+        banner.visible = true;
+      if ( state == "fade" && !running )
+        banner.visible = false;
+    }
   }
 
   layer.enabled: true
@@ -62,6 +69,7 @@ Rectangle {
 
     TextWithIcon {
       id: content
+      height: banner.height
       Layout.fillWidth: true
       fontColor: banner.fontColor
       iconColor: banner.fontColor
@@ -71,7 +79,7 @@ Rectangle {
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: "<style>a:link { color: " + banner.linkColor
             + "; text-decoration: underline; }</style>" +
-            qsTr("%1<br><a href='%2'>Learn more</a>").arg(banner.text).arg(banner.link)
+            qsTr("%1<br><a href='%2' style=\"color: %3;\">Learn more</a>").arg(banner.text).arg(banner.link).arg(InputStyle.learnMoreLinkColor)
 
       onLinkActivated: Qt.openUrlExternally(link)
     }
