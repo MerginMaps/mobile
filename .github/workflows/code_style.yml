@@ -23,7 +23,8 @@ jobs:
 
   code_style_qml:
     name: QML code convention check
-    if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ${{ false }}  # disable for now
+    # if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
 
