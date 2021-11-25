@@ -20,7 +20,7 @@ Rectangle {
   property string source: InputStyle.exclamationIcon
   property real padding: InputStyle.innerFieldMargin
   property bool showNotification: true
-  property string text: "hello"
+  property string text: ""
 
   signal notificationClosed()
   signal detailsClicked()

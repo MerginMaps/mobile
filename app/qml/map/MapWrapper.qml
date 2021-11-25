@@ -172,7 +172,7 @@ Item {
 
   function pushNotification( message ) {
       __notificationBanner.showNotification = true;
-//      __notificationBanner.text = message;
+      __notificationBanner.text = message;
   }
 
   states: [
