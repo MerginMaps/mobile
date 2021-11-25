@@ -150,7 +150,7 @@ jobs:
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
-          cat ./app/config.conf
+          cat ./app/config.pri
 
       - name: Create build system with qmake
         run: |
