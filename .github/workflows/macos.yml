@@ -19,7 +19,7 @@ env:
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.13.0
-  INPUT_SDK_VERSION: mac-20211111-25
+  INPUT_SDK_VERSION: mac-20211124-43
   CCACHE_DIR: /Users/runner/work/ccache
 
 jobs:
@@ -80,7 +80,7 @@ jobs:
           mkdir -p ${CCACHE_DIR}
           ccache --set-config=max_size=2.0G
           ccache -s
-          
+
       # Qt
       - name: Cache Qt
         id: cache-qt
@@ -95,7 +95,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           dir: ${{ github.workspace }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-      
+
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
@@ -113,7 +113,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/input-sdk
           cd ${{ github.workspace }}/input-sdk
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-          
+
       # Build Input App
       - name: Export app/config.pri
         run: |
@@ -125,9 +125,9 @@ jobs:
           echo -e "  QMAKE_CXXFLAGS += --coverage"  >> ./input/app/config.pri
           echo -e "  QMAKE_LFLAGS += --coverage "  >> ./input/app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri		  
+          echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
-          
+
       - name: build Input (Debug)
         run: |
           mkdir -p build-Input
@@ -171,14 +171,14 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYYMMDD'
-          
+
       - name: package Input.app
         run: |
           INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
           cd ${{ github.workspace }}/build-Input-rel
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input.app
-      
+
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
         with:

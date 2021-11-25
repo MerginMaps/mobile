@@ -15,9 +15,9 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2004-20211123-23
+  INPUT_SDK_VERSION: ubuntu-2004-20211124-29
   QT_VERSION: '5.14.2'
-  
+
 jobs:
   linux_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
@@ -122,7 +122,7 @@ jobs:
           echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri		  
+          echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
 
       - name: build Input
