@@ -159,6 +159,8 @@ ApplicationWindow {
 
       onNotify: showMessage( message )
 
+      onDisplayProjectIssuesPanel: projectIssuesPanel.visible = true
+
       Component.onCompleted: {
         __loader.positionKit = map.positionKit
         __loader.recording = map.digitizingController.recording
@@ -274,6 +276,22 @@ ApplicationWindow {
         height: window.height/2
         width: window.width
         edge: Qt.BottomEdge
+    }
+
+    ProjectIssuesPanel {
+        id: projectIssuesPanel
+
+        height: window.height
+        width: window.width
+        rowHeight: InputStyle.rowHeight
+        visible: false;
+
+        onVisibleChanged: {
+          if (projectIssuesPanel.visible)
+            projectIssuesPanel.focus = true; // get focus
+          else
+            mainPanel.focus = true; // pass focus back to main panel
+        }
     }
 
     Notification {
@@ -403,17 +421,12 @@ ApplicationWindow {
         target: __loader
         onLoadingStarted: projectLoadingScreen.visible = true
         onLoadingFinished: projectLoadingScreen.visible = false
-        onLoadedInvalidLayer:
-        {
-            let warningMessage = qsTr( "WARNING: the following layers are invalid: " );
-            for ( let i = 0; i < invalidLayers.length - 1; ++i )
-                warningMessage += "'%1' ".arg( invalidLayers[i] );
-            if ( invalidLayers.length > 1 )
-                warningMessage += qsTr( "and" ) + " '%1' ".arg( invalidLayers[invalidLayers.length - 1] );
-            else
-                warningMessage += "'%1' ".arg( invalidLayers[0] );
-            map.notify( warningMessage );
-        }
+        onLoadingErrorFound: map.pushNotification( "There were issues loading the project." )
+
+        onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
+
+        onSubmitQgisLog: projectIssuesPanel.log = log
+
         onProjectReloaded: map.clear()
         onProjectWillBeReloaded: {
             formsStackManager.reload()

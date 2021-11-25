@@ -22,6 +22,8 @@
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 #include "qgsquickmapsettings.h"
+#include <qgsapplication.h>
+#include <qgslogger.h>
 
 #if VERSION_INT >= 30500
 // this header only exists in QGIS >= 3.6
@@ -94,6 +96,14 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
 
+  QString logFilePath = CoreUtils::logFilename();
+  qint64 alreadyAppendedCharsCount = 0;
+
+  {
+    QFile file( logFilePath );
+    alreadyAppendedCharsCount = file.size();
+  }
+
   // Give some time to other (GUI) processes before loading a project in the main thread
   QEventLoop loop;
   QTimer t;
@@ -120,23 +130,39 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mProject );
   }
 
-  QMap<QString, QgsMapLayer *> layersMap = mProject->mapLayers();
+  QString qgisLog;
+
+  QFile file( logFilePath );
+  if ( file.open( QIODevice::ReadOnly ) )
+  {
+    QByteArray logFileData = file.readAll();
+    QByteArray neededLogFileData( logFileData.data() + alreadyAppendedCharsCount );
+    qgisLog = QString::fromStdString( neededLogFileData.toStdString() );
+    file.close();
+  }
+
+  bool foundInvalidLayer = false;
   QStringList invalidLayers;
-  for ( QgsMapLayer *layer : layersMap.values() )
+  for ( QgsMapLayer *layer : mProject->mapLayers().values() )
   {
     if ( !layer->isValid() )
-      invalidLayers.push_back( layer->name() );
+    {
+      invalidLayers.append( layer->name() );
+      foundInvalidLayer = true;
+      emit reportIssue( layer->name(), "layer is invalid" );
+    }
   }
 
   flagFile.remove();
   if ( !force )
   {
     emit loadingFinished();
-    if ( !invalidLayers.isEmpty() )
+    if ( foundInvalidLayer )
     {
       QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
       CoreUtils::log( "project loading", message );
-      emit loadedInvalidLayer( invalidLayers );
+      emit submitQgisLog( qgisLog );
+      emit loadingErrorFound();
     }
   }
   return res;

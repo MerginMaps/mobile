@@ -96,5 +96,7 @@
         <file>qmldir</file>
         <file>misc/LegacyFolderMigration.qml</file>
         <file>misc/AttentionBanner.qml</file>
+        <file>NotificationBanner.qml</file>
+        <file>ProjectIssuesPanel.qml</file>
     </qresource>
 </RCC>

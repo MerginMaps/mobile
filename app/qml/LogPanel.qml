@@ -19,6 +19,7 @@ import "./components"
 Item {
   id: root
   property string text: "(no-entries)"
+  property bool enableSendToDev: true
 
   signal close
 
@@ -81,6 +82,7 @@ Item {
 
     footer: DelegateButton {
       id: sendButton
+      visible: enableSendToDev
 
       width: root.width
       height: InputStyle.rowHeightHeader

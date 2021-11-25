@@ -107,7 +107,10 @@ class Loader: public QObject
 
     void loadingStarted();
     void loadingFinished();
-    void loadedInvalidLayer( QStringList invalidLayers );
+
+    void reportIssue( QString layerName, QString message );
+    void submitQgisLog( QString log );
+    void loadingErrorFound();
 
     void mapSettingsChanged();
 
