@@ -10,6 +10,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.7
+import QgsQuick 0.1 as QgsQuick
 import "."
 import "./components"
 
@@ -70,8 +71,9 @@ Rectangle {
 
   Button {
       id: closeBtn
-      width: 50
-      height: 50
+      width: 40 * QgsQuick.Utils.dp
+      height: 40 * QgsQuick.Utils.dp
+      anchors.top: parent.top
       anchors.right: parent.right
       anchors.margins: 10
       icon.width: width
@@ -105,7 +107,11 @@ Rectangle {
       anchors.right: notificationBanner.right
       anchors.bottom: notificationBanner.bottom
       anchors.margins: 20
-      palette.button: "green"
+      padding: 10
+      background: Rectangle {
+        color: InputStyle.activeButtonColor
+        radius: InputStyle.cornerRadius
+      }
       text: "Details"
       onClicked: detailsClicked()
   }
