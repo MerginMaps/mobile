@@ -186,9 +186,27 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   }
   QgsRectangle extent;
 
-
   QgsProjectViewSettings *viewSettings = mProject->viewSettings();
   extent = viewSettings->fullExtent();
+  if ( extent.isEmpty() )
+  {
+    bool hasWMS;
+    QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
+
+    if ( hasWMS && ( WMSExtent.length() == 4 ) )
+    {
+      extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
+    }
+    else // set layers extent
+    {
+      const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
+      for ( const QgsMapLayer *layer : layers )
+      {
+        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
+        extent.combineExtentWith( layerExtent );
+      }
+    }
+  }
 
   if ( extent.isEmpty() )
   {
