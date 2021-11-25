@@ -172,7 +172,7 @@ Item {
 
   function pushNotification( message ) {
       __notificationBanner.showNotification = true;
-      __notificationBanner.text = message;
+//      __notificationBanner.text = message;
   }
 
   states: [
@@ -587,7 +587,7 @@ Item {
   NotificationBanner {
     id: __notificationBanner
 
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    width: parent.width - __notificationBanner.anchors.margins * 2
     height: InputStyle.rowHeight * 2
 
     onDetailsClicked: displayProjectIssuesPanel();

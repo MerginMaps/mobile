@@ -90,6 +90,7 @@ Rectangle {
     TextWithIcon {
       id: content
       Layout.fillWidth: true
+      Layout.fillHeight: true
       fontColor: notificationBanner.fontColor
       iconColor: notificationBanner.fontColor
       bgColor: notificationBanner.bgColor
@@ -97,10 +98,9 @@ Rectangle {
       textItem.font.bold: true
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: notificationBanner.text
-
-      onLinkActivated: Qt.openUrlExternally(link)
     }
   }
+
   Button {
       anchors.right: notificationBanner.right
       anchors.bottom: notificationBanner.bottom
