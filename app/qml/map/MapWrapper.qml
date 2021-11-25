@@ -45,6 +45,8 @@ Item {
   signal recordInLayerFeatureFinished( var pair )
   signal recordInLayerFeatureCanceled()
 
+  signal displayProjectIssuesPanel()
+
   signal notify( string message )
 
   signal accuracyButtonClicked()
@@ -166,6 +168,11 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
+  }
+
+  function pushNotification( message ) {
+      __notificationBanner.showNotification = true;
+      __notificationBanner.text = message;
   }
 
   states: [
@@ -575,6 +582,15 @@ Item {
         }
       }
     }
+  }
+
+  NotificationBanner {
+    id: __notificationBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight * 2
+
+    onDetailsClicked: displayProjectIssuesPanel();
   }
 
   ActiveLayerPanel {

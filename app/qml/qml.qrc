@@ -100,5 +100,7 @@
         <file>misc/GpsDataPage.qml</file>
         <file>components/TextRowWithTitle.qml</file>
         <file>components/NumberInputField.qml</file>
+        <file>NotificationBanner.qml</file>
+        <file>ProjectIssuesPanel.qml</file>
     </qresource>
 </RCC>
