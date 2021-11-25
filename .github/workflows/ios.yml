@@ -119,10 +119,11 @@ jobs:
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
           wget -O \
-            input-sdk.tar.gz \
+            ${{ github.workspace }}/input-sdk.tar.gz \
             https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
-          ls ${{ github.workspace }}/input-sdk
+          mkdir -p ${{ github.workspace }}/input-sdk
+          cd ${{ github.workspace }}/input-sdk
+          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Qt
       - name: Cache Qt
