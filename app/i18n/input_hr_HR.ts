@@ -81,22 +81,27 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="113"/>
-        <source>Storage permission is permanently denied, please allow it in settings</source>
-        <translation>Dozvole za pristup uređaju za pohranu podataka su onemogućene, molimo omogućite ih u postavkama</translation>
+        <location filename="../androidutils.cpp" line="233"/>
+        <source>Without storage permission you will not be able to access previous projects</source>
+        <translation>Bez dozvola za pristup uređaju za pohranu nećete moći pristupiti prethodnim projektima</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="117"/>
-        <source>Input needs a storage permission in order to manipulate or download a project</source>
-        <translation>Input zahtjeva dozvole za pristup uređaju za pohranu podataka za upravljanje projektima ili preuzimanje projekata</translation>
+        <location filename="../androidutils.cpp" line="287"/>
+        <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
+        <translation>Dozvole za pristup uređaju za pohranu su trajno uklonjene, molimo omogućite ih u postavkama kako bi mogli učitavati slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="135"/>
+        <location filename="../androidutils.cpp" line="291"/>
+        <source>Input needs a storage permission in order to load pictures from gallery</source>
+        <translation>Input zahtjeva dozvole za pristup uređaju za pohranu podataka za učitavanje slika iz galerije</translation>
+    </message>
+    <message>
+        <location filename="../androidutils.cpp" line="309"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Dozvole za pristup kameri su onemogućene, molimo omogućite ih u postavkama</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="139"/>
+        <location filename="../androidutils.cpp" line="313"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Potrebne su dozvole za pristup kameri za dodavanje fotografija</translation>
     </message>
@@ -340,14 +345,71 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>GpsDataPage</name>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="26"/>
+        <source>GPS info</source>
+        <translation>GPS informacije</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="62"/>
+        <source>Coordinates (lon, lat)</source>
+        <translation>Koordinate (lon, lat)</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="65"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="79"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="93"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="107"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="128"/>
+        <source>Loading data from GPS</source>
+        <translation>Učitavanje podataka iz GPS-a</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="76"/>
+        <source>Project coordinates (x, y)</source>
+        <translation>Koordinate projekta (x, y)</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="90"/>
+        <source>Altitude</source>
+        <translation>Nadmorska visina</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="104"/>
+        <source>Accuracy (horizontal, vertical)</source>
+        <translation>Preciznost (horizontalna, vertikalna)</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="118"/>
+        <source>Satellites (in use/view)</source>
+        <translation>Sateliti (korišteno/vidljivo)</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="127"/>
+        <source>Speed</source>
+        <translation>Brzina</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
+        <source>Last fix</source>
+        <translation>Posljednja GPS pozicija</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
+        <source>Date not available</source>
+        <translation>Datum nije dostupan</translation>
+    </message>
+</context>
+<context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="216"/>
+        <location filename="../inputhelp.cpp" line="228"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Obavijest je poslana.%1Molimo kontaktirajte nas na%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="221"/>
+        <location filename="../inputhelp.cpp" line="233"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Obavijest nije poslana.%1Molimo provjerite Vašu internetsku vezu.</translation>
     </message>
@@ -440,30 +502,63 @@ Won&apos;t be added to the project.</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1076"/>
+        <location filename="../inpututils.cpp" line="1097"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1077"/>
+        <location filename="../inpututils.cpp" line="1098"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1078"/>
+        <location filename="../inpututils.cpp" line="1099"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1079"/>
+        <location filename="../inpututils.cpp" line="1100"/>
         <source>screen density: %1</source>
         <translation>gustoća zaslona: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LegacyFolderMigration</name>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
+        <source>Insufficient space left on device</source>
+        <translation>Nema dovoljno prostora na uređaju</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
+        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
+        <translation>Na Vašem uređaju ponestaje prostora za pohranu, potrebno Vam je %1 slobodnog prostora kako bi mogli vidjeti projekte. Uklonite neke od datoteka i pokušajte ponovno ili stisnite na Pomoć kako bi pregledali ostale načine za rjšavanje ovog problema.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <source>An error occured during update</source>
+        <translation>Došlo je do greške tijekom nadogradnje</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
+        <translation>Došlo je do problema na Vašem uređaju tijekom nadogradnje. Nećete moći vidjeti svoje projekte. Stisnite Pomoć za pregled mogućnosti rješavanja ovog problema.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <source>We are working on an important update, please do not close the application</source>
+        <translation>Radimo na vrlo bitnoj nadogradnji, molimo ne gasite aplikaciju.</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <source>%1/%2</source>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -587,18 +682,18 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="69"/>
-        <location filename="../qml/map/MapWrapper.qml" line="493"/>
+        <location filename="../qml/map/MapWrapper.qml" line="72"/>
+        <location filename="../qml/map/MapWrapper.qml" line="604"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
         <translation>GPS trenutno niije dostupan.%1Pokušajte omogućiti GPS lokaciju u postavkama uređaja.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="100"/>
+        <location filename="../qml/map/MapWrapper.qml" line="103"/>
         <source>Recorded feature is not valid</source>
         <translation>Snimljeni objekt nije valjan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="449"/>
+        <location filename="../qml/map/MapWrapper.qml" line="454"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Niska GPS preciznost (%1 m)&lt;br&gt;&lt;br&gt;Molimo osigurajte čisti pogled na nebo.</translation>
     </message>
@@ -622,7 +717,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../positionkit.cpp" line="45"/>
+        <location filename="../positionkit.cpp" line="46"/>
         <source>Unable to create default GPS Position Source</source>
         <translation>Nije moguće stvoriti zadani izvor GPS pozicije </translation>
     </message>
@@ -671,72 +766,65 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="141"/>
-        <location filename="../qml/components/ProjectList.qml" line="222"/>
+        <location filename="../qml/components/ProjectList.qml" line="133"/>
+        <location filename="../qml/components/ProjectList.qml" line="188"/>
         <source>Create project</source>
         <translation>Stvori projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="161"/>
-        <source>Input needs a storage permission, %1click to grant it%2 and then restart application.</source>
-        <translation>Input zahtjeva dozvole za pristup uređaju za pohranu podataka, %1klikni za dozvolu%2 a potom ponovno pokreni aplikaciju.</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="197"/>
+        <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Nije pronađen niti jedan projekt.%1Pogledajte %2kako stvoriti projekt%3 i %4kako ga preuzeti%3 na Vaš uređaj.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="213"/>
+        <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>Možete stvoriti projekt klikom na dugme ispod</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nije bilo moguće učitati listu projekata.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="242"/>
+        <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>No projects found!</source>
         <translation>Nema pronađenih projekata!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="273"/>
+        <location filename="../qml/components/ProjectList.qml" line="232"/>
         <source>Retry</source>
         <translation>Pokušaj ponovno</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="301"/>
+        <location filename="../qml/components/ProjectList.qml" line="260"/>
         <source>Remove project</source>
         <translation>Izbriši projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="302"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Sve nesinkronizirane promjene će biti izgubljene.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="332"/>
+        <location filename="../qml/components/ProjectList.qml" line="291"/>
         <source>Download project</source>
         <translation>Preuzmi projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="333"/>
+        <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Želite li preuzeti projekt
  %1 ?</translation>
     </message>
+</context>
+<context>
+    <name>ProjectListPage</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="349"/>
-        <source>Input needs to be restarted</source>
-        <translation>Input mora biti ponovno pokrenut</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/ProjectList.qml" line="350"/>
-        <source>To apply changes after granting storage permission, Input needs to be restarted. Click close and open Input again.</source>
-        <translation>Za primjenu postavki pristupa uređaju za pohranu podataka, Input mora biti ponovno pokrenut. Pritisnite zatvaranje i ponovno pokrenite Input.</translation>
+        <location filename="../qml/ProjectListPage.qml" line="50"/>
+        <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
+        <translation>Pažnja! Molimo posjetite %1Mergin radnu ploču%2.</translation>
     </message>
 </context>
 <context>
@@ -750,37 +838,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="128"/>
+        <location filename="../qml/ProjectPanel.qml" line="135"/>
         <source>No Changes</source>
         <translation>Nema promjena</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="153"/>
+        <location filename="../qml/ProjectPanel.qml" line="160"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="350"/>
+        <location filename="../qml/ProjectPanel.qml" line="357"/>
         <source>Home</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="372"/>
+        <location filename="../qml/ProjectPanel.qml" line="379"/>
         <source>My projects</source>
         <translation>Moji projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="396"/>
+        <location filename="../qml/ProjectPanel.qml" line="403"/>
         <source>Shared with me</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="396"/>
+        <location filename="../qml/ProjectPanel.qml" line="403"/>
         <source>Shared</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="416"/>
+        <location filename="../qml/ProjectPanel.qml" line="423"/>
         <source>Explore</source>
         <translation>Istraži</translation>
     </message>
@@ -801,7 +889,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="115"/>
+        <location filename="../projectwizard.cpp" line="116"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 stvoren</translation>
     </message>
@@ -983,27 +1071,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>RecordToolbar</name>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="91"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="71"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="114"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="94"/>
         <source>Undo</source>
         <translation>Poništi</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="129"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="109"/>
         <source>Add Point</source>
         <translation>Dodaj točku</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="145"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="125"/>
         <source>Done</source>
         <translation>Završi</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="159"/>
+        <location filename="../qml/map/RecordToolbar.qml" line="139"/>
         <source>Cancel</source>
         <translation>Odustani</translation>
     </message>
@@ -1080,47 +1168,47 @@ Won&apos;t be added to the project.</source>
         <translation>Prag preciznosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="187"/>
+        <location filename="../qml/SettingsPanel.qml" line="195"/>
         <source>Show accuracy warning</source>
         <translation>Prikaži upozorenje o preciznosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="205"/>
+        <location filename="../qml/SettingsPanel.qml" line="213"/>
         <source>Recording</source>
         <translation>Snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="212"/>
+        <location filename="../qml/SettingsPanel.qml" line="220"/>
         <source>Line rec. interval</source>
         <translation>Interval linijskog snimanja</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="234"/>
+        <location filename="../qml/SettingsPanel.qml" line="242"/>
         <source>Reuse last value option</source>
         <translation>Unos zadnje korištene vrijednosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="258"/>
+        <location filename="../qml/SettingsPanel.qml" line="266"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="267"/>
+        <location filename="../qml/SettingsPanel.qml" line="275"/>
         <source>Help</source>
         <translation>Pomoć</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="276"/>
+        <location filename="../qml/SettingsPanel.qml" line="284"/>
         <source>Privacy policy</source>
         <translation>Politika privatnosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="285"/>
+        <location filename="../qml/SettingsPanel.qml" line="293"/>
         <source>Mergin terms of service</source>
         <translation>Uvjeti korištenja Mergin servisa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="294"/>
+        <location filename="../qml/SettingsPanel.qml" line="302"/>
         <source>Diagnostic log</source>
         <translation>Dijagnostički zapis</translation>
     </message>
@@ -1282,7 +1370,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="123"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
         <source>Features</source>
         <translation>Objekti</translation>
     </message>
@@ -1290,32 +1378,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="199"/>
         <source>GPS auto-center mode on</source>
         <translation>Način GPS autocentriranja uključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="190"/>
+        <location filename="../qml/main.qml" line="199"/>
         <source>GPS auto-center mode off</source>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="213"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="364"/>
+        <location filename="../qml/main.qml" line="396"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa Mergin servisom.%1Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="333"/>
         <source>Communication error</source>
         <translation>Greška u komunikaciji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
