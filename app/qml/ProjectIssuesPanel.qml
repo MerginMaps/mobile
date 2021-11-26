@@ -20,7 +20,8 @@ Item {
   visible: false
   property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
-  property string log: ""
+  property string qgisLog: ""
+  property string headerText: ""
 
   function reportIssue( layerName, message )
   {
@@ -88,50 +89,63 @@ Item {
 
           PanelItem {
             color: InputStyle.panelBackgroundLight
-            text: qsTr("Reported Errors")
+            text: headerText
             bold: true
           }
 
           PanelItem {
-              height: projectIssuesModel.count * root.rowHeight
+              id: invalidLayersList
+              height: 0
+
               ListView {
+                  id: invalidLayersListView
                   anchors.fill: parent
+
                   model: projectIssuesModel
-                  spacing: 1
+                  spacing: 3
                   delegate: PanelItem {
+                      anchors.margins: 5
                       width: parent.width
+                      height: textItem.height
                       color: InputStyle.clrPanelMain
-                      text:  qsTr( name + ": " + message )
+                      Text {
+                          id: textItem
+                          width: parent.width
+                          anchors.left: parent.left
+                          anchors.top: parent.top
+                          text:  qsTr( name + ": " + message )
+                          wrapMode: Text.Wrap
+                      }
+                      onHeightChanged: invalidLayersList.height += height;
+                  }
+
+                  onCountChanged: {
+                      if ( count == 0 )
+                          invalidLayersList.height = 0;
                   }
               }
           }
 
-          // Delimeter
-          PanelItem {
-            color: InputStyle.panelBackgroundLight
-            text: ""
-            height: root.rowHeight / 3
-          }
 
           // Debug/Logging
           PanelItem {
-            text: qsTr("Diagnostic log")
-            MouseArea {
-              anchors.fill: parent
-              onClicked: stackview.push(logPanelComponent, { "text": log })
+            color: InputStyle.panelBackgroundLight
+            text: qsTr("QGIS log")
+            bold: true
+          }
+
+          PanelItem {
+            height: qgisLogTextItem.height
+            width: parent.width
+            Text {
+              id: qgisLogTextItem
+              width: parent.width
+              text: qgisLog//qsTr( name + ": " + message )
+              wrapMode: Text.Wrap
             }
           }
         }
       }
-    }
-  }
-
-  Component {
-    id: logPanelComponent
-    LogPanel {
-      enableSendToDev: false
-      onClose: stackview.pop(null)
-      Component.onCompleted: forceActiveFocus()
     }
   }
 }

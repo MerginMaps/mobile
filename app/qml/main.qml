@@ -451,8 +451,8 @@ ApplicationWindow {
         onLoadingErrorFound: map.pushNotification( "There were issues loading the project." )
 
         onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-
-        onSubmitQgisLog: projectIssuesPanel.log = log
+        onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
+        onQgisLogChanged: projectIssuesPanel.qgisLog = __loader.qgisLog()
 
         onProjectReloaded: map.clear()
         onProjectWillBeReloaded: {

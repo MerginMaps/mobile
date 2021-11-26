@@ -104,10 +104,21 @@ Rectangle {
   }
 
   Button {
+      id: button
       anchors.right: notificationBanner.right
       anchors.bottom: notificationBanner.bottom
       anchors.margins: 20
       padding: 10
+      contentItem: Text {
+          text: button.text
+          font: button.font
+          opacity: enabled ? 1.0 : 0.3
+          color: "white"
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
+      }
+
       background: Rectangle {
         color: InputStyle.activeButtonColor
         radius: InputStyle.cornerRadius

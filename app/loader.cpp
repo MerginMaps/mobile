@@ -44,6 +44,7 @@ Loader::Loader( MapThemesModel &mapThemeModel
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
+  , mQgisLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -96,6 +97,8 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
 
+  mQgisLog.clear();
+
   QString logFilePath = CoreUtils::logFilename();
   qint64 alreadyAppendedCharsCount = 0;
 
@@ -130,17 +133,6 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mProject );
   }
 
-  QString qgisLog;
-
-  QFile file( logFilePath );
-  if ( file.open( QIODevice::ReadOnly ) )
-  {
-    QByteArray logFileData = file.readAll();
-    QByteArray neededLogFileData( logFileData.data() + alreadyAppendedCharsCount );
-    qgisLog = QString::fromStdString( neededLogFileData.toStdString() );
-    file.close();
-  }
-
   bool foundInvalidLayer = false;
   QStringList invalidLayers;
   for ( QgsMapLayer *layer : mProject->mapLayers().values() )
@@ -149,7 +141,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     {
       invalidLayers.append( layer->name() );
       foundInvalidLayer = true;
-      emit reportIssue( layer->name(), "layer is invalid" );
+      emit reportIssue( layer->name(), layer->publicSource() );
     }
   }
 
@@ -161,7 +153,17 @@ bool Loader::forceLoad( const QString &filePath, bool force )
     {
       QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
       CoreUtils::log( "project loading", message );
-      emit submitQgisLog( qgisLog );
+
+      QFile file( logFilePath );
+      if ( file.open( QIODevice::ReadOnly ) )
+      {
+        file.seek( alreadyAppendedCharsCount );
+        QByteArray neededLogFileData = file.readAll();
+        mQgisLog = QString::fromStdString( neededLogFileData.toStdString() );
+        file.close();
+      }
+      emit qgisLogChanged();
+      emit setProjectIssuesHeader( "The following layers failed loading:" );
       emit loadingErrorFound();
     }
   }
@@ -270,6 +272,11 @@ bool Loader::layerVisible( QgsMapLayer *layer )
     }
   }
   return false;
+}
+
+QString Loader::qgisLog()
+{
+  return mQgisLog;
 }
 
 void Loader::setActiveMapTheme( int index )
