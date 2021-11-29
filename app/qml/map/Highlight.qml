@@ -66,6 +66,7 @@ Item {
   property real mapTransformScale: 1
   property real mapTransformOffsetX: 0
   property real mapTransformOffsetY: 0
+  property real displayDevicePixelRatio: 1
 
   Connections {
       target: mapSettings
@@ -73,6 +74,7 @@ Item {
           mapTransformScale = __inputUtils.mapSettingsScale(mapSettings)
           mapTransformOffsetX = __inputUtils.mapSettingsOffsetX(mapSettings)
           mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)
+          displayDevicePixelRatio = __inputUtils.mapSettingsDPR( mapSettings )
       }
   }
 
@@ -226,14 +228,19 @@ Item {
 
   Component {
     id: componentMarker
+
     Item {
+
       property real posX: 0
       property real posY: 0
       property string markerType: highlight.markerType
-      x: posX* highlight.mapTransformScale + highlight.mapTransformOffsetX* highlight.mapTransformScale - highlight.markerAnchorX
-      y: posY*-highlight.mapTransformScale + highlight.mapTransformOffsetY*-highlight.mapTransformScale - highlight.markerAnchorY
+
+      x: ( posX *  highlight.mapTransformScale + highlight.mapTransformOffsetX *  highlight.mapTransformScale ) / displayDevicePixelRatio - highlight.markerAnchorX
+      y: ( posY * -highlight.mapTransformScale + highlight.mapTransformOffsetY * -highlight.mapTransformScale ) / displayDevicePixelRatio - highlight.markerAnchorY
+
       width: highlight.markerWidth
       height: highlight.markerHeight
+
       Rectangle {
           visible: markerType == "circle"
           anchors {
@@ -245,6 +252,7 @@ Item {
           color: highlight.markerColor
           radius: width/2
       }
+
       Image {
           visible: markerType == "image"
           anchors.fill: parent

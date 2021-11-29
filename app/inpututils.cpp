@@ -281,6 +281,12 @@ double InputUtils::mapSettingsOffsetY( QgsQuickMapSettings *ms )
   return -ms->visibleExtent().yMaximum();
 }
 
+double InputUtils::mapSettingsDPR( QgsQuickMapSettings *ms )
+{
+  if ( !ms ) return 1;
+  return ms->devicePixelRatio();
+}
+
 
 static void addLineString( const QgsLineString *line, QVector<double> &data )
 {

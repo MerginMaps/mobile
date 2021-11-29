@@ -256,28 +256,24 @@ Item {
     onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
-      if ( !root.isInRecordState ) {
-        let screenPoint = Qt.point( mouse.x, mouse.y )
+      if ( !root.isInRecordState )
+      {
+        let screenPoint = Qt.point( point.x, point.y )
         let pair = _identifyKit.identifyOne( screenPoint )
 
-        if ( pair.valid ) {
+        if ( pair.valid )
+        {
           centerToPair( pair, true )
           highlightPair( pair )
           root.featureIdentified( pair )
         }
-        else {
+        else
+        {
           _highlightIdentified.featureLayerPair = null
           _highlightIdentified.visible = false
           root.nothingIdentified()
         }
       }
-    }
-  }
-
-  Item {
-    anchors.fill: _map
-    transform: QgsQuick.MapTransform {
-      mapSettings: _map.mapSettings
     }
   }
 

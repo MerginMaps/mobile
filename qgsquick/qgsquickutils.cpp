@@ -34,16 +34,6 @@ qreal QgsQuickUtils::screenDensity() const
 
 qreal QgsQuickUtils::calculateScreenDensity()
 {
-  // calculate screen density for calculation of real pixel sizes from density-independent pixels
-  // take the first top level window
-  double dpi = 96.0;
-  const QWindowList windows = QGuiApplication::topLevelWindows();
-  if ( !windows.isEmpty() )
-  {
-    QScreen *screen = windows.at( 0 )->screen();
-    double dpiX = screen->physicalDotsPerInchX();
-    double dpiY = screen->physicalDotsPerInchY();
-    dpi = dpiX < dpiY ? dpiX : dpiY; // In case of asymmetrical DPI. Improbable
-  }
-  return dpi / 160.;  // 160 DPI is baseline for density-independent pixels in Android
+  // Previously calculated screen pixel density, now kept here for possible future use
+  return 1;
 }

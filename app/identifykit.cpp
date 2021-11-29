@@ -53,7 +53,8 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
     QgsDebugMsg( QStringLiteral( "Unable to use IdentifyKit without mapSettings property set." ) );
     return results;
   }
-  QgsPointXY mapPoint = mMapSettings->mapSettings().mapToPixel().toMapCoordinates( point.toPoint() );
+
+  QgsPointXY mapPoint = mMapSettings->screenToCoordinate( point );
 
   if ( layer )
   {
@@ -94,9 +95,10 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
   return results;
 }
 
-static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const QgsMapSettings &mapSettings, const QPointF &point, double searchRadius )
+static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const QgsQuickMapSettings &mapSettings, const QPointF &point, double searchRadius )
 {
-  QgsPointXY mapPoint = mapSettings.mapToPixel().toMapCoordinates( point.toPoint() );
+  QgsPointXY mapPoint = mapSettings.screenToCoordinate( point.toPoint() );
+
   QgsGeometry mapPointGeom( QgsGeometry::fromPointXY( mapPoint ) );
 
   double distMinPoint = 1e10, distMinLine = 1e10, distMinPolygon = 1e10;
@@ -107,7 +109,7 @@ static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const
     QgsGeometry geom( res.feature().geometry() );
     try
     {
-      geom.transform( mapSettings.layerTransform( res.layer() ) );
+      geom.transform( mapSettings.mapSettings().layerTransform( res.layer() ) );
     }
     catch ( QgsCsException &e )
     {
@@ -161,7 +163,7 @@ static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const
 FeatureLayerPair IdentifyKit::identifyOne( const QPointF &point, QgsVectorLayer *layer )
 {
   FeatureLayerPairs results = identify( point, layer );
-  return _closestFeature( results, mMapSettings->mapSettings(), point, searchRadiusMU() );
+  return _closestFeature( results, *mMapSettings, point, searchRadiusMU() );
 }
 
 QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const QgsPointXY &point ) const

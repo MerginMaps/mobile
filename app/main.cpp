@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,7 +74,6 @@
 #include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
-#include "featurehighlight.h"
 #include "qgsquickcoordinatetransformer.h"
 #include "identifykit.h"
 #include "featurelayerpair.h"
@@ -280,7 +279,6 @@ void initDeclarative()
   qmlRegisterUncreatableType< FieldValidator >( "lc", 1, 0, "FieldValidator", "Only enums from FieldValidator can be used" );
   qmlRegisterType< AttributeController >( "lc", 1, 0, "AttributeController" );
   qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
-  qmlRegisterType< FeatureHighlight >( "lc", 1, 0, "FeatureHighlight" );
   qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
@@ -299,7 +297,6 @@ void initDeclarative()
   qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
-
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -327,6 +324,8 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
+  QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
+
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();

@@ -12,8 +12,6 @@ import QtQuick.Controls 2.0
 import QtQml.Models 2.2
 import QtQml 2.2
 
-// We use calendar in datetime widget that is not yet implemented in Controls 2.2
-import QtQuick.Controls 1.4 as Controls1
 import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "../components"
