@@ -187,8 +187,8 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   QgsRectangle extent;
 
   QgsProjectViewSettings *viewSettings = mProject->viewSettings();
-  extent = viewSettings->fullExtent();
-  if ( extent.isEmpty() )
+  extent = viewSettings->presetFullExtent();
+  if ( extent.isNull() )
   {
     bool hasWMS;
     QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
