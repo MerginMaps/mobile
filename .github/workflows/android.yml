@@ -26,7 +26,7 @@ jobs:
       SDK_BUILD_TOOLS: 28.0.3
       INPUT_SDK_VERSION: android-macOS-20211125-34
       CCACHE_DIR: /Users/runner/work/ccache
-      DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
+      # DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
 
@@ -62,6 +62,7 @@ jobs:
       - name: Install ccache
         run: |
           mkdir -p ${CCACHE_DIR}
+          brew install ccache
           ccache --set-config=max_size=2.0G
           ccache -s
 
@@ -73,7 +74,7 @@ jobs:
           brew install gnupg
           brew install openssl@1.1
           brew install python3
-          pip3 install dropbox
+          # pip3 install dropbox
 
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
