@@ -9,9 +9,9 @@ on:
   release:
     types:
       - published
-      
+
 env:
-  QGIS_COMMIT_HASH: a559212bbda3af37300c17997b826751318299cd
+  QGIS_COMMIT_HASH: e524574d0e25995fb0c9a543dd96aeb4e2ade727
 
 jobs:
   qgsquick_up_to_date:
