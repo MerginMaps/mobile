@@ -1082,7 +1082,6 @@ void TestMerginApi::testDiffUpload()
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
-  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
   GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
   QCOMPARE( summary, expectedSummary );
@@ -1118,7 +1117,6 @@ void TestMerginApi::testDiffSubdirsUpload()
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
-  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, base, true );
   GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
   QCOMPARE( summary, expectedSummary );
@@ -1229,7 +1227,6 @@ void TestMerginApi::testDiffUpdateWithRebase()
   // check that geodiff knows there was one added feature
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 1, 0, 0 );
-  expectedSummary["gpkg_contents"] = GeodiffUtils::TableSummary( 0, 1, 0 );
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
   GeodiffUtils::ChangesetSummary summary = GeodiffUtils::parseChangesetSummary( changes );
   QCOMPARE( summary, expectedSummary );
