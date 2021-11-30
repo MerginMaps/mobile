@@ -9,6 +9,9 @@ on:
   release:
     types:
       - published
+      
+env:
+  QGIS_COMMIT_HASH: a559212bbda3af37300c17997b826751318299cd
 
 jobs:
   qgsquick_up_to_date:
@@ -18,7 +21,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: download qgis
-        run: git clone https://github.com/qgis/QGIS.git --depth 1
+        run: |
+          git clone https://github.com/qgis/QGIS.git --depth 1
+          cd QGIS
+          git fetch --depth 1 origin ${QGIS_COMMIT_HASH}
+          git checkout FETCH_HEAD
+          cd ..
 
       - name: run check the qgsquick is up-to-date
         run: |
