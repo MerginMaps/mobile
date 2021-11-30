@@ -85,8 +85,8 @@ jobs:
               export GIT_BRANCH="${GITHUB_REF//refs\/heads\//}"
           fi
           echo "GIT_TAG: $GIT_TAG"
-          echo "GIT_BRANCH: $GIT_BRANCH" >> $GITHUB_ENV
-          echo "GIT_TAG=$GIT_TAG"
+          echo "GIT_BRANCH: $GIT_BRANCH"
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
       # Qt
@@ -175,12 +175,12 @@ jobs:
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
-          cat ./app/config.conf
+          cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
         env:
           ARCH: armeabi-v7a
-          VERSION: ${{ env. GIT_TAG }}
+          VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
@@ -195,7 +195,7 @@ jobs:
       - name: Build arm64-v8a APK
         env:
           ARCH: arm64-v8a
-          VERSION: ${{ env. GIT_TAG }}
+          VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           SOURCE_DIR: ${{ github.workspace }}/input
