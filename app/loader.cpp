@@ -29,6 +29,8 @@
 #endif
 #include <QDebug>
 
+#include <qgsprojectviewsettings.h>
+
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
 Loader::Loader( MapThemesModel &mapThemeModel
@@ -184,21 +186,25 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   }
   QgsRectangle extent;
 
-  // Check if WMSExtent is set in project
-  bool hasWMS;
-  QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
+  QgsProjectViewSettings *viewSettings = mProject->viewSettings();
+  extent = viewSettings->presetFullExtent();
+  if ( extent.isNull() )
+  {
+    bool hasWMS;
+    QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
 
-  if ( hasWMS && ( WMSExtent.length() == 4 ) )
-  {
-    extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
-  }
-  else // set layers extent
-  {
-    const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
-    for ( const QgsMapLayer *layer : layers )
+    if ( hasWMS && ( WMSExtent.length() == 4 ) )
     {
-      QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
-      extent.combineExtentWith( layerExtent );
+      extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
+    }
+    else // set layers extent
+    {
+      const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
+      for ( const QgsMapLayer *layer : layers )
+      {
+        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
+        extent.combineExtentWith( layerExtent );
+      }
     }
   }
 
