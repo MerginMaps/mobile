@@ -119,9 +119,12 @@ jobs:
         run: |
           wget -O \
             input-sdk.tar.gz \
-            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+            https://github.com/lutraconsulting/input-sdk/releases/download/macOS-android-20211125-34/input-sdk-qt-5.14.2-macOS-android-20211125-34.tar.gz
           tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
           ls ${{ github.workspace }}/input-sdk
+
+# TODO: Do not forget to switch it back to android-macos!
+# https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
 
       - name: Extract Mergin API_KEY
         env:
