@@ -10,7 +10,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
 
 /**
  * ComboBox used by valueMap and valueRelation
@@ -62,7 +61,7 @@ ComboBox {
   }
 
   background: Item {
-    implicitWidth: 120 * QgsQuick.Utils.dp
+    implicitWidth: 120 * __dp
     implicitHeight: comboBox.height * 0.8
 
     Rectangle {

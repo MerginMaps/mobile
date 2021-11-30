@@ -10,7 +10,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
 
 Rectangle {
   id: root
@@ -133,7 +132,7 @@ Rectangle {
     id: searchFieldBorder
     color: root.fontColor
     y: searchField.height - height * 4
-    height: 2 * QgsQuick.Utils.dp
+    height: 2 * __dp
     opacity: searchField.focus ? 1 : 0.6
     width: parent.width - root.panelMargin * 2
     anchors.horizontalCenter: parent.horizontalCenter

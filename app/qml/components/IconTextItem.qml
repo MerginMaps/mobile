@@ -16,7 +16,6 @@
 import QtQuick 2.5
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
-import QgsQuick 0.1 as QgsQuick
 
 Item {
   property real iconSize
@@ -29,7 +28,7 @@ Item {
 
   ColumnLayout {
     anchors.fill: parent
-    spacing: 2 * QgsQuick.Utils.dp
+    spacing: 2 * __dp
 
     Item {
       id: iconContainer

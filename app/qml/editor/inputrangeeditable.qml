@@ -12,9 +12,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-
 
 AbstractEditor {
   id: root

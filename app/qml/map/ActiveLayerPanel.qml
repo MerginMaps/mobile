@@ -10,9 +10,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
-
 import ".."
 import "../components" as Components
 

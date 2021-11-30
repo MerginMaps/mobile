@@ -12,9 +12,9 @@ import QtQuick.Controls 2.0
 import QtQml.Models 2.2
 import QtQml 2.2
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import "../components"
+import QgsQuick 0.1 as QgsQuick
 
 Item {
   /**
@@ -250,8 +250,8 @@ Item {
           TabButton {
             id: tabButton
             text: Name
-            leftPadding: 8 * QgsQuick.Utils.dp
-            rightPadding: 8 * QgsQuick.Utils.dp
+            leftPadding: 8 * __dp
+            rightPadding: 8 * __dp
             anchors.bottom: parent.bottom
             focusPolicy: Qt.NoFocus
 
@@ -592,7 +592,7 @@ Item {
         id: rememberCheckboxContainer
         visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "add" && EditorWidget !== "Hidden" && Type === FormItem.Field
 
-        implicitWidth: visible ? 35 * QgsQuick.Utils.dp : 0
+        implicitWidth: visible ? 35 * __dp : 0
         implicitHeight: placeholder.height
 
         anchors {
@@ -605,7 +605,7 @@ Item {
           visible: rememberCheckboxContainer.visible
           baseColor: form.style.checkboxComponent.baseColor
 
-          implicitWidth: 40 * QgsQuick.Utils.dp
+          implicitWidth: 40 * __dp
           implicitHeight: width
           y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
           x: (parent.width + form.style.fields.outerMargin) / 7

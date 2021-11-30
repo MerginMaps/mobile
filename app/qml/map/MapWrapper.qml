@@ -9,8 +9,8 @@
 
 import QtQuick 2.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import QgsQuick 0.1 as QgsQuick
 
 import ".."
 import "../components"
@@ -341,7 +341,7 @@ Item {
     mapSettings: _map.mapSettings
 
     height: InputStyle.scaleBarHeight
-    preferredWidth: Math.min( window.width, 180 * QgsQuick.Utils.dp )
+    preferredWidth: Math.min( window.width, 180 * __dp )
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top

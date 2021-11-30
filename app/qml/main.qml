@@ -16,9 +16,8 @@ import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
 import QtQuick.Dialogs 1.1
-import QgsQuick 0.1 as QgsQuick
-import lc 1.0
 
+import lc 1.0
 import "./map"
 import "./misc"
 
@@ -307,8 +306,8 @@ ApplicationWindow {
         id: popup
 
         text: ""
-        width: 400 * QgsQuick.Utils.dp
-        height: 160 * QgsQuick.Utils.dp
+        width: 400 * __dp
+        height: 160 * __dp
         x: ( parent.width - width ) / 2
         y: ( parent.height - height ) / 2
     }

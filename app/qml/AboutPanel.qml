@@ -13,7 +13,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
-import QgsQuick 0.1 as QgsQuick
+
 import "."  // import InputStyle singleton
 import "./components"
 
