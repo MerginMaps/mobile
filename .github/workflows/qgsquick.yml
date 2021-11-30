@@ -5,6 +5,7 @@ on:
     - 'qgsquick/**'
     - 'scripts/**'
     - 'app/**'
+    - '.github/workflows/qgsquick.yml'
 
   release:
     types:
