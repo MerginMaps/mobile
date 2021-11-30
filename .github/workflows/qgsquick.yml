@@ -4,6 +4,7 @@ on:
     paths:
     - 'qgsquick/**'
     - 'scripts/**'
+    - 'app/**'
 
   release:
     types:
