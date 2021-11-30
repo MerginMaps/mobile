@@ -56,11 +56,15 @@ mkdir -p ${BUILD_DIR}/.gradle
 ln -s ${BUILD_DIR}/.gradle /root/.gradle
 
 pushd ${BUILD_DIR}
-cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
+# cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
 ${QT_BASE}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
 ${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
 make -j ${CORES}
+
+echo "installing!"
 make install INSTALL_ROOT=${INSTALL_DIR}
+
+echo "done installing into ${INSTALL_DIR}"
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"

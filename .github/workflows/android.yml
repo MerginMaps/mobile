@@ -192,8 +192,8 @@ jobs:
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
-            ./scripts/android-apk.bash
-            ./scripts/upload-artifacts.sh
+            ../scripts/android-apk.bash
+            ../scripts/upload-artifacts.sh
 
       - name: Build arm64-v8a APK
         env:
@@ -206,5 +206,10 @@ jobs:
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
-            ./scripts/android-apk.bash
-            ./scripts/upload-artifacts.sh
+            ../scripts/android-apk.bash
+            ../scripts/upload-artifacts.sh
+
+      - name: Upload APK to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/out/build/outputs/apk/debug/android-build-debug.apk
