@@ -32,6 +32,7 @@ Row {
     height: root.height
     width: fieldHeight
     color: root.bgColor
+    radius: InputStyle.cornerRadius
 
     Image {
       anchors.margins: (fieldHeight / 4)

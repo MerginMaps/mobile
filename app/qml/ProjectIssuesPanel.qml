@@ -23,9 +23,12 @@ Item {
   property string qgisLog: ""
   property string headerText: ""
 
-  function reportIssue( layerName, message )
-  {
+  function reportIssue( layerName, message ) {
       projectIssuesModel.append( { name: layerName, message: message } );
+  }
+
+  function clear() {
+      projectIssuesModel.clear();
   }
 
   Keys.onReleased: {
@@ -140,7 +143,7 @@ Item {
             Text {
               id: qgisLogTextItem
               width: parent.width
-              text: qgisLog//qsTr( name + ": " + message )
+              text: qgisLog
               wrapMode: Text.Wrap
             }
           }

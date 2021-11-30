@@ -163,8 +163,6 @@ ApplicationWindow {
         gpsDataPageLoader.focus = true
       }
 
-      onDisplayProjectIssuesPanel: projectIssuesPanel.visible = true
-
       Component.onCompleted: {
         __loader.positionKit = map.positionKit
         __loader.recording = map.digitizingController.recording
@@ -303,6 +301,18 @@ ApplicationWindow {
         height: window.height/2
         width: window.width
         edge: Qt.BottomEdge
+    }
+
+    NotificationBanner {
+      id: notificationBanner
+
+      width: parent.width - notificationBanner.anchors.margins * 2
+      height: InputStyle.rowHeight * 2
+
+      onDetailsClicked: {
+          projectIssuesPanel.qgisLog = __loader.qgisLog();
+          projectIssuesPanel.visible = true;
+      }
     }
 
     ProjectIssuesPanel {
@@ -446,17 +456,20 @@ ApplicationWindow {
 
     Connections {
         target: __loader
-        onLoadingStarted: projectLoadingScreen.visible = true
+        onLoadingStarted: {
+            projectLoadingScreen.visible = true;
+            notificationBanner.reset();
+            projectIssuesPanel.clear();
+        }
         onLoadingFinished: projectLoadingScreen.visible = false
-        onLoadingErrorFound: map.pushNotification( "There were issues loading the project." )
+        onLoadingErrorFound: notificationBanner.pushNotification( "There were issues loading the project." )
 
         onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
         onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
-        onQgisLogChanged: projectIssuesPanel.qgisLog = __loader.qgisLog()
 
         onProjectReloaded: map.clear()
         onProjectWillBeReloaded: {
-            formsStackManager.reload()
+          formsStackManager.reload()
         }
     }
 

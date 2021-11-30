@@ -45,8 +45,6 @@ Item {
   signal recordInLayerFeatureFinished( var pair )
   signal recordInLayerFeatureCanceled()
 
-  signal displayProjectIssuesPanel()
-
   signal notify( string message )
 
   signal accuracyButtonClicked()
@@ -168,11 +166,6 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
-  }
-
-  function pushNotification( message ) {
-      __notificationBanner.showNotification = true;
-      __notificationBanner.text = message;
   }
 
   states: [
@@ -584,24 +577,15 @@ Item {
     }
   }
 
-  NotificationBanner {
-    id: __notificationBanner
+    ActiveLayerPanel {
+      id: _activeLayerPanel
 
-    width: parent.width - __notificationBanner.anchors.margins * 2
-    height: InputStyle.rowHeight * 2
+      height: window.height/2
+      width: window.width
+      edge: Qt.BottomEdge
 
-    onDetailsClicked: displayProjectIssuesPanel();
-  }
-
-  ActiveLayerPanel {
-    id: _activeLayerPanel
-
-    height: window.height/2
-    width: window.width
-    edge: Qt.BottomEdge
-
-    onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
-  }
+      onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+    }
 
   RecordToolbar {
     id: _recordToolbar

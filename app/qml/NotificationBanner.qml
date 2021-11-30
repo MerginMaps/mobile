@@ -6,8 +6,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-import QtQuick 2.7
-import QtQuick.Layouts 1.3
+import QtQuick 2.14
+import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.7
 import QgsQuick 0.1 as QgsQuick
@@ -20,11 +20,23 @@ Rectangle {
   property color bgColor: InputStyle.warningBannerColor
   property string source: InputStyle.exclamationIcon
   property real padding: InputStyle.innerFieldMargin
-  property bool showNotification: true
+  property bool showNotification: false
   property string text: ""
 
   signal notificationClosed()
   signal detailsClicked()
+
+  function pushNotification( message ) {
+    showNotification = true;
+    text = message;
+  }
+
+  function reset() {
+      state = "fade";
+      notificationBanner.visible = false;
+      showNotification = false;
+      text = "";
+  }
 
   id: notificationBanner
   color: notificationBanner.bgColor
