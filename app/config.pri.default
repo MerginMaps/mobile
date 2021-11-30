@@ -19,37 +19,20 @@ unix:!macx:!android {
 }
 
 macx:!android {
-  INPUT_SDK_PATH = $${BASE_DIR}/input-sdk/build/mac/stage
-  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13.0
-
+  INPUT_SDK_PATH=$${BASE_DIR}/input-sdk/build/mac/stage/mac
   QGIS_QUICK_DATA_PATH = $${BASE_DIR}/input/app/android/assets/qgis-data
-  GEODIFF_INCLUDE_DIR = $${BASE_DIR}/Applications/include
-  GEODIFF_LIB_DIR = $${BASE_DIR}/Applications/lib
 
-  PROJ_INCLUDE_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/include
-  PROJ_LIB_DIR = /opt/QGIS/qgis-deps-0.6.0/stage/lib
-
-  ZXING_INCLUDE_DIR=/opt/QGIS/qgis-deps-0.6.0/stage/include
-  ZXING_LIB_DIR=/opt/QGIS/qgis-deps-0.6.0/stage/lib
+  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15.0
 }
 
 ios {
-  QGIS_INSTALL_PATH =  /opt/INPUT/input-sdk-ios-<SDK_version>/stage/arm64
+  INPUT_SDK_PATH=$${BASE_DIR}/input-sdk/build/ios/stage/arm64
   QGIS_QUICK_DATA_PATH = INPUT # should be relative path
+
   QMAKE_IOS_DEPLOYMENT_TARGET = 12.0
-  GEODIFF_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
-  GEODIFF_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
-  PROJ_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include
-  PROJ_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
-  ZXING_INCLUDE_DIR=$${QGIS_INSTALL_PATH}/include
-  ZXING_LIB_DIR=$${QGIS_INSTALL_PATH}/lib/
 }
 
 win32 {
-  QGIS_INSTALL_PATH =  $${BASE_DIR}/input-sdk/x86_64/stage
-  QGIS_QUICK_DATA_PATH = C:/input-data
-  GEODIFF_INCLUDE_DIR = $${BASE_DIR}/include
-  GEODIFF_LIB_DIR = $${BASE_DIR}/lib
-  PROJ_INCLUDE_DIR = $${BASE_DIR}/include
-  PROJ_LIB_DIR = $${BASE_DIR}/lib
+  // Currently not maintained
+  INPUT_SDK_PATH=<SDK_PATH>
 }
