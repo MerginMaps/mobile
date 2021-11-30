@@ -1,47 +1,80 @@
 name: Android
-on: [push]
-env:
-  SDK_VERSION: android-22
+on:
+  push:
+    paths:
+    - 'app/**'
+    - 'core/**'
+    - 'images/**'
+    - 'qgsquick/**'
+    - 'scripts/**'
+    - '.github/workflows/android.yml'
+
+  release:
+    types:
+      - published
 
 jobs:
   android_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [armeabi-v7a, arm64-v8a]
+    runs-on: macos-10.15
+    env:
+      QT_VERSION: '5.14.2'
+      ANDROIDAPI: 24
+      ANDROID_NDK_PLATFORM: android-24
+      NDK_VERSION: r21
+      SDK_PLATFORM: android-30
+      SDK_BUILD_TOOLS: 28.0.3
+      INPUT_SDK_VERSION: android-macOS-20211125-34
+      CCACHE_DIR: /Users/runner/work/ccache
+      DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
+      INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
+
     steps:
       - uses: actions/checkout@v2
-      - name: Install Deps
+
+      # CCache
+      - name: Prepare build cache for pull request
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name == 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-android-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
+          # The head_ref or source branch of the pull request in a workflow run.
+          # The base_ref or target branch of the pull request in a workflow run.
+          restore-keys: |
+            build-android-ccache-${{ github.actor }}-${{ github.head_ref }}-
+            build-android-ccache-refs/heads/${{ github.base_ref }}-
+            build-android-ccache-refs/heads/master-
+
+      - name: Prepare build cache for branch/tag
+        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name != 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
+          key: build-android-ccache-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            build-android-ccache-${{ github.ref }}-
+            build-android-ccache-refs/heads/master-
+
+      - name: Install ccache
         run: |
-          sudo apt update && sudo apt install -y python3-pip gem openssl
-          sudo gem update bundler
+          mkdir -p ${CCACHE_DIR}
+          ccache --set-config=max_size=2.0G
+          ccache -s
+
+      - name: Install Build Dependencies
+        run: |
+          brew install bison flex automake shtool gtk-doc
+          echo "/usr/local/opt/flex/bin" >> $GITHUB_PATH
+          echo "/usr/local/opt/bison/bin" >> $GITHUB_PATH
+          brew install gnupg
+          brew install openssl@1.1
+          brew install python3
           pip3 install dropbox
-          gem --version
-          python3 --version
 
-      - name: Extract Mergin API_KEY
-        env:
-          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
-        run: |
-          openssl aes-256-cbc -k $MERGINSECRETS_DECRYPT_KEY -in core/merginsecrets.cpp.enc -out core/merginsecrets.cpp -d -md md5
-
-
-      - name: Extract GPS keystore
-        env:
-          INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
-
-        run: |
-          openssl aes-256-cbc -k $INPUTKEYSTORE_DECRYPT_KEY -in Input_keystore.keystore.enc -out Input_keystore.keystore -d -md md5
-
-      - name: Build and Upload
-        env:
-          ARCH: ${{ matrix.arch }}
-          DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-          INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-
-        run: |
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
               export GIT_TAG="${GITHUB_REF//refs\/tags\//}"
@@ -51,8 +84,123 @@ jobs:
               export GIT_BRANCH="${GITHUB_REF//refs\/heads\//}"
           fi
           echo "GIT_TAG: $GIT_TAG"
-          echo "GIT_BRANCH: $GIT_BRANCH"
+          echo "GIT_BRANCH: $GIT_BRANCH" >> $GITHUB_ENV
+          echo "GIT_TAG=$GIT_TAG"
+          echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
-          docker pull lutraconsulting/input-sdk:${SDK_VERSION}
-          docker run -v $(pwd):/usr/src/input -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "INPUTKEYSTORE_STOREPASS=${INPUTKEYSTORE_STOREPASS}" -e "VERSION=${GIT_TAG}" lutraconsulting/input-sdk:${SDK_VERSION} /usr/src/input/scripts/docker-build.sh
-          ./scripts/upload-artifacts.sh
+      # Qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-android
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: android
+          arch: android
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      # Input SDK
+      - name: Cache Input-SDK
+        id: cache-input-sdk
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/input-sdk
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+
+      - name: Install Input-SDK
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+        run: |
+          wget -O \
+            input-sdk.tar.gz \
+            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
+          ls ${{ github.workspace }}/input-sdk
+
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd core/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
+
+      - name: Extract GPS keystore
+        env:
+          INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
+
+        run: |
+          /usr/local/opt/openssl@1.1/bin/openssl \
+           aes-256-cbc -d \
+           -in Input_keystore.keystore.enc \
+           -out Input_keystore.keystore \
+           -k $INPUTKEYSTORE_DECRYPT_KEY \
+           -md md5
+
+       # Android SDK & NDK
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+          add-to-path: true
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+         java-version: 1.8
+
+      - name: Setup Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.2
+
+      - name: Install Android Tools
+        run: |
+          sdkmanager --licenses && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
+
+      # Build Input App
+      - name: Export app/config.pri
+        run: |
+          touch ./app/config.pri
+          echo -e "android {"  >> ./app/config.pri
+          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk"  >> ./app/config.pri
+          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
+          echo -e "}"  >> ./app/config.pri
+          cat ./app/config.conf
+
+      - name: Build armeabi-v7a APK
+        env:
+          ARCH: armeabi-v7a
+          VERSION: ${{ env. GIT_TAG }}
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
+          SOURCE_DIR: ${{ github.workspace }}/input
+
+        run: |
+            mkdir -p ${{ github.workspace }}/build-apk-$ARCH
+            cd ${{ github.workspace }}/build-apk-$ARCH
+            ./scripts/android-apk.bash
+            ./scripts/upload-artifacts.sh
+
+      - name: Build arm64-v8a APK
+        env:
+          ARCH: arm64-v8a
+          VERSION: ${{ env. GIT_TAG }}
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          SOURCE_DIR: ${{ github.workspace }}/input
+
+        run: |
+            mkdir -p ${{ github.workspace }}/build-apk-$ARCH
+            cd ${{ github.workspace }}/build-apk-$ARCH
+            ./scripts/android-apk.bash
+            ./scripts/upload-artifacts.sh

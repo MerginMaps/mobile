@@ -74,7 +74,6 @@
 #include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
-#include "featurehighlight.h"
 #include "qgsquickcoordinatetransformer.h"
 #include "identifykit.h"
 #include "featurelayerpair.h"
@@ -83,7 +82,6 @@
 #include "qgsquickmaptransform.h"
 #include "positionkit.h"
 #include "scalebarkit.h"
-#include "qgsquickutils.h"
 #include "featuresmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
@@ -219,13 +217,6 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
-static QObject *_utilsProvider( QQmlEngine *engine, QJSEngine *scriptEngine )
-{
-  Q_UNUSED( engine )
-  Q_UNUSED( scriptEngine )
-  return new QgsQuickUtils();  // the object will be owned by QML engine and destroyed by the engine on exit
-}
-
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -280,7 +271,6 @@ void initDeclarative()
   qmlRegisterUncreatableType< FieldValidator >( "lc", 1, 0, "FieldValidator", "Only enums from FieldValidator can be used" );
   qmlRegisterType< AttributeController >( "lc", 1, 0, "AttributeController" );
   qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
-  qmlRegisterType< FeatureHighlight >( "lc", 1, 0, "FeatureHighlight" );
   qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
@@ -296,10 +286,8 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
-  qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
-
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -327,6 +315,11 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
+  // This flag enables auto scaling for HighDPI screens
+  // Qt is handling scaling for us, so we do not need to multiply
+  // each pixel value with dp. See __dp context property comment for more.
+  QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
+
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
@@ -511,6 +504,13 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
   engine.rootContext()->setContextProperty( "__version", version );
+
+  // Enabling HighDPI scaling attribute (at the beggining of the main function) removes the
+  // need for manually calculating dp factor and multiplying it with each pixel value in qml.
+  // However, we keep the multiplications in place (right now we multiply only with 1),
+  // in case we would encounter a screen that cannot be scaled automatically.
+  // Use `value * __dp` for each pixel value in QML
+  engine.rootContext()->setContextProperty( "__dp", 1 );
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

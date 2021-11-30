@@ -16,7 +16,11 @@
 #include "qgsvectorlayer.h"
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
-#include <qgsmarkersymbollayer.h>
+#include "qgsmarkersymbollayer.h"
+#include "qgssymbollayer.h"
+#include "qgssymbol.h"
+#include "qgsmarkersymbol.h"
+#include "qgssinglesymbolrenderer.h"
 #include "inpututils.h"
 
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )

@@ -10,14 +10,13 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
-import QgsQuick 0.1 as QgsQuick
 
 Item {
     id: recordBtnContainer
     height: width
 
     property int size: width / 2
-    property int border: 10 * QgsQuick.Utils.dp
+    property int border: 10 * __dp
     property bool recording: false
     property color color: InputStyle.clrPanelMain
 

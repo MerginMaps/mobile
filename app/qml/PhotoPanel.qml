@@ -19,7 +19,6 @@ import QtQuick.Controls 2.2
 import QtQml 2.2
 import QtMultimedia 5.8
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
 
 Drawer {
   // Capture path
@@ -39,7 +38,7 @@ Drawer {
   property var confirmButtonIcon: __inputUtils.getThemeIcon("ic_check_black")
   property var cancelButtonIcon: __inputUtils.getThemeIcon("ic_clear_black")
   property var backButtonSource: __inputUtils.getThemeIcon("ic_back")
-  property real imageButtonSize: 45 * QgsQuick.Utils.dp
+  property real imageButtonSize: 45 * __dp
   property real buttonSize: imageButtonSize * 1.2
   property var buttonsPosition
 
@@ -164,7 +163,7 @@ Drawer {
         id: cancelButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.Utils.dp
+        property int borderWidth: 5 * __dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -195,7 +194,7 @@ Drawer {
         id: confirmButton
         visible: camera.imageCapture.capturedImagePath != ""
 
-        property int borderWidth: 5 * QgsQuick.Utils.dp
+        property int borderWidth: 5 * __dp
         width: buttonSize
         height: buttonSize
         color: "white"
@@ -230,7 +229,7 @@ Drawer {
     Item {
       id: backButton
 
-      property int borderWidth: 50 * QgsQuick.Utils.dp
+      property int borderWidth: 50 * __dp
       width: imageButtonSize * 1.5
       height: width
       antialiasing: true

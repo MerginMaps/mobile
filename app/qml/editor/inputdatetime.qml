@@ -18,7 +18,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4 as Controls1
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
 
 
 /**
@@ -70,8 +69,8 @@ Item {
                 font.pointSize: customStyle.fields.fontPointSize
                 color: customStyle.fields.fontColor
                 padding: 0
-                topPadding: 10 * QgsQuick.Utils.dp
-                bottomPadding: 10 * QgsQuick.Utils.dp
+                topPadding: 10 * __dp
+                bottomPadding: 10 * __dp
                 leftPadding: customStyle.fields.sideMargin
                 background: Rectangle {
                     radius: customStyle.fields.cornerRadius

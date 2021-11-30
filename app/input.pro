@@ -5,6 +5,10 @@ CONFIG += c++17
 include(config.pri)
 include(version.pri)
 
+isEmpty(QGIS_QUICK_DATA_PATH) {
+  error("Missing QGIS_QUICK_DATA_PATH")
+}
+
 QT += quick qml xml concurrent positioning sensors quickcontrols2
 QT += network svg sql
 QT += opengl

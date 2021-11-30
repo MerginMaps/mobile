@@ -7,35 +7,30 @@ ios {
         error("Use release with debug info for debugging! Debug not supported due to static linking for the moment.")
     }
 
-    # QGIS
-    QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
-    QGIS_CORE_FRAMEWORK = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework
-
-    exists($${QGIS_CORE_FRAMEWORK}/qgis_core) {
-      message("Building from QGIS: $${QGIS_INSTALL_PATH}")
-    } else {
-      error("Missing qgis_core Framework in $${QGIS_CORE_FRAMEWORK}/qgis_core")
+    isEmpty(INPUT_SDK_PATH) {
+      error("Missing INPUT_SDK_PATH")
     }
 
-    INCLUDEPATH += $${QGIS_CORE_FRAMEWORK}/Headers
+    INPUT_SDK_LIB_PATH = $${INPUT_SDK_PATH}/lib
+    INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_PATH}/include
 
-    LIBS += -F$${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
+    # QGIS
+    QGIS_PREFIX_PATH = $${INPUT_SDK_PATH}/QGIS.app/Contents/MacOS
+    QGIS_FRAMEWORK_DIR = $${INPUT_SDK_PATH}/QGIS.app/Contents/Frameworks
+    QGIS_PLUGINS_PATH=$${INPUT_SDK_PATH}/QGIS.app/Contents/PlugIns/qgis # is this needed?
+
+    exists($${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core) {
+      message("Building from QGIS: $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
+    } else {
+      error("Missing QGIS Core library in $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
+    }
+
+    INCLUDEPATH += \
+        $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/Headers \
+        $${INPUT_SDK_INCLUDE_PATH}
+
+    LIBS += -F$${QGIS_FRAMEWORK_DIR}
     LIBS += -framework qgis_core
-
-    # Geodiff
-    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
-    LIBS += -L$${GEODIFF_LIB_DIR}
-    LIBS += -lgeodiff
-
-    # Proj
-    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
-    LIBS += -L$${PROJ_LIB_DIR}
-    LIBS += -lproj
-
-#    # ZXing
-    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
-    LIBS += -L$${ZXING_LIB_DIR}
-    LIBS += -lZXing
 
     # Disabling warnings in qgis qgswkbptr.h
     QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-shorten-64-to-32
@@ -49,16 +44,34 @@ ios {
     QT += multimedia multimediawidgets location
     QTPLUGIN += qios
 
-    LIBS += -L$${QGIS_INSTALL_PATH}/lib -L$${QGIS_INSTALL_PATH}/QGIS.app/Contents/PlugIns/qgis
-    LIBS += -lwmsprovider_a -lpostgresprovider_a
+    # other libs
+    LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}
+    LIBS += -lgeodiff
+    LIBS += -lproj
+    LIBS += -lZXing
+    LIBS += -lauthmethod_basic_a
+    LIBS += -lauthmethod_esritoken_a
+    LIBS += -lauthmethod_identcert_a
+    LIBS += -lauthmethod_oauth2_a
+    LIBS += -lauthmethod_pkcs12_a
+    LIBS += -lauthmethod_pkipaths_a
+    LIBS += -lprovider_arcgisfeatureserver_a
+    LIBS += -lprovider_arcgismapserver_a
+    LIBS += -lprovider_delimitedtext_a
+    LIBS += -lprovider_spatialite_a
+    LIBS += -lprovider_virtuallayer_a
+    LIBS += -lprovider_wcs_a
+    LIBS += -lprovider_wfs_a
+    LIBS += -lprovider_wms_a
+    LIBS += -lprovider_postgres_a
     LIBS += -lqt5keychain -lqca-qt5
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
-    LIBS += -ltasn1 -lzip -lbz2 -lproj
-    LIBS += -lspatialindex -lgeos -lgeos_c -lsqlite3
-    LIBS += -lprotobuf-lite -lexpat -lfreexl -liconv
+    LIBS += -ltasn1 -lbz2 -lproj
+    LIBS += -lspatialindex -lgeos -lgeos_c
+    LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
+    LIBS += -lsqlite3 -liconv -lz -lzip
 
-    QMAKE_RPATHDIR += @executable_path/../Frameworks
     QMAKE_INFO_PLIST = ios/Info.plist
 
     # demo projects

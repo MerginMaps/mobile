@@ -9,14 +9,13 @@
 
 import QtQuick 2.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import ".."
 
 Item {    
     id: root
 
-    property real size: 100 * QgsQuick.Utils.dp
+    property real size: 100 * __dp
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 

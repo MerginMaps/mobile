@@ -7,10 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "qgsvectorlayer.h"
 #include "layersproxymodel.h"
 
-#include "qgsvectorlayer.h"
 #include "qgsproject.h"
 #include "qgslayertree.h"
 

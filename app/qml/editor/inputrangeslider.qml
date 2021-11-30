@@ -18,7 +18,6 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 
 Item {
@@ -56,7 +55,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     border.color: customStyle.fields.normalColor
-    border.width: 1 * QgsQuick.Utils.dp
+    border.width: 1 * __dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
@@ -86,7 +85,7 @@ Item {
         horizontalAlignment: Text.AlignLeft
         font.pointSize: customStyle.fields.fontPointSize
         color: customStyle.fields.fontColor
-        padding: 10 * QgsQuick.Utils.dp
+        padding: 10 * __dp
         leftPadding: customStyle.fields.sideMargin
       }
 
@@ -110,7 +109,7 @@ Item {
           y: slider.topPadding + slider.availableHeight / 2 - height / 2
           width: slider.availableWidth
           height: slider.height * 0.1
-          radius: 2 * QgsQuick.Utils.dp
+          radius: 2 * __dp
 
           color: root.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
         }

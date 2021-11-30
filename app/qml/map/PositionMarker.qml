@@ -14,7 +14,6 @@ import QtGraphicalEffects 1.0
 
 import ".."
 import lc 1.0
-import QgsQuick 0.1 as QgsQuick
 
 Item {
     id: positionMarker

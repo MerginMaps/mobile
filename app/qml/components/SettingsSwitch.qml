@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 import QtQuick 2.6
-import QgsQuick 0.1 as QgsQuick
 
 import "." // import Components
 import "../" // import InputStyle
