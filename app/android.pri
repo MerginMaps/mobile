@@ -25,8 +25,6 @@ android {
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
 
-    LIBS += -lc++_shared
-
     LIBS += -L$${INPUT_SDK_LIB_PATH}
     LIBS += -lqgis_core
     LIBS += -lgeodiff
