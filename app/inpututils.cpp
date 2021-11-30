@@ -18,7 +18,6 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-#include "qgsquickutils.h"
 #include "qgsquickmaptransform.h"
 #include "coreutils.h"
 #include "qgis.h"
@@ -35,7 +34,6 @@
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
-#include "qgsquickutils.h"
 #include "qgsunittypes.h"
 #include "qgsfeatureid.h"
 
@@ -1103,7 +1101,7 @@ QString InputUtils::dumpScreenInfo() const
     msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
     msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
     msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-    msg += tr( "screen density: %1" ).arg( QgsQuickUtils().screenDensity() );
+    msg += tr( "screen device pixel ratio: %1" ).arg( screen->devicePixelRatio() );
   }
   else
   {

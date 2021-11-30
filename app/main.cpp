@@ -82,7 +82,6 @@
 #include "qgsquickmaptransform.h"
 #include "positionkit.h"
 #include "scalebarkit.h"
-#include "qgsquickutils.h"
 #include "featuresmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
@@ -218,13 +217,6 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
-static QObject *_utilsProvider( QQmlEngine *engine, QJSEngine *scriptEngine )
-{
-  Q_UNUSED( engine )
-  Q_UNUSED( scriptEngine )
-  return new QgsQuickUtils();  // the object will be owned by QML engine and destroyed by the engine on exit
-}
-
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -294,7 +286,6 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
-  qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _utilsProvider );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }

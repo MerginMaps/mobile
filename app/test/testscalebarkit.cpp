@@ -19,7 +19,6 @@
 #include <QDesktopWidget>
 
 #include "qgsapplication.h"
-#include "qgsquickutils.h"
 #include "qgsquickmapcanvasmap.h"
 #include "scalebarkit.h"
 
