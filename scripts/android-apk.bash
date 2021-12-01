@@ -56,6 +56,7 @@ mkdir -p ${BUILD_DIR}/.gradle
 pushd ${BUILD_DIR}
 # cp ${SOURCE_DIR}/scripts/ci/config.pri ${SOURCE_DIR}/app/config.pri
 ${QT_BASE}/bin/qmake -spec android-clang ANDROID_ABIS="${ARCH}" ${SOURCE_DIR}/app/input.pro
+ls ${ANDROID_NDK_ROOT}/prebuilt/
 ${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make qmake_all
 make -j ${CORES}
 
