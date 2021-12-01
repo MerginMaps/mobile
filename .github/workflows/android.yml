@@ -24,9 +24,8 @@ jobs:
       NDK_VERSION: r21
       SDK_PLATFORM: android-30
       SDK_BUILD_TOOLS: 28.0.3
-      INPUT_SDK_VERSION: macOS-android-20211125-34 # TODO: Do not forget to switch it back to android-macos!
+      INPUT_SDK_VERSION: android-macOS-20211201-39
       CCACHE_DIR: /Users/runner/work/ccache
-      # DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
 
@@ -119,12 +118,9 @@ jobs:
         run: |
           wget -O \
             input-sdk.tar.gz \
-            https://github.com/lutraconsulting/input-sdk/releases/download/macOS-android-20211125-34/input-sdk-qt-5.14.2-macOS-android-20211125-34.tar.gz
+            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
           tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
           ls ${{ github.workspace }}/input-sdk
-
-# TODO: Do not forget to switch it back to android-macos!
-# https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
 
       - name: Extract Mergin API_KEY
         env:
@@ -187,7 +183,7 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
-          SOURCE_DIR: ${{ github.workspace }}/input
+          SOURCE_DIR: ${{ github.workspace }}
 
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
@@ -201,7 +197,7 @@ jobs:
           VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
-          SOURCE_DIR: ${{ github.workspace }}/input
+          SOURCE_DIR: ${{ github.workspace }}
 
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
@@ -213,3 +209,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-arm64-v8a/out/build/outputs/apk/debug/android-build-debug.apk
+          name: APKs
