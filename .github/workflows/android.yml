@@ -213,10 +213,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
-          name: APKs
+          name: [APK] arm64
 
       - name: Upload AAB to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/bundle/release/android-build-release.aab
-          name: APKs
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/bundle/release/out-release.aab
+          name: AAB
+
+      - name: Check generated files
+        run: |
+            find ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/
