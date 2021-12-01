@@ -62,6 +62,10 @@ android {
         abortOnError false
     }
 
+    defaultConfig {
+        resConfigs "en"
+    }
+
     // Do not compress Qt binary resources file
     aaptOptions {
         noCompress 'rcc'
