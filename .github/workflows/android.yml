@@ -208,7 +208,6 @@ jobs:
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
-            ../scripts/upload-artifacts.sh
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v2
