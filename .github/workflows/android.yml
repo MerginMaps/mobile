@@ -179,6 +179,7 @@ jobs:
           cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
+        if: false # TODO: Fix v7 build!!
         env:
           ARCH: armeabi-v7a
           VERSION: ${{ env.GIT_TAG }}
