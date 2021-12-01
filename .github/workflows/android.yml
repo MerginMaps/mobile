@@ -73,7 +73,6 @@ jobs:
           brew install gnupg
           brew install openssl@1.1
           brew install python3
-          # pip3 install dropbox
 
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -108,18 +107,21 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
+        if: false # TODO: do not forget to enable this! <--
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
           key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
 
       - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+        # if: steps.cache-input-sdk.outputs.cache-hit != 'true' # TODO: do not forget to enable this! <--
         run: |
           wget -O \
             input-sdk.tar.gz \
             https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
+          mkdir -p ${{ github.workspace }}/input-sdk
+          cd ${{ github.workspace }}/input-sdk
+          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
           ls ${{ github.workspace }}/input-sdk
 
       - name: Extract Mergin API_KEY
