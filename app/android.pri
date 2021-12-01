@@ -63,6 +63,8 @@ android {
     QT += printsupport
     QT += androidextras
 
+    LOCAL_LDLIBS += -Wl,--no-warn-shared-textrel
+
     QMAKE_CXXFLAGS += -std=c++11
 
 
