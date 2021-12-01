@@ -15,7 +15,7 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2004-20211124-29
+  INPUT_SDK_VERSION: ubuntu-2004-20211201-34
   QT_VERSION: '5.14.2'
 
 jobs:
