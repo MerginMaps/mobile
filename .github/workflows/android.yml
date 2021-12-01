@@ -183,6 +183,7 @@ jobs:
           ARCH: armeabi-v7a
           VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
           SOURCE_DIR: ${{ github.workspace }}
@@ -198,6 +199,7 @@ jobs:
           ARCH: arm64-v8a
           VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           SOURCE_DIR: ${{ github.workspace }}
 
