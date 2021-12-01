@@ -213,7 +213,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
-          name: [APK] arm64
+          name: arm64 apk
 
       - name: Upload AAB to Artifacts
         uses: actions/upload-artifact@v2
