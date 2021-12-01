@@ -28,6 +28,7 @@ jobs:
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
+      CACHE_VERSION: 0
 
     steps:
       - uses: actions/checkout@v2
@@ -107,14 +108,13 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        if: false # TODO: do not forget to enable this! <--
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
-        # if: steps.cache-input-sdk.outputs.cache-hit != 'true' # TODO: do not forget to enable this! <--
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
           wget -O \
             input-sdk.tar.gz \
@@ -212,5 +212,11 @@ jobs:
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/out/build/outputs/apk/debug/android-build-debug.apk
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: APKs
+
+      - name: Upload AAB to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/bundle/release/android-build-release.aab
           name: APKs

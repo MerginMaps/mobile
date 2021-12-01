@@ -73,6 +73,7 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --keypass ${INPUTKEYSTORE_STOREPASS} \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
+        --aab \
         --deployment bundled \
         --gradle
 else
