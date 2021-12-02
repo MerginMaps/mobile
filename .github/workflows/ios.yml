@@ -142,11 +142,16 @@ jobs:
       # Do this only until we move from 5.14.2!!
       - name: Patch Qt!
         if: ${{ env.QT_VERSION }} == '5.14.2'
+        continue-on-error: true
         run: |
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
           which $SHELL
           env
-          cp ./app/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
+          echo "copy from ${{ github.workspace }}/app/scripts/ci/ios/toolchain5.14.2_xcode12.prf"
+          echo "copy to ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf"
+
+          cp ${{ github.workspace }}/app/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
+          echo $?
           echo "Qt patched!"
 
 
