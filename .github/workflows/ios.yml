@@ -214,7 +214,9 @@ jobs:
 
       - name: debug
         if: always()
+        continue-on-error: true
         run: |
+          echo "starting!"
           find . -name "*.o"
           find . -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
           echo "Looking at ../build-INPUT"
