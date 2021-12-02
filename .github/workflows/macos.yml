@@ -7,7 +7,7 @@ on:
     - 'images/**'
     - 'qgsquick/**'
     - 'scripts/**'
-    - '.github/workflows/autotests.yml'
+    - '.github/workflows/macos.yml'
 
   release:
     types:
