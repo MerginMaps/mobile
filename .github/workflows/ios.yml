@@ -216,6 +216,7 @@ jobs:
         if: always()
         run: |
           echo "Looking at ."
+          find . -name "*.o"
           find . -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
           echo "Looking at ../build-INPUT"
           find ../build-INPUT -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
