@@ -2,9 +2,9 @@
 
 
 BUILD_DIR=`pwd`/input
-BUILD_DIR_QGSQUICK=`pwd`/qgis-quick
+# BUILD_DIR_QGSQUICK=`pwd`/qgis-quick
 INSTALL_DIR=${BUILD_DIR}/out
-INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
+# INSTALL_DIR_QGSQUICK=${BUILD_DIR_QGSQUICK}/out
 
 set -e
 
@@ -22,18 +22,18 @@ fi
 
 # TODO take from input-sdk?
 # export ANDROIDAPI=23
-if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
-  export TOOLCHAIN_SHORT_PREFIX=arm-linux-androideabi
-  export TOOLCHAIN_PREFIX=arm-linux-androideabi
-  export QT_ARCH_PREFIX=armv7
-elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
-  export TOOLCHAIN_SHORT_PREFIX=aarch64-linux-android
-  export TOOLCHAIN_PREFIX=aarch64-linux-android
-  export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
-else
-  echo "Error: Please report issue to enable support for arch (${ARCH})."
-  exit 1
-fi
+# if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
+#   export TOOLCHAIN_SHORT_PREFIX=arm-linux-androideabi
+#   export TOOLCHAIN_PREFIX=arm-linux-androideabi
+#   export QT_ARCH_PREFIX=armv7
+# elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
+#   export TOOLCHAIN_SHORT_PREFIX=aarch64-linux-android
+#   export TOOLCHAIN_PREFIX=aarch64-linux-android
+#   export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
+# else
+#   echo "Error: Please report issue to enable support for arch (${ARCH})."
+#   exit 1
+# fi
 
 #####
 # PRINT ENV
@@ -70,6 +70,7 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --keypass ${INPUTKEYSTORE_STOREPASS} \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
+        --aab \
         --deployment bundled \
         --gradle
 else

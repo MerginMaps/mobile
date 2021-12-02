@@ -179,7 +179,6 @@ jobs:
           cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
-        if: false # TODO: Fix v7 build!!
         env:
           ARCH: armeabi-v7a
           VERSION: ${{ env.GIT_TAG }}
@@ -193,7 +192,6 @@ jobs:
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
-            ../scripts/upload-artifacts.sh
 
       - name: Build arm64-v8a APK
         env:
@@ -209,18 +207,38 @@ jobs:
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
 
-      - name: Upload APK to Artifacts
+      - name: Build AAB
+        env:
+          ARCH: [armeabi-v7a, arm64-v8a]
+          VERSION: ${{ env.GIT_TAG }}
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          SOURCE_DIR: ${{ github.workspace }}
+
+        run: |
+            mkdir -p ${{ github.workspace }}/build-aab
+            cd ${{ github.workspace }}/build-aab
+            ../scripts/android-aab.bash
+
+      - name: Upload v8 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
           name: arm64 apk
 
+      - name: Upload v7 APK to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: armeabi apk
+
       - name: Upload AAB to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/bundle/release/out-release.aab
-          name: AAB
+          path: ${{ github.workspace }}/build-aab/input/out/build/outputs/bundle/release/out-release.aab
+          name: aab bundle
 
       - name: Check generated files
         run: |
-            find ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/
+            find ${{ github.workspace }}/build-* -name "*.apk" -or -name "*.aab"
