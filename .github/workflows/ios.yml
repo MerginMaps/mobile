@@ -139,6 +139,17 @@ jobs:
           dir: ${{ github.workspace }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
+      # Do this only until we move from 5.14.2!!
+      - name: Patch Qt!
+        if: ${{ env.QT_VERSION }} == '5.14.2'
+        run: |
+          echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
+          which $SHELL
+          env
+          cp ./app/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
+          echo "Qt patched!"
+
+
       # Build Input App
       - name: Export app/config.pri
         run: |
@@ -213,20 +224,6 @@ jobs:
             -exportPath $PWD \
             -allowProvisioningUpdates \
             -exportArchive
-
-      - name: debug
-        if: always()
-        continue-on-error: true
-        run: |
-          echo "starting!"
-          echo $ARCHS_STANDARD
-          find . -name "*.o"
-          find . -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
-          echo "Looking at ../build-INPUT"
-          find ../build-INPUT -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
-          echo "Done looking"
-
-
 
       - name: Upload .ipa to TestFlight
         env:
