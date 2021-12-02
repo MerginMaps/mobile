@@ -141,7 +141,6 @@ jobs:
 
       # Do this only until we move from 5.14.2!!
       - name: Patch Qt!
-        continue-on-error: true
         run: |
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
 
@@ -150,20 +149,14 @@ jobs:
             exit 1
           fi
 
-          echo "copy from ${{ github.workspace }}/scripts/ci/ios/toolchain5.14.2_xcode12.prf"
-          echo "copy to ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf"
-
           cp ${{ github.workspace }}/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
-          echo $?
-          echo "Qt patched!"
-
 
       # Build Input App
       - name: Export app/config.pri
         run: |
           touch ./app/config.pri
           echo -e "ios {"  >> ./app/config.pri
-          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk"  >> ./app/config.pri
+          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
