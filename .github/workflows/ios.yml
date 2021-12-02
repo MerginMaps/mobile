@@ -178,8 +178,8 @@ jobs:
 
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
-          mkdir -p ../build-INPUT
-          cd ../build-INPUT
+          mkdir -p build-INPUT
+          cd build-INPUT
 
           # run qmake
           ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
@@ -205,7 +205,7 @@ jobs:
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
-          cd ../build-INPUT
+          cd build-INPUT
 
           xcodebuild \
             -project Input.xcodeproj/ \
@@ -218,7 +218,7 @@ jobs:
       - name: Create Input Package
         run: |
           INPUT_DIR=`pwd`
-          cd ../build-INPUT
+          cd build-INPUT
           xcodebuild \
             -archivePath Input.xcarchive \
             -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
@@ -235,7 +235,7 @@ jobs:
         run: |
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
-          xcrun altool --upload-app -t ios -f ../build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+          xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
           GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
