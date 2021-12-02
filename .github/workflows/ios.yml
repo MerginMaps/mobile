@@ -168,7 +168,7 @@ jobs:
           cd ../build-INPUT
 
           # run qmake
-          /opt/Qt/${QT_VERSION}/ios/bin/qmake \
+          ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
             CONFIG+=release \
