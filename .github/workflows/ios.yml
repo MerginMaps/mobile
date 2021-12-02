@@ -64,8 +64,6 @@ jobs:
           brew install openssl@1.1
           brew install python3
           brew install ccache
-          pip3 install dropbox
-
 
       - name: Install ccache
         run: |
@@ -156,9 +154,6 @@ jobs:
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
-
-          # setup config environment
-          cp scripts/ci/config.pri app/config.pri
 
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
