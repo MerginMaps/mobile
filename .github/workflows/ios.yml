@@ -155,6 +155,8 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
 
+          echo "ARCHS: $ARCHS_STANDARD"
+
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
           TIMESTAMP=`date "+%y%m%d%H%M%S"`
@@ -217,6 +219,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "starting!"
+          echo $ARCHS_STANDARD
           find . -name "*.o"
           find . -name "*.o" | head -n 1 | xargs otool -lv | grep -A 4 -B 4 platform
           echo "Looking at ../build-INPUT"
