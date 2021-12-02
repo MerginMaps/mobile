@@ -209,7 +209,7 @@ jobs:
 
       - name: Build AAB
         env:
-          ARCH: [armeabi-v7a, arm64-v8a]
+          ARCH: 'armeabi-v7a arm64-v8a'
           VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
