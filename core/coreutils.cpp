@@ -51,7 +51,6 @@ QString CoreUtils::localizedDateFromUTFString( QString timestamp )
   }
   else
   {
-    qDebug() << "Unable to convert UTF " << timestamp << " to QDateTime";
     return QString();
   }
 }
