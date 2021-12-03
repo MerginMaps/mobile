@@ -24,11 +24,11 @@ Item {
   property string headerText: ""
 
   function reportIssue( layerName, message ) {
-      projectIssuesModel.append( { name: layerName, message: message } );
+    projectIssuesModel.append( { name: layerName, message: message } );
   }
 
   function clear() {
-      projectIssuesModel.clear();
+    projectIssuesModel.clear();
   }
 
   Keys.onReleased: {
@@ -97,36 +97,36 @@ Item {
           }
 
           PanelItem {
-              id: invalidLayersList
-              height: 0
+            id: invalidLayersList
+            height: 0
 
-              ListView {
-                  id: invalidLayersListView
-                  anchors.fill: parent
+            ListView {
+              id: invalidLayersListView
+              anchors.fill: parent
 
-                  model: projectIssuesModel
-                  spacing: 3
-                  delegate: PanelItem {
-                      anchors.margins: 5
-                      width: parent.width
-                      height: textItem.height
-                      color: InputStyle.clrPanelMain
-                      Text {
-                          id: textItem
-                          width: parent.width
-                          anchors.left: parent.left
-                          anchors.top: parent.top
-                          text:  qsTr( name + ": " + message )
-                          wrapMode: Text.Wrap
-                      }
-                      onHeightChanged: invalidLayersList.height += height;
-                  }
-
-                  onCountChanged: {
-                      if ( count == 0 )
-                          invalidLayersList.height = 0;
-                  }
+              model: projectIssuesModel
+              spacing: 3
+              delegate: PanelItem {
+                anchors.margins: 5
+                width: parent.width
+                height: textItem.height
+                color: InputStyle.clrPanelMain
+                Text {
+                  id: textItem
+                  width: parent.width
+                  anchors.left: parent.left
+                  anchors.top: parent.top
+                  text:  qsTr( name + ": " + message )
+                  wrapMode: Text.Wrap
+                }
+                onHeightChanged: invalidLayersList.height += height;
               }
+
+              onCountChanged: {
+                if ( count == 0 )
+                  invalidLayersList.height = 0;
+              }
+            }
           }
 
 

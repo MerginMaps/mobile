@@ -32,10 +32,10 @@ Rectangle {
   }
 
   function reset() {
-      state = "fade";
-      notificationBanner.visible = false;
-      showNotification = false;
-      text = "";
+    state = "fade";
+    notificationBanner.visible = false;
+    showNotification = false;
+    text = "";
   }
 
   id: notificationBanner
@@ -82,18 +82,18 @@ Rectangle {
   }
 
   Button {
-      id: closeBtn
-      width: 40 * QgsQuick.Utils.dp
-      height: 40 * QgsQuick.Utils.dp
-      anchors.top: parent.top
-      anchors.right: parent.right
-      anchors.margins: 10
-      icon.width: width
-      icon.height: height
-      icon.name: "close-icon"
-      icon.source: "qrc:/ic_clear_black.svg"
-      palette.button: "#00FFFFFF"
-      onClicked: notificationBanner.state = "fade"
+    id: closeBtn
+    width: 40 * QgsQuick.Utils.dp
+    height: 40 * QgsQuick.Utils.dp
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.margins: 10
+    icon.width: width
+    icon.height: height
+    icon.name: "close-icon"
+    icon.source: "qrc:/ic_clear_black.svg"
+    palette.button: "#00FFFFFF"
+    onClicked: notificationBanner.state = "fade"
   }
 
   ColumnLayout {
@@ -116,26 +116,26 @@ Rectangle {
   }
 
   Button {
-      id: button
-      anchors.right: notificationBanner.right
-      anchors.bottom: notificationBanner.bottom
-      anchors.margins: 20
-      padding: 10
-      contentItem: Text {
-          text: button.text
-          font: button.font
-          opacity: enabled ? 1.0 : 0.3
-          color: "white"
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-      }
+    id: button
+    anchors.right: notificationBanner.right
+    anchors.bottom: notificationBanner.bottom
+    anchors.margins: 20
+    padding: 10
+    contentItem: Text {
+      text: button.text
+      font: button.font
+      opacity: enabled ? 1.0 : 0.3
+      color: "white"
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+      elide: Text.ElideRight
+    }
 
-      background: Rectangle {
-        color: InputStyle.activeButtonColor
-        radius: InputStyle.cornerRadius
-      }
-      text: "Details"
-      onClicked: detailsClicked()
+    background: Rectangle {
+      color: InputStyle.activeButtonColor
+      radius: InputStyle.cornerRadius
+    }
+    text: "Details"
+    onClicked: detailsClicked()
   }
 }

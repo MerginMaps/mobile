@@ -52,17 +52,13 @@ ApplicationWindow {
             if ( stateManager.state === "view" ) {
               projectPanel.hidePanel()
               map.state = "view"
-              if ( notificationBanner.state == "show" )
-                  notificationBanner.visible = true;
             }
             else if ( stateManager.state === "record" ) {
               map.state = "recordFeature";
-              notificationBanner.visible = false;
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
               map.state = "inactive";
-              notificationBanner.visible = false;
             }
         }
     }
@@ -215,6 +211,20 @@ ApplicationWindow {
         }
     }
 
+    NotificationBanner {
+      id: notificationBanner
+
+      shouldHide: projectPanel.visible && settingsPanel.visible && stateManager.state !== "view"
+
+      width: parent.width - notificationBanner.anchors.margins * 2
+      height: InputStyle.rowHeight * 2
+
+      onDetailsClicked: {
+        projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
+        projectIssuesPanel.visible = true;
+      }
+    }
+
     SettingsPanel {
       id: settingsPanel
 
@@ -307,32 +317,20 @@ ApplicationWindow {
         edge: Qt.BottomEdge
     }
 
-    NotificationBanner {
-      id: notificationBanner
-
-      width: parent.width - notificationBanner.anchors.margins * 2
-      height: InputStyle.rowHeight * 2
-
-      onDetailsClicked: {
-          projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
-          projectIssuesPanel.visible = true;
-      }
-    }
-
     ProjectIssuesPanel {
-        id: projectIssuesPanel
+      id: projectIssuesPanel
 
-        height: window.height
-        width: window.width
-        rowHeight: InputStyle.rowHeight
-        visible: false;
+      height: window.height
+      width: window.width
+      rowHeight: InputStyle.rowHeight
+      visible: false;
 
-        onVisibleChanged: {
-          if (projectIssuesPanel.visible)
-            projectIssuesPanel.focus = true; // get focus
-          else
-            mainPanel.focus = true; // pass focus back to main panel
-        }
+      onVisibleChanged: {
+        if (projectIssuesPanel.visible)
+          projectIssuesPanel.focus = true; // get focus
+        else
+          mainPanel.focus = true; // pass focus back to main panel
+      }
     }
 
     Notification {
@@ -459,24 +457,24 @@ ApplicationWindow {
     }
 
     Connections {
-        target: __loader
-        onLoadingStarted: {
-            projectLoadingScreen.visible = true;
-            notificationBanner.reset();
-            projectIssuesPanel.clear();
-        }
-        onLoadingFinished: projectLoadingScreen.visible = false
-        onLoadingErrorFound: {
-            notificationBanner.pushNotification( "There were issues loading the project." )
-        }
+      target: __loader
+      onLoadingStarted: {
+        projectLoadingScreen.visible = true;
+        notificationBanner.reset();
+        projectIssuesPanel.clear();
+      }
+      onLoadingFinished: projectLoadingScreen.visible = false
+      onLoadingErrorFound: {
+        notificationBanner.pushNotification( "There were issues loading the project." )
+      }
 
-        onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-        onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
+      onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
+      onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
 
-        onProjectReloaded: map.clear()
-        onProjectWillBeReloaded: {
-          formsStackManager.reload()
-        }
+      onProjectReloaded: map.clear()
+      onProjectWillBeReloaded: {
+        formsStackManager.reload()
+      }
     }
 
     LegacyFolderMigration {

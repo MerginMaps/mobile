@@ -577,15 +577,15 @@ Item {
     }
   }
 
-    ActiveLayerPanel {
-      id: _activeLayerPanel
+  ActiveLayerPanel {
+    id: _activeLayerPanel
 
-      height: window.height/2
-      width: window.width
-      edge: Qt.BottomEdge
+    height: window.height/2
+    width: window.width
+    edge: Qt.BottomEdge
 
-      onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
-    }
+    onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+  }
 
   RecordToolbar {
     id: _recordToolbar
