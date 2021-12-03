@@ -1,9 +1,10 @@
 name: Translations
-# on:
+
+on: push
   # Trigger the workflow only on master
   # push:
-  #   branches:
-  #     - master
+    # branches:
+      # - master
 
 jobs:
   code_style:
