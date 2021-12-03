@@ -160,6 +160,7 @@ jobs:
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ccache clang++"  >> ./app/config.pri
+          echo -e "  QMAKE_LINK = clang++" >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
