@@ -33,29 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download repo history
-        if: true #TODO: run only on master
-        uses: actions/checkout@v2
-        with:
-          path: input-history
-          fetch-depth: 0 # fetch all history
-
-      - name: Calculate version code
-        if: true #TODO: run only on master
-        env:
-          COMMIT_OFFSET: 1639 # number of commits from start
-          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
-        run: |
-            # calculate number of commits
-            cd input-history
-            NUM_OF_COMMITS=`git rev-list --count HEAD`
-            echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
-            NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
-            VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
-
-            echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
-            echo "CALCULATED VERSION:: ${VERSION_CODE}"
-
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v2.1.5
@@ -201,10 +178,8 @@ jobs:
           cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
-        if: false #TODO: change back
         env:
           ARCH: armeabi-v7a
-          VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
@@ -217,10 +192,8 @@ jobs:
             ../scripts/android-apk.bash
 
       - name: Build arm64-v8a APK
-        if: false #TODO: change back
         env:
           ARCH: arm64-v8a
-          VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
@@ -232,47 +205,45 @@ jobs:
             ../scripts/android-apk.bash
 
       - name: Upload v8 APK to Artifacts
-        if: false #TODO: change back
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
           name: arm64 apk
 
       - name: Upload v7 APK to Artifacts
-        if: false #TODO: change back
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
           name: armeabi apk
 
-      # - name: Download repo history
-      #   if: true #TODO: run only on master
-      #   uses: actions/checkout@v2
-      #   with:
-      #     path: input-history
-      #     fetch-depth: 0 # fetch all history
-      #
-      # - name: Calculate version code
-      #   if: true #TODO: run only on master
-      #   env:
-      #     COMMIT_OFFSET: 1639 # number of commits from start
-      #     VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
-      #   run: |
-      #       # calculate number of commits
-      #       cd input-history
-      #       NUM_OF_COMMITS=`git rev-list --count HEAD`
-      #       echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
-      #       NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
-      #       VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
-      #
-      #       echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
-      #       echo "CALCULATED VERSION:: ${VERSION_CODE}"
+      - name: Download repo history
+        if: ${{ env.GIT_BRANCH }} == "master"
+        uses: actions/checkout@v2
+        with:
+          path: input-history
+          fetch-depth: 0 # fetch all history
+
+      - name: Calculate version code
+        if: ${{ env.GIT_BRANCH }} == "master"
+        env:
+          COMMIT_OFFSET: 1639 # number of commits since beginning. We use this number as offset to start counting from one
+          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
+        run: |
+            cd input-history
+
+            NUM_OF_COMMITS=`git rev-list --count HEAD`
+            echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
+
+            NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
+            VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
+
+            echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
+            echo "CALCULATED VERSION CODE: ${VERSION_CODE}"
 
       - name: Build AAB
-        if: true #TODO: run only on master
+        if: ${{ env.GIT_BRANCH }} == "master"
         env:
           ARCH: 'armeabi-v7a arm64-v8a'
-          VERSION: ${{ env.GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
@@ -286,7 +257,7 @@ jobs:
             ../scripts/android-aab.bash
 
       - name: Upload AAB to Artifacts
-        if: true #TODO: run only on master
+        if: ${{ env.GIT_BRANCH }} == "master"
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-aab/input/out/build/outputs/bundle/release/out-release.aab
