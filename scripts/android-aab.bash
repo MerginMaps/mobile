@@ -5,21 +5,6 @@ INSTALL_DIR=${BUILD_DIR}/out
 
 set -e
 
-# TODO take from input-sdk?
-# export ANDROIDAPI=23
-if [ "X${ARCH}" == "Xarmeabi-v7a" ]; then
-  export TOOLCHAIN_SHORT_PREFIX=arm-linux-androideabi
-  export TOOLCHAIN_PREFIX=arm-linux-androideabi
-  export QT_ARCH_PREFIX=armv7
-elif [ "X${ARCH}" == "Xarm64-v8a" ]; then
-  export TOOLCHAIN_SHORT_PREFIX=aarch64-linux-android
-  export TOOLCHAIN_PREFIX=aarch64-linux-android
-  export QT_ARCH_PREFIX=arm64 # watch out when changing this, openssl depends on it
-else
-  echo "Error: Please report issue to enable support for arch (${ARCH})."
-  exit 1
-fi
-
 #####
 # PRINT ENV
 
@@ -29,12 +14,6 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
 echo "API: $ANDROIDAPI"
-
-######################
-# Input
-
-# see https://bugreports.qt.io/browse/QTBUG-80756
-# export ANDROID_TARGET_ARCH=${ARCH}
 
 mkdir -p ${BUILD_DIR}/.gradle
 
@@ -55,13 +34,10 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --keypass ${INPUTKEYSTORE_STOREPASS} \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
+        --aab \
         --deployment bundled \
         --gradle
 else
-    echo "building debug"
-    ${QT_BASE}/bin/androiddeployqt \
-        --input ${BUILD_DIR}/android-Input-deployment-settings.json \
-        --output ${INSTALL_DIR} \
-        --deployment bundled \
-        --gradle
+    echo "missing certificate! exit"
+    exit 1
 fi

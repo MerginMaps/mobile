@@ -65,6 +65,9 @@ android {
 
     QMAKE_CXXFLAGS += -std=c++11
 
+    equals ( QT_ARCH, 'armeabi-v7a' ) {
+        QMAKE_LFLAGS = -Wl,-Bsymbolic
+    }
 
 
     # files from this folder will be added to the package
@@ -78,16 +81,15 @@ android {
     DISTFILES += $$OUT_PWD/res/xml/file_paths.xml
     DISTFILES += $$PWD/build.gradle
 
-    # packaging
-    ANDROID_EXTRA_LIBS += \
-        $${INPUT_SDK_LIB_PATH}/libcrypto_1_1.so \
-        $${INPUT_SDK_LIB_PATH}/libssl_1_1.so \
-        $$QT_LIBS_DIR/libQt5OpenGL_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Sensors_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Network_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Sql_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Svg_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras_$${QT_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5SerialPort_$${QT_ARCH}.so
+    for (abi, ANDROID_ABIS): ANDROID_EXTRA_LIBS += \
+        $${INPUT_SDK_PATH}/$${abi}/lib/libcrypto_1_1.so \
+        $${INPUT_SDK_PATH}/$${abi}/lib/libssl_1_1.so \
+        $$QT_LIBS_DIR/libQt5OpenGL_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5PrintSupport_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Sensors_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Network_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Sql_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Svg_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5AndroidExtras_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5SerialPort_$${abi}.so
 }

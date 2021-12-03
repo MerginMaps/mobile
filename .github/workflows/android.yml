@@ -26,9 +26,9 @@ jobs:
       SDK_BUILD_TOOLS: 28.0.3
       INPUT_SDK_VERSION: android-macOS-20211201-39
       CCACHE_DIR: /Users/runner/work/ccache
-      DROPBOX_TOKEN: ${{ secrets.INPUTAPP_BOT_DROPBOX_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
+      CACHE_VERSION: 0
 
     steps:
       - uses: actions/checkout@v2
@@ -62,6 +62,7 @@ jobs:
       - name: Install ccache
         run: |
           mkdir -p ${CCACHE_DIR}
+          brew install ccache
           ccache --set-config=max_size=2.0G
           ccache -s
 
@@ -72,8 +73,6 @@ jobs:
           echo "/usr/local/opt/bison/bin" >> $GITHUB_PATH
           brew install gnupg
           brew install openssl@1.1
-          brew install python3
-          pip3 install dropbox
 
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -84,8 +83,8 @@ jobs:
               export GIT_BRANCH="${GITHUB_REF//refs\/heads\//}"
           fi
           echo "GIT_TAG: $GIT_TAG"
-          echo "GIT_BRANCH: $GIT_BRANCH" >> $GITHUB_ENV
-          echo "GIT_TAG=$GIT_TAG"
+          echo "GIT_BRANCH: $GIT_BRANCH"
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
       # Qt
@@ -111,7 +110,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -119,7 +118,9 @@ jobs:
           wget -O \
             input-sdk.tar.gz \
             https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          tar -xvzf input-sdk.tar.gz -d ${{ github.workspace }}/input-sdk
+          mkdir -p ${{ github.workspace }}/input-sdk
+          cd ${{ github.workspace }}/input-sdk
+          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
           ls ${{ github.workspace }}/input-sdk
 
       - name: Extract Mergin API_KEY
@@ -174,33 +175,94 @@ jobs:
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
-          cat ./app/config.conf
+          cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
         env:
           ARCH: armeabi-v7a
-          VERSION: ${{ env. GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
           STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
-          SOURCE_DIR: ${{ github.workspace }}/input
+          SOURCE_DIR: ${{ github.workspace }}
 
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
-            ./scripts/android-apk.bash
-            ./scripts/upload-artifacts.sh
+            ../scripts/android-apk.bash
 
       - name: Build arm64-v8a APK
         env:
           ARCH: arm64-v8a
-          VERSION: ${{ env. GIT_TAG }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
-          SOURCE_DIR: ${{ github.workspace }}/input
+          SOURCE_DIR: ${{ github.workspace }}
 
         run: |
             mkdir -p ${{ github.workspace }}/build-apk-$ARCH
             cd ${{ github.workspace }}/build-apk-$ARCH
-            ./scripts/android-apk.bash
-            ./scripts/upload-artifacts.sh
+            ../scripts/android-apk.bash
+
+      - name: Upload v8 APK to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: arm64 apk
+
+      - name: Upload v7 APK to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: armeabi apk
+
+      - name: Download repo history
+        if: ${{ env.GIT_BRANCH }} == "master"
+        uses: actions/checkout@v2
+        with:
+          path: input-history
+          fetch-depth: 0 # fetch all history
+
+      - name: Calculate version code
+        if: ${{ env.GIT_BRANCH }} == "master"
+        env:
+          COMMIT_OFFSET: 1639 # number of commits since beginning. We use this number as offset to start counting from one
+          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
+        run: |
+            cd input-history
+
+            NUM_OF_COMMITS=`git rev-list --count HEAD`
+            echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
+
+            NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
+            VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
+
+            echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
+            echo "CALCULATED VERSION CODE: ${VERSION_CODE}"
+
+      - name: Build AAB
+        if: ${{ env.GIT_BRANCH }} == "master"
+        env:
+          ARCH: 'armeabi-v7a arm64-v8a'
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          SOURCE_DIR: ${{ github.workspace }}
+
+        run: |
+            pwd
+            echo "Version code: ${{env.ANDROID_VERSION_CODE}}"
+            mkdir -p ${{ github.workspace }}/build-aab
+            cd ${{ github.workspace }}/build-aab
+            ../scripts/android-aab.bash
+
+      - name: Upload AAB to Artifacts
+        if: ${{ env.GIT_BRANCH }} == "master"
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-aab/input/out/build/outputs/bundle/release/out-release.aab
+          name: aab bundle
+
+      - name: Check generated files
+        run: |
+            find ${{ github.workspace }}/build-* -name "*.apk" -or -name "*.aab"
