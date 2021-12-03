@@ -116,6 +116,7 @@ Item {
                   width: parent.width
                   anchors.left: parent.left
                   anchors.top: parent.top
+                  font.pixelSize: InputStyle.fontPixelSizeTitle
                   text:  qsTr( name + ": " + message )
                   wrapMode: Text.Wrap
                 }
