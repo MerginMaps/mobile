@@ -167,9 +167,6 @@ jobs:
           echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
-          echo -e "  message(\$\$QMAKE_CXX)" >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./app/config.pri
-          echo -e "  message(\$\$QMAKE_CXX)" >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
@@ -198,6 +195,7 @@ jobs:
             CONFIG+=release \
             CONFIG+=iphoneos \
             CONFIG+=device \
+            CONFIG+=ccache \
             CONFIG+=qtquickcompiler \
             QMAKE_MAC_XCODE_SETTINGS+=qprofile \
             qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
