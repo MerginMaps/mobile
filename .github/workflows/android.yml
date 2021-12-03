@@ -239,10 +239,10 @@ jobs:
             cd input-history
             NUM_OF_COMMITS=`git rev-list --count HEAD`
             echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
-            NUM_OF_COMMITS_WITH_OFFSET = $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
-            VERSION_CODE = $((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
+            NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
+            VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
 
-            echo "ANDROID_VERSION_CODE=$(VERSION_CODE)" >> $GITHUB_ENV
+            echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
             echo "CALCULATED VERSION:: ${VERSION_CODE}"
 
       - name: Build AAB
