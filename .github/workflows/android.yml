@@ -222,15 +222,18 @@ jobs:
           path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
           name: armeabi apk
 
-      - name: Determine version code
+      - name: Download repo history
         if: true #TODO: run only on master
         uses: actions/checkout@v2
-        env:
-          COMMIT_OFFSET: 1639 # number of commits from start
-          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
         with:
           path: input-history
           fetch-depth: 0 # fetch all history
+
+      - name: Calculate version code
+        if: true #TODO: run only on master
+        env:
+          COMMIT_OFFSET: 1639 # number of commits from start
+          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
         run: |
             # calculate number of commits
             cd input-history
