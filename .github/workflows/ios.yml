@@ -71,6 +71,14 @@ jobs:
           ccache --set-config=max_size=2.0G
           ccache -s
 
+      - name: d
+        if: always()
+        continue-on-error: true
+        run: |
+          which clang
+          which clang++
+          which c++
+
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
@@ -163,6 +171,7 @@ jobs:
           echo -e "  QMAKE_LINK = clang++" >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
+          echo $QMAKE_CXX
 
       - name: Create build system with qmake
         run: |
@@ -207,6 +216,8 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
+
+          echo $QMAKE_CXX
 
           xcodebuild \
             -project Input.xcodeproj/ \
