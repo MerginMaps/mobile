@@ -6,16 +6,16 @@ INSTALL_DIR=${BUILD_DIR}/out
 set -e
 
 # Replace the version number in version.pri with the one from the VERSION which is being built
-if [[ -n ${VERSION} ]];
-then
-  echo "Building release version ${VERSION}"
-  sed -i "s/VERSION_MAJOR\s*= .*/VERSION_MAJOR = $(echo "${VERSION}" | cut -f 2 -d '-' | cut -f 1 -d '.')/g" ${SOURCE_DIR}/app/version.pri
-  sed -i "s/VERSION_MINOR\s*= .*/VERSION_MINOR = $(echo "${VERSION}" | cut -f 2 -d '.')/g" ${SOURCE_DIR}/app/version.pri
-  sed -i "s/VERSION_FIX\s*= .*/VERSION_FIX = $(echo "${VERSION}" | cut -f 3 -d '.')/g" ${SOURCE_DIR}/app/version.pri
-  grep 'VERSION_MAJOR' ${SOURCE_DIR}/app/version.pri
-  grep 'VERSION_MINOR' ${SOURCE_DIR}/app/version.pri
-  grep 'VERSION_FIX' ${SOURCE_DIR}/app/version.pri
-fi
+# if [[ -n ${VERSION} ]];
+# then
+#   echo "Building release version ${VERSION}"
+#   sed -i "s/VERSION_MAJOR\s*= .*/VERSION_MAJOR = $(echo "${VERSION}" | cut -f 2 -d '-' | cut -f 1 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+#   sed -i "s/VERSION_MINOR\s*= .*/VERSION_MINOR = $(echo "${VERSION}" | cut -f 2 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+#   sed -i "s/VERSION_FIX\s*= .*/VERSION_FIX = $(echo "${VERSION}" | cut -f 3 -d '.')/g" ${SOURCE_DIR}/app/version.pri
+#   grep 'VERSION_MAJOR' ${SOURCE_DIR}/app/version.pri
+#   grep 'VERSION_MINOR' ${SOURCE_DIR}/app/version.pri
+#   grep 'VERSION_FIX' ${SOURCE_DIR}/app/version.pri
+# fi
 
 #####
 # PRINT ENV

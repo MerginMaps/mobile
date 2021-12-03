@@ -178,6 +178,7 @@ jobs:
           cat ./app/config.pri
 
       - name: Build armeabi-v7a APK
+        if: false #TODO: change back
         env:
           ARCH: armeabi-v7a
           VERSION: ${{ env.GIT_TAG }}
@@ -193,6 +194,7 @@ jobs:
             ../scripts/android-apk.bash
 
       - name: Build arm64-v8a APK
+        if: false #TODO: change back
         env:
           ARCH: arm64-v8a
           VERSION: ${{ env.GIT_TAG }}
@@ -206,7 +208,42 @@ jobs:
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
 
+      - name: Upload v8 APK to Artifacts
+        if: false #TODO: change back
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: arm64 apk
+
+      - name: Upload v7 APK to Artifacts
+        if: false #TODO: change back
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
+          name: armeabi apk
+
+      - name: Determine version code
+        if: true #TODO: run only on master
+        uses: actions/checkout@v2
+        env:
+          COMMIT_OFFSET: 1639 # number of commits from start
+          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
+        with:
+          path: input-history
+          fetch-depth: 0 # fetch all history
+        run: |
+            # calculate number of commits
+            cd input-history
+            NUM_OF_COMMITS=`git rev-list --count HEAD`
+            echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
+            NUM_OF_COMMITS_WITH_OFFSET = $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
+            VERSION_CODE = $((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
+
+            echo "ANDROID_VERSION_CODE=$(VERSION_CODE)" >> $GITHUB_ENV
+            echo "CALCULATED VERSION:: ${VERSION_CODE}"
+
       - name: Build AAB
+        if: true #TODO: run only on master
         env:
           ARCH: 'armeabi-v7a arm64-v8a'
           VERSION: ${{ env.GIT_TAG }}
@@ -216,23 +253,14 @@ jobs:
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |
+            pwd
+            echo "Version code: ${{env.ANDROID_VERSION_CODE}}"
             mkdir -p ${{ github.workspace }}/build-aab
             cd ${{ github.workspace }}/build-aab
             ../scripts/android-aab.bash
 
-      - name: Upload v8 APK to Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
-          name: arm64 apk
-
-      - name: Upload v7 APK to Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
-          name: armeabi apk
-
       - name: Upload AAB to Artifacts
+        if: true #TODO: run only on master
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-aab/input/out/build/outputs/bundle/release/out-release.aab
