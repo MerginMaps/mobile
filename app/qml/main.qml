@@ -214,8 +214,6 @@ ApplicationWindow {
     NotificationBanner {
       id: notificationBanner
 
-      shouldHide: projectPanel.visible && settingsPanel.visible && stateManager.state !== "view"
-
       width: parent.width - notificationBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
 
