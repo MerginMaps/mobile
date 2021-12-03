@@ -171,6 +171,15 @@ jobs:
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
+      # Parse Input-SDK version run number - it is used as middle integer in version number in CF_BUNDLE_VERSION
+      - uses: rishabhgupta/split-by@v1
+        id: split
+        with:
+          string: ${{ env.INPUT_SDK_VERSION }}
+          split-by: '-'
+      - run: |
+          echo "${{ steps.split.outputs._0}} ${{ steps.split.outputs._1}} ${{ steps.split.outputs._2}}"
+
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
@@ -180,7 +189,7 @@ jobs:
           TIMESTAMP=`date "+%y%m%d%H%M%S"`
           GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
           BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
-          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${IOS_SDK_VERSION}.${TIMESTAMP}
+          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
 
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
@@ -244,5 +253,5 @@ jobs:
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
-          GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
-          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}
+          # GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
+          # curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}
