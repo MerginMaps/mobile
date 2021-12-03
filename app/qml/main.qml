@@ -52,13 +52,17 @@ ApplicationWindow {
             if ( stateManager.state === "view" ) {
               projectPanel.hidePanel()
               map.state = "view"
+              if ( notificationBanner.state == "show" )
+                  notificationBanner.visible = true;
             }
             else if ( stateManager.state === "record" ) {
-              map.state = "recordFeature"
+              map.state = "recordFeature";
+              notificationBanner.visible = false;
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
-              map.state = "inactive"
+              map.state = "inactive";
+              notificationBanner.visible = false;
             }
         }
     }
@@ -310,7 +314,7 @@ ApplicationWindow {
       height: InputStyle.rowHeight * 2
 
       onDetailsClicked: {
-          projectIssuesPanel.qgisLog = __loader.qgisLog();
+          projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
           projectIssuesPanel.visible = true;
       }
     }
@@ -462,7 +466,9 @@ ApplicationWindow {
             projectIssuesPanel.clear();
         }
         onLoadingFinished: projectLoadingScreen.visible = false
-        onLoadingErrorFound: notificationBanner.pushNotification( "There were issues loading the project." )
+        onLoadingErrorFound: {
+            notificationBanner.pushNotification( "There were issues loading the project." )
+        }
 
         onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
         onSetProjectIssuesHeader: projectIssuesPanel.headerText = text

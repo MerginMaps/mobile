@@ -44,7 +44,7 @@ Loader::Loader( MapThemesModel &mapThemeModel
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
-  , mQgisLog( "" )
+  , mProjectLoadingLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -97,7 +97,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
 
-  mQgisLog.clear();
+  mProjectLoadingLog.clear();
 
   QString logFilePath = CoreUtils::logFilename();
   qint64 alreadyAppendedCharsCount = 0;
@@ -159,7 +159,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
       {
         file.seek( alreadyAppendedCharsCount );
         QByteArray neededLogFileData = file.readAll();
-        mQgisLog = QString::fromStdString( neededLogFileData.toStdString() );
+        mProjectLoadingLog = QString::fromStdString( neededLogFileData.toStdString() );
         file.close();
       }
       emit qgisLogChanged();
@@ -274,9 +274,9 @@ bool Loader::layerVisible( QgsMapLayer *layer )
   return false;
 }
 
-QString Loader::qgisLog()
+QString Loader::projectLoadingLog() const
 {
-  return mQgisLog;
+  return mProjectLoadingLog;
 }
 
 void Loader::setActiveMapTheme( int index )

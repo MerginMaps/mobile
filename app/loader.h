@@ -100,7 +100,7 @@ class Loader: public QObject
     /**
      * Return the QGIS log recorded during the loading phase of the project
      */
-    Q_INVOKABLE QString qgisLog();
+    Q_INVOKABLE QString projectLoadingLog() const;
 
   signals:
     void projectChanged();
@@ -140,7 +140,7 @@ class Loader: public QObject
     LayersProxyModel &mRecordingLayerPM;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
-    QString mQgisLog;
+    QString mProjectLoadingLog;
 
     /**
     * Reloads project.

@@ -20,7 +20,7 @@ Item {
   visible: false
   property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
-  property string qgisLog: ""
+  property string projectLoadingLog: ""
   property string headerText: ""
 
   function reportIssue( layerName, message ) {
@@ -143,7 +143,7 @@ Item {
             Text {
               id: qgisLogTextItem
               width: parent.width
-              text: qgisLog
+              text: projectLoadingLog
               wrapMode: Text.Wrap
             }
           }
