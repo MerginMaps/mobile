@@ -167,8 +167,9 @@ jobs:
           echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ccache clang++"  >> ./app/config.pri
-          echo -e "  QMAKE_LINK = clang++" >> ./app/config.pri
+          echo -e "  message($$QMAKE_CXX)" >> ./app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./app/config.pri
+          echo -e "  message($$QMAKE_CXX)" >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
           echo $QMAKE_CXX
@@ -216,8 +217,6 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
-
-          echo $QMAKE_CXX
 
           xcodebuild \
             -project Input.xcodeproj/ \
