@@ -71,14 +71,6 @@ jobs:
           ccache --set-config=max_size=2.0G
           ccache -s
 
-      - name: d
-        if: always()
-        continue-on-error: true
-        run: |
-          which clang
-          which clang++
-          which c++
-
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
@@ -149,6 +141,7 @@ jobs:
 
       # Do this only until we move from 5.14.2!!
       - name: Patch Qt!
+        shell: bash
         run: |
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
 
@@ -160,7 +153,12 @@ jobs:
           cp ${{ github.workspace }}/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
 
       # Build Input App
+      # !! ccache_clang is a custom script which runs ccache and default XCode clang.
+      # !! It has been created due to a bug in Qt when QMAKE_CXX ignored everything after
+      # !! whitespace chars. In that case in the string 'ccache clang++' clang was ignored
+      # !! and ccache received all of the compilation flags that were supposed to go to clang.
       - name: Export app/config.pri
+        shell: bash
         run: |
           touch ./app/config.pri
           echo -e "ios {"  >> ./app/config.pri
@@ -171,14 +169,20 @@ jobs:
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
+          if [ ! ${{ env.QT_VERSION }} == "5.14.2" ]; then
+            echo "Qt version has changed! Double check if we still need custom script 'ccache_clang' for QMAKE_CXX."
+            echo "  - If yes, change this condition to the new Qt version"
+            echo "  - If no, remove the 'ccache_clang' script and this check too"
+            exit 1
+          fi
+
       # Parse Input-SDK version run number - it is used as middle integer in version number in CF_BUNDLE_VERSION
-      - uses: rishabhgupta/split-by@v1
+      - name: Parse SDK version run number
+        uses: rishabhgupta/split-by@v1
         id: split
         with:
           string: ${{ env.INPUT_SDK_VERSION }}
           split-by: '-'
-      - run: |
-          echo "${{ steps.split.outputs._0}} ${{ steps.split.outputs._1}} ${{ steps.split.outputs._2}}"
 
       - name: Create build system with qmake
         run: |
@@ -191,6 +195,7 @@ jobs:
           BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
           CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
 
+          echo "Building version: $CF_BUNDLE_VERSION"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
           mkdir -p build-INPUT
@@ -253,5 +258,5 @@ jobs:
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
-          # GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
-          # curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}
+          GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
+          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "iOS - version '${CF_BUNDLE_VERSION}' just submitted!"}' ${GITHUB_API}
