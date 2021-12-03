@@ -237,7 +237,7 @@ jobs:
             NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
             VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
 
-            echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
+            echo "CI_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
             echo "CALCULATED VERSION CODE: ${VERSION_CODE}"
 
       - name: Build AAB
@@ -251,7 +251,7 @@ jobs:
 
         run: |
             pwd
-            echo "Version code: ${{env.ANDROID_VERSION_CODE}}"
+            echo "Version code: ${{env.CI_VERSION_CODE}}"
             mkdir -p ${{ github.workspace }}/build-aab
             cd ${{ github.workspace }}/build-aab
             ../scripts/android-aab.bash
