@@ -1,4 +1,3 @@
 #!/bin/bash
 
-ccache clang++ "$@"
-
+ccache `xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang "$@"
