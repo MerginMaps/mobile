@@ -167,15 +167,13 @@ jobs:
           echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ccache\\ \$\$QMAKE_CXX"  >> ./app/config.pri
+          echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
-
-          echo "ARCHS: $ARCHS_STANDARD"
 
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
