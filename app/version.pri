@@ -1,6 +1,6 @@
-# CI builds have version_code already assigned
+# CI builds have variable CI_VERSION_CODE already assigned
 
-# Set version_name
+# ANDROID_VERSION_NAME
 VERSION_MAJOR = 1
 VERSION_MINOR = 2
 VERSION_FIX = 0
@@ -13,11 +13,10 @@ DEFINES += "INPUT_VERSION=$${INPUT_VERSION}"
 
 ANDROID_VERSION_NAME = $$INPUT_VERSION
 
-# Set version_code
-message( version code: $$(ANDROID_VERSION_CODE) )
-isEmpty( $$(ANDROID_VERSION_CODE) ) {
-    message(version code is empty)
+# ANDROID_VERSION_CODE
+ANDROID_VERSION_CODE=$$(CI_VERSION_CODE)
 
+isEmpty(ANDROID_VERSION_CODE) {
     ANDROID_VERSION_SUFFIX = 0
     QT_ARCH = $$QT_ARCH$$
 
@@ -34,16 +33,14 @@ isEmpty( $$(ANDROID_VERSION_CODE) ) {
       ANDROID_VERSION_SUFFIX = 4
     }
 
-    VERSIONCODE = $$format_number($$format_number($${VERSION_MAJOR}, width=2 zeropad)$$format_number($${VERSION_MINOR}, width=2 zeropad)$$format_number($${VERSION_FIX}, width=2 zeropad)$$format_number($${ANDROID_VERSION_SUFFIX}))\
+    VERSIONCODE = $$format_number($$format_number($${VERSION_MAJOR}, width=2 zeropad)$$format_number($${VERSION_MINOR}, width=2 zeropad)$$format_number($${VERSION_FIX}, width=2 zeropad)$$format_number($${ANDROID_VERSION_SUFFIX}))
     ANDROID_VERSION_CODE = $$VERSIONCODE
 }
 else {
-    message(version code has already been assigned)
     VERSIONCODE = $$(ANDROID_VERSION_CODE)
-    ANDROID_VERSION_CODE = $$(ANDROID_VERSION_CODE)
 }
 
-message( 'Building $${QT_ARCH} version $${INPUT_VERSION} ($${VERSIONCODE})' )
+message('Building $${QT_ARCH} with version name $${INPUT_VERSION} and version code $${VERSIONCODE}')
 
 #ios
 QMAKE_FULL_VERSION=VERSIONCODE
