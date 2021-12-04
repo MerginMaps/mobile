@@ -1,23 +1,41 @@
 name: Translations
+
 on:
   # Trigger the workflow only on master
   push:
     branches:
       - master
+
 jobs:
   code_style:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
+    env:
+      QT_VERSION: '5.14.2'
     steps:
-      - name: Install deps
-        run: |
-          sudo apt-get install qt5-default qttools5-dev-tools
 
       - uses: actions/checkout@v2
 
+      # Qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-i18n
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: android
+          arch: android
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
       - name: Check for new translation entries
         run: |
-          ./scripts/update_i18n_ts.bash /usr/share/qt5
+          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
 
           echo "Changes in i18n entries"
           git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true
