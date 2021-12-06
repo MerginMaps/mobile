@@ -97,6 +97,11 @@ class Loader: public QObject
      */
     bool layerVisible( QgsMapLayer *layer );
 
+    /**
+     * Return the QGIS log recorded during the loading phase of the project
+     */
+    Q_INVOKABLE QString projectLoadingLog() const;
+
   signals:
     void projectChanged();
     void projectReloaded( QgsProject *project );
@@ -107,6 +112,11 @@ class Loader: public QObject
 
     void loadingStarted();
     void loadingFinished();
+
+    void reportIssue( QString layerName, QString message );
+    void loadingErrorFound();
+    void qgisLogChanged();
+    void setProjectIssuesHeader( QString text );
 
     void mapSettingsChanged();
 
@@ -129,6 +139,8 @@ class Loader: public QObject
     ActiveLayer &mActiveLayer;
     LayersProxyModel &mRecordingLayerPM;
     QgsQuickMapSettings *mMapSettings = nullptr;
+
+    QString mProjectLoadingLog;
 
     /**
     * Reloads project.
