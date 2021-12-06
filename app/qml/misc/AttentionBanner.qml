@@ -17,6 +17,7 @@ Rectangle {
 
   TextWithIcon {
     width: parent.width
+    height: InputStyle.rowHeight
     fontColor: 'white'
     bgColor: '#ff4f4f'
     iconColor: 'white'

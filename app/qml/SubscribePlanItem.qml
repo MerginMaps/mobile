@@ -33,36 +33,42 @@ Item {
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.infoIcon
       text: "Mergin " + root.name + " " + qsTr("Plan")
     }
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.todayIcon
       text: hasPlan ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.databaseIcon
       text: hasPlan ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
     }
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.accountMultiIcon
       text: qsTr("Unlimited collaborators")
     }
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.projectIcon
       text: qsTr("Unlimited projects")
     }
 
     TextWithIcon {
       width: parent.width
+      height: InputStyle.rowHeight
       source: InputStyle.envelopeIcon
       text: qsTr("Email support")
     }
