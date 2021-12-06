@@ -82,7 +82,7 @@ Item {
 
         background: Rectangle {
           anchors.fill: parent
-          color: InputStyle.panelBackgroundDark
+          color: InputStyle.panelBackgroundLight
         }
 
         Column {
@@ -109,16 +109,36 @@ Item {
               delegate: PanelItem {
                 anchors.margins: 5
                 width: parent.width
-                height: textItem.height
+                height: row.height
                 color: InputStyle.clrPanelMain
-                Text {
-                  id: textItem
-                  width: parent.width
-                  anchors.left: parent.left
-                  anchors.top: parent.top
-                  font.pixelSize: InputStyle.fontPixelSizeTitle
-                  text:  qsTr( name + ": " + message )
-                  wrapMode: Text.Wrap
+                Row {
+                  id: row
+                   width: parent.width
+                   anchors.left: parent.left
+                   anchors.top: parent.top
+                    Text {
+                      id: nameTextItem
+                      padding: 5
+                      font.pixelSize: InputStyle.fontPixelSizeTitle
+                      text:  qsTr( name )
+                      wrapMode: Text.Wrap
+                    }
+
+                    Rectangle {
+                        id: seperator
+                        width: 3
+                        height: parent.height
+                        color: "gray"
+                    }
+
+                    Text {
+                      id: messageTextItem
+                      width: parent.width - nameTextItem.width - seperator.width
+                      padding: 5
+                      font.pixelSize: InputStyle.fontPixelSizeTitle
+                      text:  qsTr( message )
+                      wrapMode: Text.Wrap
+                    }
                 }
                 onHeightChanged: invalidLayersList.height += height;
               }
