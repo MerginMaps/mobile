@@ -12,7 +12,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="160"/>
+        <location filename="../qml/AccountPage.qml" line="167"/>
         <source>Your subscription was cancelled on %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,47 +22,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="132"/>
+        <location filename="../qml/AccountPage.qml" line="136"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="141"/>
+        <location filename="../qml/AccountPage.qml" line="146"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="151"/>
+        <location filename="../qml/AccountPage.qml" line="157"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="185"/>
+        <location filename="../qml/AccountPage.qml" line="192"/>
         <source>Using %1 / %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="210"/>
         <source>Manage Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="210"/>
         <source>Working...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="203"/>
+        <location filename="../qml/AccountPage.qml" line="210"/>
         <source>Subscription plans</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="239"/>
+        <location filename="../qml/AccountPage.qml" line="246"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="263"/>
+        <location filename="../qml/AccountPage.qml" line="270"/>
         <source>Sign out</source>
         <translation>Sign out</translation>
     </message>
@@ -111,7 +111,7 @@
 <context>
     <name>AttentionBanner</name>
     <message>
-        <location filename="../qml/misc/AttentionBanner.qml" line="25"/>
+        <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1300,22 +1300,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SubscribePlanItem</name>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="37"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="38"/>
         <source>Plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="55"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="59"/>
         <source>Unlimited collaborators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="61"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="66"/>
         <source>Unlimited projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="67"/>
+        <location filename="../qml/SubscribePlanItem.qml" line="73"/>
         <source>Email support</source>
         <translation type="unfinished"></translation>
     </message>
