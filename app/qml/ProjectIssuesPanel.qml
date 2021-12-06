@@ -164,6 +164,7 @@ Item {
             Text {
               id: qgisLogTextItem
               width: parent.width
+              padding: 5
               text: projectLoadingLog
               wrapMode: Text.Wrap
             }
