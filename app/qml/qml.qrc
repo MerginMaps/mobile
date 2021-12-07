@@ -100,5 +100,6 @@
         <file>misc/GpsDataPage.qml</file>
         <file>components/TextRowWithTitle.qml</file>
         <file>components/NumberInputField.qml</file>
+        <file>components/DateTimePicker.qml</file>
     </qresource>
 </RCC>
