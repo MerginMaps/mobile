@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "qgsvectorlayer.h"
 
 #include "layersmodel.h"
-#include "qgsvectorlayer.h"
 
 LayersModel::LayersModel()
 {

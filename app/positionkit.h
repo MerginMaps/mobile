@@ -22,6 +22,7 @@
 #include "qgspoint.h"
 
 #include "qgsquickmapsettings.h"
+#include "qgscoordinatetransform.h"
 #include "qgsquickcoordinatetransformer.h"
 
 /**

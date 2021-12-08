@@ -16,6 +16,7 @@ import "./components"
 
 Rectangle {
   id: notificationBanner
+
   property color fontColor: "black"
   property color linkColor: fontColor
   property color bgColor: InputStyle.warningBannerColor

@@ -9,7 +9,7 @@
                  android:label="-- %%INSERT_APP_NAME%% --"
                  android:icon="@mipmap/ic_input"
                  android:extractNativeLibs="true"
-                 android:requestLegacyExternalStorage="true"> <!-- Will be removed after legacy folder migration -->
+                 android:preserveLegacyExternalStorage="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:name="uk.co.lutraconsulting.InputActivity"
                   android:label="Input"
@@ -81,7 +81,7 @@
         </provider>
 
     </application>
-    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="29"/>
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.

@@ -1,0 +1,185 @@
+name: macOS Build (Auto Tests)
+on:
+  push:
+    paths:
+    - 'app/**'
+    - 'core/**'
+    - 'images/**'
+    - 'qgsquick/**'
+    - 'scripts/**'
+    - '.github/workflows/macos.yml'
+
+  release:
+    types:
+      - published
+
+env:
+  TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
+  TEST_API_USERNAME: test_inputapp
+  TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
+  QT_VERSION: 5.14.2
+  QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.13.0
+  INPUT_SDK_VERSION: mac-20211201-46
+  CCACHE_DIR: /Users/runner/work/ccache
+
+jobs:
+  macos_build:
+    if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: macos-10.15
+    steps:
+      - name: Checkout Input
+        uses: actions/checkout@v2
+        with:
+          path: input
+
+      - name: install brew deps
+        run: |
+          brew install lcov
+          brew install ccache
+
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd input/core/
+          /usr/local/opt/openssl@1.1/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
+
+      # CCache
+      - name: Prepare build cache for pull request
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name == 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
+          # The head_ref or source branch of the pull request in a workflow run.
+          # The base_ref or target branch of the pull request in a workflow run.
+          restore-keys: |
+            build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-
+            build-mac-ccache-refs/heads/${{ github.base_ref }}-
+            build-mac-ccache-refs/heads/master-
+
+      - name: Prepare build cache for branch/tag
+        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name != 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
+          key: build-mac-ccache-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            build-mac-ccache-${{ github.ref }}-
+            build-mac-ccache-refs/heads/master-
+
+      - name: Install ccache
+        run: |
+          mkdir -p ${CCACHE_DIR}
+          ccache --set-config=max_size=2.0G
+          ccache -s
+
+      # Qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      # Input SDK
+      - name: Cache Input-SDK
+        id: cache-input-sdk
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/input-sdk
+          key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}
+
+      - name: Install Input-SDK
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+        run: |
+          wget -O \
+            ${{ github.workspace }}/input-sdk.tar.gz \
+            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk
+          cd ${{ github.workspace }}/input-sdk
+          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
+
+      # Build Input App
+      - name: Export app/config.pri
+        run: |
+          touch ./input/app/config.pri
+          echo -e "macx:!android {"  >> ./input/app/config.pri
+          echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
+          echo -e "  QMAKE_MACOSX_DEPLOYMENT_TARGET = ${{ env.QMAKE_MACOSX_DEPLOYMENT_TARGET }}"  >> ./input/app/config.pri
+          echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
+          echo -e "  QMAKE_CXXFLAGS += --coverage"  >> ./input/app/config.pri
+          echo -e "  QMAKE_LFLAGS += --coverage "  >> ./input/app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
+          echo -e "}"  >> ./input/app/config.pri
+          cat ./input/app/config.pri
+
+      - name: build Input (Debug)
+        run: |
+          mkdir -p build-Input
+          cd build-Input
+          ${{ github.workspace }}/Qt/${QT_VERSION}/clang_64/bin/qmake \
+            ../input/app/input.pro \
+            CONFIG+=debug \
+            CONFIG+=qtquickcompiler
+          make
+
+      - name: run tests
+        run: |
+          cd build-Input/
+          ../input/scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
+
+      - name: build lcov summary
+        run: |
+          cd build-Input
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input/*' --output-file coverage.info
+          lcov --list coverage.info
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: build-Input/coverage.info
+
+      - name: build Input (Release)
+        run: |
+          mkdir -p build-Input-rel
+          cd build-Input-rel
+          ${{ github.workspace }}/Qt/${QT_VERSION}/clang_64/bin/qmake \
+            ../input/app/input.pro \
+            CONFIG+=release
+          make
+
+      - name: Get TimeStamp
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYYYMMDD'
+
+      - name: package Input.app
+        run: |
+          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
+          echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
+          cd ${{ github.workspace }}/build-Input-rel
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input.app
+
+      - name: Upload Sdk in Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

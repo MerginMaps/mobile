@@ -9,8 +9,8 @@
 
 import QtQuick 2.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
+import QgsQuick 0.1 as QgsQuick
 
 import ".."
 import "../components"
@@ -256,28 +256,24 @@ Item {
     onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
-      if ( !root.isInRecordState ) {
-        let screenPoint = Qt.point( mouse.x, mouse.y )
+      if ( !root.isInRecordState )
+      {
+        let screenPoint = Qt.point( point.x, point.y )
         let pair = _identifyKit.identifyOne( screenPoint )
 
-        if ( pair.valid ) {
+        if ( pair.valid )
+        {
           centerToPair( pair, true )
           highlightPair( pair )
           root.featureIdentified( pair )
         }
-        else {
+        else
+        {
           _highlightIdentified.featureLayerPair = null
           _highlightIdentified.visible = false
           root.nothingIdentified()
         }
       }
-    }
-  }
-
-  Item {
-    anchors.fill: _map
-    transform: QgsQuick.MapTransform {
-      mapSettings: _map.mapSettings
     }
   }
 
@@ -345,7 +341,7 @@ Item {
     mapSettings: _map.mapSettings
 
     height: InputStyle.scaleBarHeight
-    preferredWidth: Math.min( window.width, 180 * QgsQuick.Utils.dp )
+    preferredWidth: Math.min( window.width, 180 * __dp )
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top

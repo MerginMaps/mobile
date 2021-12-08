@@ -3,77 +3,64 @@
 
     DEFINES += DESKTOP_OS
 
-    # QGIS
-    !isEmpty(QGIS_INSTALL_PATH) {
-      # using installed QGIS
-      QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
-      QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
-      QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include/qgis
+    isEmpty(INPUT_SDK_PATH) {
+      error("Missing INPUT_SDK_PATH")
     }
 
-    isEmpty(QGIS_INSTALL_PATH) {
-      # using QGIS from build directory (has different layout of directories)
-      # expecting QGIS_SRC_DIR and QGIS_BUILD_DIR defined
-      QGIS_PREFIX_PATH = $${QGIS_BUILD_DIR}/output
-      QGIS_LIB_DIR = $${QGIS_BUILD_DIR}/output/lib
-      QGIS_INCLUDE_DIR = \
-          $${QGIS_SRC_DIR}/src/core \
-          $${QGIS_SRC_DIR}/src/core/annotations \
-          $${QGIS_SRC_DIR}/src/core/auth \
-          $${QGIS_SRC_DIR}/src/core/composer \
-          $${QGIS_SRC_DIR}/src/core/effects \
-          $${QGIS_SRC_DIR}/src/core/expression \
-          $${QGIS_SRC_DIR}/src/core/fieldformatter \
-          $${QGIS_SRC_DIR}/src/core/geometry \
-          $${QGIS_SRC_DIR}/src/core/labeling \
-          $${QGIS_SRC_DIR}/src/core/layertree \
-          $${QGIS_SRC_DIR}/src/core/layout \
-          $${QGIS_SRC_DIR}/src/core/locator \
-          $${QGIS_SRC_DIR}/src/core/metadata \
-          $${QGIS_SRC_DIR}/src/core/providers \
-          $${QGIS_SRC_DIR}/src/core/maprenderer \
-          $${QGIS_SRC_DIR}/src/core/providers/memory \
-          $${QGIS_SRC_DIR}/src/core/raster \
-          $${QGIS_SRC_DIR}/src/core/scalebar \
-          $${QGIS_SRC_DIR}/src/core/symbology \
-          $${QGIS_SRC_DIR}/src/core/textrenderer \
-          $${QGIS_SRC_DIR}/src/core/project \
-          $${QGIS_SRC_DIR}/src/core/vector \
-          $${QGIS_SRC_DIR}/src/core/editform \
-          $${QGIS_SRC_DIR}/src/core/proj \
-          $${QGIS_SRC_DIR}/src/core/settings \
-          $${QGIS_SRC_DIR}/external/nlohmann \
-          $${QGIS_BUILD_DIR} \
-          $${QGIS_BUILD_DIR}/src/core
-    }
+    INPUT_SDK_LIB_PATH = $${INPUT_SDK_PATH}/lib
+    INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_PATH}/include
 
-    exists($${QGIS_LIB_DIR}/libqgis_core.so) {
-      message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core.so")
+    exists($${INPUT_SDK_LIB_PATH}/libqgis_core.a) {
+      message("Building from QGIS: $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
     } else {
-	  error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core.so")
+	  error("Missing QGIS Core library in $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
     }
 
-    INCLUDEPATH += $${QGIS_INCLUDE_DIR}
-    LIBS += -L$${QGIS_LIB_DIR}
+    INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
+    INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
+    INCLUDEPATH += /usr/include/gdal
+
+    LIBS += -L$${INPUT_SDK_LIB_PATH}
+    LIBS += -L$${INPUT_SDK_LIB_PATH}/x86_64-linux-gnu
+    LIBS += -L$${INPUT_SDK_LIB_PATH}/qgis/plugins
+
+    # by default QMake eats linked libs if they are mentioned multiple times
+    # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
+    CONFIG += no_lflags_merge
+
+    LIBS += -lqgis_native
+    LIBS += -lqgis_core
+    LIBS += -lauthmethod_basic_a
+    LIBS += -lauthmethod_esritoken_a
+    LIBS += -lauthmethod_identcert_a
+    LIBS += -lauthmethod_oauth2_a
+    LIBS += -lauthmethod_pkcs12_a
+    LIBS += -lauthmethod_pkipaths_a
+    LIBS += -lprovider_arcgisfeatureserver_a
+    LIBS += -lprovider_arcgismapserver_a
+    LIBS += -lprovider_delimitedtext_a
+    LIBS += -lprovider_spatialite_a
+    LIBS += -lprovider_virtuallayer_a
+    LIBS += -lprovider_wcs_a
+    LIBS += -lprovider_wfs_a
+    LIBS += -lprovider_wms_a
+    LIBS += -lprovider_postgres_a
+
+    # needs to be added again because of the cycling dependencies between qgis_core
+    # and providers and auth methods
     LIBS += -lqgis_core
 
-    # Geodiff
-    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
-    LIBS += -L$${GEODIFF_LIB_DIR}
     LIBS += -lgeodiff
-
-    # Proj
-    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
-    LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
-
-    # GDAL
-    INCLUDEPATH += $${OGR_INCLUDE_DIR}
-
-    # ZXing
-    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
-    LIBS += -L$${ZXING_LIB_DIR}
     LIBS += -lZXing
+    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lgdal -lpq -lspatialite
+    LIBS += -lxml2
+    LIBS += -lproj
+    LIBS += -lspatialindex -lgeos -lgeos_c
+    LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
+    LIBS += -lsqlite3 -lz -lzip
+    LIBS += -lwebp
 
     # TESTING stuff (only desktop)
     DEFINES += "INPUT_TEST"

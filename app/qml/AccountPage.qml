@@ -7,10 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import QtGraphicalEffects 1.14
 import lc 1.0
 import "."  // import InputStyle singleton
 import "./components"
@@ -109,34 +108,39 @@ Page {
 
       TextWithIcon {
         width: parent.width
+        height: InputStyle.rowHeight
         source: InputStyle.accountIcon
         text: root.username
       }
 
       TextWithIcon {
         width: parent.width
+        height: InputStyle.rowHeight
         source: InputStyle.envelopeIcon
         text: root.email
       }
 
       TextWithIcon {
-        visible: root.apiSupportsSubscriptions
         width: parent.width
+        height: InputStyle.rowHeight
+        visible: root.apiSupportsSubscriptions
         source: InputStyle.editIcon
         text: root.planAlias
       }
 
       TextWithIcon {
-        visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
         width: parent.width
+        height: InputStyle.rowHeight
+        visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
         source: InputStyle.infoIcon
         text: qsTr("Your subscription will not auto-renew after %1")
               .arg(root.subscriptionsTimestamp)
       }
 
       TextWithIcon {
-        visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
         width: parent.width
+        height: InputStyle.rowHeight
+        visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
         source: InputStyle.exclamationTriangleIcon
         onLinkActivated: Qt.openUrlExternally(link)
         text: qsTr("Please update your %1billing details%2 as soon as possible")
@@ -146,8 +150,9 @@ Page {
       }
 
       TextWithIcon {
-        visible: root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
         width: parent.width
+        height: InputStyle.rowHeight
+        visible: root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
         source: InputStyle.todayIcon
         text: qsTr("Your next bill will be for %1 on %2")
         .arg(root.nextBillPrice)
@@ -155,8 +160,9 @@ Page {
       }
 
       TextWithIcon {
-        visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
         width: parent.width
+        height: InputStyle.rowHeight
+        visible: root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
         source: InputStyle.todayIcon
         text: qsTr("Your subscription was cancelled on %1")
               .arg(root.subscriptionsTimestamp)

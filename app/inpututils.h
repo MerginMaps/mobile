@@ -66,6 +66,7 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsScale( QgsQuickMapSettings *ms );
     Q_INVOKABLE double mapSettingsOffsetX( QgsQuickMapSettings *ms );
     Q_INVOKABLE double mapSettingsOffsetY( QgsQuickMapSettings *ms );
+    Q_INVOKABLE double mapSettingsDPR( QgsQuickMapSettings *ms );
 
     /**
      * Extract geometry coordinates from the given feature.
@@ -356,7 +357,7 @@ class InputUtils: public QObject
      * \param fids the list of feature IDs
      * \param behavior the selection behavior
      */
-    Q_INVOKABLE static void selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior = QgsVectorLayer::SetSelection );
+    Q_INVOKABLE static void selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, Qgis::SelectBehavior behavior = Qgis::SelectBehavior::SetSelection );
 
 
     /**

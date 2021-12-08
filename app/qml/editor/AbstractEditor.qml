@@ -12,7 +12,6 @@ import QtQuick.Controls 2.14
 import QtQml.Models 2.14
 import QtQuick.Layouts 1.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import ".."
 
@@ -34,7 +33,7 @@ Item {
     width: parent.width
     height: parent.height
     border.color: customStyle.fields.normalColor
-    border.width: 1 * QgsQuick.Utils.dp
+    border.width: 1 * __dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }

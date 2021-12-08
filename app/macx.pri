@@ -3,72 +3,61 @@ macx:!android {
 
     DEFINES += DESKTOP_OS
 
+    isEmpty(INPUT_SDK_PATH) {
+      error("Missing INPUT_SDK_PATH")
+    }
+    
+    INPUT_SDK_LIB_PATH = $${INPUT_SDK_PATH}/lib
+    INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_PATH}/include
+    
     # QGIS
-    !isEmpty(QGIS_INSTALL_PATH) {
-      # using installed QGIS
-      QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/MacOS
-      QGIS_FRAMEWORK_DIR = $${QGIS_INSTALL_PATH}/QGIS.app/Contents/Frameworks
-    }
-
-    isEmpty(QGIS_INSTALL_PATH) {
-      # using QGIS from build directory (has different layout of directories)
-      # expecting QGIS_SRC_DIR and QGIS_BUILD_DIR defined
-      QGIS_PREFIX_PATH = $${QGIS_BUILD_DIR}/output
-      QGIS_FRAMEWORK_DIR = $${QGIS_BUILD_DIR}/output/lib
-
-      INCLUDEPATH += \
-          $${QGIS_SRC_DIR}/src/core \
-          $${QGIS_SRC_DIR}/src/core/annotations \
-          $${QGIS_SRC_DIR}/src/core/auth \
-          $${QGIS_SRC_DIR}/src/core/composer \
-          $${QGIS_SRC_DIR}/src/core/effects \
-          $${QGIS_SRC_DIR}/src/core/expression \
-          $${QGIS_SRC_DIR}/src/core/fieldformatter \
-          $${QGIS_SRC_DIR}/src/core/geometry \
-          $${QGIS_SRC_DIR}/src/core/labeling \
-          $${QGIS_SRC_DIR}/src/core/layertree \
-          $${QGIS_SRC_DIR}/src/core/layout \
-          $${QGIS_SRC_DIR}/src/core/locator \
-          $${QGIS_SRC_DIR}/src/core/metadata \
-          $${QGIS_SRC_DIR}/src/core/providers/memory \
-          $${QGIS_SRC_DIR}/src/core/raster \
-          $${QGIS_SRC_DIR}/src/core/scalebar \
-          $${QGIS_SRC_DIR}/src/core/symbology \
-          $${QGIS_SRC_DIR}/src/core/textrenderer \
-          $${QGIS_SRC_DIR}/src/core/proj \
-          $${QGIS_SRC_DIR}/src/core/settings \
-          $${QGIS_BUILD_DIR} \
-          $${QGIS_BUILD_DIR}/src/core
-    }
-
+    QGIS_PREFIX_PATH = $${INPUT_SDK_PATH}/QGIS.app/Contents/MacOS
+    QGIS_FRAMEWORK_DIR = $${INPUT_SDK_PATH}/QGIS.app/Contents/Frameworks
+    QGIS_PLUGINS_PATH=$${INPUT_SDK_PATH}/QGIS.app/Contents/PlugIns/qgis
+    
     exists($${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core) {
       message("Building from QGIS: $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
     } else {
-      error("Missing QGIS Core library in $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
+      error("Missing qgis_core Framework in $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
     }
 
     INCLUDEPATH += \
         $${QGIS_FRAMEWORK_DIR}/qgis_native.framework/Headers \
-        $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/Headers
+        $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/Headers \
+        $${INPUT_SDK_INCLUDE_PATH}
 
     LIBS += -F$${QGIS_FRAMEWORK_DIR}
     LIBS += -framework qgis_core \
             -framework qgis_native
 
-    # Geodiff
-    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
-    LIBS += -L$${GEODIFF_LIB_DIR}
+	# other libs
+    LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}
     LIBS += -lgeodiff
-
-    # Proj
-    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
-    LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
-
-    # ZXing
-    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
-    LIBS += -L$${ZXING_LIB_DIR}
     LIBS += -lZXing
+    LIBS += -lauthmethod_basic_a
+    LIBS += -lauthmethod_esritoken_a
+    LIBS += -lauthmethod_identcert_a
+    LIBS += -lauthmethod_oauth2_a
+    LIBS += -lauthmethod_pkcs12_a
+    LIBS += -lauthmethod_pkipaths_a
+    LIBS += -lprovider_arcgisfeatureserver_a
+    LIBS += -lprovider_arcgismapserver_a
+    LIBS += -lprovider_delimitedtext_a
+    LIBS += -lprovider_spatialite_a
+    LIBS += -lprovider_virtuallayer_a
+    LIBS += -lprovider_wcs_a
+    LIBS += -lprovider_wfs_a
+    LIBS += -lprovider_wms_a
+    LIBS += -lprovider_postgres_a
+    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lgdal -lpq -lspatialite
+    LIBS += -lcharset -lxml2
+    LIBS += -ltasn1 -lbz2 -lproj
+    LIBS += -lspatialindex -lgeos -lgeos_c
+    LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
+    LIBS += -lsqlite3 -liconv -lz -lzip
+    LIBS += -lwebp
 
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
@@ -91,5 +80,5 @@ macx:!android {
     QT += multimedia
     DEFINES += "HAVE_WIDGETS"
 
-    QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++11 -fvisibility-inlines-hidden -fvisibility=hidden
 }

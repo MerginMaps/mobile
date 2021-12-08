@@ -308,6 +308,10 @@ void AttributeController::flatten(
         // todo
         break;
 
+      case QgsAttributeEditorElement::AeTypeAction:
+        // todo
+        break;
+
       case QgsAttributeEditorElement::AeTypeQmlElement:
         // todo
         break;

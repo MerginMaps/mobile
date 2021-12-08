@@ -12,7 +12,9 @@
 #define LAYERSMODEL_H
 
 #include <QObject>
+#include <QPointer>
 
+#include "qgsmaplayer.h"
 #include "qgsmaplayermodel.h"
 
 class LayersModel : public QgsMapLayerModel

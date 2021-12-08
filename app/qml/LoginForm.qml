@@ -13,7 +13,7 @@ import QtQuick.Controls 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import QgsQuick 0.1 as QgsQuick
+
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
@@ -124,7 +124,7 @@ Rectangle {
         id: loginNameBorder
         color: loginForm.fontColor
         y: loginName.height - height
-        height: 2 * QgsQuick.Utils.dp
+        height: 2 * __dp
         opacity: loginName.focus ? 1 : 0.6
         width: parent.width - fieldHeight / 2
         anchors.horizontalCenter: parent.horizontalCenter
@@ -142,7 +142,7 @@ Rectangle {
       Rectangle {
         id: passBorder
         color: loginForm.fontColor
-        height: 2 * QgsQuick.Utils.dp
+        height: 2 * __dp
         y: fieldHeight - height
         opacity: passwordField.password.focus ? 1 : 0.6
         width: loginForm.width - fieldHeight / 2
@@ -189,7 +189,7 @@ Rectangle {
           background: Rectangle {
             anchors.fill: parent
             color: InputStyle.fontColor
-            radius: 2 * QgsQuick.Utils.dp
+            radius: 2 * __dp
           }
 
           onClicked: __merginApi.pingMergin()

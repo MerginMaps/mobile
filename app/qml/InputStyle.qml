@@ -10,8 +10,6 @@
 pragma Singleton
 import QtQuick 2.0
 
-import QgsQuick 0.1 as QgsQuick
-
 QtObject {
 
     // Primary colors
@@ -42,9 +40,9 @@ QtObject {
 
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 
-    property real fontPixelSizeSmall: QgsQuick.Utils.dp * 20 * rado2Lutra
-    property real fontPixelSizeNormal: QgsQuick.Utils.dp * 24 * rado2Lutra
-    property real fontPixelSizeTitle: QgsQuick.Utils.dp * 28 * rado2Lutra
+    property real fontPixelSizeSmall: __dp * 20 * rado2Lutra
+    property real fontPixelSizeNormal: __dp * 24 * rado2Lutra
+    property real fontPixelSizeTitle: __dp * 28 * rado2Lutra
 
     property int fontPointSizeSmall: 12
     property int fontPointSizeNormal: 15
@@ -62,20 +60,20 @@ QtObject {
     property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2
 
-    property real panelSpacing: QgsQuick.Utils.dp * 5
-    property real shadowVerticalOffset: -2 * QgsQuick.Utils.dp
-    property real shadowRadius: 8 * QgsQuick.Utils.dp
+    property real panelSpacing: 5 * __dp
+    property real shadowVerticalOffset: -2 * __dp
+    property real shadowRadius: 8 * __dp
     property real shadowSamples: 12
     property real panelOpacity: 1
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
-    property real cornerRadius: 8 * QgsQuick.Utils.dp
-    property real innerFieldMargin: 10 * QgsQuick.Utils.dp  // TODO rename fieldMargin
-    property real outerFieldMargin: 20 * QgsQuick.Utils.dp  // TODO change for PanelMargin
-    property real formSpacing: 10 * QgsQuick.Utils.dp
+    property real cornerRadius: 8 * __dp
+    property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
+    property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
+    property real formSpacing: 10 * __dp
 
     // used in scaling functions for high DPI screens
-    property real deviceRatio: 1
+    property real deviceRatio: __dp
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
@@ -143,29 +141,27 @@ QtObject {
 
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
-
-    // Scaling function using QgsQuick screenDensity and deviceRatio
     property var scale: function scale(size) {
-        return size * QgsQuick.Utils.dp
+        return size * deviceRatio
     }
 
     // Scaling function for fonts using deviceRatio
     property var scaleFontPointSize: function scaleParam(size) {
-        return size * deviceRatio;
+        return size * deviceRatio
     }
 
     // map related styling constats
-    property real mapLoadingIndicatorHeight: 7 * QgsQuick.Utils.dp
+    property real mapLoadingIndicatorHeight: 7 * __dp
 
-    property real mapMarkerWidth: 60 * QgsQuick.Utils.dp
-    property real mapMarkerHeight: 70 * QgsQuick.Utils.dp
-    property real mapMarkerAnchorY: 48 * QgsQuick.Utils.dp
+    property real mapMarkerWidth: 60 * __dp
+    property real mapMarkerHeight: 70 * __dp
+    property real mapMarkerAnchorY: 48 * __dp
 
     property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
     property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
     property color highlighOutlineColor: "white"
-    property real highlightLineWidth: 6 * QgsQuick.Utils.dp
-    property real highlighOutlinePenWidth: 1 * QgsQuick.Utils.dp
+    property real highlightLineWidth: 6 * __dp
+    property real highlighOutlinePenWidth: 1 * __dp
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
 }

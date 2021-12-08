@@ -1,48 +1,74 @@
 android {
     message("Building ANDROID")
-    message("ANDROID Platform: $${ANDROID_TARGET_ARCH}")
+    message("ANDROID Platform: $${QT_ARCH}")
 
     DEFINES += MOBILE_OS
 
-    isEmpty(QGIS_INSTALL_PATH) {
-      error("Missing QGIS_INSTALL_PATH")
+    isEmpty(INPUT_SDK_PATH) {
+      error("Missing INPUT_SDK_PATH")
     }
 
-    # using installed QGIS
-    QGIS_PREFIX_PATH = $${QGIS_INSTALL_PATH}
-    QGIS_LIB_DIR = $${QGIS_INSTALL_PATH}/lib
-    QGIS_INCLUDE_DIR = $${QGIS_INSTALL_PATH}/include/qgis
+    INPUT_SDK_ARCH_PATH = $${INPUT_SDK_PATH}/$${QT_ARCH}
+    INPUT_SDK_LIB_PATH = $${INPUT_SDK_ARCH_PATH}/lib
+    INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_ARCH_PATH}/include
 
-    exists($${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so) {
-      message("Building from QGIS: $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
+    exists($${INPUT_SDK_LIB_PATH}/libqgis_core.a) {
+      message("Building from QGIS: $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
     } else {
-      error("Missing QGIS Core library in $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so")
+      error("Missing QGIS Core library in $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
     }
+    
+    INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
+    INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
+    
+    # by default QMake eats linked libs if they are mentioned multiple times
+    # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
+    CONFIG += no_lflags_merge
 
-    INCLUDEPATH += $${QGIS_INCLUDE_DIR}
-    LIBS += -L$${QGIS_LIB_DIR}
-    LIBS += -lqgis_core_$${ANDROID_TARGET_ARCH}
-
-    # Geodiff
-    INCLUDEPATH += $${GEODIFF_INCLUDE_DIR}
-    LIBS += -L$${GEODIFF_LIB_DIR}
+    LIBS += -L$${INPUT_SDK_LIB_PATH}
+    LIBS += -lqgis_core
     LIBS += -lgeodiff
-
-    # Proj
-    INCLUDEPATH += $${PROJ_INCLUDE_DIR}
-    LIBS += -L$${PROJ_LIB_DIR}
     LIBS += -lproj
-
-    # ZXing
-    INCLUDEPATH += $${ZXING_INCLUDE_DIR}
-    LIBS += -L$${ZXING_LIB_DIR}
     LIBS += -lZXing
+    LIBS += -lauthmethod_basic_a
+    LIBS += -lauthmethod_esritoken_a
+    LIBS += -lauthmethod_identcert_a
+    LIBS += -lauthmethod_oauth2_a
+    LIBS += -lauthmethod_pkcs12_a
+    LIBS += -lauthmethod_pkipaths_a
+    LIBS += -lprovider_arcgisfeatureserver_a
+    LIBS += -lprovider_arcgismapserver_a
+    LIBS += -lprovider_delimitedtext_a
+    LIBS += -lprovider_spatialite_a
+    LIBS += -lprovider_virtuallayer_a
+    LIBS += -lprovider_wcs_a
+    LIBS += -lprovider_wfs_a
+    LIBS += -lprovider_wms_a
+    LIBS += -lprovider_postgres_a
 
+    # needs to be added again because of the cycling dependencies between qgis_core
+    # and providers and auth methods
+    LIBS += -lqgis_core
+
+    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lgdal -lpq -lspatialite
+    LIBS += -lcharset
+    LIBS += -ltasn1 -lproj
+    LIBS += -lspatialindex -lgeos_c -lgeos
+    LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
+    LIBS += -lsqlite3 -liconv -lz -lzip -lpng16
+    LIBS += -lssl_1_1 -lcrypto_1_1 -lwebp
+    
     QT += multimedia
     QT += printsupport
     QT += androidextras
 
     QMAKE_CXXFLAGS += -std=c++11
+
+    equals ( QT_ARCH, 'armeabi-v7a' ) {
+        QMAKE_LFLAGS = -Wl,-Bsymbolic
+    }
+
 
     # files from this folder will be added to the package
     # (and will override any default files from Qt - template is in $QTDIR/src/android)
@@ -55,47 +81,15 @@ android {
     DISTFILES += $$OUT_PWD/res/xml/file_paths.xml
     DISTFILES += $$PWD/build.gradle
 
-    # packaging
-    ANDROID_EXTRA_LIBS += \
-        $${QGIS_LIB_DIR}/libcrypto_1_1.so \
-        $${QGIS_LIB_DIR}/libpng16.so \
-        $${QGIS_LIB_DIR}/libexpat.so \
-        $${QGIS_LIB_DIR}/libgeodiff.so \
-        $${QGIS_LIB_DIR}/libgeos.so \
-        $${QGIS_LIB_DIR}/libgeos_c.so \
-        $${QGIS_LIB_DIR}/libsqlite3.so \
-        $${QGIS_LIB_DIR}/libcharset.so \
-        $${QGIS_LIB_DIR}/libiconv.so \
-        $${QGIS_LIB_DIR}/libfreexl.so \
-        $${QGIS_LIB_DIR}/libgdal.so \
-        $${QGIS_LIB_DIR}/libproj.so \
-        $${QGIS_LIB_DIR}/libspatialindex.so \
-        $${QGIS_LIB_DIR}/libpq.so \
-        $${QGIS_LIB_DIR}/libspatialite.so \
-        $${QGIS_LIB_DIR}/libprotobuf-lite.so \
-        $${QGIS_LIB_DIR}/libqca-qt5_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libqgis_core_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libqgis_native_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libqt5keychain_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libzip.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libdelimitedtextprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libgpxprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libmssqlprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libowsprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libpostgresprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libspatialiteprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libssl_1_1.so \
-        $${QGIS_LIB_DIR}/libwcsprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libwfsprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libwmsprovider_$${ANDROID_TARGET_ARCH}.so \
-        $${QGIS_LIB_DIR}/libZXing.so \
-        $$QT_LIBS_DIR/libQt5OpenGL_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Sensors_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Network_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Sql_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5Svg_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras_$${ANDROID_TARGET_ARCH}.so \
-        $$QT_LIBS_DIR/libQt5SerialPort_$${ANDROID_TARGET_ARCH}.so
+    for (abi, ANDROID_ABIS): ANDROID_EXTRA_LIBS += \
+        $${INPUT_SDK_PATH}/$${abi}/lib/libcrypto_1_1.so \
+        $${INPUT_SDK_PATH}/$${abi}/lib/libssl_1_1.so \
+        $$QT_LIBS_DIR/libQt5OpenGL_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5PrintSupport_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Sensors_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Network_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Sql_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5Svg_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5AndroidExtras_$${abi}.so \
+        $$QT_LIBS_DIR/libQt5SerialPort_$${abi}.so
 }

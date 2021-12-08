@@ -10,7 +10,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-import QgsQuick 0.1 as QgsQuick
 import lc 1.0
 import ".."  // import InputStyle singleton
 
@@ -27,7 +26,7 @@ Item {
     property color barColor: InputStyle.fontColor
     property string barText: scaleBarKit.distance + " " + scaleBarKit.units
     property int barWidth: scaleBarKit.width
-    property int lineWidth: 2 * QgsQuick.Utils.dp
+    property int lineWidth: 2 * __dp
 
     width: barWidth
 
@@ -42,7 +41,7 @@ Item {
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: 5 * QgsQuick.Utils.dp
+        anchors.leftMargin: 5 * __dp
         anchors.rightMargin: anchors.leftMargin
 
         Text {

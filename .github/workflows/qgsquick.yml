@@ -1,7 +1,18 @@
 name: QgsQuick
-on: [push]
+on:
+  push:
+    paths:
+    - 'qgsquick/**'
+    - 'scripts/**'
+    - 'app/**'
+    - '.github/workflows/qgsquick.yml'
+
+  release:
+    types:
+      - published
+
 env:
-  QGIS_COMMIT_HASH: 1d17bf5bd35d7872f53c8e1c8b0a1e371616bf07
+  QGIS_COMMIT_HASH: e524574d0e25995fb0c9a543dd96aeb4e2ade727
 
 jobs:
   qgsquick_up_to_date:

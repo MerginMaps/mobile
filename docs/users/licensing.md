@@ -1,1 +1,0 @@
-See [https://help.inputapp.io/licensing](https://help.inputapp.io/licensing)

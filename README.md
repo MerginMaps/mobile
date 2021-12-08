@@ -9,7 +9,7 @@ Platform builds:
 Other Checks:
 
 [![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
-[![InputApp Tests](https://github.com/lutraconsulting/input/workflows/Auto%20Tests/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Auto+Tests%22)
+[![macOS Build (Auto Tests)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml)
 [![Coverage Status](https://img.shields.io/coveralls/lutraconsulting/input.svg)](https://coveralls.io/github/lutraconsulting/input?branch=master)
 [![QgsQuick](https://github.com/lutraconsulting/input/workflows/QgsQuick/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22QgsQuick%22)
 [![Translations](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml)
@@ -31,7 +31,7 @@ Click below to download the app on your mobile device:
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
 </p>
 
-For more information on how to use the app, see [Documentation](https://help.inputapp.io).
+For more information on how to use the app, see [Documentation](https://merginmaps.com/docs).
 
 ## How to help/contribute?
 
@@ -63,7 +63,7 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 ## Documentation
 
-Read more about the app [help.inputapp.io](https://help.inputapp.io)
+Read more about the app [https://merginmaps.com/docs](https://merginmaps.com/docs)
 
 ## Questions and Answers by the community
 
@@ -74,4 +74,4 @@ See [GIS Stack Exchange](https://gis.stackexchange.com/questions/tagged/inputapp
 For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
 
 ## Privacy policy
-Read more about the app privacy policy [here](https://help.inputapp.io/privacy)
+Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)

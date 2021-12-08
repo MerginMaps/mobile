@@ -1,14 +1,27 @@
 name: iOS Build
-on: [push]
+on:
+  push:
+    paths:
+    - 'app/**'
+    - 'core/**'
+    - 'images/**'
+    - 'qgsquick/**'
+    - 'scripts/**'
+    - '.github/workflows/ios.yml'
+
+  release:
+    types:
+      - published
+
 env:
-  QT_DROPBOX_HASH: whdez6vfckulgxu
   QT_VERSION: 5.14.2
-  SDK_DROPBOX_HASH: 0002aq84fliv3kk
-  IOS_SDK_VERSION: 16
+  INPUT_SDK_VERSION: ios-20211201-22
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '12.0.1' }}
   IOS_MIN_SDK_VERSION: ${{ '12.0' }}
+  CCACHE_DIR: /Users/runner/work/ccache
+
 jobs:
   ios_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
@@ -19,12 +32,44 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      # CCache
+      - name: Prepare build cache for pull request
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name == 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-ios-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
+          # The head_ref or source branch of the pull request in a workflow run.
+          # The base_ref or target branch of the pull request in a workflow run.
+          restore-keys: |
+            build-ios-ccache-${{ github.actor }}-${{ github.head_ref }}-
+            build-ios-ccache-refs/heads/${{ github.base_ref }}-
+            build-ios-ccache-refs/heads/master-
+
+      - name: Prepare build cache for branch/tag
+        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name != 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
+          key: build-ios-ccache-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            build-ios-ccache-${{ github.ref }}-
+            build-ios-ccache-refs/heads/master-
+
       - name: Install brew deps
         run: |
           brew install gnupg
           brew install openssl@1.1
           brew install python3
-          pip3 install dropbox
+          brew install ccache
+
+      - name: Install ccache
+        run: |
+          mkdir -p ${CCACHE_DIR}
+          ccache --set-config=max_size=2.0G
+          ccache -s
 
       - name: Extract Mergin API_KEY
         env:
@@ -60,51 +105,104 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
-      - name: Download and install input-sdk
+      # Input SDK
+      - name: Cache Input-SDK
+        id: cache-input-sdk
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/input-sdk
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+
+      - name: Install Input-SDK
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
-          DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz "https://www.dropbox.com/s/${SDK_DROPBOX_HASH}/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz?dl=0"
-          sudo mkdir -p /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
-          cd /opt/INPUT/input-sdk-ios-${IOS_SDK_VERSION}/stage
-          sudo chown -R $USER .
-          tar -xvzf $DOWNLOAD_DIR/input-sdk-ios-${IOS_SDK_VERSION}.tar.gz
+          wget -O \
+            ${{ github.workspace }}/input-sdk.tar.gz \
+            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk
+          cd ${{ github.workspace }}/input-sdk
+          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
-          ls -la ./arm64/include/geodiff.h
-          ls -la ./arm64/QGIS.app/Contents/Frameworks/qgis_core.framework
+      # Qt
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-ios
 
-      - name: Download and install qt
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: ios
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      # Do this only until we move from 5.14.2!!
+      - name: Patch Qt!
+        shell: bash
         run: |
-          DOWNLOAD_DIR=`pwd`
-          curl -k -Lo $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz "https://www.dropbox.com/s/${QT_DROPBOX_HASH}/qt-${QT_VERSION}-ios.tar.gz?dl=0"
-          sudo mkdir -p /opt/Qt/${QT_VERSION}/ios
-          cd /opt/Qt/${QT_VERSION}/ios
-          sudo chown -R $USER .
-          tar -xvzf $DOWNLOAD_DIR/qt-${QT_VERSION}-ios.tar.gz
-
           echo "Patch 5.14.2 see https://github.com/lutraconsulting/input-sdk/issues/34"
-          cp $DOWNLOAD_DIR/scripts/ci/ios/toolchain5.14.2_xcode12.prf /opt/Qt/5.14.2/ios/mkspecs/features/toolchain.prf
+
+          if [ ! ${{ env.QT_VERSION }} == "5.14.2" ]; then
+            echo "Can not patch other Qt version than 5.14.2. Remove this step in case of higher Qt version!"
+            exit 1
+          fi
+
+          cp ${{ github.workspace }}/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
+
+      # Build Input App
+      # !! ccache_clang is a custom script which runs ccache and default XCode clang.
+      # !! It has been created due to a bug in Qt when QMAKE_CXX ignored everything after
+      # !! whitespace chars. In that case in the string 'ccache clang++' clang was ignored
+      # !! and ccache received all of the compilation flags that were supposed to go to clang.
+      - name: Export app/config.pri
+        shell: bash
+        run: |
+          touch ./app/config.pri
+          echo -e "ios {"  >> ./app/config.pri
+          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
+          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
+          echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
+          echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
+          echo -e "}"  >> ./app/config.pri
+          cat ./app/config.pri
+
+          if [ ! ${{ env.QT_VERSION }} == "5.14.2" ]; then
+            echo "Qt version has changed! Double check if we still need custom script 'ccache_clang' for QMAKE_CXX."
+            echo "  - If yes, change this condition to the new Qt version"
+            echo "  - If no, remove the 'ccache_clang' script and this check too"
+            exit 1
+          fi
+
+      # Parse Input-SDK version run number - it is used as middle integer in version number in CF_BUNDLE_VERSION
+      - name: Parse SDK version run number
+        uses: rishabhgupta/split-by@v1
+        id: split
+        with:
+          string: ${{ env.INPUT_SDK_VERSION }}
+          split-by: '-'
 
       - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
-
-          # setup config environment
-          cp scripts/ci/config.pri app/config.pri
 
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
           TIMESTAMP=`date "+%y%m%d%H%M%S"`
           GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
           BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
-          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${IOS_SDK_VERSION}.${TIMESTAMP}
+          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
 
+          echo "Building version: $CF_BUNDLE_VERSION"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
-          mkdir -p ../build-INPUT
-          cd ../build-INPUT
+          mkdir -p build-INPUT
+          cd build-INPUT
 
           # run qmake
-          /opt/Qt/${QT_VERSION}/ios/bin/qmake \
+          ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
             CONFIG+=release \
@@ -127,7 +225,7 @@ jobs:
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
-          cd ../build-INPUT
+          cd build-INPUT
 
           xcodebuild \
             -project Input.xcodeproj/ \
@@ -140,7 +238,7 @@ jobs:
       - name: Create Input Package
         run: |
           INPUT_DIR=`pwd`
-          cd ../build-INPUT
+          cd build-INPUT
           xcodebuild \
             -archivePath Input.xcarchive \
             -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
@@ -157,8 +255,8 @@ jobs:
         run: |
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
-          xcrun altool --upload-app -t ios -f ../build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+          xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
           GITHUB_API=https://api.github.com/repos/lutraconsulting/input/commits/${GITHUB_SHA}/comments
-          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "ios-'${CF_BUNDLE_VERSION}' (SDK: [ios-'${IOS_SDK_VERSION}'](https://github.com/lutraconsulting/input-sdk/releases/tag/ios-'${IOS_SDK_VERSION}'))"}' ${GITHUB_API}
+          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "iOS - version '${CF_BUNDLE_VERSION}' just submitted!"}' ${GITHUB_API}

@@ -1,7 +1,18 @@
 name: Code Layout
-on: [push]
+
 env:
   QT_VERSION: '6.2.0'
+on:
+  push:
+    paths:
+    - 'app/**'
+    - 'core/**'
+    - 'qgsquick/**'
+
+  release:
+    types:
+      - published
+
 jobs:
   code_style_cpp:
     name: C++ code convention check
