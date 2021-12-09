@@ -386,6 +386,9 @@ int main( int argc, char *argv[] )
 #ifdef Q_OS_LINUX
   appBundleDir = dataDir;
 #endif
+#ifdef Q_OS_MACOS
+  appBundleDir = dataDir;
+#endif
   InputProjUtils inputProjUtils;
   inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
   init_qgis( appBundleDir );
