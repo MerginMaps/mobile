@@ -231,6 +231,8 @@ Item {
       Layout.fillWidth: root.hasDatePicker ? true : false
       Layout.fillHeight: root.hasDatePicker ? true : false
 
+      visible: root.hasDatePicker
+
       Item {
         id: calendar
 
