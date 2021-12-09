@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../androidutils.cpp" line="233"/>
         <source>Without storage permission you will not be able to access previous projects</source>
-        <translation type="unfinished"/>
+        <translation>Ohne Speicherberechtigung können Sie nicht auf vorherige Projekte zugreifen</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="287"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>Die Speicherberechtigung wurde dauerhaft verweigert. Erlauben Sie dies in den Einstellungen, um Bilder aus der Galerie zu laden</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="291"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>Die Eingabe benötigt eine Speicherberechtigung, um Bilder aus der Galerie zu laden</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="309"/>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation type="unfinished"/>
+        <translation>Ihre Aufmerksamkeit ist gefragt. Bitte besuchen Sie das %1Mergin-Dashboard%2.</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="82"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Lerne mehr&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,114 @@
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>Code einscannen</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePicker</name>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>January</source>
+        <translation>Januar</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>February</source>
+        <translation>Februar</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>March</source>
+        <translation>März</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>April</source>
+        <translation>April</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>May</source>
+        <translation>Mai</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>June</source>
+        <translation>Juni</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>July</source>
+        <translation>Juli</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>August</source>
+        <translation>August</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>September</source>
+        <translation>September</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>October</source>
+        <translation>Oktober</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>November</source>
+        <translation>November</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>December</source>
+        <translation>Dezember</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Sunday</source>
+        <translation>Sonntag</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Monday</source>
+        <translation>Montag</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Tuesday</source>
+        <translation>Dienstag</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Wednesday</source>
+        <translation>Mittwoch</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Thursday</source>
+        <translation>Donnerstag</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Friday</source>
+        <translation>Freitag</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Saturday</source>
+        <translation>Samstag</translation>
     </message>
 </context>
 <context>
@@ -243,12 +351,12 @@
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="150"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation type="unfinished"/>
+        <translation>Formular kann nicht gespeichert werden, es gibt Validierungsfehler</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="151"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation type="unfinished"/>
+        <translation>Feature konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
     </message>
 </context>
 <context>
@@ -256,37 +364,37 @@
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="82"/>
         <source>Edit Feature</source>
-        <translation type="unfinished"/>
+        <translation>Bearbeite Feature</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="82"/>
         <source>Feature</source>
-        <translation type="unfinished"/>
+        <translation>Feature</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="92"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
         <source>Delete feature</source>
-        <translation type="unfinished"/>
+        <translation>Lösche Feature</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation type="unfinished"/>
+        <translation>Möchten Sie dieses Feature wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
         <source>Unsaved changes</source>
-        <translation type="unfinished"/>
+        <translation>Nicht gespeicherte Änderungen</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Do you want to save changes?</source>
-        <translation type="unfinished"/>
+        <translation>Änderungen speichern?</translation>
     </message>
 </context>
 <context>
@@ -312,7 +420,7 @@
     <message>
         <location filename="../qml/FeaturesListPage.qml" line="59"/>
         <source>Showing only the first %1 features</source>
-        <translation type="unfinished"/>
+        <translation>Nur die ersten %1 Features anzeigen</translation>
     </message>
 </context>
 <context>
@@ -320,17 +428,17 @@
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation type="unfinished"/>
+        <translation>Feature hinzufügen</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Erledigt</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
         <source>Remove link</source>
-        <translation type="unfinished"/>
+        <translation>Link entfernen</translation>
     </message>
 </context>
 <context>
@@ -358,7 +466,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
         <source>GPS info</source>
-        <translation type="unfinished"/>
+        <translation>GPS info</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
@@ -371,79 +479,79 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
         <source>Loading data from GPS</source>
-        <translation type="unfinished"/>
+        <translation>Lade Daten von GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
         <source>Altitude</source>
-        <translation type="unfinished"/>
+        <translation>Höhe</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Longitude</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Latitude</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Horizontale Genauigkeit</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Vertikale Genauigkeit</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
         <source>Satellites (in use/view)</source>
-        <translation type="unfinished"/>
+        <translation>Satelliten (in Verwendung/Ansicht)</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>Geschwindigkeit</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
         <source>Last fix</source>
-        <translation type="unfinished"/>
+        <translation>Letzter Fix</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
         <source>Date not available</source>
-        <translation type="unfinished"/>
+        <translation>Datum nicht verfügbar</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="228"/>
+        <location filename="../inputhelp.cpp" line="227"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Bericht gesendet.%1Kontaktiere uns unter%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="233"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Bericht konnte nicht gesendet werden.%1Bitte Internetverbindung überprüfen.</translation>
     </message>
@@ -559,7 +667,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../inpututils.cpp" line="1104"/>
         <source>screen device pixel ratio: %1</source>
-        <translation type="unfinished"/>
+        <translation>Pixelverhältnis des Bildschirmgeräts: %1</translation>
     </message>
 </context>
 <context>
@@ -567,48 +675,48 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
         <source>Insufficient space left on device</source>
-        <translation type="unfinished"/>
+        <translation>Nicht genügend Speicherplatz auf dem Gerät übrig</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
         <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>Ihr Gerät hat keinen Speicherplatz mehr. Sie benötigen %1 freien Speicherplatz, um Ihre Projekte anzuzeigen. Entfernen Sie einige Dateien und kehren Sie zurück oder klicken Sie auf Hilfe, um andere Möglichkeiten zur Behebung dieses Problems anzuzeigen.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
         <source>An error occured during update</source>
-        <translation type="unfinished"/>
+        <translation>Beim Update ist ein Fehler aufgetreten</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>Beim Anwenden eines Updates ist auf Ihrem Gerät ein Problem aufgetreten. Sie können Ihre Projekte nicht sehen. Klicken Sie auf Hilfe, um zu erfahren, wie Sie dieses Problem beheben können.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
         <source>We are working on an important update, please do not close the application</source>
-        <translation type="unfinished"/>
+        <translation>Wir arbeiten an einem wichtigen Update, bitte die Anwendung nicht schließen</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
         <source>%1/%2</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="51"/>
+        <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
         <translation>Diagnoseprotokoll</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
         <translation>Wird gesendet...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
         <translation>An die Entwickler senden</translation>
     </message>
@@ -719,17 +827,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/map/MapWrapper.qml" line="72"/>
         <location filename="../qml/map/MapWrapper.qml" line="611"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation type="unfinished"/>
+        <translation>GPS derzeit nicht verfügbar. %1 Versuchen Sie, den GPS-Standort in Ihren Geräteeinstellungen zuzulassen.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="103"/>
         <source>Recorded feature is not valid</source>
-        <translation type="unfinished"/>
+        <translation>Aufgezeichnetes Feature ist nicht gültig</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="450"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation type="unfinished"/>
+        <translation>Niedrige GPS-Positionsgenauigkeit (%1 m) Bitte stellen Sie sicher, dass Sie eine gute Sicht zum Himmel haben.</translation>
     </message>
 </context>
 <context>
@@ -795,6 +903,19 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>Das Projekt konnte nicht synchronisiert werden, bitte stellen Sie sicher, dass Sie angemeldet sind und über ausreichende Rechte verfügen.</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectIssuesPanel</name>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
+        <source>Project Issues</source>
+        <translation>Projektprobleme</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <source>QGIS log</source>
+        <translation>QGIS log</translation>
     </message>
 </context>
 <context>
@@ -1018,63 +1139,63 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
-        <translation type="unfinished"/>
+        <translation>Wert muss eine Nummer sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
-        <translation type="unfinished"/>
+        <translation>Wert muss kleiner sein als %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
-        <translation type="unfinished"/>
+        <translation>Wert muss größer sein als %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
-        <translation type="unfinished"/>
+        <translation>Wert ist zu groß</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
-        <translation type="unfinished"/>
+        <translation>Feld darf keine Dezimalstellen enthalten</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
-        <translation type="unfinished"/>
+        <translation>Darf nicht länger als %1 Zeichen sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
-        <translation type="unfinished"/>
+        <translation>Feld sollte nicht leer sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
-        <translation type="unfinished"/>
+        <translation>Feld darf nicht leer sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
-        <translation type="unfinished"/>
+        <translation>Wert sollte eindeutig sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
-        <translation type="unfinished"/>
+        <translation>Wert muss eindeutig sein</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation type="unfinished"/>
+        <translation>Nicht erfüllte QGIS-Ausdrucksbeschränkung</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
-        <translation type="unfinished"/>
+        <translation>Kein gültiger Wert</translation>
     </message>
 </context>
 <context>
@@ -1155,7 +1276,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="94"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -1321,35 +1442,6 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
 </context>
 <context>
-    <name>inputdatetime</name>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="43"/>
-        <location filename="../qml/editor/inputdatetime.qml" line="85"/>
-        <source>(no date)</source>
-        <translation>(kein Datum)</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="229"/>
-        <source>Hours</source>
-        <translation>Stunden</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="253"/>
-        <source>Minutes</source>
-        <translation>Minuten</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="276"/>
-        <source>Seconds</source>
-        <translation>Sekunden</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="298"/>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1372,17 +1464,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="119"/>
         <source>%1 more</source>
-        <translation type="unfinished"/>
+        <translation>%1 mehr</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="134"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="190"/>
         <source>Linked features</source>
-        <translation type="unfinished"/>
+        <translation>Verknüpfte Features</translation>
     </message>
 </context>
 <context>
@@ -1390,7 +1482,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/editor/inputrelationreference.qml" line="93"/>
         <source>Change link</source>
-        <translation type="unfinished"/>
+        <translation>Link ändern</translation>
     </message>
 </context>
 <context>
@@ -1398,7 +1490,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
         <source>Features</source>
-        <translation type="unfinished"/>
+        <translation>Features</translation>
     </message>
 </context>
 <context>
@@ -1419,17 +1511,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Keine zu bearbeitenden Layer gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="391"/>
+        <location filename="../qml/main.qml" line="419"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation type="unfinished"/>
+        <translation>Kommunikation mit Mergin fehlgeschlagen. %1 Versuchen Sie, Ihre Netzwerkverbindung zu verbessern.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Communication error</source>
         <translation>Kommunikationsfehler</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>PROJ Error</source>
         <translation>PROJ Fehler</translation>
     </message>
