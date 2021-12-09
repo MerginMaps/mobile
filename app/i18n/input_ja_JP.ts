@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja_JP" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ja_JP">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation type="unfinished"/>
+        <translation>注意が必要です。%1Merginダッシュボード%2を確認してください。</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="82"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;さらに詳しく&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,114 @@
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>コードをスキャン</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePicker</name>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>January</source>
+        <translation>1月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>February</source>
+        <translation>2月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>March</source>
+        <translation>3月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>April</source>
+        <translation>4月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>May</source>
+        <translation>5月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>June</source>
+        <translation>6月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>July</source>
+        <translation>7月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>August</source>
+        <translation>8月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>September</source>
+        <translation>9月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>October</source>
+        <translation>10月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>November</source>
+        <translation>11月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>December</source>
+        <translation>12月</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Sunday</source>
+        <translation>日曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Monday</source>
+        <translation>月曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Tuesday</source>
+        <translation>火曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Wednesday</source>
+        <translation>水曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Thursday</source>
+        <translation>木曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Friday</source>
+        <translation>金曜日</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Saturday</source>
+        <translation>土曜日</translation>
     </message>
 </context>
 <context>
@@ -358,7 +466,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
         <source>GPS info</source>
-        <translation type="unfinished"/>
+        <translation>GPS情報</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
@@ -371,79 +479,79 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
         <source>Loading data from GPS</source>
-        <translation type="unfinished"/>
+        <translation>GPSからデータを読み込んでいます</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
         <source>Altitude</source>
-        <translation type="unfinished"/>
+        <translation>高度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>経度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>緯度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"/>
+        <translation>水平精度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"/>
+        <translation>垂直精度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
         <source>Satellites (in use/view)</source>
-        <translation type="unfinished"/>
+        <translation>衛星 (利用数/表示数)</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>速度</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
         <source>Last fix</source>
-        <translation type="unfinished"/>
+        <translation>最後の修正</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
         <source>Date not available</source>
-        <translation type="unfinished"/>
+        <translation>日付が不明です</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="228"/>
+        <location filename="../inputhelp.cpp" line="227"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>リポートは送信されました。%1次のアドレスに連絡してください：%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="233"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>リポートの送信に失敗しました。%1インターネット接続を確認してください。</translation>
     </message>
@@ -559,7 +667,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inpututils.cpp" line="1104"/>
         <source>screen device pixel ratio: %1</source>
-        <translation type="unfinished"/>
+        <translation>端末の画面解像度: %1</translation>
     </message>
 </context>
 <context>
@@ -598,17 +706,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="51"/>
+        <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
         <translation>診断ログ</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
         <translation>送信中...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
         <translation>開発者に送る</translation>
     </message>
@@ -795,6 +903,19 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>プロジェクトを同期できませんでした。十分な権限を持ってログインしているか確認してください。</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectIssuesPanel</name>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
+        <source>Project Issues</source>
+        <translation>プロジェクトの課題</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <source>QGIS log</source>
+        <translation>QGISログ</translation>
     </message>
 </context>
 <context>
@@ -1321,35 +1442,6 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>inputdatetime</name>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="43"/>
-        <location filename="../qml/editor/inputdatetime.qml" line="85"/>
-        <source>(no date)</source>
-        <translation>(日付なし)</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="229"/>
-        <source>Hours</source>
-        <translation>時間</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="253"/>
-        <source>Minutes</source>
-        <translation>分</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="276"/>
-        <source>Seconds</source>
-        <translation>秒</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="298"/>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1419,17 +1511,17 @@ Won&apos;t be added to the project.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="391"/>
+        <location filename="../qml/main.qml" line="419"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Merginとの通信に失敗しました。%1 インターネット状況の確認をしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Communication error</source>
         <translation>通信エラー</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
