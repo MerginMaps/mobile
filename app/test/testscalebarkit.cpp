@@ -39,11 +39,11 @@ void TestScaleBarKit::updateScaleBar()
 
   ScaleBarKit kit;
   kit.setMapSettings( ms );
-  QCOMPARE( kit.units(), "cm" );
+  QCOMPARE( kit.units(), "km" );
   COMPARENEAR( kit.distance(), 50, 1 );
 
   qreal scale = 0.005;
   canvas.zoom( extent.center().toQPointF(), scale );
-  QCOMPARE( kit.units(), "mm" );
-  COMPARENEAR( kit.distance(), 2, 1e-4 );
+  QCOMPARE( kit.units(), "m" );
+  COMPARENEAR( kit.distance(), 200, 1 );
 }

@@ -77,7 +77,7 @@ void TestUtilsFunctions::screenUnitsToMeters()
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
   ms.setOutputSize( QSize( 1000, 500 ) );
   double sutm = mUtils->screenUnitsToMeters( &ms, 1 );
-  COMPARENEAR( sutm, 0.002, 1.0 );
+  COMPARENEAR( sutm, 213.5, 1.0 );
 }
 
 void TestUtilsFunctions::transformedPoint()
