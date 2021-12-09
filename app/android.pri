@@ -65,11 +65,6 @@ android {
 
     QMAKE_CXXFLAGS += -std=c++11
 
-    equals ( QT_ARCH, 'armeabi-v7a' ) {
-        QMAKE_LFLAGS = -Wl,-Bsymbolic
-    }
-
-
     # files from this folder will be added to the package
     # (and will override any default files from Qt - template is in $QTDIR/src/android)
     system($$PWD/../scripts/patch_manifest.bash $${ANDROID_VERSION_NAME} $${ANDROID_VERSION_CODE} $$PWD/android $$OUT_PWD/android_patched)
