@@ -101,5 +101,7 @@
         <file>components/TextRowWithTitle.qml</file>
         <file>components/NumberInputField.qml</file>
         <file>components/DateTimePicker.qml</file>
+        <file>NotificationBanner.qml</file>
+        <file>ProjectIssuesPanel.qml</file>
     </qresource>
 </RCC>

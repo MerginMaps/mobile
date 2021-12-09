@@ -21,8 +21,7 @@
 #include <QNetworkReply>
 #include <QSysInfo>
 
-const QString inputHelpRoot = QStringLiteral( "https://help.inputapp.io" );
-const QString merginHelpRoot = QStringLiteral( "https://help.cloudmergin.com" );
+const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
 const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QString helpDeskMail = QStringLiteral( "info@lutraconsulting.co.uk" );
 const QString inputWeb = QStringLiteral( "https://inputapp.io" );
@@ -44,7 +43,7 @@ InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
 
 QString InputHelp::helpRootLink() const
 {
-  return inputHelpRoot + utmTagHelp;
+  return helpRoot + utmTagHelp;
 }
 
 QString InputHelp::inputWebLink() const
@@ -74,47 +73,47 @@ QString InputHelp::merginDashboardLink() const
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return inputHelpRoot + "/privacy" + utmTagOther;
+  return helpRoot + "/reference/privacy" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const
 {
-  return merginHelpRoot + "/subscriptions" + utmTagSubscription;
+  return helpRoot + "/howto/manage/web/subscriptions" + utmTagSubscription;
 }
 
 QString InputHelp::howToEnableDigitizingLink() const
 {
-  return inputHelpRoot + "/howto/enable_digitizing" + utmTagHelp;
+  return helpRoot + "/howto/project/enable_digitizing" + utmTagHelp;
 }
 
 QString InputHelp::howToEnableBrowsingDataLink() const
 {
-  return inputHelpRoot + "/howto/enable_browsing" + utmTagHelp;
+  return helpRoot + "/howto/project/enable_browsing" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupThemesLink() const
 {
-  return inputHelpRoot + "/howto/setup_themes" + utmTagHelp;
+  return helpRoot + "/howto/project/setup_themes" + utmTagHelp;
 }
 
 QString InputHelp::howToCreateNewProjectLink() const
 {
-  return inputHelpRoot + "/howto/project_config" + utmTagHelp;
+  return helpRoot + "/howto/project/features" + utmTagHelp;
 }
 
 QString InputHelp::howToDownloadProjectLink() const
 {
-  return inputHelpRoot + "/howto/data_sync" + utmTagHelp;
+  return helpRoot + "/howto/data_sync" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupProj() const
 {
-  return inputHelpRoot + "/howto/proj" + utmTagHelp;
+  return helpRoot + "/howto/proj" + utmTagHelp;
 }
 
 QString InputHelp::gpsAccuracyHelpLink() const
 {
-  return inputHelpRoot + "/howto/gps_accuracy" + utmTagHelp;
+  return helpRoot + "/fieldwork/gps_accuracy/" + utmTagHelp;
 }
 
 QString InputHelp::merginTermsLink() const

@@ -53,11 +53,11 @@ ApplicationWindow {
               map.state = "view"
             }
             else if ( stateManager.state === "record" ) {
-              map.state = "recordFeature"
+              map.state = "recordFeature";
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
-              map.state = "inactive"
+              map.state = "inactive";
             }
         }
     }
@@ -210,6 +210,18 @@ ApplicationWindow {
         }
     }
 
+    NotificationBanner {
+      id: notificationBanner
+
+      width: parent.width - notificationBanner.anchors.margins * 2
+      height: InputStyle.rowHeight * 2
+
+      onDetailsClicked: {
+        projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
+        projectIssuesPanel.visible = true;
+      }
+    }
+
     SettingsPanel {
       id: settingsPanel
 
@@ -300,6 +312,22 @@ ApplicationWindow {
         height: window.height/2
         width: window.width
         edge: Qt.BottomEdge
+    }
+
+    ProjectIssuesPanel {
+      id: projectIssuesPanel
+
+      height: window.height
+      width: window.width
+      rowHeight: InputStyle.rowHeight
+      visible: false;
+
+      onVisibleChanged: {
+        if (projectIssuesPanel.visible)
+          projectIssuesPanel.focus = true; // get focus
+        else
+          mainPanel.focus = true; // pass focus back to main panel
+      }
     }
 
     Notification {
@@ -426,13 +454,24 @@ ApplicationWindow {
     }
 
     Connections {
-        target: __loader
-        onLoadingStarted: projectLoadingScreen.visible = true
-        onLoadingFinished: projectLoadingScreen.visible = false
-        onProjectReloaded: map.clear()
-        onProjectWillBeReloaded: {
-            formsStackManager.reload()
-        }
+      target: __loader
+      onLoadingStarted: {
+        projectLoadingScreen.visible = true;
+        notificationBanner.reset();
+        projectIssuesPanel.clear();
+      }
+      onLoadingFinished: projectLoadingScreen.visible = false
+      onLoadingErrorFound: {
+        notificationBanner.pushNotification( "There were issues loading the project." )
+      }
+
+      onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
+      onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
+
+      onProjectReloaded: map.clear()
+      onProjectWillBeReloaded: {
+        formsStackManager.reload()
+      }
     }
 
     LegacyFolderMigration {
