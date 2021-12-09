@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="it">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../androidutils.cpp" line="233"/>
         <source>Without storage permission you will not be able to access previous projects</source>
-        <translation type="unfinished"/>
+        <translation>Senza i permessi di archiviazione non potrai accedere ai progetti scaricati in precedenza</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="287"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;archiviazione non è consentita, si prega di autorizzarla nelle impostazioni per caricare le immagini dalla galleria</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="291"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>Input necessita dell&apos;autorizzazione all&apos;archiviazione per caricare le immagini dalla galleria</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="309"/>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation type="unfinished"/>
+        <translation>La tua attenzione è richiesta. Per favore accedi alla %1 dashboard Mergin%2.</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="82"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Leggi di più&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,114 @@
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>Scansiona il codice</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePicker</name>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>January</source>
+        <translation>Gennaio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>February</source>
+        <translation>Febbraio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>March</source>
+        <translation>Marzo</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>April</source>
+        <translation>Aprile</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>May</source>
+        <translation>Maggio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>June</source>
+        <translation>Giugno</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>July</source>
+        <translation>Luglio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>August</source>
+        <translation>Agosto</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>September</source>
+        <translation>Settembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>October</source>
+        <translation>Ottobre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>November</source>
+        <translation>Novembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>December</source>
+        <translation>Dicembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Sunday</source>
+        <translation>Domenica</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Monday</source>
+        <translation>Lunedì</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Tuesday</source>
+        <translation>Martedì</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Wednesday</source>
+        <translation>Mercoledì</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Thursday</source>
+        <translation>Giovedì</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Friday</source>
+        <translation>Venerdì</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Saturday</source>
+        <translation>Sabato</translation>
     </message>
 </context>
 <context>
@@ -358,7 +466,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
         <source>GPS info</source>
-        <translation type="unfinished"/>
+        <translation>Informazioni GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
@@ -371,79 +479,79 @@ Non verrà aggiunto al progetto.</translation>
         <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
         <source>Loading data from GPS</source>
-        <translation type="unfinished"/>
+        <translation>Caricamento dati dal GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
         <source>Altitude</source>
-        <translation type="unfinished"/>
+        <translation>Altitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Longitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Latitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisione orizzontale</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisione verticale</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
         <source>Satellites (in use/view)</source>
-        <translation type="unfinished"/>
+        <translation>Satelliti (in uso/vista)</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>Velocità</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
         <source>Last fix</source>
-        <translation type="unfinished"/>
+        <translation>Ultimo fix</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
         <source>Date not available</source>
-        <translation type="unfinished"/>
+        <translation>Data non disponibile</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="228"/>
+        <location filename="../inputhelp.cpp" line="227"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Report inviato.%1Per favore contattaci su%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="233"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Impossibile inviare il report.%1Per favore controlla la tua connessione a Internet.</translation>
     </message>
@@ -559,7 +667,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../inpututils.cpp" line="1104"/>
         <source>screen device pixel ratio: %1</source>
-        <translation type="unfinished"/>
+        <translation>pixel ratio del dispositivo: %1</translation>
     </message>
 </context>
 <context>
@@ -567,48 +675,48 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
         <source>Insufficient space left on device</source>
-        <translation type="unfinished"/>
+        <translation>Spazio di archiviazione insufficiente</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
         <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>Il tuo dispositivo sta terminando lo spazio di archiviazione disponibile, è necessario uno spazio libero pari a %1 per visualizzare i tuoi progetti. Rimuovi alcuni file e riprova, oppure clicca su Aiuto per trovare altri metodi di risoluzione per questo problema.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
         <source>An error occured during update</source>
-        <translation type="unfinished"/>
+        <translation>C&apos;è stato un errore durante l&apos;aggiornamento</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>Il tuo dispositivo ha riscontrato un errore durante l&apos;aggiornamento. Non potrai visualizzare i tuoi progetti. Clicca su Aiuto per trovare metodi di risoluzione per questo problema.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
         <source>We are working on an important update, please do not close the application</source>
-        <translation type="unfinished"/>
+        <translation>Stiamo lavorando ad un aggiornamento importante, si prega di non chiudere l&apos;applicazione</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
         <source>%1/%2</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="51"/>
+        <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
         <translation>Registro diagnostico</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
         <translation>Invio in corso...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
         <translation>Invia agli Sviluppatori</translation>
     </message>
@@ -795,6 +903,19 @@ Non verrà aggiunto al progetto.</translation>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>Impossibile sincronizzare il progetto, assicurati di aver fatto l&apos;accesso e di avere permessi sufficienti.</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectIssuesPanel</name>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
+        <source>Project Issues</source>
+        <translation>Problemi del progetto</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <source>QGIS log</source>
+        <translation>Log di QGIS</translation>
     </message>
 </context>
 <context>
@@ -1321,35 +1442,6 @@ Non verrà aggiunto al progetto.</translation>
     </message>
 </context>
 <context>
-    <name>inputdatetime</name>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="43"/>
-        <location filename="../qml/editor/inputdatetime.qml" line="85"/>
-        <source>(no date)</source>
-        <translation>(nessuna data)</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="229"/>
-        <source>Hours</source>
-        <translation>Ore</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="253"/>
-        <source>Minutes</source>
-        <translation>Minuti</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="276"/>
-        <source>Seconds</source>
-        <translation>Secondi</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="298"/>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1419,17 +1511,17 @@ Non verrà aggiunto al progetto.</translation>
         <translation>Non è stato trovato nessun layer modificabile.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="391"/>
+        <location filename="../qml/main.qml" line="419"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Impossibile comunicare con Mergin.%1Prova a migliorare la qualità della tua connessione</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Communication error</source>
         <translation>Errori di comunicazione</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>PROJ Error</source>
         <translation>Errore PROJ</translation>
     </message>
