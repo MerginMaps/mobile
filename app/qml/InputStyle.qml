@@ -46,6 +46,7 @@ QtObject {
 
     property int fontPointSizeSmall: 12
     property int fontPointSizeNormal: 15
+    property int fontPointSizeBig: 18
 
     property int borderSize: scale(1)
 

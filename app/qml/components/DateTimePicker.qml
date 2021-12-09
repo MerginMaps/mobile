@@ -1,10 +1,19 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick 2.14
 import QtQuick.Layouts 1.14
 import QtQuick.Controls 2.14
 import Qt.labs.calendar 1.0
 import QtGraphicalEffects 1.14
 
-// Inspired by https://gist.github.com/ilnuribat/5cc6010aea7e35708ff90c65d7be5bcf
+import ".."
 
 Item {
   id: root
@@ -14,9 +23,9 @@ Item {
 
   property date dateToSelect: new Date()
 
-  property int fontPointSizeBig: 18
-  property int fontPointSizeNormal: 15
-  property int fontPointSizeSmall: 12
+  property int fontPointSizeBig: InputStyle.fontPointSizeBig
+  property int fontPointSizeNormal: InputStyle.fontPointSizeNormal
+  property int fontPointSizeSmall: InputStyle.fontPointSizeSmall
 
   signal selected(date selectedDate)
   signal canceled()
@@ -65,18 +74,6 @@ Item {
   height: 400
   width: 400
 
-  QtObject {
-    id: palette
-    property color primary: "#006146"
-    property color primary_dark: "#006146"
-    property color primary_light: "#B2EBF2"
-    property color accent: "#FF5722"
-    property color primary_text: "#212121"
-    property color secondary_text: "#757575"
-    property color icons: "#FFFFFF"
-    property color divider: "#BDBDBD"
-  }
-
   ColumnLayout {
     anchors.fill: parent
 
@@ -90,7 +87,7 @@ Item {
       Layout.preferredHeight: 50
       Layout.maximumHeight: 55
 
-      color: palette.primary_dark
+      color: InputStyle.clrPanelBackground
 
       Rectangle {
         id: cancelBtn
@@ -104,14 +101,14 @@ Item {
           verticalCenter: parent.verticalCenter
         }
 
-        color: palette.primary_dark
+        color: InputStyle.clrPanelBackground
         Text {
           id: cancelBtnText
           anchors.centerIn: parent
           font.pointSize: root.fontPointSizeBig
           font.bold: true
           color: "#FD9626"
-          text: "Cancel"
+          text: qsTr("Cancel")
         }
         MouseArea {
           anchors.fill: parent
@@ -137,7 +134,7 @@ Item {
           visible: root.hasDatePicker
           height: parent.height / 2
           width: parent.width
-          color: palette.primary_dark
+          color: InputStyle.clrPanelBackground
           Text {
             id: yearTitle
 
@@ -193,7 +190,7 @@ Item {
           verticalCenter: parent.verticalCenter
         }
 
-        color: palette.primary_dark
+        color: InputStyle.clrPanelBackground
 
         Text {
           id: okBtnText
@@ -203,8 +200,8 @@ Item {
           font.pointSize: root.fontPointSizeBig
           font.bold: true
 
-          color: "#FD9626"
-          text: "Ok"
+          color: InputStyle.activeButtonColorOrange
+          text: qsTr("OK")
         }
         MouseArea {
           anchors.fill: parent
@@ -389,7 +386,7 @@ Item {
               radius: height * 0.5
 
               enabled: model.month === monthGrid.month
-              color: enabled && highlighted ? palette.primary_dark : "white"
+              color: enabled && highlighted ? InputStyle.fontColor : "white"
 
               Text {
                 anchors.centerIn: parent
@@ -442,7 +439,7 @@ Item {
             font.pointSize: root.fontPointSizeNormal
             text: name
             scale: index === (yearsList.currentYear - yearsList.startYear) ? 1.5 : 1
-            color: palette.primary_dark
+            color: InputStyle.fontColor
           }
           MouseArea {
             anchors.fill: parent
@@ -477,7 +474,7 @@ Item {
     Rectangle {
       id: separator
 
-      color: palette.primary_dark
+      color: InputStyle.clrPanelBackground
 
       visible: root.hasDatePicker
 
@@ -544,7 +541,7 @@ Item {
           verticalAlignment: Text.AlignVCenter
           font.pointSize: root.fontPointSizeNormal
 
-          color: isActive ? "#006146" : "black"
+          color: isActive ? InputStyle.fontColor : "black"
         }
       }
 
