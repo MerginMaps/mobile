@@ -383,6 +383,12 @@ int main( int argc, char *argv[] )
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
   //TODO win32 package demo projects
 #endif
+#ifdef Q_OS_LINUX
+  appBundleDir = dataDir;
+#endif
+#ifdef Q_OS_MACOS
+  appBundleDir = dataDir;
+#endif
   InputProjUtils inputProjUtils;
   inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
   init_qgis( appBundleDir );
