@@ -15,6 +15,8 @@ import "."
 import "./components"
 
 Rectangle {
+  id: notificationBanner
+
   property color fontColor: "black"
   property color linkColor: fontColor
   property color bgColor: InputStyle.warningBannerColor
@@ -38,7 +40,6 @@ Rectangle {
     text = "";
   }
 
-  id: notificationBanner
   color: notificationBanner.bgColor
   radius: InputStyle.cornerRadius
   x: padding
@@ -83,8 +84,8 @@ Rectangle {
 
   Button {
     id: closeBtn
-    width: 40 * QgsQuick.Utils.dp
-    height: 40 * QgsQuick.Utils.dp
+    width: notificationBanner.height / 3
+    height: notificationBanner.height / 3
     anchors.top: parent.top
     anchors.right: parent.right
     anchors.margins: 10
@@ -117,6 +118,7 @@ Rectangle {
 
   Button {
     id: button
+    height: notificationBanner.height / 4
     anchors.right: notificationBanner.right
     anchors.bottom: notificationBanner.bottom
     anchors.margins: 20
