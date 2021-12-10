@@ -1,3 +1,4 @@
+*.autosave
 *.orig
 *.DS_Store
 *.user
