@@ -65,5 +65,6 @@ Row {
           + "; text-decoration: underline; }</style>" + root.text
     textFormat: Text.RichText
     wrapMode: Text.WordWrap
+    rightPadding: fieldHeight / 4
   }
 }
