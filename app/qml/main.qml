@@ -85,11 +85,13 @@ ApplicationWindow {
       let hasNullGeometry = pair.feature.geometry.isNull
 
       if ( hasNullGeometry ) {
+        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "readOnly", "form" )
       }
       else if ( pair.valid ) {
         map.centerToPair( pair, true )
         map.highlightPair( pair )
+        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "readOnly", "preview")
       }
     }
@@ -126,10 +128,20 @@ ApplicationWindow {
       width: window.width
       previewPanelHeight: formsStackManager.previewHeight
 
-      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" )
-      onNothingIdentified: formsStackManager.closeDrawer()
+      onFeatureIdentified: {
+        navigationPanel.closeDrawer();
+        formsStackManager.openForm( pair, "readOnly", "preview" );
+      }
+
+      onNothingIdentified: {
+        if ( navigationPanel.isOpen )
+          navigationPanel.closeDrawer();
+        else
+          formsStackManager.closeDrawer();
+      }
 
       onRecordingFinished: {
+        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"
         map.highlightPair( pair )
@@ -274,6 +286,7 @@ ApplicationWindow {
 
       onCreateFeatureRequested: {
         let newPair = map.createFeature( selectedLayer )
+        navigationPanel.closeDrawer();
         formsStackManager.openForm( newPair, "add", "form" )
       }
 
@@ -314,6 +327,7 @@ ApplicationWindow {
         edge: Qt.BottomEdge
     }
 
+
     ProjectIssuesPanel {
       id: projectIssuesPanel
 
@@ -327,6 +341,22 @@ ApplicationWindow {
           projectIssuesPanel.focus = true; // get focus
         else
           mainPanel.focus = true; // pass focus back to main panel
+      }
+    }
+
+    NavigationPanel {
+      id: navigationPanel
+
+      height: window.height
+      width: window.width
+      previewHeight: window.height / 3
+      previewPanelHeight: formsStackManager.previewHeight
+
+      _map: map
+
+      onDrawerClosed: {
+        formsStackManager.visible = true
+        map.state = navigationPanel.mapStateBeforeNavigation
       }
     }
 
@@ -403,6 +433,15 @@ ApplicationWindow {
         else mainPanel.focus = true
 
         map.hideHighlight()
+      }
+
+      onNavigateToFeature: {
+        if ( !__inputUtils.isLayerOfPoints( feature.layer ) )
+          return;
+        navigationPanel.startNavigation();
+        navigationPanel.navigationTargetFeature = feature;
+        formsStackManager.visible = false;
+        navigationPanel.openDrawer();
       }
     }
 

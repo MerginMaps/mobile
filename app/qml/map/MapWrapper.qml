@@ -28,7 +28,10 @@ Item {
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
 
+  property alias navigationHighlightFeature: _navigationHighlight.featureLayerPair
+
   property bool isInRecordState
+  property bool isInNavigationState
 
   signal featureIdentified( var pair )
   signal nothingIdentified()
@@ -76,6 +79,7 @@ Item {
   function hideHighlight() {
     _highlightIdentified.visible = false
     _digitizingHighlight.visible = false
+    _navigationHighlight.visible = false
   }
 
   function createFeature( layer ) {
@@ -166,30 +170,41 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
+    _navigationHighlight.featureLayerPair = null
   }
 
   states: [
     State {
       name: "view"
       PropertyChanges { target: root; isInRecordState: false }
+      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       name: "recordFeature"
       PropertyChanges { target: root; isInRecordState: true }
+      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       // recording feature in specific layer without option to change the digitized layer.
       // can be used to create linked features in relations, value relations and browse data
       name: "recordInLayerFeature"
       PropertyChanges { target: root; isInRecordState: true }
+      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       name: "editGeometry" // of existing feature
       PropertyChanges { target: root; isInRecordState: true }
+      PropertyChanges { target: root; isInNavigationState: false }
+    },
+    State {
+      name: "navigation"
+      PropertyChanges { target: root; isInRecordState: false }
+      PropertyChanges { target: root; isInNavigationState: true }
     },
     State {
       name: "inactive" // covered by other element
       PropertyChanges { target: root; isInRecordState: false }
+      PropertyChanges { target: root; isInNavigationState: false }
     }
   ]
 
@@ -212,6 +227,18 @@ Item {
         break
       }
       case "view": {
+        if ( _digitizingHighlight.visible )
+          _digitizingHighlight.visible = false
+
+        if ( _highlightIdentified.visible )
+          _highlightIdentified.visible = false
+
+        if ( _digitizingController.recording )
+          _digitizingController.stopRecording()
+
+        break
+      }
+      case "navigation": {
         if ( _digitizingHighlight.visible )
           _digitizingHighlight.visible = false
 
@@ -425,6 +452,34 @@ Item {
     markerAnchorY: _highlightIdentified.markerAnchorY
     recordingInProgress: _digitizingController.recording
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
+  }
+
+  Highlight {
+    id: _navigationHighlight
+    anchors.fill: _map
+    visible: isInNavigationState
+
+    z: 1
+
+    hasPolygon: false
+
+    mapSettings: _map.mapSettings
+
+    lineColor: _highlightIdentified.lineColor
+    lineWidth: _highlightIdentified.lineWidth
+
+    fillColor: _highlightIdentified.fillColor
+
+    outlinePenWidth: _highlightIdentified.outlinePenWidth
+    outlineColor: _highlightIdentified.outlineColor
+
+    markerType: _highlightIdentified.markerType
+    markerImageSource: _highlightIdentified.markerImageSource
+    markerWidth: _highlightIdentified.markerWidth
+    markerHeight: _highlightIdentified.markerHeight
+    markerAnchorY: _highlightIdentified.markerAnchorY
+    navigationInProgress: true
+    guideLineAllowed: false//_digitizingController.manualRecording && root.isInRecordState
   }
 
   Banner {

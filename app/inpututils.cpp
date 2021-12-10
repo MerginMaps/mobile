@@ -1206,3 +1206,89 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
 
   return settings;
 }
+
+FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( FeatureLayerPair targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings )
+{
+  QgsVectorLayer *layer = targetFeature.layer();
+  QgsFeature f = targetFeature.feature();
+
+  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
+  QgsCoordinateTransform ct( wgs84, layer->crs(), mapSettings->transformContext() );
+  gpsPosition.transform( ct );
+
+  const QgsAbstractGeometry *g = f.geometry().constGet();
+
+  QgsPoint targetPoint = QgsPoint( dynamic_cast< const QgsPoint * >( g )->toQPointF() );
+
+  QgsLineString *line = new QgsLineString( QVector<QgsPoint>() << gpsPosition << targetPoint );
+  QgsGeometry geom( line );
+  f.setGeometry( geom );
+
+  // TODO: figure out how to delete safely (memory leak)
+  QgsVectorLayer *returnedLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=%1" ).arg( layer->crs().authid() ), "navigationHighlight", "memory" );
+  return FeatureLayerPair( f, returnedLayer );
+}
+
+QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+{
+  if ( !mapSettings || !pair.isValid() )
+    return QgsRectangle();
+
+  QgsGeometry geom = pair.feature().geometry();
+  if ( geom.isNull() || !geom.constGet() )
+    return QgsRectangle();
+
+  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent( pair.layer(), geom.boundingBox() );
+  bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
+  bbox.scale( 1.2 );
+
+  return bbox;
+}
+
+Q_INVOKABLE bool InputUtils::isLayerOfPoints( QgsVectorLayer *layer )
+{
+  return layer->geometryType() == QgsWkbTypes::PointGeometry;
+}
+
+QString InputUtils::distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings )
+    return "";
+
+  QgsVectorLayer *layer = pair.layer();
+  QgsFeature f = pair.feature();
+
+  if ( !pair.isValid() || layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+    return "";
+
+  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
+  QgsCoordinateTransform ct( wgs84, layer->crs(), mapSettings->transformContext() );
+  gpsPos.transform( ct );
+
+  QgsPoint featurePoint( dynamic_cast< QgsPoint *>( f.geometry().get() )->toQPointF() );
+
+  QgsDistanceArea distanceArea;
+  distanceArea.setSourceCrs( layer->crs(), mapSettings->transformContext() );
+  double dist = distanceArea.measureLine( gpsPos, featurePoint );
+  QString res = formatDistance( dist, distanceArea.lengthUnits(), 2 );
+  return res;
+}
+
+QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *project )
+{
+  if ( !project || !pair.isValid() )
+    return QString();
+
+  QgsVectorLayer *layer = pair.layer();
+
+  // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
+  QList<QgsExpressionContextScope *> scopes;
+  scopes << QgsExpressionContextUtils::globalScope();
+  scopes << QgsExpressionContextUtils::projectScope( project );
+  scopes << QgsExpressionContextUtils::layerScope( layer );
+
+  QgsExpressionContext context( scopes );
+  context.setFeature( pair.feature() );
+  QgsExpression expr( pair.layer()->displayExpression() );
+  return expr.evaluate( &context ).toString();
+}

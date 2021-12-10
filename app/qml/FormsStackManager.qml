@@ -31,6 +31,7 @@ Item {
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
+  signal navigateToFeature( var feature );
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -65,6 +66,13 @@ Item {
 
     if ( form )
       form.closeDrawer()
+  }
+
+  function openDrawer() {
+    let form = _getActiveForm()
+
+    if ( form )
+      form.openDrawer()
   }
 
   function reload() {
@@ -203,6 +211,7 @@ Item {
       onEditGeometry: root.editGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
+      onNavigateToFeature: root.navigateToFeature( feature )
     }
   }
 }

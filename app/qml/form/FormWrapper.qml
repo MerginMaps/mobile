@@ -40,6 +40,7 @@ Item {
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
+  signal navigateToFeature( var feature )
 
   function updateFeatureGeometry() {
     formContainer.updateFeatureGeometry()
@@ -51,6 +52,10 @@ Item {
 
   function closeDrawer() {
     drawer.close()
+  }
+
+  function drawerIsOpen() {
+    return drawer.opened;
   }
 
   Drawer {
@@ -116,6 +121,8 @@ Item {
 
     PreviewPanel {
       id: previewPanel
+
+      onNavigateToFeature: root.navigateToFeature( feature )
 
       isReadOnly: root.isReadOnly
       controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }

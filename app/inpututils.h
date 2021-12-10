@@ -402,6 +402,15 @@ class InputUtils: public QObject
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
+    Q_INVOKABLE static FeatureLayerPair constructNavigationLineFeatureLayerPair( FeatureLayerPair targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings );
+
+    Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+
+    Q_INVOKABLE static bool isLayerOfPoints( QgsVectorLayer *layer );
+
+    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+
+    Q_INVOKABLE QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

@@ -25,13 +25,14 @@ Item {
 
     signal contentClicked()
     signal editClicked()
+    signal navigateToFeature( var feature )
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            contentClicked()
-        }
-    }
+      MouseArea {
+          anchors.fill: parent
+          onClicked: {
+              contentClicked()
+          }
+      }
 
     layer.enabled: true
     layer.effect: Components.Shadow {}
@@ -140,6 +141,12 @@ Item {
                     anchors.topMargin: InputStyle.panelMargin
                 }
 
+                Button {
+                    visible: __inputUtils.isLayerOfPoints( controller.featureLayerPair.layer )
+                    text: "navigate to point"
+                    onClicked: previewPanel.navigateToFeature( controller.featureLayerPair )
+                }
+
                 ListView {
                     visible: controller.type == AttributePreviewController.Fields
                     model: controller.fieldModel
@@ -153,21 +160,21 @@ Item {
                         spacing: InputStyle.panelMargin
                         width: parent.width
 
-                          Text {
-                              id: fieldName
-                              text: Name
-                              width: root.width/2
-                              font.pixelSize: InputStyle.fontPixelSizeNormal
-                              color: InputStyle.fontColorBright
-                              elide: Text.ElideRight
-                          }
+                        Text {
+                            id: fieldName
+                            text: Name
+                            width: root.width/2
+                            font.pixelSize: InputStyle.fontPixelSizeNormal
+                            color: InputStyle.fontColorBright
+                            elide: Text.ElideRight
+                        }
 
-                          Text {
-                              id: fieldValue
-                              text: Value ? Value : ""
-                              font.pixelSize: InputStyle.fontPixelSizeNormal
-                              color: InputStyle.fontColor
-                              elide: Text.ElideRight
+                        Text {
+                            id: fieldValue
+                            text: Value ? Value : ""
+                            font.pixelSize: InputStyle.fontPixelSizeNormal
+                            color: InputStyle.fontColor
+                            elide: Text.ElideRight
 
                         }
                     }
