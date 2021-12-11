@@ -12,7 +12,11 @@ cp config.pri.default config.pri
 # nano config.pri
 ```
 
-You may need to export env variable ANDROID_TARGET_ARCH to select builds to one platform only
+Notes:
+
+1. If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
+
+2. You may need to export env variable INPUT_ONLY_TARGET_ARCH to select builds to one platform only
 
 ## Development Linux Cross-Compilation for Android
 
@@ -24,9 +28,9 @@ Requirements Android:
 
 How to compile Android:
 
-  1. edit `config.pri` file with your paths (Qt, Qt Android, Qgis, Geodiff)
+  1. edit `config.pri` file with your paths (Qt, input-sdk)
 
-Generally check input-sdk requirements and also Dockerfile how it is build in CI
+
 
 ## Development MacOS Cross-Compilation for Android
 

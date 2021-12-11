@@ -1,10 +1,9 @@
 BASE_DIR=</home/folder>/Projects/quick
 
 android {
-  # If you want to build APK you may set ANDROID_TARGET_ARCH.
-  # QT_ARCH should be used instead of ANDROID_TARGET_ARCH in all qmake files.
+  # If you want to build APK for only ONE arch, you may set INPUT_ONLY_TARGET_ARCH.
   # Supported values are "armeabi-v7a" (for 32-bit ARM) and "arm64-v8a" (for 64-bit ARM)
-  # ANDROID_TARGET_ARCH = armeabi-v7a
+  # INPUT_ONLY_TARGET_ARCH = armeabi-v7a
 
   INPUT_SDK_PATH = $${BASE_DIR}/input-sdk/build/android/stage
 

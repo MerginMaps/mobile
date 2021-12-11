@@ -12,12 +12,25 @@ android {
     INPUT_SDK_LIB_PATH = $${INPUT_SDK_ARCH_PATH}/lib
     INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_ARCH_PATH}/include
 
-    exists($${INPUT_SDK_LIB_PATH}/libqgis_core.a) {
-      message("Building from QGIS: $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+    # If we do not build 64b ABI, we do not need 64b SDK
+    isEmpty(INPUT_ONLY_TARGET_ARCH) {
+      exists($${INPUT_SDK_LIB_PATH}/libqgis_core.a) {
+        message("Building from QGIS: $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+      } else {
+        error("Missing QGIS Core library in $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+      }
     } else {
-      error("Missing QGIS Core library in $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+      equals(INPUT_ONLY_TARGET_ARCH, $${QT_ARCH}) {
+        exists($${INPUT_SDK_LIB_PATH}/libqgis_core.a) {
+          message("Building from QGIS: $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+        } else {
+          error("Missing QGIS Core library in $${INPUT_SDK_LIB_PATH}/libqgis_core.a")
+        }
+      } else {
+        message("Skipping check QGIS Core library for $${QT_ARCH}, INPUT_ONLY_TARGET_ARCH set to $${INPUT_ONLY_TARGET_ARCH}")
+      }
     }
-    
+
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
     
@@ -64,6 +77,14 @@ android {
     QT += androidextras
 
     QMAKE_CXXFLAGS += -std=c++11
+
+    # see https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
+    # note: may not be needed with NDK r23+ (we use r21 ATM)
+    # without this it crashes in PROJ's c_locale_stod on start
+    # https://github.com/lutraconsulting/input/issues/1824
+    equals ( QT_ARCH, 'armeabi-v7a' ) {
+        LIBS += -lunwind
+    }
 
     # files from this folder will be added to the package
     # (and will override any default files from Qt - template is in $QTDIR/src/android)
