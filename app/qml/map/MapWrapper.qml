@@ -79,7 +79,6 @@ Item {
   function hideHighlight() {
     _highlightIdentified.visible = false
     _digitizingHighlight.visible = false
-    _navigationHighlight.visible = false
   }
 
   function createFeature( layer ) {

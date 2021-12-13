@@ -75,13 +75,14 @@ Item {
     onNavigationTargetFeatureChanged: {
       navigationPanel.featureTitle = __inputUtils.featureTitle( navigationTargetFeature, __loader.project )
       _map.navigationHighlightFeature = __inputUtils.constructNavigationLineFeatureLayerPair( navigationTargetFeature, _map.positionKit.position, _map.mapSettings )
-      autoFollow = true
+      autoFollow = true;
+      updateNavigation()
     }
 
     Connections {
         target: _map.positionKit
         onPositionChanged: {
-          if ( _map.state === "navigation" && _map.isInNavigationState && navigationTargetFeature )
+          if ( _map.isInNavigationState && navigationTargetFeature )
             updateNavigation();
         }
     }
