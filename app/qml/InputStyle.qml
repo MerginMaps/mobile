@@ -38,15 +38,9 @@ QtObject {
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
 
-    property real rado2Lutra: 0.75 // TODO delete this, but later!
-
-//    property real fontPixelSizeSmall: __dp * 20 * rado2Lutra
-//    property real fontPixelSizeNormal: __dp * 24 * rado2Lutra
-//    property real fontPixelSizeTitle: __dp * 28 * rado2Lutra
-
-    property int fontPointSizeSmall: 12
-    property int fontPointSizeNormal: 15
-    property int fontPointSizeBig: 18
+    property real fontPointSizeSmall: 12.5
+    property real fontPointSizeNormal: 15
+    property real fontPointSizeBig: 18
 
     property int borderSize: scale(1)
 
@@ -72,9 +66,6 @@ QtObject {
     property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
     property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
     property real formSpacing: 10 * __dp
-
-    // used in scaling functions for high DPI screens
-    property real deviceRatio: __dp
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
@@ -143,12 +134,7 @@ QtObject {
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     property var scale: function scale(size) {
-        return size * deviceRatio
-    }
-
-    // Scaling function for fonts using deviceRatio
-    property var scaleFontPointSize: function scaleParam(size) {
-        return size * deviceRatio
+        return size / 1.14 * __dp
     }
 
     // map related styling constats
