@@ -200,7 +200,7 @@ Item {
     visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
     text: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
     color: InputStyle.fontColor
-    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.pointSize: InputStyle.fontPointSizeNormal
     font.bold: true
   }
 
@@ -230,7 +230,7 @@ Item {
       width: reloadList.width - 2* InputStyle.panelMargin
       height: reloadList.height
       text: qsTr("Retry")
-      font.pixelSize: reloadBtn.height/2
+      font.pointSize: InputStyle.fontPointSizeNormal
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         // filters suppose to not change

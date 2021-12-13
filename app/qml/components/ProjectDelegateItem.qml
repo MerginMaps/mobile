@@ -158,7 +158,7 @@ Rectangle {
         text: __inputUtils.formatProjectName( projectDisplayName )
         height: textContainer.height/2
         width: textContainer.width
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         color: if (root.highlight) root.primaryColor
                else if (!projectIsValid) InputStyle.panelBackgroundDark
                else root.secondaryColor
@@ -177,7 +177,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.top: mainText.bottom
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        font.pointSize: InputStyle.fontPointSizeSmall
         color: root.highlight ? root.primaryColor : InputStyle.panelBackgroundDark
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop
@@ -187,10 +187,10 @@ Rectangle {
       ProgressBar {
         id: progressBar
 
-        property real itemHeight: InputStyle.fontPixelSizeSmall
+        property real itemHeight: 20
 
         anchors.top: mainText.bottom
-        height: InputStyle.fontPixelSizeSmall
+        height: 20
         width: secondaryText.width
         value: projectSyncProgress
         visible: projectIsPending

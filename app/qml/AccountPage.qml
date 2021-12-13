@@ -187,7 +187,7 @@ Page {
           id: textItem
           height: root.fieldHeight
           verticalAlignment: Text.AlignVCenter
-          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.pointSize: InputStyle.fontPointSizeNormal
           color: InputStyle.fontColor
           text: qsTr("Using %1 / %2").arg(__inputUtils.bytesToHumanSize(root.diskUsage)).arg(__inputUtils.bytesToHumanSize(root.storageLimit))
         }
@@ -208,7 +208,7 @@ Page {
 
         height: InputStyle.rowHeightHeader
         text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+        font.pointSize: InputStyle.fontPointSizeBig
 
         background: Rectangle {
           color: InputStyle.highlightColor
@@ -230,7 +230,7 @@ Page {
       Item {
         id: spacer
         visible: textRestore.visible
-        height: InputStyle.fontPixelSizeTitle
+        height: InputStyle.rowHeightHeader
         width:parent.width
       }
 
@@ -247,7 +247,7 @@ Page {
                 "You can also %1restore%2 your purchases")
               .arg("<a href='http://restore-purchases'>")
               .arg("</a>")
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         color: InputStyle.fontColor
         width: root.width
         leftPadding: InputStyle.rowHeightHeader
@@ -266,9 +266,9 @@ Page {
 
       Button {
         id: signOutButton
-        height: InputStyle.fontPixelSizeTitle
+        height: InputStyle.rowHeightHeader
         text: qsTr("Sign out")
-        font.pixelSize: signOutButton.height
+        font.pointSize: InputStyle.fontPointSizeNormal
         font.bold: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

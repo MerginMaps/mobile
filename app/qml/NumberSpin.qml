@@ -39,7 +39,7 @@ Item {
         id: valueText
         text: value + suffix
         color: InputStyle.fontColorBright
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         height: root.height
         width: root.width - (2 * imageIncrease.width)
         verticalAlignment: Text.AlignVCenter

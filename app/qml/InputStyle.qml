@@ -40,9 +40,9 @@ QtObject {
 
     property real rado2Lutra: 0.75 // TODO delete this, but later!
 
-    property real fontPixelSizeSmall: __dp * 20 * rado2Lutra
-    property real fontPixelSizeNormal: __dp * 24 * rado2Lutra
-    property real fontPixelSizeTitle: __dp * 28 * rado2Lutra
+//    property real fontPixelSizeSmall: __dp * 20 * rado2Lutra
+//    property real fontPixelSizeNormal: __dp * 24 * rado2Lutra
+//    property real fontPixelSizeTitle: __dp * 28 * rado2Lutra
 
     property int fontPointSizeSmall: 12
     property int fontPointSizeNormal: 15
@@ -58,7 +58,7 @@ QtObject {
     property real smallGap: scale(25)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
-    property real scaleBarHeight: fontPixelSizeSmall * 3 //according scaleBar text
+    property real scaleBarHeight: fontPointSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2
 
     property real panelSpacing: 5 * __dp

@@ -15,7 +15,7 @@ Rectangle {
   property color bgColor: InputStyle.fontColorBright
   property string text: ""
   property string source: ""
-  property real fontPixelSize: InputStyle.fontPixelSizeNormal
+  property real fontPointSize: InputStyle.fontPointSizeNormal
   property bool fontBold: false
 
   property alias icon: icon
@@ -52,7 +52,7 @@ Rectangle {
       text: root.text
       color: root.fontColor
       font.bold: root.fontBold
-      font.pixelSize: root.fontPixelSize
+      font.pointSize: root.fontPointSize
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: Text.AlignHCenter
     }

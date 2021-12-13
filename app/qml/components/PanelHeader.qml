@@ -36,7 +36,7 @@ Rectangle {
 
         Image {
             id: image
-            height: backIconVisible ? InputStyle.fontPixelSizeNormal : 0
+            height: backIconVisible ? 20 : 0
             width: height
             source: InputStyle.backIcon
             sourceSize.width: width
@@ -60,7 +60,7 @@ Rectangle {
             id: backButtonText
             text: header.backText
             color: header.fontBtnColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.pointSize: InputStyle.fontPointSizeNormal
             height: header.rowHeight
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
@@ -84,7 +84,7 @@ Rectangle {
         anchors.fill: parent
         text: header.titleText
         color: InputStyle.fontColor
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+        font.pointSize: InputStyle.fontPointSizeBig
         font.bold: true
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

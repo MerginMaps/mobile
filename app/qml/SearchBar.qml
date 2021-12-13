@@ -67,7 +67,7 @@ Rectangle {
       id: searchField
       width: parent.width - iconContainer.width
       height: InputStyle.rowHeight
-      font.pixelSize: InputStyle.fontPixelSizeNormal
+      font.pointSize: InputStyle.fontPointSizeNormal
       color: root.fontColor
       placeholderText: qsTr("SEARCH")
       font.capitalization: Font.MixedCase

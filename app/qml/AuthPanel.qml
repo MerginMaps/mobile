@@ -136,7 +136,7 @@ Item {
         }
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         color: InputStyle.fontColor
         wrapMode: Text.WordWrap
       }

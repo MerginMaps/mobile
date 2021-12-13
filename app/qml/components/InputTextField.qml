@@ -13,7 +13,7 @@ TextField {
   rightPadding: InputStyle.innerFieldMargin
   color: InputStyle.fontColor
   font.capitalization: Font.MixedCase
-  font.pixelSize: InputStyle.fontPixelSizeNormal
+  font.pointSize: InputStyle.fontPointSizeNormal
   inputMethodHints: Qt.ImhNoPredictiveText
 
   background: Rectangle {

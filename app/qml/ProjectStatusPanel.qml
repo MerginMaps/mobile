@@ -79,7 +79,7 @@ Item {
             text: section
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: InputStyle.fontPixelSizeNormal
+            font.pointSize: InputStyle.fontPointSizeNormal
             font.weight: Font.Bold
           }
         }
@@ -109,7 +109,7 @@ Item {
               text:itemText
               height: fileStatus === MerginProjectStatusModel.Changelog ? textContainer.height/2 : textContainer.height
               width: textContainer.width
-              font.pixelSize: InputStyle.fontPixelSizeNormal
+              font.pointSize: InputStyle.fontPointSizeNormal
               color: InputStyle.fontColor
               horizontalAlignment: Text.AlignLeft
               verticalAlignment: fileStatus === MerginProjectStatusModel.Changelog ? Text.AlignBottom : Text.AlignVCenter

@@ -91,7 +91,7 @@ Page {
 
       Text {
         text: "v" + __version
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        font.pointSize: InputStyle.fontPointSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         color: fontColor
       }
@@ -108,7 +108,7 @@ Page {
 
         contentItem: Text {
           text: __inputHelp.inputWebLink.split( '?' )[0] // do not show utm tags
-          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.pointSize: InputStyle.fontPointSizeNormal
           color: InputStyle.highlightColor
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
@@ -120,7 +120,7 @@ Page {
     Text {
       id: developedText
       text: qsTr("Developed by")
-      font.pixelSize: InputStyle.fontPixelSizeSmall
+      font.pointSize: InputStyle.fontPointSizeSmall
       anchors.horizontalCenter: lutraLogo.horizontalCenter
       anchors.bottom: lutraLogo.top
       color: fontColor

@@ -226,7 +226,7 @@ Item {
               maxValue: 30
               suffix: " s"
               onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
-              height: InputStyle.fontPixelSizeNormal
+              height: parent.height / 2
               rowHeight: parent.height
               anchors.verticalCenter: parent.verticalCenter
               width: height * 6

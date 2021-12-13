@@ -75,7 +75,7 @@ Rectangle {
         }
         text: root.text
         font.bold: true
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        font.pointSize: InputStyle.fontPointSizeSmall
         verticalAlignment: Text.AlignBottom
         horizontalAlignment: Text.AlignHCenter
         z: image.z + 1

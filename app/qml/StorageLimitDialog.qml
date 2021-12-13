@@ -46,7 +46,7 @@ Dialog {
       height: root.fieldHeight
       text: root.titleText
       color: InputStyle.fontColor
-      font.pixelSize: InputStyle.fontPixelSizeTitle
+      font.pointSize: InputStyle.fontPointSizeBig
       font.bold: true
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: Text.AlignHCenter
@@ -80,7 +80,7 @@ Dialog {
         id: textItem
         height: root.fieldHeight
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         color: InputStyle.fontColor
         text: qsTr("Using %1 / %2").arg(__inputUtils.bytesToHumanSize(
                                           diskUsage)).arg(
@@ -102,7 +102,7 @@ Dialog {
       Layout.fillWidth: true
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
-      font.pixelSize: InputStyle.fontPixelSizeNormal
+      font.pointSize: InputStyle.fontPointSizeNormal
       font.underline: true
       color: InputStyle.fontColor
       text: qsTr("Manage subscriptions")
@@ -116,7 +116,7 @@ Dialog {
 
     Item {
       id: spacer
-      height: InputStyle.fontPixelSizeTitle
+      height: InputStyle.smallGap
       width: parent.width
     }
 

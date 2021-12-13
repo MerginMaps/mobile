@@ -26,7 +26,7 @@ QtObject {
     property real height: 64 * __dp
     property color fontColor: InputStyle.fontColor
     property int spacing: InputStyle.formSpacing
-    property int fontPixelSize: 24 * __dp
+    property int fontPointSize: InputStyle.fontPointSizeNormal
   }
 
   property QtObject tabs: QtObject {
@@ -69,7 +69,7 @@ QtObject {
     property color normalColor: InputStyle.panelBackgroundLight
     property real cornerRadius: 8 * __dp
     property real height: InputStyle.fieldHeight
-    property int fontPixelSize: 22 * __dp
+    property int fontPointStyle: InputStyle.fontPointSizeSmall
     property real sideMargin: InputStyle.innerFieldMargin
     property real outerMargin: InputStyle.outerFieldMargin
     property int fontPointSize: 15

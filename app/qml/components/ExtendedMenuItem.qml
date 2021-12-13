@@ -74,7 +74,7 @@ Item {
                 height: parent.height
                 width: parent.width
 
-                font.pixelSize: InputStyle.fontPixelSizeNormal
+                font.pointSize: InputStyle.fontPointSizeNormal
                 font.weight: Font.Bold
                 color: root.highlight ? root.panelColor : root.fontColor
                 horizontalAlignment: Text.AlignLeft

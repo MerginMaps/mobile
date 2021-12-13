@@ -31,7 +31,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         color: InputStyle.fontColor
         font.bold: bold
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         elide: Text.ElideRight
     }
 
@@ -47,7 +47,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         color: InputStyle.fontColor
         font.bold: bold
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         elide: Text.ElideRight
         visible: text2
     }

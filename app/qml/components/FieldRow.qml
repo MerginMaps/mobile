@@ -65,7 +65,7 @@ Item {
         height: comboBox.height * 0.8
         text: model.display.replace('&', "&&") // issue ampersand character showing up as underscore
         font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         highlighted: comboBox.highlightedIndex === index
         leftPadding: textField.leftPadding
         onClicked: {
@@ -77,7 +77,7 @@ Item {
       contentItem: Text {
         height: comboBox.height * 0.8
         text: comboBox.displayText
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

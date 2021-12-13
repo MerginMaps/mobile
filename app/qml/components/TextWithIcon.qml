@@ -58,7 +58,7 @@ Row {
     width: parent.width - iconContainer.width
     height: root.height
     verticalAlignment: Text.AlignVCenter
-    font.pixelSize: InputStyle.fontPixelSizeNormal
+    font.pointSize: InputStyle.fontPointSizeNormal
     onLinkActivated: root.linkActivated(link)
     color: root.fontColor
     text: "<style>a:link { color: " + root.linkColor

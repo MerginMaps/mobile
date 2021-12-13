@@ -350,7 +350,7 @@ Item {
                     Text {
                       anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
                       font.bold: true
-                      font.pixelSize: form.style.group.fontPixelSize
+                      font.pointSize: form.style.group.fontPointSize
                       text: section
                       color: form.style.group.fontColor
                     }

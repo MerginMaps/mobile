@@ -75,7 +75,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         text: qsTr("Project name")
         color: InputStyle.fontColor
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         leftPadding: InputStyle.innerFieldMargin
       }
 
@@ -90,7 +90,7 @@ Item {
         width: parent.width
         text: qsTr("Fields")
         color: InputStyle.fontColor
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+        font.pointSize: InputStyle.fontPointSizeNormal
         Layout.preferredHeight: projectWizardPanel.rowHeight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
