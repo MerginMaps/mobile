@@ -37,8 +37,10 @@ android {
     # by default QMake eats linked libs if they are mentioned multiple times
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
-
     LIBS += -L$${INPUT_SDK_LIB_PATH}
+
+    # a) STATIC libraries before -lunwind
+    # see note below about unwinding
     LIBS += -lqgis_core
     LIBS += -lgeodiff
     LIBS += -lproj
@@ -70,7 +72,7 @@ android {
     LIBS += -lspatialindex -lgeos_c -lgeos
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip -lpng16
-    LIBS += -lssl_1_1 -lcrypto_1_1 -lwebp
+    LIBS += -lwebp
     
     QT += multimedia
     QT += printsupport
@@ -78,13 +80,17 @@ android {
 
     QMAKE_CXXFLAGS += -std=c++11
 
-    # see https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
+    # B) see https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
     # note: may not be needed with NDK r23+ (we use r21 ATM)
     # without this it crashes in PROJ's c_locale_stod on start
     # https://github.com/lutraconsulting/input/issues/1824
     equals ( QT_ARCH, 'armeabi-v7a' ) {
         LIBS += -lunwind
     }
+
+    # C) SHARED libraries after -lunwind
+    # see note above about unwinding
+    LIBS += -lssl_1_1 -lcrypto_1_1
 
     # files from this folder will be added to the package
     # (and will override any default files from Qt - template is in $QTDIR/src/android)
