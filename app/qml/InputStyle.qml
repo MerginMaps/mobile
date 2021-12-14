@@ -136,7 +136,7 @@ QtObject {
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     property var scale: function scale(size) {
-        return size / 1.14 * __dp
+        return ( size * __dp ) / __highDprScale
     }
 
     // map related styling constats

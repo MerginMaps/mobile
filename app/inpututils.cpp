@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -926,6 +926,31 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
     }
   }
   return QString();
+}
+
+qreal InputUtils::calculateHighDprScale()
+{
+  qreal highDprScale = 1;
+  const QWindowList windows = QGuiApplication::topLevelWindows();
+
+  if ( !windows.isEmpty() )
+  {
+    QScreen *screen = windows.at( 0 )->screen();
+    qreal screenDpr = screen->devicePixelRatio();
+
+    if ( screenDpr > 2.7 )
+    {
+      // Between DPR of 2.6 and 3 we needed to scale down elements by 1.14
+      // Based on this ratio we came up with a function between DPR and the resulting scale.
+      // The function is applied on each screen with DPR 3 or higher. It is a linear function
+      // with angle set by initial ratio.
+      qreal dprDelta = screenDpr - 2.7;
+      qreal tangAngle = 0.368; // ~ 20 degrees
+      highDprScale = ( dprDelta * tangAngle ) + 1;
+    }
+  }
+
+  return highDprScale;
 }
 
 QString InputUtils::formatPoint(
