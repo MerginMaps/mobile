@@ -26,7 +26,7 @@ Item {
     property color barColor: InputStyle.fontColor
     property string barText: scaleBarKit.distance + " " + scaleBarKit.units
     property int barWidth: scaleBarKit.width
-    property int lineWidth: 2 * __dp
+    property int lineWidth: 2
 
     width: barWidth
 
@@ -41,7 +41,7 @@ Item {
 
     Item {
         anchors.fill: parent
-        anchors.leftMargin: 5 * __dp
+        anchors.leftMargin: 5
         anchors.rightMargin: anchors.leftMargin
 
         Text {

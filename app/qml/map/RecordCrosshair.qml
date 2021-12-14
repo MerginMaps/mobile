@@ -15,7 +15,7 @@ import ".."
 Item {    
     id: root
 
-    property real size: 100 * __dp
+    property real size: 100
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 

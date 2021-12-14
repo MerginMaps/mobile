@@ -334,8 +334,8 @@ ApplicationWindow {
         id: popup
 
         text: ""
-        width: 400 * __dp
-        height: 160 * __dp
+        width: 400
+        height: 160
         x: ( parent.width - width ) / 2
         y: ( parent.height - height ) / 2
     }

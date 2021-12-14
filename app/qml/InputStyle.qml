@@ -56,17 +56,17 @@ QtObject {
     property real scaleBarHeight: fontPointSizeSmall * 3 //according scaleBar text
     property real projectItemHeight: rowHeightHeader * 1.2
 
-    property real panelSpacing: 5 * __dp
-    property real shadowVerticalOffset: -2 * __dp
-    property real shadowRadius: 8 * __dp
+    property real panelSpacing: 5
+    property real shadowVerticalOffset: -2
+    property real shadowRadius: 8
     property real shadowSamples: 12
     property real panelOpacity: 1
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
-    property real cornerRadius: 8 * __dp
-    property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
-    property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
-    property real formSpacing: 10 * __dp
+    property real cornerRadius: 8
+    property real innerFieldMargin: 10
+    property real outerFieldMargin: 20
+    property real formSpacing: 10
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
@@ -136,21 +136,21 @@ QtObject {
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     property var scale: function scale(size) {
-        return ( size * __dp ) / __highDprScale
+        return size / __highDprScale
     }
 
     // map related styling constats
-    property real mapLoadingIndicatorHeight: 7 * __dp
+    property real mapLoadingIndicatorHeight: 7
 
-    property real mapMarkerWidth: 60 * __dp
-    property real mapMarkerHeight: 70 * __dp
-    property real mapMarkerAnchorY: 48 * __dp
+    property real mapMarkerWidth: 60
+    property real mapMarkerHeight: 70
+    property real mapMarkerAnchorY: 48
 
     property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
     property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
     property color highlighOutlineColor: "white"
-    property real highlightLineWidth: 6 * __dp
-    property real highlighOutlinePenWidth: 1 * __dp
+    property real highlightLineWidth: 6
+    property real highlighOutlinePenWidth: 1
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
 }

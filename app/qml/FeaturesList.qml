@@ -38,10 +38,10 @@ Item {
   }
 
   ListView {
-    topMargin: 10 * __dp
+    topMargin: 10
     implicitHeight: parent.height
     implicitWidth: parent.width
-    spacing: 8 * __dp
+    spacing: 8
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
     model: featuresModel
@@ -49,7 +49,7 @@ Item {
     delegate: Rectangle {
       id: itemContainer
       width: parent.width
-      height: 50 * __dp
+      height: 50
 
       MouseArea {
         anchors.fill: parent
@@ -76,15 +76,15 @@ Item {
           id: checkboxContainer
           visible: allowMultiselect
           height: itemContainer.height
-          width: 40 * __dp
+          width: 40
 
           LeftCheckBox {
             id: checkboxItem
             anchors.margins: (parent.height / 4)
             anchors.centerIn: parent
             baseColor: InputStyle.panelBackgroundDarker
-            height: 40 * __dp
-            width: 40 * __dp
+            height: 40
+            width: 40
 
             onCheckboxClicked: root.toggleFeature( model.FeatureId )
           }
@@ -93,14 +93,14 @@ Item {
         Item {
           id: iconContainer
           height: itemContainer.height
-          width: checkboxContainer.visible ? 30 * __dp : 60 * __dp
+          width: checkboxContainer.visible ? 30 : 60
 
           Image {
             id: icon
             anchors.centerIn: parent
-            anchors.leftMargin: 10 * __dp
+            anchors.leftMargin: 10
             source: __loader.loadIconFromFeature( model.Feature )
-            width: 30 * __dp
+            width: 30
             height: width
             sourceSize.width: width
             sourceSize.height: height

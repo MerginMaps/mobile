@@ -15,7 +15,7 @@ Item {
   property real rowHeight: InputStyle.fieldHeight
   property var fontColor: InputStyle.fontColor
   property var bgColor: InputStyle.clrPanelMain
-  property real panelMargin: 10 * __dp
+  property real panelMargin: 10
 
   property ListModel widgetsModel: ListModel {}
 

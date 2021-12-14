@@ -11,7 +11,7 @@ T.Switch {
 
     signal switchChecked( bool isChecked )
 
-    implicitHeight: 60 * __dp
+    implicitHeight: 60
     implicitWidth: 2 * height
 
     indicator: Rectangle {
@@ -27,7 +27,7 @@ T.Switch {
         height: parent.height * 0.66
         width: height
 
-        radius: 20 * __dp
+        radius: 20
         color: control.handleColor
 
         Behavior on x {
@@ -37,7 +37,7 @@ T.Switch {
     }
 
     background: Rectangle {
-        radius: 20 * __dp
+        radius: 20
         color: control.isReadOnly || !control.checked ? control.bgndColorInactive : control.bgndColorActive
     }
 

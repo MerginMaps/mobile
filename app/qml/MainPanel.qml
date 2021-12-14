@@ -225,7 +225,7 @@ Item {
         title: qsTr("Menu")
         x:parent.width - rootMenu.width
         y: -rootMenu.height
-        width: parent.width < 300 * __dp ? parent.width : 300 * __dp
+        width: parent.width < 300 ? parent.width : 300
         closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
 
         MenuItem {

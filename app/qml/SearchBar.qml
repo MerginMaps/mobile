@@ -132,7 +132,7 @@ Rectangle {
     id: searchFieldBorder
     color: root.fontColor
     y: searchField.height - height * 4
-    height: 2 * __dp
+    height: 2
     opacity: searchField.focus ? 1 : 0.6
     width: parent.width - root.panelMargin * 2
     anchors.horizontalCenter: parent.horizontalCenter

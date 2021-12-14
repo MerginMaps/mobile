@@ -341,7 +341,7 @@ Item {
     mapSettings: _map.mapSettings
 
     height: InputStyle.scaleBarHeight
-    preferredWidth: Math.min( window.width, 180 * __dp )
+    preferredWidth: Math.min( window.width, 180 )
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top

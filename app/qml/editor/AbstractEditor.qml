@@ -33,7 +33,7 @@ Item {
     width: parent.width
     height: parent.height
     border.color: customStyle.fields.normalColor
-    border.width: 1 * __dp
+    border.width: 1
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }

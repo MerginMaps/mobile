@@ -61,7 +61,7 @@ ComboBox {
   }
 
   background: Item {
-    implicitWidth: 120 * __dp
+    implicitWidth: 120
     implicitHeight: comboBox.height * 0.8
 
     Rectangle {

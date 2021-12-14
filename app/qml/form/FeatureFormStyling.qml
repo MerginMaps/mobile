@@ -19,11 +19,11 @@ QtObject {
   property QtObject group: QtObject {
     property color backgroundColor: InputStyle.panelBackgroundLight
     property color marginColor: InputStyle.panelBackgroundDark
-    property real leftMargin: 0 * __dp
-    property real rightMargin: 0 * __dp
-    property real topMargin: 1 * __dp
-    property real bottomMargin: 1 * __dp
-    property real height: 64 * __dp
+    property real leftMargin: 0
+    property real rightMargin: 0
+    property real topMargin: 1
+    property real bottomMargin: 1
+    property real height: 64
     property color fontColor: InputStyle.fontColor
     property int spacing: InputStyle.formSpacing
     property int fontPointSize: InputStyle.fontPointSizeNormal
@@ -41,7 +41,7 @@ QtObject {
     property real buttonHeight: height
     property real spacing: 0
     property int tabLabelPointSize: 12
-    property real borderWidth: 1 * __dp
+    property real borderWidth: 1
     property color borderColor: InputStyle.labelColor
   }
 
@@ -55,7 +55,7 @@ QtObject {
     property color backgroundColor: "transparent"
     property color backgroundColorInvalid: "#bdc3c7"
     property color activeButtonColor: InputStyle.activeButtonColor
-    property real size: 80 * __dp
+    property real size: 80
   }
 
   property QtObject fields: QtObject {
@@ -67,7 +67,7 @@ QtObject {
     property color activeColor: InputStyle.fontColor
     property color attentionColor: "#aa0000"
     property color normalColor: InputStyle.panelBackgroundLight
-    property real cornerRadius: 8 * __dp
+    property real cornerRadius: 8
     property real height: InputStyle.fieldHeight
     property int fontPointStyle: InputStyle.fontPointSizeSmall
     property real sideMargin: InputStyle.innerFieldMargin
@@ -98,7 +98,7 @@ QtObject {
 
   property QtObject relationComponent: QtObject {
     property real textDelegateHeight: fields.height * 0.8
-    property int flowSpacing: 8 * __dp
+    property int flowSpacing: 8
 
     // photo mode
     property color photoBorderColor: InputStyle.darkGreen
@@ -106,7 +106,7 @@ QtObject {
     property color iconColor: InputStyle.darkGreen
     property color iconColorButton: InputStyle.darkOrange
     property color textColorButton: InputStyle.darkOrange
-    property real photoBorderWidth: 2 * __dp
+    property real photoBorderWidth: 2
 
     // tag cloud (text mode)
     property color tagBackgroundColor: InputStyle.darkGreen
@@ -116,8 +116,8 @@ QtObject {
     property color tagBorderColorButton: InputStyle.darkOrange
     property color tagTextColor: InputStyle.panelBackgroundLight
     property color tagTextColorButton: InputStyle.darkOrange
-    property real tagBorderWidth: 2 * __dp
-    property real tagRadius: 10 * __dp
-    property real tagInnerSpacing: 30 * __dp
+    property real tagBorderWidth: 2
+    property real tagRadius: 10
+    property real tagInnerSpacing: 30
   }
 }

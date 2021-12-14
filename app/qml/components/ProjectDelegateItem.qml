@@ -37,7 +37,7 @@ Rectangle {
 
   property color iconColor: root.highlight ? root.primaryColor : InputStyle.activeButtonColorOrange
   property real iconSize: height * 0.3
-  property real borderWidth: 1 * __dp
+  property real borderWidth: 1
   property real menuItemHeight: height * 0.8
 
   property real viewContentY: 0
@@ -303,7 +303,7 @@ Rectangle {
   Menu {
     id: contextMenu
 
-    width: Math.min( root.width, 300 * __dp )
+    width: Math.min( root.width, 300 )
     leftMargin: Math.max( root.width - width, 0 )
     z: 100
 
