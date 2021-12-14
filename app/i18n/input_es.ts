@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../androidutils.cpp" line="233"/>
         <source>Without storage permission you will not be able to access previous projects</source>
-        <translation type="unfinished"/>
+        <translation>Sin permiso de almacenamiento no se prodrá acceder a proyectos anteriores</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="287"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>El permiso de almacenamiento está denegado permanentemente, por favor permítalo en ajustes para cargar imágenes de la galería</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="291"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
-        <translation type="unfinished"/>
+        <translation>Input necesita permiso de almacenamiento para cargar imágenes de la galería</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="309"/>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation type="unfinished"/>
+        <translation>Se requiere su atención. Por favor visite el %1Panel de Mergin%2.</translation>
     </message>
 </context>
 <context>
@@ -119,12 +119,12 @@
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="515"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation type="unfinished"/>
+        <translation>Expresión de valor predeterminado para %1:%2 tiene un error del analizador: %3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="525"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation type="unfinished"/>
+        <translation>Expresión de valor predeterminado para %1:%2 tiene un error de evaluación: %3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="536"/>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="82"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>%1 &lt;br&gt;&lt;a href=&apos;%2&apos;&gt;Saber más&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,114 @@
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>Escanear código</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePicker</name>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>January</source>
+        <translation>Enero</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>February</source>
+        <translation>Febrero</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>March</source>
+        <translation>Marzo</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>April</source>
+        <translation>Abril</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>May</source>
+        <translation>Mayo</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>June</source>
+        <translation>Junio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>July</source>
+        <translation>Julio</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>August</source>
+        <translation>Agosto</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>September</source>
+        <translation>Septiembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>October</source>
+        <translation>Octubre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>November</source>
+        <translation>Noviembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>December</source>
+        <translation>Diciembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Sunday</source>
+        <translation>Domingo</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Monday</source>
+        <translation>Lunes</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Tuesday</source>
+        <translation>Martes</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Wednesday</source>
+        <translation>Miércoles</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Thursday</source>
+        <translation>Jueves</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Friday</source>
+        <translation>Viernes</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Saturday</source>
+        <translation>Sábado</translation>
     </message>
 </context>
 <context>
@@ -243,12 +351,12 @@
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="150"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation type="unfinished"/>
+        <translation>No se puede guardar el formulario, hay errores de validación</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="151"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation type="unfinished"/>
+        <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
     </message>
 </context>
 <context>
@@ -312,7 +420,7 @@
     <message>
         <location filename="../qml/FeaturesListPage.qml" line="59"/>
         <source>Showing only the first %1 features</source>
-        <translation type="unfinished"/>
+        <translation>Se muestran solo los primeros %1 objetos</translation>
     </message>
 </context>
 <context>
@@ -380,38 +488,38 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Longitud</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Latitud</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisión horizontal</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisión vertical</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
@@ -431,18 +539,18 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
         <source>Date not available</source>
-        <translation type="unfinished"/>
+        <translation>Fecha no disponible</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="228"/>
+        <location filename="../inputhelp.cpp" line="227"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Informe enviado. %1Por favor, envíanos un e-mail a%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="233"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Error al enviar el informe. %1Por favor, comprueba tu conexión de internet</translation>
     </message>
@@ -559,7 +667,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../inpututils.cpp" line="1104"/>
         <source>screen device pixel ratio: %1</source>
-        <translation type="unfinished"/>
+        <translation>Resolución de pantalla del dispositivo: %1</translation>
     </message>
 </context>
 <context>
@@ -567,48 +675,48 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
         <source>Insufficient space left on device</source>
-        <translation type="unfinished"/>
+        <translation>Espacio insuficiente en el dispositivo</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
         <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>El dispositivo se está quedando sin espacio, necesita %1 de espacio libre para ver sus proyectos. Elimine algunos archivos y vuelva aquí o pulse Ayuda para ver otras formas de resolver este problema.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
         <source>An error occured during update</source>
-        <translation type="unfinished"/>
+        <translation>Se ha producido un error durante la actualización</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation type="unfinished"/>
+        <translation>Su dispositivo encontró un problema mientras se realizaba una actualización.  No podrá ver sus proyectos. Pulse Ayuda para ver cómo resolver este problema. </translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
         <source>We are working on an important update, please do not close the application</source>
-        <translation type="unfinished"/>
+        <translation>Estamos trabajando en un actualización importante, por favor no cierre la aplicación</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
         <source>%1/%2</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="51"/>
+        <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
         <translation>Registro de diagnóstico</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
         <translation>Enviando...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
         <translation>Enviar a los Desarrolladores</translation>
     </message>
@@ -719,17 +827,17 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/map/MapWrapper.qml" line="72"/>
         <location filename="../qml/map/MapWrapper.qml" line="611"/>
         <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation type="unfinished"/>
+        <translation>GPS no disponible actualmente.%1Pruebe a permitir la Localización GPS en los ajustes de su dispositivo.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="103"/>
         <source>Recorded feature is not valid</source>
-        <translation type="unfinished"/>
+        <translation>Objeto registrado no válido</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="450"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation type="unfinished"/>
+        <translation>Baja precisión de la posición del GPS (%1 m) &lt;br&gt;&lt;br&gt;Por favor asegúrese de que tiene una vista clara del cielo.</translation>
     </message>
 </context>
 <context>
@@ -761,7 +869,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/form/PreviewPanel.qml" line="122"/>
         <source>No map tip available.</source>
-        <translation type="unfinished"/>
+        <translation>No hay información del mapa.</translation>
     </message>
 </context>
 <context>
@@ -798,6 +906,19 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     </message>
 </context>
 <context>
+    <name>ProjectIssuesPanel</name>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
+        <source>Project Issues</source>
+        <translation>Errores del Proyecto</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <source>QGIS log</source>
+        <translation>Log de QGIS</translation>
+    </message>
+</context>
+<context>
     <name>ProjectList</name>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="133"/>
@@ -808,17 +929,17 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/components/ProjectList.qml" line="163"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation type="unfinished"/>
+        <translation>No hay proyectos descargados.%1Aprende %2cómo crear proyectos%3 y %4descargarlos%3 en tu dispositivo.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="179"/>
         <source>You can also create new project by clicking button below.</source>
-        <translation type="unfinished"/>
+        <translation>También puedes crear un nuevo proyecto pulsando el botón inferior</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="201"/>
         <source>Unable to get the list of projects.</source>
-        <translation type="unfinished"/>
+        <translation>No se ha podido obtener la lista de proyectos.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="201"/>
@@ -849,7 +970,8 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/components/ProjectList.qml" line="292"/>
         <source>Would you like to download the project
  %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Desea descargar el proyecto
+%1 ?</translation>
     </message>
 </context>
 <context>
@@ -1017,52 +1139,52 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
-        <translation type="unfinished"/>
+        <translation>El valor debe ser un número</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
-        <translation type="unfinished"/>
+        <translation>El valor debe ser menor que %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
-        <translation type="unfinished"/>
+        <translation>El valor debe ser mayor que %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
-        <translation type="unfinished"/>
+        <translation>El valor es demasiado grande</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
-        <translation type="unfinished"/>
+        <translation>El campo no puede contener decimales</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
-        <translation type="unfinished"/>
+        <translation>No puede ser más largo de %1 caracteres</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
-        <translation type="unfinished"/>
+        <translation>El campo no debería estar vacío</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
-        <translation type="unfinished"/>
+        <translation>El campo no puede estar vacío</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
-        <translation type="unfinished"/>
+        <translation>El valor debería ser único</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
-        <translation type="unfinished"/>
+        <translation>El valor tiene que ser único</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
@@ -1320,35 +1442,6 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     </message>
 </context>
 <context>
-    <name>inputdatetime</name>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="43"/>
-        <location filename="../qml/editor/inputdatetime.qml" line="85"/>
-        <source>(no date)</source>
-        <translation>(sin fecha)</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="229"/>
-        <source>Hours</source>
-        <translation>Horas</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="253"/>
-        <source>Minutes</source>
-        <translation>Minutos</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="276"/>
-        <source>Seconds</source>
-        <translation>Segundos</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="298"/>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1418,17 +1511,17 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <translation>No se han encontrado ningunas capas editables.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="391"/>
+        <location filename="../qml/main.qml" line="419"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation type="unfinished"/>
+        <translation>Error al comunicar con Mergin.%1Intenta mejorar tu conexión a internet.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Communication error</source>
         <translation>Error de comunicación</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>PROJ Error</source>
         <translation>Error en PROJ</translation>
     </message>
