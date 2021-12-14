@@ -83,9 +83,9 @@ Item {
                       Image {
                           id: navigationIcon
                           anchors.fill: parent
-                          anchors.margins: rowHeight/4
+                          anchors.margins: rowHeight/8
                           anchors.rightMargin: 0
-                          source: "qrc:/navigate_to.svg"
+                          source: "qrc:/navigate_to.png"
                           sourceSize.width: width
                           sourceSize.height: height
                           fillMode: Image.PreserveAspectFit
