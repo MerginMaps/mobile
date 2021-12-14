@@ -355,6 +355,7 @@ ApplicationWindow {
       _map: map
 
       onDrawerClosed: {
+        map.state = navigationPanel.mapStateBeforeNavigation
         if ( !ignoreDrawerClosed )
           formsStackManager.closeDrawer();
         else
@@ -362,8 +363,8 @@ ApplicationWindow {
       }
 
       onNavigationClosed: {
-        formsStackManager.visible = true
         map.state = navigationPanel.mapStateBeforeNavigation
+        formsStackManager.visible = true
         ignoreDrawerClosed = true
         closeDrawer()
       }
