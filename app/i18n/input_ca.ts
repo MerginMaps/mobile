@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ca">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation type="unfinished"/>
+        <translation>Es necessita la vostra atenció. Visiteu %1Mergin dashboard%2. </translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../qml/Banner.qml" line="82"/>
         <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Més informació&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,114 @@
         <location filename="../qml/CodeReader.qml" line="62"/>
         <source>Scan code</source>
         <translation>Codi d’escaneig</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePicker</name>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <source>Cancel</source>
+        <translation>Cancel·lar</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>January</source>
+        <translation>Gener</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>February</source>
+        <translation>Febrer</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>March</source>
+        <translation>Març</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <source>April</source>
+        <translation>Abril</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>May</source>
+        <translation>Maig</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>June</source>
+        <translation>Juny</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>July</source>
+        <translation>Juliol</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <source>August</source>
+        <translation>Agost</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>September</source>
+        <translation>Setembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>October</source>
+        <translation>Octubre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>November</source>
+        <translation>Novembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <source>December</source>
+        <translation>Desembre</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Sunday</source>
+        <translation>Diumenge</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Monday</source>
+        <translation>Dilluns</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Tuesday</source>
+        <translation>Dimarts</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <source>Wednesday</source>
+        <translation>Dimecres</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Thursday</source>
+        <translation>Dijous</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Friday</source>
+        <translation>Divendres</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <source>Saturday</source>
+        <translation>Dissabte</translation>
     </message>
 </context>
 <context>
@@ -358,7 +466,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
         <source>GPS info</source>
-        <translation type="unfinished"/>
+        <translation>Informació GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
@@ -371,79 +479,79 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
         <source>Loading data from GPS</source>
-        <translation type="unfinished"/>
+        <translation>Carregant dades del GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
         <source>Altitude</source>
-        <translation type="unfinished"/>
+        <translation>Altitud</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
         <source>Longitude</source>
-        <translation type="unfinished"/>
+        <translation>Longitud</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
         <source>Latitude</source>
-        <translation type="unfinished"/>
+        <translation>Latitud</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisió horitzontal</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Precisió vertical</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
         <source>Satellites (in use/view)</source>
-        <translation type="unfinished"/>
+        <translation>Satèl·lits (en ús / a la vista) </translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>Velocitat</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
         <source>Last fix</source>
-        <translation type="unfinished"/>
+        <translation>Darrera correcció</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
         <source>Date not available</source>
-        <translation type="unfinished"/>
+        <translation>Data no disponible</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="228"/>
+        <location filename="../inputhelp.cpp" line="227"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Informe enviat.%1Si us plau poseu-vos en contacte amb nosaltres a%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="233"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Error en enviar informe. %1Si us plau comproveu la vostra connexió a internet.</translation>
     </message>
@@ -559,7 +667,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../inpututils.cpp" line="1104"/>
         <source>screen device pixel ratio: %1</source>
-        <translation type="unfinished"/>
+        <translation>Proporció de píxels de la pantalla del dispositiu: %1</translation>
     </message>
 </context>
 <context>
@@ -598,17 +706,17 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>LogPanel</name>
     <message>
-        <location filename="../qml/LogPanel.qml" line="51"/>
+        <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
         <translation>Registre de diagnòstic</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
         <translation>Enviant...</translation>
     </message>
     <message>
-        <location filename="../qml/LogPanel.qml" line="87"/>
+        <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
         <translation>Enviar als Desenvolupadors</translation>
     </message>
@@ -795,6 +903,19 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>No s&apos;ha pogut sincronitzar el projecte, comproveu que heu iniciat sessió i que teniu permisos suficients.</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectIssuesPanel</name>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
+        <source>Project Issues</source>
+        <translation>Problemes del projecte</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <source>QGIS log</source>
+        <translation>Registre de QGIS</translation>
     </message>
 </context>
 <context>
@@ -1321,35 +1442,6 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
-    <name>inputdatetime</name>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="43"/>
-        <location filename="../qml/editor/inputdatetime.qml" line="85"/>
-        <source>(no date)</source>
-        <translation>(no data)</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="229"/>
-        <source>Hours</source>
-        <translation>Hores</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="253"/>
-        <source>Minutes</source>
-        <translation>Minuts</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="276"/>
-        <source>Seconds</source>
-        <translation>Segons</translation>
-    </message>
-    <message>
-        <location filename="../qml/editor/inputdatetime.qml" line="298"/>
-        <source>OK</source>
-        <translation>D&apos;acord</translation>
-    </message>
-</context>
-<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1419,17 +1511,17 @@ No s&apos;afegirà al projecte.</translation>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="391"/>
+        <location filename="../qml/main.qml" line="419"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Communication error</source>
         <translation>Error de comunicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
