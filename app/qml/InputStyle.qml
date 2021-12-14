@@ -47,6 +47,7 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real rowHeightSmall: scale(20)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
     property real smallGap: scale(25)
