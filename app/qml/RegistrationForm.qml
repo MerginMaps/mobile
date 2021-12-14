@@ -87,7 +87,7 @@ Rectangle {
         x: iconContainer.width
         width: parent.width - iconContainer.width
         height: fieldHeight
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: root.fontColor
         placeholderText: qsTr("Username")
         font.capitalization: Font.MixedCase
@@ -142,7 +142,7 @@ Rectangle {
         id: email
         width: parent.width - iconContainer.width
         height: fieldHeight
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: root.fontColor
         placeholderText: qsTr("Email")
         inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
@@ -234,7 +234,7 @@ Rectangle {
       width: registerForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign up")
-      font.pointSize: InputStyle.fontPointSizeBig
+      font.pixelSize: InputStyle.fontPixelSizeBig
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         stackView.pending = true

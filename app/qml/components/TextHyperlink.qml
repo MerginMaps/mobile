@@ -18,7 +18,7 @@ Text {
     onLinkActivated: Qt.openUrlExternally(link)
     textFormat: Text.StyledText
     wrapMode: Text.WordWrap
-    font.pointSize: InputStyle.fontPointSizeNormal
+    font.pixelSize: InputStyle.fontPixelSizeNormal
     font.bold: true
     horizontalAlignment: Qt.AlignHCenter
     verticalAlignment: Qt.AlignVCenter

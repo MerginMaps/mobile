@@ -56,7 +56,7 @@ AbstractEditor {
       anchors.fill: parent
       color: customStyle.fields.fontColor
       leftPadding: customStyle.fields.sideMargins
-      font.pointSize: customStyle.fields.fontPointSize
+      font.pixelSize: customStyle.fields.fontPixelSize
 
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter

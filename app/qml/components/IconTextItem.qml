@@ -20,7 +20,7 @@ import QtQuick.Layouts 1.3
 Item {
   property real iconSize
   property color fontColor
-  property real fontPointSize: root.iconSize * 0.75
+  property real fontPixelSize: root.iconSize * 0.75
   property string iconSource
   property string labelText
 
@@ -69,7 +69,7 @@ Item {
         id: text
 
         text: root.labelText
-        font.pointSize: root.fontPointSize
+        font.pixelSize: root.fontPixelSize
         width: parent.width
         color: root.fontColor
         horizontalAlignment: Text.AlignHCenter

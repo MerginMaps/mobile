@@ -95,7 +95,7 @@ Item {
           visible: featureForm.state === "edit" || featureForm.state === "add"
 
           color: featureForm.controller.hasValidationErrors ? InputStyle.invalidButtonColor : InputStyle.highlightColor
-          font.pointSize: InputStyle.fontPointSizeNormal
+          font.pixelSize: InputStyle.fontPixelSizeNormal
 
           verticalAlignment: Text.AlignVCenter
           horizontalAlignment: Text.AlignLeft

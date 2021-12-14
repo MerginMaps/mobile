@@ -118,7 +118,7 @@ Item {
             text: model.FeatureTitle
             height: textContainer.height/2
             width: textContainer.width
-            font.pointSize: InputStyle.fontPointSizeNormal
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             color: InputStyle.fontColor
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignBottom
@@ -133,7 +133,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.top: featureTitleText.bottom
-            font.pointSize: InputStyle.fontPointSizeSmall
+            font.pixelSize: InputStyle.fontPixelSizeSmall
             color: InputStyle.panelBackgroundDark
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignTop

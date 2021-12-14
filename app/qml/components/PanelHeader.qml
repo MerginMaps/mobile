@@ -60,7 +60,7 @@ Rectangle {
             id: backButtonText
             text: header.backText
             color: header.fontBtnColor
-            font.pointSize: InputStyle.fontPointSizeNormal
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             height: header.rowHeight
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
@@ -84,7 +84,7 @@ Rectangle {
         anchors.fill: parent
         text: header.titleText
         color: InputStyle.fontColor
-        font.pointSize: InputStyle.fontPointSizeBig
+        font.pixelSize: InputStyle.fontPixelSizeBig
         font.bold: true
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

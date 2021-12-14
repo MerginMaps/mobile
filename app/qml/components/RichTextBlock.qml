@@ -6,7 +6,7 @@ Text {
 
   textFormat: Text.RichText
   color: InputStyle.fontColor
-  font.pointSize: InputStyle.fontPointSizeNormal
+  font.pixelSize: InputStyle.fontPixelSizeNormal
   font.bold: true
   verticalAlignment: Text.AlignVCenter
   horizontalAlignment: Text.AlignHCenter

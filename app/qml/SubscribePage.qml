@@ -96,7 +96,7 @@ Rectangle {
               text: qsTr("Individual")
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: InputStyle.fontPointSizeNormal
+              font.pixelSize: InputStyle.fontPixelSizeNormal
             }
 
             background: Rectangle {
@@ -113,7 +113,7 @@ Rectangle {
               text: qsTr("Professional")
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: InputStyle.fontPointSizeNormal
+              font.pixelSize: InputStyle.fontPixelSizeNormal
             }
 
             background: Rectangle {

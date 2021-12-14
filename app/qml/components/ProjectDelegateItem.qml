@@ -158,7 +158,7 @@ Rectangle {
         text: __inputUtils.formatProjectName( projectDisplayName )
         height: textContainer.height/2
         width: textContainer.width
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: if (root.highlight) root.primaryColor
                else if (!projectIsValid) InputStyle.panelBackgroundDark
                else root.secondaryColor
@@ -177,7 +177,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.top: mainText.bottom
-        font.pointSize: InputStyle.fontPointSizeSmall
+        font.pixelSize: InputStyle.fontPixelSizeSmall
         color: root.highlight ? root.primaryColor : InputStyle.panelBackgroundDark
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop

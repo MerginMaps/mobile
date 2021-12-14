@@ -59,7 +59,7 @@ Item {
                         height: parent.height
                         width: parent.width - rowHeight
                         text: controller.title
-                        font.pointSize: InputStyle.fontPointSizeBig
+                        font.pixelSize: InputStyle.fontPixelSizeBig
                         color: InputStyle.fontColor
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
@@ -157,7 +157,7 @@ Item {
                               id: fieldName
                               text: Name
                               width: root.width/2
-                              font.pointSize: InputStyle.fontPointSizeNormal
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
                               color: InputStyle.fontColorBright
                               elide: Text.ElideRight
                           }
@@ -165,7 +165,7 @@ Item {
                           Text {
                               id: fieldValue
                               text: Value ? Value : ""
-                              font.pointSize: InputStyle.fontPointSizeNormal
+                              font.pixelSize: InputStyle.fontPixelSizeNormal
                               color: InputStyle.fontColor
                               elide: Text.ElideRight
 

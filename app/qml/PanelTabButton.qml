@@ -38,7 +38,7 @@ TabButton {
         opacity: button.checked ? 1 : 0.7
         font.underline: button.checked
         font.bold: true
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
     }
 
 }

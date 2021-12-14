@@ -32,7 +32,7 @@ Item {
     anchors.verticalCenterOffset: parent.height/6
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
-    font.pointSize: InputStyle.fontPointSizeNormal
+    font.pixelSize: InputStyle.fontPixelSizeNormal
     color: "white"
   }
 

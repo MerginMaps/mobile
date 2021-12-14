@@ -228,7 +228,7 @@ Item {
       IconTextItem {
         id: photoButton
         fontColor: customStyle.fields.fontColor
-        fontPointSize: customStyle.fields.fontPointSize
+        fontPixelSize: customStyle.fields.fontPixelSize
         iconSource: fieldItem.cameraIcon
         iconSize: buttonsContainer.itemHeight
         labelText: qsTr("Take a photo")
@@ -270,7 +270,7 @@ Item {
       IconTextItem {
         id: browseButton
         fontColor: customStyle.fields.fontColor
-        fontPointSize: customStyle.fields.fontPointSize
+        fontPixelSize: customStyle.fields.fontPixelSize
         iconSource: fieldItem.galleryIcon
         iconSize: buttonsContainer.itemHeight
         labelText: qsTr("From gallery")
@@ -295,7 +295,7 @@ Item {
     width: imageContainer.width - 2* fieldItem.textMargin
     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     text: qsTr("Image is not available: ") + image.currentValue
-    font.pointSize: customStyle.fields.fontPointSize
+    font.pixelSize: customStyle.fields.fontPixelSize
     color: customStyle.fields.fontColor
     anchors.leftMargin: buttonsContainer.itemHeight + fieldItem.textMargin
     horizontalAlignment: Text.AlignHCenter

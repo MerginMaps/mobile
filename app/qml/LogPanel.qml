@@ -70,7 +70,7 @@ Item {
         text: "<style>" + "a:link { color: " + InputStyle.highlightColor
               + "; text-decoration: underline; }" + "p.odd { color: "
               + InputStyle.fontColorBright + "; }" + "</style>" + root.text
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
         textFormat: Text.RichText
         wrapMode: Text.WordWrap

@@ -43,7 +43,7 @@ Row {
     id: password
     width: loginForm.width - iconContainer.width - visibilityIconContainer.width
     height: fieldHeight
-    font.pointSize: InputStyle.fontPointSizeNormal
+    font.pixelSize: InputStyle.fontPixelSizeNormal
     color: root.fontColor
     placeholderText: root.placeholderText
     echoMode: TextInput.Password

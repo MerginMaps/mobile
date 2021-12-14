@@ -273,7 +273,7 @@ Item {
                                           tabButton.checked ? form.style.tabs.activeColor : form.style.tabs.normalColor
               font.weight: Font.DemiBold
               font.underline: tabButton.checked ? true : false
-              font.pointSize: form.style.tabs.tabLabelPointSize
+              font.pixelSize: form.style.tabs.tabLabelPixelSize
               opacity: tabButton.checked ? 1 : 0.5
 
               horizontalAlignment: Text.AlignHCenter
@@ -350,7 +350,7 @@ Item {
                     Text {
                       anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
                       font.bold: true
-                      font.pointSize: form.style.group.fontPointSize
+                      font.pixelSize: form.style.group.fontPixelSize
                       text: section
                       color: form.style.group.fontColor
                     }
@@ -441,7 +441,7 @@ Item {
           text: Name
           color: form.style.constraint.validColor
           leftPadding: form.style.fields.sideMargin
-          font.pointSize: form.style.fields.labelPointSize
+          font.pixelSize: form.style.fields.labelPixelSize
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
           anchors.top: parent.top

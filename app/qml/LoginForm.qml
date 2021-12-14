@@ -108,7 +108,7 @@ Rectangle {
           x: iconContainer.width
           width: parent.width - iconContainer.width
           height: fieldHeight
-          font.pointSize: InputStyle.fontPointSizeNormal
+          font.pixelSize: InputStyle.fontPixelSizeNormal
           color: loginForm.fontColor
           placeholderText: qsTr("Username")
           font.capitalization: Font.MixedCase
@@ -155,7 +155,7 @@ Rectangle {
         width: loginForm.width - 2 * loginForm.panelMargin
         height: loginForm.fieldHeight
         text: qsTr("Sign in")
-        font.pointSize: InputStyle.fontPointSizeBig
+        font.pixelSize: InputStyle.fontPixelSizeBig
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
           stackView.pending = true
@@ -221,7 +221,7 @@ Rectangle {
         width: loginForm.width - 2 * loginForm.panelMargin
         height: fieldHeight * 0.7
         text: qsTr("Sign up for free")
-        font.pointSize: InputStyle.fontPointSizeSmall
+        font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: loginForm.registrationRequested()
         background: Rectangle {
@@ -243,7 +243,7 @@ Rectangle {
         width: loginForm.width - 2 * loginForm.panelMargin
         height: fieldHeight * 0.7
         text: qsTr("Forgot password?")
-        font.pointSize: InputStyle.fontPointSizeSmall
+        font.pixelSize: InputStyle.fontPixelSizeSmall
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: Qt.openUrlExternally(__merginApi.resetPasswordUrl());
         background: Rectangle {

@@ -483,7 +483,7 @@ Item {
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
 
         height: parent.height
@@ -545,7 +545,7 @@ Item {
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
 
         height: parent.height

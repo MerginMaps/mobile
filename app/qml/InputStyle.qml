@@ -38,9 +38,9 @@ QtObject {
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
 
-    property real fontPointSizeSmall: 12.5
-    property real fontPointSizeNormal: 15
-    property real fontPointSizeBig: 18
+    property int fontPixelSizeSmall: scaleFont(15)
+    property int fontPixelSizeNormal: scaleFont(18)
+    property int fontPixelSizeBig: scaleFont(21)
 
     property int borderSize: scale(1)
 
@@ -53,7 +53,7 @@ QtObject {
     property real smallGap: scale(25)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
-    property real scaleBarHeight: fontPointSizeSmall * 3 //according scaleBar text
+    property real scaleBarHeight: scale(45)
     property real projectItemHeight: rowHeightHeader * 1.2
 
     property real panelSpacing: 5
@@ -135,10 +135,6 @@ QtObject {
 
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
-    property var scale: function scale(size) {
-        return size / __highDprScale
-    }
-
     // map related styling constats
     property real mapLoadingIndicatorHeight: 7
 
@@ -153,4 +149,14 @@ QtObject {
     property real highlighOutlinePenWidth: 1
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
+
+    function scale(size)
+    {
+        return size / __highDprScale
+    }
+
+    function scaleFont(fontSize)
+    {
+      return fontSize
+    }
 }

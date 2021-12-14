@@ -102,7 +102,7 @@ Item {
       Text {
         text: qsTr( "We are working on an important update, please do not close the application" )
 
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
 
         Layout.alignment: Qt.AlignCenter
@@ -116,7 +116,7 @@ Item {
       Text {
         text: qsTr( "%1/%2" ).arg( root.numOfCopiedProjects ).arg( root.numOfProjectsToCopy )
 
-        font.pointSize: InputStyle.fontPointSizeNormal
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
 
         Layout.alignment: Qt.AlignCenter

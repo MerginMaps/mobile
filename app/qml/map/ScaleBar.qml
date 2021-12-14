@@ -48,7 +48,7 @@ Item {
             id: text
             text: barText
             color: barColor
-            font.pointSize: InputStyle.fontPointSizeSmall
+            font.pixelSize: InputStyle.fontPixelSizeSmall
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop

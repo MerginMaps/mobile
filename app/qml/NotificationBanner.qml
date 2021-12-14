@@ -126,7 +126,7 @@ Rectangle {
     contentItem: Text {
       text: button.text
       opacity: enabled ? 1.0 : 0.3
-      font.pointSize: InputStyle.fontPointSizeBig
+      font.pixelSize: InputStyle.fontPixelSizeBig
       color: "white"
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
