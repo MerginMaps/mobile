@@ -402,10 +402,6 @@ class InputUtils: public QObject
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
-    // Calculates factor that is used to scale down components sizes on devices with high dpi (3 and more) - some mobile devices
-    // Without this scale components look too big
-    static qreal calculateHighDprScale();
-
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
