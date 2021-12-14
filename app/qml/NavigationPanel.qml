@@ -38,8 +38,11 @@ Item {
 
     property string mapStateBeforeNavigation
 
+    property bool ignoreDrawerClosed: false
+
     signal drawerClosed()
     signal recenterClicked()
+    signal navigationClosed()
 
     function startNavigation() {
       mapStateBeforeNavigation = _map.state
@@ -145,6 +148,38 @@ Item {
                           verticalAlignment: Text.AlignVCenter
                           elide: Qt.ElideRight
                       }
+
+                      Item {
+                          id: iconContainer
+                          height: rowHeight
+                          width: height
+                          anchors.left: titleText.right
+                          anchors.right: parent.right
+
+                          MouseArea {
+                              id: editArea
+                              anchors.fill: iconContainer
+                              onClicked: navigationClosed()
+                          }
+
+                          Image {
+                              id: icon
+                              anchors.fill: parent
+                              anchors.margins: rowHeight/4
+                              anchors.rightMargin: 0
+                              source: "qrc:/ic_clear_black.svg"
+                              sourceSize.width: width
+                              sourceSize.height: height
+                              fillMode: Image.PreserveAspectFit
+                          }
+
+                          ColorOverlay {
+                              anchors.fill: icon
+                              source: icon
+                              color: InputStyle.fontColor
+                          }
+                      }
+
                   }
 
                   Rectangle {
@@ -168,7 +203,7 @@ Item {
                       }
                       Text {
                         anchors.top: recenterBtn.bottom
-                        text: "distance from gps position: " + featureToGpsDistance
+                        text: "Distance: " + featureToGpsDistance
                         font.pixelSize: InputStyle.fontPixelSizeTitle
                         color: InputStyle.fontColor
                         horizontalAlignment: Text.AlignLeft

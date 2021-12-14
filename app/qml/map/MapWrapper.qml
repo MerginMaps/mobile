@@ -316,6 +316,8 @@ Item {
   PositionMarker {
     id: _positionMarker
 
+    z: 2
+
     positionKit: _positionKit
     compass: _compass
   }
@@ -457,28 +459,27 @@ Item {
     id: _navigationHighlight
     anchors.fill: _map
     visible: isInNavigationState
-
     z: 1
 
     hasPolygon: false
 
     mapSettings: _map.mapSettings
 
-    lineColor: _highlightIdentified.lineColor
-    lineWidth: _highlightIdentified.lineWidth
+    lineColor: InputStyle.highlightLineColor
+    lineWidth: InputStyle.highlightLineWidth * 2
 
-    fillColor: _highlightIdentified.fillColor
+    fillColor: InputStyle.highlightFillColor
 
-    outlinePenWidth: _highlightIdentified.outlinePenWidth
-    outlineColor: _highlightIdentified.outlineColor
+    outlinePenWidth: InputStyle.highlighOutlinePenWidth
+    outlineColor: InputStyle.highlighOutlineColor
 
-    markerType: _highlightIdentified.markerType
-    markerImageSource: _highlightIdentified.markerImageSource
-    markerWidth: _highlightIdentified.markerWidth
-    markerHeight: _highlightIdentified.markerHeight
-    markerAnchorY: _highlightIdentified.markerAnchorY
+    markerType: "image"
+    markerImageSource: InputStyle.mapMarkerIcon
+    markerWidth: InputStyle.mapMarkerWidth
+    markerHeight: InputStyle.mapMarkerHeight
+    markerAnchorY: InputStyle.mapMarkerAnchorY
     navigationInProgress: true
-    guideLineAllowed: false//_digitizingController.manualRecording && root.isInRecordState
+    guideLineAllowed: false
   }
 
   Banner {
