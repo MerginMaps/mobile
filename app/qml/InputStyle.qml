@@ -112,7 +112,7 @@ QtObject {
     property string vectorLineIcon: "qrc:/mIconLineLayer.svg"
     property string vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
 
-    property string recordIcon: "qrc:/plus-circle.svg"
+    property string recordIcon: "qrc:/dot-circle.svg"
     property string crosshairIcon: "qrc:/crosshair.svg"
     property string undoIcon: "qrc:/undo.svg"
     property string merginColorIcon: "qrc:/mergin_color.svg"
