@@ -152,11 +152,11 @@ QtObject {
 
     function scale(size)
     {
-        return size
+        return size * __dp
     }
 
     function scaleFont(fontSize)
     {
-      return fontSize
+      return fontSize * __dp
     }
 }

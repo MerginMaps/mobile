@@ -930,15 +930,17 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
 
 qreal InputUtils::calculateScreenDpr()
 {
-  const QWindowList windows = QGuiApplication::topLevelWindows();
+  const QList<QScreen *> screens = QGuiApplication::screens();
 
-  if ( !windows.isEmpty() )
+  if ( !screens.isEmpty() )
   {
-    QScreen *screen = windows.at( 0 )->screen();
+    QScreen *screen = screens.at( 0 );
     double dpiX = screen->physicalDotsPerInchX();
     double dpiY = screen->physicalDotsPerInchY();
 
     qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
+    realDpi = realDpi * screen->devicePixelRatio();
+
     return realDpi / 160.;
   }
 
@@ -947,11 +949,11 @@ qreal InputUtils::calculateScreenDpr()
 
 qreal InputUtils::calculateDpRatio()
 {
-  const QWindowList windows = QGuiApplication::topLevelWindows();
+  const QList<QScreen *> screens = QGuiApplication::screens();
 
-  if ( !windows.isEmpty() )
+  if ( !screens.isEmpty() )
   {
-    QScreen *screen = windows.at( 0 )->screen();
+    QScreen *screen = screens.at( 0 );
 
     qreal realDpr = calculateScreenDpr();
     return realDpr / screen->devicePixelRatio();
