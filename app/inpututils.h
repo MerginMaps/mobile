@@ -403,13 +403,10 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
     // Constructs navigation feature layer pair used for highlighting navigation
-    Q_INVOKABLE static FeatureLayerPair constructNavigationLineFeatureLayerPair( FeatureLayerPair targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static FeatureLayerPair constructNavigationLineFeatureLayerPair( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings );
 
     // Returns the extent of the navigation feature representing the source and the destination of the navigation
     Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
-
-    // Returns whether a layer is a layer point geometries
-    Q_INVOKABLE static bool isLayerOfPoints( QgsVectorLayer *layer );
 
     // Returns the distance from \a gpsPos to the feature \a pair
     Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );

@@ -10,7 +10,7 @@ import QtQuick 2.14
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.7
-import QgsQuick 0.1 as QgsQuick
+
 import "."
 import "./components"
 
@@ -92,7 +92,7 @@ Rectangle {
     icon.width: width
     icon.height: height
     icon.name: "close-icon"
-    icon.source: "qrc:/ic_clear_black.svg"
+    icon.source: InputStyle.closeIcon
     palette.button: "#00FFFFFF"
     onClicked: notificationBanner.state = "fade"
   }

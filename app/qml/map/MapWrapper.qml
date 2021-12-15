@@ -31,7 +31,6 @@ Item {
   property alias navigationHighlightFeature: _navigationHighlight.featureLayerPair
 
   property bool isInRecordState
-  property bool isInNavigationState
 
   signal featureIdentified( var pair )
   signal nothingIdentified()
@@ -176,34 +175,28 @@ Item {
     State {
       name: "view"
       PropertyChanges { target: root; isInRecordState: false }
-      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       name: "recordFeature"
       PropertyChanges { target: root; isInRecordState: true }
-      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       // recording feature in specific layer without option to change the digitized layer.
       // can be used to create linked features in relations, value relations and browse data
       name: "recordInLayerFeature"
       PropertyChanges { target: root; isInRecordState: true }
-      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       name: "editGeometry" // of existing feature
       PropertyChanges { target: root; isInRecordState: true }
-      PropertyChanges { target: root; isInNavigationState: false }
     },
     State {
       name: "navigation"
       PropertyChanges { target: root; isInRecordState: false }
-      PropertyChanges { target: root; isInNavigationState: true }
     },
     State {
       name: "inactive" // covered by other element
       PropertyChanges { target: root; isInRecordState: false }
-      PropertyChanges { target: root; isInNavigationState: false }
     }
   ]
 
@@ -253,6 +246,8 @@ Item {
         break
       }
     }
+
+    _navigationHighlight.visible = state === "navigation";
   }
 
   state: "view"
@@ -313,10 +308,34 @@ Item {
 
   Compass { id: _compass }
 
+  Highlight {
+    id: _navigationHighlight
+    anchors.fill: _map
+    visible: false
+
+    hasPolygon: false
+
+    mapSettings: _map.mapSettings
+
+    lineColor: InputStyle.highlightLineColor
+    lineWidth: InputStyle.highlightLineWidth * 2
+
+    fillColor: InputStyle.highlightFillColor
+
+    outlinePenWidth: InputStyle.highlighOutlinePenWidth
+    outlineColor: InputStyle.highlighOutlineColor
+
+    markerType: "image"
+    markerImageSource: InputStyle.mapMarkerIcon
+    markerWidth: InputStyle.mapMarkerWidth
+    markerHeight: InputStyle.mapMarkerHeight
+    markerAnchorY: InputStyle.mapMarkerAnchorY
+    navigationInProgress: true
+    guideLineAllowed: false
+  }
+
   PositionMarker {
     id: _positionMarker
-
-    z: 2
 
     positionKit: _positionKit
     compass: _compass
@@ -453,33 +472,6 @@ Item {
     markerAnchorY: _highlightIdentified.markerAnchorY
     recordingInProgress: _digitizingController.recording
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
-  }
-
-  Highlight {
-    id: _navigationHighlight
-    anchors.fill: _map
-    visible: isInNavigationState
-    z: 1
-
-    hasPolygon: false
-
-    mapSettings: _map.mapSettings
-
-    lineColor: InputStyle.highlightLineColor
-    lineWidth: InputStyle.highlightLineWidth * 2
-
-    fillColor: InputStyle.highlightFillColor
-
-    outlinePenWidth: InputStyle.highlighOutlinePenWidth
-    outlineColor: InputStyle.highlighOutlineColor
-
-    markerType: "image"
-    markerImageSource: InputStyle.mapMarkerIcon
-    markerWidth: InputStyle.mapMarkerWidth
-    markerHeight: InputStyle.mapMarkerHeight
-    markerAnchorY: InputStyle.mapMarkerAnchorY
-    navigationInProgress: true
-    guideLineAllowed: false
   }
 
   Banner {

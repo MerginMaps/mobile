@@ -1207,14 +1207,29 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( FeatureLayerPair targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings )
+FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings )
 {
+  if ( !mapSettings || !targetFeature.isValid() )
+    return FeatureLayerPair();
+
   QgsVectorLayer *layer = targetFeature.layer();
   QgsFeature f = targetFeature.feature();
 
   QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
   QgsCoordinateTransform ct( wgs84, layer->crs(), mapSettings->transformContext() );
-  gpsPosition.transform( ct );
+
+  if ( !ct.isShortCircuited() )
+  {
+    try
+    {
+      gpsPosition.transform( ct );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return FeatureLayerPair();
+    }
+  }
 
   const QgsAbstractGeometry *g = f.geometry().constGet();
 
@@ -1245,25 +1260,32 @@ QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &pair, 
   return bbox;
 }
 
-Q_INVOKABLE bool InputUtils::isLayerOfPoints( QgsVectorLayer *layer )
-{
-  return layer->geometryType() == QgsWkbTypes::PointGeometry;
-}
-
 QString InputUtils::distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
 {
-  if ( !mapSettings )
+  if ( !mapSettings || !pair.isValid() )
     return "";
 
   QgsVectorLayer *layer = pair.layer();
   QgsFeature f = pair.feature();
 
-  if ( !pair.isValid() || layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
     return "";
 
   QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
   QgsCoordinateTransform ct( wgs84, layer->crs(), mapSettings->transformContext() );
-  gpsPos.transform( ct );
+
+  if ( !ct.isShortCircuited() )
+  {
+    try
+    {
+      gpsPos.transform( ct );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return "Unknown (invalid CRS)";
+    }
+  }
 
   QgsPoint featurePoint( dynamic_cast< QgsPoint *>( f.geometry().get() )->toQPointF() );
 
@@ -1279,6 +1301,8 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
   if ( !project || !pair.isValid() )
     return QString();
 
+  QString title;
+
   QgsVectorLayer *layer = pair.layer();
 
   // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
@@ -1290,5 +1314,10 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
   QgsExpressionContext context( scopes );
   context.setFeature( pair.feature() );
   QgsExpression expr( pair.layer()->displayExpression() );
-  return expr.evaluate( &context ).toString();
+  title = expr.evaluate( &context ).toString();
+
+  if ( title.isEmpty() )
+    title = QStringLiteral( "Feature %1" ).arg( pair.feature().id() );
+
+  return title;
 }

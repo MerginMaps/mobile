@@ -7,12 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 
-import QgsQuick 0.1 as QgsQuick
 import "."  // import InputStyle singleton
 import "./components" as Components
 import lc 1.0
@@ -89,7 +88,7 @@ Item {
     Connections {
         target: _map.positionKit
         onPositionChanged: {
-          if ( _map.isInNavigationState && navigationTargetFeature )
+          if ( _map.state === "navigation" && navigationTargetFeature )
             updateNavigation();
         }
     }
@@ -169,7 +168,7 @@ Item {
                             anchors.fill: parent
                             anchors.margins: rowHeight/8
                             anchors.rightMargin: 0
-                            source: "qrc:/navigate_to.png"
+                            source: InputStyle.navigateToIcon
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
@@ -199,7 +198,7 @@ Item {
                             anchors.fill: parent
                             anchors.margins: rowHeight/4
                             anchors.rightMargin: 0
-                            source: "qrc:/ic_clear_black.svg"
+                            source: InputStyle.closeIcon
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
