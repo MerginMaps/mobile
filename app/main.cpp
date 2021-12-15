@@ -317,7 +317,7 @@ int main( int argc, char *argv[] )
 {
   // This flag enables auto scaling for HighDPI screens
   // Qt is handling scaling for us, so we do not need to multiply
-  // each pixel value with dp. Pixels are basically considered as dp now.
+  // each pixel value with dp. See __dp context property comment for more.
   QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
 
   QgsApplication app( argc, argv, true );
@@ -510,6 +510,13 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
 #endif
   engine.rootContext()->setContextProperty( "__version", version );
+
+  // Enabling HighDPI scaling attribute (at the beggining of the main function) removes the
+  // need for manually calculating dp factor and multiplying it with each pixel value in qml.
+  // However, we keep the multiplications in place (right now we multiply only with 1),
+  // in case we would encounter a screen that cannot be scaled automatically.
+  // Use `value * __dp` for each pixel value in QML
+  engine.rootContext()->setContextProperty( "__dp", 1 );
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

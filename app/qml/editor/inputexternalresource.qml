@@ -62,7 +62,7 @@ Item {
   property var galleryIcon: customStyle.icons.gallery
   property var backIcon: customStyle.icons.back
   property real iconSize:  customStyle.fields.height
-  property real textMargin: 10
+  property real textMargin: 10 * __dp
   /**
    * 0 - Relative path disabled
    * 1 - Relative path to project
@@ -262,7 +262,7 @@ Item {
 
           height: parent.height * 0.7
           color: customStyle.fields.fontColor
-          width: 1.5
+          width: 1.5 * __dp
           anchors.centerIn: parent
         }
       }

@@ -81,7 +81,7 @@ Item {
       Layout.minimumHeight: customStyle.fields.height
 
       border.color: customStyle.fields.normalColor
-      border.width: 1
+      border.width: 1 * __dp
       color: customStyle.fields.backgroundColor
       radius: customStyle.fields.cornerRadius
 
@@ -155,7 +155,7 @@ Item {
       width: parent.width
 
       border.color: customStyle.fields.normalColor
-      border.width: 1
+      border.width: 1 * __dp
       color: customStyle.fields.backgroundColor
       radius: customStyle.fields.cornerRadius
 

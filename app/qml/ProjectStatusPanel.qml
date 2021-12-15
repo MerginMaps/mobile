@@ -212,7 +212,7 @@ Item {
           id: borderLine
           color: InputStyle.panelBackground2
           width: delegateItem.width
-          height: 1
+          height: 1 * __dp
           anchors.bottom: parent.bottom
         }
       }

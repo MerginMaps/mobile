@@ -102,7 +102,7 @@ Rectangle {
       id: registerNameBorder
       color: root.fontColor
       y: registerName.height - height
-      height: 2
+      height: 2 * __dp
       opacity: registerName.focus ? 1 : 0.6
       width: parent.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
@@ -155,7 +155,7 @@ Rectangle {
     Rectangle {
       id: emailBorder
       color: InputStyle.panelBackgroundDark
-      height: 2
+      height: 2 * __dp
       y: email.height - height
       opacity: email.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -173,7 +173,7 @@ Rectangle {
     Rectangle {
       id: passBorder
       color: InputStyle.panelBackgroundDark
-      height: 2
+      height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -193,7 +193,7 @@ Rectangle {
     Rectangle {
       id: confirmPassBorder
       color: InputStyle.panelBackgroundDark
-      height: 2
+      height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordConfirmField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
@@ -221,7 +221,7 @@ Rectangle {
     Rectangle {
       id: acceptTOCBorder
       color: InputStyle.panelBackgroundDark
-      height: 2
+      height: 2 * __dp
       y: acceptTOC.height - height
       opacity: acceptTOC.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2

@@ -28,7 +28,7 @@ Item {
 
   ColumnLayout {
     anchors.fill: parent
-    spacing: 2
+    spacing: 2 * __dp
 
     Item {
       id: iconContainer

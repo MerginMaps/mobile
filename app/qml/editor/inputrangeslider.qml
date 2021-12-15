@@ -55,7 +55,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     border.color: customStyle.fields.normalColor
-    border.width: 1
+    border.width: 1 * __dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
@@ -85,7 +85,7 @@ Item {
         horizontalAlignment: Text.AlignLeft
         font.pixelSize: customStyle.fields.fontPixelSize
         color: customStyle.fields.fontColor
-        padding: 10
+        padding: 10 * __dp
         leftPadding: customStyle.fields.sideMargin
       }
 
@@ -109,7 +109,7 @@ Item {
           y: slider.topPadding + slider.availableHeight / 2 - height / 2
           width: slider.availableWidth
           height: slider.height * 0.1
-          radius: 2
+          radius: 2 * __dp
 
           color: root.enabled ? customStyle.fields.fontColor : customStyle.fields.backgroundColorInactive
         }

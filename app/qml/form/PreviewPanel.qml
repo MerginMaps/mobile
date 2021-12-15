@@ -145,7 +145,7 @@ Item {
                     model: controller.fieldModel
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
-                    spacing: 2
+                    spacing: 2 * __dp
                     interactive: false
 
                     delegate: Row {
