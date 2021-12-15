@@ -23,7 +23,7 @@ env:
   CCACHE_DIR: /Users/runner/work/ccache
 
 concurrency:
-  group: ci-${{github.ref}}-linux
+  group: ci-${{github.ref}}-macos
   cancel-in-progress: true
 
 jobs:
