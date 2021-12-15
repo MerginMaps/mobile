@@ -14,7 +14,7 @@ import ".."
 QtObject {
   property color backgroundColor: "white"
   property real backgroundOpacity: 1
-  property real titleLabelPointSize: 16
+  property real titleLabelPixelSize: InputStyle.fontPixelSizeNormal
 
   property QtObject group: QtObject {
     property color backgroundColor: InputStyle.panelBackgroundLight
@@ -26,7 +26,7 @@ QtObject {
     property real height: 64 * __dp
     property color fontColor: InputStyle.fontColor
     property int spacing: InputStyle.formSpacing
-    property int fontPixelSize: 24 * __dp
+    property int fontPixelSize: InputStyle.fontPixelSizeNormal
   }
 
   property QtObject tabs: QtObject {
@@ -40,7 +40,7 @@ QtObject {
     property real height: InputStyle.rowHeight * 0.9
     property real buttonHeight: height
     property real spacing: 0
-    property int tabLabelPointSize: 12
+    property int tabLabelPixelSize: InputStyle.fontPixelSizeSmall
     property real borderWidth: 1 * __dp
     property color borderColor: InputStyle.labelColor
   }
@@ -69,11 +69,11 @@ QtObject {
     property color normalColor: InputStyle.panelBackgroundLight
     property real cornerRadius: 8 * __dp
     property real height: InputStyle.fieldHeight
-    property int fontPixelSize: 22 * __dp
+    property int fontPixelStyle: InputStyle.fontPixelSizeSmall
     property real sideMargin: InputStyle.innerFieldMargin
     property real outerMargin: InputStyle.outerFieldMargin
-    property int fontPointSize: 15
-    property int labelPointSize: 12
+    property int fontPixelSize: InputStyle.fontPixelSizeNormal
+    property int labelPixelSize: InputStyle.fontPixelSizeSmall
   }
 
   property QtObject icons: QtObject {

@@ -95,7 +95,7 @@ AbstractEditor {
 
         inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-        font.pointSize: customStyle.fields.fontPointSize
+        font.pixelSize: customStyle.fields.fontPixelSize
         color: customStyle.fields.fontColor
         selectionColor: customStyle.fields.fontColor
         selectedTextColor: "#ffffff"
@@ -119,7 +119,7 @@ AbstractEditor {
         verticalAlignment: Qt.AlignVCenter
 
         color: customStyle.fields.fontColor
-        font.pointSize: customStyle.fields.fontPointSize
+        font.pixelSize: customStyle.fields.fontPixelSize
       }
     }
   }

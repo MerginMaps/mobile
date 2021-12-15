@@ -51,82 +51,54 @@ Item {
                 width: parent.width
                 height: previewPanel.rowHeight
 
-                Row {
-                  id: title
-                  height: rowHeight
-                  width: parent.width
+                Item {
+                    id: title
+                    width: parent.width
+                    height: parent.height - titleBorder.height
+                    Text {
+                        id: titleText
+                        height: parent.height
+                        width: parent.width - rowHeight
+                        text: controller.title
+                        font.pixelSize: InputStyle.fontPixelSizeBig
+                        color: InputStyle.fontColor
+                        font.bold: true
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Qt.ElideRight
+                    }
 
-                  Text {
-                      id: titleText
-                      height: rowHeight
-                      width: parent.width - navigationIconContainer.width - iconContainer.width
-                      text: controller.title
-                      font.pixelSize: InputStyle.fontPixelSizeTitle
-                      color: InputStyle.fontColor
-                      font.bold: true
-                      horizontalAlignment: Text.AlignLeft
-                      verticalAlignment: Text.AlignVCenter
-                      elide: Qt.ElideRight
-                  }
+                    Item {
+                        id: iconContainer
+                        height: rowHeight
+                        width: height
+                        anchors.left: titleText.right
+                        anchors.right: parent.right
+                        visible: !previewPanel.isReadOnly
 
-                  Item {
-                      id: navigationIconContainer
-                      height: rowHeight
-                      width: rowHeight
+                        MouseArea {
+                            id: editArea
+                            anchors.fill: iconContainer
+                            onClicked: editClicked()
+                        }
 
-                      MouseArea {
-                          id: navigationIconArea
-                          anchors.fill: navigationIconContainer
-                          onClicked: previewPanel.navigateToFeature( controller.featureLayerPair )
-                      }
+                        Image {
+                            id: icon
+                            anchors.fill: parent
+                            anchors.margins: rowHeight/4
+                            anchors.rightMargin: 0
+                            source: InputStyle.editIcon
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
 
-                      Image {
-                          id: navigationIcon
-                          anchors.fill: parent
-                          anchors.margins: rowHeight/8
-                          anchors.rightMargin: 0
-                          source: "qrc:/navigate_to.png"
-                          sourceSize.width: width
-                          sourceSize.height: height
-                          fillMode: Image.PreserveAspectFit
-                      }
-
-                      ColorOverlay {
-                          anchors.fill: navigationIcon
-                          source: navigationIcon
-                          color: InputStyle.fontColor
-                      }
-                  }
-
-                  Item {
-                      id: iconContainer
-                      height: rowHeight
-                      width: rowHeight
-                      visible: !previewPanel.isReadOnly
-
-                      MouseArea {
-                          id: editArea
-                          anchors.fill: iconContainer
-                          onClicked: editClicked()
-                      }
-
-                      Image {
-                          id: icon
-                          anchors.fill: parent
-                          anchors.margins: rowHeight/4
-                          anchors.rightMargin: 0
-                          source: InputStyle.editIcon
-                          sourceSize.width: width
-                          sourceSize.height: height
-                          fillMode: Image.PreserveAspectFit
-                      }
-
-                      ColorOverlay {
-                          anchors.fill: icon
-                          source: icon
-                          color: InputStyle.fontColor
-                      }
-                  }
+                        ColorOverlay {
+                            anchors.fill: icon
+                            source: icon
+                            color: InputStyle.fontColor
+                        }
+                    }
                 }
 
                 Rectangle {

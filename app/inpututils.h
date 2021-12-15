@@ -418,6 +418,12 @@ class InputUtils: public QObject
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
+
+    // Calculates real screen DPR based on DPI
+    static qreal calculateScreenDpr();
+
+    // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
+    static qreal calculateDpRatio();
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

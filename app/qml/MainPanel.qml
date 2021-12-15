@@ -24,7 +24,6 @@ Item {
     signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
-    property alias recordButton: recBtnIcon
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -112,17 +111,10 @@ Item {
 
             MainPanelButton {
                 id: recBtn
+
                 width: mainPanel.itemSize
                 text: qsTr("Record")
-
-                RecordBtn {
-                    id: recBtnIcon
-                    width: mainPanel.itemSize
-                    anchors.top: parent.top
-                    anchors.margins: width/4
-                    anchors.topMargin: -anchors.margins/2
-                    enabled: true
-                }
+                imageSource: InputStyle.recordIcon
 
                 onActivated: {
                   rootMenu.close()
@@ -294,15 +286,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Record")
-
-                RecordBtn {
-                    id: recBtnIcon2
-                    width: mainPanel.itemSize
-                    anchors.margins: width/4
-                    anchors.topMargin: -anchors.margins/2
-                    enabled: true
-                    color: InputStyle.fontColor
-                }
+                imageSource: InputStyle.recordIcon
             }
 
             onClicked: {

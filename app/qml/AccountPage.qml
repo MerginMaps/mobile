@@ -208,7 +208,7 @@ Page {
 
         height: InputStyle.rowHeightHeader
         text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+        font.pixelSize: InputStyle.fontPixelSizeBig
 
         background: Rectangle {
           color: InputStyle.highlightColor
@@ -230,7 +230,7 @@ Page {
       Item {
         id: spacer
         visible: textRestore.visible
-        height: InputStyle.fontPixelSizeTitle
+        height: InputStyle.rowHeightHeader
         width:parent.width
       }
 
@@ -266,9 +266,9 @@ Page {
 
       Button {
         id: signOutButton
-        height: InputStyle.fontPixelSizeTitle
+        height: InputStyle.rowHeightHeader
         text: qsTr("Sign out")
-        font.pixelSize: signOutButton.height
+        font.pixelSize: InputStyle.fontPixelSizeNormal
         font.bold: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

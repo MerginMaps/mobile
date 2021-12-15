@@ -23,10 +23,6 @@ Item {
 
   property date dateToSelect: new Date()
 
-  property int fontPointSizeBig: InputStyle.fontPointSizeBig
-  property int fontPointSizeNormal: InputStyle.fontPointSizeNormal
-  property int fontPointSizeSmall: InputStyle.fontPointSizeSmall
-
   signal selected(date selectedDate)
   signal canceled()
 
@@ -105,7 +101,7 @@ Item {
         Text {
           id: cancelBtnText
           anchors.centerIn: parent
-          font.pointSize: root.fontPointSizeBig
+          font.pixelSize: InputStyle.fontPixelSizeBig
           font.bold: true
           color: "#FD9626"
           text: qsTr("Cancel")
@@ -140,7 +136,7 @@ Item {
 
             anchors.centerIn: parent
 
-            font.pointSize: root.fontPointSizeBig
+            font.pixelSize: InputStyle.fontPixelSizeBig
             opacity: yearsList.visible ? 1 : 0.7
             color: "white"
             text: calendar.selectedDate.getFullYear()
@@ -164,7 +160,7 @@ Item {
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
 
-          font.pointSize: root.fontPointSizeNormal
+          font.pixelSize: InputStyle.fontPixelSizeNormal
           text: calendar.weekNames[calendar.selectedDate.getDay()].slice(0, 3) + ", " + calendar.selectedDate.getDate() + " " + calendar.months[calendar.selectedDate.getMonth()].slice(0, 3)
           color: "white"
           opacity: yearsList.visible ? 0.7 : 1
@@ -197,7 +193,7 @@ Item {
 
           anchors.centerIn: parent
 
-          font.pointSize: root.fontPointSizeBig
+          font.pixelSize: InputStyle.fontPixelSizeBig
           font.bold: true
 
           color: InputStyle.activeButtonColorOrange
@@ -309,7 +305,7 @@ Item {
 
             Text {
               anchors.centerIn: parent
-              font.pointSize: root.fontPointSizeNormal
+              font.pixelSize: InputStyle.fontPixelSizeNormal
               text: calendar.months[monthGrid.month] + " " + monthGrid.year;
             }
 
@@ -358,7 +354,7 @@ Item {
               text: model.shortName
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: root.fontPointSizeSmall
+              font.pixelSize: InputStyle.fontPixelSizeSmall
             }
           }
 
@@ -391,7 +387,7 @@ Item {
               Text {
                 anchors.centerIn: parent
                 text: model.day
-                font.pointSize: root.fontPointSizeNormal
+                font.pixelSize: InputStyle.fontPixelSizeNormal
                 scale: highlighted ? 1.25 : 1
                 Behavior on scale {
                   NumberAnimation {
@@ -436,7 +432,7 @@ Item {
           height: 30
           Text {
             anchors.centerIn: parent
-            font.pointSize: root.fontPointSizeNormal
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             text: name
             scale: index === (yearsList.currentYear - yearsList.startYear) ? 1.5 : 1
             color: InputStyle.fontColor
@@ -539,7 +535,7 @@ Item {
 
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
-          font.pointSize: root.fontPointSizeNormal
+          font.pixelSize: InputStyle.fontPixelSizeNormal
 
           color: isActive ? InputStyle.fontColor : "black"
         }
@@ -576,7 +572,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             font.bold: true
-            font.pointSize: root.fontPointSizeNormal
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             color: "black"
           }
 
@@ -599,7 +595,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             font.bold: true
-            font.pointSize: root.fontPointSizeNormal
+            font.pixelSize: InputStyle.fontPixelSizeNormal
             color: "black"
           }
 

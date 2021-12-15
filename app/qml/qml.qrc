@@ -30,7 +30,6 @@
         <file>ProjectPanel.qml</file>
         <file>ProjectStatusPanel.qml</file>
         <file>ProjectWizardPage.qml</file>
-        <file>RecordBtn.qml</file>
         <file>RegistrationForm.qml</file>
         <file>RoundIndicator.qml</file>
         <file>SearchBar.qml</file>

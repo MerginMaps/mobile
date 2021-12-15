@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -950,6 +950,40 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
   return QString();
 }
 
+qreal InputUtils::calculateScreenDpr()
+{
+  const QList<QScreen *> screens = QGuiApplication::screens();
+
+  if ( !screens.isEmpty() )
+  {
+    QScreen *screen = screens.at( 0 );
+    double dpiX = screen->physicalDotsPerInchX();
+    double dpiY = screen->physicalDotsPerInchY();
+
+    qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
+    realDpi = realDpi * screen->devicePixelRatio();
+
+    return realDpi / 160.;
+  }
+
+  return 1;
+}
+
+qreal InputUtils::calculateDpRatio()
+{
+  const QList<QScreen *> screens = QGuiApplication::screens();
+
+  if ( !screens.isEmpty() )
+  {
+    QScreen *screen = screens.at( 0 );
+
+    qreal realDpr = calculateScreenDpr();
+    return realDpr / screen->devicePixelRatio();
+  }
+
+  return 1;
+}
+
 QString InputUtils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,
@@ -1123,7 +1157,9 @@ QString InputUtils::dumpScreenInfo() const
     msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
     msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
     msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-    msg += tr( "screen device pixel ratio: %1" ).arg( screen->devicePixelRatio() );
+    msg += tr( "reported device pixel ratio: %1\n" ).arg( screen->devicePixelRatio() );
+    msg += tr( "calculated device pixel ratio: %1\n" ).arg( calculateScreenDpr() );
+    msg += tr( "used dp scale: %1" ).arg( calculateDpRatio() );
   }
   else
   {

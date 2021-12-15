@@ -95,7 +95,7 @@ Item {
 
               anchors.centerIn: parent
 
-              font.pointSize: customStyle.fields.labelPointSize
+              font.pixelSize: customStyle.fields.labelPixelSize
               color: customStyle.relationComponent.textColorButton
               clip: true
             }

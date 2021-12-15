@@ -75,5 +75,6 @@
         <file>link-rotated.svg</file>
         <file>loadingindicator.svg</file>
         <file>navigate_to.png</file>
+        <file>dot-circle.svg</file>
     </qresource>
 </RCC>

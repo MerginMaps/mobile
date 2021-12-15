@@ -35,7 +35,7 @@ AbstractEditor {
 
     wrapMode: Text.Wrap
     color: customStyle.fields.fontColor
-    font.pointSize: customStyle.fields.fontPointSize
+    font.pixelSize: customStyle.fields.fontPixelSize
 
     text: root.parentValue !== undefined ? root.parentValue : ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText

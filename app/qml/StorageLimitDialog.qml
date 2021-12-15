@@ -46,7 +46,7 @@ Dialog {
       height: root.fieldHeight
       text: root.titleText
       color: InputStyle.fontColor
-      font.pixelSize: InputStyle.fontPixelSizeTitle
+      font.pixelSize: InputStyle.fontPixelSizeBig
       font.bold: true
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: Text.AlignHCenter
@@ -116,7 +116,7 @@ Dialog {
 
     Item {
       id: spacer
-      height: InputStyle.fontPixelSizeTitle
+      height: InputStyle.smallGap
       width: parent.width
     }
 
