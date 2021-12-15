@@ -13,6 +13,10 @@ on:
     types:
       - published
 
+concurrency:
+  group: ci-${{github.ref}}-android
+  cancel-in-progress: true
+
 jobs:
   android_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))

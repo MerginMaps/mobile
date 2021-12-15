@@ -22,6 +22,10 @@ env:
   IOS_MIN_SDK_VERSION: ${{ '12.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
 
+concurrency:
+  group: ci-${{github.ref}}-ios
+  cancel-in-progress: true
+
 jobs:
   ios_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
