@@ -83,7 +83,7 @@ Item {
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
-        font.pointSize: customStyle.fields.fontPointSize
+        font.pixelSize: customStyle.fields.fontPixelSize
         color: customStyle.fields.fontColor
         padding: 10 * __dp
         leftPadding: customStyle.fields.sideMargin

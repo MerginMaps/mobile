@@ -59,7 +59,7 @@ Item {
 
     Text {
       text: switchComp.checked ? fieldItem.checkedState : fieldItem.uncheckedState
-      font.pointSize: customStyle.fields.fontPointSize
+      font.pixelSize: customStyle.fields.fontPixelSize
       color: customStyle.fields.fontColor
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter

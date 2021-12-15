@@ -34,7 +34,7 @@ Item {
 
       color: InputStyle.labelColor
 
-      font.pointSize: InputStyle.fontPointSizeSmall
+      font.pixelSize: InputStyle.fontPixelSizeSmall
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter
     }
@@ -44,7 +44,7 @@ Item {
 
       text: root.text
 
-      font.pointSize: InputStyle.fontPointSizeNormal
+      font.pixelSize: InputStyle.fontPixelSizeNormal
       color: InputStyle.fontColor
 
       horizontalAlignment: Text.AlignLeft

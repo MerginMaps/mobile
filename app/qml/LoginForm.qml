@@ -155,7 +155,7 @@ Rectangle {
         width: loginForm.width - 2 * loginForm.panelMargin
         height: loginForm.fieldHeight
         text: qsTr("Sign in")
-        font.pixelSize: InputStyle.fontPixelSizeTitle
+        font.pixelSize: InputStyle.fontPixelSizeBig
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
           stackView.pending = true

@@ -315,9 +315,9 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
-  // This flag enables auto scaling for HighDPI screens
-  // Qt is handling scaling for us, so we do not need to multiply
-  // each pixel value with dp. See __dp context property comment for more.
+  // This flag enables auto scaling for HighDPI screens.
+  // This basically means that each specified pixel in QML is now considered dp
+  // See __dp comment for more information.
   QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
 
   QgsApplication app( argc, argv, true );
@@ -511,12 +511,11 @@ int main( int argc, char *argv[] )
 #endif
   engine.rootContext()->setContextProperty( "__version", version );
 
-  // Enabling HighDPI scaling attribute (at the beggining of the main function) removes the
-  // need for manually calculating dp factor and multiplying it with each pixel value in qml.
-  // However, we keep the multiplications in place (right now we multiply only with 1),
-  // in case we would encounter a screen that cannot be scaled automatically.
+  // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
+  // there are screens that need a "little help", because system DPR has different value than the
+  // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
   // Use `value * __dp` for each pixel value in QML
-  engine.rootContext()->setContextProperty( "__dp", 1 );
+  engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

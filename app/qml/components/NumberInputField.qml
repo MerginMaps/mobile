@@ -45,7 +45,7 @@ Item {
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-    font.pointSize: InputStyle.fontPointSizeNormal
+    font.pixelSize: InputStyle.fontPixelSizeNormal
     color: InputStyle.fontColorBright
     selectionColor: InputStyle.fontColorBright
     selectedTextColor: "#ffffff"
@@ -59,7 +59,7 @@ Item {
   Text {
     id: suffixText
 
-    font.pointSize: InputStyle.fontPointSizeNormal
+    font.pixelSize: InputStyle.fontPixelSizeNormal
     color: InputStyle.fontColorBright
 
     horizontalAlignment: Qt.AlignLeft

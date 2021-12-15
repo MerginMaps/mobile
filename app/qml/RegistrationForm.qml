@@ -234,7 +234,7 @@ Rectangle {
       width: registerForm.width - 2 * root.panelMargin
       height: fieldHeight
       text: qsTr("Sign up")
-      font.pixelSize: InputStyle.fontPixelSizeTitle
+      font.pixelSize: InputStyle.fontPixelSizeBig
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         stackView.pending = true

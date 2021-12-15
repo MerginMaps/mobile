@@ -187,10 +187,10 @@ Rectangle {
       ProgressBar {
         id: progressBar
 
-        property real itemHeight: InputStyle.fontPixelSizeSmall
+        property real itemHeight: InputStyle.rowHeightSmall
 
         anchors.top: mainText.bottom
-        height: InputStyle.fontPixelSizeSmall
+        height: itemHeight
         width: secondaryText.width
         value: projectSyncProgress
         visible: projectIsPending

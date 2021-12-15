@@ -119,7 +119,7 @@ Item {
                     Text {
                       id: nameTextItem
                       padding: 5
-                      font.pixelSize: InputStyle.fontPixelSizeTitle
+                      font.pixelSize: InputStyle.fontPixelSizeBig
                       text:  qsTr( name )
                       wrapMode: Text.Wrap
                     }
@@ -135,7 +135,7 @@ Item {
                       id: messageTextItem
                       width: parent.width - nameTextItem.width - seperator.width
                       padding: 5
-                      font.pixelSize: InputStyle.fontPixelSizeTitle
+                      font.pixelSize: InputStyle.fontPixelSizeBig
                       text:  qsTr( message )
                       wrapMode: Text.Wrap
                     }

@@ -82,7 +82,7 @@ Item {
 
       clip: true
       font.bold: true
-      font.pointSize: customStyle.fields.fontPointSize
+      font.pixelSize: customStyle.fields.fontPixelSize
       color: customStyle.relationComponent.tagTextColor
     }
   }

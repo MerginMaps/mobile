@@ -81,7 +81,7 @@ Item {
       height: InputStyle.rowHeightHeader
       text: hasPlan ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
       enabled: text !== ''
-      font.pixelSize: InputStyle.fontPixelSizeTitle
+      font.pixelSize: InputStyle.fontPixelSizeBig
 
       background: Rectangle {
         color: InputStyle.highlightColor

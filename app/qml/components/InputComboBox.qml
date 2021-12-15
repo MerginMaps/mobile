@@ -43,7 +43,7 @@ ComboBox {
     height: comboBox.height * 0.8
     text: model.display
     font.weight: comboBox.currentIndex === index ? Font.DemiBold : Font.Normal
-    font.pointSize: customStyle.fields.fontPointSize
+    font.pixelSize: customStyle.fields.fontPixelSize
     highlighted: comboBox.highlightedIndex === index
     leftPadding: customStyle.fields.sideMargin
     onClicked: comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
@@ -52,7 +52,7 @@ ComboBox {
   contentItem: Text {
     height: comboBox.height * 0.8
     text: comboBox.displayText
-    font.pointSize: customStyle.fields.fontPointSize
+    font.pixelSize: customStyle.fields.fontPixelSize
     horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight

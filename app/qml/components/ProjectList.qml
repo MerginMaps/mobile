@@ -230,7 +230,7 @@ Item {
       width: reloadList.width - 2* InputStyle.panelMargin
       height: reloadList.height
       text: qsTr("Retry")
-      font.pixelSize: reloadBtn.height/2
+      font.pixelSize: InputStyle.fontPixelSizeNormal
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         // filters suppose to not change

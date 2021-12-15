@@ -37,7 +37,7 @@ AbstractEditor {
 
     readOnly: root.isReadOnly
 
-    font.pointSize: customStyle.fields.fontPointSize
+    font.pixelSize: customStyle.fields.fontPixelSize
     color: customStyle.fields.fontColor
 
     text: root.parentValue === undefined || root.parentValueIsNull ? '' : root.parentValue

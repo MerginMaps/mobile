@@ -59,7 +59,7 @@ Item {
                         height: parent.height
                         width: parent.width - rowHeight
                         text: controller.title
-                        font.pixelSize: InputStyle.fontPixelSizeTitle
+                        font.pixelSize: InputStyle.fontPixelSizeBig
                         color: InputStyle.fontColor
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
