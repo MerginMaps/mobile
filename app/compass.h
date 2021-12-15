@@ -17,7 +17,6 @@
 
 class Compass: public QObject
 {
-
     Q_OBJECT
   public:
     explicit Compass( QObject *parent = nullptr );
