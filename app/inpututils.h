@@ -402,6 +402,12 @@ class InputUtils: public QObject
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
+    // Calculates real screen DPR based on DPI
+    static qreal calculateScreenDpr();
+
+    // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
+    static qreal calculateDpRatio();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
