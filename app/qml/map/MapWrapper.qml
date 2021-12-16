@@ -245,9 +245,7 @@ Item {
       case "inactive": {
         break
       }
-    }
-
-    _navigationHighlight.visible = state === "navigation";
+    }    
   }
 
   state: "view"
@@ -277,7 +275,7 @@ Item {
     onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
-      if ( !root.isInRecordState )
+      if ( !root.isInRecordState && root.state != "navigation" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = _identifyKit.identifyOne( screenPoint )
@@ -295,6 +293,8 @@ Item {
           root.nothingIdentified()
         }
       }
+      if ( root.state == "navigation" )
+        root.nothingIdentified();
     }
   }
 
@@ -311,7 +311,7 @@ Item {
   Highlight {
     id: _navigationHighlight
     anchors.fill: _map
-    visible: false
+    visible: root.state == "navigation"
 
     hasPolygon: false
 

@@ -27,7 +27,7 @@ Item {
 
     property real previewHeight
 
-    property bool isOpen: false
+    readonly property alias isOpen: drawer.opened
 
     property var _map
 
@@ -37,25 +37,16 @@ Item {
 
     property string mapStateBeforeNavigation
 
-    property bool ignoreDrawerClosed: false
-
-    signal drawerClosed()
-    signal recenterClicked()
-    signal navigationClosed()
 
     function startNavigation() {
       mapStateBeforeNavigation = _map.state
       _map.state = "navigation"
-    }
-
-    function openDrawer() {
       drawer.open()
-      isOpen = true
     }
 
-    function closeDrawer() {
+    function endNavigation() {
+      _map.state = mapStateBeforeNavigation;
       drawer.close()
-      isOpen = false
     }
 
     function updateNavigation() {
@@ -106,7 +97,7 @@ Item {
 
       onClosed: {
         _map.navigationHighlightFeature = null;
-        drawerClosed();
+//        drawerClosed();
       }
 
       Behavior on height {
@@ -160,7 +151,7 @@ Item {
                         MouseArea {
                             id: navigationIconArea
                             anchors.fill: navigationIconContainer
-                            onClicked: autoFollow = true
+                            onClicked: autoFollow = true;
                         }
 
                         Image {
@@ -190,7 +181,7 @@ Item {
                         MouseArea {
                             id: editArea
                             anchors.fill: iconContainer
-                            onClicked: navigationClosed()
+                            onClicked: endNavigation()
                         }
 
                         Image {

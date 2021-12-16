@@ -85,13 +85,11 @@ ApplicationWindow {
       let hasNullGeometry = pair.feature.geometry.isNull
 
       if ( hasNullGeometry ) {
-        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "readOnly", "form" )
       }
       else if ( pair.valid ) {
         map.centerToPair( pair, true )
         map.highlightPair( pair )
-        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "readOnly", "preview")
       }
     }
@@ -129,19 +127,19 @@ ApplicationWindow {
       previewPanelHeight: formsStackManager.previewHeight
 
       onFeatureIdentified: {
-        navigationPanel.closeDrawer();
-        formsStackManager.openForm( pair, "readOnly", "preview" );
+        let wasOpen = navigationPanel.isOpen;
+        navigationPanel.endNavigation();
+        if ( !wasOpen )
+          formsStackManager.openForm( pair, "readOnly", "preview" );
       }
 
       onNothingIdentified: {
         if ( navigationPanel.isOpen )
-          navigationPanel.closeDrawer();
-        else
-          formsStackManager.closeDrawer();
+          navigationPanel.endNavigation();
+        formsStackManager.closeDrawer();
       }
 
       onRecordingFinished: {
-        navigationPanel.closeDrawer();
         formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"
         map.highlightPair( pair )
@@ -286,7 +284,6 @@ ApplicationWindow {
 
       onCreateFeatureRequested: {
         let newPair = map.createFeature( selectedLayer )
-        navigationPanel.closeDrawer();
         formsStackManager.openForm( newPair, "add", "form" )
       }
 
@@ -353,21 +350,6 @@ ApplicationWindow {
       previewPanelHeight: formsStackManager.previewHeight
 
       _map: map
-
-      onDrawerClosed: {
-        map.state = navigationPanel.mapStateBeforeNavigation
-        if ( !ignoreDrawerClosed )
-          formsStackManager.closeDrawer();
-        else
-          ignoreDrawerClosed = false;
-      }
-
-      onNavigationClosed: {
-        map.state = navigationPanel.mapStateBeforeNavigation
-        formsStackManager.visible = true
-        ignoreDrawerClosed = true
-        closeDrawer()
-      }
     }
 
     Notification {
@@ -450,8 +432,6 @@ ApplicationWindow {
           return;
         navigationPanel.startNavigation();
         navigationPanel.navigationTargetFeature = feature;
-        formsStackManager.visible = false;
-        navigationPanel.openDrawer();
       }
     }
 
