@@ -1207,7 +1207,7 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings )
+FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsVectorLayer *returnedLayer, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
     return FeatureLayerPair();
@@ -1239,8 +1239,6 @@ FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( const Feat
   QgsGeometry geom( line );
   f.setGeometry( geom );
 
-  // TODO: figure out how to delete safely (memory leak)
-  QgsVectorLayer *returnedLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=%1" ).arg( layer->crs().authid() ), "navigationHighlight", "memory" );
   return FeatureLayerPair( f, returnedLayer );
 }
 
