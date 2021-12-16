@@ -7,14 +7,14 @@ echo "copy_to_qgis.bash QGIS_SRC_DIR"
 QGIS_SRC_DIR=$1
 QGIS_SRC_DIR=`realpath $QGIS_SRC_DIR`
 QGSQUICK_QGIS_DIR="$QGIS_SRC_DIR/src/quickgui"
-if [ ! -f "$QGSQUICK_QGIS_DIR/qgsquickutils.cpp" ]; then
-  echo "Wrong QGIS_SRC_DIR, missing $QGSQUICK_QGIS_DIR/qgsquickutils.cpp!"
+if [ ! -f "$QGSQUICK_QGIS_DIR/qgsquickmapcanvasmap.cpp" ]; then
+  echo "Wrong QGIS_SRC_DIR, missing $QGSQUICK_QGIS_DIR/qgsquickmapcanvasmap.cpp!"
   exit 1;
 fi
 
 QGSQUICK_INPUT_DIR=$DIR/../qgsquick
-if [ ! -f "$QGSQUICK_INPUT_DIR/qgsquickutils.cpp" ]; then
-  echo "Wrong QGSQUICK_INPUT_DIR"
+if [ ! -f "$QGSQUICK_INPUT_DIR/qgsquickmapcanvasmap.cpp" ]; then
+  echo "Wrong QGSQUICK_INPUT_DIR, missing $QGSQUICK_INPUT_DIR/qgsquickmapcanvasmap.cpp!"
   exit 1;
 fi
 
