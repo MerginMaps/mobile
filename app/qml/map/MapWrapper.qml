@@ -308,14 +308,13 @@ Item {
 
   Compass { id: _compass }
 
-  Highlight {
+  NavigationHighlight {
     id: _navigationHighlight
     anchors.fill: _map
     visible: root.state == "navigation"
 
-    hasPolygon: false
-
     mapSettings: _map.mapSettings
+    positionKit: _positionKit
 
     lineColor: InputStyle.highlightLineColor
     lineWidth: InputStyle.highlightLineWidth * 2
@@ -330,8 +329,6 @@ Item {
     markerWidth: InputStyle.mapMarkerWidth
     markerHeight: InputStyle.mapMarkerHeight
     markerAnchorY: InputStyle.mapMarkerAnchorY
-    navigationInProgress: true
-    guideLineAllowed: false
   }
 
   PositionMarker {

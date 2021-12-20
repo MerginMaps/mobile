@@ -104,5 +104,6 @@
         <file>NotificationBanner.qml</file>
         <file>ProjectIssuesPanel.qml</file>
         <file>NavigationPanel.qml</file>
+        <file>map/NavigationHighlight.qml</file>
     </qresource>
 </RCC>

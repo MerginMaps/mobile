@@ -53,10 +53,10 @@ Item {
       var mapSettings = _map.mapSettings;
       var positionKit = _map.positionKit;
 
-      _map.navigationHighlightFeature = __inputUtils.constructNavigationLineFeatureLayerPair( navigationTargetFeature, _map.positionKit.position, __disposableLinesLayer, mapSettings );
+      _map.navigationHighlightFeature = navigationTargetFeature
 
       var previewPanelHeightRatio = previewPanelHeight / _map.height;
-      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, mapSettings, previewPanelHeightRatio );
+      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, _map.positionKit.position, mapSettings, previewPanelHeightRatio );
 
       if ( autoFollow )
         mapSettings.extent = calculatedNavigationExtent;
@@ -71,7 +71,7 @@ Item {
 
     onNavigationTargetFeatureChanged: {
       navigationPanel.featureTitle = __inputUtils.featureTitle( navigationTargetFeature, __loader.project )
-      _map.navigationHighlightFeature = __inputUtils.constructNavigationLineFeatureLayerPair( navigationTargetFeature, _map.positionKit.position, __disposableLinesLayer, _map.mapSettings )
+      _map.navigationHighlightFeature = navigationTargetFeature//__inputUtils.constructNavigationLineFeatureLayerPair( navigationTargetFeature, _map.positionKit.position, __disposableLinesLayer, _map.mapSettings )
       autoFollow = true;
       updateNavigation()
     }

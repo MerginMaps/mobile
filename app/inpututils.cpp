@@ -392,6 +392,28 @@ QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &
   return data;
 }
 
+QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &g )
+{
+  QVector<double> data;
+
+  const QgsAbstractGeometry *geom = g.constGet();
+  QgsWkbTypes::GeometryType geomType = g.type();
+  const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
+  if ( collection && !collection->isEmpty() )
+  {
+    for ( int i = 0; i < collection->numGeometries(); ++i )
+    {
+      addSingleGeometry( collection->geometryN( i ), geomType, data );
+    }
+  }
+  else
+  {
+    addSingleGeometry( geom, geomType, data );
+  }
+
+  return data;
+}
+
 QString InputUtils::filesToString( QList<MerginFile> files )
 {
   QStringList resultList;
@@ -1207,51 +1229,61 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-FeatureLayerPair InputUtils::constructNavigationLineFeatureLayerPair( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsVectorLayer *returnedLayer, QgsQuickMapSettings *mapSettings )
+QgsGeometry InputUtils::constructNavigationHighlightGeometry( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
-    return FeatureLayerPair();
+    return QgsGeometry();
 
-  QgsVectorLayer *layer = targetFeature.layer();
-  QgsFeature f = targetFeature.feature();
+  if ( geometryFromLayer( targetFeature.layer() ) != QStringLiteral( "point" ) )
+    return QgsGeometry();
 
+  // Transform the gps position to map CRS
   QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
-  QgsCoordinateTransform ct( wgs84, layer->crs(), mapSettings->transformContext() );
-
-  if ( !ct.isShortCircuited() )
+  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct1.isShortCircuited() )
   {
     try
     {
-      gpsPosition.transform( ct );
+      gpsPosition.transform( ct1 );
     }
     catch ( QgsCsException &e )
     {
       Q_UNUSED( e )
-      return FeatureLayerPair();
+      return QgsGeometry();
     }
   }
 
+  QgsFeature f = targetFeature.feature();
+  QgsVectorLayer *layer = targetFeature.layer();
   const QgsAbstractGeometry *g = f.geometry().constGet();
 
   QgsPoint targetPoint = QgsPoint( dynamic_cast< const QgsPoint * >( g )->toQPointF() );
+  QgsCoordinateTransform ct2( layer->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct2.isShortCircuited() )
+  {
+    try
+    {
+      gpsPosition.transform( ct2 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QgsGeometry();
+    }
+  }
 
   QgsLineString *line = new QgsLineString( QVector<QgsPoint>() << gpsPosition << targetPoint );
   QgsGeometry geom( line );
   f.setGeometry( geom );
 
-  return FeatureLayerPair( f, returnedLayer );
+  return geom;
 }
 
-QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
-  if ( !mapSettings || !pair.isValid() )
-    return QgsRectangle();
+  QgsGeometry geom = constructNavigationHighlightGeometry( targetFeature, gpsPosition, mapSettings );
 
-  QgsGeometry geom = pair.feature().geometry();
-  if ( geom.isNull() || !geom.constGet() )
-    return QgsRectangle();
-
-  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent( pair.layer(), geom.boundingBox() );
+  QgsRectangle bbox = geom.boundingBox();
   bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
   bbox.scale( 1.2 );
 
