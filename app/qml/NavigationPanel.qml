@@ -50,19 +50,16 @@ Item {
     }
 
     function updateNavigation() {
-      var mapSettings = _map.mapSettings;
-      var positionKit = _map.positionKit;
-
       _map.navigationHighlightFeature = navigationTargetFeature
+      _map.navigationHighlightGpsPosition = _map.positionKit.position
 
       var previewPanelHeightRatio = previewPanelHeight / _map.height;
-      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, _map.positionKit.position, mapSettings, previewPanelHeightRatio );
+      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, _map.positionKit.position, _map.mapSettings, previewPanelHeightRatio );
 
       if ( autoFollow )
-        mapSettings.extent = calculatedNavigationExtent;
+        _map.mapSettings.extent = calculatedNavigationExtent;
 
-      var gpsToFeature = __inputUtils.distanceToFeature( _map.positionKit.position, navigationTargetFeature, mapSettings );
-      navigationPanel.featureToGpsDistance = gpsToFeature
+      navigationPanel.featureToGpsDistance = __inputUtils.distanceToFeature( _map.positionKit.position, navigationTargetFeature, _map.mapSettings );
     }
 
     onAutoFollowChanged: {
@@ -71,7 +68,7 @@ Item {
 
     onNavigationTargetFeatureChanged: {
       navigationPanel.featureTitle = __inputUtils.featureTitle( navigationTargetFeature, __loader.project )
-      _map.navigationHighlightFeature = navigationTargetFeature//__inputUtils.constructNavigationLineFeatureLayerPair( navigationTargetFeature, _map.positionKit.position, __disposableLinesLayer, _map.mapSettings )
+      _map.navigationHighlightFeature = navigationTargetFeature
       autoFollow = true;
       updateNavigation()
     }
@@ -82,6 +79,14 @@ Item {
         if ( _map.state === "navigation" && _map.mapSettings.extent !== calculatedNavigationExtent )
           autoFollow = false;
       }
+    }
+
+    Connections {
+        target: _map.positionKit
+        onPositionChanged: {
+          if ( _map.state === "navigation" && navigationTargetFeature )
+            updateNavigation();
+        }
     }
 
     Drawer {

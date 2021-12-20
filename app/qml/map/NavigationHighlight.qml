@@ -38,7 +38,7 @@ Item {
 
   // feature+layer pair which determines what geometry is highlighted
   property var featureLayerPair: null
-  property var positionKit: null
+  property var gpsPosition: null
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
@@ -80,9 +80,9 @@ Item {
 
   function constructHighlights()
   {
-    if ( !featureLayerPair || !mapSettings ) return
+    if ( !featureLayerPair || !gpsPosition || !mapSettings ) return
 
-    let geom = __inputUtils.constructNavigationHighlightGeometry( featureLayerPair, positionKit.position, mapSettings );
+    let geom = __inputUtils.constructNavigationHighlightGeometry( featureLayerPair, gpsPosition, mapSettings );
     let data = __inputUtils.extractGeometryCoordinates( geom );
 
     let newMarkerItems = []
@@ -138,6 +138,8 @@ Item {
     constructHighlights()
   }
 
+  onGpsPositionChanged: constructHighlights()
+
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
 
@@ -145,11 +147,6 @@ Item {
   // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
   layer.enabled: true
   layer.samples: 4
-
-  Connections {
-      target: positionKit
-      onPositionChanged: constructHighlights();
-  }
 
   Component {
     id: componentMarker

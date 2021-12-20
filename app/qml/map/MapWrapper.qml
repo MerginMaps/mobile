@@ -29,6 +29,7 @@ Item {
   readonly property alias compass: _compass
 
   property alias navigationHighlightFeature: _navigationHighlight.featureLayerPair
+  property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
 
   property bool isInRecordState
 
@@ -314,7 +315,6 @@ Item {
     visible: root.state == "navigation"
 
     mapSettings: _map.mapSettings
-    positionKit: _positionKit
 
     lineColor: InputStyle.highlightLineColor
     lineWidth: InputStyle.highlightLineWidth * 2
