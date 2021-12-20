@@ -146,6 +146,11 @@ Item {
   layer.enabled: true
   layer.samples: 4
 
+  Connections {
+      target: positionKit
+      onPositionChanged: constructHighlights();
+  }
+
   Component {
     id: componentMarker
 

@@ -77,14 +77,6 @@ Item {
     }
 
     Connections {
-        target: _map.positionKit
-        onPositionChanged: {
-          if ( _map.state === "navigation" && navigationTargetFeature )
-            updateNavigation();
-        }
-    }
-
-    Connections {
       target: _map.mapSettings
       onExtentChanged: {
         if ( _map.state === "navigation" && _map.mapSettings.extent !== calculatedNavigationExtent )
@@ -95,10 +87,7 @@ Item {
     Drawer {
       id: drawer
 
-      onClosed: {
-        _map.navigationHighlightFeature = null;
-//        drawerClosed();
-      }
+      onClosed: _map.navigationHighlightFeature = null;
 
       Behavior on height {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
@@ -176,7 +165,6 @@ Item {
                         id: iconContainer
                         height: rowHeight
                         width: rowHeight
-                        visible: !previewPanel.isReadOnly
 
                         MouseArea {
                             id: editArea
@@ -211,14 +199,12 @@ Item {
                       anchors.bottom: title.bottom
                   }
 
-
                   Item {
                       id: content
                       width: parent.width
                       anchors.top: header.bottom
                       anchors.bottom: parent.bottom
                       Text {
-                        anchors.top: recenterBtn.bottom
                         text: "Distance: " + featureToGpsDistance
                         font.pixelSize: InputStyle.fontPixelSizeTitle
                         color: InputStyle.fontColor

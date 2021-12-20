@@ -1263,7 +1263,7 @@ QgsGeometry InputUtils::constructNavigationHighlightGeometry( const FeatureLayer
   {
     try
     {
-      gpsPosition.transform( ct2 );
+      targetPoint.transform( ct2 );
     }
     catch ( QgsCsException &e )
     {
@@ -1274,7 +1274,6 @@ QgsGeometry InputUtils::constructNavigationHighlightGeometry( const FeatureLayer
 
   QgsLineString *line = new QgsLineString( QVector<QgsPoint>() << gpsPosition << targetPoint );
   QgsGeometry geom( line );
-  f.setGeometry( geom );
 
   return geom;
 }

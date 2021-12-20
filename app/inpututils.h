@@ -90,7 +90,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsGeometry &geom );
 
-
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
      * \param srcPath Absolute path to a file.
@@ -418,7 +417,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
     // Returns the title of the feature
-    Q_INVOKABLE QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
+    Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
