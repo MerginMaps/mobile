@@ -427,8 +427,6 @@ int main( int argc, char *argv[] )
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
-  std::unique_ptr<QgsVectorLayer> disposableLinesLayer( new QgsVectorLayer( QStringLiteral( "LineString" ), "disposableLinesLayer", "memory" ) );
-
   // Connec~tions
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
@@ -501,7 +499,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
-  engine.rootContext()->setContextProperty( "__disposableLinesLayer", disposableLinesLayer.get() );
 
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
