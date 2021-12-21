@@ -218,107 +218,107 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="200"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>January</source>
         <translation>1月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>February</source>
         <translation>2月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>March</source>
         <translation>3月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>April</source>
         <translation>4月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>May</source>
         <translation>5月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>June</source>
         <translation>6月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>July</source>
         <translation>7月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>August</source>
         <translation>8月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>September</source>
         <translation>9月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>October</source>
         <translation>10月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>November</source>
         <translation>11月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>December</source>
         <translation>12月</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Sunday</source>
         <translation>日曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Monday</source>
         <translation>月曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Tuesday</source>
         <translation>火曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Wednesday</source>
         <translation>水曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Thursday</source>
         <translation>木曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Friday</source>
         <translation>金曜日</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Saturday</source>
         <translation>土曜日</translation>
     </message>
@@ -644,30 +644,44 @@ Won&apos;t be added to the project.</source>
         <translation>%1 年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1101"/>
+        <location filename="../inpututils.cpp" line="1135"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>スクリーン解像度: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1102"/>
+        <location filename="../inpututils.cpp" line="1136"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>スクリーンDPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1103"/>
+        <location filename="../inpututils.cpp" line="1137"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>スクリーンサイズ: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1104"/>
-        <source>screen device pixel ratio: %1</source>
-        <translation>端末の画面解像度: %1</translation>
+        <location filename="../inpututils.cpp" line="1138"/>
+        <source>reported device pixel ratio: %1
+</source>
+        <translation>取得したデバイスの画素数比率: %1
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1139"/>
+        <source>calculated device pixel ratio: %1
+</source>
+        <translation>計算したデバイスの画素数比率: %1
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1140"/>
+        <source>used dp scale: %1</source>
+        <translation>使用したdpスケール: %1</translation>
     </message>
 </context>
 <context>
@@ -752,58 +766,58 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="248"/>
+        <location filename="../qml/MainPanel.qml" line="61"/>
+        <location filename="../qml/MainPanel.qml" line="240"/>
         <source>Projects</source>
         <translation>プロジェクト</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="267"/>
+        <location filename="../qml/MainPanel.qml" line="81"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="296"/>
+        <location filename="../qml/MainPanel.qml" line="288"/>
         <source>Record</source>
         <translation>記録</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="144"/>
-        <location filename="../qml/MainPanel.qml" line="323"/>
+        <location filename="../qml/MainPanel.qml" line="136"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Zoom to project</source>
         <translation>プロジェクトにズーム</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="163"/>
+        <location filename="../qml/MainPanel.qml" line="155"/>
         <source>Browse data</source>
         <translation>データの閲覧</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="183"/>
-        <location filename="../qml/MainPanel.qml" line="361"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
         <source>Map themes</source>
         <translation>地図テーマ</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="203"/>
-        <location filename="../qml/MainPanel.qml" line="380"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="220"/>
+        <location filename="../qml/MainPanel.qml" line="212"/>
         <source>More</source>
         <translation>さらに</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="233"/>
+        <location filename="../qml/MainPanel.qml" line="225"/>
         <source>Menu</source>
         <translation>メニュー</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="342"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Browse features</source>
         <translation>地物の閲覧</translation>
     </message>
