@@ -9,7 +9,6 @@ attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
 featurelayerpair.cpp \
-highlightsgnode.cpp \
 identifykit.cpp \
 positionkit.cpp \
 scalebarkit.cpp \
@@ -54,7 +53,6 @@ attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
-highlightsgnode.h \
 featurelayerpair.h \
 identifykit.h \
 positionkit.h \
