@@ -25,7 +25,7 @@ ANDROID_FILE=$DIR/../app/version.pri
 echo "patching $ANDROID_FILE"
 sed -i.orig -E "s|VERSION_MAJOR = [0-9]+|VERSION_MAJOR = $MAJOR|g" $ANDROID_FILE
 sed -i.orig -E "s|VERSION_MINOR = [0-9]+|VERSION_MINOR = $MINOR|g" $ANDROID_FILE
-sed -i.orig -E "s|VERSION_FIX   = [0-9]+|VERSION_FIX   = $BUILD|g" $ANDROID_FILE
+sed -i.orig -E "s|VERSION_FIX = [0-9]+|VERSION_FIX = $BUILD|g" $ANDROID_FILE
 rm -f $ANDROID_FILE.orig
 
 # win: scripts/version.cmd
