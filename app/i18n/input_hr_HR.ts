@@ -218,107 +218,107 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>Odustani</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="200"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>January</source>
         <translation>Siječanj</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>February</source>
         <translation>Veljača</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>March</source>
         <translation>Ožujak</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>April</source>
         <translation>Travanj</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>May</source>
         <translation>Svibanj</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>June</source>
         <translation>Lipanj</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>July</source>
         <translation>Srpanj</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>August</source>
         <translation>Kolovoz</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>September</source>
         <translation>Rujan</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>October</source>
         <translation>Listopad</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>November</source>
         <translation>Studeni</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>December</source>
         <translation>Prosinac</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Sunday</source>
         <translation>Nedjelja</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Monday</source>
         <translation>Ponedjeljak</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Tuesday</source>
         <translation>Utorak</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Wednesday</source>
         <translation>Srijeda</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Thursday</source>
         <translation>Četvrtak</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Friday</source>
         <translation>Petak</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Saturday</source>
         <translation>Subota</translation>
     </message>
@@ -643,30 +643,44 @@ Won&apos;t be added to the project.</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1101"/>
+        <location filename="../inpututils.cpp" line="1135"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1102"/>
+        <location filename="../inpututils.cpp" line="1136"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1103"/>
+        <location filename="../inpututils.cpp" line="1137"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1104"/>
-        <source>screen device pixel ratio: %1</source>
-        <translation>omjer piksela zaslona uređaja: %1</translation>
+        <location filename="../inpututils.cpp" line="1138"/>
+        <source>reported device pixel ratio: %1
+</source>
+        <translation>prijavljeni omjer piksela zaslona uređaja: %1
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1139"/>
+        <source>calculated device pixel ratio: %1
+</source>
+        <translation>izračunati omjer piksela zaslona uređaja: %1
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1140"/>
+        <source>used dp scale: %1</source>
+        <translation>korišteno dp mjerilo: %1</translation>
     </message>
 </context>
 <context>
@@ -751,58 +765,58 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="248"/>
+        <location filename="../qml/MainPanel.qml" line="61"/>
+        <location filename="../qml/MainPanel.qml" line="240"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="267"/>
+        <location filename="../qml/MainPanel.qml" line="81"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="296"/>
+        <location filename="../qml/MainPanel.qml" line="288"/>
         <source>Record</source>
         <translation>Snimaj</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="144"/>
-        <location filename="../qml/MainPanel.qml" line="323"/>
+        <location filename="../qml/MainPanel.qml" line="136"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Zoom to project</source>
         <translation>Zumiraj na projekt</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="163"/>
+        <location filename="../qml/MainPanel.qml" line="155"/>
         <source>Browse data</source>
         <translation>Pregledaj podatke</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="183"/>
-        <location filename="../qml/MainPanel.qml" line="361"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
         <source>Map themes</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="203"/>
-        <location filename="../qml/MainPanel.qml" line="380"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="220"/>
+        <location filename="../qml/MainPanel.qml" line="212"/>
         <source>More</source>
         <translation>Više</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="233"/>
+        <location filename="../qml/MainPanel.qml" line="225"/>
         <source>Menu</source>
         <translation>Meni</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="342"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Browse features</source>
         <translation>Pregledaj podatke</translation>
     </message>
