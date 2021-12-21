@@ -218,107 +218,107 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="111"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="204"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="200"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>January</source>
         <translation>Gener</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>February</source>
         <translation>Febrer</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>March</source>
         <translation>Març</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="242"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
         <source>April</source>
         <translation>Abril</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>May</source>
         <translation>Maig</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>June</source>
         <translation>Juny</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>July</source>
         <translation>Juliol</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="243"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
         <source>August</source>
         <translation>Agost</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>September</source>
         <translation>Setembre</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>October</source>
         <translation>Octubre</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>November</source>
         <translation>Novembre</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
         <source>December</source>
         <translation>Desembre</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Sunday</source>
         <translation>Diumenge</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Monday</source>
         <translation>Dilluns</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Tuesday</source>
         <translation>Dimarts</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="248"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
         <source>Wednesday</source>
         <translation>Dimecres</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Thursday</source>
         <translation>Dijous</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Friday</source>
         <translation>Divendres</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="249"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
         <source>Saturday</source>
         <translation>Dissabte</translation>
     </message>
@@ -644,30 +644,43 @@ No s&apos;afegirà al projecte.</translation>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1101"/>
+        <location filename="../inpututils.cpp" line="1135"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1102"/>
+        <location filename="../inpututils.cpp" line="1136"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1103"/>
+        <location filename="../inpututils.cpp" line="1137"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1104"/>
-        <source>screen device pixel ratio: %1</source>
-        <translation>Proporció de píxels de la pantalla del dispositiu: %1</translation>
+        <location filename="../inpututils.cpp" line="1138"/>
+        <source>reported device pixel ratio: %1
+</source>
+        <translation>proporció de píxels del dispositiu informada: %1
+</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1139"/>
+        <source>calculated device pixel ratio: %1
+</source>
+        <translation>relació de píxels del dispositiu calculada: %1</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1140"/>
+        <source>used dp scale: %1</source>
+        <translation>escala dp utilitzada: %1</translation>
     </message>
 </context>
 <context>
@@ -752,58 +765,58 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="248"/>
+        <location filename="../qml/MainPanel.qml" line="61"/>
+        <location filename="../qml/MainPanel.qml" line="240"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="267"/>
+        <location filename="../qml/MainPanel.qml" line="81"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="296"/>
+        <location filename="../qml/MainPanel.qml" line="288"/>
         <source>Record</source>
         <translation>Registre</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="144"/>
-        <location filename="../qml/MainPanel.qml" line="323"/>
+        <location filename="../qml/MainPanel.qml" line="136"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Zoom to project</source>
         <translation>Zoom al projecte</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="163"/>
+        <location filename="../qml/MainPanel.qml" line="155"/>
         <source>Browse data</source>
         <translation>Veure dades</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="183"/>
-        <location filename="../qml/MainPanel.qml" line="361"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
         <source>Map themes</source>
         <translation>Temes de mapa</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="203"/>
-        <location filename="../qml/MainPanel.qml" line="380"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="220"/>
+        <location filename="../qml/MainPanel.qml" line="212"/>
         <source>More</source>
         <translation>Més</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="233"/>
+        <location filename="../qml/MainPanel.qml" line="225"/>
         <source>Menu</source>
         <translation>Menú</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="342"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Browse features</source>
         <translation>Veure les característiques</translation>
     </message>
