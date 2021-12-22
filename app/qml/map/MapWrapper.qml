@@ -312,7 +312,7 @@ Item {
   NavigationHighlight {
     id: _navigationHighlight
     anchors.fill: _map
-    visible: root.state == "navigation"
+    visible: root.state === "navigation"
 
     mapSettings: _map.mapSettings
 
