@@ -1367,7 +1367,7 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )
 {
   if ( !feature.isValid() || geometryFromLayer( feature.layer() ) != "point" )
-      return QgsPointXY();
+    return QgsPointXY();
 
   QgsFeature f = feature.feature();
   const QgsAbstractGeometry *g = f.geometry().constGet();
