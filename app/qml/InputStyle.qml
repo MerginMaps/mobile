@@ -135,7 +135,7 @@ QtObject {
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string navigateToIcon: "qrc:/navigate_to.png"
-
+    
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     // map related styling constats
