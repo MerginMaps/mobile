@@ -621,7 +621,6 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
                                        const QgsCoordinateTransformContext &context,
                                        const QgsPointXY &srcPoint )
 {
-  qDebug() << srcCrs.geographicCrsAuthId() << " " << destCrs.geographicCrsAuthId();
   try
   {
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
