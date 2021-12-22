@@ -52,6 +52,9 @@ Item {
 
   signal accuracyButtonClicked()
 
+  // This signal is emmited when the map is clicked in navigation mode and used to close all panels
+  signal exitNavigationClicked();
+
   function centerToPair( pair, considerFormPreview = false ) {
     if ( considerFormPreview )
       var previewPanelHeightRatio = previewPanelHeight / _map.height
@@ -238,9 +241,6 @@ Item {
         if ( _highlightIdentified.visible )
           _highlightIdentified.visible = false
 
-        if ( _digitizingController.recording )
-          _digitizingController.stopRecording()
-
         break
       }
       case "inactive": {
@@ -276,7 +276,7 @@ Item {
     onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
-      if ( !root.isInRecordState && root.state != "navigation" )
+      if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = _identifyKit.identifyOne( screenPoint )
@@ -294,8 +294,8 @@ Item {
           root.nothingIdentified()
         }
       }
-      if ( root.state == "navigation" )
-        root.nothingIdentified();
+      if ( root.state === "navigation" )
+        exitNavigationClicked();
     }
   }
 

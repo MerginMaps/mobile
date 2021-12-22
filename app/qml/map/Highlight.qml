@@ -46,7 +46,6 @@ Item {
   property QgsQuick.MapSettings mapSettings
 
   property bool recordingInProgress: false
-  property bool navigationInProgress: true
   property color guideLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
 
   property bool guideLineAllowed: false
@@ -139,7 +138,7 @@ Item {
       else // line or polygon
       {
         // place temporary point marker if this is the first point in line / polygon
-        if ( ( navigationInProgress || recordingInProgress ) && data.length < dataStartIndex + 3 )
+        if ( ( recordingInProgress ) && data.length < dataStartIndex + 3 )
         {
           newMarkerItems.push( componentMarker.createObject( highlight, {
                                                               "posX": data[ dataStartIndex ],
@@ -168,7 +167,7 @@ Item {
           i = k
         }
 
-        if ( ( navigationInProgress || recordingInProgress ) && guideLineAllowed ) { // construct a guide line / polygon
+        if ( ( recordingInProgress ) && guideLineAllowed ) { // construct a guide line / polygon
           if ( geometryType === 2 && elements.length > 2 )
           {
             newGuideLineElements = Array.from( elements ) // shallow copy

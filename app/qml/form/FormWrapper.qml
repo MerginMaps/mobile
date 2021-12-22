@@ -54,10 +54,6 @@ Item {
     drawer.close()
   }
 
-  function drawerIsOpen() {
-    return drawer.opened;
-  }
-
   Drawer {
     id: drawer
 

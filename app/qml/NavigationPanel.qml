@@ -13,8 +13,6 @@ import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import "."  // import InputStyle singleton
-import "./components" as Components
-import lc 1.0
 
 Item {
     id: navigationPanel

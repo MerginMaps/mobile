@@ -126,16 +126,12 @@ ApplicationWindow {
       width: window.width
       previewPanelHeight: formsStackManager.previewHeight
 
-      onFeatureIdentified: {
-        let wasOpen = navigationPanel.isOpen;
-        navigationPanel.endNavigation();
-        if ( !wasOpen )
-          formsStackManager.openForm( pair, "readOnly", "preview" );
-      }
+      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
 
-      onNothingIdentified: {
-        if ( navigationPanel.isOpen )
-          navigationPanel.endNavigation();
+      onNothingIdentified: formsStackManager.closeDrawer();
+
+      onExitNavigationClicked: {
+        navigationPanel.endNavigation();
         formsStackManager.closeDrawer();
       }
 
