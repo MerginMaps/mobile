@@ -130,11 +130,6 @@ ApplicationWindow {
 
       onNothingIdentified: formsStackManager.closeDrawer();
 
-      onExitNavigationClicked: {
-        navigationPanel.endNavigation();
-        formsStackManager.closeDrawer();
-      }
-
       onRecordingFinished: {
         formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"

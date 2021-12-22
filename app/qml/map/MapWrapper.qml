@@ -52,9 +52,6 @@ Item {
 
   signal accuracyButtonClicked()
 
-  // This signal is emmited when the map is clicked in navigation mode and used to close all panels
-  signal exitNavigationClicked();
-
   function centerToPair( pair, considerFormPreview = false ) {
     if ( considerFormPreview )
       var previewPanelHeightRatio = previewPanelHeight / _map.height
@@ -294,8 +291,6 @@ Item {
           root.nothingIdentified()
         }
       }
-      if ( root.state === "navigation" )
-        exitNavigationClicked();
     }
   }
 
