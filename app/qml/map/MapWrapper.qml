@@ -28,7 +28,7 @@ Item {
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
 
-  property alias navigationHighlightFeature: _navigationHighlight.featureLayerPair
+  property alias navigationHighlightFeature: _navigationHighlight.destinationPair
   property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
 
   property bool isInRecordState
@@ -172,7 +172,7 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
-    _navigationHighlight.featureLayerPair = null
+    _navigationHighlight.destinationPair = null
   }
 
   states: [
@@ -323,12 +323,6 @@ Item {
 
     outlinePenWidth: InputStyle.highlighOutlinePenWidth
     outlineColor: InputStyle.highlighOutlineColor
-
-    markerType: "image"
-    markerImageSource: InputStyle.mapMarkerIcon
-    markerWidth: InputStyle.mapMarkerWidth
-    markerHeight: InputStyle.mapMarkerHeight
-    markerAnchorY: InputStyle.mapMarkerAnchorY
   }
 
   PositionMarker {

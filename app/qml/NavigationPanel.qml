@@ -127,7 +127,7 @@ Item {
                         height: rowHeight
                         width: parent.width - navigationIconContainer.width - iconContainer.width
                         text: featureTitle
-                        font.pixelSize: InputStyle.fontPixelSizeTitle
+                        font.pixelSize: InputStyle.fontPixelSizeBig
                         color: InputStyle.fontColor
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
@@ -209,7 +209,7 @@ Item {
                       anchors.bottom: parent.bottom
                       Text {
                         text: "Distance: " + featureToGpsDistance
-                        font.pixelSize: InputStyle.fontPixelSizeTitle
+                        font.pixelSize: InputStyle.fontPixelSizeNormal
                         color: InputStyle.fontColor
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter

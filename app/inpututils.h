@@ -86,11 +86,6 @@ class InputUtils: public QObject
     Q_INVOKABLE QVector<double> extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
 
     /**
-     * Extract geometry coordinates from the given geomerty that is already in map CRS.
-     */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsGeometry &geom );
-
-    /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
      * \param srcPath Absolute path to a file.
      * \param dateTime new name of a file. If is invalid, current dateTime is used.
@@ -407,14 +402,14 @@ class InputUtils: public QObject
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
-    // Constructs geometry (in map CRS) used for highlighting navigation
-    Q_INVOKABLE static QgsGeometry constructNavigationHighlightGeometry( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings );
+    // Returns a point geometry from point feature
+    Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
     // Returns the extent of the navigation feature representing the source and the destination of the navigation
     Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // Returns the distance from \a gpsPos to the feature \a pair
-    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPos, const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
