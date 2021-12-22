@@ -125,7 +125,7 @@ Item {
                     Text {
                         id: titleText
                         height: rowHeight
-                        width: parent.width - navigationIconContainer.width - iconContainer.width
+                        width: parent.width - recenterIconContainer.width - iconContainer.width
                         text: featureTitle
                         font.pixelSize: InputStyle.fontPixelSizeBig
                         color: InputStyle.fontColor
@@ -136,30 +136,30 @@ Item {
                     }
 
                     Item {
-                        id: navigationIconContainer
+                        id: recenterIconContainer
                         height: rowHeight
                         width: rowHeight
 
                         MouseArea {
-                            id: navigationIconArea
-                            anchors.fill: navigationIconContainer
+                            id: recenterIconArea
+                            anchors.fill: recenterIconContainer
                             onClicked: autoFollow = true;
                         }
 
                         Image {
-                            id: navigationIcon
+                            id: recenterIcon
                             anchors.fill: parent
-                            anchors.margins: rowHeight/8
+                            anchors.margins: rowHeight/4
                             anchors.rightMargin: 0
-                            source: InputStyle.navigateToIcon
+                            source: InputStyle.zoomToProjectIcon
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
                         }
 
                         ColorOverlay {
-                            anchors.fill: navigationIcon
-                            source: navigationIcon
+                            anchors.fill: recenterIcon
+                            source: recenterIcon
                             color: InputStyle.fontColor
                         }
                     }
