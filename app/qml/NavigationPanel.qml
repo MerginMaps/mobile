@@ -90,7 +90,7 @@ Item {
     Drawer {
       id: drawer
 
-      onClosed: _map.navigationHighlightFeature = null;
+      onClosed: endNavigation()
 
       Behavior on height {
         PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
