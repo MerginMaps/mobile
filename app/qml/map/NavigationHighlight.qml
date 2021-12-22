@@ -66,7 +66,9 @@ Item {
   {
     if ( !destinationPair || !gpsPosition || !mapSettings ) return
 
+    print( "gpsMapCRS" )
     let gpsMapCRS = __inputUtils.transformPoint( __inputUtils.coordinateReferenceSystemFromEpsgId( 4326 ), mapSettings.destinationCrs, mapSettings.transformContext(), __inputUtils.pointXY( gpsPosition.x, gpsPosition.y ) );
+    print( "gpsMapCRS ", destinationPair.layer.crs )
     let targetMapCRS = __inputUtils.transformPoint( destinationPair.layer.crs, mapSettings.destinationCrs, mapSettings.transformContext(), __inputUtils.extractPointFromFeature( destinationPair ) );
 
     _srcX = gpsMapCRS.x;
@@ -96,6 +98,9 @@ Item {
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
+
+      startX: _srcX
+      startY: _srcY
 
       PathLine { x: _srcX; y: _srcY; }
       PathLine { x: _dstX; y: _dstY; }

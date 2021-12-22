@@ -621,6 +621,7 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
                                        const QgsCoordinateTransformContext &context,
                                        const QgsPointXY &srcPoint )
 {
+  qDebug() << srcCrs.geographicCrsAuthId() << " " << destCrs.geographicCrsAuthId();
   try
   {
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
@@ -1280,8 +1281,10 @@ QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &target
   }
 
   QgsRectangle bbox;
-  bbox.include( gpsPosition );
-  bbox.include( targetPoint );
+  bbox.setXMinimum( qMin( gpsPosition.x(), targetPoint.x() ) );
+  bbox.setXMaximum( qMax( gpsPosition.x(), targetPoint.x() ) );
+  bbox.setYMinimum( qMin( gpsPosition.y(), targetPoint.y() ) );
+  bbox.setYMaximum( qMax( gpsPosition.y(), targetPoint.y() ) );
   bbox.scale( 1.2 );
   bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
 
