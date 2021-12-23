@@ -92,6 +92,7 @@
 #include "projectsproxymodel.h"
 #include "project.h"
 #include "qgsproject.h"
+#include "bluetoothdiscoverymodel.h"
 
 
 #ifndef NDEBUG
@@ -278,6 +279,7 @@ void initDeclarative()
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
+  qmlRegisterType< BluetoothDiscoveryModel >( "lc", 1, 0, "BluetoothDiscoveryModel" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );

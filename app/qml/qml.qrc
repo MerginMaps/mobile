@@ -104,5 +104,6 @@
         <file>ProjectIssuesPanel.qml</file>
         <file>NavigationPanel.qml</file>
         <file>map/NavigationHighlight.qml</file>
+        <file>misc/LocationProvider.qml</file>
     </qresource>
 </RCC>
