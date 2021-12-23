@@ -124,7 +124,7 @@ ApplicationWindow {
 
       height: window.height - mainPanel.height
       width: window.width
-      previewPanelHeight: formsStackManager.previewHeight
+      previewPanelHeight: formsStackManager.takenPanelsSpace
 
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
 

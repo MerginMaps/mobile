@@ -497,7 +497,7 @@ Item {
     maxWidth: parent.width / 2
 
     anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
-    anchors.bottomMargin: InputStyle.smallGap
+    anchors.bottomMargin: root.previewPanelHeight + InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
     visible: root.state !== "inactive" && _gpsState.state !== "unavailable"

@@ -28,6 +28,8 @@ Item {
 
   property int activeFormIndex: formsStack.depth - 1
 
+  property real takenPanelsSpace: 0
+
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
@@ -51,6 +53,7 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
+    takenPanelsSpace = previewHeight
   }
 
   function _getActiveForm() {
@@ -185,7 +188,10 @@ Item {
       formsStack.pop()
 
       if ( formsStack.depth <= 1 )
+      {
         root.closed() // this is the top most form, we want to keep it instantiated, just invisible
+        takenPanelsSpace = 0
+      }
     }
 
     focus: true
