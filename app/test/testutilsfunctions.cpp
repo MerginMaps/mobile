@@ -19,6 +19,8 @@
 #include "qgspointxy.h"
 #include "qgis.h"
 #include "qgsunittypes.h"
+#include "qgsfeature.h"
+#include "qgsgeometry.h"
 
 #include "testutils.h"
 
@@ -323,4 +325,74 @@ void TestUtilsFunctions::testDirSize()
 
   dirSize = mUtils->dirSize( tempFolder + QStringLiteral( "/.mergin" ) );
   QCOMPARE( dirSize, 0 );
+}
+
+void TestUtilsFunctions::testExtractPointFromFeature()
+{
+  FeatureLayerPair invalidPair;
+  QCOMPARE( mUtils->extractPointFromFeature( invalidPair ), QgsPointXY() );
+
+  QgsFeature feature;
+  QgsGeometry geom;
+  QgsPoint *pt = new QgsPoint( 1, 2, 3, 4 );
+  geom.set( pt );
+  feature.setGeometry( geom );
+
+  QgsVectorLayer linesLayer( QStringLiteral( "LineString?crs=%1" ).arg(  "EPSG:4326"  ), "linesLayer", "memory" );
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg(  "EPSG:4326"  ), "pointsLayer", "memory" );
+
+  FeatureLayerPair linePair( feature, &linesLayer );
+  QCOMPARE( mUtils->extractPointFromFeature( linePair ), QgsPointXY() );
+
+  FeatureLayerPair pointPair( feature, &pointsLayer );
+  QCOMPARE( mUtils->extractPointFromFeature( pointPair ), QgsPointXY( 1, 2 ) );
+}
+
+void TestUtilsFunctions::testNavigationFeatureExtent()
+{
+  QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 6326 );
+
+  QgsQuickMapSettings ms;
+  ms.setDestinationCrs( crs );
+  ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
+  ms.setOutputSize( QSize( 1000, 500 ) );
+
+  QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
+  QgsPoint *point = new QgsPoint(36.77440939232914, 3.0596565641869136 );
+
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg(  "EPSG:4326"  ), "pointsLayer", "memory" );
+
+  QgsFeature feature;
+  QgsGeometry geom;
+  geom.set( point );
+  feature.setGeometry( geom );
+
+  FeatureLayerPair pair( feature, &pointsLayer );
+
+  QgsRectangle rect = mUtils->navigationFeatureExtent( pair, gpsPos, &ms, 0 );
+  QgsRectangle acceptedExtent( 36.773085939, 3.059613648845, 36.7745297063, 3.06012863296 );
+  QCOMPARE( rect, acceptedExtent );
+}
+
+void TestUtilsFunctions::testDistanceToFeature()
+{
+  QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+
+  QgsQuickMapSettings ms;
+  ms.setDestinationCrs( crs );
+
+  QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
+  QgsPoint *point = new QgsPoint(36.77440939232914, 3.0596565641869136 );
+
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg(  "EPSG:4326"  ), "pointsLayer", "memory" );
+
+  QgsFeature feature;
+  QgsGeometry geom;
+  geom.set( point );
+  feature.setGeometry( geom );
+
+  FeatureLayerPair pair( feature, &pointsLayer );
+
+  QString ditance = mUtils->distanceToFeature( gpsPos, pair, &ms );
+  QCOMPARE( ditance, QStringLiteral( "100" ) );
 }
