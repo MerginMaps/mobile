@@ -50,8 +50,14 @@ class CoreUtils
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
 
-
     static bool createEmptyFile( const QString &filePath );
+
+    /**
+    * Returns modified path for a conflict file in following form:
+    * <path>/<filename>_<copy/edit>_conflict_<username>_v<version>.<file_extension>
+    */
+    static QString generateCopyConflictFileName( const QString &path, const QString &username, int version );
+    static QString generateEditConflictFileName( const QString &path, const QString &username, int version );
 
     /**
      * Sets the filename of the internal text log file

@@ -197,3 +197,21 @@ bool CoreUtils::createEmptyFile( const QString &filePath )
   newFile.close();
   return true;
 }
+
+QString CoreUtils::generateCopyConflictFileName( const QString &path, const QString &username, int version )
+{
+  if ( path.isEmpty() )
+    return QString();
+
+  QFileInfo f( path );
+  return QString( "%1/%2_copy_conflict_%3_v%4.%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+}
+
+QString CoreUtils::generateEditConflictFileName( const QString &path, const QString &username, int version )
+{
+  if ( path.isEmpty() )
+    return QString();
+
+  QFileInfo f( path );
+  return QString( "%1/%2_edit_conflict_%3_v%4.%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+}

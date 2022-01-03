@@ -48,6 +48,9 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testModels
 NFAILURES=$(($NFAILURES+$?))
 
+$INPUT_EXECUTABLE --testCoreUtils
+NFAILURES=$(($NFAILURES+$?))
+
 echo "Total $NFAILURES failures found in testing"
 
 exit $NFAILURES

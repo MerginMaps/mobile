@@ -24,6 +24,7 @@
 #include "test/testvariablesmanager.h"
 #include "test/testformeditors.h"
 #include "test/testmodels.h"
+#include "test/testcoreutils.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -152,6 +153,11 @@ int InputTests::runTest() const
   {
     TestModels modelsTest;
     nFailed = QTest::qExec( &modelsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testCoreUtils" )
+  {
+    TestCoreUtils coreUtilsTest;
+    nFailed = QTest::qExec( &coreUtilsTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )
