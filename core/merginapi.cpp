@@ -1192,11 +1192,6 @@ QString MerginApi::getTempProjectDir( const QString &projectFullName )
   return mDataDir + "/" + TEMP_FOLDER + projectFullName;
 }
 
-QString MerginApi::generateConflictFileName( const QString &path, int version )
-{
-  return QString( "%1_conflict_%2_v%3" ).arg( path, mUserAuth->username(), QString::number( version ) );
-}
-
 QString MerginApi::getFullProjectName( QString projectNamespace, QString projectName ) // TODO: move to inpututils?
 {
   return QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
@@ -1447,8 +1442,10 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   QString dest = projectDir + "/" + filePath;
   QString basefile = projectDir + "/.mergin/" + filePath;
 
-  // TODO where the conflict file should be located?
-  QString conflictfile = projectDir + "/.mergin/" + filePath + ".conflict";
+  LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
+
+  // add conflict files to project dir so they can be synced
+  QString conflictfile = CoreUtils::findUniquePath( CoreUtils::generateEditConflictFileName( projectDir, mUserAuth->username(), info.localVersion ), false );
 
   createPathIfNotExists( src );
   createPathIfNotExists( dest );
@@ -1501,7 +1498,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-    QString newDest = CoreUtils::findUniquePath( generateConflictFileName( dest, info.localVersion ), false );
+    QString newDest = CoreUtils::findUniquePath( CoreUtils::generateCopyConflictFileName( dest, mUserAuth->username(), info.localVersion ), false );
     if ( !QFile::rename( dest, newDest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
@@ -1555,7 +1552,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-        QString newPath = CoreUtils::findUniquePath( generateConflictFileName( origPath, info.localVersion ), false );
+        QString newPath = CoreUtils::findUniquePath( CoreUtils::generateCopyConflictFileName( origPath, mUserAuth->username(), info.localVersion ), false );
         if ( !QFile::rename( origPath, newPath ) )
         {
           CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );

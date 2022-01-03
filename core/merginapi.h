@@ -549,13 +549,6 @@ class MerginApi: public QObject
     * \param projectFullName
     */
     QString getTempProjectDir( const QString &projectFullName );
-    /**
-    * Returns modified path for a conflict file in following form: <path>_conflict_<username>_<version>
-    * where username is taken from currently logged in user in mergin.
-    * \param QString path
-    * \param int version
-    */
-    QString generateConflictFileName( const QString &path, int version );
 
     /** Creates a request to get project details (list of project files).
      */
