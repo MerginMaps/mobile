@@ -43,6 +43,9 @@ Item {
     }
 
     function endNavigation() {
+      autoFollow = true
+      updateNavigation()
+      autoFollow = false
       _map.state = mapStateBeforeNavigation;
       drawer.close()
     }
