@@ -338,8 +338,8 @@ void TestUtilsFunctions::testExtractPointFromFeature()
   geom.set( pt );
   feature.setGeometry( geom );
 
-  QgsVectorLayer linesLayer( QStringLiteral( "LineString?crs=%1" ).arg( "EPSG:4326"  ), "linesLayer", "memory" );
-  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326"  ), "pointsLayer", "memory" );
+  QgsVectorLayer linesLayer( QStringLiteral( "LineString?crs=%1" ).arg( "EPSG:4326" ), "linesLayer", "memory" );
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326" ), "pointsLayer", "memory" );
 
   FeatureLayerPair linePair( feature, &linesLayer );
   QCOMPARE( mUtils->extractPointFromFeature( linePair ), QgsPointXY() );
@@ -360,7 +360,7 @@ void TestUtilsFunctions::testNavigationFeatureExtent()
   QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
   QgsPoint *point = new QgsPoint( 36.77440939232914, 3.0596565641869136 );
 
-  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326"  ), "pointsLayer", "memory" );
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326" ), "pointsLayer", "memory" );
 
   QgsFeature feature;
   QgsGeometry geom;
@@ -384,7 +384,7 @@ void TestUtilsFunctions::testDistanceToFeature()
   QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
   QgsPoint *point = new QgsPoint( 36.77440939232914, 3.0596565641869136 );
 
-  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326"  ), "pointsLayer", "memory" );
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326" ), "pointsLayer", "memory" );
 
   QgsFeature feature;
   QgsGeometry geom;
