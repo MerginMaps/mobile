@@ -154,7 +154,7 @@ Item {
 
   function updatePosition() {
     let autoCenterDuringRecording = _digitizingController.useGpsPoint && root.isInRecordState
-    let autoCenterDuringViewing = !root.isInRecordState && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
+    let autoCenterDuringViewing = !root.isInRecordState && root.state != "navigation" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
 
     if ( autoCenterDuringRecording || autoCenterDuringViewing ) {
       let useGpsPoint = _digitizingController.useGpsPoint
