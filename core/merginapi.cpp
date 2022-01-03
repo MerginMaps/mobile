@@ -1986,9 +1986,9 @@ void MerginApi::prepareDownloadConfig( const QString &projectFullName, bool down
 
   if ( !transaction.config.isValid )
   {
-    // if transaction is not valid, consider it as deleted
+    // if transaction is not valid (or missing), consider it as deleted
     transaction.config.downloadMissingFiles = true;
-    CoreUtils::log( "MerginConfig", "Config has invalid structure, continuing as if project had no config" );
+    CoreUtils::log( "MerginConfig", "No config detected" );
   }
   else if ( serverContainsConfig && previousVersionContainedConfig )
   {
