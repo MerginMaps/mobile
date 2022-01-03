@@ -305,6 +305,13 @@ ApplicationWindow {
       asynchronous: true
       active: false
       sourceComponent: gpsDataPageComponent
+      onActiveChanged: {
+        if ( gpsDataPageLoader.active )
+        {
+          navigationPanel.endNavigation();
+          formsStackManager.closeDrawer();
+        }
+      }
     }
 
     MapThemePanel {

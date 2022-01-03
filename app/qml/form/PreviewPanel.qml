@@ -27,12 +27,19 @@ Item {
     signal editClicked()
     signal navigateToFeature( var feature )
 
-      MouseArea {
-          anchors.fill: parent
-          onClicked: {
-              contentClicked()
-          }
+    Connections {
+      target: controller
+      onFeatureLayerPairChanged: {
+        navigationIconContainer.visible = __inputUtils.geometryFromLayer( controller.featureLayerPair.layer ) === "point";
       }
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: {
+        contentClicked()
+      }
+    }
 
     layer.enabled: true
     layer.effect: Components.Shadow {}
@@ -59,7 +66,7 @@ Item {
                   Text {
                       id: titleText
                       height: rowHeight
-                      width: parent.width - navigationIconContainer.width - iconContainer.width
+                      width: parent.width - 2 * rowHeight
                       text: controller.title
                       font.pixelSize: InputStyle.fontPixelSizeBig
                       color: InputStyle.fontColor
@@ -71,8 +78,10 @@ Item {
 
                   Item {
                       id: navigationIconContainer
+                      visible: __inputUtils.geometryFromLayer( controller.featureLayerPair.layer ) === "point"
                       height: rowHeight
                       width: rowHeight
+                      anchors.left: titleText.right
 
                       MouseArea {
                           id: navigationIconArea
@@ -85,7 +94,7 @@ Item {
                           anchors.fill: parent
                           anchors.margins: rowHeight/8
                           anchors.rightMargin: 0
-                          source: "qrc:/navigate_to.png"
+                          source: InputStyle.navigateToIcon
                           sourceSize.width: width
                           sourceSize.height: height
                           fillMode: Image.PreserveAspectFit
@@ -103,6 +112,7 @@ Item {
                       height: rowHeight
                       width: rowHeight
                       visible: !previewPanel.isReadOnly
+                      anchors.left: navigationIconContainer.right
 
                       MouseArea {
                           id: editArea
