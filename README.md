@@ -3,7 +3,6 @@
 Platform builds:
 
 [![InputApp Android Build](https://github.com/lutraconsulting/input/workflows/Android/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Android%22)
-[![InputApp Win Build](https://ci.appveyor.com/api/projects/status/05296dh8ml5b11vj?svg=true)](https://ci.appveyor.com/project/PeterPetrik/input)
 [![InputApp iOS Build](https://github.com/lutraconsulting/input/workflows/iOS%20Build/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22iOS+Build%22)
 
 Other Checks:
