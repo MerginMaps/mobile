@@ -97,7 +97,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-android
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-android-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
