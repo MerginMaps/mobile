@@ -90,6 +90,20 @@ Item {
     transform: mapTransform
 
     ShapePath {
+      id: lineShapePath2
+      strokeColor: "black"
+      strokeWidth: (navHighlight.lineWidth - navHighlight.outlinePenWidth * 2 + 5 * __dp) / navHighlight.mapTransformScale // negate scaling from the transform
+      fillColor: "black"
+      capStyle: ShapePath.RoundCap
+      joinStyle: ShapePath.BevelJoin
+
+      startX: _srcX
+      startY: _srcY
+
+      PathLine { x: _dstX; y: _dstY; }
+    }
+
+    ShapePath {
       id: lineShapePath
       strokeColor: navHighlight.lineColor
       strokeWidth: (navHighlight.lineWidth - navHighlight.outlinePenWidth * 2) / navHighlight.mapTransformScale  // negate scaling from the transform
@@ -100,7 +114,6 @@ Item {
       startX: _srcX
       startY: _srcY
 
-      PathLine { x: _srcX; y: _srcY; }
       PathLine { x: _dstX; y: _dstY; }
     }
   }
