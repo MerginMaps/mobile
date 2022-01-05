@@ -426,7 +426,7 @@ ApplicationWindow {
       }
 
       onNavigateToFeature: {
-        if ( __inputUtils.geometryFromLayer( feature.layer ) !== "point" )
+        if ( !__inputUtils.isPointLayerFeature( feature ) )
           return;
         navigationPanel.startNavigation();
         navigationPanel.navigationTargetFeature = feature;

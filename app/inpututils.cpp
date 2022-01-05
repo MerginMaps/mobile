@@ -46,6 +46,8 @@
 #include <limits>
 #include <math.h>
 
+#include <iostream>
+
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
 
@@ -1375,4 +1377,14 @@ QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature 
   const QgsAbstractGeometry *g = f.geometry().constGet();
 
   return QgsPoint( dynamic_cast< const QgsPoint * >( g )->toQPointF() );
+}
+
+bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
+{
+  if ( !feature.isValid() || geometryFromLayer( feature.layer() ) != "point" )
+    return false;
+  const QgsAbstractGeometry *g = feature.feature().geometry().constGet();
+  qDebug() << "geometry type: " << feature.feature().geometry().type();
+  const QgsPoint *point = dynamic_cast< const QgsPoint * >( g );
+  return point != nullptr;
 }

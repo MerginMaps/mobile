@@ -30,7 +30,7 @@ Item {
     Connections {
       target: controller
       onFeatureLayerPairChanged: {
-        navigationIconContainer.visible = __inputUtils.geometryFromLayer( controller.featureLayerPair.layer ) === "point";
+        navigationIconContainer.visible = __inputUtils.isPointLayerFeature( controller.featureLayerPair );
       }
     }
 
@@ -78,7 +78,7 @@ Item {
 
                   Item {
                       id: navigationIconContainer
-                      visible: __inputUtils.geometryFromLayer( controller.featureLayerPair.layer ) === "point"
+                      visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
                       height: rowHeight
                       width: rowHeight
                       anchors.left: titleText.right

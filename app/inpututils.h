@@ -419,6 +419,9 @@ class InputUtils: public QObject
 
     // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
     static qreal calculateDpRatio();
+
+    // Returns whether geometry of the feature is an actual Point feature (Used because some )
+    Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
