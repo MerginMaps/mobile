@@ -399,3 +399,38 @@ void TestUtilsFunctions::testDistanceToFeature()
   QString ditance = mUtils->distanceToFeature( gpsPos, pair, &ms );
   QCOMPARE( ditance, QStringLiteral( "142.20 m" ) );
 }
+
+void TestUtilsFunctions::testIsPointLayerFeature()
+{
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326" ), "pointsLayer", "memory" );
+  QgsVectorLayer linesLayer( QStringLiteral( "LineString?crs=%1" ).arg( "EPSG:4326" ), "linesLayer", "memory" );
+
+  QgsFeature pointFeature;
+  QgsGeometry geom;
+  QgsPoint *pt = new QgsPoint( 1, 2, 3, 4 );
+  geom.set( pt );
+  pointFeature.setGeometry( geom );
+
+  QgsFeature lineFeature;
+  QgsGeometry lineGeom;
+  QgsLineString *line = new QgsLineString( QVector<QgsPointXY>() << QgsPointXY( 0, 0 ) << QgsPointXY( 1, 1 ) );
+  lineGeom.set( line );
+  lineFeature.setGeometry( lineGeom );
+
+  {
+    FeatureLayerPair pair( pointFeature, &pointsLayer );
+    QCOMPARE( InputUtils::isPointLayerFeature( pair ), true );
+  }
+  {
+    FeatureLayerPair pair( pointFeature, &linesLayer );
+    QCOMPARE( InputUtils::isPointLayerFeature( pair ), false );
+  }
+  {
+    FeatureLayerPair pair( lineFeature, &pointsLayer );
+    QCOMPARE( InputUtils::isPointLayerFeature( pair ), false );
+  }
+  {
+    FeatureLayerPair pair( lineFeature, &linesLayer );
+    QCOMPARE( InputUtils::isPointLayerFeature( pair ), false );
+  }
+}

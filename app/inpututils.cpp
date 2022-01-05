@@ -1384,7 +1384,6 @@ bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
   if ( !feature.isValid() || geometryFromLayer( feature.layer() ) != "point" )
     return false;
   const QgsAbstractGeometry *g = feature.feature().geometry().constGet();
-  qDebug() << "geometry type: " << feature.feature().geometry().type();
   const QgsPoint *point = dynamic_cast< const QgsPoint * >( g );
   return point != nullptr;
 }

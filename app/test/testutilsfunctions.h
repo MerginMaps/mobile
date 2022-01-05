@@ -37,6 +37,7 @@ class TestUtilsFunctions: public QObject
     void testExtractPointFromFeature();
     void testNavigationFeatureExtent();
     void testDistanceToFeature();
+    void testIsPointLayerFeature();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
