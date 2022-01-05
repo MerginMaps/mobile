@@ -428,6 +428,12 @@ ApplicationWindow {
       onNavigateToFeature: {
         if ( !__inputUtils.isPointLayerFeature( feature ) )
           return;
+        if ( !map.positionKit.hasPosition )
+        {
+          showMessage( "Navigation mode is disabled because location is unavailable!" );
+          return;
+        }
+
         navigationPanel.startNavigation();
         navigationPanel.navigationTargetFeature = feature;
       }
