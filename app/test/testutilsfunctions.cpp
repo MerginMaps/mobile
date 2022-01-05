@@ -371,7 +371,10 @@ void TestUtilsFunctions::testNavigationFeatureExtent()
 
   QgsRectangle rect = mUtils->navigationFeatureExtent( pair, gpsPos, &ms, 0 );
   QgsRectangle acceptedExtent( 36.773085939, 3.059613648845, 36.7745297063, 3.06012863296 );
-  QCOMPARE( rect, acceptedExtent );
+  QCOMPARE( rect.xMinimum(), acceptedExtent.xMinimum() );
+  QCOMPARE( rect.yMinimum(), acceptedExtent.yMinimum() );
+  QCOMPARE( rect.xMaximum(), acceptedExtent.xMaximum() );
+  QCOMPARE( rect.yMaximum(), acceptedExtent.yMaximum() );
 }
 
 void TestUtilsFunctions::testDistanceToFeature()
@@ -394,5 +397,5 @@ void TestUtilsFunctions::testDistanceToFeature()
   FeatureLayerPair pair( feature, &pointsLayer );
 
   QString ditance = mUtils->distanceToFeature( gpsPos, pair, &ms );
-  QCOMPARE( ditance, QStringLiteral( "100" ) );
+  QCOMPARE( ditance, QStringLiteral( "142.20 m" ) );
 }
