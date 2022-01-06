@@ -83,7 +83,7 @@ void TestCoreUtils::testFindUniquePath()
   projectDir.mkpath( projectPath );
 
   QVERIFY( projectDir.exists() );
-  QVERIFY( projectDir.entryList( QDir::NoDotAndDotDot ).isEmpty() );
+  QVERIFY( projectDir.entryList( QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs ).isEmpty() );
 
   //
   // Create test files in the following structure:

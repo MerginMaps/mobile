@@ -89,6 +89,7 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
   deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteUpdateLocalUpdate" );
   deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteAddLocalAdd" );
+  deleteRemoteProject( mApiExtra, mUsername, "testEditConflictScenario" );
   deleteRemoteProject( mApiExtra, mUsername, "testUploadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testCreateProjectTwice" );
@@ -943,8 +944,8 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   // verify the result: the server version should be in test1.txt
-  // and the local version should go to test1_copy_conflict_<username>_v<version>.txt
-  QString conflictFilename = projectDir + "/test1_copy_conflict_" + mUsername + "_v1.txt";
+  // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
+  QString conflictFilename = projectDir + "/test1 (conflicted copy, " + mUsername + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
 
@@ -966,9 +967,9 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   // verify the result: the server version should be in test1.txt
-  // and the local version should go to test1_copy_conflict_<username>_v<version>.txt
-  // Note: test1.txt_conflict_<username>_<version> should be still same
-  QString conflictFilename2 = projectDir + "/test1_copy_conflict_" + mUsername + "_v3.txt";
+  // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
+  // Note: test1.txt conflict file should still be the same
+  QString conflictFilename2 = projectDir + "/test1 (conflicted copy, " + mUsername + " v3).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content 2" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
   QCOMPARE( readFileContent( conflictFilename2 ), QByteArray( "local content 2" ) );
@@ -1009,10 +1010,65 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   // verify the result: the server version should be in test1.txt
-  // and the local version should go to test1_copy_conflict_<username>_v<version>.txt
-  QString conflictFilename = projectDir + "/test-new-file_copy_conflict_" + mUsername + "_v1.txt";
+  // and the local version should go to conflicted copy file
+  QString conflictFilename = projectDir + "/test-new-file (conflicted copy, " + mUsername + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "new local content" ) );
+}
+
+void TestMerginApi::testEditConflictScenario()
+{
+  // this test simulates creation of edit conflict when two
+  // clients are trying to update the same attribute.
+  // edit conflict file should be created inside project folder and synced to server
+
+  QString projectName = "testEditConflictScenario";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString extraProjectDir = mApiExtra->projectsPath() + "/" + projectName;
+
+  // folder rebase_edit_conflict
+  QString dataProjectDir = TestUtils::testDataDir() + "/" + QStringLiteral( "rebase_edit_conflict" );
+  qDebug() << "About to create the project";
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  qDebug() << "Project has been created!";
+  QString dbName = QStringLiteral( "data.gpkg" );
+  QString baseDB = dataProjectDir + QStringLiteral( "/base.gpkg" );
+  QString localChangeDB = dataProjectDir + QStringLiteral( "/local-change.gpkg" );
+  QString remoteChangeDB = dataProjectDir + QStringLiteral( "/remote-change.gpkg" );
+
+  downloadRemoteProject( mApi, mUsername, projectName );
+
+  // upload base db
+  InputUtils::copyFile( baseDB, projectDir + "/" + dbName );
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  // both clients now sync the project so that both of them have base gpkg
+  downloadRemoteProject( mApi, mUsername, projectName );
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+
+  // both clients now make change to the same field
+  InputUtils::removeFile( projectDir + "/" + dbName );
+  InputUtils::removeFile( extraProjectDir + "/" + dbName );
+  InputUtils::copyFile( localChangeDB, projectDir + "/" + dbName );
+  InputUtils::copyFile( remoteChangeDB, extraProjectDir + "/" + dbName );
+
+  // client B syncs his changes
+  uploadRemoteProject( mApiExtra, mUsername, projectName );
+
+  //
+  // now client A syncs, resulting in edit conflict
+  //
+
+  uploadRemoteProject( mApi, mUsername, projectName );
+
+  QDir projDir( projectDir );
+
+  // check the edit conflict file presence
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).gpkg" ).arg( mUsername ) ) );
+
+  // when client B downloads changes, he should also have that edit conflict file
+  downloadRemoteProject( mApiExtra, mUsername, projectName );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).gpkg" ).arg( mUsername ) ) );
 }
 
 void TestMerginApi::testUploadWithUpdate()
@@ -1302,7 +1358,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   //
   // check the result
   //
-  QString conflictFilename = "base_copy_conflict_" + mUsername + "_v1.gpkg";
+  QString conflictFilename = "base (conflicted copy, " + mUsername + " v1).gpkg";
   QVERIFY( QFile::exists( projectDir + "/base.gpkg" ) );
   QVERIFY( QFile::exists( projectDir + "/" + conflictFilename ) );
 
