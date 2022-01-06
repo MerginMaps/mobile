@@ -1445,7 +1445,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
   LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
 
   // add conflict files to project dir so they can be synced
-  QString conflictfile = CoreUtils::findUniquePath( CoreUtils::generateEditConflictFileName( projectDir, mUserAuth->username(), info.localVersion ) );
+  QString conflictfile = CoreUtils::findUniquePath( CoreUtils::generateEditConflictFileName( dest, mUserAuth->username(), info.localVersion ) );
 
   createPathIfNotExists( src );
   createPathIfNotExists( dest );
