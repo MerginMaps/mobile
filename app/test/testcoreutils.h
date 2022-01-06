@@ -21,6 +21,7 @@ class TestCoreUtils : public QObject
     void cleanup(); // will be called after every testfunction.
 
     void testConflictFileNames();
+    void testFindUniquePath();
 };
 
 #endif // TESTCOREUTILS_H

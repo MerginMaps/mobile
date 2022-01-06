@@ -9,6 +9,7 @@
 
 #include "testcoreutils.h"
 #include "coreutils.h"
+#include "testutils.h"
 
 #include <QtTest/QtTest>
 
@@ -68,5 +69,83 @@ void TestCoreUtils::testConflictFileNames()
   {
     QString actualName = CoreUtils::generateEditConflictFileName( c.filename, c.username, c.version );
     QCOMPARE( actualName, c.expectedName );
+  }
+}
+
+void TestCoreUtils::testFindUniquePath()
+{
+  QString projectPath = QDir::tempPath() + QStringLiteral( "/testFindUniquePath" );
+
+  QDir projectDir( projectPath );
+  if ( projectDir.exists() )
+    projectDir.removeRecursively();
+
+  projectDir.mkpath( projectPath );
+
+  QVERIFY( projectDir.exists() );
+  QVERIFY( projectDir.entryList( QDir::NoDotAndDotDot ).isEmpty() );
+
+  //
+  // Create test files in the following structure:
+  //
+  // - folderA
+  //   |- fileA.txt
+  //   |- fileA (1).txt
+  //   |- fileB.txt
+  //   |- folderAB
+  //   |- folderAB (1)
+  //
+  // - file.txt
+  // - another.txt
+  // - another (1).txt
+  // - another (2).txt
+  // - arch.tar.gz
+  //
+
+  QString structure = "{"
+  " \"folderA\": {"
+  "  \"files\": ["
+  "   \"fileA.txt\", "
+  "   \"fileA (1).txt\", "
+  "   \"fileB.txt\""
+  "  ],"
+  "  \"folderAB\": {},"
+  "  \"folderAB (1)\": {}"
+  " },"
+  " \"files\": [ "
+  "  \"file.txt\", "
+  "  \"another.txt\", "
+  "  \"another (1).txt\", "
+  "  \"another (2).txt\", "
+  "  \"arch.tar.gz\""
+  " ]"
+  "}";
+
+  QVERIFY( TestUtils::generateProjectFolder( projectPath, QJsonDocument::fromJson( structure.toUtf8() ) ) );
+
+  struct combination
+  {
+    QString path;
+    QString expectedOutput;
+  };
+
+  QVector<combination> testcases = {
+    { "file.txt", "file (1).txt" },
+    { "another.txt", "another (3).txt" },
+    { "folderA", "folderA (1)" },
+    { "non.txt", "non.txt" },
+    { "data.gpkg", "data.gpkg" },
+    { "arch.tar.gz", "arch (1).tar.gz" },
+    { "folderA/folder", "folderA/folder" },
+    { "folderA/fileA.txt", "folderA/fileA (2).txt" },
+    { "folderA/fileB.txt", "folderA/fileB (1).txt" },
+    { "folderA/fileC.txt", "folderA/fileC.txt" },
+    { "folderA/folderAB", "folderA/folderAB (2)" },
+  };
+
+  for ( const auto &c : testcases )
+  {
+    QString foundPath = CoreUtils::findUniquePath( projectPath + "/" + c.path );
+    QCOMPARE( foundPath, projectPath + "/" + c.expectedOutput );
   }
 }

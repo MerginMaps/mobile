@@ -41,11 +41,11 @@ class CoreUtils
     static int getProjectFilesCount( const QString &path );
 
     /**
-    * Returns given path if doesn't exists, otherwise the slightly modified non-existing path by adding a number to given path.
-    * \param QString path
-    * \param QString isPathDir True if the result path suppose to be a folder
+    * Returns given path if it does not exist yet, otherwise adds a number to the path in format:
+    *  - if path is a directory: "folder" -> "folder (1)"
+    *  - if path is a file: "filename.txt" -> "filename (1).txt"
     */
-    static QString findUniquePath( const QString &path, bool isPathDir = true );
+    static QString findUniquePath( const QString &path );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );
