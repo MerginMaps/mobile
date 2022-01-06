@@ -53,11 +53,12 @@ class CoreUtils
     static bool createEmptyFile( const QString &filePath );
 
     /**
-    * Returns modified path for a conflict file in following form:
-    * <path>/<filename>_<copy/edit>_conflict_<username>_v<version>.<file_extension>
+    * Returns generated name of a conflict file in the following form:
+    * <filename>_<copy/edit>_conflict_<username>_v<version>.<file_extension>, example:
+    * data (conflicted copy/edit conflict, martin v5).gpkg
     */
-    static QString generateCopyConflictFileName( const QString &path, const QString &username, int version );
-    static QString generateEditConflictFileName( const QString &path, const QString &username, int version );
+    static QString generateConflictedCopyFileName( const QString &file, const QString &username, int version );
+    static QString generateEditConflictFileName( const QString &file, const QString &username, int version );
 
     /**
      * Sets the filename of the internal text log file

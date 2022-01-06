@@ -33,35 +33,35 @@ void TestCoreUtils::testConflictFileNames()
 
   QVector<testcase> testcasesCopyConflicts =
   {
-    { "/home/test/geo.gpkg", "jack", 10, "/home/test/geo_copy_conflict_jack_v10.gpkg" },
-    { "/home/test/g.pkg", "j", 0, "/home/test/g_copy_conflict_j_v0.pkg" },
-    { "home/test/geo.gpkg", "jack", 10, "home/test/geo_copy_conflict_jack_v10.gpkg" },
-    { "geo.gpkg", "jack", 10, "./geo_copy_conflict_jack_v10.gpkg" },
-    { "/home/../geo.gpkg", "jack", 10, "/home/../geo_copy_conflict_jack_v10.gpkg" },
-    { "/home/./geo.gpkg", "jack", 10, "/home/./geo_copy_conflict_jack_v10.gpkg" },
-    { "/home/test/geo.gpkg", "", 10, "/home/test/geo_copy_conflict__v10.gpkg" },
-    { "/home/test/geo.gpkg", "jack", -1, "/home/test/geo_copy_conflict_jack_v-1.gpkg" },
-    { "/home/test/geo.tar.gz", "jack", -1, "/home/test/geo_copy_conflict_jack_v-1.tar.gz" },
+    { "/home/test/geo.gpkg", "jack", 10, "/home/test/geo (conflicted copy, jack v10).gpkg" },
+    { "/home/test/g.pkg", "j", 0, "/home/test/g (conflicted copy, j v0).pkg" },
+    { "home/test/geo.gpkg", "jack", 10, "home/test/geo (conflicted copy, jack v10).gpkg" },
+    { "geo.gpkg", "jack", 10, "./geo (conflicted copy, jack v10).gpkg" },
+    { "/home/../geo.gpkg", "jack", 10, "/home/../geo (conflicted copy, jack v10).gpkg" },
+    { "/home/./geo.gpkg", "jack", 10, "/home/./geo (conflicted copy, jack v10).gpkg" },
+    { "/home/test/geo.gpkg", "", 10, "/home/test/geo (conflicted copy,  v10).gpkg" },
+    { "/home/test/geo.gpkg", "jack", -1, "/home/test/geo (conflicted copy, jack v-1).gpkg" },
+    { "/home/test/geo.tar.gz", "jack", 100, "/home/test/geo (conflicted copy, jack v100).tar.gz" },
     { "", "jack", 1, "" }
   };
 
   for ( const auto &c : testcasesCopyConflicts )
   {
-    QString actualName = CoreUtils::generateCopyConflictFileName( c.filename, c.username, c.version );
+    QString actualName = CoreUtils::generateConflictedCopyFileName( c.filename, c.username, c.version );
     QCOMPARE( actualName, c.expectedName );
   }
 
   QVector<testcase> testcasesEditConflicts =
   {
-    { "/home/test/geo.gpkg", "jack", 10, "/home/test/geo_edit_conflict_jack_v10.gpkg" },
-    { "/home/test/g.pkg", "j", 0, "/home/test/g_edit_conflict_j_v0.pkg" },
-    { "home/test/geo.gpkg", "jack", 10, "home/test/geo_edit_conflict_jack_v10.gpkg" },
-    { "geo.gpkg", "jack", 10, "./geo_edit_conflict_jack_v10.gpkg" },
-    { "/home/../geo.gpkg", "jack", 10, "/home/../geo_edit_conflict_jack_v10.gpkg" },
-    { "/home/./geo.gpkg", "jack", 10, "/home/./geo_edit_conflict_jack_v10.gpkg" },
-    { "/home/test/geo.gpkg", "", 10, "/home/test/geo_edit_conflict__v10.gpkg" },
-    { "/home/test/geo.gpkg", "jack", -1, "/home/test/geo_edit_conflict_jack_v-1.gpkg" },
-    { "/home/test/geo.tar.gz", "jack", -1, "/home/test/geo_edit_conflict_jack_v-1.tar.gz" },
+    { "/home/test/geo.json", "jack", 10, "/home/test/geo (edit conflict, jack v10).json" },
+    { "/home/test/g.jsn", "j", 0, "/home/test/g (edit conflict, j v0).jsn" },
+    { "home/test/geo.json", "jack", 10, "home/test/geo (edit conflict, jack v10).json" },
+    { "geo.json", "jack", 10, "./geo (edit conflict, jack v10).json" },
+    { "/home/../geo.json", "jack", 10, "/home/../geo (edit conflict, jack v10).json" },
+    { "/home/./geo.json", "jack", 10, "/home/./geo (edit conflict, jack v10).json" },
+    { "/home/test/geo.json", "", 10, "/home/test/geo (edit conflict,  v10).json" },
+    { "/home/test/geo.json", "jack", -1, "/home/test/geo (edit conflict, jack v-1).json" },
+    { "/home/test/geo.tar.gz", "jack", 100, "/home/test/geo (edit conflict, jack v100).tar.gz" },
     { "", "jack", 1, "" }
   };
 

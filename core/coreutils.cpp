@@ -207,20 +207,21 @@ bool CoreUtils::createEmptyFile( const QString &filePath )
   return true;
 }
 
-QString CoreUtils::generateCopyConflictFileName( const QString &path, const QString &username, int version )
+QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QString &username, int version )
 {
-  if ( path.isEmpty() )
+  if ( file.isEmpty() )
     return QString();
 
-  QFileInfo f( path );
-  return QString( "%1/%2_copy_conflict_%3_v%4.%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+  QFileInfo f( file );
+
+  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
 }
 
-QString CoreUtils::generateEditConflictFileName( const QString &path, const QString &username, int version )
+QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )
 {
-  if ( path.isEmpty() )
+  if ( file.isEmpty() )
     return QString();
 
-  QFileInfo f( path );
-  return QString( "%1/%2_edit_conflict_%3_v%4.%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+  QFileInfo f( file );
+  return QString( "%1/%2 (edit conflict, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
 }

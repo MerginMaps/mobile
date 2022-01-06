@@ -1498,7 +1498,7 @@ void MerginApi::finalizeProjectUpdateApplyDiff( const QString &projectFullName, 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-    QString newDest = CoreUtils::findUniquePath( CoreUtils::generateCopyConflictFileName( dest, mUserAuth->username(), info.localVersion ), false );
+    QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserAuth->username(), info.localVersion ) );
     if ( !QFile::rename( dest, newDest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
@@ -1552,7 +1552,7 @@ void MerginApi::finalizeProjectUpdate( const QString &projectFullName )
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-        QString newPath = CoreUtils::findUniquePath( CoreUtils::generateCopyConflictFileName( origPath, mUserAuth->username(), info.localVersion ), false );
+        QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserAuth->username(), info.localVersion ) );
         if ( !QFile::rename( origPath, newPath ) )
         {
           CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
