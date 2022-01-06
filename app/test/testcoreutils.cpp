@@ -103,23 +103,23 @@ void TestCoreUtils::testFindUniquePath()
   //
 
   QString structure = "{"
-  " \"folderA\": {"
-  "  \"files\": ["
-  "   \"fileA.txt\", "
-  "   \"fileA (1).txt\", "
-  "   \"fileB.txt\""
-  "  ],"
-  "  \"folderAB\": {},"
-  "  \"folderAB (1)\": {}"
-  " },"
-  " \"files\": [ "
-  "  \"file.txt\", "
-  "  \"another.txt\", "
-  "  \"another (1).txt\", "
-  "  \"another (2).txt\", "
-  "  \"arch.tar.gz\""
-  " ]"
-  "}";
+                      " \"folderA\": {"
+                      "  \"files\": ["
+                      "   \"fileA.txt\", "
+                      "   \"fileA (1).txt\", "
+                      "   \"fileB.txt\""
+                      "  ],"
+                      "  \"folderAB\": {},"
+                      "  \"folderAB (1)\": {}"
+                      " },"
+                      " \"files\": [ "
+                      "  \"file.txt\", "
+                      "  \"another.txt\", "
+                      "  \"another (1).txt\", "
+                      "  \"another (2).txt\", "
+                      "  \"arch.tar.gz\""
+                      " ]"
+                      "}";
 
   QVERIFY( TestUtils::generateProjectFolder( projectPath, QJsonDocument::fromJson( structure.toUtf8() ) ) );
 
@@ -129,7 +129,8 @@ void TestCoreUtils::testFindUniquePath()
     QString expectedOutput;
   };
 
-  QVector<combination> testcases = {
+  QVector<combination> testcases =
+  {
     { "file.txt", "file (1).txt" },
     { "another.txt", "another (3).txt" },
     { "folderA", "folderA (1)" },
