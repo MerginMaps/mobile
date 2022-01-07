@@ -19,6 +19,8 @@ import "../components" as Components
 Page {
   id: root
 
+  property var provider
+
   signal close
 
   header: Components.PanelHeader {
@@ -30,7 +32,10 @@ Page {
     rowHeight: InputStyle.rowHeightHeader
     titleText: "Location Providers"
 
-    onBack: root.close()
+    onBack: {
+      btModel.discovering = false
+      root.close()
+    }
     withBackButton: true
   }
 
@@ -49,37 +54,53 @@ Page {
       width: ListView.view.width
       height: InputStyle.rowHeight
 
-      Text {
-        id: deviceName
+      border.color: "black"
+      border.width: 2 * __dp
 
-        width: parent.width
-        height: parent.height * 0.8
+      Column {
+        anchors.fill: parent
+        anchors.leftMargin: 5
+        anchors.topMargin: 5
 
-        text: model.DeviceName ? model.DeviceAddress : model.DeviceName
-      }
+        Text {
+          id: deviceName
 
-      Text {
-        id: deviceAddress
+          width: parent.width
+          height: parent.height * 0.5
 
-        width: parent.width
-        height: parent.height * 0.2
+          text: model.DeviceName
+        }
 
-        text: model.DeviceName ? model.DeviceAddress : ""
+        Text {
+          id: deviceAddress
+          width: parent.width
+          height: parent.height * 0.5
+
+          text: model.DeviceAddress + ", signal strength: " + model.SignalStrength
+        }
       }
 
       MouseArea {
         anchors.fill: parent
-        onClicked: console.log( "Selected device: ", model.DeviceAddress )
+        onClicked: {
+          console.log( "Selected device: ", model.DeviceAddress )
+          let provider = __inputUtils.constructBTProvider( model.DeviceAddress )
+          root.provider = provider
+        }
       }
     }
-  }
 
-  Text {
-    id: discoveryInProgress
+    footer: Text {
+      id: discoveryInProgress
 
-    anchors.centerIn: parent
+      width: ListView.view.width
+      height: InputStyle.rowHeight
 
-    visible: btModel.discovering
-    text: qsTr("Looking for devices ...")
+      leftPadding: 5
+      topPadding: 5
+
+      visible: btModel.discovering
+      text: ListView.view.count > 2 ? qsTr("Looking for more devices ...") : qsTr("Looking for devices ...")
+    }
   }
 }

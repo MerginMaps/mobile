@@ -13,9 +13,7 @@
 #include <QAbstractListModel>
 #include <QObject>
 #include <qglobal.h>
-#include <QBluetoothServiceInfo>
-
-class QBluetoothServiceDiscoveryAgent;
+#include <QtBluetooth>
 
 class BluetoothDiscoveryModel : public QAbstractListModel
 {
@@ -31,6 +29,7 @@ class BluetoothDiscoveryModel : public QAbstractListModel
     {
       DeviceAddress = Qt::UserRole + 1, //! physical address of BT device
       DeviceName,
+      SignalStrength
     };
     Q_ENUM( DataRoles )
 
@@ -43,8 +42,8 @@ class BluetoothDiscoveryModel : public QAbstractListModel
     void setDiscovering( bool discovering );
 
   public slots:
-    void serviceDiscovered( const QBluetoothServiceInfo &info );
-//    void deviceUpdated( const QBluetoothDeviceInfo &info, QBluetoothDeviceInfo::Fields updatedFields );
+    void deviceDiscovered( const QBluetoothDeviceInfo &info );
+    void deviceUpdated( const QBluetoothDeviceInfo &info, QBluetoothDeviceInfo::Fields updatedFields );
     void finishedDiscovery();
 
   signals:
@@ -53,8 +52,8 @@ class BluetoothDiscoveryModel : public QAbstractListModel
   private:
     bool mDiscovering;
 
-    QList<QBluetoothServiceInfo> mFoundDevices;
-    std::unique_ptr<QBluetoothServiceDiscoveryAgent> mDiscoveryAgent; // owned
+    QList<QBluetoothDeviceInfo> mFoundDevices;
+    std::unique_ptr<QBluetoothDeviceDiscoveryAgent> mDiscoveryAgent; // owned
 };
 
 #endif // BLUETOOTHDISCOVERYMODEL_H

@@ -7,15 +7,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EXTERNALGPSLOCATIONPROVIDER_H
-#define EXTERNALGPSLOCATIONPROVIDER_H
+#ifndef BLUETOOTHLOCATIONPROVIDER_H
+#define BLUETOOTHLOCATIONPROVIDER_H
 
 #include "abstractlocationprovider.h"
 
-class ExternalGPSLocationProvider : public AbstractLocationProvider
+#include <QBluetoothSocket>
+
+class BluetoothLocationProvider : public AbstractLocationProvider
 {
+    Q_OBJECT
+
   public:
-    ExternalGPSLocationProvider();
+    BluetoothLocationProvider( const QString &addr, QIODevice::OpenMode mode = QIODevice::ReadOnly );
+
+//    Q_INVOKABLE static BluetoothLocationProvider *constructProvider( const QString &address );
+
+  public slots:
+    void connected();
+    void disconnected();
+    void stateChanged( QBluetoothSocket::SocketState );
+    void positionUpdateReceived();
+
+  private:
+    std::unique_ptr<QBluetoothSocket> mBtSocket;
 };
 
-#endif // EXTERNALGPSLOCATIONPROVIDER_H
+#endif // BLUETOOTHLOCATIONPROVIDER_H

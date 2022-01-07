@@ -9,7 +9,7 @@ attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
 location/abstractlocationprovider.cpp \
-location/externalgpslocationprovider.cpp \
+location/bluetoothlocationprovider.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
 identifykit.cpp \
@@ -57,7 +57,7 @@ attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
 location/abstractlocationprovider.h \
-location/externalgpslocationprovider.h \
+location/bluetoothlocationprovider.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
 identifykit.h \

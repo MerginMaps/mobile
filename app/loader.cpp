@@ -325,8 +325,6 @@ void Loader::appAboutToQuit()
   CoreUtils::log( "Input", "Application has quit" );
 }
 
-
-
 void Loader::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )

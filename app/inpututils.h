@@ -40,6 +40,7 @@
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 
+#include "location/bluetoothlocationprovider.h"
 
 class QgsFeature;
 class QgsVectorLayer;
@@ -378,6 +379,8 @@ class InputUtils: public QObject
      * \brief invalidIndex returns invalid index
      */
     Q_INVOKABLE static QModelIndex invalidIndex();
+
+    Q_INVOKABLE static BluetoothLocationProvider *constructBTProvider( const QString &data );
 
     /**
      * Returns if provided Id is valid ( >= 0 )

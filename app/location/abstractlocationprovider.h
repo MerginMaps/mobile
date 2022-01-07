@@ -10,8 +10,12 @@
 #ifndef ABSTRACTLOCATIONPROVIDER_H
 #define ABSTRACTLOCATIONPROVIDER_H
 
-class AbstractLocationProvider
+#include "qobject.h"
+
+class AbstractLocationProvider : public QObject
 {
+  Q_OBJECT
+
   public:
     AbstractLocationProvider();
 };
