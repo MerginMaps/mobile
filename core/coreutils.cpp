@@ -156,24 +156,33 @@ int CoreUtils::getProjectFilesCount( const QString &path )
   return count;
 }
 
-QString CoreUtils::findUniquePath( const QString &path, bool isPathDir )
+QString CoreUtils::findUniquePath( const QString &path )
 {
-  QFileInfo pathInfo( path );
-  if ( pathInfo.exists() )
+  QFileInfo originalPath( path );
+  QString uniquePath = path;
+
+  // are we dealing with directory?
+  bool isDirectory = originalPath.isDir();
+
+  int i = 0;
+  QFileInfo f( uniquePath );
+
+  while ( f.exists() )
   {
-    int i = 0;
-    QFileInfo info( path + QString::number( i ) );
-    while ( info.exists() && ( info.isDir() || !isPathDir ) )
+    ++i; // let's start from 1
+
+    if ( isDirectory )
     {
-      ++i;
-      info.setFile( path + QString::number( i ) );
+      uniquePath = path + " (" + QString::number( i ) + ')';
     }
-    return path + QString::number( i );
+    else // file
+    {
+      uniquePath = originalPath.path() + '/' + originalPath.baseName() + " (" + QString::number( i ) + ")." + originalPath.completeSuffix();
+    }
+    f.setFile( uniquePath );
   }
-  else
-  {
-    return path;
-  }
+
+  return uniquePath;
 }
 
 QString CoreUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )
@@ -196,4 +205,23 @@ bool CoreUtils::createEmptyFile( const QString &filePath )
 
   newFile.close();
   return true;
+}
+
+QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QString &username, int version )
+{
+  if ( file.isEmpty() )
+    return QString();
+
+  QFileInfo f( file );
+
+  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+}
+
+QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )
+{
+  if ( file.isEmpty() )
+    return QString();
+
+  QFileInfo f( file );
+  return QString( "%1/%2 (edit conflict, %3 v%4).json" ).arg( f.path(), f.baseName(), username, QString::number( version ) );
 }

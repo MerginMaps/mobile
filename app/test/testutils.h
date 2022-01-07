@@ -20,6 +20,15 @@ namespace TestUtils
 
   void mergin_auth( QString &apiRoot, QString &username, QString &password );
   QString testDataDir();
+
+  /**
+   * Generates files and folders in rootPath based on json structure.
+   * \param structure is a json instance, each object is considered as folder. Each folder can have a key named "files"
+   * which is an array of files to be created.
+   * \see TestCoreUtils::testFindUniquePath for usage
+   * Returns true if files were successfully created
+   */
+  bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

@@ -8,6 +8,8 @@
  ***************************************************************************/
 
 #include "QtDebug"
+#include <QJsonDocument>
+#include <QJsonArray>
 
 #include "testutils.h"
 #include "merginapi.h"
@@ -34,4 +36,46 @@ QString TestUtils::testDataDir()
 {
   QString dataDir( TEST_DATA_DIR );
   return dataDir;
+}
+
+bool TestUtils::generateProjectFolder( const QString &rootPath, const QJsonDocument &structure )
+{
+  if ( !structure.isObject() )
+    return false;
+
+  if ( !QDir( rootPath ).exists() )
+    return false;
+
+  QJsonObject rootObj = structure.object();
+
+  // generate files
+  if ( rootObj.contains( "files" ) )
+  {
+    QJsonArray files = rootObj.value( "files" ).toArray();
+    for ( int i = 0; i < files.count(); i++ )
+    {
+      QFile f( rootPath + "/" + files[i].toString() );
+      f.open( QIODevice::WriteOnly );
+      f.close();
+    }
+  }
+
+  // go deeper to subfolders
+  bool allGood = true;
+
+  QStringList nodes = rootObj.keys();
+  for ( int i = 0; i < nodes.count(); i++ )
+  {
+    if ( rootObj.value( nodes[i] ).isObject() )
+    {
+      QString newPath = rootPath + "/" + nodes[i];
+
+      QDir d( newPath );
+      d.mkpath( newPath );
+
+      allGood = allGood && generateProjectFolder( rootPath + "/" + nodes[i], QJsonDocument( rootObj.value( nodes[i] ).toObject() ) );
+    }
+  }
+
+  return allGood;
 }
