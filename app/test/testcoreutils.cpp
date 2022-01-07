@@ -54,14 +54,15 @@ void TestCoreUtils::testConflictFileNames()
   QVector<testcase> testcasesEditConflicts =
   {
     { "/home/test/geo.json", "jack", 10, "/home/test/geo (edit conflict, jack v10).json" },
-    { "/home/test/g.jsn", "j", 0, "/home/test/g (edit conflict, j v0).jsn" },
+    { "/home/test/g.jsn", "j", 0, "/home/test/g (edit conflict, j v0).json" },
     { "home/test/geo.json", "jack", 10, "home/test/geo (edit conflict, jack v10).json" },
     { "geo.json", "jack", 10, "./geo (edit conflict, jack v10).json" },
     { "/home/../geo.json", "jack", 10, "/home/../geo (edit conflict, jack v10).json" },
     { "/home/./geo.json", "jack", 10, "/home/./geo (edit conflict, jack v10).json" },
     { "/home/test/geo.json", "", 10, "/home/test/geo (edit conflict,  v10).json" },
     { "/home/test/geo.json", "jack", -1, "/home/test/geo (edit conflict, jack v-1).json" },
-    { "/home/test/geo.tar.gz", "jack", 100, "/home/test/geo (edit conflict, jack v100).tar.gz" },
+    { "/home/test/geo.gpkg", "jack", 10, "/home/test/geo (edit conflict, jack v10).json" },
+    { "/home/test/geo.tar.gz", "jack", 100, "/home/test/geo (edit conflict, jack v100).json" },
     { "", "jack", 1, "" }
   };
 

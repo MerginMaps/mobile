@@ -1064,11 +1064,11 @@ void TestMerginApi::testEditConflictScenario()
   QDir projDir( projectDir );
 
   // check the edit conflict file presence
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).gpkg" ).arg( mUsername ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
 
   // when client B downloads changes, he should also have that edit conflict file
   downloadRemoteProject( mApiExtra, mUsername, projectName );
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).gpkg" ).arg( mUsername ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
 }
 
 void TestMerginApi::testUploadWithUpdate()

@@ -223,5 +223,5 @@ QString CoreUtils::generateEditConflictFileName( const QString &file, const QStr
     return QString();
 
   QFileInfo f( file );
-  return QString( "%1/%2 (edit conflict, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+  return QString( "%1/%2 (edit conflict, %3 v%4).json" ).arg( f.path(), f.baseName(), username, QString::number( version ) );
 }
