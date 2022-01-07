@@ -43,6 +43,9 @@ Item {
     }
 
     function endNavigation() {
+      if ( _map.state !== "navigation" )
+        return;
+
       autoFollow = true
       updateNavigation()
       autoFollow = false
@@ -51,6 +54,9 @@ Item {
     }
 
     function updateNavigation() {
+      if ( _map.state !== "navigation" )
+        return;
+
       _map.navigationHighlightFeature = navigationTargetFeature
       _map.navigationHighlightGpsPosition = _map.positionKit.position
 
