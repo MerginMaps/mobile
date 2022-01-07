@@ -53,7 +53,7 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
-    takenPanelsSpace = previewHeight
+    takenPanelsSpace = previewHeight - InputStyle.rowHeightHeader
   }
 
   function _getActiveForm() {
