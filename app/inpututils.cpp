@@ -1210,9 +1210,9 @@ QModelIndex InputUtils::invalidIndex()
   return QModelIndex();
 }
 
-BluetoothLocationProvider *InputUtils::constructBTProvider(const QString &bluetoothAddress)
+BluetoothPositionProvider *InputUtils::constructBTProvider(const QString &bluetoothAddress)
 {
-  BluetoothLocationProvider *provider = new BluetoothLocationProvider( bluetoothAddress );
+  BluetoothPositionProvider *provider = new BluetoothPositionProvider( bluetoothAddress );
   qDebug() << "Instantiated bt provider!";
   return provider;
 }

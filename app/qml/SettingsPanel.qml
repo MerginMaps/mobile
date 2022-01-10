@@ -217,7 +217,7 @@ Item {
 
             MouseArea {
               anchors.fill: parent
-              onClicked: stackview.push( locationProviderComponent )
+              onClicked: stackview.push( positionProviderComponent )
             }
           }
 
@@ -345,8 +345,8 @@ Item {
   }
 
   Component {
-    id: locationProviderComponent
-    LocationProvider {
+    id: positionProviderComponent
+    PositionProviderPage {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }

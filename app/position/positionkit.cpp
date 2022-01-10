@@ -21,7 +21,6 @@
 
 #include "positionkit.h"
 #include "inpututils.h"
-#include "simulatedpositionsource.h"
 #include "coreutils.h"
 
 PositionKit::PositionKit( QObject *parent )
@@ -71,7 +70,7 @@ QGeoSatelliteInfoSource *PositionKit::gpsSatellitesSource()
 
 QGeoPositionInfoSource *PositionKit::simulatedSource( double longitude, double latitude, double radius )
 {
-  return new SimulatedPositionSource( this, longitude, latitude, radius );
+  return new SimulatedPositionProvider( this, longitude, latitude, radius );
 }
 
 QGeoPositionInfoSource *PositionKit::source() const

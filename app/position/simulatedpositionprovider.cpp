@@ -13,21 +13,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "simulatedpositionsource.h"
+#include "simulatedpositionprovider.h"
 
 #include <QTimer>
 
-SimulatedPositionSource::SimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius )
+SimulatedPositionProvider::SimulatedPositionProvider( QObject *parent, double longitude, double latitude, double flightRadius )
   : QGeoPositionInfoSource( parent )
   , mTimer( new QTimer() )
   , mFlightRadius( flightRadius )
   , mLongitude( longitude )
   , mLatitude( latitude )
 {
-  connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionSource::readNextPosition );
+  connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::readNextPosition );
 }
 
-void SimulatedPositionSource::startUpdates()
+void SimulatedPositionProvider::startUpdates()
 {
   int interval = updateInterval();
   if ( interval < minimumUpdateInterval() )
@@ -37,19 +37,19 @@ void SimulatedPositionSource::startUpdates()
   readNextPosition();
 }
 
-void SimulatedPositionSource::stopUpdates()
+void SimulatedPositionProvider::stopUpdates()
 {
   mTimer->stop();
 }
 
-void SimulatedPositionSource::requestUpdate( int /*timeout*/ )
+void SimulatedPositionProvider::requestUpdate( int /*timeout*/ )
 {
   readNextPosition();
 }
 
 
 
-void SimulatedPositionSource::readNextPosition()
+void SimulatedPositionProvider::readNextPosition()
 {
   if ( mFlightRadius <= 0 )
     readConstantPosition();
@@ -57,7 +57,7 @@ void SimulatedPositionSource::readNextPosition()
     readRandomPosition();
 }
 
-void SimulatedPositionSource::readRandomPosition()
+void SimulatedPositionProvider::readRandomPosition()
 {
   double latitude = mLatitude, longitude = mLongitude;
   latitude += sin( mAngle * M_PI / 180 ) * mFlightRadius;
@@ -88,7 +88,7 @@ void SimulatedPositionSource::readRandomPosition()
   }
 }
 
-void SimulatedPositionSource::readConstantPosition()
+void SimulatedPositionProvider::readConstantPosition()
 {
   QGeoCoordinate coordinate( mLatitude, mLongitude );
   coordinate.setAltitude( 20 );

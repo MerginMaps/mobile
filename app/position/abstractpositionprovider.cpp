@@ -7,18 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTLOCATIONPROVIDER_H
-#define ABSTRACTLOCATIONPROVIDER_H
+#include "abstractpositionprovider.h"
 
-#include "qobject.h"
-
-class AbstractLocationProvider : public QObject
+AbstractPositionProvider::AbstractPositionProvider( QObject *object ) : QObject( object )
 {
-  Q_OBJECT
 
-  public:
-    AbstractLocationProvider();
-};
+}
 
-
-#endif // ABSTRACTLOCATIONPROVIDER_H
+AbstractPositionProvider::~AbstractPositionProvider() = default;

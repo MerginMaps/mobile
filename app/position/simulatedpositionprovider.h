@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SIMULATEDPOSITIONSOURCE_H
-#define SIMULATEDPOSITIONSOURCE_H
+#ifndef SIMULATEDPOSITIONPROVIDER_H
+#define SIMULATEDPOSITIONPROVIDER_H
 
 #include <QObject>
 #include <QTimer>
@@ -33,11 +33,11 @@
  *
  * \note QML Type: not exported
  */
-class SimulatedPositionSource : public QGeoPositionInfoSource
+class SimulatedPositionProvider : public QGeoPositionInfoSource
 {
     Q_OBJECT
   public:
-    SimulatedPositionSource( QObject *parent, double longitude, double latitude, double flightRadius );
+    SimulatedPositionProvider( QObject *parent, double longitude, double latitude, double flightRadius );
 
     QGeoPositionInfo lastKnownPosition( bool /*fromSatellitePositioningMethodsOnly = false*/ ) const { return mLastPosition; }
     PositioningMethods supportedPositioningMethods() const { return AllPositioningMethods; }
@@ -68,4 +68,4 @@ class SimulatedPositionSource : public QGeoPositionInfoSource
 
 /// @endcond
 
-#endif // SIMULATEDPOSITIONSOURCE_H
+#endif // SIMULATEDPOSITIONPROVIDER_H

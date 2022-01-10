@@ -300,11 +300,13 @@ class PositionKit : public QObject
     void numberOfSatellitesInViewChanged( const QList<QGeoSatelliteInfo> &list );
 
   private:
-    void replacePositionSource( QGeoPositionInfoSource *source );
-    void replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource );
-    void updateSimulatedSatellitesData();
+//    void replacePositionSource( QGeoPositionInfoSource *source );
+//    void replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource );
+//    void updateSimulatedSatellitesData();
+
     QString calculateStatusLabel();
     double calculateScreenAccuracy();
+
     void updateProjectedPosition();
     void updateScreenPosition();
     void updateScreenAccuracy();
@@ -314,9 +316,9 @@ class PositionKit : public QObject
     void setSpeed( double speedInMS );
     void setLastGPSRead( const QDateTime &timestamp );
 
-    QGeoPositionInfoSource *gpsSource();
-    QGeoSatelliteInfoSource *gpsSatellitesSource();
-    QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
+//    QGeoPositionInfoSource *gpsSource();
+
+//    QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
 
     QgsPoint mPosition;
     QgsPoint mProjectedPosition;
@@ -329,9 +331,9 @@ class PositionKit : public QObject
     bool mHasPosition = false;
     bool mIsSimulated = false;
     QDateTime mLastGPSRead;
-    QVector<double> mSimulatePositionLongLatRad;
-    std::unique_ptr<QGeoPositionInfoSource> mSource;
-    std::unique_ptr<QGeoSatelliteInfoSource> mSatelliteSource;
+//    QVector<double> mSimulatePositionLongLatRad;
+//    std::unique_ptr<QGeoPositionInfoSource> mSource;
+//    std::unique_ptr<QGeoSatelliteInfoSource> mSatelliteSource;
     int mSatellitesInViewCount = -1;
     int mUsedSatellitesCount = -1;
 

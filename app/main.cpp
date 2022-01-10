@@ -93,7 +93,7 @@
 #include "project.h"
 #include "qgsproject.h"
 #include "bluetoothdiscoverymodel.h"
-#include "location/bluetoothlocationprovider.h"
+#include "position/bluetoothpositionprovider.h"
 
 
 #ifndef NDEBUG
@@ -290,7 +290,7 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
 
-  qmlRegisterUncreatableType< BluetoothLocationProvider >( "lc", 1, 0, "BluetoothLocationProvider", "Must be instantiated via its construct method" );
+  qmlRegisterUncreatableType< BluetoothPositionProvider >( "lc", 1, 0, "BluetoothPositionProvider", "Must be instantiated via its construct method" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }

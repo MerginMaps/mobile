@@ -7,9 +7,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "abstractlocationprovider.h"
+#ifndef ABSTRACTPOSITIONPROVIDER_H
+#define ABSTRACTPOSITIONPROVIDER_H
 
-AbstractLocationProvider::AbstractLocationProvider()
+#include "qgsgpsconnection.h"
+
+#include "qobject.h"
+
+class AbstractPositionProvider : public QObject
 {
+  Q_OBJECT
 
-}
+  public:
+    AbstractPositionProvider( QObject *object = nullptr );
+    virtual ~AbstractPositionProvider();
+
+    virtual void close();
+    virtual void stopUpdates();
+    virtual void startUpdates();
+
+  signals:
+    void positionChanged( QgsGpsInformation position );
+    void lostConnection();
+
+  private:
+    QgsGpsInformation mLastPosition;
+};
+
+
+#endif // ABSTRACTPOSITIONPROVIDER_H
