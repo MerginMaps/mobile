@@ -81,7 +81,6 @@ Item {
                       visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
                       height: rowHeight
                       width: rowHeight
-                      anchors.left: titleText.right
 
                       MouseArea {
                           id: navigationIconArea
@@ -112,7 +111,6 @@ Item {
                       height: rowHeight
                       width: rowHeight
                       visible: !previewPanel.isReadOnly
-                      anchors.left: navigationIconContainer.right
 
                       MouseArea {
                           id: editArea
