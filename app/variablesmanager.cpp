@@ -44,7 +44,7 @@ void VariablesManager::registerInputExpressionFunctions()
 
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
-  QGeoPositionInfo geoInfo = mPositionKit->lastKnownPosition();
+  QGeoPositionInfo geoInfo = mPositionKit->lastPosition();
   return positionScope( geoInfo, compass()->direction(), mUseGpsPoint );
 }
 

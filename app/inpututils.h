@@ -99,7 +99,7 @@ class InputUtils: public QObject
     Q_INVOKABLE void showNotification( const QString &message );
 
     /**
-     * Converts bytes to  human readable size (e.g. 1GB, 500MB)
+     * Converts bytes to human readable size (e.g. 1GB, 500MB)
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 

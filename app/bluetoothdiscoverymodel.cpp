@@ -21,15 +21,16 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::canceled, this, &BluetoothDiscoveryModel::finishedDiscovery );
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::finished, this, &BluetoothDiscoveryModel::finishedDiscovery );
 
-  connect( mDiscoveryAgent.get(), QOverload<QBluetoothDeviceDiscoveryAgent::Error>::of(&QBluetoothDeviceDiscoveryAgent::error),
-      [=]( QBluetoothDeviceDiscoveryAgent::Error error ) {
+  connect( mDiscoveryAgent.get(), QOverload<QBluetoothDeviceDiscoveryAgent::Error>::of( &QBluetoothDeviceDiscoveryAgent::error ),
+           [ = ]( QBluetoothDeviceDiscoveryAgent::Error error )
+  {
     qDebug() << error << "occured during discovery, ending..";
     CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #" ).arg( error ) );
     finishedDiscovery();
-  });
+  } );
 
-  QBluetoothDeviceInfo demo1( QBluetoothAddress("01:01:01:01:01:01"), "Demo device 1", 1 );
-  QBluetoothDeviceInfo demo2( QBluetoothAddress("01:01:01:01:01:02"), "Demo device 2", 3 );
+  QBluetoothDeviceInfo demo1( QBluetoothAddress( "01:01:01:01:01:01" ), "Demo device 1", 1 );
+  QBluetoothDeviceInfo demo2( QBluetoothAddress( "01:01:01:01:01:02" ), "Demo device 2", 3 );
   mFoundDevices << demo1;
   mFoundDevices << demo2;
 }
@@ -65,16 +66,20 @@ QVariant BluetoothDiscoveryModel::data( const QModelIndex &index, int role ) con
 
   QBluetoothDeviceInfo device = mFoundDevices[deviceIndex];
 
-  switch( role ) {
-    case DataRoles::DeviceAddress: {
+  switch ( role )
+  {
+    case DataRoles::DeviceAddress:
+    {
       return device.address().toString();
     }
 
-    case DataRoles::DeviceName: {
+    case DataRoles::DeviceName:
+    {
       return device.name();
     }
 
-    case DataRoles::SignalStrength: {
+    case DataRoles::SignalStrength:
+    {
       return device.rssi();
     }
 

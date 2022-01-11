@@ -45,6 +45,7 @@ class SimulatedPositionProvider : public AbstractPositionProvider
       double updateTimeout = 1000,
       QObject *parent = nullptr
     );
+    virtual ~SimulatedPositionProvider();
 
   public slots:
     virtual void startUpdates() override;

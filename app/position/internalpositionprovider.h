@@ -28,6 +28,7 @@ class InternalPositionProvider : public AbstractPositionProvider
 
   public:
     explicit InternalPositionProvider( QObject *parent = nullptr );
+    virtual ~InternalPositionProvider();
 
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
