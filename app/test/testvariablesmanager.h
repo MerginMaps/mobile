@@ -10,7 +10,7 @@
 #include <QtTest>
 
 #include "variablesmanager.h"
-#include "positionkit.h"
+#include "qgeopositioninfo.h"
 #include "compass.h"
 
 #ifndef TESTVARIABLESMANAGER_H

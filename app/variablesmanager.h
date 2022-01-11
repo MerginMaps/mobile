@@ -13,7 +13,7 @@
 #include <QObject>
 #include "merginapi.h"
 #include "qgsproject.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "compass.h"
 
 class MerginApi;

@@ -9,7 +9,6 @@
 #include "testvariablesmanager.h"
 #include "qgsexpression.h"
 #include "qgsexpressioncontext.h"
-#include "positionkit.h"
 
 #include "test/testmerginapi.h"
 #include "inputtests.h"

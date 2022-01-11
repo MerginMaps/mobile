@@ -16,7 +16,7 @@
 #include "qgsfeature.h"
 #include "qgsgeometry.h"
 #include "qgsquickmapsettings.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "featurelayerpair.h"
 #include "variablesmanager.h"
 
