@@ -433,7 +433,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   // Connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged ); // TODO: pass this signal also to a PositionKit so that loader do not need have positionkit?
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );

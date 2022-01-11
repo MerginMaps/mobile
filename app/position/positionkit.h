@@ -16,23 +16,18 @@
 #ifndef POSITIONKIT_H
 #define POSITIONKIT_H
 
+#include "position/abstractpositionprovider.h"
+
 #include <QObject>
 #include <QtPositioning>
 
 #include "qgspoint.h"
-
 #include "qgsquickmapsettings.h"
 #include "qgscoordinatetransform.h"
 #include "qgsquickcoordinatetransformer.h"
 
 /**
- * \brief Convenient set of tools to read GPS position and accuracy.
- *
- * Also, if one can use use_simulated_location to specify simulated position.
- * Simulated position source generates random points in circles around the selected
- * point and radius. Real GPS position is not used in this mode.
- *
- * \note QML Type: PositionKit
+ * TODO: Add documentation
  */
 class PositionKit : public QObject
 {
@@ -113,7 +108,7 @@ class PositionKit : public QObject
      *
      * This is a readonly property. To change to simulated position, see PositionKit::simulatePositionLongLatRad
      */
-    Q_PROPERTY( bool isSimulated READ isSimulated NOTIFY isSimulatedChanged )
+//    Q_PROPERTY( bool isSimulated READ isSimulated NOTIFY isSimulatedChanged )
 
     /**
      * Associated map settings. Should be initialized before the first use from mapcanvas map settings.
@@ -130,18 +125,12 @@ class PositionKit : public QObject
      *
      * From QML context, also functions useSimulatedLocation() or useGpsLocation() could be used instead
      */
-    Q_PROPERTY( QVector<double> simulatePositionLongLatRad READ simulatePositionLongLatRad WRITE setSimulatePositionLongLatRad NOTIFY simulatePositionLongLatRadChanged )
+//    Q_PROPERTY( QVector<double> simulatePositionLongLatRad READ simulatePositionLongLatRad WRITE setSimulatePositionLongLatRad NOTIFY simulatePositionLongLatRadChanged )
 
-    /**
-     * Internal source of GPS location data.
-     * Allows start/stop of its services or access properties.
-     */
-    Q_PROPERTY( QGeoPositionInfoSource *source READ source NOTIFY sourceChanged )
+    Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
 
-    // How many satellites is device using.
     Q_PROPERTY( int usedSatellitesCount READ usedSatellitesCount NOTIFY usedSatellitesCountChanged )
 
-    // How many satellites are in view.
     Q_PROPERTY( int satellitesInViewCount READ satellitesInViewCount NOTIFY satellitesInViewCountChanged )
 
   public:
@@ -184,20 +173,24 @@ class PositionKit : public QObject
     //! \copydoc PositionKit::mapSettings
     void setMapSettings( QgsQuickMapSettings *mapSettings );
 
+    void setPositionProvider( AbstractPositionProvider *provider );
+
+    AbstractPositionProvider *positionProvider();
+
     //! \copydoc PositionKit::mapSettings
     QgsQuickMapSettings *mapSettings() const;
 
     //! \copydoc PositionKit::simulatePositionLongLatRad
-    QVector<double> simulatePositionLongLatRad() const;
+//    QVector<double> simulatePositionLongLatRad() const;
 
     //! \copydoc PositionKit::simulatePositionLongLatRad
-    void setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad );
+//    void setSimulatePositionLongLatRad( const QVector<double> &simulatePositionLongLatRad );
 
     /**
      * Returns pointer to the internal QGeoPositionInfoSource object used to receive GPS location.
      * \note The returned pointer is only valid until sourceChanged() signal is emitted
      */
-    QGeoPositionInfoSource *source() const;
+//    QGeoPositionInfoSource *source() const;
 
     /**
      * Returns last known QGeoPositionInfo of the source.
@@ -222,7 +215,7 @@ class PositionKit : public QObject
      * \param latitude latitude of the centre of the emulated points
      * \param radius distance of emulated points from the centre (in degrees WSG84)
      */
-    Q_INVOKABLE void useSimulatedLocation( double longitude, double latitude, double radius );
+//    Q_INVOKABLE void useSimulatedLocation( double longitude, double latitude, double radius );
 
     // Starts receiving updates from GPS sources
     void startUpdates();
@@ -271,20 +264,20 @@ class PositionKit : public QObject
     double speedChanged( double speed );
 
     //! \copydoc PositionKit::isSimulated
-    void isSimulatedChanged();
+//    void isSimulatedChanged();
 
     //! \copydoc PositionKit::mapSettings
     void mapSettingsChanged();
 
     //! \copydoc PositionKit::simulatePositionLongLatRad
-    void simulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
+//    void simulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
 
     //! Emitted when the internal source of GPS location data has been replaced.
-    void sourceChanged();
+    void positionProviderChanged( AbstractPositionProvider *provider );
 
     void lastGPSReadChanged( const QDateTime &lastread );
 
-    void satelliteSourceChanged();
+//    void satelliteSourceChanged();
 
     void satellitesInViewCountChanged( int );
 
@@ -292,9 +285,12 @@ class PositionKit : public QObject
 
   private slots:
     void onPositionUpdated( const QGeoPositionInfo &info );
+
+    // ?
     void onMapSettingsUpdated();
     void onUpdateTimeout();
-    void onSimulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
+
+//    void onSimulatePositionLongLatRadChanged( QVector<double> simulatePositionLongLatRad );
 
     void numberOfUsedSatellitesChanged( const QList<QGeoSatelliteInfo> &list );
     void numberOfSatellitesInViewChanged( const QList<QGeoSatelliteInfo> &list );
@@ -304,13 +300,14 @@ class PositionKit : public QObject
 //    void replaceSatelliteSource( QGeoSatelliteInfoSource *satelliteSource );
 //    void updateSimulatedSatellitesData();
 
-    QString calculateStatusLabel();
+    // ?
     double calculateScreenAccuracy();
 
     void updateProjectedPosition();
     void updateScreenPosition();
     void updateScreenAccuracy();
 
+    // TODO: add setter for each property
     void setProjectedPosition( const QgsPoint &projectedPosition );
     void setVerticalAccuracy( double vaccuracy );
     void setSpeed( double speedInMS );
@@ -319,6 +316,8 @@ class PositionKit : public QObject
 //    QGeoPositionInfoSource *gpsSource();
 
 //    QGeoPositionInfoSource *simulatedSource( double longitude, double latitude, double radius );
+
+    std::unique_ptr<AbstractPositionProvider> mPositionProvider; //owned
 
     QgsPoint mPosition;
     QgsPoint mProjectedPosition;
