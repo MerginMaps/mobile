@@ -28,9 +28,12 @@ Item {
 
   property int activeFormIndex: formsStack.depth - 1
 
+  property real takenPanelsSpace: 0
+
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
+  signal navigateToFeature( var feature );
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -50,6 +53,7 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
+    takenPanelsSpace = previewHeight - InputStyle.rowHeightHeader
   }
 
   function _getActiveForm() {
@@ -65,6 +69,13 @@ Item {
 
     if ( form )
       form.closeDrawer()
+  }
+
+  function openDrawer() {
+    let form = _getActiveForm()
+
+    if ( form )
+      form.openDrawer()
   }
 
   function reload() {
@@ -177,7 +188,10 @@ Item {
       formsStack.pop()
 
       if ( formsStack.depth <= 1 )
+      {
         root.closed() // this is the top most form, we want to keep it instantiated, just invisible
+        takenPanelsSpace = 0
+      }
     }
 
     focus: true
@@ -203,6 +217,7 @@ Item {
       onEditGeometry: root.editGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
+      onNavigateToFeature: root.navigateToFeature( feature )
     }
   }
 }

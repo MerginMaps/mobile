@@ -124,10 +124,11 @@ ApplicationWindow {
 
       height: window.height - mainPanel.height
       width: window.width
-      previewPanelHeight: formsStackManager.previewHeight
+      previewPanelHeight: formsStackManager.takenPanelsSpace
 
-      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" )
-      onNothingIdentified: formsStackManager.closeDrawer()
+      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
+
+      onNothingIdentified: formsStackManager.closeDrawer();
 
       onRecordingFinished: {
         formsStackManager.openForm( pair, "add", "form" )
@@ -304,6 +305,13 @@ ApplicationWindow {
       asynchronous: true
       active: false
       sourceComponent: gpsDataPageComponent
+      onActiveChanged: {
+        if ( gpsDataPageLoader.active )
+        {
+          navigationPanel.endNavigation();
+          formsStackManager.closeDrawer();
+        }
+      }
     }
 
     MapThemePanel {
@@ -313,6 +321,7 @@ ApplicationWindow {
         width: window.width
         edge: Qt.BottomEdge
     }
+
 
     ProjectIssuesPanel {
       id: projectIssuesPanel
@@ -328,6 +337,17 @@ ApplicationWindow {
         else
           mainPanel.focus = true; // pass focus back to main panel
       }
+    }
+
+    NavigationPanel {
+      id: navigationPanel
+
+      height: window.height
+      width: window.width
+      previewHeight: window.height / 3
+      previewPanelHeight: formsStackManager.previewHeight
+
+      _map: map
     }
 
     Notification {
@@ -403,6 +423,19 @@ ApplicationWindow {
         else mainPanel.focus = true
 
         map.hideHighlight()
+      }
+
+      onNavigateToFeature: {
+        if ( !__inputUtils.isPointLayerFeature( feature ) )
+          return;
+        if ( !map.positionKit.hasPosition )
+        {
+          showMessage( "Navigation mode is disabled because location is unavailable!" );
+          return;
+        }
+
+        navigationPanel.startNavigation();
+        navigationPanel.navigationTargetFeature = feature;
       }
     }
 

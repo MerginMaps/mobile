@@ -46,6 +46,8 @@
 #include <limits>
 #include <math.h>
 
+#include <iostream>
+
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
 
@@ -349,7 +351,6 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
       break;
   }
 }
-
 
 QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
 {
@@ -1241,4 +1242,148 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   settings->setTransformContext( project->transformContext() );
 
   return settings;
+}
+
+QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+{
+  if ( !mapSettings || !targetFeature.isValid() || geometryFromLayer( targetFeature.layer() ) != QStringLiteral( "point" ) )
+    return QgsRectangle();
+
+  // Transform gps position to map CRS
+  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
+  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct1.isShortCircuited() )
+  {
+    try
+    {
+      gpsPosition.transform( ct1 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QgsRectangle();
+    }
+  }
+
+  // Transform target point to map CRS
+  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
+  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct2.isShortCircuited() )
+  {
+    try
+    {
+      targetPoint.transform( ct2 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QgsRectangle();
+    }
+  }
+
+  QgsRectangle bbox;
+  bbox.setXMinimum( qMin( gpsPosition.x(), targetPoint.x() ) );
+  bbox.setXMaximum( qMax( gpsPosition.x(), targetPoint.x() ) );
+  bbox.setYMinimum( qMin( gpsPosition.y(), targetPoint.y() ) );
+  bbox.setYMaximum( qMax( gpsPosition.y(), targetPoint.y() ) );
+  bbox.scale( 1.2 );
+  bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
+
+  return bbox;
+}
+
+QString InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !targetFeature.isValid() )
+    return QString();
+
+  QgsVectorLayer *layer = targetFeature.layer();
+  QgsFeature f = targetFeature.feature();
+
+  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+    return QString();
+
+  // Transform gps position to map CRS
+  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
+  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct1.isShortCircuited() )
+  {
+    try
+    {
+      gpsPosition.transform( ct1 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QString();
+    }
+  }
+
+  // Transform target point to map CRS
+  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
+  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct2.isShortCircuited() )
+  {
+    try
+    {
+      targetPoint.transform( ct2 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QString();
+    }
+  }
+
+  QgsDistanceArea distanceArea;
+  distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
+  double dist = distanceArea.measureLine( gpsPosition, targetPoint );
+  QString res = formatDistance( dist, distanceArea.lengthUnits(), 2 );
+  return res;
+}
+
+QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *project )
+{
+  if ( !project || !pair.isValid() )
+    return QString();
+
+  QString title;
+
+  QgsVectorLayer *layer = pair.layer();
+
+  // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
+  QList<QgsExpressionContextScope *> scopes;
+  scopes << QgsExpressionContextUtils::globalScope();
+  scopes << QgsExpressionContextUtils::projectScope( project );
+  scopes << QgsExpressionContextUtils::layerScope( layer );
+
+  QgsExpressionContext context( scopes );
+  context.setFeature( pair.feature() );
+  QgsExpression expr( pair.layer()->displayExpression() );
+  title = expr.evaluate( &context ).toString();
+
+  if ( title.isEmpty() )
+    title = QStringLiteral( "Feature %1" ).arg( pair.feature().id() );
+
+  return title;
+}
+
+QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )
+{
+  if ( !feature.isValid() || geometryFromLayer( feature.layer() ) != "point" )
+    return QgsPointXY();
+
+  QgsFeature f = feature.feature();
+  const QgsAbstractGeometry *g = f.geometry().constGet();
+
+  return QgsPoint( dynamic_cast< const QgsPoint * >( g )->toQPointF() );
+}
+
+bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
+{
+  if ( !feature.isValid() || geometryFromLayer( feature.layer() ) != "point" )
+    return false;
+  const QgsAbstractGeometry *g = feature.feature().geometry().constGet();
+  const QgsPoint *point = dynamic_cast< const QgsPoint * >( g );
+  return point != nullptr;
 }

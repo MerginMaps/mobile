@@ -28,6 +28,9 @@ Item {
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
 
+  property alias navigationHighlightFeature: _navigationHighlight.destinationPair
+  property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
+
   property bool isInRecordState
 
   signal featureIdentified( var pair )
@@ -151,7 +154,7 @@ Item {
 
   function updatePosition() {
     let autoCenterDuringRecording = _digitizingController.useGpsPoint && root.isInRecordState
-    let autoCenterDuringViewing = !root.isInRecordState && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
+    let autoCenterDuringViewing = !root.isInRecordState && root.state != "navigation" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
 
     if ( autoCenterDuringRecording || autoCenterDuringViewing ) {
       let useGpsPoint = _digitizingController.useGpsPoint
@@ -166,6 +169,7 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
+    _navigationHighlight.destinationPair = null
   }
 
   states: [
@@ -186,6 +190,10 @@ Item {
     State {
       name: "editGeometry" // of existing feature
       PropertyChanges { target: root; isInRecordState: true }
+    },
+    State {
+      name: "navigation"
+      PropertyChanges { target: root; isInRecordState: false }
     },
     State {
       name: "inactive" // covered by other element
@@ -223,10 +231,19 @@ Item {
 
         break
       }
+      case "navigation": {
+        if ( _digitizingHighlight.visible )
+          _digitizingHighlight.visible = false
+
+        if ( _highlightIdentified.visible )
+          _highlightIdentified.visible = false
+
+        break
+      }
       case "inactive": {
         break
       }
-    }
+    }    
   }
 
   state: "view"
@@ -256,7 +273,7 @@ Item {
     onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
-      if ( !root.isInRecordState )
+      if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = _identifyKit.identifyOne( screenPoint )
@@ -286,6 +303,22 @@ Item {
   }
 
   Compass { id: _compass }
+
+  NavigationHighlight {
+    id: _navigationHighlight
+    anchors.fill: _map
+    visible: root.state === "navigation"
+
+    mapSettings: _map.mapSettings
+
+    lineColor: InputStyle.highlightLineColor
+    lineWidth: InputStyle.highlightLineWidth * 2
+
+    fillColor: InputStyle.highlightFillColor
+
+    outlinePenWidth: InputStyle.highlighOutlinePenWidth
+    outlineColor: InputStyle.highlighOutlineColor
+  }
 
   PositionMarker {
     id: _positionMarker
@@ -464,7 +497,7 @@ Item {
     maxWidth: parent.width / 2
 
     anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
-    anchors.bottomMargin: InputStyle.smallGap
+    anchors.bottomMargin: root.previewPanelHeight + InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
     visible: root.state !== "inactive" && _gpsState.state !== "unavailable"

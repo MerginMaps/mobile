@@ -138,7 +138,7 @@ Item {
       else // line or polygon
       {
         // place temporary point marker if this is the first point in line / polygon
-        if ( recordingInProgress && data.length < dataStartIndex + 3 )
+        if ( ( recordingInProgress ) && data.length < dataStartIndex + 3 )
         {
           newMarkerItems.push( componentMarker.createObject( highlight, {
                                                               "posX": data[ dataStartIndex ],
@@ -167,7 +167,7 @@ Item {
           i = k
         }
 
-        if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
+        if ( ( recordingInProgress ) && guideLineAllowed ) { // construct a guide line / polygon
           if ( geometryType === 2 && elements.length > 2 )
           {
             newGuideLineElements = Array.from( elements ) // shallow copy

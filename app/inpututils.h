@@ -402,12 +402,26 @@ class InputUtils: public QObject
     // Returns geometry type in form that qml understands
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
+    // Returns a point geometry from point feature
+    Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
+
+    // Returns the extent of the navigation feature representing the source and the destination of the navigation
+    Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+
+    // Returns the distance from \a gpsPos to the feature \a pair
+    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+
+    // Returns the title of the feature
+    Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
+
     // Calculates real screen DPR based on DPI
     static qreal calculateScreenDpr();
 
     // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
     static qreal calculateDpRatio();
 
+    // Returns whether geometry of the feature is an actual Point feature (Used because some )
+    Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
