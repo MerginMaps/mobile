@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,67 +8,82 @@
  ***************************************************************************/
 
 #include "bluetoothpositionprovider.h"
+#include "coreutils.h"
 
-BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QIODevice::OpenMode mode )
+NmeaParser::NmeaParser() : QgsNmeaConnection( nullptr )
+{
+}
+
+QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
+{
+  mStringBuffer = nmeastring;
+  processStringBuffer();
+  return mLastGPSInformation;
+}
+
+BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObject *parent )
+  : AbstractPositionProvider( parent )
+  , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
 
-  connect( mSocket.get(), &QBluetoothSocket::connected, this, &BluetoothPositionProvider::connected );
-  connect( mSocket.get(), &QBluetoothSocket::disconnected, this, &BluetoothPositionProvider::disconnected );
-  connect( mSocket.get(), &QBluetoothSocket::stateChanged, this, &BluetoothPositionProvider::stateChanged );
+  connect( mSocket.get(), &QBluetoothSocket::stateChanged, this, &BluetoothPositionProvider::socketStateChanged );
   connect( mSocket.get(), QOverload<QBluetoothSocket::SocketError>::of( &QBluetoothSocket::error ),
-       [=]( QBluetoothSocket::SocketError error ){
-    qDebug() << error << "<- occured bluetooth socket error!!";
-  });
+           [ = ]( QBluetoothSocket::SocketError error )
+  {
+    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Occured error code: %1" ).arg( error ) );
+    qDebug() << error << "<- occured bluetooth socket error!!"; // TODO: remove
+  } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
-
-  mSocket->connectToService( QBluetoothAddress( addr ), QBluetoothUuid( QBluetoothUuid::SerialPort ), mode );
-
-//  mNmeaConnection = std::unique_ptr<QgsNmeaConnection>( new QgsNmeaConnection( mSocket.get() ) );
-
-//  connect( mNmeaConnection.get(), &QgsNmeaConnection::stateChanged, this, &BluetoothPositionProvider::positionChanged );
 }
 
 BluetoothPositionProvider::~BluetoothPositionProvider()
 {
-  mNmeaConnection->close();
   mSocket->disconnectFromService();
   mSocket->close();
 }
 
-void BluetoothPositionProvider::connected()
+void BluetoothPositionProvider::startUpdates()
 {
-  qDebug() << "SOCKET" << mSocket->peerName() << "CONNECTED!";
-//  mNmeaConnection->connect();
+  mSocket->connectToService( mTargetAddress, QBluetoothUuid( QBluetoothUuid::SerialPort ), QIODevice::ReadOnly );
 }
 
-void BluetoothPositionProvider::disconnected()
+void BluetoothPositionProvider::stopUpdates()
 {
-  qDebug() << "SOCKET" << mSocket->peerName() << "DISCONNECTED!";
-  emit lostConnection();
+  mSocket->disconnectFromService();
 }
 
-void BluetoothPositionProvider::stateChanged( QBluetoothSocket::SocketState state )
+void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
-  qDebug() << "SOCKET" << mSocket->peerName() << "CHANGED STATE TO:" << state << "!";
+  if ( state == QBluetoothSocket::ConnectingState )
+    emit providerConnecting();
+  else if ( state == QBluetoothSocket::ConnectedState )
+    emit providerConnected();
+  else if ( state == QBluetoothSocket::UnconnectedState )
+    emit lostConnection();
+
+  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: " ).arg( state ) );
 }
 
 void BluetoothPositionProvider::positionUpdateReceived()
 {
-  qDebug() << "SOCKET" << mSocket->peerName() << "RECEIVED POSITION UPDATE!";
-
   if ( mSocket->state() != QBluetoothSocket::UnconnectedState )
   {
     QByteArray rawNmea = mSocket->readAll();
     QString nmea( rawNmea );
+
     qDebug() << "NMEA:" << nmea;
 
-    emit AbstractPositionProvider::positionChanged();
+    QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+
+    qDebug() << "Parsed position: " << data.latitude << data.longitude;
+
+    GpsInformation out = GpsInformation::from( data );
+
+    qDebug() << "After copy parsed position: " << out.latitude << out.longitude;
+
+    emit positionChanged( out );
   }
 }
 
-void BluetoothPositionProvider::positionChanged( QgsGpsInformation position )
-{
-  qDebug() << "Received new position:" << position.latitude << position.longitude << position.hdop << position.satellitesUsed;
-}

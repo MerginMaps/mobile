@@ -20,6 +20,8 @@ class GpsInformation : public QgsGpsInformation
 
     // add information to QgsGpsInformation class to bear simple int for satellites in view
     int satellitesVisible;
+
+    static GpsInformation from( const QgsGpsInformation &other );
 };
 
 class AbstractPositionProvider : public QObject
@@ -36,6 +38,8 @@ class AbstractPositionProvider : public QObject
 
   signals:
     void positionChanged( QgsGpsInformation position );
+    void providerConnecting();
+    void providerConnected();
     void lostConnection();
 
   private:
