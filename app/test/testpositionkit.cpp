@@ -19,28 +19,40 @@
 #include <QDesktopWidget>
 
 #include "qgsapplication.h"
-#include "positionkit.h"
-#include "simulatedpositionsource.h"
+#include "position/positionkit.h"
+#include "position/simulatedpositionprovider.h"
 
 #include "testutils.h"
 
 void TestPositionKit::simulated_position()
 {
-  QVERIFY( !positionKit.isSimulated() );
-  positionKit.useSimulatedLocation( -92.36, 38.93, -1 );
-  QVERIFY( positionKit.isSimulated() );
+  QVERIFY( !positionKit.positionProvider() );
+
+  SimulatedPositionProvider simulatedProvider( -92.36, 38.93, 0 );
+  simulatedProvider.startUpdates();
+
+  positionKit.setPositionProvider( &simulatedProvider );
+
+  QVERIFY( positionKit.positionProvider() );
 
   QVERIFY( positionKit.hasPosition() );
+
   COMPARENEAR( positionKit.position().y(), 38.93, 1e-4 );
   QVERIFY( positionKit.accuracy() > 0 );
   QVERIFY( positionKit.satellitesInViewCount() >= 0 );
   QVERIFY( positionKit.usedSatellitesCount() >= 0 );
 
-  const QVector<double> newPosition( { 90.36, 33.93, -1 } );
-  positionKit.setSimulatePositionLongLatRad( newPosition );
-  QVERIFY( positionKit.hasPosition() );
-  COMPARENEAR( positionKit.position().y(), newPosition[1], 1e-4 );
+  SimulatedPositionProvider simulatedProvider2( 90.36, 33.93, 0 );
+  simulatedProvider2.startUpdates();
 
-  positionKit.setSimulatePositionLongLatRad( QVector<double>() );
-  QVERIFY( !positionKit.isSimulated() );
+  positionKit.setPositionProvider( &simulatedProvider2 );
+
+  QVERIFY( positionKit.hasPosition() );
+  COMPARENEAR( positionKit.position().y(), 33.93, 1e-4 );
+
+  simulatedProvider.stopUpdates();
+  simulatedProvider2.stopUpdates();
+
+  positionKit.setPositionProvider( nullptr );
+  QVERIFY( !positionKit.positionProvider() );
 }

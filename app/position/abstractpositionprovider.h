@@ -14,17 +14,25 @@
 
 #include "qobject.h"
 
+class GpsInformation : public QgsGpsInformation
+{
+  public:
+
+    // add information to QgsGpsInformation class to bear simple int for satellites in view
+    int satellitesVisible;
+};
+
 class AbstractPositionProvider : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
   public:
     AbstractPositionProvider( QObject *object = nullptr );
     virtual ~AbstractPositionProvider();
 
-    virtual void close();
-    virtual void stopUpdates();
     virtual void startUpdates();
+    virtual void stopUpdates();
+    virtual void closeProvider();
 
   signals:
     void positionChanged( QgsGpsInformation position );

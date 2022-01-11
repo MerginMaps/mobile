@@ -15,26 +15,24 @@
 
 #include "simulatedpositionprovider.h"
 
-#include <QTimer>
-
-SimulatedPositionProvider::SimulatedPositionProvider( QObject *parent, double longitude, double latitude, double flightRadius )
-  : QGeoPositionInfoSource( parent )
+SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
+  : AbstractPositionProvider( parent )
   , mTimer( new QTimer() )
-  , mFlightRadius( flightRadius )
   , mLongitude( longitude )
   , mLatitude( latitude )
+  , mFlightRadius( flightRadius )
+  , mTimerTimeout( timerTimeout )
 {
-  connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::readNextPosition );
+  std::random_device seed;
+  mGenerator = std::unique_ptr<std::mt19937>( new std::mt19937( seed() ) );
+
+  connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::generateNextPosition );
 }
 
 void SimulatedPositionProvider::startUpdates()
 {
-  int interval = updateInterval();
-  if ( interval < minimumUpdateInterval() )
-    interval = minimumUpdateInterval();
-
-  mTimer->start( interval );
-  readNextPosition();
+  mTimer->start( mTimerTimeout );
+  generateNextPosition();
 }
 
 void SimulatedPositionProvider::stopUpdates()
@@ -42,59 +40,64 @@ void SimulatedPositionProvider::stopUpdates()
   mTimer->stop();
 }
 
-void SimulatedPositionProvider::requestUpdate( int /*timeout*/ )
-{
-  readNextPosition();
-}
-
-
-
-void SimulatedPositionProvider::readNextPosition()
+void SimulatedPositionProvider::generateNextPosition()
 {
   if ( mFlightRadius <= 0 )
-    readConstantPosition();
+    generateConstantPosition();
   else
-    readRandomPosition();
+    generateRadiusPosition();
 }
 
-void SimulatedPositionProvider::readRandomPosition()
+void SimulatedPositionProvider::generateRadiusPosition()
 {
   double latitude = mLatitude, longitude = mLongitude;
   latitude += sin( mAngle * M_PI / 180 ) * mFlightRadius;
   longitude += cos( mAngle * M_PI / 180 ) * mFlightRadius;
   mAngle += 1;
 
-  QGeoCoordinate coordinate( latitude, longitude );
-  double altitude = std::rand() % 40 + 20; // rand altitude <20,55>m and lost (0)
+  GpsInformation position;
+
+  position.latitude = latitude;
+  position.longitude = longitude;
+
+  double altitude = ( *mGenerator )() % 40 + 20; // rand altitude <20,55>m and lost (0)
   if ( altitude <= 55 )
   {
-    coordinate.setAltitude( altitude ); // 3D
+    position.elevation = altitude;
   }
 
   QDateTime timestamp = QDateTime::currentDateTime();
+  position.utcDateTime = timestamp;
 
-  QGeoPositionInfo info( coordinate, timestamp );
-  if ( info.isValid() )
+  position.direction = 360 - int( mAngle ) % 360;
+
+  int accuracy = ( *mGenerator )() % 40; // rand accuracy <0,35>m and lost (-1)
+  if ( accuracy > 35 )
   {
-    mLastPosition = info;
-    info.setAttribute( QGeoPositionInfo::Direction, 360 - int( mAngle ) % 360 );
-    int accuracy = std::rand() % 40 + 20; // rand accuracy <20,55>m and lost (-1)
-    if ( accuracy > 55 )
-    {
-      accuracy = -1;
-    }
-    info.setAttribute( QGeoPositionInfo::HorizontalAccuracy, accuracy );
-    emit positionUpdated( info );
+    accuracy = -1;
   }
+  position.hacc = accuracy;
+
+  position.satellitesUsed = ( *mGenerator )() % 30;
+  position.satellitesVisible = ( *mGenerator )() % 30;
+
+  position.speed = ( *mGenerator )() % 50 - ( ( ( *mGenerator )() % 10 ) / 10 ); // e.g. 45 - 3 / 10 = 44.7 (km/h)
+
+  emit positionChanged( position );
 }
 
-void SimulatedPositionProvider::readConstantPosition()
+void SimulatedPositionProvider::generateConstantPosition()
 {
-  QGeoCoordinate coordinate( mLatitude, mLongitude );
-  coordinate.setAltitude( 20 );
-  QDateTime timestamp = QDateTime::currentDateTime();
-  QGeoPositionInfo info( coordinate, timestamp );
-  info.setAttribute( QGeoPositionInfo::Direction, 0 );
-  info.setAttribute( QGeoPositionInfo::HorizontalAccuracy, 20 );
-  emit positionUpdated( info );
+  GpsInformation position;
+  position.latitude = mLatitude;
+  position.longitude = mLongitude;
+  position.elevation = 20;
+  position.utcDateTime = QDateTime::currentDateTime();
+  position.direction = 0;
+  position.hacc = 20;
+  position.satellitesUsed = ( *mGenerator )() % 30;
+  position.satellitesVisible = ( *mGenerator )() % 30;
+  position.speed = 0;
+
+  emit positionChanged( position );
 }

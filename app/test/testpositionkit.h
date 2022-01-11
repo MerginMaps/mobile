@@ -12,7 +12,7 @@
 #ifndef TESTPOSITIONKIT_H
 #define TESTPOSITIONKIT_H
 
-#include "positionkit.h"
+#include "position/positionkit.h"
 
 class TestPositionKit: public QObject
 {

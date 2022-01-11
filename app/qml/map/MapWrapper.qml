@@ -298,7 +298,6 @@ Item {
     id: _positionKit
 
     mapSettings: _map.mapSettings
-    simulatePositionLongLatRad: __use_simulated_position ? [17.130032, 48.130725, 0.1] : []
     onScreenPositionChanged: updatePosition()
   }
 

@@ -16,56 +16,53 @@
 #ifndef SIMULATEDPOSITIONPROVIDER_H
 #define SIMULATEDPOSITIONPROVIDER_H
 
+#include "position/abstractpositionprovider.h"
+
 #include <QObject>
 #include <QTimer>
-#include <QtPositioning>
-#include <qgspoint.h>
+
+#include <random>
 
 /**
- * This is an internal (implementation) class used to generate (fake) GPS position source
- * Useful for for testing purposes (e.g. testing of the application with map for different
- * location then your physical (GPS) location)
- *
- * Simulated position source generates random points in circles around the selected
- * point and radius. Real GPS position is not used in this mode.
- *
- * For disabling (random) updates, use flight radius <= 0 (useful for testing)
- *
- * \note QML Type: not exported
+ * SimulatedPositionProvider is used to generate random position around specified point
+ * Point can be specified via constructor arguments
+ * Should be used as a position provider in PositionKit
  */
-class SimulatedPositionProvider : public QGeoPositionInfoSource
+class SimulatedPositionProvider : public AbstractPositionProvider
 {
     Q_OBJECT
-  public:
-    SimulatedPositionProvider( QObject *parent, double longitude, double latitude, double flightRadius );
 
-    QGeoPositionInfo lastKnownPosition( bool /*fromSatellitePositioningMethodsOnly = false*/ ) const { return mLastPosition; }
-    PositioningMethods supportedPositioningMethods() const { return AllPositioningMethods; }
-    int minimumUpdateInterval() const { return 1000; }
-    Error error() const { return QGeoPositionInfoSource::NoError; }
+  public:
+
+    /**
+     *  Change these default values to fly around a specific point
+     *  Set flightRadius to 0 in order to get constant position (no movement)
+     */
+    explicit SimulatedPositionProvider(
+      double longitude = 17.130,
+      double latitude = 48.130,
+      double flightRadius = 0.1,
+      double updateTimeout = 1000,
+      QObject *parent = nullptr
+    );
 
   public slots:
-    virtual void startUpdates();
-    virtual void stopUpdates();
+    virtual void startUpdates() override;
+    virtual void stopUpdates() override;
 
-    virtual void requestUpdate( int timeout = 5000 );
-
-  private slots:
-    void readNextPosition();
+    void generateNextPosition();
 
   private:
-    void readRandomPosition();
-    void readConstantPosition();
+    void generateRadiusPosition();
+    void generateConstantPosition();
 
-    std::unique_ptr< QTimer > mTimer;
-    QGeoPositionInfo mLastPosition;
+    std::unique_ptr<QTimer> mTimer;
+    std::unique_ptr<std::mt19937> mGenerator;
     double mAngle = 0;
-
-    double mFlightRadius = 0;
     double mLongitude = 0;
     double mLatitude = 0;
+    double mFlightRadius = 0;
+    double mTimerTimeout = 0;
 };
-
-/// @endcond
 
 #endif // SIMULATEDPOSITIONPROVIDER_H
