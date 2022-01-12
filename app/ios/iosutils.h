@@ -18,7 +18,7 @@
 
 #include <QObject>
 #include "iosimagepicker.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "compass.h"
 
 class IosUtils: public QObject

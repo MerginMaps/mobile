@@ -11,6 +11,7 @@ attributes/fieldvalidator.cpp \
 position/abstractpositionprovider.cpp \
 position/bluetoothpositionprovider.cpp \
 position/internalpositionprovider.cpp \
+position/mapposition.cpp \
 position/positiondirection.cpp \
 position/positionkit.cpp \
 position/simulatedpositionprovider.cpp \
@@ -61,6 +62,7 @@ attributes/fieldvalidator.h \
 position/abstractpositionprovider.h \
 position/bluetoothpositionprovider.h \
 position/internalpositionprovider.h \
+position/mapposition.h \
 position/positiondirection.h \
 position/positionkit.h \
 position/simulatedpositionprovider.h \

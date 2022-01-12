@@ -25,9 +25,9 @@ void PositionDirection::updateDirection()
     return;
   }
 
-  if ( mPositionKit->lastPosition().isValid() )
+  if ( !std::isnan( mPositionKit->speed() ) )
   {
-    groundSpeed = mPositionKit->lastPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
+    groundSpeed = mPositionKit->speed();
   }
 
   qreal newDirection = Compass::MIN_INVALID_DIRECTION;

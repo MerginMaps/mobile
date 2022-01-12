@@ -32,6 +32,7 @@ class InternalPositionProvider : public AbstractPositionProvider
 
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
+    virtual void closeProvider() override;
 
   public slots:
     void parsePositionUpdate( const QGeoPositionInfo &position );
@@ -45,7 +46,7 @@ class InternalPositionProvider : public AbstractPositionProvider
     // Both of them are handled in separate slots and in order to be able to emit merged information
     // as position update, we need to store received data in mLastPosition.
     // Otherwise this provider would emit uncomplete GPS info (position without satellites or vice versa).
-    GpsInformation mLastPosition;
+    GeoPosition mLastPosition;
 
     std::unique_ptr<QGeoPositionInfoSource> mGpsPositionSource;
     std::unique_ptr<QGeoSatelliteInfoSource> mGpsSatellitesSource;

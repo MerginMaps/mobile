@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
   positionkit.cpp
   --------------------------------------
   Date                 : Dec. 2017
@@ -13,15 +13,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <memory>
+#include "positionkit.h"
+#include "coreutils.h"
 
 #include "qgis.h"
-#include "qgslogger.h"
-#include "qgsmessagelog.h"
-
-#include "positionkit.h"
-#include "inpututils.h"
-#include "coreutils.h"
 
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
@@ -29,190 +24,171 @@ PositionKit::PositionKit( QObject *parent )
   // TODO: try to load last used provider
 }
 
-GpsInformation PositionKit::lastPosition() const
-{
-  return mLastPosition;
-}
-
-void PositionKit::startUpdates()
-{
-  if ( mPositionProvider )
-  {
-    mPositionProvider->startUpdates();
-  }
-}
-
-void PositionKit::stopUpdates()
-{
-  if ( mPositionProvider )
-  {
-    mPositionProvider->stopUpdates();
-  }
-}
-
-void PositionKit::updateScreenPosition()
-{
-  if ( !mMapSettings )
-    return;
-
-  QPointF screenPosition = mapSettings()->coordinateToScreen( projectedPosition() );
-  if ( screenPosition != mScreenPosition )
-  {
-    mScreenPosition = screenPosition;
-    emit screenPositionChanged();
-  }
-}
-
-void PositionKit::updateScreenAccuracy()
-{
-  if ( !mMapSettings )
-    return;
-
-  double screenAccuracy = calculateScreenAccuracy();
-  if ( !qgsDoubleNear( screenAccuracy, mScreenAccuracy ) )
-  {
-    mScreenAccuracy = screenAccuracy;
-    emit screenAccuracyChanged();
-  }
-}
-
-void PositionKit::setProjectedPosition( const QgsPoint &projectedPosition )
-{
-  if ( projectedPosition != mProjectedPosition )
-  {
-    mProjectedPosition = projectedPosition;
-    emit projectedPositionChanged();
-  }
-}
-
-void PositionKit::setVerticalAccuracy( double vAccuracy )
-{
-  if ( !qgsDoubleNear( vAccuracy, mVerticalAccuracy ) )
-  {
-    mVerticalAccuracy = vAccuracy;
-    emit verticalAccuracyChanged( mVerticalAccuracy );
-  }
-}
-
-void PositionKit::setSpeed( double speed )
-{
-  if ( !qgsDoubleNear( speed, mSpeed ) )
-  {
-    mSpeed = speed;
-    emit speedChanged( mSpeed );
-  }
-}
-
-void PositionKit::setLastGPSRead( const QDateTime &timestamp )
-{
-  if ( mLastGPSRead != timestamp )
-  {
-    mLastGPSRead = timestamp;
-    emit lastGPSReadChanged( mLastGPSRead );
-  }
-}
-
-
-
-QgsQuickMapSettings *PositionKit::mapSettings() const
-{
-  return mMapSettings;
-}
-
-void PositionKit::updateProjectedPosition()
-{
-  if ( !mMapSettings )
-    return;
-
-  // During startup, GPS position might not be available so we do not transform empty points.
-  if ( mPosition.isEmpty() )
-  {
-    setProjectedPosition( QgsPoint() );
-  }
-  else
-  {
-    QgsPointXY srcPoint = QgsPointXY( mPosition.x(), mPosition.y() );
-    QgsPointXY projectedPositionXY = InputUtils::transformPoint(
-                                       positionCRS(),
-                                       mMapSettings->destinationCrs(),
-                                       mMapSettings->transformContext(),
-                                       srcPoint
-                                     );
-
-    QgsPoint projectedPosition( projectedPositionXY );
-    projectedPosition.addZValue( mPosition.z() );
-
-    setProjectedPosition( projectedPosition );
-  }
-}
-
-void PositionKit::onPositionUpdated( const QGeoPositionInfo &info )
-{
-
-  // recalculate projected/screen variables
-  onMapSettingsUpdated();
-}
-
-void PositionKit::onMapSettingsUpdated()
-{
-  updateProjectedPosition();
-
-  updateScreenAccuracy();
-  updateScreenPosition();
-}
-
-void PositionKit::numberOfUsedSatellitesChanged( const QList<QGeoSatelliteInfo> &list )
-{
-  if ( list.count() != mUsedSatellitesCount )
-  {
-    mUsedSatellitesCount = list.count();
-    emit usedSatellitesCountChanged( list.count() );
-  }
-}
-
-void PositionKit::numberOfSatellitesInViewChanged( const QList<QGeoSatelliteInfo> &list )
-{
-  if ( list.count() != mSatellitesInViewCount )
-  {
-    mSatellitesInViewCount = list.count();
-    emit satellitesInViewCountChanged( list.count() );
-  }
-}
-
-double PositionKit::calculateScreenAccuracy()
-{
-  if ( !mMapSettings )
-    return 2.0;
-
-  if ( accuracy() > 0 )
-  {
-    double scpm = InputUtils::screenUnitsToMeters( mMapSettings, 1 );
-    if ( scpm > 0 )
-      return 2 * ( accuracy() / scpm );
-    else
-      return 2.0;
-  }
-  return 2.0;
-}
-
-QPointF PositionKit::screenPosition() const
-{
-  return mScreenPosition;
-}
-
-double PositionKit::screenAccuracy() const
-{
-  return mScreenAccuracy;
-}
-
 QgsCoordinateReferenceSystem PositionKit::positionCRS() const
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 }
 
-QgsPoint PositionKit::projectedPosition() const
+void PositionKit::startUpdates()
 {
-  return mProjectedPosition;
+  if ( mPositionProvider )
+    mPositionProvider->startUpdates();
+}
+
+void PositionKit::stopUpdates()
+{
+  if ( mPositionProvider )
+    mPositionProvider->stopUpdates();
+}
+
+void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
+{
+  if ( mPositionProvider.get() == provider )
+    return;
+
+  if ( mPositionProvider )
+    mPositionProvider->disconnect();
+
+  mPositionProvider.reset( provider );
+
+  if ( mPositionProvider )
+  {
+    connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
+    connect( mPositionProvider.get(), &AbstractPositionProvider::lostConnection, this, &PositionKit::lostConnection );
+  }
+}
+
+void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
+{
+  bool hasAnythingChanged = false;
+
+  if ( !qgsDoubleNear( newPosition.latitude, mPosition.latitude ) )
+  {
+    mPosition.latitude = newPosition.latitude;
+    emit latitudeChanged( mPosition.latitude );
+    emit positionCoordinateChanged( positionCoordinate() );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.longitude, mPosition.longitude ) )
+  {
+    mPosition.longitude = newPosition.longitude;
+    emit longitudeChanged( mPosition.longitude );
+    emit positionCoordinateChanged( positionCoordinate() );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.elevation, mPosition.elevation ) )
+  {
+    mPosition.elevation = newPosition.elevation;
+    emit altitudeChanged( mPosition.elevation );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.hasValidPosition() != mHasPosition )
+  {
+    mHasPosition = newPosition.hasValidPosition();
+    emit hasPositionChanged( mHasPosition );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.hacc, mPosition.hacc ) )
+  {
+    mPosition.hacc = newPosition.hacc;
+    emit horizontalAccuracyChanged( mPosition.hacc );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.vacc, mPosition.vacc ) )
+  {
+    mPosition.vacc = newPosition.vacc;
+    emit verticalAccuracyChanged( mPosition.vacc );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.speed, mPosition.speed ) )
+  {
+    mPosition.speed = newPosition.speed;
+    emit speedChanged( mPosition.speed );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.verticalSpeed, mPosition.verticalSpeed ) )
+  {
+    mPosition.verticalSpeed = newPosition.verticalSpeed;
+    emit verticalSpeedChanged( mPosition.verticalSpeed );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.direction, mPosition.direction ) )
+  {
+    mPosition.direction = newPosition.direction;
+    emit directionChanged( mPosition.direction );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.magneticVariation, mPosition.magneticVariation ) )
+  {
+    mPosition.magneticVariation = newPosition.magneticVariation;
+    emit magneticVariationChanged( mPosition.magneticVariation );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.satellitesVisible != mPosition.satellitesVisible )
+  {
+    mPosition.satellitesVisible = newPosition.satellitesVisible;
+    emit satellitesVisibleChanged( mPosition.satellitesVisible );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.satellitesUsed != mPosition.satellitesUsed )
+  {
+    mPosition.satellitesUsed = newPosition.satellitesUsed;
+    emit satellitesUsedChanged( mPosition.satellitesUsed );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.hdop, mPosition.hdop ) )
+  {
+    mPosition.hdop = newPosition.hdop;
+    emit hdopChanged( mPosition.hdop );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.utcDateTime != mPosition.utcDateTime )
+  {
+    mPosition.utcDateTime = newPosition.utcDateTime;
+    emit lastReadChanged( mPosition.utcDateTime );
+    hasAnythingChanged = true;
+  }
+
+  if ( hasAnythingChanged )
+  {
+    emit positionChanged( mPosition );
+  }
+}
+
+double PositionKit::latitude() const
+{
+  return mPosition.latitude;
+}
+
+double PositionKit::longitude() const
+{
+  return mPosition.longitude;
+}
+
+double PositionKit::altitude() const
+{
+  return mPosition.elevation;
+}
+
+QgsPoint PositionKit::positionCoordinate() const
+{
+  if ( mPosition.latitude < 0 || mPosition.longitude < 0 )
+    return QgsPoint();
+
+  return QgsPoint( mPosition.latitude, mPosition.longitude, mPosition.elevation );
 }
 
 bool PositionKit::hasPosition() const
@@ -220,76 +196,62 @@ bool PositionKit::hasPosition() const
   return mHasPosition;
 }
 
-QgsPoint PositionKit::position() const
+double PositionKit::horizontalAccuracy() const
 {
-  return mPosition;
-}
-
-double PositionKit::accuracy() const
-{
-  return mAccuracy;
+  return mPosition.hacc;
 }
 
 double PositionKit::verticalAccuracy() const
 {
-  return mVerticalAccuracy;
+  return mPosition.vacc;
 }
 
 double PositionKit::direction() const
 {
-  return mDirection;
+  return mPosition.direction;
+}
+
+double PositionKit::magneticVariation() const
+{
+  return mPosition.magneticVariation;
 }
 
 double PositionKit::speed() const
 {
-  return mSpeed;
+  return mPosition.speed;
 }
 
-void PositionKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+double PositionKit::verticalSpeed() const
 {
-  if ( mMapSettings == mapSettings )
-    return;
-
-  if ( mMapSettings )
-  {
-    mMapSettings->disconnect();
-  }
-
-  mMapSettings = mapSettings;
-
-  if ( mMapSettings )
-  {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &PositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &PositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &PositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &PositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &PositionKit::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &PositionKit::onMapSettingsUpdated );
-  }
-
-  emit mapSettingsChanged();
+  return mPosition.verticalSpeed;
 }
 
-void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
+const QDateTime &PositionKit::lastRead() const
 {
-  // TODO: disconnect from signals of previous provider
-
-  mPositionProvider.reset( provider );
-
-  // TODO: connect to signals of new provider
+  return mPosition.utcDateTime;
 }
 
-const QDateTime &PositionKit::lastGPSRead() const
+int PositionKit::satellitesUsed() const
 {
-  return mLastGPSRead;
+  return mPosition.satellitesUsed;
 }
 
-int PositionKit::satellitesInViewCount() const
+int PositionKit::satellitesVisible() const
 {
-  return mSatellitesInViewCount;
+  return mPosition.satellitesVisible;
 }
 
-int PositionKit::usedSatellitesCount() const
+double PositionKit::hdop() const
 {
-  return mUsedSatellitesCount;
+  return mPosition.hdop;
+}
+
+AbstractPositionProvider *PositionKit::positionProvider() const
+{
+  return mPositionProvider.get();
+}
+
+const GeoPosition &PositionKit::position() const
+{
+  return mPosition;
 }

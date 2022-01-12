@@ -47,6 +47,7 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
+    virtual void closeProvider() override;
 
   public slots:
     void positionUpdateReceived();

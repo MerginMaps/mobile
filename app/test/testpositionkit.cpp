@@ -37,10 +37,10 @@ void TestPositionKit::simulated_position()
 
   QVERIFY( positionKit.hasPosition() );
 
-  COMPARENEAR( positionKit.position().y(), 38.93, 1e-4 );
-  QVERIFY( positionKit.accuracy() > 0 );
-  QVERIFY( positionKit.satellitesInViewCount() >= 0 );
-  QVERIFY( positionKit.usedSatellitesCount() >= 0 );
+  COMPARENEAR( positionKit.positionCoordinate().y(), 38.93, 1e-4 );
+  QVERIFY( positionKit.horizontalAccuracy() > 0 );
+  QVERIFY( positionKit.satellitesVisible() >= 0 );
+  QVERIFY( positionKit.satellitesUsed() >= 0 );
 
   SimulatedPositionProvider simulatedProvider2( 90.36, 33.93, 0 );
   simulatedProvider2.startUpdates();
@@ -48,7 +48,7 @@ void TestPositionKit::simulated_position()
   positionKit.setPositionProvider( &simulatedProvider2 );
 
   QVERIFY( positionKit.hasPosition() );
-  COMPARENEAR( positionKit.position().y(), 33.93, 1e-4 );
+  COMPARENEAR( positionKit.positionCoordinate().y(), 33.93, 1e-4 );
 
   simulatedProvider.stopUpdates();
   simulatedProvider2.stopUpdates();

@@ -54,6 +54,12 @@ void BluetoothPositionProvider::stopUpdates()
   mSocket->disconnectFromService();
 }
 
+void BluetoothPositionProvider::closeProvider()
+{
+  mSocket->disconnectFromService();
+  mSocket->close();
+}
+
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
   if ( state == QBluetoothSocket::ConnectingState )
@@ -79,7 +85,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
 
     qDebug() << "Parsed position: " << data.latitude << data.longitude;
 
-    GpsInformation out = GpsInformation::from( data );
+    GeoPosition out = GeoPosition::from( data );
 
     qDebug() << "After copy parsed position: " << out.latitude << out.longitude;
 

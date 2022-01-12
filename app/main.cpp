@@ -94,6 +94,7 @@
 #include "qgsproject.h"
 #include "bluetoothdiscoverymodel.h"
 #include "position/bluetoothpositionprovider.h"
+#include "position/mapposition.h"
 
 
 #ifndef NDEBUG
@@ -275,6 +276,7 @@ void initDeclarative()
   qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
   qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
+  qmlRegisterType< MapPosition >( "lc", 1, 0, "MapPosition" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );

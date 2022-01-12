@@ -20,7 +20,7 @@
 #include <QObject>
 #include "qgsproject.h"
 #include "inpututils.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"

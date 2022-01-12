@@ -42,6 +42,11 @@ void SimulatedPositionProvider::stopUpdates()
   mTimer->stop();
 }
 
+void SimulatedPositionProvider::closeProvider()
+{
+  mTimer->stop();
+}
+
 void SimulatedPositionProvider::generateNextPosition()
 {
   if ( mFlightRadius <= 0 )
@@ -57,7 +62,7 @@ void SimulatedPositionProvider::generateRadiusPosition()
   longitude += cos( mAngle * M_PI / 180 ) * mFlightRadius;
   mAngle += 1;
 
-  GpsInformation position;
+  GeoPosition position;
 
   position.latitude = latitude;
   position.longitude = longitude;
@@ -90,7 +95,7 @@ void SimulatedPositionProvider::generateRadiusPosition()
 
 void SimulatedPositionProvider::generateConstantPosition()
 {
-  GpsInformation position;
+  GeoPosition position;
   position.latitude = mLatitude;
   position.longitude = mLongitude;
   position.elevation = 20;

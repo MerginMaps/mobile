@@ -64,6 +64,7 @@ Item {
     Image {
         id: navigation
         source: positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+        visible: positionKit.hasPosition
         fillMode: Image.PreserveAspectFit
         width: positionMarker.size
         height: width

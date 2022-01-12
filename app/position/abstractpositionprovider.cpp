@@ -16,9 +16,25 @@ AbstractPositionProvider::AbstractPositionProvider( QObject *object ) : QObject(
 
 AbstractPositionProvider::~AbstractPositionProvider() = default;
 
-GpsInformation GpsInformation::from( const QgsGpsInformation &other )
+GeoPosition::GeoPosition()
 {
-  GpsInformation out;
+  // set attribute from base type to invalid value
+  latitude = -1;
+  longitude = -1;
+  elevation = -1;
+  direction = -1;
+  speed = -1;
+  pdop = -1;
+  hdop = -1;
+  vdop = -1;
+  hacc = -1;
+  vacc = -1;
+  satellitesUsed = -1;
+}
+
+GeoPosition GeoPosition::from( const QgsGpsInformation &other )
+{
+  GeoPosition out;
   out.latitude = other.latitude;
   out.longitude = other.longitude;
   out.elevation = other.elevation;
@@ -43,4 +59,9 @@ GpsInformation GpsInformation::from( const QgsGpsInformation &other )
   out.satInfoComplete = other.satInfoComplete;
 
   return out;
+}
+
+bool GeoPosition::hasValidPosition() const
+{
+  return !std::isnan( latitude ) && !std::isnan( longitude );
 }

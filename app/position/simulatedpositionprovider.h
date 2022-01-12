@@ -50,6 +50,7 @@ class SimulatedPositionProvider : public AbstractPositionProvider
   public slots:
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
+    virtual void closeProvider() override;
 
     void generateNextPosition();
 

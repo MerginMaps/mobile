@@ -32,6 +32,8 @@
 #include <QDebug>
 
 #include <qgsprojectviewsettings.h>
+#include <QStandardPaths>
+#include <QTimer>
 
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 

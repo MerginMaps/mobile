@@ -19,7 +19,8 @@ Page {
   id: root
 
   property var positionKit
-  property string coordinatesInDegrees: __inputUtils.degreesString( root.positionKit.position )
+  property var mapPositioning
+  property string coordinatesInDegrees: __inputUtils.degreesString( root.positionKit.positionCoordinate )
 
   property real cellWidth: root.width * 0.4
 
@@ -79,7 +80,7 @@ Page {
 
         titleText: qsTr( "Longitude" )
         text: {
-          if ( root.positionKit.position.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
           root.coordinatesInDegrees.split(", ")[0]
@@ -93,7 +94,7 @@ Page {
 
         titleText: qsTr( "Latitude" )
         text: {
-          if ( root.positionKit.position.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
           root.coordinatesInDegrees.split(", ")[1]
@@ -107,10 +108,10 @@ Page {
 
         titleText: qsTr( "X" )
         text: {
-          if ( root.positionKit.projectedPosition.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
           }
-          __inputUtils.formatNumber( root.positionKit.projectedPosition.x, 2 )
+          __inputUtils.formatNumber( root.mapPositioning.mapPosition.x, 2 )
         }
       }
 
@@ -121,10 +122,10 @@ Page {
 
         titleText: qsTr( "Y" )
         text: {
-          if ( root.positionKit.projectedPosition.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
           }
-          __inputUtils.formatNumber( root.positionKit.projectedPosition.y, 2 )
+          __inputUtils.formatNumber( root.mapPositioning.mapPosition.y, 2 )
         }
       }
 
@@ -135,11 +136,11 @@ Page {
 
         titleText: qsTr( "Horizontal accuracy" )
         text: {
-          if ( root.positionKit.position.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
 
-          root.positionKit.accuracy < 0 ? qsTr( "N/A" ) : ( __inputUtils.formatNumber( root.positionKit.accuracy, 2 ) + " m" )
+          root.positionKit.horizontalAccuracy < 0 ? qsTr( "N/A" ) : ( __inputUtils.formatNumber( root.positionKit.horizontalAccuracy, 2 ) + " m" )
         }
       }
 
@@ -150,7 +151,7 @@ Page {
 
         titleText: qsTr( "Vertical accuracy" )
         text: {
-          if ( root.positionKit.position.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
 
@@ -167,10 +168,10 @@ Page {
 
         titleText: qsTr( "Altitude" )
         text: {
-          if ( root.positionKit.position.isEmpty ) {
+          if ( !root.positionKit.hasPosition ) {
             return qsTr( "Loading data from GPS" ) // if you do not have position yet
           }
-          __inputUtils.formatNumber( root.positionKit.position.z, 2 ) + " m"
+          __inputUtils.formatNumber( root.positionKit.altitude, 2 ) + " m"
         }
       }
 
@@ -183,12 +184,12 @@ Page {
 
         titleText: qsTr( "Satellites (in use/view)" )
         text: {
-          if ( root.positionKit.usedSatellitesCount < 0 || root.positionKit.satellitesInViewCount < 0 )
+          if ( root.positionKit.satellitesUsed < 0 || root.positionKit.satellitesVisible < 0 )
           {
             return qsTr( "Loading data from GPS" )
           }
 
-          root.positionKit.usedSatellitesCount + "/" + root.positionKit.satellitesInViewCount
+          root.positionKit.satellitesUsed + "/" + root.positionKit.satellitesVisible
         }
       }
 
@@ -211,7 +212,7 @@ Page {
         Layout.column: 0
 
         titleText: qsTr( "Last fix" )
-        text: root.positionKit.lastGPSRead ? root.positionKit.lastGPSRead.toLocaleTimeString( Qt.locale() ) : qsTr( "Date not available" )
+        text: root.positionKit.lastRead ? root.positionKit.lastRead.toLocaleTimeString( Qt.locale() ) : qsTr( "Date not available" )
       }
     }
   }

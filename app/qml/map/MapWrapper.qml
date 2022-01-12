@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@ Item {
   readonly property alias digitizingController: _digitizingController
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
+  readonly property alias mapPositioning: _mapPosition
 
   property alias navigationHighlightFeature: _navigationHighlight.destinationPair
   property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
@@ -296,8 +297,13 @@ Item {
 
   PositionKit {
     id: _positionKit
+  }
+
+  MapPosition {
+    id: _mapPosition
 
     mapSettings: _map.mapSettings
+    positionKit: _positionKit
     onScreenPositionChanged: updatePosition()
   }
 
@@ -334,7 +340,7 @@ Item {
     states: [
       State {
         name: "good"
-        when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy <= __appSettings.gpsAccuracyTolerance )
+        when: ( _positionKit.horizontalAccuracy > 0 ) && ( _positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softGreen
@@ -342,7 +348,7 @@ Item {
       },
       State {
         name: "low" // below accuracy tolerance
-        when: ( _positionKit.accuracy > 0 ) && ( _positionKit.accuracy > __appSettings.gpsAccuracyTolerance )
+        when: ( _positionKit.horizontalAccuracy > 0 ) && ( _positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softOrange
@@ -350,7 +356,7 @@ Item {
       },
       State {
         name: "unavailable"
-        when: _positionKit.accuracy <= 0
+        when: _positionKit.horizontalAccuracy <= 0
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softRed
@@ -480,7 +486,7 @@ Item {
     height: InputStyle.rowHeight * 2
 
     text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( _positionKit.accuracy ) )
+    .arg( __inputUtils.formatNumber( _positionKit.horizontalAccuracy ) )
     link: __inputHelp.gpsAccuracyHelpLink
 
     showWarning: shouldShowAccuracyWarning
@@ -489,7 +495,7 @@ Item {
   MapFloatButton {
     id: _accuracyButton
 
-    property int accuracyPrecision: _positionKit.accuracy > 1 ? 1 : 2
+    property int accuracyPrecision: _positionKit.horizontalAccuracy > 1 ? 1 : 2
 
     onClicked: accuracyButtonClicked()
 
@@ -511,7 +517,7 @@ Item {
       Text {
         id: acctext
 
-        text: __inputUtils.formatNumber( _positionKit.accuracy, _accuracyButton.accuracyPrecision ) + " m"
+        text: __inputUtils.formatNumber( _positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 

@@ -31,9 +31,11 @@ class PositionDirection : public QObject
     Q_OBJECT
 
     Q_PROPERTY( qreal direction READ direction NOTIFY directionChanged )
-    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
-    Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
     Q_PROPERTY( bool hasDirection READ hasDirection NOTIFY hasDirectionChanged )
+
+    // components to use during calculation
+    Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
   public:
     explicit PositionDirection( QObject *parent = nullptr );
@@ -54,6 +56,7 @@ class PositionDirection : public QObject
     void positionKitChanged();
     void compassChanged();
     void hasDirectionChanged();
+
   public slots:
     void updateDirection();
 

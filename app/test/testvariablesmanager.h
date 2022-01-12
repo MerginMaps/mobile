@@ -29,7 +29,7 @@ class TestVariablesManager: public QObject
   private:
     VariablesManager *mVariablesManager;
     void evaluateExpression( const QString &expStr, const QString &expectedValue, const QgsExpressionContext *context );
-    QGeoPositionInfo testGeoInfo();
+    GeoPosition testGeoPosition();
 };
 
 #endif // TESTVARIABLESMANAGER_H

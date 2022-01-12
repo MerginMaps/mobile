@@ -266,7 +266,7 @@ void DigitizingController::onPositionChanged()
   if ( !mPositionKit->hasPosition() )
     return;
 
-  QgsPoint point = mPositionKit->position();
+  QgsPoint point = mPositionKit->positionCoordinate();
   std::unique_ptr<QgsPoint> layerPoint = getLayerPoint( point, true );
 
   if ( mLastTimeRecorded.addSecs( mLineRecordingInterval ) <= QDateTime::currentDateTime() )

@@ -33,7 +33,7 @@ void TestVariablesManager::cleanup()
 void TestVariablesManager::positionVariables()
 {
   // Init test data
-  QGeoPositionInfo geoInfo = testGeoInfo();
+  GeoPosition geoInfo = testGeoPosition();
   bool useGpsPoint = true;
   double direction = 123.45;
 
@@ -52,16 +52,18 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_direction" ), QStringLiteral( "123" ), &context );
 }
 
-QGeoPositionInfo TestVariablesManager::testGeoInfo()
+GeoPosition TestVariablesManager::testGeoPosition()
 {
-  QGeoPositionInfo geoInfo;
-  geoInfo.setTimestamp( QDateTime::currentDateTime() );
-  geoInfo.setCoordinate( QGeoCoordinate( -2.9207148, 51.3624998, 0.05 ) );
-  geoInfo.setAttribute( QGeoPositionInfo::GroundSpeed, 10.34 );
-  geoInfo.setAttribute( QGeoPositionInfo::VerticalSpeed, 11.34 );
-  geoInfo.setAttribute( QGeoPositionInfo::HorizontalAccuracy, 12.34 );
-  geoInfo.setAttribute( QGeoPositionInfo::VerticalAccuracy, 13.34 );
-  geoInfo.setAttribute( QGeoPositionInfo::MagneticVariation, 14.34 );
+  GeoPosition geoInfo;
+  geoInfo.utcDateTime = QDateTime::currentDateTime();
+  geoInfo.latitude = -2.9207148;
+  geoInfo.longitude = 51.3624998;
+  geoInfo.elevation = 0.05;
+  geoInfo.speed = 10.34;
+  geoInfo.verticalSpeed = 11.34;
+  geoInfo.hacc = 12.34;
+  geoInfo.vacc = 13.34;
+  geoInfo.magneticVariation = 14.34;
 
   return geoInfo;
 }
