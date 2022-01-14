@@ -69,7 +69,7 @@ Item {
 
   function centerToPosition() {
     if ( _positionKit.hasPosition ) {
-      _map.mapSettings.setCenter( _positionKit.projectedPosition )
+      _map.mapSettings.setCenter( _mapPosition.mapPosition )
       _digitizingController.useGpsPoint = true
     }
     else {
@@ -297,6 +297,39 @@ Item {
 
   PositionKit {
     id: _positionKit
+
+    Component.onCompleted: {
+      // load previously active position provider
+      let providerId = __appSettings.activePositionProviderId
+
+      if ( !providerId ) // nothing has been written to qsettings
+      {
+        if ( __androidUtils.isAndroid || __iosUtils.isIos )
+        {
+          _positionKit.positionProvider = _positionKit.constructProvider( "internal" )
+        }
+        else // desktop
+        {
+          _positionKit.positionProvider = _positionKit.constructProvider( "simulated" )
+        }
+      }
+      else if ( providerId === "internal" )
+      {
+        _positionKit.positionProvider = _positionKit.constructProvider( "internal" )
+      }
+      else if ( providerId === "simulated" )
+      {
+        _positionKit.positionProvider = _positionKit.constructProvider( "simulated" )
+      }
+      else
+      {
+        _positionKit.positionProvider = _positionKit.constructProvider( "external", providerId )
+      }
+    }
+
+    onPositionProviderChanged: {
+      __appSettings.activePositionProviderId = _positionKit.positionProviderId( provider.providerId() )
+    }
   }
 
   MapPosition {
@@ -329,6 +362,7 @@ Item {
     id: _positionMarker
 
     positionKit: _positionKit
+    mapPosition: _mapPosition
     compass: _compass
   }
 
@@ -649,7 +683,7 @@ Item {
         showMessage( qsTr( "GPS currently unavailable.%1Try to allow GPS Location in your device settings." ).arg( "\n" ) )
         return
       }
-      _map.mapSettings.setCenter( _positionKit.projectedPosition )
+      _map.mapSettings.setCenter( _mapPosition.mapPosition )
       _digitizingController.useGpsPoint = true
     }
 

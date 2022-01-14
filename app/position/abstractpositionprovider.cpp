@@ -9,19 +9,25 @@
 
 #include "abstractpositionprovider.h"
 
-AbstractPositionProvider::AbstractPositionProvider( QObject *object ) : QObject( object )
+AbstractPositionProvider::AbstractPositionProvider( const QString &id, QObject *object )
+  : QObject( object )
+  , mProviderId( id )
 {
-
 }
 
 AbstractPositionProvider::~AbstractPositionProvider() = default;
 
-GeoPosition::GeoPosition()
+QString AbstractPositionProvider::providerId() const
+{
+  return mProviderId;
+};
+
+GeoPosition::GeoPosition() : QgsGpsInformation()
 {
   // set attribute from base type to invalid value
-  latitude = -1;
-  longitude = -1;
-  elevation = -1;
+  latitude = std::numeric_limits<double>::quiet_NaN();
+  longitude = std::numeric_limits<double>::quiet_NaN();
+  elevation = std::numeric_limits<double>::quiet_NaN();
   direction = -1;
   speed = -1;
   pdop = -1;
@@ -63,5 +69,5 @@ GeoPosition GeoPosition::from( const QgsGpsInformation &other )
 
 bool GeoPosition::hasValidPosition() const
 {
-  return !std::isnan( latitude ) && !std::isnan( longitude );
+  return !( std::isnan( latitude ) || std::isnan( longitude ) );
 }

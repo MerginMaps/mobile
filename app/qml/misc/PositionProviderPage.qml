@@ -30,13 +30,18 @@ Page {
     width: parent.width
     color: InputStyle.clrPanelBackground
     rowHeight: InputStyle.rowHeightHeader
-    titleText: "Location Providers"
+    titleText: "Position Providers"
 
     onBack: {
       btModel.discovering = false
       root.close()
     }
     withBackButton: true
+  }
+
+  // TODO: remove this (later), it is there just for test purposes. Will be fixed in future PR
+  PositionKit {
+    id: pos
   }
 
   ListView {
@@ -84,7 +89,7 @@ Page {
         anchors.fill: parent
         onClicked: {
           console.log( "Selected device: ", model.DeviceAddress )
-          let provider = __inputUtils.constructBTProvider( model.DeviceAddress )
+          pos.positionProvider = pos.constructProvider( "external", model.DeviceAddress )
           root.provider = provider
         }
       }

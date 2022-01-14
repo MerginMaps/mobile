@@ -102,14 +102,14 @@ void MapPosition::recalculateMapPosition()
     if ( !geoposition.isEmpty() )
     {
       QgsPointXY srcPoint = QgsPointXY( geoposition.x(), geoposition.y() );
-      QgsPointXY projectedPositionXY = InputUtils::transformPoint(
+      QgsPointXY mapPositionXY = InputUtils::transformPoint(
                                          mPositionKit->positionCRS(),
                                          mMapSettings->destinationCrs(),
                                          mMapSettings->transformContext(),
                                          srcPoint
                                        );
 
-      newMapPosition = QgsPoint( projectedPositionXY );
+      newMapPosition = QgsPoint( mapPositionXY );
       newMapPosition.addZValue( geoposition.z() );
     }
   }

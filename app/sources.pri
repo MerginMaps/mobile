@@ -16,7 +16,6 @@ position/positiondirection.cpp \
 position/positionkit.cpp \
 position/simulatedpositionprovider.cpp \
 bluetoothdiscoverymodel.cpp \
-connectivityservice.cpp \
 featurelayerpair.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
@@ -67,7 +66,6 @@ position/positiondirection.h \
 position/positionkit.h \
 position/simulatedpositionprovider.h \
 bluetoothdiscoverymodel.h \
-connectivityservice.h \
 featurelayerpair.h \
 identifykit.h \
 scalebarkit.h \

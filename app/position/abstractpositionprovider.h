@@ -37,18 +37,23 @@ class AbstractPositionProvider : public QObject
     Q_OBJECT
 
   public:
-    AbstractPositionProvider( QObject *object = nullptr );
+    AbstractPositionProvider( const QString &id, QObject *object = nullptr );
     virtual ~AbstractPositionProvider();
 
     virtual void startUpdates() = 0;
     virtual void stopUpdates() = 0;
     virtual void closeProvider() = 0;
 
+    Q_INVOKABLE QString providerId() const;
+
   signals:
     void positionChanged( const GeoPosition &position );
     void providerConnecting();
     void providerConnected();
     void lostConnection();
+
+  protected:
+    QString mProviderId;
 };
 
 

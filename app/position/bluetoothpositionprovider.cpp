@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,7 +10,7 @@
 #include "bluetoothpositionprovider.h"
 #include "coreutils.h"
 
-NmeaParser::NmeaParser() : QgsNmeaConnection( nullptr )
+NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
 }
 
@@ -22,7 +22,7 @@ QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
 }
 
 BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObject *parent )
-  : AbstractPositionProvider( parent )
+  : AbstractPositionProvider( addr, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
@@ -36,6 +36,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObje
   } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
+  startUpdates();
 }
 
 BluetoothPositionProvider::~BluetoothPositionProvider()
@@ -83,11 +84,10 @@ void BluetoothPositionProvider::positionUpdateReceived()
 
     QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
 
-    qDebug() << "Parsed position: " << data.latitude << data.longitude;
+    qDebug() << "Parsed position: " << "la:" << data.latitude << "lo:" << data.longitude << "alt:" << data.elevation << "h/v acc:" <<
+                data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop;
 
     GeoPosition out = GeoPosition::from( data );
-
-    qDebug() << "After copy parsed position: " << out.latitude << out.longitude;
 
     emit positionChanged( out );
   }

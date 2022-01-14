@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
   positionkit.cpp
   --------------------------------------
   Date                 : Dec. 2017
@@ -18,10 +18,15 @@
 
 #include "qgis.h"
 
+#include "bluetoothpositionprovider.h"
+#include "internalpositionprovider.h"
+#include "simulatedpositionprovider.h"
+
+#include <QQmlEngine>
+
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
-  // TODO: try to load last used provider
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCRS() const
@@ -55,6 +60,33 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
     connect( mPositionProvider.get(), &AbstractPositionProvider::lostConnection, this, &PositionKit::lostConnection );
+  }
+
+  CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->providerId() ) );
+
+  // reset last position data
+  parsePositionUpdate( GeoPosition() );
+}
+
+AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &metadata )
+{
+  if ( type == "external" )
+  {
+    AbstractPositionProvider *provider = new BluetoothPositionProvider( metadata );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+  else if ( type == "simulated" )
+  {
+    AbstractPositionProvider *provider = new SimulatedPositionProvider();
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+  else // internal
+  {
+    AbstractPositionProvider *provider = new InternalPositionProvider();
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
   }
 }
 
@@ -185,10 +217,10 @@ double PositionKit::altitude() const
 
 QgsPoint PositionKit::positionCoordinate() const
 {
-  if ( mPosition.latitude < 0 || mPosition.longitude < 0 )
-    return QgsPoint();
+  if ( mPosition.hasValidPosition() )
+    return QgsPoint( mPosition.longitude, mPosition.latitude, mPosition.elevation );
 
-  return QgsPoint( mPosition.latitude, mPosition.longitude, mPosition.elevation );
+  return QgsPoint();
 }
 
 bool PositionKit::hasPosition() const

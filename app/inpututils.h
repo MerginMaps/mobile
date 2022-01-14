@@ -39,8 +39,6 @@
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 
-#include "position/bluetoothpositionprovider.h"
-
 class QgsFeature;
 class QgsVectorLayer;
 class QgsCoordinateReferenceSystem;
@@ -371,8 +369,6 @@ class InputUtils: public QObject
      * \brief invalidIndex returns invalid index
      */
     Q_INVOKABLE static QModelIndex invalidIndex();
-
-    Q_INVOKABLE static BluetoothPositionProvider *constructBTProvider( const QString &data );
 
     /**
      * Returns if provided Id is valid ( >= 0 )

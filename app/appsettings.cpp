@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
+  QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -37,6 +38,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setReuseLastEnteredValues( reuseLastEnteredValues );
   setAppVersion( savedAppVersion );
   setLegacyFolderMigrated( legacyFolderMigrated );
+  setActivePositionProviderId( activeProviderId );
 }
 
 QString AppSettings::defaultLayer() const
@@ -216,6 +218,101 @@ void AppSettings::setLegacyFolderMigrated( bool hasBeenMigrated )
   emit legacyFolderMigratedChanged( mLegacyFolderMigrated );
 }
 
+const QString &AppSettings::activePositionProviderId() const
+{
+  return mActivePositionProviderId;
+}
+
+void AppSettings::setActivePositionProviderId( const QString &id )
+{
+  if ( mActivePositionProviderId == id )
+    return;
+
+  mActivePositionProviderId = id;
+  setValue( QStringLiteral( "activePositionProviderId" ), id );
+  emit activePositionProviderIdChanged( mActivePositionProviderId );
+}
+
+QVariantList AppSettings::savedPositionProviders() const
+{
+  QSettings settings;
+  QVariantList providers;
+
+  int size = settings.beginReadArray( mPositionProvidersArrayGroupName );
+
+  for ( int i = 0; i < size; i++ )
+  {
+    settings.setArrayIndex( i );
+    QString name = settings.value( "providerName" ).toString();
+    QString address = settings.value( "providerAddress" ).toString();
+    providers.append( { name, address } );
+  }
+
+  settings.endArray();
+
+  return providers;
+}
+
+void AppSettings::savePositionProvider( const QString &name, const QString &address )
+{
+  QSettings settings;
+  QVariantList providers = savedPositionProviders();
+
+  if ( !providers.isEmpty() )
+  {
+    settings.remove( mPositionProvidersArrayGroupName );
+  }
+
+  // ignore if we already have such address saved
+  for ( int i = 0; i < providers.count(); i++ )
+  {
+    if ( providers[i].toList()[1] == address )
+      return;
+  }
+
+  providers.append( { name, address } );
+
+  writePositionProvidersArray( providers );
+  emit savedPositionProvidersChanged( providers );
+}
+
+void AppSettings::removePositionProvider( const QString &address )
+{
+  QSettings settings;
+  QVariantList providers = savedPositionProviders();
+
+  if ( !providers.isEmpty() )
+  {
+    settings.remove( mPositionProvidersArrayGroupName );
+  }
+
+  // do we already have such address saved?
+  for ( int i = 0; i < providers.count(); i++ )
+  {
+    if ( providers[i].toList()[1] == address )
+    {
+      providers.removeAt( i );
+      break;
+    }
+  }
+
+  writePositionProvidersArray( providers );
+  emit savedPositionProvidersChanged( providers );
+}
+
+void AppSettings::writePositionProvidersArray( QVariantList providers )
+{
+  QSettings settings;
+  settings.beginWriteArray( mPositionProvidersArrayGroupName );
+
+  for ( int i = 0; i < providers.count(); i++ )
+  {
+    settings.setArrayIndex( i );
+    settings.setValue( "providerName", providers[i].toList()[0] );
+    settings.setValue( "providerAddress", providers[i].toList()[1] );
+  }
+  settings.endArray();
+}
 
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {

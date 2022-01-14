@@ -14,14 +14,15 @@
 
 #include "qdebug.h" //TODO: remove
 
-InternalPositionProvider::InternalPositionProvider( QObject *parent ) : AbstractPositionProvider( parent )
+InternalPositionProvider::InternalPositionProvider( QObject *parent )
+  : AbstractPositionProvider( QStringLiteral( "internal" ), parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
   if ( !mGpsPositionSource.get() || mGpsPositionSource->error() != QGeoPositionInfoSource::NoError )
   {
     CoreUtils::log(
       QStringLiteral( "Internal GPS provider" ),
-      QStringLiteral( "Unable to create default GPS position source, error: %1" ).arg( mGpsPositionSource->error() )
+      QStringLiteral( "Unable to create default GPS position source" )
     );
 
     mIsValid = false;
@@ -32,7 +33,7 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent ) : Abstract
   {
     CoreUtils::log(
       QStringLiteral( "Internal GPS provider" ),
-      QStringLiteral( "Unable to create default GPS satellite source, error: %1" ).arg( mGpsSatellitesSource->error() )
+      QStringLiteral( "Unable to create default GPS satellite source" )
     );
 
     mIsValid = false;
@@ -73,6 +74,8 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent ) : Abstract
       emit lostConnection();
     } );
   }
+
+  startUpdates();
 }
 
 InternalPositionProvider::~InternalPositionProvider() = default;

@@ -28,11 +28,6 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
     CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #" ).arg( error ) );
     finishedDiscovery();
   } );
-
-  QBluetoothDeviceInfo demo1( QBluetoothAddress( "01:01:01:01:01:01" ), "Demo device 1", 1 );
-  QBluetoothDeviceInfo demo2( QBluetoothAddress( "01:01:01:01:01:02" ), "Demo device 2", 3 );
-  mFoundDevices << demo1;
-  mFoundDevices << demo2;
 }
 
 BluetoothDiscoveryModel::~BluetoothDiscoveryModel()
@@ -111,7 +106,7 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   emit discoveringChanged( mDiscovering );
 }
 
-// helper class to print the device
+// helper class to print the device, let's keep it there for a while
 void _printDeviceInfo( const QBluetoothDeviceInfo &device )
 {
   qDebug() << "Device" << device.name() << "Address:" << device.address();
@@ -137,9 +132,6 @@ void BluetoothDiscoveryModel::deviceDiscovered( const QBluetoothDeviceInfo &devi
     }
   }
 
-  qDebug() << "Found new device! info below";
-  _printDeviceInfo( device );
-
   // ignore devices with invalid address (apple devices)
   if ( device.address().isNull() )
     return;
@@ -162,12 +154,8 @@ void BluetoothDiscoveryModel::deviceUpdated( const QBluetoothDeviceInfo &device,
   {
     if ( mFoundDevices[i].address() == device.address() )
     {
-      qDebug() << "Updated info about device! Info below:";
-      _printDeviceInfo( device );
-//      beginResetModel();
       mFoundDevices[i] = device;
-//      endResetModel();
-      dataChanged( index( i ), index( i ) );
+      emit dataChanged( index( i ), index( i ) );
       break;
     }
   }

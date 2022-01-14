@@ -16,7 +16,7 @@
 #include "simulatedpositionprovider.h"
 
 SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
-  : AbstractPositionProvider( parent )
+  : AbstractPositionProvider( QStringLiteral( "simulated" ), parent )
   , mTimer( new QTimer() )
   , mLongitude( longitude )
   , mLatitude( latitude )
@@ -88,7 +88,7 @@ void SimulatedPositionProvider::generateRadiusPosition()
   position.satellitesUsed = ( *mGenerator )() % 30;
   position.satellitesVisible = ( *mGenerator )() % 30;
 
-  position.speed = ( *mGenerator )() % 50 - ( ( ( *mGenerator )() % 10 ) / 10 ); // e.g. 45 - 3 / 10 = 44.7 (km/h)
+  position.speed = ( *mGenerator )() % 50 - ( ( ( *mGenerator )() % 10 ) / 10. ); // e.g. 45 - 3 / 10 = 44.7 (km/h)
 
   emit positionChanged( position );
 }

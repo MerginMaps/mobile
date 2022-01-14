@@ -213,7 +213,7 @@ Item {
             height: root.rowHeight
             width: parent.width
             color: InputStyle.clrPanelMain
-            text: qsTr("Location provider")
+            text: qsTr("Select GPS receiver")
 
             MouseArea {
               anchors.fill: parent

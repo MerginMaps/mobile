@@ -1199,13 +1199,6 @@ QModelIndex InputUtils::invalidIndex()
   return QModelIndex();
 }
 
-BluetoothPositionProvider *InputUtils::constructBTProvider( const QString &bluetoothAddress )
-{
-  BluetoothPositionProvider *provider = new BluetoothPositionProvider( bluetoothAddress );
-  qDebug() << "Instantiated bt provider!";
-  return provider;
-}
-
 bool InputUtils::isFeatureIdValid( qint64 featureId )
 {
   return !FID_IS_NEW( featureId ) && !FID_IS_NULL( featureId );

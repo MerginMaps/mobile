@@ -23,7 +23,10 @@
 #include <QObject>
 
 /**
- * TODO: Add documentation
+ * PositionKit is a core component that feeds application with position data it receives from position provider.
+ * PositionKit contains a static function to construct new provider which can then be assigned to positionProvider property.
+ * It is possible to either read all data about position at once (via position property) or read separate data via its
+ * corresponding property.
  */
 class PositionKit : public QObject
 {
@@ -74,8 +77,8 @@ class PositionKit : public QObject
     // Coordinate reference system of position - WGS84 (constant)
     Q_INVOKABLE QgsCoordinateReferenceSystem positionCRS() const;
 
-    void startUpdates();
-    void stopUpdates();
+    Q_INVOKABLE void startUpdates();
+    Q_INVOKABLE void stopUpdates();
 
     double latitude() const;
     double longitude() const;
@@ -104,6 +107,8 @@ class PositionKit : public QObject
 
     double hdop() const;
 
+    Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &metadata = QString() );
+
   signals:
     void lostConnection();
 
@@ -128,7 +133,7 @@ class PositionKit : public QObject
     void satellitesVisibleChanged( int );
     void hdopChanged( double );
 
-    void positionProviderChanged( AbstractPositionProvider * );
+    void positionProviderChanged( AbstractPositionProvider *provider );
 
     void positionChanged( const GeoPosition & );
 
@@ -137,7 +142,7 @@ class PositionKit : public QObject
 
   private:
     GeoPosition mPosition;
-    bool mHasPosition;
+    bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
 };
 
