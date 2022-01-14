@@ -85,7 +85,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
     QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
 
     qDebug() << "Parsed position: " << "la:" << data.latitude << "lo:" << data.longitude << "alt:" << data.elevation << "h/v acc:" <<
-                data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop;
+             data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop;
 
     GeoPosition out = GeoPosition::from( data );
 

@@ -92,7 +92,7 @@ class AppSettings: public QObject
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
     void legacyFolderMigratedChanged( bool legacyFolderMigrated );
     void appVersionChanged( const QString &version );
-    void savedPositionProvidersChanged( const QVariantList &);
+    void savedPositionProvidersChanged( const QVariantList & );
     void activePositionProviderIdChanged( const QString & );
 
   private:

@@ -103,11 +103,11 @@ void MapPosition::recalculateMapPosition()
     {
       QgsPointXY srcPoint = QgsPointXY( geoposition.x(), geoposition.y() );
       QgsPointXY mapPositionXY = InputUtils::transformPoint(
-                                         mPositionKit->positionCRS(),
-                                         mMapSettings->destinationCrs(),
-                                         mMapSettings->transformContext(),
-                                         srcPoint
-                                       );
+                                   mPositionKit->positionCRS(),
+                                   mMapSettings->destinationCrs(),
+                                   mMapSettings->transformContext(),
+                                   srcPoint
+                                 );
 
       newMapPosition = QgsPoint( mapPositionXY );
       newMapPosition.addZValue( geoposition.z() );
