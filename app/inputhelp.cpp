@@ -83,7 +83,7 @@ QString InputHelp::merginSubscriptionDetailsLink() const
 
 QString InputHelp::howToEnableDigitizingLink() const
 {
-  return helpRoot + "/howto/project/enable_digitizing" + utmTagHelp;
+  return helpRoot + "/howto/project/enable_digitising" + utmTagHelp;
 }
 
 QString InputHelp::howToEnableBrowsingDataLink() const
