@@ -14,6 +14,7 @@
 #include <QObject>
 #include <qglobal.h>
 #include <QtBluetooth>
+#include <memory>
 
 class BluetoothDiscoveryModel : public QAbstractListModel
 {

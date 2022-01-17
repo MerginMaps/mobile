@@ -80,12 +80,12 @@ void BluetoothPositionProvider::positionUpdateReceived()
     QByteArray rawNmea = mSocket->readAll();
     QString nmea( rawNmea );
 
-    qDebug() << "NMEA:" << nmea;
+    qDebug() << "NMEA:" << nmea; // TODO: remove
 
     QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
 
     qDebug() << "Parsed position: " << "la:" << data.latitude << "lo:" << data.longitude << "alt:" << data.elevation << "h/v acc:" <<
-             data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop;
+             data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop; // TODO: remove
 
     GeoPosition out = GeoPosition::from( data );
 
