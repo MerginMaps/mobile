@@ -54,9 +54,13 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
     connect( mPositionProvider.get(), &AbstractPositionProvider::lostConnection, this, &PositionKit::lostConnection );
-  }
 
-  CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->providerId() ) );
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->providerId() ) );
+  }
+  else // passed nullptr
+  {
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Position provider has been removed" ) );
+  }
 
   // reset last position data
   parsePositionUpdate( GeoPosition() );

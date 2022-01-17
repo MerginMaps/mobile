@@ -21,6 +21,8 @@ SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double l
   mGenerator = std::unique_ptr<std::mt19937>( new std::mt19937( seed() ) );
 
   connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::generateNextPosition );
+
+  startUpdates();
 }
 
 SimulatedPositionProvider::~SimulatedPositionProvider() = default;

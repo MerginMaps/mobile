@@ -24,17 +24,26 @@
 
 #include "testutils.h"
 
+void TestPositionKit::init()
+{
+  qRegisterMetaType< GeoPosition >( "GeoPosition" );
+}
+
 void TestPositionKit::simulated_position()
 {
   QVERIFY( !positionKit.positionProvider() );
 
-  SimulatedPositionProvider simulatedProvider( -92.36, 38.93, 0 );
-  simulatedProvider.startUpdates();
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
 
-  positionKit.setPositionProvider( &simulatedProvider );
+  positionKit.setPositionProvider( simulatedProvider ); // ownership of provider is passed to positionkit
 
   QVERIFY( positionKit.positionProvider() );
+  simulatedProvider = nullptr;
 
+  QSignalSpy positionKitSpy( &positionKit, &PositionKit::positionChanged );
+  bool hasPositionChanged = positionKitSpy.wait( 2000 );
+
+  QVERIFY( hasPositionChanged );
   QVERIFY( positionKit.hasPosition() );
 
   COMPARENEAR( positionKit.positionCoordinate().y(), 38.93, 1e-4 );
@@ -42,16 +51,18 @@ void TestPositionKit::simulated_position()
   QVERIFY( positionKit.satellitesVisible() >= 0 );
   QVERIFY( positionKit.satellitesUsed() >= 0 );
 
-  SimulatedPositionProvider simulatedProvider2( 90.36, 33.93, 0 );
-  simulatedProvider2.startUpdates();
+  SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( 90.36, 33.93, 0 );
 
-  positionKit.setPositionProvider( &simulatedProvider2 );
+  positionKit.setPositionProvider( simulatedProvider2 ); // deletes the first provider
+  simulatedProvider2 = nullptr;
 
+  hasPositionChanged = positionKitSpy.wait( 2000 );
+
+  QVERIFY( hasPositionChanged );
   QVERIFY( positionKit.hasPosition() );
   COMPARENEAR( positionKit.positionCoordinate().y(), 33.93, 1e-4 );
 
-  simulatedProvider.stopUpdates();
-  simulatedProvider2.stopUpdates();
+  positionKit.stopUpdates();
 
   positionKit.setPositionProvider( nullptr );
   QVERIFY( !positionKit.positionProvider() );
