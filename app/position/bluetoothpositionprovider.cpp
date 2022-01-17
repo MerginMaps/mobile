@@ -87,7 +87,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
     qDebug() << "Parsed position: " << "la:" << data.latitude << "lo:" << data.longitude << "alt:" << data.elevation << "h/v acc:" <<
              data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop; // TODO: remove
 
-    GeoPosition out = GeoPosition::from( data );
+    GeoPosition out = GeoPosition::fromQgsGpsInformation( data );
 
     emit positionChanged( out );
   }

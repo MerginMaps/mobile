@@ -38,7 +38,7 @@ GeoPosition::GeoPosition() : QgsGpsInformation()
   satellitesUsed = -1;
 }
 
-GeoPosition GeoPosition::from( const QgsGpsInformation &other )
+GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
 {
   GeoPosition out;
   out.latitude = other.latitude;

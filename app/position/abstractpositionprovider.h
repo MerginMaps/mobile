@@ -27,7 +27,7 @@ class GeoPosition : public QgsGpsInformation
     double verticalSpeed = -1;
 
     // copies all data from QgsGpsInformation other and updates satellitesVisible
-    static GeoPosition from( const QgsGpsInformation &other );
+    static GeoPosition fromQgsGpsInformation( const QgsGpsInformation &other );
 
     bool hasValidPosition() const;
 };
