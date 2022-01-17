@@ -13,7 +13,7 @@
 #include <QObject>
 #include "merginapi.h"
 #include "qgsproject.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "compass.h"
 
 class MerginApi;
@@ -42,7 +42,7 @@ class VariablesManager : public QObject
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     void registerInputExpressionFunctions();
     QgsExpressionContextScope *positionScope();
-    QgsExpressionContextScope *positionScope( const QGeoPositionInfo &geoInfo, const double direction, bool useGpsPoint );
+    QgsExpressionContextScope *positionScope( const GeoPosition &geoInfo, const double direction, bool useGpsPoint );
 
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *positionKit );
@@ -75,7 +75,7 @@ class VariablesManager : public QObject
 
     void setProjectVariables();
     void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );
-    QVariant getGeoPositionAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute );
+    QVariant getGeoPositionAttribute( double attributeValue );
 };
 
 #endif // VARIABLESMANAGER_H

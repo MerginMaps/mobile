@@ -9,6 +9,7 @@
 
 #include  <QDebug>
 #include <QNetworkReply>
+#include <QUrlQuery>
 
 #include "purchasing.h"
 #include "merginapi.h"

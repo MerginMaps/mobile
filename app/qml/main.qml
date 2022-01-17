@@ -292,6 +292,7 @@ ApplicationWindow {
 
         onBack: gpsDataPageLoader.active = false
 
+        mapPositioning: map.mapPositioning
         positionKit: map.positionKit
 
         height: window.height

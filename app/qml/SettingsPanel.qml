@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
@@ -13,6 +14,7 @@ import QtGraphicalEffects 1.0
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
+import "./misc"
 
 Item {
   id: root
@@ -207,6 +209,19 @@ Item {
             }
           }
 
+          PanelItem {
+            height: root.rowHeight
+            width: parent.width
+            color: InputStyle.clrPanelMain
+            text: qsTr("Select GPS receiver")
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: stackview.push( positionProviderComponent )
+            }
+          }
+
+
           // Header "Recording"
           PanelItem {
             color: InputStyle.panelBackgroundLight
@@ -324,6 +339,14 @@ Item {
   Component {
     id: logPanelComponent
     LogPanel {
+      onClose: stackview.pop(null)
+      Component.onCompleted: forceActiveFocus()
+    }
+  }
+
+  Component {
+    id: positionProviderComponent
+    PositionProviderPage {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }

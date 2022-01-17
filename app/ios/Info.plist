@@ -37,7 +37,11 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Program requires access to gallery to attach pictures to features on map</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Program requires access to gallery to attach pictures to features on map</string>
+    <string>Program requires access to gallery to attach pictures to features on map</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Program requires access to bluetooth to connect to external GPS receivers</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Program requires access to bluetooth to connect to external GPS receivers</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>

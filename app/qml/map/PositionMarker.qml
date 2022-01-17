@@ -17,9 +17,12 @@ import lc 1.0
 
 Item {
     id: positionMarker
-    property int size: InputStyle.rowHeightHeader/2
+
     property PositionKit positionKit
+    /*required*/ property MapPosition mapPosition
     property Compass compass
+
+    property int size: InputStyle.rowHeightHeader/2
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
 
@@ -32,13 +35,14 @@ Item {
 
     Rectangle {
         id: accuracyIndicator
+
         visible: withAccuracy &&
                  positionKit.hasPosition &&
-                 (positionKit.accuracy > 0) &&
+                 (positionKit.horizontalAccuracy > 0) &&
                  (accuracyIndicator.width > positionMarker.size / 2.0)
-        x: positionKit.screenPosition.x - width/2
-        y: positionKit.screenPosition.y - height/2
-        width:positionKit.screenAccuracy
+        x: mapPosition.screenPosition.x - width/2
+        y: mapPosition.screenPosition.y - height/2
+        width: mapPosition.screenAccuracy
         height: accuracyIndicator.width
         color: InputStyle.highlightColor
         radius: width*0.5
@@ -47,6 +51,7 @@ Item {
 
     Image {
         id: direction
+
         source: InputStyle.gpsDirectionIcon
         fillMode: Image.PreserveAspectFit
         rotation: positionDirection.direction
@@ -55,20 +60,22 @@ Item {
         height: width
         smooth: true
         visible: positionKit.hasPosition && positionDirection.hasDirection
-        x: positionKit.screenPosition.x - width/2
-        y: positionKit.screenPosition.y - (height * 1)
+        x: mapPosition.screenPosition.x - width/2
+        y: mapPosition.screenPosition.y - (height * 1)
 
         Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
     }
 
     Image {
         id: navigation
+
         source: positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+        visible: positionKit.hasPosition
         fillMode: Image.PreserveAspectFit
         width: positionMarker.size
         height: width
         smooth: true
-        x: positionKit.screenPosition.x - width/2
-        y: positionKit.screenPosition.y - height/2
+        x: mapPosition.screenPosition.x - width/2
+        y: mapPosition.screenPosition.y - height/2
     }
 }

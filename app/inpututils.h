@@ -29,7 +29,6 @@
 #include "androidutils.h"
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
-#include "positionkit.h"
 #include "qgis.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsmessagelog.h"
@@ -39,7 +38,6 @@
 #include "qgsquickmapsettings.h"
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
-
 
 class QgsFeature;
 class QgsVectorLayer;
@@ -99,14 +97,7 @@ class InputUtils: public QObject
     Q_INVOKABLE void showNotification( const QString &message );
 
     /**
-     * Returns speed from positionKit's QGeoPositionInfo.
-     * \param PositionKit positionKit.
-     * \result The ground speed, in meters/sec.
-     */
-    Q_INVOKABLE qreal groundSpeedFromSource( PositionKit *positionKit );
-
-    /**
-     * Converts bytes to  human readable size (e.g. 1GB, 500MB)
+     * Converts bytes to human readable size (e.g. 1GB, 500MB)
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
@@ -130,6 +121,7 @@ class InputUtils: public QObject
 
     /** InputApp platform */
     static QString appPlatform();
+    static bool isMobilePlatform();
 
     /**
      * Converts string in rational number format to double.

@@ -32,7 +32,7 @@
 #include "ios/iosutils.h"
 #include "inpututils.h"
 #include "coreutils.h"
-#include "positiondirection.h"
+#include "position/positiondirection.h"
 #include "mapthemesmodel.h"
 #include "digitizingcontroller.h"
 #include "merginapi.h"
@@ -80,7 +80,7 @@
 #include "qgsquickmapcanvasmap.h"
 #include "qgsquickmapsettings.h"
 #include "qgsquickmaptransform.h"
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
 #include "relationfeaturesmodel.h"
@@ -92,6 +92,9 @@
 #include "projectsproxymodel.h"
 #include "project.h"
 #include "qgsproject.h"
+#include "bluetoothdiscoverymodel.h"
+#include "position/bluetoothpositionprovider.h"
+#include "position/mapposition.h"
 
 
 #ifndef NDEBUG
@@ -273,11 +276,13 @@ void initDeclarative()
   qmlRegisterType< RememberAttributesController >( "lc", 1, 0, "RememberAttributesController" );
   qmlRegisterType< IdentifyKit >( "lc", 1, 0, "IdentifyKit" );
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
+  qmlRegisterType< MapPosition >( "lc", 1, 0, "MapPosition" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
+  qmlRegisterType< BluetoothDiscoveryModel >( "lc", 1, 0, "BluetoothDiscoveryModel" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
@@ -286,6 +291,8 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
+
+  qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "AbstractPositionProvider", "Must be instantiated via its construct method" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }
@@ -428,7 +435,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   // Connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged ); // TODO: pass this signal also to a PositionKit so that loader do not need have positionkit?
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );

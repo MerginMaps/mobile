@@ -20,7 +20,7 @@
 #include "iosviewdelegate.h"
 #include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "compass.h"
 
 #import <ImageIO/CGImageSource.h>
@@ -129,13 +129,13 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     {
       @try
       {
-        const QgsPoint position = positionKit->position();
+        const QgsPoint position = positionKit->positionCoordinate();
         [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
         [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
         [gpsDict setValue:position.x() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
         [gpsDict setValue:position.y() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
-        [gpsDict setValue:[NSNumber numberWithFloat:positionKit->position().z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
-        [gpsDict setValue:[NSNumber numberWithShort:positionKit->position().z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
+        [gpsDict setValue:[NSNumber numberWithFloat:position.z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
+        [gpsDict setValue:[NSNumber numberWithShort:position.z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
       }
       @catch ( NSException *exception )
       {

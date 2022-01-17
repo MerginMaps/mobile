@@ -44,25 +44,25 @@ void VariablesManager::registerInputExpressionFunctions()
 
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
-  QGeoPositionInfo geoInfo = mPositionKit->lastKnownPosition();
-  return positionScope( geoInfo, compass()->direction(), mUseGpsPoint );
+  GeoPosition position = mPositionKit->position();
+  return positionScope( position, compass()->direction(), mUseGpsPoint );
 }
 
-QgsExpressionContextScope *VariablesManager::positionScope( const QGeoPositionInfo &geoInfo, const double direction, bool useGpsPoint )
+QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint )
 {
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
-  const QgsGeometry point = QgsGeometry( new QgsPoint( geoInfo.coordinate().longitude(), geoInfo.coordinate().latitude(), geoInfo.coordinate().altitude() ) );
+  const QgsGeometry point = QgsGeometry( new QgsPoint( pos.longitude, pos.latitude, pos.elevation ) );
 
   addPositionVariable( scope, QStringLiteral( "coordinate" ), QVariant::fromValue<QgsGeometry>( point ) );
-  addPositionVariable( scope, QStringLiteral( "longitude" ), geoInfo.coordinate().longitude() );
-  addPositionVariable( scope, QStringLiteral( "latitude" ), geoInfo.coordinate().latitude() );
-  addPositionVariable( scope, QStringLiteral( "altitude" ), geoInfo.coordinate().altitude() );
-  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::HorizontalAccuracy ) );
-  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::VerticalAccuracy ) );
-  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::GroundSpeed ) );
-  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::VerticalSpeed ) );
-  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( geoInfo, QGeoPositionInfo::MagneticVariation ) );
-  addPositionVariable( scope, QStringLiteral( "timestamp" ), geoInfo.timestamp() );
+  addPositionVariable( scope, QStringLiteral( "longitude" ), pos.longitude );
+  addPositionVariable( scope, QStringLiteral( "latitude" ), pos.latitude );
+  addPositionVariable( scope, QStringLiteral( "altitude" ), pos.elevation );
+  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( pos.hacc ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( pos.vacc ) );
+  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( pos.speed ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( pos.verticalSpeed ) );
+  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( pos.magneticVariation ) );
+  addPositionVariable( scope, QStringLiteral( "timestamp" ), pos.utcDateTime );
   addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
   addPositionVariable( scope, QStringLiteral( "from_gps" ), useGpsPoint );
 
@@ -176,12 +176,11 @@ void VariablesManager::addPositionVariable( QgsExpressionContextScope *scope, co
   }
 }
 
-QVariant VariablesManager::getGeoPositionAttribute( const QGeoPositionInfo &info, QGeoPositionInfo::Attribute attribute )
+QVariant VariablesManager::getGeoPositionAttribute( double attributeValue )
 {
-  if ( info.hasAttribute( attribute ) )
+  if ( attributeValue >= 0 )
   {
-    qreal value = info.attribute( attribute );
-    return QString::number( value, 'f', 2 );
+    return QString::number( attributeValue, 'f', 2 );
   }
   else
     return QVariant();

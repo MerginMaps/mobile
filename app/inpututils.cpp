@@ -460,6 +460,12 @@ QString InputUtils::appPlatform()
   return platform;
 }
 
+bool InputUtils::isMobilePlatform()
+{
+  QString platform = appPlatform();
+  return platform == QStringLiteral( "android" ) || platform == QStringLiteral( "ios" );
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;
@@ -577,17 +583,6 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
 void InputUtils::showNotification( const QString &message )
 {
   emit showNotificationRequested( message );
-}
-
-qreal InputUtils::groundSpeedFromSource( PositionKit *positionKit )
-{
-  if ( positionKit == nullptr ) return 0;
-
-  if ( positionKit->source()->lastKnownPosition().isValid() )
-  {
-    return positionKit->source()->lastKnownPosition().attribute( QGeoPositionInfo::Attribute::GroundSpeed );
-  }
-  return 0;
 }
 
 double InputUtils::ratherZeroThanNaN( double d )

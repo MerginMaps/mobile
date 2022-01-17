@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 #include "iosutils.h"
-#include "positionkit.h"
 
 IosUtils::IosUtils( QObject *parent ): QObject( parent )
 {
