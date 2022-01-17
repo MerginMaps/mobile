@@ -121,6 +121,7 @@ class InputUtils: public QObject
 
     /** InputApp platform */
     static QString appPlatform();
+    static bool isMobilePlatform();
 
     /**
      * Converts string in rational number format to double.

@@ -51,7 +51,7 @@ class BluetoothDiscoveryModel : public QAbstractListModel
     void discoveringChanged( bool );
 
   private:
-    bool mDiscovering;
+    bool mDiscovering = false;
 
     QList<QBluetoothDeviceInfo> mFoundDevices;
     std::unique_ptr<QBluetoothDeviceDiscoveryAgent> mDiscoveryAgent; // owned

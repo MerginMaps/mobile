@@ -16,6 +16,9 @@
 #include "internalpositionprovider.h"
 #include "simulatedpositionprovider.h"
 
+#include "appsettings.h"
+#include "inpututils.h"
+
 #include <QQmlEngine>
 
 PositionKit::PositionKit( QObject *parent )
@@ -85,6 +88,38 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
     AbstractPositionProvider *provider = new InternalPositionProvider();
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
+  }
+}
+
+AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *appsettings )
+{
+  if ( !appsettings )
+    return nullptr;
+
+  QString providerId = appsettings->activePositionProviderId();
+
+  if ( providerId.isEmpty() ) // nothing has been written to qsettings
+  {
+    if ( InputUtils::isMobilePlatform() )
+    {
+      return constructProvider( QStringLiteral( "internal" ) );
+    }
+    else // desktop
+    {
+      return constructProvider( QStringLiteral( "simulated" ) );
+    }
+  }
+  else if ( providerId == QStringLiteral( "internal" ) )
+  {
+    return constructProvider( QStringLiteral( "internal" ) );
+  }
+  else if ( providerId == QStringLiteral( "simulated" ) )
+  {
+    return constructProvider( QStringLiteral( "simulated" ) );
+  }
+  else
+  {
+    return constructProvider( QStringLiteral( "external" ), providerId );
   }
 }
 

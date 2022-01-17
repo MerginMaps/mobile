@@ -300,31 +300,7 @@ Item {
 
     Component.onCompleted: {
       // load previously active position provider
-      let providerId = __appSettings.activePositionProviderId
-
-      if ( !providerId ) // nothing has been written to qsettings
-      {
-        if ( __androidUtils.isAndroid || __iosUtils.isIos )
-        {
-          _positionKit.positionProvider = _positionKit.constructProvider( "internal" )
-        }
-        else // desktop
-        {
-          _positionKit.positionProvider = _positionKit.constructProvider( "simulated" )
-        }
-      }
-      else if ( providerId === "internal" )
-      {
-        _positionKit.positionProvider = _positionKit.constructProvider( "internal" )
-      }
-      else if ( providerId === "simulated" )
-      {
-        _positionKit.positionProvider = _positionKit.constructProvider( "simulated" )
-      }
-      else
-      {
-        _positionKit.positionProvider = _positionKit.constructProvider( "external", providerId )
-      }
+      _positionKit.positionProvider = _positionKit.constructActiveProvider( __appSettings )
     }
 
     onPositionProviderChanged: {

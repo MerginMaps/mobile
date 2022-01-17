@@ -16,6 +16,8 @@
 #include "qgscoordinatereferencesystem.h"
 #include <QObject>
 
+class AppSettings;
+
 /**
  * PositionKit is a core component that feeds application with position data it receives from position provider.
  * PositionKit contains a static function to construct new provider which can then be assigned to positionProvider property.
@@ -102,6 +104,7 @@ class PositionKit : public QObject
     double hdop() const;
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &metadata = QString() );
+    Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
   signals:
     void lostConnection();

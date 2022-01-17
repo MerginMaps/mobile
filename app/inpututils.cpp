@@ -460,6 +460,12 @@ QString InputUtils::appPlatform()
   return platform;
 }
 
+bool InputUtils::isMobilePlatform()
+{
+  QString platform = appPlatform();
+  return platform == QStringLiteral( "android" ) || platform == QStringLiteral( "ios" );
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;
