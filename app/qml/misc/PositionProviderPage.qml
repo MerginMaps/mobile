@@ -9,6 +9,7 @@
 
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtGraphicalEffects 1.14
 
 import lc 1.0
 
@@ -19,7 +20,7 @@ import "../components" as Components
 Page {
   id: root
 
-  property var provider
+  property var positionKit
 
   signal close
 
@@ -32,16 +33,8 @@ Page {
     rowHeight: InputStyle.rowHeightHeader
     titleText: "Position Providers"
 
-    onBack: {
-      btModel.discovering = false
-      root.close()
-    }
+    onBack: root.close()
     withBackButton: true
-  }
-
-  // TODO: remove this (later), it is there just for test purposes. Will be fixed in future PR
-  PositionKit {
-    id: pos
   }
 
   ListView {
@@ -49,12 +42,14 @@ Page {
 
     anchors.fill: parent
 
-    model: BluetoothDiscoveryModel {
+    model: PositionProvidersModel {
       id: btModel
-      discovering: true
+
+      appSettings: __appSettings
     }
 
     delegate: Rectangle {
+      id: providerDelegate
 
       width: ListView.view.width
       height: InputStyle.rowHeight
@@ -62,50 +57,120 @@ Page {
       border.color: "black"
       border.width: 2 * __dp
 
-      Column {
+      Row {
+        id: row
+
         anchors.fill: parent
-        anchors.leftMargin: 5
-        anchors.topMargin: 5
 
-        Text {
-          id: deviceName
+        RadioButton {
+          id: isActiveButton
 
-          width: parent.width
-          height: parent.height * 0.5
+          width: parent.height
+          height: parent.height
 
-          text: model.DeviceName
+          checked: providerDelegate.ListView.isCurrentItem
+
+//          indicator: InputStyle.activeButtonColor
+
         }
 
-        Text {
-          id: deviceAddress
-          width: parent.width
-          height: parent.height * 0.5
+        Column {
+          width: row.width - isActiveButton.width - removeIcon.width
+          height: row.height
 
-          text: model.DeviceAddress + ", signal strength: " + model.SignalStrength
+          Text {
+            id: deviceName
+
+            width: parent.width
+            height: parent.height * 0.5
+
+            text: model.ProviderName
+          }
+
+          Text {
+            id: deviceAddress
+            width: parent.width
+            height: parent.height * 0.5
+
+            text: model.ProviderDescription + " (" + model.ProviderId + ")"
+          }
+        }
+
+        Image {
+          id: removeIcon
+
+          width: parent.height / 2
+          sourceSize.width: parent.height / 2
+
+          source: InputStyle.removeIcon
+          visible: model.CanBeDeleted
+
+          ColorOverlay {
+            anchors.fill: removeIcon
+            source: removeIcon
+            color: InputStyle.activeButtonColor
+          }
         }
       }
 
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          console.log( "Selected device: ", model.DeviceAddress )
-          pos.positionProvider = pos.constructProvider( "external", model.DeviceAddress )
-          root.provider = provider
+          if ( model.ProviderId === "internal" )
+          {
+            root.positionKit.positionProvider = root.positionKit.constructProvider( "internal" )
+          }
+          else if ( model.ProviderId === "simulated" )
+          {
+            root.positionKit.positionProvider = root.positionKit.constructProvider( "simulated" )
+          }
+          else
+          {
+            root.positionKit.positionProvider = root.positionKit.constructProvider( "external", model.ProviderId )
+          }
         }
       }
     }
 
-    footer: Text {
-      id: discoveryInProgress
+    footer: Rectangle {
+      height: InputStyle.rowHeightHeader
+      implicitWidth: ListView.view.width * 0.8
 
-      width: ListView.view.width
-      height: InputStyle.rowHeight
+      Components.TextWithIcon {
+        width: parent.width
+        height: parent.height
+        source: InputStyle.plusIcon
+        text: qsTr( "Add new provider" )
+      }
 
-      leftPadding: 5
-      topPadding: 5
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          bluetoothDiscoveryLoader.active = true
+          bluetoothDiscoveryLoader.focus = true
+        }
+      }
+    }
+  }
 
-      visible: btModel.discovering
-      text: ListView.view.count > 2 ? qsTr("Looking for more devices ...") : qsTr("Looking for devices ...")
+  Loader {
+    id: bluetoothDiscoveryLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: bluetoothDiscoveryComponent
+  }
+
+  Component {
+    id: bluetoothDiscoveryComponent
+
+    AddPositionProviderPage {
+      positionKit: root.positionKit
+
+      height: root.height + header.height
+      width: root.width
+
+      onClose: bluetoothDiscoveryLoader.active = false
     }
   }
 }

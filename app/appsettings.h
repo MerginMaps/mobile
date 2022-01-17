@@ -29,7 +29,6 @@ class AppSettings: public QObject
     Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
     Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setLegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
-    Q_PROPERTY( QVariantList savedPositionProviders READ savedPositionProviders NOTIFY savedPositionProvidersChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -71,8 +70,7 @@ class AppSettings: public QObject
     // SavedPositionProviders property is read only when needed ~ not at startup time.
     // It returns list of all external position providers (does not include internal/simulated position providers)
     QVariantList savedPositionProviders() const;
-    Q_INVOKABLE void savePositionProvider( const QString &name, const QString &address );
-    Q_INVOKABLE void removePositionProvider( const QString &address );
+    void savePositionProviders( const QVariantList &providers );
 
     const QString &activePositionProviderId() const;
     void setActivePositionProviderId( const QString &id );
@@ -96,8 +94,6 @@ class AppSettings: public QObject
     void activePositionProviderIdChanged( const QString & );
 
   private:
-    void writePositionProvidersArray( QVariantList positionProviders );
-
     // Projects path
     QString mDefaultProject;
     // Path to active project

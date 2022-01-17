@@ -24,6 +24,8 @@ Item {
   property string defaultLayer: __appSettings.defaultLayer
   property color gpsIndicatorColor: InputStyle.softRed
 
+  property PositionKit positionKit
+
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
@@ -348,6 +350,7 @@ Item {
     id: positionProviderComponent
     PositionProviderPage {
       onClose: stackview.pop(null)
+      positionKit: root.positionKit
       Component.onCompleted: forceActiveFocus()
     }
   }

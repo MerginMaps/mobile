@@ -230,6 +230,8 @@ ApplicationWindow {
       width: window.width
       rowHeight: InputStyle.rowHeight
 
+      positionKit: map.positionKit
+
       onVisibleChanged: {
         if (settingsPanel.visible)
           settingsPanel.focus = true; // get focus

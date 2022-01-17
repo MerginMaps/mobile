@@ -63,6 +63,8 @@ void BluetoothPositionProvider::closeProvider()
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
+  // TODO: emit messages when BT devices is connected / error occured!
+
   if ( state == QBluetoothSocket::ConnectingState )
     emit providerConnecting();
   else if ( state == QBluetoothSocket::ConnectedState )

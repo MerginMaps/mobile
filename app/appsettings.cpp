@@ -253,56 +253,15 @@ QVariantList AppSettings::savedPositionProviders() const
   return providers;
 }
 
-void AppSettings::savePositionProvider( const QString &name, const QString &address )
+void AppSettings::savePositionProviders( const QVariantList &providers )
 {
   QSettings settings;
-  QVariantList providers = savedPositionProviders();
 
-  if ( !providers.isEmpty() )
+  if ( settings.contains( mPositionProvidersArrayGroupName ) )
   {
     settings.remove( mPositionProvidersArrayGroupName );
   }
 
-  // ignore if we already have such address saved
-  for ( int i = 0; i < providers.count(); i++ )
-  {
-    if ( providers[i].toList()[1] == address )
-      return;
-  }
-
-  providers.append( { name, address } );
-
-  writePositionProvidersArray( providers );
-  emit savedPositionProvidersChanged( providers );
-}
-
-void AppSettings::removePositionProvider( const QString &address )
-{
-  QSettings settings;
-  QVariantList providers = savedPositionProviders();
-
-  if ( !providers.isEmpty() )
-  {
-    settings.remove( mPositionProvidersArrayGroupName );
-  }
-
-  // do we already have such address saved?
-  for ( int i = 0; i < providers.count(); i++ )
-  {
-    if ( providers[i].toList()[1] == address )
-    {
-      providers.removeAt( i );
-      break;
-    }
-  }
-
-  writePositionProvidersArray( providers );
-  emit savedPositionProvidersChanged( providers );
-}
-
-void AppSettings::writePositionProvidersArray( QVariantList providers )
-{
-  QSettings settings;
   settings.beginWriteArray( mPositionProvidersArrayGroupName );
 
   for ( int i = 0; i < providers.count(); i++ )
