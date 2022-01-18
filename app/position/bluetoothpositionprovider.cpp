@@ -72,7 +72,7 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
   else if ( state == QBluetoothSocket::UnconnectedState )
     emit lostConnection();
 
-  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: " ).arg( state ) );
+  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( state ) );
 }
 
 void BluetoothPositionProvider::positionUpdateReceived()

@@ -351,6 +351,7 @@ Item {
     PositionProviderPage {
       onClose: stackview.pop(null)
       positionKit: root.positionKit
+      stackView: stackview
       Component.onCompleted: forceActiveFocus()
     }
   }

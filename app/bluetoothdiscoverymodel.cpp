@@ -134,10 +134,9 @@ void BluetoothDiscoveryModel::deviceDiscovered( const QBluetoothDeviceInfo &devi
   if ( device.address().isNull() )
     return;
 
-  int insertIndex = mFoundDevices.count();
-  beginInsertRows( QModelIndex(), insertIndex, insertIndex );
+  beginInsertRows( QModelIndex(), 0, 0 );
 
-  mFoundDevices << device;
+  mFoundDevices.push_front( device );
 
   endInsertRows();
 }

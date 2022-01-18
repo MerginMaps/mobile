@@ -28,6 +28,7 @@ QtObject {
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
     property color labelColor: "#999999"
+    property color secondaryFontColor: "#B3B3B3"
 
     property color highlightColor: "#FD9626"
     property color panelItemHighlight: "#9ABFA0"
@@ -67,6 +68,8 @@ QtObject {
     property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
     property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
     property real formSpacing: 10 * __dp
+
+    property real circleRadius: 100
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"

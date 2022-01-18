@@ -304,7 +304,7 @@ Item {
     }
 
     onPositionProviderChanged: {
-      __appSettings.activePositionProviderId = _positionKit.positionProviderId( provider.providerId() )
+      __appSettings.activePositionProviderId = provider.providerId() ? provider.providerId() : ""
     }
   }
 

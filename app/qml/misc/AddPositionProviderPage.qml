@@ -9,6 +9,7 @@
 
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtGraphicalEffects 1.14
 
 import lc 1.0
 
@@ -21,15 +22,16 @@ Page {
   property PositionKit positionKit;
 
   signal close
+  signal initiatedConnectionTo( string deviceAddress, string deviceName )
 
   header: Components.PanelHeader {
     id: header
 
     height: InputStyle.rowHeightHeader
     width: parent.width
-    color: InputStyle.clrPanelBackground
+    color: InputStyle.clrPanelMain
     rowHeight: InputStyle.rowHeightHeader
-    titleText: "Find bluetooth device"
+    titleText: qsTr( "Connect to bluetooth device" )
 
     onBack: {
       btModel.discovering = false
@@ -37,6 +39,15 @@ Page {
     }
 
     withBackButton: true
+  }
+
+  focus: true
+
+  Keys.onReleased: {
+    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+      event.accepted = true
+      close()
+    }
   }
 
   ListView {
@@ -50,56 +61,131 @@ Page {
     }
 
     delegate: Rectangle {
+      id: providerDelegate
 
       width: ListView.view.width
       height: InputStyle.rowHeight
 
-      border.color: "black"
-      border.width: 2 * __dp
+      Row {
+        id: row
 
-      Column {
         anchors.fill: parent
-        anchors.leftMargin: 5
-        anchors.topMargin: 5
+        anchors.leftMargin: InputStyle.panelMargin
+        anchors.rightMargin: InputStyle.panelMargin
+        anchors.bottomMargin: 5 * __dp
+        anchors.topMargin: 5 * __dp
 
-        Text {
-          id: deviceName
+        Column {
+          width: row.width - connectIconContainer.width
+          height: row.height
 
-          width: parent.width
-          height: parent.height * 0.5
+          Text {
+            id: deviceName
 
-          text: model.DeviceName
+            width: parent.width
+            height: parent.height * 0.5
+
+            text: model.DeviceName
+
+            elide: Text.ElideRight
+            color: InputStyle.fontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+          }
+
+          Text {
+            id: deviceAddress
+
+            width: parent.width
+            height: parent.height * 0.5
+
+            text: model.DeviceAddress
+
+            elide: Text.ElideRight
+            color: InputStyle.secondaryFontColor
+            font.pixelSize: InputStyle.fontPixelSizeSmall
+          }
         }
 
-        Text {
-          id: deviceAddress
-          width: parent.width
-          height: parent.height * 0.5
+        Item {
+          id: connectIconContainer
 
-          text: model.DeviceAddress + ", signal strength: " + model.SignalStrength
+          height: parent.height
+          width: parent.height
+
+          Image {
+            id: connectIcon
+
+            anchors.centerIn: parent
+
+            width: parent.height / 2
+            sourceSize.width: parent.height / 2
+
+            source: InputStyle.plusIcon
+          }
+
+          ColorOverlay {
+            anchors.fill: connectIcon
+            source: connectIcon
+            color: InputStyle.darkGreen
+          }
         }
       }
 
       MouseArea {
         anchors.fill: parent
         onClicked: {
+          btModel.discovering = false
           root.positionKit.positionProvider = root.positionKit.constructProvider( "external", model.DeviceAddress )
+          initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
+          close()
         }
+      }
+
+      Rectangle {
+        width: providerDelegate.width / 1.5
+        height: 2 * __dp
+
+        color: InputStyle.panelBackgroundLight
+        visible: index < providerDelegate.ListView.view.count - 1
+
+        anchors.top: row.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
       }
     }
 
-    footer: Text {
-      id: discoveryInProgress
+    footer: Item {
+      id: footerDelegate
 
       width: ListView.view.width
       height: InputStyle.rowHeight
 
-      leftPadding: 5
-      topPadding: 5
+      Row {
+        height: parent.height
+        width: contentChildren.width
 
-      visible: btModel.discovering
-      text: ListView.view.count > 2 ? qsTr("Looking for more devices ...") : qsTr("Looking for devices ...")
+        anchors.centerIn: parent
+        visible: btModel.discovering
+
+        Components.LoadingSpinner {
+          id: loadingSpinner
+
+          running: btModel.discovering
+          width: parent.height
+        }
+
+        Text {
+          id: discoveryInProgress
+
+          text: footerDelegate.ListView.view.count > 2 ? qsTr("Looking for more devices") + " ..." : qsTr("Looking for devices") + " ..."
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+
+          color: InputStyle.fontColor
+          y: parent.height / 2 - contentHeight / 2
+
+          wrapMode: Text.WordWrap
+          elide: Text.ElideRight
+        }
+      }
     }
   }
 }
-

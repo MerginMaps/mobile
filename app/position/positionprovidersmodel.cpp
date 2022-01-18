@@ -15,7 +15,7 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 {
   if ( !InputUtils::isMobilePlatform() )
   {
-    PositionProvider simulated( "Simulated provider", "Simulated position around point", "simulated" );
+    PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
 
     mProviders.push_front( simulated );
   }
@@ -23,7 +23,8 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
   PositionProvider internal;
   internal.name = tr( "Internal GPS receiver" );
   internal.description = tr( "GPS receiver of this device" );
-  internal.providerId = "internal";
+  internal.providerType = "internal";
+  internal.providerId = "devicegps";
 
   mProviders.push_front( internal );
 }
@@ -33,8 +34,8 @@ QHash<int, QByteArray> PositionProvidersModel::roleNames() const
   QHash<int, QByteArray> roles;
   roles.insert( DataRoles::ProviderName, QByteArray( "ProviderName" ) );
   roles.insert( DataRoles::ProviderDescription, QByteArray( "ProviderDescription" ) );
+  roles.insert( DataRoles::ProviderType, QByteArray( "ProviderType" ) );
   roles.insert( DataRoles::ProviderId, QByteArray( "ProviderId" ) );
-  roles.insert( DataRoles::CanBeDeleted, QByteArray( "CanBeDeleted" ) );
   return roles;
 }
 
@@ -66,8 +67,8 @@ QVariant PositionProvidersModel::data( const QModelIndex &index, int role ) cons
     case DataRoles::ProviderId:
       return provider.providerId;
 
-    case DataRoles::CanBeDeleted:
-      return !provider.isPermanent();
+    case DataRoles::ProviderType:
+      return provider.providerType;
 
     default:
       return QVariant();
@@ -109,6 +110,7 @@ void PositionProvidersModel::addProvider( const QString &name, const QString &pr
   toAdd.name = name;
   toAdd.providerId = providerId;
   toAdd.description = tr( "Bluetooth GPS receiver" );
+  toAdd.providerType = "external";
 
   if ( mProviders.contains( toAdd ) )
     return;
@@ -156,6 +158,7 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
         provider.name = providers[i].toList()[0].toString();
         provider.providerId = providers[i].toList()[1].toString();
         provider.description = tr( "Bluetooth GPS receiver" );
+        provider.providerType = "external";
 
         mProviders.append( provider );
       }
@@ -171,10 +174,11 @@ QVariantList PositionProvidersModel::toVariantList() const
 
   for ( int i = 0; i < mProviders.count(); ++i )
   {
-    if ( mProviders[i].isPermanent() )
+    if ( mProviders[i].providerType == QStringLiteral( "internal" ) )
       continue;
 
-    out.append( { mProviders[i].name, mProviders[i].providerId } );
+    QStringList a = { mProviders[i].name, mProviders[i].providerId };
+    out.push_back( a );
   }
 
   return out;

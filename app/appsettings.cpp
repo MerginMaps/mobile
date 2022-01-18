@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -243,9 +243,10 @@ QVariantList AppSettings::savedPositionProviders() const
   for ( int i = 0; i < size; i++ )
   {
     settings.setArrayIndex( i );
-    QString name = settings.value( "providerName" ).toString();
-    QString address = settings.value( "providerAddress" ).toString();
-    providers.append( { name, address } );
+    QStringList provider;
+    provider << settings.value( "providerName" ).toString();
+    provider << settings.value( "providerAddress" ).toString();
+    providers.push_back( provider );
   }
 
   settings.endArray();

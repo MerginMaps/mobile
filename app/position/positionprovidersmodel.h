@@ -20,7 +20,8 @@ struct PositionProvider
 {
   QString name;
   QString description;
-  QString providerId; // simulated/internal/BT address
+  QString providerType; // either internal or external
+  QString providerId; // holds BT address for external provider and simulated/internal for internal provider
 
   bool operator==( const PositionProvider &other ) const
   {
@@ -32,16 +33,11 @@ struct PositionProvider
     return !( *this == other );
   }
 
-  PositionProvider( const QString &name, const QString &desc, const QString &id )
-    : name( name ), description( desc ), providerId( id )
+  PositionProvider( const QString &name, const QString &desc, const QString &type, const QString &id )
+    : name( name ), description( desc ), providerType( type ), providerId( id )
   {}
 
   PositionProvider() {}
-
-  bool isPermanent() const
-  {
-    return ( providerId == QStringLiteral( "internal" ) || providerId == QStringLiteral( "simulated" ) );
-  }
 };
 
 class PositionProvidersModel : public QAbstractListModel
@@ -60,7 +56,7 @@ class PositionProvidersModel : public QAbstractListModel
       ProviderName = Qt::UserRole + 1, //! physical address of BT device
       ProviderDescription,
       ProviderId,
-      CanBeDeleted
+      ProviderType // external (connected) / internal (device)
     };
     Q_ENUM( DataRoles )
 
