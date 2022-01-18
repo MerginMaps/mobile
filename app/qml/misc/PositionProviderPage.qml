@@ -78,7 +78,7 @@ Page {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.positionKit.positionProvider = root.positionKit.constructProvider( model.ProviderType, model.ProviderId )
+            root.positionKit.positionProvider = root.positionKit.constructProvider( model.ProviderType, model.ProviderId )
         }
       }
 
@@ -97,6 +97,7 @@ Page {
           width: parent.height
           height: parent.height
 
+          checkable: false
           checked: __appSettings.activePositionProviderId === model.ProviderId
 
           indicator: Rectangle {
@@ -118,7 +119,15 @@ Page {
 
               radius: InputStyle.circleRadius
               color: InputStyle.darkGreen
-              visible: isActiveButton.checked
+              visible: __appSettings.activePositionProviderId === model.ProviderId
+            }
+          }
+
+          // We need to duplicate mouse area here in order to handle clicks from RadioButton
+          MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.positionKit.positionProvider = root.positionKit.constructProvider( model.ProviderType, model.ProviderId )
             }
           }
         }
@@ -133,7 +142,7 @@ Page {
             width: parent.width
             height: parent.height * 0.5
 
-            text: model.ProviderName
+            text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
 
             elide: Text.ElideRight
             color: InputStyle.fontColor
@@ -191,8 +200,8 @@ Page {
 
       Rectangle {
         property bool separatorVisible: {
-          // items that have separator: first item in internal providers and all other in external but the last one
-          if ( model.ProviderType === "internal" ) return index === 0
+          // items that have separator: all items in external but the last one
+          if ( model.ProviderType === "internal" ) return false
           else return index < providerDelegate.ListView.view.count - 1
         }
 

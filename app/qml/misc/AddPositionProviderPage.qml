@@ -85,7 +85,7 @@ Page {
             width: parent.width
             height: parent.height * 0.5
 
-            text: model.DeviceName
+            text: model.DeviceName ? model.DeviceName : qsTr( "Unknown device" )
 
             elide: Text.ElideRight
             color: InputStyle.fontColor
