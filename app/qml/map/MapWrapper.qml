@@ -322,7 +322,6 @@ Item {
   PositionMarker {
     id: _positionMarker
 
-    positionKit: __positionKit
     mapPosition: _mapPosition
     compass: _compass
   }
