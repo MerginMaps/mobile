@@ -440,7 +440,7 @@ int main( int argc, char *argv[] )
   PositionKit pk;
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
   // when provider changes, save it to QSettings
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, [&as]( AbstractPositionProvider * provider )
+  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
   {
     as.setActivePositionProviderId( provider->providerId() );
   } );

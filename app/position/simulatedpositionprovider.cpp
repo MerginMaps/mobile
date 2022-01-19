@@ -22,7 +22,7 @@ SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double l
 
   connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::generateNextPosition );
 
-  startUpdates();
+  SimulatedPositionProvider::startUpdates();
 }
 
 SimulatedPositionProvider::~SimulatedPositionProvider() = default;
