@@ -40,7 +40,9 @@ class InternalPositionProvider : public AbstractPositionProvider
     void parseUsedSatellitesUpdate( const QList<QGeoSatelliteInfo> &satellites );
 
   private:
-    bool mIsValid = true; // determines if both position sources were successfully created
+    // determines if sources were successfully created
+    bool mPositionSourceValid = false;
+    bool mSatelliteSourceValid = false;
 
     // There are two sources of GPS data, one informs us about position and the other about satellites.
     // Both of them are handled in separate slots and in order to be able to emit merged information

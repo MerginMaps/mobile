@@ -18,30 +18,11 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
   : AbstractPositionProvider( QStringLiteral( "devicegps" ), parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
-  if ( !mGpsPositionSource.get() || mGpsPositionSource->error() != QGeoPositionInfoSource::NoError )
+
+  if ( mGpsPositionSource.get() && mGpsPositionSource->error() == QGeoPositionInfoSource::NoError )
   {
-    CoreUtils::log(
-      QStringLiteral( "Internal GPS provider" ),
-      QStringLiteral( "Unable to create default GPS position source" )
-    );
-
-    mIsValid = false;
-  }
-
-  mGpsSatellitesSource = std::unique_ptr<QGeoSatelliteInfoSource>( QGeoSatelliteInfoSource::createDefaultSource( nullptr ) );
-  if ( !mGpsSatellitesSource.get() || mGpsSatellitesSource->error() != QGeoSatelliteInfoSource::NoError )
-  {
-    CoreUtils::log(
-      QStringLiteral( "Internal GPS provider" ),
-      QStringLiteral( "Unable to create default GPS satellite source" )
-    );
-
-    mIsValid = false;
-  }
-
-  if ( mIsValid )
-  {
-    //TODO: maybe set a minimal timeout (e.g. 500 ms)?
+    // let's have an update each second
+    mGpsPositionSource->setUpdateInterval( 1000 );
 
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &InternalPositionProvider::parsePositionUpdate );
     connect( mGpsPositionSource.get(), QOverload<QGeoPositionInfoSource::Error>::of( &QGeoPositionInfoSource::error ), this,
@@ -58,6 +39,23 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
       emit lostConnection();
     } );
 
+    mPositionSourceValid = true;
+  }
+  else
+  {
+    CoreUtils::log(
+      QStringLiteral( "Internal GPS provider" ),
+      QStringLiteral( "Unable to create default GPS position source" )
+    );
+
+    mPositionSourceValid = false;
+  }
+
+  // now the same for satellites source
+  mGpsSatellitesSource = std::unique_ptr<QGeoSatelliteInfoSource>( QGeoSatelliteInfoSource::createDefaultSource( nullptr ) );
+
+  if ( mGpsSatellitesSource.get() && mGpsSatellitesSource->error() == QGeoSatelliteInfoSource::NoError )
+  {
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInViewUpdated, this, &InternalPositionProvider::parseVisibleSatellitesUpdate );
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInUseUpdated, this, &InternalPositionProvider::parseUsedSatellitesUpdate );
     connect( mGpsSatellitesSource.get(), QOverload<QGeoSatelliteInfoSource::Error>::of( &QGeoSatelliteInfoSource::error ), this,
@@ -73,6 +71,17 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
       qDebug() << " Internal GPS (satellite) stopped receiving data!"; // TODO: remove
       emit lostConnection();
     } );
+
+    mSatelliteSourceValid = true;
+  }
+  else
+  {
+    CoreUtils::log(
+      QStringLiteral( "Internal GPS provider" ),
+      QStringLiteral( "Unable to create default GPS satellite source" )
+    );
+
+    mSatelliteSourceValid = false;
   }
 
   InternalPositionProvider::startUpdates();
@@ -82,29 +91,29 @@ InternalPositionProvider::~InternalPositionProvider() = default;
 
 void InternalPositionProvider::startUpdates()
 {
-  if ( mIsValid )
-  {
+  if ( mPositionSourceValid )
     mGpsPositionSource->startUpdates();
+
+  if ( mSatelliteSourceValid )
     mGpsSatellitesSource->startUpdates();
-  }
 }
 
 void InternalPositionProvider::stopUpdates()
 {
-  if ( mIsValid )
-  {
+  if ( mPositionSourceValid )
     mGpsPositionSource->stopUpdates();
+
+  if ( mSatelliteSourceValid )
     mGpsSatellitesSource->stopUpdates();
-  }
 }
 
 void InternalPositionProvider::closeProvider()
 {
-  if ( mIsValid )
-  {
+  if ( mPositionSourceValid )
     mGpsPositionSource->stopUpdates();
+
+  if ( mSatelliteSourceValid )
     mGpsSatellitesSource->stopUpdates();
-  }
 }
 
 void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &position )
