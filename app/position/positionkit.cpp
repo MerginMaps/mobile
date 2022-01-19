@@ -241,6 +241,18 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
   }
 }
 
+void PositionKit::appStateChanged( Qt::ApplicationState state )
+{
+  if ( state == Qt::ApplicationActive )
+  {
+    startUpdates();
+  }
+  else
+  {
+    stopUpdates();
+  }
+}
+
 double PositionKit::latitude() const
 {
   return mPosition.latitude;

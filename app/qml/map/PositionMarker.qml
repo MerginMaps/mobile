@@ -18,7 +18,6 @@ import lc 1.0
 Item {
     id: positionMarker
 
-    property PositionKit positionKit
     /*required*/ property MapPosition mapPosition
     property Compass compass
 
@@ -26,19 +25,20 @@ Item {
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
 
-    onPositionKitChanged: positionDirection.positionKit = positionMarker.positionKit
     onCompassChanged: positionDirection.compass = positionMarker.compass
 
     PositionDirection {
       id: positionDirection
+
+      positionKit: __positionKit
     }
 
     Rectangle {
         id: accuracyIndicator
 
         visible: withAccuracy &&
-                 positionKit.hasPosition &&
-                 (positionKit.horizontalAccuracy > 0) &&
+                 __positionKit.hasPosition &&
+                 (__positionKit.horizontalAccuracy > 0) &&
                  (accuracyIndicator.width > positionMarker.size / 2.0)
         x: mapPosition.screenPosition.x - width/2
         y: mapPosition.screenPosition.y - height/2
@@ -59,7 +59,7 @@ Item {
         width: positionMarker.size * 2
         height: width
         smooth: true
-        visible: positionKit.hasPosition && positionDirection.hasDirection
+        visible: __positionKit.hasPosition && positionDirection.hasDirection
         x: mapPosition.screenPosition.x - width/2
         y: mapPosition.screenPosition.y - (height * 1)
 
@@ -69,8 +69,8 @@ Item {
     Image {
         id: navigation
 
-        source: positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
-        visible: positionKit.hasPosition
+        source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+        visible: __positionKit.hasPosition
         fillMode: Image.PreserveAspectFit
         width: positionMarker.size
         height: width

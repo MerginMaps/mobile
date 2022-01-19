@@ -20,7 +20,6 @@ import "../components" as Components
 Page {
   id: root
 
-  property var positionKit
   property var stackView
 
   signal close
@@ -78,7 +77,7 @@ Page {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-            root.positionKit.positionProvider = root.positionKit.constructProvider( model.ProviderType, model.ProviderId )
+            __positionKit.positionProvider = __positionKit.constructProvider( model.ProviderType, model.ProviderId )
         }
       }
 
@@ -127,7 +126,7 @@ Page {
           MouseArea {
             anchors.fill: parent
             onClicked: {
-                root.positionKit.positionProvider = root.positionKit.constructProvider( model.ProviderType, model.ProviderId )
+                __positionKit.positionProvider = __positionKit.constructProvider( model.ProviderType, model.ProviderId )
             }
           }
         }
@@ -245,8 +244,6 @@ Page {
     id: bluetoothDiscoveryComponent
 
     AddPositionProviderPage {
-      positionKit: root.positionKit
-
       height: root.height + header.height
       width: root.width
 
@@ -280,7 +277,7 @@ Page {
         if ( __appSettings.activePositionProviderId == relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
-          root.positionKit.positionProvider = root.positionKit.constructProvider( "internal", "devicegps" )
+          __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps" )
         }
 
         providersModel.removeProvider( relatedProviderId )
