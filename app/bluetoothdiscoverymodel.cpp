@@ -21,7 +21,7 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::canceled, this, &BluetoothDiscoveryModel::finishedDiscovery );
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::finished, this, &BluetoothDiscoveryModel::finishedDiscovery );
 
-  connect( mDiscoveryAgent.get(), QOverload<QBluetoothDeviceDiscoveryAgent::Error>::of( &QBluetoothDeviceDiscoveryAgent::error ),
+  connect( mDiscoveryAgent.get(), QOverload<QBluetoothDeviceDiscoveryAgent::Error>::of( &QBluetoothDeviceDiscoveryAgent::error ), this,
            [ = ]( QBluetoothDeviceDiscoveryAgent::Error error )
   {
     qDebug() << error << "occured during discovery, ending.."; // TODO: remove

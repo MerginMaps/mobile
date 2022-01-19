@@ -44,14 +44,14 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     //TODO: maybe set a minimal timeout (e.g. 500 ms)?
 
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &InternalPositionProvider::parsePositionUpdate );
-    connect( mGpsPositionSource.get(), QOverload<QGeoPositionInfoSource::Error>::of( &QGeoPositionInfoSource::error ),
+    connect( mGpsPositionSource.get(), QOverload<QGeoPositionInfoSource::Error>::of( &QGeoPositionInfoSource::error ), this,
              [ = ]( QGeoPositionInfoSource::Error positioningError )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
       qDebug() << positioningError << " <- has occured during initialization of internal GPS position provider!"; // TODO: remove
       emit lostConnection();
     } );
-    connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::updateTimeout, [ = ]()
+    connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::updateTimeout, this, [ = ]()
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving position data" ) );
       qDebug() << " Internal GPS (position) stopped receiving data!"; // TODO: remove
@@ -60,14 +60,14 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
 
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInViewUpdated, this, &InternalPositionProvider::parseVisibleSatellitesUpdate );
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInUseUpdated, this, &InternalPositionProvider::parseUsedSatellitesUpdate );
-    connect( mGpsSatellitesSource.get(), QOverload<QGeoSatelliteInfoSource::Error>::of( &QGeoSatelliteInfoSource::error ),
+    connect( mGpsSatellitesSource.get(), QOverload<QGeoSatelliteInfoSource::Error>::of( &QGeoSatelliteInfoSource::error ), this,
              [ = ]( QGeoSatelliteInfoSource::Error satelliteError )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (satellites source), code: %1" ).arg( satelliteError ) );
       qDebug() << satelliteError << " <- has occured during initialization of internal GPS satellites provider!"; // TODO: remove
       emit lostConnection();
     } );
-    connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::requestTimeout, [ = ]()
+    connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::requestTimeout, this, [ = ]()
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving satellites data" ) );
       qDebug() << " Internal GPS (satellite) stopped receiving data!"; // TODO: remove
