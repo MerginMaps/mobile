@@ -24,6 +24,14 @@ Page {
 
   signal close
 
+  function constructProvider( type, id )
+  {
+    if ( __appSettings.activePositionProviderId === id )
+      return // do not construct the same provider again
+
+    __positionKit.positionProvider = __positionKit.constructProvider( type, id )
+  }
+
   header: Components.PanelHeader {
     id: header
 
@@ -76,9 +84,7 @@ Page {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: {
-            __positionKit.positionProvider = __positionKit.constructProvider( model.ProviderType, model.ProviderId )
-        }
+        onClicked: root.constructProvider( model.ProviderType, model.ProviderId )
       }
 
       Row {
@@ -125,9 +131,7 @@ Page {
           // We need to duplicate mouse area here in order to handle clicks from RadioButton
           MouseArea {
             anchors.fill: parent
-            onClicked: {
-                __positionKit.positionProvider = __positionKit.constructProvider( model.ProviderType, model.ProviderId )
-            }
+            onClicked: root.constructProvider( model.ProviderType, model.ProviderId )
           }
         }
 
@@ -277,7 +281,7 @@ Page {
         if ( __appSettings.activePositionProviderId == relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
-          __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps" )
+          root.constructProvider( "internal", "devicegps" )
         }
 
         providersModel.removeProvider( relatedProviderId )
