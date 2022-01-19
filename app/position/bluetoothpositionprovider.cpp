@@ -36,7 +36,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObje
   } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
-  startUpdates();
+  BluetoothPositionProvider::startUpdates();
 }
 
 BluetoothPositionProvider::~BluetoothPositionProvider()

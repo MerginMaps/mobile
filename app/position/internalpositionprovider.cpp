@@ -75,7 +75,7 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     } );
   }
 
-  startUpdates();
+  InternalPositionProvider::startUpdates();
 }
 
 InternalPositionProvider::~InternalPositionProvider() = default;
