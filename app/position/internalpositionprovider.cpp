@@ -15,7 +15,7 @@
 #include "qdebug.h" //TODO: remove
 
 InternalPositionProvider::InternalPositionProvider( QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "internal" ), parent )
+  : AbstractPositionProvider( QStringLiteral( "devicegps" ), parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
   if ( !mGpsPositionSource.get() || mGpsPositionSource->error() != QGeoPositionInfoSource::NoError )

@@ -53,7 +53,9 @@ void TestPositionKit::simulated_position()
 
   SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( 90.36, 33.93, 0 );
 
-  positionKit.setPositionProvider( simulatedProvider2 ); // deletes the first provider
+  // position kit ignores new provider if it is the same type and id, so delete the previous one first
+  positionKit.setPositionProvider( nullptr ); // deletes the first provider
+  positionKit.setPositionProvider( simulatedProvider2 );
   simulatedProvider2 = nullptr;
 
   hasPositionChanged = positionKitSpy.wait( 2000 );

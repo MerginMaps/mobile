@@ -105,5 +105,6 @@
         <file>NavigationPanel.qml</file>
         <file>map/NavigationHighlight.qml</file>
         <file>misc/PositionProviderPage.qml</file>
+        <file>misc/AddPositionProviderPage.qml</file>
     </qresource>
 </RCC>

@@ -95,6 +95,7 @@
 #include "bluetoothdiscoverymodel.h"
 #include "position/bluetoothpositionprovider.h"
 #include "position/mapposition.h"
+#include "position/positionprovidersmodel.h"
 
 
 #ifndef NDEBUG
@@ -283,6 +284,7 @@ void initDeclarative()
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "lc", 1, 0, "BluetoothDiscoveryModel" );
+  qmlRegisterType< PositionProvidersModel >( "lc", 1, 0, "PositionProvidersModel" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );

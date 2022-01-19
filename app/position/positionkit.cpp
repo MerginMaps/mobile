@@ -48,6 +48,9 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   if ( mPositionProvider.get() == provider )
     return;
 
+  if ( mPositionProvider.get() && provider && mPositionProvider->providerId() == provider->providerId() )
+    return;
+
   if ( mPositionProvider )
     mPositionProvider->disconnect();
 
@@ -65,29 +68,34 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
     CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Position provider has been removed" ) );
   }
 
+  emit positionProviderChanged( provider );
+
   // reset last position data
   parsePositionUpdate( GeoPosition() );
 }
 
-AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &metadata )
+AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id )
 {
-  if ( type == "external" )
+  if ( type == QStringLiteral( "external" ) )
   {
-    AbstractPositionProvider *provider = new BluetoothPositionProvider( metadata );
+    AbstractPositionProvider *provider = new BluetoothPositionProvider( id );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
-  else if ( type == "simulated" )
+  else // type == internal
   {
-    AbstractPositionProvider *provider = new SimulatedPositionProvider();
-    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
-    return provider;
-  }
-  else // internal
-  {
-    AbstractPositionProvider *provider = new InternalPositionProvider();
-    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
-    return provider;
+    if ( id == QStringLiteral( "simulated" ) )
+    {
+      AbstractPositionProvider *provider = new SimulatedPositionProvider();
+      QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+      return provider;
+    }
+    else // id == devicegps
+    {
+      AbstractPositionProvider *provider = new InternalPositionProvider();
+      QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+      return provider;
+    }
   }
 }
 
@@ -102,20 +110,20 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   {
     if ( InputUtils::isMobilePlatform() )
     {
-      return constructProvider( QStringLiteral( "internal" ) );
+      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
     }
     else // desktop
     {
-      return constructProvider( QStringLiteral( "simulated" ) );
+      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
     }
   }
-  else if ( providerId == QStringLiteral( "internal" ) )
+  else if ( providerId == QStringLiteral( "devicegps" ) )
   {
-    return constructProvider( QStringLiteral( "internal" ) );
+    return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
   }
   else if ( providerId == QStringLiteral( "simulated" ) )
   {
-    return constructProvider( QStringLiteral( "simulated" ) );
+    return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
   }
   else
   {

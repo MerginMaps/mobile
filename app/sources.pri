@@ -14,6 +14,7 @@ position/internalpositionprovider.cpp \
 position/mapposition.cpp \
 position/positiondirection.cpp \
 position/positionkit.cpp \
+position/positionprovidersmodel.cpp \
 position/simulatedpositionprovider.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
@@ -64,6 +65,7 @@ position/internalpositionprovider.h \
 position/mapposition.h \
 position/positiondirection.h \
 position/positionkit.h \
+position/positionprovidersmodel.h \
 position/simulatedpositionprovider.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \

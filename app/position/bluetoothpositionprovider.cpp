@@ -63,6 +63,8 @@ void BluetoothPositionProvider::closeProvider()
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
+  // TODO: emit messages when BT devices is connected / error occured!
+
   if ( state == QBluetoothSocket::ConnectingState )
     emit providerConnecting();
   else if ( state == QBluetoothSocket::ConnectedState )
@@ -70,7 +72,7 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
   else if ( state == QBluetoothSocket::UnconnectedState )
     emit lostConnection();
 
-  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: " ).arg( state ) );
+  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( state ) );
 }
 
 void BluetoothPositionProvider::positionUpdateReceived()
