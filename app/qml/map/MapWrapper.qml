@@ -23,11 +23,9 @@ Item {
   property real previewPanelHeight
 
   readonly property alias gpsIndicatorColor: _gpsState.indicatorColor
-  readonly property alias positionKit: _positionKit
   readonly property alias digitizingController: _digitizingController
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
-  readonly property alias mapPositioning: _mapPosition
 
   property alias navigationHighlightFeature: _navigationHighlight.destinationPair
   property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
@@ -68,7 +66,7 @@ Item {
   }
 
   function centerToPosition() {
-    if ( _positionKit.hasPosition ) {
+    if ( __positionKit.hasPosition ) {
       _map.mapSettings.setCenter( _mapPosition.mapPosition )
       _digitizingController.useGpsPoint = true
     }
@@ -90,7 +88,7 @@ Item {
   //! Returns point from GPS (WGS84) or center screen point in map CRS
   function findRecordedPoint() {
     return _digitizingController.useGpsPoint ?
-          _positionKit.position : // WGS84
+          __positionKit.positionCoordinate : // WGS84
           _map.mapSettings.screenToCoordinate( _crosshair.center ) // map CRS
   }
 
@@ -146,10 +144,10 @@ Item {
 
   function isPositionOutOfExtent() {
     let border = InputStyle.mapOutOfExtentBorder
-    return ( ( _positionKit.screenPosition.x < border ) ||
-            ( _positionKit.screenPosition.y < border ) ||
-            ( _positionKit.screenPosition.x > _map.width - border ) ||
-            ( _positionKit.screenPosition.y > _map.height - border )
+    return ( ( _mapPosition.screenPosition.x < border ) ||
+            ( _mapPosition.screenPosition.y < border ) ||
+            ( _mapPosition.screenPosition.x > _map.width - border ) ||
+            ( _mapPosition.screenPosition.y > _map.height - border )
             )
   }
 
@@ -295,24 +293,11 @@ Item {
     }
   }
 
-  PositionKit {
-    id: _positionKit
-
-    Component.onCompleted: {
-      // load previously active position provider
-      _positionKit.positionProvider = _positionKit.constructActiveProvider( __appSettings )
-    }
-
-    onPositionProviderChanged: {
-      __appSettings.activePositionProviderId = provider.providerId() ? provider.providerId() : ""
-    }
-  }
-
   MapPosition {
     id: _mapPosition
 
     mapSettings: _map.mapSettings
-    positionKit: _positionKit
+    positionKit: __positionKit
     onScreenPositionChanged: updatePosition()
   }
 
@@ -337,7 +322,7 @@ Item {
   PositionMarker {
     id: _positionMarker
 
-    positionKit: _positionKit
+    positionKit: __positionKit
     mapPosition: _mapPosition
     compass: _compass
   }
@@ -350,7 +335,7 @@ Item {
     states: [
       State {
         name: "good"
-        when: ( _positionKit.horizontalAccuracy > 0 ) && ( _positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance )
+        when: ( __positionKit.horizontalAccuracy > 0 ) && ( __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softGreen
@@ -358,7 +343,7 @@ Item {
       },
       State {
         name: "low" // below accuracy tolerance
-        when: ( _positionKit.horizontalAccuracy > 0 ) && ( _positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
+        when: ( __positionKit.horizontalAccuracy > 0 ) && ( __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softOrange
@@ -366,7 +351,7 @@ Item {
       },
       State {
         name: "unavailable"
-        when: _positionKit.horizontalAccuracy <= 0
+        when: __positionKit.horizontalAccuracy <= 0
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softRed
@@ -423,7 +408,7 @@ Item {
   DigitizingController  {
     id: _digitizingController
 
-    positionKit: _positionKit
+    positionKit: __positionKit
     layer: __activeLayer.vectorLayer
     mapSettings: _map.mapSettings
 
@@ -483,7 +468,7 @@ Item {
       let isBannerAllowed = __appSettings.gpsAccuracyWarning
       let isRecording = root.isInRecordState
       let isUsingPosition = _digitizingController.useGpsPoint || !_digitizingController.manualRecording
-      let isGpsWorking = _positionKit.hasPosition
+      let isGpsWorking = __positionKit.hasPosition
 
       return isLowAccuracy  &&
           isBannerAllowed   &&
@@ -496,7 +481,7 @@ Item {
     height: InputStyle.rowHeight * 2
 
     text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( _positionKit.horizontalAccuracy ) )
+    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
     link: __inputHelp.gpsAccuracyHelpLink
 
     showWarning: shouldShowAccuracyWarning
@@ -505,7 +490,7 @@ Item {
   MapFloatButton {
     id: _accuracyButton
 
-    property int accuracyPrecision: _positionKit.horizontalAccuracy > 1 ? 1 : 2
+    property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2
 
     onClicked: accuracyButtonClicked()
 
@@ -527,7 +512,7 @@ Item {
       Text {
         id: acctext
 
-        text: __inputUtils.formatNumber( _positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
+        text: __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 

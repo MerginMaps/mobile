@@ -19,8 +19,6 @@ import "../components" as Components
 Page {
   id: root
 
-  property PositionKit positionKit;
-
   signal close
   signal initiatedConnectionTo( string deviceAddress, string deviceName )
 
@@ -135,7 +133,7 @@ Page {
         anchors.fill: parent
         onClicked: {
           btModel.discovering = false
-          root.positionKit.positionProvider = root.positionKit.constructProvider( "external", model.DeviceAddress )
+          __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress )
           initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
           close()
         }

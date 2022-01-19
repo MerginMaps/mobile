@@ -62,12 +62,6 @@ QgsProject *Loader::project()
   return mProject;
 }
 
-void Loader::setPositionKit( PositionKit *kit )
-{
-  mPositionKit = kit;
-  emit positionKitChanged();
-}
-
 void Loader::setRecording( bool isRecordingOn )
 {
   if ( mRecording != isRecordingOn )
@@ -308,18 +302,6 @@ void Loader::appStateChanged( Qt::ApplicationState state )
 
   logHelper << "Application changed state to: " << state;
   CoreUtils::log( "Input", msg );
-
-  if ( !mRecording && mPositionKit )
-  {
-    if ( state == Qt::ApplicationActive )
-    {
-      mPositionKit->startUpdates();
-    }
-    else
-    {
-      mPositionKit->stopUpdates();
-    }
-  }
 }
 
 void Loader::appAboutToQuit()

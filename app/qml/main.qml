@@ -164,13 +164,12 @@ ApplicationWindow {
       }
 
       Component.onCompleted: {
-        __loader.positionKit = map.positionKit
         __loader.recording = map.digitizingController.recording
         __loader.mapSettings = map.mapSettings
-        __iosUtils.positionKit = map.positionKit
+        __iosUtils.positionKit = __positionKit
         __iosUtils.compass = map.compass
         __variablesManager.compass = map.compass
-        __variablesManager.positionKit = map.positionKit
+        __variablesManager.positionKit = __positionKit
       }
     }
 
@@ -229,8 +228,6 @@ ApplicationWindow {
       height: window.height
       width: window.width
       rowHeight: InputStyle.rowHeight
-
-      positionKit: map.positionKit
 
       onVisibleChanged: {
         if (settingsPanel.visible)
@@ -294,8 +291,7 @@ ApplicationWindow {
 
         onBack: gpsDataPageLoader.active = false
 
-        mapPositioning: map.mapPositioning
-        positionKit: map.positionKit
+        mapSettings: map.mapSettings
 
         height: window.height
         width: window.width
@@ -431,7 +427,7 @@ ApplicationWindow {
       onNavigateToFeature: {
         if ( !__inputUtils.isPointLayerFeature( feature ) )
           return;
-        if ( !map.positionKit.hasPosition )
+        if ( !__positionKit.hasPosition )
         {
           showMessage( "Navigation mode is disabled because location is unavailable!" );
           return;

@@ -137,6 +137,9 @@ class PositionKit : public QObject
   public slots:
     void parsePositionUpdate( const GeoPosition &newPosition );
 
+    // stop updates when application is minimized
+    void appStateChanged( Qt::ApplicationState state );
+
   private:
     GeoPosition mPosition;
     bool mHasPosition = false;

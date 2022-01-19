@@ -58,15 +58,15 @@ Item {
         return;
 
       _map.navigationHighlightFeature = navigationTargetFeature
-      _map.navigationHighlightGpsPosition = _map.positionKit.position
+      _map.navigationHighlightGpsPosition = __positionKit.positionCoordinate
 
       var previewPanelHeightRatio = previewPanelHeight / _map.height;
-      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, _map.positionKit.position, _map.mapSettings, previewPanelHeightRatio );
+      calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent( _map.navigationHighlightFeature, __positionKit.positionCoordinate, _map.mapSettings, previewPanelHeightRatio );
 
       if ( autoFollow )
         _map.mapSettings.extent = calculatedNavigationExtent;
 
-      navigationPanel.featureToGpsDistance = __inputUtils.distanceToFeature( _map.positionKit.position, navigationTargetFeature, _map.mapSettings );
+      navigationPanel.featureToGpsDistance = __inputUtils.distanceToFeature( __positionKit.positionCoordinate, navigationTargetFeature, _map.mapSettings );
     }
 
     onAutoFollowChanged: {
@@ -89,7 +89,7 @@ Item {
     }
 
     Connections {
-        target: _map.positionKit
+        target: __positionKit
         onPositionChanged: {
           if ( _map.state === "navigation" && navigationTargetFeature )
             updateNavigation();
