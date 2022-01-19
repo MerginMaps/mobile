@@ -155,8 +155,7 @@ Page {
             width: parent.width
             height: parent.height * 0.5
 
-            // add BT address to text if it is external receiver
-            text: model.ProviderDescription + ( model.ProviderType === "external" ? " (" + model.ProviderId + ")": "" )
+            text: model.ProviderDescription
 
             elide: Text.ElideRight
             color: InputStyle.secondaryFontColor

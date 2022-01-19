@@ -49,7 +49,7 @@ class PositionProvidersModel : public QAbstractListModel
   public:
 
     explicit PositionProvidersModel( QObject *parent = nullptr );
-    virtual ~PositionProvidersModel() = default;
+    virtual ~PositionProvidersModel();
 
     enum DataRoles
     {
@@ -77,7 +77,7 @@ class PositionProvidersModel : public QAbstractListModel
   private:
     QVariantList toVariantList() const;
 
-    AppSettings *mAppSettings; // not owned
+    AppSettings *mAppSettings = nullptr; // not owned
     QList<PositionProvider> mProviders;
 };
 

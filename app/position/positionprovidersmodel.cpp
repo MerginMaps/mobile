@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +28,8 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 
   mProviders.push_front( internal );
 }
+
+PositionProvidersModel::~PositionProvidersModel() = default;
 
 QHash<int, QByteArray> PositionProvidersModel::roleNames() const
 {
@@ -109,7 +111,7 @@ void PositionProvidersModel::addProvider( const QString &name, const QString &pr
   PositionProvider toAdd;
   toAdd.name = name;
   toAdd.providerId = providerId;
-  toAdd.description = tr( "Bluetooth GPS receiver" );
+  toAdd.description = providerId + " " + tr( " Bluetooth device" );
   toAdd.providerType = "external";
 
   if ( mProviders.contains( toAdd ) )
@@ -157,7 +159,7 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
         PositionProvider provider;
         provider.name = providers[i].toList()[0].toString();
         provider.providerId = providers[i].toList()[1].toString();
-        provider.description = tr( "Bluetooth GPS receiver" );
+        provider.description = provider.providerId + " " + tr( "Bluetooth device" );
         provider.providerType = "external";
 
         mProviders.append( provider );
