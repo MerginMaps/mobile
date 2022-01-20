@@ -21,6 +21,7 @@ env:
   XC_VERSION: ${{ '12.0.1' }}
   IOS_MIN_SDK_VERSION: ${{ '12.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
+  CACHE_VERSION: 0
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -115,7 +116,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -133,7 +134,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-ios
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
