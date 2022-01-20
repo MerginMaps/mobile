@@ -29,6 +29,7 @@ Page {
     if ( __appSettings.activePositionProviderId === id )
       return // do not construct the same provider again
 
+    connectionDialog.open()
     __positionKit.positionProvider = __positionKit.constructProvider( type, id )
   }
 
@@ -254,6 +255,15 @@ Page {
       onInitiatedConnectionTo: providersModel.addProvider( deviceName, deviceAddress )
       onClose: root.stackView.pop()
     }
+  }
+
+  Components.BluetoothConnectionDialog {
+    id: connectionDialog
+
+    width: root.width * 0.8
+    height: root.height / 2
+
+    anchors.centerIn: parent
   }
 
   MessageDialog {

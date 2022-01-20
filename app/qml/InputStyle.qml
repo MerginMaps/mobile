@@ -79,6 +79,7 @@ QtObject {
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
     property string noIcon: "qrc:/no.svg"
+    property string yesIcon: "qrc:/yes.svg"
     property string editIcon: "qrc:/edit.svg"
     property string infoIcon: "qrc:/info.svg"
     property string tableIcon: "qrc:/table.svg"

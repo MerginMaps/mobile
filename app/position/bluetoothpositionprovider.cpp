@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObje
            [ = ]( QBluetoothSocket::SocketError error )
   {
     CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Occured error code: %1" ).arg( error ) );
-    qDebug() << error << "<- occured bluetooth socket error!!"; // TODO: remove
+    qDebug() << "BT!: SOCKET ERROR:" << error; // TODO: remove
   } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
@@ -71,7 +71,7 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
     emit providerConnected();
   else if ( state == QBluetoothSocket::UnconnectedState )
     emit lostConnection();
-
+  qDebug() << "BT!: SOCKET STATE:" << state;
   CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( state ) );
 }
 
