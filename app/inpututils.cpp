@@ -51,9 +51,15 @@
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
 
-InputUtils::InputUtils( QObject *parent ): QObject( parent )
+InputUtils::InputUtils( QObject *parent )
+  : QObject( parent )
 {
-  mAndroidUtils = std::unique_ptr<AndroidUtils>( new AndroidUtils() );
+}
+
+InputUtils::InputUtils( AndroidUtils *au, QObject *parent )
+  : QObject( parent )
+  , mAndroidUtils( au )
+{
 }
 
 bool InputUtils::removeFile( const QString &filePath )
@@ -430,11 +436,28 @@ QString InputUtils::bytesToHumanSize( double bytes )
 
 bool InputUtils::acquireCameraPermission()
 {
-  if ( appPlatform() == QStringLiteral( "android" ) )
+  if ( appPlatform() == QStringLiteral( "android" ) && mAndroidUtils )
   {
     return mAndroidUtils->requestCameraPermission();
   }
   return true;
+}
+
+bool InputUtils::isBluetoothTurnedOn()
+{
+  if ( appPlatform() == QStringLiteral( "android" ) && mAndroidUtils )
+  {
+    return mAndroidUtils->isBluetoothTurnedOn();
+  }
+  return true;
+}
+
+void InputUtils::turnBluetoothOn()
+{
+  if ( appPlatform() == QStringLiteral( "android" ) && mAndroidUtils )
+  {
+    mAndroidUtils->turnBluetoothOn();
+  }
 }
 
 void InputUtils::quitApp()

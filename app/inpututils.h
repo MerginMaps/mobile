@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,6 +48,7 @@ class InputUtils: public QObject
     Q_OBJECT
   public:
     explicit InputUtils( QObject *parent = nullptr );
+    explicit InputUtils( AndroidUtils *au, QObject *parent = nullptr );
     ~InputUtils() override = default;
 
     Q_INVOKABLE static bool copyFile( const QString &srcPath, const QString &dstPath );
@@ -102,6 +103,10 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
     Q_INVOKABLE bool acquireCameraPermission();
+
+    Q_INVOKABLE bool isBluetoothTurnedOn();
+
+    Q_INVOKABLE void turnBluetoothOn();
 
     Q_INVOKABLE void quitApp();
 
@@ -443,7 +448,8 @@ class InputUtils: public QObject
     static QString sanitizeName( const QString &path );
 
     static double ratherZeroThanNaN( double d );
-    std::unique_ptr<AndroidUtils> mAndroidUtils;
+
+    AndroidUtils *mAndroidUtils = nullptr; // not owned
 };
 
 #endif // INPUTUTILS_H
