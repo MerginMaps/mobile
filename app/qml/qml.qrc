@@ -106,5 +106,6 @@
         <file>map/NavigationHighlight.qml</file>
         <file>misc/PositionProviderPage.qml</file>
         <file>misc/AddPositionProviderPage.qml</file>
+        <file>components/BluetoothConnectionDialog.qml</file>
     </qresource>
 </RCC>
