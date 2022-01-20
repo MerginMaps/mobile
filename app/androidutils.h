@@ -14,6 +14,7 @@
 #ifdef ANDROID
 #include <QAndroidActivityResultReceiver>
 #include <QAndroidJniObject>
+#include <QBluetoothLocalDevice>
 #endif
 #include <QObject>
 
@@ -55,6 +56,9 @@ class AndroidUtils: public QObject
     bool findLegacyFolder( QString &legacyFolderPath );
     void migrateLegacyProjects( const QString &from, const QString &to );
 
+    void turnBluetoothOn();
+    bool isBluetoothTurnedOn();
+
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.
@@ -64,6 +68,7 @@ class AndroidUtils: public QObject
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;
     const static int CAMERA_CODE = 102;
+    const static int BLUETOOTH_CODE = 103;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data ) override;
 #endif
@@ -76,12 +81,17 @@ class AndroidUtils: public QObject
     void migrationStarted( int numOfProjectsToCopy );
     void notEnoughSpaceLeftToMigrate( QString neededSpace );
 
+    void bluetoothEnabled( bool state );
+
   public slots:
     void showToast( QString message );
 
   private:
-
     bool mIsAndroid;
+
+#ifdef ANDROID
+    QBluetoothLocalDevice mBluetooth;
+#endif
 };
 
 #endif // ANDROIDUTILS_H

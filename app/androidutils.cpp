@@ -275,6 +275,40 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
 #endif
 }
 
+void AndroidUtils::turnBluetoothOn()
+{
+#ifdef ANDROID
+  if ( !isBluetoothTurnedOn() )
+  {
+    QAndroidJniObject ACTION_BT = QAndroidJniObject::getStaticObjectField(
+                                    "android/bluetooth/BluetoothAdapter",
+                                    "ACTION_REQUEST_ENABLE",
+                                    "Ljava/lang/String;"
+                                  );
+
+    QAndroidJniObject intent(
+      "android/content/Intent",
+      "(Ljava/lang/String;)V",
+      ACTION_BT.object()
+    );
+
+    if ( ACTION_BT.isValid() && intent.isValid() )
+    {
+      QtAndroid::startActivity( intent.object<jobject>(), BLUETOOTH_CODE, this );
+    }
+  }
+#endif
+}
+
+bool AndroidUtils::isBluetoothTurnedOn()
+{
+#ifdef ANDROID
+  return mBluetooth.hostMode() != QBluetoothLocalDevice::HostPoweredOff;
+#else
+  return true;
+#endif
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
@@ -399,6 +433,20 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 
   jint RESULT_OK = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
   jint RESULT_CANCELED = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
+
+  if ( receiverRequestCode == BLUETOOTH_CODE )
+  {
+    if ( resultCode == RESULT_OK )
+    {
+      emit bluetoothEnabled( true );
+    }
+    else
+    {
+      emit bluetoothEnabled( false );
+    }
+
+    return;
+  }
 
   if ( resultCode == RESULT_CANCELED )
   {

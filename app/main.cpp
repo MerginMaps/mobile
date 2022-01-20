@@ -420,7 +420,7 @@ int main( int argc, char *argv[] )
   LocalProjectsManager localProjectsManager( projectDir );
   MapThemesModel mtm;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
-  InputUtils iu;
+  InputUtils iu( &au );
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );

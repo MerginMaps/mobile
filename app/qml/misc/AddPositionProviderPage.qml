@@ -44,6 +44,7 @@ Page {
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
+      btModel.discovering = false
       close()
     }
   }
@@ -55,7 +56,38 @@ Page {
 
     model: BluetoothDiscoveryModel {
       id: btModel
-      discovering: true
+      discovering: false
+    }
+
+    Component.onCompleted: {
+      // Is bluetooth turned on?
+      // For iOS this is working out of the box, but for Android we need to
+      // opt to enable Bluetooth and listen on response in the connections component.
+      if ( __inputUtils.isBluetoothTurnedOn() )
+      {
+        btModel.discovering = true
+      }
+      else
+      {
+        __inputUtils.turnBluetoothOn()
+      }
+    }
+
+    Connections {
+      target: __androidUtils
+
+      function onBluetoothEnabled( state )
+      {
+        if ( state )
+        {
+          btModel.discovering = true
+        }
+        else
+        {
+          __inputUtils.showNotification( qsTr( "You need to enable Bluetooth in order to connect new GPS receiver" ) )
+          root.close()
+        }
+      }
     }
 
     delegate: Rectangle {
