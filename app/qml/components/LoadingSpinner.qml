@@ -15,6 +15,7 @@ Symbol {
   id: root
 
   property bool running: false
+  property int speed: 800
 
   visible: running
   source: InputStyle.loadingIndicatorIcon
@@ -25,7 +26,7 @@ Symbol {
     from: 0
     to: 360
 
-    duration: 800
+    duration: root.speed
 
     running: root.running
     loops: Animation.Infinite

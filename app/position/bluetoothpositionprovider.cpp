@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,23 +26,30 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, QObje
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
+  mReceiverDevice = std::make_unique<QBluetoothLocalDevice>();
 
   connect( mSocket.get(), &QBluetoothSocket::stateChanged, this, &BluetoothPositionProvider::socketStateChanged );
   connect( mSocket.get(), QOverload<QBluetoothSocket::SocketError>::of( &QBluetoothSocket::error ), this,
            [ = ]( QBluetoothSocket::SocketError error )
   {
-    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Occured error code: %1" ).arg( error ) );
+    QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( error );
+    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Occured connection error: %1" ).arg( errorToString ) );
+
+    qDebug() << "BT!: PAIRING STATE:" << mReceiverDevice->pairingStatus( mTargetAddress );
     qDebug() << "BT!: SOCKET ERROR:" << error; // TODO: remove
+
+    emit lostConnection();
   } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
+
   BluetoothPositionProvider::startUpdates();
 }
 
 BluetoothPositionProvider::~BluetoothPositionProvider()
 {
-  mSocket->disconnectFromService();
   mSocket->close();
+  qDebug() << "Destroyed provider" << this;
 }
 
 void BluetoothPositionProvider::startUpdates()
@@ -52,27 +59,47 @@ void BluetoothPositionProvider::startUpdates()
 
 void BluetoothPositionProvider::stopUpdates()
 {
-  mSocket->disconnectFromService();
+  mSocket->close();
 }
 
 void BluetoothPositionProvider::closeProvider()
 {
-  mSocket->disconnectFromService();
   mSocket->close();
 }
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
-  // TODO: emit messages when BT devices is connected / error occured!
-
-  if ( state == QBluetoothSocket::ConnectingState )
+  if ( state == QBluetoothSocket::ConnectingState || state == QBluetoothSocket::ServiceLookupState )
+  {
     emit providerConnecting();
+  }
   else if ( state == QBluetoothSocket::ConnectedState )
+  {
     emit providerConnected();
+  }
   else if ( state == QBluetoothSocket::UnconnectedState )
+  {
     emit lostConnection();
+  }
+
   qDebug() << "BT!: SOCKET STATE:" << state;
-  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( state ) );
+  qDebug() << "BT!: PAIRING STATE:" << mReceiverDevice->pairingStatus( mTargetAddress );
+
+//  if ( mSocket->error() == QBluetoothSocket::NetworkError
+//       && mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Paired
+//       && state == QBluetoothSocket::UnconnectedState )
+//  {
+    // try to fix connection
+//    qDebug() << "BT!: HERE I WOULD FIX THE CONNECTION!";
+//    if ( !mRepairingConnection )
+//    {
+//      mRepairingConnection = true;
+//      startUpdates();
+//    }
+//  }
+
+  QString stateToString = QMetaEnum::fromType<QBluetoothSocket::SocketState>().valueToKey( state );
+  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( stateToString ) );
 }
 
 void BluetoothPositionProvider::positionUpdateReceived()
@@ -84,10 +111,13 @@ void BluetoothPositionProvider::positionUpdateReceived()
 
     qDebug() << "NMEA:" << nmea; // TODO: remove
 
+    CoreUtils::log( "NMEA STRING", nmea );
+
     QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
 
-    qDebug() << "Parsed position: " << "la:" << data.latitude << "lo:" << data.longitude << "alt:" << data.elevation << "h/v acc:" <<
-             data.hacc << data.vacc << "speed:" << data.speed << "hdop:" << data.hdop; // TODO: remove
+    QString parsed = QStringLiteral( "Parsed position: la: %1 lo: %2 alt: %3 h/v acc: %4/%5 speed: %6 hdop: %7" ).arg( data.latitude ).arg( data.longitude ).arg( data.elevation ).arg( data.hacc ).arg( data.vacc ).arg( data.speed ).arg( data.hdop );
+
+    CoreUtils::log( "NMEA PARSED:", parsed );
 
     GeoPosition out = GeoPosition::fromQgsGpsInformation( data );
 

@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,10 +15,49 @@ import ".."
 Dialog {
   id: root
 
-  property string titleText: "Connecting to device A"
-  property string descriptionText: "Await pairing shortly"
+  property string titleText: ""
+  property string descriptionText: rootstate.state === "working" ? qsTr( "You might be asked to pair your device during this process." ) : ""
 
-  // TODO: assign AbstractPositionProvider and listen to its different states! :)
+  signal success()
+  signal failure()
+
+  Connections {
+    target: __positionKit.positionProvider
+
+    function onLostConnection()
+    {
+      rootstate.state = "fail"
+    }
+
+    function onProviderConnecting()
+    {
+      rootstate.state = "working"
+    }
+
+    function onProviderConnected()
+    {
+      rootstate.state = "success"
+    }
+  }
+
+  Timer {
+    id: closeTimer
+
+    interval: 1500
+    repeat: false
+    running: false
+    onTriggered: {
+      if ( rootstate.state === "success" )
+      {
+        root.success()
+      }
+      else
+      {
+        root.failure()
+      }
+      root.close()
+    }
+  }
 
   StateGroup {
     id: rootstate
@@ -26,24 +65,18 @@ Dialog {
     states: [
       State {
         name: "working"
-//        PropertyChanges { target: loadingSpinner; visible: true }
-//        PropertyChanges { target: resultIcon; visible: false }
         PropertyChanges { target: loadingSpinner; opacity: 1.0 }
         PropertyChanges { target: resultIcon; opacity: 0.0 }
       },
       State {
         name: "success"
-//        PropertyChanges { target: loadingSpinner; visible: false }
         PropertyChanges { target: resultIcon; source: InputStyle.yesIcon }
-//        PropertyChanges { target: resultIcon; visible: true }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }
       },
       State {
         name: "fail"
-//        PropertyChanges { target: loadingSpinner; visible: false }
         PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
-//        PropertyChanges { target: resultIcon; visible: true }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }
       }
@@ -57,6 +90,11 @@ Dialog {
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
           NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
+          ScriptAction {
+            script: {
+              closeTimer.start()
+            }
+          }
         }
       },
       Transition {
@@ -74,59 +112,38 @@ Dialog {
   }
 
   // Handle dialog buttons
-  onAccepted: {
-    // either "ok" or "retry"
-    if ( rootstate.state === "success" )
-    {
-      console.log( "Ok after success" )
-      rootstate.state = "fail"
-    }
-    else if ( rootstate.state === "fail" )
-    {
-      console.log( "Retry after failure" )
-      rootstate.state = "working"
-      root.open()
-    }
-  }
+//  onAccepted: {
+//    // either "ok" or "retry"
+//    if ( rootstate.state === "success" )
+//    {
+//      console.log( "Ok after success" )
+//      rootstate.state = "fail"
+//    }
+//    else if ( rootstate.state === "fail" )
+//    {
+//      console.log( "Retry after failure" )
+//      rootstate.state = "working"
+//      root.open()
+//    }
+//  }
 
-  onRejected: {
-    // "cancel" button
-    if ( rootstate.state === "working" )
-    {
-      // cancel connection process
-      console.log( "Cancel connection process" )
-      rootstate.state = "success"
-    }
-    else if ( rootstate.state === "fail" )
-    {
-      // not interested in trying again
-      console.log( "Cancel after failure" )
-      root.close()
-    }
-  }
+//  onRejected: {
+//    // "cancel" button
+//    if ( rootstate.state === "working" )
+//    {
+//      // cancel connection process
+//      console.log( "Cancel connection process" )
+//      rootstate.state = "success"
+//    }
+//    else if ( rootstate.state === "fail" )
+//    {
+//      // not interested in trying again
+//      console.log( "Cancel after failure" )
+//      root.close()
+//    }
+//  }
 
   modal: true
-
-  Timer {
-    property bool turn: false
-
-    running: true
-    repeat: true
-    interval: 4000
-
-    onTriggered: {
-      if ( rootstate.state === "working" )
-      {
-        if ( turn )
-          rootstate.state = "success"
-        else
-          rootstate.state = "fail"
-        turn = !turn
-      }
-      else
-        rootstate.state = "working"
-    }
-  }
 
   enter: Transition {
     NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
@@ -134,6 +151,8 @@ Dialog {
   exit: Transition {
     NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 200 }
   }
+
+  closePolicy: Popup.CloseOnEscape
 
   background: Rectangle {
     width: root.width
@@ -167,8 +186,8 @@ Dialog {
           anchors.centerIn: parent
           iconSize: width
 
+          speed: 1600
           running: rootstate.state === "working"
-//          visible: rootstate.state === "working"
         }
 
         Symbol {
@@ -178,9 +197,6 @@ Dialog {
           width: parent.height / 2
 
           anchors.centerIn: parent
-//          visible: rootstate.state !== "working"
-
-//          source: rootstate.state === "success" ? InputStyle.yesIcon : InputStyle.noIcon
           iconSize: width
         }
       }
@@ -194,7 +210,9 @@ Dialog {
         Text {
           text: root.titleText
 
-          anchors.centerIn: parent
+          anchors.fill: parent
+
+          horizontalAlignment: Text.AlignHCenter
 
           elide: Text.ElideRight
           color: InputStyle.fontColor
@@ -211,9 +229,12 @@ Dialog {
         Text {
           text: root.descriptionText
 
-          anchors.centerIn: parent
+          anchors.fill: parent
+
+          horizontalAlignment: Text.AlignHCenter
 
           elide: Text.ElideRight
+          wrapMode: Text.WordWrap
           color: InputStyle.fontColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
         }

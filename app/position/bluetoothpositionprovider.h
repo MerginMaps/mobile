@@ -15,6 +15,7 @@
 #include "qgsnmeaconnection.h"
 
 #include <QBluetoothSocket>
+#include <QBluetoothLocalDevice>
 
 /**
  * NmeaParser is a big hack how to reuse QGIS NmeaConnection function in order to (a) keep ownership of bluetooth
@@ -54,8 +55,11 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     void socketStateChanged( QBluetoothSocket::SocketState );
 
   private:
+    bool mRepairingConnection = false;
+
     QBluetoothAddress mTargetAddress;
     std::unique_ptr<QBluetoothSocket> mSocket;
+    std::unique_ptr<QBluetoothLocalDevice> mReceiverDevice;
 
     NmeaParser mNmeaParser;
 };
