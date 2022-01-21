@@ -22,6 +22,7 @@ Item {
   property bool hasDatePicker: true
 
   property date dateToSelect: new Date()
+  property var locale: Qt.locale()
 
   signal selected(date selectedDate)
   signal canceled()
@@ -161,7 +162,9 @@ Item {
           verticalAlignment: Text.AlignVCenter
 
           font.pixelSize: InputStyle.fontPixelSizeNormal
-          text: calendar.weekNames[calendar.selectedDate.getDay()].slice(0, 3) + ", " + calendar.selectedDate.getDate() + " " + calendar.months[calendar.selectedDate.getMonth()].slice(0, 3)
+          text: root.locale.dayName( calendar.selectedDate.getDay(), Locale.ShortFormat ) + ", "
+                + calendar.selectedDate.getDate() + " "
+                + root.locale.monthName( calendar.selectedDate.getMonth(), Locale.ShortFormat )
           color: "white"
           opacity: yearsList.visible ? 0.7 : 1
 
@@ -234,17 +237,6 @@ Item {
         property int startYear: 1940
         property int endYear: 2040
 
-        property var months: [
-          qsTr("January"), qsTr("February"), qsTr("March"), qsTr("April"),
-          qsTr("May"), qsTr("June"), qsTr("July"), qsTr("August"),
-          qsTr("September"), qsTr("October"), qsTr("November"), qsTr("December")
-        ]
-
-        property var weekNames: [
-          qsTr("Sunday"), qsTr("Monday"), qsTr("Tuesday"), qsTr("Wednesday"),
-          qsTr("Thursday"), qsTr("Friday"), qsTr("Saturday")
-        ]
-
         function selectDate(ddate) {
           calendar.selectedDate = ddate
         }
@@ -306,7 +298,7 @@ Item {
             Text {
               anchors.centerIn: parent
               font.pixelSize: InputStyle.fontPixelSizeNormal
-              text: calendar.months[monthGrid.month] + " " + monthGrid.year;
+              text: root.locale.standaloneMonthName( monthGrid.month, Locale.LongFormat ) + " " + monthGrid.year;
             }
 
             Image {
@@ -348,7 +340,7 @@ Item {
             Layout.preferredHeight: parent.height / 10
             Layout.maximumHeight: parent.height / 9
 
-            locale: monthGrid.locale
+            locale: root.locale
 
             delegate: Text {
               text: model.shortName
@@ -369,7 +361,7 @@ Item {
 
             spacing: 0
 
-            locale: Qt.locale()
+            locale: root.locale
 
             delegate: Rectangle {
               property bool highlighted: enabled
