@@ -51,8 +51,18 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   if ( mPositionProvider.get() && provider && mPositionProvider->providerId() == provider->providerId() )
     return;
 
+  AbstractPositionProvider *lastProvider = nullptr;
+
   if ( mPositionProvider )
+  {
     mPositionProvider->disconnect();
+    mPositionProvider->closeProvider();
+    lastProvider = mPositionProvider.release();
+  }
+
+  //
+  // NOTE: THIS IS MEMORY LEAK --> TODO: EVENTUALLY REMOVE LAST PROVIDER AFTER IT IS UNCONNECTED
+  //
 
   mPositionProvider.reset( provider );
 

@@ -19,6 +19,9 @@ import "../components" as Components
 Page {
   id: root
 
+  property string requestedDeviceName
+  property string requestedDeviceAddress
+
   signal close
   signal initiatedConnectionTo( string deviceAddress, string deviceName )
 
@@ -164,10 +167,15 @@ Page {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          btModel.discovering = false
           __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress )
-          initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
-          close()
+          root.requestedDeviceName = model.DeviceName
+          root.requestedDeviceAddress = model.DeviceAddress
+          connectionDialog.open()
+
+//          btModel.discovering = false
+
+//          initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
+//          close()
         }
       }
 
@@ -216,6 +224,28 @@ Page {
           elide: Text.ElideRight
         }
       }
+    }
+  }
+
+  Components.BluetoothConnectionDialog {
+    id: connectionDialog
+
+    width: root.width * 0.8
+    height: root.height / 2
+
+    anchors.centerIn: parent
+
+    titleText: qsTr( "Connecting to " ) + root.requestedDeviceName
+
+    onSuccess: {
+      btModel.discovering = false
+      root.initiatedConnectionTo( root.requestedDeviceAddress, root.requestedDeviceName )
+//      connectionDialog.close()
+      root.close()
+    }
+
+    onFailure: {
+      // keep discovering
     }
   }
 }

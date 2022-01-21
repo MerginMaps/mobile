@@ -29,7 +29,11 @@ Page {
     if ( __appSettings.activePositionProviderId === id )
       return // do not construct the same provider again
 
-    connectionDialog.open()
+    if ( type === "external" )
+    {
+      connectionToSavedProviderDialog.open()
+    }
+
     __positionKit.positionProvider = __positionKit.constructProvider( type, id )
   }
 
@@ -257,14 +261,29 @@ Page {
     }
   }
 
-  Components.BluetoothConnectionDialog {
-    id: connectionDialog
+  Loader {
+    id: dialogLoader
 
-    width: root.width * 0.8
-    height: root.height / 2
+    sourceComponent: connectionToSavedProviderDialogBlueprint
+    active: false
+    asynchronous: true
 
-    anchors.centerIn: parent
+    onLoaded: item.open()
   }
+
+  Component {
+    id: connectionToSavedProviderDialogBlueprint
+
+    Components.BluetoothConnectionDialog {
+      id: connectionToSavedProviderDialog
+
+      width: root.width * 0.8
+      height: root.height / 2
+
+      anchors.centerIn: parent
+    }
+  }
+
 
   MessageDialog {
     id: removeDialog
