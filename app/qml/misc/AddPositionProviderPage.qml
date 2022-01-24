@@ -64,8 +64,7 @@ Page {
 
     Component.onCompleted: {
       // Is bluetooth turned on?
-      // For iOS this is working out of the box, but for Android we need to
-      // opt to enable Bluetooth and listen on response in the connections component.
+      // For Android we need to opt to enable Bluetooth and listen on response in the connections component.
       if ( __inputUtils.isBluetoothTurnedOn() )
       {
         btModel.discovering = true
@@ -167,15 +166,10 @@ Page {
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress )
+          __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress, model.DeviceName )
           root.requestedDeviceName = model.DeviceName
           root.requestedDeviceAddress = model.DeviceAddress
           connectionDialog.open()
-
-//          btModel.discovering = false
-
-//          initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
-//          close()
         }
       }
 
@@ -235,17 +229,15 @@ Page {
 
     anchors.centerIn: parent
 
-    titleText: qsTr( "Connecting to " ) + root.requestedDeviceName
-
     onSuccess: {
       btModel.discovering = false
       root.initiatedConnectionTo( root.requestedDeviceAddress, root.requestedDeviceName )
-//      connectionDialog.close()
       root.close()
     }
 
     onFailure: {
-      // keep discovering
+      // keep discovering, revert position provider back to internal provider
+      __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
     }
   }
 }

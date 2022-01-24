@@ -12,10 +12,8 @@
 
 #include "qgis.h"
 
-#include "qdebug.h" //TODO: remove
-
 InternalPositionProvider::InternalPositionProvider( QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "devicegps" ), parent )
+  : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), QStringLiteral( "Internal GPS receiver" ), parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
 
@@ -29,14 +27,10 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
              [ = ]( QGeoPositionInfoSource::Error positioningError )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
-      qDebug() << positioningError << " <- has occured during initialization of internal GPS position provider!"; // TODO: remove
-      emit lostConnection();
     } );
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::updateTimeout, this, [ = ]()
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving position data" ) );
-      qDebug() << " Internal GPS (position) stopped receiving data!"; // TODO: remove
-      emit lostConnection();
     } );
 
     mPositionSourceValid = true;
@@ -62,14 +56,10 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
              [ = ]( QGeoSatelliteInfoSource::Error satelliteError )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (satellites source), code: %1" ).arg( satelliteError ) );
-      qDebug() << satelliteError << " <- has occured during initialization of internal GPS satellites provider!"; // TODO: remove
-      emit lostConnection();
     } );
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::requestTimeout, this, [ = ]()
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving satellites data" ) );
-      qDebug() << " Internal GPS (satellite) stopped receiving data!"; // TODO: remove
-      emit lostConnection();
     } );
 
     mSatelliteSourceValid = true;
@@ -121,7 +111,6 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   bool hasPosition = position.coordinate().isValid();
   if ( !hasPosition )
   {
-    emit lostConnection();
     return;
   }
 
