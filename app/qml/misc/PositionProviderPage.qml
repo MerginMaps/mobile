@@ -26,6 +26,16 @@ Page {
 
   function constructProvider( type, id, name )
   {
+    if ( type === "external" )
+    {
+      // Is bluetooth turned on?
+      if ( !__inputUtils.isBluetoothTurnedOn() )
+      {
+        __inputUtils.turnBluetoothOn()
+        return
+      }
+    }
+
     if ( __appSettings.activePositionProviderId === id )
     {
       // if provider has error, try to reconnect on click
@@ -35,16 +45,6 @@ Page {
       }
 
       return // do not construct the same provider again
-    }
-
-    if ( type === "external" )
-    {
-      // Is bluetooth turned on?
-      if ( !__inputUtils.isBluetoothTurnedOn() )
-      {
-        __inputUtils.turnBluetoothOn()
-        return
-      }
     }
 
      __positionKit.positionProvider = __positionKit.constructProvider( type, id, name )
