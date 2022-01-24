@@ -15,7 +15,7 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
-  TEST_API_USERNAME: test_inputapp2
+  TEST_API_USERNAME: test_inputapp
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.13.0
