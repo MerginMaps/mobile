@@ -36,15 +36,23 @@ class AbstractPositionProvider : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY( QString statusString READ statusString NOTIFY statusStringChanged )
+    Q_PROPERTY( bool hasError READ hasError NOTIFY hasErrorChanged )
+
   public:
-    AbstractPositionProvider( const QString &id, QObject *object = nullptr );
+    AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object = nullptr );
     virtual ~AbstractPositionProvider();
 
     virtual void startUpdates() = 0;
     virtual void stopUpdates() = 0;
     virtual void closeProvider() = 0;
+    Q_INVOKABLE virtual void reconnect();
 
+    QString statusString() const;
+    bool hasError() const;
+    Q_INVOKABLE QString name() const;
     Q_INVOKABLE QString providerId() const;
+    Q_INVOKABLE QString providerType() const;
 
   signals:
     void positionChanged( const GeoPosition &position );
@@ -52,8 +60,18 @@ class AbstractPositionProvider : public QObject
     void providerConnected();
     void lostConnection();
 
+    void statusStringChanged( const QString &status );
+    void hasErrorChanged( bool err );
+
   protected:
+    void setStatusString( const QString &newStatus );
+    void setHasError( bool newError );
+
     QString mProviderId;
+    QString mProviderType;
+    QString mProviderName;
+    QString mStatusString;
+    bool mHasError = false;
 };
 
 

@@ -84,11 +84,11 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   parsePositionUpdate( GeoPosition() );
 }
 
-AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id )
+AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
   if ( type == QStringLiteral( "external" ) )
   {
-    AbstractPositionProvider *provider = new BluetoothPositionProvider( id );
+    AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -137,7 +137,18 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   }
   else
   {
-    return constructProvider( QStringLiteral( "external" ), providerId );
+    // find name of the active provider
+    QString providerName;
+    QVariantList providers = appsettings->savedPositionProviders();
+    for ( const auto &provider : providers )
+    {
+      if ( provider.toList()[1] == providerId )
+      {
+        providerName = provider.toList()[0].toString();
+      }
+    }
+
+    return constructProvider( QStringLiteral( "external" ), providerId, providerName );
   }
 }
 

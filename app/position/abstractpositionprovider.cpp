@@ -8,18 +8,70 @@
  ***************************************************************************/
 
 #include "abstractpositionprovider.h"
+#include "coreutils.h"
 
-AbstractPositionProvider::AbstractPositionProvider( const QString &id, QObject *object )
+AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object )
   : QObject( object )
   , mProviderId( id )
+  , mProviderType( type )
+  , mProviderName( name )
 {
+}
+
+void AbstractPositionProvider::reconnect()
+{
+  CoreUtils::log( QStringLiteral( "PositionProvider" ), QStringLiteral( "Reconnecting provider" ) + mProviderId );
+  stopUpdates();
+  startUpdates();
 }
 
 AbstractPositionProvider::~AbstractPositionProvider() = default;
 
+QString AbstractPositionProvider::name() const
+{
+  return mProviderName;
+}
+
+QString AbstractPositionProvider::statusString() const
+{
+  return mStatusString;
+}
+
+bool AbstractPositionProvider::hasError() const
+{
+  return mHasError;
+}
+
 QString AbstractPositionProvider::providerId() const
 {
   return mProviderId;
+}
+
+QString AbstractPositionProvider::providerType() const
+{
+  return mProviderType;
+}
+
+void AbstractPositionProvider::setStatusString( const QString &newStatus )
+{
+  if ( mStatusString == newStatus )
+  {
+    return;
+  }
+
+  mStatusString = newStatus;
+  emit statusStringChanged( mStatusString );
+}
+
+void AbstractPositionProvider::setHasError( bool newError )
+{
+  if ( mHasError == newError )
+  {
+    return;
+  }
+
+  mHasError = newError;
+  emit hasErrorChanged( mHasError );
 };
 
 GeoPosition::GeoPosition() : QgsGpsInformation()

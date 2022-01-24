@@ -24,17 +24,36 @@ Page {
 
   signal close
 
-  function constructProvider( type, id )
+  function constructProvider( type, id, name )
   {
     if ( __appSettings.activePositionProviderId === id )
+    {
+      // if provider has error, try to reconnect on click
+      if ( __positionKit.positionProvider.hasError )
+      {
+        __positionKit.positionProvider.reconnect()
+      }
+
       return // do not construct the same provider again
+    }
 
     if ( type === "external" )
     {
-      connectionToSavedProviderDialog.open()
+      // Is bluetooth turned on?
+      if ( !__inputUtils.isBluetoothTurnedOn() )
+      {
+        __inputUtils.turnBluetoothOn()
+        return
+      }
     }
 
-    __positionKit.positionProvider = __positionKit.constructProvider( type, id )
+     __positionKit.positionProvider = __positionKit.constructProvider( type, id, name )
+
+    if ( type === "external" )
+    {
+      dialogLoader.active = true
+      dialogLoader.focus = true
+    }
   }
 
   header: Components.PanelHeader {
@@ -84,12 +103,17 @@ Page {
     delegate: Rectangle {
       id: providerDelegate
 
+      property bool isActiveProvider: __appSettings.activePositionProviderId === model.ProviderId
+
       width: ListView.view.width
+      // we give more height to active external receiver because of status text
+//      height: isActiveProvider ? InputStyle.rowHeight * 2 : InputStyle.rowHeight
+//      height: model.ProviderType === "external" && isActiveProvider ? InputStyle.rowHeight * 2 : InputStyle.rowHeight
       height: InputStyle.rowHeight
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.constructProvider( model.ProviderType, model.ProviderId )
+        onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
       }
 
       Row {
@@ -108,7 +132,7 @@ Page {
           height: parent.height
 
           checkable: false
-          checked: __appSettings.activePositionProviderId === model.ProviderId
+          checked: providerDelegate.isActiveProvider
 
           indicator: Rectangle {
             implicitWidth: isActiveButton.height / 2.3
@@ -129,14 +153,14 @@ Page {
 
               radius: InputStyle.circleRadius
               color: InputStyle.darkGreen
-              visible: __appSettings.activePositionProviderId === model.ProviderId
+              visible: providerDelegate.isActiveProvider
             }
           }
 
           // We need to duplicate mouse area here in order to handle clicks from RadioButton
           MouseArea {
             anchors.fill: parent
-            onClicked: root.constructProvider( model.ProviderType, model.ProviderId )
+            onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
           }
         }
 
@@ -148,7 +172,7 @@ Page {
             id: deviceName
 
             width: parent.width
-            height: parent.height * 0.5
+            height: parent.height * 0.4
 
             text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
 
@@ -161,9 +185,23 @@ Page {
             id: deviceSecondaryText
 
             width: parent.width
-            height: parent.height * 0.5
+            height: parent.height * 0.3
 
             text: model.ProviderDescription
+
+            elide: Text.ElideRight
+            color: InputStyle.secondaryFontColor
+            font.pixelSize: InputStyle.fontPixelSizeSmall
+          }
+
+          Text {
+            id: deviceStatusText
+
+            width: parent.width
+            height: parent.height * 0.3
+
+            visible: providerDelegate.isActiveProvider
+            text: __positionKit.positionProvider ? __positionKit.positionProvider.statusString : ""
 
             elide: Text.ElideRight
             color: InputStyle.secondaryFontColor
@@ -267,6 +305,7 @@ Page {
     sourceComponent: connectionToSavedProviderDialogBlueprint
     active: false
     asynchronous: true
+    anchors.fill: parent
 
     onLoaded: item.open()
   }
@@ -281,9 +320,10 @@ Page {
       height: root.height / 2
 
       anchors.centerIn: parent
+
+      onClosed: dialogLoader.active = false
     }
   }
-
 
   MessageDialog {
     id: removeDialog
@@ -310,7 +350,7 @@ Page {
         if ( __appSettings.activePositionProviderId == relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
-          root.constructProvider( "internal", "devicegps" )
+          root.constructProvider( "internal", "devicegps", qsTr( "Internal GPS receiver" ) )
         }
 
         providersModel.removeProvider( relatedProviderId )

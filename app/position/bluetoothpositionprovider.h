@@ -43,12 +43,13 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     Q_OBJECT
 
   public:
-    BluetoothPositionProvider( const QString &addr, QObject *parent = nullptr );
+    BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent = nullptr );
     virtual ~BluetoothPositionProvider();
 
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
     virtual void closeProvider() override;
+    virtual void reconnect() override;
 
   public slots:
     void positionUpdateReceived();
@@ -56,6 +57,7 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 
   private:
     bool mRepairingConnection = false;
+    bool mAlreadyTriedToRepairConnection = false;
 
     QBluetoothAddress mTargetAddress;
     std::unique_ptr<QBluetoothSocket> mSocket;

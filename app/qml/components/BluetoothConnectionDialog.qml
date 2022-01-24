@@ -15,8 +15,39 @@ import ".."
 Dialog {
   id: root
 
-  property string titleText: ""
-  property string descriptionText: rootstate.state === "working" ? qsTr( "You might be asked to pair your device during this process." ) : ""
+  property string titleText: {
+    if ( rootstate.state === "working")
+    {
+      return qsTr( "Connecting to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
+    }
+    else if ( rootstate.state === "success" )
+    {
+      return qsTr( "Connected" )
+    }
+    else
+    {
+      return qsTr( "Failed to connect to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
+    }
+  }
+
+  property string descriptionText: {
+    if ( rootstate.state === "working" )
+    {
+      return qsTr( "You might be asked to pair your device during this process." )
+    }
+    else if ( rootstate.state === "success" )
+    {
+      return ""
+    }
+    else
+    {
+      return qsTr( "We were not able to connect to the specified device.
+        Please make sure your device is powered on and can be connected to.%1Learn more %2here%3." )
+      .arg("\n")
+      .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
+      .arg("</a>")
+    }
+  }
 
   signal success()
   signal failure()
@@ -85,7 +116,7 @@ Dialog {
     transitions: [
       Transition {
         from: "working"
-        to: "*"
+        to: "success"
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
@@ -95,6 +126,15 @@ Dialog {
               closeTimer.start()
             }
           }
+        }
+      },
+      Transition {
+        from: "working"
+        to: "fail"
+
+        SequentialAnimation {
+          NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
+          NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
         }
       },
       Transition {
@@ -110,38 +150,6 @@ Dialog {
 
     state: "working"
   }
-
-  // Handle dialog buttons
-//  onAccepted: {
-//    // either "ok" or "retry"
-//    if ( rootstate.state === "success" )
-//    {
-//      console.log( "Ok after success" )
-//      rootstate.state = "fail"
-//    }
-//    else if ( rootstate.state === "fail" )
-//    {
-//      console.log( "Retry after failure" )
-//      rootstate.state = "working"
-//      root.open()
-//    }
-//  }
-
-//  onRejected: {
-//    // "cancel" button
-//    if ( rootstate.state === "working" )
-//    {
-//      // cancel connection process
-//      console.log( "Cancel connection process" )
-//      rootstate.state = "success"
-//    }
-//    else if ( rootstate.state === "fail" )
-//    {
-//      // not interested in trying again
-//      console.log( "Cancel after failure" )
-//      root.close()
-//    }
-//  }
 
   modal: true
 
@@ -169,12 +177,13 @@ Dialog {
 
     ColumnLayout {
       anchors.fill: parent
+      spacing: 5 * __dp
 
       Item {
         id: statusIconContainer
 
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 3 / 6
+        Layout.preferredHeight: parent.height * 2 / 6
 
         // either loading spinner when dialog is in working state or success / failure
         LoadingSpinner {
@@ -224,26 +233,41 @@ Dialog {
         id: descriptionContainer
 
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 1 / 6
+        Layout.preferredHeight: parent.height * 2 / 6
 
         Text {
           text: root.descriptionText
 
           anchors.fill: parent
-
           horizontalAlignment: Text.AlignHCenter
 
           elide: Text.ElideRight
           wrapMode: Text.WordWrap
+          textFormat: Text.RichText
           color: InputStyle.fontColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
+
+          onLinkActivated: Qt.openUrlExternally( link )
         }
       }
 
       Item {
-        id: buttonsContainer
+        id: closeButtonContainer
+
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height * 1 / 6
+
+        DelegateButton {
+          width: parent.width
+          height: InputStyle.rowHeight > parent.height ? parent.height : InputStyle.rowHeight
+          text: qsTr( "Close" )
+          visible: rootstate.state === "fail"
+
+          onClicked: {
+            root.failure()
+            root.close()
+          }
+        }
       }
     }
   }

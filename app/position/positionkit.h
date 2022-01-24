@@ -103,7 +103,7 @@ class PositionKit : public QObject
 
     double hdop() const;
 
-    Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &metadata = QString() );
+    Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
   signals:

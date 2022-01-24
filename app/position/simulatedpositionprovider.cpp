@@ -10,7 +10,7 @@
 #include "simulatedpositionprovider.h"
 
 SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "simulated" ), parent )
+  : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), parent )
   , mTimer( new QTimer() )
   , mLongitude( longitude )
   , mLatitude( latitude )

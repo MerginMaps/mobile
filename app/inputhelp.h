@@ -34,6 +34,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToDownloadProjectLink READ howToDownloadProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToSetupProj READ howToSetupProj NOTIFY linkChanged )
     Q_PROPERTY( QString gpsAccuracyHelpLink READ gpsAccuracyHelpLink NOTIFY linkChanged )
+    Q_PROPERTY( QString howToConnectGPSLink READ howToConnectGPSLink NOTIFY linkChanged )
     Q_PROPERTY( QString merginTermsLink READ merginTermsLink )
 
     Q_PROPERTY( bool submitReportPending READ submitReportPending NOTIFY submitReportPendingChanged )
@@ -62,6 +63,7 @@ class InputHelp: public QObject
     QString howToDownloadProjectLink() const;
     QString howToSetupProj() const;
     QString gpsAccuracyHelpLink() const;
+    QString howToConnectGPSLink() const;
     QString merginTermsLink() const;
 
     bool submitReportPending() const;

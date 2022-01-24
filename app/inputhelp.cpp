@@ -116,6 +116,11 @@ QString InputHelp::gpsAccuracyHelpLink() const
   return helpRoot + "/fieldwork/gps_accuracy/" + utmTagHelp;
 }
 
+QString InputHelp::howToConnectGPSLink() const
+{
+  return helpRoot + "/howto/external_gps/" + utmTagHelp;
+}
+
 QString InputHelp::merginTermsLink() const
 {
   return MerginApi::defaultApiRoot() + "assets/tos.html" + utmTagOther;
