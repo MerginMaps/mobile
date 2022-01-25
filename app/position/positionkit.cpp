@@ -133,11 +133,20 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
     // find name of the active provider
     QString providerName;
     QVariantList providers = appsettings->savedPositionProviders();
+
     for ( const auto &provider : providers )
     {
-      if ( provider.toList()[1] == providerId )
+      QVariantList providerData = provider.toList();
+
+      if ( providerData.length() < 2 )
       {
-        providerName = provider.toList()[0].toString();
+        CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Found provider with insufficient data" ) );
+        continue;
+      }
+
+      if ( providerData[1] == providerId )
+      {
+        providerName = providerData[0].toString();
       }
     }
 

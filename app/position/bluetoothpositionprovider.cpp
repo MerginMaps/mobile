@@ -54,13 +54,11 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
         mRepairingConnection = false;
       } );
 
-      setHasError( false );
-      setStatusString( QStringLiteral( "Reconnecting the receiver" ) );
+      setStatus( tr( "Reconnecting the receiver" ), StatusLevel::Info );
     }
     else
     {
-      setHasError( true );
-      setStatusString( QStringLiteral( "Lost connection, click to reconnect" ) );
+      setStatus( tr( "Lost connection, click to reconnect" ), StatusLevel::Error );
       emit lostConnection();
     }
   } );
@@ -92,7 +90,7 @@ void BluetoothPositionProvider::closeProvider()
 
 void BluetoothPositionProvider::reconnect()
 {
-  setStatusString( QStringLiteral( "Reconnecting" ) );
+  setStatus( tr( "Reconnecting" ), StatusLevel::Info );
   AbstractPositionProvider::reconnect();
 }
 
@@ -100,22 +98,19 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
 {
   if ( state == QBluetoothSocket::ConnectingState || state == QBluetoothSocket::ServiceLookupState )
   {
-    setHasError( false );
-    setStatusString( QStringLiteral( "Connecting to the receiver" ) );
+    setStatus( tr( "Connecting the receiver" ), StatusLevel::Info );
     emit providerConnecting();
   }
   else if ( state == QBluetoothSocket::ConnectedState )
   {
-    setHasError( false );
-    setStatusString( QStringLiteral( "Connected" ) );
+    setStatus( tr( "Connected" ), StatusLevel::Info );
     emit providerConnected();
   }
   else if ( state == QBluetoothSocket::UnconnectedState )
   {
     if ( !mRepairingConnection )
     {
-      setHasError( true );
-      setStatusString( QStringLiteral( "Lost connection, click to reconnect" ) );
+      setStatus( tr( "Lost connection, click to reconnect" ), StatusLevel::Error );
       emit lostConnection();
     }
   }
@@ -130,8 +125,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
   {
     // if by any chance we showed wrong message in the status like "lost connection", fix it here
     // we know the connection is working because we just received data from the device
-    setStatusString( QStringLiteral( "Connected" ) );
-    setHasError( false );
+    setStatus( tr( "Connected" ), StatusLevel::Info );
 
     QByteArray rawNmea = mSocket->readAll();
     QString nmea( rawNmea );

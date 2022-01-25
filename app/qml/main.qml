@@ -521,7 +521,7 @@ ApplicationWindow {
       target: __positionKit.positionProvider
 
       function onLostConnection() {
-        gpsNotificationBanner.pushNotification( qsTr( "Connection to GPS receiver was lost" ) )
+        gpsNotificationBanner.pushNotification( qsTr( "Lost connection to GPS receiver." ) )
       }
 
       function onProviderConnected() {

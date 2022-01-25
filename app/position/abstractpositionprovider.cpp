@@ -20,7 +20,7 @@ AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QSt
 
 void AbstractPositionProvider::reconnect()
 {
-  CoreUtils::log( QStringLiteral( "PositionProvider" ), QStringLiteral( "Reconnecting provider" ) + mProviderId );
+  CoreUtils::log( QStringLiteral( "PositionProvider" ), QStringLiteral( "Reconnecting provider " ) + mProviderId );
   stopUpdates();
   startUpdates();
 }
@@ -32,14 +32,14 @@ QString AbstractPositionProvider::name() const
   return mProviderName;
 }
 
-QString AbstractPositionProvider::statusString() const
+QString AbstractPositionProvider::statusMessage() const
 {
-  return mStatusString;
+  return mStatusMessage;
 }
 
-bool AbstractPositionProvider::hasError() const
+AbstractPositionProvider::StatusLevel AbstractPositionProvider::statusLevel() const
 {
-  return mHasError;
+  return mStatusLevel;
 }
 
 QString AbstractPositionProvider::id() const
@@ -52,27 +52,20 @@ QString AbstractPositionProvider::type() const
   return mProviderType;
 }
 
-void AbstractPositionProvider::setStatusString( const QString &newStatus )
+void AbstractPositionProvider::setStatus( const QString &message, StatusLevel level )
 {
-  if ( mStatusString == newStatus )
+  if ( mStatusMessage != message )
   {
-    return;
+    mStatusMessage = message;
+    emit statusMessageChanged( mStatusMessage );
   }
 
-  mStatusString = newStatus;
-  emit statusStringChanged( mStatusString );
+  if ( mStatusLevel != level )
+  {
+    mStatusLevel = level;
+    emit statusLevelChanged( mStatusLevel );
+  }
 }
-
-void AbstractPositionProvider::setHasError( bool newError )
-{
-  if ( mHasError == newError )
-  {
-    return;
-  }
-
-  mHasError = newError;
-  emit hasErrorChanged( mHasError );
-};
 
 GeoPosition::GeoPosition() : QgsGpsInformation()
 {

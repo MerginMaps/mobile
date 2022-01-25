@@ -36,10 +36,18 @@ class AbstractPositionProvider : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QString statusString READ statusString NOTIFY statusStringChanged )
-    Q_PROPERTY( bool hasError READ hasError NOTIFY hasErrorChanged )
+    Q_PROPERTY( QString statusMessage READ statusMessage NOTIFY statusMessageChanged )
+    Q_PROPERTY( StatusLevel statusLevel READ statusLevel NOTIFY statusLevelChanged )
 
   public:
+
+    enum StatusLevel
+    {
+      Info = 0, //!< nothing serious, status like "connected"
+      Error     //!< there is a serious error in provider like "lost connection"
+    };
+    Q_ENUMS( StatusLevel )
+
     AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object = nullptr );
     virtual ~AbstractPositionProvider();
 
@@ -48,8 +56,8 @@ class AbstractPositionProvider : public QObject
     virtual void closeProvider() = 0;
     Q_INVOKABLE virtual void reconnect();
 
-    QString statusString() const;
-    bool hasError() const;
+    QString statusMessage() const;
+    StatusLevel statusLevel() const;
     Q_INVOKABLE QString id() const;
     Q_INVOKABLE QString name() const;
     Q_INVOKABLE QString type() const;
@@ -60,18 +68,28 @@ class AbstractPositionProvider : public QObject
     void providerConnected();
     void lostConnection();
 
-    void statusStringChanged( const QString &status );
-    void hasErrorChanged( bool err );
+    void statusMessageChanged( const QString &status );
+    void statusLevelChanged( StatusLevel level );
 
   protected:
-    void setStatusString( const QString &newStatus );
-    void setHasError( bool newError );
+    void setStatus( const QString &message, StatusLevel level = StatusLevel::Info );
 
+    // ProviderId - unique id of this provider.
+    // For external receiver it holds mac address of a bluetooth device.
+    // Internal providers (internal gps and simulated provider) has constant values of "devicegps" and "simulated"
     QString mProviderId;
+
+    // ProviderType - whether it is an "internal" or "external" provider
     QString mProviderType;
+
+    // ProviderName - name of the provider.
+    // External receiver - name of a bluetooth device
+    // Internal providers has constant values of "Internal GPS receiver" and "Simulated provider"
     QString mProviderName;
-    QString mStatusString;
-    bool mHasError = false;
+
+    // Status of this provider, "connected", "failure",..
+    QString mStatusMessage;
+    StatusLevel mStatusLevel;
 };
 
 
