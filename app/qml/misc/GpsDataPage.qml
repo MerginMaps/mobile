@@ -87,7 +87,7 @@ Page {
         titleText: qsTr( "Longitude" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+            return qsTr( "No data from GPS" ) // if you do not have position yet
           }
           root.coordinatesInDegrees.split(", ")[0]
         }
@@ -101,7 +101,7 @@ Page {
         titleText: qsTr( "Latitude" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+            return qsTr( "No data from GPS" ) // if you do not have position yet
           }
           root.coordinatesInDegrees.split(", ")[1]
         }
@@ -115,7 +115,7 @@ Page {
         titleText: qsTr( "X" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
+            return qsTr( "No data from GPS" ) // if you do not have projected position yet
           }
           __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
         }
@@ -129,7 +129,7 @@ Page {
         titleText: qsTr( "Y" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have projected position yet
+            return qsTr( "No data from GPS" ) // if you do not have projected position yet
           }
           __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
         }
@@ -143,7 +143,7 @@ Page {
         titleText: qsTr( "Horizontal accuracy" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+            return qsTr( "No data from GPS" ) // if you do not have position yet
           }
 
           __positionKit.horizontalAccuracy < 0 ? qsTr( "N/A" ) : ( __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m" )
@@ -158,7 +158,7 @@ Page {
         titleText: qsTr( "Vertical accuracy" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+            return qsTr( "No data from GPS" ) // if you do not have position yet
           }
 
           __positionKit.verticalAccuracy < 0 ? qsTr( "N/A" ) : __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
@@ -175,7 +175,7 @@ Page {
         titleText: qsTr( "Altitude" )
         text: {
           if ( !__positionKit.hasPosition ) {
-            return qsTr( "Loading data from GPS" ) // if you do not have position yet
+            return qsTr( "No data from GPS" ) // if you do not have position yet
           }
           __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
         }
@@ -192,7 +192,7 @@ Page {
         text: {
           if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
           {
-            return qsTr( "Loading data from GPS" )
+            return qsTr( "No data from GPS" )
           }
 
           __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
@@ -207,7 +207,7 @@ Page {
         Layout.column: 0
 
         titleText: qsTr( "Speed" )
-        text: __positionKit.speed < 0 ? qsTr( "Loading data from GPS" ) : __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
+        text: __positionKit.speed < 0 ? qsTr( "No data from GPS" ) : __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
       }
 
       TextRowWithTitle {
@@ -218,7 +218,7 @@ Page {
         Layout.column: 0
 
         titleText: qsTr( "Last fix" )
-        text: __positionKit.lastRead ? __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) : qsTr( "Date not available" )
+        text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "Date not available" )
       }
     }
   }

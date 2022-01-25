@@ -45,6 +45,8 @@ void SimulatedPositionProvider::closeProvider()
 
 void SimulatedPositionProvider::generateNextPosition()
 {
+  emit providerConnected();
+
   if ( mFlightRadius <= 0 )
     generateConstantPosition();
   else

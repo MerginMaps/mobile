@@ -440,7 +440,7 @@ int main( int argc, char *argv[] )
   PositionKit pk;
   QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
   {
-    as.setActivePositionProviderId( provider->providerId() );
+    as.setActivePositionProviderId( provider->id() );
   } );
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
 

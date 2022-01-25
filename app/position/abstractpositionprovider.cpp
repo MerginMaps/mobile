@@ -42,12 +42,12 @@ bool AbstractPositionProvider::hasError() const
   return mHasError;
 }
 
-QString AbstractPositionProvider::providerId() const
+QString AbstractPositionProvider::id() const
 {
   return mProviderId;
 }
 
-QString AbstractPositionProvider::providerType() const
+QString AbstractPositionProvider::type() const
 {
   return mProviderType;
 }
@@ -93,21 +93,70 @@ GeoPosition::GeoPosition() : QgsGpsInformation()
 GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
 {
   GeoPosition out;
-  out.latitude = other.latitude;
-  out.longitude = other.longitude;
-  out.elevation = other.elevation;
+
+  // Copy all data from QgsGpsInformation into GeoPosition.
+  // Some members of QgsGpsInformation have default value other than those in our GeoPosition
+  // for such
+
+  if ( !qgsDoubleNear( other.latitude, 0 ) )
+  {
+    out.latitude = other.latitude;
+  }
+
+  if ( !qgsDoubleNear( other.longitude, 0 ) )
+  {
+    out.longitude = other.longitude;
+  }
+
+  if ( !qgsDoubleNear( other.elevation, 0 ) )
+  {
+    out.elevation = other.elevation;
+  }
+
+  if ( !std::isnan( other.direction ) )
+  {
+    out.direction = other.direction;
+  }
+
+  if ( !std::isnan( other.hacc ) )
+  {
+    out.hacc = other.hacc;
+  }
+
+  if ( !std::isnan( other.vacc ) )
+  {
+    out.vacc = other.vacc;
+  }
+
+  if ( !std::isnan( other.hvacc ) )
+  {
+    out.hvacc = other.hvacc;
+  }
+
+  if ( !qgsDoubleNear( other.speed, 0 ) )
+  {
+    out.speed = other.speed;
+  }
+
+  if ( !qgsDoubleNear( other.hdop, 0 ) )
+  {
+    out.hdop = other.hdop;
+  }
+
+  if ( !qgsDoubleNear( other.pdop, 0 ) )
+  {
+    out.pdop = other.pdop;
+  }
+
+  if ( !qgsDoubleNear( other.vdop, 0 ) )
+  {
+    out.vdop = other.vdop;
+  }
+
   out.elevation_diff = other.elevation_diff;
-  out.speed = other.speed;
-  out.direction = other.direction;
   out.satellitesVisible = other.satellitesInView.count();
   out.satellitesInView = other.satellitesInView;
   out.satellitesUsed = other.satellitesUsed;
-  out.pdop = other.pdop;
-  out.hdop = other.hdop;
-  out.vdop = other.vdop;
-  out.hacc = other.hacc;
-  out.vacc = other.vacc;
-  out.hvacc = other.hvacc;
   out.utcDateTime = other.utcDateTime;
   out.fixMode = other.fixMode;
   out.fixType = other.fixType;

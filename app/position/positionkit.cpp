@@ -48,21 +48,14 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   if ( mPositionProvider.get() == provider )
     return;
 
-  if ( mPositionProvider.get() && provider && mPositionProvider->providerId() == provider->providerId() )
+  if ( mPositionProvider.get() && provider && mPositionProvider->id() == provider->id() )
     return;
-
-  AbstractPositionProvider *lastProvider = nullptr;
 
   if ( mPositionProvider )
   {
     mPositionProvider->disconnect();
     mPositionProvider->closeProvider();
-    lastProvider = mPositionProvider.release();
   }
-
-  //
-  // NOTE: THIS IS MEMORY LEAK --> TODO: EVENTUALLY REMOVE LAST PROVIDER AFTER IT IS UNCONNECTED
-  //
 
   mPositionProvider.reset( provider );
 
@@ -71,7 +64,7 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
     connect( mPositionProvider.get(), &AbstractPositionProvider::lostConnection, this, &PositionKit::lostConnection );
 
-    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->providerId() ) );
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->id() ) );
   }
   else // passed nullptr
   {

@@ -50,9 +50,9 @@ class AbstractPositionProvider : public QObject
 
     QString statusString() const;
     bool hasError() const;
+    Q_INVOKABLE QString id() const;
     Q_INVOKABLE QString name() const;
-    Q_INVOKABLE QString providerId() const;
-    Q_INVOKABLE QString providerType() const;
+    Q_INVOKABLE QString type() const;
 
   signals:
     void positionChanged( const GeoPosition &position );

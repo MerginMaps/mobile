@@ -222,6 +222,17 @@ ApplicationWindow {
       }
     }
 
+    NotificationBanner {
+      id: gpsNotificationBanner
+
+      width: parent.width - gpsNotificationBanner.anchors.margins * 2
+      height: InputStyle.rowHeight * 2
+
+      onDetailsClicked: {
+        settingsPanel.open( "gps" )
+      }
+    }
+
     SettingsPanel {
       id: settingsPanel
 
@@ -503,6 +514,22 @@ ApplicationWindow {
       onProjectReloaded: map.clear()
       onProjectWillBeReloaded: {
         formsStackManager.reload()
+      }
+    }
+
+    Connections {
+      target: __positionKit.positionProvider
+
+      function onLostConnection() {
+        gpsNotificationBanner.pushNotification( qsTr( "Connection to GPS receiver was lost" ) )
+      }
+
+      function onProviderConnected() {
+        gpsNotificationBanner.reset()
+      }
+
+      function onProviderConnecting() {
+        gpsNotificationBanner.reset()
       }
     }
 

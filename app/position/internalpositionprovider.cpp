@@ -34,6 +34,7 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     } );
 
     mPositionSourceValid = true;
+    emit providerConnected();
   }
   else
   {
@@ -108,6 +109,10 @@ void InternalPositionProvider::closeProvider()
 
 void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &position )
 {
+  // if by any chance we are in wrong state (QML thinking that provider is not connected)
+  // emit connected signal here to know that the connection is OK
+  emit providerConnected();
+
   bool hasPosition = position.coordinate().isValid();
   if ( !hasPosition )
   {

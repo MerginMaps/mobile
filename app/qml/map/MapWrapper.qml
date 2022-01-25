@@ -71,7 +71,7 @@ Item {
       _digitizingController.useGpsPoint = true
     }
     else {
-      showMessage( qsTr( "GPS currently unavailable.%1Try to allow GPS Location in your device settings." ).arg( "\n" ) )
+      showMessage( qsTr( "GPS currently unavailable." ) )
     }
   }
 
@@ -333,24 +333,24 @@ Item {
 
     states: [
       State {
-        name: "good"
-        when: ( __positionKit.horizontalAccuracy > 0 ) && ( __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance )
+        name: "good" // GPS provides position AND horizontal accuracy is below set tolerance (threshold)
+        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softGreen
         }
       },
       State {
-        name: "low" // below accuracy tolerance
-        when: ( __positionKit.horizontalAccuracy > 0 ) && ( __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
+        name: "low" // below accuracy tolerance OR GPS does not provide horizontal accuracy
+        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softOrange
         }
       },
       State {
-        name: "unavailable"
-        when: __positionKit.horizontalAccuracy <= 0
+        name: "unavailable" // GPS does not provide position
+        when: !__positionKit.hasPosition
         PropertyChanges {
           target: _gpsState
           indicatorColor: InputStyle.softRed
@@ -499,7 +499,19 @@ Item {
     anchors.bottomMargin: root.previewPanelHeight + InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
-    visible: root.state !== "inactive" && _gpsState.state !== "unavailable"
+    visible: {
+      if ( root.state === "inactive" )
+      {
+        return false
+      }
+      else if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" )
+      {
+        // for external receivers we want to show gps panel and accuracy button
+        // even when the GPS receiver is not sending position data
+        return true
+      }
+      else return ( _gpsState.state !== "unavailable" )
+    }
 
     content: Item {
 
@@ -511,7 +523,13 @@ Item {
       Text {
         id: acctext
 
-        text: __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
+        text: {
+          if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
+          {
+            return qsTr( "unknown accuracy" ) // Replace by "no position" when GPS do not provide position
+          }
+          return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
+        }
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
 
@@ -640,7 +658,7 @@ Item {
 
     onGpsSwitchClicked: {
       if ( _gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable.%1Try to allow GPS Location in your device settings." ).arg( "\n" ) )
+        showMessage( qsTr( "GPS currently unavailable." ) )
         return
       }
       _map.mapSettings.setCenter( _mapPosition.mapPosition )

@@ -42,7 +42,7 @@ Dialog {
     else
     {
       return qsTr( "We were not able to connect to the specified device.
-        Please make sure your device is powered on and can be connected to.%1Learn more %2here%3." )
+        Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3." )
       .arg("\n")
       .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
       .arg("</a>")
@@ -68,6 +68,16 @@ Dialog {
     function onProviderConnected()
     {
       rootstate.state = "success"
+    }
+  }
+
+  focus: true
+
+  // just close the popup, keep the connection running
+  Keys.onReleased: {
+    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+      event.accepted = true
+      close()
     }
   }
 

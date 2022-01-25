@@ -49,7 +49,7 @@ Rectangle {
     margins: padding
   }
 
-  state:"show"
+  state: "fade"
 
   states: [
     State { name: "show"; when: notificationBanner.showNotification;

@@ -42,6 +42,8 @@ Page {
       if ( __positionKit.positionProvider.hasError )
       {
         __positionKit.positionProvider.reconnect()
+        dialogLoader.active = true
+        dialogLoader.focus = true
       }
 
       return // do not construct the same provider again
@@ -106,9 +108,6 @@ Page {
       property bool isActiveProvider: __appSettings.activePositionProviderId === model.ProviderId
 
       width: ListView.view.width
-      // we give more height to active external receiver because of status text
-//      height: isActiveProvider ? InputStyle.rowHeight * 2 : InputStyle.rowHeight
-//      height: model.ProviderType === "external" && isActiveProvider ? InputStyle.rowHeight * 2 : InputStyle.rowHeight
       height: InputStyle.rowHeight
 
       MouseArea {
@@ -241,22 +240,6 @@ Page {
             onClicked: removeDialog.openDialog( model.ProviderId )
           }
         }
-      }
-
-      Rectangle {
-        property bool separatorVisible: {
-          // items that have separator: all items in external but the last one
-          if ( model.ProviderType === "internal" ) return false
-          else return index < providerDelegate.ListView.view.count - 1
-        }
-
-        width: providerDelegate.width / 1.5
-        height: 2 * __dp
-        visible: separatorVisible
-        color: InputStyle.panelBackgroundLight
-
-        anchors.top: row.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
       }
     }
 
