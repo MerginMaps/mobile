@@ -34,6 +34,7 @@ void MapPosition::setPositionKit( PositionKit *newPositionKit )
     connect( mPositionKit, &PositionKit::positionChanged, this, &MapPosition::update );
 
   emit positionKitChanged( mPositionKit );
+  update();
 }
 
 QgsQuickMapSettings *MapPosition::mapSettings() const
@@ -64,6 +65,7 @@ void MapPosition::setMapSettings( QgsQuickMapSettings *newMapSettings )
   }
 
   emit mapSettingsChanged( mMapSettings );
+  update();
 }
 
 QgsPoint MapPosition::mapPosition() const

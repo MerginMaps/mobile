@@ -24,6 +24,17 @@ Item {
   property string defaultLayer: __appSettings.defaultLayer
   property color gpsIndicatorColor: InputStyle.softRed
 
+  function open( subsetting="" )
+  {
+    // opens settings panel and if subsetting is provided, opens directly that
+    root.visible = true
+
+    if ( subsetting === "gps" )
+    {
+      stackview.push( positionProviderComponent )
+    }
+  }
+
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true

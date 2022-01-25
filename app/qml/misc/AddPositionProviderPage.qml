@@ -19,9 +19,6 @@ import "../components" as Components
 Page {
   id: root
 
-  property string requestedDeviceName
-  property string requestedDeviceAddress
-
   signal close
   signal initiatedConnectionTo( string deviceAddress, string deviceName )
 
@@ -167,9 +164,10 @@ Page {
         anchors.fill: parent
         onClicked: {
           __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress, model.DeviceName )
-          root.requestedDeviceName = model.DeviceName
-          root.requestedDeviceAddress = model.DeviceAddress
-          connectionDialog.open()
+          root.initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
+
+          connectionDialogLoader.active = true
+          connectionDialogLoader.focus = true
         }
       }
 
@@ -221,23 +219,39 @@ Page {
     }
   }
 
-  Components.BluetoothConnectionDialog {
-    id: connectionDialog
+  Loader {
+    id: connectionDialogLoader
 
-    width: root.width * 0.8
-    height: root.height / 2
+    sourceComponent: connectionDialogComponent
+    active: false
+    asynchronous: true
+    anchors.fill: parent
 
-    anchors.centerIn: parent
+    onLoaded: item.open()
+  }
 
-    onSuccess: {
-      btModel.discovering = false
-      root.initiatedConnectionTo( root.requestedDeviceAddress, root.requestedDeviceName )
-      root.close()
-    }
+  Component {
+    id: connectionDialogComponent
 
-    onFailure: {
-      // keep discovering, revert position provider back to internal provider
-      __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
+    Components.BluetoothConnectionDialog {
+      id: connectionDialog
+
+      width: root.width * 0.8
+      height: root.height / 2
+
+      anchors.centerIn: parent
+
+      onSuccess: {
+        btModel.discovering = false
+        root.close()
+      }
+
+      onFailure: {
+        // keep discovering, revert position provider back to internal provider
+        __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
+      }
+
+      onClosed: dialogLoader.active = false
     }
   }
 }
