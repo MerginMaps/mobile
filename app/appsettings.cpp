@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "appsettings.h"
+#include "coreutils.h"
 
 #include <QSettings>
 #include <QFileInfo>
@@ -267,7 +268,15 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
 
   for ( int i = 0; i < providers.count(); i++ )
   {
+    QVariantList provider = providers[i].toList();
+
+    if ( provider.length() < 2 )
+    {
+      CoreUtils::log( QStringLiteral( "AppSettings" ), QStringLiteral( "Tried to save provider without sufficient data" ) );
+      continue;
+    }
     settings.setArrayIndex( i );
+
     settings.setValue( "providerName", providers[i].toList()[0] );
     settings.setValue( "providerAddress", providers[i].toList()[1] );
   }

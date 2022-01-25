@@ -10,6 +10,7 @@
 #include "positionprovidersmodel.h"
 #include "inpututils.h"
 #include "appsettings.h"
+#include "coreutils.h"
 
 PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractListModel( parent )
 {
@@ -156,9 +157,17 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
     {
       if ( providers[i].type() == QVariant::List || providers[i].type() == QVariant::StringList )
       {
+        QVariantList providerData = providers[i].toList();
+
+        if ( providerData.length() < 2 )
+        {
+          CoreUtils::log( QStringLiteral( "PositionProvidersModel" ), QStringLiteral( "Saved provider does not have sufficient data" ) );
+          continue;
+        }
+
         PositionProvider provider;
-        provider.name = providers[i].toList()[0].toString();
-        provider.providerId = providers[i].toList()[1].toString();
+        provider.name = providerData[0].toString();
+        provider.providerId = providerData[1].toString();
         provider.description = provider.providerId + " " + tr( "Bluetooth device" );
         provider.providerType = "external";
 
