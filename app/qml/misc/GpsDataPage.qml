@@ -72,7 +72,6 @@ Item {
 
         anchors.fill: parent
         contentWidth: availableWidth // to only scroll vertically
-        contentHeight: gpsReceiverContainer.implicitHeight + gridItem.implicitHeight
 
         spacing: InputStyle.panelSpacing
         clip: true
@@ -82,85 +81,35 @@ Item {
           color: InputStyle.clrPanelMain
         }
 
-
-        Item {
-          id: gpsReceiverContainer
-
-          anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            leftMargin: 2 * InputStyle.formSpacing
-            rightMargin: InputStyle.formSpacing
-            topMargin: InputStyle.formSpacings
-          }
-
-          height: InputStyle.rowHeightHeader + InputStyle.smallGap
-
-          Column {
-
-            anchors.fill: parent
-
-            leftPadding: InputStyle.formSpacing
-            topPadding: InputStyle.formSpacing
-
-            Label {
-              id: title
-
-              text: qsTr( "GPS receiver" )
-
-              color: InputStyle.labelColor
-
-              font.pixelSize: InputStyle.fontPixelSizeSmall
-              horizontalAlignment: Text.AlignLeft
-              verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-              id: name
-
-              text: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
-
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-              color: InputStyle.fontColor
-
-              horizontalAlignment: Text.AlignLeft
-              verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-              id: status
-
-              text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
-              visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
-
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-              color: InputStyle.fontColor
-
-              horizontalAlignment: Text.AlignLeft
-              verticalAlignment: Text.AlignVCenter
-            }
-          }
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: additionalContent.push( positionProviderComponent )
-          }
-        }
-
         GridLayout {
           id: gridItem
 
           columns: 2
 
           anchors {
-            top: gpsReceiverContainer.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+            fill: parent
             leftMargin: 2 * InputStyle.formSpacing
-            rightMargin: InputStyle.formSpacing
+            rightMargin: 2 * InputStyle.formSpacing
             topMargin: InputStyle.formSpacings
+          }
+
+          TextRowWithTitle {
+            id: gpsReceiver
+
+            Layout.fillWidth: true
+
+            titleText: qsTr( "GPS receiver" )
+            text: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
+          }
+
+          TextRowWithTitle {
+            id: gpsReceiverStatus
+
+            Layout.fillWidth: true
+
+            titleText: qsTr( "GPS receiver status" )
+            text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
           }
 
           TextRowWithTitle {
@@ -336,11 +285,39 @@ Item {
             id: lastFix
 
             Layout.fillWidth: true
-            Layout.row: 7
-            Layout.column: 0
 
             titleText: qsTr( "Last fix" )
             text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "Date not available" )
+          }
+        }
+      }
+
+      footer: Item {
+        width: parent.width
+        height: InputStyle.rowHeightHeader
+
+        Rectangle {
+          anchors.fill: parent
+          color: InputStyle.clrPanelBackground
+        }
+
+        Row {
+          anchors.fill: parent
+
+          Item {
+            width: parent.width / parent.children.length
+            height: parent.height
+
+            MainPanelButton {
+              id: managePositionProviders
+              width: parent.height * 0.8
+              text: qsTr( "Manage GPS receivers" )
+              imageSource: InputStyle.satelliteIcon
+
+              onActivated: {
+                additionalContent.push( positionProviderComponent )
+              }
+            }
           }
         }
       }

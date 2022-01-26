@@ -76,5 +76,6 @@
         <file>loadingindicator.svg</file>
         <file>navigate_to.png</file>
         <file>dot-circle.svg</file>
+        <file>satellite.svg</file>
     </qresource>
 </RCC>
