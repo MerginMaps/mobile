@@ -24,7 +24,6 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
   connect( mDiscoveryAgent.get(), QOverload<QBluetoothDeviceDiscoveryAgent::Error>::of( &QBluetoothDeviceDiscoveryAgent::error ), this,
            [ = ]( QBluetoothDeviceDiscoveryAgent::Error error )
   {
-    qDebug() << error << "occured during discovery, ending.."; // TODO: remove
     CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #" ).arg( error ) );
     finishedDiscovery();
   } );
@@ -102,22 +101,6 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
 
   mDiscovering = discovering;
   emit discoveringChanged( mDiscovering );
-}
-
-// TODO: this is a helper class to print the device, let's keep it there for a while
-void _printDeviceInfo( const QBluetoothDeviceInfo &device )
-{
-  qDebug() << "Device" << device.name() << "Address:" << device.address();
-  qDebug() << "  uuid:" << device.deviceUuid();
-  qDebug() << "  rssi (signal strength):" << device.rssi();
-  qDebug() << "  core config:" << device.coreConfigurations();
-  qDebug() << "  service classes:" << device.serviceClasses();
-  qDebug() << "  service uuids:" << device.serviceUuids();
-  qDebug() << "  valid:" << device.isValid();
-  qDebug() << "  cached: " << device.isCached();
-  qDebug() << "  major class:" << device.majorDeviceClass();
-  qDebug() << "  minor class:" << device.minorDeviceClass();
-  qDebug() << " --- ";
 }
 
 void BluetoothDiscoveryModel::deviceDiscovered( const QBluetoothDeviceInfo &device )
