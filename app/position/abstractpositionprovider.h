@@ -26,10 +26,14 @@ class GeoPosition : public QgsGpsInformation
 
     double verticalSpeed = -1;
 
+    QString fixStatusString;
+
     // copies all data from QgsGpsInformation other and updates satellitesVisible
     static GeoPosition fromQgsGpsInformation( const QgsGpsInformation &other );
 
     bool hasValidPosition() const;
+
+    QString parseFixStatus() const;
 };
 
 class AbstractPositionProvider : public QObject

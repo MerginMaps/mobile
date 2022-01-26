@@ -18,6 +18,7 @@ NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 
 QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
 {
+  mLastGPSInformation = QgsGpsInformation();
   mStringBuffer = nmeastring;
   processStringBuffer();
   return mLastGPSInformation;
@@ -37,7 +38,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
     QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( error );
     CoreUtils::log(
       QStringLiteral( "BluetoothPositionProvider" ),
-      QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString ).arg( mSocket->errorString() )
+      QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
     );
 
     setState( tr( "Disconnected" ), State::Disconnected );
