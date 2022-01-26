@@ -10,7 +10,9 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.14
+
 import ".."
+import lc 1.0
 
 Dialog {
   id: root
@@ -52,25 +54,6 @@ Dialog {
   signal success()
   signal failure()
 
-  Connections {
-    target: __positionKit.positionProvider
-
-    function onLostConnection()
-    {
-      rootstate.state = "fail"
-    }
-
-    function onProviderConnecting()
-    {
-      rootstate.state = "working"
-    }
-
-    function onProviderConnected()
-    {
-      rootstate.state = "success"
-    }
-  }
-
   focus: true
 
   // just close the popup, keep the connection running
@@ -106,17 +89,20 @@ Dialog {
     states: [
       State {
         name: "working"
+        when: __positionKit.positionProvider && __positionKit.positionProvider.state === PositionProvider.Connecting
         PropertyChanges { target: loadingSpinner; opacity: 1.0 }
         PropertyChanges { target: resultIcon; opacity: 0.0 }
       },
       State {
         name: "success"
+        when: __positionKit.positionProvider && __positionKit.positionProvider.state === PositionProvider.Connected
         PropertyChanges { target: resultIcon; source: InputStyle.yesIcon }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }
       },
       State {
         name: "fail"
+        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.Unconnected
         PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }

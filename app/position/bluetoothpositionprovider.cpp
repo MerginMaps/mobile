@@ -10,8 +10,6 @@
 #include "bluetoothpositionprovider.h"
 #include "coreutils.h"
 
-#include <QTimer>
-
 NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
 }
@@ -40,30 +38,16 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
       QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString ).arg( mSocket->errorString() )
     );
 
-    // let's try to reconnect in few seconds in case of network error
-    if ( error == QBluetoothSocket::NetworkError &&
-         mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Paired &&
-         !mAlreadyTriedToRepairConnection )
-    {
-      mRepairingConnection = true;
-      mAlreadyTriedToRepairConnection = true; // we try to reconnect only once
-
-      QTimer::singleShot( 3000, this, [ = ]()
-      {
-        reconnect();
-        mRepairingConnection = false;
-      } );
-
-      setStatus( tr( "Reconnecting the receiver" ), StatusLevel::Info );
-    }
-    else
-    {
-      setStatus( tr( "Lost connection, click to reconnect" ), StatusLevel::Error );
-      emit lostConnection();
-    }
+    setState( tr( "Unconnected" ), State::Unconnected );
+    handleLostConnection();
   } );
 
   connect( mSocket.get(), &QBluetoothSocket::readyRead, this, &BluetoothPositionProvider::positionUpdateReceived );
+
+  mReconnectTimer.setSingleShot( false );
+  mReconnectTimer.setInterval( 1000 );
+
+  connect( &mReconnectTimer, &QTimer::timeout, this, &BluetoothPositionProvider::reconnectTimeout );
 
   BluetoothPositionProvider::startUpdates();
 }
@@ -75,7 +59,10 @@ BluetoothPositionProvider::~BluetoothPositionProvider()
 
 void BluetoothPositionProvider::startUpdates()
 {
-  mSocket->connectToService( mTargetAddress, QBluetoothUuid( QBluetoothUuid::SerialPort ), QIODevice::ReadOnly );
+  if ( mSocket->state() == QBluetoothSocket::SocketState::UnconnectedState )
+  {
+    mSocket->connectToService( mTargetAddress, QBluetoothUuid( QBluetoothUuid::SerialPort ), QIODevice::ReadOnly );
+  }
 }
 
 void BluetoothPositionProvider::stopUpdates()
@@ -90,29 +77,67 @@ void BluetoothPositionProvider::closeProvider()
 
 void BluetoothPositionProvider::reconnect()
 {
-  setStatus( tr( "Reconnecting" ), StatusLevel::Info );
-  AbstractPositionProvider::reconnect();
+  mReconnectTimer.stop();
+
+  setState( tr( "Reconnecting" ), State::Connecting );
+
+  CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Reconnecting to %1" ).arg( mProviderName ) );
+
+  stopUpdates();
+  startUpdates();
+}
+
+void BluetoothPositionProvider::reconnectTimeout()
+{
+  if ( mSecondsLeftToReconnect <= 1 )
+  {
+    reconnect();
+  }
+  else
+  {
+    mSecondsLeftToReconnect--;
+    setState( tr( "Lost connection, reconnecting in (%1) ..." ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+    mReconnectTimer.start();
+  }
+}
+
+void BluetoothPositionProvider::handleLostConnection()
+{
+  // we want to reconnect, but only to devices that are paired
+
+  if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
+  {
+    setState( tr( "Could not connect to device, not paired" ), State::Unconnected );
+  }
+  else if ( mState != WaitingToReconnect && mState != Connecting )
+  {
+    mSecondsLeftToReconnect = mReconnectDelay / 1000;
+    setState( tr( "Lost connection, reconnecting in (%1) ..." ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+
+    mReconnectTimer.start();
+
+    // first time do reconnect in short time, then each other in long time
+    if ( mReconnectDelay == BluetoothPositionProvider::ShortDelay )
+    {
+      mReconnectDelay = BluetoothPositionProvider::LongDelay;
+    }
+  }
 }
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
   if ( state == QBluetoothSocket::ConnectingState || state == QBluetoothSocket::ServiceLookupState )
   {
-    setStatus( tr( "Connecting the receiver" ), StatusLevel::Info );
-    emit providerConnecting();
+    setState( tr( "Connecting to %1" ).arg( mProviderName ), State::Connecting );
   }
   else if ( state == QBluetoothSocket::ConnectedState )
   {
-    setStatus( tr( "Connected" ), StatusLevel::Info );
-    emit providerConnected();
+    setState( tr( "Connected" ), State::Connected );
   }
   else if ( state == QBluetoothSocket::UnconnectedState )
   {
-    if ( !mRepairingConnection )
-    {
-      setStatus( tr( "Lost connection, click to reconnect" ), StatusLevel::Error );
-      emit lostConnection();
-    }
+    setState( tr( "Unconnected" ), State::Unconnected );
+    handleLostConnection();
   }
 
   QString stateToString = QMetaEnum::fromType<QBluetoothSocket::SocketState>().valueToKey( state );
@@ -125,7 +150,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
   {
     // if by any chance we showed wrong message in the status like "lost connection", fix it here
     // we know the connection is working because we just received data from the device
-    setStatus( tr( "Connected" ), StatusLevel::Info );
+    setState( tr( "Connected" ), State::Connected );
 
     QByteArray rawNmea = mSocket->readAll();
     QString nmea( rawNmea );

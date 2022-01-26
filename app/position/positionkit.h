@@ -107,8 +107,6 @@ class PositionKit : public QObject
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
   signals:
-    void lostConnection();
-
     void latitudeChanged( double );
     void longitudeChanged( double );
     void altitudeChanged( double );

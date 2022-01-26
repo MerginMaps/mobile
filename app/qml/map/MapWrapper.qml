@@ -524,9 +524,29 @@ Item {
         id: acctext
 
         text: {
-          if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
+          if ( !__positionKit.positionProvider )
           {
-            return qsTr( "unknown accuracy" ) // Replace by "no position" when GPS do not provide position
+            return ""
+          }
+          else if ( __positionKit.positionProvider.type() === "external" )
+          {
+            if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
+            {
+              return qsTr( "connecting to %1" ).arg( __positionKit.positionProvider.name() )
+            }
+            else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
+            {
+              return qsTr( "no position" )
+            }
+          }
+
+          if ( !__positionKit.hasPosition )
+          {
+            return qsTr( "no position" )
+          }
+          else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
+          {
+            return qsTr( "unknown accuracy" )
           }
           return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
         }
