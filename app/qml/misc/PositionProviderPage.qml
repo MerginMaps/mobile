@@ -235,12 +235,25 @@ Page {
       }
     }
 
-    footer: Rectangle {
+    Component.onCompleted: {
+      // select appropriate footer, on iOS say that you can not connect via BT
+      if ( __haveBluetooth )
+      {
+        view.footer = connectNewReceiverButtonComponent
+      }
+      else
+      {
+        view.footer = btNotSupportedComponent
+      }
+    }
+  }
+
+  Component {
+    id: connectNewReceiverButtonComponent
+
+    Rectangle {
       height: InputStyle.rowHeightHeader
       width: ListView.view.width
-
-      // Apple does not support reading Bluetooth serial
-      visible: !__iosUtils.isIos
 
       Components.TextWithIcon {
         width: parent.width
@@ -261,6 +274,42 @@ Page {
           let page = root.stackView.push( bluetoothDiscoveryComponent )
           page.focus = true
         }
+      }
+    }
+  }
+
+  Component {
+    id: btNotSupportedComponent
+
+    Rectangle {
+      height: InputStyle.rowHeightHeader * 5
+      width: ListView.view.width
+
+
+      Text {
+        id: textItem
+
+        anchors.fill: parent
+        anchors.topMargin: InputStyle.panelMargin
+
+        verticalAlignment: Text.AlignTop
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+
+        color: InputStyle.fontColor
+        text: qsTr( "Connecting to receivers via Bluetooth directly in Input is not possible on iOS." +
+                   " Your hardware vendor may provide a custom app that connects to the receiver and sets position." +
+                   " Input will still think it is the internal GPS of your phone/tablet." +
+                   "%1%2Click here to learn more.%3" )
+        .arg( "<br><br>" )
+        .arg( "<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>" )
+        .arg( "</a>" )
+
+        wrapMode: Text.Wrap
+        textFormat: Text.RichText
+        leftPadding: InputStyle.panelMargin
+        rightPadding: InputStyle.panelMargin
+
+        onLinkActivated: Qt.openUrlExternally( link )
       }
     }
   }

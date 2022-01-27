@@ -519,6 +519,12 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
+#ifdef HAVE_BLUETOOTH
+  engine.rootContext()->setContextProperty( "__haveBluetooth", true );
+#else
+  engine.rootContext()->setContextProperty( "__haveBluetooth", false );
+#endif
+
 #ifdef MOBILE_OS
   engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
   engine.rootContext()->setContextProperty( "__appwindowwidth", QVariant( 0 ) );
