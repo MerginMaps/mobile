@@ -40,7 +40,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
       QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString ).arg( mSocket->errorString() )
     );
 
-    setState( tr( "Unconnected" ), State::Unconnected );
+    setState( tr( "Disconnected" ), State::Disconnected );
     handleLostConnection();
   } );
 
@@ -119,7 +119,7 @@ void BluetoothPositionProvider::handleLostConnection()
 
   if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
   {
-    setState( tr( "Could not connect to device, not paired" ), State::Unconnected );
+    setState( tr( "Could not connect to device, not paired" ), State::Disconnected );
   }
   else if ( mState != WaitingToReconnect && mState != Connecting )
   {
@@ -148,7 +148,7 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
   }
   else if ( state == QBluetoothSocket::UnconnectedState )
   {
-    setState( tr( "Unconnected" ), State::Unconnected );
+    setState( tr( "Disconnected" ), State::Disconnected );
     handleLostConnection();
   }
 

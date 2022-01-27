@@ -102,7 +102,7 @@ Dialog {
       },
       State {
         name: "fail"
-        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.Unconnected
+        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.Disconnected
         PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }
