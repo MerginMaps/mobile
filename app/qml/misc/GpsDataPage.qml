@@ -312,7 +312,7 @@ Item {
               id: managePositionProviders
               width: parent.height * 0.8
               text: qsTr( "Manage GPS receivers" )
-              imageSource: InputStyle.satelliteIcon
+              imageSource: InputStyle.settingsIcon
 
               onActivated: {
                 additionalContent.push( positionProviderComponent )
