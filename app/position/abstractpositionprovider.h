@@ -87,7 +87,7 @@ class AbstractPositionProvider : public QObject
 
     // ProviderName - name of the provider.
     // External receiver - name of a bluetooth device
-    // Internal providers has constant values of "Internal GPS receiver" and "Simulated provider"
+    // Internal providers has constant values of "Internal" and "Simulated provider"
     QString mProviderName;
 
     // State of this provider, see State enum. Message bears human readable explanation of the state

@@ -98,7 +98,7 @@ Item {
 
             Layout.fillWidth: true
 
-            titleText: qsTr( "GPS receiver" )
+            titleText: qsTr( "Source" )
             text: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
           }
 
@@ -115,7 +115,7 @@ Item {
               width: parent.width
               height: parent.height
 
-              titleText: qsTr( "GPS receiver status" )
+              titleText: qsTr( "Status" )
               text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
               visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
             }
