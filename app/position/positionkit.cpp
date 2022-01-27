@@ -62,7 +62,6 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   if ( mPositionProvider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
-    connect( mPositionProvider.get(), &AbstractPositionProvider::lostConnection, this, &PositionKit::lostConnection );
 
     CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->id() ) );
   }

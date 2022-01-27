@@ -16,6 +16,7 @@
 
 #include <QBluetoothSocket>
 #include <QBluetoothLocalDevice>
+#include <QTimer>
 
 /**
  * NmeaParser is a big hack how to reuse QGIS NmeaConnection function in order to (a) keep ownership of bluetooth
@@ -42,6 +43,13 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 {
     Q_OBJECT
 
+    // signalizes in how many [ms] we will try to reconnect to GPS again
+    enum ReconnectDelay
+    {
+      ShortDelay = 3000,
+      LongDelay = 10000
+    };
+
   public:
     BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent = nullptr );
     virtual ~BluetoothPositionProvider();
@@ -49,19 +57,23 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
     virtual void closeProvider() override;
-    virtual void reconnect() override;
+
+    void handleLostConnection();
+    void reconnect();
 
   public slots:
     void positionUpdateReceived();
     void socketStateChanged( QBluetoothSocket::SocketState );
+    void reconnectTimeout();
 
   private:
-    bool mRepairingConnection = false;
-    bool mAlreadyTriedToRepairConnection = false;
+    QBluetoothAddress mTargetAddress; // BT mac address of the receiver
+    std::unique_ptr<QBluetoothSocket> mSocket; // socket used to receive data from GPS
+    std::unique_ptr<QBluetoothLocalDevice> mReceiverDevice; // description of this device bluetooth state
 
-    QBluetoothAddress mTargetAddress;
-    std::unique_ptr<QBluetoothSocket> mSocket;
-    std::unique_ptr<QBluetoothLocalDevice> mReceiverDevice;
+    int mReconnectDelay = ReconnectDelay::ShortDelay; // in how many [ms] we will try to reconnect again
+    int mSecondsLeftToReconnect = ReconnectDelay::ShortDelay; // how many seconds are left to reconnect. Reconnects if less than or equal to one
+    QTimer mReconnectTimer; // timer that times out each second and lowers the mSecondsLeftToReconnect by one
 
     NmeaParser mNmeaParser;
 };

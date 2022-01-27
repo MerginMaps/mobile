@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,17 +36,19 @@ class AbstractPositionProvider : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QString statusMessage READ statusMessage NOTIFY statusMessageChanged )
-    Q_PROPERTY( StatusLevel statusLevel READ statusLevel NOTIFY statusLevelChanged )
+    Q_PROPERTY( QString stateMessage READ stateMessage NOTIFY stateMessageChanged )
+    Q_PROPERTY( State state READ state NOTIFY stateChanged )
 
   public:
 
-    enum StatusLevel
+    enum State
     {
-      Info = 0, //!< nothing serious, status like "connected"
-      Error     //!< there is a serious error in provider like "lost connection"
+      Disconnected = 0,
+      WaitingToReconnect,
+      Connecting,
+      Connected
     };
-    Q_ENUMS( StatusLevel )
+    Q_ENUMS( State )
 
     AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object = nullptr );
     virtual ~AbstractPositionProvider();
@@ -54,25 +56,22 @@ class AbstractPositionProvider : public QObject
     virtual void startUpdates() = 0;
     virtual void stopUpdates() = 0;
     virtual void closeProvider() = 0;
-    Q_INVOKABLE virtual void reconnect();
 
-    QString statusMessage() const;
-    StatusLevel statusLevel() const;
+    QString stateMessage() const;
+    State state() const;
     Q_INVOKABLE QString id() const;
     Q_INVOKABLE QString name() const;
     Q_INVOKABLE QString type() const;
 
   signals:
     void positionChanged( const GeoPosition &position );
-    void providerConnecting();
-    void providerConnected();
-    void lostConnection();
 
-    void statusMessageChanged( const QString &status );
-    void statusLevelChanged( StatusLevel level );
+    void stateMessageChanged( const QString &message );
+    void stateChanged( State state );
 
   protected:
-    void setStatus( const QString &message, StatusLevel level = StatusLevel::Info );
+    void setState( const QString &message ); // keeps state enum the same and only changes the message
+    void setState( const QString &message, State state );
 
     // ProviderId - unique id of this provider.
     // For external receiver it holds mac address of a bluetooth device.
@@ -87,10 +86,9 @@ class AbstractPositionProvider : public QObject
     // Internal providers has constant values of "Internal GPS receiver" and "Simulated provider"
     QString mProviderName;
 
-    // Status of this provider, "connected", "failure",..
-    QString mStatusMessage;
-    StatusLevel mStatusLevel;
+    // State of this provider, see State enum. Message bears human readable explanation of the state
+    QString mStateMessage;
+    State mState = State::Disconnected;
 };
-
 
 #endif // ABSTRACTPOSITIONPROVIDER_H

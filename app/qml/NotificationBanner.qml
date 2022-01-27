@@ -28,16 +28,28 @@ Rectangle {
   signal notificationClosed()
   signal detailsClicked()
 
-  function pushNotification( message ) {
+  function pushNotification( message )
+  {
     showNotification = true;
-    text = message;
   }
 
-  function reset() {
-    state = "fade";
+  function pushNotificationMessage( message )
+  {
+    text = message;
+    pushNotification()
+  }
+
+  function close()
+  {
+    state = "fade"
     notificationBanner.visible = false;
     showNotification = false;
+  }
+
+  function reset()
+  {
     text = "";
+    close()
   }
 
   color: notificationBanner.bgColor

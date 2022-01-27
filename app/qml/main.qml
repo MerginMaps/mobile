@@ -211,9 +211,9 @@ ApplicationWindow {
     }
 
     NotificationBanner {
-      id: notificationBanner
+      id: failedToLoadProjectBanner
 
-      width: parent.width - notificationBanner.anchors.margins * 2
+      width: parent.width - failedToLoadProjectBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
 
       onDetailsClicked: {
@@ -227,6 +227,10 @@ ApplicationWindow {
 
       width: parent.width - gpsNotificationBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
+
+      text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
+
+      showNotification: __positionKit.positionProvider ? ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect ) : false
 
       onDetailsClicked: {
         settingsPanel.open( "gps" )
@@ -500,12 +504,12 @@ ApplicationWindow {
       target: __loader
       onLoadingStarted: {
         projectLoadingScreen.visible = true;
-        notificationBanner.reset();
+        failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
       onLoadingFinished: projectLoadingScreen.visible = false
       onLoadingErrorFound: {
-        notificationBanner.pushNotification( "There were issues loading the project." )
+        failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
 
       onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
@@ -514,22 +518,6 @@ ApplicationWindow {
       onProjectReloaded: map.clear()
       onProjectWillBeReloaded: {
         formsStackManager.reload()
-      }
-    }
-
-    Connections {
-      target: __positionKit.positionProvider
-
-      function onLostConnection() {
-        gpsNotificationBanner.pushNotification( qsTr( "Lost connection to GPS receiver." ) )
-      }
-
-      function onProviderConnected() {
-        gpsNotificationBanner.reset()
-      }
-
-      function onProviderConnecting() {
-        gpsNotificationBanner.reset()
       }
     }
 

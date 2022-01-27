@@ -38,14 +38,6 @@ Page {
 
     if ( __appSettings.activePositionProviderId === id )
     {
-      // if provider has error, try to reconnect on click
-      if ( __positionKit.positionProvider.statusLevel === AbstractPositionProvider.Error )
-      {
-        __positionKit.positionProvider.reconnect()
-        dialogLoader.active = true
-        dialogLoader.focus = true
-      }
-
       return // do not construct the same provider again
     }
 
@@ -200,7 +192,7 @@ Page {
             height: parent.height * 0.3
 
             visible: providerDelegate.isActiveProvider
-            text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
+            text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
 
             elide: Text.ElideRight
             color: InputStyle.secondaryFontColor

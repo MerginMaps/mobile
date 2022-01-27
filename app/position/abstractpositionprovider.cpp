@@ -18,13 +18,6 @@ AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QSt
 {
 }
 
-void AbstractPositionProvider::reconnect()
-{
-  CoreUtils::log( QStringLiteral( "PositionProvider" ), QStringLiteral( "Reconnecting provider " ) + mProviderId );
-  stopUpdates();
-  startUpdates();
-}
-
 AbstractPositionProvider::~AbstractPositionProvider() = default;
 
 QString AbstractPositionProvider::name() const
@@ -32,14 +25,14 @@ QString AbstractPositionProvider::name() const
   return mProviderName;
 }
 
-QString AbstractPositionProvider::statusMessage() const
+QString AbstractPositionProvider::stateMessage() const
 {
-  return mStatusMessage;
+  return mStateMessage;
 }
 
-AbstractPositionProvider::StatusLevel AbstractPositionProvider::statusLevel() const
+AbstractPositionProvider::State AbstractPositionProvider::state() const
 {
-  return mStatusLevel;
+  return mState;
 }
 
 QString AbstractPositionProvider::id() const
@@ -52,18 +45,23 @@ QString AbstractPositionProvider::type() const
   return mProviderType;
 }
 
-void AbstractPositionProvider::setStatus( const QString &message, StatusLevel level )
+void AbstractPositionProvider::setState( const QString &message )
 {
-  if ( mStatusMessage != message )
+  setState( message, mState );
+}
+
+void AbstractPositionProvider::setState( const QString &message, AbstractPositionProvider::State state )
+{
+  if ( mStateMessage != message )
   {
-    mStatusMessage = message;
-    emit statusMessageChanged( mStatusMessage );
+    mStateMessage = message;
+    emit stateMessageChanged( mStateMessage );
   }
 
-  if ( mStatusLevel != level )
+  if ( mState != state )
   {
-    mStatusLevel = level;
-    emit statusLevelChanged( mStatusLevel );
+    mState = state;
+    emit stateChanged( mState );
   }
 }
 

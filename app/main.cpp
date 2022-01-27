@@ -294,7 +294,7 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
 
-  qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "AbstractPositionProvider", "Must be instantiated via its construct method" );
+  qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }
