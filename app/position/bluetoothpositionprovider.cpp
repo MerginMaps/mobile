@@ -9,6 +9,8 @@
 
 #include "bluetoothpositionprovider.h"
 #include "coreutils.h"
+#include "androidutils.h"
+#include "inpututils.h"
 
 NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
@@ -82,6 +84,16 @@ void BluetoothPositionProvider::reconnect()
   setState( tr( "Reconnecting" ), State::Connecting );
 
   CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Reconnecting to %1" ).arg( mProviderName ) );
+
+  if ( mReceiverDevice->hostMode() == QBluetoothLocalDevice::HostPoweredOff )
+  {
+    // bluetooth is powered off.. ask user once to turn it on
+    if ( InputUtils::appPlatform() == QStringLiteral( "android" ) )
+    {
+      AndroidUtils android;
+      android.turnBluetoothOn();
+    }
+  }
 
   stopUpdates();
   startUpdates();
