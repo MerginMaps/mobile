@@ -10,10 +10,14 @@
 #include "bluetoothdiscoverymodel.h"
 #include "coreutils.h"
 
-#include "qdebug.h"
+#ifdef HAVE_BLUETOOTH
+#include <QBluetoothUuid>
+#endif
+
 
 BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractListModel( parent )
 {
+#ifdef HAVE_BLUETOOTH
   mDiscoveryAgent = std::unique_ptr<QBluetoothDeviceDiscoveryAgent>( new QBluetoothDeviceDiscoveryAgent() );
 
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &BluetoothDiscoveryModel::deviceDiscovered );
@@ -27,6 +31,7 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
     CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #" ).arg( error ) );
     finishedDiscovery();
   } );
+#endif
 }
 
 BluetoothDiscoveryModel::~BluetoothDiscoveryModel() = default;
@@ -34,20 +39,28 @@ BluetoothDiscoveryModel::~BluetoothDiscoveryModel() = default;
 QHash<int, QByteArray> BluetoothDiscoveryModel::roleNames() const
 {
   QHash<int, QByteArray> roles;
+
+#ifdef HAVE_BLUETOOTH
   roles.insert( DataRoles::DeviceAddress, "DeviceAddress" );
   roles.insert( DataRoles::DeviceName, "DeviceName" );
   roles.insert( DataRoles::SignalStrength, "SignalStrength" );
+#endif
 
   return roles;
 }
 
 int BluetoothDiscoveryModel::rowCount( const QModelIndex & ) const
 {
+#ifdef HAVE_BLUETOOTH
   return mFoundDevices.count();
+#else
+  return 0;
+#endif
 }
 
 QVariant BluetoothDiscoveryModel::data( const QModelIndex &index, int role ) const
 {
+#ifdef HAVE_BLUETOOTH
   if ( !index.isValid() )
     return QVariant();
 
@@ -77,6 +90,9 @@ QVariant BluetoothDiscoveryModel::data( const QModelIndex &index, int role ) con
 
     default: return QVariant();
   }
+#else
+  return QVariant();
+#endif
 }
 
 bool BluetoothDiscoveryModel::discovering() const
@@ -89,6 +105,7 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   if ( mDiscovering == discovering )
     return;
 
+#ifdef HAVE_BLUETOOTH
   if ( discovering )
   {
     mDiscoveryAgent->start();
@@ -98,11 +115,13 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   {
     mDiscoveryAgent->stop();
   }
+#endif
 
   mDiscovering = discovering;
   emit discoveringChanged( mDiscovering );
 }
 
+#ifdef HAVE_BLUETOOTH
 void BluetoothDiscoveryModel::deviceDiscovered( const QBluetoothDeviceInfo &device )
 {
   for ( int i = 0; i < mFoundDevices.count(); i++ )
@@ -141,6 +160,7 @@ void BluetoothDiscoveryModel::deviceUpdated( const QBluetoothDeviceInfo &device,
     }
   }
 }
+#endif
 
 void BluetoothDiscoveryModel::finishedDiscovery()
 {

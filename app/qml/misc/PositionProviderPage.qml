@@ -239,6 +239,9 @@ Page {
       height: InputStyle.rowHeightHeader
       width: ListView.view.width
 
+      // Apple does not support reading Bluetooth serial
+      visible: !__iosUtils.isIos
+
       Components.TextWithIcon {
         width: parent.width
         height: parent.height

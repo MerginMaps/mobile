@@ -13,8 +13,12 @@
 #include <QAbstractListModel>
 #include <QObject>
 #include <qglobal.h>
-#include <QtBluetooth>
 #include <memory>
+
+#ifdef HAVE_BLUETOOTH
+#include <QBluetoothDeviceInfo>
+#include <QBluetoothDeviceDiscoveryAgent>
+#endif
 
 class BluetoothDiscoveryModel : public QAbstractListModel
 {
@@ -43,8 +47,11 @@ class BluetoothDiscoveryModel : public QAbstractListModel
     void setDiscovering( bool discovering );
 
   public slots:
+
+#ifdef HAVE_BLUETOOTH
     void deviceDiscovered( const QBluetoothDeviceInfo &info );
     void deviceUpdated( const QBluetoothDeviceInfo &info, QBluetoothDeviceInfo::Fields updatedFields );
+#endif
     void finishedDiscovery();
 
   signals:
@@ -53,8 +60,10 @@ class BluetoothDiscoveryModel : public QAbstractListModel
   private:
     bool mDiscovering = false;
 
+#ifdef HAVE_BLUETOOTH
     QList<QBluetoothDeviceInfo> mFoundDevices;
-    std::unique_ptr<QBluetoothDeviceDiscoveryAgent> mDiscoveryAgent; // owned
+    std::unique_ptr<QBluetoothDeviceDiscoveryAgent> mDiscoveryAgent;
+#endif
 };
 
 #endif // BLUETOOTHDISCOVERYMODEL_H

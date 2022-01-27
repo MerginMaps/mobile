@@ -28,10 +28,6 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
     } );
-    connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::updateTimeout, this, [ = ]()
-    {
-      CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving position data" ) );
-    } );
 
     mPositionSourceValid = true;
     setState( tr( "Connected" ), State::Connected );

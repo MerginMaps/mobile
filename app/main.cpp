@@ -93,9 +93,9 @@
 #include "project.h"
 #include "qgsproject.h"
 #include "bluetoothdiscoverymodel.h"
-#include "position/bluetoothpositionprovider.h"
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
+#include "position/abstractpositionprovider.h"
 
 
 #ifndef NDEBUG

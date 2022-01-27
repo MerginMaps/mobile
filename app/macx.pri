@@ -78,6 +78,8 @@ macx:!android {
     QT += printsupport
     QT += widgets
     QT += multimedia
+    QT += bluetooth
+    DEFINES += "HAVE_BLUETOOTH"
     DEFINES += "HAVE_WIDGETS"
 
     QMAKE_CXXFLAGS += -std=c++11 -fvisibility-inlines-hidden -fvisibility=hidden
