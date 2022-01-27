@@ -102,14 +102,23 @@ Item {
             text: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
           }
 
-          TextRowWithTitle {
-            id: gpsReceiverStatus
+          Item {
+            id: gpsReceiverStatusContainer
 
             Layout.fillWidth: true
+            Layout.preferredHeight: InputStyle.rowHeight
 
-            titleText: qsTr( "GPS receiver status" )
-            text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            TextRowWithTitle {
+              id: gpsReceiverStatus
+
+              width: parent.width
+              height: parent.height
+
+              titleText: qsTr( "GPS receiver status" )
+              text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
+              visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            }
           }
 
           TextRowWithTitle {
