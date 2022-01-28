@@ -77,6 +77,8 @@ android {
     QT += multimedia
     QT += printsupport
     QT += androidextras
+    QT += bluetooth
+    DEFINES += "HAVE_BLUETOOTH"
 
     QMAKE_CXXFLAGS += -std=c++11
 

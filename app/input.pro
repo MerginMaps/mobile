@@ -10,7 +10,7 @@ isEmpty(QGIS_QUICK_DATA_PATH) {
 }
 
 QT += quick qml xml concurrent positioning sensors quickcontrols2
-QT += network svg sql bluetooth
+QT += network svg sql
 QT += opengl
 QT += core
 

@@ -9,7 +9,6 @@ attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
 position/abstractpositionprovider.cpp \
-position/bluetoothpositionprovider.cpp \
 position/internalpositionprovider.cpp \
 position/mapposition.cpp \
 position/positiondirection.cpp \
@@ -60,7 +59,6 @@ attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
 position/abstractpositionprovider.h \
-position/bluetoothpositionprovider.h \
 position/internalpositionprovider.h \
 position/mapposition.h \
 position/positiondirection.h \
@@ -98,6 +96,13 @@ featuresmodel.h \
 relationfeaturesmodel.h \
 relationreferencefeaturesmodel.h \
 valuerelationfeaturesmodel.h
+
+contains(DEFINES, HAVE_BLUETOOTH) {
+  message("Building with bluetooth position provider")
+
+  SOURCES += position/bluetoothpositionprovider.cpp
+  HEADERS += position/bluetoothpositionprovider.h
+}
 
 contains(DEFINES, INPUT_TEST) {
 

@@ -12,7 +12,10 @@
 
 #include "qgis.h"
 
+#ifndef Q_OS_IOS
 #include "bluetoothpositionprovider.h"
+#endif
+
 #include "internalpositionprovider.h"
 #include "simulatedpositionprovider.h"
 
@@ -78,11 +81,21 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
+  QString providerType( type );
+
+  // currently the only external provider is bluetooth, so manually set internal provider for platforms that
+  // do not support reading bluetooth serial
+#ifndef HAVE_BLUETOOTH
+  providerType = QStringLiteral( "internal" );
+#endif
+
   if ( type == QStringLiteral( "external" ) )
   {
+#ifdef HAVE_BLUETOOTH
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
+#endif
   }
   else // type == internal
   {
