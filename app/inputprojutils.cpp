@@ -13,9 +13,9 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include "proj.h"
 #include "inpututils.h"
 #include "coreutils.h"
-#include "proj.h"
 #include "qgsprojutils.h"
 #include "inputhelp.h"
 
