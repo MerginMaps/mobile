@@ -377,7 +377,7 @@ Page {
         if ( __appSettings.activePositionProviderId == relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
-          root.constructProvider( "internal", "devicegps", qsTr( "Internal GPS receiver" ) )
+          root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
         }
 
         providersModel.removeProvider( relatedProviderId )

@@ -149,7 +149,6 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
     for ( const auto &provider : providers )
     {
       QVariantList providerData = provider.toList();
-
       if ( providerData.length() < 2 )
       {
         CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Found provider with insufficient data" ) );
@@ -263,6 +262,19 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( newPosition.fixStatusString != mPosition.fixStatusString )
+  {
+    mPosition.fixStatusString = newPosition.fixStatusString;
+    emit fixChanged( mPosition.fixStatusString );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.quality != mPosition.quality )
+  {
+    mPosition.quality = newPosition.quality;
+    hasAnythingChanged = true;
+  }
+
   if ( newPosition.utcDateTime != mPosition.utcDateTime )
   {
     mPosition.utcDateTime = newPosition.utcDateTime;
@@ -359,6 +371,11 @@ int PositionKit::satellitesUsed() const
 int PositionKit::satellitesVisible() const
 {
   return mPosition.satellitesVisible;
+}
+
+QString PositionKit::fix() const
+{
+  return mPosition.fixStatusString;
 }
 
 double PositionKit::hdop() const

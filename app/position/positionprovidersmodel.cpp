@@ -22,7 +22,7 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
   }
 
   PositionProvider internal;
-  internal.name = tr( "Internal GPS receiver" );
+  internal.name = tr( "Internal" );
   internal.description = tr( "GPS receiver of this device" );
   internal.providerType = "internal";
   internal.providerId = "devicegps";

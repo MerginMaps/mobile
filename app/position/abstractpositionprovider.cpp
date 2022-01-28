@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,6 +155,7 @@ GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
   out.status = other.status;
   out.satPrn = other.satPrn;
   out.satInfoComplete = other.satInfoComplete;
+  out.fixStatusString = out.parseFixStatus();
 
   return out;
 }
@@ -162,4 +163,54 @@ GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
 bool GeoPosition::hasValidPosition() const
 {
   return !( std::isnan( latitude ) || std::isnan( longitude ) );
+}
+
+QString GeoPosition::parseFixStatus() const
+{
+  //
+  // parsed based on http://lefebure.com/articles/nmea-gga/:
+  //
+  //  0 = Invalid, no position available.
+  //  1 = Autonomous GPS fix, no correction data used.
+  //  2 = DGPS fix, using a local DGPS base station or correction service such as WAAS or EGNOS.
+  //  3 = PPS fix, I’ve never seen this used.
+  //  4 = RTK fix, high accuracy Real Time Kinematic.
+  //  5 = RTK Float, better than DGPS, but not quite RTK.
+  //  6 = Estimated fix (dead reckoning).
+  //  7 = Manual input mode.
+  //  8 = Simulation mode.
+  //  9 = WAAS fix (not NMEA standard, but NovAtel receivers report this instead of a 2).
+  //
+
+  switch ( quality )
+  {
+    case -1:
+      return QObject::tr( "No data" );
+
+    case 0:
+      return QObject::tr( "No fix" );
+
+    case 1:
+      return QObject::tr( "GPS fix, no correction data" );
+
+    case 2:
+    // fall through
+    case 9:
+      return QObject::tr( "DGPS fix" );
+
+    case 3:
+      return QObject::tr( "PPS fix" );
+
+    case 4:
+      return QObject::tr( "RTK fix" );
+
+    case 5:
+      return QObject::tr( "RTK float" );
+
+    case 6:
+      return QObject::tr( "Estimated fix (dead reckoning)" );
+
+    default:
+      return QObject::tr( "Unknown fix" );
+  }
 }

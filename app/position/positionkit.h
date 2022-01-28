@@ -60,6 +60,9 @@ class PositionKit : public QObject
     // GPS satellites advanced data (Horizontal dilution of precision)
     Q_PROPERTY( double hdop READ hdop NOTIFY hdopChanged )
 
+    // GPS fix status
+    Q_PROPERTY( QString fix READ fix NOTIFY fixChanged )
+
     // Auxiliary property
     Q_PROPERTY( GeoPosition position READ position NOTIFY positionChanged )
 
@@ -96,6 +99,8 @@ class PositionKit : public QObject
     int satellitesUsed() const;
     int satellitesVisible() const;
 
+    QString fix() const;
+
     const GeoPosition &position() const;
 
     AbstractPositionProvider *positionProvider() const;
@@ -127,6 +132,8 @@ class PositionKit : public QObject
     void satellitesUsedChanged( int );
     void satellitesVisibleChanged( int );
     void hdopChanged( double );
+
+    void fixChanged( const QString & );
 
     void positionProviderChanged( AbstractPositionProvider *provider );
 

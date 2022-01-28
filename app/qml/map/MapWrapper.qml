@@ -493,7 +493,7 @@ Item {
 
     onClicked: accuracyButtonClicked()
 
-    maxWidth: parent.width / 2
+    maxWidth: parent.width - ( InputStyle.panelMargin * 2 )
 
     anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
     anchors.bottomMargin: root.previewPanelHeight + InputStyle.smallGap
@@ -532,21 +532,25 @@ Item {
           {
             if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
             {
-              return qsTr( "connecting to %1" ).arg( __positionKit.positionProvider.name() )
+              return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
             }
             else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
             {
-              return qsTr( "no position" )
+              return __positionKit.positionProvider.stateMessage
+            }
+            else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
+            {
+              return __positionKit.positionProvider.stateMessage
             }
           }
 
           if ( !__positionKit.hasPosition )
           {
-            return qsTr( "no position" )
+            return qsTr( "Connected, no position" )
           }
           else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
           {
-            return qsTr( "unknown accuracy" )
+            return qsTr( "Unknown accuracy" )
           }
           return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
         }

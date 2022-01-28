@@ -32,9 +32,11 @@ Item {
 
       text: root.titleText
 
-      color: InputStyle.labelColor
-
       font.pixelSize: InputStyle.fontPixelSizeSmall
+      color: InputStyle.labelColor
+      width: parent.width
+
+      wrapMode: Text.Wrap
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter
     }
@@ -46,7 +48,9 @@ Item {
 
       font.pixelSize: InputStyle.fontPixelSizeNormal
       color: InputStyle.fontColor
+      width: parent.width
 
+      wrapMode: Text.Wrap
       horizontalAlignment: Text.AlignLeft
       verticalAlignment: Text.AlignVCenter
     }

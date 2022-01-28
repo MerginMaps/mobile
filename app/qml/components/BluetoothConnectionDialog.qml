@@ -56,11 +56,14 @@ Dialog {
 
   focus: true
 
-  // just close the popup, keep the connection running
-  Keys.onReleased: {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
+  Item {
+    focus: true
+    // just close the popup, keep the connection running
+    Keys.onReleased: {
+      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+        event.accepted = true
+        close()
+      }
     }
   }
 
@@ -102,7 +105,7 @@ Dialog {
       },
       State {
         name: "fail"
-        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.Disconnected
+        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.NoConnection
         PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }

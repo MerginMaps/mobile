@@ -222,21 +222,6 @@ ApplicationWindow {
       }
     }
 
-    NotificationBanner {
-      id: gpsNotificationBanner
-
-      width: parent.width - gpsNotificationBanner.anchors.margins * 2
-      height: InputStyle.rowHeight * 2
-
-      text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
-
-      showNotification: __positionKit.positionProvider ? ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect ) : false
-
-      onDetailsClicked: {
-        settingsPanel.open( "gps" )
-      }
-    }
-
     SettingsPanel {
       id: settingsPanel
 
