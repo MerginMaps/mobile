@@ -47,7 +47,7 @@ class AbstractPositionProvider : public QObject
 
     enum State
     {
-      Disconnected = 0,
+      NoConnection = 0,
       WaitingToReconnect,
       Connecting,
       Connected
@@ -92,7 +92,7 @@ class AbstractPositionProvider : public QObject
 
     // State of this provider, see State enum. Message bears human readable explanation of the state
     QString mStateMessage;
-    State mState = State::Disconnected;
+    State mState = State::NoConnection;
 };
 
 #endif // ABSTRACTPOSITIONPROVIDER_H

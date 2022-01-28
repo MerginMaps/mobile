@@ -41,7 +41,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
       QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
     );
 
-    setState( tr( "Disconnected" ), State::Disconnected );
+    setState( tr( "No connection" ), State::NoConnection );
     handleLostConnection();
   } );
 
@@ -109,7 +109,7 @@ void BluetoothPositionProvider::reconnectTimeout()
   else
   {
     mSecondsLeftToReconnect--;
-    setState( tr( "Lost connection, reconnecting in (%1) ..." ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+    setState( tr( "Lost connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
     mReconnectTimer.start();
   }
 }
@@ -120,12 +120,12 @@ void BluetoothPositionProvider::handleLostConnection()
 
   if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
   {
-    setState( tr( "Could not connect to device, not paired" ), State::Disconnected );
+    setState( tr( "Could not connect to device, not paired" ), State::NoConnection );
   }
   else if ( mState != WaitingToReconnect && mState != Connecting )
   {
     mSecondsLeftToReconnect = mReconnectDelay / 1000;
-    setState( tr( "Lost connection, reconnecting in (%1) ..." ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+    setState( tr( "Lost connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
 
     mReconnectTimer.start();
 
@@ -149,7 +149,7 @@ void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketStat
   }
   else if ( state == QBluetoothSocket::UnconnectedState )
   {
-    setState( tr( "Disconnected" ), State::Disconnected );
+    setState( tr( "No connection" ), State::NoConnection );
     handleLostConnection();
   }
 
