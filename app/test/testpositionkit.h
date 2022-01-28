@@ -21,7 +21,12 @@ class TestPositionKit: public QObject
     void init(); // will be called before each testfunction is executed.
     void cleanup() {} // will be called after every testfunction.
 
-    void simulated_position();
+    void simulatedPosition();
+    void testBluetoothProviderConnection();
+    void testBluetoothProviderPosition();
+    void testSettingsProvidersKeys();
+    void testMapPosition();
+    void testPositionDirection();
 
   private:
     PositionKit positionKit;

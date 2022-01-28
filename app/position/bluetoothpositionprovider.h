@@ -59,7 +59,10 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     virtual void closeProvider() override;
 
     void handleLostConnection();
+    void startReconnectionTime();
     void reconnect();
+
+    QBluetoothSocket *socket() const;
 
   public slots:
     void positionUpdateReceived();
