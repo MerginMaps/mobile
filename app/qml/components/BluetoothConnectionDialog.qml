@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,7 +18,7 @@ Dialog {
   id: root
 
   property string titleText: {
-    if ( rootstate.state === "working")
+    if ( rootstate.state === "working" )
     {
       return qsTr( "Connecting to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
     }
@@ -28,6 +28,7 @@ Dialog {
     }
     else
     {
+      // either NoConnection or WaitingToReconnect
       return qsTr( "Failed to connect to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
     }
   }
@@ -41,11 +42,20 @@ Dialog {
     {
       return ""
     }
+    else if ( rootstate.state === "waitingToReconnect" )
+    {
+      return __positionKit.positionProvider.stateMessage + "<br><br>" +
+          qsTr( "You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3" )
+      .arg("<br>")
+      .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
+      .arg("</a>")
+    }
+
     else
     {
       return qsTr( "We were not able to connect to the specified device.
         Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3." )
-      .arg("\n")
+      .arg("<br>")
       .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
       .arg("</a>")
     }
@@ -109,6 +119,13 @@ Dialog {
         PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
         PropertyChanges { target: resultIcon; opacity: 1.0 }
+      },
+      State {
+        name: "waitingToReconnect"
+        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect
+        PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
+        PropertyChanges { target: loadingSpinner; opacity: 0.0 }
+        PropertyChanges { target: resultIcon; opacity: 1.0 }
       }
     ]
 
@@ -130,6 +147,15 @@ Dialog {
       Transition {
         from: "working"
         to: "fail"
+
+        SequentialAnimation {
+          NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
+          NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
+        }
+      },
+      Transition {
+        from: "*"
+        to: "waitingToReconnect"
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
@@ -260,7 +286,7 @@ Dialog {
           width: parent.width
           height: InputStyle.rowHeight > parent.height ? parent.height : InputStyle.rowHeight
           text: qsTr( "Close" )
-          visible: rootstate.state === "fail"
+          visible: rootstate.state === "fail" || rootstate.state === "waitingToReconnect"
 
           onClicked: {
             root.failure()
