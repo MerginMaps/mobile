@@ -18,7 +18,6 @@ NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 
 QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
 {
-  mLastGPSInformation = QgsGpsInformation();
   mStringBuffer = nmeastring;
   processStringBuffer();
   return mLastGPSInformation;
@@ -135,6 +134,9 @@ void BluetoothPositionProvider::handleLostConnection()
       mReconnectDelay = BluetoothPositionProvider::LongDelay;
     }
   }
+
+  // let's also invalidate current position since we no longer have connection
+  emit positionChanged( GeoPosition() );
 }
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
