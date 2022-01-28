@@ -109,7 +109,7 @@ void BluetoothPositionProvider::reconnectTimeout()
   else
   {
     mSecondsLeftToReconnect--;
-    setState( tr( "Lost connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+    setState( tr( "No connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
     mReconnectTimer.start();
   }
 }
@@ -125,7 +125,7 @@ void BluetoothPositionProvider::handleLostConnection()
   else if ( mState != WaitingToReconnect && mState != Connecting )
   {
     mSecondsLeftToReconnect = mReconnectDelay / 1000;
-    setState( tr( "Lost connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+    setState( tr( "No connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
 
     mReconnectTimer.start();
 
@@ -161,7 +161,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
 {
   if ( mSocket->state() != QBluetoothSocket::UnconnectedState )
   {
-    // if by any chance we showed wrong message in the status like "lost connection", fix it here
+    // if by any chance we showed wrong message in the status like "no connection", fix it here
     // we know the connection is working because we just received data from the device
     setState( tr( "Connected" ), State::Connected );
 
