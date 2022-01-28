@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -128,10 +128,15 @@ Item {
 
             titleText: qsTr( "Longitude" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
+                return qsTr( "N/A" )
               }
-              root.coordinatesInDegrees.split(", ")[0]
+
+              let coordParts = root.coordinatesInDegrees.split(", ")
+              if ( coordParts.length > 1 )
+                return coordParts[0]
+
+              return qsTr( "N/A" )
             }
           }
 
@@ -142,15 +147,15 @@ Item {
 
             titleText: qsTr( "Latitude" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
+                return qsTr( "N/A" )
               }
 
               let coordParts = root.coordinatesInDegrees.split(", ")
               if ( coordParts.length > 1 )
                 return coordParts[1]
 
-              return qsTr( "No data from GPS" )
+              return qsTr( "N/A" )
             }
           }
 
@@ -161,9 +166,10 @@ Item {
 
             titleText: qsTr( "X" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have projected position yet
+              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
+                return qsTr( "N/A" )
               }
+
               __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
             }
           }
@@ -175,9 +181,10 @@ Item {
 
             titleText: qsTr( "Y" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have projected position yet
+              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
+                return qsTr( "N/A" )
               }
+
               __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
             }
           }
@@ -189,11 +196,11 @@ Item {
 
             titleText: qsTr( "Horizontal accuracy" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
+                return qsTr( "N/A" )
               }
 
-              __positionKit.horizontalAccuracy < 0 ? qsTr( "N/A" ) : ( __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m" )
+              __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
             }
           }
 
@@ -204,11 +211,11 @@ Item {
 
             titleText: qsTr( "Vertical accuracy" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
+                return qsTr( "N/A" )
               }
 
-              __positionKit.verticalAccuracy < 0 ? qsTr( "N/A" ) : __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
+              __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
             }
           }
 
@@ -219,8 +226,8 @@ Item {
 
             titleText: qsTr( "Altitude" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
+                return qsTr( "N/A" )
               }
               __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
             }
@@ -236,7 +243,7 @@ Item {
             titleText: qsTr( "Fix quality" )
             text: {
               if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+                return qsTr( "N/A" )
               }
 
               __positionKit.fix
@@ -252,7 +259,7 @@ Item {
             text: {
               if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
               {
-                return qsTr( "No data from GPS" )
+                return qsTr( "N/A" )
               }
 
               __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
@@ -268,10 +275,11 @@ Item {
 
             titleText: qsTr( "HDOP" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || __positionKit.hdop < 0 ) {
+                return qsTr( "N/A" )
               }
-              __positionKit.hdop < 0 ? qsTr( "N/A" ) : __inputUtils.formatNumber( __positionKit.hdop, 2 )
+
+              __inputUtils.formatNumber( __positionKit.hdop, 2 )
             }
           }
 
@@ -282,11 +290,11 @@ Item {
 
             titleText: qsTr( "Speed" )
             text: {
-              if ( !__positionKit.hasPosition ) {
-                return qsTr( "No data from GPS" ) // if you do not have position yet
+              if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
+                return qsTr( "N/A" )
               }
 
-              __positionKit.speed < 0 ? qsTr( "N/A" ) : __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
+              __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
             }
           }
 
@@ -296,7 +304,7 @@ Item {
             Layout.fillWidth: true
 
             titleText: qsTr( "Last fix" )
-            text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "Date not available" )
+            text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
           }
         }
       }
