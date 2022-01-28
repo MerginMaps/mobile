@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,7 +116,7 @@ Item {
               height: parent.height
 
               titleText: qsTr( "Status" )
-              text: __positionKit.positionProvider ? __positionKit.positionProvider.statusMessage : ""
+              text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
               visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
             }
           }
