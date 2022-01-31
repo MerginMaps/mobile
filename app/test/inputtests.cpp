@@ -57,12 +57,13 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager )
+void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *kit )
 {
   mApi = api;
   mPurchasing = purchasing;
   mInputUtils = utils;
   mVariablesManager = varManager;
+  mPositionKit = kit;
 }
 
 void InputTests::initTestDeclarative()
@@ -126,7 +127,7 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testPosition" )
   {
-    TestPosition pkTest;
+    TestPosition pkTest( mPositionKit );
     nFailed = QTest::qExec( &pkTest, mTestArgs );
   }
   else if ( mTestRequested == "--testRememberAttributesController" )

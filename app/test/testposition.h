@@ -17,6 +17,10 @@
 class TestPosition: public QObject
 {
     Q_OBJECT
+
+  public:
+    explicit TestPosition( PositionKit *kit, QObject *parent = nullptr );
+
   private slots:
     void init(); // will be called before each testfunction is executed.
     void cleanup() {} // will be called after every testfunction.
@@ -29,7 +33,7 @@ class TestPosition: public QObject
     void testPositionDirection();
 
   private:
-    PositionKit positionKit;
+    PositionKit *positionKit;
 };
 
 #endif // TESTPOSITION_H

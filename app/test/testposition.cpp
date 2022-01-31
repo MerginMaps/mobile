@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
      testqgspositionkit.cpp
      --------------------------------------
   Date                 : May 2018
@@ -31,60 +31,67 @@
 
 #include "testutils.h"
 
+TestPosition::TestPosition( PositionKit *kit, QObject *parent ) : QObject( parent )
+{
+  positionKit = kit;
+}
+
 void TestPosition::init()
 {
   qRegisterMetaType< GeoPosition >( "GeoPosition" );
   qRegisterMetaType< AbstractPositionProvider::State >( "State" );
+
+  positionKit->setPositionProvider( nullptr );
 }
 
 void TestPosition::simulatedPosition()
 {
-  QVERIFY( !positionKit.positionProvider() );
+  QVERIFY( !positionKit->positionProvider() );
 
   SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
 
-  positionKit.setPositionProvider( simulatedProvider ); // ownership of provider is passed to positionkit
+  positionKit->setPositionProvider( simulatedProvider ); // ownership of provider is passed to positionkit
 
-  QVERIFY( positionKit.positionProvider() );
+  QVERIFY( positionKit->positionProvider() );
   simulatedProvider = nullptr;
 
-  QSignalSpy positionKitSpy( &positionKit, &PositionKit::positionChanged );
+  QSignalSpy positionKitSpy( positionKit, &PositionKit::positionChanged );
   bool hasPositionChanged = positionKitSpy.wait( 2000 );
 
   QVERIFY( hasPositionChanged );
-  QVERIFY( positionKit.hasPosition() );
+  QVERIFY( positionKit->hasPosition() );
 
-  COMPARENEAR( positionKit.positionCoordinate().y(), 38.93, 1e-4 );
-  QVERIFY( positionKit.horizontalAccuracy() > 0 );
-  QVERIFY( positionKit.satellitesVisible() >= 0 );
-  QVERIFY( positionKit.satellitesUsed() >= 0 );
+  COMPARENEAR( positionKit->positionCoordinate().y(), 38.93, 1e-4 );
+  QVERIFY( positionKit->horizontalAccuracy() > 0 );
+  QVERIFY( positionKit->satellitesVisible() >= 0 );
+  QVERIFY( positionKit->satellitesUsed() >= 0 );
 
   SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( 90.36, 33.93, 0 );
 
   // position kit ignores new provider if it is the same type and id, so delete the previous one first
-  positionKit.setPositionProvider( nullptr ); // deletes the first provider
-  positionKit.setPositionProvider( simulatedProvider2 );
+  positionKit->setPositionProvider( nullptr ); // deletes the first provider
+  positionKit->setPositionProvider( simulatedProvider2 );
   simulatedProvider2 = nullptr;
 
   hasPositionChanged = positionKitSpy.wait( 2000 );
 
   QVERIFY( hasPositionChanged );
-  QVERIFY( positionKit.hasPosition() );
-  COMPARENEAR( positionKit.positionCoordinate().y(), 33.93, 1e-4 );
+  QVERIFY( positionKit->hasPosition() );
+  COMPARENEAR( positionKit->positionCoordinate().y(), 33.93, 1e-4 );
 
-  positionKit.stopUpdates();
+  positionKit->stopUpdates();
 
-  positionKit.setPositionProvider( nullptr );
-  QVERIFY( !positionKit.positionProvider() );
+  positionKit->setPositionProvider( nullptr );
+  QVERIFY( !positionKit->positionProvider() );
 }
 
 void TestPosition::testBluetoothProviderConnection()
 {
   BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider" );
 
-  positionKit.setPositionProvider( btProvider ); // positionKit takes ownership of this provider
+  positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
-  AbstractPositionProvider *pkProvider = positionKit.positionProvider();
+  AbstractPositionProvider *pkProvider = positionKit->positionProvider();
 
   // let's make sure that we have correct provider assigned
   QCOMPARE( "testBluetoothProvider", btProvider->name() );
@@ -122,7 +129,7 @@ void TestPosition::testBluetoothProviderConnection()
   QVERIFY( providerSpy.count() > 3 );
 
   // position kit should have its position invalidated
-  QVERIFY( !positionKit.hasPosition() );
+  QVERIFY( !positionKit->hasPosition() );
 
   //
   // test reconnection logic
@@ -181,7 +188,7 @@ void TestPosition::testBluetoothProviderPosition()
 
   BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
 
-  positionKit.setPositionProvider( btProvider ); // positionKit takes ownership of this provider
+  positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
@@ -195,14 +202,14 @@ void TestPosition::testBluetoothProviderPosition()
   emit btProvider->positionChanged( GeoPosition::fromQgsGpsInformation( position ) );
 
   // test if position kit has correct information
-  QVERIFY( qgsDoubleNear( positionKit.latitude(), 48.10305 ) );
-  QVERIFY( qgsDoubleNear( positionKit.longitude(), 17.1064 ) );
-  QCOMPARE( positionKit.horizontalAccuracy(), -1 );
-  QCOMPARE( positionKit.verticalAccuracy(), -1 );
-  QCOMPARE( positionKit.altitude(), 171.3 );
-  QCOMPARE( positionKit.speed(), -1 );
-  QCOMPARE( positionKit.hdop(), -1 );
-  QCOMPARE( positionKit.fix(), "GPS fix, no correction data" );
+  QVERIFY( qgsDoubleNear( positionKit->latitude(), 48.10305 ) );
+  QVERIFY( qgsDoubleNear( positionKit->longitude(), 17.1064 ) );
+  QCOMPARE( positionKit->horizontalAccuracy(), -1 );
+  QCOMPARE( positionKit->verticalAccuracy(), -1 );
+  QCOMPARE( positionKit->altitude(), 171.3 );
+  QCOMPARE( positionKit->speed(), -1 );
+  QCOMPARE( positionKit->hdop(), -1 );
+  QCOMPARE( positionKit->fix(), "GPS fix, no correction data" );
 
   // let's invalidate previous data
   emit btProvider->positionChanged( GeoPosition() );
@@ -218,22 +225,66 @@ void TestPosition::testBluetoothProviderPosition()
   emit btProvider->positionChanged( GeoPosition::fromQgsGpsInformation( position ) );
 
   // test if position kit has correct information
-  QCOMPARE( positionKit.latitude(), 48.10313552 );
-  QVERIFY( qgsDoubleNear( positionKit.longitude(), 17.1059, 0.0001 ) );
-  QVERIFY( qgsDoubleNear( positionKit.horizontalAccuracy(), 0.0257, 0.0001 ) );
-  QCOMPARE( positionKit.verticalAccuracy(), 0.041 );
-  QCOMPARE( positionKit.altitude(), 153.026 );
-  QCOMPARE( positionKit.speed(), 0.05 );
-  QCOMPARE( positionKit.hdop(), 3.2 );
-  QCOMPARE( positionKit.satellitesUsed(), 9 );
-  QCOMPARE( positionKit.fix(), "RTK float" );
-  QCOMPARE( positionKit.lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
+  QCOMPARE( positionKit->latitude(), 48.10313552 );
+  QVERIFY( qgsDoubleNear( positionKit->longitude(), 17.1059, 0.0001 ) );
+  QVERIFY( qgsDoubleNear( positionKit->horizontalAccuracy(), 0.0257, 0.0001 ) );
+  QCOMPARE( positionKit->verticalAccuracy(), 0.041 );
+  QCOMPARE( positionKit->altitude(), 153.026 );
+  QCOMPARE( positionKit->speed(), 0.05 );
+  QCOMPARE( positionKit->hdop(), 3.2 );
+  QCOMPARE( positionKit->satellitesUsed(), 9 );
+  QCOMPARE( positionKit->fix(), "RTK float" );
+  QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
 
 void TestPosition::testPositionProviderKeysInSettings()
 {
-  // look to qsettings to see if the keys are being correctly saved
-  // test position providers model!
+  //
+  // Look to QSettings to see if the keys are being correctly saved and read
+  //
+
+  QSettings rawSettings;
+  rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
+
+  positionKit->setPositionProvider( positionKit->constructProvider( "external", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
+
+  QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
+  QCOMPARE( positionKit->positionProvider()->name(), "testProviderA" );
+  QCOMPARE( positionKit->positionProvider()->type(), "external" );
+
+  QCOMPARE( rawSettings.value( AppSettings::GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
+
+  positionKit->setPositionProvider( positionKit->constructProvider( "internal", "devicegps" ) );
+
+  QCOMPARE( rawSettings.value( AppSettings::GROUP_NAME + "/activePositionProviderId" ).toString(), "devicegps" );
+
+  // even without appSettings provider model should have two items in desktop build: simulated and internal provider
+  PositionProvidersModel providersModel;
+  AppSettings appSettings;
+
+  QCOMPARE( providersModel.rowCount(), 2 );
+  QCOMPARE( providersModel.data( providersModel.index( 0 ), PositionProvidersModel::ProviderId ), "devicegps" );
+  QCOMPARE( providersModel.data( providersModel.index( 1 ), PositionProvidersModel::ProviderId ), "simulated" );
+
+  providersModel.setAppSettings( &appSettings );
+  providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44" );
+
+  // app settings should have one saved provider - testProviderB
+  QVariantList providers = appSettings.savedPositionProviders();
+
+  QCOMPARE( providers.count(), 1 ); // we have one (external) provider
+  QCOMPARE( providers.at( 0 ).toList().count(), 2 ); // the provider has two properties
+
+  QVariantList providerData = providers.at( 0 ).toList();
+  QCOMPARE( providerData.at( 0 ).toString(), "testProviderB" );
+  QCOMPARE( providerData.at( 1 ).toString(), "AA:00:11:22:23:44" );
+
+  // remove that provider
+  providersModel.removeProvider( "AA:00:11:22:23:44" );
+
+  providers = appSettings.savedPositionProviders();
+
+  QVERIFY( providers.isEmpty() );
 }
 
 void TestPosition::testMapPosition()

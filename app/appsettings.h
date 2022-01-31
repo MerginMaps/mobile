@@ -75,6 +75,9 @@ class AppSettings: public QObject
     const QString &activePositionProviderId() const;
     void setActivePositionProviderId( const QString &id );
 
+    static const QString GROUP_NAME;
+    static const QString POSITION_PROVIDERS_GROUP;
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -90,7 +93,6 @@ class AppSettings: public QObject
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
     void legacyFolderMigratedChanged( bool legacyFolderMigrated );
     void appVersionChanged( const QString &version );
-    void savedPositionProvidersChanged( const QVariantList & );
     void activePositionProviderIdChanged( const QString & );
 
   private:
@@ -118,9 +120,6 @@ class AppSettings: public QObject
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;
-
-    const QString mGroupName = QString( "inputApp" );
-    const QString mPositionProvidersArrayGroupName = mGroupName + "/positionProviders";
 
     // used to allow remembering values of last created feature to speed up digitizing for user
     bool mReuseLastEnteredValues;
