@@ -104,6 +104,23 @@ QBluetoothSocket *BluetoothPositionProvider::socket() const
   return mSocket.get();
 }
 
+#ifdef INPUT_TEST
+void BluetoothPositionProvider::setSocket( QIODevice *socket )
+{
+  if ( mSocket.get() != socket )
+  {
+    if ( mSocket )
+    {
+      mSocket->disconnect();
+    }
+
+    // We use this function only for test purposes,
+    // it would otherwise be dangerous to downcast like this
+    mSocket.reset( new QBluetoothSocket( socket ) );
+  }
+}
+#endif
+
 void BluetoothPositionProvider::reconnectTimeout()
 {
   if ( mSecondsLeftToReconnect <= 1 )
