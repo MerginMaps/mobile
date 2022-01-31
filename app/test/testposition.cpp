@@ -26,10 +26,12 @@
 #include "position/bluetoothpositionprovider.h"
 #include "position/internalpositionprovider.h"
 #include "position/mapposition.h"
-#include "position/positiondirection.h"
 #include "position/positionprovidersmodel.h"
 
 #include "testutils.h"
+
+#include "qgsquickmapcanvasmap.h"
+#include "qgsvectorlayer.h"
 
 TestPosition::TestPosition( PositionKit *kit, QObject *parent ) : QObject( parent )
 {
@@ -40,6 +42,7 @@ void TestPosition::init()
 {
   qRegisterMetaType< GeoPosition >( "GeoPosition" );
   qRegisterMetaType< AbstractPositionProvider::State >( "State" );
+  qRegisterMetaType< QgsPoint >( "QgsPoint" );
 
   positionKit->setPositionProvider( nullptr );
 }
@@ -289,10 +292,62 @@ void TestPosition::testPositionProviderKeysInSettings()
 
 void TestPosition::testMapPosition()
 {
+  //
+  // Test if map canvas properties (position on map) change when extent changes
+  //
 
-}
+  // Create map settings
+  QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 5514 );
+  QVERIFY( crsGPS.authid() == "EPSG:5514" );
 
-void TestPosition::testPositionDirection()
-{
+  QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
+  QgsQuickMapCanvasMap canvas;
 
+  QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:5514" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
+  QVERIFY( tempLayer->isValid() );
+
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  ms->setDestinationCrs( crsGPS );
+  ms->setExtent( extent );
+  ms->setOutputSize( QSize( 1000, 500 ) );
+  ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
+
+  // Create position kit provider
+  SimulatedPositionProvider *provider = new SimulatedPositionProvider( 17.1, 48.1, 0 );
+  positionKit->setPositionProvider( provider );
+
+  // Create MapPosition
+  MapPosition mapPosition;
+
+  QVERIFY( mapPosition.mapPosition().isEmpty() );
+
+  mapPosition.setMapSettings( ms );
+  mapPosition.setPositionKit( positionKit );
+
+  // Let's give simulated provider some time to generate first location
+  QSignalSpy positionUpdateSpy( provider, &AbstractPositionProvider::positionChanged );
+  positionUpdateSpy.wait( 3000 );
+
+  QVERIFY( !mapPosition.mapPosition().isEmpty() );
+
+  QgsPoint oldmappos = mapPosition.mapPosition();
+
+  QSignalSpy mpSpy( &mapPosition, &MapPosition::mapPositionChanged );
+
+  // Change extent and see if map position changes
+  ms->setExtent( QgsRectangle( -120, 23, -82, 40 ) );
+
+  QVERIFY( mpSpy.isEmpty() ); // changing extent does not change position printed on map
+  QVERIFY( mapPosition.mapPosition() == oldmappos );
+
+  // Now let's assign a not stationary provider
+  positionKit->setPositionProvider( nullptr );
+  SimulatedPositionProvider *provider2 = new SimulatedPositionProvider( 15.1, 48.1, 1, 500 );
+  positionKit->setPositionProvider( provider2 );
+
+  QSignalSpy positionUpdateSpy2( provider2, &AbstractPositionProvider::positionChanged );
+  positionUpdateSpy2.wait( 1500 );
+
+  QVERIFY( !positionUpdateSpy2.isEmpty() );
+  QVERIFY( mapPosition.mapPosition() != oldmappos );
 }

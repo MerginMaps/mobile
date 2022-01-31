@@ -30,7 +30,6 @@ class TestPosition: public QObject
     void testBluetoothProviderPosition();
     void testPositionProviderKeysInSettings();
     void testMapPosition();
-    void testPositionDirection();
 
   private:
     PositionKit *positionKit;
