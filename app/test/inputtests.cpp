@@ -18,7 +18,7 @@
 #include "test/testattributepreviewcontroller.h"
 #include "test/testattributecontroller.h"
 #include "test/testidentifykit.h"
-#include "test/testpositionkit.h"
+#include "test/testposition.h"
 #include "test/testrememberattributescontroller.h"
 #include "test/testscalebarkit.h"
 #include "test/testvariablesmanager.h"
@@ -124,9 +124,9 @@ int InputTests::runTest() const
     TestIdentifyKit ikTest;
     nFailed = QTest::qExec( &ikTest, mTestArgs );
   }
-  else if ( mTestRequested == "--testPositionKit" )
+  else if ( mTestRequested == "--testPosition" )
   {
-    TestPositionKit pkTest;
+    TestPosition pkTest;
     nFailed = QTest::qExec( &pkTest, mTestArgs );
   }
   else if ( mTestRequested == "--testRememberAttributesController" )

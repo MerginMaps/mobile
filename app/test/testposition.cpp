@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "testpositionkit.h"
+#include "testposition.h"
 
 #include <QObject>
 #include <QApplication>
@@ -31,7 +31,7 @@
 
 #include "testutils.h"
 
-void TestPositionKit::init()
+void TestPosition::init()
 {
   qRegisterMetaType< GeoPosition >( "GeoPosition" );
   qRegisterMetaType< AbstractPositionProvider::State >( "State" );
@@ -107,20 +107,19 @@ void TestPosition::testBluetoothProviderConnection()
 
   emit socket->error( QBluetoothSocket::NetworkError );
   QCOMPARE( AbstractPositionProvider::NoConnection, btProvider->state() );
-  QVERIFY( providerSpy.count() > 1 );
 
   emit socket->stateChanged( QBluetoothSocket::ConnectingState );
   QCOMPARE( AbstractPositionProvider::Connecting, btProvider->state() );
-  QVERIFY( providerSpy.count() > 2 );
+  QVERIFY( providerSpy.count() > 1 );
 
   emit socket->stateChanged( QBluetoothSocket::ConnectedState );
   QCOMPARE( AbstractPositionProvider::Connected, btProvider->state() );
-  QVERIFY( providerSpy.count() > 3 );
+  QVERIFY( providerSpy.count() > 2 );
 
   emit socket->stateChanged( QBluetoothSocket::UnconnectedState );
   QCOMPARE( AbstractPositionProvider::NoConnection, btProvider->state() );
   QCOMPARE( "Could not connect to device, not paired", btProvider->stateMessage() );
-  QVERIFY( providerSpy.count() > 4 );
+  QVERIFY( providerSpy.count() > 3 );
 
   // position kit should have its position invalidated
   QVERIFY( !positionKit.hasPosition() );
@@ -141,7 +140,14 @@ void TestPosition::testBluetoothProviderConnection()
   btProvider->startReconnectionTime();
 
   // countdown should emit at least 3 message changed signals -> 3,2,1 + message Connecting ... (optionally NoConnection)
-  providerCountdownSpy.wait( 5000 );
+
+  // non-blocking wait
+  QEventLoop loop;
+  QTimer t;
+  t.connect( &t, &QTimer::timeout, &loop, &QEventLoop::quit );
+  t.start( 5000 );
+  loop.exec();
+
   QVERIFY( providerCountdownSpy.count() > 3 );
 
   // state should have changed to WaitingToReconnect and Connecting ... (optionally NoConnection)
@@ -168,7 +174,36 @@ void TestPosition::testBluetoothProviderConnection()
 
 void TestPosition::testBluetoothProviderPosition()
 {
+  //
   // read nmea sentences from test file and make sure that position kit has correct position
+  //
+
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider" );
+
+  positionKit.setPositionProvider( btProvider ); // positionKit takes ownership of this provider
+
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  btProvider->setSocket( &miniNmeaFile );
+  QVERIFY( btProvider->socket() );
+
+  btProvider->positionUpdateReceived();
+
+  // test if position kit has correct infnormation
+  QCOMPARE( positionKit.latitude(), 15.5 );
+  QCOMPARE( positionKit.longitude(), 1 );
+  QCOMPARE( positionKit.altitude(), 171.3 );
+  QCOMPARE( positionKit.speed(), -1 );
+  QCOMPARE( positionKit.hdop(), -1 );
+//  QCOMPARE( positionKit.fixStatusString(), "no position" );
+
+  // full file contains position, accuracy, fix, speed, hdop and similar
+  QString fullNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_full.txt";
 }
 
 void TestPosition::testPositionProviderKeysInSettings()
@@ -177,12 +212,12 @@ void TestPosition::testPositionProviderKeysInSettings()
   // test position providers model!
 }
 
-void TestPositionKit::testMapPosition()
+void TestPosition::testMapPosition()
 {
 
 }
 
-void TestPositionKit::testPositionDirection()
+void TestPosition::testPositionDirection()
 {
 
 }

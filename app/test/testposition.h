@@ -9,12 +9,12 @@
 #include <QObject>
 #include <QtTest>
 
-#ifndef TESTPOSITIONKIT_H
-#define TESTPOSITIONKIT_H
+#ifndef TESTPOSITION_H
+#define TESTPOSITION_H
 
 #include "position/positionkit.h"
 
-class TestPositionKit: public QObject
+class TestPosition: public QObject
 {
     Q_OBJECT
   private slots:
@@ -24,7 +24,7 @@ class TestPositionKit: public QObject
     void simulatedPosition();
     void testBluetoothProviderConnection();
     void testBluetoothProviderPosition();
-    void testSettingsProvidersKeys();
+    void testPositionProviderKeysInSettings();
     void testMapPosition();
     void testPositionDirection();
 
@@ -32,4 +32,4 @@ class TestPositionKit: public QObject
     PositionKit positionKit;
 };
 
-#endif // TESTPOSITIONKIT_H
+#endif // TESTPOSITION_H

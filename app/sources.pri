@@ -121,7 +121,7 @@ contains(DEFINES, INPUT_TEST) {
       test/testattributepreviewcontroller.cpp \
       test/testattributecontroller.cpp \
       test/testidentifykit.cpp \
-      test/testpositionkit.cpp \
+      test/testposition.cpp \
       test/testrememberattributescontroller.cpp \
       test/testscalebarkit.cpp \
       test/testvariablesmanager.cpp \
@@ -136,7 +136,7 @@ contains(DEFINES, INPUT_TEST) {
       test/testmerginapi.h \
       test/testingpurchasingbackend.h \
       test/testpurchasing.h \
-      test/testpositionkit.h \
+      test/testposition.h \
       test/testlinks.h \
       test/testattributepreviewcontroller.h \
       test/testattributecontroller.h \

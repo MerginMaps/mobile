@@ -30,7 +30,7 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testIdentifyKit
 NFAILURES=$(($NFAILURES+$?))
 
-$INPUT_EXECUTABLE --testPositionKit
+$INPUT_EXECUTABLE --testPosition
 NFAILURES=$(($NFAILURES+$?))
 
 $INPUT_EXECUTABLE --testRememberAttributesController
