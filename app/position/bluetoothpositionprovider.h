@@ -64,11 +64,6 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 
     QBluetoothSocket *socket() const;
 
-#ifdef INPUT_TEST
-    //! Method used only for test purposes, do not use in code!
-    void setSocket( QIODevice *socket );
-#endif
-
   public slots:
     void positionUpdateReceived();
     void socketStateChanged( QBluetoothSocket::SocketState );

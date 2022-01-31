@@ -176,9 +176,10 @@ void TestPosition::testBluetoothProviderPosition()
 {
   //
   // read nmea sentences from test file and make sure that position kit has correct position
+  // NOTE: If you want to read NMEA sentences from file, make sure that files has CRLF line endings!
   //
 
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider" );
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
 
   positionKit.setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
@@ -189,21 +190,44 @@ void TestPosition::testBluetoothProviderPosition()
 
   QVERIFY( miniNmeaFile.isOpen() );
 
-  btProvider->setSocket( &miniNmeaFile );
-  QVERIFY( btProvider->socket() );
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  emit btProvider->positionChanged( GeoPosition::fromQgsGpsInformation( position ) );
 
-  btProvider->positionUpdateReceived();
-
-  // test if position kit has correct infnormation
-  QCOMPARE( positionKit.latitude(), 15.5 );
-  QCOMPARE( positionKit.longitude(), 1 );
+  // test if position kit has correct information
+  QVERIFY( qgsDoubleNear( positionKit.latitude(), 48.10305 ) );
+  QVERIFY( qgsDoubleNear( positionKit.longitude(), 17.1064 ) );
+  QCOMPARE( positionKit.horizontalAccuracy(), -1 );
+  QCOMPARE( positionKit.verticalAccuracy(), -1 );
   QCOMPARE( positionKit.altitude(), 171.3 );
   QCOMPARE( positionKit.speed(), -1 );
   QCOMPARE( positionKit.hdop(), -1 );
-//  QCOMPARE( positionKit.fixStatusString(), "no position" );
+  QCOMPARE( positionKit.fix(), "GPS fix, no correction data" );
+
+  // let's invalidate previous data
+  emit btProvider->positionChanged( GeoPosition() );
 
   // full file contains position, accuracy, fix, speed, hdop and similar
   QString fullNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_full.txt";
+  QFile fullNmeaFile( fullNmeaPositionFilePath );
+  fullNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( fullNmeaFile.isOpen() );
+
+  position = parser.parseNmeaString( fullNmeaFile.readAll() );
+  emit btProvider->positionChanged( GeoPosition::fromQgsGpsInformation( position ) );
+
+  // test if position kit has correct information
+  QCOMPARE( positionKit.latitude(), 48.10313552 );
+  QVERIFY( qgsDoubleNear( positionKit.longitude(), 17.1059, 0.0001 ) );
+  QVERIFY( qgsDoubleNear( positionKit.horizontalAccuracy(), 0.0257, 0.0001 ) );
+  QCOMPARE( positionKit.verticalAccuracy(), 0.041 );
+  QCOMPARE( positionKit.altitude(), 153.026 );
+  QCOMPARE( positionKit.speed(), 0.05 );
+  QCOMPARE( positionKit.hdop(), 3.2 );
+  QCOMPARE( positionKit.satellitesUsed(), 9 );
+  QCOMPARE( positionKit.fix(), "RTK float" );
+  QCOMPARE( positionKit.lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
 
 void TestPosition::testPositionProviderKeysInSettings()
