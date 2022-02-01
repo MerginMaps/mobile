@@ -271,6 +271,11 @@ Item {
         if ( root.activeProjectId === relatedProjectId )
           root.activeProjectDeleted()
 
+        __inputUtils.log(
+              "Delete project",
+              "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
+              ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+
         controllerModel.removeLocalProject( relatedProjectId )
 
         removeDialog.relatedProjectId = ""

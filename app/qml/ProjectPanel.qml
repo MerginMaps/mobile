@@ -438,6 +438,10 @@ Item {
         target: __projectWizard
         onProjectCreated: {
           if  (stackView.currentItem.objectName === "projectWizard") {
+            __inputUtils.log(
+                  "Create project",
+                  "Local project " + projectName + " created at path: " + projectDir + " by "
+                  + ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) )
             stackView.popOnePageOrClose()
           }
         }

@@ -784,6 +784,11 @@ void InputUtils::logMessage( const QString &message, const QString &tag, Qgis::M
   QgsMessageLog::logMessage( message, tag, level );
 }
 
+void InputUtils::log( const QString &context, const QString &message )
+{
+  CoreUtils::log( context, message );
+}
+
 FeatureLayerPair InputUtils::featureFactory( const QgsFeature &feature, QgsVectorLayer *layer )
 {
   return FeatureLayerPair( feature, layer );

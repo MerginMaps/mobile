@@ -45,6 +45,14 @@ class LocalProjectsManager : public QObject
 
     Q_INVOKABLE QString projectId( const QString &path ) const;
 
+    Q_INVOKABLE QString projectName( const QString &projectId ) const;
+
+    /**
+     * Returns changes of a project specified by projectId in the form :
+     * (pending changes, features in layer survey: 10 addition, 3 updates, 1 deletion. 10 new files)
+     */
+    Q_INVOKABLE QString projectChanges( const QString &projectId );
+
     //! after successful update/upload - both server and local version are the same
     void updateLocalVersion( const QString &projectDir, int version );
 

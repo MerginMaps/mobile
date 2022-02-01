@@ -137,6 +137,33 @@ QString LocalProjectsManager::projectId( const QString &path ) const
   return QString();
 }
 
+QString LocalProjectsManager::projectName( const QString &projectId ) const
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].id() == projectId )
+    {
+      return MerginApi::getFullProjectName( mProjects[i].projectNamespace, mProjects[i].projectName );
+    }
+  }
+
+  return QString();
+}
+
+QString LocalProjectsManager::projectChanges( const QString &projectId )
+{
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].id() == projectId )
+    {
+      ProjectDiff diff = MerginApi::localProjectChanges( mProjects[i].projectDir );
+      return diff.dump();
+    }
+  }
+
+  return QString();
+}
+
 void LocalProjectsManager::updateLocalVersion( const QString &projectDir, int version )
 {
   for ( int i = 0; i < mProjects.count(); ++i )
