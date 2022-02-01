@@ -73,37 +73,37 @@ QString InputHelp::merginDashboardLink() const
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return helpRoot + "/misc/privacy" + utmTagOther;
+  return helpRoot + "/misc/privacy/" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const
 {
-  return helpRoot + "/setup/subscriptions" + utmTagSubscription;
+  return helpRoot + "/setup/subscriptions/" + utmTagSubscription;
 }
 
 QString InputHelp::howToEnableDigitizingLink() const
 {
-  return helpRoot + "/gis/enable_digitising" + utmTagHelp;
+  return helpRoot + "/gis/enable_digitising/" + utmTagHelp;
 }
 
 QString InputHelp::howToEnableBrowsingDataLink() const
 {
-  return helpRoot + "/gis/enable_browsing" + utmTagHelp;
+  return helpRoot + "/gis/enable_browsing/" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupThemesLink() const
 {
-  return helpRoot + "/gis/setup_themes" + utmTagHelp;
+  return helpRoot + "/gis/setup_themes/" + utmTagHelp;
 }
 
 QString InputHelp::howToCreateNewProjectLink() const
 {
-  return helpRoot + "/manage/create-project" + utmTagHelp;
+  return helpRoot + "/manage/create-project/" + utmTagHelp;
 }
 
 QString InputHelp::howToDownloadProjectLink() const
 {
-  return helpRoot + "/manage/data_sync" + utmTagHelp;
+  return helpRoot + "/manage/data_sync/" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupProj() const
