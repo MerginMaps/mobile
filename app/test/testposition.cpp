@@ -114,16 +114,16 @@ void TestPosition::testBluetoothProviderConnection()
 
   emit socket->stateChanged( QBluetoothSocket::ConnectingState );
   QCOMPARE( AbstractPositionProvider::Connecting, btProvider->state() );
-  QVERIFY( providerSpy.count() > 1 );
+  QVERIFY( providerSpy.count() > 0 );
 
   emit socket->stateChanged( QBluetoothSocket::ConnectedState );
   QCOMPARE( AbstractPositionProvider::Connected, btProvider->state() );
-  QVERIFY( providerSpy.count() > 2 );
+  QVERIFY( providerSpy.count() > 1 );
 
   emit socket->stateChanged( QBluetoothSocket::UnconnectedState );
   QCOMPARE( AbstractPositionProvider::NoConnection, btProvider->state() );
   QCOMPARE( "Could not connect to device, not paired", btProvider->stateMessage() );
-  QVERIFY( providerSpy.count() > 3 );
+  QVERIFY( providerSpy.count() > 2 );
 
   // position kit should have its position invalidated
   QVERIFY( !positionKit->hasPosition() );
