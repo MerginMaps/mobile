@@ -17,6 +17,7 @@ env:
   CCACHE_DIR: ~/.ccache
   INPUT_SDK_VERSION: ubuntu-2004-20211201-34
   QT_VERSION: '5.14.2'
+  CACHE_VERSION: 0
 
 concurrency:
   group: ci-${{github.ref}}-linux
@@ -47,7 +48,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}
+          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -106,7 +107,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
