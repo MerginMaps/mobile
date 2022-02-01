@@ -95,4 +95,6 @@ class AbstractPositionProvider : public QObject
     State mState = State::NoConnection;
 };
 
+Q_DECLARE_METATYPE( AbstractPositionProvider::State );
+
 #endif // ABSTRACTPOSITIONPROVIDER_H

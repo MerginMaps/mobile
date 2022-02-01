@@ -17,6 +17,7 @@ class MerginApi;
 class Purchasing;
 class InputUtils;
 class VariablesManager;
+class PositionKit;
 
 class InputTests
 {
@@ -28,7 +29,7 @@ class InputTests
 
     bool testingRequested() const;
 
-    void init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager );
+    void init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *positionKit );
     void initTestDeclarative();
     QString initTestingDir();
     int runTest() const;
@@ -40,6 +41,7 @@ class InputTests
     Purchasing *mPurchasing = nullptr;
     InputUtils *mInputUtils = nullptr;
     VariablesManager *mVariablesManager = nullptr;
+    PositionKit *mPositionKit = nullptr;
 };
 
 #endif // INPUTTESTS_H

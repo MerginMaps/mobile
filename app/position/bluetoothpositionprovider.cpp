@@ -99,6 +99,11 @@ void BluetoothPositionProvider::reconnect()
   startUpdates();
 }
 
+QBluetoothSocket *BluetoothPositionProvider::socket() const
+{
+  return mSocket.get();
+}
+
 void BluetoothPositionProvider::reconnectTimeout()
 {
   if ( mSecondsLeftToReconnect <= 1 )
@@ -113,6 +118,20 @@ void BluetoothPositionProvider::reconnectTimeout()
   }
 }
 
+void BluetoothPositionProvider::startReconnectionTime()
+{
+  mSecondsLeftToReconnect = mReconnectDelay / 1000;
+  setState( tr( "No connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
+
+  mReconnectTimer.start();
+
+  // first time do reconnect in short time, then each other in long time
+  if ( mReconnectDelay == BluetoothPositionProvider::ShortDelay )
+  {
+    mReconnectDelay = BluetoothPositionProvider::LongDelay;
+  }
+}
+
 void BluetoothPositionProvider::handleLostConnection()
 {
   // we want to reconnect, but only to devices that are paired
@@ -123,16 +142,7 @@ void BluetoothPositionProvider::handleLostConnection()
   }
   else if ( mState != WaitingToReconnect && mState != Connecting )
   {
-    mSecondsLeftToReconnect = mReconnectDelay / 1000;
-    setState( tr( "No connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
-
-    mReconnectTimer.start();
-
-    // first time do reconnect in short time, then each other in long time
-    if ( mReconnectDelay == BluetoothPositionProvider::ShortDelay )
-    {
-      mReconnectDelay = BluetoothPositionProvider::LongDelay;
-    }
+    startReconnectionTime();
   }
 
   // let's also invalidate current position since we no longer have connection

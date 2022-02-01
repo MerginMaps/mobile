@@ -73,52 +73,52 @@ QString InputHelp::merginDashboardLink() const
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return helpRoot + "/reference/privacy" + utmTagOther;
+  return helpRoot + "/misc/privacy" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const
 {
-  return helpRoot + "/howto/manage/web/subscriptions" + utmTagSubscription;
+  return helpRoot + "/setup/subscriptions" + utmTagSubscription;
 }
 
 QString InputHelp::howToEnableDigitizingLink() const
 {
-  return helpRoot + "/howto/project/enable_digitising" + utmTagHelp;
+  return helpRoot + "/gis/enable_digitising" + utmTagHelp;
 }
 
 QString InputHelp::howToEnableBrowsingDataLink() const
 {
-  return helpRoot + "/howto/project/enable_browsing" + utmTagHelp;
+  return helpRoot + "/gis/enable_browsing" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupThemesLink() const
 {
-  return helpRoot + "/howto/project/setup_themes" + utmTagHelp;
+  return helpRoot + "/gis/setup_themes" + utmTagHelp;
 }
 
 QString InputHelp::howToCreateNewProjectLink() const
 {
-  return helpRoot + "/howto/project/features" + utmTagHelp;
+  return helpRoot + "/manage/create-project" + utmTagHelp;
 }
 
 QString InputHelp::howToDownloadProjectLink() const
 {
-  return helpRoot + "/howto/data_sync" + utmTagHelp;
+  return helpRoot + "/manage/data_sync" + utmTagHelp;
 }
 
 QString InputHelp::howToSetupProj() const
 {
-  return helpRoot + "/howto/proj" + utmTagHelp;
+  return helpRoot + "/gis/proj/" + utmTagHelp;
 }
 
 QString InputHelp::gpsAccuracyHelpLink() const
 {
-  return helpRoot + "/fieldwork/gps_accuracy/" + utmTagHelp;
+  return helpRoot + "/field/gps_accuracy/" + utmTagHelp;
 }
 
 QString InputHelp::howToConnectGPSLink() const
 {
-  return helpRoot + "/howto/external_gps/" + utmTagHelp;
+  return helpRoot + "/field/external_gps/" + utmTagHelp;
 }
 
 QString InputHelp::merginTermsLink() const

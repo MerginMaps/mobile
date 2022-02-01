@@ -13,10 +13,13 @@
 #include <QSettings>
 #include <QFileInfo>
 
+const QString AppSettings::GROUP_NAME = QStringLiteral( "inputApp" );
+const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
+
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
-  settings.beginGroup( mGroupName );
+  settings.beginGroup( GROUP_NAME );
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
@@ -239,7 +242,7 @@ QVariantList AppSettings::savedPositionProviders() const
   QSettings settings;
   QVariantList providers;
 
-  int size = settings.beginReadArray( mPositionProvidersArrayGroupName );
+  int size = settings.beginReadArray( POSITION_PROVIDERS_GROUP );
 
   for ( int i = 0; i < size; i++ )
   {
@@ -259,12 +262,12 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
 {
   QSettings settings;
 
-  if ( settings.contains( mPositionProvidersArrayGroupName ) )
+  if ( settings.contains( POSITION_PROVIDERS_GROUP ) )
   {
-    settings.remove( mPositionProvidersArrayGroupName );
+    settings.remove( POSITION_PROVIDERS_GROUP );
   }
 
-  settings.beginWriteArray( mPositionProvidersArrayGroupName );
+  settings.beginWriteArray( POSITION_PROVIDERS_GROUP );
 
   for ( int i = 0; i < providers.count(); i++ )
   {
@@ -286,7 +289,7 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {
   QSettings settings;
-  settings.beginGroup( mGroupName );
+  settings.beginGroup( GROUP_NAME );
   settings.setValue( key, value );
   settings.endGroup();
 }
@@ -294,7 +297,7 @@ void AppSettings::setValue( const QString &key, const QVariant &value )
 QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
 {
   QSettings settings;
-  settings.beginGroup( mGroupName );
+  settings.beginGroup( GROUP_NAME );
   QVariant value = settings.value( key, defaultValue );
   settings.endGroup();
 

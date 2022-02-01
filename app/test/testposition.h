@@ -9,22 +9,30 @@
 #include <QObject>
 #include <QtTest>
 
-#ifndef TESTPOSITIONKIT_H
-#define TESTPOSITIONKIT_H
+#ifndef TESTPOSITION_H
+#define TESTPOSITION_H
 
 #include "position/positionkit.h"
 
-class TestPositionKit: public QObject
+class TestPosition: public QObject
 {
     Q_OBJECT
+
+  public:
+    explicit TestPosition( PositionKit *kit, QObject *parent = nullptr );
+
   private slots:
     void init(); // will be called before each testfunction is executed.
     void cleanup() {} // will be called after every testfunction.
 
-    void simulated_position();
+    void simulatedPosition();
+    void testBluetoothProviderConnection();
+    void testBluetoothProviderPosition();
+    void testPositionProviderKeysInSettings();
+    void testMapPosition();
 
   private:
-    PositionKit positionKit;
+    PositionKit *positionKit;
 };
 
-#endif // TESTPOSITIONKIT_H
+#endif // TESTPOSITION_H

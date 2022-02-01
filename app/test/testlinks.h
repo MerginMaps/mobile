@@ -83,6 +83,46 @@ class TestLinks: public QObject
       _run( mHelp.howToDownloadProjectLink() );
     }
 
+    void testHelpRootLink()
+    {
+      _run( mHelp.helpRootLink() );
+    }
+
+    void testMerginWebLink()
+    {
+      _run( mHelp.merginWebLink() );
+    }
+
+    void testMerginDashboardLink()
+    {
+      _run( mHelp.merginDashboardLink() );
+    }
+
+    void testMerginSubscriptionDetailsLink()
+    {
+      _run( mHelp.merginSubscriptionDetailsLink() );
+    }
+
+    void testHowToSetupProj()
+    {
+      _run( mHelp.howToSetupProj() );
+    }
+
+    void testGpsAccuracyHelpLink()
+    {
+      _run( mHelp.gpsAccuracyHelpLink() );
+    }
+
+    void testHowToConnectGpsLink()
+    {
+      _run( mHelp.howToConnectGPSLink() );
+    }
+
+    void testMerginTermsLink()
+    {
+      _run( mHelp.merginTermsLink() );
+    }
+
   private:
     InputHelp mHelp;
     QNetworkAccessManager mManager;

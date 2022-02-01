@@ -440,7 +440,7 @@ int main( int argc, char *argv[] )
   PositionKit pk;
   QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
   {
-    as.setActivePositionProviderId( provider->id() );
+    as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
 
@@ -473,7 +473,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), purchasing.get(), &iu, vm.get() );
+    tests.init( ma.get(), purchasing.get(), &iu, vm.get(), &pk );
     return tests.runTest();
   }
 #endif
