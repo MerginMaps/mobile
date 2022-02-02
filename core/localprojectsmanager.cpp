@@ -72,6 +72,16 @@ LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &pr
   return LocalProject();
 }
 
+LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectId ) const
+{
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.id() == projectId )
+      return info;
+  }
+  return LocalProject();
+}
+
 LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
   for ( const LocalProject &info : mProjects )
@@ -139,12 +149,11 @@ QString LocalProjectsManager::projectId( const QString &path ) const
 
 QString LocalProjectsManager::projectName( const QString &projectId ) const
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  LocalProject project = projectFromProjectId( projectId );
+
+  if ( project.isValid() )
   {
-    if ( mProjects[i].id() == projectId )
-    {
-      return MerginApi::getFullProjectName( mProjects[i].projectNamespace, mProjects[i].projectName );
-    }
+    return MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
   }
 
   return QString();
@@ -152,13 +161,11 @@ QString LocalProjectsManager::projectName( const QString &projectId ) const
 
 QString LocalProjectsManager::projectChanges( const QString &projectId )
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  LocalProject project = projectFromProjectId( projectId );
+
+  if ( project.isValid() )
   {
-    if ( mProjects[i].id() == projectId )
-    {
-      ProjectDiff diff = MerginApi::localProjectChanges( mProjects[i].projectDir );
-      return diff.dump();
-    }
+    return MerginApi::localProjectChanges( project.projectDir ).dump();
   }
 
   return QString();

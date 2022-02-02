@@ -28,6 +28,7 @@ class LocalProjectsManager : public QObject
 
     LocalProject projectFromDirectory( const QString &projectDir ) const;
     LocalProject projectFromProjectFilePath( const QString &projectFilePath ) const;
+    LocalProject projectFromProjectId( const QString &projectId ) const;
 
     LocalProject projectFromMerginName( const QString &projectFullName ) const;
     LocalProject projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
