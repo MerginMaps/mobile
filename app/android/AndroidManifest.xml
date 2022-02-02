@@ -110,6 +110,9 @@
     <!-- Camera permissions -->
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- We are reading sensors that from API 31 needs additional permission -->
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
     <!-- %%INSERT_FEATURES -->
