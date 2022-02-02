@@ -251,6 +251,11 @@ class InputUtils: public QObject
                                         Qgis::MessageLevel level = Qgis::Warning );
 
     /**
+     * Logs message via CoreUtils to diagnostic log
+     */
+    Q_INVOKABLE static void log( const QString &context, const QString &message );
+
+    /**
       * FeatureLayerPair factory for tuple of QgsFeature and QgsVectorLayer used in QgsQUick library.
       * \param feature QgsFeature linked to new Feature instance.
       * \param layer QgsVectorLayer which the feature belongs to, optional.

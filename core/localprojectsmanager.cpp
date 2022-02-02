@@ -72,6 +72,16 @@ LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &pr
   return LocalProject();
 }
 
+LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectId ) const
+{
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.id() == projectId )
+      return info;
+  }
+  return LocalProject();
+}
+
 LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
   for ( const LocalProject &info : mProjects )
@@ -134,6 +144,30 @@ QString LocalProjectsManager::projectId( const QString &path ) const
       return mProjects[i].id();
     }
   }
+  return QString();
+}
+
+QString LocalProjectsManager::projectName( const QString &projectId ) const
+{
+  LocalProject project = projectFromProjectId( projectId );
+
+  if ( project.isValid() )
+  {
+    return MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
+  }
+
+  return QString();
+}
+
+QString LocalProjectsManager::projectChanges( const QString &projectId )
+{
+  LocalProject project = projectFromProjectId( projectId );
+
+  if ( project.isValid() )
+  {
+    return MerginApi::localProjectChanges( project.projectDir ).dump();
+  }
+
   return QString();
 }
 
