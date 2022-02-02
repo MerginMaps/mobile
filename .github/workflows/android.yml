@@ -26,7 +26,7 @@ jobs:
       ANDROIDAPI: 24
       ANDROID_NDK_PLATFORM: android-24
       NDK_VERSION: r21
-      SDK_PLATFORM: android-30
+      SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 28.0.3
       INPUT_SDK_VERSION: android-macOS-20211210-41
       CCACHE_DIR: /Users/runner/work/ccache
