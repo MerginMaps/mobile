@@ -291,6 +291,15 @@ Item {
         }
       }
     }
+
+    onLongPressed: {
+      // Alter position of simulated provider
+
+      if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
+      {
+        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
+      }
+    }
   }
 
   MapPosition {

@@ -11,6 +11,7 @@
 #define ABSTRACTPOSITIONPROVIDER_H
 
 #include "qgsgpsconnection.h"
+#include "qgspoint.h"
 
 #include "qobject.h"
 
@@ -60,6 +61,8 @@ class AbstractPositionProvider : public QObject
     virtual void startUpdates() = 0;
     virtual void stopUpdates() = 0;
     virtual void closeProvider() = 0;
+
+    virtual void setPosition( QgsPoint position );
 
     QString stateMessage() const;
     State state() const;

@@ -46,6 +46,8 @@ class SimulatedPositionProvider : public AbstractPositionProvider
     virtual void stopUpdates() override;
     virtual void closeProvider() override;
 
+    virtual void setPosition( QgsPoint position ) override;
+
     void generateNextPosition();
 
   private:

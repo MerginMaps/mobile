@@ -674,6 +674,36 @@ double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int ba
   return mDistanceArea.measureLine( p1, p2 );
 }
 
+QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings )
+    return QgsPoint();
+
+  if ( mapPosition.isNull() )
+    return QgsPoint();
+
+  QgsPoint positionMapCrs = mapSettings->screenToCoordinate( mapPosition );
+
+  // convert it to GPS crs (EPSG:4326)
+  QgsCoordinateReferenceSystem c4326 = coordinateReferenceSystemFromEpsgId( 4326 );
+
+  try
+  {
+    QgsCoordinateTransform ct( mapSettings->destinationCrs(), c4326, QgsCoordinateTransformContext() );
+    if ( ct.isValid() )
+    {
+      const QgsPointXY pt = ct.transform( positionMapCrs );
+      return QgsPoint( pt.x(), pt.y() );
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    Q_UNUSED( cse )
+  }
+
+  return QgsPoint();
+}
+
 bool InputUtils::fileExists( const QString &path )
 {
   QFileInfo check_file( path );

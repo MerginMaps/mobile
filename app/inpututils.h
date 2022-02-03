@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -189,6 +189,8 @@ class InputUtils: public QObject
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
       */
     Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );
+
+    Q_INVOKABLE static QgsPoint mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings );
 
     /**
       * Returns whether file on path exists

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "simulatedpositionprovider.h"
+#include "qgspoint.h"
 
 SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
   : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), parent )
@@ -41,6 +42,17 @@ void SimulatedPositionProvider::stopUpdates()
 void SimulatedPositionProvider::closeProvider()
 {
   mTimer->stop();
+}
+
+void SimulatedPositionProvider::setPosition( QgsPoint position )
+{
+  if ( position.isEmpty() )
+    return;
+
+  stopUpdates();
+  mLatitude = position.y();
+  mLongitude = position.x();
+  generateConstantPosition();
 }
 
 void SimulatedPositionProvider::generateNextPosition()
@@ -99,7 +111,7 @@ void SimulatedPositionProvider::generateConstantPosition()
   position.elevation = 20;
   position.utcDateTime = QDateTime::currentDateTime();
   position.direction = 0;
-  position.hacc = 20;
+  position.hacc = ( *mGenerator )() % 20;
   position.satellitesUsed = ( *mGenerator )() % 30;
   position.satellitesVisible = ( *mGenerator )() % 30;
   position.speed = 0;
