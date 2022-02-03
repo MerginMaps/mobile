@@ -347,6 +347,10 @@ ApplicationWindow {
       previewPanelHeight: formsStackManager.previewHeight
 
       _map: map
+
+      onNavigationEnded: {
+        formsStackManager.openForm( navigationPanel.navigationTargetFeature, "readOnly", "preview" )
+      }
     }
 
     Notification {
@@ -435,6 +439,7 @@ ApplicationWindow {
 
         navigationPanel.startNavigation();
         navigationPanel.navigationTargetFeature = feature;
+        closeDrawer()
       }
     }
 

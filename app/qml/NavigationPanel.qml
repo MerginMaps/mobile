@@ -35,6 +35,7 @@ Item {
 
     property string mapStateBeforeNavigation
 
+    signal navigationEnded()
 
     function startNavigation() {
       mapStateBeforeNavigation = _map.state
@@ -51,6 +52,7 @@ Item {
       autoFollow = false
       _map.state = mapStateBeforeNavigation;
       drawer.close()
+      navigationEnded()
     }
 
     function updateNavigation() {
