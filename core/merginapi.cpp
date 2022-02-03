@@ -2360,6 +2360,15 @@ void MerginApi::uploadFinishReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadFinish" ) );
 
+    // remove temporary diff files
+    const auto diffFiles = transaction.uploadDiffFiles;
+    for ( const MerginFile &merginFile : diffFiles )
+    {
+      QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
+      if ( !QFile::remove( diffPath ) )
+        CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
+    }
+
     transaction.replyUploadFinish->deleteLater();
     transaction.replyUploadFinish = nullptr;
 
