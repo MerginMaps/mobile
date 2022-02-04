@@ -1788,10 +1788,10 @@ void MerginApi::updateInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+//    QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: updateInfo" ) );
+//    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: updateInfo" ) );
 
     transaction.replyProjectInfo->deleteLater();
     transaction.replyProjectInfo = nullptr;
@@ -2277,10 +2277,10 @@ void MerginApi::uploadInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+//    QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadInfo" ) );
+//    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadInfo" ) );
 
     transaction.replyUploadProjectInfo->deleteLater();
     transaction.replyUploadProjectInfo = nullptr;
@@ -2358,16 +2358,16 @@ void MerginApi::uploadFinishReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "uploadFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadFinish" ) );
+//    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadFinish" ) );
 
-    // remove temporary diff files
-    const auto diffFiles = transaction.uploadDiffFiles;
-    for ( const MerginFile &merginFile : diffFiles )
-    {
-      QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
-      if ( !QFile::remove( diffPath ) )
-        CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
-    }
+//    // remove temporary diff files
+//    const auto diffFiles = transaction.uploadDiffFiles;
+//    for ( const MerginFile &merginFile : diffFiles )
+//    {
+//      QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
+//      if ( !QFile::remove( diffPath ) )
+//        CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
+//    }
 
     transaction.replyUploadFinish->deleteLater();
     transaction.replyUploadFinish = nullptr;
