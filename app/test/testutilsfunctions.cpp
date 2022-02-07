@@ -396,8 +396,7 @@ void TestUtilsFunctions::testDistanceToFeature()
 
   FeatureLayerPair pair( feature, &pointsLayer );
 
-  QString ditance = mUtils->distanceToFeature( gpsPos, pair, &ms );
-  QCOMPARE( ditance, QStringLiteral( "142.20 m" ) );
+  QCOMPARE( mUtils->distanceToFeature( gpsPos, pair, &ms ), 142.20 );
 }
 
 void TestUtilsFunctions::testIsPointLayerFeature()

@@ -110,11 +110,11 @@ void SimulatedPositionProvider::generateConstantPosition()
   position.longitude = mLongitude;
   position.elevation = 20;
   position.utcDateTime = QDateTime::currentDateTime();
-  position.direction = 0;
+  position.direction = 360 - int( mAngle ) % 360;;
   position.hacc = ( *mGenerator )() % 20;
   position.satellitesUsed = ( *mGenerator )() % 30;
   position.satellitesVisible = ( *mGenerator )() % 30;
-  position.speed = 0;
+  position.speed = ( *mGenerator )() % 50 - ( ( ( *mGenerator )() % 10 ) / 10. );
 
   emit positionChanged( position );
 }

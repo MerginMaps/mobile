@@ -413,7 +413,10 @@ class InputUtils: public QObject
     Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // Returns the distance from \a gpsPos to the feature \a pair
-    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE qreal distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+
+    // Returns a bearing between point a and b
+    Q_INVOKABLE qreal bearingToFeature( QgsPoint a, const FeatureLayerPair &b, QgsQuickMapSettings *mapSettings );
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );

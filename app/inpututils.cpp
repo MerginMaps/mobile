@@ -1345,16 +1345,16 @@ QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &target
   return bbox;
 }
 
-QString InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
-    return QString();
+    return -1;
 
   QgsVectorLayer *layer = targetFeature.layer();
   QgsFeature f = targetFeature.feature();
 
   if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
-    return QString();
+    return -1;
 
   // Transform gps position to map CRS
   QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
@@ -1368,7 +1368,7 @@ QString InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerP
     catch ( QgsCsException &e )
     {
       Q_UNUSED( e )
-      return QString();
+      return -1;
     }
   }
 
@@ -1384,15 +1384,64 @@ QString InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerP
     catch ( QgsCsException &e )
     {
       Q_UNUSED( e )
-      return QString();
+      return -1;
     }
   }
 
   QgsDistanceArea distanceArea;
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
-  double dist = distanceArea.measureLine( gpsPosition, targetPoint );
-  QString res = formatDistance( dist, distanceArea.lengthUnits(), 2 );
-  return res;
+
+  return distanceArea.measureLine( gpsPosition, targetPoint );
+}
+
+qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !targetFeature.isValid() )
+    return -1;
+
+  QgsVectorLayer *layer = targetFeature.layer();
+  QgsFeature f = targetFeature.feature();
+
+  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+    return -1;
+
+  // Transform gps position to map CRS
+  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
+  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct1.isShortCircuited() )
+  {
+    try
+    {
+      gpsPosition.transform( ct1 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return -1;
+    }
+  }
+
+  // Transform target point to map CRS
+  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
+  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct2.isShortCircuited() )
+  {
+    try
+    {
+      targetPoint.transform( ct2 );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return -1;
+    }
+  }
+
+  QgsDistanceArea distanceArea;
+  distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
+
+//  return distanceArea.measureLine( gpsPosition, targetPoint );
+  return distanceArea.bearing( gpsPosition, targetPoint );
 }
 
 QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *project )
