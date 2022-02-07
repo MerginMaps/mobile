@@ -15,6 +15,9 @@ import QtQuick.Shapes 1.14
 
 import "."  // import InputStyle singleton
 import "./components" as Components
+import "./map" as Map
+
+import lc 1.0
 
 Item {
   id: root
@@ -72,6 +75,15 @@ Item {
       mapCanvas.mapSettings.extent = calculatedNavigationExtent;
 
     root.featureToGpsDistance = __inputUtils.distanceToFeature( __positionKit.positionCoordinate, root.navigationTargetFeature, root.mapCanvas.mapSettings );
+
+    if ( root.featureToGpsDistance < root.distanceThresholdToFinishNavigation )
+    {
+      navigationComponent.state = "atTarget"
+    }
+    else
+    {
+      navigationComponent.state = "notAtTarget"
+    }
   }
 
   onAutoFollowChanged: updateNavigation()
@@ -248,7 +260,20 @@ Item {
           Layout.fillHeight: true
           Layout.fillWidth: true
 
+          states: [
+            State {
+              name: "atTarget"
+            },
+            State {
+              name: "notAtTarget"
+            }
+          ]
+
+          state: "notAtTarget"
+
           visible: root.state === "short"
+
+          onStateChanged: console.log( "state:", state )
 
           // enable antialiasing
           layer.enabled: true
@@ -263,18 +288,29 @@ Item {
             anchors.fill: parent
 
             ShapePath {
-
-              fillGradient: RadialGradient {
-                centerX: rootShape.centerX; centerY: rootShape.centerY
-                centerRadius: 100 * __dp
-                focalX: centerX; focalY: centerY
-                focalRadius: 10 * __dp
-                GradientStop { position: 0; color: "#006146" }
-                GradientStop { position: 1; color: "white" }
-              }
+              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+              fillColor: navigationComponent.state === "notAtTarget" ? "transparent" : InputStyle.fontColorBright
 
               PathAngleArc {
                 id: innerArc
+
+                centerX: rootShape.centerX
+                centerY: rootShape.centerY
+
+                radiusX: 50 * __dp
+                radiusY: 50 * __dp
+
+                startAngle: 0
+                sweepAngle: 360
+              }
+            }
+
+            ShapePath {
+              strokeColor: InputStyle.panelBackgroundDarker
+              fillColor: navigationComponent.state === "notAtTarget" ? "transparent" : InputStyle.fontColorBright
+
+              PathAngleArc {
+                id: outerArc
 
                 centerX: rootShape.centerX
                 centerY: rootShape.centerY
@@ -286,29 +322,52 @@ Item {
                 sweepAngle: 360
               }
             }
+          }
 
-            ShapePath {
-              id: positionArc
+          Item {
+            id: positionMarker
 
-              fillColor: "black"
+            PositionDirection {
+              id: positionDirection
 
-              PathAngleArc {
-                id: positionMarker
+              positionKit: __positionKit
+              compass: Compass { id: ccompass }
+            }
+
+            Image {
+                id: direction
 
                 property real bearing: root.navigationTargetFeature ? __inputUtils.bearingToFeature(
                                                                         __positionKit.positionCoordinate,
                                                                         root.navigationTargetFeature,
                                                                         root.mapCanvas.mapSettings ) : 0
 
-                centerX: rootShape.centerX + ( Math.sin( -bearing ) * root.featureToGpsDistance ) * innerArc.radiusX / root.distanceThresholdToShortMode * __dp
-                centerY: rootShape.centerY + ( Math.cos( -bearing ) * root.featureToGpsDistance ) * innerArc.radiusX / root.distanceThresholdToShortMode * __dp
+                source: InputStyle.gpsDirectionIcon
+                fillMode: Image.PreserveAspectFit
+                rotation: positionDirection.direction
+                transformOrigin: Item.Bottom
+                width: InputStyle.rowHeightHeader
+                height: width
+                smooth: true
+                visible: __positionKit.hasPosition && positionDirection.hasDirection
 
-                radiusX: 10 * __dp
-                radiusY: 10 * __dp
+                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height
 
-                startAngle: 0
-                sweepAngle: 360
-              }
+                Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+            }
+
+            Image {
+                id: navigation
+
+                source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+                visible: __positionKit.hasPosition
+                fillMode: Image.PreserveAspectFit
+                width: InputStyle.rowHeightHeader / 2
+                height: width
+                smooth: true
+                x: ( rootShape.centerX + ( Math.sin( direction.bearing * -1 ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( direction.bearing * -1 ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height / 2
             }
           }
         }
