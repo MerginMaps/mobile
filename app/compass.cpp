@@ -23,7 +23,7 @@ Compass::Compass( QObject *parent ) : QObject( parent )
 qreal Compass::direction() const
 {
   qreal newDirection = MIN_INVALID_DIRECTION;
-  if ( mCompass->reading() )
+  if ( mCompass && mCompass->reading() )
   {
     newDirection = mCompass->reading()->azimuth() + mCompass->userOrientation();
   }
@@ -33,7 +33,11 @@ qreal Compass::direction() const
 
 QCompassReading *Compass::reading()
 {
-  return mCompass->reading();
+  if ( mCompass )
+  {
+    return mCompass->reading();
+  }
+  return nullptr;
 }
 
 void Compass::setUserOrientation()

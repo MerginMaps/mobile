@@ -35,7 +35,7 @@ void PositionDirection::updateDirection()
   {
     newDirection = mPositionKit->direction();
   }
-  else if ( mCompass->reading() )
+  else if ( mCompass && mCompass->reading() )
   {
     newDirection = mCompass->direction();
   }
