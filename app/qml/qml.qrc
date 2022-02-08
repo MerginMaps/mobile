@@ -107,5 +107,6 @@
         <file>misc/PositionProviderPage.qml</file>
         <file>misc/AddPositionProviderPage.qml</file>
         <file>components/BluetoothConnectionDialog.qml</file>
+        <file>components/InputText.qml</file>
     </qresource>
 </RCC>

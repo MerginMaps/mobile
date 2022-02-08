@@ -75,15 +75,6 @@ Item {
       mapCanvas.mapSettings.extent = calculatedNavigationExtent;
 
     root.featureToGpsDistance = __inputUtils.distanceToFeature( __positionKit.positionCoordinate, root.navigationTargetFeature, root.mapCanvas.mapSettings );
-
-    if ( root.featureToGpsDistance < root.distanceThresholdToFinishNavigation )
-    {
-      navigationComponent.state = "atTarget"
-    }
-    else
-    {
-      navigationComponent.state = "notAtTarget"
-    }
   }
 
   onAutoFollowChanged: updateNavigation()
@@ -263,17 +254,17 @@ Item {
           states: [
             State {
               name: "atTarget"
+              when: root.featureToGpsDistance < root.distanceThresholdToFinishNavigation
             },
             State {
               name: "notAtTarget"
+              when: state != "atTarget"
             }
           ]
 
           state: "notAtTarget"
 
           visible: root.state === "short"
-
-          onStateChanged: console.log( "state:", state )
 
           // enable antialiasing
           layer.enabled: true
@@ -291,6 +282,8 @@ Item {
               strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
               fillColor: navigationComponent.state === "notAtTarget" ? "transparent" : InputStyle.fontColorBright
 
+              strokeWidth: 5 * __dp
+
               PathAngleArc {
                 id: innerArc
 
@@ -306,8 +299,10 @@ Item {
             }
 
             ShapePath {
-              strokeColor: InputStyle.panelBackgroundDarker
-              fillColor: navigationComponent.state === "notAtTarget" ? "transparent" : InputStyle.fontColorBright
+              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+              fillColor: "transparent"
+
+              strokeWidth: 3 * __dp
 
               PathAngleArc {
                 id: outerArc
@@ -324,6 +319,35 @@ Item {
             }
           }
 
+          // Target X icon
+          Components.Symbol {
+            source: InputStyle.noIcon
+            iconColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+            iconSize: rootShape.height / 12
+            x: rootShape.centerX - width / 2
+            y: rootShape.centerY - height / 2
+          }
+
+          // Legends (1m, 0.5m)
+          Components.InputText {
+            text: qsTr("1 m")
+
+            color: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+
+            x: rootShape.centerX + outerArc.radiusX + InputStyle.tinyGap
+            y: rootShape.centerY
+          }
+
+          Components.InputText {
+            text: qsTr("0.5 m")
+
+            color: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+
+            x: rootShape.centerX + innerArc.radiusX + InputStyle.tinyGap
+            y: rootShape.centerY
+          }
+
+          // Position indicator with direction
           Item {
             id: positionMarker
 
