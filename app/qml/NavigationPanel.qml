@@ -296,10 +296,10 @@ Item {
             anchors.fill: parent
 
             ShapePath {
-              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
-              fillColor: navigationComponent.state === "notAtTarget" ? "transparent" : InputStyle.fontColorBright
+              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
+              fillColor: navigationComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
 
-              strokeWidth: 5 * __dp
+              strokeWidth: 2 * __dp
 
               PathAngleArc {
                 id: innerArc
@@ -316,10 +316,10 @@ Item {
             }
 
             ShapePath {
-              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
               fillColor: "transparent"
 
-              strokeWidth: 3 * __dp
+              strokeWidth: 2 * __dp
 
               PathAngleArc {
                 id: outerArc
@@ -343,25 +343,6 @@ Item {
             iconSize: rootShape.height / 12
             x: rootShape.centerX - width / 2
             y: rootShape.centerY - height / 2
-          }
-
-          // Legends (1m, 0.5m)
-          Components.InputText {
-            text: qsTr("1 m")
-
-            color: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
-
-            x: rootShape.centerX + outerArc.radiusX + InputStyle.tinyGap
-            y: rootShape.centerY
-          }
-
-          Components.InputText {
-            text: qsTr("0.5 m")
-
-            color: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
-
-            x: rootShape.centerX + innerArc.radiusX + InputStyle.tinyGap
-            y: rootShape.centerY
           }
 
           // Position indicator with direction
