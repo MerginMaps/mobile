@@ -315,8 +315,8 @@ Item {
 
     fillColor: InputStyle.highlightFillColor
 
-    outlinePenWidth: InputStyle.highlighOutlinePenWidth
-    outlineColor: InputStyle.highlighOutlineColor
+    outlinePenWidth: InputStyle.highlightOutlinePenWidth
+    outlineColor: InputStyle.highlightOutlineColor
   }
 
   PositionMarker {
@@ -394,8 +394,8 @@ Item {
 
     fillColor: InputStyle.highlightFillColor
 
-    outlinePenWidth: InputStyle.highlighOutlinePenWidth
-    outlineColor: InputStyle.highlighOutlineColor
+    outlinePenWidth: InputStyle.highlightOutlinePenWidth
+    outlineColor: InputStyle.highlightOutlineColor
 
     markerType: "image"
     markerImageSource: InputStyle.mapMarkerIcon
