@@ -56,17 +56,21 @@ Item {
   property real markerOffsetY: 14 * __dp // for circle marker type to be aligned with crosshair
   property real markerCircleSize: 15 * __dp
 
-  // transform used by line/path
-  property QgsQuick.MapTransform mapTransform: QgsQuick.MapTransform {
-    mapSettings: highlight.mapSettings
-  }
-
   // properties used by markers (not able to use values directly from mapTransform
   // (no direct access to matrix no mapSettings' visible extent)
   property real mapTransformScale: 1
   property real mapTransformOffsetX: 0
   property real mapTransformOffsetY: 0
   property real displayDevicePixelRatio: 1
+
+  // Reference view settings used for transformation of coordinates (needed for lines and polygons).
+  // We convert their coordinates to screen coordinates of the current view, and then as user pans/zooms
+  // the map, we use a transform to adjust the shape. The reason is that the transform uses single
+  // precision floats, and if we used just map coordinates, we get numerical errors when the map gets
+  // zoomed in. This approach is more stable (but does not avoid the issue 100%)
+  property real refTransformScale: 1
+  property real refTransformOffsetX: 0
+  property real refTransformOffsetY: 0
 
   Connections {
       target: mapSettings
@@ -119,6 +123,10 @@ Item {
   {
     if ( !featureLayerPair || !mapSettings ) return
 
+    refTransformOffsetX = mapTransformOffsetX
+    refTransformOffsetY = mapTransformOffsetY
+    refTransformScale = mapTransformScale
+
     let data = __inputUtils.extractGeometryCoordinates( featureLayerPair, mapSettings )
 
     let newMarkerItems = []
@@ -158,11 +166,15 @@ Item {
           let geomType = data[ i++ ];
           let pointsCount = data[ i++ ];
           // Move to the first point
-          elements.push( componentMoveTo.createObject( objOwner, { "x": data[ i ], "y": data[ i + 1 ] } ) )
+          let x0 =  ( data[i]   + highlight.mapTransformOffsetX) * highlight.mapTransformScale / displayDevicePixelRatio
+          let y0 = -( data[i+1] + highlight.mapTransformOffsetY) * highlight.mapTransformScale / displayDevicePixelRatio
+          elements.push( componentMoveTo.createObject( objOwner, { "x": x0, "y": y0 } ) )
           // Draw lines for rest of points in the segment
           for ( k = i + 2; k < i + pointsCount * 2; k += 2 )
           {
-            elements.push( componentLineTo.createObject( objOwner, { "x": data[ k ], "y": data[ k + 1 ] } ) )
+            let x1 =  ( data[k]   + highlight.mapTransformOffsetX) * highlight.mapTransformScale / displayDevicePixelRatio
+            let y1 = -( data[k+1] + highlight.mapTransformOffsetY) * highlight.mapTransformScale / displayDevicePixelRatio
+            elements.push( componentLineTo.createObject( objOwner, { "x": x1, "y": y1 } ) )
           }
           i = k
         }
@@ -268,14 +280,28 @@ Item {
     id: shape
     anchors.fill: parent
 
-    transform: mapTransform
+    transform: Matrix4x4 {
+        // the formula for x coordinate for map to screen coordinates conversion goes like this:
+        //   x_screen = (x_map + offset_x) * scale / ddp
+        // this matrix is just doing transform from old view settings (scale, offset_x, offset_y) for which we have
+        // calculated coordinates in constructHighlight to new view settings (that are active now).
+        id: shapeTransform
+        property real scale: mapTransformScale / refTransformScale
+        property real offsetX:  (mapTransformOffsetX - refTransformOffsetX) * mapTransformScale / displayDevicePixelRatio
+        property real offsetY: -(mapTransformOffsetY - refTransformOffsetY) * mapTransformScale / displayDevicePixelRatio
+
+        matrix: Qt.matrix4x4( scale, 0,     0, offsetX,
+                              0,     scale, 0, offsetY,
+                              0,     0,     1, 0,
+                              0,     0,     0, 1)
+    }
 
     Component {  id: componentLineTo; PathLine { } }
     Component {  id: componentMoveTo; PathMove { } }
 
     ShapePath {
         id: lineOutlineShapePath
-        strokeWidth: highlight.lineWidth / highlight.mapTransformScale
+        strokeWidth: highlight.lineWidth / shapeTransform.scale  // negate scaling from the transform
         fillColor: "transparent"
         strokeColor: highlight.outlineColor
         capStyle: lineShapePath.capStyle
@@ -285,7 +311,7 @@ Item {
     ShapePath {
       id: lineShapePath
       strokeColor: highlight.lineColor
-      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / highlight.mapTransformScale  // negate scaling from the transform
+      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
@@ -294,7 +320,7 @@ Item {
     ShapePath {
       id: polygonShapePath
       strokeColor: highlight.outlineColor
-      strokeWidth: highlight.outlinePenWidth / highlight.mapTransformScale  // negate scaling from the transform
+      strokeWidth: highlight.outlinePenWidth / shapeTransform.scale  // negate scaling from the transform
       fillColor: highlight.fillColor
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
@@ -304,7 +330,7 @@ Item {
       id: guideLine // also used for guide polygon
       fillColor: hasPolygon ? guideLineColor : "transparent"
       strokeColor: guideLineColor
-      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / highlight.mapTransformScale  // negate scaling from the transform
+      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
     }
