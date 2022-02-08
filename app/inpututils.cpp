@@ -1390,8 +1390,9 @@ qreal InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPai
 
   QgsDistanceArea distanceArea;
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
-
-  return distanceArea.measureLine( gpsPosition, targetPoint );
+  qreal distance = distanceArea.measureLine( gpsPosition, targetPoint );
+  distance = distanceArea.convertLengthMeasurement( distance, QgsUnitTypes::DistanceMeters );
+  return distance;
 }
 
 qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
@@ -1440,7 +1441,6 @@ qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair
   QgsDistanceArea distanceArea;
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
 
-//  return distanceArea.measureLine( gpsPosition, targetPoint );
   return distanceArea.bearing( gpsPosition, targetPoint );
 }
 

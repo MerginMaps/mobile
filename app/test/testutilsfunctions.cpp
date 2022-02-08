@@ -395,8 +395,8 @@ void TestUtilsFunctions::testDistanceToFeature()
   feature.setGeometry( geom );
 
   FeatureLayerPair pair( feature, &pointsLayer );
-
-  QCOMPARE( mUtils->distanceToFeature( gpsPos, pair, &ms ), 142.20 );
+  qreal distance = mUtils->distanceToFeature( gpsPos, pair, &ms );
+  QCOMPARE( mUtils->formatNumber( distance, 2 ), "142.20" );
 }
 
 void TestUtilsFunctions::testIsPointLayerFeature()
