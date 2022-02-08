@@ -683,25 +683,22 @@ QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *ma
     return QgsPoint();
 
   QgsPoint positionMapCrs = mapSettings->screenToCoordinate( mapPosition );
+  QgsCoordinateReferenceSystem crsGPS = coordinateReferenceSystemFromEpsgId( 4326 );
 
-  // convert it to GPS crs (EPSG:4326)
-  QgsCoordinateReferenceSystem c4326 = coordinateReferenceSystemFromEpsgId( 4326 );
+  const QgsPointXY transformedXY = transformPoint(
+                                     mapSettings->destinationCrs(),
+                                     crsGPS,
+                                     QgsCoordinateTransformContext(),
+                                     positionMapCrs
+                                   );
 
-  try
+  if ( transformedXY == positionMapCrs && mapSettings->destinationCrs() != crsGPS )
   {
-    QgsCoordinateTransform ct( mapSettings->destinationCrs(), c4326, QgsCoordinateTransformContext() );
-    if ( ct.isValid() )
-    {
-      const QgsPointXY pt = ct.transform( positionMapCrs );
-      return QgsPoint( pt.x(), pt.y() );
-    }
-  }
-  catch ( QgsCsException &cse )
-  {
-    Q_UNUSED( cse )
+    // point could not be transformed
+    return QgsPoint();
   }
 
-  return QgsPoint();
+  return QgsPoint( transformedXY.x(), transformedXY.y() );
 }
 
 bool InputUtils::fileExists( const QString &path )
@@ -1345,7 +1342,7 @@ QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &target
   return bbox;
 }
 
-qreal InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
     return -1;
@@ -1395,7 +1392,7 @@ qreal InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPai
   return distance;
 }
 
-qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
     return -1;
@@ -1403,6 +1400,7 @@ qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair
   QgsVectorLayer *layer = targetFeature.layer();
   QgsFeature f = targetFeature.feature();
 
+  // Only points are supported
   if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
     return -1;
 
@@ -1413,7 +1411,7 @@ qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair
   {
     try
     {
-      gpsPosition.transform( ct1 );
+      gpsPoint.transform( ct1 );
     }
     catch ( QgsCsException &e )
     {
@@ -1423,13 +1421,13 @@ qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair
   }
 
   // Transform target point to map CRS
-  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
+  QgsPoint target( extractPointFromFeature( targetFeature ) );
   QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
   if ( !ct2.isShortCircuited() )
   {
     try
     {
-      targetPoint.transform( ct2 );
+      target.transform( ct2 );
     }
     catch ( QgsCsException &e )
     {
@@ -1441,7 +1439,7 @@ qreal InputUtils::bearingToFeature( QgsPoint gpsPosition, const FeatureLayerPair
   QgsDistanceArea distanceArea;
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
 
-  return distanceArea.bearing( gpsPosition, targetPoint );
+  return distanceArea.bearing( gpsPoint, target );
 }
 
 QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *project )

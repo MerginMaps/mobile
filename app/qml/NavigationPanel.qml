@@ -74,7 +74,7 @@ Item {
     if ( autoFollow )
       mapCanvas.mapSettings.extent = calculatedNavigationExtent;
 
-    root.featureToGpsDistance = __inputUtils.distanceToFeature( __positionKit.positionCoordinate, root.navigationTargetFeature, root.mapCanvas.mapSettings );
+    root.featureToGpsDistance = __inputUtils.distanceBetweenGpsAndFeature( __positionKit.positionCoordinate, root.navigationTargetFeature, root.mapCanvas.mapSettings );
   }
 
   onAutoFollowChanged: updateNavigation()
@@ -184,8 +184,7 @@ Item {
           verticalAlignment: Text.AlignVCenter
         }
 
-        // TODO: add center to extent icon!
-        // TODO:   onClicked: autoFollow = true;
+        // TODO: add center to extent icon! onClicked: autoFollow = true;
 
         Item {
           id: closebtn
@@ -361,7 +360,7 @@ Item {
             Image {
                 id: direction
 
-                property real bearing: root.navigationTargetFeature ? __inputUtils.bearingToFeature(
+                property real bearing: root.navigationTargetFeature ? __inputUtils.angleBetweenGpsAndFeature(
                                                                         __positionKit.positionCoordinate,
                                                                         root.navigationTargetFeature,
                                                                         root.mapCanvas.mapSettings ) : 0

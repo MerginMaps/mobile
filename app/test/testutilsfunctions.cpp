@@ -377,7 +377,7 @@ void TestUtilsFunctions::testNavigationFeatureExtent()
   QCOMPARE( rect.yMaximum(), acceptedExtent.yMaximum() );
 }
 
-void TestUtilsFunctions::testDistanceToFeature()
+void TestUtilsFunctions::testDistanceBetweenGpsAndFeature()
 {
   QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 
@@ -395,8 +395,30 @@ void TestUtilsFunctions::testDistanceToFeature()
   feature.setGeometry( geom );
 
   FeatureLayerPair pair( feature, &pointsLayer );
-  qreal distance = mUtils->distanceToFeature( gpsPos, pair, &ms );
+  qreal distance = mUtils->distanceBetweenGpsAndFeature( gpsPos, pair, &ms );
   QCOMPARE( mUtils->formatNumber( distance, 2 ), "142.20" );
+}
+
+void TestUtilsFunctions::testAngleBetweenGpsAndFeature()
+{
+  QgsCoordinateReferenceSystem featureCRS = QgsCoordinateReferenceSystem::fromEpsgId( 3857 );
+
+  QgsQuickMapSettings ms;
+  ms.setDestinationCrs( featureCRS );
+
+  QgsPoint gpsPos( 14.7067, 46.6842 );
+  QgsPoint *point = new QgsPoint( 524780, 5887742 );
+
+  QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:3857" ), "pointsLayer", "memory" );
+
+  QgsFeature feature;
+  QgsGeometry geom;
+  geom.set( point );
+  feature.setGeometry( geom );
+
+  FeatureLayerPair pair( feature, &pointsLayer );
+  qreal angle = mUtils->angleBetweenGpsAndFeature( gpsPos, pair, &ms );
+  QCOMPARE( mUtils->formatNumber( angle, 3 ), "-1.573" );
 }
 
 void TestUtilsFunctions::testIsPointLayerFeature()
@@ -431,5 +453,50 @@ void TestUtilsFunctions::testIsPointLayerFeature()
   {
     FeatureLayerPair pair( lineFeature, &linesLayer );
     QCOMPARE( InputUtils::isPointLayerFeature( pair ), false );
+  }
+}
+
+void TestUtilsFunctions::testMapPointToGps()
+{
+  // get a point from map crs and compare it to GPS crs (4326)
+
+  QgsQuickMapSettings ms;
+  ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
+  ms.setExtent( QgsRectangle( 1638326.6916276202537119, 5886831.7859314000234008, 1653505.5471235010772943, 5901042.9167255694046617 ) );
+  ms.setOutputSize( QSize( 1000, 500 ) );
+
+  struct scenario
+  {
+    double x; // original
+    double y; // original
+    double lat; // expected
+    double lon; // expected
+  };
+
+  double nan = std::numeric_limits<double>::quiet_NaN();
+
+  QVector<scenario> scenarios =
+  {
+    { 191.162109375, 364.65240478515625, 14.7067, 46.6842 },
+    { 181.21180725097656, 289.0494384765625, 14.7041, 46.6974 },
+    { 262.84490966796875, 418.75543212890625, 14.725, 46.6747 },
+    { 253.0792236328125, 199.93780517578125, 14.7225, 46.713 },
+    { nan, nan, nan, nan }
+  };
+
+  for ( const auto &s : scenarios )
+  {
+    QPointF mapPoint( s.x, s.y );
+    QgsPoint gpsPoint = InputUtils::mapPointToGps( mapPoint, &ms );
+
+    if ( std::isnan( s.x ) )
+    {
+      QVERIFY( gpsPoint.isEmpty() );
+    }
+    else
+    {
+      QVERIFY( qgsDoubleNear( gpsPoint.x(), s.lat, 0.001 ) );
+      QVERIFY( qgsDoubleNear( gpsPoint.y(), s.lon, 0.001 ) );
+    }
   }
 }
