@@ -171,7 +171,7 @@ Item {
 
         Text {
           Layout.preferredHeight: parent.height
-          Layout.preferredWidth: parent.width - closebtn.width
+          Layout.fillWidth: true
 
           text: qsTr( "Stake out" )
 
@@ -184,7 +184,25 @@ Item {
           verticalAlignment: Text.AlignVCenter
         }
 
-        // TODO: add center to extent icon! onClicked: autoFollow = true;
+        Item {
+          id: recenterbtn
+
+          Layout.preferredHeight: parent.height
+          Layout.preferredWidth: parent.height
+
+          visible: root.autoFollow === false
+
+          Components.Symbol {
+            source: InputStyle.zoomToProjectIcon
+            iconSize: parent.height / 2
+            anchors.centerIn: parent
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: root.autoFollow = true
+          }
+        }
 
         Item {
           id: closebtn
