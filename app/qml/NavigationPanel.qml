@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,8 +63,11 @@ Item {
     mapCanvas.navigationHighlightFeature = navigationTargetFeature
     mapCanvas.navigationHighlightGpsPosition = __positionKit.positionCoordinate
 
-    var previewPanelHeightRatio = drawer.height / mapCanvas.height;
-    calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent(
+    // reserve some space around canvas so that position marker is always visible in autofollow mode
+    let previewMargin = direction.height * 3
+    let previewPanelHeightRatio = ( drawer.height + previewMargin ) / mapCanvas.height
+
+    root.calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent(
           mapCanvas.navigationHighlightFeature,
           __positionKit.positionCoordinate,
           mapCanvas.mapSettings,
