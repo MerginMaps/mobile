@@ -289,7 +289,10 @@ ApplicationWindow {
       GpsDataPage {
         id: gpsDataPage
 
-        onBack: gpsDataPageLoader.active = false
+        onBack: {
+          mainPanel.focus = true
+          gpsDataPageLoader.active = false
+        }
 
         mapSettings: map.mapSettings
 
@@ -303,6 +306,7 @@ ApplicationWindow {
 
       asynchronous: true
       active: false
+      focus: true
       sourceComponent: gpsDataPageComponent
       onActiveChanged: {
         if ( gpsDataPageLoader.active )
@@ -420,6 +424,10 @@ ApplicationWindow {
         if ( browseDataPanel.visible ) {
           browseDataPanel.refreshFeaturesData()
           browseDataPanel.focus = true
+        }
+        else if ( gpsDataPageLoader.active )
+        {
+          // do nothing, gps page already has focus
         }
         else mainPanel.focus = true
 
