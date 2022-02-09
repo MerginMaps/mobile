@@ -104,6 +104,18 @@ void TestUtilsFunctions::transformedPoint()
                                  pointXY );
   COMPARENEAR( transformedPoint.x(), 5554843, 1.0 );
   COMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
+
+  // Check transformation within the same CRS
+  transformedPoint = mUtils->transformPoint(
+                       crsGPS,
+                       crsGPS,
+                       QgsCoordinateTransformContext(),
+                       pointXY
+                     );
+
+  QVERIFY( !transformedPoint.isEmpty() );
+  COMPARENEAR( transformedPoint.x(), 49.9, 1e-4 );
+  COMPARENEAR( transformedPoint.y(), 16.3, 1e-4 );
 }
 
 void TestUtilsFunctions::formatPoint()
@@ -495,8 +507,8 @@ void TestUtilsFunctions::testMapPointToGps()
     }
     else
     {
-      QVERIFY( qgsDoubleNear( gpsPoint.x(), s.lat, 0.001 ) );
-      QVERIFY( qgsDoubleNear( gpsPoint.y(), s.lon, 0.001 ) );
+      COMPARENEAR( gpsPoint.x(), s.lat, 0.001 );
+      COMPARENEAR( gpsPoint.y(), s.lon, 0.001 );
     }
   }
 }

@@ -110,9 +110,11 @@ void MapPosition::recalculateMapPosition()
                                    mMapSettings->transformContext(),
                                    srcPoint
                                  );
-
-      newMapPosition = QgsPoint( mapPositionXY );
-      newMapPosition.addZValue( geoposition.z() );
+      if ( !mapPositionXY.isEmpty() )
+      {
+        newMapPosition = QgsPoint( mapPositionXY );
+        newMapPosition.addZValue( geoposition.z() );
+      }
     }
   }
 

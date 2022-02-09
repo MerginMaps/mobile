@@ -178,7 +178,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );
 
     /**
-      * Transforms point between different crs from QML
+      * Transforms point between different crs
+      * Return empty QgsPointXY if the transformation could not be applied or srcPoint is empty
       */
     Q_INVOKABLE static QgsPointXY transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
         const QgsCoordinateReferenceSystem &destCrs,
