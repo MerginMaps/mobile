@@ -24,10 +24,13 @@ Item {
 
   readonly property alias isOpen: drawer.opened
 
-  property real featureToGpsDistance: -1
-  property var navigationTargetFeature
-
   property var mapCanvas
+
+  property var navigationTargetFeature
+  property real featureToGpsDistance: navigationTargetFeature ? __inputUtils.distanceBetweenGpsAndFeature(
+                                                                  __positionKit.positionCoordinate,
+                                                                  navigationTargetFeature,
+                                                                  mapCanvas.mapSettings ) : -1
 
   property bool autoFollow: true
   property var calculatedNavigationExtent
@@ -73,8 +76,6 @@ Item {
 
     if ( autoFollow )
       mapCanvas.mapSettings.extent = calculatedNavigationExtent;
-
-    root.featureToGpsDistance = __inputUtils.distanceBetweenGpsAndFeature( __positionKit.positionCoordinate, root.navigationTargetFeature, root.mapCanvas.mapSettings );
   }
 
   onAutoFollowChanged: updateNavigation()
@@ -279,6 +280,8 @@ Item {
             }
           ]
 
+          onStateChanged: root.updateNavigation()
+
           state: "notAtTarget"
 
           visible: root.state === "short"
@@ -373,6 +376,14 @@ Item {
                 smooth: true
                 visible: __positionKit.hasPosition && positionDirection.hasDirection
 
+                /**
+                  * Formula to calculate GPS position in the short-range window goes like this:
+                  *   center of the window +
+                  *   sin<or cos> of angle between GPS position and the target feature *
+                  *   distance to the feature *
+                  *   scale by size of the outer circle /
+                  *   distance of the outer circle in metres (distanceThresholdToShortMode)
+                  */
                 x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
                 y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height
 
@@ -380,16 +391,14 @@ Item {
             }
 
             Image {
-                id: navigation
-
                 source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
                 visible: __positionKit.hasPosition
                 fillMode: Image.PreserveAspectFit
                 width: InputStyle.rowHeightHeader / 2
                 height: width
                 smooth: true
-                x: ( rootShape.centerX + ( Math.sin( direction.bearing * -1 ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
-                y: ( rootShape.centerY + ( Math.cos( direction.bearing * -1 ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height / 2
+                x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height / 2
             }
           }
         }
