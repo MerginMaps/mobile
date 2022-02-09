@@ -343,10 +343,12 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      previewHeight: window.height / 3
-      previewPanelHeight: formsStackManager.previewHeight
 
-      _map: map
+      mapCanvas: map
+
+      onNavigationEnded: {
+        formsStackManager.openForm( navigationPanel.navigationTargetFeature, "readOnly", "preview" )
+      }
     }
 
     Notification {
@@ -435,6 +437,7 @@ ApplicationWindow {
 
         navigationPanel.startNavigation();
         navigationPanel.navigationTargetFeature = feature;
+        closeDrawer()
       }
     }
 

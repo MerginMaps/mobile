@@ -43,7 +43,7 @@ Rectangle {
       width: height
       iconSize: height / 2
       source: root.source
-      fontColor: root.fontColor
+      iconColor: root.fontColor
     }
 
     Text {

@@ -641,6 +641,13 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
                                        const QgsCoordinateTransformContext &context,
                                        const QgsPointXY &srcPoint )
 {
+  // we do not want to transform empty points,
+  // QGIS would convert them to a valid (0, 0) points
+  if ( srcPoint.isEmpty() )
+  {
+    return QgsPointXY();
+  }
+
   try
   {
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
@@ -654,7 +661,8 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
   {
     Q_UNUSED( cse )
   }
-  return srcPoint;
+
+  return QgsPointXY();
 }
 
 double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
@@ -672,6 +680,33 @@ double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int ba
   QgsPointXY p1 = mapSettings->screenToCoordinate( pointCenter );
   QgsPointXY p2 = mapSettings->screenToCoordinate( pointCenter + QPoint( baseLengthPixels, 0 ) );
   return mDistanceArea.measureLine( p1, p2 );
+}
+
+QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings )
+    return QgsPoint();
+
+  if ( mapPosition.isNull() )
+    return QgsPoint();
+
+  QgsPoint positionMapCrs = mapSettings->screenToCoordinate( mapPosition );
+  QgsCoordinateReferenceSystem crsGPS = coordinateReferenceSystemFromEpsgId( 4326 );
+
+  const QgsPointXY transformedXY = transformPoint(
+                                     mapSettings->destinationCrs(),
+                                     crsGPS,
+                                     QgsCoordinateTransformContext(),
+                                     positionMapCrs
+                                   );
+
+  if ( transformedXY.isEmpty() )
+  {
+    // point could not be transformed
+    return QgsPoint();
+  }
+
+  return QgsPoint( transformedXY );
 }
 
 bool InputUtils::fileExists( const QString &path )
@@ -1315,54 +1350,94 @@ QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &target
   return bbox;
 }
 
-QString InputUtils::distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
-    return QString();
+    return -1;
 
-  QgsVectorLayer *layer = targetFeature.layer();
-  QgsFeature f = targetFeature.feature();
-
-  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
-    return QString();
+  // We calculate distance only between points
+  if ( targetFeature.layer()->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+    return -1;
 
   // Transform gps position to map CRS
-  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
-  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct1.isShortCircuited() )
+  QgsPointXY transformedPosition = transformPoint(
+                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     mapSettings->destinationCrs(),
+                                     mapSettings->transformContext(),
+                                     gpsPosition
+                                   );
+
+  if ( transformedPosition.isEmpty() )
   {
-    try
-    {
-      gpsPosition.transform( ct1 );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QString();
-    }
+    return -1;
   }
 
   // Transform target point to map CRS
-  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
-  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct2.isShortCircuited() )
+  QgsPoint target( extractPointFromFeature( targetFeature ) );
+  QgsPointXY transformedTarget = transformPoint(
+                                   targetFeature.layer()->crs(),
+                                   mapSettings->destinationCrs(),
+                                   mapSettings->transformContext(),
+                                   target
+                                 );
+
+  if ( transformedTarget.isEmpty() )
   {
-    try
-    {
-      targetPoint.transform( ct2 );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QString();
-    }
+    return -1;
   }
 
   QgsDistanceArea distanceArea;
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
-  double dist = distanceArea.measureLine( gpsPosition, targetPoint );
-  QString res = formatDistance( dist, distanceArea.lengthUnits(), 2 );
-  return res;
+
+  qreal distance = distanceArea.measureLine( transformedPosition, transformedTarget );
+  distance = distanceArea.convertLengthMeasurement( distance, QgsUnitTypes::DistanceMeters );
+
+  return distance;
+}
+
+qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !targetFeature.isValid() )
+    return -1;
+
+  QgsVectorLayer *layer = targetFeature.layer();
+  QgsFeature f = targetFeature.feature();
+
+  // Only points are supported
+  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+    return -1;
+
+  // Transform gps position to map CRS
+  QgsPointXY transformedPosition = transformPoint(
+                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     mapSettings->destinationCrs(),
+                                     mapSettings->transformContext(),
+                                     gpsPoint
+                                   );
+
+  if ( transformedPosition.isEmpty() )
+  {
+    return -1;
+  }
+
+  // Transform target point to map CRS
+  QgsPoint target( extractPointFromFeature( targetFeature ) );
+  QgsPointXY transformedTarget = transformPoint(
+                                   targetFeature.layer()->crs(),
+                                   mapSettings->destinationCrs(),
+                                   mapSettings->transformContext(),
+                                   target
+                                 );
+
+  if ( transformedTarget.isEmpty() )
+  {
+    return -1;
+  }
+
+  QgsDistanceArea distanceArea;
+  distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
+
+  return distanceArea.bearing( transformedPosition, transformedTarget );
 }
 
 QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *project )

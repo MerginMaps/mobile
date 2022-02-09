@@ -20,6 +20,10 @@ AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QSt
 
 AbstractPositionProvider::~AbstractPositionProvider() = default;
 
+void AbstractPositionProvider::setPosition( QgsPoint )
+{
+}
+
 QString AbstractPositionProvider::name() const
 {
   return mProviderName;

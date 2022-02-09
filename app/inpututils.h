@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -178,7 +178,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );
 
     /**
-      * Transforms point between different crs from QML
+      * Transforms point between different crs
+      * Return empty QgsPointXY if the transformation could not be applied or srcPoint is empty
       */
     Q_INVOKABLE static QgsPointXY transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
         const QgsCoordinateReferenceSystem &destCrs,
@@ -189,6 +190,9 @@ class InputUtils: public QObject
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
       */
     Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );
+
+    // Converts map coordinate in map's X/Y to GPS coordinate
+    Q_INVOKABLE static QgsPoint mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings );
 
     /**
       * Returns whether file on path exists
@@ -411,7 +415,10 @@ class InputUtils: public QObject
     Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // Returns the distance from \a gpsPos to the feature \a pair
-    Q_INVOKABLE QString distanceToFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+
+    // Returns an angle between current gps position and feature
+    Q_INVOKABLE qreal angleBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );

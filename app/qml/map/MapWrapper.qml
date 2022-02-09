@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -289,6 +289,15 @@ Item {
           _highlightIdentified.visible = false
           root.nothingIdentified()
         }
+      }
+    }
+
+    onLongPressed: {
+      // Alter position of simulated provider
+
+      if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
+      {
+        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
       }
     }
   }

@@ -16,7 +16,7 @@ Rectangle {
   property real iconSize: InputStyle.rowHeight
   property string source: ""
   property color bgColor: "transparent"
-  property color fontColor: InputStyle.fontColor
+  property color iconColor: InputStyle.fontColor
 
   id: iconContainer
   height: iconContainer.iconSize
@@ -37,6 +37,6 @@ Rectangle {
   ColorOverlay {
     anchors.fill: icon
     source: icon
-    color: iconContainer.fontColor
+    color: iconContainer.iconColor
   }
 }

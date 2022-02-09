@@ -33,9 +33,9 @@ class SimulatedPositionProvider : public AbstractPositionProvider
      *  Set flightRadius to 0 in order to get constant position (no movement)
      */
     explicit SimulatedPositionProvider(
-      double longitude = 17.130,
-      double latitude = 48.130,
-      double flightRadius = 0.1,
+      double longitude = 17.107137342092614,
+      double latitude = 48.10301740375036,
+      double flightRadius = 0,
       double updateTimeout = 1000,
       QObject *parent = nullptr
     );
@@ -45,6 +45,8 @@ class SimulatedPositionProvider : public AbstractPositionProvider
     virtual void startUpdates() override;
     virtual void stopUpdates() override;
     virtual void closeProvider() override;
+
+    virtual void setPosition( QgsPoint position ) override;
 
     void generateNextPosition();
 
