@@ -33,7 +33,7 @@ Item {
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
-  signal navigateToFeature( var feature );
+  signal stakeoutFeature( var feature );
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -217,7 +217,7 @@ Item {
       onEditGeometry: root.editGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
-      onNavigateToFeature: root.navigateToFeature( feature )
+      onStakeoutFeature: root.stakeoutFeature( feature )
     }
   }
 }

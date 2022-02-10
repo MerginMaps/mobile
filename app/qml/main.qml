@@ -183,7 +183,7 @@ ApplicationWindow {
       onStakeoutStarted: {
         stakeoutPanelLoader.active = true
         stakeoutPanelLoader.focus = true
-        stakeoutPanelLoader.item.navigationTargetPair = pair
+        stakeoutPanelLoader.item.targetPair = pair
       }
 
       Component.onCompleted: {
@@ -391,17 +391,17 @@ ApplicationWindow {
     Component {
       id: stakeoutPanelComponent
 
-      NavigationPanel {
-        id: navigationPanel
+      StakeoutPanel {
+        id: stakeoutPanel
 
         height: window.height
         width: window.width
 
         mapCanvas: map
 
-        onNavigationFinished: {
+        onStakeoutFinished: {
           map.stopStakeout()
-          formsStackManager.openForm( navigationTargetPair, "readOnly", "preview" )
+          formsStackManager.openForm( targetPair, "readOnly", "preview" )
           stakeoutPanelLoader.active = false
         }
       }
@@ -486,7 +486,7 @@ ApplicationWindow {
         map.hideHighlight()
       }
 
-      onNavigateToFeature: {
+      onStakeoutFeature: {
         if ( !__inputUtils.isPointLayerFeature( feature ) )
           return;
         if ( !__positionKit.hasPosition )

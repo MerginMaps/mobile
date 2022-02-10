@@ -35,7 +35,7 @@ class TestUtilsFunctions: public QObject
     void resolveTargetDir();
     void testDirSize();
     void testExtractPointFromFeature();
-    void testNavigationFeatureExtent();
+    void testStakeoutFeatureExtent();
     void testDistanceBetweenGpsAndFeature();
     void testAngleBetweenGpsAndFeature();
     void testIsPointLayerFeature();

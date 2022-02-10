@@ -102,8 +102,8 @@
         <file>components/DateTimePicker.qml</file>
         <file>NotificationBanner.qml</file>
         <file>ProjectIssuesPanel.qml</file>
-        <file>NavigationPanel.qml</file>
-        <file>map/NavigationHighlight.qml</file>
+        <file>StakeoutPanel.qml</file>
+        <file>map/StakeoutHighlight.qml</file>
         <file>misc/PositionProviderPage.qml</file>
         <file>misc/AddPositionProviderPage.qml</file>
         <file>components/BluetoothConnectionDialog.qml</file>

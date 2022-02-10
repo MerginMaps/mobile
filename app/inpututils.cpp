@@ -1302,7 +1302,7 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-QgsRectangle InputUtils::navigationFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+QgsRectangle InputUtils::stakeoutFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
 {
   if ( !mapSettings || !targetFeature.isValid() || geometryFromLayer( targetFeature.layer() ) != QStringLiteral( "point" ) )
     return QgsRectangle();

@@ -411,8 +411,8 @@ class InputUtils: public QObject
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
-    // Returns the extent of the navigation feature representing the source and the destination of the navigation
-    Q_INVOKABLE QgsRectangle navigationFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    // Returns an extent showing both pair and gpsPosition
+    Q_INVOKABLE QgsRectangle stakeoutFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
 
     // Returns the distance from \a gpsPos to the feature \a pair
     Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
