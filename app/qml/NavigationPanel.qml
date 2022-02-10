@@ -22,72 +22,76 @@ import lc 1.0
 Item {
   id: root
 
-  readonly property alias isOpen: drawer.opened
-
   property var mapCanvas
 
-  property var navigationTargetFeature
-  property real featureToGpsDistance: navigationTargetFeature ? __inputUtils.distanceBetweenGpsAndFeature(
+  property var navigationTargetPair: null
+  property real featureToGpsDistance: navigationTargetPair ? __inputUtils.distanceBetweenGpsAndFeature(
                                                                   __positionKit.positionCoordinate,
-                                                                  navigationTargetFeature,
+                                                                  navigationTargetPair,
                                                                   mapCanvas.mapSettings ) : -1
 
+  // Determines if canvas is auto centered to stakout line
   property bool autoFollow: true
+
   property var calculatedNavigationExtent
-  property string mapStateBeforeNavigation
 
   property real distanceThresholdToShortMode: 1 // in metres
   property real distanceThresholdToFinishNavigation: 0.1 // in metres
 
-  signal navigationEnded()
+  readonly property alias panelHeight: drawer.height
 
-  function startNavigation() {
-    mapStateBeforeNavigation = mapCanvas.state
-    mapCanvas.state = "navigation"
+  signal navigationFinished()
+
+  Component.onCompleted: {
+    // stakeout starts
     drawer.open()
   }
 
-  function endNavigation() {
+  function endStakeout() {
     if ( mapCanvas.state !== "navigation" )
       return;
 
-    autoFollow = true
-    updateNavigation()
-    autoFollow = false
-    mapCanvas.state = mapStateBeforeNavigation;
     drawer.close()
-    navigationEnded()
+    navigationFinished()
+  }
+
+  function hide() {
+    drawer.close()
+  }
+
+  function restore() {
+    drawer.open()
   }
 
   function updateNavigation() {
     if ( mapCanvas.state !== "navigation" )
       return;
 
-    mapCanvas.navigationHighlightFeature = navigationTargetFeature
-    mapCanvas.navigationHighlightGpsPosition = __positionKit.positionCoordinate
+    if ( root.navigationTargetPair )
+    {
+      // reserve some space around canvas so that position marker is always visible in autofollow mode
+      let previewMargin = direction.height * 3
+      let stakoutPanelHeightRatio = ( drawer.height + previewMargin ) / mapCanvas.height
 
-    // reserve some space around canvas so that position marker is always visible in autofollow mode
-    let previewMargin = direction.height * 3
-    let previewPanelHeightRatio = ( drawer.height + previewMargin ) / mapCanvas.height
+      //
+      // This is ugly .. it should ideally be computed in MapWrapper, not here.
+      // It needs to be revisited when QML refactoring will take place (separation of project to new component)
+      //
+      root.calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent(
+            root.navigationTargetPair,
+            __positionKit.positionCoordinate,
+            mapCanvas.mapSettings,
+            stakoutPanelHeightRatio
+            );
 
-    root.calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent(
-          mapCanvas.navigationHighlightFeature,
-          __positionKit.positionCoordinate,
-          mapCanvas.mapSettings,
-          previewPanelHeightRatio
-          );
-
-    if ( autoFollow )
-      mapCanvas.mapSettings.extent = calculatedNavigationExtent;
+      if ( autoFollow )
+      {
+        mapCanvas.mapSettings.extent = calculatedNavigationExtent;
+      }
+    }
   }
 
   onAutoFollowChanged: updateNavigation()
-
-  onNavigationTargetFeatureChanged: {
-    mapCanvas.navigationHighlightFeature = navigationTargetFeature
-    autoFollow = true;
-    updateNavigation()
-  }
 
   states: [
     State {
@@ -119,7 +123,7 @@ Item {
   Connections {
     target: __positionKit
     onPositionChanged: {
-      if ( mapCanvas.state === "navigation" && navigationTargetFeature )
+      if ( mapCanvas.state === "navigation" && navigationTargetPair )
         updateNavigation();
     }
   }
@@ -129,7 +133,7 @@ Item {
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
-      endNavigation()
+      endStakeout()
     }
   }
 
@@ -137,8 +141,6 @@ Item {
 
   Drawer {
     id: drawer
-
-    onClosed: endNavigation()
 
     Behavior on height {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
@@ -173,6 +175,8 @@ Item {
         width: parent.width
         height: InputStyle.rowHeight
 
+        spacing: 0
+
         Text {
           Layout.preferredHeight: parent.height
           Layout.fillWidth: true
@@ -197,7 +201,7 @@ Item {
           visible: root.autoFollow === false
 
           Components.Symbol {
-            source: InputStyle.zoomToProjectIcon
+            source: InputStyle.gpsFixedIcon
             iconSize: parent.height / 2
             anchors.centerIn: parent
           }
@@ -222,7 +226,7 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: endNavigation()
+            onClicked: endStakeout()
           }
         }
       }
@@ -252,7 +256,7 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Feature" )
-            text: root.navigationTargetFeature ? __inputUtils.featureTitle( root.navigationTargetFeature, __loader.project ) : ""
+            text: root.navigationTargetPair ? __inputUtils.featureTitle( root.navigationTargetPair, __loader.project ) : ""
           }
 
           Components.TextRowWithTitle {
@@ -365,9 +369,9 @@ Item {
             Image {
                 id: direction
 
-                property real bearing: root.navigationTargetFeature ? __inputUtils.angleBetweenGpsAndFeature(
+                property real bearing: root.navigationTargetPair ? __inputUtils.angleBetweenGpsAndFeature(
                                                                         __positionKit.positionCoordinate,
-                                                                        root.navigationTargetFeature,
+                                                                        root.navigationTargetPair,
                                                                         root.mapCanvas.mapSettings ) : 0
 
                 source: InputStyle.gpsDirectionIcon

@@ -124,7 +124,16 @@ ApplicationWindow {
 
       height: window.height - mainPanel.height
       width: window.width
-      previewPanelHeight: formsStackManager.takenPanelsSpace
+
+      mapExtentOffset: {
+        // offset depends on what panels are visible.
+        // we need to subtract mainPanel (toolbar)'s height from
+        if ( stakeoutPanelLoader.active )
+        {
+          return stakeoutPanelLoader.item.panelHeight - mainPanel.height
+        }
+        return formsStackManager.takenPanelsSpace - mainPanel.height
+      }
 
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
 
@@ -161,6 +170,12 @@ ApplicationWindow {
       onAccuracyButtonClicked: {
         gpsDataPageLoader.active = true
         gpsDataPageLoader.focus = true
+      }
+
+      onStakeoutStarted: {
+        stakeoutPanelLoader.active = true
+        stakeoutPanelLoader.focus = true
+        stakeoutPanelLoader.item.navigationTargetPair = pair
       }
 
       Component.onCompleted: {
@@ -311,8 +326,21 @@ ApplicationWindow {
       onActiveChanged: {
         if ( gpsDataPageLoader.active )
         {
-          navigationPanel.endNavigation();
           formsStackManager.closeDrawer();
+
+          if ( stakeoutPanelLoader.active )
+          {
+            // if we are in stakeout mode
+            stakeoutPanelLoader.item.hide()
+          }
+        }
+        else
+        {
+          if ( stakeoutPanelLoader.active )
+          {
+            // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
+            stakeoutPanelLoader.item.restore()
+          }
         }
       }
     }
@@ -342,16 +370,32 @@ ApplicationWindow {
       }
     }
 
-    NavigationPanel {
-      id: navigationPanel
+    Loader {
+      id: stakeoutPanelLoader
 
-      height: window.height
-      width: window.width
+      focus: true
+      active: false
+      asynchronous: true
 
-      mapCanvas: map
+      sourceComponent: stakeoutPanelComponent
+    }
 
-      onNavigationEnded: {
-        formsStackManager.openForm( navigationPanel.navigationTargetFeature, "readOnly", "preview" )
+    Component {
+      id: stakeoutPanelComponent
+
+      NavigationPanel {
+        id: navigationPanel
+
+        height: window.height
+        width: window.width
+
+        mapCanvas: map
+
+        onNavigationFinished: {
+          map.stopStakeout()
+          formsStackManager.openForm( navigationTargetPair, "readOnly", "preview" )
+          stakeoutPanelLoader.active = false
+        }
       }
     }
 
@@ -439,12 +483,11 @@ ApplicationWindow {
           return;
         if ( !__positionKit.hasPosition )
         {
-          showMessage( "Navigation mode is disabled because location is unavailable!" );
+          showMessage( qsTr( "Stake out is disabled because location is unavailable!" ) );
           return;
         }
 
-        navigationPanel.startNavigation();
-        navigationPanel.navigationTargetFeature = feature;
+        map.stakeout( feature )
         closeDrawer()
       }
     }
