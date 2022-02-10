@@ -155,7 +155,7 @@ Item {
 
   function updatePosition() {
     let autoCenterDuringRecording = _digitizingController.useGpsPoint && root.isInRecordState
-    let autoCenterDuringViewing = !root.isInRecordState && root.state != "navigation" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
+    let autoCenterDuringViewing = !root.isInRecordState && root.state != "stakeout" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
 
     if ( autoCenterDuringRecording || autoCenterDuringViewing ) {
       let useGpsPoint = _digitizingController.useGpsPoint
@@ -170,25 +170,25 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
-    _navigationHighlight.destinationPair = null
+    _stakeoutHighlight.destinationPair = null
   }
 
   function stakeout( feature )
   {
-    _navigationHighlight.destinationPair = feature
-    state = "navigation"
+    _stakeoutHighlight.destinationPair = feature
+    state = "stakeout"
     stakeoutStarted( feature )
   }
 
   function stopStakeout()
   {
     // go back to "view" state and highlight the target pair
-    let pair = _navigationHighlight.destinationPair
+    let pair = _stakeoutHighlight.destinationPair
     state = "view"
 
     centerToPair( pair )
     highlightPair( pair )
-    _navigationHighlight.destinationPair = null
+    _stakeoutHighlight.destinationPair = null
   }
 
   states: [
@@ -211,7 +211,7 @@ Item {
       PropertyChanges { target: root; isInRecordState: true }
     },
     State {
-      name: "navigation"
+      name: "stakeout"
       PropertyChanges { target: root; isInRecordState: false }
     },
     State {
@@ -250,7 +250,7 @@ Item {
 
         break
       }
-      case "navigation": {
+      case "stakeout": {
         if ( _digitizingHighlight.visible )
           _digitizingHighlight.visible = false
 
@@ -332,10 +332,10 @@ Item {
 
   Compass { id: _compass }
 
-  NavigationHighlight {
-    id: _navigationHighlight
+  StakeoutHighlight {
+    id: _stakeoutHighlight
     anchors.fill: _map
-    visible: root.state === "navigation"
+    visible: root.state === "stakeout"
 
     mapSettings: _map.mapSettings
 

@@ -25,12 +25,12 @@ Item {
 
     signal contentClicked()
     signal editClicked()
-    signal navigateToFeature( var feature )
+    signal stakeoutFeature( var feature )
 
     Connections {
       target: controller
       onFeatureLayerPairChanged: {
-        navigationIconContainer.visible = __inputUtils.isPointLayerFeature( controller.featureLayerPair );
+        stakeoutIconContainer.visible = __inputUtils.isPointLayerFeature( controller.featureLayerPair );
       }
     }
 
@@ -77,31 +77,30 @@ Item {
                   }
 
                   Item {
-                      id: navigationIconContainer
+                      id: stakeoutIconContainer
                       visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
                       height: rowHeight
                       width: rowHeight
 
                       MouseArea {
-                          id: navigationIconArea
-                          anchors.fill: navigationIconContainer
-                          onClicked: previewPanel.navigateToFeature( controller.featureLayerPair )
+                          anchors.fill: stakeoutIconContainer
+                          onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
                       }
 
                       Image {
-                          id: navigationIcon
+                          id: stakeoutIcon
                           anchors.fill: parent
                           anchors.margins: rowHeight/8
                           anchors.rightMargin: 0
-                          source: InputStyle.navigateToIcon
+                          source: InputStyle.stakeoutIcon
                           sourceSize.width: width
                           sourceSize.height: height
                           fillMode: Image.PreserveAspectFit
                       }
 
                       ColorOverlay {
-                          anchors.fill: navigationIcon
-                          source: navigationIcon
+                          anchors.fill: stakeoutIcon
+                          source: stakeoutIcon
                           color: InputStyle.fontColor
                       }
                   }

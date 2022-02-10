@@ -360,7 +360,7 @@ void TestUtilsFunctions::testExtractPointFromFeature()
   QCOMPARE( mUtils->extractPointFromFeature( pointPair ), QgsPointXY( 1, 2 ) );
 }
 
-void TestUtilsFunctions::testNavigationFeatureExtent()
+void TestUtilsFunctions::testStakeoutFeatureExtent()
 {
   QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 6326 );
 
@@ -381,7 +381,7 @@ void TestUtilsFunctions::testNavigationFeatureExtent()
 
   FeatureLayerPair pair( feature, &pointsLayer );
 
-  QgsRectangle rect = mUtils->navigationFeatureExtent( pair, gpsPos, &ms, 0 );
+  QgsRectangle rect = mUtils->stakeoutFeatureExtent( pair, gpsPos, &ms, 0 );
   QgsRectangle acceptedExtent( 36.773085939, 3.059613648845, 36.7745297063, 3.06012863296 );
   QCOMPARE( rect.xMinimum(), acceptedExtent.xMinimum() );
   QCOMPARE( rect.yMinimum(), acceptedExtent.yMinimum() );

@@ -24,23 +24,23 @@ Item {
 
   property var mapCanvas
 
-  property var navigationTargetPair: null
-  property real featureToGpsDistance: navigationTargetPair ? __inputUtils.distanceBetweenGpsAndFeature(
+  property var targetPair: null
+  property real remainingDistance: targetPair ? __inputUtils.distanceBetweenGpsAndFeature(
                                                                   __positionKit.positionCoordinate,
-                                                                  navigationTargetPair,
+                                                                  targetPair,
                                                                   mapCanvas.mapSettings ) : -1
 
-  // Determines if canvas is auto centered to stakout line
+  // Determines if canvas is auto centered to stakeout line
   property bool autoFollow: true
 
-  property var calculatedNavigationExtent
+  property var extent
 
-  property real distanceThresholdToShortMode: 1 // in metres
-  property real distanceThresholdToFinishNavigation: 0.1 // in metres
+  property real closeRangeModeDistanceThreshold: 1 // in metres
+  property real targetReachedDistanceThreshold: 0.1 // in metres
 
   readonly property alias panelHeight: drawer.height
 
-  signal navigationFinished()
+  signal stakeoutFinished()
 
   Component.onCompleted: {
     // stakeout starts
@@ -48,11 +48,11 @@ Item {
   }
 
   function endStakeout() {
-    if ( mapCanvas.state !== "navigation" )
+    if ( mapCanvas.state !== "stakeout" )
       return;
 
     drawer.close()
-    navigationFinished()
+    stakeoutFinished()
   }
 
   function hide() {
@@ -63,11 +63,11 @@ Item {
     drawer.open()
   }
 
-  function updateNavigation() {
-    if ( mapCanvas.state !== "navigation" )
+  function update() {
+    if ( mapCanvas.state !== "stakeout" )
       return;
 
-    if ( root.navigationTargetPair )
+    if ( root.targetPair )
     {
       // reserve some space around canvas so that position marker is always visible in autofollow mode
       let previewMargin = direction.height * 3
@@ -77,8 +77,8 @@ Item {
       // This is ugly .. it should ideally be computed in MapWrapper, not here.
       // It needs to be revisited when QML refactoring will take place (separation of project to new component)
       //
-      root.calculatedNavigationExtent =  __inputUtils.navigationFeatureExtent(
-            root.navigationTargetPair,
+      root.extent = __inputUtils.stakeoutFeatureExtent(
+            root.targetPair,
             __positionKit.positionCoordinate,
             mapCanvas.mapSettings,
             stakoutPanelHeightRatio
@@ -86,25 +86,25 @@ Item {
 
       if ( autoFollow )
       {
-        mapCanvas.mapSettings.extent = calculatedNavigationExtent;
+        mapCanvas.mapSettings.extent = extent;
       }
     }
   }
 
-  onAutoFollowChanged: updateNavigation()
+  onAutoFollowChanged: update()
 
   states: [
     State {
-      name: "long"
-      when: featureToGpsDistance >= distanceThresholdToShortMode
+      name: "longRange"
+      when: remainingDistance >= closeRangeModeDistanceThreshold
       PropertyChanges {
         target: drawer
         height: root.height / 6
       }
     },
     State {
-      name: "short"
-      when: featureToGpsDistance >= 0 && featureToGpsDistance < distanceThresholdToShortMode
+      name: "closeRange"
+      when: remainingDistance >= 0 && remainingDistance < closeRangeModeDistanceThreshold
       PropertyChanges {
         target: drawer
         height: root.height / 2
@@ -115,7 +115,7 @@ Item {
   Connections {
     target: mapCanvas.mapSettings
     onExtentChanged: {
-      if ( mapCanvas.state === "navigation" && mapCanvas.mapSettings.extent !== calculatedNavigationExtent )
+      if ( mapCanvas.state === "stakeout" && mapCanvas.mapSettings.extent !== extent )
         autoFollow = false;
     }
   }
@@ -123,12 +123,12 @@ Item {
   Connections {
     target: __positionKit
     onPositionChanged: {
-      if ( mapCanvas.state === "navigation" && navigationTargetPair )
-        updateNavigation();
+      if ( mapCanvas.state === "stakeout" && targetPair )
+        update();
     }
   }
 
-  onStateChanged: updateNavigation()
+  onStateChanged: update()
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -258,7 +258,7 @@ Item {
         width: parent.width
 
         Row {
-          Layout.preferredHeight: root.state === "long" ? parent.height : ( parent.width * 1/6 )
+          Layout.preferredHeight: root.state === "longRange" ? parent.height : ( parent.width * 1/6 )
           Layout.preferredWidth: parent.width
 
           Components.TextRowWithTitle {
@@ -268,7 +268,7 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Feature" )
-            text: root.navigationTargetPair ? __inputUtils.featureTitle( root.navigationTargetPair, __loader.project ) : ""
+            text: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __loader.project ) : ""
           }
 
           Components.TextRowWithTitle {
@@ -278,12 +278,12 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Distance" )
-            text: __inputUtils.formatNumber( featureToGpsDistance, 2 ) + " m"
+            text: __inputUtils.formatNumber( remainingDistance, 2 ) + " m"
           }
         }
 
         Item {
-          id: navigationComponent
+          id: closeRangeModeComponent
 
           Layout.fillHeight: true
           Layout.fillWidth: true
@@ -291,7 +291,7 @@ Item {
           states: [
             State {
               name: "atTarget"
-              when: root.featureToGpsDistance < root.distanceThresholdToFinishNavigation
+              when: root.remainingDistance < root.targetReachedDistanceThreshold
             },
             State {
               name: "notAtTarget"
@@ -299,11 +299,11 @@ Item {
             }
           ]
 
-          onStateChanged: root.updateNavigation()
+          onStateChanged: root.update()
 
           state: "notAtTarget"
 
-          visible: root.state === "short"
+          visible: root.state === "closeRange"
 
           // enable antialiasing
           layer.enabled: true
@@ -318,8 +318,8 @@ Item {
             anchors.fill: parent
 
             ShapePath {
-              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
-              fillColor: navigationComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
+              fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
 
               strokeWidth: 2 * __dp
 
@@ -338,7 +338,7 @@ Item {
             }
 
             ShapePath {
-              strokeColor: navigationComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
               fillColor: "transparent"
 
               strokeWidth: 2 * __dp
@@ -361,7 +361,7 @@ Item {
           // Target X icon
           Components.Symbol {
             source: InputStyle.noIcon
-            iconColor: navigationComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+            iconColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
             iconSize: rootShape.height / 12
             x: rootShape.centerX - width / 2
             y: rootShape.centerY - height / 2
@@ -381,9 +381,9 @@ Item {
             Image {
                 id: direction
 
-                property real bearing: root.navigationTargetPair ? __inputUtils.angleBetweenGpsAndFeature(
+                property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
                                                                         __positionKit.positionCoordinate,
-                                                                        root.navigationTargetPair,
+                                                                        root.targetPair,
                                                                         root.mapCanvas.mapSettings ) : 0
 
                 source: InputStyle.gpsDirectionIcon
@@ -401,10 +401,10 @@ Item {
                   *   sin<or cos> of angle between GPS position and the target feature *
                   *   distance to the feature *
                   *   scale by size of the outer circle /
-                  *   distance of the outer circle in metres (distanceThresholdToShortMode)
+                  *   distance of the outer circle in metres (closeRangeModeDistanceThreshold)
                   */
-                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
-                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height
+                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - height
 
                 Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
             }
@@ -416,8 +416,8 @@ Item {
                 width: InputStyle.rowHeightHeader / 2
                 height: width
                 smooth: true
-                x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - width / 2
-                y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.featureToGpsDistance ) * outerArc.radiusX / root.distanceThresholdToShortMode * __dp ) - height / 2
+                x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
             }
           }
         }
