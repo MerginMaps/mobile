@@ -130,9 +130,15 @@ ApplicationWindow {
         // we need to subtract mainPanel (toolbar)'s height from
         if ( stakeoutPanelLoader.active )
         {
+          // if stakeout panel is opened
           return stakeoutPanelLoader.item.panelHeight - mainPanel.height
         }
-        return formsStackManager.takenPanelsSpace - mainPanel.height
+        else if ( formsStackManager.takenPanelsSpace > 0 )
+        {
+          // if feature preview panel is opened
+          return formsStackManager.takenPanelsSpace - mainPanel.height
+        }
+        return 0
       }
 
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
