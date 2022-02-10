@@ -127,7 +127,9 @@ ApplicationWindow {
 
       mapExtentOffset: {
         // offset depends on what panels are visible.
-        // we need to subtract mainPanel (toolbar)'s height from
+        // we need to subtract mainPanel (toolbar)'s height from any visible panel
+        // because panels start at the bottom of the screen, but map canvas's height is lowered
+        // by mainPanels's height.
         if ( stakeoutPanelLoader.active )
         {
           // if stakeout panel is opened
