@@ -20,15 +20,16 @@ Item {
 
   property var featurePairToEdit // we are editing geometry of this feature layer pair
   property var targetLayerToUse // layer used in digitizing when recording in specific layer
-  property real previewPanelHeight
+
+  // mapExtentOffset represents a height (or a portion) of canvas which is occupied by some other component
+  // like preview panel or stakeout panel. Map extent thus must be calculated regarding to this
+  // offset in order to not highlight features in the occupied area, but rather move canvas
+  property real mapExtentOffset
 
   readonly property alias gpsIndicatorColor: _gpsState.indicatorColor
   readonly property alias digitizingController: _digitizingController
   readonly property alias mapSettings: _map.mapSettings
   readonly property alias compass: _compass
-
-  property alias navigationHighlightFeature: _navigationHighlight.destinationPair
-  property alias navigationHighlightGpsPosition: _navigationHighlight.gpsPosition
 
   property bool isInRecordState
 
@@ -49,15 +50,16 @@ Item {
 
   signal notify( string message )
 
+  signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
 
-  function centerToPair( pair, considerFormPreview = false ) {
-    if ( considerFormPreview )
-      var previewPanelHeightRatio = previewPanelHeight / _map.height
+  function centerToPair( pair, considerMapExtentOffset = false ) {
+    if ( considerMapExtentOffset )
+      var mapExtentOffsetRatio = mapExtentOffset / _map.height
     else
-      previewPanelHeightRatio = 0
+      mapExtentOffsetRatio = 0
 
-    __inputUtils.setExtentToFeature( pair, _map.mapSettings, previewPanelHeightRatio )
+    __inputUtils.setExtentToFeature( pair, _map.mapSettings, mapExtentOffsetRatio )
   }
 
   function highlightPair( pair ) {
@@ -168,6 +170,24 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
     _highlightIdentified.featureLayerPair = null
     _digitizingHighlight.featureLayerPair = null
+    _navigationHighlight.destinationPair = null
+  }
+
+  function stakeout( feature )
+  {
+    _navigationHighlight.destinationPair = feature
+    state = "navigation"
+    stakeoutStarted( feature )
+  }
+
+  function stopStakeout()
+  {
+    // go back to "view" state and highlight the target pair
+    let pair = _navigationHighlight.destinationPair
+    state = "view"
+
+    centerToPair( pair )
+    highlightPair( pair )
     _navigationHighlight.destinationPair = null
   }
 
@@ -505,7 +525,7 @@ Item {
     maxWidth: parent.width - ( InputStyle.panelMargin * 2 )
 
     anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
-    anchors.bottomMargin: root.previewPanelHeight + InputStyle.smallGap
+    anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
     visible: {

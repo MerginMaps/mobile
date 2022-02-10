@@ -25,7 +25,12 @@ Item {
 
   signal back()
 
-  focus: true
+  Keys.onReleased: {
+    if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+      event.accepted = true
+      root.back()
+    }
+  }
 
   StackView {
     id: additionalContent
@@ -40,12 +45,15 @@ Item {
     Page {
       id: gpsPage
 
+      focus: true
       Keys.onReleased: {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.back()
         }
       }
+
+      Component.onCompleted: forceActiveFocus()
 
       MapPosition {
         id: mapPositioning

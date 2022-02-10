@@ -124,7 +124,24 @@ ApplicationWindow {
 
       height: window.height - mainPanel.height
       width: window.width
-      previewPanelHeight: formsStackManager.takenPanelsSpace
+
+      mapExtentOffset: {
+        // offset depends on what panels are visible.
+        // we need to subtract mainPanel (toolbar)'s height from any visible panel
+        // because panels start at the bottom of the screen, but map canvas's height is lowered
+        // by mainPanels's height.
+        if ( stakeoutPanelLoader.active )
+        {
+          // if stakeout panel is opened
+          return stakeoutPanelLoader.item.panelHeight - mainPanel.height
+        }
+        else if ( formsStackManager.takenPanelsSpace > 0 )
+        {
+          // if feature preview panel is opened
+          return formsStackManager.takenPanelsSpace - mainPanel.height
+        }
+        return 0
+      }
 
       onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
 
@@ -161,6 +178,12 @@ ApplicationWindow {
       onAccuracyButtonClicked: {
         gpsDataPageLoader.active = true
         gpsDataPageLoader.focus = true
+      }
+
+      onStakeoutStarted: {
+        stakeoutPanelLoader.active = true
+        stakeoutPanelLoader.focus = true
+        stakeoutPanelLoader.item.navigationTargetPair = pair
       }
 
       Component.onCompleted: {
@@ -289,7 +312,10 @@ ApplicationWindow {
       GpsDataPage {
         id: gpsDataPage
 
-        onBack: gpsDataPageLoader.active = false
+        onBack: {
+          mainPanel.focus = true
+          gpsDataPageLoader.active = false
+        }
 
         mapSettings: map.mapSettings
 
@@ -303,12 +329,26 @@ ApplicationWindow {
 
       asynchronous: true
       active: false
+      focus: true
       sourceComponent: gpsDataPageComponent
       onActiveChanged: {
         if ( gpsDataPageLoader.active )
         {
-          navigationPanel.endNavigation();
           formsStackManager.closeDrawer();
+
+          if ( stakeoutPanelLoader.active )
+          {
+            // if we are in stakeout mode
+            stakeoutPanelLoader.item.hide()
+          }
+        }
+        else
+        {
+          if ( stakeoutPanelLoader.active )
+          {
+            // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
+            stakeoutPanelLoader.item.restore()
+          }
         }
       }
     }
@@ -338,16 +378,32 @@ ApplicationWindow {
       }
     }
 
-    NavigationPanel {
-      id: navigationPanel
+    Loader {
+      id: stakeoutPanelLoader
 
-      height: window.height
-      width: window.width
+      focus: true
+      active: false
+      asynchronous: true
 
-      mapCanvas: map
+      sourceComponent: stakeoutPanelComponent
+    }
 
-      onNavigationEnded: {
-        formsStackManager.openForm( navigationPanel.navigationTargetFeature, "readOnly", "preview" )
+    Component {
+      id: stakeoutPanelComponent
+
+      NavigationPanel {
+        id: navigationPanel
+
+        height: window.height
+        width: window.width
+
+        mapCanvas: map
+
+        onNavigationFinished: {
+          map.stopStakeout()
+          formsStackManager.openForm( navigationTargetPair, "readOnly", "preview" )
+          stakeoutPanelLoader.active = false
+        }
       }
     }
 
@@ -421,6 +477,10 @@ ApplicationWindow {
           browseDataPanel.refreshFeaturesData()
           browseDataPanel.focus = true
         }
+        else if ( gpsDataPageLoader.active )
+        {
+          // do nothing, gps page already has focus
+        }
         else mainPanel.focus = true
 
         map.hideHighlight()
@@ -431,12 +491,11 @@ ApplicationWindow {
           return;
         if ( !__positionKit.hasPosition )
         {
-          showMessage( "Navigation mode is disabled because location is unavailable!" );
+          showMessage( qsTr( "Stake out is disabled because location is unavailable!" ) );
           return;
         }
 
-        navigationPanel.startNavigation();
-        navigationPanel.navigationTargetFeature = feature;
+        map.stakeout( feature )
         closeDrawer()
       }
     }
