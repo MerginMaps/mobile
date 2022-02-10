@@ -152,7 +152,19 @@ Item {
     edge: Qt.BottomEdge
 
     dragMargin: 0 // prevents opening the drawer by dragging.
-    closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
+    closePolicy: Popup.NoAutoClose
+
+    Item {
+      // back handler
+      focus: true
+
+      Keys.onReleased: {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+          event.accepted = true;
+          endStakeout()
+        }
+      }
+    }
 
     Rectangle {
       anchors.fill: parent
