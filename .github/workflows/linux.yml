@@ -17,7 +17,7 @@ env:
   CCACHE_DIR: ~/.ccache
   INPUT_SDK_VERSION: ubuntu-2004-20220210-41
   QT_VERSION: '5.14.2'
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
 
 concurrency:
   group: ci-${{github.ref}}-linux

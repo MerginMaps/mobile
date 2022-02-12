@@ -18,10 +18,10 @@ env:
   TEST_API_USERNAME: test_inputapp
   TEST_API_PASSWORD: ${{ secrets.MERGINTEST_API_PASSWORD }}
   QT_VERSION: 5.14.2
-  QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.13.0
-  INPUT_SDK_VERSION: mac-20220210-58
+  QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
+  INPUT_SDK_VERSION: mac-20220212-62
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
 
 concurrency:
   group: ci-${{github.ref}}-macos
@@ -137,8 +137,9 @@ jobs:
           echo -e "  QMAKE_MACOSX_DEPLOYMENT_TARGET = ${{ env.QMAKE_MACOSX_DEPLOYMENT_TARGET }}"  >> ./input/app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
           echo -e "  QMAKE_CXXFLAGS += --coverage"  >> ./input/app/config.pri
-          echo -e "  QMAKE_LFLAGS += --coverage "  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
+          echo -e "  QMAKE_LFLAGS += --coverage"  >> ./input/app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./input/app/config.pri
+          echo -e "  CONFIG += sdk_no_version_check"  >> ./input/app/config.pri
           echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
 
