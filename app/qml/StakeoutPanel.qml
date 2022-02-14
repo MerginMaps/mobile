@@ -329,8 +329,8 @@ Item {
                 centerX: rootShape.centerX
                 centerY: rootShape.centerY
 
-                radiusX: 50 * __dp
-                radiusY: 50 * __dp
+                radiusX: outerArc.radiusX / 2
+                radiusY: outerArc.radiusY / 2
 
                 startAngle: 0
                 sweepAngle: 360
@@ -346,11 +346,19 @@ Item {
               PathAngleArc {
                 id: outerArc
 
+                property real outerRadius: {
+                  if ( rootShape.height / 2.5 < 100 )
+                  {
+                    return 100 // minimum height
+                  }
+                  return rootShape.height / 2.5
+                }
+
                 centerX: rootShape.centerX
                 centerY: rootShape.centerY
 
-                radiusX: 100 * __dp
-                radiusY: 100 * __dp
+                radiusX: outerRadius * __dp
+                radiusY: outerRadius * __dp
 
                 startAngle: 0
                 sweepAngle: 360
@@ -403,8 +411,8 @@ Item {
                   *   scale by size of the outer circle /
                   *   distance of the outer circle in metres (closeRangeModeDistanceThreshold)
                   */
-                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - height
+                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
 
                 Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
             }
@@ -416,8 +424,8 @@ Item {
                 width: InputStyle.rowHeightHeader / 2
                 height: width
                 smooth: true
-                x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-                y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.radiusX / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
+                x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
             }
           }
         }
