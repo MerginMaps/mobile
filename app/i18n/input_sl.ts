@@ -912,24 +912,6 @@ V projekt ne bo dodano.</translation>
     </message>
 </context>
 <context>
-    <name>NavigationPanel</name>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="196"/>
-        <source>Stake out</source>
-        <translation>Zakoličba</translation>
-    </message>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="270"/>
-        <source>Feature</source>
-        <translation>Element</translation>
-    </message>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="280"/>
-        <source>Distance</source>
-        <translation>razdalja</translation>
-    </message>
-</context>
-<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/components/PanelHeader.qml" line="20"/>
@@ -1019,7 +1001,7 @@ V projekt ne bo dodano.</translation>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="159"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
         <source>No map tip available.</source>
         <translation>Map tip ni na voljo</translation>
     </message>
@@ -1568,6 +1550,24 @@ V projekt ne bo dodano.</translation>
         <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
         <source>Connected</source>
         <translation>povezano</translation>
+    </message>
+</context>
+<context>
+    <name>StakeoutPanel</name>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <source>Stake out</source>
+        <translation>Zakoličba</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <source>Feature</source>
+        <translation>Element</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <source>Distance</source>
+        <translation>razdalja</translation>
     </message>
 </context>
 <context>
