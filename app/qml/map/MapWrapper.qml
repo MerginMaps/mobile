@@ -32,6 +32,7 @@ Item {
   readonly property alias compass: _compass
 
   property bool isInRecordState
+  property var extentBeforeStakeout
 
   signal featureIdentified( var pair )
   signal nothingIdentified()
@@ -177,6 +178,7 @@ Item {
   {
     _stakeoutHighlight.destinationPair = feature
     state = "stakeout"
+    root.extentBeforeStakeout = _map.mapSettings.extent
     stakeoutStarted( feature )
   }
 
@@ -186,7 +188,8 @@ Item {
     let pair = _stakeoutHighlight.destinationPair
     state = "view"
 
-    centerToPair( pair )
+    // return map extent to position it was before starting stakeout
+    _map.mapSettings.extent = root.extentBeforeStakeout
     highlightPair( pair )
     _stakeoutHighlight.destinationPair = null
   }
