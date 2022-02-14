@@ -404,6 +404,9 @@ ApplicationWindow {
           formsStackManager.openForm( targetPair, "readOnly", "preview" )
           stakeoutPanelLoader.active = false
         }
+
+        onAutoFollowClicked: map.autoFollowStakeoutPath = true
+        onPanelHeightUpdated: map.updatePosition()
       }
     }
 

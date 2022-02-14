@@ -1302,52 +1302,93 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-QgsRectangle InputUtils::stakeoutFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setStakeoutPathExtent(
+  MapPosition *mapPositioner,
+  const FeatureLayerPair &targetFeature,
+  QgsQuickMapSettings *mapSettings,
+  double mapWidth,
+  double mapHeight,
+  double mapExtentOffset,
+  double mapMargin
+)
 {
-  if ( !mapSettings || !targetFeature.isValid() || geometryFromLayer( targetFeature.layer() ) != QStringLiteral( "point" ) )
-    return QgsRectangle();
+  if ( !mapPositioner || !mapSettings || !targetFeature.isValid() )
+    return;
 
-  // Transform gps position to map CRS
-  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
-  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct1.isShortCircuited() )
+  // We currently support only point geometries
+  if ( targetFeature.layer()->geometryType() != QgsWkbTypes::PointGeometry )
+    return;
+
+  if ( !mapPositioner->positionKit() || !mapPositioner->mapSettings() )
+    return;
+
+  //
+  // In order to compute stakeout extent, we first compute distance to target feature and
+  // based on that we update the extent like this:
+  //   - if distance is > 10m, use 5m scale and center to GPS point
+  //   - if distance is 3-10m, use 2m scale and center to GPS point
+  //   - if distance is 1-3m, use 1m scale and center to GPS point
+  //   - if distance is < 1m, use 50cm scale and center to target point (so that canvas does not move all the time)
+  //
+
+  // transform gps point to map's CRS and screen's X/Y pixels
+  QgsPoint gpsPointRaw = mapPositioner->positionKit()->positionCoordinate();
+  QgsPointXY gpsPointInMapCRS = transformPoint(
+                                  coordinateReferenceSystemFromEpsgId( 4326 ),
+                                  mapSettings->destinationCrs(),
+                                  mapSettings->transformContext(),
+                                  gpsPointRaw
+                                );
+
+  if ( gpsPointInMapCRS.isEmpty() )
   {
-    try
-    {
-      gpsPosition.transform( ct1 );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QgsRectangle();
-    }
+    // unsuccessful transform
+    return;
   }
 
-  // Transform target point to map CRS
-  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
-  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct2.isShortCircuited() )
+  qreal distance = distanceBetweenGpsAndFeature( gpsPointRaw, targetFeature, mapSettings );
+  qreal scale = 205; // ~ 5m scale
+
+  // TODO: Move extent based on panel height (y coord)
+
+  QgsRectangle extent;
+
+  if ( distance > 10 )
   {
-    try
+    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+  }
+  else if ( distance <= 10 && distance > 3 )
+  {
+    scale = 105; // ~ 2m scale
+    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+  }
+  else if ( distance <= 3 && distance > 1 )
+  {
+    scale = 55; // ~ 1m scale
+    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+  }
+  else if ( distance <= 1 )
+  {
+    scale = 25; // ~ 50cm scale
+
+    QgsPoint targetPointRaw( extractPointFromFeature( targetFeature ) );
+    QgsPointXY targetPointInMapCRS = transformPoint(
+                                       targetFeature.layer()->crs(),
+                                       mapSettings->destinationCrs(),
+                                       mapSettings->transformContext(),
+                                       targetPointRaw
+                                     );
+
+    if ( targetPointInMapCRS.isEmpty() )
     {
-      targetPoint.transform( ct2 );
+      // unsuccessful transform
+      return;
     }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QgsRectangle();
-    }
+
+    extent = mapSettings->mapSettings().computeExtentForScale( targetPointInMapCRS, scale );
   }
 
-  QgsRectangle bbox;
-  bbox.setXMinimum( qMin( gpsPosition.x(), targetPoint.x() ) );
-  bbox.setXMaximum( qMax( gpsPosition.x(), targetPoint.x() ) );
-  bbox.setYMinimum( qMin( gpsPosition.y(), targetPoint.y() ) );
-  bbox.setYMaximum( qMax( gpsPosition.y(), targetPoint.y() ) );
-  bbox.scale( 1.2 );
-  bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
-
-  return bbox;
+  mapSettings->setExtent( extent );
 }
 
 qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )

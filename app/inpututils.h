@@ -38,6 +38,7 @@
 #include "qgsquickmapsettings.h"
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
+#include "position/mapposition.h"
 
 class QgsFeature;
 class QgsVectorLayer;
@@ -412,7 +413,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
     // Returns an extent showing both pair and gpsPosition
-    Q_INVOKABLE QgsRectangle stakeoutFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    Q_INVOKABLE void setStakeoutPathExtent( MapPosition *mapPositioner, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapWidth, double mapHeight, double mapExtentOffset, double mapMargin );
 
     // Returns the distance from \a gpsPos to the feature \a pair
     Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );

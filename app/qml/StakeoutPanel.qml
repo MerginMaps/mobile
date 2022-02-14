@@ -30,16 +30,18 @@ Item {
                                                                   targetPair,
                                                                   mapCanvas.mapSettings ) : -1
 
-  // Determines if canvas is auto centered to stakeout line
-  property bool autoFollow: true
-
   property var extent
 
   property real closeRangeModeDistanceThreshold: 1 // in metres
   property real targetReachedDistanceThreshold: 0.1 // in metres
 
   readonly property alias panelHeight: drawer.height
+  // Intentionally create additional signal that signalizes when stakeout panel changes its height
+  // panelHeightUpdated is emitted after animation for panel height is finished! panelHeight property contains also
+  // intermediary values during animation
+  signal panelHeightUpdated()
 
+  signal autoFollowClicked()
   signal stakeoutFinished()
 
   Component.onCompleted: {
@@ -63,36 +65,6 @@ Item {
     drawer.open()
   }
 
-  function update() {
-    if ( mapCanvas.state !== "stakeout" )
-      return;
-
-    if ( root.targetPair )
-    {
-      // reserve some space around canvas so that position marker is always visible in autofollow mode
-      let previewMargin = direction.height * 3
-      let stakoutPanelHeightRatio = ( drawer.height + previewMargin ) / mapCanvas.height
-
-      //
-      // This is ugly .. it should ideally be computed in MapWrapper, not here.
-      // It needs to be revisited when QML refactoring will take place (separation of project to new component)
-      //
-      root.extent = __inputUtils.stakeoutFeatureExtent(
-            root.targetPair,
-            __positionKit.positionCoordinate,
-            mapCanvas.mapSettings,
-            stakoutPanelHeightRatio
-            );
-
-      if ( autoFollow )
-      {
-        mapCanvas.mapSettings.extent = extent;
-      }
-    }
-  }
-
-  onAutoFollowChanged: update()
-
   states: [
     State {
       name: "longRange"
@@ -112,24 +84,6 @@ Item {
     }
   ]
 
-  Connections {
-    target: mapCanvas.mapSettings
-    onExtentChanged: {
-      if ( mapCanvas.state === "stakeout" && mapCanvas.mapSettings.extent !== extent )
-        autoFollow = false;
-    }
-  }
-
-  Connections {
-    target: __positionKit
-    onPositionChanged: {
-      if ( mapCanvas.state === "stakeout" && targetPair )
-        update();
-    }
-  }
-
-  onStateChanged: update()
-
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
@@ -143,7 +97,10 @@ Item {
     id: drawer
 
     Behavior on height {
-      PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+      SequentialAnimation {
+        PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
+        ScriptAction { script: root.panelHeightUpdated() }
+      }
     }
 
     width: parent.width
@@ -210,7 +167,7 @@ Item {
           Layout.preferredHeight: parent.height
           Layout.preferredWidth: parent.height
 
-          visible: root.autoFollow === false
+          visible: mapCanvas.autoFollowStakeoutPath === false
 
           Components.Symbol {
             source: InputStyle.gpsFixedIcon
@@ -220,7 +177,7 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: root.autoFollow = true
+            onClicked: root.autoFollowClicked()
           }
         }
 
@@ -298,8 +255,6 @@ Item {
               when: state != "atTarget"
             }
           ]
-
-          onStateChanged: root.update()
 
           state: "notAtTarget"
 

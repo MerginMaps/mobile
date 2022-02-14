@@ -34,6 +34,9 @@ Item {
   property bool isInRecordState
   property var extentBeforeStakeout
 
+  // Determines if canvas is auto centered to stakeout line
+  property bool autoFollowStakeoutPath: true
+
   signal featureIdentified( var pair )
   signal nothingIdentified()
 
@@ -155,12 +158,23 @@ Item {
   }
 
   function updatePosition() {
-    let autoCenterDuringRecording = _digitizingController.useGpsPoint && root.isInRecordState
-    let autoCenterDuringViewing = !root.isInRecordState && root.state != "stakeout" && __appSettings.autoCenterMapChecked && isPositionOutOfExtent()
-
-    if ( autoCenterDuringRecording || autoCenterDuringViewing ) {
-      let useGpsPoint = _digitizingController.useGpsPoint
+    if ( root.isInRecordState && _digitizingController.useGpsPoint )
+    {
       centerToPosition()
+    }
+    else if ( root.state === "stakeout" )
+    {
+      if ( root.autoFollowStakeoutPath )
+      {
+        __inputUtils.setStakeoutPathExtent( _mapPosition, _stakeoutHighlight.destinationPair, _map.mapSettings, _map.width, _map.height, mapExtentOffset, InputStyle.mapOutOfExtentBorder )
+      }
+    }
+    else if ( root.state === "view" )
+    {
+      if ( __appSettings.autoCenterMapChecked && isPositionOutOfExtent() )
+      {
+        centerToPosition()
+      }
     }
 
     _digitizingHighlight.positionChanged()
@@ -178,7 +192,9 @@ Item {
   {
     _stakeoutHighlight.destinationPair = feature
     state = "stakeout"
+    root.autoFollowStakeoutPath = true
     root.extentBeforeStakeout = _map.mapSettings.extent
+    updatePosition()
     stakeoutStarted( feature )
   }
 
@@ -192,6 +208,13 @@ Item {
     _map.mapSettings.extent = root.extentBeforeStakeout
     highlightPair( pair )
     _stakeoutHighlight.destinationPair = null
+  }
+
+  onAutoFollowStakeoutPathChanged: {
+    if ( autoFollowStakeoutPath )
+    {
+      updatePosition()
+    }
   }
 
   states: [
@@ -321,6 +344,13 @@ Item {
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
         __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
+      }
+    }
+
+    onUserInteractedWithMap: {
+      if ( root.state === "stakeout" )
+      {
+        root.autoFollowStakeoutPath = false
       }
     }
   }
