@@ -71,7 +71,8 @@ ios {
     LIBS += -lspatialindex -lgeos -lgeos_c
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip
-
+    LIBS += -lwebp
+    
     QMAKE_INFO_PLIST = ios/Info.plist
 
     # demo projects
