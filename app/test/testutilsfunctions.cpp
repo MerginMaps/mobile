@@ -382,13 +382,15 @@ void TestUtilsFunctions::testStakeoutPathExtent()
   QgsPoint *target = new QgsPoint( 47.48117696934868, 19.064282309621444 );
 
   // We want to test if extent has correct scale and center
-  struct testcase {
-      QgsPoint gpsPosition;
-      QgsPoint expectedCenter;
-      int expectedScale;
+  struct testcase
+  {
+    QgsPoint gpsPosition;
+    QgsPoint expectedCenter;
+    int expectedScale;
   };
 
-  QVector< testcase > testcases = {
+  QVector< testcase > testcases =
+  {
     { QgsPoint( 48.1141526157956, 17.267434685006886 ),  QgsPoint( 48.1141526157956, 17.267434685006886 ),  204 }, // far far away
     { QgsPoint( 47.48127984125111, 19.064443912646784 ), QgsPoint( 47.48127984125111, 19.064443912646784 ), 204 }, // > 20m from target
     { QgsPoint( 47.481122740577486, 19.06433009357165 ), QgsPoint( 47.481122740577486, 19.06433009357165 ), 105 }, // ~ 8m from target
@@ -411,7 +413,7 @@ void TestUtilsFunctions::testStakeoutPathExtent()
     QVERIFY( mUtils->equals( extent.center(), test.expectedCenter ) );
 
     ms.setExtent( extent );
-    QCOMPARE( (int)ms.mapSettings().scale(), test.expectedScale );
+    QCOMPARE( ( int )ms.mapSettings().scale(), test.expectedScale );
   }
 }
 
