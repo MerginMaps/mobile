@@ -360,33 +360,59 @@ void TestUtilsFunctions::testExtractPointFromFeature()
   QCOMPARE( mUtils->extractPointFromFeature( pointPair ), QgsPointXY( 1, 2 ) );
 }
 
-void TestUtilsFunctions::testStakeoutFeatureExtent()
+void TestUtilsFunctions::testStakeoutPathExtent()
 {
-  QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 6326 );
+  QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 
   QgsQuickMapSettings ms;
   ms.setDestinationCrs( crs );
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
-  ms.setOutputSize( QSize( 1000, 500 ) );
+  ms.setOutputSize( QSize( 400, 620 ) );
 
-  QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
-  QgsPoint *point = new QgsPoint( 36.77440939232914, 3.0596565641869136 );
+  PositionKit positionKit;
+  positionKit.setPositionProvider( PositionKit::constructProvider( "internal", "simulated", "simulated" ) );
+  AbstractPositionProvider *provider = positionKit.positionProvider();
+
+  MapPosition mapPositioner;
+  mapPositioner.setMapSettings( &ms );
+  mapPositioner.setPositionKit( &positionKit );
 
   QgsVectorLayer pointsLayer( QStringLiteral( "point?crs=%1" ).arg( "EPSG:4326" ), "pointsLayer", "memory" );
 
+  QgsPoint *target = new QgsPoint( 47.48117696934868, 19.064282309621444 );
+
+  // We want to test if extent has correct scale and center
+  struct testcase {
+      QgsPoint gpsPosition;
+      QgsPoint expectedCenter;
+      int expectedScale;
+  };
+
+  QVector< testcase > testcases = {
+    { QgsPoint( 48.1141526157956, 17.267434685006886 ),  QgsPoint( 48.1141526157956, 17.267434685006886 ),  204 }, // far far away
+    { QgsPoint( 47.48127984125111, 19.064443912646784 ), QgsPoint( 47.48127984125111, 19.064443912646784 ), 204 }, // > 20m from target
+    { QgsPoint( 47.481122740577486, 19.06433009357165 ), QgsPoint( 47.481122740577486, 19.06433009357165 ), 105 }, // ~ 8m from target
+    { QgsPoint( 47.481185467, 19.064302897 ),            QgsPoint( 47.481185467, 19.064302897 ),            55  }, // ~ 2m from target
+    { QgsPoint( 47.481177379, 19.064283071 ),            QgsPoint( 47.48117696934868, 19.064282309621444 ), 25  }  // ~ 10cm from target
+  };
+
   QgsFeature feature;
   QgsGeometry geom;
-  geom.set( point );
+  geom.set( target );
   feature.setGeometry( geom );
 
   FeatureLayerPair pair( feature, &pointsLayer );
 
-//  QgsRectangle rect = mUtils->stakeoutFeatureExtent( pair, gpsPos, &ms, 0 );
-//  QgsRectangle acceptedExtent( 36.773085939, 3.059613648845, 36.7745297063, 3.06012863296 );
-//  QCOMPARE( rect.xMinimum(), acceptedExtent.xMinimum() );
-//  QCOMPARE( rect.yMinimum(), acceptedExtent.yMinimum() );
-//  QCOMPARE( rect.xMaximum(), acceptedExtent.xMaximum() );
-//  QCOMPARE( rect.yMaximum(), acceptedExtent.yMaximum() );
+  for ( const auto &test : testcases )
+  {
+    provider->setPosition( test.gpsPosition );
+    QgsRectangle extent = mUtils->stakeoutPathExtent( &mapPositioner, pair, &ms, 0 );
+
+    QVERIFY( mUtils->equals( extent.center(), test.expectedCenter ) );
+
+    ms.setExtent( extent );
+    QCOMPARE( (int)ms.mapSettings().scale(), test.expectedScale );
+  }
 }
 
 void TestUtilsFunctions::testDistanceBetweenGpsAndFeature()
