@@ -237,7 +237,7 @@
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="32"/>
         <source>Failed to connect to</source>
-        <translation>Erro en connectar amb </translation>
+        <translation>Error en connectar amb </translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="39"/>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
         <source>Could not connect to device, not paired</source>
-        <translation>No s&apos;ha pogut connectar al dispositiu, no s&apos;ha vinculat </translation>
+        <translation>No s&apos;ha pogut connectar al dispositiu, no vinculat </translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
@@ -912,24 +912,6 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
-    <name>NavigationPanel</name>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="196"/>
-        <source>Stake out</source>
-        <translation>Replantejar</translation>
-    </message>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="270"/>
-        <source>Feature</source>
-        <translation>Característica</translation>
-    </message>
-    <message>
-        <location filename="../qml/NavigationPanel.qml" line="280"/>
-        <source>Distance</source>
-        <translation>Distància</translation>
-    </message>
-</context>
-<context>
     <name>PanelHeader</name>
     <message>
         <location filename="../qml/components/PanelHeader.qml" line="20"/>
@@ -1019,7 +1001,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="159"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
         <source>No map tip available.</source>
         <translation>No hi ha cap consell de mapa disponible.</translation>
     </message>
@@ -1567,7 +1549,25 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
         <source>Connected</source>
-        <translation>onnectat</translation>
+        <translation>Connectat</translation>
+    </message>
+</context>
+<context>
+    <name>StakeoutPanel</name>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <source>Stake out</source>
+        <translation>Replantejar</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <source>Feature</source>
+        <translation>Característica</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <source>Distance</source>
+        <translation>Distància</translation>
     </message>
 </context>
 <context>
