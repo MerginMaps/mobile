@@ -28,7 +28,7 @@ class MapPosition : public QObject
     Q_PROPERTY( QgsPoint mapPosition READ mapPosition NOTIFY mapPositionChanged )
 
     // GPS position in device coords (pixels)
-    Q_PROPERTY( QPointF screenPosition READ screenPosition NOTIFY screenPositionChanged )
+    Q_PROPERTY( QgsPointXY screenPosition READ screenPosition NOTIFY screenPositionChanged )
 
     // Screen horizontal accuracy, 2 if not available or resolution is too small
     Q_PROPERTY( double screenAccuracy READ screenAccuracy NOTIFY screenAccuracyChanged )
@@ -47,7 +47,7 @@ class MapPosition : public QObject
     void setMapSettings( QgsQuickMapSettings *newMapSettings );
 
     QgsPoint mapPosition() const;
-    QPointF screenPosition() const;
+    QgsPointXY screenPosition() const;
     double screenAccuracy() const;
 
   signals:
@@ -55,7 +55,7 @@ class MapPosition : public QObject
     void mapSettingsChanged( QgsQuickMapSettings * );
 
     void mapPositionChanged( QgsPoint );
-    void screenPositionChanged( QPointF );
+    void screenPositionChanged( QgsPointXY );
     void screenAccuracyChanged( double );
 
   public slots:
@@ -68,7 +68,7 @@ class MapPosition : public QObject
     void recalculateScreenAccuracy();
 
     QgsPoint mMapPosition;
-    QPointF mScreenPosition;
+    QgsPointXY mScreenPosition;
     double mScreenAccuracy = 2;
 
     PositionKit *mPositionKit = nullptr; // not owned

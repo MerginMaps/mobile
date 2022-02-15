@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1019,6 +1019,16 @@ qreal InputUtils::calculateDpRatio()
   }
 
   return 1;
+}
+
+bool InputUtils::equals( const QPointF &a, const QPointF &b, double epsilon )
+{
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
+}
+
+bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon )
+{
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
 }
 
 QString InputUtils::formatPoint(
