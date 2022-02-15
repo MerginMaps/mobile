@@ -47,7 +47,7 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     enum ReconnectDelay
     {
       ShortDelay = 3000,
-      LongDelay = 10000
+      LongDelay = 5000
     };
 
   public:
