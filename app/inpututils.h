@@ -413,7 +413,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
     // Returns an extent showing both pair and gpsPosition
-    Q_INVOKABLE void setStakeoutPathExtent( MapPosition *mapPositioner, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapWidth, double mapHeight, double mapExtentOffset, double mapMargin );
+    Q_INVOKABLE void setStakeoutPathExtent( MapPosition *mapPositioner, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapExtentOffset );
 
     // Returns the distance from \a gpsPos to the feature \a pair
     Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );

@@ -166,7 +166,7 @@ Item {
     {
       if ( root.autoFollowStakeoutPath )
       {
-        __inputUtils.setStakeoutPathExtent( _mapPosition, _stakeoutHighlight.destinationPair, _map.mapSettings, _map.width, _map.height, mapExtentOffset, InputStyle.mapOutOfExtentBorder )
+        __inputUtils.setStakeoutPathExtent( _mapPosition, _stakeoutHighlight.destinationPair, _map.mapSettings, mapExtentOffset )
       }
     }
     else if ( root.state === "view" )

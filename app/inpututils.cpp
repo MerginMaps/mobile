@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1306,10 +1306,7 @@ void InputUtils::setStakeoutPathExtent(
   MapPosition *mapPositioner,
   const FeatureLayerPair &targetFeature,
   QgsQuickMapSettings *mapSettings,
-  double mapWidth,
-  double mapHeight,
-  double mapExtentOffset,
-  double mapMargin
+  double mapExtentOffset
 )
 {
   if ( !mapPositioner || !mapSettings || !targetFeature.isValid() )
@@ -1346,26 +1343,43 @@ void InputUtils::setStakeoutPathExtent(
     return;
   }
 
+  QgsPointXY gpsPointInCanvasXY = mapPositioner->screenPosition();
+
   qreal distance = distanceBetweenGpsAndFeature( gpsPointRaw, targetFeature, mapSettings );
   qreal scale = 205; // ~ 5m scale
+  qreal panelOffset = 0; // (px) used as an offset in order to center point in visible extent (we center to gpsPoint/target point + this offset)
 
-  // TODO: Move extent based on panel height (y coord)
+  if ( mapExtentOffset > 0 )
+  {
+    panelOffset = mapExtentOffset / 2;
+  }
 
   QgsRectangle extent;
 
   if ( distance > 10 )
   {
-    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
   else if ( distance <= 10 && distance > 3 )
   {
     scale = 105; // ~ 2m scale
-    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+
+    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
   else if ( distance <= 3 && distance > 1 )
   {
     scale = 55; // ~ 1m scale
-    extent = mapSettings->mapSettings().computeExtentForScale( gpsPointInMapCRS, scale );
+
+    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
   else if ( distance <= 1 )
   {
@@ -1385,7 +1399,11 @@ void InputUtils::setStakeoutPathExtent(
       return;
     }
 
-    extent = mapSettings->mapSettings().computeExtentForScale( targetPointInMapCRS, scale );
+    QgsPointXY targetPointInCanvasXY = mapSettings->coordinateToScreen( QgsPoint( targetPointInMapCRS ) );
+    QgsPointXY centerInCanvasXY( targetPointInCanvasXY.x(), targetPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
 
   mapSettings->setExtent( extent );
