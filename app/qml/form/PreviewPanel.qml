@@ -27,13 +27,6 @@ Item {
     signal editClicked()
     signal stakeoutFeature( var feature )
 
-    Connections {
-      target: controller
-      onFeatureLayerPairChanged: {
-        stakeoutIconContainer.visible = __inputUtils.isPointLayerFeature( controller.featureLayerPair );
-      }
-    }
-
     MouseArea {
       anchors.fill: parent
       onClicked: {
@@ -77,31 +70,38 @@ Item {
                   }
 
                   Item {
-                      id: stakeoutIconContainer
-                      visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
+                      id: stakeoutIconContainerSpace
                       height: rowHeight
                       width: rowHeight
 
-                      MouseArea {
-                          anchors.fill: stakeoutIconContainer
-                          onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
-                      }
+                      Item {
+                        visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
+                        enabled: visible
 
-                      Image {
-                          id: stakeoutIcon
-                          anchors.fill: parent
-                          anchors.margins: rowHeight/8
-                          anchors.rightMargin: 0
-                          source: InputStyle.stakeoutIcon
-                          sourceSize.width: width
-                          sourceSize.height: height
-                          fillMode: Image.PreserveAspectFit
-                      }
+                        anchors.fill: parent
 
-                      ColorOverlay {
-                          anchors.fill: stakeoutIcon
-                          source: stakeoutIcon
-                          color: InputStyle.fontColor
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
+                        }
+
+                        Image {
+                            id: stakeoutIcon
+
+                            anchors.fill: parent
+                            anchors.margins: rowHeight/8
+                            anchors.rightMargin: 0
+                            source: InputStyle.stakeoutIcon
+                            sourceSize.width: width
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: stakeoutIcon
+                            source: stakeoutIcon
+                            color: InputStyle.fontColor
+                        }
                       }
                   }
 
