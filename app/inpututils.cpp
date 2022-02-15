@@ -1312,7 +1312,7 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-void InputUtils::setStakeoutPathExtent(
+QgsRectangle InputUtils::stakeoutPathExtent(
   MapPosition *mapPositioner,
   const FeatureLayerPair &targetFeature,
   QgsQuickMapSettings *mapSettings,
@@ -1320,14 +1320,16 @@ void InputUtils::setStakeoutPathExtent(
 )
 {
   if ( !mapPositioner || !mapSettings || !targetFeature.isValid() )
-    return;
+    return QgsRectangle();
+
+  QgsRectangle extent = mapSettings->extent();
 
   // We currently support only point geometries
   if ( targetFeature.layer()->geometryType() != QgsWkbTypes::PointGeometry )
-    return;
+    return extent;
 
   if ( !mapPositioner->positionKit() || !mapPositioner->mapSettings() )
-    return;
+    return extent;
 
   //
   // In order to compute stakeout extent, we first compute distance to target feature and
@@ -1350,7 +1352,7 @@ void InputUtils::setStakeoutPathExtent(
   if ( gpsPointInMapCRS.isEmpty() )
   {
     // unsuccessful transform
-    return;
+    return extent;
   }
 
   QgsPointXY gpsPointInCanvasXY = mapPositioner->screenPosition();
@@ -1363,8 +1365,6 @@ void InputUtils::setStakeoutPathExtent(
   {
     panelOffset = mapExtentOffset / 2;
   }
-
-  QgsRectangle extent;
 
   if ( distance > 10 )
   {
@@ -1406,7 +1406,7 @@ void InputUtils::setStakeoutPathExtent(
     if ( targetPointInMapCRS.isEmpty() )
     {
       // unsuccessful transform
-      return;
+      return extent;
     }
 
     QgsPointXY targetPointInCanvasXY = mapSettings->coordinateToScreen( QgsPoint( targetPointInMapCRS ) );
@@ -1416,7 +1416,7 @@ void InputUtils::setStakeoutPathExtent(
     extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
 
-  mapSettings->setExtent( extent );
+  return extent;
 }
 
 qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
