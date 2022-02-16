@@ -107,7 +107,7 @@ Item {
 
     modal: false
     edge: Qt.BottomEdge
-
+    interactive: false // prevents closing by swiping the window down
     dragMargin: 0 // prevents opening the drawer by dragging.
     closePolicy: Popup.NoAutoClose
 
