@@ -79,6 +79,34 @@
     </message>
 </context>
 <context>
+    <name>AddPositionProviderPage</name>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="32"/>
+        <source>Connect to bluetooth device</source>
+        <translation>התחברות למכשיר Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="86"/>
+        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
+        <translation>עליכם להפעיל Bluetooth על מנת להתחבר למקלט GPS חדש</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="117"/>
+        <source>Unknown device</source>
+        <translation>מכשיר לא מזוהה</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
+        <source>Looking for more devices</source>
+        <translation>מחפש מכשירים נוספים</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
+        <source>Looking for devices</source>
+        <translation>מחפש מכשירים</translation>
+    </message>
+</context>
+<context>
     <name>AndroidUtils</name>
     <message>
         <location filename="../androidutils.cpp" line="233"/>
@@ -86,22 +114,22 @@
         <translation>ללא הרשאת אחסון לא תוכלו לגשת לפרוייקטים קודמים</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="287"/>
+        <location filename="../androidutils.cpp" line="321"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>הרשאת הגישה לאחסון במכשיר נדחתה לצמיתות, נא לאפשר גישה בהגדרות המכשיר על מנת לטעון תמונות מהגלריה.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="291"/>
+        <location filename="../androidutils.cpp" line="325"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input צריך הרשאת גישה לאחסון על מנת לטעון תמונות מהגלריה.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="309"/>
+        <location filename="../androidutils.cpp" line="343"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>הרשאת הגישה למצלמה נדחתה לצמיתות, נא לאפשר גישה בהגדרות המכשיר.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="313"/>
+        <location filename="../androidutils.cpp" line="347"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>אנחנו צריכים הרשאות גישה למצלמה על מנת לצלם תמונה</translation>
     </message>
@@ -195,6 +223,82 @@
     </message>
 </context>
 <context>
+    <name>BluetoothConnectionDialog</name>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="23"/>
+        <source>Connecting to</source>
+        <translation>התחברות ל</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="27"/>
+        <source>Connected</source>
+        <translation>מחובר</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="32"/>
+        <source>Failed to connect to</source>
+        <translation>תקלה בהתחברות ל</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="39"/>
+        <source>You might be asked to pair your device during this process.</source>
+        <translation>ייתכן שתתבקשו לחבר את המכשיר שלכם במהלך תהליך זה.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="48"/>
+        <source>You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3</source>
+        <translation>ניתן לסגור את הודעה זו, נמשיך לנסות להתחבר למכשירך.%1 אם נדרשת עזרה נוספת, %2 יש ללחוץ כאן%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="56"/>
+        <source>We were not able to connect to the specified device.
+        Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3.</source>
+        <translation>החיבור למכשיר המצוין נכשל.
+ נא לוודא כי המכשיר דולק וכי ניתן להתחבר אליו.%1 %2למידע נוסף%3.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
+        <source>Close</source>
+        <translation>סגירה</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPositionProvider</name>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
+        <source>No connection</source>
+        <translation>אין חיבור</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
+        <source>Reconnecting</source>
+        <translation>מתחבר מחדש</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
+        <source>No connection, reconnecting in (%1)</source>
+        <translation>אין חיבור, מתחבר מדש בעוד (%1)</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
+        <source>Could not connect to device, not paired</source>
+        <translation>לא ניתן להתחבר למכשיר, לא בוצעה הצמדה</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
+        <source>Connecting to %1</source>
+        <translation>מתחבר ל%1</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
+        <source>Connected</source>
+        <translation>מחובר</translation>
+    </message>
+</context>
+<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -218,109 +322,14 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="108"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="200"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="203"/>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>January</source>
-        <translation>ינואר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>February</source>
-        <translation>פברואר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>March</source>
-        <translation>מרץ</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>April</source>
-        <translation>אפריל</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>May</source>
-        <translation>מאי</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>June</source>
-        <translation>יוני</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>July</source>
-        <translation>יולי</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>August</source>
-        <translation>אוגוסט</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>September</source>
-        <translation>ספטמבר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>October</source>
-        <translation>אוקטובר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>November</source>
-        <translation>נובמבר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>December</source>
-        <translation>דצמבר</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Sunday</source>
-        <translation>יום א&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Monday</source>
-        <translation>יום ב&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Tuesday</source>
-        <translation>יום ג&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Wednesday</source>
-        <translation>יום ד&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Thursday</source>
-        <translation>יום ה&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Friday</source>
-        <translation>יום ו&apos;</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Saturday</source>
-        <translation>שבת</translation>
     </message>
 </context>
 <context>
@@ -464,94 +473,118 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>GpsDataPage</name>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="67"/>
         <source>GPS info</source>
         <translation>מידע GPS</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="97"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="111"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="125"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="154"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="171"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
-        <source>Loading data from GPS</source>
-        <translation>טוען מידע מGPS</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
         <source>Altitude</source>
         <translation>גובה</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
         <source>Longitude</source>
         <translation>קו אורך</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="109"/>
+        <source>Source</source>
+        <translation>מקור</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="110"/>
+        <source>No receiver</source>
+        <translation>אין מקלט</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
+        <source>Status</source>
+        <translation>סטטוס</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="156"/>
         <source>Latitude</source>
         <translation>קו רוחב</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="175"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="190"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
         <source>Horizontal accuracy</source>
         <translation>דיוק אופקי</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
+        <source>Manage GPS receivers</source>
+        <translation>ניהול מקלטי GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="147"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="159"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="166"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="178"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="193"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="208"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="223"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="238"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="254"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="270"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="287"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="302"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="315"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
         <source>Vertical accuracy</source>
         <translation>דיוק אנכי</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
+        <source>Fix quality</source>
+        <translation>איכות איכון</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
         <source>Satellites (in use/view)</source>
         <translation>לוויינים (בשימוש)</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
+        <source>HDOP</source>
+        <translation>HDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="299"/>
         <source>Speed</source>
         <translation>מהירות</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
         <source>Last fix</source>
         <translation>תיקון אחרון</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
-        <source>Date not available</source>
-        <translation>תאריך אינו זמין</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="227"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>הדיווח נשלח.%1נא ליצור איתנו קשר ב%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="232"/>
+        <location filename="../inputhelp.cpp" line="237"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>שליחת הדיווח נכשלה.%1יש לבדוק את חיבורכם לאינטרנט.</translation>
     </message>
@@ -577,111 +610,120 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="153"/>
+        <location filename="../inpututils.cpp" line="161"/>
         <source>just now</source>
         <translation>הרגע</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="166"/>
         <source>%1 minutes ago</source>
         <translation>לפני %1 דקות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="166"/>
         <source>%1 minute ago</source>
         <translation>לפני דקה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="171"/>
         <source>%1 hours ago</source>
         <translation>לפני %1 שעות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="171"/>
         <source>%1 hour ago</source>
         <translation>לפני שעה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="175"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 days ago</source>
         <translation>לפני %1 ימים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="175"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 day ago</source>
         <translation>לפני יום %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 weeks ago</source>
         <translation>לפני %1 שבועות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 week ago</source>
         <translation>לפני שבוע %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="190"/>
         <source>%1 months ago</source>
         <translation>לפני %1 חודשים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="190"/>
         <source>%1 month ago</source>
         <translation>לפני חודש %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="195"/>
         <source>%1 years ago</source>
         <translation>לפני %1 שנים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="195"/>
         <source>%1 year ago</source>
         <translation>לפני שנה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1135"/>
+        <location filename="../inpututils.cpp" line="1194"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>רזולוצית מסך: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1136"/>
+        <location filename="../inpututils.cpp" line="1195"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI מסך: %1x%2 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1137"/>
+        <location filename="../inpututils.cpp" line="1196"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>גודל מסך: %1x%2 מ&quot;מ
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1138"/>
+        <location filename="../inpututils.cpp" line="1197"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>דווח יחס הפיקסלים של המכשיר: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1139"/>
+        <location filename="../inpututils.cpp" line="1198"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>חושב יחס הפיקסלים של המכשיר: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1140"/>
+        <location filename="../inpututils.cpp" line="1199"/>
         <source>used dp scale: %1</source>
         <translation>קנה מידה dp בשימוש: %1</translation>
+    </message>
+</context>
+<context>
+    <name>InternalPositionProvider</name>
+    <message>
+        <location filename="../position/internalpositionprovider.cpp" line="33"/>
+        <location filename="../position/internalpositionprovider.cpp" line="110"/>
+        <source>Connected</source>
+        <translation>מחובר</translation>
     </message>
 </context>
 <context>
@@ -838,20 +880,35 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="72"/>
-        <location filename="../qml/map/MapWrapper.qml" line="611"/>
-        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPS אינו זמין כעת.%1נסו לאפשר מיקום על ידי GPS בהגדרות המכשיר שלכם.</translation>
+        <location filename="../qml/map/MapWrapper.qml" line="76"/>
+        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <source>GPS currently unavailable.</source>
+        <translation>GPS אינו זמין כרגע.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="103"/>
+        <location filename="../qml/map/MapWrapper.qml" line="107"/>
         <source>Recorded feature is not valid</source>
         <translation>הרשומה שהוקלטה אינה תקינה</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="450"/>
+        <location filename="../qml/map/MapWrapper.qml" line="511"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>דיוק מיקום GPS נמוך (%1מ&apos;)&lt;br&gt;&lt;br&gt;נא ודאו שיש לכם תצפית טובה של השמיים.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <source>Connecting to %1</source>
+        <translation>מתחבר ל%1</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <source>Connected, no position</source>
+        <translation>מחובר, אין מיקום</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <source>Unknown accuracy</source>
+        <translation>דיוק לא ידוע</translation>
     </message>
 </context>
 <context>
@@ -871,17 +928,80 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>PositionKit</name>
+    <name>PositionProviderPage</name>
     <message>
-        <location filename="../positionkit.cpp" line="46"/>
-        <source>Unable to create default GPS Position Source</source>
-        <translation>לא ניתן ליצור מיקום GPS ברירת מחדל</translation>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="60"/>
+        <source>GPS receivers</source>
+        <translation>מקלטי GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
+        <source>Internal receivers</source>
+        <translation>מקלטים פנימיים</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
+        <source>External receivers</source>
+        <translation>מקלטים חיצוניים</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="168"/>
+        <source>Unknown device</source>
+        <translation>מכשיר לא מזוהה</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="268"/>
+        <source>Connect new receiver</source>
+        <translation>חיבור מקלט חדש</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="299"/>
+        <source>Connecting to receivers via Bluetooth directly in Input is not possible on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Input will still think it is the internal GPS of your phone/tablet.%1%2Click here to learn more.%3</source>
+        <translation>חיבור ישיר למקלטים דרך Bluetooth אינו אפשרי בInput בiOS. ספק החומרה שלך עשוי לספק אפליקציה מותאמת אישית שמתחברת למקלט ומגדירה את המיקום. Input עדיין יחשוב שזה הGPS הפנימי של הטלפון/טאבלט שלך.%1%2לחצו כאן למידע נוסף.%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
+        <source>Remove receiver</source>
+        <translation>הסרת מקלט</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
+        <source>Do you want to remove receiver from the list of recent receivers?</source>
+        <translation>האם ברצונך להסיר את המקלט מרשימת המקלטים האחרונים?</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
+        <source>Internal</source>
+        <translation>פנימי</translation>
+    </message>
+</context>
+<context>
+    <name>PositionProvidersModel</name>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <source>Internal</source>
+        <translation>פנימי</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="26"/>
+        <source>GPS receiver of this device</source>
+        <translation>מקלט הGPS של מכשיר זה</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="115"/>
+        <source> Bluetooth device</source>
+        <translation>מכשיר Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="171"/>
+        <source>Bluetooth device</source>
+        <translation>מכשיר Bluetooth</translation>
     </message>
 </context>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="122"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
         <source>No map tip available.</source>
         <translation>אין פופאפ מוגדר עבור המפה.</translation>
     </message>
@@ -976,12 +1096,12 @@ Won&apos;t be added to the project.</source>
         <translation>כל השינויים שלא סונכרנו יאבדו.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="291"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Download project</source>
         <translation>הורדת פרויקט</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="292"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>האם ברצונכם להוריד את הפרויקט
@@ -1100,27 +1220,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="519"/>
+        <location filename="../purchasing.cpp" line="520"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>עיבוד נתוני התשלום נכשל.%1המנוי לא נרכש.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="527"/>
+        <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully restored your subscription</source>
         <translation>המנוי שלך שוחזר בהצלחה</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="529"/>
+        <location filename="../purchasing.cpp" line="530"/>
         <source>Successfully purchased subscription</source>
         <translation>המנוי נרכש בהצלחה</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="541"/>
+        <location filename="../purchasing.cpp" line="542"/>
         <source>Failed to purchase subscription</source>
         <translation>רכישת המנוי נכשלה</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="540"/>
         <source>Unable to restore your subscription</source>
         <translation>לא ניתן לשחזר את המנוי שלך</translation>
     </message>
@@ -1128,22 +1248,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="119"/>
+        <location filename="../purchasing.cpp" line="120"/>
         <source>Monthly subscription</source>
         <translation>מנוי חודשי</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="123"/>
+        <location filename="../purchasing.cpp" line="124"/>
         <source>Annual subscription</source>
         <translation>מנוי שנתי</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="128"/>
+        <location filename="../purchasing.cpp" line="129"/>
         <source>month</source>
         <translation>חודש</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="132"/>
+        <location filename="../purchasing.cpp" line="133"/>
         <source>year</source>
         <translation>שנה</translation>
     </message>
@@ -1210,6 +1330,51 @@ Won&apos;t be added to the project.</source>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>ערך לא תקין</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="192"/>
+        <source>No data</source>
+        <translation>אין מידע</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="195"/>
+        <source>No fix</source>
+        <translation>אין איכון</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="198"/>
+        <source>GPS fix, no correction data</source>
+        <translation>איכון GPS, ללא נתוני תיקון</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="203"/>
+        <source>DGPS fix</source>
+        <translation>איכון DGPS</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="206"/>
+        <source>PPS fix</source>
+        <translation>איכון PPS</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="209"/>
+        <source>RTK fix</source>
+        <translation>איכון RTK</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="212"/>
+        <source>RTK float</source>
+        <translation>RTK צף</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="215"/>
+        <source>Estimated fix (dead reckoning)</source>
+        <translation>איכון משוער (ניווט מקורב)</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="218"/>
+        <source>Unknown fix</source>
+        <translation>איכון לא ידוע</translation>
     </message>
 </context>
 <context>
@@ -1304,74 +1469,105 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="62"/>
+        <location filename="../qml/SettingsPanel.qml" line="75"/>
         <source>Settings</source>
         <translation>הגדרות</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="87"/>
+        <location filename="../qml/SettingsPanel.qml" line="100"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="95"/>
+        <location filename="../qml/SettingsPanel.qml" line="108"/>
         <source>Follow GPS with map</source>
         <translation>עקוב אחרי הGPS עם המפה</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="114"/>
+        <location filename="../qml/SettingsPanel.qml" line="127"/>
         <source>GPS accuracy</source>
         <translation>רמת דיוק GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="169"/>
+        <location filename="../qml/SettingsPanel.qml" line="182"/>
         <source>Accuracy threshold</source>
         <translation>סף דיוק</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="195"/>
+        <location filename="../qml/SettingsPanel.qml" line="208"/>
         <source>Show accuracy warning</source>
         <translation>הצג אזהרת דיוק</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="213"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <source>Select GPS receiver</source>
+        <translation>בחירת מקלט GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="239"/>
         <source>Recording</source>
         <translation>מקליט</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="220"/>
+        <location filename="../qml/SettingsPanel.qml" line="246"/>
         <source>Line rec. interval</source>
         <translation>מרווח הקלטת קו</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="242"/>
+        <location filename="../qml/SettingsPanel.qml" line="268"/>
         <source>Reuse last value option</source>
         <translation>אפשרות השימוש בערך האחרון</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="266"/>
+        <location filename="../qml/SettingsPanel.qml" line="292"/>
         <source>About</source>
         <translation>אודות</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="301"/>
         <source>Help</source>
         <translation>עזרה</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="284"/>
+        <location filename="../qml/SettingsPanel.qml" line="310"/>
         <source>Privacy policy</source>
         <translation>מדיניות פרטיות</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="293"/>
+        <location filename="../qml/SettingsPanel.qml" line="319"/>
         <source>Mergin terms of service</source>
         <translation>תנאי השימוש בMergin</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="302"/>
+        <location filename="../qml/SettingsPanel.qml" line="328"/>
         <source>Diagnostic log</source>
         <translation>דו&quot;ח אבחון</translation>
+    </message>
+</context>
+<context>
+    <name>SimulatedPositionProvider</name>
+    <message>
+        <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
+        <source>Connected</source>
+        <translation>מחובר</translation>
+    </message>
+</context>
+<context>
+    <name>StakeoutPanel</name>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <source>Stake out</source>
+        <translation>ניווט לנקודה המדויקת</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <source>Feature</source>
+        <translation>ישות</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <source>Distance</source>
+        <translation>מרחק</translation>
     </message>
 </context>
 <context>
@@ -1510,32 +1706,42 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="194"/>
+        <location filename="../qml/main.qml" line="217"/>
         <source>GPS auto-center mode on</source>
         <translation>מצב מרכוז GPS אוטומטי פעיל</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="194"/>
+        <location filename="../qml/main.qml" line="217"/>
         <source>GPS auto-center mode off</source>
         <translation>מצב מרכוז GPS אוטומטי כבוי</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="208"/>
+        <location filename="../qml/main.qml" line="231"/>
         <source>No editable layers found.</source>
         <translation>לא נמצאו שכבות שניתנות לעריכה.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="419"/>
+        <location filename="../qml/main.qml" line="494"/>
+        <source>Stake out is disabled because location is unavailable!</source>
+        <translation>ניווט לנקודה המדויקת מנוטרל מושבת כי המיקום אינו זמין!</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="513"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>תקלה בתקשורת עם Mergin.%1 נסו לשפר את חיבור הרשת.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="356"/>
+        <location filename="../qml/main.qml" line="559"/>
+        <source>There were issues loading the project.</source>
+        <translation>היו בעיות בטעינת הפרויקט.</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="433"/>
         <source>Communication error</source>
         <translation>תקלת תקשורת</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="362"/>
+        <location filename="../qml/main.qml" line="439"/>
         <source>PROJ Error</source>
         <translation>תקלת PROJ</translation>
     </message>
