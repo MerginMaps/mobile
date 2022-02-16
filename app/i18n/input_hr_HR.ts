@@ -79,6 +79,34 @@
     </message>
 </context>
 <context>
+    <name>AddPositionProviderPage</name>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="32"/>
+        <source>Connect to bluetooth device</source>
+        <translation>Poveži se s bluetooth uređajem</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="86"/>
+        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
+        <translation>Potrebno je omogućiti Bluetooth kako bi se povezali s novim GPS-om</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="117"/>
+        <source>Unknown device</source>
+        <translation>Nepoznat uređaj</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
+        <source>Looking for more devices</source>
+        <translation>Pretraga više uređaja</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
+        <source>Looking for devices</source>
+        <translation>Pretraga uređaja</translation>
+    </message>
+</context>
+<context>
     <name>AndroidUtils</name>
     <message>
         <location filename="../androidutils.cpp" line="233"/>
@@ -86,22 +114,22 @@
         <translation>Bez dozvola za pristup uređaju za pohranu nećete moći pristupiti prethodnim projektima</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="287"/>
+        <location filename="../androidutils.cpp" line="321"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Dozvole za pristup uređaju za pohranu su trajno uklonjene, molimo omogućite ih u postavkama kako bi mogli učitavati slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="291"/>
+        <location filename="../androidutils.cpp" line="325"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input zahtjeva dozvole za pristup uređaju za pohranu podataka za učitavanje slika iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="309"/>
+        <location filename="../androidutils.cpp" line="343"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Dozvole za pristup kameri su onemogućene, molimo omogućite ih u postavkama</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="313"/>
+        <location filename="../androidutils.cpp" line="347"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Potrebne su dozvole za pristup kameri za dodavanje fotografija</translation>
     </message>
@@ -195,6 +223,82 @@
     </message>
 </context>
 <context>
+    <name>BluetoothConnectionDialog</name>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="23"/>
+        <source>Connecting to</source>
+        <translation>Povezivanje na</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="27"/>
+        <source>Connected</source>
+        <translation>Povezano</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="32"/>
+        <source>Failed to connect to</source>
+        <translation>Neuspješno povezivanje na</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="39"/>
+        <source>You might be asked to pair your device during this process.</source>
+        <translation>Tijekom ovoga postupka vjerojatno će biti potrebno upariti vaš uređaj</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="48"/>
+        <source>You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3</source>
+        <translation>Možete zatvoriti ovu poruku, učestalo će biti pokušano povezivanje na vaš uređaj.%1 Ukoliko trebate pomoć, %2kliknite ovdje%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="56"/>
+        <source>We were not able to connect to the specified device.
+        Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3.</source>
+        <translation>Neuspjeli pokušaj povezivanje na odabrani uređaj.
+        Molimo osigurajte da je vaš uređaj uključen i da je omogućeno povezivanje.%1 %2Saznajte više ovdje%3.</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
+        <source>Close</source>
+        <translation>Zatvori</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPositionProvider</name>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
+        <source>No connection</source>
+        <translation>Nema veze</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
+        <source>Reconnecting</source>
+        <translation>Ponovno povezivanje</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
+        <source>No connection, reconnecting in (%1)</source>
+        <translation>Nema veze, ponovno povezivanje za (%1)</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
+        <source>Could not connect to device, not paired</source>
+        <translation>Nije koguće povezivanje s uređajem, nije uparen</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
+        <source>Connecting to %1</source>
+        <translation>Povezivanje na %1</translation>
+    </message>
+    <message>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
+        <source>Connected</source>
+        <translation>Povezano</translation>
+    </message>
+</context>
+<context>
     <name>BrowseDataLayersPanel</name>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
@@ -218,109 +322,14 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="108"/>
         <source>Cancel</source>
         <translation>Odustani</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="200"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="203"/>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>January</source>
-        <translation>Siječanj</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>February</source>
-        <translation>Veljača</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>March</source>
-        <translation>Ožujak</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="238"/>
-        <source>April</source>
-        <translation>Travanj</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>May</source>
-        <translation>Svibanj</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>June</source>
-        <translation>Lipanj</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>July</source>
-        <translation>Srpanj</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="239"/>
-        <source>August</source>
-        <translation>Kolovoz</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>September</source>
-        <translation>Rujan</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>October</source>
-        <translation>Listopad</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>November</source>
-        <translation>Studeni</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="240"/>
-        <source>December</source>
-        <translation>Prosinac</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Sunday</source>
-        <translation>Nedjelja</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Monday</source>
-        <translation>Ponedjeljak</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Tuesday</source>
-        <translation>Utorak</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="244"/>
-        <source>Wednesday</source>
-        <translation>Srijeda</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Thursday</source>
-        <translation>Četvrtak</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Friday</source>
-        <translation>Petak</translation>
-    </message>
-    <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="245"/>
-        <source>Saturday</source>
-        <translation>Subota</translation>
     </message>
 </context>
 <context>
@@ -463,94 +472,118 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>GpsDataPage</name>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="39"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="67"/>
         <source>GPS info</source>
         <translation>GPS informacije</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="83"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="97"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="111"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="125"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="154"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="171"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="188"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="203"/>
-        <source>Loading data from GPS</source>
-        <translation>Učitavanje podataka iz GPS-a</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="168"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
         <source>Altitude</source>
         <translation>Nadmorska visina</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="80"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
         <source>Longitude</source>
         <translation>Geografska dužina</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="94"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="109"/>
+        <source>Source</source>
+        <translation>Izvor</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="110"/>
+        <source>No receiver</source>
+        <translation>Nema prijemnika</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="156"/>
         <source>Latitude</source>
         <translation>Geografska širina</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="108"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="175"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="122"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="190"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
         <source>Horizontal accuracy</source>
         <translation>Horizontalna preciznost</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="142"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="157"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
+        <source>Manage GPS receivers</source>
+        <translation>Upravljaj GPS prijemnicima</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="147"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="159"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="166"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="178"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="193"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="208"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="223"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="238"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="254"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="270"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="287"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="302"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="315"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="151"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
         <source>Vertical accuracy</source>
         <translation>Vertikalna preciznost</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="184"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
+        <source>Fix quality</source>
+        <translation>Kvaliteta pozicije</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
         <source>Satellites (in use/view)</source>
         <translation>Sateliti (korišteno/vidljivo)</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="202"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
+        <source>HDOP</source>
+        <translation>HDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="299"/>
         <source>Speed</source>
         <translation>Brzina</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="213"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
         <source>Last fix</source>
         <translation>Posljednja GPS pozicija</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="214"/>
-        <source>Date not available</source>
-        <translation>Datum nije dostupan</translation>
     </message>
 </context>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="227"/>
+        <location filename="../inputhelp.cpp" line="232"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Obavijest je poslana.%1Molimo kontaktirajte nas na%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="232"/>
+        <location filename="../inputhelp.cpp" line="237"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Obavijest nije poslana.%1Molimo provjerite Vašu internetsku vezu.</translation>
     </message>
@@ -576,111 +609,120 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="153"/>
+        <location filename="../inpututils.cpp" line="161"/>
         <source>just now</source>
         <translation>upravo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="166"/>
         <source>%1 minutes ago</source>
         <translation>prije %1 minuta</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="158"/>
+        <location filename="../inpututils.cpp" line="166"/>
         <source>%1 minute ago</source>
         <translation>prije %1 minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="171"/>
         <source>%1 hours ago</source>
         <translation>prije %1 sati</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="171"/>
         <source>%1 hour ago</source>
         <translation>prije %1 sata</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="175"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 days ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="175"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 day ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 weeks ago</source>
         <translation>prije %1 tjedana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 week ago</source>
         <translation>prije %1 tjedna</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="190"/>
         <source>%1 months ago</source>
         <translation>prije %1 mjeseci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="190"/>
         <source>%1 month ago</source>
         <translation>prije %1 mjeseca</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="195"/>
         <source>%1 years ago</source>
         <translation>prije %1 godina</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="195"/>
         <source>%1 year ago</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1135"/>
+        <location filename="../inpututils.cpp" line="1194"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1136"/>
+        <location filename="../inpututils.cpp" line="1195"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1137"/>
+        <location filename="../inpututils.cpp" line="1196"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1138"/>
+        <location filename="../inpututils.cpp" line="1197"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1139"/>
+        <location filename="../inpututils.cpp" line="1198"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1140"/>
+        <location filename="../inpututils.cpp" line="1199"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
+    </message>
+</context>
+<context>
+    <name>InternalPositionProvider</name>
+    <message>
+        <location filename="../position/internalpositionprovider.cpp" line="33"/>
+        <location filename="../position/internalpositionprovider.cpp" line="110"/>
+        <source>Connected</source>
+        <translation>Povezano</translation>
     </message>
 </context>
 <context>
@@ -837,20 +879,35 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="72"/>
-        <location filename="../qml/map/MapWrapper.qml" line="611"/>
-        <source>GPS currently unavailable.%1Try to allow GPS Location in your device settings.</source>
-        <translation>GPS trenutno niije dostupan.%1Pokušajte omogućiti GPS lokaciju u postavkama uređaja.</translation>
+        <location filename="../qml/map/MapWrapper.qml" line="76"/>
+        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <source>GPS currently unavailable.</source>
+        <translation>GPS trenutno nije dostupan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="103"/>
+        <location filename="../qml/map/MapWrapper.qml" line="107"/>
         <source>Recorded feature is not valid</source>
         <translation>Snimljeni objekt nije valjan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="450"/>
+        <location filename="../qml/map/MapWrapper.qml" line="511"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Niska GPS preciznost (%1 m)&lt;br&gt;&lt;br&gt;Molimo osigurajte čisti pogled na nebo.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <source>Connecting to %1</source>
+        <translation>Povezivanje na %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <source>Connected, no position</source>
+        <translation>Povezano, nema pozicije</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <source>Unknown accuracy</source>
+        <translation>Nepoznata preciznost</translation>
     </message>
 </context>
 <context>
@@ -870,17 +927,80 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>PositionKit</name>
+    <name>PositionProviderPage</name>
     <message>
-        <location filename="../positionkit.cpp" line="46"/>
-        <source>Unable to create default GPS Position Source</source>
-        <translation>Nije moguće stvoriti zadani izvor GPS pozicije </translation>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="60"/>
+        <source>GPS receivers</source>
+        <translation>GPS prijemnici</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
+        <source>Internal receivers</source>
+        <translation>Ugrađeni prijemnici</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
+        <source>External receivers</source>
+        <translation>Vanjski prijemnici</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="168"/>
+        <source>Unknown device</source>
+        <translation>Nepoznat uređaj</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="268"/>
+        <source>Connect new receiver</source>
+        <translation>Poveži se s novim prijemnikom</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="299"/>
+        <source>Connecting to receivers via Bluetooth directly in Input is not possible on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Input will still think it is the internal GPS of your phone/tablet.%1%2Click here to learn more.%3</source>
+        <translation>Direktno povezivanje s prijemnicima putem Bluetooth-a u Inputu nije moguće na iOS-u. Proizvođač vašeg uređaja vjerojatno izdaje i posebnu aplikaciju za povezivanje na uređaj i određivanje pozicije. Inputu će na takav način uređaj biti vidljiv kao ugrađeni GPS Vašeg pametnog telefona/tableta.%1%2Klikni za više informacija.%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
+        <source>Remove receiver</source>
+        <translation>Ukloni prijemnik</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
+        <source>Do you want to remove receiver from the list of recent receivers?</source>
+        <translation>Želite li ukloniti prijemnik sa popisa nedavno korištenih prijemnika?</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
+        <source>Internal</source>
+        <translation>Ugrađeni</translation>
+    </message>
+</context>
+<context>
+    <name>PositionProvidersModel</name>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <source>Internal</source>
+        <translation>Ugrađeni</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="26"/>
+        <source>GPS receiver of this device</source>
+        <translation>GPS prijemnik ovog uređaja</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="115"/>
+        <source> Bluetooth device</source>
+        <translation>Bluetooth uređaj</translation>
+    </message>
+    <message>
+        <location filename="../position/positionprovidersmodel.cpp" line="171"/>
+        <source>Bluetooth device</source>
+        <translation>Bluetooth uređaj</translation>
     </message>
 </context>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="122"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
         <source>No map tip available.</source>
         <translation>Nema dostupnih informacija</translation>
     </message>
@@ -975,12 +1095,12 @@ Won&apos;t be added to the project.</source>
         <translation>Sve nesinkronizirane promjene će biti izgubljene.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="291"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Download project</source>
         <translation>Preuzmi projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="292"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Želite li preuzeti projekt
@@ -1099,27 +1219,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="519"/>
+        <location filename="../purchasing.cpp" line="520"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Neuspjela obrada podataka za plaćanje.%1Pretplata nije kupljena.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="527"/>
+        <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully restored your subscription</source>
         <translation>Uspješno obnovljena pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="529"/>
+        <location filename="../purchasing.cpp" line="530"/>
         <source>Successfully purchased subscription</source>
         <translation>Uspješno kupljena pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="541"/>
+        <location filename="../purchasing.cpp" line="542"/>
         <source>Failed to purchase subscription</source>
         <translation>Neuspješni pokušaj kupnje pretplate</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="540"/>
         <source>Unable to restore your subscription</source>
         <translation>Nije moguće obnoviti pretplatu</translation>
     </message>
@@ -1127,22 +1247,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>PurchasingPlan</name>
     <message>
-        <location filename="../purchasing.cpp" line="119"/>
+        <location filename="../purchasing.cpp" line="120"/>
         <source>Monthly subscription</source>
         <translation>Mjesečna pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="123"/>
+        <location filename="../purchasing.cpp" line="124"/>
         <source>Annual subscription</source>
         <translation>Godišnja pretplata</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="128"/>
+        <location filename="../purchasing.cpp" line="129"/>
         <source>month</source>
         <translation>mjesec</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="132"/>
+        <location filename="../purchasing.cpp" line="133"/>
         <source>year</source>
         <translation>godina</translation>
     </message>
@@ -1209,6 +1329,51 @@ Won&apos;t be added to the project.</source>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>Vrijednost nije valjana</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="192"/>
+        <source>No data</source>
+        <translation>Nema podataka</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="195"/>
+        <source>No fix</source>
+        <translation>Nema pozicije</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="198"/>
+        <source>GPS fix, no correction data</source>
+        <translation>GPS fix, nema korekcijskih podataka</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="203"/>
+        <source>DGPS fix</source>
+        <translation>DGPS fix</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="206"/>
+        <source>PPS fix</source>
+        <translation>PPS fix</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="209"/>
+        <source>RTK fix</source>
+        <translation>RTK fix</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="212"/>
+        <source>RTK float</source>
+        <translation>RTK float</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="215"/>
+        <source>Estimated fix (dead reckoning)</source>
+        <translation>Procjenjeni fix (dead reckoning)</translation>
+    </message>
+    <message>
+        <location filename="../position/abstractpositionprovider.cpp" line="218"/>
+        <source>Unknown fix</source>
+        <translation>Nepoznati fix</translation>
     </message>
 </context>
 <context>
@@ -1303,74 +1468,105 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>SettingsPanel</name>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="62"/>
+        <location filename="../qml/SettingsPanel.qml" line="75"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="87"/>
+        <location filename="../qml/SettingsPanel.qml" line="100"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="95"/>
+        <location filename="../qml/SettingsPanel.qml" line="108"/>
         <source>Follow GPS with map</source>
         <translation>Prati GPS na karti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="114"/>
+        <location filename="../qml/SettingsPanel.qml" line="127"/>
         <source>GPS accuracy</source>
         <translation>GPS preciznost</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="169"/>
+        <location filename="../qml/SettingsPanel.qml" line="182"/>
         <source>Accuracy threshold</source>
         <translation>Prag preciznosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="195"/>
+        <location filename="../qml/SettingsPanel.qml" line="208"/>
         <source>Show accuracy warning</source>
         <translation>Prikaži upozorenje o preciznosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="213"/>
+        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <source>Select GPS receiver</source>
+        <translation>Odaberi GPS prijemnik</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="239"/>
         <source>Recording</source>
         <translation>Snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="220"/>
+        <location filename="../qml/SettingsPanel.qml" line="246"/>
         <source>Line rec. interval</source>
         <translation>Interval linijskog snimanja</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="242"/>
+        <location filename="../qml/SettingsPanel.qml" line="268"/>
         <source>Reuse last value option</source>
         <translation>Unos zadnje korištene vrijednosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="266"/>
+        <location filename="../qml/SettingsPanel.qml" line="292"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="301"/>
         <source>Help</source>
         <translation>Pomoć</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="284"/>
+        <location filename="../qml/SettingsPanel.qml" line="310"/>
         <source>Privacy policy</source>
         <translation>Politika privatnosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="293"/>
+        <location filename="../qml/SettingsPanel.qml" line="319"/>
         <source>Mergin terms of service</source>
         <translation>Uvjeti korištenja Mergin servisa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="302"/>
+        <location filename="../qml/SettingsPanel.qml" line="328"/>
         <source>Diagnostic log</source>
         <translation>Dijagnostički zapis</translation>
+    </message>
+</context>
+<context>
+    <name>SimulatedPositionProvider</name>
+    <message>
+        <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
+        <source>Connected</source>
+        <translation>Povezano</translation>
+    </message>
+</context>
+<context>
+    <name>StakeoutPanel</name>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <source>Stake out</source>
+        <translation>Navođenje</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <source>Feature</source>
+        <translation>Objekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <source>Distance</source>
+        <translation>Udaljenost</translation>
     </message>
 </context>
 <context>
@@ -1509,32 +1705,42 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="194"/>
+        <location filename="../qml/main.qml" line="217"/>
         <source>GPS auto-center mode on</source>
         <translation>Način GPS autocentriranja uključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="194"/>
+        <location filename="../qml/main.qml" line="217"/>
         <source>GPS auto-center mode off</source>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="208"/>
+        <location filename="../qml/main.qml" line="231"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="419"/>
+        <location filename="../qml/main.qml" line="494"/>
+        <source>Stake out is disabled because location is unavailable!</source>
+        <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="513"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa Mergin servisom.%1Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="356"/>
+        <location filename="../qml/main.qml" line="559"/>
+        <source>There were issues loading the project.</source>
+        <translation>Došlo je do problema prilikom učitavanja projekta</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="433"/>
         <source>Communication error</source>
         <translation>Greška u komunikaciji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="362"/>
+        <location filename="../qml/main.qml" line="439"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
