@@ -40,6 +40,7 @@ class TestUtilsFunctions: public QObject
     void testAngleBetweenGpsAndFeature();
     void testIsPointLayerFeature();
     void testMapPointToGps();
+    void testEquals();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

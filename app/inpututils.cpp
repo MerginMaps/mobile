@@ -1028,6 +1028,13 @@ bool InputUtils::equals( const QPointF &a, const QPointF &b, double epsilon )
 
 bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon )
 {
+  if ( a.isEmpty() && b.isEmpty() )
+    return true;
+  if ( a.isEmpty() && !b.isEmpty() )
+    return false;
+  if ( !a.isEmpty() && b.isEmpty() )
+    return false;
+
   return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
 }
 

@@ -568,3 +568,57 @@ void TestUtilsFunctions::testMapPointToGps()
     }
   }
 }
+
+void TestUtilsFunctions::testEquals()
+{
+  // Test different InputUtils::equals overloads
+
+  struct testcaseQPointF
+  {
+    QPointF a;
+    QPointF b;
+    qreal epsilon;
+    bool shouldEqual;
+  };
+
+  QVector<testcaseQPointF> testcasesQPointFs =
+  {
+    { QPointF(),             QPointF(),       0.001, true  },
+    { QPointF( 1, 1 ),       QPointF( 1, 1 ), 0.001, true  },
+    { QPointF( 1, 1 ),       QPointF(),       0.001, false },
+    { QPointF(),             QPointF( 1, 1 ), 0.001, false },
+    { QPointF( 0, -5 ),      QPointF( 0, 5 ), 0.1,   false },
+    { QPointF( 1.15005, 5 ), QPointF( 1.15, 5 ), 0.01,    true  },
+    { QPointF( 1.15005, 5 ), QPointF( 1.15, 5 ), 0.001,   true  },
+    { QPointF( 1.15005, 5 ), QPointF( 1.15, 5 ), 0.00001, false },
+  };
+
+  for ( const auto &test : testcasesQPointFs )
+  {
+    QCOMPARE( InputUtils::equals( test.a, test.b, test.epsilon ), test.shouldEqual );
+  }
+
+  struct testcaseQgsPointXY
+  {
+    QgsPointXY a;
+    QgsPointXY b;
+    qreal epsilon;
+    bool shouldEqual;
+  };
+
+  QVector<testcaseQgsPointXY> testcasesQgsPointXY =
+  {
+    { QgsPointXY(),        QgsPointXY(),        0.0001, true  },
+    { QgsPointXY(),        QgsPointXY( 1, 6 ),  0.0001, false },
+    { QgsPointXY( -5, 5 ), QgsPointXY(),        0.0001, false },
+    { QgsPointXY( -5, 5 ), QgsPointXY( -5, 5 ), 0.0001, true  },
+    { QgsPointXY( -5, 5 ), QgsPointXY( 5, 5 ),  0.1,    false },
+    { QgsPointXY( 1.15005, 5 ), QgsPointXY( 1.15, 5 ), 0.001,   true  },
+    { QgsPointXY( 1.15005, 5 ), QgsPointXY( 1.15, 5 ), 0.00001, false },
+  };
+
+  for ( const auto &test : testcasesQgsPointXY )
+  {
+    QCOMPARE( InputUtils::equals( test.a, test.b, test.epsilon ), test.shouldEqual );
+  }
+}
