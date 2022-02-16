@@ -110,7 +110,7 @@
     <!-- Camera permissions -->
     <uses-permission android:name="android.permission.CAMERA"/>
 
-    <!-- In order to target Android 12 (API LVL 31), uncomment this permission, it is used for orientation sensor! -->
+    <!-- Add the following permission when app should target Android 12 (API LVL 31), it is used for orientation sensor! -->
     <!-- <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/> -->
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
