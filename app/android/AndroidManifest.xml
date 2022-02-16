@@ -110,6 +110,9 @@
     <!-- Camera permissions -->
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- Add the following permission when app should target Android 12 (API LVL 31), it is used for orientation sensor! -->
+    <!-- <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/> -->
+
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
     <!-- %%INSERT_FEATURES -->
@@ -117,4 +120,12 @@
     <!-- Bluetooth feature - our app can run even without bluetooth -->
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
 
+    <uses-feature android:name="android.hardware.camera.any" android:required="false"/>
+
+    <!-- Explicitly mention that we need to use external app for capturing an image -->
+    <queries>
+      <intent>
+        <action android:name="android.media.action.IMAGE_CAPTURE" />
+      </intent>
+    </queries>
 </manifest>
