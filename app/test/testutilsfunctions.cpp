@@ -415,6 +415,34 @@ void TestUtilsFunctions::testStakeoutPathExtent()
     ms.setExtent( extent );
     QCOMPARE( ( int )ms.mapSettings().scale(), test.expectedScale );
   }
+
+  // Test stakeout distance2scale
+  struct testcaseDistance2Scale
+  {
+    qreal distance;
+    qreal expectedScale;
+  };
+
+  QVector<testcaseDistance2Scale> testcasesDistance2Scale =
+  {
+    { 150, 205 },
+    { 15, 205 },
+    { 10.1, 205 },
+    { 8, 105 },
+    { 4, 105 },
+    { 2, 55 },
+    { 1.5, 55 },
+    { 1.10320432, 55 },
+    { 0.9, 25 },
+    { 0.1, 25 },
+    { 0, 25 },
+    { -15, 25 }
+  };
+
+  for ( const auto &test : testcasesDistance2Scale )
+  {
+    COMPARENEAR( mUtils->distanceToScale( test.distance ), test.expectedScale, 0.1 );
+  }
 }
 
 void TestUtilsFunctions::testDistanceBetweenGpsAndFeature()

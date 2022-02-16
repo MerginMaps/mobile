@@ -1333,32 +1333,15 @@ QgsRectangle InputUtils::stakeoutPathExtent(
 
   //
   // In order to compute stakeout extent, we first compute distance to target feature and
-  // based on that we update the extent like this:
-  //   - if distance is > 10m, use 5m scale and center to GPS point
-  //   - if distance is 3-10m, use 2m scale and center to GPS point
-  //   - if distance is 1-3m, use 1m scale and center to GPS point
-  //   - if distance is < 1m, use 50cm scale and center to target point (so that canvas does not move all the time)
+  // based on that we update the extent and scale. Logic for scale computation is in distanceToScale function.
+  // Moreover, when distance to target point is lower then 1 meter, extent is centered to target point, otherwise
+  // it is centered to GPS position. This has been added in order to reduce "jumps" of canvas when user is near the target.
   //
 
-  // transform gps point to map's CRS and screen's X/Y pixels
   QgsPoint gpsPointRaw = mapPositioner->positionKit()->positionCoordinate();
-  QgsPointXY gpsPointInMapCRS = transformPoint(
-                                  coordinateReferenceSystemFromEpsgId( 4326 ),
-                                  mapSettings->destinationCrs(),
-                                  mapSettings->transformContext(),
-                                  gpsPointRaw
-                                );
-
-  if ( gpsPointInMapCRS.isEmpty() )
-  {
-    // unsuccessful transform
-    return extent;
-  }
-
-  QgsPointXY gpsPointInCanvasXY = mapPositioner->screenPosition();
 
   qreal distance = distanceBetweenGpsAndFeature( gpsPointRaw, targetFeature, mapSettings );
-  qreal scale = 205; // ~ 5m scale
+  qreal scale = distanceToScale( distance );
   qreal panelOffset = 0; // (px) used as an offset in order to center point in visible extent (we center to gpsPoint/target point + this offset)
 
   if ( mapExtentOffset > 0 )
@@ -1366,35 +1349,9 @@ QgsRectangle InputUtils::stakeoutPathExtent(
     panelOffset = mapExtentOffset / 2;
   }
 
-  if ( distance > 10 )
+  if ( distance <= 1 )
   {
-    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
-    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
-
-    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
-  }
-  else if ( distance <= 10 && distance > 3 )
-  {
-    scale = 105; // ~ 2m scale
-
-    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
-    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
-
-    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
-  }
-  else if ( distance <= 3 && distance > 1 )
-  {
-    scale = 55; // ~ 1m scale
-
-    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
-    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
-
-    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
-  }
-  else if ( distance <= 1 )
-  {
-    scale = 25; // ~ 50cm scale
-
+    // center to target point
     QgsPoint targetPointRaw( extractPointFromFeature( targetFeature ) );
     QgsPointXY targetPointInMapCRS = transformPoint(
                                        targetFeature.layer()->crs(),
@@ -1415,8 +1372,43 @@ QgsRectangle InputUtils::stakeoutPathExtent(
 
     extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
+  else
+  {
+    // center to GPS position
+    QgsPointXY gpsPointInCanvasXY = mapPositioner->screenPosition();
+    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
+  }
 
   return extent;
+}
+
+qreal InputUtils::distanceToScale( qreal distance )
+{
+  // Stakeout extent scale is computed based on these (empirically found) conditions:
+  //   - if distance is > 10m, use 1:205 scale (~ 5m on mobile)
+  //   - if distance is 3-10m, use 1:105 scale (~ 2m on mobile)
+  //   - if distance is 1-3m,  use 1:55 scale  (~ 1m on mobile)
+  //   - if distance is < 1m,  use 1:25 scale  (~ 0.5m on mobile)
+
+  qreal scale = 205;
+
+  if ( distance <= 1 )
+  {
+    scale = 25;
+  }
+  else if ( distance <= 3 && distance > 1 )
+  {
+    scale = 55;
+  }
+  else if ( distance <= 10 && distance > 3 )
+  {
+    scale = 105;
+  }
+
+  return scale;
 }
 
 qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
