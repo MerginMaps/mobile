@@ -677,40 +677,40 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1194"/>
+        <location filename="../inpututils.cpp" line="1209"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1195"/>
+        <location filename="../inpututils.cpp" line="1210"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1196"/>
+        <location filename="../inpututils.cpp" line="1211"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1197"/>
+        <location filename="../inpututils.cpp" line="1212"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1198"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1199"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -878,33 +878,33 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="76"/>
-        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <location filename="../qml/map/MapWrapper.qml" line="80"/>
+        <location filename="../qml/map/MapWrapper.qml" line="747"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="107"/>
+        <location filename="../qml/map/MapWrapper.qml" line="111"/>
         <source>Recorded feature is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="511"/>
+        <location filename="../qml/map/MapWrapper.qml" line="544"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="597"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <location filename="../qml/map/MapWrapper.qml" line="611"/>
         <source>Connected, no position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <location filename="../qml/map/MapWrapper.qml" line="615"/>
         <source>Unknown accuracy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1552,17 +1552,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>StakeoutPanel</name>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <location filename="../qml/StakeoutPanel.qml" line="153"/>
         <source>Stake out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <location filename="../qml/StakeoutPanel.qml" line="227"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <location filename="../qml/StakeoutPanel.qml" line="237"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1718,27 +1718,27 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="494"/>
+        <location filename="../qml/main.qml" line="497"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="513"/>
+        <location filename="../qml/main.qml" line="516"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="559"/>
+        <location filename="../qml/main.qml" line="562"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="433"/>
+        <location filename="../qml/main.qml" line="436"/>
         <source>Communication error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="442"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
