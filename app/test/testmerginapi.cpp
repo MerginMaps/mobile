@@ -46,9 +46,8 @@ TestMerginApi::TestMerginApi( MerginApi *api )
 void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
-  TestUtils::mergin_auth( apiRoot, username, password );
+  TestUtils::mergin_auth( mApi, apiRoot, username, password );
 
-  mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
