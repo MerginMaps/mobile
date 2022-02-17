@@ -38,6 +38,7 @@
 #include "qgsquickmapsettings.h"
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
+#include "position/mapposition.h"
 
 class QgsFeature;
 class QgsVectorLayer;
@@ -411,8 +412,11 @@ class InputUtils: public QObject
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
-    // Returns an extent showing both pair and gpsPosition
-    Q_INVOKABLE QgsRectangle stakeoutFeatureExtent( const FeatureLayerPair &pair, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    // Returns an extent for stakeout based on distance between gps position and target feature
+    Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapExtentOffset );
+
+    // Translates distance to target point into scale factor that should be used for map canvas during stakeout
+    qreal distanceToScale( qreal distance );
 
     // Returns the distance from \a gpsPos to the feature \a pair
     Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
@@ -428,6 +432,11 @@ class InputUtils: public QObject
 
     // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
     static qreal calculateDpRatio();
+
+    // Compares two variables and returns true if they are equal. For floating point values it uses provided epsilon for comparison
+    static bool equals( const QPointF &a, const QPointF &b, double epsilon = 0.001 );
+    // Convinient comparison function with possibility to pass custom epsilon value (not possible in QGIS API)
+    static bool equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon = 0.001 );
 
     // Returns whether geometry of the feature is an actual Point feature (Used because some )
     Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );

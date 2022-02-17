@@ -35,11 +35,12 @@ class TestUtilsFunctions: public QObject
     void resolveTargetDir();
     void testDirSize();
     void testExtractPointFromFeature();
-    void testStakeoutFeatureExtent();
+    void testStakeoutPathExtent();
     void testDistanceBetweenGpsAndFeature();
     void testAngleBetweenGpsAndFeature();
     void testIsPointLayerFeature();
     void testMapPointToGps();
+    void testEquals();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

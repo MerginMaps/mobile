@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1021,6 +1021,21 @@ qreal InputUtils::calculateDpRatio()
   return 1;
 }
 
+bool InputUtils::equals( const QPointF &a, const QPointF &b, double epsilon )
+{
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
+}
+
+bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon )
+{
+  if ( a.isEmpty() && b.isEmpty() )
+    return true;
+  if ( a.isEmpty() != b.isEmpty() )
+    return false;
+
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
+}
+
 QString InputUtils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,
@@ -1302,52 +1317,103 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
   return settings;
 }
 
-QgsRectangle InputUtils::stakeoutFeatureExtent( const FeatureLayerPair &targetFeature, QgsPoint gpsPosition, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+QgsRectangle InputUtils::stakeoutPathExtent(
+  MapPosition *mapPosition,
+  const FeatureLayerPair &targetFeature,
+  QgsQuickMapSettings *mapSettings,
+  double mapExtentOffset
+)
 {
-  if ( !mapSettings || !targetFeature.isValid() || geometryFromLayer( targetFeature.layer() ) != QStringLiteral( "point" ) )
+  if ( !mapPosition || !mapSettings || !targetFeature.isValid() )
     return QgsRectangle();
 
-  // Transform gps position to map CRS
-  QgsCoordinateReferenceSystem wgs84( "EPSG:4326" );
-  QgsCoordinateTransform ct1( wgs84, mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct1.isShortCircuited() )
+  QgsRectangle extent = mapSettings->extent();
+
+  // We currently support only point geometries
+  if ( targetFeature.layer()->geometryType() != QgsWkbTypes::PointGeometry )
+    return extent;
+
+  if ( !mapPosition->positionKit() || !mapPosition->mapSettings() )
+    return extent;
+
+  //
+  // In order to compute stakeout extent, we first compute distance to target feature and
+  // based on that we update the extent and scale. Logic for scale computation is in distanceToScale function.
+  // Moreover, when distance to target point is lower then 1 meter, extent is centered to target point, otherwise
+  // it is centered to GPS position. This has been added in order to reduce "jumps" of canvas when user is near the target.
+  //
+
+  QgsPoint gpsPointRaw = mapPosition->positionKit()->positionCoordinate();
+
+  qreal distance = distanceBetweenGpsAndFeature( gpsPointRaw, targetFeature, mapSettings );
+  qreal scale = distanceToScale( distance );
+  qreal panelOffset = 0; // (px) used as an offset in order to center point in visible extent (we center to gpsPoint/target point + this offset)
+
+  if ( mapExtentOffset > 0 )
   {
-    try
-    {
-      gpsPosition.transform( ct1 );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QgsRectangle();
-    }
+    panelOffset = mapExtentOffset / 2.0;
   }
 
-  // Transform target point to map CRS
-  QgsPoint targetPoint( extractPointFromFeature( targetFeature ) );
-  QgsCoordinateTransform ct2( targetFeature.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct2.isShortCircuited() )
+  if ( distance <= 1 )
   {
-    try
+    // center to target point
+    QgsPoint targetPointRaw( extractPointFromFeature( targetFeature ) );
+    QgsPointXY targetPointInMapCRS = transformPoint(
+                                       targetFeature.layer()->crs(),
+                                       mapSettings->destinationCrs(),
+                                       mapSettings->transformContext(),
+                                       targetPointRaw
+                                     );
+
+    if ( targetPointInMapCRS.isEmpty() )
     {
-      targetPoint.transform( ct2 );
+      // unsuccessful transform
+      return extent;
     }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QgsRectangle();
-    }
+
+    QgsPointXY targetPointInCanvasXY = mapSettings->coordinateToScreen( QgsPoint( targetPointInMapCRS ) );
+    QgsPointXY centerInCanvasXY( targetPointInCanvasXY.x(), targetPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
+  }
+  else
+  {
+    // center to GPS position
+    QgsPointXY gpsPointInCanvasXY = mapPosition->screenPosition();
+    QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
+    QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
+
+    extent = mapSettings->mapSettings().computeExtentForScale( center, scale );
   }
 
-  QgsRectangle bbox;
-  bbox.setXMinimum( qMin( gpsPosition.x(), targetPoint.x() ) );
-  bbox.setXMaximum( qMax( gpsPosition.x(), targetPoint.x() ) );
-  bbox.setYMinimum( qMin( gpsPosition.y(), targetPoint.y() ) );
-  bbox.setYMaximum( qMax( gpsPosition.y(), targetPoint.y() ) );
-  bbox.scale( 1.2 );
-  bbox.setYMinimum( bbox.yMinimum() - panelOffsetRatio * ( bbox.yMaximum() - bbox.yMinimum() ) );
+  return extent;
+}
 
-  return bbox;
+qreal InputUtils::distanceToScale( qreal distance )
+{
+  // Stakeout extent scale is computed based on these (empirically found) conditions:
+  //   - if distance is > 10m, use 1:205 scale (~ 5m on mobile)
+  //   - if distance is 3-10m, use 1:105 scale (~ 2m on mobile)
+  //   - if distance is 1-3m,  use 1:55 scale  (~ 1m on mobile)
+  //   - if distance is < 1m,  use 1:25 scale  (~ 0.5m on mobile)
+
+  qreal scale = 205;
+
+  if ( distance <= 1 )
+  {
+    scale = 25;
+  }
+  else if ( distance <= 3 && distance > 1 )
+  {
+    scale = 55;
+  }
+  else if ( distance <= 10 && distance > 3 )
+  {
+    scale = 105;
+  }
+
+  return scale;
 }
 
 qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )

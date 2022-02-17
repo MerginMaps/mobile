@@ -73,7 +73,7 @@ QgsPoint MapPosition::mapPosition() const
   return mMapPosition;
 }
 
-QPointF MapPosition::screenPosition() const
+QgsPointXY MapPosition::screenPosition() const
 {
   return mScreenPosition;
 }
@@ -127,14 +127,16 @@ void MapPosition::recalculateMapPosition()
 
 void MapPosition::recalculateScreenPosition()
 {
-  QPointF newScreenPosition;
+  QgsPointXY newScreenPosition;
 
   if ( mMapSettings && mPositionKit )
   {
     newScreenPosition = mapSettings()->coordinateToScreen( mMapPosition );
   }
 
-  if ( mScreenPosition != newScreenPosition )
+  // We use comparison with higher epsilon to limit issues with floating point precision (in QPointF) and
+  // make less updates as 0.001 precision is well enough for us. QgsPointXY internally uses 1E-8 precision
+  if ( !InputUtils::equals( mScreenPosition, newScreenPosition, 0.001 ) )
   {
     mScreenPosition = newScreenPosition;
     emit screenPositionChanged( mScreenPosition );
