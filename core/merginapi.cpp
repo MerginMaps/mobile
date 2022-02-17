@@ -782,7 +782,7 @@ QString MerginApi::resetPasswordUrl()
   return QString();
 }
 
-void MerginApi::createProject( const QString &projectNamespace, const QString &projectName )
+void MerginApi::createProject( const QString &projectNamespace, const QString &projectName, bool isPublic )
 {
   if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -801,7 +801,7 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
   jsonObject.insert( QStringLiteral( "name" ), projectName );
-  jsonObject.insert( QStringLiteral( "public" ), false );
+  jsonObject.insert( QStringLiteral( "public" ), isPublic );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
