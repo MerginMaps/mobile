@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1030,9 +1030,7 @@ bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilo
 {
   if ( a.isEmpty() && b.isEmpty() )
     return true;
-  if ( a.isEmpty() && !b.isEmpty() )
-    return false;
-  if ( !a.isEmpty() && b.isEmpty() )
+  if ( a.isEmpty() != b.isEmpty() )
     return false;
 
   return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
@@ -1320,13 +1318,13 @@ QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuick
 }
 
 QgsRectangle InputUtils::stakeoutPathExtent(
-  MapPosition *mapPositioner,
+  MapPosition *mapPosition,
   const FeatureLayerPair &targetFeature,
   QgsQuickMapSettings *mapSettings,
   double mapExtentOffset
 )
 {
-  if ( !mapPositioner || !mapSettings || !targetFeature.isValid() )
+  if ( !mapPosition || !mapSettings || !targetFeature.isValid() )
     return QgsRectangle();
 
   QgsRectangle extent = mapSettings->extent();
@@ -1335,7 +1333,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   if ( targetFeature.layer()->geometryType() != QgsWkbTypes::PointGeometry )
     return extent;
 
-  if ( !mapPositioner->positionKit() || !mapPositioner->mapSettings() )
+  if ( !mapPosition->positionKit() || !mapPosition->mapSettings() )
     return extent;
 
   //
@@ -1345,7 +1343,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   // it is centered to GPS position. This has been added in order to reduce "jumps" of canvas when user is near the target.
   //
 
-  QgsPoint gpsPointRaw = mapPositioner->positionKit()->positionCoordinate();
+  QgsPoint gpsPointRaw = mapPosition->positionKit()->positionCoordinate();
 
   qreal distance = distanceBetweenGpsAndFeature( gpsPointRaw, targetFeature, mapSettings );
   qreal scale = distanceToScale( distance );
@@ -1353,7 +1351,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
 
   if ( mapExtentOffset > 0 )
   {
-    panelOffset = mapExtentOffset / 2;
+    panelOffset = mapExtentOffset / 2.0;
   }
 
   if ( distance <= 1 )
@@ -1382,7 +1380,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   else
   {
     // center to GPS position
-    QgsPointXY gpsPointInCanvasXY = mapPositioner->screenPosition();
+    QgsPointXY gpsPointInCanvasXY = mapPosition->screenPosition();
     QgsPointXY centerInCanvasXY( gpsPointInCanvasXY.x(), gpsPointInCanvasXY.y() + panelOffset );
     QgsPointXY center = mapSettings->screenToCoordinate( centerInCanvasXY.toQPointF() );
 
