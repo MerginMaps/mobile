@@ -68,7 +68,7 @@ Item {
   states: [
     State {
       name: "longRange"
-      when: remainingDistance >= closeRangeModeDistanceThreshold
+      when: remainingDistance >= closeRangeModeDistanceThreshold || remainingDistance < 0
       PropertyChanges {
         target: drawer
         height: root.height / 6
@@ -235,7 +235,7 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Distance" )
-            text: __inputUtils.formatNumber( remainingDistance, 2 ) + " m"
+            text: remainingDistance >= 0 ?__inputUtils.formatNumber( remainingDistance, 2 ) + " m" : "N/A m"
           }
         }
 
