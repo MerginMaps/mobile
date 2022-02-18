@@ -89,34 +89,16 @@ Item {
     return crosshairCoord
   }
 
-  function updateGuideLine() {
+  // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
+  function transformX( xcoord )
+  {
+    return ( xcoord + highlight.mapTransformOffsetX ) * highlight.mapTransformScale / displayDevicePixelRatio
+  }
 
-    if ( !guideLineAllowed ) { // remove any elements
-      let resetElems = []
-      resetElems.push ( componentMoveTo.createObject( guideLine ) )
-      guideLine.pathElements = resetElems
-    }
-
-    let elements = Object.values( guideLine.pathElements )
-
-    if ( elements.length === 1 && elements[0].x === 0 && elements[0].y === 0 )
-      return // if we have not yet added any point, do not draw a line
-
-    if ( hasPolygon && elements.length > 2 ) {
-      let firstPoint = elements.pop()
-      elements.pop() // last center point
-
-      let centerPoint = crosshairPoint()
-      elements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
-      elements.push( firstPoint )
-    }
-    else {
-      elements.pop() // remove point leading to old crosshair
-      let centerPoint = crosshairPoint()
-      elements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
-    }
-
-    guideLine.pathElements = elements
+  // Transforms Y coordinate from map CRS to screen XY with regards to scale and HighDPI
+  function transformY( ycoord )
+  {
+    return -( ycoord + highlight.mapTransformOffsetY ) * highlight.mapTransformScale / displayDevicePixelRatio
   }
 
   function constructHighlights()
@@ -166,33 +148,40 @@ Item {
           let geomType = data[ i++ ];
           let pointsCount = data[ i++ ];
           // Move to the first point
-          let x0 =  ( data[i]   + highlight.mapTransformOffsetX) * highlight.mapTransformScale / displayDevicePixelRatio
-          let y0 = -( data[i+1] + highlight.mapTransformOffsetY) * highlight.mapTransformScale / displayDevicePixelRatio
+          let x0 = transformX( data[i] )
+          let y0 = transformY( data[i+1] )
           elements.push( componentMoveTo.createObject( objOwner, { "x": x0, "y": y0 } ) )
           // Draw lines for rest of points in the segment
           for ( k = i + 2; k < i + pointsCount * 2; k += 2 )
           {
-            let x1 =  ( data[k]   + highlight.mapTransformOffsetX) * highlight.mapTransformScale / displayDevicePixelRatio
-            let y1 = -( data[k+1] + highlight.mapTransformOffsetY) * highlight.mapTransformScale / displayDevicePixelRatio
+            let x1 = transformX( data[k] )
+            let y1 = transformY( data[k+1] )
             elements.push( componentLineTo.createObject( objOwner, { "x": x1, "y": y1 } ) )
           }
           i = k
         }
 
-        if ( ( recordingInProgress ) && guideLineAllowed ) { // construct a guide line / polygon
+        if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
+          let centerPoint = crosshairPoint()
+          let centerX = transformX( centerPoint.x )
+          let centerY = transformY( centerPoint.y )
+
           if ( geometryType === 2 && elements.length > 2 )
           {
+            // For polygons we need to pass current center point as "one before last" point in the geometry
+            // because for polygon with points ABC the geometry looks like [A, B, C, A]. We add the center point
+            // between C and A like: [A, B, C, CENTER, A]
             newGuideLineElements = Array.from( elements ) // shallow copy
             let firstPoint = newGuideLineElements.pop()
-            let centerPoint = crosshairPoint()
-            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
+
+            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerX, "y": centerY } ) )
             newGuideLineElements.push( firstPoint )
           }
           else
           {
+            // For lines we only create guideline from last recorded point and current center
             newGuideLineElements.push( componentMoveTo.createObject( guideLine, { "x": elements[ elements.length - 1 ].x, "y": elements[ elements.length - 1 ].y } ) )
-            let centerPoint = crosshairPoint()
-            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerPoint.x, "y": centerPoint.y } ) )
+            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerX, "y": centerY } ) )
           }
         }
       }
@@ -216,19 +205,9 @@ Item {
     constructHighlights()
   }
 
-  onGuideLineAllowedChanged: {
-    if ( guideLineAllowed )
-      constructHighlights()
-    else updateGuideLine()
-  }
+  onGuideLineAllowedChanged: constructHighlights()
 
-  onPositionChanged: {
-    if ( !recordingInProgress )
-      return
-
-    updateGuideLine()
-  }
-
+  onPositionChanged: constructHighlights()
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
