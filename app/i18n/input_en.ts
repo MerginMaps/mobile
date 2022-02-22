@@ -677,40 +677,40 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1209"/>
+        <location filename="../inpututils.cpp" line="1211"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1210"/>
+        <location filename="../inpututils.cpp" line="1212"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1211"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
