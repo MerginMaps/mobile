@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -187,12 +187,14 @@ Item {
       }
     }
 
-    // reset shapes
+    // trigger repaint for empty geometries
     markerItems = markerItems.map( function (marker) { return marker.destroy() } )
     if ( newLineElements.length === 0 )
       newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
     if ( newPolygonElements.length === 0 )
       newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+    if ( newGuideLineElements.length === 0 )
+      newGuideLineElements.push( componentMoveTo.createObject( guideLine ) )
 
     markerItems = newMarkerItems
     polygonShapePath.pathElements = newPolygonElements
