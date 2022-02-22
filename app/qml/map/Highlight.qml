@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -201,13 +201,16 @@ Item {
     guideLine.pathElements = newGuideLineElements
   }
 
-  onFeatureLayerPairChanged: { // highlighting features
-    constructHighlights()
-  }
+  onFeatureLayerPairChanged: constructHighlights()
 
   onGuideLineAllowedChanged: constructHighlights()
 
-  onPositionChanged: constructHighlights()
+  onPositionChanged: {
+    if ( highlight.recordingInProgress )
+    {
+      constructHighlights()
+    }
+  }
 
   // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
