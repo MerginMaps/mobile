@@ -246,10 +246,12 @@ QString InputUtils::degreesString( const QgsPoint &point )
 {
   if ( point.isEmpty() )
   {
-    return QStringLiteral();
+    return QLatin1String();
   }
 
-  return QGeoCoordinate( point.x(), point.y() ).toString( QGeoCoordinate::DegreesMinutesWithHemisphere );
+  // QGeoCoordinate formatter uses lat/long order, but we (and QGIS) use long/lat order,
+  // so here we need to first pass y and then x.
+  return QGeoCoordinate( point.y(), point.x() ).toString( QGeoCoordinate::DegreesMinutesWithHemisphere );
 }
 
 double InputUtils::convertRationalNumber( const QString &rationalValue )

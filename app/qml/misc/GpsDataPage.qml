@@ -142,7 +142,7 @@ Item {
 
               let coordParts = root.coordinatesInDegrees.split(", ")
               if ( coordParts.length > 1 )
-                return coordParts[0]
+                return coordParts[1]
 
               return qsTr( "N/A" )
             }
@@ -161,7 +161,7 @@ Item {
 
               let coordParts = root.coordinatesInDegrees.split(", ")
               if ( coordParts.length > 1 )
-                return coordParts[1]
+                return coordParts[0]
 
               return qsTr( "N/A" )
             }
