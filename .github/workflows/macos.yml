@@ -29,15 +29,6 @@ jobs:
   macos_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-10.15
-    # Set concurrency to this job so that there will be only one workflow instance
-    # running throughout all branches. This limitation can be removed once we
-    # solve https://github.com/lutraconsulting/input/issues/902 - have unique
-    # user for each run of tests. Until then we can run only one instance of tests
-    # at a time - concurrent runs could (and often does) harm each others state,
-    # resulting in failed autotests. There will be a maximum of two runs
-    # accepted - one will run and the other will be set as pending (wait until
-    # the first one finishes). Other runs are automatically canceled if there are two runs already.
-    concurrency: ci-autotests
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2
