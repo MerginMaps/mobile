@@ -132,12 +132,8 @@ void TestMerginApi::testListProject()
 {
   QString projectName = "testListProject";
 
-  // check that there's no hello world project
-  QSignalSpy spy0( mApi, &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString() );
-  QVERIFY( spy0.wait( TestUtils::SHORT_REPLY ) );
-  QCOMPARE( spy0.count(), 1 );
-  MerginProjectsList projects = projectListFromSpy( spy0 );
+  // check that there's no testListProject
+  MerginProjectsList projects = getProjectList();
 
   QVERIFY( !_findProjectByName( mUsername, projectName, projects ).isValid() );
   QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mUsername, projectName ).isValid() );
@@ -146,11 +142,7 @@ void TestMerginApi::testListProject()
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
   // check the project exists on the server
-  QSignalSpy spy( mApi, &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString() );
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
-  projects = projectListFromSpy( spy );
+  projects = getProjectList();
 
   QVERIFY( _findProjectByName( mUsername, projectName, projects ).isValid() );
 
