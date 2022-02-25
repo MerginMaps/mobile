@@ -10,26 +10,64 @@
 #include "QtDebug"
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QSignalSpy>
 
 #include "testutils.h"
+#include "coreutils.h"
 #include "merginapi.h"
 
-void TestUtils::mergin_auth( QString &apiRoot, QString &username, QString &password )
+void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
-  // these env variables really need to be set!
+  Q_ASSERT( api );
+
+  // Test server url needs to be set
   Q_ASSERT( ::getenv( "TEST_MERGIN_URL" ) );
-  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
-  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
 
   apiRoot = ::getenv( "TEST_MERGIN_URL" );
+  api->setApiRoot( apiRoot );
+
+  qDebug() << "MERGIN API ROOT:" << apiRoot;
+
   username = ::getenv( "TEST_API_USERNAME" );
   password = ::getenv( "TEST_API_PASSWORD" );
 
-  qDebug() << "MERGIN API ROOT:" << apiRoot;
+  if ( username.isEmpty() )
+  {
+    // we need to register new user for tests and assign its credentials to env vars
+    username = generateUsername();
+    password = generatePassword();
+    QString email = username + "@autotest.xy";
+
+    qDebug() << "REGISTERING NEW TEST USER:" << username;
+
+    QSignalSpy spy( api,  &MerginApi::registrationSucceeded );
+    api->registerUser( username, email, password, password, true );
+    QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+
+    qputenv( "TEST_API_USERNAME", username.toLatin1() );
+    qputenv( "TEST_API_PASSWORD", password.toLatin1() );
+  }
+
+  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
+  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
+
   qDebug() << "MERGIN USERNAME:" << username;
 
   // let's make sure we do not mess with the public instance
   Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
+}
+
+QString TestUtils::generateUsername()
+{
+  QDateTime time = QDateTime::currentDateTime();
+  QString uniqename = time.toString( QStringLiteral( "ddMMyyyy-hhmmss-z" ) );
+  return QStringLiteral( "input-%1" ).arg( uniqename );
+}
+
+QString TestUtils::generatePassword()
+{
+  QString pass = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
+  return QStringLiteral( "_Pass12%1" ).arg( pass );
 }
 
 QString TestUtils::testDataDir()

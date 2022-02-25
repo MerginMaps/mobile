@@ -46,9 +46,8 @@ TestMerginApi::TestMerginApi( MerginApi *api )
 void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
-  TestUtils::mergin_auth( apiRoot, username, password );
+  TestUtils::mergin_auth( mApi, apiRoot, username, password );
 
-  mApi->setApiRoot( apiRoot );
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
@@ -207,7 +206,7 @@ void TestMerginApi::testDownloadProjectSpecChars()
 
   // create an empty project on the server
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName );
+  mApi->createProject( projectNamespace, projectName, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -244,7 +243,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
 {
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
-  api->createProject( projectNamespace, projectName );
+  api->createProject( projectNamespace, projectName, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -333,7 +332,7 @@ void TestMerginApi::testCreateProjectTwice()
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName );
+  mApi->createProject( projectNamespace, projectName, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -346,7 +345,7 @@ void TestMerginApi::testCreateProjectTwice()
 
   // Create again, expecting error
   QSignalSpy spy2( mApi, &MerginApi::networkErrorOccurred );
-  mApi->createProject( projectNamespace, projectName );
+  mApi->createProject( projectNamespace, projectName, true );
   QVERIFY( spy2.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
@@ -394,7 +393,7 @@ void TestMerginApi::testCreateDeleteProject()
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName );
+  mApi->createProject( projectNamespace, projectName, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -422,7 +421,7 @@ void TestMerginApi::testUploadProject()
   QString projectDir = mApi->projectsPath() + "/" + projectName;
 
   QSignalSpy spy0( mApiExtra, &MerginApi::projectCreated );
-  mApiExtra->createProject( projectNamespace, projectName );
+  mApiExtra->createProject( projectNamespace, projectName, true );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
   QCOMPARE( spy0.takeFirst().at( 1 ).toBool(), true );

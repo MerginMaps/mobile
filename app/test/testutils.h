@@ -12,13 +12,19 @@
 
 #include <QString>
 #include <qtestcase.h>
+#include "merginapi.h"
 
 namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 70000;
 
-  void mergin_auth( QString &apiRoot, QString &username, QString &password );
+  // Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var
+  void mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
+
+  QString generateUsername();
+  QString generatePassword();
+
   QString testDataDir();
 
   /**

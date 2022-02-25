@@ -340,11 +340,12 @@ class MerginApi: public QObject
     Q_INVOKABLE static QString getFullProjectName( QString projectNamespace, QString projectName );
 
     /**
-    * Creates an empty project on Mergin server.
+    * Creates an empty project on Mergin server. isPublic determines if the new project will be visible to all or private
     * \param projectNamespace
     * \param projectName
+    * \param isPublic
     */
-    void createProject( const QString &projectNamespace, const QString &projectName );
+    void createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
 
     // Test functions
     /**
