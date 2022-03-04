@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,6 +121,15 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
 
 QString MerginApi::listProjectsByName( const QStringList &projectNames )
 {
+  if ( mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit listProjectsFailed();
+    return QLatin1String();
+  }
+
+  // Authentification is optional in this case, as there might be public projects without the need to be logged in
+  validateAuthAndContinute();
+
   // construct JSON body
   QJsonDocument body;
   QJsonObject projects;
@@ -1087,7 +1096,7 @@ bool MerginApi::validateAuthAndContinute()
   if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTime().toUTC() )
   {
     authorize( mUserAuth->username(), mUserAuth->password() );
-
+    CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
     mAuthLoopEvent.exec();
   }
   return true;
