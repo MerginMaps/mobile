@@ -149,6 +149,38 @@ void TestMerginApi::testListProject()
   QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mUsername, projectName ).isValid() );
 }
 
+void TestMerginApi::testListProjectsByName()
+{
+  QString projectName = "testListProjectByName";
+
+  // create the project on the server with other client
+  createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // let's invalidate main client's auth token and see if the listProjectsByName gets new one
+  QDateTime now = QDateTime::currentDateTimeUtc();
+  mApi->userAuth()->setTokenExpiration( now );
+
+  QByteArray oldToken = mApi->userAuth()->authToken();
+
+  // wait for 3 seconds so that the token expires
+  QTest::qSleep( 3000 );
+
+  QStringList projects;
+  projects.append( MerginApi::getFullProjectName( mUsername, projectName ) );
+
+  QSignalSpy responseReceived( mApi, &MerginApi::listProjectsByNameFinished );
+  mApi->listProjectsByName( projects );
+  QVERIFY( responseReceived.wait( TestUtils::SHORT_REPLY ) );
+
+  QVERIFY( oldToken != mApi->userAuth()->authToken() );
+
+  MerginProjectsList receivedProjects = projectListFromSpy( responseReceived );
+  QVERIFY( receivedProjects.count() == 1 );
+
+  MerginProject ourProject = receivedProjects.at( 0 );
+  QVERIFY( ourProject.remoteError.isEmpty() );
+}
+
 /**
  * Download project from a scratch using fetch endpoint.
  */
