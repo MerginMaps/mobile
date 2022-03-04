@@ -157,13 +157,11 @@ void TestMerginApi::testListProjectsByName()
   createRemoteProject( mApiExtra, mUsername, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
   // let's invalidate main client's auth token and see if the listProjectsByName gets new one
-  QDateTime now = QDateTime::currentDateTimeUtc();
+  // set token's expiration to 3 secs ago
+  QDateTime now = QDateTime::currentDateTimeUtc().addSecs( -3 );
   mApi->userAuth()->setTokenExpiration( now );
 
   QByteArray oldToken = mApi->userAuth()->authToken();
-
-  // wait for 3 seconds so that the token expires
-  QTest::qSleep( 3000 );
 
   QStringList projects;
   projects.append( MerginApi::getFullProjectName( mUsername, projectName ) );
