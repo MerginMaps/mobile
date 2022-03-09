@@ -306,7 +306,7 @@ Item {
     width: root.width
     visible: root.state !== "inactive"
 
-    mapSettings.project: __loader.project
+    mapSettings.project: __loader.qgsProject
 
     IdentifyKit {
       id: _identifyKit

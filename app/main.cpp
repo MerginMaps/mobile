@@ -96,6 +96,7 @@
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
 #include "position/abstractpositionprovider.h"
+#include "synchronizationcontroller.h"
 
 
 #ifndef NDEBUG
@@ -424,6 +425,7 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
+  SynchronizationController syncController;
 
   // layer models
   LayersModel lm;
@@ -431,7 +433,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  Loader loader( mtm, as, al, recordingLpm );
+  Loader loader( mtm, as, al, recordingLpm, localProjectsManager );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
@@ -451,6 +453,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
+  QObject::connect( &loader, &Loader::projectChanged, &syncController, &SynchronizationController::activeProjectChanged );
   QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );

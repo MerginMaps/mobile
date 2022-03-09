@@ -46,7 +46,8 @@ compass.cpp \
 featuresmodel.cpp \
 relationfeaturesmodel.cpp \
 relationreferencefeaturesmodel.cpp \
-valuerelationfeaturesmodel.cpp
+valuerelationfeaturesmodel.cpp \
+synchronizationcontroller.cpp
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -95,7 +96,8 @@ compass.h \
 featuresmodel.h \
 relationfeaturesmodel.h \
 relationreferencefeaturesmodel.h \
-valuerelationfeaturesmodel.h
+valuerelationfeaturesmodel.h \
+synchronizationcontroller.h
 
 contains(DEFINES, HAVE_BLUETOOTH) {
   message("Building with bluetooth position provider")

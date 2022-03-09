@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
   app.h
   --------------------------------------
   Date                 : Nov 2017
@@ -41,6 +41,7 @@ Loader::Loader( MapThemesModel &mapThemeModel
                 , AppSettings &appSettings
                 , ActiveLayer &activeLayer
                 , LayersProxyModel &recordingLayerPM
+                , LocalProjectsManager &localProjectsManager
                 , QObject *parent ) :
 
   QObject( parent )
@@ -48,27 +49,24 @@ Loader::Loader( MapThemesModel &mapThemeModel
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
+  , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
   // iterator uses it for virtual fields, causing minor bugs with expressions)
   // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
-  mProject = QgsProject::instance();
+  mQgsProject = QgsProject::instance();
 }
 
-QgsProject *Loader::project()
+QgsProject *Loader::qgsProject()
+{
+  return mQgsProject;
+}
+
+LocalProject Loader::project()
 {
   return mProject;
-}
-
-void Loader::setRecording( bool isRecordingOn )
-{
-  if ( mRecording != isRecordingOn )
-  {
-    mRecording = isRecordingOn;
-    emit recordingChanged();
-  }
 }
 
 bool Loader::load( const QString &filePath )
@@ -78,19 +76,21 @@ bool Loader::load( const QString &filePath )
 
 bool Loader::forceLoad( const QString &filePath, bool force )
 {
-  qDebug() << "Loading " << filePath << force;
+  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
+
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
-    emit projectWillBeReloaded( QString() );
-    mProject->clear();
+    emit projectWillBeReloaded();
+    mQgsProject->clear();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
-    emit projectReloaded( mProject );
+    emit projectReloaded( mQgsProject );
     return true;
   }
 
   if ( !force )
     emit loadingStarted();
+
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
@@ -113,12 +113,18 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   loop.exec();
 
   bool res = true;
-  if ( mProject->fileName() != filePath || force )
+  if ( mQgsProject->fileName() != filePath || force )
   {
-    emit projectWillBeReloaded( filePath );
-    res = mProject->read( filePath );
+    emit projectWillBeReloaded();
+    res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
-    mMapThemeModel.reloadMapThemes( mProject );
+    mMapThemeModel.reloadMapThemes( mQgsProject );
+    mProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
+
+    if ( !mProject.isValid() )
+    {
+      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
+    }
 
     QgsVectorLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
     if ( defaultLayer )
@@ -128,12 +134,13 @@ bool Loader::forceLoad( const QString &filePath, bool force )
 
     setMapSettingsLayers();
 
-    emit projectReloaded( mProject );
+    emit projectReloaded( mQgsProject );
+    emit projectChanged( mProject );
   }
 
   bool foundInvalidLayer = false;
   QStringList invalidLayers;
-  for ( QgsMapLayer *layer : mProject->mapLayers().values() )
+  for ( QgsMapLayer *layer : mQgsProject->mapLayers().values() )
   {
     if ( !layer->isValid() )
     {
@@ -161,7 +168,6 @@ bool Loader::forceLoad( const QString &filePath, bool force )
         file.close();
       }
       emit qgisLogChanged();
-      emit setProjectIssuesHeader( "The following layers failed loading:" );
       emit loadingErrorFound();
     }
   }
@@ -170,9 +176,9 @@ bool Loader::forceLoad( const QString &filePath, bool force )
 
 bool Loader::reloadProject( QString projectDir )
 {
-  if ( mProject->homePath() == projectDir )
+  if ( mQgsProject->homePath() == projectDir )
   {
-    return forceLoad( mProject->fileName(), true );
+    return forceLoad( mQgsProject->fileName(), true );
   }
   return false;
 }
@@ -190,9 +196,9 @@ void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
 
 void Loader::setMapSettingsLayers() const
 {
-  if ( !mProject || !mMapSettings ) return;
+  if ( !mQgsProject || !mMapSettings ) return;
 
-  QgsLayerTree *root = mProject->layerTreeRoot();
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
   QList< QgsMapLayer * > allLayers;
@@ -209,7 +215,7 @@ void Loader::setMapSettingsLayers() const
   }
 
   mMapSettings->setLayers( allLayers );
-  mMapSettings->setTransformContext( mProject->transformContext() );
+  mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
 QgsQuickMapSettings *Loader::mapSettings() const
@@ -226,12 +232,12 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
   }
   QgsRectangle extent;
 
-  QgsProjectViewSettings *viewSettings = mProject->viewSettings();
+  QgsProjectViewSettings *viewSettings = mQgsProject->viewSettings();
   extent = viewSettings->presetFullExtent();
   if ( extent.isNull() )
   {
     bool hasWMS;
-    QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
+    QStringList WMSExtent = mQgsProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
 
     if ( hasWMS && ( WMSExtent.length() == 4 ) )
     {
@@ -239,7 +245,7 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
     }
     else // set layers extent
     {
-      const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
+      const QVector<QgsMapLayer *> layers = mQgsProject->layers<QgsMapLayer *>();
       for ( const QgsMapLayer *layer : layers )
       {
         QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
@@ -250,7 +256,7 @@ void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
 
   if ( extent.isEmpty() )
   {
-    extent.grow( mProject->crs().isGeographic() ? 0.01 : 1000.0 );
+    extent.grow( mQgsProject->crs().isGeographic() ? 0.01 : 1000.0 );
   }
   extent.scale( 1.05 );
   mapSettings->setExtent( extent );

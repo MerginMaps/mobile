@@ -451,7 +451,7 @@ ApplicationWindow {
       width: window.width
       previewHeight: window.height / 3
 
-      project: __loader.project
+      project: __loader.qgsProject
 
       onCreateLinkedFeatureRequested: {
         let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
@@ -563,12 +563,9 @@ ApplicationWindow {
       }
 
       onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-      onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
 
       onProjectReloaded: map.clear()
-      onProjectWillBeReloaded: {
-        formsStackManager.reload()
-      }
+      onProjectWillBeReloaded: formsStackManager.reload()
     }
 
     LegacyFolderMigration {

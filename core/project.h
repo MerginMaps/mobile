@@ -43,34 +43,38 @@ namespace ProjectStatus
  */
 struct LocalProject
 {
-  LocalProject() {};
-  ~LocalProject() {};
+    Q_GADGET
 
-  QString projectName;
-  QString projectNamespace;
+  public:
 
-  QString id() const; //! projectFullName for time being
+    LocalProject() {};
+    ~LocalProject() {};
 
-  QString projectDir;
-  QString projectError; // Error that leads to project not being able to open in app
+    QString projectName;
+    QString projectNamespace;
 
-  QString qgisProjectFilePath;
+    QString id() const; //! projectFullName for time being
 
-  int localVersion = -1;
+    QString projectDir;
+    QString projectError; // Error that leads to project not being able to open in app
 
-  bool isValid() { return !projectDir.isEmpty(); }
+    QString qgisProjectFilePath;
 
-  LocalProject *clone() const;
+    int localVersion = -1;
 
-  bool operator ==( const LocalProject &other )
-  {
-    return ( this->id() == other.id() );
-  }
+    bool isValid() { return !projectDir.isEmpty(); }
 
-  bool operator !=( const LocalProject &other )
-  {
-    return !( *this == other );
-  }
+    LocalProject *clone() const;
+
+    bool operator ==( const LocalProject &other )
+    {
+      return ( this->id() == other.id() );
+    }
+
+    bool operator !=( const LocalProject &other )
+    {
+      return !( *this == other );
+    }
 };
 
 /**

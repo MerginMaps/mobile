@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
   app.h
   --------------------------------------
   Date                 : Nov 2017
@@ -24,14 +24,15 @@
 #include "appsettings.h"
 #include "activelayer.h"
 #include "layersproxymodel.h"
+#include "localprojectsmanager.h"
 
 class QgsQuickMapSettings;
 
 class Loader: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
-    Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
+    Q_PROPERTY( LocalProject project READ project NOTIFY projectChanged ) // LocalProject instance of active project, changes when project is loaded
+    Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
@@ -40,12 +41,14 @@ class Loader: public QObject
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
       , LayersProxyModel &recordingLayerPM
+      , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
-    QgsProject *project();
+    //! Returns active project's QgsProject instance to do QGIS API magic
+    QgsProject *qgsProject();
 
-    bool isRecording() const { return mRecording; }
-    void setRecording( bool isRecording );
+    //! Returns Input related info about active project
+    LocalProject project();
 
     Q_INVOKABLE bool load( const QString &filePath );
     Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
@@ -98,9 +101,10 @@ class Loader: public QObject
     Q_INVOKABLE QString projectLoadingLog() const;
 
   signals:
-    void projectChanged();
+    void qgsProjectChanged();
+    void projectChanged( LocalProject project );
     void projectReloaded( QgsProject *project );
-    void projectWillBeReloaded( const QString &projectFile );
+    void projectWillBeReloaded();
 
     void recordingChanged();
 
@@ -110,7 +114,6 @@ class Loader: public QObject
     void reportIssue( QString layerName, QString message );
     void loadingErrorFound();
     void qgisLogChanged();
-    void setProjectIssuesHeader( QString text );
 
     void mapSettingsChanged();
 
@@ -124,13 +127,14 @@ class Loader: public QObject
     QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
 
 
-    QgsProject *mProject = nullptr;
-    bool mRecording = false;
+    QgsProject *mQgsProject = nullptr;
+    LocalProject mProject;
 
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
     LayersProxyModel &mRecordingLayerPM;
+    LocalProjectsManager &mLocalProjectsManager;
     QgsQuickMapSettings *mMapSettings = nullptr;
 
     QString mProjectLoadingLog;
