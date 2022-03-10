@@ -20,13 +20,13 @@
 #include "qgsapplication.h"
 #include "qgslogger.h"
 
-#include "loader.h"
+#include "activeprojectmanager.h"
 #include "inpututils.h"
 #include "coreutils.h"
 
-const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
+const QString ActiveProjectManager::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-Loader::Loader( MapThemesModel &mapThemeModel
+ActiveProjectManager::ActiveProjectManager( MapThemesModel &mapThemeModel
                 , AppSettings &appSettings
                 , ActiveLayer &activeLayer
                 , LayersProxyModel &recordingLayerPM
@@ -48,22 +48,22 @@ Loader::Loader( MapThemesModel &mapThemeModel
   mQgsProject = QgsProject::instance();
 }
 
-QgsProject *Loader::qgsProject()
+QgsProject *ActiveProjectManager::qgsProject()
 {
   return mQgsProject;
 }
 
-LocalProject Loader::project()
+LocalProject ActiveProjectManager::project()
 {
   return mProject;
 }
 
-bool Loader::load( const QString &filePath )
+bool ActiveProjectManager::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
 }
 
-bool Loader::forceLoad( const QString &filePath, bool force )
+bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
 {
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
 
@@ -164,7 +164,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   return res;
 }
 
-bool Loader::reloadProject( QString projectDir )
+bool ActiveProjectManager::reloadProject( QString projectDir )
 {
   if ( mQgsProject->homePath() == projectDir )
   {
@@ -173,7 +173,7 @@ bool Loader::reloadProject( QString projectDir )
   return false;
 }
 
-void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ActiveProjectManager::setMapSettings( QgsQuickMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -184,7 +184,7 @@ void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
   emit mapSettingsChanged();
 }
 
-void Loader::setMapSettingsLayers() const
+void ActiveProjectManager::setMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
@@ -208,12 +208,12 @@ void Loader::setMapSettingsLayers() const
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
-QgsQuickMapSettings *Loader::mapSettings() const
+QgsQuickMapSettings *ActiveProjectManager::mapSettings() const
 {
   return mMapSettings;
 }
 
-bool Loader::layerVisible( QgsMapLayer *layer )
+bool ActiveProjectManager::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
 
@@ -233,12 +233,12 @@ bool Loader::layerVisible( QgsMapLayer *layer )
   return false;
 }
 
-QString Loader::projectLoadingLog() const
+QString ActiveProjectManager::projectLoadingLog() const
 {
   return mProjectLoadingLog;
 }
 
-void Loader::setActiveMapTheme( int index )
+void ActiveProjectManager::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
 
@@ -249,7 +249,7 @@ void Loader::setActiveMapTheme( int index )
   setMapSettingsLayers();
 }
 
-void Loader::setActiveLayerByName( QString layerName ) const
+void ActiveProjectManager::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )
   {
@@ -264,7 +264,7 @@ void Loader::setActiveLayerByName( QString layerName ) const
   setActiveLayer( nullptr );
 }
 
-void Loader::setActiveLayer( QgsMapLayer *layer ) const
+void ActiveProjectManager::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
     mActiveLayer.resetActiveLayer();

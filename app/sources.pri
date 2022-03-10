@@ -15,6 +15,7 @@ position/positiondirection.cpp \
 position/positionkit.cpp \
 position/positionprovidersmodel.cpp \
 position/simulatedpositionprovider.cpp \
+activeprojectmanager.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
 identifykit.cpp \
@@ -26,7 +27,6 @@ layersmodel.cpp \
 layersproxymodel.cpp \
 main.cpp \
 projectwizard.cpp \
-loader.cpp \
 digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
@@ -66,6 +66,7 @@ position/positiondirection.h \
 position/positionkit.h \
 position/positionprovidersmodel.h \
 position/simulatedpositionprovider.h \
+activeprojectmanager.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
 identifykit.h \
@@ -76,7 +77,6 @@ fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
 projectwizard.h \
-loader.h \
 digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \

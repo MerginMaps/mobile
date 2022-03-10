@@ -119,7 +119,7 @@
 #endif
 
 #include "qgsapplication.h"
-#include "loader.h"
+#include "activeprojectmanager.h"
 #include "appsettings.h"
 
 static QString getDataDir()
@@ -229,7 +229,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
-  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "InputLoader", "" );
+  qmlRegisterUncreatableType<ActiveProjectManager>( "lc", 1, 0, "ActiveProjectManager", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -433,7 +433,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  Loader loader( mtm, as, al, recordingLpm, localProjectsManager );
+  ActiveProjectManager activeProjectManager( mtm, as, al, recordingLpm, localProjectsManager );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
@@ -470,11 +470,11 @@ int main( int argc, char *argv[] )
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProjectManager, &ActiveProjectManager::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
-  QObject::connect( &loader, &Loader::projectChanged, &syncController, &SynchronizationController::activeProjectChanged );
-  QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
-  QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectChanged, &syncController, &SynchronizationController::activeProjectChanged );
+  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( QgsApplication::messageLog(),
@@ -482,7 +482,7 @@ int main( int argc, char *argv[] )
                     &iu,
                     &InputUtils::onQgsLogMessageReceived );
 
-  QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
+  QFile projectLoadingFile( ActiveProjectManager::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
@@ -527,7 +527,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__loader", &loader );
+  engine.rootContext()->setContextProperty( "__activeProjectManager", &activeProjectManager );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );

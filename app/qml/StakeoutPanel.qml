@@ -225,7 +225,7 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Feature" )
-            text: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __loader.qgsProject ) : ""
+            text: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProjectManager.qgsProject ) : ""
           }
 
           Components.TextRowWithTitle {

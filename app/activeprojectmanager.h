@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 
-#ifndef LOADER_H
-#define LOADER_H
+#ifndef ACTIVEPROJECTMANAGER_H
+#define ACTIVEPROJECTMANAGER_H
 
 #include <QObject>
 
@@ -25,9 +25,9 @@
 class QgsQuickMapSettings;
 
 /**
- * \brief The Loader class is responsible to load a QGIS project provided to it. It also holds an information about active project.
+ * \brief The ActiveProjectManager class can load a QGIS project and holds its data.
  */
-class Loader: public QObject
+class ActiveProjectManager: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( LocalProject project READ project NOTIFY projectChanged ) // LocalProject instance of active project, changes when project is loaded
@@ -35,7 +35,7 @@ class Loader: public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader(
+    explicit ActiveProjectManager(
       MapThemesModel &mapThemeModel
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
@@ -142,4 +142,4 @@ class Loader: public QObject
     bool forceLoad( const QString &filePath, bool force );
 };
 
-#endif // LOADER_H
+#endif // ACTIVEPROJECTMANAGER_H

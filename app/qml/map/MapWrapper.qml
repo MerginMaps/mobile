@@ -253,12 +253,12 @@ Item {
         break
       }
       case "recordInLayerFeature": {
-        __loader.setActiveLayer( root.targetLayerToUse )
+        __activeProjectManager.setActiveLayer( root.targetLayerToUse )
         root.recordInLayerFeatureStarted()
         break
       }
       case "editGeometry": {
-        __loader.setActiveLayer( root.featurePairToEdit.layer )
+        __activeProjectManager.setActiveLayer( root.featurePairToEdit.layer )
         _digitizingHighlight.featureLayerPair = root.featurePairToEdit
         _digitizingHighlight.visible = true
         root.editingGeometryStarted()
@@ -306,7 +306,7 @@ Item {
     width: root.width
     visible: root.state !== "inactive"
 
-    mapSettings.project: __loader.qgsProject
+    mapSettings.project: __activeProjectManager.qgsProject
 
     IdentifyKit {
       id: _identifyKit
@@ -475,8 +475,6 @@ Item {
 
     lineRecordingInterval: __appSettings.lineRecordingInterval
     variablesManager: __variablesManager
-
-    onRecordingChanged: __loader.recording = recording
 
     onFeatureLayerPairChanged: {
       if ( recording ) {
@@ -716,7 +714,7 @@ Item {
     width: window.width
     edge: Qt.BottomEdge
 
-    onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+    onActiveLayerChangeRequested: __activeProjectManager.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
   RecordToolbar {
