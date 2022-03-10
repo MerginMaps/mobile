@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,9 @@
 #include "qgsunittypes.h"
 #include "qgsfeature.h"
 #include "qgsgeometry.h"
+#include "qgsmemoryproviderutils.h"
+#include "qgsrasterlayer.h"
+#include "qgspolygon.h"
 
 #include "testutils.h"
 
@@ -620,5 +623,73 @@ void TestUtilsFunctions::testEquals()
   for ( const auto &test : testcasesQgsPointXY )
   {
     QCOMPARE( InputUtils::equals( test.a, test.b, test.epsilon ), test.shouldEqual );
+  }
+}
+
+void TestUtilsFunctions::testGeometryIcons()
+{
+  QVector<QPair< QgsMapLayer *, QString > > testcases = {
+    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), QgsWkbTypes::Point ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), QgsWkbTypes::PointZ ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), QgsWkbTypes::PointM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), QgsWkbTypes::PointZM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), QgsWkbTypes::MultiPoint ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+
+    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), QgsWkbTypes::LineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), QgsWkbTypes::LineStringZ ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), QgsWkbTypes::LineStringM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), QgsWkbTypes::LineStringZM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), QgsWkbTypes::MultiLineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), QgsWkbTypes::Polygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), QgsWkbTypes::PolygonZ ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), QgsWkbTypes::PolygonM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), QgsWkbTypes::PolygonZM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), QgsWkbTypes::MultiPolygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+
+    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), QgsWkbTypes::Unknown ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), QgsWkbTypes::NoGeometry ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
+
+    { new QgsRasterLayer(), QStringLiteral( "qrc:/mIconRasterLayer.svg" ) }
+  };
+
+  for ( const auto &test : testcases )
+  {
+    QCOMPARE( mUtils->loadIconFromLayer( test.first ), test.second );
+    delete test.first;
+  }
+
+  QgsFeature pointFeature;
+  QgsGeometry geom;
+  QgsPoint *pt = new QgsPoint( 1, 2, 3, 4 );
+  geom.set( pt );
+  pointFeature.setGeometry( geom );
+
+  QgsFeature lineFeature;
+  QgsGeometry lineGeom;
+  QgsLineString *line = new QgsLineString( QVector<QgsPointXY>() << QgsPointXY( 0, 0 ) << QgsPointXY( 1, 1 ) );
+  lineGeom.set( line );
+  lineFeature.setGeometry( lineGeom );
+
+  QgsFeature polygonFeature;
+  QgsGeometry polygonGeom;
+  QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector<QgsPointXY>() << QgsPointXY( 0, 0 ) << QgsPointXY( 1, 1 ) ) );
+  polygonGeom.set( polygon );
+  polygonFeature.setGeometry( polygonGeom );
+
+  QgsFeature emptyFeature;
+  QgsGeometry emptyGeom;
+  emptyFeature.setGeometry( emptyGeom );
+
+  QVector< QPair< QgsFeature, QString > > testcases_features = {
+    { pointFeature, QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { lineFeature, QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { polygonFeature, QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { emptyFeature, QStringLiteral( "qrc:/mIconTableLayer.svg" ) }
+  };
+
+  for ( const auto &test: testcases_features )
+  {
+    QCOMPARE( mUtils->loadIconFromFeature( test.first ), test.second );
   }
 }
