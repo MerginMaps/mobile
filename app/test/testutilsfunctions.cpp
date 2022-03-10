@@ -628,7 +628,8 @@ void TestUtilsFunctions::testEquals()
 
 void TestUtilsFunctions::testGeometryIcons()
 {
-  QVector<QPair< QgsMapLayer *, QString > > testcases = {
+  QVector<QPair< QgsMapLayer *, QString > > testcases =
+  {
     { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), QgsWkbTypes::Point ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
     { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), QgsWkbTypes::PointZ ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
     { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), QgsWkbTypes::PointM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
@@ -681,14 +682,15 @@ void TestUtilsFunctions::testGeometryIcons()
   QgsGeometry emptyGeom;
   emptyFeature.setGeometry( emptyGeom );
 
-  QVector< QPair< QgsFeature, QString > > testcases_features = {
+  QVector< QPair< QgsFeature, QString > > testcases_features =
+  {
     { pointFeature, QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
     { lineFeature, QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
     { polygonFeature, QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
     { emptyFeature, QStringLiteral( "qrc:/mIconTableLayer.svg" ) }
   };
 
-  for ( const auto &test: testcases_features )
+  for ( const auto &test : testcases_features )
   {
     QCOMPARE( mUtils->loadIconFromFeature( test.first ), test.second );
   }
