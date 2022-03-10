@@ -21,8 +21,6 @@ class SynchronizationController : public QObject
   public:
     explicit SynchronizationController( QObject *parent = nullptr );
 
-    void syncProject( const QString &projectId );
-
   public slots:
     void activeProjectChanged( LocalProject activeProject );
 
