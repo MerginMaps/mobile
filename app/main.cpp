@@ -446,10 +446,29 @@ int main( int argc, char *argv[] )
   } );
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
 
-  // Connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
+  // Lambda context object can be used in all lambda functions defined here,
+  // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
+  QObject lambdaContext;
+
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
+  {
+    QString msg;
+
+    // Instatiate QDebug with QString to redirect output to string
+    // It is used to convert enum to string
+    QDebug logHelper( &msg );
+
+    logHelper << QStringLiteral( "Application changed state to:" ) << state;
+    CoreUtils::log( QStringLiteral( "Input" ), msg );
+  } );
+
+  QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext, []()
+  {
+    CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
+  } );
+
+  // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
-  QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );

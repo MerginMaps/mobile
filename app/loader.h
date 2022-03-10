@@ -1,10 +1,4 @@
-﻿/***************************************************************************
-  app.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : peter.petrik@lutraconsulting.co.uk
- ***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,7 +12,9 @@
 #define LOADER_H
 
 #include <QObject>
+
 #include "qgsproject.h"
+
 #include "inpututils.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
@@ -28,6 +24,9 @@
 
 class QgsQuickMapSettings;
 
+/**
+ * \brief The Loader class is responsible to load a QGIS project provided to it. It also holds an information about active project.
+ */
 class Loader: public QObject
 {
     Q_OBJECT
@@ -50,10 +49,11 @@ class Loader: public QObject
     //! Returns Input related info about active project
     LocalProject project();
 
+    /**
+     * Loads a .qgz/.qgs project file specified by filePath.
+     * \param filePath Path to project file.
+     */
     Q_INVOKABLE bool load( const QString &filePath );
-    Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
-    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
-    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
     /**
      * Updates active map theme.
@@ -70,9 +70,6 @@ class Loader: public QObject
      * setActiveLayer sets active layer from layer
      */
     Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
-
-    //! A File on this path represents a project is loading and exists only during the process.
-    static const QString LOADING_FLAG_FILE_PATH;
 
     /**
      * mapSettings method returns mapsettings pointer
@@ -100,14 +97,15 @@ class Loader: public QObject
      */
     Q_INVOKABLE QString projectLoadingLog() const;
 
+    //! A File on this path represents that project is loading and exists only during the process.
+    static const QString LOADING_FLAG_FILE_PATH;
+
   signals:
     void qgsProjectChanged();
     void projectChanged( LocalProject project );
-    void projectReloaded( QgsProject *project );
+
     void projectWillBeReloaded();
-
-    void recordingChanged();
-
+    void projectReloaded( QgsProject *project );
     void loadingStarted();
     void loadingFinished();
 
@@ -118,14 +116,10 @@ class Loader: public QObject
     void mapSettingsChanged();
 
   public slots:
-    void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
-    void appAboutToQuit();
 
   private:
-    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
-
 
     QgsProject *mQgsProject = nullptr;
     LocalProject mProject;

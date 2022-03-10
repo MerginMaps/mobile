@@ -221,7 +221,7 @@ ApplicationWindow {
           if ( __appSettings.autoCenterMapChecked ) {
             mainPanel.myLocationHold()
           }
-          __loader.zoomToProject( map.mapSettings )
+          __inputUtils.zoomToProject( __loader.qgsProject, map.mapSettings )
         }
         onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {

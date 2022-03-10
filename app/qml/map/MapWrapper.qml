@@ -667,7 +667,7 @@ Item {
         id: layericon
 
         iconSize: parent.height / 2
-        source: __loader.loadIconFromLayer( __activeLayer.layer )
+        source: __inputUtils.loadIconFromLayer( __activeLayer.layer )
 
         anchors.verticalCenter: parent.verticalCenter
       }

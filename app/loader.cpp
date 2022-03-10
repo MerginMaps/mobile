@@ -1,10 +1,4 @@
 ﻿/***************************************************************************
-  app.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : peter.petrik@lutraconsulting.co.uk
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,27 +7,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "loader.h"
-#include "inpututils.h"
-#include "coreutils.h"
+#include <QDebug>
+#include <QStandardPaths>
+#include <QTimer>
+
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 #include "qgsquickmapsettings.h"
-#include <qgsapplication.h>
-#include <qgslogger.h>
+#include "qgsapplication.h"
+#include "qgslogger.h"
 
-#if VERSION_INT >= 30500
-// this header only exists in QGIS >= 3.6
-#include "qgsexpressioncontextutils.h"
-#endif
-#include <QDebug>
-
-#include <qgsprojectviewsettings.h>
-#include <QStandardPaths>
-#include <QTimer>
+#include "loader.h"
+#include "inpututils.h"
+#include "coreutils.h"
 
 const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
@@ -154,6 +143,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   if ( !force )
   {
     emit loadingFinished();
+
     if ( foundInvalidLayer )
     {
       QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
@@ -223,45 +213,6 @@ QgsQuickMapSettings *Loader::mapSettings() const
   return mMapSettings;
 }
 
-void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
-{
-  if ( !mapSettings )
-  {
-    qDebug() << "Cannot zoom to extent, mapSettings is not defined";
-    return;
-  }
-  QgsRectangle extent;
-
-  QgsProjectViewSettings *viewSettings = mQgsProject->viewSettings();
-  extent = viewSettings->presetFullExtent();
-  if ( extent.isNull() )
-  {
-    bool hasWMS;
-    QStringList WMSExtent = mQgsProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
-
-    if ( hasWMS && ( WMSExtent.length() == 4 ) )
-    {
-      extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
-    }
-    else // set layers extent
-    {
-      const QVector<QgsMapLayer *> layers = mQgsProject->layers<QgsMapLayer *>();
-      for ( const QgsMapLayer *layer : layers )
-      {
-        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
-        extent.combineExtentWith( layerExtent );
-      }
-    }
-  }
-
-  if ( extent.isEmpty() )
-  {
-    extent.grow( mQgsProject->crs().isGeographic() ? 0.01 : 1000.0 );
-  }
-  extent.scale( 1.05 );
-  mapSettings->setExtent( extent );
-}
-
 bool Loader::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
@@ -298,23 +249,6 @@ void Loader::setActiveMapTheme( int index )
   setMapSettingsLayers();
 }
 
-void Loader::appStateChanged( Qt::ApplicationState state )
-{
-  QString msg;
-
-  // Instatiate QDebug with QString to redirect output to string
-  // It is used to convert enum to string
-  QDebug logHelper( &msg );
-
-  logHelper << "Application changed state to: " << state;
-  CoreUtils::log( "Input", msg );
-}
-
-void Loader::appAboutToQuit()
-{
-  CoreUtils::log( "Input", "Application has quit" );
-}
-
 void Loader::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )
@@ -338,37 +272,5 @@ void Loader::setActiveLayer( QgsMapLayer *layer ) const
   {
     mActiveLayer.setActiveLayer( layer );
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
-  }
-}
-
-QString Loader::loadIconFromLayer( QgsMapLayer *layer )
-{
-  if ( !layer )
-    return QString();
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  if ( vectorLayer )
-  {
-    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
-    return iconFromGeometry( geometry );
-  }
-  else
-    return QString( "qrc:/mIconRasterLayer.svg" );
-}
-
-QString Loader::loadIconFromFeature( QgsFeature feature )
-{
-  return iconFromGeometry( feature.geometry().type() );
-}
-
-QString Loader::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
-{
-  switch ( geometry )
-  {
-    case QgsWkbTypes::GeometryType::PointGeometry: return QString( "qrc:/mIconPointLayer.svg" );
-    case QgsWkbTypes::GeometryType::LineGeometry: return QString( "qrc:/mIconLineLayer.svg" );
-    case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "qrc:/mIconPolygonLayer.svg" );
-    default: return QString( "qrc:/mIconTableLayer.svg" );
   }
 }
