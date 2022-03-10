@@ -27,11 +27,11 @@
 const QString ActiveProjectManager::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
 ActiveProjectManager::ActiveProjectManager( MapThemesModel &mapThemeModel
-                , AppSettings &appSettings
-                , ActiveLayer &activeLayer
-                , LayersProxyModel &recordingLayerPM
-                , LocalProjectsManager &localProjectsManager
-                , QObject *parent ) :
+    , AppSettings &appSettings
+    , ActiveLayer &activeLayer
+    , LayersProxyModel &recordingLayerPM
+    , LocalProjectsManager &localProjectsManager
+    , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
