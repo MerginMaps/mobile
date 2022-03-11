@@ -10,7 +10,7 @@ on:
     - '.github/workflows/linux.yml'
 
   release:
-    types
+    types:
       - published
 
 env:
