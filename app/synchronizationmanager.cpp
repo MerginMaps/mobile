@@ -7,23 +7,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SYNCHRONIZATIONCONTROLLER_H
-#define SYNCHRONIZATIONCONTROLLER_H
+#include "synchronizationmanager.h"
 
-#include <QObject>
-#include <qglobal.h>
+#include "qdebug.h"
 
-#include <project.h>
-
-class SynchronizationController : public QObject
+SynchronizationManager::SynchronizationManager( QObject *parent ) : QObject( parent )
 {
-    Q_OBJECT
-  public:
-    explicit SynchronizationController( QObject *parent = nullptr );
 
-  public slots:
-    void activeProjectChanged( LocalProject activeProject );
+}
 
-};
+bool SynchronizationManager::autosyncAllowed()
+{
+  return mAutosyncAllowed;
+}
 
-#endif // SYNCHRONIZATIONCONTROLLER_H
+void SynchronizationManager::setAutosyncAllowed( bool )
+{
+
+}
+
+void SynchronizationManager::activeProjectChanged( LocalProject activeProject )
+{
+  qDebug() << "Active project changed to:" << activeProject.projectName;
+}

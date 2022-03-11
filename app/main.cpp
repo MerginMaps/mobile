@@ -96,7 +96,7 @@
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
 #include "position/abstractpositionprovider.h"
-#include "synchronizationcontroller.h"
+#include "synchronizationmanager.h"
 
 
 #ifndef NDEBUG
@@ -425,7 +425,9 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
-  SynchronizationController syncController;
+
+  SynchronizationManager syncManager;
+  syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // layer models
   LayersModel lm;
@@ -472,7 +474,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProjectManager, &ActiveProjectManager::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
-  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectChanged, &syncController, &SynchronizationController::activeProjectChanged );
+  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectChanged, &syncManager, &SynchronizationManager::activeProjectChanged );
   QObject::connect( &activeProjectManager, &ActiveProjectManager::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProjectManager, &ActiveProjectManager::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
