@@ -16,3 +16,4 @@ Other topics:
 - [Publishing](./publishing.md)
 - [Testing](./manual_test_plan.md)
 - [Secrets](./secrets.md)
+- [Code formatting](./code_formatting.md) 

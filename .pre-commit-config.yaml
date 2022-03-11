@@ -1,0 +1,17 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: check-yaml
+        types: [yaml]
+
+-   repo: local
+    hooks:
+    -   id: check-cpp
+        name: 'Check CPP formatting with astyle'
+        entry: './scripts/astyle.bash'
+        language: script
+        types_or: [c++, objective-c++]
+        files: ^(app|core|qgsquick)/
