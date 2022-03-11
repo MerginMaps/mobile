@@ -426,7 +426,7 @@ int main( int argc, char *argv[] )
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
 
-  SynchronizationManager syncManager;
+  SynchronizationManager syncManager( ma.get() );
   syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // layer models

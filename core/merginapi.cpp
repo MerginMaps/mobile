@@ -574,13 +574,13 @@ void MerginApi::uploadFinish( const QString &projectFullName, const QString &tra
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting transaction finish: " ) + transactionUUID );
 }
 
-void MerginApi::updateProject( const QString &projectNamespace, const QString &projectName, bool withoutAuth )
+void MerginApi::updateProject( const QString &projectNamespace, const QString &projectName, bool withAuth )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
 
   CoreUtils::log( "pull " + projectFullName, "### Starting ###" );
 
-  QNetworkReply *reply = getProjectInfo( projectFullName, withoutAuth );
+  QNetworkReply *reply = getProjectInfo( projectFullName, withAuth );
   if ( reply )
   {
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting project info: " ) + reply->request().url().toString() );
@@ -589,6 +589,7 @@ void MerginApi::updateProject( const QString &projectNamespace, const QString &p
     mTransactionalStatus.insert( projectFullName, TransactionStatus() );
     mTransactionalStatus[projectFullName].replyProjectInfo = reply;
     mTransactionalStatus[projectFullName].configAllowed = mSupportsSelectiveSync;
+    mTransactionalStatus[projectFullName].type = TransactionStatus::Pull;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -617,6 +618,7 @@ void MerginApi::uploadProject( const QString &projectNamespace, const QString &p
     mTransactionalStatus[projectFullName].replyUploadProjectInfo = reply;
     mTransactionalStatus[projectFullName].isInitialUpload = isInitialUpload;
     mTransactionalStatus[projectFullName].configAllowed = mSupportsSelectiveSync;
+    mTransactionalStatus[projectFullName].type = TransactionStatus::Push;
 
     emit syncProjectStatusChanged( projectFullName, 0 );
 
@@ -1047,9 +1049,9 @@ void MerginApi::onPlanProductIdChanged()
   }
 }
 
-QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withoutAuth )
+QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withAuth )
 {
-  if ( ( !withoutAuth && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
+  if ( ( withAuth && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
     return nullptr;
   }
@@ -1070,7 +1072,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1" ).arg( projectFullName ) );
   url.setQuery( query );
 
-  QNetworkRequest request = getDefaultRequest( !withoutAuth );
+  QNetworkRequest request = getDefaultRequest( withAuth );
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 

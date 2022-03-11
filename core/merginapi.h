@@ -134,6 +134,12 @@ struct UpdateTask
 
 struct TransactionStatus
 {
+  enum TransactionType
+  {
+    Push = 0,
+    Pull
+  };
+
   qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
   int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for upload. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
@@ -168,6 +174,8 @@ struct TransactionStatus
 
   bool configAllowed = false; //!< if true, seeks for mergin-config and alters synchronization process based on it
   MerginConfig config; //!< defines additional behavior of the transaction (e.g. selective sync)
+
+  TransactionType type;
 };
 
 typedef QHash<QString, TransactionStatus> Transactions;
@@ -235,9 +243,9 @@ class MerginApi: public QObject
      * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
-     * \param withoutAuth If True, a request is  without authorization (only public projects dont require auth)
+     * \param withAuth If True, request is constructed with current authorization
      */
-    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName, bool withoutAuth = false );
+    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
 
     /**
      * Sends non-blocking POST request to the server to upload changes in a project with a given name.
@@ -553,7 +561,7 @@ class MerginApi: public QObject
 
     /** Creates a request to get project details (list of project files).
      */
-    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withoutAuth = false );
+    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withAuth = true );
 
     //! Called when download/update of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectUpdate( const QString &projectFullName );
