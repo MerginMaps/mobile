@@ -187,8 +187,7 @@ ApplicationWindow {
       }
 
       Component.onCompleted: {
-        __loader.recording = map.digitizingController.recording
-        __loader.mapSettings = map.mapSettings
+        __activeProjectManager.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
         __iosUtils.compass = map.compass
         __variablesManager.compass = map.compass
@@ -221,7 +220,7 @@ ApplicationWindow {
           if ( __appSettings.autoCenterMapChecked ) {
             mainPanel.myLocationHold()
           }
-          __loader.zoomToProject( map.mapSettings )
+          __inputUtils.zoomToProject( __activeProjectManager.qgsProject, map.mapSettings )
         }
         onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
@@ -240,7 +239,7 @@ ApplicationWindow {
       height: InputStyle.rowHeight * 2
 
       onDetailsClicked: {
-        projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
+        projectIssuesPanel.projectLoadingLog = __activeProjectManager.projectLoadingLog();
         projectIssuesPanel.visible = true;
       }
     }
@@ -280,7 +279,7 @@ ApplicationWindow {
         onOpenProjectRequested: {
           __appSettings.defaultProject = projectPath
           __appSettings.activeProject = projectPath
-          __loader.load( projectPath )
+          __activeProjectManager.load( projectPath )
         }
 
         onClosed: stateManager.state = "view"
@@ -451,7 +450,7 @@ ApplicationWindow {
       width: window.width
       previewHeight: window.height / 3
 
-      project: __loader.project
+      project: __activeProjectManager.qgsProject
 
       onCreateLinkedFeatureRequested: {
         let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
@@ -551,7 +550,7 @@ ApplicationWindow {
     }
 
     Connections {
-      target: __loader
+      target: __activeProjectManager
       onLoadingStarted: {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
@@ -563,12 +562,9 @@ ApplicationWindow {
       }
 
       onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-      onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
 
       onProjectReloaded: map.clear()
-      onProjectWillBeReloaded: {
-        formsStackManager.reload()
-      }
+      onProjectWillBeReloaded: formsStackManager.reload()
     }
 
     LegacyFolderMigration {

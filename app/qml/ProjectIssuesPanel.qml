@@ -21,7 +21,7 @@ Item {
   property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
   property string projectLoadingLog: ""
-  property string headerText: ""
+  property string headerText: qsTr( "The following layers failed loading" ) + ":"
 
   function reportIssue( layerName, message ) {
     projectIssuesModel.append( { name: layerName, message: message } );

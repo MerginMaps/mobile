@@ -272,6 +272,10 @@ class InputUtils: public QObject
       */
     Q_INVOKABLE static const QUrl getThemeIcon( const QString &name );
 
+    //! returns icon for layer / feature based on its geometry
+    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
+    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
+
     /**
       * Returns url to field editor component for a feature form.
       * If the widgetName does not match any supported widget, text edit is returned.
@@ -440,6 +444,12 @@ class InputUtils: public QObject
 
     // Returns whether geometry of the feature is an actual Point feature (Used because some )
     Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );
+
+    /**
+     *  Changes visible extent of mapsettings based on settings in QGIS project.
+     */
+    Q_INVOKABLE void zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *mapSettings );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
@@ -469,6 +479,9 @@ class InputUtils: public QObject
     static QString sanitizeName( const QString &path );
 
     static double ratherZeroThanNaN( double d );
+
+    // Returns icon from QgsWkbType geometry
+    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
 
     AndroidUtils *mAndroidUtils = nullptr; // not owned
 };

@@ -86,7 +86,7 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                  __loader.setActiveMapTheme( index )
+                  __activeProjectManager.setActiveMapTheme( index )
                   mapThemePanel.close()
                 }
             }
