@@ -29,6 +29,7 @@ class AppSettings: public QObject
     Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
     Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setLegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
+    Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -75,6 +76,9 @@ class AppSettings: public QObject
     const QString &activePositionProviderId() const;
     void setActivePositionProviderId( const QString &id );
 
+    bool autosyncAllowed() const;
+    void setAutosyncAllowed( bool newAutosyncAllowed );
+
     static const QString GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
 
@@ -94,6 +98,8 @@ class AppSettings: public QObject
     void legacyFolderMigratedChanged( bool legacyFolderMigrated );
     void appVersionChanged( const QString &version );
     void activePositionProviderIdChanged( const QString & );
+
+    void autosyncAllowedChanged( bool autosyncAllowed );
 
   private:
     // Projects path
@@ -127,6 +133,7 @@ class AppSettings: public QObject
     void setValue( const QString &key, const QVariant &value );
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
+    bool mAutosyncAllowed = false;
 };
 
 #endif // APPSETTINGS_H
