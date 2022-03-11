@@ -11,7 +11,7 @@ on:
 
   release:
     types:
-      - published
+      -   published
 
 env:
   CCACHE_DIR: ~/.ccache
