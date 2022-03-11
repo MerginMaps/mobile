@@ -5,3 +5,12 @@ repos:
     rev: v3.2.0
     hooks:
     -   id: check-yaml
+
+-   repo: local
+    hooks:
+    -   id: check-cpp
+        name: 'Check CPP formatting with astyle'
+        entry: './scripts/astyle.bash'
+        language: script
+        types_or: [c++, objective-c++]
+        files: ^(app|core|qgsquick)/
