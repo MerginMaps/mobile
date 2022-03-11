@@ -10,8 +10,8 @@ on:
     - '.github/workflows/linux.yml'
 
   release:
-    types:
-      -          published
+    types
+      - published
 
 env:
   CCACHE_DIR: ~/.ccache
