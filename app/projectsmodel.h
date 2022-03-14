@@ -15,6 +15,7 @@
 
 #include "project.h"
 #include "merginapi.h"
+#include "synchronizationmanager.h"
 
 class LocalProjectsManager;
 
@@ -87,6 +88,7 @@ class ProjectsModel : public QAbstractListModel
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
     Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager )
     Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
+    Q_PROPERTY( SynchronizationManager *syncManager READ syncManager WRITE setSyncManager NOTIFY syncManagerChanged )
 
     //! Indicates that model has more projects to fetch, so view can call fetchAnotherPage
     Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
@@ -141,6 +143,10 @@ class ProjectsModel : public QAbstractListModel
 
     void setModelIsLoading( bool state );
 
+    SynchronizationManager *syncManager() const;
+
+    void setSyncManager( SynchronizationManager *newSyncManager );
+
   public slots:
     // MerginAPI - backend signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
@@ -166,6 +172,8 @@ class ProjectsModel : public QAbstractListModel
 
     void isLoadingChanged( bool isLoading );
 
+    void syncManagerChanged( SynchronizationManager * );
+
   private:
     QString modelTypeToFlag() const;
     QStringList projectNames() const;
@@ -187,6 +195,7 @@ class ProjectsModel : public QAbstractListModel
     QString mLastRequestId;
 
     bool mModelIsLoading;
+    SynchronizationManager *mSyncManager = nullptr;
 };
 
 #endif // PROJECTSMODEL_H

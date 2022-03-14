@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,19 +8,22 @@
  ***************************************************************************/
 
 #include "synchronizationmanager.h"
-#include "merginuserauth.h"
-#include "coreutils.h"
-
-#include "qdebug.h"
 
 SynchronizationManager::SynchronizationManager( MerginApi *backend, QObject *parent )
   : QObject( parent )
+  , mAutosyncController( nullptr )
   , mBackend( backend )
+{
+  QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
+  QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
+}
+
+SynchronizationManager::~SynchronizationManager()
 {
 
 }
 
-void SynchronizationManager::syncProject( const Project &project, bool isAuthOptional )
+void SynchronizationManager::syncProject( const Project &project, bool withAuth )
 {
   if ( !project.isMergin() || project.mergin->pending )
   {
@@ -29,34 +32,11 @@ void SynchronizationManager::syncProject( const Project &project, bool isAuthOpt
 
   if ( project.mergin->status == ProjectStatus::NoVersion || project.mergin->status == ProjectStatus::OutOfDate )
   {
-    bool useAuth = false;
-
-    // TODO: this entire auth condition tree should go to MerginApi - new method that is going to be called also for "listProjectsByName"
-    if ( !isAuthOptional )
-    {
-      // auth is mandatory
-      useAuth = true;
-    }
-    else
-    {
-      // we only want to include auth token when user is logged in.
-      if ( mBackend->userAuth()->hasAuthData() )
-      {
-        // his token, however, might have already expired, so let's just refresh it
-        if ( mBackend->userAuth()->tokenExpiration() < QDateTime::currentDateTimeUtc() )
-        {
-          // TODO: this needs to be a blocking call to "refresh token", not simple authorize
-          mBackend->authorize( mBackend->userAuth()->username(), mBackend->userAuth()->password() );
-        }
-        useAuth = true;
-      }
-    }
-
-    mBackend->updateProject( project.mergin->projectNamespace, project.mergin->projectName, useAuth );
+    mBackend->pullProject( project.mergin->projectNamespace, project.mergin->projectName, withAuth );
   }
   else if ( project.mergin->status == ProjectStatus::Modified )
   {
-    mBackend->uploadProject( project.mergin->projectNamespace, project.mergin->projectName );
+    mBackend->pushProject( project.mergin->projectNamespace, project.mergin->projectName );
   }
 }
 
@@ -67,74 +47,43 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
   if ( t.contains( projectFullname ) )
   {
     TransactionStatus transaction = t.value( projectFullname );
+
     if ( transaction.type == TransactionStatus::Pull )
     {
-      mBackend->updateCancel( projectFullname );
+      mBackend->cancelPull( projectFullname );
     }
     else
     {
-      mBackend->uploadCancel( projectFullname );
+      mBackend->cancelPush( projectFullname );
     }
   }
 }
 
-bool SynchronizationManager::autosyncAllowed()
+bool SynchronizationManager::autosyncAllowed() const
 {
   return mAutosyncAllowed;
 }
 
 void SynchronizationManager::setAutosyncAllowed( bool allowed )
 {
-  if ( mAutosyncAllowed != allowed )
-  {
-    mAutosyncAllowed = allowed;
-    emit autosyncAllowedChanged( allowed );
-  }
-}
+  if ( mAutosyncAllowed == allowed )
+    return;
 
-void SynchronizationManager::activeProjectChanged( LocalProject activeProject )
-{
-  mActiveProject.local.reset( activeProject.clone() );
-  mActiveProject.mergin.reset();
+  mAutosyncAllowed = allowed;
 
   if ( mAutosyncAllowed )
   {
-    if ( activeProject.localVersion < 0 )
-    {
-      // not a mergin project
-      return;
-    }
-
-    if ( !mBackend )
-    {
-      CoreUtils::log( QStringLiteral( "Synchronization Manager" ), QStringLiteral( "Manager does not have a valid MerginAPI reference" ) );
-      return;
-    }
-
-    // acquire server information about an active project
-    QString projectname = MerginApi::getFullProjectName( activeProject.projectNamespace, activeProject.projectName );
-
-    QObject::connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &SynchronizationManager::receivedServerInfo, Qt::UniqueConnection );
-
-    mBackend->listProjectsByName( QStringList() << projectname );
+    // In future, instantiate AutosyncController
   }
+  else
+  {
+    // In future, delete AutosyncController
+  }
+
+  emit autosyncAllowedChanged( allowed );
 }
 
-void SynchronizationManager::receivedServerInfo( const MerginProjectsList &merginProjects, Transactions, QString requestId )
+AutosyncController *SynchronizationManager::autosyncController() const
 {
-  // find active project in merginProjects
-  MerginProject finder;
-  finder.projectName = mActiveProject.projectName();
-  finder.projectNamespace = mActiveProject.projectNamespace();
-
-  qDebug() << "Got an answer" << requestId;
-  if ( merginProjects.contains( finder ) )
-  {
-    MerginProject activeProjectData = merginProjects.at( merginProjects.indexOf( finder ) );
-    mActiveProject.mergin.reset( activeProjectData.clone() );
-
-    qDebug() << QStringLiteral( "Acquired data for project" ) << mActiveProject.mergin->projectName;
-
-    syncProject( mActiveProject );
-  }
+  return mAutosyncController.get();
 }

@@ -19,11 +19,11 @@ ProjectsModel::ProjectsModel( QObject *parent ) : QAbstractListModel( parent )
 
 void ProjectsModel::initializeProjectsModel()
 {
-  if ( !mBackend || !mLocalProjectsManager || mModelType == EmptyProjectsModel ) // Model is not set up properly yet
+  if ( !mSyncManager || !mBackend || !mLocalProjectsManager || mModelType == EmptyProjectsModel ) // Model is not set up properly yet
     return;
 
-  QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &ProjectsModel::onProjectSyncProgressChanged );
-  QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &ProjectsModel::onProjectSyncFinished );
+  QObject::connect( mSyncManager, &SynchronizationManager::syncProjectStatusChanged, this, &ProjectsModel::onProjectSyncProgressChanged );
+  QObject::connect( mSyncManager, &SynchronizationManager::syncProjectFinished, this, &ProjectsModel::onProjectSyncFinished );
   QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
   QObject::connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
   QObject::connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
@@ -262,7 +262,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
           project->mergin->pending = true;
           pendingProjects.remove( project->mergin->id() );
         }
-        project->mergin->status = ProjectStatus::projectStatus( project );
+        project->mergin->status = ProjectStatus::projectStatus( project.get() );
       }
       else if ( project->local->localVersion > -1 )
       {
@@ -270,7 +270,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
         project->mergin = std::unique_ptr<MerginProject>( new MerginProject() );
         project->mergin->projectName = project->local->projectName;
         project->mergin->projectNamespace = project->local->projectNamespace;
-        project->mergin->status = ProjectStatus::projectStatus( project );
+        project->mergin->status = ProjectStatus::projectStatus( project.get() );
       }
 
       mProjects << project;
@@ -288,7 +288,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
       MerginApi::extractProjectName( i.key(), project->mergin->projectNamespace, project->mergin->projectName );
       project->mergin->progress = i.value().totalSize != 0 ? i.value().transferedSize / i.value().totalSize : 0;
       project->mergin->pending = true;
-      project->mergin->status = ProjectStatus::projectStatus( project );
+      project->mergin->status = ProjectStatus::projectStatus( project.get() );
 
       mProjects << project;
       ++i;
@@ -318,7 +318,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
       {
         project->local = std::unique_ptr<LocalProject>( res->clone() );
       }
-      project->mergin->status = ProjectStatus::projectStatus( project );
+      project->mergin->status = ProjectStatus::projectStatus( project.get() );
 
       mProjects << project;
     }
@@ -329,38 +329,24 @@ void ProjectsModel::syncProject( const QString &projectId )
 {
   std::shared_ptr<Project> project = projectFromId( projectId );
 
-  if ( project == nullptr || !project->isMergin() || project->mergin->pending )
+  if ( mSyncManager )
   {
-    return;
-  }
-
-  if ( project->mergin->status == ProjectStatus::NoVersion || project->mergin->status == ProjectStatus::OutOfDate )
-  {
-    bool useAuth = !mBackend->userAuth()->hasAuthData() && mModelType == ProjectModelTypes::PublicProjectsModel;
-    mBackend->updateProject( project->mergin->projectNamespace, project->mergin->projectName, useAuth );
-  }
-  else if ( project->mergin->status == ProjectStatus::Modified )
-  {
-    mBackend->uploadProject( project->mergin->projectNamespace, project->mergin->projectName );
+    if ( mModelType == ProjectModelTypes::PublicProjectsModel )
+    {
+      mSyncManager->syncProject( *project, false ); // does not need to be authorized
+    }
+    else
+    {
+      mSyncManager->syncProject( *project ); // requires auth
+    }
   }
 }
 
 void ProjectsModel::stopProjectSync( const QString &projectId )
 {
-  std::shared_ptr<Project> project = projectFromId( projectId );
-
-  if ( project == nullptr || !project->isMergin() || !project->mergin->pending )
+  if ( mSyncManager )
   {
-    return;
-  }
-
-  if ( project->mergin->status == ProjectStatus::NoVersion || project->mergin->status == ProjectStatus::OutOfDate )
-  {
-    mBackend->cancelPull( project->mergin->id() );
-  }
-  else if ( project->mergin->status == ProjectStatus::Modified )
-  {
-    mBackend->cancelPush( project->mergin->id() );
+    mSyncManager->stopProjectSync( projectId );
   }
 }
 
@@ -391,7 +377,7 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectDir, const QStr
     project->mergin->pending = false;
     project->mergin->progress = 0;
     project->mergin->serverVersion = newVersion;
-    project->mergin->status = ProjectStatus::projectStatus( project );
+    project->mergin->status = ProjectStatus::projectStatus( project.get() );
 
     QModelIndex ix = index( mProjects.indexOf( project ) );
     emit dataChanged( ix, ix );
@@ -429,7 +415,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &project )
     // add local information ~ project downloaded
     proj->local = std::unique_ptr<LocalProject>( project.clone() );
     if ( proj->isMergin() )
-      proj->mergin->status = ProjectStatus::projectStatus( proj );
+      proj->mergin->status = ProjectStatus::projectStatus( proj.get() );
 
     QModelIndex ix = index( mProjects.indexOf( proj ) );
     emit dataChanged( ix, ix );
@@ -468,7 +454,7 @@ void ProjectsModel::onAboutToRemoveProject( const LocalProject project )
       proj->local.reset();
 
       if ( proj->isMergin() )
-        proj->mergin->status = ProjectStatus::projectStatus( proj );
+        proj->mergin->status = ProjectStatus::projectStatus( proj.get() );
 
       QModelIndex ix = index( mProjects.indexOf( proj ) );
       emit dataChanged( ix, ix );
@@ -484,7 +470,7 @@ void ProjectsModel::onProjectDataChanged( const LocalProject &project )
   {
     proj->local = std::unique_ptr<LocalProject>( project.clone() );
     if ( proj->isMergin() )
-      proj->mergin->status = ProjectStatus::projectStatus( proj );
+      proj->mergin->status = ProjectStatus::projectStatus( proj.get() );
 
     QModelIndex editIndex = index( mProjects.indexOf( proj ) );
 
@@ -634,4 +620,19 @@ void ProjectsModel::setModelIsLoading( bool state )
 ProjectsModel::ProjectModelTypes ProjectsModel::modelType() const
 {
   return mModelType;
+}
+
+SynchronizationManager *ProjectsModel::syncManager() const
+{
+  return mSyncManager;
+}
+
+void ProjectsModel::setSyncManager( SynchronizationManager *newSyncManager )
+{
+  if ( mSyncManager == newSyncManager )
+    return;
+  mSyncManager = newSyncManager;
+  emit syncManagerChanged( mSyncManager );
+
+  initializeProjectsModel();
 }

@@ -99,7 +99,7 @@ ApplicationWindow {
       if ( __appSettings.defaultProject ) {
         let path = __appSettings.defaultProject
 
-        if ( __localProjectsManager.projectIsValid( path ) && __loader.load( path ) ) {
+        if ( __localProjectsManager.projectIsValid( path ) && __activeProjectManager.load( path ) ) {
           projectPanel.activeProjectPath = path
           projectPanel.activeProjectId = __localProjectsManager.projectId( path )
           __appSettings.activeProject = path

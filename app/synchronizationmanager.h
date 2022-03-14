@@ -11,10 +11,9 @@
 #define SYNCHRONIZATIONMANAGER_H
 
 #include <QObject>
-#include <qglobal.h>
 
-#include "project.h"
 #include "merginapi.h"
+#include "autosynccontroller.h"
 
 class SynchronizationManager : public QObject
 {
@@ -22,36 +21,48 @@ class SynchronizationManager : public QObject
 
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
 
+    Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
+
   public:
+
     explicit SynchronizationManager( MerginApi *backend, QObject *parent = nullptr );
+
+    virtual ~SynchronizationManager();
 
     /**
      * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
+     *
      * \param project Project struct instance
-     * \param isAuthOptional Signalizes that auth should be used only when user is logged in, of not, send request anyways, but without auth data.
-     *        This is helpful for getting status of projects in home ~ some are public, some are not.
-     *        If auth is not optional, it is mandatory.
+     * \param withAut Bears an information whether authorization should be included in sync requests.
+     *                Authorization can be omitted for pull of public projects
      */
-    Q_INVOKABLE void syncProject( const Project &project, bool isAuthOptional = false );
+    Q_INVOKABLE void syncProject( const Project &project, bool withAuth = true );
 
     //! Stops a running sync process if there is one for project specified by projectFullname
     Q_INVOKABLE void stopProjectSync( const QString &projectFullname );
 
-    bool autosyncAllowed();
+    bool autosyncAllowed() const;
+
     void setAutosyncAllowed( bool );
 
+    AutosyncController *autosyncController() const;
+
   signals:
+
+    void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
+
+    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
+
     void autosyncAllowedChanged( bool autosyncAllowed );
 
-  public slots:
-    void activeProjectChanged( LocalProject activeProject );
-    void receivedServerInfo( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+    void autosyncControllerChanged( AutosyncController *controller );
 
   private:
     bool mAutosyncAllowed = false;
-    Project mActiveProject;
+    std::unique_ptr<AutosyncController> mAutosyncController;
 
     MerginApi *mBackend = nullptr;
+    QString mLastRequestId;
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H
