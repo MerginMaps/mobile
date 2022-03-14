@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,12 +36,12 @@ class Purchasing;
 
 struct ProjectDiff
 {
-  // changes that should be pushed (uploaded)
+  // changes that should be pushed
   QSet<QString> localAdded;
   QSet<QString> localUpdated;
   QSet<QString> localDeleted;
 
-  // changes that should be pulled (downloaded)
+  // changes that should be pulled
   QSet<QString> remoteAdded;
   QSet<QString> remoteUpdated;
   QSet<QString> remoteDeleted;
@@ -93,7 +93,7 @@ struct ProjectDiff
 
 
 /**
- * A unit of download that should be downloaded during project update (pull).
+ * A unit of download that should be downloaded during project pull.
  * This is either a chunk of a full file or it is a single diff between two versions.
  */
 struct DownloadQueueItem
@@ -111,10 +111,10 @@ struct DownloadQueueItem
 
 
 /**
- * Entry for each file that will be updated. At the end of a successful download of new data,
+ * Entry for each file that will be updated. At the end of a successful pull of new data,
  * all the tasks are executed.
  */
-struct UpdateTask
+struct PullTask
 {
   enum Method
   {
@@ -124,7 +124,7 @@ struct UpdateTask
     Delete,         //!< remove files that have been removed from the server
   };
 
-  UpdateTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
+  PullTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
     : method( m ), filePath( fp ), data( d ) {}
 
   Method method;                  //!< what to do with the file
@@ -140,33 +140,33 @@ struct TransactionStatus
     Pull
   };
 
-  qreal totalSize = 0;     //!< total size (in bytes) of files to be uploaded or downloaded
+  qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
   int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
-  QString transactionUUID; //!< only for upload. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
+  QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
 
-  // download replies
-  QPointer<QNetworkReply> replyProjectInfo;
-  QPointer<QNetworkReply> replyDownloadItem;
+  // pull replies
+  QPointer<QNetworkReply> replyPullProjectInfo;
+  QPointer<QNetworkReply> replyPullItem;
 
-  // upload replies
-  QPointer<QNetworkReply> replyUploadProjectInfo;
-  QPointer<QNetworkReply> replyUploadStart;
-  QPointer<QNetworkReply> replyUploadFile;
-  QPointer<QNetworkReply> replyUploadFinish;
+  // push replies
+  QPointer<QNetworkReply> replyPushProjectInfo;
+  QPointer<QNetworkReply> replyPushStart;
+  QPointer<QNetworkReply> replyPushFile;
+  QPointer<QNetworkReply> replyPushFinish;
 
-  // download-related data
+  // pull-related data
   QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
-  QList<UpdateTask> updateTasks;  //!< tasks to do at the end of update (pull) when everything has been downloaded
+  QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
 
-  // upload-related data
-  QList<MerginFile> uploadQueue; //!< pending list of files to upload (at the end of transaction it is empty)
-  QList<MerginFile> uploadDiffFiles;  //!< these are just diff files for upload - we don't remove them when uploading chunks (needed for finalization)
+  // push-related data
+  QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
+  QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
-  bool updateBeforeUpload = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
-  bool isInitialUpload = false; //! true when we are first time uploading the project - migration to Mergin
+  bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
+  bool isInitialPush = false; //! true when we are first time uploading the project - migration to Mergin
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -236,44 +236,42 @@ class MerginApi: public QObject
     Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
-     * Sends non-blocking POST request to the server to download/update a project with a given name. On downloadProjectReplyFinished,
+     * Sends non-blocking POST request to the server to pull (download) a project with a given name. On pullProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
+     * files are removed. Emits syncProjectFinished at the end.
      * If update has been successful, updates metadata file of the project.
-     * Emits also notify signal with a message for the GUI.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
      * \param withAuth If True, request is constructed with current authorization
      */
-    Q_INVOKABLE void updateProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
+    Q_INVOKABLE void pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
 
     /**
-     * Sends non-blocking POST request to the server to upload changes in a project with a given name.
-     * Firstly updateProject is triggered to fetch new changes. If it was successful, sends update post request with list of local changes
-     * and modified/newly added files in JSON. Eventually emits syncProjectFinished on which ProjectModel updates status of the project item.
-     * Emits also notify signal with a message for the GUI.
+     * Sends non-blocking POST request to the server to push changes in a project with a given name.
+     * At the begining it checks if there are any changes on server and pulls them if so.
+     * If the pull was successful, it sends post request with list of local changes and modified/newly added files in JSON.
+     * Emits syncProjectFinished at the end.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName Project's name used in request.
-     * \param isInitialUpload indicates if this is first upload of the project (project creation)
+     * \param isInitialPush indicates if this is first push of the project (project creation)
      */
-    Q_INVOKABLE void uploadProject( const QString &projectNamespace, const QString &projectName, bool isInitialUpload = false );
+    Q_INVOKABLE void pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
 
     /**
-     * Sends non-blocking POST request to the server to cancel uploading of a project with a given name.
-     * If upload has not started yet and a client is waiting for transaction UUID, it cancels the procedure just on client side
+     * Sends non-blocking POST request to the server to cancel a running push of a project with a given name.
+     * If push has not started yet and a client is waiting for transaction UUID, it cancels the procedure just on client side
      * without sending cancel request to the server.
-     * \param projectFullName Project's full name to cancel its upload
-     * \note uploadCanceled() signal is emitted when the reply to the cancel request is received
+     * \param projectFullName Project's full name to cancel its 4
+     * \note pushCanceled() signal is emitted when the reply to the cancel request is received
      */
-    Q_INVOKABLE void uploadCancel( const QString &projectFullName );
+    Q_INVOKABLE void cancelPush( const QString &projectFullName );
 
     /**
-     * To cancel update (1) either before downloading data started - all data related to the download are cleaned;
-     * or (2) either when data transfer has begun - connections are aborted followed by calling function once again
-     * to clean related data as in the case 1.;
-     * \param projectFullName Project's full name to cancel its update
+     * Cancels pull either (1) before project data download starts or
+     * (2) when data transfer has begun - connections are aborted.
+     * \param projectFullName Project's full name to cancel
      */
-    Q_INVOKABLE void updateCancel( const QString &projectFullName );
+    Q_INVOKABLE void cancelPull( const QString &projectFullName );
 
     /**
     * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
@@ -403,7 +401,7 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
-    //! Returns details about currently active transactions (both download and upload). Useful for tests
+    //! Returns details about currently active transactions (both push and pull). Useful for tests
     Transactions transactions() const { return mTransactionalStatus; }
 
     static bool isInIgnore( const QFileInfo &info );
@@ -445,7 +443,7 @@ class MerginApi: public QObject
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
-     * Normally progress is in interval [0, 1] as data get uploaded or downloaded.
+     * Normally progress is in interval [0, 1] as data get pushed or pulled.
      * With no pending sync, progress is set to -1
      */
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
@@ -467,10 +465,8 @@ class MerginApi: public QObject
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
-    //! Emitted when started to upload chunks (useful for unit testing)
     void pushFilesStarted();
-    //! Emitted when upload cancellation request has finished
-    void uploadCanceled( const QString &projectFullName, bool result );
+    void pushCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
     void projectAttachedToMergin( const QString &projectFullName );
@@ -480,16 +476,16 @@ class MerginApi: public QObject
     void listProjectsByNameReplyFinished( QString requestId );
 
     // Pull slots
-    void updateInfoReplyFinished();
+    void pullInfoReplyFinished();
     void downloadItemReplyFinished();
     void cacheServerConfig();
 
     // Push slots
-    void uploadStartReplyFinished();
-    void uploadInfoReplyFinished();
-    void uploadFileReplyFinished();
-    void uploadFinishReplyFinished();
-    void uploadCancelReplyFinished();
+    void pushStartReplyFinished();
+    void pushInfoReplyFinished();
+    void pushFileReplyFinished();
+    void pushFinishReplyFinished();
+    void pushCancelReplyFinished();
 
     void getUserInfoFinished();
     void getSubscriptionInfoFinished();
@@ -517,7 +513,7 @@ class MerginApi: public QObject
      * \param projectFullName Namespace/name
      * \param json project info containing metadata for upload
      */
-    void uploadStart( const QString &projectFullName, const QByteArray &json );
+    void pushStart( const QString &projectFullName, const QByteArray &json );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
@@ -526,16 +522,16 @@ class MerginApi: public QObject
      * \param file Mergin file to upload
      * \param chunkNo Chunk number of given file to be uploaded
      */
-    void uploadFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
+    void pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
 
     /**
-     * Closing request after successful upload.
+     * Closing request after successful push.
      * \param projectFullName Namespace/name
      * \param transactionUUID transaction UUID to match upload process on the server
      */
-    void uploadFinish( const QString &projectFullName, const QString &transactionUUID );
+    void pushFinish( const QString &projectFullName, const QString &transactionUUID );
 
-    void sendUploadCancelRequest( const QString &projectFullName, const QString &transactionUUID );
+    void sendPushCancelRequest( const QString &projectFullName, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
@@ -563,20 +559,20 @@ class MerginApi: public QObject
      */
     QNetworkReply *getProjectInfo( const QString &projectFullName, bool withAuth = true );
 
-    //! Called when download/update of project data has finished to finalize things and emit sync finished signal
-    void finalizeProjectUpdate( const QString &projectFullName );
+    //! Called when pull of project data has finished to finalize things and emit sync finished signal
+    void finalizeProjectPull( const QString &projectFullName );
 
-    void finalizeProjectUpdateCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
-    void finalizeProjectUpdateApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+    void finalizeProjectPullCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+    void finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
 
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
     void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
 
-    void prepareProjectUpdate( const QString &projectFullName, const QByteArray &data );
+    void prepareProjectPull( const QString &projectFullName, const QByteArray &data );
 
-    void startProjectUpdate( const QString &projectFullName );
+    void startProjectPull( const QString &projectFullName );
 
-    //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project update
+    //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project pull
     void prepareDownloadConfig( const QString &projectFullName, bool downloaded = false );
     void requestServerConfig( const QString &projectFullName );
 

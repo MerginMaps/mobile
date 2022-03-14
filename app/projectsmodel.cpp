@@ -356,11 +356,11 @@ void ProjectsModel::stopProjectSync( const QString &projectId )
 
   if ( project->mergin->status == ProjectStatus::NoVersion || project->mergin->status == ProjectStatus::OutOfDate )
   {
-    mBackend->updateCancel( project->mergin->id() );
+    mBackend->cancelPull( project->mergin->id() );
   }
   else if ( project->mergin->status == ProjectStatus::Modified )
   {
-    mBackend->uploadCancel( project->mergin->id() );
+    mBackend->cancelPush( project->mergin->id() );
   }
 }
 
