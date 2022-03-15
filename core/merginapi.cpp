@@ -2732,7 +2732,7 @@ void MerginApi::refreshAuthToken()
   if ( !mUserAuth->hasAuthData() ||
        mUserAuth->authToken().isEmpty() )
   {
-    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, insufficient credentials" ) );
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
     return;
   }
 
