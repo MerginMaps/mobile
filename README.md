@@ -70,7 +70,7 @@ See [GIS Stack Exchange](https://gis.stackexchange.com/questions/tagged/inputapp
 
 ## Developers
 
-For more information on building Input please have a look in [developer documentation](docs/developers/index.md).
+For more information on building Input please have a look in [developer documentation](docs/developers/README.md).
 
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)
