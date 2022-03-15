@@ -69,6 +69,7 @@ Item {
 
         merginApi: __merginApi
         localProjectsManager: __localProjectsManager
+        syncManager: __syncManager
         modelType: root.projectModelType
       }
     }

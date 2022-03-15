@@ -7,23 +7,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SYNCHRONIZATIONCONTROLLER_H
-#define SYNCHRONIZATIONCONTROLLER_H
+#include "autosynccontroller.h"
 
-#include <QObject>
-#include <qglobal.h>
-
-#include <project.h>
-
-class SynchronizationController : public QObject
+AutosyncController::AutosyncController( QObject *parent ) : QObject( parent )
 {
-    Q_OBJECT
-  public:
-    explicit SynchronizationController( QObject *parent = nullptr );
+  // raise NotImplemented :)
+}
 
-  public slots:
-    void activeProjectChanged( LocalProject activeProject );
+AutosyncController::~AutosyncController()
+{
+  // raise NotImplemented :)
+}
 
-};
+AutosyncController::SyncStatus AutosyncController::syncStatus()
+{
+  return mSyncStatus;
+}
 
-#endif // SYNCHRONIZATIONCONTROLLER_H
+void AutosyncController::setActiveProject( Project )
+{
+  // raise NotImplemented :)
+}
+
+void AutosyncController::setActiveQgsProject( QgsProject * )
+{
+  // raise NotImplemented :)
+}
+
+void AutosyncController::handleSyncFinished()
+{
+  // raise NotImplemented :)
+}

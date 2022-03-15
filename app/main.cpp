@@ -96,7 +96,7 @@
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
 #include "position/abstractpositionprovider.h"
-#include "synchronizationcontroller.h"
+#include "synchronizationmanager.h"
 
 
 #ifndef NDEBUG
@@ -230,6 +230,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<ActiveProjectManager>( "lc", 1, 0, "ActiveProjectManager", "" );
+  qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -425,7 +426,9 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
-  SynchronizationController syncController;
+
+  SynchronizationManager syncManager( ma.get() );
+  syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // layer models
   LayersModel lm;
@@ -472,7 +475,6 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProjectManager, &ActiveProjectManager::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
-  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectChanged, &syncController, &SynchronizationController::activeProjectChanged );
   QObject::connect( &activeProjectManager, &ActiveProjectManager::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProjectManager, &ActiveProjectManager::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
@@ -528,6 +530,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProjectManager", &activeProjectManager );
+  engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );

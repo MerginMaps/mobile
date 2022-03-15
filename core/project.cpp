@@ -51,7 +51,7 @@ MerginProject *MerginProject::clone() const
   return me;
 }
 
-ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Project> project )
+ProjectStatus::Status ProjectStatus::projectStatus( Project *project )
 {
   if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus::NoVersion;

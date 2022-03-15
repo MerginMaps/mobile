@@ -31,7 +31,7 @@ namespace ProjectStatus
   Q_ENUM_NS( Status )
 
   //! Returns project state from ProjectStatus::Status enum for the project
-  Status projectStatus( const std::shared_ptr<Project> project );
+  Status projectStatus( Project *project );
 }
 
 /**

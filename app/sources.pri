@@ -16,10 +16,12 @@ position/positionkit.cpp \
 position/positionprovidersmodel.cpp \
 position/simulatedpositionprovider.cpp \
 activeprojectmanager.cpp \
+autosynccontroller.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
+synchronizationmanager.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -46,8 +48,7 @@ compass.cpp \
 featuresmodel.cpp \
 relationfeaturesmodel.cpp \
 relationreferencefeaturesmodel.cpp \
-valuerelationfeaturesmodel.cpp \
-synchronizationcontroller.cpp
+valuerelationfeaturesmodel.cpp
 
 HEADERS += \
 attributes/attributecontroller.h \
@@ -67,10 +68,12 @@ position/positionkit.h \
 position/positionprovidersmodel.h \
 position/simulatedpositionprovider.h \
 activeprojectmanager.h \
+autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
 identifykit.h \
 scalebarkit.h \
+synchronizationmanager.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
@@ -96,8 +99,7 @@ compass.h \
 featuresmodel.h \
 relationfeaturesmodel.h \
 relationreferencefeaturesmodel.h \
-valuerelationfeaturesmodel.h \
-synchronizationcontroller.h
+valuerelationfeaturesmodel.h
 
 contains(DEFINES, HAVE_BLUETOOTH) {
   message("Building with bluetooth position provider")

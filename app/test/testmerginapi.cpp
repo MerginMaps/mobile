@@ -194,7 +194,7 @@ void TestMerginApi::testDownloadProject()
 
   // try to download the project
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
-  mApi->updateProject( projectNamespace, projectName );
+  mApi->pullProject( projectNamespace, projectName );
   QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
   QCOMPARE( spy.count(), 1 );
@@ -256,7 +256,7 @@ void TestMerginApi::testDownloadProjectSpecChars()
 
   // Upload data
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
-  mApi->uploadProject( projectNamespace, projectName );
+  mApi->pushProject( projectNamespace, projectName );
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
   QList<QVariant> arguments = spy2.takeFirst();
@@ -287,7 +287,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
 
   // Upload data
   QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
-  api->uploadProject( projectNamespace, projectName );
+  api->pushProject( projectNamespace, projectName );
   QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy3.count(), 1 );
   QList<QVariant> arguments = spy3.takeFirst();
@@ -319,9 +319,9 @@ void TestMerginApi::testCancelDownloadProject()
 
   // Test download and cancel before transaction actually starts
   QSignalSpy spy5( mApi, &MerginApi::syncProjectFinished );
-  mApi->updateProject( mUsername, projectName );
+  mApi->pullProject( mUsername, projectName );
   QCOMPARE( mApi->transactions().count(), 1 );
-  mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
+  mApi->cancelPull( MerginApi::getFullProjectName( mUsername, projectName ) );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy5.count(), 1 );
@@ -335,12 +335,12 @@ void TestMerginApi::testCancelDownloadProject()
 
   // Test download and cancel after transcation starts
   QSignalSpy spy6( mApi, &MerginApi::pullFilesStarted );
-  mApi->updateProject( mUsername, projectName );
+  mApi->pullProject( mUsername, projectName );
   QVERIFY( spy6.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy6.count(), 1 );
 
   QSignalSpy spy7( mApi, &MerginApi::syncProjectFinished );
-  mApi->updateCancel( MerginApi::getFullProjectName( mUsername, projectName ) );
+  mApi->cancelPull( MerginApi::getFullProjectName( mUsername, projectName ) );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy7.count(), 1 );
@@ -474,8 +474,8 @@ void TestMerginApi::testUploadProject()
   //
 
   QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
-  mApi->uploadProject( projectNamespace, projectName );
-  mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  mApi->pushProject( projectNamespace, projectName );
+  mApi->cancelPush( MerginApi::getFullProjectName( projectNamespace, projectName ) );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy.count(), 1 );
@@ -494,12 +494,12 @@ void TestMerginApi::testUploadProject()
 
   QSignalSpy spyX( mApi, &MerginApi::syncProjectFinished );
   QSignalSpy spyY( mApi, &MerginApi::pushFilesStarted );
-  mApi->uploadProject( projectNamespace, projectName );
+  mApi->pushProject( projectNamespace, projectName );
   QVERIFY( spyY.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyY.count(), 1 );
 
-  QSignalSpy spyCancel( mApi, &MerginApi::uploadCanceled );
-  mApi->uploadCancel( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  QSignalSpy spyCancel( mApi, &MerginApi::pushCanceled );
+  mApi->cancelPush( MerginApi::getFullProjectName( projectNamespace, projectName ) );
   QVERIFY( spyCancel.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyCancel.count(), 1 );
 
@@ -524,7 +524,7 @@ void TestMerginApi::testUploadProject()
   // try to upload - and let the upload finish successfully
   //
 
-  mApi->uploadProject( projectNamespace, projectName );
+  mApi->pushProject( projectNamespace, projectName );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
@@ -2449,7 +2449,7 @@ void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projec
 void TestMerginApi::downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion )
 {
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
-  api->updateProject( projectNamespace, projectName );
+  api->pullProject( projectNamespace, projectName );
   QCOMPARE( api->transactions().count(), 1 );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
   serverVersion = serverVersionFromSpy( spy );
@@ -2463,7 +2463,7 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 
 void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion )
 {
-  api->uploadProject( projectNamespace, projectName );
+  api->pushProject( projectNamespace, projectName );
   QSignalSpy spy( api, &MerginApi::syncProjectFinished );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY * 30 ) );
   QCOMPARE( spy.count(), 1 );
