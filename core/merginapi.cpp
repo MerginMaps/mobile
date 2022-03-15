@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -127,8 +127,10 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
     return QLatin1String();
   }
 
-  // Authentification is optional in this case, as there might be public projects without the need to be logged in
-  validateAuthAndContinute();
+  // Authentification is optional in this case, as there might be public projects without the need to be logged in.
+  // We only want to include auth token when user is logged in.
+  // User's token, however, might have already expired, so let's just refresh it.
+  refreshAuthToken();
 
   // construct JSON body
   QJsonDocument body;
@@ -2727,6 +2729,22 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
   return result;
 }
 
+void MerginApi::refreshAuthToken()
+{
+  if ( !mUserAuth->hasAuthData() ||
+       mUserAuth->authToken().isEmpty() )
+  {
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, insufficient credentials" ) );
+    return;
+  }
+
+  if ( mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
+  {
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired, requesting new one" ) );
+    authorize( mUserAuth->username(), mUserAuth->password() );
+    mAuthLoopEvent.exec();
+  }
+}
 
 QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
 {
