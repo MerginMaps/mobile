@@ -578,6 +578,10 @@ class MerginApi: public QObject
     //! Removes temp folder for project
     void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName );
 
+    //! Refreshes auth token if it is expired. It does a blocking call to authorize.
+    //! Works only when login, password and token is set in UserAuth
+    void refreshAuthToken();
+
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
