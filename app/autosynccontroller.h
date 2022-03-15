@@ -13,9 +13,10 @@
 #include <QObject>
 #include <QTimer>
 
-#include "qgsproject.h"
-
 #include "project.h"
+#include "merginapi.h"
+
+class QgsProject;
 
 class AutosyncController : public QObject
 {
@@ -29,20 +30,17 @@ class AutosyncController : public QObject
     {
       Synced = 0,
       SyncInProgress,
-      PendingChanges,
-      SyncKeepsFailing
+      PendingChanges, // awaits sync
+      SyncKeepsFailing,
+      NotAMerginProject
     };
-    Q_ENUMS( SyncStatus )
+    Q_ENUM( SyncStatus )
 
-    explicit AutosyncController( QObject *parent = nullptr );
+    explicit AutosyncController( LocalProject openedProject, QgsProject *openedQgsProject, MerginApi *backend, QObject *parent = nullptr );
 
     virtual ~AutosyncController();
 
     SyncStatus syncStatus();
-
-    void setActiveProject( Project project );
-
-    void setActiveQgsProject( QgsProject *qgsProject );
 
   signals:
 
@@ -52,16 +50,24 @@ class AutosyncController : public QObject
 
   public slots:
 
-    void handleSyncFinished();
+    void synchronizationProgressed( const QString &projectFullName, qreal progress );
+
+    void synchronizationFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
+
+    void receivedServerInfo( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+
+    void handleLocalChange();
 
   private:
+    void setSyncStatus( SyncStatus status );
 
     SyncStatus mSyncStatus = Synced;
 
-    Project *mActiveProject = nullptr;
+    std::unique_ptr<Project> mActiveProject; // owned
+    QgsProject *mActiveQgsProject = nullptr; // not owned
+    MerginApi *mBackend = nullptr; // not owned
 
-    QgsProject *mActiveQgsProject = nullptr;
-
+    QString mLastRequestId;
     QTimer mTimer;
 };
 

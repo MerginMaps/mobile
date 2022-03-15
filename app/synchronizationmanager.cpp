@@ -8,13 +8,34 @@
  ***************************************************************************/
 
 #include "synchronizationmanager.h"
+#include "activeprojectmanager.h"
 
-SynchronizationManager::SynchronizationManager( MerginApi *backend, QObject *parent )
+SynchronizationManager::SynchronizationManager(
+  MerginApi *backend,
+  ActiveProjectManager *activeProjectManager,
+  QObject *parent
+)
   : QObject( parent )
   , mBackend( backend )
+  , mActiveProjectManager( activeProjectManager )
 {
-  QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
-  QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
+  if ( mBackend )
+  {
+    QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
+    QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
+  }
+
+  QObject::connect( this, &SynchronizationManager::autosyncAllowedChanged, this, [this]( bool allowed )
+  {
+    if ( allowed )
+    {
+      this->setupAutosync();
+    }
+    else
+    {
+      this->clearAutosync();
+    }
+  } );
 }
 
 SynchronizationManager::~SynchronizationManager() = default;
@@ -67,19 +88,91 @@ void SynchronizationManager::setAutosyncAllowed( bool allowed )
 
   mAutosyncAllowed = allowed;
 
-  if ( mAutosyncAllowed )
-  {
-    // In future, instantiate AutosyncController
-  }
-  else
-  {
-    // In future, delete AutosyncController
-  }
-
   emit autosyncAllowedChanged( allowed );
 }
 
 AutosyncController *SynchronizationManager::autosyncController() const
 {
   return mAutosyncController.get();
+}
+
+void SynchronizationManager::setupAutosync()
+{
+  if ( mAutosyncAllowed )
+  {
+    if ( mActiveProjectManager )
+    {
+      // When project is going to be changed - destroy autosync controller
+      QObject::connect(
+        mActiveProjectManager,
+        &ActiveProjectManager::projectWillBeReloaded,
+        this,
+        &SynchronizationManager::clearAutosyncController
+      );
+
+      // After new project is loaded - instantiate new autosync controller
+      QObject::connect(
+        mActiveProjectManager,
+        &ActiveProjectManager::projectReloaded,
+        this,
+        &SynchronizationManager::setupAutosyncController
+      );
+
+      // Let's start the autosync right now if there is already a loaded project
+      if ( !mActiveProjectManager->qgsProject()->homePath().isEmpty() )
+      {
+        setupAutosyncController();
+      }
+    }
+  }
+}
+
+void SynchronizationManager::clearAutosync()
+{
+  if ( !mAutosyncAllowed )
+  {
+    if ( mActiveProjectManager )
+    {
+      QObject::disconnect( mActiveProjectManager );
+    }
+  }
+}
+
+void SynchronizationManager::setupAutosyncController()
+{
+  if ( !mAutosyncAllowed || !mBackend || !mActiveProjectManager )
+  {
+    return;
+  }
+
+  if ( mAutosyncController )
+  {
+    clearAutosyncController();
+  }
+
+  mAutosyncController.reset( new AutosyncController(
+                               mActiveProjectManager->project(),
+                               mActiveProjectManager->qgsProject(),
+                               mBackend
+                             )
+                           );
+
+  QObject::connect( mAutosyncController.get(), &AutosyncController::syncProject, this, [this]( Project * project ) { this->syncProject( *project );} );
+
+  // Let the controller listen to sync changes from backend
+  QObject::connect( mBackend, &MerginApi::syncProjectFinished, mAutosyncController.get(), &AutosyncController::synchronizationFinished );
+  QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, mAutosyncController.get(), &AutosyncController::synchronizationProgressed );
+}
+
+void SynchronizationManager::clearAutosyncController()
+{
+  if ( !mAutosyncController )
+  {
+    // controller is already null
+    return;
+  }
+
+  QObject::disconnect( mAutosyncController.get() );
+
+  mAutosyncController.reset();
 }

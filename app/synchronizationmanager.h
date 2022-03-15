@@ -27,7 +27,7 @@ class SynchronizationManager : public QObject
 
   public:
 
-    explicit SynchronizationManager( MerginApi *backend, QObject *parent = nullptr );
+    explicit SynchronizationManager( MerginApi *backend, ActiveProjectManager *, QObject *parent = nullptr );
 
     virtual ~SynchronizationManager();
 
@@ -60,6 +60,15 @@ class SynchronizationManager : public QObject
     void autosyncControllerChanged( AutosyncController *controller );
 
   private:
+
+    void setupAutosync();
+
+    void clearAutosync();
+
+    void setupAutosyncController();
+
+    void clearAutosyncController();
+
     bool mAutosyncAllowed = false;
     std::unique_ptr<AutosyncController> mAutosyncController; // owned
 

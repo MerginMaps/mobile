@@ -427,9 +427,6 @@ int main( int argc, char *argv[] )
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
 
-  SynchronizationManager syncManager( ma.get() );
-  syncManager.setAutosyncAllowed( as.autosyncAllowed() );
-
   // layer models
   LayersModel lm;
   LayersProxyModel browseLpm( &lm, LayerModelTypes::BrowseDataLayerSelection );
@@ -440,6 +437,9 @@ int main( int argc, char *argv[] )
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
+
+  SynchronizationManager syncManager( ma.get(), &activeProjectManager );
+  syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
