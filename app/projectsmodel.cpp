@@ -12,6 +12,7 @@
 #include "inpututils.h"
 #include "merginuserauth.h"
 #include "coreutils.h"
+#include "synchronizationmanager.h"
 
 ProjectsModel::ProjectsModel( QObject *parent ) : QAbstractListModel( parent )
 {

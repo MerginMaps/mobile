@@ -15,6 +15,8 @@
 #include "merginapi.h"
 #include "autosynccontroller.h"
 
+class ActiveProjectManager;
+
 class SynchronizationManager : public QObject
 {
     Q_OBJECT
@@ -59,9 +61,10 @@ class SynchronizationManager : public QObject
 
   private:
     bool mAutosyncAllowed = false;
-    std::unique_ptr<AutosyncController> mAutosyncController;
+    std::unique_ptr<AutosyncController> mAutosyncController; // owned
 
-    MerginApi *mBackend = nullptr;
+    MerginApi *mBackend = nullptr; // not owned
+    ActiveProjectManager *mActiveProjectManager = nullptr; // not owned
     QString mLastRequestId;
 };
 

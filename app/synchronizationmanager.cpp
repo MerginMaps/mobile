@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,17 +11,13 @@
 
 SynchronizationManager::SynchronizationManager( MerginApi *backend, QObject *parent )
   : QObject( parent )
-  , mAutosyncController( nullptr )
   , mBackend( backend )
 {
   QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
   QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
 }
 
-SynchronizationManager::~SynchronizationManager()
-{
-
-}
+SynchronizationManager::~SynchronizationManager() = default;
 
 void SynchronizationManager::syncProject( const Project &project, bool withAuth )
 {
@@ -46,7 +42,7 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 
   if ( t.contains( projectFullname ) )
   {
-    TransactionStatus transaction = t.value( projectFullname );
+    TransactionStatus &transaction = t[projectFullname];
 
     if ( transaction.type == TransactionStatus::Pull )
     {
