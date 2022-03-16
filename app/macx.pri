@@ -30,7 +30,7 @@ macx:!android {
     LIBS += -framework qgis_core \
             -framework qgis_native
 
-	# other libs
+    # other libs
     LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}
     LIBS += -lgeodiff
     LIBS += -lproj
@@ -57,7 +57,9 @@ macx:!android {
     LIBS += -lspatialindex -lgeos -lgeos_c
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip
-    LIBS += -lwebp
+    LIBS += -lwebp -lcurl
+    
+    LIBS += -framework Security -framework CoreFoundation -framework SystemConfiguration
 
     # PURCHASING stuff (only testing)
     DEFINES += "PURCHASING"
