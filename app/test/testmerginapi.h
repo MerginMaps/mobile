@@ -25,7 +25,7 @@ class TestMerginApi: public QObject
     Q_OBJECT
   public:
     explicit TestMerginApi( MerginApi *api );
-    ~TestMerginApi() = default;
+    ~TestMerginApi();
 
     static const QString TEST_PROJECT_NAME;
     static const QString TEST_EMPTY_FILE_NAME;
@@ -85,6 +85,7 @@ class TestMerginApi: public QObject
     MerginApi *mApi;
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
     std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
+    std::unique_ptr<SynchronizationManager> mSyncManager;
     QString mUsername;
     QString mTestDataPath;
     //! extra API to do requests we are not testing (as if some other user did those)

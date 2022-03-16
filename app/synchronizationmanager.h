@@ -27,7 +27,7 @@ class SynchronizationManager : public QObject
 
   public:
 
-    explicit SynchronizationManager( MerginApi *backend, ActiveProjectManager *, QObject *parent = nullptr );
+    explicit SynchronizationManager( MerginApi *backend, QObject *parent = nullptr );
 
     virtual ~SynchronizationManager();
 
@@ -42,6 +42,8 @@ class SynchronizationManager : public QObject
 
     //! Stops a running sync process if there is one for project specified by projectFullname
     Q_INVOKABLE void stopProjectSync( const QString &projectFullname );
+
+    void setActiveProjectManager( ActiveProjectManager * );
 
     bool autosyncAllowed() const;
 

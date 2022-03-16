@@ -12,12 +12,10 @@
 
 SynchronizationManager::SynchronizationManager(
   MerginApi *backend,
-  ActiveProjectManager *activeProjectManager,
   QObject *parent
 )
   : QObject( parent )
   , mBackend( backend )
-  , mActiveProjectManager( activeProjectManager )
 {
   if ( mBackend )
   {
@@ -74,6 +72,11 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
       mBackend->cancelPush( projectFullname );
     }
   }
+}
+
+void SynchronizationManager::setActiveProjectManager( ActiveProjectManager *activeProjectManager )
+{
+  mActiveProjectManager = activeProjectManager;
 }
 
 bool SynchronizationManager::autosyncAllowed() const

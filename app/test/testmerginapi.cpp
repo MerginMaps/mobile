@@ -11,6 +11,7 @@
 #include "testutils.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "synchronizationmanager.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 const QString TestMerginApi::TEST_EMPTY_FILE_NAME = "test_empty_file.md";
@@ -32,16 +33,22 @@ TestMerginApi::TestMerginApi( MerginApi *api )
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
 
+  mSyncManager = std::make_unique<SynchronizationManager>( mApi );
+
   mLocalProjectsModel = std::unique_ptr<ProjectsModel>( new ProjectsModel );
   mLocalProjectsModel->setModelType( ProjectsModel::LocalProjectsModel );
   mLocalProjectsModel->setMerginApi( mApi );
   mLocalProjectsModel->setLocalProjectsManager( &mApi->localProjectsManager() );
+  mLocalProjectsModel->setSyncManager( mSyncManager.get() );
 
   mCreatedProjectsModel = std::unique_ptr<ProjectsModel>( new ProjectsModel );
   mCreatedProjectsModel->setModelType( ProjectsModel::CreatedProjectsModel );
   mCreatedProjectsModel->setMerginApi( mApi );
   mCreatedProjectsModel->setLocalProjectsManager( &mApi->localProjectsManager() );
+  mCreatedProjectsModel->setSyncManager( mSyncManager.get() );
 }
+
+TestMerginApi::~TestMerginApi() = default;
 
 void TestMerginApi::initTestCase()
 {

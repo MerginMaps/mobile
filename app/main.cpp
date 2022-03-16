@@ -438,7 +438,8 @@ int main( int argc, char *argv[] )
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
-  SynchronizationManager syncManager( ma.get(), &activeProjectManager );
+  SynchronizationManager syncManager( ma.get() );
+  syncManager.setActiveProjectManager( &activeProjectManager );
   syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // build position kit, save active provider to QSettings and load previously active provider
