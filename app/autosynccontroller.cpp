@@ -47,8 +47,6 @@ AutosyncController::AutosyncController(
   {
     // this is not a mergin project
     setSyncStatus( SyncStatus::NotAMerginProject );
-
-    qDebug() << "This is not a mergin project!";
   }
 }
 
@@ -97,14 +95,10 @@ void AutosyncController::receivedServerInfo( const MerginProjectsList &merginPro
   finder.projectName = mActiveProject->projectName();
   finder.projectNamespace = mActiveProject->projectNamespace();
 
-  qDebug() << "Got an answer" << requestId;
-
   if ( merginProjects.contains( finder ) )
   {
     MerginProject activeProjectData = merginProjects.at( merginProjects.indexOf( finder ) );
     mActiveProject->mergin.reset( activeProjectData.clone() );
-
-    qDebug() << QStringLiteral( "Acquired data for project" ) << mActiveProject->projectFullName();
 
     mActiveProject->mergin->status = ProjectStatus::projectStatus( mActiveProject.get() );
 
@@ -121,8 +115,6 @@ void AutosyncController::receivedServerInfo( const MerginProjectsList &merginPro
 
 void AutosyncController::handleLocalChange()
 {
-  qDebug() << "Found a local change!";
-
   if ( mActiveProject->local->localVersion < 0 )
   {
     // still not a mergin project
@@ -141,6 +133,4 @@ void AutosyncController::setSyncStatus( SyncStatus status )
 
   mSyncStatus = status;
   emit syncStatusChanged( status );
-
-  qDebug() << "New autosync state:" << QMetaEnum::fromType<SyncStatus>().valueToKey( mSyncStatus );
 }
