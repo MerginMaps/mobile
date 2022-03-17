@@ -14,17 +14,19 @@
 #include "qgsvectorlayer.h"
 
 AutosyncController::AutosyncController(
-  LocalProject openedProject,
+  LocalProject *openedProject,
   QgsProject *openedQgsProject,
-  MerginApi *backend,
   QObject *parent
 )
   : QObject( parent )
+  , mActiveProject( openedProject )
   , mActiveQgsProject( openedQgsProject )
-  , mBackend( backend )
 {
-  mActiveProject.reset( new Project() );
-  mActiveProject->local.reset( openedProject.clone() );
+  if ( !mActiveQgsProject || !mActiveProject )
+  {
+    CoreUtils::log( QStringLiteral( "Autosync" ), QStringLiteral( "Received an invalid active project data" ) );
+    return;
+  }
 
   // Register for data change of project's vector layers
   for ( const QgsMapLayer *layer : mActiveQgsProject->mapLayers( true ) )
@@ -36,14 +38,7 @@ AutosyncController::AutosyncController(
     }
   }
 
-  // We need to send ListProjectsByNameAPI to find out the state of
-  // the active project on server and if we have rights to access it
-  QObject::connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &AutosyncController::receivedServerInfo, Qt::UniqueConnection );
-  if ( mActiveProject->local->localVersion >= 0 )
-  {
-    mLastRequestId = mBackend->listProjectsByName( QStringList() << mActiveProject->projectFullName() );
-  }
-  else
+  if ( mActiveProject->localVersion < 0 )
   {
     // this is not a mergin project
     setSyncStatus( SyncStatus::NotAMerginProject );
@@ -59,7 +54,12 @@ AutosyncController::SyncStatus AutosyncController::syncStatus()
 
 void AutosyncController::synchronizationProgressed( const QString &projectFullName, qreal progress )
 {
-  if ( projectFullName == mActiveProject->projectFullName() )
+  if ( !mActiveProject )
+    return;
+
+  QString activeProjectName = MerginApi::getFullProjectName( mActiveProject->projectNamespace, mActiveProject->projectName );
+
+  if ( projectFullName == activeProjectName )
   {
     if ( progress >= 0 && progress < 1 )
     {
@@ -70,7 +70,12 @@ void AutosyncController::synchronizationProgressed( const QString &projectFullNa
 
 void AutosyncController::synchronizationFinished( const QString &, const QString &projectFullName, bool successfully, int )
 {
-  if ( projectFullName != mActiveProject->projectFullName() )
+  if ( !mActiveProject )
+    return;
+
+  QString activeProjectName = MerginApi::getFullProjectName( mActiveProject->projectNamespace, mActiveProject->projectName );
+
+  if ( projectFullName != activeProjectName )
     return;
 
   if ( successfully )
@@ -83,39 +88,12 @@ void AutosyncController::synchronizationFinished( const QString &, const QString
   }
 }
 
-void AutosyncController::receivedServerInfo( const MerginProjectsList &merginProjects, Transactions, QString requestId )
-{
-  if ( mLastRequestId != requestId )
-  {
-    return;
-  }
-
-  // find active project in merginProjects
-  MerginProject finder;
-  finder.projectName = mActiveProject->projectName();
-  finder.projectNamespace = mActiveProject->projectNamespace();
-
-  if ( merginProjects.contains( finder ) )
-  {
-    MerginProject activeProjectData = merginProjects.at( merginProjects.indexOf( finder ) );
-    mActiveProject->mergin.reset( activeProjectData.clone() );
-
-    mActiveProject->mergin->status = ProjectStatus::projectStatus( mActiveProject.get() );
-
-    QString projectError = mActiveProject->mergin->remoteError;
-    if ( !projectError.isEmpty() )
-    {
-      CoreUtils::log( QStringLiteral( "Autosync" ), QStringLiteral( "Can not start syncing current project, error:" ) + projectError );
-      return;
-    }
-
-    emit syncProject( mActiveProject.get() );
-  }
-}
-
 void AutosyncController::handleLocalChange()
 {
-  if ( mActiveProject->local->localVersion < 0 )
+  if ( !mActiveProject )
+    return;
+
+  if ( mActiveProject->localVersion < 0 )
   {
     // still not a mergin project
     setSyncStatus( SyncStatus::NotAMerginProject );
@@ -123,7 +101,7 @@ void AutosyncController::handleLocalChange()
   }
 
   setSyncStatus( SyncStatus::PendingChanges );
-  emit syncProject( mActiveProject.get() );
+  emit foundProjectChanges( mActiveProject->projectNamespace, mActiveProject->projectName );
 }
 
 void AutosyncController::setSyncStatus( SyncStatus status )

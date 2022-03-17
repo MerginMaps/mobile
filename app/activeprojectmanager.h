@@ -30,7 +30,7 @@ class QgsQuickMapSettings;
 class ActiveProjectManager: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( LocalProject project READ project NOTIFY projectChanged ) // LocalProject instance of active project, changes when project is loaded
+    Q_PROPERTY( LocalProject *project READ project NOTIFY projectChanged ) // LocalProject instance of active project, changes when project is loaded
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
@@ -47,7 +47,7 @@ class ActiveProjectManager: public QObject
     QgsProject *qgsProject();
 
     //! Returns Input related info about active project
-    LocalProject project();
+    LocalProject *project();
 
     /**
      * Loads a .qgz/.qgs project file specified by filePath.
@@ -102,7 +102,7 @@ class ActiveProjectManager: public QObject
 
   signals:
     void qgsProjectChanged();
-    void projectChanged( LocalProject project );
+    void projectChanged( LocalProject *project );
 
     void projectWillBeReloaded();
     void projectReloaded( QgsProject *project );
@@ -122,7 +122,7 @@ class ActiveProjectManager: public QObject
   private:
 
     QgsProject *mQgsProject = nullptr;
-    LocalProject mProject;
+    LocalProject *mProject = nullptr;
 
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;

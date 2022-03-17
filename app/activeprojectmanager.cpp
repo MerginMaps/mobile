@@ -46,6 +46,21 @@ ActiveProjectManager::ActiveProjectManager( MapThemesModel &mapThemeModel
   // iterator uses it for virtual fields, causing minor bugs with expressions)
   // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
   mQgsProject = QgsProject::instance();
+
+  // listen to local project removal event to invalidate mProject pointer and avoid dangling pointer
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::aboutToRemoveLocalProject,
+    this, [this]( LocalProject project )
+  {
+    if ( mProject )
+    {
+      if ( project.id() == mProject->id() )
+      {
+        load( QLatin1String() );
+      }
+    }
+  } );
 }
 
 QgsProject *ActiveProjectManager::qgsProject()
@@ -53,7 +68,7 @@ QgsProject *ActiveProjectManager::qgsProject()
   return mQgsProject;
 }
 
-LocalProject ActiveProjectManager::project()
+LocalProject *ActiveProjectManager::project()
 {
   return mProject;
 }
@@ -72,7 +87,9 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
     mQgsProject->clear();
+    mProject = nullptr;
     whileBlocking( &mActiveLayer )->resetActiveLayer();
+    emit projectChanged( mProject );
     emit projectReloaded( mQgsProject );
     return true;
   }
@@ -108,9 +125,9 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
     res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mQgsProject );
-    mProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
+    mProject = mLocalProjectsManager.projectPtrFromProjectFilePath( filePath );
 
-    if ( !mProject.isValid() )
+    if ( !mProject || !mProject->isValid() )
     {
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
@@ -123,13 +140,13 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
 
     setMapSettingsLayers();
 
-    emit projectReloaded( mQgsProject );
     emit projectChanged( mProject );
+    emit projectReloaded( mQgsProject );
   }
 
   bool foundInvalidLayer = false;
   QStringList invalidLayers;
-  for ( QgsMapLayer *layer : mQgsProject->mapLayers().values() )
+  for ( QgsMapLayer *layer : mQgsProject->mapLayers() )
   {
     if ( !layer->isValid() )
     {

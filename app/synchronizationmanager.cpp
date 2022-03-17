@@ -153,14 +153,22 @@ void SynchronizationManager::setupAutosyncController()
     clearAutosyncController();
   }
 
+  if ( !mActiveProjectManager->project() )
+  {
+    // if there is an invalid project loaded / no project is loaded
+    return clearAutosyncController();
+  }
+
   mAutosyncController.reset( new AutosyncController(
                                mActiveProjectManager->project(),
-                               mActiveProjectManager->qgsProject(),
-                               mBackend
+                               mActiveProjectManager->qgsProject()
                              )
                            );
 
-  QObject::connect( mAutosyncController.get(), &AutosyncController::syncProject, this, [this]( Project * project ) { this->syncProject( *project );} );
+  QObject::connect( mAutosyncController.get(), &AutosyncController::foundProjectChanges, this, [this]( const QString & projectNamespace, const QString & projectName )
+  {
+    this->mBackend->pushProject( projectNamespace, projectName );
+  } );
 
   // Let the controller listen to sync changes from backend
   QObject::connect( mBackend, &MerginApi::syncProjectFinished, mAutosyncController.get(), &AutosyncController::synchronizationFinished );
@@ -174,6 +182,8 @@ void SynchronizationManager::clearAutosyncController()
     // controller is already null
     return;
   }
+
+  mAutosyncController->disconnect();
 
   QObject::disconnect( mAutosyncController.get() );
 

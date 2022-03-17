@@ -36,7 +36,7 @@ class AutosyncController : public QObject
     };
     Q_ENUM( SyncStatus )
 
-    explicit AutosyncController( LocalProject openedProject, QgsProject *openedQgsProject, MerginApi *backend, QObject *parent = nullptr );
+    explicit AutosyncController( LocalProject *openedProject, QgsProject *openedQgsProject, QObject *parent = nullptr );
 
     virtual ~AutosyncController();
 
@@ -44,7 +44,7 @@ class AutosyncController : public QObject
 
   signals:
 
-    void syncProject( Project *project );
+    void foundProjectChanges( const QString &projectNamespace, const QString &projectName );
 
     void syncStatusChanged( SyncStatus status );
 
@@ -54,8 +54,6 @@ class AutosyncController : public QObject
 
     void synchronizationFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
 
-    void receivedServerInfo( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
-
     void handleLocalChange();
 
   private:
@@ -63,7 +61,7 @@ class AutosyncController : public QObject
 
     SyncStatus mSyncStatus = Synced;
 
-    std::unique_ptr<Project> mActiveProject; // owned
+    LocalProject *mActiveProject = nullptr; // not owned
     QgsProject *mActiveQgsProject = nullptr; // not owned
     MerginApi *mBackend = nullptr; // not owned
 
