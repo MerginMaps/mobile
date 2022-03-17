@@ -138,6 +138,8 @@ void SynchronizationManager::clearAutosync()
     {
       QObject::disconnect( mActiveProjectManager );
     }
+
+    clearAutosyncController();
   }
 }
 

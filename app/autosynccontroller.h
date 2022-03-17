@@ -69,4 +69,6 @@ class AutosyncController : public QObject
     QTimer mTimer;
 };
 
+Q_DECLARE_METATYPE( AutosyncController::SyncStatus );
+
 #endif // AUTOSYNCCONTROLLER_H

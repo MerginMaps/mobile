@@ -12,6 +12,9 @@
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
 #include "synchronizationmanager.h"
+#include "activeprojectmanager.h"
+
+#include "qgsproject.h"
 
 const QString TestMerginApi::TEST_PROJECT_NAME = "TEMPORARY_TEST_PROJECT";
 const QString TestMerginApi::TEST_EMPTY_FILE_NAME = "test_empty_file.md";
@@ -120,8 +123,12 @@ void TestMerginApi::initTestCase()
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncChangeSyncFolder" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncDisabledInConfig" );
   deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncCorruptedFormat" );
+  deleteRemoteProject( mApiExtra, mUsername, "testSynchronizationViaManager" );
+  deleteRemoteProject( mApiExtra, mUsername, "testAutosync" );
 
   deleteLocalDir( mApi, "testExcludeFromSync" );
+
+  qRegisterMetaType<AutosyncController::SyncStatus>( "SyncStatus" );
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -2323,6 +2330,124 @@ void TestMerginApi::testSelectiveSyncCorruptedFormat()
 
   QFile fileExtra1( photoPathClient2 + "/" + "photoC1-B.png" );
   QVERIFY( fileExtra1.exists() );
+}
+
+void TestMerginApi::testSynchronizationViaManager()
+{
+  //
+  // 1. instantiate sync manager
+  // 2. create remote project & download it
+  // 3. add some data
+  // 4. sync it via manager
+  // 5. check if all signals are called
+  //
+
+  SynchronizationManager syncmanager( mApi );
+
+  QString projectname( QStringLiteral( "testSynchronizationViaManager" ) );
+
+  createRemoteProject( mApiExtra, mUsername, projectname, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mUsername, projectname );
+
+  refreshProjectsModel( ProjectsModel::LocalProjectsModel );
+
+  std::shared_ptr<Project> project = mLocalProjectsModel->projectFromId( mUsername + '/' + projectname );
+
+  QFile::copy( mTestDataPath + "/" + TEST_PROJECT_NAME + "/test1.txt", project->local->projectDir + "/data.txt" );
+
+  project->mergin->status = ProjectStatus::projectStatus( project.get() );
+
+  QSignalSpy syncFinishedSpy( &syncmanager, &SynchronizationManager::syncProjectFinished );
+  QSignalSpy syncProgressedSpy( &syncmanager, &SynchronizationManager::syncProjectStatusChanged );
+
+  syncmanager.syncProject( *project );
+
+  syncFinishedSpy.wait( TestUtils::LONG_REPLY );
+
+  QVERIFY( syncFinishedSpy.count() );
+  QVERIFY( syncProgressedSpy.count() );
+}
+
+void TestMerginApi::testAutosync()
+{
+  //
+  // 1. copy test project to temp
+  // 2. load it
+  // 3. create autosync controller
+  // 4. make some changes in the project
+  // 5. make sure autosync controller syncs it
+  //
+
+  QString projectname = QStringLiteral( "testAutosync" );
+  QString projectdir = QDir::tempPath() + "/" + projectname;
+  QString projectfilename = "quickapp_project.qgs";
+
+  InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectdir );
+
+  // 2. load it
+  MapThemesModel mtm; AppSettings as; ActiveLayer al;
+  LayersModel lm; LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
+  ActiveProjectManager activeProjectManager( mtm, as, al, lpm, mApi->localProjectsManager() );
+
+  mApi->localProjectsManager().addLocalProject( projectdir, projectname );
+
+  QVERIFY( activeProjectManager.load( projectdir + "/" + projectfilename ) );
+  QVERIFY( activeProjectManager.project() );
+
+  // 3. create autosync controller
+  SynchronizationManager syncManager( mApi );
+  syncManager.setActiveProjectManager( &activeProjectManager );
+  syncManager.setAutosyncAllowed( true );
+
+  AutosyncController *autosyncController = syncManager.autosyncController();
+  QVERIFY( autosyncController );
+  QCOMPARE( autosyncController->syncStatus(), AutosyncController::NotAMerginProject );
+
+  QSignalSpy createProjectSpy( mApi, &MerginApi::syncProjectFinished );
+  mApi->migrateProjectToMergin( projectname );
+  createProjectSpy.wait( TestUtils::LONG_REPLY );
+  QVERIFY( createProjectSpy.count() );
+
+  // 4. make some changes in the project && 5. make sure autosync controller syncs it
+  QgsMapLayer *planesL = activeProjectManager.qgsProject()->mapLayersByName( QStringLiteral( "airport-towers" ) ).at( 0 );
+  QgsVectorLayer *planes = qobject_cast<QgsVectorLayer *>( planesL );
+  planes->startEditing();
+
+  QgsFields fields = planes->fields();
+
+  QgsFeature f( planes->fields() );
+  planes->addFeature( f );
+
+  QSignalSpy syncSpy( autosyncController, &AutosyncController::foundProjectChanges );
+
+  planes->commitChanges();
+
+  QCOMPARE( autosyncController->syncStatus(), AutosyncController::SyncInProgress );
+  QVERIFY( syncSpy.count() > 0 );
+
+  QSignalSpy syncStateSpy( autosyncController, &AutosyncController::syncStatusChanged );
+  syncStateSpy.wait( TestUtils::LONG_REPLY );
+  QVERIFY( syncStateSpy.count() > 0 );
+
+  QCOMPARE( autosyncController->syncStatus(), AutosyncController::Synced );
+
+  syncManager.setAutosyncAllowed( false );
+  QVERIFY( !syncManager.autosyncController() );
+}
+
+void TestMerginApi::testAutosyncFailure()
+{
+  //
+  // 1. copy test project to temp
+  // 2. load it
+  // 3. create autosync controller
+  // 4. sign out
+  // 5. make some changes in the project
+  // 6. make sure autosync controller has correct failure state
+  // 7. sign back in
+  //
+
+  // TODO: Will be added with incremental requests
 }
 
 void TestMerginApi::testRegister()
