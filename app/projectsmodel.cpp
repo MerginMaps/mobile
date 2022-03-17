@@ -265,7 +265,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Tra
         }
         project->mergin->status = ProjectStatus::projectStatus( project.get() );
       }
-      else if ( project->local->localVersion > -1 )
+      else if ( project->local->isMergin() )
       {
         // this is indeed a Mergin project, it has metadata folder in it
         project->mergin = std::unique_ptr<MerginProject>( new MerginProject() );

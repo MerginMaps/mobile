@@ -11,16 +11,16 @@
 #include "activeprojectmanager.h"
 
 SynchronizationManager::SynchronizationManager(
-  MerginApi *backend,
+  MerginApi *merginApi,
   QObject *parent
 )
   : QObject( parent )
-  , mBackend( backend )
+  , mMerginApi( merginApi )
 {
-  if ( mBackend )
+  if ( mMerginApi )
   {
-    QObject::connect( mBackend, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
-    QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
+    QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
+    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectStatusChanged );
   }
 
   QObject::connect( this, &SynchronizationManager::autosyncAllowedChanged, this, [this]( bool allowed )
@@ -47,17 +47,17 @@ void SynchronizationManager::syncProject( const Project &project, bool withAuth 
 
   if ( project.mergin->status == ProjectStatus::NoVersion || project.mergin->status == ProjectStatus::OutOfDate )
   {
-    mBackend->pullProject( project.mergin->projectNamespace, project.mergin->projectName, withAuth );
+    mMerginApi->pullProject( project.mergin->projectNamespace, project.mergin->projectName, withAuth );
   }
   else if ( project.mergin->status == ProjectStatus::Modified )
   {
-    mBackend->pushProject( project.mergin->projectNamespace, project.mergin->projectName );
+    mMerginApi->pushProject( project.mergin->projectNamespace, project.mergin->projectName );
   }
 }
 
 void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 {
-  Transactions t = mBackend->transactions();
+  Transactions t = mMerginApi->transactions();
 
   if ( t.contains( projectFullname ) )
   {
@@ -65,11 +65,11 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 
     if ( transaction.type == TransactionStatus::Pull )
     {
-      mBackend->cancelPull( projectFullname );
+      mMerginApi->cancelPull( projectFullname );
     }
     else
     {
-      mBackend->cancelPush( projectFullname );
+      mMerginApi->cancelPush( projectFullname );
     }
   }
 }
@@ -145,7 +145,7 @@ void SynchronizationManager::clearAutosync()
 
 void SynchronizationManager::setupAutosyncController()
 {
-  if ( !mAutosyncAllowed || !mBackend || !mActiveProjectManager )
+  if ( !mAutosyncAllowed || !mMerginApi || !mActiveProjectManager )
   {
     return;
   }
@@ -169,12 +169,12 @@ void SynchronizationManager::setupAutosyncController()
 
   QObject::connect( mAutosyncController.get(), &AutosyncController::foundProjectChanges, this, [this]( const QString & projectNamespace, const QString & projectName )
   {
-    this->mBackend->pushProject( projectNamespace, projectName );
+    this->mMerginApi->pushProject( projectNamespace, projectName );
   } );
 
   // Let the controller listen to sync changes from backend
-  QObject::connect( mBackend, &MerginApi::syncProjectFinished, mAutosyncController.get(), &AutosyncController::synchronizationFinished );
-  QObject::connect( mBackend, &MerginApi::syncProjectStatusChanged, mAutosyncController.get(), &AutosyncController::synchronizationProgressed );
+  QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, mAutosyncController.get(), &AutosyncController::synchronizationFinished );
+  QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, mAutosyncController.get(), &AutosyncController::synchronizationProgressed );
 }
 
 void SynchronizationManager::clearAutosyncController()

@@ -61,9 +61,8 @@ class AutosyncController : public QObject
 
     SyncStatus mSyncStatus = Synced;
 
-    LocalProject *mActiveProject = nullptr; // not owned
-    QgsProject *mActiveQgsProject = nullptr; // not owned
-    MerginApi *mBackend = nullptr; // not owned
+    LocalProject *mLocalProject = nullptr; // not owned
+    QgsProject *mQgsProject = nullptr; // not owned
 
     QString mLastRequestId;
     QTimer mTimer;

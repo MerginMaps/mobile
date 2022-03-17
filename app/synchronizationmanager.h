@@ -27,7 +27,7 @@ class SynchronizationManager : public QObject
 
   public:
 
-    explicit SynchronizationManager( MerginApi *backend, QObject *parent = nullptr );
+    explicit SynchronizationManager( MerginApi *merginApi, QObject *parent = nullptr );
 
     virtual ~SynchronizationManager();
 
@@ -74,7 +74,7 @@ class SynchronizationManager : public QObject
     bool mAutosyncAllowed = false;
     std::unique_ptr<AutosyncController> mAutosyncController; // owned
 
-    MerginApi *mBackend = nullptr; // not owned
+    MerginApi *mMerginApi = nullptr; // not owned
     ActiveProjectManager *mActiveProjectManager = nullptr; // not owned
     QString mLastRequestId;
 };

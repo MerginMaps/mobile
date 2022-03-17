@@ -19,17 +19,17 @@ AutosyncController::AutosyncController(
   QObject *parent
 )
   : QObject( parent )
-  , mActiveProject( openedProject )
-  , mActiveQgsProject( openedQgsProject )
+  , mLocalProject( openedProject )
+  , mQgsProject( openedQgsProject )
 {
-  if ( !mActiveQgsProject || !mActiveProject )
+  if ( !mQgsProject || !mLocalProject )
   {
     CoreUtils::log( QStringLiteral( "Autosync" ), QStringLiteral( "Received an invalid active project data" ) );
     return;
   }
 
   // Register for data change of project's vector layers
-  for ( const QgsMapLayer *layer : mActiveQgsProject->mapLayers( true ) )
+  for ( const QgsMapLayer *layer : mQgsProject->mapLayers( true ) )
   {
     const QgsVectorLayer *vecLayer = qobject_cast<const QgsVectorLayer *>( layer );
     if ( vecLayer )
@@ -38,7 +38,7 @@ AutosyncController::AutosyncController(
     }
   }
 
-  if ( mActiveProject->localVersion < 0 )
+  if ( !mLocalProject->isMergin() )
   {
     // this is not a mergin project
     setSyncStatus( SyncStatus::NotAMerginProject );
@@ -54,10 +54,10 @@ AutosyncController::SyncStatus AutosyncController::syncStatus()
 
 void AutosyncController::synchronizationProgressed( const QString &projectFullName, qreal progress )
 {
-  if ( !mActiveProject )
+  if ( !mLocalProject )
     return;
 
-  QString activeProjectName = MerginApi::getFullProjectName( mActiveProject->projectNamespace, mActiveProject->projectName );
+  QString activeProjectName = MerginApi::getFullProjectName( mLocalProject->projectNamespace, mLocalProject->projectName );
 
   if ( projectFullName == activeProjectName )
   {
@@ -70,10 +70,10 @@ void AutosyncController::synchronizationProgressed( const QString &projectFullNa
 
 void AutosyncController::synchronizationFinished( const QString &, const QString &projectFullName, bool successfully, int )
 {
-  if ( !mActiveProject )
+  if ( !mLocalProject )
     return;
 
-  QString activeProjectName = MerginApi::getFullProjectName( mActiveProject->projectNamespace, mActiveProject->projectName );
+  QString activeProjectName = MerginApi::getFullProjectName( mLocalProject->projectNamespace, mLocalProject->projectName );
 
   if ( projectFullName != activeProjectName )
     return;
@@ -90,10 +90,10 @@ void AutosyncController::synchronizationFinished( const QString &, const QString
 
 void AutosyncController::handleLocalChange()
 {
-  if ( !mActiveProject )
+  if ( !mLocalProject )
     return;
 
-  if ( mActiveProject->localVersion < 0 )
+  if ( !mLocalProject->isMergin() )
   {
     // still not a mergin project
     setSyncStatus( SyncStatus::NotAMerginProject );
@@ -101,7 +101,7 @@ void AutosyncController::handleLocalChange()
   }
 
   setSyncStatus( SyncStatus::PendingChanges );
-  emit foundProjectChanges( mActiveProject->projectNamespace, mActiveProject->projectName );
+  emit foundProjectChanges( mLocalProject->projectNamespace, mLocalProject->projectName );
 }
 
 void AutosyncController::setSyncStatus( SyncStatus status )

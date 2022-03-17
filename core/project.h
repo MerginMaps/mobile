@@ -64,6 +64,12 @@ struct LocalProject
 
     bool isValid() { return !projectDir.isEmpty(); }
 
+    //! Returns true if the local version instance has a mergin counterpart based on localVersion.
+    //! LocalVersion comes from metadata file stored in .mergin folder.
+    //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
+    //!       Project->isMergin() is recommended to use over this one
+    bool isMergin() { return localVersion > 0; }
+
     LocalProject *clone() const;
 
     bool operator ==( const LocalProject &other )
