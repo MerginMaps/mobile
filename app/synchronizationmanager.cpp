@@ -174,7 +174,7 @@ void SynchronizationManager::setupAutosyncController()
 
   // Let the controller listen to sync changes from backend
   QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, mAutosyncController.get(), &AutosyncController::synchronizationFinished );
-  QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, mAutosyncController.get(), &AutosyncController::synchronizationProgressed );
+  QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, mAutosyncController.get(), &AutosyncController::onSynchronizationProgressUpdated );
 }
 
 void SynchronizationManager::clearAutosyncController()

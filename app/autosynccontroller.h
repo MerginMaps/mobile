@@ -50,7 +50,7 @@ class AutosyncController : public QObject
 
   public slots:
 
-    void synchronizationProgressed( const QString &projectFullName, qreal progress );
+    void onSynchronizationProgressUpdated( const QString &projectFullName, qreal progress );
 
     void synchronizationFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
 

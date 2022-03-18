@@ -29,7 +29,8 @@ AutosyncController::AutosyncController(
   }
 
   // Register for data change of project's vector layers
-  for ( const QgsMapLayer *layer : mQgsProject->mapLayers( true ) )
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers( true );
+  for ( const QgsMapLayer *layer : layers )
   {
     const QgsVectorLayer *vecLayer = qobject_cast<const QgsVectorLayer *>( layer );
     if ( vecLayer )
@@ -52,7 +53,7 @@ AutosyncController::SyncStatus AutosyncController::syncStatus()
   return mSyncStatus;
 }
 
-void AutosyncController::synchronizationProgressed( const QString &projectFullName, qreal progress )
+void AutosyncController::onSynchronizationProgressUpdated( const QString &projectFullName, qreal progress )
 {
   if ( !mLocalProject )
     return;
