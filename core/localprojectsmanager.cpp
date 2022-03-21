@@ -72,16 +72,6 @@ LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &pr
   return LocalProject();
 }
 
-LocalProject *LocalProjectsManager::projectPtrFromProjectFilePath( const QString &projectFilePath )
-{
-  for ( int i = 0; i < mProjects.count(); ++i )
-  {
-    if ( mProjects[i].qgisProjectFilePath == projectFilePath )
-      return &mProjects[i];
-  }
-  return nullptr;
-}
-
 LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectId ) const
 {
   for ( const LocalProject &info : mProjects )

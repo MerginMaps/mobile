@@ -119,7 +119,7 @@
 #endif
 
 #include "qgsapplication.h"
-#include "activeprojectmanager.h"
+#include "activeproject.h"
 #include "appsettings.h"
 
 static QString getDataDir()
@@ -229,7 +229,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
-  qmlRegisterUncreatableType<ActiveProjectManager>( "lc", 1, 0, "ActiveProjectManager", "" );
+  qmlRegisterUncreatableType<ActiveProject>( "lc", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
@@ -433,14 +433,12 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  ActiveProjectManager activeProjectManager( mtm, as, al, recordingLpm, localProjectsManager );
+  ActiveProject activeProject( mtm, as, al, recordingLpm, localProjectsManager );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
-  syncManager.setActiveProjectManager( &activeProjectManager );
-  syncManager.setAutosyncAllowed( as.autosyncAllowed() );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
@@ -471,13 +469,18 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
   } );
 
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  {
+    syncManager.syncProject( project );
+  } );
+
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProjectManager, &ActiveProjectManager::reloadProject );
+  QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProject, &ActiveProject::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
-  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
-  QObject::connect( &activeProjectManager, &ActiveProjectManager::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( QgsApplication::messageLog(),
@@ -485,7 +488,7 @@ int main( int argc, char *argv[] )
                     &iu,
                     &InputUtils::onQgsLogMessageReceived );
 
-  QFile projectLoadingFile( ActiveProjectManager::LOADING_FLAG_FILE_PATH );
+  QFile projectLoadingFile( ActiveProject::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
@@ -530,7 +533,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__activeProjectManager", &activeProjectManager );
+  engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );

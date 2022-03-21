@@ -79,7 +79,7 @@ MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
 {
   bool authorize = !flag.isEmpty();
-  if ( ( authorize && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
+  if ( ( authorize && !validateAuth() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
     emit listProjectsFailed();
     return QString();
@@ -403,7 +403,7 @@ void MerginApi::cacheServerConfig()
 
 void MerginApi::pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -443,7 +443,7 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
 
 void MerginApi::pushStart( const QString &projectFullName, const QByteArray &json )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -466,7 +466,7 @@ void MerginApi::pushStart( const QString &projectFullName, const QByteArray &jso
 
 void MerginApi::cancelPush( const QString &projectFullName )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -555,7 +555,7 @@ void MerginApi::cancelPull( const QString &projectFullName )
 
 void MerginApi::pushFinish( const QString &projectFullName, const QString &transactionUUID )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -733,7 +733,7 @@ void MerginApi::registerUser( const QString &username,
 
 void MerginApi::getUserInfo( )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -755,7 +755,7 @@ void MerginApi::getSubscriptionInfo()
     qDebug() << "Subscription info request skipped - server doesn't support subscriptions.";
   }
 
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -797,7 +797,7 @@ QString MerginApi::resetPasswordUrl()
 
 void MerginApi::createProject( const QString &projectNamespace, const QString &projectName, bool isPublic )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -825,7 +825,7 @@ void MerginApi::createProject( const QString &projectNamespace, const QString &p
 
 void MerginApi::deleteProject( const QString &projectNamespace, const QString &projectName, bool informUser )
 {
-  if ( !validateAuthAndContinute() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
@@ -1053,8 +1053,15 @@ void MerginApi::onPlanProductIdChanged()
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withAuth )
 {
-  if ( ( withAuth && !validateAuthAndContinute() ) || mApiVersionStatus != MerginApiStatus::OK )
+  if ( withAuth && !validateAuth() )
   {
+    // TODO: emit missingCredentialsError()
+    return nullptr;
+  }
+
+  if ( mApiVersionStatus != MerginApiStatus::OK )
+  {
+    // TODO: emit merginServerNotOk()
     return nullptr;
   }
 
@@ -1089,7 +1096,7 @@ void MerginApi::loadAuthData()
   mUserAuth->loadAuthData();
 }
 
-bool MerginApi::validateAuthAndContinute()
+bool MerginApi::validateAuth()
 {
   if ( !mUserAuth->hasAuthData() )
   {

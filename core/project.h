@@ -16,6 +16,7 @@
 #include <memory>
 
 struct Project;
+struct LocalProject;
 
 namespace ProjectStatus
 {
@@ -31,7 +32,9 @@ namespace ProjectStatus
   Q_ENUM_NS( Status )
 
   //! Returns project state from ProjectStatus::Status enum for the project
-  Status projectStatus( Project *project );
+  Status projectStatus( const Project &project );
+
+  bool hasLocalChanges( const LocalProject &project );
 }
 
 /**
@@ -62,13 +65,13 @@ struct LocalProject
 
     int localVersion = -1;
 
-    bool isValid() { return !projectDir.isEmpty(); }
+    bool isValid() const { return !projectDir.isEmpty(); }
 
     //! Returns true if the local version instance has a mergin counterpart based on localVersion.
     //! LocalVersion comes from metadata file stored in .mergin folder.
     //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
     //!       Project->isMergin() is recommended to use over this one
-    bool isMergin() { return localVersion > 0; }
+    bool hasMerginMetadata() const { return localVersion > 0; }
 
     LocalProject *clone() const;
 
@@ -135,34 +138,34 @@ struct Project
   Project() {};
   ~Project() {};
 
-  std::unique_ptr<MerginProject> mergin;
-  std::unique_ptr<LocalProject> local;
+  MerginProject mergin;
+  LocalProject local;
 
-  bool isMergin() const { return mergin != nullptr; }
-  bool isLocal() const { return local != nullptr; }
+  bool isMergin() const { return mergin.isValid(); }
+  bool isLocal() const { return local.isValid(); }
 
-  QString projectName()
+  QString projectName() const
   {
-    if ( isMergin() ) return mergin->projectName;
-    else if ( isLocal() ) return local->projectName;
+    if ( isMergin() ) return mergin.projectName;
+    else if ( isLocal() ) return local.projectName;
     return QString();
   }
 
-  QString projectNamespace()
+  QString projectNamespace() const
   {
-    if ( isMergin() ) return mergin->projectNamespace;
-    else if ( isLocal() ) return local->projectNamespace;
+    if ( isMergin() ) return mergin.projectNamespace;
+    else if ( isLocal() ) return local.projectNamespace;
     return QString();
   }
 
-  QString projectId()
+  QString projectId() const
   {
-    if ( isMergin() ) return mergin->id();
-    else if ( isLocal() ) return local->id();
+    if ( isMergin() ) return mergin.id();
+    else if ( isLocal() ) return local.id();
     return QString();
   }
 
-  QString projectFullName()
+  QString projectFullName() const
   {
     return projectId();
   }
@@ -171,11 +174,11 @@ struct Project
   {
     if ( this->isLocal() && other.isLocal() )
     {
-      return this->local->id() == other.local->id();
+      return this->local.id() == other.local.id();
     }
     else if ( this->isMergin() && other.isMergin() )
     {
-      return this->mergin->id() == other.mergin->id();
+      return this->mergin.id() == other.mergin.id();
     }
     return false;
   }

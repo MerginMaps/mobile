@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,18 +20,19 @@
 #include "qgsapplication.h"
 #include "qgslogger.h"
 
-#include "activeprojectmanager.h"
+#include "activeproject.h"
 #include "inpututils.h"
 #include "coreutils.h"
+#include "autosynccontroller.h"
 
-const QString ActiveProjectManager::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
+const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-ActiveProjectManager::ActiveProjectManager( MapThemesModel &mapThemeModel
-    , AppSettings &appSettings
-    , ActiveLayer &activeLayer
-    , LayersProxyModel &recordingLayerPM
-    , LocalProjectsManager &localProjectsManager
-    , QObject *parent ) :
+ActiveProject::ActiveProject( MapThemesModel &mapThemeModel
+                              , AppSettings &appSettings
+                              , ActiveLayer &activeLayer
+                              , LayersProxyModel &recordingLayerPM
+                              , LocalProjectsManager &localProjectsManager
+                              , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
@@ -47,50 +48,72 @@ ActiveProjectManager::ActiveProjectManager( MapThemesModel &mapThemeModel
   // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
   mQgsProject = QgsProject::instance();
 
-  // listen to local project removal event to invalidate mProject pointer and avoid dangling pointer
+  // listen to local project removal event to invalidate mProject
   QObject::connect(
     &mLocalProjectsManager,
     &LocalProjectsManager::aboutToRemoveLocalProject,
-    this, [this]( LocalProject project )
+    this, [this]( const LocalProject & project )
   {
-    if ( mProject )
+    if ( project.id() == mLocalProject.id() )
     {
-      if ( project.id() == mProject->id() )
-      {
-        load( QLatin1String() );
-      }
+      load( QLatin1String() );
     }
   } );
+
+  // listen to metadata changes of opened LocalProject (e.g. local version update or namespace update)
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::localProjectDataChanged,
+    this, [this]( const LocalProject & project )
+  {
+    if ( project.id() == mLocalProject.id() )
+    {
+      mLocalProject = project;
+      emit localProjectChanged( mLocalProject );
+    }
+  } );
+
+  setAutosyncEnabled( mAppSettings.autosyncAllowed() );
+
+  QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
 }
 
-QgsProject *ActiveProjectManager::qgsProject()
+ActiveProject::~ActiveProject() = default;
+
+QgsProject *ActiveProject::qgsProject()
 {
   return mQgsProject;
 }
 
-LocalProject *ActiveProjectManager::project()
+LocalProject ActiveProject::localProject()
 {
-  return mProject;
+  return mLocalProject;
 }
 
-bool ActiveProjectManager::load( const QString &filePath )
+bool ActiveProject::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
 }
 
-bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
+bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
+
+  // clear autosync
+  setAutosyncEnabled( false );
 
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
     emit projectWillBeReloaded();
+
     mQgsProject->clear();
-    mProject = nullptr;
+    mLocalProject = LocalProject();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
-    emit projectChanged( mProject );
+
+    emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
+
     return true;
   }
 
@@ -125,9 +148,9 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
     res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
     mMapThemeModel.reloadMapThemes( mQgsProject );
-    mProject = mLocalProjectsManager.projectPtrFromProjectFilePath( filePath );
+    mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
 
-    if ( !mProject || !mProject->isValid() )
+    if ( !mLocalProject.isValid() )
     {
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
@@ -140,7 +163,7 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
 
     setMapSettingsLayers();
 
-    emit projectChanged( mProject );
+    emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
   }
 
@@ -178,10 +201,16 @@ bool ActiveProjectManager::forceLoad( const QString &filePath, bool force )
       emit loadingErrorFound();
     }
   }
+
+  if ( mAppSettings.autosyncAllowed() )
+  {
+    setAutosyncEnabled( true );
+  }
+
   return res;
 }
 
-bool ActiveProjectManager::reloadProject( QString projectDir )
+bool ActiveProject::reloadProject( QString projectDir )
 {
   if ( mQgsProject->homePath() == projectDir )
   {
@@ -190,7 +219,38 @@ bool ActiveProjectManager::reloadProject( QString projectDir )
   return false;
 }
 
-void ActiveProjectManager::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ActiveProject::setAutosyncEnabled( bool enabled )
+{
+  if ( enabled )
+  {
+    if ( mAutosyncController )
+    {
+      mAutosyncController->disconnect();
+      mAutosyncController.reset();
+    }
+
+    mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
+
+    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, [this]()
+    {
+      emit syncActiveProject( mLocalProject );
+    } );
+
+    qDebug() << "Autosync has started!";
+  }
+  else
+  {
+    if ( mAutosyncController )
+    {
+      mAutosyncController->disconnect();
+    }
+    mAutosyncController.reset();
+
+    qDebug() << "Autosync stopped!";
+  }
+}
+
+void ActiveProject::setMapSettings( QgsQuickMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -201,7 +261,7 @@ void ActiveProjectManager::setMapSettings( QgsQuickMapSettings *mapSettings )
   emit mapSettingsChanged();
 }
 
-void ActiveProjectManager::setMapSettingsLayers() const
+void ActiveProject::setMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
@@ -225,12 +285,22 @@ void ActiveProjectManager::setMapSettingsLayers() const
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
-QgsQuickMapSettings *ActiveProjectManager::mapSettings() const
+QgsQuickMapSettings *ActiveProject::mapSettings() const
 {
   return mMapSettings;
 }
 
-bool ActiveProjectManager::layerVisible( QgsMapLayer *layer )
+AutosyncController *ActiveProject::autosyncController() const
+{
+  if ( mAutosyncController )
+  {
+    return mAutosyncController.get();
+  }
+
+  return nullptr;
+}
+
+bool ActiveProject::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
 
@@ -250,12 +320,12 @@ bool ActiveProjectManager::layerVisible( QgsMapLayer *layer )
   return false;
 }
 
-QString ActiveProjectManager::projectLoadingLog() const
+QString ActiveProject::projectLoadingLog() const
 {
   return mProjectLoadingLog;
 }
 
-void ActiveProjectManager::setActiveMapTheme( int index )
+void ActiveProject::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
 
@@ -266,7 +336,7 @@ void ActiveProjectManager::setActiveMapTheme( int index )
   setMapSettingsLayers();
 }
 
-void ActiveProjectManager::setActiveLayerByName( QString layerName ) const
+void ActiveProject::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )
   {
@@ -281,7 +351,7 @@ void ActiveProjectManager::setActiveLayerByName( QString layerName ) const
   setActiveLayer( nullptr );
 }
 
-void ActiveProjectManager::setActiveLayer( QgsMapLayer *layer ) const
+void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
     mActiveLayer.resetActiveLayer();

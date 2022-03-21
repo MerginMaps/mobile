@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 
-#ifndef ACTIVEPROJECTMANAGER_H
-#define ACTIVEPROJECTMANAGER_H
+#ifndef ACTIVEPROJECT_H
+#define ACTIVEPROJECT_H
 
 #include <QObject>
 
@@ -23,19 +23,21 @@
 #include "localprojectsmanager.h"
 
 class QgsQuickMapSettings;
+class AutosyncController;
 
 /**
- * \brief The ActiveProjectManager class can load a QGIS project and holds its data.
+ * \brief The ActiveProject class can load a QGIS project and holds its data.
  */
-class ActiveProjectManager: public QObject
+class ActiveProject: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( LocalProject *project READ project NOTIFY projectChanged ) // LocalProject instance of active project, changes when project is loaded
+    Q_PROPERTY( LocalProject localProject READ localProject NOTIFY localProjectChanged ) // LocalProject instance of active project, changes when project is loaded
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
+    Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit ActiveProjectManager(
+    explicit ActiveProject(
       MapThemesModel &mapThemeModel
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
@@ -43,11 +45,13 @@ class ActiveProjectManager: public QObject
       , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
+    virtual ~ActiveProject();
+
     //! Returns active project's QgsProject instance to do QGIS API magic
     QgsProject *qgsProject();
 
     //! Returns Input related info about active project
-    LocalProject *project();
+    LocalProject localProject();
 
     /**
      * Loads a .qgz/.qgs project file specified by filePath.
@@ -76,6 +80,9 @@ class ActiveProjectManager: public QObject
      */
     QgsQuickMapSettings *mapSettings() const;
 
+    //! Returns autosyncController instance if autosync is allowed, otherwise returns nullptr
+    AutosyncController *autosyncController() const;
+
     /**
      * setMapSettings method sets mapSettings
      * Method also reloads the layer list
@@ -102,7 +109,7 @@ class ActiveProjectManager: public QObject
 
   signals:
     void qgsProjectChanged();
-    void projectChanged( LocalProject *project );
+    void localProjectChanged( LocalProject project );
 
     void projectWillBeReloaded();
     void projectReloaded( QgsProject *project );
@@ -113,16 +120,22 @@ class ActiveProjectManager: public QObject
     void loadingErrorFound();
     void qgisLogChanged();
 
+    void autosyncControllerChanged( AutosyncController *controller );
+
     void mapSettingsChanged();
+
+    void syncActiveProject( const LocalProject &project );
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
 
+    void setAutosyncEnabled( bool enabled );
+
   private:
 
     QgsProject *mQgsProject = nullptr;
-    LocalProject *mProject = nullptr;
+    LocalProject mLocalProject;
 
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
@@ -130,6 +143,8 @@ class ActiveProjectManager: public QObject
     LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     QgsQuickMapSettings *mMapSettings = nullptr;
+
+    std::unique_ptr<AutosyncController> mAutosyncController;
 
     QString mProjectLoadingLog;
 
@@ -142,4 +157,4 @@ class ActiveProjectManager: public QObject
     bool forceLoad( const QString &filePath, bool force );
 };
 
-#endif // ACTIVEPROJECTMANAGER_H
+#endif // ACTIVEPROJECT_H

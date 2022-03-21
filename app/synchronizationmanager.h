@@ -13,23 +13,34 @@
 #include <QObject>
 
 #include "merginapi.h"
-#include "autosynccontroller.h"
 
-class ActiveProjectManager;
+struct SyncTransation
+{
+  bool pending = false;
+  qreal progress = -1;
+  QString serverInfoRequestId;
+};
 
 class SynchronizationManager : public QObject
 {
     Q_OBJECT
-
-    Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
-
-    Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
 
   public:
 
     explicit SynchronizationManager( MerginApi *merginApi, QObject *parent = nullptr );
 
     virtual ~SynchronizationManager();
+
+    //! Stops a running sync process if there is one for project specified by projectFullname
+    Q_INVOKABLE void stopProjectSync( const QString &projectFullname );
+
+  signals:
+
+    void syncProjectProgressChanged( const QString &projectFullName, qreal progress );
+
+    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
+
+  public slots:
 
     /**
      * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
@@ -38,45 +49,17 @@ class SynchronizationManager : public QObject
      * \param withAut Bears an information whether authorization should be included in sync requests.
      *                Authorization can be omitted for pull of public projects
      */
-    Q_INVOKABLE void syncProject( const Project &project, bool withAuth = true );
+    void syncProject( const Project &project, bool withAuth = true );
 
-    //! Stops a running sync process if there is one for project specified by projectFullname
-    Q_INVOKABLE void stopProjectSync( const QString &projectFullname );
+    Q_INVOKABLE void syncProject( const LocalProject &project, bool withAuth = true );
 
-    void setActiveProjectManager( ActiveProjectManager * );
-
-    bool autosyncAllowed() const;
-
-    void setAutosyncAllowed( bool );
-
-    AutosyncController *autosyncController() const;
-
-  signals:
-
-    void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
-
-    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
-
-    void autosyncAllowedChanged( bool autosyncAllowed );
-
-    void autosyncControllerChanged( AutosyncController *controller );
+    void receivedRemoteProjectInfo( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
 
   private:
 
-    void setupAutosync();
-
-    void clearAutosync();
-
-    void setupAutosyncController();
-
-    void clearAutosyncController();
-
-    bool mAutosyncAllowed = false;
-    std::unique_ptr<AutosyncController> mAutosyncController; // owned
+    QHash<QString, SyncTransation> mOngoingSyncs;
 
     MerginApi *mMerginApi = nullptr; // not owned
-    ActiveProjectManager *mActiveProjectManager = nullptr; // not owned
-    QString mLastRequestId;
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H

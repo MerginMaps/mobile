@@ -15,7 +15,7 @@ position/positiondirection.cpp \
 position/positionkit.cpp \
 position/positionprovidersmodel.cpp \
 position/simulatedpositionprovider.cpp \
-activeprojectmanager.cpp \
+activeproject.cpp \
 autosynccontroller.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
@@ -67,7 +67,7 @@ position/positiondirection.h \
 position/positionkit.h \
 position/positionprovidersmodel.h \
 position/simulatedpositionprovider.h \
-activeprojectmanager.h \
+activeproject.h \
 autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \

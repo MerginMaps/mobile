@@ -135,9 +135,9 @@ class ProjectsModel : public QAbstractListModel
 
     bool hasMoreProjects() const;
 
-    bool containsProject( QString projectId ) const;
+    int projectIndexFromId( const QString &projectId ) const;
 
-    std::shared_ptr<Project> projectFromId( QString projectId ) const;
+    Project projectFromId( const QString &projectId ) const;
 
     bool isLoading() const;
 
@@ -148,19 +148,22 @@ class ProjectsModel : public QAbstractListModel
     void setSyncManager( SynchronizationManager *newSyncManager );
 
   public slots:
-    // MerginAPI - backend signals
+    // MerginAPI - project list signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+
+    // Synchonization signals
     void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int newVersion );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );
-    void onAuthChanged(); // when user logs out
 
     // LocalProjectsManager signals
     void onProjectAdded( const LocalProject &project );
-    void onAboutToRemoveProject( const LocalProject project );
+    void onAboutToRemoveProject( const LocalProject &project );
     void onProjectDataChanged( const LocalProject &project );
+
+    void onAuthChanged();
 
     void setMerginApi( MerginApi *merginApi );
     void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
@@ -181,9 +184,7 @@ class ProjectsModel : public QAbstractListModel
     void loadLocalProjects();
     void initializeProjectsModel();
 
-    MerginApi *mBackend = nullptr;
-    LocalProjectsManager *mLocalProjectsManager = nullptr;
-    QList<std::shared_ptr<Project>> mProjects;
+    QList<Project> mProjects;
 
     ProjectModelTypes mModelType = EmptyProjectsModel;
 
@@ -191,11 +192,14 @@ class ProjectsModel : public QAbstractListModel
     int mServerProjectsCount = -1;
     int mPaginatedPage = 1;
 
-    //! For processing only my requests
+    //! For processing requests sent via this model
     QString mLastRequestId;
 
     bool mModelIsLoading;
-    SynchronizationManager *mSyncManager = nullptr;
+
+    MerginApi *mBackend = nullptr; // not owned
+    LocalProjectsManager *mLocalProjectsManager = nullptr; // not owned
+    SynchronizationManager *mSyncManager = nullptr; // not owned
 };
 
 #endif // PROJECTSMODEL_H

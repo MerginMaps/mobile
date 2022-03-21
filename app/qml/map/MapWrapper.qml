@@ -253,12 +253,12 @@ Item {
         break
       }
       case "recordInLayerFeature": {
-        __activeProjectManager.setActiveLayer( root.targetLayerToUse )
+        __activeProject.setActiveLayer( root.targetLayerToUse )
         root.recordInLayerFeatureStarted()
         break
       }
       case "editGeometry": {
-        __activeProjectManager.setActiveLayer( root.featurePairToEdit.layer )
+        __activeProject.setActiveLayer( root.featurePairToEdit.layer )
         _digitizingHighlight.featureLayerPair = root.featurePairToEdit
         _digitizingHighlight.visible = true
         root.editingGeometryStarted()
@@ -306,7 +306,7 @@ Item {
     width: root.width
     visible: root.state !== "inactive"
 
-    mapSettings.project: __activeProjectManager.qgsProject
+    mapSettings.project: __activeProject.qgsProject
 
     IdentifyKit {
       id: _identifyKit
@@ -714,7 +714,7 @@ Item {
     width: window.width
     edge: Qt.BottomEdge
 
-    onActiveLayerChangeRequested: __activeProjectManager.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+    onActiveLayerChangeRequested: __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
   RecordToolbar {

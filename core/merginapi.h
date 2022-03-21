@@ -541,7 +541,7 @@ class MerginApi: public QObject
 
     void loadAuthData();
 
-    bool validateAuthAndContinute();
+    bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
     /**
