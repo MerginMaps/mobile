@@ -32,8 +32,8 @@ Drawer {
   CodeFilter {
     id: zxingFilter
 
-    onCapturedDataChanged: {
-      codeReader.scanFinished(capturedData)
+    onDataCaptured: {
+      codeReader.scanFinished( data )
       camera.cameraState = Camera.UnloadedState
       codeReaderTimer.start()
     }
@@ -41,10 +41,12 @@ Drawer {
 
   Camera {
     id: camera
-    onDeviceIdChanged: {
-      focus.focusMode = CameraFocus.FocusContinuous
-      focus.focusPointMode = CameraFocus.FocusPointAuto
+
+    focus {
+        focusMode: Camera.FocusContinuous
+        focusPointMode: Camera.FocusPointAuto
     }
+
     cameraState: Camera.UnloadedState
     onError: __inputUtils.showNotificationRequested(errorString)
   }

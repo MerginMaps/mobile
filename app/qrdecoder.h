@@ -12,8 +12,8 @@
 class QRDecoder : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString captured READ captured WRITE setCaptured NOTIFY capturedChanged )
     Q_PROPERTY( bool isDecoding READ isDecoding WRITE setIsDecoding NOTIFY isDecodingChanged )
+
   public:
     explicit QRDecoder( QObject *parent = nullptr );
     QString captured() const;
@@ -29,16 +29,14 @@ class QRDecoder : public QObject
     void process( const QImage capturedImage );
 
   signals:
-    void capturedChanged( QString captured );
+    void capturedText( QString capturedText );
     void isDecodingChanged( bool isDecoding );
 
   private:
-    QString _captured = "";
     QOpenGLContext *_ctx;
     bool _isDecoding = false;
     QVideoFrame _videoFrame;
 
-    void setCaptured( QString captured );
     void setIsDecoding( bool isDecoding );
 };
 

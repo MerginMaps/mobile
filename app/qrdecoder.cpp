@@ -80,22 +80,6 @@ QRDecoder::QRDecoder( QObject *parent ) : QObject( parent )
 
 }
 
-QString QRDecoder::captured() const
-{
-  return _captured;
-}
-
-void QRDecoder::setCaptured( QString captured )
-{
-  if ( _captured == captured )
-  {
-    return;
-  }
-
-  _captured = captured;
-  emit capturedChanged( _captured );
-}
-
 void QRDecoder::setIsDecoding( bool isDecoding )
 {
   if ( _isDecoding == isDecoding )
@@ -131,7 +115,7 @@ void QRDecoder::process( const QImage capturedImage )
 
   if ( result.isValid() )
   {
-    setCaptured( result.text() );
+    emit capturedText( result.text() );
   }
 
   setIsDecoding( false );
