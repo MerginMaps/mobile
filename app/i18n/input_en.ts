@@ -315,7 +315,7 @@
 <context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="62"/>
+        <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
         <translation type="unfinished"></translation>
     </message>
