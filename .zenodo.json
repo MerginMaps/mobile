@@ -1,0 +1,55 @@
+{
+    "description": "<p>Input app is a QGIS based mobile app for Android and iOS devices.</p>", 
+    "license": "GPLv3", 
+    "title": "Input: QGIS in your pocket", 
+    "version": "1.3.0", 
+    "upload_type": "software", 
+    "publication_date": "2022-02-24", 
+    "creators": [
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Tomas Mizera"
+        }, 
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Peter Petrik"
+        }, 
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Martin Dobias"
+        }, 
+        {
+            "affiliation": "Lutra Consulting", 
+            "name": "Saber Razmjooei"
+        }, 
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Nedjima Belgacem"
+        }, 
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Martin Varga"
+        }, 
+        {
+            "affiliation": "Lutra Consulting", 
+            "name": "Peter Wells"
+        }, 
+        {
+            "affiliation": "@lutraconsulting", 
+            "name": "Stefanos Natsis"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/lutraconsulting/input/tree/1.3.0", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.6375198", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
