@@ -1,6 +1,13 @@
-cff-version: 1.1.0
+cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-authors: Input app contributors
-    orcid: https://doi.org/10.5281/zenodo.6375198
-title: lutraconsulting/input
+authors:
+- family-names: "Martin"
+  given-names: "Dobias"
+- family-names: "Peter"
+  given-names: "Petrik"
+- family-names: "Tomas"
+  given-names: "Mizera"
+title: "Input app"
+doi: 10.5281/zenodo.6375198
 date-released: 2017-12-18
+url: "https://github.com/lutraconsulting/input"
