@@ -14,6 +14,7 @@ Other Checks:
 [![Translations](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml)
 
 Citation link:
+
 [![DOI](https://zenodo.org/badge/DOI/PLACEHOLDER/zenodo.PLACEHOLDER.svg)](https://doi.org/PLACEholder/zenodo.PLACEHOLDER)
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
