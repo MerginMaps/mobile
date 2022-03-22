@@ -73,23 +73,12 @@ CodeFilter::CodeFilter()
 {
   mDecoder = std::shared_ptr<QRDecoder>( new QRDecoder );
 
-  QObject::connect( mDecoder.get(), &QRDecoder::capturedChanged, this, &CodeFilter::setCapturedData );
+  QObject::connect( mDecoder.get(), &QRDecoder::capturedText, this, &CodeFilter::dataCaptured );
 }
 
 QVideoFilterRunnable *CodeFilter::createFilterRunnable()
 {
   return new QRRunnable( this );
-}
-
-QString CodeFilter::capturedData()
-{
-  return mCapturedData;
-}
-
-void CodeFilter::setCapturedData( const QString &newValue )
-{
-  mCapturedData = newValue;
-  emit capturedDataChanged();
 }
 
 bool CodeFilter::isDecoding() const

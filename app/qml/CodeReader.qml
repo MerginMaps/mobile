@@ -32,8 +32,8 @@ Drawer {
   CodeFilter {
     id: zxingFilter
 
-    onCapturedDataChanged: {
-      codeReader.scanFinished(capturedData)
+    onDataCaptured: {
+      codeReader.scanFinished( data )
       camera.cameraState = Camera.UnloadedState
       codeReaderTimer.start()
     }

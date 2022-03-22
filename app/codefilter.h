@@ -23,12 +23,11 @@
 class CodeFilter : public QAbstractVideoFilter
 {
     Q_OBJECT
-    Q_PROPERTY( QString capturedData READ capturedData NOTIFY capturedDataChanged )
     Q_PROPERTY( bool isDecoding READ isDecoding NOTIFY isDecodingChanged )
+
   public:
     CodeFilter();
 
-    QString capturedData();
     bool isDecoding() const;
     std::shared_ptr<QRDecoder> decoder() const;
     QFuture<void> futureThread() const;
@@ -42,14 +41,10 @@ class CodeFilter : public QAbstractVideoFilter
     QVideoFilterRunnable *createFilterRunnable() override;
 
   signals:
-    void capturedDataChanged();
+    void dataCaptured( const QString &data );
     void isDecodingChanged( bool isDecoding );
 
-  private slots:
-    void setCapturedData( const QString &capturedData );
-
   private:
-    QString mCapturedData;
     bool mIsDecoding;
     std::shared_ptr<QRDecoder> mDecoder = nullptr;
     QFuture<void> mFutureThread;
