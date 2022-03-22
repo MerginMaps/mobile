@@ -15,7 +15,7 @@ Other Checks:
 
 Citation link:
 
-[![DOI](https://zenodo.org/badge/DOI/PLACEHOLDER/zenodo.PLACEHOLDER.svg)](https://doi.org/PLACEholder/zenodo.PLACEHOLDER)
+[![DOI](https://zenodo.org/badge/46554390.svg)](https://zenodo.org/badge/latestdoi/46554390)
 
 Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
