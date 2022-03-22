@@ -1,0 +1,6 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors: Input app contributors
+    orcid: https://doi.org/10.5281/zenodo.6375198
+title: lutraconsulting/input
+date-released: 2017-12-18
