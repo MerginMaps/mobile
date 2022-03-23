@@ -6,6 +6,10 @@
 
 ![](media/class-structure.png)
 
+# Projects handling during sync
+
+![](media/projects-sync.png)
+
 # Fields in more menu:
 
 ![](media/more-menu.png)
