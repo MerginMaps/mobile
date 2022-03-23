@@ -33,7 +33,10 @@ AutosyncController::AutosyncController(
     const QgsVectorLayer *vecLayer = qobject_cast<const QgsVectorLayer *>( layer );
     if ( vecLayer )
     {
-      QObject::connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, &AutosyncController::projectChangeDetected );
+      if ( !vecLayer->readOnly() )
+      {
+        QObject::connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, &AutosyncController::projectChangeDetected );
+      }
     }
   }
 }
