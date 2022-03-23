@@ -11,58 +11,25 @@
 #define AUTOSYNCCONTROLLER_H
 
 #include <QObject>
-#include <QTimer>
 
-#include "qgsproject.h"
-
-#include "project.h"
+class QgsProject;
 
 class AutosyncController : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( SyncStatus syncStatus READ syncStatus NOTIFY syncStatusChanged )
-
   public:
 
-    enum SyncStatus
-    {
-      Synced = 0,
-      SyncInProgress,
-      PendingChanges,
-      SyncKeepsFailing
-    };
-    Q_ENUMS( SyncStatus )
-
-    explicit AutosyncController( QObject *parent = nullptr );
-
+    explicit AutosyncController( QgsProject *openedQgsProject, QObject *parent = nullptr );
     virtual ~AutosyncController();
-
-    SyncStatus syncStatus();
-
-    void setActiveProject( Project project );
-
-    void setActiveQgsProject( QgsProject *qgsProject );
 
   signals:
 
-    void syncProject( Project *project );
-
-    void syncStatusChanged( SyncStatus status );
-
-  public slots:
-
-    void handleSyncFinished();
+    void projectChangeDetected();
 
   private:
 
-    SyncStatus mSyncStatus = Synced;
-
-    Project *mActiveProject = nullptr;
-
-    QgsProject *mActiveQgsProject = nullptr;
-
-    QTimer mTimer;
+    QgsProject *mQgsProject = nullptr; // not owned
 };
 
 #endif // AUTOSYNCCONTROLLER_H

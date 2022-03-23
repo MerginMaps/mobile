@@ -30,7 +30,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
-  bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ) ).toBool();
+  bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );

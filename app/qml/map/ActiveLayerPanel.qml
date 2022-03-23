@@ -71,7 +71,7 @@ Drawer {
         borderWidth: 1
 
         onListItemClicked: {
-          __activeProjectManager.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+          __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
           layerPanel.visible = false
         }
     }

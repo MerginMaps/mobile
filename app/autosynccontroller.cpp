@@ -8,33 +8,37 @@
  ***************************************************************************/
 
 #include "autosynccontroller.h"
+#include "coreutils.h"
 
-AutosyncController::AutosyncController( QObject *parent ) : QObject( parent )
+#include "qgsproject.h"
+#include "qgsvectorlayer.h"
+
+AutosyncController::AutosyncController(
+  QgsProject *openedQgsProject,
+  QObject *parent
+)
+  : QObject( parent )
+  , mQgsProject( openedQgsProject )
 {
-  // raise NotImplemented :)
+  if ( !mQgsProject )
+  {
+    CoreUtils::log( QStringLiteral( "Autosync" ), QStringLiteral( "Received an invalid active project data" ) );
+    return;
+  }
+
+  // Register for data change of project's vector layers
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers( true );
+  for ( const QgsMapLayer *layer : layers )
+  {
+    const QgsVectorLayer *vecLayer = qobject_cast<const QgsVectorLayer *>( layer );
+    if ( vecLayer )
+    {
+      if ( !vecLayer->readOnly() )
+      {
+        QObject::connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, &AutosyncController::projectChangeDetected );
+      }
+    }
+  }
 }
 
-AutosyncController::~AutosyncController()
-{
-  // raise NotImplemented :)
-}
-
-AutosyncController::SyncStatus AutosyncController::syncStatus()
-{
-  return mSyncStatus;
-}
-
-void AutosyncController::setActiveProject( Project )
-{
-  // raise NotImplemented :)
-}
-
-void AutosyncController::setActiveQgsProject( QgsProject * )
-{
-  // raise NotImplemented :)
-}
-
-void AutosyncController::handleSyncFinished()
-{
-  // raise NotImplemented :)
-}
+AutosyncController::~AutosyncController() = default;
