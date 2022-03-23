@@ -81,6 +81,12 @@ class ProjectsModel : public QAbstractListModel
     };
     Q_ENUM( ProjectModelTypes )
 
+    enum MergeStrategy
+    {
+      KeepPrevious = 0,
+      DiscardPrevious
+    };
+
     ProjectsModel( QObject *parent = nullptr );
     ~ProjectsModel() override {};
 
@@ -125,7 +131,7 @@ class ProjectsModel : public QAbstractListModel
     Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
 
     //! Merges local and remote projects based on the model type
-    void mergeProjects( const MerginProjectsList &merginProjects, bool keepPrevious = false );
+    void mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy = DiscardPrevious );
 
     //! Returns Project deep copy from projectId
     Project projectFromId( const QString &projectId ) const;

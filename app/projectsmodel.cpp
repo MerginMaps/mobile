@@ -207,14 +207,14 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   {
     // if we are populating first page, reset model and throw away previous projects
     beginResetModel();
-    mergeProjects( merginProjects, false );
+    mergeProjects( merginProjects, MergeStrategy::DiscardPrevious );
     endResetModel();
   }
   else
   {
     // paginating next page, keep previous projects and emit model add items
     beginInsertRows( QModelIndex(), mProjects.size(), mProjects.size() + merginProjects.size() - 1 );
-    mergeProjects( merginProjects, true );
+    mergeProjects( merginProjects, MergeStrategy::KeepPrevious );
     endInsertRows();
   }
 
@@ -239,12 +239,14 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
   setModelIsLoading( false );
 }
 
-void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, bool keepPrevious )
+void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy )
 {
   const LocalProjectsList localProjects = mLocalProjectsManager->projects();
 
-  if ( !keepPrevious )
+  if ( mergeStrategy == DiscardPrevious )
+  {
     mProjects.clear();
+  }
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
