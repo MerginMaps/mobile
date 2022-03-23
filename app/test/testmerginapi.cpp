@@ -87,6 +87,7 @@ void TestMerginApi::initTestCase()
 
   // remove any projects on the server that may prevent us from creating them
   deleteRemoteProject( mApiExtra, mUsername, "testListProject" );
+  deleteRemoteProject( mApiExtra, mUsername, "testListProjectByName" );
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
   deleteRemoteProject( mApiExtra, mUsername, "testDownloadProjectSpecChars" );
   deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );

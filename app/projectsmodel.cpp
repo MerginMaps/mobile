@@ -483,7 +483,7 @@ void ProjectsModel::onAboutToRemoveProject( const LocalProject &localProject )
     else
     {
       // just remove local part
-      mProjects[ix].mergin = MerginProject();
+      mProjects[ix].local = LocalProject();
       mProjects[ix].mergin.status = ProjectStatus::projectStatus( mProjects[ix] );
 
       QModelIndex modelIx = index( ix );
