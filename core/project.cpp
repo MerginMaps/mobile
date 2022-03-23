@@ -20,35 +20,9 @@ QString LocalProject::id() const
   return dir.dirName();
 }
 
-LocalProject *LocalProject::clone() const
-{
-  LocalProject *me = new LocalProject();
-  me->projectName = projectName;
-  me->projectNamespace = projectNamespace;
-  me->projectDir = projectDir;
-  me->projectError = projectError;
-  me->qgisProjectFilePath = qgisProjectFilePath;
-  me->localVersion = localVersion;
-  return me;
-}
-
 QString MerginProject::id() const
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );
-}
-
-MerginProject *MerginProject::clone() const
-{
-  MerginProject *me = new MerginProject();
-  me->projectName = projectName;
-  me->projectNamespace = projectNamespace;
-  me->serverUpdated = serverUpdated;
-  me->serverVersion = serverVersion;
-  me->pending = pending;
-  me->progress = progress;
-  me->status = status;
-  me->remoteError = remoteError;
-  return me;
 }
 
 ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )

@@ -243,8 +243,9 @@ class MerginApi: public QObject
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
      * \param withAuth If True, request is constructed with current authorization
+     * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE void pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
+    Q_INVOKABLE bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
 
     /**
      * Sends non-blocking POST request to the server to push changes in a project with a given name.
@@ -254,8 +255,9 @@ class MerginApi: public QObject
      * \param projectNamespace Project's namespace used in request.
      * \param projectName Project's name used in request.
      * \param isInitialPush indicates if this is first push of the project (project creation)
+     * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE void pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
+    Q_INVOKABLE bool pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
 
     /**
      * Sends non-blocking POST request to the server to cancel a running push of a project with a given name.
@@ -437,9 +439,9 @@ class MerginApi: public QObject
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
 
-    void listProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectCount, int page, QString requestId );
+    void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
-    void listProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+    void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
     void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
@@ -470,6 +472,9 @@ class MerginApi: public QObject
     void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
     void projectAttachedToMergin( const QString &projectFullName );
+
+    void projectAlreadyOnLatestVersion( const QString &projectFullName );
+    void missingAuthorizationError( const QString &projectFullName );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

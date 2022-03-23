@@ -2446,7 +2446,7 @@ void TestMerginApi::testAutosyncFailure()
   // 7. sign back in
   //
 
-  // TODO: Will be added with incremental requests
+  // Will be added with incremental requests
 }
 
 void TestMerginApi::testRegister()

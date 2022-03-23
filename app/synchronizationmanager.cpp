@@ -18,10 +18,9 @@ SynchronizationManager::SynchronizationManager(
 {
   if ( mMerginApi )
   {
-    QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::syncProjectFinished );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::syncProjectProgressChanged );
-
-    QObject::connect( mMerginApi, &MerginApi::listProjectsByNameFinished, this, &SynchronizationManager::receivedRemoteProjectInfo );
+    QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
+    QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
+    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
   }
 }
 
@@ -31,15 +30,12 @@ void SynchronizationManager::syncProject( const Project &project, bool withAuth 
 {
   if ( project.isLocal() )
   {
-    // sync it as regular local project
     syncProject( project.local, withAuth );
     return;
   }
 
-  // project does not have local struct yet -> we download it for the first time
-
+  // project is not local yet -> we download it for the first time
   mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, withAuth );
-  // TODO: send getProjectInfo / listProjectsByName to find out if there actually is change on server!
 }
 
 void SynchronizationManager::syncProject( const LocalProject &project, bool withAuth )
@@ -56,46 +52,122 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   QString projectFullName = MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
 
-  if ( mOngoingSyncs.contains( projectFullName ) )
+  if ( mSyncProcesses.contains( projectFullName ) )
   {
     return; // there is already an active sync
   }
 
+  bool syncHasStarted = false;
+
   if ( ProjectStatus::hasLocalChanges( project ) )
   {
-    mMerginApi->pushProject( project.projectNamespace, project.projectName );
+    syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
   }
   else
   {
-    // no local changes, let's see if there are changes on server side
-    mMerginApi->pullProject( project.projectNamespace, project.projectName, withAuth );
+    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, withAuth );
   }
 
-  // TODO: insert a new entry to syncs hashmap
-//  SyncTransation &syncEntry = mOngoingSyncs[projectFullName];
+  if ( syncHasStarted )
+  {
+    SyncProcess sync;
+    sync.pending = true;
 
-  // TODO: start listening on project sync changes and emit them further
+    mSyncProcesses.insert( projectFullName, sync );
+
+    emit syncStarted( projectFullName );
+  }
 }
 
 void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 {
-  Transactions t = mMerginApi->transactions();
-
-  if ( t.contains( projectFullname ) )
+  if ( mSyncProcesses.contains( projectFullname ) )
   {
-    TransactionStatus &transaction = t[projectFullname];
+    Transactions syncTransactions = mMerginApi->transactions();
 
-    if ( transaction.type == TransactionStatus::Pull )
+    if ( syncTransactions.contains( projectFullname ) )
     {
-      mMerginApi->cancelPull( projectFullname );
-    }
-    else
-    {
-      mMerginApi->cancelPush( projectFullname );
+      TransactionStatus &transaction = syncTransactions[projectFullname];
+
+      if ( transaction.type == TransactionStatus::Pull )
+      {
+        mMerginApi->cancelPull( projectFullname );
+      }
+      else
+      {
+        mMerginApi->cancelPush( projectFullname );
+      }
     }
   }
 }
 
-void SynchronizationManager::receivedRemoteProjectInfo( const MerginProjectsList &merginProjects, Transactions, QString requestId )
+void SynchronizationManager::migrateProjectToMergin( const QString &projectName )
 {
+  QString projectNamespace = mMerginApi->merginUserName();
+  QString fullProjectName = MerginApi::getFullProjectName( projectNamespace, projectName );
+
+  if ( !mSyncProcesses.contains( fullProjectName ) )
+  {
+    mMerginApi->migrateProjectToMergin( projectName );
+    emit syncStarted( fullProjectName );
+  }
+}
+
+qreal SynchronizationManager::syncProgress( const QString &projectFullName ) const
+{
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    return mSyncProcesses.value( projectFullName ).progress;
+  }
+
+  return -1;
+}
+
+bool SynchronizationManager::hasPendingSync( const QString &projectFullName ) const
+{
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    return mSyncProcesses.value( projectFullName ).pending;
+  }
+
+  return false;
+}
+
+QList<QString> SynchronizationManager::pendingProjects() const
+{
+  return mSyncProcesses.keys();
+}
+
+void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullName, bool withError )
+{
+  Q_UNUSED( withError )
+
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    mSyncProcesses.remove( projectFullName );
+  }
+
+  emit syncCancelled( projectFullName );
+}
+
+void SynchronizationManager::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version )
+{
+  Q_UNUSED( projectDir )
+
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    mSyncProcesses.remove( projectFullName );
+  }
+
+  emit syncFinished( projectFullName, successfully, version );
+}
+
+void SynchronizationManager::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
+{
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    mSyncProcesses[projectFullName].progress = progress;
+  }
+
+  emit syncProgressChanged( projectFullName, progress );
 }

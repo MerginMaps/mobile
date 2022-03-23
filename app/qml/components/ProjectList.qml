@@ -84,9 +84,9 @@ Item {
       projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
       projectDescription: model.ProjectDescription
-      projectStatus: model.ProjectSyncStatus ? model.ProjectSyncStatus : ProjectStatus.NoVersion
+      projectStatus: model.ProjectStatus ? model.ProjectStatus : ProjectStatus.NoVersion
       projectIsValid: model.ProjectIsValid
-      projectIsPending: model.ProjectPending ? model.ProjectPending : false
+      projectIsPending: model.ProjectSyncPending ? model.ProjectSyncPending : false
       projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
       projectIsLocal: model.ProjectIsLocal
       projectIsMergin: model.ProjectIsMergin
@@ -100,7 +100,7 @@ Item {
       onOpenRequested: {
         if ( model.ProjectIsLocal )
           root.openProjectRequested( projectId, model.ProjectFilePath )
-        else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectPending) {
+        else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectSyncPending) {
           downloadProjectDialog.relatedProjectId = model.ProjectId
           downloadProjectDialog.open()
         }

@@ -73,8 +73,6 @@ struct LocalProject
     //!       Project->isMergin() is recommended to use over this one
     bool hasMerginMetadata() const { return localVersion > 0; }
 
-    LocalProject *clone() const;
-
     bool operator ==( const LocalProject &other )
     {
       return ( this->id() == other.id() );
@@ -107,14 +105,10 @@ struct MerginProject
   int serverVersion;
 
   ProjectStatus::Status status = ProjectStatus::NoVersion;
-  bool pending = false;
-  qreal progress = 0;
 
   QString remoteError; // Error leading to project not being able to sync (received error code from server)
 
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
-
-  MerginProject *clone() const;
 
   bool operator ==( const MerginProject &other )
   {
@@ -158,16 +152,16 @@ struct Project
     return QString();
   }
 
-  QString projectId() const
+  QString id() const
   {
     if ( isMergin() ) return mergin.id();
     else if ( isLocal() ) return local.id();
     return QString();
   }
 
-  QString projectFullName() const
+  QString fullName() const
   {
-    return projectId();
+    return id();
   }
 
   bool operator ==( const Project &other )

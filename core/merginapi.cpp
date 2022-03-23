@@ -576,9 +576,10 @@ void MerginApi::pushFinish( const QString &projectFullName, const QString &trans
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting transaction finish: " ) + transactionUUID );
 }
 
-void MerginApi::pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth )
+bool MerginApi::pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
+  bool pullHasStarted = false;
 
   CoreUtils::log( "pull " + projectFullName, "### Starting ###" );
 
@@ -596,16 +597,20 @@ void MerginApi::pullProject( const QString &projectNamespace, const QString &pro
     emit syncProjectStatusChanged( projectFullName, 0 );
 
     connect( reply, &QNetworkReply::finished, this, &MerginApi::pullInfoReplyFinished );
+    pullHasStarted = true;
   }
   else
   {
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED to create project info request!" ) );
   }
+
+  return pullHasStarted;
 }
 
-void MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
+bool MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
+  bool pushHasStarted = false;
 
   CoreUtils::log( "push " + projectFullName, "### Starting ###" );
 
@@ -625,11 +630,14 @@ void MerginApi::pushProject( const QString &projectNamespace, const QString &pro
     emit syncProjectStatusChanged( projectFullName, 0 );
 
     connect( reply, &QNetworkReply::finished, this, &MerginApi::pushInfoReplyFinished );
+    pushHasStarted = true;
   }
   else
   {
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED to create project info request!" ) );
   }
+
+  return pushHasStarted;
 }
 
 void MerginApi::authorize( const QString &login, const QString &password )
@@ -1055,13 +1063,12 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
 {
   if ( withAuth && !validateAuth() )
   {
-    // TODO: emit missingCredentialsError()
+    emit missingAuthorizationError( projectFullName );
     return nullptr;
   }
 
   if ( mApiVersionStatus != MerginApiStatus::OK )
   {
-    // TODO: emit merginServerNotOk()
     return nullptr;
   }
 
@@ -1371,7 +1378,7 @@ void MerginApi::listProjectsReplyFinished( QString requestId )
 
   r->deleteLater();
 
-  emit listProjectsFinished( projectList, mTransactionalStatus, projectCount, requestedPage, requestId );
+  emit listProjectsFinished( projectList, projectCount, requestedPage, requestId );
 }
 
 void MerginApi::listProjectsByNameReplyFinished( QString requestId )
@@ -1400,7 +1407,7 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
 
   r->deleteLater();
 
-  emit listProjectsByNameFinished( projectList, mTransactionalStatus, requestId );
+  emit listProjectsByNameFinished( projectList, requestId );
 }
 
 
@@ -1825,10 +1832,22 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+
+  transaction.projectMetadata = data;
+  transaction.version = serverProject.version;
+
   LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( projectInfo.isValid() )
   {
     transaction.projectDir = projectInfo.projectDir;
+
+    // do not continue if we are already on the latest version
+    if ( projectInfo.localVersion != -1 && projectInfo.localVersion == serverProject.version )
+    {
+      emit projectAlreadyOnLatestVersion( projectFullName );
+      return finishProjectSync( projectFullName, true );
+    }
   }
   else
   {
@@ -1853,12 +1872,6 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
   }
 
   Q_ASSERT( !transaction.projectDir.isEmpty() );  // that would mean we do not have entry -> fail getting local files
-
-  MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-  MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-
-  transaction.projectMetadata = data;
-  transaction.version = serverProject.version;
 
   if ( transaction.configAllowed )
   {

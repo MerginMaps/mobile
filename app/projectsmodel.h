@@ -53,12 +53,12 @@ class ProjectsModel : public QAbstractListModel
       ProjectId,
       ProjectDirectory,
       ProjectDescription,
-      ProjectPending,
       ProjectIsMergin,
       ProjectIsLocal,
       ProjectFilePath,
       ProjectIsValid,
-      ProjectSyncStatus,
+      ProjectStatus,
+      ProjectSyncPending,
       ProjectSyncProgress,
       ProjectRemoteError
     };
@@ -85,10 +85,10 @@ class ProjectsModel : public QAbstractListModel
     ~ProjectsModel() override {};
 
     // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will be always instantiated from QML with these mandatory properties
-    Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi )
-    Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager )
-    Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType )
+    Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
+    Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
     Q_PROPERTY( SynchronizationManager *syncManager READ syncManager WRITE setSyncManager NOTIFY syncManagerChanged )
+    Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager NOTIFY localProjectsManagerChanged )
 
     //! Indicates that model has more projects to fetch, so view can call fetchAnotherPage
     Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
@@ -125,36 +125,30 @@ class ProjectsModel : public QAbstractListModel
     Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
 
     //! Merges local and remote projects based on the model type
-    void mergeProjects( const MerginProjectsList &merginProjects, Transactions pendingProjects, bool keepPrevious = false );
+    void mergeProjects( const MerginProjectsList &merginProjects, bool keepPrevious = false );
 
-    ProjectsModel::ProjectModelTypes modelType() const;
-
-    MerginApi *merginApi() const { return mBackend; }
-
-    LocalProjectsManager *localProjectsManager() const { return mLocalProjectsManager; }
-
-    bool hasMoreProjects() const;
-
-    int projectIndexFromId( const QString &projectId ) const;
-
+    //! Returns Project deep copy from projectId
     Project projectFromId( const QString &projectId ) const;
 
-    bool isLoading() const;
-
-    void setModelIsLoading( bool state );
-
+    MerginApi *merginApi() const;
     SynchronizationManager *syncManager() const;
+    LocalProjectsManager *localProjectsManager() const;
+    ProjectsModel::ProjectModelTypes modelType() const;
 
-    void setSyncManager( SynchronizationManager *newSyncManager );
+    bool isLoading() const;
+    bool hasMoreProjects() const;
 
   public slots:
     // MerginAPI - project list signals
-    void onListProjectsFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, int projectsCount, int page, QString requestId );
-    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, Transactions pendingProjects, QString requestId );
+    void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, QString requestId );
+    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
 
     // Synchonization signals
-    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int newVersion );
+    void onProjectSyncStarted( const QString &projectFullName );
+    void onProjectSyncCancelled( const QString &projectFullName );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion );
+
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );
 
@@ -166,8 +160,9 @@ class ProjectsModel : public QAbstractListModel
     void onAuthChanged();
 
     void setMerginApi( MerginApi *merginApi );
-    void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
     void setModelType( ProjectModelTypes modelType );
+    void setSyncManager( SynchronizationManager *newSyncManager );
+    void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
 
   signals:
     void modelInitialized();
@@ -175,9 +170,17 @@ class ProjectsModel : public QAbstractListModel
 
     void isLoadingChanged( bool isLoading );
 
-    void syncManagerChanged( SynchronizationManager * );
+    void merginApiChanged( MerginApi *api );
+    void modelTypeChanged( ProjectModelTypes type );
+    void syncManagerChanged( SynchronizationManager *syncManager );
+    void localProjectsManagerChanged( LocalProjectsManager *projectsManager );
 
   private:
+
+    int projectIndexFromId( const QString &projectId ) const;
+
+    void setModelIsLoading( bool state );
+
     QString modelTypeToFlag() const;
     QStringList projectNames() const;
     void clearProjects();
