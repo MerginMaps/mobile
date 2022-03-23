@@ -235,8 +235,6 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
     {
       emit syncActiveProject( mLocalProject );
     } );
-
-    qDebug() << "Autosync has started!";
   }
   else
   {
@@ -245,8 +243,6 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
       mAutosyncController->disconnect();
     }
     mAutosyncController.reset();
-
-    qDebug() << "Autosync stopped!";
   }
 }
 
