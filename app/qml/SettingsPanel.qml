@@ -280,6 +280,25 @@ Item {
             }
           }
 
+          PanelItem {
+            height: root.rowHeight
+            width: parent.width
+            color: InputStyle.clrPanelMain
+            text: qsTr( "Automatically sync changes" )
+
+            SettingsSwitch {
+              id: autosyncSwitch
+
+              checked: __appSettings.autosyncAllowed
+              onCheckedChanged: __appSettings.autosyncAllowed = checked
+            }
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: autosyncSwitch.toggle()
+            }
+          }
+
           // Delimeter
           PanelItem {
             color: InputStyle.panelBackgroundLight
