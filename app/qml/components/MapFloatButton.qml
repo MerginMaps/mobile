@@ -15,6 +15,7 @@ Item {
 
   property double maxWidth
   property alias content: contentContainer.children
+  property bool withImplicitMargins: true
 
   signal clicked()
 
@@ -29,7 +30,7 @@ Item {
     border.width: InputStyle.borderSize
     border.color: InputStyle.darkGreen
 
-    implicitWidth: Math.min( contentContainer.childrenRect.width, root.maxWidth ) + InputStyle.smallGap
+    implicitWidth: Math.min( contentContainer.childrenRect.width, root.maxWidth ) + ( root.withImplicitMargins ? InputStyle.smallGap : 0 )
 
     radius: InputStyle.cornerRadius
     color: InputStyle.panelBackgroundLight

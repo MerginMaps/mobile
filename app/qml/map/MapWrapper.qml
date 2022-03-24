@@ -547,6 +547,101 @@ Item {
   }
 
   MapFloatButton {
+    id: syncButton
+
+    onClicked: __activeProject.requestSync()
+
+    maxWidth: InputStyle.mapBtnHeight
+    withImplicitMargins: false
+
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
+    anchors.right: parent.right
+    anchors.rightMargin: InputStyle.smallGap
+
+    visible: root.state === "view"
+
+    content: Item {
+
+      implicitWidth: InputStyle.mapBtnHeight
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: syncicon
+
+        iconSize: parent.height / 2
+        source: InputStyle.syncIcon
+
+        anchors.centerIn: parent
+      }
+
+      RotationAnimation {
+        id: syncInProgressAnimation
+
+        target: syncicon
+
+        from: 0
+        to: 720
+        duration: 1000
+
+        alwaysRunToEnd: true
+        loops: Animation.Infinite
+        easing.type: Easing.InOutSine
+      }
+    }
+
+    Connections {
+      target: __syncManager
+
+      function onSyncStarted( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.start()
+        }
+      }
+
+      function onSyncFinished( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+        }
+      }
+
+      function onSyncCancelled( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+        }
+      }
+    }
+
+    Connections {
+      target: __merginApi
+
+      function onMissingAuthorizationError( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          console.log( "Missing credentials!" )
+        }
+      }
+
+      function onProjectAlreadyOnLatestVersion( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          console.log( "Already on the latest version!" )
+        }
+      }
+    }
+  }
+
+  MapFloatButton {
     id: _accuracyButton
 
     property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2

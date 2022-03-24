@@ -57,6 +57,7 @@ struct LocalProject
     QString projectNamespace;
 
     QString id() const; //! projectFullName for time being
+    QString fullName() const;
 
     QString projectDir;
     QString projectError; // Error that leads to project not being able to open in app

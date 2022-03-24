@@ -90,6 +90,11 @@ LocalProject ActiveProject::localProject()
   return mLocalProject;
 }
 
+QString ActiveProject::projectFullName() const
+{
+  return mLocalProject.fullName();
+}
+
 bool ActiveProject::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
@@ -231,10 +236,7 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
 
     mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
 
-    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, [this]()
-    {
-      emit syncActiveProject( mLocalProject );
-    } );
+    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, &ActiveProject::requestSync );
   }
   else
   {
@@ -244,6 +246,11 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
     }
     mAutosyncController.reset();
   }
+}
+
+void ActiveProject::requestSync()
+{
+  emit syncActiveProject( mLocalProject );
 }
 
 void ActiveProject::setMapSettings( QgsQuickMapSettings *mapSettings )

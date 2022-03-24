@@ -53,6 +53,8 @@ class ActiveProject: public QObject
     //! Returns Input related info about active project
     LocalProject localProject();
 
+    Q_INVOKABLE QString projectFullName() const;
+
     /**
      * Loads a .qgz/.qgs project file specified by filePath.
      * \param filePath Path to project file.
@@ -131,6 +133,8 @@ class ActiveProject: public QObject
     bool reloadProject( QString projectDir );
 
     void setAutosyncEnabled( bool enabled );
+
+    void requestSync();
 
   private:
 

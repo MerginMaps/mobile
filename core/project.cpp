@@ -13,6 +13,11 @@
 
 QString LocalProject::id() const
 {
+  return fullName();
+}
+
+QString LocalProject::fullName() const
+{
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
 
