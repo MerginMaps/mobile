@@ -449,6 +449,8 @@ Item {
 
       Connections {
         target: __merginApi
+        enabled: root.visible
+
         onListProjectsFinished: stackView.pending = false
         onListProjectsByNameFinished: stackView.pending = false
         onApiVersionStatusChanged: {

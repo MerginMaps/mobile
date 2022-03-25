@@ -97,6 +97,7 @@
 #include "position/positionprovidersmodel.h"
 #include "position/abstractpositionprovider.h"
 #include "synchronizationmanager.h"
+#include "synchronizationerror.h"
 
 
 #ifndef NDEBUG
@@ -231,6 +232,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<ActiveProject>( "lc", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
+  qmlRegisterUncreatableType<SynchronizationError>( "lc", 1, 0, "SyncError", "SyncError Enum" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );

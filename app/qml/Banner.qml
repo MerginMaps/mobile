@@ -20,7 +20,7 @@ Rectangle {
   property string link: ""
   property string source: InputStyle.exclamationIcon
   property real padding: InputStyle.innerFieldMargin
-  property bool showWarning: false
+  property bool showBanner: false
 
   id: banner
   color: banner.bgColor
@@ -34,10 +34,10 @@ Rectangle {
   state:"fade"
 
   states: [
-    State { name: "show"; when: banner.showWarning;
+    State { name: "show"; when: banner.showBanner;
       PropertyChanges { target: banner; opacity: 1.0 }
     },
-    State { name: "fade"; when: !banner.showWarning;
+    State { name: "fade"; when: !banner.showBanner;
       PropertyChanges { target: banner; opacity: 0.0 }
     }
   ]
@@ -59,7 +59,7 @@ Rectangle {
   //! Prevents propagating events to other components while banner is shown (e.g no map panning)
   MouseArea {
     anchors.fill: banner
-    enabled: banner.showWarning
+    enabled: banner.showBanner
   }
 
   ColumnLayout {

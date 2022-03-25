@@ -72,7 +72,7 @@ struct LocalProject
     //! LocalVersion comes from metadata file stored in .mergin folder.
     //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
     //!       Project->isMergin() is recommended to use over this one
-    bool hasMerginMetadata() const { return localVersion > 0; }
+    bool hasMerginMetadata() const { return localVersion > -1; }
 
     bool operator ==( const LocalProject &other )
     {

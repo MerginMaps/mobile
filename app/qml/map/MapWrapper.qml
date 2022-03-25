@@ -543,7 +543,7 @@ Item {
     .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
     link: __inputHelp.gpsAccuracyHelpLink
 
-    showWarning: shouldShowAccuracyWarning
+    showBanner: shouldShowAccuracyWarning
   }
 
   MapFloatButton {
@@ -594,6 +594,7 @@ Item {
 
     Connections {
       target: __syncManager
+      enabled: root.state !== "inactive"
 
       function onSyncStarted( projectFullName )
       {
@@ -603,11 +604,16 @@ Item {
         }
       }
 
-      function onSyncFinished( projectFullName )
+      function onSyncFinished( projectFullName, success )
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
           syncInProgressAnimation.stop()
+
+          if ( success )
+          {
+            root.notify( qsTr( "Successfully synchronized" ) )
+          }
         }
       }
 
@@ -618,16 +624,44 @@ Item {
           syncInProgressAnimation.stop()
         }
       }
+
+      function onSyncError( projectFullName, errorType, errorMessage )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          if ( errorType === SyncError.NotAMerginProject )
+          {
+            root.notify( qsTr( "This is not a mergin project" ) )
+            // migrateToMerginDialog.open()
+          }
+          else if ( errorType === SyncError.NoPermissions )
+          {
+            root.notify( qsTr( "You do not have permissions for that project" ) )
+            // noPermissionsDialog
+          }
+          else if ( errorType === SyncError.AnotherProcessIsRunning )
+          {
+            root.notify( qsTr( "Somebody else is syncing, we will try later" ) )
+            // anotherProcessRunning
+          }
+          else
+          {
+            root.notify( errorMessage )
+          }
+        }
+      }
     }
 
     Connections {
       target: __merginApi
+      enabled: root.state !== "inactive"
 
       function onMissingAuthorizationError( projectFullName )
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
-          console.log( "Missing credentials!" )
+          root.notify( qsTr( "Missing authorization" ) )
+          //  missingAuthorizationDialog.open()
         }
       }
 
@@ -635,7 +669,7 @@ Item {
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
-          console.log( "Already on the latest version!" )
+          root.notify( qsTr( "Up to date" ) )
         }
       }
     }
@@ -828,7 +862,7 @@ Item {
     // reset manualRecording after opening
     onVisibleChanged: {
       if ( visible ) _digitizingController.manualRecording = true
-      if ( _gpsAccuracyBanner.showWarning ) {
+      if ( _gpsAccuracyBanner.showBanner ) {
         _gpsAccuracyBanner.state = visible ? "show" : "fade"
       }
     }

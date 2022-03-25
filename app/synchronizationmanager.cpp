@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QTimer>
+
 #include "synchronizationmanager.h"
 
 SynchronizationManager::SynchronizationManager(
@@ -21,6 +23,7 @@ SynchronizationManager::SynchronizationManager(
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
+    QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
   }
 }
 
@@ -47,6 +50,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   if ( !project.hasMerginMetadata() )
   {
+    emit syncError( project.id(), SynchronizationError::NotAMerginProject );
     return;
   }
 
@@ -54,7 +58,15 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   if ( mSyncProcesses.contains( projectFullName ) )
   {
-    return; // there is already an active sync
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    if ( process.pending )
+    {
+      return; // this project is currently syncing
+    }
+    else if ( process.awaitsRetry )
+    {
+      process.awaitsRetry = false;
+    }
   }
 
   bool syncHasStarted = false;
@@ -70,10 +82,8 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   if ( syncHasStarted )
   {
-    SyncProcess sync;
-    sync.pending = true;
-
-    mSyncProcesses.insert( projectFullName, sync );
+    SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
+    process.pending = true;
 
     emit syncStarted( projectFullName );
   }
@@ -145,21 +155,29 @@ void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullNa
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     mSyncProcesses.remove( projectFullName );
+    emit syncCancelled( projectFullName );
   }
-
-  emit syncCancelled( projectFullName );
 }
 
-void SynchronizationManager::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version )
+void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version )
 {
-  Q_UNUSED( projectDir )
-
   if ( mSyncProcesses.contains( projectFullName ) )
   {
-    mSyncProcesses.remove( projectFullName );
-  }
+    SyncProcess &process = mSyncProcesses[projectFullName];
 
-  emit syncFinished( projectFullName, successfully, version );
+    if ( !successfully && process.awaitsRetry )
+    {
+      // sync has failed, but we will try to sync again
+      process.pending = false;
+      process.progress = -1;
+    }
+    else // successfully or we won't try again
+    {
+      mSyncProcesses.remove( projectFullName );
+    }
+
+    emit syncFinished( projectFullName, successfully, version );
+  }
 }
 
 void SynchronizationManager::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
@@ -167,7 +185,56 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     mSyncProcesses[projectFullName].progress = progress;
+    emit syncProgressChanged( projectFullName, progress );
+  }
+}
+
+void SynchronizationManager::onProjectSyncFailure(
+  const QString &message,
+  const QString &topic,
+  QNetworkReply::NetworkError networkError,
+  int errorCode,
+  const QString &projectFullName )
+{
+  if ( projectFullName.isEmpty() )
+  {
+    return; // network error outside of sync
   }
 
-  emit syncProgressChanged( projectFullName, progress );
+  if ( !mSyncProcesses.contains( projectFullName ) )
+  {
+    return;
+  }
+
+  SyncProcess &process = mSyncProcesses[projectFullName];
+
+  SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message, topic, networkError );
+
+  emit syncError( projectFullName, error, message );
+
+  // We currently retry only once
+  if ( process.retriesCount == 0 )
+  {
+    if ( SynchronizationError::isWorthOfRetry( error ) )
+    {
+      process.retriesCount = process.retriesCount + 1;
+      process.awaitsRetry = true;
+
+      QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]()
+      {
+        LocalProject project = mMerginApi->getLocalProject( projectFullName );
+        syncProject( project );
+      } );
+    }
+  }
+
+  if ( error == process.lastSyncError )
+  {
+    mSyncProcesses.remove( projectFullName );
+    emit syncFinished( projectFullName, false, -1 );
+
+    return;
+  }
+
+  process.lastSyncError = error;
 }

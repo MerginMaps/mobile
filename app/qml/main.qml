@@ -71,11 +71,6 @@ ApplicationWindow {
         }
     }
 
-    function showDialog(message) {
-      alertDialog.text  = message
-      alertDialog.open()
-    }
-
     function showProjError(message) {
       projDialog.text  = message
       projDialog.open()
@@ -430,12 +425,6 @@ ApplicationWindow {
     }
 
     MessageDialog {
-        id: alertDialog
-        onAccepted: alertDialog.close()
-        title: qsTr("Communication error")
-    }
-
-    MessageDialog {
         id: projDialog
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
@@ -512,8 +501,11 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
+          if ( stateManager.state === "projects" )
+          {
             var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
-            showAsDialog ? showDialog(msg) : showMessage(msg)
+            showMessage( msg )
+          }
         }
 
         onStorageLimitReached: {

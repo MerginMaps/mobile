@@ -345,9 +345,10 @@ void MerginApi::downloadItemReplyFinished()
       QDir( transaction.projectDir ).removeRecursively();
     }
 
-    finishProjectSync( projectFullName, false );
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), r->error(), httpCode, projectFullName );
 
-    emit networkErrorOccurred( QStringLiteral(), QStringLiteral( "Mergin API error: downloadFile" ) );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -394,9 +395,10 @@ void MerginApi::cacheServerConfig()
       CoreUtils::removeDir( transaction.projectDir );
     }
 
-    finishProjectSync( projectFullName, false );
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), r->error(), httpCode, projectFullName );
 
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ) );
+    finishProjectSync( projectFullName, false );
   }
 }
 
@@ -895,8 +897,11 @@ void MerginApi::createProjectFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
     CoreUtils::log( "create " + projectFullName, message );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+
     emit projectCreated( projectFullName, false );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), r->error(), httpCode, projectFullName );
   }
   r->deleteLater();
 }
@@ -1725,7 +1730,8 @@ void MerginApi::pushStartReplyFinished()
     }
     else
     {
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadStartReply" ) );
+      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), r->error(), httpCode, projectFullName );
     }
 
     finishProjectSync( projectFullName, false );
@@ -1783,7 +1789,9 @@ void MerginApi::pushFileReplyFinished()
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), r->error(), httpCode, projectFullName );
 
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
@@ -1818,7 +1826,9 @@ void MerginApi::pullInfoReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: updateInfo" ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), r->error(), httpCode, projectFullName );
 
     transaction.replyPullProjectInfo->deleteLater();
     transaction.replyPullProjectInfo = nullptr;
@@ -1846,7 +1856,9 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
     if ( projectInfo.localVersion != -1 && projectInfo.localVersion == serverProject.version )
     {
       emit projectAlreadyOnLatestVersion( projectFullName );
-      return finishProjectSync( projectFullName, true );
+      CoreUtils::log( QStringLiteral( "Pull %1" ).arg( projectFullName ), QStringLiteral( "Project is already on the latest version: %1" ).arg( serverProject.version ) );
+
+      return finishProjectSync( projectFullName, false );
     }
   }
   else
@@ -2313,7 +2325,9 @@ void MerginApi::pushInfoReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: uploadInfo" ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), r->error(), httpCode, projectFullName );
 
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
@@ -2391,7 +2405,9 @@ void MerginApi::pushFinishReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), r->error(), httpCode, projectFullName );
 
     // remove temporary diff files
     const auto diffFiles = transaction.pushDiffFiles;
@@ -2862,7 +2878,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   }
   else
   {
-    emit syncProjectFinished( projectDir, projectFullName, syncSuccessful, newVersion );
+    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion );
 
     if ( syncSuccessful )
     {

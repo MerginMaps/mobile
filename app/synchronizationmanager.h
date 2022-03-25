@@ -11,14 +11,21 @@
 #define SYNCHRONIZATIONMANAGER_H
 
 #include <QObject>
+#include <QNetworkReply>
 
 #include "project.h"
 #include "merginapi.h"
+#include "synchronizationerror.h"
 
 struct SyncProcess
 {
   qreal progress;
   bool pending;
+
+  bool awaitsRetry; // not currently being synced, but awaits to be synced
+  SynchronizationError::ErrorType lastSyncError = SynchronizationError::NoError;
+  int retriesCount = 0;
+
   // In future: current state (push/pull)
 };
 
@@ -53,6 +60,8 @@ class SynchronizationManager : public QObject
     void syncProgressChanged( const QString &projectFullName, qreal progress );
     void syncFinished( const QString &projectFullName, bool success, int newVersion );
 
+    void syncError( const QString &projectFullName, int errorType, const QString &errorMessage = QLatin1String() );
+
   public slots:
 
     /**
@@ -69,8 +78,9 @@ class SynchronizationManager : public QObject
 
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
-    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
+    void onProjectSyncFailure( const QString &message, const QString &topic, QNetworkReply::NetworkError error, int httpCode, const QString &projectFullName );
 
   private:
 
@@ -78,6 +88,8 @@ class SynchronizationManager : public QObject
     QHash<QString, SyncProcess> mSyncProcesses;
 
     MerginApi *mMerginApi = nullptr; // not owned
+
+    int mSyncRetryIntervalSeconds = 10000; // 10 seconds between sync retries
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H
