@@ -164,7 +164,7 @@ Rectangle {
                else root.secondaryColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignBottom
-        elide: Text.ElideRight
+        elide: Text.ElideLeft
       }
 
       Text {
