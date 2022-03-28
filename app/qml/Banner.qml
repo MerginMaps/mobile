@@ -13,6 +13,8 @@ import "."
 import "./components"
 
 Rectangle {
+  id: banner
+
   property color fontColor: "black"
   property color linkColor: fontColor
   property color bgColor: InputStyle.warningBannerColor
@@ -21,8 +23,22 @@ Rectangle {
   property string source: InputStyle.exclamationIcon
   property real padding: InputStyle.innerFieldMargin
   property bool showBanner: false
+  property bool withLink: false
 
-  id: banner
+  function getText()
+  {
+    if ( banner.withLink )
+    {
+      return "<style>a:link { color: " + banner.linkColor
+          + "; text-decoration: underline; }</style>%1<br><a href='%2' style=\"color: %3;\">".arg(banner.text).arg(banner.link).arg(InputStyle.learnMoreLinkColor) +
+          qsTr("Learn more") + "</a>"
+    }
+    else
+    {
+      return banner.text
+    }
+  }
+
   color: banner.bgColor
   radius: InputStyle.cornerRadius
   x: padding
@@ -77,12 +93,9 @@ Rectangle {
       source: banner.source
       textItem.font.bold: true
       textItem.rightPadding: InputStyle.innerFieldMargin
-      textItem.text: "<style>a:link { color: " + banner.linkColor
-            + "; text-decoration: underline; }</style>" +
-            qsTr("%1<br><a href='%2' style=\"color: %3;\">Learn more</a>").arg(banner.text).arg(banner.link).arg(InputStyle.learnMoreLinkColor)
+      textItem.text: banner.getText()
 
       onLinkActivated: Qt.openUrlExternally(link)
     }
   }
-
 }

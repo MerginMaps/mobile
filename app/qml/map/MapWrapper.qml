@@ -14,6 +14,8 @@ import QgsQuick 0.1 as QgsQuick
 
 import ".."
 import "../components"
+import "../dialogs"
+import "../banners"
 
 Item {
   id: root
@@ -56,6 +58,8 @@ Item {
 
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
+
+  signal signInRequested()
 
   function centerToPair( pair, considerMapExtentOffset = false ) {
     if ( considerMapExtentOffset )
@@ -519,6 +523,33 @@ Item {
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
   }
 
+  AutoHideBanner {
+    id: syncSuccessfulBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    text: qsTr( "Successfully synchronized" )
+  }
+
+  AutoHideBanner {
+    id: upToDateBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    text: qsTr( "Up to date" )
+  }
+
+  AutoHideBanner {
+    id: anotherProcessIsRunningBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    text: qsTr( "Somebody else is syncing, we will try again later" )
+  }
+
   Banner {
     id: _gpsAccuracyBanner
 
@@ -541,9 +572,30 @@ Item {
 
     text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
     .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
+    withLink: true
     link: __inputHelp.gpsAccuracyHelpLink
 
     showBanner: shouldShowAccuracyWarning
+  }
+
+  MissingAuthDialog {
+    id: missingAuthDialog
+
+    onSingInRequested: root.signInRequested()
+  }
+
+  SyncFailedDialog {
+    id: syncFailedDialog
+  }
+
+  MigrateToMerginDialog {
+    id: migrateToMerginDialog
+
+    onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
+  }
+
+  NoPermissionsDialog {
+    id: noPermissionsDialog
   }
 
   MapFloatButton {
@@ -612,7 +664,8 @@ Item {
 
           if ( success )
           {
-            root.notify( qsTr( "Successfully synchronized" ) )
+            // just banner
+            syncSuccessfulBanner.show()
           }
         }
       }
@@ -625,28 +678,27 @@ Item {
         }
       }
 
-      function onSyncError( projectFullName, errorType, errorMessage )
+      function onSyncError( projectFullName, errorType, willRetry, errorMessage )
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
           if ( errorType === SyncError.NotAMerginProject )
           {
-            root.notify( qsTr( "This is not a mergin project" ) )
-            // migrateToMerginDialog.open()
+             migrateToMerginDialog.open()
           }
           else if ( errorType === SyncError.NoPermissions )
           {
-            root.notify( qsTr( "You do not have permissions for that project" ) )
-            // noPermissionsDialog
+            noPermissionsDialog.open()
           }
           else if ( errorType === SyncError.AnotherProcessIsRunning )
           {
-            root.notify( qsTr( "Somebody else is syncing, we will try later" ) )
-            // anotherProcessRunning
+            // just banner that we will try again
+            anotherProcessIsRunningBanner.show()
           }
           else
           {
-            root.notify( errorMessage )
+            syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
+            syncFailedDialog.open()
           }
         }
       }
@@ -660,8 +712,8 @@ Item {
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
-          root.notify( qsTr( "Missing authorization" ) )
-          //  missingAuthorizationDialog.open()
+          syncInProgressAnimation.stop()
+          missingAuthDialog.open()
         }
       }
 
@@ -669,7 +721,7 @@ Item {
       {
         if ( projectFullName === __activeProject.projectFullName() )
         {
-          root.notify( qsTr( "Up to date" ) )
+          upToDateBanner.show()
         }
       }
     }

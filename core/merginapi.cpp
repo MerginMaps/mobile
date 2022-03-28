@@ -807,7 +807,13 @@ QString MerginApi::resetPasswordUrl()
 
 void MerginApi::createProject( const QString &projectNamespace, const QString &projectName, bool isPublic )
 {
-  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  if ( !validateAuth() )
+  {
+    emit missingAuthorizationError( projectName );
+    return;
+  }
+
+  if ( mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }

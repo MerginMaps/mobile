@@ -76,6 +76,7 @@ identifykit.h \
 scalebarkit.h \
 synchronizationerror.h \
 synchronizationmanager.h \
+synchronizationoptions.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \

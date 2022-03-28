@@ -473,7 +473,7 @@ int main( int argc, char *argv[] )
 
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
-    syncManager.syncProject( project );
+    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
   } );
 
   // Direct connections

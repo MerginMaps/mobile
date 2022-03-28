@@ -53,6 +53,11 @@ Item {
     }
   }
 
+  function openAuthPanel( authstate = "login" )
+  {
+    stackView.push( authPanelComp, { state: authstate } )
+  }
+
   visible: false
   focus: true
 
@@ -197,7 +202,7 @@ Item {
                   stackView.push( accountPanelComp )
                 }
                 else
-                  stackView.push( authPanelComp, { state: "login" })
+                  root.openAuthPanel()
               }
             }
 
@@ -460,14 +465,14 @@ Item {
               refreshProjectList()
             } else if (pageContent.state !== 'local') {
               if (stackView.currentItem.objectName !== "authPanel") {
-                stackView.push(authPanelComp, {state: "login"})
+                root.openAuthPanel()
               }
             }
           }
         }
         onAuthRequested: {
           stackView.pending = false
-          stackView.push(authPanelComp, {state: "login"})
+          root.openAuthPanel()
         }
         onAuthChanged: {
           stackView.pending = false

@@ -20,6 +20,7 @@ import QtQuick.Dialogs 1.1
 import lc 1.0
 import "./map"
 import "./misc"
+import "./dialogs"
 
 ApplicationWindow {
     id: window
@@ -179,6 +180,11 @@ ApplicationWindow {
         stakeoutPanelLoader.active = true
         stakeoutPanelLoader.focus = true
         stakeoutPanelLoader.item.targetPair = pair
+      }
+
+      onSignInRequested: {
+        stateManager.state = "projects"
+        projectPanel.openAuthPanel()
       }
 
       Component.onCompleted: {

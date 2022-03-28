@@ -29,19 +29,28 @@ SynchronizationManager::SynchronizationManager(
 
 SynchronizationManager::~SynchronizationManager() = default;
 
-void SynchronizationManager::syncProject( const Project &project, bool withAuth )
+void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
   if ( project.isLocal() )
   {
-    syncProject( project.local, withAuth );
+    syncProject( project.local, auth, strategy );
     return;
   }
 
   // project is not local yet -> we download it for the first time
-  mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, withAuth );
+  bool syncHasStarted = mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, auth == SyncOptions::Authorized );
+
+  if ( syncHasStarted )
+  {
+    SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
+    process.pending = true;
+    process.strategy = strategy;
+
+    emit syncStarted( project.fullName() );
+  }
 }
 
-void SynchronizationManager::syncProject( const LocalProject &project, bool withAuth )
+void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
   if ( !project.isValid() )
   {
@@ -77,13 +86,14 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
   }
   else
   {
-    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, withAuth );
+    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, auth == SyncOptions::Authorized );
   }
 
   if ( syncHasStarted )
   {
     SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
     process.pending = true;
+    process.strategy = strategy;
 
     emit syncStarted( projectFullName );
   }
@@ -119,7 +129,6 @@ void SynchronizationManager::migrateProjectToMergin( const QString &projectName 
   if ( !mSyncProcesses.contains( fullProjectName ) )
   {
     mMerginApi->migrateProjectToMergin( projectName );
-    emit syncStarted( fullProjectName );
   }
 }
 
@@ -187,6 +196,15 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     mSyncProcesses[projectFullName].progress = progress;
     emit syncProgressChanged( projectFullName, progress );
   }
+  else if ( progress >= 0 )
+  {
+    // let's add it to map, this could happen in case we are migrating project to mergin
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    process.pending = true;
+    process.progress = progress;
+    emit syncStarted( projectFullName );
+    emit syncProgressChanged( projectFullName, progress );
+  }
 }
 
 void SynchronizationManager::onProjectSyncFailure(
@@ -210,31 +228,29 @@ void SynchronizationManager::onProjectSyncFailure(
 
   SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message, topic, networkError );
 
-  emit syncError( projectFullName, error, message );
+  // We only retry twice
+  bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
+                          process.retriesCount < 2 &&
+                          SynchronizationError::isWorthOfRetry( error );
 
-  // We currently retry only once
-  if ( process.retriesCount == 0 )
+  emit syncError( projectFullName, error, eligibleForRetry, message );
+
+  if ( eligibleForRetry )
   {
-    if ( SynchronizationError::isWorthOfRetry( error ) )
+    process.retriesCount = process.retriesCount + 1;
+    process.awaitsRetry = true;
+
+    QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]()
     {
-      process.retriesCount = process.retriesCount + 1;
-      process.awaitsRetry = true;
-
-      QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]()
-      {
-        LocalProject project = mMerginApi->getLocalProject( projectFullName );
-        syncProject( project );
-      } );
-    }
+      LocalProject project = mMerginApi->getLocalProject( projectFullName );
+      syncProject( project );
+    } );
   }
-
-  if ( error == process.lastSyncError )
+  else
   {
     mSyncProcesses.remove( projectFullName );
     emit syncFinished( projectFullName, false, -1 );
 
     return;
   }
-
-  process.lastSyncError = error;
 }

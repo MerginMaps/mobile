@@ -93,7 +93,6 @@ bool SynchronizationError::isWorthOfRetry( ErrorType errorType )
 {
   switch ( errorType )
   {
-
     case AnotherProcessIsRunning: return true;
 
     case VersionMismatch: return true;
