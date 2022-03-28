@@ -66,7 +66,7 @@ ActiveProject::ActiveProject( MapThemesModel &mapThemeModel
     &LocalProjectsManager::localProjectDataChanged,
     this, [this]( const LocalProject & project )
   {
-    if ( project.id() == mLocalProject.id() )
+    if ( project.projectDir == mLocalProject.projectDir )
     {
       mLocalProject = project;
       emit localProjectChanged( mLocalProject );
