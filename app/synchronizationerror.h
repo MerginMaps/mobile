@@ -24,25 +24,18 @@ class SynchronizationError
     {
       NoError = 0,
       AnotherProcessIsRunning,
-      Unauthorized,
-      VersionMismatch,
-      DataLimitReached,
       NoPermissions,
-      ServiceAbusement,
       NotAMerginProject,
       ProjectNotFound,
-      ProjectAlreadyExists,
-      WrongProjectName,
-      ServerMaintenance,
+      VersionMismatch,
       ServerError,
-      PushFinish, // most probably GEODIFF error
       Other
     };
     Q_ENUMS( ErrorType );
 
     //! Parser error from server based on error code and message and returns one
     //! of SyncError types. "Other" is returned for unknown errors.
-    static ErrorType errorType( int errorCode, const QString &errorMessage, const QString &topic, QNetworkReply::NetworkError networkError );
+    static ErrorType errorType( int errorCode, const QString &errorMessage );
 
     //! Returns true if the errorType can disappear in next sync try
     static bool isWorthOfRetry( ErrorType errorType );

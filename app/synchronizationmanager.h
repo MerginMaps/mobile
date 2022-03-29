@@ -80,7 +80,8 @@ class SynchronizationManager : public QObject
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
-    void onProjectSyncFailure( const QString &message, const QString &topic, QNetworkReply::NetworkError error, int httpCode, const QString &projectFullName );
+    void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
+    void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
 
   private:
 

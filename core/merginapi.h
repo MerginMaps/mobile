@@ -353,8 +353,9 @@ class MerginApi: public QObject
     * \param projectNamespace
     * \param projectName
     * \param isPublic
+    * \return true when project creation has started, false otherwise (e.g. due to a missing authorization)
     */
-    void createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
+    bool createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
 
     // Test functions
     /**
@@ -455,7 +456,6 @@ class MerginApi: public QObject
     void networkErrorOccurred(
       const QString &message,
       const QString &topic,
-      QNetworkReply::NetworkError error = QNetworkReply::NoError,
       int httpCode = -1,
       const QString &projectFullName = QLatin1String()
     );
@@ -469,7 +469,7 @@ class MerginApi: public QObject
     void registrationFailed();
     void apiRootChanged();
     void apiVersionStatusChanged();
-    void projectCreated( const QString &projectName, bool result );
+    void projectCreated( const QString &projectFullName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
     void subscriptionInfoChanged();
@@ -480,7 +480,7 @@ class MerginApi: public QObject
     void pushCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
-    void projectAttachedToMergin( const QString &projectFullName );
+    void projectAttachedToMergin( const QString &projectFullName, const QString &previousProjectName );
 
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
     void missingAuthorizationError( const QString &projectFullName );

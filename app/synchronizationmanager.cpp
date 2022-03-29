@@ -22,8 +22,9 @@ SynchronizationManager::SynchronizationManager(
   {
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
+    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
   }
 }
 
@@ -123,12 +124,17 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 
 void SynchronizationManager::migrateProjectToMergin( const QString &projectName )
 {
-  QString projectNamespace = mMerginApi->merginUserName();
-  QString fullProjectName = MerginApi::getFullProjectName( projectNamespace, projectName );
-
-  if ( !mSyncProcesses.contains( fullProjectName ) )
+  if ( !mSyncProcesses.contains( projectName ) )
   {
-    mMerginApi->migrateProjectToMergin( projectName );
+    bool hasStarted = mMerginApi->createProject( mMerginApi->merginUserName(), projectName );
+
+    if ( hasStarted )
+    {
+      SyncProcess &process = mSyncProcesses[projectName]; // creates new entry
+      process.pending = true;
+
+      emit syncStarted( projectName );
+    }
   }
 }
 
@@ -196,21 +202,11 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     mSyncProcesses[projectFullName].progress = progress;
     emit syncProgressChanged( projectFullName, progress );
   }
-  else if ( progress >= 0 )
-  {
-    // let's add it to map, this could happen in case we are migrating project to mergin
-    SyncProcess &process = mSyncProcesses[projectFullName];
-    process.pending = true;
-    process.progress = progress;
-    emit syncStarted( projectFullName );
-    emit syncProgressChanged( projectFullName, progress );
-  }
 }
 
 void SynchronizationManager::onProjectSyncFailure(
   const QString &message,
   const QString &topic,
-  QNetworkReply::NetworkError networkError,
   int errorCode,
   const QString &projectFullName )
 {
@@ -224,9 +220,11 @@ void SynchronizationManager::onProjectSyncFailure(
     return;
   }
 
+  Q_UNUSED( topic );
+
   SyncProcess &process = mSyncProcesses[projectFullName];
 
-  SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message, topic, networkError );
+  SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
 
   // We only retry twice
   bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
@@ -252,5 +250,15 @@ void SynchronizationManager::onProjectSyncFailure(
     emit syncFinished( projectFullName, false, -1 );
 
     return;
+  }
+}
+
+void SynchronizationManager::onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName )
+{
+  if ( mSyncProcesses.contains( previousName ) )
+  {
+    SyncProcess process = mSyncProcesses.value( previousName );
+    mSyncProcesses.remove( previousName );
+    mSyncProcesses.insert( projectFullName, process );
   }
 }
