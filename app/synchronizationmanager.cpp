@@ -202,6 +202,21 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     mSyncProcesses[projectFullName].progress = progress;
     emit syncProgressChanged( projectFullName, progress );
   }
+  else if ( progress >= 0 )
+  {
+    //
+    // Synchronization was not started via sync manager,
+    // let's add it to the manager here.
+    // This is most probably usefull only for tests, where we
+    // normally run sync from MerginApi directly
+    //
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    process.pending = true;
+    process.progress = progress;
+    emit syncStarted( projectFullName );
+    emit syncProgressChanged( projectFullName, progress );
+  }
+
 }
 
 void SynchronizationManager::onProjectSyncFailure(
