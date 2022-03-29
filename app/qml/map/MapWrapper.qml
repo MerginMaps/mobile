@@ -571,6 +571,17 @@ Item {
     text: qsTr( "Somebody else is syncing, we will try again later" )
   }
 
+  AutoHideBanner {
+    id: retryableSyncErrorBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    text: qsTr( "There was an issue during synchronization, we will try again. Click to learn more" )
+
+    onClicked: syncFailedDialog.open()
+  }
+
   Banner {
     id: _gpsAccuracyBanner
 
@@ -720,7 +731,14 @@ Item {
           else
           {
             syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
-            syncFailedDialog.open()
+            if ( willRetry )
+            {
+              retryableSyncErrorBanner.show( 10000 )
+            }
+            else
+            {
+              syncFailedDialog.open()
+            }
           }
         }
       }

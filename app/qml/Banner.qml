@@ -25,6 +25,8 @@ Rectangle {
   property bool showBanner: false
   property bool withLink: false
 
+  signal clicked()
+
   function getText()
   {
     if ( banner.withLink )
@@ -76,6 +78,8 @@ Rectangle {
   MouseArea {
     anchors.fill: banner
     enabled: banner.showBanner
+
+    onClicked: banner.clicked()
   }
 
   ColumnLayout {
