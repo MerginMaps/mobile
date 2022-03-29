@@ -103,7 +103,7 @@ struct MerginProject
   QString id() const; //! projectFullName for time being
 
   QDateTime serverUpdated; // available latest version of project files on server
-  int serverVersion;
+  int serverVersion = -1;
 
   ProjectStatus::Status status = ProjectStatus::NoVersion;
 
