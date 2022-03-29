@@ -278,6 +278,16 @@ Item {
         if ( _digitizingController.recording )
           _digitizingController.stopRecording()
 
+        // Stop/Start sync animation when user goes to map
+        if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
+        {
+          syncInProgressAnimation.start()
+        }
+        else
+        {
+          syncInProgressAnimation.stop()
+        }
+
         break
       }
       case "stakeout": {
@@ -529,6 +539,11 @@ Item {
     width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
     height: InputStyle.rowHeight
 
+    bgColor: InputStyle.clrPanelBackground
+    fontColor: "white"
+
+    source: InputStyle.yesIcon
+
     text: qsTr( "Successfully synchronized" )
   }
 
@@ -537,6 +552,11 @@ Item {
 
     width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
     height: InputStyle.rowHeight
+
+    bgColor: InputStyle.informationColor
+    fontColor: "white"
+
+    source: InputStyle.yesIcon
 
     text: qsTr( "Up to date" )
   }
@@ -690,7 +710,7 @@ Item {
           {
             noPermissionsDialog.open()
           }
-          else if ( errorType === SyncError.AnotherProcessIsRunning )
+          else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
           {
             // just banner that we will try again
             anotherProcessIsRunningBanner.show()

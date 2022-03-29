@@ -48,7 +48,7 @@ class SynchronizationManager : public QObject
     qreal syncProgress( const QString &projectFullName ) const;
 
     //! Returns true if specified project is being synchronized, false otherwise.
-    bool hasPendingSync( const QString &projectFullName ) const;
+    Q_INVOKABLE bool hasPendingSync( const QString &projectFullName ) const;
 
     QList<QString> pendingProjects() const;
 
