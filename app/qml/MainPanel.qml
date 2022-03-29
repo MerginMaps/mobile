@@ -24,6 +24,7 @@ Item {
     signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
+    signal localChangesClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -144,9 +145,27 @@ Item {
         }
 
         Item {
-            id: browseDataItem
             height: parent.height
             visible: panelRow.itemsToShow > 5
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+                id: localChangesBtn
+                width: mainPanel.itemSize
+                text: qsTr("Local changes")
+                imageSource: InputStyle.projectIcon
+
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.localChangesClicked()
+                }
+            }
+        }
+
+        Item {
+            id: browseDataItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -165,7 +184,7 @@ Item {
         Item {
             id: mapThemesItem
             height: parent.height
-            visible: panelRow.itemsToShow > 6
+            visible: panelRow.itemsToShow > 7
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -185,7 +204,7 @@ Item {
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 6
+            visible: panelRow.itemsToShow > 8
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -310,6 +329,25 @@ Item {
 
             onClicked: {
                 zoomToProjectBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !mapThemesItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Local changes")
+                imageSource: InputStyle.projectIcon
+            }
+
+            onClicked: {
+                localChangesBtn.activated()
                 rootMenu.close()
             }
         }

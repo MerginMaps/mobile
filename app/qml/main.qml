@@ -187,6 +187,18 @@ ApplicationWindow {
         projectPanel.openAuthPanel()
       }
 
+      onLocalChangesPanelRequested: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
+      }
+
       Component.onCompleted: {
         __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
@@ -230,6 +242,17 @@ ApplicationWindow {
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
             }
+        }
+        onLocalChangesClicked: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
         }
     }
 

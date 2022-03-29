@@ -60,6 +60,7 @@ Item {
   signal accuracyButtonClicked()
 
   signal signInRequested()
+  signal localChangesPanelRequested()
 
   function centerToPair( pair, considerMapExtentOffset = false ) {
     if ( considerMapExtentOffset )
@@ -622,6 +623,7 @@ Item {
     id: syncButton
 
     onClicked: __activeProject.requestSync()
+    onPressAndHold: root.localChangesPanelRequested()
 
     maxWidth: InputStyle.mapBtnHeight
     withImplicitMargins: false

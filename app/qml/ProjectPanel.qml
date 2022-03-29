@@ -58,6 +58,19 @@ Item {
     stackView.push( authPanelComp, { state: authstate } )
   }
 
+  function openChangesPanel()
+  {
+    stackView.push( statusPanelComp )
+  }
+
+  function showChanges( projectId ) {
+    if ( __merginProjectStatusModel.loadProjectInfo( projectId ) )
+    {
+      root.openChangesPanel()
+    }
+    else __inputUtils.showNotification( qsTr( "No Changes" ) )
+  }
+
   visible: false
   focus: true
 
@@ -131,13 +144,6 @@ Item {
 
         if ( projectId && projectPath ) // this is not project reset
           hidePanel()
-      }
-
-      function showChanges( projectId ) {
-        if ( __merginProjectStatusModel.loadProjectInfo( projectId ) ) {
-          stackView.push( statusPanelComp )
-        }
-        else __inputUtils.showNotification( qsTr( "No Changes" ) )
       }
 
       function refreshProjectList( keepSearchFilter = false ) {

@@ -18,6 +18,7 @@ Item {
   property bool withImplicitMargins: true
 
   signal clicked()
+  signal pressAndHold()
 
   height: InputStyle.mapBtnHeight
   width: childrenRect.width
@@ -49,6 +50,7 @@ Item {
     MouseArea {
       anchors.fill: parent
       onClicked: root.clicked()
+      onPressAndHold: root.pressAndHold()
     }
   }
 }
