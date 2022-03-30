@@ -20,6 +20,7 @@ import QtQuick.Dialogs 1.1
 import lc 1.0
 import "./map"
 import "./misc"
+import "./dialogs"
 
 ApplicationWindow {
     id: window
@@ -69,11 +70,6 @@ ApplicationWindow {
         } else {
             __androidUtils.showToast( message )
         }
-    }
-
-    function showDialog(message) {
-      alertDialog.text  = message
-      alertDialog.open()
     }
 
     function showProjError(message) {
@@ -186,6 +182,23 @@ ApplicationWindow {
         stakeoutPanelLoader.item.targetPair = pair
       }
 
+      onSignInRequested: {
+        stateManager.state = "projects"
+        projectPanel.openAuthPanel()
+      }
+
+      onLocalChangesPanelRequested: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
+      }
+
       Component.onCompleted: {
         __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
@@ -229,6 +242,17 @@ ApplicationWindow {
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
             }
+        }
+        onLocalChangesClicked: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
         }
     }
 
@@ -430,12 +454,6 @@ ApplicationWindow {
     }
 
     MessageDialog {
-        id: alertDialog
-        onAccepted: alertDialog.close()
-        title: qsTr("Communication error")
-    }
-
-    MessageDialog {
         id: projDialog
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
@@ -512,8 +530,11 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
+          if ( stateManager.state === "projects" )
+          {
             var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
-            showAsDialog ? showDialog(msg) : showMessage(msg)
+            showMessage( msg )
+          }
         }
 
         onStorageLimitReached: {

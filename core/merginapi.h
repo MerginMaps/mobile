@@ -14,6 +14,7 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QEventLoop>
 #include <QFile>
 #include <QFileInfo>
@@ -352,8 +353,9 @@ class MerginApi: public QObject
     * \param projectNamespace
     * \param projectName
     * \param isPublic
+    * \return true when project creation has started, false otherwise (e.g. due to a missing authorization)
     */
-    void createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
+    bool createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
 
     // Test functions
     /**
@@ -442,7 +444,7 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
-    void syncProjectFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
+    void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get pushed or pulled.
@@ -450,7 +452,14 @@ class MerginApi: public QObject
      */
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
     void reloadProject( const QString &projectDir );
-    void networkErrorOccurred( const QString &message, const QString &additionalInfo, bool showAsDialog = false );
+
+    void networkErrorOccurred(
+      const QString &message,
+      const QString &topic,
+      int httpCode = -1,
+      const QString &projectFullName = QLatin1String()
+    );
+
     void storageLimitReached( qreal uploadSize );
     void notify( const QString &message );
     void authRequested();
@@ -460,7 +469,7 @@ class MerginApi: public QObject
     void registrationFailed();
     void apiRootChanged();
     void apiVersionStatusChanged();
-    void projectCreated( const QString &projectName, bool result );
+    void projectCreated( const QString &projectFullName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
     void subscriptionInfoChanged();
@@ -471,7 +480,7 @@ class MerginApi: public QObject
     void pushCanceled( const QString &projectFullName, bool result );
     void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
-    void projectAttachedToMergin( const QString &projectFullName );
+    void projectAttachedToMergin( const QString &projectFullName, const QString &previousProjectName );
 
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
     void missingAuthorizationError( const QString &projectFullName );

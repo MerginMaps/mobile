@@ -21,6 +21,7 @@ bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
+synchronizationerror.cpp \
 synchronizationmanager.cpp \
 inputhelp.cpp \
 activelayer.cpp \
@@ -73,7 +74,9 @@ bluetoothdiscoverymodel.h \
 featurelayerpair.h \
 identifykit.h \
 scalebarkit.h \
+synchronizationerror.h \
 synchronizationmanager.h \
+synchronizationoptions.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \

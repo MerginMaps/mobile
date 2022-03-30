@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QTimer>
+
 #include "synchronizationmanager.h"
 
 SynchronizationManager::SynchronizationManager(
@@ -20,25 +22,36 @@ SynchronizationManager::SynchronizationManager(
   {
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
+    QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
   }
 }
 
 SynchronizationManager::~SynchronizationManager() = default;
 
-void SynchronizationManager::syncProject( const Project &project, bool withAuth )
+void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
   if ( project.isLocal() )
   {
-    syncProject( project.local, withAuth );
+    syncProject( project.local, auth, strategy );
     return;
   }
 
   // project is not local yet -> we download it for the first time
-  mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, withAuth );
+  bool syncHasStarted = mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, auth == SyncOptions::Authorized );
+
+  if ( syncHasStarted )
+  {
+    SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
+    process.pending = true;
+    process.strategy = strategy;
+
+    emit syncStarted( project.fullName() );
+  }
 }
 
-void SynchronizationManager::syncProject( const LocalProject &project, bool withAuth )
+void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
   if ( !project.isValid() )
   {
@@ -47,6 +60,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   if ( !project.hasMerginMetadata() )
   {
+    emit syncError( project.id(), SynchronizationError::NotAMerginProject );
     return;
   }
 
@@ -54,7 +68,15 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
 
   if ( mSyncProcesses.contains( projectFullName ) )
   {
-    return; // there is already an active sync
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    if ( process.pending )
+    {
+      return; // this project is currently syncing
+    }
+    else if ( process.awaitsRetry )
+    {
+      process.awaitsRetry = false;
+    }
   }
 
   bool syncHasStarted = false;
@@ -65,15 +87,14 @@ void SynchronizationManager::syncProject( const LocalProject &project, bool with
   }
   else
   {
-    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, withAuth );
+    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, auth == SyncOptions::Authorized );
   }
 
   if ( syncHasStarted )
   {
-    SyncProcess sync;
-    sync.pending = true;
-
-    mSyncProcesses.insert( projectFullName, sync );
+    SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
+    process.pending = true;
+    process.strategy = strategy;
 
     emit syncStarted( projectFullName );
   }
@@ -103,13 +124,17 @@ void SynchronizationManager::stopProjectSync( const QString &projectFullname )
 
 void SynchronizationManager::migrateProjectToMergin( const QString &projectName )
 {
-  QString projectNamespace = mMerginApi->merginUserName();
-  QString fullProjectName = MerginApi::getFullProjectName( projectNamespace, projectName );
-
-  if ( !mSyncProcesses.contains( fullProjectName ) )
+  if ( !mSyncProcesses.contains( projectName ) )
   {
-    mMerginApi->migrateProjectToMergin( projectName );
-    emit syncStarted( fullProjectName );
+    bool hasStarted = mMerginApi->createProject( mMerginApi->merginUserName(), projectName );
+
+    if ( hasStarted )
+    {
+      SyncProcess &process = mSyncProcesses[projectName]; // creates new entry
+      process.pending = true;
+
+      emit syncStarted( projectName );
+    }
   }
 }
 
@@ -145,21 +170,29 @@ void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullNa
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     mSyncProcesses.remove( projectFullName );
+    emit syncCancelled( projectFullName );
   }
-
-  emit syncCancelled( projectFullName );
 }
 
-void SynchronizationManager::onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version )
+void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version )
 {
-  Q_UNUSED( projectDir )
-
   if ( mSyncProcesses.contains( projectFullName ) )
   {
-    mSyncProcesses.remove( projectFullName );
-  }
+    SyncProcess &process = mSyncProcesses[projectFullName];
 
-  emit syncFinished( projectFullName, successfully, version );
+    if ( !successfully && process.awaitsRetry )
+    {
+      // sync has failed, but we will try to sync again
+      process.pending = false;
+      process.progress = -1;
+    }
+    else // successfully or we won't try again
+    {
+      mSyncProcesses.remove( projectFullName );
+    }
+
+    emit syncFinished( projectFullName, successfully, version );
+  }
 }
 
 void SynchronizationManager::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
@@ -167,7 +200,80 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     mSyncProcesses[projectFullName].progress = progress;
+    emit syncProgressChanged( projectFullName, progress );
+  }
+  else if ( progress >= 0 )
+  {
+    //
+    // Synchronization was not started via sync manager,
+    // let's add it to the manager here.
+    // This is most probably usefull only for tests, where we
+    // normally run sync from MerginApi directly
+    //
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    process.pending = true;
+    process.progress = progress;
+    emit syncStarted( projectFullName );
+    emit syncProgressChanged( projectFullName, progress );
   }
 
-  emit syncProgressChanged( projectFullName, progress );
+}
+
+void SynchronizationManager::onProjectSyncFailure(
+  const QString &message,
+  const QString &topic,
+  int errorCode,
+  const QString &projectFullName )
+{
+  if ( projectFullName.isEmpty() )
+  {
+    return; // network error outside of sync
+  }
+
+  if ( !mSyncProcesses.contains( projectFullName ) )
+  {
+    return;
+  }
+
+  Q_UNUSED( topic );
+
+  SyncProcess &process = mSyncProcesses[projectFullName];
+
+  SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
+
+  // We only retry twice
+  bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
+                          process.retriesCount < 2 &&
+                          !SynchronizationError::isPermanent( error );
+
+  emit syncError( projectFullName, error, eligibleForRetry, message );
+
+  if ( eligibleForRetry )
+  {
+    process.retriesCount = process.retriesCount + 1;
+    process.awaitsRetry = true;
+
+    QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]()
+    {
+      LocalProject project = mMerginApi->getLocalProject( projectFullName );
+      syncProject( project );
+    } );
+  }
+  else
+  {
+    mSyncProcesses.remove( projectFullName );
+    emit syncFinished( projectFullName, false, -1 );
+
+    return;
+  }
+}
+
+void SynchronizationManager::onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName )
+{
+  if ( mSyncProcesses.contains( previousName ) )
+  {
+    SyncProcess process = mSyncProcesses.value( previousName );
+    mSyncProcesses.remove( previousName );
+    mSyncProcesses.insert( projectFullName, process );
+  }
 }

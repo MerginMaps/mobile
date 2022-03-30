@@ -11,14 +11,21 @@
 #define SYNCHRONIZATIONMANAGER_H
 
 #include <QObject>
+#include <QNetworkReply>
 
 #include "project.h"
 #include "merginapi.h"
+#include "synchronizationerror.h"
+#include "synchronizationoptions.h"
 
 struct SyncProcess
 {
   qreal progress;
   bool pending;
+
+  bool awaitsRetry; // not currently being synced, but awaits to be synced
+  int retriesCount = 0;
+  SyncOptions::Strategy strategy = SyncOptions::Singleshot;
   // In future: current state (push/pull)
 };
 
@@ -35,13 +42,13 @@ class SynchronizationManager : public QObject
     //! Stops a running sync process if there is one for project specified by projectFullname
     void stopProjectSync( const QString &projectFullName );
 
-    void migrateProjectToMergin( const QString &projectName );
+    Q_INVOKABLE void migrateProjectToMergin( const QString &projectName );
 
     //! Returns sync progress of specified project in range <0, 1>. Returns -1 if this project is not being synchronized.
     qreal syncProgress( const QString &projectFullName ) const;
 
     //! Returns true if specified project is being synchronized, false otherwise.
-    bool hasPendingSync( const QString &projectFullName ) const;
+    Q_INVOKABLE bool hasPendingSync( const QString &projectFullName ) const;
 
     QList<QString> pendingProjects() const;
 
@@ -53,6 +60,8 @@ class SynchronizationManager : public QObject
     void syncProgressChanged( const QString &projectFullName, qreal progress );
     void syncFinished( const QString &projectFullName, bool success, int newVersion );
 
+    void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
+
   public slots:
 
     /**
@@ -62,15 +71,17 @@ class SynchronizationManager : public QObject
      * \param withAut Bears an information whether authorization should be included in sync requests.
      *                Authorization can be omitted for pull of public projects
      */
-    void syncProject( const LocalProject &project, bool withAuth = true );
+    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
     //! Overloaded method, allows to sync with Project instance. Can be used in case of first download of remote project (it has invalid LocalProject info).
-    void syncProject( const Project &project, bool withAuth = true );
+    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
-    void onProjectSyncFinished( const QString &projectDir, const QString &projectFullName, bool successfully, int version );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
+    void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
+    void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
 
   private:
 
@@ -78,6 +89,8 @@ class SynchronizationManager : public QObject
     QHash<QString, SyncProcess> mSyncProcesses;
 
     MerginApi *mMerginApi = nullptr; // not owned
+
+    int mSyncRetryIntervalSeconds = 100000; // 1 minute between sync retries
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H

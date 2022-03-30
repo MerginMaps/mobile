@@ -334,11 +334,11 @@ void ProjectsModel::syncProject( const QString &projectId )
   {
     if ( mModelType == ProjectModelTypes::PublicProjectsModel )
     {
-      mSyncManager->syncProject( mProjects[ix], false ); // does not need to be authorized
+      mSyncManager->syncProject( mProjects[ix], SyncOptions::AuthOptional );
     }
     else
     {
-      mSyncManager->syncProject( mProjects[ix] ); // requires auth
+      mSyncManager->syncProject( mProjects[ix] );
     }
   }
 }

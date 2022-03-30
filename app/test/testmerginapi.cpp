@@ -343,7 +343,7 @@ void TestMerginApi::testCancelDownloadProject()
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy5.count(), 1 );
   QList<QVariant> arguments = spy5.takeFirst();
-  QVERIFY( !arguments.at( 2 ).toBool() );
+  QVERIFY( !arguments.at( 1 ).toBool() );
 
   QCOMPARE( QFileInfo( projectDir ).size(), 0 );
   QVERIFY( QDir( projectDir ).isEmpty() );
@@ -362,7 +362,7 @@ void TestMerginApi::testCancelDownloadProject()
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy7.count(), 1 );
   arguments = spy7.takeFirst();
-  QVERIFY( !arguments.at( 2 ).toBool() );
+  QVERIFY( !arguments.at( 1 ).toBool() );
 
   QFileInfo info( projectDir );
   QDir dir( projectDir );
@@ -497,7 +497,7 @@ void TestMerginApi::testUploadProject()
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy.count(), 1 );
   QList<QVariant> arguments = spy.takeFirst();
-  QVERIFY( !arguments.at( 2 ).toBool() );
+  QVERIFY( !arguments.at( 1 ).toBool() );
 
   // server version is still not available (cancelled before project info)
   Project project1 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
@@ -523,7 +523,7 @@ void TestMerginApi::testUploadProject()
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spyX.count(), 1 );
   QList<QVariant> argumentsX = spyX.takeFirst();
-  QVERIFY( !argumentsX.at( 2 ).toBool() );
+  QVERIFY( !argumentsX.at( 1 ).toBool() );
 
   // server version is now available (cancelled after project info), but after projects model refresh
   Project project2 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );

@@ -57,6 +57,7 @@ struct LocalProject
     QString projectNamespace;
 
     QString id() const; //! projectFullName for time being
+    QString fullName() const;
 
     QString projectDir;
     QString projectError; // Error that leads to project not being able to open in app
@@ -71,7 +72,7 @@ struct LocalProject
     //! LocalVersion comes from metadata file stored in .mergin folder.
     //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
     //!       Project->isMergin() is recommended to use over this one
-    bool hasMerginMetadata() const { return localVersion > 0; }
+    bool hasMerginMetadata() const { return localVersion > -1; }
 
     bool operator ==( const LocalProject &other )
     {
@@ -102,7 +103,7 @@ struct MerginProject
   QString id() const; //! projectFullName for time being
 
   QDateTime serverUpdated; // available latest version of project files on server
-  int serverVersion;
+  int serverVersion = -1;
 
   ProjectStatus::Status status = ProjectStatus::NoVersion;
 
