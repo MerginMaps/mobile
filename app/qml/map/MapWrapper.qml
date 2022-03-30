@@ -633,13 +633,23 @@ Item {
   MapFloatButton {
     id: syncButton
 
+    // Find out if sync would collide with acc button
+    // based on distance between them
+    function wouldCollideWithAccBtn()
+    {
+      let accBtnRightMostX = _accuracyButton.x + _accuracyButton.width
+      let syncBtnLeftMostX = syncButton.x
+      let distance = syncBtnLeftMostX - accBtnRightMostX
+      return distance < InputStyle.smallGap / 2
+    }
+
     onClicked: __activeProject.requestSync()
     onPressAndHold: root.localChangesPanelRequested()
 
     maxWidth: InputStyle.mapBtnHeight
     withImplicitMargins: false
 
-    anchors.bottom: parent.bottom
+    anchors.bottom: wouldCollideWithAccBtn() ? _accuracyButton.top : parent.bottom
     anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
     anchors.right: parent.right
     anchors.rightMargin: InputStyle.smallGap
