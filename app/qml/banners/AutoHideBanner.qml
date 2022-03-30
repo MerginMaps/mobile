@@ -13,9 +13,11 @@ import ".."
 Banner {
   id: root
 
-  function show( interval = 3000 )
+  property int visibleInterval: 3000 // [ms]
+
+  function show()
   {
-    hideTimer.interval = interval
+    hideTimer.interval = root.visibleInterval
     hideTimer.start()
   }
 

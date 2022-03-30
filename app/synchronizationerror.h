@@ -29,16 +29,16 @@ class SynchronizationError
       ProjectNotFound,
       VersionMismatch,
       ServerError,
-      Other
+      UnknownError
     };
     Q_ENUMS( ErrorType );
 
-    //! Parser error from server based on error code and message and returns one
+    //! Parses error from server based on error code and message and returns one
     //! of SyncError types. "Other" is returned for unknown errors.
     static ErrorType errorType( int errorCode, const QString &errorMessage );
 
-    //! Returns true if the errorType can disappear in next sync try
-    static bool isWorthOfRetry( ErrorType errorType );
+    //! Returns true if there is no point to try to sync again for the errorType
+    static bool isPermanent( ErrorType errorType );
 };
 
 #endif // SYNCHRONIZATIONERROR_H

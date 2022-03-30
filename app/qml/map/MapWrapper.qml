@@ -554,7 +554,7 @@ Item {
     width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
     height: InputStyle.rowHeight
 
-    bgColor: InputStyle.informationColor
+    bgColor: InputStyle.secondaryBackgroundColor
     fontColor: "white"
 
     source: InputStyle.yesIcon
@@ -577,6 +577,7 @@ Item {
     width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
     height: InputStyle.rowHeight
 
+    visibleInterval: 10000
     text: qsTr( "There was an issue during synchronization, we will try again. Click to learn more" )
 
     onClicked: syncFailedDialog.open()
@@ -743,7 +744,7 @@ Item {
             syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
             if ( willRetry )
             {
-              retryableSyncErrorBanner.show( 10000 )
+              retryableSyncErrorBanner.show()
             }
             else
             {

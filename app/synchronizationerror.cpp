@@ -9,10 +9,7 @@
 
 #include "synchronizationerror.h"
 
-SynchronizationError::SynchronizationError()
-{
-
-}
+SynchronizationError::SynchronizationError() = default;
 
 SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, const QString &errorMessage )
 {
@@ -46,19 +43,19 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
     return ErrorType::ServerError;
   }
 
-  return ErrorType::Other;
+  return ErrorType::UnknownError;
 }
 
-bool SynchronizationError::isWorthOfRetry( ErrorType errorType )
+bool SynchronizationError::isPermanent( ErrorType errorType )
 {
   switch ( errorType )
   {
-    case AnotherProcessIsRunning: return true;
+    case AnotherProcessIsRunning:
+      [[fallthrough]];
+    case VersionMismatch:
+      [[fallthrough]];
+    case ServerError: return false;
 
-    case VersionMismatch: return true;
-
-    case ServerError: return true;
-
-    default: return false;
+    default: return true;
   }
 }

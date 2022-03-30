@@ -244,7 +244,7 @@ void SynchronizationManager::onProjectSyncFailure(
   // We only retry twice
   bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
                           process.retriesCount < 2 &&
-                          SynchronizationError::isWorthOfRetry( error );
+                          !SynchronizationError::isPermanent( error );
 
   emit syncError( projectFullName, error, eligibleForRetry, message );
 

@@ -10,6 +10,12 @@
 import QtQuick 2.14
 import QtQuick.Dialogs 1.3
 
+/**
+  * Dialog bearing information about synchronization failure.
+  * By default it has some text, but it is also possible to set "detailedText"
+  * "detailedText" will be visible either under "details" button or appended to
+  * the default text (based on platform).
+  */
 MessageDialog {
   id: root
 
@@ -18,6 +24,5 @@ MessageDialog {
 
   standardButtons: StandardButton.Ok
 
-  // It is also possible to set "detailedText"
- // detailedText: ""
+//  detailedText: ""
 }

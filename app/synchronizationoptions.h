@@ -22,7 +22,7 @@ class SyncOptions
 
     enum Strategy
     {
-      Basic = 0, //! try to sync once, finishes on first failure
+      Singleshot = 0, //! try to sync once, finishes on first failure
       Retry //! retries up to 2 times to repeat sync on failure
     };
     Q_ENUMS( Strategy );

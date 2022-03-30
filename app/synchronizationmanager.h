@@ -25,7 +25,7 @@ struct SyncProcess
 
   bool awaitsRetry; // not currently being synced, but awaits to be synced
   int retriesCount = 0;
-  SyncOptions::Strategy strategy = SyncOptions::Basic;
+  SyncOptions::Strategy strategy = SyncOptions::Singleshot;
   // In future: current state (push/pull)
 };
 
@@ -71,10 +71,10 @@ class SynchronizationManager : public QObject
      * \param withAut Bears an information whether authorization should be included in sync requests.
      *                Authorization can be omitted for pull of public projects
      */
-    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Basic );
+    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
     //! Overloaded method, allows to sync with Project instance. Can be used in case of first download of remote project (it has invalid LocalProject info).
-    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Basic );
+    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
