@@ -18,6 +18,9 @@ Item {
   property string titleText
   property string text
 
+  property alias titleComponent: title
+  property alias textComponent: txt
+
   height: InputStyle.rowHeight
 
   Column {
