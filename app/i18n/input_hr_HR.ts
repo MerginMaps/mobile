@@ -217,9 +217,9 @@
 <context>
     <name>Banner</name>
     <message>
-        <location filename="../qml/Banner.qml" line="82"/>
-        <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Saznaj više&lt;/a&gt;</translation>
+        <location filename="../qml/Banner.qml" line="36"/>
+        <source>Learn more</source>
+        <translation>Saznaj više</translation>
     </message>
 </context>
 <context>
@@ -314,7 +314,7 @@
 <context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="62"/>
+        <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
         <translation>Skeniraj kod</translation>
     </message>
@@ -609,109 +609,109 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="161"/>
+        <location filename="../inpututils.cpp" line="162"/>
         <source>just now</source>
         <translation>upravo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minutes ago</source>
         <translation>prije %1 minuta</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minute ago</source>
         <translation>prije %1 minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hours ago</source>
         <translation>prije %1 sati</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hour ago</source>
         <translation>prije %1 sata</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 days ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 day ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 weeks ago</source>
         <translation>prije %1 tjedana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 week ago</source>
         <translation>prije %1 tjedna</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 months ago</source>
         <translation>prije %1 mjeseci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 month ago</source>
         <translation>prije %1 mjeseca</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 years ago</source>
         <translation>prije %1 godina</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 year ago</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1194"/>
+        <location filename="../inpututils.cpp" line="1212"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1195"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1196"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1197"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1198"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1199"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
@@ -807,58 +807,64 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="61"/>
-        <location filename="../qml/MainPanel.qml" line="240"/>
+        <location filename="../qml/MainPanel.qml" line="62"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="81"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="82"/>
+        <location filename="../qml/MainPanel.qml" line="278"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="288"/>
+        <location filename="../qml/MainPanel.qml" line="117"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
         <translation>Snimaj</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="136"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="137"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
         <translation>Zumiraj na projekt</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
+        <source>Local changes</source>
+        <translation>Lokalne izmjene</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="174"/>
         <source>Browse data</source>
         <translation>Pregledaj podatke</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="175"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="194"/>
+        <location filename="../qml/MainPanel.qml" line="383"/>
         <source>Map themes</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="195"/>
-        <location filename="../qml/MainPanel.qml" line="364"/>
+        <location filename="../qml/MainPanel.qml" line="214"/>
+        <location filename="../qml/MainPanel.qml" line="402"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="212"/>
+        <location filename="../qml/MainPanel.qml" line="231"/>
         <source>More</source>
         <translation>Više</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="225"/>
+        <location filename="../qml/MainPanel.qml" line="244"/>
         <source>Menu</source>
         <translation>Meni</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
         <translation>Pregledaj podatke</translation>
     </message>
@@ -879,35 +885,101 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="76"/>
-        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <location filename="../qml/map/MapWrapper.qml" line="85"/>
+        <location filename="../qml/map/MapWrapper.qml" line="977"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="107"/>
+        <location filename="../qml/map/MapWrapper.qml" line="116"/>
         <source>Recorded feature is not valid</source>
         <translation>Snimljeni objekt nije valjan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="511"/>
+        <location filename="../qml/map/MapWrapper.qml" line="548"/>
+        <source>Successfully synchronized</source>
+        <translation>Uspješno sinkronizirano</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="562"/>
+        <source>Up to date</source>
+        <translation>Ažurno</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="571"/>
+        <source>Somebody else is syncing, we will try again later</source>
+        <translation>Netko upravo sinkronizira podatke, pokušati ćemo nešto kasnije</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="581"/>
+        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
+        <translation>Došlo je do problema prilikom sinkronizacije, pokušati ćemo ponovno. Klikni za više</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="606"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Niska GPS preciznost (%1 m)&lt;br&gt;&lt;br&gt;Molimo osigurajte čisti pogled na nebo.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <source>Details</source>
+        <translation>Detalji</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="827"/>
         <source>Connecting to %1</source>
         <translation>Povezivanje na %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <location filename="../qml/map/MapWrapper.qml" line="841"/>
         <source>Connected, no position</source>
         <translation>Povezano, nema pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <location filename="../qml/map/MapWrapper.qml" line="845"/>
         <source>Unknown accuracy</source>
         <translation>Nepoznata preciznost</translation>
+    </message>
+</context>
+<context>
+    <name>MigrateToMerginDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
+        <source>Upload project to Mergin?</source>
+        <translation>Prenesi projekt na Mergin?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
+        <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
+Click &apos;Yes&apos; to upload it.</source>
+        <translation>Ovaj projekt nije prenesen na Mergin. Prenesite ga na Mergin kako bi aktivirali sinkronizaciju i suradnju. 
+Stisnite &apos;Da&apos; za prijenos.</translation>
+    </message>
+</context>
+<context>
+    <name>MissingAuthDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="18"/>
+        <source>Sign in to Mergin</source>
+        <translation>Prijava na Mergin</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="19"/>
+        <source>You need to be signed in to your Mergin account in order to synchronize a project. Hit &apos;Yes&apos; to sign in.</source>
+        <translation>Potrebna je prijava s Vašim Mergin računom kako bi sinkronizirali projekt. Stisnite &apos;Da&apos; za prijavu.</translation>
+    </message>
+</context>
+<context>
+    <name>NoPermissionsDialog</name>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="16"/>
+        <source>No rights to access the project</source>
+        <translation>Nemate prava za pristup projektu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
+        <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
+        <translation>Nemate dozvole za sinkronizaciju vaših promjena. Kontaktirajte vlasnika Mergin projekta kako bi Vam dodijelio ispravne dozvole. Ako ste Vi vlasnik projekta, prijavite se na Mergin.</translation>
     </message>
 </context>
 <context>
@@ -1041,6 +1113,11 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectIssuesPanel</name>
     <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
+        <source>The following layers failed loading</source>
+        <translation>Slijedeći slojevi nisu uspješno učitani.</translation>
+    </message>
+    <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
         <translation>Problemi s projektom</translation>
@@ -1054,53 +1131,53 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="133"/>
-        <location filename="../qml/components/ProjectList.qml" line="188"/>
+        <location filename="../qml/components/ProjectList.qml" line="134"/>
+        <location filename="../qml/components/ProjectList.qml" line="189"/>
         <source>Create project</source>
         <translation>Stvori projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="163"/>
+        <location filename="../qml/components/ProjectList.qml" line="164"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Nije pronađen niti jedan projekt.%1Pogledajte %2kako stvoriti projekt%3 i %4kako ga preuzeti%3 na Vaš uređaj.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="179"/>
+        <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>Možete stvoriti projekt klikom na dugme ispod</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nije bilo moguće učitati listu projekata.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>No projects found!</source>
         <translation>Nema pronađenih projekata!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="232"/>
+        <location filename="../qml/components/ProjectList.qml" line="233"/>
         <source>Retry</source>
         <translation>Pokušaj ponovno</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="260"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
         <translation>Izbriši projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="262"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Sve nesinkronizirane promjene će biti izgubljene.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="296"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Download project</source>
         <translation>Preuzmi projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Želite li preuzeti projekt
@@ -1118,37 +1195,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="135"/>
+        <location filename="../qml/ProjectPanel.qml" line="71"/>
         <source>No Changes</source>
         <translation>Nema promjena</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="160"/>
+        <location filename="../qml/ProjectPanel.qml" line="171"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="357"/>
+        <location filename="../qml/ProjectPanel.qml" line="368"/>
         <source>Home</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="379"/>
+        <location filename="../qml/ProjectPanel.qml" line="390"/>
         <source>My projects</source>
         <translation>Moji projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared with me</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="423"/>
+        <location filename="../qml/ProjectPanel.qml" line="434"/>
         <source>Explore</source>
         <translation>Istraži</translation>
     </message>
@@ -1210,8 +1287,8 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="90"/>
-        <location filename="../projectsmodel.cpp" line="94"/>
+        <location filename="../projectsmodel.cpp" line="98"/>
+        <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
         <translation>Ažurirano %1</translation>
     </message>
@@ -1518,27 +1595,32 @@ Won&apos;t be added to the project.</source>
         <translation>Unos zadnje korištene vrijednosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="292"/>
+        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <source>Automatically sync changes</source>
+        <translation>Automatski sinkroniziraj promjene.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="311"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="301"/>
+        <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Help</source>
         <translation>Pomoć</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="310"/>
+        <location filename="../qml/SettingsPanel.qml" line="329"/>
         <source>Privacy policy</source>
         <translation>Politika privatnosti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="319"/>
+        <location filename="../qml/SettingsPanel.qml" line="338"/>
         <source>Mergin terms of service</source>
         <translation>Uvjeti korištenja Mergin servisa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="328"/>
+        <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>Diagnostic log</source>
         <translation>Dijagnostički zapis</translation>
     </message>
@@ -1554,17 +1636,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>StakeoutPanel</name>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <location filename="../qml/StakeoutPanel.qml" line="153"/>
         <source>Stake out</source>
         <translation>Navođenje</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <location filename="../qml/StakeoutPanel.qml" line="229"/>
         <source>Feature</source>
         <translation>Objekt</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <location filename="../qml/StakeoutPanel.qml" line="244"/>
         <source>Distance</source>
         <translation>Udaljenost</translation>
     </message>
@@ -1651,6 +1733,19 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>SyncFailedDialog</name>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
+        <source>Failed to synchronize your changes</source>
+        <translation>Sinkronizacija promjena nije moguća.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
+        <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
+        <translation>Vaše promjene nisu mogle biti prenesene na poslužitelj, provjerite internetsku vezu i potrebne dozvole za projekt.</translation>
+    </message>
+</context>
+<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1705,42 +1800,43 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="254"/>
+        <source>No Changes</source>
+        <translation>Nema promjena</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode on</source>
         <translation>Način GPS autocentriranja uključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode off</source>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="243"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="494"/>
+        <location filename="../qml/main.qml" line="514"/>
         <source>Stake out is disabled because location is unavailable!</source>
-        <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije</translation>
+        <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="513"/>
+        <location filename="../qml/main.qml" line="535"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa Mergin servisom.%1Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="559"/>
+        <location filename="../qml/main.qml" line="582"/>
         <source>There were issues loading the project.</source>
         <translation>Došlo je do problema prilikom učitavanja projekta</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="433"/>
-        <source>Communication error</source>
-        <translation>Greška u komunikaciji</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
