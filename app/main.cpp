@@ -96,6 +96,8 @@
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
 #include "position/abstractpositionprovider.h"
+#include "synchronizationmanager.h"
+#include "synchronizationerror.h"
 
 
 #ifndef NDEBUG
@@ -118,7 +120,7 @@
 #endif
 
 #include "qgsapplication.h"
-#include "loader.h"
+#include "activeproject.h"
 #include "appsettings.h"
 
 static QString getDataDir()
@@ -228,7 +230,9 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
-  qmlRegisterUncreatableType<Loader>( "lc", 1, 0, "InputLoader", "" );
+  qmlRegisterUncreatableType<ActiveProject>( "lc", 1, 0, "ActiveProject", "" );
+  qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
+  qmlRegisterUncreatableType<SynchronizationError>( "lc", 1, 0, "SyncError", "SyncError Enum" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -431,10 +435,12 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  Loader loader( mtm, as, al, recordingLpm );
+  ActiveProject activeProject( mtm, as, al, recordingLpm, localProjectsManager );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
+
+  SynchronizationManager syncManager( ma.get() );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
@@ -444,15 +450,39 @@ int main( int argc, char *argv[] )
   } );
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
 
-  // Connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &loader, &Loader::appStateChanged );
+  // Lambda context object can be used in all lambda functions defined here,
+  // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
+  QObject lambdaContext;
+
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
+  {
+    QString msg;
+
+    // Instatiate QDebug with QString to redirect output to string
+    // It is used to convert enum to string
+    QDebug logHelper( &msg );
+
+    logHelper << QStringLiteral( "Application changed state to:" ) << state;
+    CoreUtils::log( QStringLiteral( "Input" ), msg );
+  } );
+
+  QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext, []()
+  {
+    CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
+  } );
+
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  {
+    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+  } );
+
+  // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
-  QObject::connect( &app, &QCoreApplication::aboutToQuit, &loader, &Loader::appAboutToQuit );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::reloadProject, &loader, &Loader::reloadProject );
+  QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProject, &ActiveProject::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
-  QObject::connect( &loader, &Loader::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
-  QObject::connect( &loader, &Loader::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( QgsApplication::messageLog(),
@@ -460,7 +490,7 @@ int main( int argc, char *argv[] )
                     &iu,
                     &InputUtils::onQgsLogMessageReceived );
 
-  QFile projectLoadingFile( Loader::LOADING_FLAG_FILE_PATH );
+  QFile projectLoadingFile( ActiveProject::LOADING_FLAG_FILE_PATH );
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
@@ -505,7 +535,8 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__loader", &loader );
+  engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
+  engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );

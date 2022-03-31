@@ -15,8 +15,10 @@ Item {
 
   property double maxWidth
   property alias content: contentContainer.children
+  property bool withImplicitMargins: true
 
   signal clicked()
+  signal pressAndHold()
 
   height: InputStyle.mapBtnHeight
   width: childrenRect.width
@@ -29,7 +31,7 @@ Item {
     border.width: InputStyle.borderSize
     border.color: InputStyle.darkGreen
 
-    implicitWidth: Math.min( contentContainer.childrenRect.width, root.maxWidth ) + InputStyle.smallGap
+    implicitWidth: Math.min( contentContainer.childrenRect.width, root.maxWidth ) + ( root.withImplicitMargins ? InputStyle.smallGap : 0 )
 
     radius: InputStyle.cornerRadius
     color: InputStyle.panelBackgroundLight
@@ -48,6 +50,7 @@ Item {
     MouseArea {
       anchors.fill: parent
       onClicked: root.clicked()
+      onPressAndHold: root.pressAndHold()
     }
   }
 }

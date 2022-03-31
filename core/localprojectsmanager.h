@@ -13,6 +13,11 @@
 #include <QObject>
 #include <project.h>
 
+/**
+ * \brief The LocalProjectsManager class is responsible for loading local - downloaded - files from path
+ *  on the system specified by "dataDir". It holds the loaded projects and provides deep copy of them.
+ *  It also contains signals about changes in those projects.
+ */
 class LocalProjectsManager : public QObject
 {
     Q_OBJECT
@@ -57,18 +62,17 @@ class LocalProjectsManager : public QObject
     //! after successful update/upload - both server and local version are the same
     void updateLocalVersion( const QString &projectDir, int version );
 
-    //! Updates proejct's namespace
+    //! Updates project's namespace
     void updateNamespace( const QString &projectDir, const QString &projectNamespace );
 
     //! Finds all QGIS project files and set the err variable if any occured.
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
   signals:
-    void projectMetadataChanged( const QString &projectDir );
-    void localMerginProjectAdded( const QString &projectDir );
     void localProjectAdded( const LocalProject &project );
-    void aboutToRemoveLocalProject( const LocalProject project );
     void localProjectDataChanged( const LocalProject &project );
+    void aboutToRemoveLocalProject( const LocalProject &project );
+
     void dataDirReloaded();
 
   private:

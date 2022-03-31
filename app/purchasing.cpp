@@ -492,7 +492,7 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
 {
   setTransactionCreationRequested( false );
 
-  if ( !mMerginApi->validateAuthAndContinute() || mMerginApi->apiVersionStatus() != MerginApiStatus::OK )
+  if ( !mMerginApi->validateAuth() || mMerginApi->apiVersionStatus() != MerginApiStatus::OK )
   {
     return;
   }

@@ -108,5 +108,10 @@
         <file>misc/AddPositionProviderPage.qml</file>
         <file>components/BluetoothConnectionDialog.qml</file>
         <file>components/InputText.qml</file>
+        <file>dialogs/SyncFailedDialog.qml</file>
+        <file>dialogs/MissingAuthDialog.qml</file>
+        <file>dialogs/MigrateToMerginDialog.qml</file>
+        <file>dialogs/NoPermissionsDialog.qml</file>
+        <file>banners/AutoHideBanner.qml</file>
     </qresource>
 </RCC>

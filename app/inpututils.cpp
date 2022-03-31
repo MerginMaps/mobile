@@ -31,6 +31,7 @@
 #include "qgsvaluerelationfieldformatter.h"
 #include "qgsdatetimefieldformatter.h"
 #include "qgslayertree.h"
+#include "qgsprojectviewsettings.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1552,4 +1553,75 @@ bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
   const QgsAbstractGeometry *g = feature.feature().geometry().constGet();
   const QgsPoint *point = dynamic_cast< const QgsPoint * >( g );
   return point != nullptr;
+}
+
+void InputUtils::zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *mapSettings )
+{
+  if ( !qgsProject || !mapSettings )
+  {
+    qDebug() << "Cannot zoom to extent, MapSettings or QgsProject is not defined";
+    return;
+  }
+  QgsRectangle extent;
+
+  QgsProjectViewSettings *viewSettings = qgsProject->viewSettings();
+  extent = viewSettings->presetFullExtent();
+  if ( extent.isNull() )
+  {
+    bool hasWMS;
+    QStringList WMSExtent = qgsProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
+
+    if ( hasWMS && ( WMSExtent.length() == 4 ) )
+    {
+      extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
+    }
+    else // set layers extent
+    {
+      const QVector<QgsMapLayer *> layers = qgsProject->layers<QgsMapLayer *>();
+      for ( const QgsMapLayer *layer : layers )
+      {
+        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
+        extent.combineExtentWith( layerExtent );
+      }
+    }
+  }
+
+  if ( extent.isEmpty() )
+  {
+    extent.grow( qgsProject->crs().isGeographic() ? 0.01 : 1000.0 );
+  }
+  extent.scale( 1.05 );
+  mapSettings->setExtent( extent );
+}
+
+QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
+{
+  if ( !layer )
+    return QString();
+
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  if ( vectorLayer )
+  {
+    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
+    return iconFromGeometry( geometry );
+  }
+  else
+    return QString( "qrc:/mIconRasterLayer.svg" );
+}
+
+QString InputUtils::loadIconFromFeature( QgsFeature feature )
+{
+  return iconFromGeometry( feature.geometry().type() );
+}
+
+QString InputUtils::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
+{
+  switch ( geometry )
+  {
+    case QgsWkbTypes::GeometryType::PointGeometry: return QString( "qrc:/mIconPointLayer.svg" );
+    case QgsWkbTypes::GeometryType::LineGeometry: return QString( "qrc:/mIconLineLayer.svg" );
+    case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "qrc:/mIconPolygonLayer.svg" );
+    default: return QString( "qrc:/mIconTableLayer.svg" );
+  }
 }

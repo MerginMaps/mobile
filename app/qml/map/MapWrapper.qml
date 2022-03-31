@@ -14,6 +14,8 @@ import QgsQuick 0.1 as QgsQuick
 
 import ".."
 import "../components"
+import "../dialogs"
+import "../banners"
 
 Item {
   id: root
@@ -56,6 +58,9 @@ Item {
 
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
+
+  signal signInRequested()
+  signal localChangesPanelRequested()
 
   function centerToPair( pair, considerMapExtentOffset = false ) {
     if ( considerMapExtentOffset )
@@ -253,12 +258,12 @@ Item {
         break
       }
       case "recordInLayerFeature": {
-        __loader.setActiveLayer( root.targetLayerToUse )
+        __activeProject.setActiveLayer( root.targetLayerToUse )
         root.recordInLayerFeatureStarted()
         break
       }
       case "editGeometry": {
-        __loader.setActiveLayer( root.featurePairToEdit.layer )
+        __activeProject.setActiveLayer( root.featurePairToEdit.layer )
         _digitizingHighlight.featureLayerPair = root.featurePairToEdit
         _digitizingHighlight.visible = true
         root.editingGeometryStarted()
@@ -273,6 +278,16 @@ Item {
 
         if ( _digitizingController.recording )
           _digitizingController.stopRecording()
+
+        // Stop/Start sync animation when user goes to map
+        if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
+        {
+          syncInProgressAnimation.start()
+        }
+        else
+        {
+          syncInProgressAnimation.stop()
+        }
 
         break
       }
@@ -306,7 +321,7 @@ Item {
     width: root.width
     visible: root.state !== "inactive"
 
-    mapSettings.project: __loader.project
+    mapSettings.project: __activeProject.qgsProject
 
     IdentifyKit {
       id: _identifyKit
@@ -476,8 +491,6 @@ Item {
     lineRecordingInterval: __appSettings.lineRecordingInterval
     variablesManager: __variablesManager
 
-    onRecordingChanged: __loader.recording = recording
-
     onFeatureLayerPairChanged: {
       if ( recording ) {
         _digitizingHighlight.visible = true
@@ -521,6 +534,55 @@ Item {
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
   }
 
+  AutoHideBanner {
+    id: syncSuccessfulBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.clrPanelBackground
+    fontColor: "white"
+
+    source: InputStyle.yesIcon
+
+    text: qsTr( "Successfully synchronized" )
+  }
+
+  AutoHideBanner {
+    id: upToDateBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.yesIcon
+
+    text: qsTr( "Up to date" )
+  }
+
+  AutoHideBanner {
+    id: anotherProcessIsRunningBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    text: qsTr( "Somebody else is syncing, we will try again later" )
+  }
+
+  AutoHideBanner {
+    id: retryableSyncErrorBanner
+
+    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    height: InputStyle.rowHeight
+
+    visibleInterval: 10000
+    text: qsTr( "There was an issue during synchronization, we will try again. Click to learn more" )
+
+    onClicked: syncFailedDialog.open()
+  }
+
   Banner {
     id: _gpsAccuracyBanner
 
@@ -543,9 +605,177 @@ Item {
 
     text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
     .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
+    withLink: true
     link: __inputHelp.gpsAccuracyHelpLink
 
-    showWarning: shouldShowAccuracyWarning
+    showBanner: shouldShowAccuracyWarning
+  }
+
+  MissingAuthDialog {
+    id: missingAuthDialog
+
+    onSingInRequested: root.signInRequested()
+  }
+
+  SyncFailedDialog {
+    id: syncFailedDialog
+  }
+
+  MigrateToMerginDialog {
+    id: migrateToMerginDialog
+
+    onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
+  }
+
+  NoPermissionsDialog {
+    id: noPermissionsDialog
+  }
+
+  MapFloatButton {
+    id: syncButton
+
+    // Find out if sync would collide with acc button
+    // based on distance between them
+    function wouldCollideWithAccBtn()
+    {
+      let accBtnRightMostX = _accuracyButton.x + _accuracyButton.width
+      let syncBtnLeftMostX = syncButton.x
+      let distance = syncBtnLeftMostX - accBtnRightMostX
+      return distance < InputStyle.smallGap / 2
+    }
+
+    onClicked: __activeProject.requestSync()
+    onPressAndHold: root.localChangesPanelRequested()
+
+    maxWidth: InputStyle.mapBtnHeight
+    withImplicitMargins: false
+
+    anchors.bottom: wouldCollideWithAccBtn() ? _accuracyButton.top : parent.bottom
+    anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
+    anchors.right: parent.right
+    anchors.rightMargin: InputStyle.smallGap
+
+    visible: root.state === "view"
+
+    content: Item {
+
+      implicitWidth: InputStyle.mapBtnHeight
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: syncicon
+
+        iconSize: parent.height / 2
+        source: InputStyle.syncIcon
+
+        anchors.centerIn: parent
+      }
+
+      RotationAnimation {
+        id: syncInProgressAnimation
+
+        target: syncicon
+
+        from: 0
+        to: 720
+        duration: 1000
+
+        alwaysRunToEnd: true
+        loops: Animation.Infinite
+        easing.type: Easing.InOutSine
+      }
+    }
+
+    Connections {
+      target: __syncManager
+      enabled: root.state !== "inactive"
+
+      function onSyncStarted( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.start()
+        }
+      }
+
+      function onSyncFinished( projectFullName, success )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+
+          if ( success )
+          {
+            // just banner
+            syncSuccessfulBanner.show()
+          }
+        }
+      }
+
+      function onSyncCancelled( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+        }
+      }
+
+      function onSyncError( projectFullName, errorType, willRetry, errorMessage )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          if ( errorType === SyncError.NotAMerginProject )
+          {
+             migrateToMerginDialog.open()
+          }
+          else if ( errorType === SyncError.NoPermissions )
+          {
+            noPermissionsDialog.open()
+          }
+          else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
+          {
+            // just banner that we will try again
+            anotherProcessIsRunningBanner.show()
+          }
+          else
+          {
+            syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
+            if ( willRetry )
+            {
+              retryableSyncErrorBanner.show()
+            }
+            else
+            {
+              syncFailedDialog.open()
+            }
+          }
+        }
+      }
+    }
+
+    Connections {
+      target: __merginApi
+      enabled: root.state !== "inactive"
+
+      function onMissingAuthorizationError( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+          missingAuthDialog.open()
+        }
+      }
+
+      function onProjectAlreadyOnLatestVersion( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          upToDateBanner.show()
+        }
+      }
+    }
   }
 
   MapFloatButton {
@@ -667,7 +897,7 @@ Item {
         id: layericon
 
         iconSize: parent.height / 2
-        source: __loader.loadIconFromLayer( __activeLayer.layer )
+        source: __inputUtils.loadIconFromLayer( __activeLayer.layer )
 
         anchors.verticalCenter: parent.verticalCenter
       }
@@ -716,7 +946,7 @@ Item {
     width: window.width
     edge: Qt.BottomEdge
 
-    onActiveLayerChangeRequested: __loader.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+    onActiveLayerChangeRequested: __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
   RecordToolbar {
@@ -735,7 +965,7 @@ Item {
     // reset manualRecording after opening
     onVisibleChanged: {
       if ( visible ) _digitizingController.manualRecording = true
-      if ( _gpsAccuracyBanner.showWarning ) {
+      if ( _gpsAccuracyBanner.showBanner ) {
         _gpsAccuracyBanner.state = visible ? "show" : "fade"
       }
     }
