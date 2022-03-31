@@ -99,7 +99,7 @@ Item {
             id: icon
             anchors.centerIn: parent
             anchors.leftMargin: 10 * __dp
-            source: __loader.loadIconFromFeature( model.Feature )
+            source: __inputUtils.loadIconFromFeature( model.Feature )
             width: 30 * __dp
             height: width
             sourceSize.width: width

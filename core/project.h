@@ -16,6 +16,7 @@
 #include <memory>
 
 struct Project;
+struct LocalProject;
 
 namespace ProjectStatus
 {
@@ -31,7 +32,9 @@ namespace ProjectStatus
   Q_ENUM_NS( Status )
 
   //! Returns project state from ProjectStatus::Status enum for the project
-  Status projectStatus( const std::shared_ptr<Project> project );
+  Status projectStatus( const Project &project );
+
+  bool hasLocalChanges( const LocalProject &project );
 }
 
 /**
@@ -43,34 +46,43 @@ namespace ProjectStatus
  */
 struct LocalProject
 {
-  LocalProject() {};
-  ~LocalProject() {};
+    Q_GADGET
 
-  QString projectName;
-  QString projectNamespace;
+  public:
 
-  QString id() const; //! projectFullName for time being
+    LocalProject() {};
+    ~LocalProject() {};
 
-  QString projectDir;
-  QString projectError; // Error that leads to project not being able to open in app
+    QString projectName;
+    QString projectNamespace;
 
-  QString qgisProjectFilePath;
+    QString id() const; //! projectFullName for time being
+    QString fullName() const;
 
-  int localVersion = -1;
+    QString projectDir;
+    QString projectError; // Error that leads to project not being able to open in app
 
-  bool isValid() { return !projectDir.isEmpty(); }
+    QString qgisProjectFilePath;
 
-  LocalProject *clone() const;
+    int localVersion = -1;
 
-  bool operator ==( const LocalProject &other )
-  {
-    return ( this->id() == other.id() );
-  }
+    bool isValid() const { return !projectDir.isEmpty(); }
 
-  bool operator !=( const LocalProject &other )
-  {
-    return !( *this == other );
-  }
+    //! Returns true if the local version instance has a mergin counterpart based on localVersion.
+    //! LocalVersion comes from metadata file stored in .mergin folder.
+    //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
+    //!       Project->isMergin() is recommended to use over this one
+    bool hasMerginMetadata() const { return localVersion > -1; }
+
+    bool operator ==( const LocalProject &other )
+    {
+      return ( this->id() == other.id() );
+    }
+
+    bool operator !=( const LocalProject &other )
+    {
+      return !( *this == other );
+    }
 };
 
 /**
@@ -91,17 +103,13 @@ struct MerginProject
   QString id() const; //! projectFullName for time being
 
   QDateTime serverUpdated; // available latest version of project files on server
-  int serverVersion;
+  int serverVersion = -1;
 
   ProjectStatus::Status status = ProjectStatus::NoVersion;
-  bool pending = false;
-  qreal progress = 0;
 
   QString remoteError; // Error leading to project not being able to sync (received error code from server)
 
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
-
-  MerginProject *clone() const;
 
   bool operator ==( const MerginProject &other )
   {
@@ -125,47 +133,47 @@ struct Project
   Project() {};
   ~Project() {};
 
-  std::unique_ptr<MerginProject> mergin;
-  std::unique_ptr<LocalProject> local;
+  MerginProject mergin;
+  LocalProject local;
 
-  bool isMergin() const { return mergin != nullptr; }
-  bool isLocal() const { return local != nullptr; }
+  bool isMergin() const { return mergin.isValid(); }
+  bool isLocal() const { return local.isValid(); }
 
-  QString projectName()
+  QString projectName() const
   {
-    if ( isMergin() ) return mergin->projectName;
-    else if ( isLocal() ) return local->projectName;
+    if ( isMergin() ) return mergin.projectName;
+    else if ( isLocal() ) return local.projectName;
     return QString();
   }
 
-  QString projectNamespace()
+  QString projectNamespace() const
   {
-    if ( isMergin() ) return mergin->projectNamespace;
-    else if ( isLocal() ) return local->projectNamespace;
+    if ( isMergin() ) return mergin.projectNamespace;
+    else if ( isLocal() ) return local.projectNamespace;
     return QString();
   }
 
-  QString projectId()
+  QString id() const
   {
-    if ( isMergin() ) return mergin->id();
-    else if ( isLocal() ) return local->id();
+    if ( isMergin() ) return mergin.id();
+    else if ( isLocal() ) return local.id();
     return QString();
   }
 
-  QString projectFullName()
+  QString fullName() const
   {
-    return projectId();
+    return id();
   }
 
   bool operator ==( const Project &other )
   {
     if ( this->isLocal() && other.isLocal() )
     {
-      return this->local->id() == other.local->id();
+      return this->local.id() == other.local.id();
     }
     else if ( this->isMergin() && other.isMergin() )
     {
-      return this->mergin->id() == other.mergin->id();
+      return this->mergin.id() == other.mergin.id();
     }
     return false;
   }

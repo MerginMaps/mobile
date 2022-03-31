@@ -13,6 +13,11 @@
 
 QString LocalProject::id() const
 {
+  return fullName();
+}
+
+QString LocalProject::fullName() const
+{
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
 
@@ -20,69 +25,63 @@ QString LocalProject::id() const
   return dir.dirName();
 }
 
-LocalProject *LocalProject::clone() const
-{
-  LocalProject *me = new LocalProject();
-  me->projectName = projectName;
-  me->projectNamespace = projectNamespace;
-  me->projectDir = projectDir;
-  me->projectError = projectError;
-  me->qgisProjectFilePath = qgisProjectFilePath;
-  me->localVersion = localVersion;
-  return me;
-}
-
 QString MerginProject::id() const
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
 
-MerginProject *MerginProject::clone() const
+ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
 {
-  MerginProject *me = new MerginProject();
-  me->projectName = projectName;
-  me->projectNamespace = projectNamespace;
-  me->serverUpdated = serverUpdated;
-  me->serverVersion = serverVersion;
-  me->pending = pending;
-  me->progress = progress;
-  me->status = status;
-  me->remoteError = remoteError;
-  return me;
-}
-
-ProjectStatus::Status ProjectStatus::projectStatus( const std::shared_ptr<Project> project )
-{
-  if ( !project || !project->isMergin() || !project->isLocal() ) // This is not a Mergin project or not downloaded project
+  if ( !project.isMergin() || !project.isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus::NoVersion;
 
   // There was no sync yet
-  if ( project->local->localVersion < 0 )
+  if ( !project.local.hasMerginMetadata() )
   {
     return ProjectStatus::NoVersion;
   }
 
-  // Something has locally changed after last sync with server
-  QString metadataFilePath = project->local->projectDir + "/" + MerginApi::sMetadataFile;
-  QDateTime lastModified = CoreUtils::getLastModifiedFileDateTime( project->local->projectDir );
-  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified().toUTC();
-  MerginProjectMetadata meta = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  int filesCount = CoreUtils::getProjectFilesCount( project->local->projectDir );
-  if ( lastSync < lastModified || meta.files.count() != filesCount )
+  if ( ProjectStatus::hasLocalChanges( project.local ) )
   {
-    // When GPKG is opened, its header is updated and therefore lastModified timestamp is updated as well.
-    // Double check if there is really something to upload
-    ProjectDiff diff = MerginApi::localProjectChanges( project->local->projectDir );
-
-    if ( !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty() )
-      return ProjectStatus::Modified;
+    return ProjectStatus::Modified;
   }
 
   // Version is lower than latest one, last sync also before updated
-  if ( project->local->localVersion < project->mergin->serverVersion )
+  if ( project.local.localVersion < project.mergin.serverVersion )
   {
     return ProjectStatus::OutOfDate;
   }
 
   return ProjectStatus::UpToDate;
+}
+
+bool ProjectStatus::hasLocalChanges( const LocalProject &project )
+{
+  QString metadataFilePath = project.projectDir + "/" + MerginApi::sMetadataFile;
+
+  if ( !QFile::exists( metadataFilePath ) )
+  {
+    // If the project does not have metadata file, there are local changes
+    return true;
+  }
+
+  // Check if something has locally changed after last sync with server
+  QDateTime lastModified = CoreUtils::getLastModifiedFileDateTime( project.projectDir );
+
+  QDateTime lastSync = QFileInfo( metadataFilePath ).lastModified().toUTC();
+  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( metadataFilePath );
+
+  int filesCount = CoreUtils::getProjectFilesCount( project.projectDir );
+
+  if ( lastSync < lastModified || metadata.files.count() != filesCount )
+  {
+    // When GPKG is opened, its header is updated and therefore lastModified timestamp is updated as well.
+    // Double check if something has really changed
+    ProjectDiff diff = MerginApi::localProjectChanges( project.projectDir );
+
+    if ( !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty() )
+      return true;
+  }
+
+  return false;
 }

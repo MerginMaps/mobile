@@ -20,6 +20,7 @@ import QtQuick.Dialogs 1.1
 import lc 1.0
 import "./map"
 import "./misc"
+import "./dialogs"
 
 ApplicationWindow {
     id: window
@@ -71,11 +72,6 @@ ApplicationWindow {
         }
     }
 
-    function showDialog(message) {
-      alertDialog.text  = message
-      alertDialog.open()
-    }
-
     function showProjError(message) {
       projDialog.text  = message
       projDialog.open()
@@ -99,7 +95,7 @@ ApplicationWindow {
       if ( __appSettings.defaultProject ) {
         let path = __appSettings.defaultProject
 
-        if ( __localProjectsManager.projectIsValid( path ) && __loader.load( path ) ) {
+        if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
           projectPanel.activeProjectPath = path
           projectPanel.activeProjectId = __localProjectsManager.projectId( path )
           __appSettings.activeProject = path
@@ -186,9 +182,25 @@ ApplicationWindow {
         stakeoutPanelLoader.item.targetPair = pair
       }
 
+      onSignInRequested: {
+        stateManager.state = "projects"
+        projectPanel.openAuthPanel()
+      }
+
+      onLocalChangesPanelRequested: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
+      }
+
       Component.onCompleted: {
-        __loader.recording = map.digitizingController.recording
-        __loader.mapSettings = map.mapSettings
+        __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
         __iosUtils.compass = map.compass
         __variablesManager.compass = map.compass
@@ -221,7 +233,7 @@ ApplicationWindow {
           if ( __appSettings.autoCenterMapChecked ) {
             mainPanel.myLocationHold()
           }
-          __loader.zoomToProject( map.mapSettings )
+          __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
         onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
@@ -230,6 +242,17 @@ ApplicationWindow {
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
             }
+        }
+        onLocalChangesClicked: {
+          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+          {
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel()
+          }
+          else
+          {
+            __inputUtils.showNotification( qsTr( "No Changes" ) )
+          }
         }
     }
 
@@ -240,7 +263,7 @@ ApplicationWindow {
       height: InputStyle.rowHeight * 2
 
       onDetailsClicked: {
-        projectIssuesPanel.projectLoadingLog = __loader.projectLoadingLog();
+        projectIssuesPanel.projectLoadingLog = __activeProject.projectLoadingLog();
         projectIssuesPanel.visible = true;
       }
     }
@@ -280,7 +303,7 @@ ApplicationWindow {
         onOpenProjectRequested: {
           __appSettings.defaultProject = projectPath
           __appSettings.activeProject = projectPath
-          __loader.load( projectPath )
+          __activeProject.load( projectPath )
         }
 
         onClosed: stateManager.state = "view"
@@ -431,12 +454,6 @@ ApplicationWindow {
     }
 
     MessageDialog {
-        id: alertDialog
-        onAccepted: alertDialog.close()
-        title: qsTr("Communication error")
-    }
-
-    MessageDialog {
         id: projDialog
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
@@ -451,7 +468,7 @@ ApplicationWindow {
       width: window.width
       previewHeight: window.height / 3
 
-      project: __loader.project
+      project: __activeProject.qgsProject
 
       onCreateLinkedFeatureRequested: {
         let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
@@ -513,8 +530,11 @@ ApplicationWindow {
     Connections {
         target: __merginApi
         onNetworkErrorOccurred: {
+          if ( stateManager.state === "projects" )
+          {
             var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
-            showAsDialog ? showDialog(msg) : showMessage(msg)
+            showMessage( msg )
+          }
         }
 
         onStorageLimitReached: {
@@ -551,7 +571,7 @@ ApplicationWindow {
     }
 
     Connections {
-      target: __loader
+      target: __activeProject
       onLoadingStarted: {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
@@ -563,12 +583,9 @@ ApplicationWindow {
       }
 
       onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-      onSetProjectIssuesHeader: projectIssuesPanel.headerText = text
 
       onProjectReloaded: map.clear()
-      onProjectWillBeReloaded: {
-        formsStackManager.reload()
-      }
+      onProjectWillBeReloaded: formsStackManager.reload()
     }
 
     LegacyFolderMigration {

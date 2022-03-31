@@ -53,6 +53,24 @@ Item {
     }
   }
 
+  function openAuthPanel( authstate = "login" )
+  {
+    stackView.push( authPanelComp, { state: authstate } )
+  }
+
+  function openChangesPanel()
+  {
+    stackView.push( statusPanelComp )
+  }
+
+  function showChanges( projectId ) {
+    if ( __merginProjectStatusModel.loadProjectInfo( projectId ) )
+    {
+      root.openChangesPanel()
+    }
+    else __inputUtils.showNotification( qsTr( "No Changes" ) )
+  }
+
   visible: false
   focus: true
 
@@ -128,13 +146,6 @@ Item {
           hidePanel()
       }
 
-      function showChanges( projectId ) {
-        if ( __merginProjectStatusModel.loadProjectInfo( projectId ) ) {
-          stackView.push( statusPanelComp )
-        }
-        else __inputUtils.showNotification( qsTr( "No Changes" ) )
-      }
-
       function refreshProjectList( keepSearchFilter = false ) {
 
         stackView.pending = true
@@ -197,7 +208,7 @@ Item {
                   stackView.push( accountPanelComp )
                 }
                 else
-                  stackView.push( authPanelComp, { state: "login" })
+                  root.openAuthPanel()
               }
             }
 
@@ -449,6 +460,8 @@ Item {
 
       Connections {
         target: __merginApi
+        enabled: root.visible
+
         onListProjectsFinished: stackView.pending = false
         onListProjectsByNameFinished: stackView.pending = false
         onApiVersionStatusChanged: {
@@ -458,14 +471,14 @@ Item {
               refreshProjectList()
             } else if (pageContent.state !== 'local') {
               if (stackView.currentItem.objectName !== "authPanel") {
-                stackView.push(authPanelComp, {state: "login"})
+                root.openAuthPanel()
               }
             }
           }
         }
         onAuthRequested: {
           stackView.pending = false
-          stackView.push(authPanelComp, {state: "login"})
+          root.openAuthPanel()
         }
         onAuthChanged: {
           stackView.pending = false

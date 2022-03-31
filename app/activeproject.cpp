@@ -1,10 +1,4 @@
 /***************************************************************************
-  app.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : peter.petrik@lutraconsulting.co.uk
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,84 +7,124 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "loader.h"
-#include "inpututils.h"
-#include "coreutils.h"
+#include <QDebug>
+#include <QStandardPaths>
+#include <QTimer>
+
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 #include "qgsquickmapsettings.h"
-#include <qgsapplication.h>
-#include <qgslogger.h>
+#include "qgsapplication.h"
+#include "qgslogger.h"
 
-#if VERSION_INT >= 30500
-// this header only exists in QGIS >= 3.6
-#include "qgsexpressioncontextutils.h"
-#endif
-#include <QDebug>
+#include "activeproject.h"
+#include "inpututils.h"
+#include "coreutils.h"
+#include "autosynccontroller.h"
 
-#include <qgsprojectviewsettings.h>
-#include <QStandardPaths>
-#include <QTimer>
+const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-const QString Loader::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
-
-Loader::Loader( MapThemesModel &mapThemeModel
-                , AppSettings &appSettings
-                , ActiveLayer &activeLayer
-                , LayersProxyModel &recordingLayerPM
-                , QObject *parent ) :
+ActiveProject::ActiveProject( MapThemesModel &mapThemeModel
+                              , AppSettings &appSettings
+                              , ActiveLayer &activeLayer
+                              , LayersProxyModel &recordingLayerPM
+                              , LocalProjectsManager &localProjectsManager
+                              , QObject *parent ) :
 
   QObject( parent )
   , mMapThemeModel( mapThemeModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
+  , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
   // iterator uses it for virtual fields, causing minor bugs with expressions)
   // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
-  mProject = QgsProject::instance();
-}
+  mQgsProject = QgsProject::instance();
 
-QgsProject *Loader::project()
-{
-  return mProject;
-}
-
-void Loader::setRecording( bool isRecordingOn )
-{
-  if ( mRecording != isRecordingOn )
+  // listen to local project removal event to invalidate mProject
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::aboutToRemoveLocalProject,
+    this, [this]( const LocalProject & project )
   {
-    mRecording = isRecordingOn;
-    emit recordingChanged();
-  }
+    if ( project.id() == mLocalProject.id() )
+    {
+      load( QLatin1String() );
+    }
+  } );
+
+  // listen to metadata changes of opened LocalProject (e.g. local version update or namespace update)
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::localProjectDataChanged,
+    this, [this]( const LocalProject & project )
+  {
+    if ( project.projectDir == mLocalProject.projectDir )
+    {
+      mLocalProject = project;
+      emit localProjectChanged( mLocalProject );
+    }
+  } );
+
+  setAutosyncEnabled( mAppSettings.autosyncAllowed() );
+
+  QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
 }
 
-bool Loader::load( const QString &filePath )
+ActiveProject::~ActiveProject() = default;
+
+QgsProject *ActiveProject::qgsProject()
+{
+  return mQgsProject;
+}
+
+LocalProject ActiveProject::localProject()
+{
+  return mLocalProject;
+}
+
+QString ActiveProject::projectFullName() const
+{
+  return mLocalProject.fullName();
+}
+
+bool ActiveProject::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
 }
 
-bool Loader::forceLoad( const QString &filePath, bool force )
+bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
-  qDebug() << "Loading " << filePath << force;
+  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
+
+  // clear autosync
+  setAutosyncEnabled( false );
+
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
-    emit projectWillBeReloaded( QString() );
-    mProject->clear();
+    emit projectWillBeReloaded();
+
+    mQgsProject->clear();
+    mLocalProject = LocalProject();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
-    emit projectReloaded( mProject );
+
+    emit localProjectChanged( mLocalProject );
+    emit projectReloaded( mQgsProject );
+
     return true;
   }
 
   if ( !force )
     emit loadingStarted();
+
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
@@ -113,12 +147,18 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   loop.exec();
 
   bool res = true;
-  if ( mProject->fileName() != filePath || force )
+  if ( mQgsProject->fileName() != filePath || force )
   {
-    emit projectWillBeReloaded( filePath );
-    res = mProject->read( filePath );
+    emit projectWillBeReloaded();
+    res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
-    mMapThemeModel.reloadMapThemes( mProject );
+    mMapThemeModel.reloadMapThemes( mQgsProject );
+    mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
+
+    if ( !mLocalProject.isValid() )
+    {
+      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
+    }
 
     QgsVectorLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
     if ( defaultLayer )
@@ -128,12 +168,13 @@ bool Loader::forceLoad( const QString &filePath, bool force )
 
     setMapSettingsLayers();
 
-    emit projectReloaded( mProject );
+    emit localProjectChanged( mLocalProject );
+    emit projectReloaded( mQgsProject );
   }
 
   bool foundInvalidLayer = false;
   QStringList invalidLayers;
-  for ( QgsMapLayer *layer : mProject->mapLayers().values() )
+  for ( QgsMapLayer *layer : mQgsProject->mapLayers() )
   {
     if ( !layer->isValid() )
     {
@@ -147,6 +188,7 @@ bool Loader::forceLoad( const QString &filePath, bool force )
   if ( !force )
   {
     emit loadingFinished();
+
     if ( foundInvalidLayer )
     {
       QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
@@ -161,23 +203,57 @@ bool Loader::forceLoad( const QString &filePath, bool force )
         file.close();
       }
       emit qgisLogChanged();
-      emit setProjectIssuesHeader( "The following layers failed loading:" );
       emit loadingErrorFound();
     }
   }
+
+  if ( mAppSettings.autosyncAllowed() )
+  {
+    setAutosyncEnabled( true );
+  }
+
   return res;
 }
 
-bool Loader::reloadProject( QString projectDir )
+bool ActiveProject::reloadProject( QString projectDir )
 {
-  if ( mProject->homePath() == projectDir )
+  if ( mQgsProject->homePath() == projectDir )
   {
-    return forceLoad( mProject->fileName(), true );
+    return forceLoad( mQgsProject->fileName(), true );
   }
   return false;
 }
 
-void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ActiveProject::setAutosyncEnabled( bool enabled )
+{
+  if ( enabled )
+  {
+    if ( mAutosyncController )
+    {
+      mAutosyncController->disconnect();
+      mAutosyncController.reset();
+    }
+
+    mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
+
+    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, &ActiveProject::requestSync );
+  }
+  else
+  {
+    if ( mAutosyncController )
+    {
+      mAutosyncController->disconnect();
+    }
+    mAutosyncController.reset();
+  }
+}
+
+void ActiveProject::requestSync()
+{
+  emit syncActiveProject( mLocalProject );
+}
+
+void ActiveProject::setMapSettings( QgsQuickMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -188,11 +264,11 @@ void Loader::setMapSettings( QgsQuickMapSettings *mapSettings )
   emit mapSettingsChanged();
 }
 
-void Loader::setMapSettingsLayers() const
+void ActiveProject::setMapSettingsLayers() const
 {
-  if ( !mProject || !mMapSettings ) return;
+  if ( !mQgsProject || !mMapSettings ) return;
 
-  QgsLayerTree *root = mProject->layerTreeRoot();
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
   QList< QgsMapLayer * > allLayers;
@@ -209,54 +285,25 @@ void Loader::setMapSettingsLayers() const
   }
 
   mMapSettings->setLayers( allLayers );
-  mMapSettings->setTransformContext( mProject->transformContext() );
+  mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
-QgsQuickMapSettings *Loader::mapSettings() const
+QgsQuickMapSettings *ActiveProject::mapSettings() const
 {
   return mMapSettings;
 }
 
-void Loader::zoomToProject( QgsQuickMapSettings *mapSettings )
+AutosyncController *ActiveProject::autosyncController() const
 {
-  if ( !mapSettings )
+  if ( mAutosyncController )
   {
-    qDebug() << "Cannot zoom to extent, mapSettings is not defined";
-    return;
-  }
-  QgsRectangle extent;
-
-  QgsProjectViewSettings *viewSettings = mProject->viewSettings();
-  extent = viewSettings->presetFullExtent();
-  if ( extent.isNull() )
-  {
-    bool hasWMS;
-    QStringList WMSExtent = mProject->readListEntry( "WMSExtent", QStringLiteral( "/" ), QStringList(), &hasWMS );
-
-    if ( hasWMS && ( WMSExtent.length() == 4 ) )
-    {
-      extent.set( WMSExtent[0].toDouble(), WMSExtent[1].toDouble(), WMSExtent[2].toDouble(), WMSExtent[3].toDouble() );
-    }
-    else // set layers extent
-    {
-      const QVector<QgsMapLayer *> layers = mProject->layers<QgsMapLayer *>();
-      for ( const QgsMapLayer *layer : layers )
-      {
-        QgsRectangle layerExtent = mapSettings->mapSettings().layerExtentToOutputExtent( layer, layer->extent() );
-        extent.combineExtentWith( layerExtent );
-      }
-    }
+    return mAutosyncController.get();
   }
 
-  if ( extent.isEmpty() )
-  {
-    extent.grow( mProject->crs().isGeographic() ? 0.01 : 1000.0 );
-  }
-  extent.scale( 1.05 );
-  mapSettings->setExtent( extent );
+  return nullptr;
 }
 
-bool Loader::layerVisible( QgsMapLayer *layer )
+bool ActiveProject::layerVisible( QgsMapLayer *layer )
 {
   if ( !layer ) return false;
 
@@ -276,12 +323,12 @@ bool Loader::layerVisible( QgsMapLayer *layer )
   return false;
 }
 
-QString Loader::projectLoadingLog() const
+QString ActiveProject::projectLoadingLog() const
 {
   return mProjectLoadingLog;
 }
 
-void Loader::setActiveMapTheme( int index )
+void ActiveProject::setActiveMapTheme( int index )
 {
   QString name = mMapThemeModel.setActiveThemeIndex( index );
 
@@ -292,24 +339,7 @@ void Loader::setActiveMapTheme( int index )
   setMapSettingsLayers();
 }
 
-void Loader::appStateChanged( Qt::ApplicationState state )
-{
-  QString msg;
-
-  // Instatiate QDebug with QString to redirect output to string
-  // It is used to convert enum to string
-  QDebug logHelper( &msg );
-
-  logHelper << "Application changed state to: " << state;
-  CoreUtils::log( "Input", msg );
-}
-
-void Loader::appAboutToQuit()
-{
-  CoreUtils::log( "Input", "Application has quit" );
-}
-
-void Loader::setActiveLayerByName( QString layerName ) const
+void ActiveProject::setActiveLayerByName( QString layerName ) const
 {
   if ( !layerName.isEmpty() )
   {
@@ -324,7 +354,7 @@ void Loader::setActiveLayerByName( QString layerName ) const
   setActiveLayer( nullptr );
 }
 
-void Loader::setActiveLayer( QgsMapLayer *layer ) const
+void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
     mActiveLayer.resetActiveLayer();
@@ -332,37 +362,5 @@ void Loader::setActiveLayer( QgsMapLayer *layer ) const
   {
     mActiveLayer.setActiveLayer( layer );
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
-  }
-}
-
-QString Loader::loadIconFromLayer( QgsMapLayer *layer )
-{
-  if ( !layer )
-    return QString();
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  if ( vectorLayer )
-  {
-    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
-    return iconFromGeometry( geometry );
-  }
-  else
-    return QString( "qrc:/mIconRasterLayer.svg" );
-}
-
-QString Loader::loadIconFromFeature( QgsFeature feature )
-{
-  return iconFromGeometry( feature.geometry().type() );
-}
-
-QString Loader::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
-{
-  switch ( geometry )
-  {
-    case QgsWkbTypes::GeometryType::PointGeometry: return QString( "qrc:/mIconPointLayer.svg" );
-    case QgsWkbTypes::GeometryType::LineGeometry: return QString( "qrc:/mIconLineLayer.svg" );
-    case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "qrc:/mIconPolygonLayer.svg" );
-    default: return QString( "qrc:/mIconTableLayer.svg" );
   }
 }

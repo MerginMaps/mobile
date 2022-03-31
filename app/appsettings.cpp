@@ -30,6 +30,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
+  bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -43,6 +44,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAppVersion( savedAppVersion );
   setLegacyFolderMigrated( legacyFolderMigrated );
   setActivePositionProviderId( activeProviderId );
+  setAutosyncAllowed( autosync );
 }
 
 QString AppSettings::defaultLayer() const
@@ -302,4 +304,19 @@ QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
   settings.endGroup();
 
   return value;
+}
+
+bool AppSettings::autosyncAllowed() const
+{
+  return mAutosyncAllowed;
+}
+
+void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
+{
+  if ( mAutosyncAllowed == newAutosyncAllowed )
+    return;
+
+  mAutosyncAllowed = newAutosyncAllowed;
+  setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
+  emit autosyncAllowedChanged( mAutosyncAllowed );
 }

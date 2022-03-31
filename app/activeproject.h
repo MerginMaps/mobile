@@ -1,10 +1,4 @@
 /***************************************************************************
-  app.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : peter.petrik@lutraconsulting.co.uk
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,43 +8,58 @@
  ***************************************************************************/
 
 
-#ifndef LOADER_H
-#define LOADER_H
+#ifndef ACTIVEPROJECT_H
+#define ACTIVEPROJECT_H
 
 #include <QObject>
+
 #include "qgsproject.h"
+
 #include "inpututils.h"
 #include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
 #include "layersproxymodel.h"
+#include "localprojectsmanager.h"
 
 class QgsQuickMapSettings;
+class AutosyncController;
 
-class Loader: public QObject
+/**
+ * \brief The ActiveProject class can load a QGIS project and holds its data.
+ */
+class ActiveProject: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QgsProject *project READ project NOTIFY projectChanged ) // never changes
-    Q_PROPERTY( bool recording READ isRecording WRITE setRecording NOTIFY recordingChanged )
+    Q_PROPERTY( LocalProject localProject READ localProject NOTIFY localProjectChanged ) // LocalProject instance of active project, changes when project is loaded
+    Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
+    Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    explicit Loader(
+    explicit ActiveProject(
       MapThemesModel &mapThemeModel
       , AppSettings &appSettings
       , ActiveLayer &activeLayer
       , LayersProxyModel &recordingLayerPM
+      , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
-    QgsProject *project();
+    virtual ~ActiveProject();
 
-    bool isRecording() const { return mRecording; }
-    void setRecording( bool isRecording );
+    //! Returns active project's QgsProject instance to do QGIS API magic
+    QgsProject *qgsProject();
 
+    //! Returns Input related info about active project
+    LocalProject localProject();
+
+    Q_INVOKABLE QString projectFullName() const;
+
+    /**
+     * Loads a .qgz/.qgs project file specified by filePath.
+     * \param filePath Path to project file.
+     */
     Q_INVOKABLE bool load( const QString &filePath );
-    Q_INVOKABLE void zoomToProject( QgsQuickMapSettings *mapSettings );
-    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
-    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
 
     /**
      * Updates active map theme.
@@ -68,13 +77,13 @@ class Loader: public QObject
      */
     Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
 
-    //! A File on this path represents a project is loading and exists only during the process.
-    static const QString LOADING_FLAG_FILE_PATH;
-
     /**
      * mapSettings method returns mapsettings pointer
      */
     QgsQuickMapSettings *mapSettings() const;
+
+    //! Returns autosyncController instance if autosync is allowed, otherwise returns nullptr
+    AutosyncController *autosyncController() const;
 
     /**
      * setMapSettings method sets mapSettings
@@ -97,41 +106,49 @@ class Loader: public QObject
      */
     Q_INVOKABLE QString projectLoadingLog() const;
 
+    //! A File on this path represents that project is loading and exists only during the process.
+    static const QString LOADING_FLAG_FILE_PATH;
+
   signals:
-    void projectChanged();
+    void qgsProjectChanged();
+    void localProjectChanged( LocalProject project );
+
+    void projectWillBeReloaded();
     void projectReloaded( QgsProject *project );
-    void projectWillBeReloaded( const QString &projectFile );
-
-    void recordingChanged();
-
     void loadingStarted();
     void loadingFinished();
 
     void reportIssue( QString layerName, QString message );
     void loadingErrorFound();
     void qgisLogChanged();
-    void setProjectIssuesHeader( QString text );
+
+    void autosyncControllerChanged( AutosyncController *controller );
 
     void mapSettingsChanged();
 
+    void syncActiveProject( const LocalProject &project );
+
   public slots:
-    void appStateChanged( Qt::ApplicationState state );
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
-    void appAboutToQuit();
+
+    void setAutosyncEnabled( bool enabled );
+
+    void requestSync();
 
   private:
-    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
 
-
-    QgsProject *mProject = nullptr;
-    bool mRecording = false;
+    QgsProject *mQgsProject = nullptr;
+    LocalProject mLocalProject;
 
     MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
     LayersProxyModel &mRecordingLayerPM;
+    LocalProjectsManager &mLocalProjectsManager;
     QgsQuickMapSettings *mMapSettings = nullptr;
+
+    std::unique_ptr<AutosyncController> mAutosyncController;
 
     QString mProjectLoadingLog;
 
@@ -144,4 +161,4 @@ class Loader: public QObject
     bool forceLoad( const QString &filePath, bool force );
 };
 
-#endif // LOADER_H
+#endif // ACTIVEPROJECT_H
