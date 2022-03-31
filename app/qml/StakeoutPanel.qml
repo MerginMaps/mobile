@@ -71,7 +71,7 @@ Item {
       when: remainingDistance >= closeRangeModeDistanceThreshold || remainingDistance < 0
       PropertyChanges {
         target: drawer
-        height: root.height / 6
+        height: Math.max( 2 * InputStyle.rowHeight, root.height / 6 )
       }
     },
     State {
@@ -79,7 +79,7 @@ Item {
       when: remainingDistance >= 0 && remainingDistance < closeRangeModeDistanceThreshold
       PropertyChanges {
         target: drawer
-        height: root.height / 2
+        height: Math.max( 4 * InputStyle.rowHeight, root.height / 2 )
       }
     }
   ]
@@ -214,8 +214,10 @@ Item {
         height: parent.height - header.height
         width: parent.width
 
+        spacing: 0
+
         Row {
-          Layout.preferredHeight: root.state === "longRange" ? parent.height : ( parent.width * 1/6 )
+          Layout.preferredHeight: root.state === "longRange" ? parent.height : ( parent.height * 1/6 )
           Layout.preferredWidth: parent.width
 
           Components.TextRowWithTitle {
@@ -225,7 +227,12 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Feature" )
-            text: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
+            text: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __loader.project ) : ""
+
+            titleComponent.wrapMode: Text.NoWrap
+            titleComponent.elide: Text.ElideRight
+            textComponent.wrapMode: Text.NoWrap
+            textComponent.elide: Text.ElideRight
           }
 
           Components.TextRowWithTitle {
@@ -236,6 +243,11 @@ Item {
 
             titleText: qsTr( "Distance" )
             text: remainingDistance >= 0 ?__inputUtils.formatNumber( remainingDistance, 2 ) + " m" : "N/A m"
+
+            titleComponent.wrapMode: Text.NoWrap
+            titleComponent.elide: Text.ElideRight
+            textComponent.wrapMode: Text.NoWrap
+            textComponent.elide: Text.ElideRight
           }
         }
 
@@ -301,13 +313,7 @@ Item {
               PathAngleArc {
                 id: outerArc
 
-                property real outerRadius: {
-                  if ( rootShape.height / 2.5 < 100 )
-                  {
-                    return 100 // minimum height
-                  }
-                  return rootShape.height / 2.5
-                }
+                property real outerRadius: rootShape.height / 2.5
 
                 centerX: rootShape.centerX
                 centerY: rootShape.centerY
