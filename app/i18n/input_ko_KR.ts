@@ -217,9 +217,9 @@
 <context>
     <name>Banner</name>
     <message>
-        <location filename="../qml/Banner.qml" line="82"/>
-        <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;자세히 알아보기&lt;/a&gt;</translation>
+        <location filename="../qml/Banner.qml" line="36"/>
+        <source>Learn more</source>
+        <translation>더 알아보기</translation>
     </message>
 </context>
 <context>
@@ -314,7 +314,7 @@
 <context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="62"/>
+        <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
         <translation>코드 스캔</translation>
     </message>
@@ -610,109 +610,109 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="161"/>
+        <location filename="../inpututils.cpp" line="162"/>
         <source>just now</source>
         <translation>지금 당장</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minutes ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minute ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hours ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hour ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 days ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 day ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 weeks ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 week ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 months ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 month ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 years ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 year ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1211"/>
+        <location filename="../inpututils.cpp" line="1212"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>화면 해상도: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>화면 DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>화면 크기: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>기록상 장치 화소 비율: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>계산상 장치 화소 비율 :%1 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>used dp scale: %1</source>
         <translation>사용된 dp 배율: %1</translation>
     </message>
@@ -808,58 +808,64 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="61"/>
-        <location filename="../qml/MainPanel.qml" line="240"/>
+        <location filename="../qml/MainPanel.qml" line="62"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>Projects</source>
         <translation>프로젝트</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="81"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="82"/>
+        <location filename="../qml/MainPanel.qml" line="278"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="288"/>
+        <location filename="../qml/MainPanel.qml" line="117"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
         <translation>기록</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="136"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="137"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
         <translation>프로젝트로 확대</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
+        <source>Local changes</source>
+        <translation>로컬 변경사항</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="174"/>
         <source>Browse data</source>
         <translation>데이터 찾아보기</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="175"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="194"/>
+        <location filename="../qml/MainPanel.qml" line="383"/>
         <source>Map themes</source>
         <translation>지도 테마</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="195"/>
-        <location filename="../qml/MainPanel.qml" line="364"/>
+        <location filename="../qml/MainPanel.qml" line="214"/>
+        <location filename="../qml/MainPanel.qml" line="402"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="212"/>
+        <location filename="../qml/MainPanel.qml" line="231"/>
         <source>More</source>
         <translation>더보기</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="225"/>
+        <location filename="../qml/MainPanel.qml" line="244"/>
         <source>Menu</source>
         <translation>메뉴</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
         <translation>피처 찾아보기</translation>
     </message>
@@ -880,35 +886,101 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="80"/>
-        <location filename="../qml/map/MapWrapper.qml" line="747"/>
+        <location filename="../qml/map/MapWrapper.qml" line="85"/>
+        <location filename="../qml/map/MapWrapper.qml" line="977"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="111"/>
+        <location filename="../qml/map/MapWrapper.qml" line="116"/>
         <source>Recorded feature is not valid</source>
         <translation>기록된 피처가 유효하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="544"/>
+        <location filename="../qml/map/MapWrapper.qml" line="548"/>
+        <source>Successfully synchronized</source>
+        <translation>성공적으로 동기화됨</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="562"/>
+        <source>Up to date</source>
+        <translation>최신 정보</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="571"/>
+        <source>Somebody else is syncing, we will try again later</source>
+        <translation>다른  사람이 동기화 중입니다. 나중에 다시 시도하겠습니다.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="581"/>
+        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
+        <translation>동기화하는 동안 문제가 발생했습니다. 다시 시도하겠습니다. 자세히 알아보려면 클릭</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="606"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>낮은 GPS 위치 정확도 (%1 m)&lt;br&gt;&lt;br&gt;하늘이 잘 보이는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="597"/>
+        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <source>Details</source>
+        <translation>세부 사항</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="827"/>
         <source>Connecting to %1</source>
         <translation>%1 연결 중</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="611"/>
+        <location filename="../qml/map/MapWrapper.qml" line="841"/>
         <source>Connected, no position</source>
         <translation>연결됨, 위치 없음</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="615"/>
+        <location filename="../qml/map/MapWrapper.qml" line="845"/>
         <source>Unknown accuracy</source>
         <translation>알 수 없는 정확도</translation>
+    </message>
+</context>
+<context>
+    <name>MigrateToMerginDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
+        <source>Upload project to Mergin?</source>
+        <translation>Mergin에 프로젝트를 업로드하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
+        <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
+Click &apos;Yes&apos; to upload it.</source>
+        <translation>이 프로젝트는 현재 Mergin에 업로드되지 않았습니다. 동기화 및 협업을 활성화하려면 Mergin에 업로드하십시오. 
+&apos;예&apos;를 클릭하여 업로드합니다.</translation>
+    </message>
+</context>
+<context>
+    <name>MissingAuthDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="18"/>
+        <source>Sign in to Mergin</source>
+        <translation>Mergin에 로그인</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="19"/>
+        <source>You need to be signed in to your Mergin account in order to synchronize a project. Hit &apos;Yes&apos; to sign in.</source>
+        <translation>프로젝트를 동기화하려면 Mergin 계정에 로그인해야 합니다. 로그인하려면 &apos;예&apos;를 누르세요.</translation>
+    </message>
+</context>
+<context>
+    <name>NoPermissionsDialog</name>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="16"/>
+        <source>No rights to access the project</source>
+        <translation>프로젝트에 엑세스할 수 있는 권한이 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
+        <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
+        <translation>변경사항을 동기화할 수 없습니다. 올바른 권한을 지정하려면 Mergin 프로젝트 소유자에게 문의하세요. 프로젝트 소유자인 경우, Mergin 대시보드에 로그인합니다.</translation>
     </message>
 </context>
 <context>
@@ -1042,6 +1114,11 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectIssuesPanel</name>
     <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
+        <source>The following layers failed loading</source>
+        <translation>다음 레이어를 로드하지 못했습니다.</translation>
+    </message>
+    <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
         <translation>프로젝트 이슈</translation>
@@ -1055,53 +1132,53 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="133"/>
-        <location filename="../qml/components/ProjectList.qml" line="188"/>
+        <location filename="../qml/components/ProjectList.qml" line="134"/>
+        <location filename="../qml/components/ProjectList.qml" line="189"/>
         <source>Create project</source>
         <translation>프로젝트 생성</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="163"/>
+        <location filename="../qml/components/ProjectList.qml" line="164"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>다운로드한 프로젝트를 찾을 수 없습니다. %2프로젝트를 생성하는 방법%3을 %1배우고 %3장치에 %4다운로드합니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="179"/>
+        <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>아래 버튼을 클릭하여 새 프로젝트를 생성할 수도 있습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>Unable to get the list of projects.</source>
         <translation>프로젝트 목록을 가져올 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>No projects found!</source>
         <translation>프로젝트를 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="232"/>
+        <location filename="../qml/components/ProjectList.qml" line="233"/>
         <source>Retry</source>
         <translation>다시 시도</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="260"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
         <translation>프로젝트 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="262"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>동기화되지 않은 변경사항은 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="296"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Download project</source>
         <translation>프로젝트 다운로드</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>프로젝트를 다운로드하시겠습니까
@@ -1119,37 +1196,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="135"/>
+        <location filename="../qml/ProjectPanel.qml" line="71"/>
         <source>No Changes</source>
         <translation>변경사항 없음</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="160"/>
+        <location filename="../qml/ProjectPanel.qml" line="171"/>
         <source>Projects</source>
         <translation>프로젝트</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="357"/>
+        <location filename="../qml/ProjectPanel.qml" line="368"/>
         <source>Home</source>
         <translation>홈</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="379"/>
+        <location filename="../qml/ProjectPanel.qml" line="390"/>
         <source>My projects</source>
         <translation>내 프로젝트</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared with me</source>
         <translation>나에게 공유</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared</source>
         <translation>공유</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="423"/>
+        <location filename="../qml/ProjectPanel.qml" line="434"/>
         <source>Explore</source>
         <translation>탐색</translation>
     </message>
@@ -1211,8 +1288,8 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="90"/>
-        <location filename="../projectsmodel.cpp" line="94"/>
+        <location filename="../projectsmodel.cpp" line="98"/>
+        <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
         <translation>1% 업데이트</translation>
     </message>
@@ -1519,27 +1596,32 @@ Won&apos;t be added to the project.</source>
         <translation>마지막 값 재사용 옵션</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="292"/>
+        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <source>Automatically sync changes</source>
+        <translation>변경사항 자동 동기화</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="311"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="301"/>
+        <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Help</source>
         <translation>도움말</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="310"/>
+        <location filename="../qml/SettingsPanel.qml" line="329"/>
         <source>Privacy policy</source>
         <translation>개인정보보호 정책</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="319"/>
+        <location filename="../qml/SettingsPanel.qml" line="338"/>
         <source>Mergin terms of service</source>
         <translation>Mergin 서비스 약관</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="328"/>
+        <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>Diagnostic log</source>
         <translation>진단 로그</translation>
     </message>
@@ -1560,12 +1642,12 @@ Won&apos;t be added to the project.</source>
         <translation>측설</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="227"/>
+        <location filename="../qml/StakeoutPanel.qml" line="229"/>
         <source>Feature</source>
         <translation>피처</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="237"/>
+        <location filename="../qml/StakeoutPanel.qml" line="244"/>
         <source>Distance</source>
         <translation>거리</translation>
     </message>
@@ -1652,6 +1734,19 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>SyncFailedDialog</name>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
+        <source>Failed to synchronize your changes</source>
+        <translation>변경사항을 동기화하지 못했습니다</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
+        <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
+        <translation>변경사항을 서버로 보낼 수 없습니다. 인터넷에 연결되어 있고 이 프로젝트에 대한 쓰기 권한이 있는지 확인하십시오.</translation>
+    </message>
+</context>
+<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1706,42 +1801,43 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="254"/>
+        <source>No Changes</source>
+        <translation>변경사항 없음</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS 자동 센터 모드 켜기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS 자동 센터 모드 끄기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="243"/>
         <source>No editable layers found.</source>
         <translation>편집 가능한 레이어를 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="497"/>
+        <location filename="../qml/main.qml" line="514"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>위치를 사용할 수 없기 때문에 측설이 비활성화되었습니다!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="516"/>
+        <location filename="../qml/main.qml" line="535"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Mergin과 통신하지 못했습니다.%1네트워크 연결을 개선하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="562"/>
+        <location filename="../qml/main.qml" line="582"/>
         <source>There were issues loading the project.</source>
         <translation>프로젝트를 로드하는 중에 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="436"/>
-        <source>Communication error</source>
-        <translation>통신 오류</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="442"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>PROJ Error</source>
         <translation>PROJ 오류</translation>
     </message>
