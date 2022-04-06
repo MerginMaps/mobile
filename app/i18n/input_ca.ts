@@ -217,9 +217,9 @@
 <context>
     <name>Banner</name>
     <message>
-        <location filename="../qml/Banner.qml" line="82"/>
-        <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Més informació&lt;/a&gt;</translation>
+        <location filename="../qml/Banner.qml" line="36"/>
+        <source>Learn more</source>
+        <translation>Més informació</translation>
     </message>
 </context>
 <context>
@@ -314,7 +314,7 @@
 <context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="62"/>
+        <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
         <translation>Codi d’escaneig</translation>
     </message>
@@ -610,109 +610,109 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="161"/>
+        <location filename="../inpututils.cpp" line="162"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minutes ago</source>
         <translation>ara fa %1 minuts</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="167"/>
         <source>%1 minute ago</source>
         <translation>ara fa %1 minut</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hours ago</source>
         <translation>ara fa %1 hores</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="172"/>
         <source>%1 hour ago</source>
         <translation>ara fa %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 days ago</source>
         <translation>ara fa %1 dies</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="176"/>
+        <location filename="../inpututils.cpp" line="181"/>
         <source>%1 day ago</source>
         <translation>ara fa %1 dia</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 weeks ago</source>
         <translation>ara fa %1 setmanes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="186"/>
         <source>%1 week ago</source>
         <translation>ara fa %1 setmana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 months ago</source>
         <translation>ara fa %1 mesos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="191"/>
         <source>%1 month ago</source>
         <translation>ara fa %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 years ago</source>
         <translation>ara fa %1 anys</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 year ago</source>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1194"/>
+        <location filename="../inpututils.cpp" line="1212"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1195"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1196"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1197"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu informada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1198"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1199"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>used dp scale: %1</source>
         <translation>escala dp utilitzada: %1</translation>
     </message>
@@ -808,58 +808,64 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="61"/>
-        <location filename="../qml/MainPanel.qml" line="240"/>
+        <location filename="../qml/MainPanel.qml" line="62"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="81"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="82"/>
+        <location filename="../qml/MainPanel.qml" line="278"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="288"/>
+        <location filename="../qml/MainPanel.qml" line="117"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
         <translation>Registre</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="136"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="137"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
         <translation>Zoom al projecte</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
+        <source>Local changes</source>
+        <translation>Canvis locals</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="174"/>
         <source>Browse data</source>
         <translation>Veure dades</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="175"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="194"/>
+        <location filename="../qml/MainPanel.qml" line="383"/>
         <source>Map themes</source>
         <translation>Temes de mapa</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="195"/>
-        <location filename="../qml/MainPanel.qml" line="364"/>
+        <location filename="../qml/MainPanel.qml" line="214"/>
+        <location filename="../qml/MainPanel.qml" line="402"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="212"/>
+        <location filename="../qml/MainPanel.qml" line="231"/>
         <source>More</source>
         <translation>Més</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="225"/>
+        <location filename="../qml/MainPanel.qml" line="244"/>
         <source>Menu</source>
         <translation>Menú</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
         <translation>Veure les característiques</translation>
     </message>
@@ -880,35 +886,101 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="76"/>
-        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <location filename="../qml/map/MapWrapper.qml" line="85"/>
+        <location filename="../qml/map/MapWrapper.qml" line="977"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="107"/>
+        <location filename="../qml/map/MapWrapper.qml" line="116"/>
         <source>Recorded feature is not valid</source>
         <translation>La característica enregistrada no és vàlida</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="511"/>
+        <location filename="../qml/map/MapWrapper.qml" line="548"/>
+        <source>Successfully synchronized</source>
+        <translation>S&apos;ha sincronitzat correctament</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="562"/>
+        <source>Up to date</source>
+        <translation>Actualitzat</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="571"/>
+        <source>Somebody else is syncing, we will try again later</source>
+        <translation>Algú més s&apos;està sincronitzant, ho tornarem a provar més tard</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="581"/>
+        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
+        <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="606"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Precisió de posició GPS baixa (%1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos de tenir una bona vista del cel.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <source>Details</source>
+        <translation>Detalls</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="827"/>
         <source>Connecting to %1</source>
         <translation>Connectant amb %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <location filename="../qml/map/MapWrapper.qml" line="841"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <location filename="../qml/map/MapWrapper.qml" line="845"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
+    </message>
+</context>
+<context>
+    <name>MigrateToMerginDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
+        <source>Upload project to Mergin?</source>
+        <translation>Vols pujar el projecte a Mergin?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
+        <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
+Click &apos;Yes&apos; to upload it.</source>
+        <translation>Aquest projecte no està penjat actualment a Merging. Carregueu-lo a Merging per activar la sincronització i la col·laboració.
+Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
+    </message>
+</context>
+<context>
+    <name>MissingAuthDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="18"/>
+        <source>Sign in to Mergin</source>
+        <translation>Inicieu la sessió a Mergin</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="19"/>
+        <source>You need to be signed in to your Mergin account in order to synchronize a project. Hit &apos;Yes&apos; to sign in.</source>
+        <translation>Heu d&apos;iniciar la sessió al vostre compte de Mergin per sincronitzar un projecte. Premeu &quot;Sí&quot; per iniciar la sessió.</translation>
+    </message>
+</context>
+<context>
+    <name>NoPermissionsDialog</name>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="16"/>
+        <source>No rights to access the project</source>
+        <translation>Sense drets per accedir al projecte</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
+        <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
+        <translation>No teniu permís per sincronitzar els vostres canvis. Poseu-vos en contacte amb el propietari del projecte Mergin per assignar-vos el permís correcte. Si sou el propietari del projecte, inicieu sessió al tauler de Mergin.</translation>
     </message>
 </context>
 <context>
@@ -1042,6 +1114,11 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectIssuesPanel</name>
     <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
+        <source>The following layers failed loading</source>
+        <translation>Les capes següents no s&apos;han pogut carregar</translation>
+    </message>
+    <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
         <translation>Problemes del projecte</translation>
@@ -1055,53 +1132,53 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="133"/>
-        <location filename="../qml/components/ProjectList.qml" line="188"/>
+        <location filename="../qml/components/ProjectList.qml" line="134"/>
+        <location filename="../qml/components/ProjectList.qml" line="189"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="163"/>
+        <location filename="../qml/components/ProjectList.qml" line="164"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>No s&apos;ha trobat projectes descarregats. %1Apren %2com crear projectes%3 i %4descarregar-los%3 al dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="179"/>
+        <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>També pots crear un nou projecte fent clic al botó següent.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>Unable to get the list of projects.</source>
         <translation>No s&apos;ha pogut obtenir la llista de projectes.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>No projects found!</source>
         <translation>No  s&apos;ha trobat cap projecte!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="232"/>
+        <location filename="../qml/components/ProjectList.qml" line="233"/>
         <source>Retry</source>
         <translation>Provar de nou</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="260"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
         <translation>Eliminar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="262"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Es perdran tots els canvis no sincronitzats.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="296"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Download project</source>
         <translation>Descarregar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Voleu descarregar el projecte
@@ -1119,37 +1196,37 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="135"/>
+        <location filename="../qml/ProjectPanel.qml" line="71"/>
         <source>No Changes</source>
         <translation>Sense canvis</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="160"/>
+        <location filename="../qml/ProjectPanel.qml" line="171"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="357"/>
+        <location filename="../qml/ProjectPanel.qml" line="368"/>
         <source>Home</source>
         <translation>Inici</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="379"/>
+        <location filename="../qml/ProjectPanel.qml" line="390"/>
         <source>My projects</source>
         <translation>Els meus projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared with me</source>
         <translation>Compartit amb mi</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared</source>
         <translation>Compartit</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="423"/>
+        <location filename="../qml/ProjectPanel.qml" line="434"/>
         <source>Explore</source>
         <translation>Explora</translation>
     </message>
@@ -1211,8 +1288,8 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="90"/>
-        <location filename="../projectsmodel.cpp" line="94"/>
+        <location filename="../projectsmodel.cpp" line="98"/>
+        <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
         <translation>Actualitzat %1</translation>
     </message>
@@ -1519,27 +1596,32 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Reutilitzeu l&apos;opció del darrer valor</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="292"/>
+        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <source>Automatically sync changes</source>
+        <translation>Sincronitza automàticament els canvis</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="311"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="301"/>
+        <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="310"/>
+        <location filename="../qml/SettingsPanel.qml" line="329"/>
         <source>Privacy policy</source>
         <translation>Política de privadesa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="319"/>
+        <location filename="../qml/SettingsPanel.qml" line="338"/>
         <source>Mergin terms of service</source>
         <translation>Condicions de servei de Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="328"/>
+        <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>Diagnostic log</source>
         <translation>Registre de diagnòstic</translation>
     </message>
@@ -1555,17 +1637,17 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>StakeoutPanel</name>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <location filename="../qml/StakeoutPanel.qml" line="153"/>
         <source>Stake out</source>
         <translation>Replantejar</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <location filename="../qml/StakeoutPanel.qml" line="229"/>
         <source>Feature</source>
         <translation>Característica</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <location filename="../qml/StakeoutPanel.qml" line="244"/>
         <source>Distance</source>
         <translation>Distància</translation>
     </message>
@@ -1652,6 +1734,19 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
+    <name>SyncFailedDialog</name>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
+        <source>Failed to synchronize your changes</source>
+        <translation>No s&apos;han pogut sincronitzar els vostres canvis</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
+        <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
+        <translation>Els vostres canvis no s&apos;han pogut enviar al servidor, assegureu-vos que esteu connectat a Internet i teniu accés d&apos;escriptura a aquest projecte.</translation>
+    </message>
+</context>
+<context>
     <name>inputexternalresource</name>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
@@ -1706,42 +1801,43 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="198"/>
+        <location filename="../qml/main.qml" line="254"/>
+        <source>No Changes</source>
+        <translation>Cap canvi</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="229"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="243"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="494"/>
+        <location filename="../qml/main.qml" line="514"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="513"/>
+        <location filename="../qml/main.qml" line="535"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="559"/>
+        <location filename="../qml/main.qml" line="582"/>
         <source>There were issues loading the project.</source>
         <translation>Problemes en carregar el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="433"/>
-        <source>Communication error</source>
-        <translation>Error de comunicació</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="459"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
