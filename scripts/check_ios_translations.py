@@ -5,7 +5,6 @@ import plistlib
 import xml.etree.ElementTree as ET
 
 if len(sys.argv) != 3:
-    print(sys.argv)
     print("Wrong args, correct run: check_ios_translation INFOPLIST_PATH INPUTI18N_QRC_PATH")
     exit(1)
 
