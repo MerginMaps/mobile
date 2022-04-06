@@ -46,16 +46,23 @@
 	<array>
 		<string>en</string>
 		<string>fi</string>
+		<string>fi_FI</string>
 		<string>et</string>
+		<string>et_EE</string>
 		<string>es</string>
+		<string>es_ES</string>
 		<string>fr</string>
+		<string>fr_FR</string>
 		<string>ko</string>
+		<string>ko_KR</string>
 		<string>sl</string>
+		<string>sl_SI</string>
 		<string>zh</string>
 		<string>he</string>
 		<string>zh_CN</string>
 		<string>uk_UA</string>
 		<string>ru_RU</string>
+		<string>pt_BR</string>
 		<string>nl</string>
         	<string>de</string>
        		<string>it</string>
