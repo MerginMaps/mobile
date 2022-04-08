@@ -424,3 +424,9 @@ void QgsQuickMapCanvasMap::refresh()
   if ( !mFreeze )
     mRefreshTimer.start( 1 );
 }
+
+void QgsQuickMapCanvasMap::clearCache()
+{
+  if ( mCache )
+    mCache->clear();
+}
