@@ -303,7 +303,7 @@ Item {
       case "inactive": {
         break
       }
-    }    
+    }
   }
 
   state: "view"
@@ -710,6 +710,8 @@ Item {
           {
             // just banner
             syncSuccessfulBanner.show()
+            // refresh canvas
+            _map.refresh()
           }
         }
       }
