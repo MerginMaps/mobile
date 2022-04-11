@@ -1578,6 +1578,8 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
 
   CoreUtils::log( "pull " + projectFullName, "Running update tasks" );
 
+  mReloadedNeeded = false;
+
   for ( const PullTask &finalizationItem : transaction.pullTasks )
   {
     switch ( finalizationItem.method )
@@ -1585,6 +1587,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
       case PullTask::Copy:
       {
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        mReloadedNeeded = true;
         break;
       }
 
@@ -1600,6 +1603,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         }
         else
         {
+          mReloadedNeeded = true;
           CoreUtils::log( "pull " + projectFullName, "Local file renamed due to conflict with server: " + finalizationItem.filePath );
         }
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
@@ -2887,7 +2891,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   }
   else
   {
-    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion );
+    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion, mReloadedNeeded );
 
     if ( syncSuccessful )
     {

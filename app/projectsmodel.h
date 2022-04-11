@@ -153,7 +153,7 @@ class ProjectsModel : public QAbstractListModel
     void onProjectSyncStarted( const QString &projectFullName );
     void onProjectSyncCancelled( const QString &projectFullName );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion, bool reloadNeeded );
 
     void onProjectDetachedFromMergin( const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName );

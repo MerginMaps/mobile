@@ -174,7 +174,7 @@ void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullNa
   }
 }
 
-void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version )
+void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version, bool reloadNeeded )
 {
   if ( mSyncProcesses.contains( projectFullName ) )
   {
@@ -191,7 +191,7 @@ void SynchronizationManager::onProjectSyncFinished( const QString &projectFullNa
       mSyncProcesses.remove( projectFullName );
     }
 
-    emit syncFinished( projectFullName, successfully, version );
+    emit syncFinished( projectFullName, successfully, version, reloadNeeded );
   }
 }
 
@@ -262,7 +262,7 @@ void SynchronizationManager::onProjectSyncFailure(
   else
   {
     mSyncProcesses.remove( projectFullName );
-    emit syncFinished( projectFullName, false, -1 );
+    emit syncFinished( projectFullName, false, -1, false );
 
     return;
   }

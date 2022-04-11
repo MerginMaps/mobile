@@ -444,7 +444,7 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
-    void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
+    void syncProjectFinished( const QString &projectFullName, bool successfully, int version, bool reloadNeeded );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get pushed or pulled.
@@ -610,6 +610,7 @@ class MerginApi: public QObject
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
     QString mDataDir; // dir with all projects
+    bool mReloadedNeeded = false; // indicate whether project reload is needed after sync
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)

@@ -485,13 +485,11 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
-  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]()
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
-    if ( activeProject.hasConflictedCopies() )
+    if ( reloadNeeded )
     {
-      QgsRectangle extent = activeProject.mapSettings()->extent();
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
-      activeProject.mapSettings()->setExtent( extent );
     }
   } );
   QObject::connect( QgsApplication::messageLog(),

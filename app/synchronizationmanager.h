@@ -58,7 +58,7 @@ class SynchronizationManager : public QObject
     void syncStarted( const QString &projectFullName );
     void syncCancelled( const QString &projectFullName );
     void syncProgressChanged( const QString &projectFullName, qreal progress );
-    void syncFinished( const QString &projectFullName, bool success, int newVersion );
+    void syncFinished( const QString &projectFullName, bool success, int newVersion, bool reloadNeeded );
 
     void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
 
@@ -79,7 +79,7 @@ class SynchronizationManager : public QObject
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version, bool reloadNeeded );
     void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
 
