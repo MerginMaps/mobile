@@ -485,6 +485,15 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]()
+  {
+    if ( activeProject.hasConflictedCopies() )
+    {
+      QgsRectangle extent = activeProject.mapSettings()->extent();
+      activeProject.reloadProject( activeProject.qgsProject()->homePath() );
+      activeProject.mapSettings()->setExtent( extent );
+    }
+  } );
   QObject::connect( QgsApplication::messageLog(),
                     static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
                     &iu,

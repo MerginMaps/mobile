@@ -710,13 +710,6 @@ Item {
           {
             // just banner
             syncSuccessfulBanner.show()
-
-            // check for confliected copies and reload project if any to
-            // reset connections to the GPKG files (see #1798)
-            if ( __activeProject.hasConflictedCopies() )
-            {
-              __activeProject.reloadProject( __activeProject.qgsProject.homePath )
-            }
           }
         }
       }
