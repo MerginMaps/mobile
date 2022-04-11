@@ -29,12 +29,14 @@ bool LocalProject::hasConflictedCopies()
 {
   if ( isValid() )
   {
+    QString filePath;
     int count = 0;
     QDirIterator it( projectDir, QStringList() << "*conflicted copy*", QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories );
     while ( it.hasNext() )
     {
-      it.next();
-      count++;
+      filePath = it.next();
+      if ( !filePath.contains( QStringLiteral( ".mergin" ) ) )
+        count++;
     }
     return count > 0 ? true : false;
   }
