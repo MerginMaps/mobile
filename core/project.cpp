@@ -25,6 +25,22 @@ QString LocalProject::fullName() const
   return dir.dirName();
 }
 
+bool LocalProject::hasConflictedCopies()
+{
+  if ( isValid() )
+  {
+    int count = 0;
+    QDirIterator it( projectDir, QStringList() << "*conflicted copy*", QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories );
+    while ( it.hasNext() )
+    {
+      it.next();
+      count++;
+    }
+    return count > 0 ? true : false;
+  }
+  return false;
+}
+
 QString MerginProject::id() const
 {
   return MerginApi::getFullProjectName( projectNamespace, projectName );

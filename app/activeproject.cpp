@@ -364,3 +364,12 @@ void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
   }
 }
+
+bool ActiveProject::hasConflictedCopies()
+{
+  LocalProject project = localProject();
+  if ( project.isValid() )
+    return project.hasConflictedCopies();
+
+  return false;
+}
