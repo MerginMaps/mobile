@@ -126,7 +126,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit loadingStarted();
 
   // store current project extent
-  QgsRectangle extent = mMapSettings->extent();
+  if ( mMapSettings )
+    QgsRectangle extent = mMapSettings->extent();
 
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
@@ -215,7 +216,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     setAutosyncEnabled( true );
   }
 
-  mMapSettings->setExtent( extent );
+  if ( mMapSettings )
+    mMapSettings->setExtent( extent );
 
   return res;
 }
