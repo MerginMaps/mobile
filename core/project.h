@@ -74,9 +74,6 @@ struct LocalProject
     //!       Project->isMergin() is recommended to use over this one
     bool hasMerginMetadata() const { return localVersion > -1; }
 
-    //! Returns true if project has conflicted copies
-    bool hasConflictedCopies();
-
     bool operator ==( const LocalProject &other )
     {
       return ( this->id() == other.id() );

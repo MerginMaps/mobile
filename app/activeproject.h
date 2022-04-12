@@ -106,8 +106,6 @@ class ActiveProject: public QObject
      */
     Q_INVOKABLE QString projectLoadingLog() const;
 
-    Q_INVOKABLE bool hasConflictedCopies();
-
     //! A File on this path represents that project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
 
