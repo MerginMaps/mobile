@@ -479,7 +479,6 @@ int main( int argc, char *argv[] )
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( ma.get(), &MerginApi::reloadProject, &activeProject, &ActiveProject::reloadProject );
   QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
@@ -489,7 +488,7 @@ int main( int argc, char *argv[] )
   {
     if ( reloadNeeded )
     {
-      activeProject.reloadProject( activeProject.qgsProject()->homePath() );
+      activeProject.reloadPreservingExtent();
     }
   } );
   QObject::connect( QgsApplication::messageLog(),

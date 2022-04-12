@@ -1471,7 +1471,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
 }
 
 
-void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
+bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
 {
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Applying diff to " ) + filePath );
 
@@ -1522,6 +1522,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   //
   // now we are ready for the update of our local file
   //
+  bool hasConflicts = false;
 
   int res = GEODIFF_rebase( basefile.toUtf8().constData(),
                             src.toUtf8().constData(),
@@ -1538,6 +1539,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
+    hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserAuth->username(), info.localVersion ) );
     if ( !QFile::rename( dest, newDest ) )
@@ -1566,6 +1568,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
 
     // TODO: this is a critical failure - we should abort pull
   }
+  return hasConflicts;
 }
 
 void MerginApi::finalizeProjectPull( const QString &projectFullName )
@@ -1578,8 +1581,6 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
 
   CoreUtils::log( "pull " + projectFullName, "Running update tasks" );
 
-  mReloadedNeeded = false;
-
   for ( const PullTask &finalizationItem : transaction.pullTasks )
   {
     switch ( finalizationItem.method )
@@ -1587,7 +1588,6 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
       case PullTask::Copy:
       {
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
-        mReloadedNeeded = true;
         break;
       }
 
@@ -1603,7 +1603,6 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         }
         else
         {
-          mReloadedNeeded = true;
           CoreUtils::log( "pull " + projectFullName, "Local file renamed due to conflict with server: " + finalizationItem.filePath );
         }
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
@@ -1612,7 +1611,10 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
 
       case PullTask::ApplyDiff:
       {
-        finalizeProjectPullApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        // applying diff can result in conflicted copy too, in this case
+        // we need to update gpkgSchemaChanged flag.
+        bool res = finalizeProjectPullApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        transaction.gpkgSchemaChanged = res;
         break;
       }
 
@@ -1937,6 +1939,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
+    transaction.gpkgSchemaChanged = true;
   }
 
   for ( QString filePath : transaction.diff.remoteUpdated )
@@ -1953,6 +1956,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
+      transaction.gpkgSchemaChanged = true;
     }
   }
 
@@ -1971,6 +1975,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
+      transaction.gpkgSchemaChanged = true;
     }
   }
 
@@ -1980,6 +1985,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
+    transaction.gpkgSchemaChanged = true;
   }
 
   // schedule removed files to be deleted
@@ -2879,6 +2885,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
+  bool hasSchemaChange = transaction.gpkgSchemaChanged;
   mTransactionalStatus.remove( projectFullName );
 
   if ( pullBeforePush )
@@ -2888,21 +2895,19 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
     pushProject( projectNamespace, projectName );
+    // preserve information about GPKG schema changes detected at pull
+    mTransactionalStatus[projectFullName].gpkgSchemaChanged = hasSchemaChange;
   }
   else
   {
-    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion, mReloadedNeeded );
+    // we need to reload if either project itself was changed or one of the GPKG files has
+    // schema changes
+    bool reloadNeeded = projectFileHasBeenUpdated( diff ) || hasSchemaChange;
+    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion, reloadNeeded );
 
     if ( syncSuccessful )
     {
-      if ( projectFileHasBeenUpdated( diff ) )
-      {
-        emit reloadProject( projectDir );
-      }
-      else
-      {
-        emit projectDataChanged( projectFullName );
-      }
+      emit projectDataChanged( projectFullName );
     }
   }
 }
