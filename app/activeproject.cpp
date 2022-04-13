@@ -125,6 +125,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( !force )
     emit loadingStarted();
 
+  // store current project extent
+  QgsRectangle extent;
+  if ( mMapSettings )
+    extent = mMapSettings->extent();
+
   QFile flagFile( LOADING_FLAG_FILE_PATH );
   flagFile.open( QIODevice::WriteOnly );
   flagFile.close();
@@ -211,6 +216,10 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     setAutosyncEnabled( true );
   }
+
+  // restore extent
+  if ( mMapSettings && !extent.isNull() )
+    mMapSettings->setExtent( extent );
 
   return res;
 }
@@ -363,19 +372,4 @@ void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
     mActiveLayer.setActiveLayer( layer );
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
   }
-}
-
-bool ActiveProject::reloadPreservingExtent()
-{
-  // store current project extent
-  QgsRectangle extent;
-  if ( mMapSettings )
-    extent = mMapSettings->extent();
-
-  bool res = forceLoad( mQgsProject->fileName(), true );
-
-  if ( mMapSettings && !extent.isNull() )
-    mMapSettings->setExtent( extent );
-
-  return res;
 }

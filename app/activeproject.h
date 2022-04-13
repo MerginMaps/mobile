@@ -131,8 +131,6 @@ class ActiveProject: public QObject
   public slots:
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
-    // Reloads project while preserving current extent
-    bool reloadPreservingExtent();
 
     void setAutosyncEnabled( bool enabled );
 

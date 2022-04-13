@@ -488,7 +488,7 @@ int main( int argc, char *argv[] )
   {
     if ( reloadNeeded )
     {
-      activeProject.reloadPreservingExtent();
+      activeProject.reloadProject( activeProject.qgsProject()->homePath() );
     }
   } );
   QObject::connect( QgsApplication::messageLog(),
