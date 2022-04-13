@@ -164,7 +164,7 @@ Item {
       controller.create()
     }
 
-    saved()
+    //saved()
   }
 
   function cancel() {

@@ -14,6 +14,7 @@ import QtQuick.Dialogs 1.3
 import lc 1.0
 import ".."
 import "../components"
+import "../banners"
 
 Item {
   id: root
@@ -166,6 +167,12 @@ Item {
           onFormStateChanged: featureForm.state = root.formState
         }
 
+        Connections {
+          target: featureForm.controller
+          onChangesCommited: featureForm.saved()
+          onChangesRolledback: editingFailedBanner.show()
+        }
+
         Component.onCompleted: {
           if ( root.parentController && root.linkedRelation ) {
             featureForm.controller.parentController = root.parentController
@@ -232,6 +239,19 @@ Item {
           }
           visible = false
         }
+      }
+
+      AutoHideBanner {
+        id: editingFailedBanner
+
+        width: featureForm.width - 16
+        height: InputStyle.rowHeight
+
+        bgColor: InputStyle.warningBannerColor
+
+        source: InputStyle.noIcon
+
+        text: qsTr( "Failed to save changes." )
       }
 
       ExternalResourceBundle {
