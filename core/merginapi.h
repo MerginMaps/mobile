@@ -452,7 +452,6 @@ class MerginApi: public QObject
      * With no pending sync, progress is set to -1
      */
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
-    void reloadProject( const QString &projectDir );
 
     void networkErrorOccurred(
       const QString &message,
