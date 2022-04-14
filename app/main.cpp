@@ -486,7 +486,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
-    if ( reloadNeeded )
+    if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
     {
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
     }

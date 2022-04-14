@@ -388,7 +388,7 @@ void ProjectsModel::onProjectSyncCancelled( const QString &projectFullName )
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress, ProjectStatus } );
 }
 
-void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion, bool reloadNeeded )
+void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion )
 {
   int ix = projectIndexFromId( projectFullName );
 

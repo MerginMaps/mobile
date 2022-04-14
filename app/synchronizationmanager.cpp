@@ -25,6 +25,7 @@ SynchronizationManager::SynchronizationManager(
     QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
     QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
+    QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
   }
 }
 
@@ -174,11 +175,12 @@ void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullNa
   }
 }
 
-void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version, bool reloadNeeded )
+void SynchronizationManager::onProjectSyncFinished( const QString &projectFullName, bool successfully, int version )
 {
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     SyncProcess &process = mSyncProcesses[projectFullName];
+    bool reloadNeeded = process.reloadProject;
 
     if ( !successfully && process.awaitsRetry )
     {
@@ -276,4 +278,13 @@ void SynchronizationManager::onProjectAttachedToMergin( const QString &projectFu
     mSyncProcesses.remove( previousName );
     mSyncProcesses.insert( projectFullName, process );
   }
+}
+
+void SynchronizationManager::onProjectReloadNeededAfterSync( const QString &projectFullName )
+{
+  if ( mSyncProcesses.contains( projectFullName ) )
+  {
+    mSyncProcesses[projectFullName].reloadProject = true;
+  }
+
 }

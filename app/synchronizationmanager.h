@@ -23,6 +23,8 @@ struct SyncProcess
   qreal progress;
   bool pending;
 
+  bool reloadProject = false;
+
   bool awaitsRetry; // not currently being synced, but awaits to be synced
   int retriesCount = 0;
   SyncOptions::Strategy strategy = SyncOptions::Singleshot;
@@ -79,9 +81,10 @@ class SynchronizationManager : public QObject
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version, bool reloadNeeded );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
     void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
+    void onProjectReloadNeededAfterSync( const QString &projectFullName );
 
   private:
 

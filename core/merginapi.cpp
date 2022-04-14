@@ -2885,8 +2885,12 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
-  bool hasSchemaChange = transaction.gpkgSchemaChanged;
   mTransactionalStatus.remove( projectFullName );
+
+  if ( transaction.gpkgSchemaChanged )
+  {
+    emit projectReloadNeededAfterSync( projectFullName );
+  }
 
   if ( pullBeforePush )
   {
@@ -2895,15 +2899,10 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     QString projectNamespace, projectName;
     extractProjectName( projectFullName, projectNamespace, projectName );
     pushProject( projectNamespace, projectName );
-    // preserve information about GPKG schema changes detected at pull
-    mTransactionalStatus[projectFullName].gpkgSchemaChanged = hasSchemaChange;
   }
   else
   {
-    // we need to reload if either project itself was changed or one of the GPKG files has
-    // schema changes
-    bool reloadNeeded = projectFileHasBeenUpdated( diff ) || hasSchemaChange;
-    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion, reloadNeeded );
+    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion );
 
     if ( syncSuccessful )
     {
