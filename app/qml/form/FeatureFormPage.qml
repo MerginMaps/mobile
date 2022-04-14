@@ -14,7 +14,6 @@ import QtQuick.Dialogs 1.3
 import lc 1.0
 import ".."
 import "../components"
-import "../banners"
 
 Item {
   id: root
@@ -157,7 +156,7 @@ Item {
 
         onSaved: root.close()
         onCanceled: root.close()
-        onEditingFailed: editingFailedBanner.show()
+        onEditingFailed: editingFailedDialog.open()
         onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
         onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
@@ -236,17 +235,19 @@ Item {
         }
       }
 
-      AutoHideBanner {
-        id: editingFailedBanner
+      MessageDialog {
+        id: editingFailedDialog
 
-        width: featureForm.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
+        visible: false
+        title: qsTr( "Saving failed" )
+        text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Close
 
-        bgColor: InputStyle.warningBannerColor
-
-        source: InputStyle.noIcon
-
-        text: qsTr( "Failed to save changes. Try to restart app." )
+        //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+        onButtonClicked: {
+          visible = false
+        }
       }
 
       ExternalResourceBundle {
