@@ -244,7 +244,7 @@ Item {
       AutoHideBanner {
         id: editingFailedBanner
 
-        width: featureForm.width - 16
+        width: featureForm.width - InputStyle.innerFieldMargin * 2
         height: InputStyle.rowHeight
 
         bgColor: InputStyle.warningBannerColor
