@@ -168,8 +168,6 @@ Item {
     {
       controller.create()
     }
-
-    //saved()
   }
 
   function cancel() {
