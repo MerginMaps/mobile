@@ -28,6 +28,11 @@ Item {
   signal canceled
 
   /**
+   * When edit operation failed.
+   */
+  signal editingFailed
+
+  /**
    * Signal emited when relation editor requests to open child feature form
    */
   signal openLinkedFeature( var linkedFeature )
@@ -627,5 +632,11 @@ Item {
     onVisibleChanged: {
       Qt.inputMethod.commit()
     }
+  }
+
+  Connections {
+    target: form.controller
+    onChangesCommited: form.saved()
+    onChangesRolledback: form.editingFailed()
   }
 }

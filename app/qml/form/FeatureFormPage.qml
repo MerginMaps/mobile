@@ -157,6 +157,7 @@ Item {
 
         onSaved: root.close()
         onCanceled: root.close()
+        onEditingFailed: editingFailedBanner.show()
         onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
         onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
@@ -165,12 +166,6 @@ Item {
         Connections {
           target: root
           onFormStateChanged: featureForm.state = root.formState
-        }
-
-        Connections {
-          target: featureForm.controller
-          onChangesCommited: featureForm.saved()
-          onChangesRolledback: editingFailedBanner.show()
         }
 
         Component.onCompleted: {
@@ -251,7 +246,7 @@ Item {
 
         source: InputStyle.noIcon
 
-        text: qsTr( "Failed to save changes." )
+        text: qsTr( "Failed to save changes. Try to restart app." )
       }
 
       ExternalResourceBundle {
