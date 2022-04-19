@@ -484,11 +484,7 @@ void AttributeController::acquireId()
   }
 
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-  if ( commit() )
-  {
-    emit changesCommited();
-  }
-  else
+  if ( !commit() )
   {
     emit changesRolledback();
   }
