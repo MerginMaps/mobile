@@ -484,7 +484,10 @@ void AttributeController::acquireId()
   }
 
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-  commit();
+  if ( !commit() )
+  {
+    emit changesRolledback();
+  }
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
@@ -784,14 +787,18 @@ bool AttributeController::deleteFeature()
   bool isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
   rv = commit();
 
-  if ( !isDeleted )
+  if ( !isDeleted || !rv )
+  {
     QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
                                QStringLiteral( "Input" ),
                                Qgis::Warning );
+    emit changesRolledback();
+  }
   else
   {
     mFeatureLayerPair = FeatureLayerPair();
     emit featureLayerPairChanged();
+    emit changesCommited();
   }
 
   return rv;
@@ -812,7 +819,14 @@ bool AttributeController::create()
 
   }
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-  commit();
+  if ( commit() )
+  {
+    emit changesCommited();
+  }
+  else
+  {
+    emit changesRolledback();
+  }
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 
 
@@ -854,6 +868,11 @@ bool AttributeController::save()
       QgsMessageLog::logMessage( tr( "Feature %1 could not be fetched after commit" ).arg( mFeatureLayerPair.feature().id() ),
                                  QStringLiteral( "Input" ),
                                  Qgis::Warning );
+    emit changesCommited();
+  }
+  else
+  {
+    emit changesRolledback();
   }
   return rv;
 }
@@ -885,9 +904,9 @@ bool AttributeController::commit()
 
   if ( !mFeatureLayerPair.layer()->commitChanges() )
   {
-    QgsMessageLog::logMessage( tr( "Could not save changes. Rolling back." ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Critical );
+    CoreUtils::log( QStringLiteral( "CommitChanges" ),
+                    QStringLiteral( "Failed to commit changes:\n%1" )
+                    .arg( mFeatureLayerPair.layer()->commitErrors().join( QLatin1Char( '\n' ) ) ) );
     mFeatureLayerPair.layer()->rollBack();
     return false;
   }

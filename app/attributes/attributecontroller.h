@@ -164,6 +164,8 @@ class  AttributeController : public QObject
     void tabDataChanged( int id );
     void formRecalculated();
     void featureIdChanged();
+    void changesCommited();
+    void changesRolledback();
 
   private:
     void clearAll();

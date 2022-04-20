@@ -156,6 +156,7 @@ Item {
 
         onSaved: root.close()
         onCanceled: root.close()
+        onEditingFailed: editingFailedDialog.open()
         onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
         onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
 
@@ -230,6 +231,21 @@ Item {
           else if (clickedButton === StandardButton.Cancel) {
             // Do nothing
           }
+          visible = false
+        }
+      }
+
+      MessageDialog {
+        id: editingFailedDialog
+
+        visible: false
+        title: qsTr( "Saving failed" )
+        text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Close
+
+        //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
+        onButtonClicked: {
           visible = false
         }
       }
