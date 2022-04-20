@@ -65,7 +65,6 @@ Item {
   signal longPressReleased()
 
   //! Emitted when user does some interaction with map canvas (pan, zoom)
-  //! This is helpful to determine whether the map extent changed programatically or by user interaction
   signal userInteractedWithMap()
 
   /**
@@ -97,6 +96,11 @@ Item {
 
   function zoomOut(point) {
     mapCanvasWrapper.zoom(point, 1.5)
+  }
+
+  function refresh() {
+    mapCanvasWrapper.clearCache()
+    mapCanvasWrapper.refresh()
   }
 
   QgsQuick.MapCanvasMap {
