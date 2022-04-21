@@ -168,6 +168,7 @@ struct TransactionStatus
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
   bool isInitialPush = false; //! true when we are first time uploading the project - migration to Mergin
+  bool gpkgSchemaChanged = false; //! true when GPKG schema changes found
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -445,13 +446,13 @@ class MerginApi: public QObject
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
     void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
+    void projectReloadNeededAfterSync( const QString &projectFullName );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get pushed or pulled.
      * With no pending sync, progress is set to -1
      */
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
-    void reloadProject( const QString &projectDir );
 
     void networkErrorOccurred(
       const QString &message,
@@ -577,7 +578,7 @@ class MerginApi: public QObject
     void finalizeProjectPull( const QString &projectFullName );
 
     void finalizeProjectPullCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
-    void finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+    bool finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
 
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
     void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
