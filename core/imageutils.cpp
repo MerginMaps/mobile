@@ -19,8 +19,6 @@
 
 bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &targetImage )
 {
-  CoreUtils::log( "copy EXIF", QStringLiteral( "Copy EXIF from %1 to %2" ).arg( sourceImage, targetImage ) );
-
   if ( !QFileInfo::exists( sourceImage ) || !QFileInfo::exists( targetImage ) )
     return false;
 
@@ -34,7 +32,6 @@ bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &ta
     if ( !dstImage )
       return false;
 
-    CoreUtils::log( "copy EXIF", QStringLiteral( "Read EXIF from source image" ) );
     srcImage->readMetadata();
     Exiv2::ExifData &exifData = srcImage->exifData();
     if ( exifData.empty() )
@@ -42,28 +39,23 @@ bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &ta
       return true;
     }
 
-    CoreUtils::log( "copy EXIF", QStringLiteral( "Write EXIF to target image" ) );
     dstImage->setExifData( exifData );
     dstImage->writeMetadata();
-    CoreUtils::log( "copy EXIF", QStringLiteral( "Save target image metadata" ) );
     return true;
   }
   catch ( ... )
   {
-    CoreUtils::log( "copy EXIF", QStringLiteral( "FAILED to copy EXIF metadata" ) );
+    CoreUtils::log( "copying EXIF", QStringLiteral( "Failed to copy EXIF metadata" ) );
     return false;
   }
 }
 
 bool ImageUtils::rescale( const QString &path, int quality )
 {
-  CoreUtils::log( "rescaling image", QStringLiteral( "Rescale %1 with quality %2" ).arg( path ).arg( quality ) );
 
   QImage sourceImage( path );
   bool isPortrait = sourceImage.height() > sourceImage.width();
   int size = isPortrait ? sourceImage.width() : sourceImage.height();
-  CoreUtils::log( "rescaling image", QStringLiteral( "Portrait orientation: %1" ).arg( isPortrait ) );
-  CoreUtils::log( "rescaling image", QStringLiteral( "Original size: %1" ).arg( size ) );
 
   int newSize = size;
   switch ( quality )
@@ -93,7 +85,6 @@ bool ImageUtils::rescale( const QString &path, int quality )
   // than new size we keep original image
   if ( size <= newSize )
   {
-    CoreUtils::log( "rescaling image", QStringLiteral( "Original size smaller than new size. No rescaling needed" ) );
     return true;
   }
 
@@ -101,18 +92,16 @@ bool ImageUtils::rescale( const QString &path, int quality )
   QImage rescaledImage;
   if ( isPortrait )
   {
-    CoreUtils::log( "rescaling image", QStringLiteral( "Rescale to width" ) );
     rescaledImage = sourceImage.scaledToWidth( newSize, Qt::SmoothTransformation );
   }
   else
   {
-    CoreUtils::log( "rescaling image", QStringLiteral( "Rescale to height" ) );
     rescaledImage = sourceImage.scaledToHeight( newSize, Qt::SmoothTransformation );
   }
 
   if ( rescaledImage.isNull() )
   {
-    CoreUtils::log( "rescaling image", QStringLiteral( "FAILED to rescale" ) );
+    CoreUtils::log( "rescaling image", QStringLiteral( "Failed to rescale %1" ).arg( path ) );
     return false;
   }
 
@@ -121,7 +110,7 @@ bool ImageUtils::rescale( const QString &path, int quality )
 
   if ( !rescaledImage.save( newPath ) )
   {
-    CoreUtils::log( "rescaling image", QStringLiteral( "FAILED to save rescaled image" ) );
+    CoreUtils::log( "rescaling image", QStringLiteral( "Failed to save rescaled image" ) );
     return false;
   }
 
@@ -137,6 +126,6 @@ bool ImageUtils::rescale( const QString &path, int quality )
     }
   }
 
-  CoreUtils::log( "rescaling image", QStringLiteral( "FAILED to replace original file with rescaled version" ) );
+  CoreUtils::log( "rescaling image", QStringLiteral( "Can not replace original file with rescaled version" ) );
   return false;
 }
