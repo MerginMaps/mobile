@@ -115,7 +115,11 @@ bool ImageUtils::rescale( const QString &path, int quality )
   }
 
   // copy EXIF from source image to rescaled image
-  copyExifMetadata( path, newPath );
+  if( !copyExifMetadata( path, newPath ) )
+  {
+    CoreUtils::log( "rescaling image", QStringLiteral( "Failed to copy EXIF metadata from original image" ) );
+    return false;
+  }
 
   // remove original file and rename rescaled version
   if ( QFile::remove( path ) )

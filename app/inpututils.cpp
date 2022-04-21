@@ -1629,7 +1629,6 @@ QString InputUtils::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry 
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
-  qDebug() << "rescaleImage called";
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
 }
