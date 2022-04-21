@@ -1466,7 +1466,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
 }
 
 
-void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
+bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
 {
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Applying diff to " ) + filePath );
 
@@ -1517,6 +1517,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   //
   // now we are ready for the update of our local file
   //
+  bool hasConflicts = false;
 
   int res = GEODIFF_rebase( basefile.toUtf8().constData(),
                             src.toUtf8().constData(),
@@ -1533,6 +1534,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
 
     // not good... something went wrong in rebase - we need to save the local changes
     // let's put them into a conflict file and use the server version
+    hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserAuth->username(), info.localVersion ) );
     if ( !QFile::rename( dest, newDest ) )
@@ -1561,6 +1563,7 @@ void MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
 
     // TODO: this is a critical failure - we should abort pull
   }
+  return hasConflicts;
 }
 
 void MerginApi::finalizeProjectPull( const QString &projectFullName )
@@ -1603,7 +1606,10 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
 
       case PullTask::ApplyDiff:
       {
-        finalizeProjectPullApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        // applying diff can result in conflicted copy too, in this case
+        // we need to update gpkgSchemaChanged flag.
+        bool res = finalizeProjectPullApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
+        transaction.gpkgSchemaChanged = res;
         break;
       }
 
@@ -1928,6 +1934,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
+    transaction.gpkgSchemaChanged = true;
   }
 
   for ( QString filePath : transaction.diff.remoteUpdated )
@@ -1944,6 +1951,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
+      transaction.gpkgSchemaChanged = true;
     }
   }
 
@@ -1962,6 +1970,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
+      transaction.gpkgSchemaChanged = true;
     }
   }
 
@@ -1971,6 +1980,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
+    transaction.gpkgSchemaChanged = true;
   }
 
   // schedule removed files to be deleted
@@ -2872,6 +2882,11 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   int newVersion = syncSuccessful ? transaction.version : -1;
   mTransactionalStatus.remove( projectFullName );
 
+  if ( transaction.gpkgSchemaChanged )
+  {
+    emit projectReloadNeededAfterSync( projectFullName );
+  }
+
   if ( pullBeforePush )
   {
     CoreUtils::log( "sync " + projectFullName, QStringLiteral( "Continue with push after pull" ) );
@@ -2886,14 +2901,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
     if ( syncSuccessful )
     {
-      if ( projectFileHasBeenUpdated( diff ) )
-      {
-        emit reloadProject( projectDir );
-      }
-      else
-      {
-        emit projectDataChanged( projectFullName );
-      }
+      emit projectDataChanged( projectFullName );
     }
   }
 }

@@ -1390,8 +1390,14 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
   QCOMPARE( changes, QString( "ERROR" ) );  // local diff should fail
 
+  QSignalSpy spy( mApi, &MerginApi::projectReloadNeededAfterSync );
+
   // update our local version now
   downloadRemoteProject( mApi, mUsername, projectName );
+
+  // check that projectReloadNeededAfterSync is emited and has correct argument
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 0 ).toString(), mUsername + "/"  + projectName );
 
   //
   // check the result

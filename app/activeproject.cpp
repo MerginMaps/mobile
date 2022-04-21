@@ -219,7 +219,18 @@ bool ActiveProject::reloadProject( QString projectDir )
 {
   if ( mQgsProject->homePath() == projectDir )
   {
-    return forceLoad( mQgsProject->fileName(), true );
+    // store current project extent
+    QgsRectangle extent;
+    if ( mMapSettings )
+      extent = mMapSettings->extent();
+
+    bool result = forceLoad( mQgsProject->fileName(), true );
+
+    // restore extent
+    if ( mMapSettings && !extent.isNull() )
+      mMapSettings->setExtent( extent );
+
+    return result;
   }
   return false;
 }
