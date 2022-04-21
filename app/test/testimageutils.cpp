@@ -46,5 +46,5 @@ void TestImageUtils::testRescale()
   const Exiv2::ExifData::iterator itElevVal = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSAltitude" ) );
   const Exiv2::Rational rational = itElevVal->value().toRational( 0 );
   double val = static_cast< double >( rational.first ) / rational.second;
-  QCOMPARE(val, 133);
+  QCOMPARE( val, 133 );
 }
