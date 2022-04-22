@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = Input
-CONFIG += c++14
+CONFIG += c++17
 
 include(config.pri)
 include(version.pri)
@@ -13,6 +13,12 @@ QT += quick qml xml concurrent positioning sensors quickcontrols2
 QT += network svg sql
 QT += opengl
 QT += core
+
+# Exiv still uses std::auto_ptr
+# remove when https://github.com/lutraconsulting/input-sdk/issues/68 is fixed
+*-clang++ {
+   DEFINES += "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR"
+}
 
 include(android.pri)
 include(ios.pri)
