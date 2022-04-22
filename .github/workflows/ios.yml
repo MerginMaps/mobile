@@ -228,8 +228,8 @@ jobs:
             qstyle.value=Manual
             
           # Use old deprecated build system in XCode 13
-          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" WorkspaceSettings.xcsettings
-          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" WorkspaceSettings.xcsettings
+          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
               
       - name: Build Input
         run: |
