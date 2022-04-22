@@ -16,8 +16,9 @@ QT += core
 
 # Exiv still uses std::auto_ptr
 # remove when https://github.com/lutraconsulting/input-sdk/issues/68 is fixed
-*-clang++ {
-   DEFINES += "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR"
+equals(QMAKE_CXX, clang++)
+{
+    DEFINES += "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR"
 }
 
 include(android.pri)
