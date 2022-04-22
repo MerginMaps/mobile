@@ -64,19 +64,19 @@ bool ImageUtils::rescale( const QString &path, int quality )
     {
       break;
     }
-    case 1: // high quality, output image size ~5Mb
+    case 1: // high quality, output image size ~2-4 Mb
     {
       newSize = 3000;
       break;
     }
-    case 2: // medium quality, output image size ~3Mb
+    case 2: // medium quality, output image size ~1-2 Mb
     {
       newSize = 1500;
       break;
     }
-    case 3: // low quality, output image size ~1Mb
+    case 3: // low quality, output image size ~0.5 Mb
     {
-      newSize = 800;
+      newSize = 1000;
       break;
     }
   }
