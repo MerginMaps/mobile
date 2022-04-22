@@ -34,7 +34,7 @@ void TestImageUtils::testRescale()
   QVERIFY( ImageUtils::rescale( dir.filePath( testPhotoName ), 3 ) );
 
   QImage img( dir.filePath( testPhotoName ) );
-  QCOMPARE( img.height(), 800 );
+  QCOMPARE( img.height(), 1000 );
 
   // check EXIF tags
   std::unique_ptr< Exiv2::Image > image( Exiv2::ImageFactory::open( dir.filePath( testPhotoName ).toStdString() ) );
