@@ -17,7 +17,7 @@ env:
   TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
   QT_VERSION: 5.14.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
-  INPUT_SDK_VERSION: mac-20220310-66
+  INPUT_SDK_VERSION: mac-20220422-69
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
 
