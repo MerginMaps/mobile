@@ -226,7 +226,11 @@ jobs:
             QMAKE_MAC_XCODE_SETTINGS+=qstyle \
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=Manual
-
+            
+          # Use old deprecated build system in XCode 13
+          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" WorkspaceSettings.xcsettings
+          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" WorkspaceSettings.xcsettings
+              
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
