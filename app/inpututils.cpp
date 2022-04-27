@@ -38,6 +38,8 @@
 #include "qgsunittypes.h"
 #include "qgsfeatureid.h"
 
+#include "imageutils.h"
+
 #include <Qt>
 #include <QDir>
 #include <QFile>
@@ -46,7 +48,6 @@
 #include <algorithm>
 #include <limits>
 #include <math.h>
-
 #include <iostream>
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
@@ -1624,4 +1625,10 @@ QString InputUtils::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry 
     case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "qrc:/mIconPolygonLayer.svg" );
     default: return QString( "qrc:/mIconTableLayer.svg" );
   }
+}
+
+bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
+{
+  int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
+  return ImageUtils::rescale( path, quality );
 }
