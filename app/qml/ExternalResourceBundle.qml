@@ -97,6 +97,7 @@ Item {
          */
         property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
           if (value) {
+            __inputUtils.rescaleImage(value, __activeProject.qgsProject)
             var newCurrentValue = __inputUtils.getRelativePath(value, prefixToRelativePath)
             itemWidget.editorValueChanged(newCurrentValue, newCurrentValue === "" || newCurrentValue === null)
           }

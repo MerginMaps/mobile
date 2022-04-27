@@ -14,6 +14,13 @@ QT += network svg sql
 QT += opengl
 QT += core
 
+# Exiv still uses std::auto_ptr
+# remove when https://github.com/lutraconsulting/input-sdk/issues/68 is fixed
+equals(QMAKE_CXX, clang++)
+{
+    DEFINES += "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR"
+}
+
 include(android.pri)
 include(ios.pri)
 include(linux.pri)

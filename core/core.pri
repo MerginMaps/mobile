@@ -12,7 +12,8 @@ SOURCES += \
   $$PWD/localprojectsmanager.cpp \
   $$PWD/merginprojectmetadata.cpp \
   $$PWD/project.cpp \
-  $$PWD/geodiffutils.cpp
+  $$PWD/geodiffutils.cpp \
+  $$PWD/imageutils.cpp
 
 HEADERS += \
   $$PWD/coreutils.h \
@@ -27,7 +28,8 @@ HEADERS += \
   $$PWD/localprojectsmanager.h \
   $$PWD/merginprojectmetadata.h \
   $$PWD/project.h \
-  $$PWD/geodiffutils.h
+  $$PWD/geodiffutils.h \
+  $$PWD/imageutils.h
 
 exists($$PWD/merginsecrets.cpp) {
   message("Using production Mergin API_KEYS")

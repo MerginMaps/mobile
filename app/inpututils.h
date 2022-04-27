@@ -450,6 +450,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE void zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *mapSettings );
 
+    /**
+     * Rescales image according to the project photo quality setting.
+     */
+    Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
