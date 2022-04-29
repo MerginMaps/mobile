@@ -76,5 +76,6 @@
         <file>loadingindicator.svg</file>
         <file>stakeout.png</file>
         <file>dot-circle.svg</file>
+        <file>merginmaps_logo.svg</file>
     </qresource>
 </RCC>
