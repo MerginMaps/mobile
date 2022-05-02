@@ -15,11 +15,11 @@ on:
 
 env:
   QT_VERSION: 5.14.2
-  INPUT_SDK_VERSION: ios-20220310-40
+  INPUT_SDK_VERSION: ios-20220422-45
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
-  XC_VERSION: ${{ '12.0.1' }}
-  IOS_MIN_SDK_VERSION: ${{ '12.0' }}
+  XC_VERSION: ${{ '13.2.1' }}
+  IOS_MIN_SDK_VERSION: ${{ '14.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
 
@@ -30,7 +30,7 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
@@ -226,7 +226,11 @@ jobs:
             QMAKE_MAC_XCODE_SETTINGS+=qstyle \
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=Manual
-
+            
+          # Use old deprecated build system in XCode 13
+          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+              
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
