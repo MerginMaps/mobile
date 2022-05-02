@@ -68,7 +68,7 @@ Rectangle {
     id: merginLogo
     anchors.top: header.bottom
     antialiasing: true
-    source: InputStyle.merginColorIcon
+    source: InputStyle.mmLogoHorizontal
     height: InputStyle.rowHeightHeader
     width: parent.width
     sourceSize.width: width

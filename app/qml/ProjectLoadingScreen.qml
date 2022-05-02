@@ -14,13 +14,13 @@ Item {
 
   Rectangle {
     anchors.fill: parent
-    color: InputStyle.fontColor
+    color: InputStyle.clrPanelMain
   }
 
   Image {
     id: logo
     anchors.centerIn: parent
-    source: InputStyle.inputLogo
+    source: InputStyle.mmLogoVertical
     width: parent.width/2
     sourceSize.height: 0
     fillMode: Image.PreserveAspectFit

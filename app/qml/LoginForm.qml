@@ -55,7 +55,7 @@ Rectangle {
       anchors.bottom: parent.bottom
 
       Image {
-        source: InputStyle.merginColorIcon
+        source: InputStyle.mmLogoHorizontal
         height: fieldHeight
         sourceSize.height: height
         anchors.horizontalCenter: parent.horizontalCenter
@@ -67,7 +67,7 @@ Rectangle {
         visible: !loginName.activeFocus && !passwordField.password.activeFocus
         height: 2 * fieldHeight
         anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTr("%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
+        text: qsTr("Log in to your %1Mergin Maps%2 account in order to sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
                   .arg("<a href='" + __inputHelp.merginWebLink + "'>")
                   .arg("</a>")
       }

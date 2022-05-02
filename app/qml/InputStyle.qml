@@ -120,7 +120,6 @@ QtObject {
     property string recordIcon: "qrc:/dot-circle.svg"
     property string crosshairIcon: "qrc:/crosshair.svg"
     property string undoIcon: "qrc:/undo.svg"
-    property string merginColorIcon: "qrc:/mergin_color.svg"
     property string accountIcon: "qrc:/account.svg"
     property string accountMultiIcon: "qrc:/account-multi.svg"
     property string envelopeIcon: "qrc:/envelope-solid.svg"
@@ -135,8 +134,9 @@ QtObject {
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"
 
-    property string inputLogo: "qrc:/input.svg"
     property string lutraLogo: "qrc:/lutra_logo.svg"
+    property string mmLogoVertical: "qrc:/mm_logo_vert_pos.svg" // merginmaps logo
+    property string mmLogoHorizontal: "qrc:/mm_logo_hor_pos.svg"
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string stakeoutIcon: "qrc:/stakeout.png"

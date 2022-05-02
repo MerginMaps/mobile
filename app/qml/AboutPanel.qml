@@ -22,8 +22,8 @@ Page {
 
   property real fieldHeight: InputStyle.rowHeight
   property real panelMargin: fieldHeight / 4
-  property color fontColor: "white"
-  property color bgColor: InputStyle.fontColor
+  property color fontColor: InputStyle.fontColor
+  property color bgColor: InputStyle.panelBackgroundLight
   property bool isPortraitOrientation: Screen.primaryOrientation === Qt.PortraitOrientation
 
   signal close()
@@ -82,8 +82,8 @@ Page {
       width: parent.width
 
       Image {
-        id: inputLogo
-        source: InputStyle.inputLogo
+        id: mmLogo
+        source: InputStyle.mmLogoHorizontal
         width: content.width / 2
         sourceSize.width: width
         anchors.horizontalCenter: parent.horizontalCenter
@@ -103,7 +103,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
         background: Rectangle {
-          color: InputStyle.fontColor
+          color: root.bgColor
         }
 
         contentItem: Text {
@@ -129,7 +129,7 @@ Page {
     Image {
       id: lutraLogo
       source: InputStyle.lutraLogo
-      width: inputLogo.width / 2
+      width: mmLogo.width / 2
       sourceSize.width: width
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
