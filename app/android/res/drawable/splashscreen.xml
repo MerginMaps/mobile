@@ -6,6 +6,8 @@
         </shape>
     </item>
     <item
+        android:width="260dp"
+    	android:height="260dp"
  		android:gravity="center">
         <bitmap android:src="@drawable/merginmaps" android:gravity="center|clip_vertical|clip_horizontal" />
     </item>
