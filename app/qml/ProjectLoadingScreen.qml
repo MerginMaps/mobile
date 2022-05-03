@@ -29,11 +29,10 @@ Item {
 
   Text {
     text: qsTr("Opening project ...")
-    anchors.verticalCenterOffset: parent.height/6
+    anchors.top: logo.bottom
+    anchors.topMargin: InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
-    color: "white"
+    color: InputStyle.fontColor
   }
-
 }
