@@ -16,6 +16,8 @@ Notes:
 
 1. If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
 
+![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
+
 2. You may need to export env variable INPUT_ONLY_TARGET_ARCH to select builds to one platform only
 
 ## Development Linux Cross-Compilation for Android
