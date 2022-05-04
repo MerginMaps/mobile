@@ -781,8 +781,8 @@ Ne sera pas ajouté au projet.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 utilise une synchronisation dans le cloud entre votre appareil mobile et votre ordinateur de bureau. Utilisez-le aussi pour partager vos projets avec les autres et travailler en mode collaboratif.</translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Synchronisez vos projets avec votre ordinateur et travaillez en collaboration avec d&apos;autres personnes en vous connectant à votre compte %1Mergin Maps%2  .</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -904,9 +904,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="562"/>
         <source>Up to date</source>
-        <translation>À jour
-
-</translation>
+        <translation>À jour</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="571"/>
@@ -955,8 +953,8 @@ Ne sera pas ajouté au projet.</translation>
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
         <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
 Click &apos;Yes&apos; to upload it.</source>
-        <translation>Ce projet n&apos;est actuellement pas chargé sur Mergin. Chargez-le sur Mergin afin d&apos;activer la synchronisation et la collaboration. 
-Cliquez sur &quot;Oui&quot; pour le charger.</translation>
+        <translation>Ce projet n&apos;est actuellement pas partagé sur Mergin. Envoyez-le sur Mergin afin d&apos;activer la synchronisation et la collaboration.
+Cliquez sur &quot;Oui&quot; pour l&apos;envoyer.</translation>
     </message>
 </context>
 <context>
@@ -982,9 +980,7 @@ Cliquez sur &quot;Oui&quot; pour le charger.</translation>
     <message>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
-        <translation>Vous n&apos;êtes pas autorisé à synchroniser vos modifications. Contactez le propriétaire du projet Mergin pour qu&apos;il vous attribue l&apos;autorisation correcte. Si vous êtes le propriétaire du projet, connectez-vous au tableau de bord de Mergin.
-
-</translation>
+        <translation>Vous n&apos;êtes pas autorisé à synchroniser vos modifications. Contactez le propriétaire du projet Mergin pour qu&apos;il vous attribue l&apos;autorisation correcte. Si vous êtes le propriétaire du projet, connectez-vous au tableau de bord de Mergin.</translation>
     </message>
 </context>
 <context>
@@ -1450,7 +1446,7 @@ Cliquez sur &quot;Oui&quot; pour le charger.</translation>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="215"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Fix estimé</translation>
+        <translation>Position approximative (calcul d&apos;estime)</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="218"/>
@@ -1473,6 +1469,14 @@ Cliquez sur &quot;Oui&quot; pour le charger.</translation>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>La rotation du canevas de carte n&apos;est pas prise en charge. Réinitialisation de %1 à 0.</translation>
+    </message>
+</context>
+<context>
+    <name>RebrandingBanner</name>
+    <message>
+        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
+        <source>%1Input%2 is becoming part of</source>
+        <translation>%1Input%2 fait partie de </translation>
     </message>
 </context>
 <context>
@@ -1697,19 +1701,19 @@ Cliquez sur &quot;Oui&quot; pour le charger.</translation>
         <translation>S&apos;abonner</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Individuel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Professionnel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Votre plan d&apos;abonnement à Mergin se renouvellera automatiquement. Vous pouvez l&apos;annuler ou le modifier à tout moment. %1En savoir plus%2</translation>
     </message>
@@ -1833,7 +1837,7 @@ Cliquez sur &quot;Oui&quot; pour le charger.</translation>
     <message>
         <location filename="../qml/main.qml" line="535"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation>La connection n&apos;a pu être établie avec Mergin.%1Essayez avec un meilleur réseau</translation>
+        <translation>La connection n&apos;a pu être établie avec Mergin.%1Essayez avec une meilleure connection à internet.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="582"/>
