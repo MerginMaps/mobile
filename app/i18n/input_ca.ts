@@ -781,8 +781,8 @@ No s&apos;afegirà al projecte.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 proporciona una sincronització basada en el núvol entre el mòbil i l&apos;escriptori. Utilitzeu-ho també per compartir els vostres projectes amb altres persones i treballar col·laborativament. </translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Sincronitza projectes amb el teu ordinador d&apos;escriptori i treballa en col·laboració amb altres persones iniciant sessió al teu compte de %1Mergin Maps%2.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -899,7 +899,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="548"/>
         <source>Successfully synchronized</source>
-        <translation>S&apos;ha sincronitzat correctament</translation>
+        <translation>Correctament sincronitzat</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="562"/>
@@ -947,7 +947,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
         <source>Upload project to Mergin?</source>
-        <translation>Vols pujar el projecte a Mergin?</translation>
+        <translation>Voleu pujar el projecte a Mergin?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
@@ -1472,6 +1472,14 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     </message>
 </context>
 <context>
+    <name>RebrandingBanner</name>
+    <message>
+        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
+        <source>%1Input%2 is becoming part of</source>
+        <translation>%1Input%2 ara és part de </translation>
+    </message>
+</context>
+<context>
     <name>RecordToolbar</name>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="70"/>
@@ -1693,19 +1701,19 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Subscriure&apos;s</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Individual</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Professional</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>La vostra subscripció a Mergin es renovarà automàticament. La podeu canviar o cancel·lar en qualsevol moment. %1Més detalls%2</translation>
     </message>
