@@ -68,8 +68,8 @@ Rectangle {
     id: merginLogo
     anchors.top: header.bottom
     antialiasing: true
-    source: InputStyle.merginColorIcon
-    height: InputStyle.rowHeightHeader
+    source: InputStyle.mmLogoHorizontal
+    height: InputStyle.rowHeightHeader * 0.8
     width: parent.width
     sourceSize.width: width
     sourceSize.height: height
@@ -80,6 +80,7 @@ Rectangle {
 
   Column {
     anchors.top: merginLogo.bottom
+    anchors.topMargin: InputStyle.smallGap
     width: parent.width
     anchors.horizontalCenter: parent.horizontalCenter
     TabBar {

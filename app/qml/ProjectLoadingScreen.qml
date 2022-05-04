@@ -14,13 +14,13 @@ Item {
 
   Rectangle {
     anchors.fill: parent
-    color: InputStyle.fontColor
+    color: InputStyle.clrPanelMain
   }
 
   Image {
     id: logo
     anchors.centerIn: parent
-    source: InputStyle.inputLogo
+    source: InputStyle.mmLogoVertical
     width: parent.width/2
     sourceSize.height: 0
     fillMode: Image.PreserveAspectFit
@@ -29,11 +29,10 @@ Item {
 
   Text {
     text: qsTr("Opening project ...")
-    anchors.verticalCenterOffset: parent.height/6
+    anchors.top: logo.bottom
+    anchors.topMargin: InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
-    color: "white"
+    color: InputStyle.fontColor
   }
-
 }

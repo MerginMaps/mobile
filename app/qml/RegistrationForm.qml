@@ -45,8 +45,8 @@ Rectangle {
     anchors.bottom: parent.bottom
 
     Image {
-      source: InputStyle.merginColorIcon
-      height: fieldHeight
+      source: InputStyle.mmLogoHorizontal
+      height: fieldHeight * 0.8
       sourceSize.height: height
       anchors.horizontalCenter: parent.horizontalCenter
     }

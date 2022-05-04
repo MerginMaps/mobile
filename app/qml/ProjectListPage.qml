@@ -28,11 +28,27 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
+  RebrandingBanner {
+    id: rebrandingBanner
+    visible: !__appSettings.rebrandingBannerDismissed
+
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+
+    onClosed: {
+      rebrandingBanner.visible = false
+      __appSettings.rebrandingBannerDismissed = true
+    }
+  }
+
   AttentionBanner {
     id: attentionBanner
     visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
     anchors {
-      top: parent.top
+      top: rebrandingBanner.visible ? rebrandingBanner.bottom : parent.top
       left: parent.left
       right: parent.right
     }
@@ -42,7 +58,13 @@ Item {
     id: searchBar
 
     anchors {
-      top: attentionBanner.visible ? attentionBanner.bottom : parent.top
+      top: {
+        if ( attentionBanner.visible )
+          return attentionBanner.bottom
+        else if ( rebrandingBanner.visible )
+          return rebrandingBanner.bottom
+        return parent.top
+      }
       left: parent.left
       right: parent.right
     }

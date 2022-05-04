@@ -30,6 +30,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setLegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
+    Q_PROPERTY( bool rebrandingBannerDismissed READ rebrandingBannerDismissed WRITE setRebrandingBannerDismissed NOTIFY rebrandingBannerDismissedChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -82,6 +83,9 @@ class AppSettings: public QObject
     static const QString GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
 
+    bool rebrandingBannerDismissed() const;
+    void setRebrandingBannerDismissed( bool newRebrandingBannerDismissed );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -100,6 +104,8 @@ class AppSettings: public QObject
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
+
+    void rebrandingBannerDismissedChanged( bool rebrandingBannerDismissed );
 
   private:
     // Projects path
@@ -134,6 +140,7 @@ class AppSettings: public QObject
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
+    bool mRebrandingBannerDismissed = false;
 };
 
 #endif // APPSETTINGS_H

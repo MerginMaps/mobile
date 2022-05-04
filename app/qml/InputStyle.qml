@@ -44,7 +44,7 @@ QtObject {
     property int fontPixelSizeNormal: scaleFont(18)
     property int fontPixelSizeBig: scaleFont(21)
 
-    property int borderSize: scale(1)
+    property int borderSize: Math.max( scale(1), 1 )
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
@@ -57,6 +57,8 @@ QtObject {
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)
     property real projectItemHeight: rowHeightHeader * 1.2
+
+    property real closeBtnSize: scale(30)
 
     property real panelSpacing: 5 * __dp
     property real shadowVerticalOffset: -2 * __dp
@@ -120,7 +122,6 @@ QtObject {
     property string recordIcon: "qrc:/dot-circle.svg"
     property string crosshairIcon: "qrc:/crosshair.svg"
     property string undoIcon: "qrc:/undo.svg"
-    property string merginColorIcon: "qrc:/mergin_color.svg"
     property string accountIcon: "qrc:/account.svg"
     property string accountMultiIcon: "qrc:/account-multi.svg"
     property string envelopeIcon: "qrc:/envelope-solid.svg"
@@ -135,8 +136,9 @@ QtObject {
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"
 
-    property string inputLogo: "qrc:/input.svg"
     property string lutraLogo: "qrc:/lutra_logo.svg"
+    property string mmLogoVertical: "qrc:/mm_logo_vert_pos.svg" // merginmaps logo
+    property string mmLogoHorizontal: "qrc:/mm_logo_hor_pos.svg"
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string stakeoutIcon: "qrc:/stakeout.png"
