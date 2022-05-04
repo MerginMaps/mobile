@@ -35,7 +35,7 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-            sudo apt-get install -y bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip gdal-bin \
+            sudo apt-get install -y libcurl4-gnutls-dev bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip gdal-bin \
                             git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgeos++-dev \
                             libgsl-dev libpq-dev libproj-dev libprotobuf-dev \
                             libspatialindex-dev libspatialite-dev libsqlite3-dev libsqlite3-mod-spatialite libyaml-tiny-perl \
