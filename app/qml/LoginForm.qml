@@ -67,7 +67,7 @@ Rectangle {
         visible: !loginName.activeFocus && !passwordField.password.activeFocus
         height: 2 * fieldHeight
         anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTr("Log in to your %1Mergin Maps%2 account in order to sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.")
+        text: qsTr("Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.")
                   .arg("<a href='" + __inputHelp.merginWebLink + "'>")
                   .arg("</a>")
       }
