@@ -46,7 +46,7 @@ Rectangle {
 
     Image {
       source: InputStyle.mmLogoHorizontal
-      height: fieldHeight
+      height: fieldHeight * 0.8
       sourceSize.height: height
       anchors.horizontalCenter: parent.horizontalCenter
     }

@@ -113,5 +113,6 @@
         <file>dialogs/MigrateToMerginDialog.qml</file>
         <file>dialogs/NoPermissionsDialog.qml</file>
         <file>banners/AutoHideBanner.qml</file>
+        <file>misc/RebrandingBanner.qml</file>
     </qresource>
 </RCC>

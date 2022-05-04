@@ -44,7 +44,7 @@ QtObject {
     property int fontPixelSizeNormal: scaleFont(18)
     property int fontPixelSizeBig: scaleFont(21)
 
-    property int borderSize: scale(1)
+    property int borderSize: Math.max( scale(1), 1 )
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
@@ -57,6 +57,8 @@ QtObject {
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)
     property real projectItemHeight: rowHeightHeader * 1.2
+
+    property real closeBtnSize: scale(30)
 
     property real panelSpacing: 5 * __dp
     property real shadowVerticalOffset: -2 * __dp
