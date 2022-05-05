@@ -214,7 +214,12 @@ QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QS
 
   QFileInfo f( file );
 
-  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+  QString suffix = f.completeSuffix();
+  if ( !suffix.compare( QStringLiteral( "qgs" ), Qt::CaseInsensitive ) || !suffix.compare( QStringLiteral( "qgz" ), Qt::CaseInsensitive ) )
+  {
+    suffix += "~";
+  }
+  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), suffix );
 }
 
 QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )
