@@ -781,8 +781,8 @@ V projekt ne bo dodano.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 omogoča sinhronizacijo med mobilno napravo in strežnikom. Uporaben je tudi za deljenje projektov in skupinsko urejanje podatkov.</translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Sinhroniziraj projekte z namiznim računalnikom in delaj v skupini z prijavo v tvoj %1Mergin Maps%2 račun.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -1472,6 +1472,14 @@ Izberi &apos;Da&apos; za nalaganje.</translation>
     </message>
 </context>
 <context>
+    <name>RebrandingBanner</name>
+    <message>
+        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
+        <source>%1Input%2 is becoming part of</source>
+        <translation>%1Input%2 bo postal del</translation>
+    </message>
+</context>
+<context>
     <name>RecordToolbar</name>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="70"/>
@@ -1693,19 +1701,19 @@ Izberi &apos;Da&apos; za nalaganje.</translation>
         <translation>Naroči</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Posamezno</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Profesionalno</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Tvoja Mergin naročnina bo samodejno podaljšana. Naročnino lahko kadarkoli prekineš ali spremeniš. %1Več%2</translation>
     </message>
