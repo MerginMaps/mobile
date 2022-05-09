@@ -781,8 +781,8 @@ Wordt niet toegevoegd aan het project.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 biedt cloud gebaseerde synchronisatie tussen uw mobiel en desktop. Gebruik het ook om uw projecten met anderen te delen en samen te werken.</translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Synchroniseer projecten met je PC en werk samen met anderen door in te loggen op je %1Mergin Maps%2 account.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -979,7 +979,7 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
-        <translation>Je mag je wijzigingen niet synchroniseren. Neem contact op met de eigenaar van het Mergin project zodat die jou de goede rechten geeft. Wanneer jij de project eigenaar bent, log in op het Mergin dashboard.</translation>
+        <translation>Je mag je wijzigingen niet synchroniseren. Neem contact op met de eigenaar van het Mergin project voor het krijgen van rechten. Wanneer jij de project eigenaar bent, log in op het Mergin dashboard.</translation>
     </message>
 </context>
 <context>
@@ -1471,6 +1471,14 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
+    <name>RebrandingBanner</name>
+    <message>
+        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
+        <source>%1Input%2 is becoming part of</source>
+        <translation>%1Input%2 wordt onderdeel van</translation>
+    </message>
+</context>
+<context>
     <name>RecordToolbar</name>
     <message>
         <location filename="../qml/map/RecordToolbar.qml" line="70"/>
@@ -1692,19 +1700,19 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>Abonneer</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Individueel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Professioneel</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Uw gekozen Mergin abonnement wordt bij einde contract automatisch verlengd. U kunt deze op elk moment wijzigen of opzeggen. %1Meer informatie%2</translation>
     </message>
