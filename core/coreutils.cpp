@@ -215,7 +215,7 @@ QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QS
   QFileInfo f( file );
 
   QString suffix = f.completeSuffix();
-  if ( !suffix.compare( QStringLiteral( "qgs" ), Qt::CaseInsensitive ) || !suffix.compare( QStringLiteral( "qgz" ), Qt::CaseInsensitive ) )
+  if ( hasProjecFileExtension( file ) )
   {
     suffix += "~";
   }
@@ -229,4 +229,9 @@ QString CoreUtils::generateEditConflictFileName( const QString &file, const QStr
 
   QFileInfo f( file );
   return QString( "%1/%2 (edit conflict, %3 v%4).json" ).arg( f.path(), f.baseName(), username, QString::number( version ) );
+}
+
+bool CoreUtils::hasProjecFileExtension( const QString filePath )
+{
+  return filePath.contains( ".qgs", Qt::CaseInsensitive ) || filePath.contains( ".qgz", Qt::CaseInsensitive );
 }

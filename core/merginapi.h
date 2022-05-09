@@ -604,8 +604,6 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
-    bool hasProjecFileExtension( const QString filePath );
-
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;

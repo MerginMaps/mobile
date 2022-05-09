@@ -223,22 +223,17 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
 {
   for ( QString filePath : diff.remoteAdded )
   {
-    if ( hasProjecFileExtension( filePath ) )
+    if ( CoreUtils::hasProjecFileExtension( filePath ) )
       return true;
   }
 
   for ( QString filePath : diff.remoteUpdated )
   {
-    if ( hasProjecFileExtension( filePath ) )
+    if ( CoreUtils::hasProjecFileExtension( filePath ) )
       return true;
   }
 
   return false;
-}
-
-bool MerginApi::hasProjecFileExtension( const QString filePath )
-{
-  return filePath.contains( ".qgs" ) || filePath.contains( ".qgz" );
 }
 
 bool MerginApi::supportsSelectiveSync() const

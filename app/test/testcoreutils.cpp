@@ -153,3 +153,10 @@ void TestCoreUtils::testFindUniquePath()
     QCOMPARE( foundPath, projectPath + "/" + c.expectedOutput );
   }
 }
+
+void TestCoreUtils::testHasProjecFileExtension()
+{
+  QVERIFY( CoreUtils::hasProjecFileExtension( QStringLiteral( "project.qgs" ) ) );
+  QVERIFY( CoreUtils::hasProjecFileExtension( QStringLiteral( "project.QGZ" ) ) );
+  QVERIFY( !CoreUtils::hasProjecFileExtension( QStringLiteral( "project.qg" ) ) );
+}
