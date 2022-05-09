@@ -1,4 +1,6 @@
-# Input
+# Mergin Maps Input
+
+<img src="images/MM_logo.png" width=350>
 
 Platform builds:
 
