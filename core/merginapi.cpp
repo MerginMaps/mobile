@@ -223,13 +223,13 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
 {
   for ( QString filePath : diff.remoteAdded )
   {
-    if ( CoreUtils::hasProjecFileExtension( filePath ) )
+    if ( CoreUtils::hasProjectFileExtension( filePath ) )
       return true;
   }
 
   for ( QString filePath : diff.remoteUpdated )
   {
-    if ( CoreUtils::hasProjecFileExtension( filePath ) )
+    if ( CoreUtils::hasProjectFileExtension( filePath ) )
       return true;
   }
 

@@ -22,7 +22,7 @@ class TestCoreUtils : public QObject
 
     void testConflictFileNames();
     void testFindUniquePath();
-    void testHasProjecFileExtension();
+    void testHasProjectFileExtension();
 };
 
 #endif // TESTCOREUTILS_H

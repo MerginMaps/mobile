@@ -154,9 +154,9 @@ void TestCoreUtils::testFindUniquePath()
   }
 }
 
-void TestCoreUtils::testHasProjecFileExtension()
+void TestCoreUtils::testHasProjectFileExtension()
 {
-  QVERIFY( CoreUtils::hasProjecFileExtension( QStringLiteral( "project.qgs" ) ) );
-  QVERIFY( CoreUtils::hasProjecFileExtension( QStringLiteral( "project.QGZ" ) ) );
-  QVERIFY( !CoreUtils::hasProjecFileExtension( QStringLiteral( "project.qg" ) ) );
+  QVERIFY( CoreUtils::hasProjectFileExtension( QStringLiteral( "project.qgs" ) ) );
+  QVERIFY( CoreUtils::hasProjectFileExtension( QStringLiteral( "project.QGZ" ) ) );
+  QVERIFY( !CoreUtils::hasProjectFileExtension( QStringLiteral( "project.qg" ) ) );
 }
