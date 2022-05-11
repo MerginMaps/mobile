@@ -259,35 +259,61 @@ Page {
     // Footer
     Item {
       id: footer
-      height: InputStyle.rowHeight
+      height: InputStyle.rowHeight * 2
       width: parent.width
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
 
-      Button {
-        id: signOutButton
-        height: InputStyle.rowHeightHeader
-        text: qsTr("Sign out")
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        font.bold: true
+      Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        background: Rectangle {
-          color: root.bgColor
+        spacing: 5
+
+        Button {
+          id: signOutButton
+          height: InputStyle.rowHeightHeader
+          text: qsTr("Sign out")
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          background: Rectangle {
+            color: root.bgColor
+          }
+
+          onClicked: signOutClicked()
+
+          contentItem: Text {
+            text: signOutButton.text
+            font: signOutButton.font
+            color: InputStyle.highlightColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
         }
 
-        onClicked: signOutClicked()
+        Button {
+          id: deleteAccountButton
+          height: InputStyle.rowHeightHeader
+          text: qsTr("Delete account")
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          background: Rectangle {
+            color: root.bgColor
+          }
 
-        contentItem: Text {
-          text: signOutButton.text
-          font: signOutButton.font
-          color: InputStyle.highlightColor
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
+          contentItem: Text {
+            text: deleteAccountButton.text
+            font: deleteAccountButton.font
+            color: InputStyle.invalidButtonColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
         }
+
       }
     }
   }
 }
-
