@@ -145,50 +145,45 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="515"/>
+        <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Expresión de valor predeterminado para %1:%2 tiene un error del analizador: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Expresión de valor predeterminado para %1:%2 tiene un error de evaluación: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no se ha podido convertir en un valor compatible para el campo %2(%3)</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
         <translation>No se puede eliminar el objeto</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
         <translation>No se ha podido añadir el objeto</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="840"/>
+        <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
         <translation>No se puede actualizar el objeto</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Objeto %1 no se ha podido cargar después de guardar</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="871"/>
+        <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
         <translation>No se puede iniciar la edición</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="888"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>No se han podido guardar los cambios. Revirtiendo.</translation>
     </message>
 </context>
 <context>
@@ -335,22 +330,22 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="192"/>
         <source>Open Image</source>
         <translation>Abrir imagen</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="194"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Archivos de imagen (*.gif *.png *.jpg) </translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
         <source>Remove photo reference</source>
         <translation>Eliminar referencia de la foto</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Also permanently delete photo from device?</source>
         <translation>¿Eliminar permanentemente la foto también del dispositivo?</translation>
     </message>
@@ -358,12 +353,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="150"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>No se puede guardar el formulario, hay errores de validación</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="151"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
     </message>
@@ -386,24 +381,34 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>Borrar objeto</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>Cambios no guardados</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>¿Desea guardar los cambios?</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <source>Saving failed</source>
+        <translation>Error al guardar</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="243"/>
+        <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
+        <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe otra vez — si eso no lo soluciona, por favor contacte con soporte.</translation>
     </message>
 </context>
 <context>
@@ -610,109 +615,109 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="162"/>
+        <location filename="../inpututils.cpp" line="163"/>
         <source>just now</source>
         <translation>ahora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minutes ago</source>
         <translation>Hace %1 minutos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minute ago</source>
         <translation>Hace %1 minuto</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hours ago</source>
         <translation>Hace %1 horas</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hour ago</source>
         <translation>Hace %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 days ago</source>
         <translation>Hace %1 días</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 day ago</source>
         <translation>Hace %1 día</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 weeks ago</source>
         <translation>Hace %1 semanas</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 week ago</source>
         <translation>Hace %1 semana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 months ago</source>
         <translation>Hace %1 meses</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 month ago</source>
         <translation>Hace %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 years ago</source>
         <translation>Hace %1 años</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 year ago</source>
         <translation>Hace %1 año</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolución de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>PPP de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>tamaño de pantalla %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>La relación de píxeles del dispositivo ha sido informado: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>La relación de píxeles del dispositivo ha sido calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1217"/>
+        <location filename="../inpututils.cpp" line="1218"/>
         <source>used dp scale: %1</source>
         <translation>escala de dp utilizada: %1</translation>
     </message>
@@ -887,7 +892,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <name>MapWrapper</name>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="85"/>
-        <location filename="../qml/map/MapWrapper.qml" line="977"/>
+        <location filename="../qml/map/MapWrapper.qml" line="979"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible actualmente.</translation>
     </message>
@@ -922,22 +927,22 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <translation>Baja precisión de la posición del GPS (%1 m) &lt;br&gt;&lt;br&gt;Por favor asegúrese de que tiene una vista clara del cielo.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Details</source>
         <translation>Detalles</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="827"/>
+        <location filename="../qml/map/MapWrapper.qml" line="829"/>
         <source>Connecting to %1</source>
         <translation>Conectando a %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="843"/>
         <source>Connected, no position</source>
         <translation>Conectado, sin posición</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="845"/>
+        <location filename="../qml/map/MapWrapper.qml" line="847"/>
         <source>Unknown accuracy</source>
         <translation>Precisión desconocida</translation>
     </message>
@@ -1457,7 +1462,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="172"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
         <translation>Representación</translation>
     </message>
