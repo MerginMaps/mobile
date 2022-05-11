@@ -327,6 +327,11 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser = true );
 
+    /**
+    * Deletes all local projects and then tries to remove user account.
+    */
+    Q_INVOKABLE void deleteAccount();
+
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
@@ -485,6 +490,8 @@ class MerginApi: public QObject
 
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
     void missingAuthorizationError( const QString &projectFullName );
+    void accountDeleted( bool result );
+    void userIsAnOrgOwner();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -510,6 +517,8 @@ class MerginApi: public QObject
     void authorizeFinished();
     void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
     void pingMerginReplyFinished();
+    void deleteAccountFinished();
+
     /**
      * @brief When plan has been changed, an extra userInfo request is needed to update also storage.
      * Calls user info only when has authData, otherwise slots catches the signal from clearing user data after signing out.

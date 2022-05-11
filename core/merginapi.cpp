@@ -3000,6 +3000,63 @@ QSet<QString> MerginApi::listFiles( const QString &path )
   return files;
 }
 
+void MerginApi::deleteAccount()
+{
+  qDebug() << "CALLED deleteAccount";
+
+  // delete account itself
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  // first remove all local projects from the device
+  LocalProjectsList projects = mLocalProjects.projects();
+  for ( const LocalProject &info : projects )
+  {
+    mLocalProjects.removeLocalProject( info.id() );
+  }
+
+  // then remove account itself
+  QNetworkRequest request = getDefaultRequest();
+  QUrl url( mApiRoot + QStringLiteral( "/v1/user" ) );
+  request.setUrl( url );
+  QNetworkReply *reply = mManager.deleteResource( request );
+  connect( reply, &QNetworkReply::finished, this, [this]() { this->deleteAccountFinished();} );
+  CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
+}
+
+void MerginApi::deleteAccountFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Success" ) );
+    emit accountDeleted( true );
+  }
+  else
+  {
+    int statusCode = r->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toInt();
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    if ( statusCode == 422 )
+    {
+      emit userIsAnOrgOwner();
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: deleteAccount" ) );
+    }
+
+    emit accountDeleted( false );
+  }
+
+  clearAuth();
+  r->deleteLater();
+}
+
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {

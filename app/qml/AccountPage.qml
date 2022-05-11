@@ -361,6 +361,7 @@ Page {
       }
 
       onAccepted: {
+         __merginApi.deleteAccount()
          close()
       }
       onRejected: {
@@ -376,10 +377,33 @@ Page {
       visible: false
       title: qsTr( "Failed to remove account" )
       text: messageText
-      icon: StandardIcon.Warning
-      standardButtons: StandardButton.Close
+      icon: Dialogs.StandardIcon.Warning
+      standardButtons: Dialogs.StandardButton.Close
       onRejected: {
         close()
+        accountDeleted()
+      }
+    }
+
+    Connections {
+      target: __merginApi
+
+      onUserIsAnOrgOwner: {
+        console.log("Can not close account because user is the only owner of organisation.")
+        accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
+                                                       "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))
+        accountDeletionFailedDialog.open()
+      }
+      onAccountDeleted: {
+        console.log("Account removal ", result)
+        if ( result ) {
+            accountDeleted()
+        }
+        else {
+          console.log("Failed to remove account")
+          accountDeletionFailedDialog.messageText = qsTr( "Failed to remove account" )
+          accountDeletionFailedDialog.open()
+        }
       }
     }
   }

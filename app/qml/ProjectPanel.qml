@@ -547,6 +547,11 @@ Item {
       onRestorePurchasesClicked: {
         __purchasing.restore()
       }
+      onAccountDeleted: {
+        console.log("DELETE ACCOUNT - OK!")
+        stackView.popOnePageOrClose()
+        root.resetView()
+      }
     }
   }
 
